@@ -32,28 +32,33 @@ def search_gene_variants(gene_name):
 def get_pmids_for_rsids(rsids):
     """
     Get PMIDs for a list of rsIDs using the rsids2pmids endpoint.
+    Batches requests to avoid URL length limits (max 100 rsIDs per request).
     """
     if not rsids:
         return {}
     
     base_url = "https://www.ncbi.nlm.nih.gov/research/bionlp/litvar/api/v1"
-    rsids_param = ','.join(rsids)
-    pmids_url = f"{base_url}/public/rsids2pmids?rsids={rsids_param}"
+    rsid_to_pmids = {}
+    batch_size = 100
     
-    try:
-        response = requests.get(pmids_url, timeout=60)
-        response.raise_for_status()
-        data = response.json()
+    for i in range(0, len(rsids), batch_size):
+        batch = rsids[i:i + batch_size]
+        rsids_param = ','.join(batch)
+        pmids_url = f"{base_url}/public/rsids2pmids?rsids={rsids_param}"
         
-        rsid_to_pmids = {}
-        if isinstance(data, list):
-            for idx, item in enumerate(data):
-                if idx < len(rsids) and isinstance(item, dict) and 'pmids' in item:
-                    rsid_to_pmids[rsids[idx]] = item['pmids']
-        
-        return rsid_to_pmids
-    except Exception as e:
-        return {}
+        try:
+            response = requests.get(pmids_url, timeout=60)
+            response.raise_for_status()
+            data = response.json()
+            
+            if isinstance(data, list):
+                for item in data:
+                    if isinstance(item, dict) and 'pmids' in item and 'rsid' in item:
+                        rsid_to_pmids[item['rsid']] = item['pmids']
+        except Exception as e:
+            continue
+    
+    return rsid_to_pmids
 
 def extract_variant_data(api_response, gene_name):
     """
