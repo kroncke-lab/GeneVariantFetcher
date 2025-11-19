@@ -388,6 +388,9 @@ min_pmids = st.sidebar.number_input(
 
 search_button = st.sidebar.button("Search", type="primary", use_container_width=True)
 
+results_available = False
+search_results_key = "search_results"
+
 if search_button and gene_input:
     if search_mode == "Single Gene":
         genes_to_search = [gene_input.strip()]
@@ -462,226 +465,325 @@ if search_button and gene_input:
                     total_associations = sum(v['PMID_Count'] for v in variants_data)
                     st.metric("Total Associations", total_associations)
                 
-                tab1, tab2, tab3, tab4 = st.tabs(["📊 Visualizations", "📋 Variant Details", "📚 PMID List", "🧬 Individual Extractions"])
+                st.session_state[search_results_key] = {
+                    'variants_data': variants_data,
+                    'all_pmids': all_pmids,
+                    'genes_to_search': genes_to_search,
+                    'gene_display': gene_display,
+                    'gene_name': gene_name,
+                    'total_pmids': total_pmids,
+                    'total_associations': total_associations
+                }
+                results_available = True
                 
-                with tab1:
-                    st.subheader("Data Visualizations")
-                    fig_pmid_dist, fig_top_variants = create_visualizations(variants_data)
-                    
-                    col_viz1, col_viz2 = st.columns(2)
-                    with col_viz1:
-                        st.plotly_chart(fig_pmid_dist, use_container_width=True)
-                    with col_viz2:
-                        st.plotly_chart(fig_top_variants, use_container_width=True)
-                    
-                    st.markdown("""
-                    **Insights:**
-                    - The left chart shows how PMIDs are distributed across variants
-                    - The right chart highlights the most-studied variants based on publication count
-                    """)
-                
-                with tab2:
-                    st.subheader("Variant Details")
-                    df = pd.DataFrame(variants_data)
-                    
-                    df_display = df.copy()
-                    df_display['dbSNP_Link'] = df_display['rsID'].apply(
-                        lambda x: f"https://www.ncbi.nlm.nih.gov/snp/{x}" if x != 'N/A' else ''
-                    )
-                    
-                    df_display['First_5_PMIDs'] = df_display['PMIDs'].apply(
-                        lambda x: ', '.join(x.split(', ')[:5]) if x else ''
-                    )
-                    
-                    column_order = ['Gene', 'dbSNP_Link', 'Variant_ID', 'HGVS', 'HGVS_Protein', 'PMID_Count', 'Publications_Count', 'First_5_PMIDs']
-                    available_columns = [col for col in column_order if col in df_display.columns]
-                    df_display_final = df_display[available_columns]
-                    
-                    st.dataframe(
-                        df_display_final,
-                        use_container_width=True,
-                        height=400,
-                        column_config={
-                            "dbSNP_Link": st.column_config.LinkColumn(
-                                "rsID",
-                                help="Click to view variant in dbSNP database"
-                            ),
-                            "First_5_PMIDs": st.column_config.TextColumn(
-                                "First 5 PMIDs",
-                                help="First 5 PMIDs (see PMID List tab for clickable links to all PMIDs)"
-                            ),
-                        }
-                    )
-                    
-                    st.markdown("**Clickable PMID Links (first 20 variants):**")
-                    for idx, row in df.head(20).iterrows():
-                        pmid_str = row.get('PMIDs')
-                        if pmid_str and isinstance(pmid_str, str):
-                            pmids = pmid_str.split(', ')[:5]
-                            pmid_links = ' • '.join([f"[{p}](https://pubmed.ncbi.nlm.nih.gov/{p}/)" for p in pmids])
-                            st.markdown(f"**{row['rsID']}**: {pmid_links}")
-                    
-                    csv = df[['Gene', 'rsID', 'Variant_ID', 'HGVS', 'HGVS_Protein', 'PMID_Count', 'Publications_Count', 'PMIDs']].to_csv(index=False)
-                    st.download_button(
-                        label="Download Variant Data (CSV)",
-                        data=csv,
-                        file_name=f"{gene_name}_variants.csv",
-                        mime="text/csv"
-                    )
-                
-                with tab3:
-                    st.subheader("All Unique PMIDs")
-                    st.info(f"Total unique PMIDs: {total_pmids}")
-                    
-                    if all_pmids:
-                        pmid_links = [f"[{pmid}](https://pubmed.ncbi.nlm.nih.gov/{pmid}/)" for pmid in all_pmids[:50]]
-                        pmid_display = ', '.join(all_pmids)
-                        
-                        col_a, col_b = st.columns([2, 1])
-                        with col_a:
-                            st.text_area("PMID List (all)", pmid_display, height=150)
-                        with col_b:
-                            st.markdown("**Quick Links (first 50):**")
-                            st.markdown(" • ".join(pmid_links), unsafe_allow_html=True)
-                            
-                            st.download_button(
-                                label="Download PMIDs (TXT)",
-                                data='\n'.join(all_pmids),
-                                file_name=f"{gene_name}_pmids.txt",
-                                mime="text/plain"
-                            )
-                
-                with tab4:
-                    st.subheader("Individual-Level Data Extraction")
-                    st.markdown("""
-                    Extract structured individual-level variant and phenotype data from PubMed articles using AI-powered biomedical text extraction.
-                    """)
-                    
-                    st.info("This feature uses Replit AI Integrations (charged to your credits) to analyze PubMed articles and extract individual patient data including variants, phenotypes, and clinical status.")
-                    
-                    max_pmids_extract = st.number_input(
-                        "Number of articles to extract (max 20)",
-                        min_value=1,
-                        max_value=20,
-                        value=min(5, len(all_pmids)),
-                        help="Processing uses AI credits - start small for testing"
-                    )
-                    
-                    if st.button("🚀 Extract Individual Data", type="primary"):
-                        pmids_to_process = all_pmids[:max_pmids_extract]
-                        
-                        with st.spinner(f"Fetching {len(pmids_to_process)} PubMed abstracts..."):
-                            article_data = fetch_pubmed_abstracts(pmids_to_process)
-                        
-                        st.success(f"Fetched {len(article_data)} articles successfully")
-                        
-                        if article_data:
-                            with st.spinner(f"Extracting individual-level data from {len(article_data)} articles... This may take a few minutes."):
-                                progress_extraction = st.progress(0)
-                                extracted_individuals = []
-                                
-                                for idx, pmid in enumerate(pmids_to_process):
-                                    if pmid in article_data:
-                                        individuals = extract_individuals_from_article(
-                                            pmid, 
-                                            article_data[pmid]['full_text'],
-                                            genes_to_search[0] if len(genes_to_search) == 1 else gene_name
-                                        )
-                                        extracted_individuals.extend(individuals)
-                                    
-                                    progress_extraction.progress((idx + 1) / len(pmids_to_process))
-                                
-                                progress_extraction.empty()
-                            
-                            if extracted_individuals:
-                                st.success(f"✅ Extracted {len(extracted_individuals)} individual records from {len(article_data)} articles")
-                                
-                                df_individuals = pd.DataFrame(extracted_individuals)
-                                
-                                if 'variants' in df_individuals.columns:
-                                    df_individuals['variants_str'] = df_individuals['variants'].apply(
-                                        lambda x: json.dumps(x) if isinstance(x, (list, dict)) else str(x)
-                                    )
-                                
-                                if 'evidence' in df_individuals.columns:
-                                    df_individuals['evidence_sentence'] = df_individuals['evidence'].apply(
-                                        lambda x: x.get('sentence', '') if isinstance(x, dict) else ''
-                                    )
-                                
-                                if 'phenotypes_raw' in df_individuals.columns:
-                                    df_individuals['phenotypes_str'] = df_individuals['phenotypes_raw'].apply(
-                                        lambda x: ', '.join(x) if isinstance(x, list) else str(x)
-                                    )
-                                
-                                display_columns = []
-                                for col in ['individual_id', 'pmid', 'gene', 'age', 'sex', 'affected_status', 
-                                           'phenotypes_str', 'variants_str', 'evidence_sentence']:
-                                    if col in df_individuals.columns:
-                                        display_columns.append(col)
-                                
-                                st.dataframe(
-                                    df_individuals[display_columns] if display_columns else df_individuals,
-                                    use_container_width=True,
-                                    height=400
-                                )
-                                
-                                json_output = json.dumps(extracted_individuals, indent=2)
-                                st.download_button(
-                                    label="📥 Download Extraction Results (JSON)",
-                                    data=json_output,
-                                    file_name=f"{gene_name}_individual_extractions.json",
-                                    mime="application/json"
-                                )
-                                
-                                csv_output = df_individuals.to_csv(index=False)
-                                st.download_button(
-                                    label="📥 Download Extraction Results (CSV)",
-                                    data=csv_output,
-                                    file_name=f"{gene_name}_individual_extractions.csv",
-                                    mime="text/csv"
-                                )
-                                
-                                with st.expander("📊 Extraction Statistics"):
-                                    col_stat1, col_stat2, col_stat3 = st.columns(3)
-                                    with col_stat1:
-                                        affected_count = len([i for i in extracted_individuals if i.get('affected_status') == 'affected'])
-                                        st.metric("Affected Individuals", affected_count)
-                                    with col_stat2:
-                                        unique_variants = set()
-                                        for i in extracted_individuals:
-                                            if isinstance(i.get('variants'), list):
-                                                for v in i['variants']:
-                                                    if isinstance(v, dict) and v.get('hgvs_c'):
-                                                        unique_variants.add(v['hgvs_c'])
-                                        st.metric("Unique Variants", len(unique_variants))
-                                    with col_stat3:
-                                        articles_with_data = len(set([i.get('pmid') for i in extracted_individuals if i.get('pmid')]))
-                                        st.metric("Articles with Data", articles_with_data)
-                            else:
-                                st.warning("No individual-level data could be extracted from the selected articles. This may occur if articles don't contain specific patient-level variant information.")
-                        else:
-                            st.error("Failed to fetch article abstracts from PubMed")
-                    
-                    with st.expander("ℹ️ About Individual Extraction"):
-                        st.markdown("""
-                        **What this extracts:**
-                        - Individual patients/subjects with variant data
-                        - Genetic variants in HGVS notation (cDNA and protein)
-                        - Phenotypes with HPO codes when available
-                        - Clinical status (affected/unaffected)
-                        - Age, sex, and other demographics
-                        - Evidence sentences supporting each extraction
-                        
-                        **Important notes:**
-                        - Uses AI (GPT-5) to analyze article text
-                        - Works best with case reports and detailed studies
-                        - Limited to abstracts (full text not available via API)
-                        - May not extract data from purely aggregate studies
-                        - Costs are charged to your Replit credits
-                        """)
 
 elif search_button and not gene_input:
     st.warning("Please enter a gene symbol to search.")
+
+if not results_available and search_results_key in st.session_state:
+    results = st.session_state[search_results_key]
+    variants_data = results['variants_data']
+    all_pmids = results['all_pmids']
+    genes_to_search = results['genes_to_search']
+    gene_display = results['gene_display']
+    gene_name = results['gene_name']
+    total_pmids = results['total_pmids']
+    total_associations = results['total_associations']
+    
+    st.success(f"Found {len(variants_data)} variant(s) across {gene_display}")
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Total Variants", len(variants_data))
+    with col2:
+        st.metric("Unique PMIDs", total_pmids)
+    with col3:
+        st.metric("Total Associations", total_associations)
+    
+    results_available = True
+
+if results_available:
+    tab1, tab2, tab3, tab4 = st.tabs(["📊 Visualizations", "📋 Variant Details", "📚 PMID List", "🧬 Individual Extractions"])
+    
+    with tab1:
+        st.subheader("Data Visualizations")
+        fig_pmid_dist, fig_top_variants = create_visualizations(variants_data)
+        
+        col_viz1, col_viz2 = st.columns(2)
+        with col_viz1:
+            st.plotly_chart(fig_pmid_dist, use_container_width=True)
+        with col_viz2:
+            st.plotly_chart(fig_top_variants, use_container_width=True)
+        
+        st.markdown("""
+        **Insights:**
+        - The left chart shows how PMIDs are distributed across variants
+        - The right chart highlights the most-studied variants based on publication count
+        """)
+    
+    with tab2:
+        st.subheader("Variant Details")
+        df = pd.DataFrame(variants_data)
+        
+        df_display = df.copy()
+        df_display['dbSNP_Link'] = df_display['rsID'].apply(
+            lambda x: f"https://www.ncbi.nlm.nih.gov/snp/{x}" if x != 'N/A' else ''
+        )
+        
+        df_display['First_5_PMIDs'] = df_display['PMIDs'].apply(
+            lambda x: ', '.join(x.split(', ')[:5]) if x else ''
+        )
+        
+        column_order = ['Gene', 'dbSNP_Link', 'Variant_ID', 'HGVS', 'HGVS_Protein', 'PMID_Count', 'Publications_Count', 'First_5_PMIDs']
+        available_columns = [col for col in column_order if col in df_display.columns]
+        df_display_final = df_display[available_columns]
+        
+        st.dataframe(
+            df_display_final,
+            use_container_width=True,
+            height=400,
+            column_config={
+                "dbSNP_Link": st.column_config.LinkColumn(
+                    "rsID",
+                    help="Click to view variant in dbSNP database"
+                ),
+                "First_5_PMIDs": st.column_config.TextColumn(
+                    "First 5 PMIDs",
+                    help="First 5 PMIDs (see PMID List tab for clickable links to all PMIDs)"
+                ),
+            }
+        )
+        
+        st.markdown("**Clickable PMID Links (first 20 variants):**")
+        for idx, row in df.head(20).iterrows():
+            pmid_str = row.get('PMIDs')
+            if pmid_str and isinstance(pmid_str, str):
+                pmids = pmid_str.split(', ')[:5]
+                pmid_links = ' • '.join([f"[{p}](https://pubmed.ncbi.nlm.nih.gov/{p}/)" for p in pmids])
+                st.markdown(f"**{row['rsID']}**: {pmid_links}")
+        
+        csv = df[['Gene', 'rsID', 'Variant_ID', 'HGVS', 'HGVS_Protein', 'PMID_Count', 'Publications_Count', 'PMIDs']].to_csv(index=False)
+        st.download_button(
+            label="Download Variant Data (CSV)",
+            data=csv,
+            file_name=f"{gene_name}_variants.csv",
+            mime="text/csv"
+        )
+    
+    with tab3:
+        st.subheader("All Unique PMIDs")
+        st.info(f"Total unique PMIDs: {total_pmids}")
+        
+        if all_pmids:
+            pmid_links = [f"[{pmid}](https://pubmed.ncbi.nlm.nih.gov/{pmid}/)" for pmid in all_pmids[:50]]
+            pmid_display = ', '.join(all_pmids)
+            
+            col_a, col_b = st.columns([2, 1])
+            with col_a:
+                st.text_area("PMID List (all)", pmid_display, height=150)
+            with col_b:
+                st.markdown("**Quick Links (first 50):**")
+                st.markdown(" • ".join(pmid_links), unsafe_allow_html=True)
+                
+                st.download_button(
+                    label="Download PMIDs (TXT)",
+                    data='\n'.join(all_pmids),
+                    file_name=f"{gene_name}_pmids.txt",
+                    mime="text/plain"
+                )
+    
+    with tab4:
+        st.subheader("Individual-Level Data Extraction")
+        st.markdown("""
+        Extract structured individual-level variant and phenotype data from PubMed articles using AI-powered biomedical text extraction.
+        """)
+        
+        st.info("This feature uses Replit AI Integrations (charged to your credits) to analyze PubMed articles and extract individual patient data including variants, phenotypes, and clinical status.")
+        
+        max_pmids_extract = st.number_input(
+            "Number of articles to extract (max 20)",
+            min_value=1,
+            max_value=20,
+            value=min(5, len(all_pmids)),
+            help="Processing uses AI credits - start small for testing",
+            key=f"max_pmids_extract_{gene_name}"
+        )
+        
+        extraction_key = f"extraction_data_{gene_name}"
+        status_key = f"extraction_status_{gene_name}"
+        
+        if st.button("🚀 Extract Individual Data", type="primary", key=f"extract_btn_{gene_name}"):
+            try:
+                pmids_to_process = all_pmids[:max_pmids_extract]
+                
+                st.session_state[status_key] = {
+                    'stage': 'fetching',
+                    'total': len(pmids_to_process),
+                    'processed': 0
+                }
+                st.rerun()
+            except Exception as e:
+                st.session_state[status_key] = {
+                    'stage': 'error',
+                    'message': f"Error starting extraction: {str(e)}"
+                }
+        
+        if status_key in st.session_state:
+            status = st.session_state[status_key]
+            
+            if status['stage'] == 'fetching':
+                with st.status("Fetching PubMed abstracts...", expanded=True) as status_widget:
+                    try:
+                        pmids_to_process = all_pmids[:max_pmids_extract]
+                        article_data = fetch_pubmed_abstracts(pmids_to_process)
+                        st.write(f"✅ Fetched {len(article_data)} articles")
+                        
+                        st.session_state[status_key] = {
+                            'stage': 'extracting',
+                            'article_data': article_data,
+                            'pmids': pmids_to_process,
+                            'total': len(pmids_to_process),
+                            'processed': 0
+                        }
+                        status_widget.update(label="PubMed fetch complete", state="complete")
+                        st.rerun()
+                    except Exception as e:
+                        st.session_state[status_key] = {
+                            'stage': 'error',
+                            'message': f"PubMed fetch error: {str(e)}"
+                        }
+                        status_widget.update(label="Fetch failed", state="error")
+                        st.rerun()
+            
+            elif status['stage'] == 'extracting':
+                with st.status("Extracting individual-level data...", expanded=True) as status_widget:
+                    try:
+                        article_data = status['article_data']
+                        pmids_to_process = status['pmids']
+                        
+                        extracted_individuals = []
+                        for idx, pmid in enumerate(pmids_to_process):
+                            if pmid in article_data:
+                                st.write(f"Processing article {idx + 1}/{len(pmids_to_process)}: PMID {pmid}")
+                                individuals = extract_individuals_from_article(
+                                    pmid,
+                                    article_data[pmid]['full_text'],
+                                    genes_to_search[0] if len(genes_to_search) == 1 else gene_name
+                                )
+                                extracted_individuals.extend(individuals)
+                                st.write(f"  → Found {len(individuals)} individual(s)")
+                        
+                        st.session_state[extraction_key] = extracted_individuals
+                        st.session_state[status_key] = {
+                            'stage': 'complete',
+                            'count': len(extracted_individuals)
+                        }
+                        status_widget.update(label=f"Extraction complete - {len(extracted_individuals)} individuals found", state="complete")
+                        st.rerun()
+                    except Exception as e:
+                        st.session_state[status_key] = {
+                            'stage': 'error',
+                            'message': f"Extraction error: {str(e)}"
+                        }
+                        status_widget.update(label="Extraction failed", state="error")
+                        st.rerun()
+            
+            elif status['stage'] == 'error':
+                st.error(f"❌ {status.get('message', 'Unknown error occurred')}")
+                if st.button("Clear Error", key=f"clear_error_{gene_name}"):
+                    del st.session_state[status_key]
+                    st.rerun()
+        
+        if extraction_key in st.session_state:
+            extracted_individuals = st.session_state[extraction_key]
+            
+            if extracted_individuals:
+                unique_pmids = set([i.get('pmid') for i in extracted_individuals if i.get('pmid')])
+                st.success(f"✅ Extracted {len(extracted_individuals)} individual records from {len(unique_pmids)} articles")
+                
+                df_individuals = pd.DataFrame(extracted_individuals)
+                
+                if 'variants' in df_individuals.columns:
+                    df_individuals['variants_str'] = df_individuals['variants'].apply(
+                        lambda x: json.dumps(x) if isinstance(x, (list, dict)) else str(x)
+                    )
+                
+                if 'evidence' in df_individuals.columns:
+                    df_individuals['evidence_sentence'] = df_individuals['evidence'].apply(
+                        lambda x: x.get('sentence', '') if isinstance(x, dict) else ''
+                    )
+                
+                if 'phenotypes_raw' in df_individuals.columns:
+                    df_individuals['phenotypes_str'] = df_individuals['phenotypes_raw'].apply(
+                        lambda x: ', '.join(x) if isinstance(x, list) else str(x)
+                    )
+                
+                display_columns = []
+                for col in ['individual_id', 'pmid', 'gene', 'age', 'sex', 'affected_status', 
+                           'phenotypes_str', 'variants_str', 'evidence_sentence']:
+                    if col in df_individuals.columns:
+                        display_columns.append(col)
+                
+                st.dataframe(
+                    df_individuals[display_columns] if display_columns else df_individuals,
+                    use_container_width=True,
+                    height=400
+                )
+                
+                json_output = json.dumps(extracted_individuals, indent=2)
+                st.download_button(
+                    label="📥 Download Extraction Results (JSON)",
+                    data=json_output,
+                    file_name=f"{gene_name}_individual_extractions.json",
+                    mime="application/json",
+                    key=f"download_json_{gene_name}"
+                )
+                
+                csv_output = df_individuals.to_csv(index=False)
+                st.download_button(
+                    label="📥 Download Extraction Results (CSV)",
+                    data=csv_output,
+                    file_name=f"{gene_name}_individual_extractions.csv",
+                    mime="text/csv",
+                    key=f"download_csv_{gene_name}"
+                )
+                
+                with st.expander("📊 Extraction Statistics"):
+                    col_stat1, col_stat2, col_stat3 = st.columns(3)
+                    with col_stat1:
+                        affected_count = len([i for i in extracted_individuals if i.get('affected_status') == 'affected'])
+                        st.metric("Affected Individuals", affected_count)
+                    with col_stat2:
+                        unique_variants = set()
+                        for i in extracted_individuals:
+                            if isinstance(i.get('variants'), list):
+                                for v in i['variants']:
+                                    if isinstance(v, dict) and v.get('hgvs_c'):
+                                        unique_variants.add(v['hgvs_c'])
+                        st.metric("Unique Variants", len(unique_variants))
+                    with col_stat3:
+                        articles_with_data = len(set([i.get('pmid') for i in extracted_individuals if i.get('pmid')]))
+                        st.metric("Articles with Data", articles_with_data)
+            else:
+                st.warning("No individual-level data could be extracted from the selected articles. This may occur if articles don't contain specific patient-level variant information.")
+        
+        with st.expander("ℹ️ About Individual Extraction"):
+            st.markdown("""
+            **What this extracts:**
+            - Individual patients/subjects with variant data
+            - Genetic variants in HGVS notation (cDNA and protein)
+            - Phenotypes with HPO codes when possible
+            - Clinical status (affected/unaffected)
+            - Age, sex, and other demographics
+            - Evidence sentences supporting each extraction
+            
+            **Important notes:**
+            - Uses AI (GPT-5) to analyze article text
+            - Works best with case reports and detailed studies
+            - Limited to abstracts (full text not available via API)
+            - May not extract data from purely aggregate studies
+            - Costs are charged to your Replit credits
+            """)
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
