@@ -198,3 +198,41 @@ The application implements a multi-tier API integration strategy:
 - Verified with BRCA2: 4,144 variants, 2,028 PMIDs, pathogenicity data displayed
 - Confirmed extraction feature works with PubMind-derived PMIDs
 - All four tabs functional with enhanced data presentation
+
+## Standalone PMC Full-Text Harvester (November 20, 2025)
+
+**Purpose**: Created standalone Python script to harvest full-text papers and ALL supplemental materials from PubMed Central for comprehensive LLM-based data extraction.
+
+**Script**: `harvest_pmc_fulltext.py`
+
+**Key Features**:
+1. **PMID → PMCID Conversion**: Uses NCBI E-utilities to identify PubMed Central IDs
+2. **Full-Text Download**: Retrieves complete article XML from EuropePMC API
+3. **Supplemental Files**: Downloads ALL attachments (Excel, Word, PDF, ZIP)
+4. **Unified Markdown**: Converts everything to a single `{PMID}_FULL_CONTEXT.md` file per article
+5. **Excel Table Conversion**: Converts spreadsheets to markdown tables for LLM processing
+6. **Error Handling**: Logs paywalled/unavailable articles to `paywalled_missing.csv`
+
+**APIs Used**:
+- **NCBI E-utilities**: PMID → PMCID conversion via `Bio.Entrez.elink()`
+- **EuropePMC fullTextXML**: `https://www.ebi.ac.uk/europepmc/webservices/rest/{PMCID}/fullTextXML`
+- **EuropePMC supplementaryFiles**: `https://www.ebi.ac.uk/europepmc/webservices/rest/{PMCID}/supplementaryFiles`
+
+**Dependencies**: biopython, requests, markitdown, pandas, openpyxl, python-docx, tabulate
+
+**Usage**:
+```python
+from harvest_pmc_fulltext import PMCHarvester
+
+harvester = PMCHarvester(output_dir="pmc_harvest")
+pmids = ['35443093', '33442691', '34931732']
+harvester.harvest(pmids, delay=2.0)
+```
+
+**Output Structure**:
+- `{PMID}_FULL_CONTEXT.md` - Unified markdown with full-text + supplements
+- `{PMID}_supplements/` - Downloaded supplemental files
+- `successful_downloads.csv` - Log of successful harvests
+- `paywalled_missing.csv` - Log of unavailable articles
+
+**Integration with PubMind App**: The harvester can process PMIDs extracted from PubMind variant searches, providing richer data for LLM extraction than abstract-only processing. Example scripts provided in `example_harvest_from_pubmind.py`.
