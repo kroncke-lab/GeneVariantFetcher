@@ -30,7 +30,7 @@ except ImportError:
     print("WARNING: markitdown not available. Will use basic conversion for docx/xlsx.")
 
 
-Entrez.email = "your.email@example.com"
+Entrez.email = "brett.kroncke@gmail.com"
 Entrez.tool = "PMCHarvester"
 
 
