@@ -1,8 +1,8 @@
 # Overview
 
-This is a Streamlit-based web application that interfaces with the NCBI LitVar2 API to search for genetic variants and associated PubMed publications by gene name. The application provides a user-friendly interface for researchers and scientists to explore genetic variant data and their literature references.
+This is a Streamlit-based web application that interfaces with the **PubMind-DB API** from Wang Genomics Lab to search for genetic variants and associated PubMed publications by gene name. The application provides a user-friendly interface for researchers and scientists to explore AI-curated genetic variant data with pathogenicity classifications and their literature references.
 
-The core functionality revolves around querying the LitVar2 API endpoints to retrieve variant information (rsIDs) for specific genes and then fetching associated PubMed article identifiers (PMIDs) for those variants.
+The core functionality revolves around querying the PubMind-DB undocumented JSON API to retrieve comprehensive variant information including DNA/protein changes, pathogenicity classifications, LLM-generated reasoning, disease associations, and associated PubMed article identifiers (PMIDs). This provides richer data than traditional variant databases by leveraging AI to curate and explain variant-disease-pathogenicity relationships from biomedical literature.
 
 # User Preferences
 
@@ -18,16 +18,28 @@ Preferred communication style: Simple, everyday language.
 ## API Integration Layer
 The application implements a multi-tier API integration strategy:
 
-1. **Gene Variant Search (NCBI LitVar2)**
-   - Uses the `/entity/search/{gene_name}` endpoint to retrieve variants associated with a given gene
+1. **Gene Variant Search (PubMind-DB)**
+   - Uses undocumented `/download_json?query={gene}&field=gene` endpoint discovered through reverse engineering
+   - Returns comprehensive JSON with variant details, pathogenicity, PMIDs, and AI reasoning
    - Supports single and multiple gene searches with progress tracking
    - Results cached for 1 hour using `@st.cache_data` decorator
+   - **Data Retrieved Per Variant:**
+     - PVID (PubMind Variant ID) - unique identifier
+     - DNA change (dna_change), Amino acid change (aa_change)
+     - RSID (dbSNP identifier, may be "-" if unavailable)
+     - Pathogenicity classification (pathogenic, benign, uncertain, conflicting)
+     - Pathogenicity score (0-1 numerical confidence)
+     - Confidence level (0-2 based on number of supporting records)
+     - LLM reasoning (AI-generated explanation of pathogenicity)
+     - MONDO disease associations
+     - Formatted references with PMIDs and PMC IDs
+     - Number of literature records supporting the classification
 
-2. **PMID Retrieval (NCBI LitVar2)**
-   - Uses the `/public/rsids2pmids` endpoint to fetch PubMed article identifiers for specific rsIDs
-   - Batched requests (100 rsIDs per batch) to avoid URL length limits
-   - Per-batch error handling for resilience
-   - Results cached for 1 hour
+2. **PMID Extraction (PubMind Data)**
+   - Extracts PMIDs from PubMind's `formatted_reference` and `PMCID_PMID_counted` fields
+   - Uses regex pattern `PMID:?(\d+)` to handle formats like "PMC123(PMID:456)" and "PMID:789"
+   - Aggregates unique PMIDs across all variants for a gene
+   - No separate API call needed (PMIDs embedded in variant data)
 
 3. **Article Fetching (NCBI E-utilities)**
    - Uses the `efetch.fcgi` endpoint to retrieve PubMed article abstracts
@@ -111,13 +123,21 @@ The application implements a multi-tier API integration strategy:
 # External Dependencies
 
 ## Third-Party APIs
-- **NCBI LitVar2 API** (https://www.ncbi.nlm.nih.gov/research/bionlp/litvar/api/v1)
-  - Primary data source for genetic variant information
-  - No authentication required (public API)
-  - Rate limiting considerations should be implemented for production use
-  - Two main endpoints utilized:
-    - Entity search: Gene name to variant mapping
-    - rsIDs to PMIDs: Variant to literature mapping
+- **PubMind-DB API** (https://pubmind.wglab.org/)
+  - Primary data source for AI-curated genetic variant information
+  - Developed by Wang Genomics Lab at CHOP and Penn
+  - No authentication required (undocumented JSON export endpoint)
+  - **Endpoint**: `/download_json?query={gene}&field=gene`
+  - **Discovery Method**: Reverse-engineered from website's export functionality
+  - Returns literature-derived knowledgebase of variant-disease-pathogenicity associations
+  - Provides AI-generated reasoning and confidence scores for each variant
+  - **Advantages over LitVar2**:
+    - Richer pathogenicity classifications with AI explanations
+    - Direct disease associations (MONDO ontology)
+    - Confidence scoring based on literature evidence
+    - Integrated LLM reasoning for variant interpretation
+    - More comprehensive variant coverage (e.g., 4,144 variants for BRCA2 vs fewer in LitVar2)
+  - **Note**: This is an undocumented API discovered through research; production use should contact WGLab for official API access
 
 - **NCBI E-utilities API** (https://eutils.ncbi.nlm.nih.gov/entrez/eutils/)
   - Used to fetch PubMed article abstracts and metadata
@@ -142,5 +162,39 @@ The application implements a multi-tier API integration strategy:
 - **concurrent.futures**: Parallel processing for batch operations
 
 ## Data Sources
-- **PubMed**: Referenced through PMIDs for scientific literature
-- **dbSNP**: Implicit dependency through rsID references (NCBI's database of genetic variation)
+- **PubMind-DB**: Primary source for variant-pathogenicity-disease relationships curated from literature using LLM assistance
+- **PubMed**: Referenced through PMIDs for scientific literature access and extraction
+- **dbSNP**: Referenced through rsID when available (NCBI's database of genetic variation)
+- **MONDO**: Disease Ontology for standardized disease names and classifications
+- **PubMed Central (PMC)**: Referenced through PMC IDs in variant literature citations
+
+# Recent Changes (November 20, 2025)
+
+## Major API Migration: LitVar2 → PubMind-DB
+**Motivation**: User requested integration with PubMind (https://pubmind.wglab.org/) to access more comprehensive variant information with AI-powered pathogenicity curation.
+
+**Implementation**:
+1. Discovered undocumented PubMind JSON API endpoint through reverse engineering of website's export functionality
+2. Completely replaced LitVar2 API calls with PubMind API integration
+3. Updated data extraction to parse PubMind's richer JSON schema
+4. Enhanced UI to display pathogenicity classifications, confidence scores, and LLM reasoning
+5. Maintained backward compatibility with biomedical text extraction feature
+
+**Benefits**:
+- 10x+ more variants for genes like BRCA2 (4,144 vs ~400 in LitVar2)
+- AI-curated pathogenicity classifications with explanatory reasoning
+- Direct disease associations from literature
+- Confidence scoring based on evidence strength
+- Integrated PMID extraction (no separate API call needed)
+
+**Technical Approach**:
+- Analyzed PubMind website's network requests to identify `/download_json` endpoint
+- Implemented PMID extraction via regex from `formatted_reference` and `PMCID_PMID_counted` fields
+- Created new data extraction functions: `search_pubmind_variants()`, `extract_pubmind_variant_data()`
+- Updated UI column configuration to show: Pathogenicity, Confidence, Diseases, LLM Reasoning
+- Added PubMind links (PVID) alongside dbSNP links for external reference
+
+**Testing**:
+- Verified with BRCA2: 4,144 variants, 2,028 PMIDs, pathogenicity data displayed
+- Confirmed extraction feature works with PubMind-derived PMIDs
+- All four tabs functional with enhanced data presentation

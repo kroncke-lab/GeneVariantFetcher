@@ -10,7 +10,7 @@ from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-st.set_page_config(page_title="LitVar2 Gene Variant Search", layout="wide")
+st.set_page_config(page_title="PubMind Variant Search", layout="wide")
 
 # OpenAI client setup using Replit AI Integrations
 # the newest OpenAI model is "gpt-5" which was released August 7, 2025.
@@ -23,20 +23,20 @@ openai_client = OpenAI(
     base_url=AI_INTEGRATIONS_OPENAI_BASE_URL
 )
 
-st.title("NCBI LitVar2 Gene Variant Search")
+st.title("PubMind Variant Search")
 st.markdown("""
-Search for genetic variants and associated PubMed publications by gene name using the NCBI LitVar2 API.
+Search for genetic variants and associated PubMed publications by gene name using the PubMind-DB API from Wang Genomics Lab.
 """)
 
 @st.cache_data(ttl=3600)
-def search_gene_variants(gene_name):
+def search_pubmind_variants(gene_name):
     """
-    Search for variants associated with a gene using NCBI LitVar2 API.
-    Returns variant data from the search endpoint.
+    Search for variants associated with a gene using PubMind-DB API.
+    Returns variant data with pathogenicity and publication information.
     Cached for 1 hour to improve performance.
     """
-    base_url = "https://www.ncbi.nlm.nih.gov/research/bionlp/litvar/api/v1"
-    search_url = f"{base_url}/entity/search/{gene_name}"
+    base_url = "https://pubmind.wglab.org"
+    search_url = f"{base_url}/download_json?query={gene_name}&field=gene"
     
     try:
         response = requests.get(search_url, timeout=30)
@@ -48,44 +48,25 @@ def search_gene_variants(gene_name):
     except json.JSONDecodeError:
         return None, "Error: Unable to parse API response"
 
-@st.cache_data(ttl=3600)
-def get_pmids_for_rsids(rsids):
+def extract_pmids_from_pubmind(formatted_ref, pmcid_counted):
     """
-    Get PMIDs for a list of rsIDs using the rsids2pmids endpoint.
-    Batches requests to avoid URL length limits (max 100 rsIDs per request).
-    Cached for 1 hour to improve performance.
+    Extract unique PMIDs from PubMind reference strings.
+    Handles formats like: PMC123(PMID:456), PMID:789
     """
-    if not rsids:
-        return {}
+    pmids = set()
+    import re
     
-    rsids = tuple(rsids)
-    
-    base_url = "https://www.ncbi.nlm.nih.gov/research/bionlp/litvar/api/v1"
-    rsid_to_pmids = {}
-    batch_size = 100
-    
-    for i in range(0, len(rsids), batch_size):
-        batch = rsids[i:i + batch_size]
-        rsids_param = ','.join(batch)
-        pmids_url = f"{base_url}/public/rsids2pmids?rsids={rsids_param}"
-        
-        try:
-            response = requests.get(pmids_url, timeout=60)
-            response.raise_for_status()
-            data = response.json()
-            
-            if isinstance(data, list):
-                for item in data:
-                    if isinstance(item, dict) and 'pmids' in item and 'rsid' in item:
-                        rsid_to_pmids[item['rsid']] = item['pmids']
-        except Exception as e:
+    for text in [formatted_ref, pmcid_counted]:
+        if not text or text == "-":
             continue
+        pmid_matches = re.findall(r'PMID:?(\d+)', text)
+        pmids.update(pmid_matches)
     
-    return rsid_to_pmids
+    return list(pmids)
 
-def extract_variant_data(api_response, gene_name):
+def extract_pubmind_variant_data(api_response, gene_name):
     """
-    Extract variant information from the API response and fetch PMIDs.
+    Extract variant information from PubMind API response.
     Returns a list of dictionaries containing variant details with PMIDs.
     """
     variants_data = []
@@ -93,57 +74,51 @@ def extract_variant_data(api_response, gene_name):
     if not api_response or not isinstance(api_response, list):
         return variants_data
     
-    rsids = []
     for item in api_response:
-        if isinstance(item, dict) and 'rsid' in item:
-            rsids.append(item['rsid'])
-    
-    rsid_to_pmids = get_pmids_for_rsids(rsids)
-    
-    for item in api_response:
-        variant_info = extract_single_variant(item, rsid_to_pmids, gene_name)
+        variant_info = extract_single_pubmind_variant(item, gene_name)
         if variant_info:
             variants_data.append(variant_info)
     
     return variants_data
 
-def extract_single_variant(variant_item, rsid_to_pmids, gene_name):
+def extract_single_pubmind_variant(variant_item, gene_name):
     """
-    Extract information from a single variant item.
+    Extract information from a single PubMind variant item.
     """
     if not isinstance(variant_item, dict):
         return None
     
     variant_info = {}
     
-    rsid = variant_item.get('rsid', 'N/A')
-    variant_info['rsID'] = rsid
+    variant_info['Gene'] = gene_name
+    variant_info['rsID'] = variant_item.get('RSID', '-')
+    variant_info['Variant_ID'] = variant_item.get('PVID', 'N/A')
     
-    variant_info['Variant_ID'] = variant_item.get('id', 'N/A')
-    
-    hgvs = variant_item.get('hgvs', '')
-    if hgvs:
+    hgvs = variant_item.get('dna_change', '')
+    if hgvs and hgvs != '-':
         variant_info['HGVS'] = hgvs
     else:
         variant_info['HGVS'] = 'N/A'
     
-    hgvs_prot = variant_item.get('hgvs_prot', '')
-    if hgvs_prot:
+    hgvs_prot = variant_item.get('aa_change', '')
+    if hgvs_prot and hgvs_prot != '-':
         variant_info['HGVS_Protein'] = hgvs_prot
     else:
         variant_info['HGVS_Protein'] = 'N/A'
     
-    gene_data = variant_item.get('gene', {})
-    if isinstance(gene_data, dict):
-        variant_info['Gene'] = gene_data.get('name', gene_name)
-    else:
-        variant_info['Gene'] = gene_name
+    variant_info['Pathogenicity'] = variant_item.get('pathogenicity_sum', 'Unknown')
+    variant_info['Pathogenicity_Score'] = variant_item.get('pathogenicity_score', 'N/A')
+    variant_info['Confidence'] = variant_item.get('confidence', 'N/A')
+    variant_info['LLM_Reasoning'] = variant_item.get('LLM_reasoning', 'N/A')
+    variant_info['Diseases'] = variant_item.get('MONDO_name_counted', 'N/A')
     
-    pmids = rsid_to_pmids.get(rsid, [])
+    pmids = extract_pmids_from_pubmind(
+        variant_item.get('formatted_reference', ''),
+        variant_item.get('PMCID_PMID_counted', '')
+    )
     variant_info['PMID_Count'] = len(pmids)
-    variant_info['PMIDs'] = ', '.join(map(str, pmids)) if pmids else ''
-    
-    variant_info['Publications_Count'] = variant_item.get('pmids_count', 0)
+    variant_info['PMIDs'] = ', '.join(pmids) if pmids else ''
+    variant_info['Publications_Count'] = variant_item.get('Num_of_record_used', 0)
     
     return variant_info
 
@@ -409,14 +384,14 @@ if search_button and gene_input:
         for idx, gene_name in enumerate(genes_to_search):
             status_text.text(f"Processing {gene_name} ({idx + 1}/{len(genes_to_search)})...")
             
-            api_response, error = search_gene_variants(gene_name)
+            api_response, error = search_pubmind_variants(gene_name)
             
             if error:
                 failed_genes.append((gene_name, error))
             elif not api_response:
                 failed_genes.append((gene_name, "No variant data found"))
             else:
-                variants_data = extract_variant_data(api_response, gene_name)
+                variants_data = extract_pubmind_variant_data(api_response, gene_name)
                 if variants_data:
                     all_variants_data.extend(variants_data)
                 else:
@@ -534,7 +509,13 @@ if results_available:
             lambda x: ', '.join(x.split(', ')[:5]) if x else ''
         )
         
-        column_order = ['Gene', 'dbSNP_Link', 'Variant_ID', 'HGVS', 'HGVS_Protein', 'PMID_Count', 'Publications_Count', 'First_5_PMIDs']
+        df_display['PVID_Link'] = df_display['Variant_ID'].apply(
+            lambda x: f"https://pubmind.wglab.org/pvid_redirect?pvid={x}" if x != 'N/A' and x.startswith('PVID') else ''
+        )
+        
+        column_order = ['Gene', 'Variant_ID', 'PVID_Link', 'HGVS', 'HGVS_Protein', 'rsID', 
+                       'Pathogenicity', 'Pathogenicity_Score', 'Confidence', 'Diseases',
+                       'PMID_Count', 'Publications_Count', 'First_5_PMIDs']
         available_columns = [col for col in column_order if col in df_display.columns]
         df_display_final = df_display[available_columns]
         
@@ -543,24 +524,50 @@ if results_available:
             use_container_width=True,
             height=400,
             column_config={
+                "PVID_Link": st.column_config.LinkColumn(
+                    "PubMind Link",
+                    help="Click to view full variant details in PubMind-DB"
+                ),
                 "dbSNP_Link": st.column_config.LinkColumn(
-                    "rsID",
-                    help="Click to view variant in dbSNP database"
+                    "dbSNP",
+                    help="Click to view variant in dbSNP database (if rsID available)"
                 ),
                 "First_5_PMIDs": st.column_config.TextColumn(
                     "First 5 PMIDs",
-                    help="First 5 PMIDs (see PMID List tab for clickable links to all PMIDs)"
+                    help="First 5 PMIDs (see PMID List tab for all)"
+                ),
+                "Pathogenicity": st.column_config.TextColumn(
+                    "Pathogenicity",
+                    help="AI-curated pathogenicity classification from literature"
+                ),
+                "Confidence": st.column_config.NumberColumn(
+                    "Confidence",
+                    help="Confidence level (0-2): based on number of supporting records"
+                ),
+                "Diseases": st.column_config.TextColumn(
+                    "Associated Diseases",
+                    help="Diseases mentioned with this variant (MONDO ontology)"
                 ),
             }
         )
         
-        st.markdown("**Clickable PMID Links (first 20 variants):**")
+        with st.expander("🧠 View LLM Reasoning (AI-Generated Pathogenicity Explanations)"):
+            st.markdown("PubMind uses AI to explain why each variant is classified as pathogenic, benign, or uncertain based on literature evidence.")
+            for idx, row in df.head(20).iterrows():
+                llm_reasoning = row.get('LLM_Reasoning', 'N/A')
+                if llm_reasoning and llm_reasoning != 'N/A':
+                    st.markdown(f"**{row['Variant_ID']} ({row['HGVS']})** - *{row.get('Pathogenicity', 'Unknown')}*")
+                    st.info(llm_reasoning)
+                    st.divider()
+        
+        st.markdown("**Quick PMID Links (first 20 variants):**")
         for idx, row in df.head(20).iterrows():
             pmid_str = row.get('PMIDs')
             if pmid_str and isinstance(pmid_str, str):
                 pmids = pmid_str.split(', ')[:5]
-                pmid_links = ' • '.join([f"[{p}](https://pubmed.ncbi.nlm.nih.gov/{p}/)" for p in pmids])
-                st.markdown(f"**{row['rsID']}**: {pmid_links}")
+                if pmids:
+                    pmid_links = ' • '.join([f"[{p}](https://pubmed.ncbi.nlm.nih.gov/{p}/)" for p in pmids])
+                    st.markdown(f"**{row['Variant_ID']} ({row['HGVS']})**: {pmid_links}")
         
         csv = df[['Gene', 'rsID', 'Variant_ID', 'HGVS', 'HGVS_Protein', 'PMID_Count', 'Publications_Count', 'PMIDs']].to_csv(index=False)
         st.download_button(
