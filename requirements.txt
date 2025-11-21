@@ -1,0 +1,19 @@
+# Tiered Biomedical Extraction Pipeline Dependencies
+
+# Core dependencies
+pydantic>=2.0.0
+litellm>=1.30.0
+requests>=2.31.0
+pandas>=2.0.0
+tenacity>=8.2.0
+
+# Optional: For enhanced functionality
+python-dotenv>=1.0.0  # For environment variable management
+rich>=13.0.0  # For beautiful terminal output
+tqdm>=4.65.0  # For progress bars
+
+# Development dependencies (optional)
+pytest>=7.4.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
