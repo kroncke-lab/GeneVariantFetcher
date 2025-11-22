@@ -72,13 +72,23 @@ harvester.harvest(pmids, delay=2.0)
 
 ---
 
-## Integration with PubMind App
+## Working with PMID Lists
 
-### Step 1: Export PMIDs from PubMind
+### Step 1: Prepare Your PMID List
 
-In your Streamlit app, search for a gene (e.g., BRCA2) and click **"Download PMIDs (TXT)"** button.
+Create a text file with PMIDs (one per line), for example `BRCA2_pmids.txt`:
 
-This creates a file like `BRCA2_pmids.txt` with PMIDs.
+```
+35443093
+33442691
+34931732
+```
+
+You can obtain PMIDs from various sources:
+- PubMed searches
+- Literature databases
+- Variant databases like PubMind-DB, ClinVar, etc.
+- Your own curated lists
 
 ### Step 2: Harvest Full-Text Papers
 
@@ -249,20 +259,20 @@ for i in range(0, len(pmids), batch_size):
 ## Example Workflow
 
 ```bash
-# 1. Search BRCA2 in PubMind app
-# 2. Download PMIDs → BRCA2_pmids.txt
+# 1. Create PMID list (e.g., from PubMed search or variant database)
+# Save to BRCA2_pmids.txt
 
-# 3. Harvest full-text papers
+# 2. Harvest full-text papers
 python harvest_pmc_fulltext.py
 
-# 4. Review harvested papers
+# 3. Review harvested papers
 ls pmc_harvest/
 # → 35443093_FULL_CONTEXT.md (56 KB!)
 # → 33442691_FULL_CONTEXT.md (657 bytes)
 # → successful_downloads.csv
 # → paywalled_missing.csv
 
-# 5. Use with your LLM extraction pipeline
+# 4. Use with your LLM extraction pipeline
 # Now you have FULL CONTEXT instead of just abstracts!
 ```
 
