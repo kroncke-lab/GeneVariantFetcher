@@ -1,60 +1,42 @@
-# GeneVariantFetcher - Usage Guide
+# GeneVariantFetcher - Command-Line Tools
 
-A powerful tool for searching genetic variants and extracting patient-level data from PubMed literature. This application combines the PubMind-DB variant database with AI-powered text extraction to help researchers analyze gene variants and associated publications.
+A collection of Python tools for extracting genetic variant data, patient-level information, and full-text articles from PubMed literature. All tools are designed to run locally on your computer without requiring a web browser.
 
 ## Table of Contents
 
 - [What This Tool Does](#what-this-tool-does)
-- [Quick Start (Browser - Replit)](#quick-start-browser---replit)
-- [Local Setup (PyCharm/VSCode)](#local-setup-pycharmintellijvscode)
-- [Using the Web Interface](#using-the-web-interface)
-- [Using the Harvesting Tool](#using-the-harvesting-tool)
-- [Features Overview](#features-overview)
+- [Local Setup](#local-setup)
+- [Available Tools](#available-tools)
+- [Using the PMC Harvester](#using-the-pmc-harvester)
+- [Using the Extraction Pipeline](#using-the-extraction-pipeline)
+- [Using the Clinical Data Triage Tool](#using-the-clinical-data-triage-tool)
 - [Troubleshooting](#troubleshooting)
 
 ---
 
 ## What This Tool Does
 
-**GeneVariantFetcher** provides two main capabilities:
+**GeneVariantFetcher** provides command-line tools for:
 
-1. **Web Interface (Streamlit App)** - Search for genetic variants by gene name and:
-   - View variant details with pathogenicity classifications
-   - See associated PubMed publications
-   - Extract individual patient-level data using AI
-   - Download results as CSV/JSON files
-
-2. **Full-Text Harvester** - Download complete PubMed Central articles with:
+1. **Full-Text Harvester** - Download complete PubMed Central articles with:
    - Full-text content (not just abstracts)
    - All supplemental materials (Excel, Word, PDFs)
    - Everything consolidated into markdown files for LLM processing
 
----
+2. **Extraction Pipeline** - Extract structured biomedical data from articles:
+   - Individual-level variant and phenotype data
+   - Clinical status (affected/unaffected)
+   - Age, sex, and demographic information
+   - Evidence sentences supporting each extraction
 
-## Quick Start (Browser - Replit)
-
-### Option 1: Running on Replit (Easiest)
-
-This is the **simplest way** to use the tool - no installation needed!
-
-1. **Open the project on Replit**
-   - If you're viewing this in Replit, you're already there!
-   - Look for the green "Run" button at the top of the page
-
-2. **Click the "Run" button**
-   - The application will start automatically
-   - Wait 10-30 seconds for the server to start
-   - You'll see a web browser preview open on the right side
-
-3. **Start using the app**
-   - The web interface will appear automatically
-   - Skip to [Using the Web Interface](#using-the-web-interface) below
-
-**That's it!** The browser interface is now ready to use.
+3. **Clinical Data Triage** - Process and triage clinical data:
+   - Extract and organize patient-level information
+   - Filter and classify clinical variants
+   - Generate structured outputs for analysis
 
 ---
 
-## Local Setup (PyCharm/IntelliJ/VSCode)
+## Local Setup
 
 ### Prerequisites
 
@@ -101,7 +83,7 @@ This installs all required packages listed in `pyproject.toml`.
 
 ### Step 4: Set Up OpenAI API Key (for AI extraction features)
 
-The individual-level data extraction feature requires an OpenAI API key.
+The extraction features require an OpenAI API key.
 
 **Option A: Using environment variables (recommended)**
 
@@ -124,156 +106,46 @@ AI_INTEGRATIONS_OPENAI_API_KEY=your-api-key-here
 AI_INTEGRATIONS_OPENAI_BASE_URL=https://api.openai.com/v1
 ```
 
-Then modify `app.py` to load the .env file (add at the top):
+---
 
-```python
-from dotenv import load_dotenv
-load_dotenv()
-```
+## Available Tools
 
-And install python-dotenv:
+### 1. PMC Full-Text Harvester (`harvest_pmc_fulltext.py`)
 
+Download full-text articles and supplemental materials from PubMed Central.
+
+**Quick Start:**
 ```bash
-pip install python-dotenv
+python harvest_pmc_fulltext.py
 ```
 
-### Step 5: Run the Application
+**See detailed documentation:** [HARVESTER_QUICKSTART.md](HARVESTER_QUICKSTART.md)
 
-**In PyCharm:**
+### 2. Extraction Pipeline (`pipeline.py`)
 
-1. Open the project folder in PyCharm
-2. Right-click on `app.py`
-3. Select "Run 'app'"
-4. Or use the terminal:
+Extract structured biomedical data from articles using AI.
 
+**Quick Start:**
 ```bash
-streamlit run app.py --server.port 5000
+python example_usage.py
 ```
 
-**In VSCode:**
+**See detailed documentation:** [README_PIPELINE.md](README_PIPELINE.md)
 
-1. Open the project folder
-2. Open a terminal (View → Terminal)
-3. Run:
+### 3. Clinical Data Triage (`clinical_data_triage.py`)
 
+Process and triage clinical data from various sources.
+
+**Quick Start:**
 ```bash
-streamlit run app.py --server.port 5000
+python example_triage.py
 ```
 
-**In the terminal:**
-
-```bash
-streamlit run app.py --server.port 5000
-```
-
-4. **Open your browser**
-   - The app will automatically open at `http://localhost:5000`
-   - If not, manually navigate to that URL
+**See detailed documentation:** [TRIAGE_README.md](TRIAGE_README.md)
 
 ---
 
-## Using the Web Interface
-
-### Step-by-Step: Searching for Variants
-
-1. **Enter a Gene Symbol**
-   - Look at the left sidebar
-   - In the text box labeled "Enter Gene Symbol"
-   - Type a gene name (e.g., `BRCA1`, `TP53`, `SCN5A`, `KCNQ1`)
-   - Gene symbols are case-insensitive
-
-2. **Choose Search Mode (Optional)**
-   - **Single Gene**: Search one gene at a time (default)
-   - **Multiple Genes**: Enter multiple genes, one per line
-
-3. **Set Filters (Optional)**
-   - **Min PMIDs per variant**: Show only variants with at least X publications
-   - Leave at 0 to see all variants
-
-4. **Click the "Search" Button**
-   - Wait a few seconds for results
-   - You'll see a progress indicator
-
-### Understanding the Results
-
-The results are organized into 4 tabs:
-
-#### Tab 1: 📊 Visualizations
-
-- **Left chart**: Distribution of how many PMIDs each variant has
-- **Right chart**: Top 15 most-studied variants
-- Use these to identify well-researched variants
-
-#### Tab 2: 📋 Variant Details
-
-- **Table view** with columns:
-  - `Gene`: The gene symbol you searched
-  - `Variant_ID`: PubMind unique identifier (PVID)
-  - `HGVS`: DNA-level variant notation (e.g., c.1234G>A)
-  - `HGVS_Protein`: Protein-level change (e.g., p.Arg412His)
-  - `rsID`: dbSNP identifier (clickable link)
-  - `Pathogenicity`: AI-curated classification (Pathogenic/Benign/VUS)
-  - `PMID_Count`: Number of PubMed publications mentioning this variant
-  - `First 5 PMIDs`: Quick links to publications
-
-- **Features:**
-  - Click on PVID links to view full details on PubMind-DB
-  - Click on rsID links to view in dbSNP database
-  - Expand "View LLM Reasoning" to see AI explanations for pathogenicity
-  - Click PMID numbers to open articles on PubMed
-
-- **Download:**
-  - Click "Download Variant Data (CSV)" at the bottom
-  - Opens in Excel, Google Sheets, etc.
-
-#### Tab 3: 📚 PMID List
-
-- **Full list** of all unique PubMed IDs across all variants
-- **Quick links** to the first 50 PMIDs
-- **Download:**
-  - Click "Download PMIDs (TXT)" to get a plain text file
-  - One PMID per line
-  - Use this for the Harvesting Tool (see below)
-
-#### Tab 4: 🧬 Individual Extractions
-
-**What this does:**
-Analyzes PubMed articles using AI to extract structured patient-level data including:
-- Individual patients with specific variants
-- Phenotypes (symptoms, conditions)
-- Clinical status (affected/unaffected)
-- Age, sex, and other demographics
-
-**How to use:**
-
-1. **Choose number of articles**
-   - Use the number input (default: 5)
-   - Start small (5-10) to test
-   - Maximum: 20 articles per run
-   - **Note:** Uses OpenAI API credits (~$0.02 per article)
-
-2. **Click "🚀 Extract Individual Data"**
-   - Wait for processing (30-60 seconds per article)
-   - Progress indicator shows status
-
-3. **Review Results**
-   - Table shows extracted individuals
-   - Columns: individual_id, PMID, gene, age, sex, affected_status, phenotypes, variants
-   - View extraction statistics in expandable section
-
-4. **Download Results**
-   - **JSON format**: For programmatic analysis
-   - **CSV format**: For Excel/Google Sheets
-
-**Important Notes:**
-- Works best with case reports and detailed clinical studies
-- Limited to abstracts (full text requires harvesting - see below)
-- Requires valid OpenAI API key
-- Costs are typically $0.02-0.05 per article
-
----
-
-## Using the Harvesting Tool
+## Using the PMC Harvester
 
 The harvesting tool downloads **full-text** PubMed Central articles with all supplemental materials. This provides much richer data than abstracts alone.
 
@@ -282,16 +154,15 @@ The harvesting tool downloads **full-text** PubMed Central articles with all sup
 - You need full article text, not just abstracts
 - You want supplemental tables with patient-level data
 - You're preparing articles for detailed LLM extraction
-- You have a list of PMIDs from the web interface
+- You have a list of PMIDs to process
 
 ### Option 1: Quick Start (Edit the Script)
 
 1. **Get your PMIDs**
-   - From the web interface: Tab 3 → Download PMIDs (TXT)
-   - Or manually create a list
+   - Create a list of PubMed IDs you want to download
 
 2. **Edit the harvesting script**
-   - Open `harvest_pmc_fulltext.py` in PyCharm/VSCode
+   - Open `harvest_pmc_fulltext.py`
    - Find line 333 (look for `pmids = [`)
    - Replace with your PMIDs:
 
@@ -309,11 +180,6 @@ The harvesting tool downloads **full-text** PubMed Central articles with all sup
 
 4. **Run the script**
 
-   **In PyCharm:**
-   - Right-click `harvest_pmc_fulltext.py`
-   - Click "Run 'harvest_pmc_fulltext'"
-
-   **In terminal:**
    ```bash
    python harvest_pmc_fulltext.py
    ```
@@ -350,8 +216,8 @@ The harvesting tool downloads **full-text** PubMed Central articles with all sup
 ```python
 from harvest_pmc_fulltext import PMCHarvester
 
-# Load PMIDs from the web app download
-with open('BRCA1_pmids.txt', 'r') as f:
+# Load PMIDs from a file
+with open('my_pmids.txt', 'r') as f:
     pmids = [line.strip() for line in f if line.strip()]
 
 # Create harvester
@@ -425,58 +291,37 @@ for i in range(0, len(pmids), batch_size):
 
 ---
 
-## Features Overview
+## Using the Extraction Pipeline
 
-### Web Interface Features
+See [README_PIPELINE.md](README_PIPELINE.md) for detailed documentation on:
+- Extracting individual-level data from articles
+- Tiered extraction with cost optimization
+- Filtering and post-processing
+- Output formats and usage
 
-| Feature | Description | Use Case |
-|---------|-------------|----------|
-| **Single Gene Search** | Search one gene at a time | Quick lookups, focused research |
-| **Multi-Gene Search** | Search multiple genes | Comparative studies, gene panels |
-| **Pathogenicity AI** | AI-curated variant classifications | Clinical interpretation |
-| **Publication Links** | Direct links to PubMed articles | Literature review |
-| **Individual Extraction** | AI-powered patient data extraction | Building databases, meta-analysis |
-| **Data Export** | Download as CSV/JSON | Further analysis, Excel processing |
-| **Visualizations** | Charts and graphs | Presentations, quick insights |
+**Quick Start:**
+```bash
+python example_usage.py
+```
 
-### Harvester Features
+---
 
-| Feature | Description | Benefit |
-|---------|-------------|---------|
-| **Full-Text Download** | Complete article text | 10-100x more data than abstracts |
-| **Supplemental Files** | Excel, Word, PDF supplements | Patient-level data tables |
-| **Markdown Conversion** | Everything in one .md file | LLM-ready format |
-| **Batch Processing** | Process hundreds of PMIDs | Automated large-scale extraction |
-| **Error Handling** | Automatic retry, logging | Robust processing |
+## Using the Clinical Data Triage Tool
+
+See [TRIAGE_README.md](TRIAGE_README.md) for detailed documentation on:
+- Clinical data processing and triage
+- Variant classification
+- Quality control and filtering
+- Integration with extraction pipeline
+
+**Quick Start:**
+```bash
+python example_triage.py
+```
 
 ---
 
 ## Troubleshooting
-
-### Web Interface Issues
-
-**Problem: "API Error" when searching**
-- **Solution**: Check your internet connection. The PubMind API might be temporarily unavailable. Try again in a few minutes.
-
-**Problem: "No variants found"**
-- **Solution**:
-  - Check spelling of gene symbol
-  - Try alternative gene names (e.g., "SCN5A" vs "Sodium Channel")
-  - Not all genes have data in PubMind-DB
-
-**Problem: Individual extraction fails**
-- **Solution**:
-  - Check that OpenAI API key is set correctly
-  - Verify you have API credits available
-  - Check the error message for rate limit issues
-  - Try with fewer articles (start with 1-2)
-
-**Problem: App won't start in PyCharm**
-- **Solution**:
-  - Verify Python 3.11+ is installed: `python --version`
-  - Reinstall dependencies: `pip install -e .`
-  - Try running from terminal: `streamlit run app.py`
-  - Check if port 5000 is already in use
 
 ### Harvester Issues
 
@@ -517,75 +362,65 @@ for i in range(0, len(pmids), batch_size):
   - Verify virtual environment is activated (you should see `(venv)` in terminal)
   - Reinstall: `pip install -e . --force-reinstall`
 
-**Problem: Port already in use**
+### Extraction Issues
+
+**Problem: OpenAI API errors**
 - **Solution**:
-  - Use a different port: `streamlit run app.py --server.port 8501`
-  - Or kill the process using port 5000
+  - Check that API key is set correctly
+  - Verify you have API credits available
+  - Check the error message for rate limit issues
+
+**Problem: No data extracted**
+- **Solution**:
+  - Works best with case reports and detailed clinical studies
+  - Limited to abstracts unless using harvested full-text
+  - Some articles don't contain individual-level data
 
 ---
 
 ## Workflow Examples
 
-### Example 1: Clinical Variant Review
+### Example 1: Downloading and Extracting Data for a Gene
 
-**Goal**: Review pathogenicity of BRCA1 variants
+**Goal**: Get all available data for SCN5A variants
 
-1. Open the web interface
-2. Search for "BRCA1"
-3. Set "Min PMIDs" to 5 (focus on well-studied variants)
-4. Click Search
-5. Go to Tab 2: Variant Details
-6. Review pathogenicity classifications
-7. Expand "View LLM Reasoning" for AI explanations
-8. Click on rsID links to verify in dbSNP
-9. Download CSV for reporting
-
-### Example 2: Building a Patient Database
-
-**Goal**: Extract individual patient data from SCN5A papers
-
-1. Open the web interface
-2. Search for "SCN5A"
-3. Go to Tab 3: PMID List
-4. Download PMIDs (TXT)
-5. Go to Tab 4: Individual Extractions
-6. Set to 10 articles
-7. Click "Extract Individual Data"
-8. Wait for processing
-9. Download JSON results
-10. Use the harvester to get full-text for top articles:
-    ```bash
-    # Edit harvest_pmc_fulltext.py with PMIDs
-    python harvest_pmc_fulltext.py
-    ```
-11. Feed full-text markdown files to your own LLM for deeper extraction
-
-### Example 3: Multi-Gene Panel Analysis
-
-**Goal**: Compare variants across a cardiac gene panel
-
-1. Open the web interface
-2. Select "Multiple Genes" mode
-3. Enter genes (one per line):
+1. Create a PMID list for your gene of interest
+2. Harvest full-text articles:
+   ```bash
+   python harvest_pmc_fulltext.py
    ```
-   SCN5A
-   KCNQ1
-   KCNH2
-   SCN1B
+3. Run extraction pipeline on harvested files:
+   ```bash
+   python example_usage.py
    ```
-4. Click Search
-5. Go to Tab 1: Visualizations
-6. Compare distribution charts
-7. Go to Tab 2: Download CSV
-8. Analyze in Excel/Python
+4. Process and triage the results:
+   ```bash
+   python example_triage.py
+   ```
+
+### Example 2: Processing a Large PMID List
+
+**Goal**: Process 1000+ articles efficiently
+
+1. Split your PMID list into batches
+2. Process each batch:
+   ```python
+   from harvest_pmc_fulltext import PMCHarvester
+
+   batch_size = 100
+   for i in range(0, len(pmids), batch_size):
+       batch = pmids[i:i+batch_size]
+       harvester = PMCHarvester(output_dir=f"batch_{i//batch_size}")
+       harvester.harvest(batch, delay=2.0)
+   ```
 
 ---
 
 ## Additional Resources
 
-- **Full Harvester Documentation**: See `HARVESTER_QUICKSTART.md`
-- **Detailed Harvester Guide**: See `README_HARVEST.md`
-- **PubMind-DB Website**: https://pubmind.wglab.org
+- **Full Harvester Documentation**: See `HARVESTER_QUICKSTART.md` and `README_HARVEST.md`
+- **Extraction Pipeline Documentation**: See `README_PIPELINE.md`
+- **Clinical Triage Documentation**: See `TRIAGE_README.md`
 - **NCBI E-utilities**: https://www.ncbi.nlm.nih.gov/books/NBK25501/
 - **OpenAI API Docs**: https://platform.openai.com/docs
 
@@ -594,14 +429,14 @@ for i in range(0, len(pmids), batch_size):
 ## Getting Help
 
 - Check the troubleshooting section above
-- Review the detailed guides in `HARVESTER_QUICKSTART.md`
+- Review the detailed guides in the documentation files
 - For bugs or feature requests, contact the repository maintainers
 
 ---
 
 ## Credits
 
-- **PubMind-DB**: Wang Genomics Lab
 - **NCBI E-utilities**: National Library of Medicine
+- **EuropePMC API**: Europe PubMed Central
 - **MarkItDown**: Microsoft Research
-- **Streamlit**: Streamlit Inc.
+- **OpenAI**: GPT models for extraction
