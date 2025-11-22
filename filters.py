@@ -237,3 +237,189 @@ Respond with a JSON object:
                 confidence=0.0,
                 metadata={"error": str(e)}
             )
+
+
+class ClinicalDataTriageFilter:
+    """
+    Clinical Data Triage Filter: Determines if text contains ORIGINAL clinical data.
+
+    This is a specialized filter that triages papers based on whether they contain
+    new clinical case data vs. reviews, animal studies, or other non-clinical research.
+
+    Rules:
+    - REJECT: Review articles, Meta-analyses (unless individual patient data attached),
+              Animal studies, Cell studies only, Variant interpretation guidelines without new cases
+    - ACCEPT: Case reports, Case series, Clinical cohorts, Functional studies that also describe phenotype
+
+    Output: JSON with "KEEP" or "DROP" decision, reason, and confidence score.
+    """
+
+    TRIAGE_PROMPT = """You are a Triage Assistant for clinical genetic research papers.
+
+Task: Determine if the text contains ORIGINAL clinical data (case reports, cohort studies) for {gene}.
+Input: Abstract/Introduction.
+
+Rules:
+1. REJECT if:
+   - Review article
+   - Meta-analysis (unless individual patient data attached)
+   - Animal study (mouse, rat, zebrafish, etc.)
+   - Cell study only (in vitro, cell lines, no patients)
+   - Variant interpretation guidelines (without new cases)
+   - Purely computational/bioinformatics study
+   - Basic science without patient phenotypes
+
+2. ACCEPT if:
+   - Case report (even single patient)
+   - Case series (multiple patients)
+   - Clinical cohort study
+   - Functional study that *also* describes the patient phenotype
+   - Clinical trial with patient-level data
+   - Family study with clinical data
+
+Key Question: Does this paper report NEW patient-level clinical data?
+
+Title: {title}
+
+Abstract/Introduction: {abstract}
+
+Output format: JSON only.
+{{
+  "decision": "KEEP" | "DROP",
+  "reason": "Brief explanation (e.g., 'Review article only', 'Mouse model only', 'New case report detected')",
+  "confidence": 0.0-1.0
+}}
+
+Respond ONLY with valid JSON. Be conservative - when in doubt about borderline cases, use confidence < 0.5."""
+
+    def __init__(
+        self,
+        model: str = "gpt-4o-mini",
+        temperature: float = 0.1,
+        max_tokens: int = 200
+    ):
+        """
+        Initialize the Clinical Data Triage filter.
+
+        Args:
+            model: LiteLLM model identifier (default: gpt-4o-mini for cost efficiency).
+            temperature: Model temperature (lower = more deterministic).
+            max_tokens: Maximum tokens for response.
+        """
+        self.model = model
+        self.temperature = temperature
+        self.max_tokens = max_tokens
+
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
+    def triage(
+        self,
+        title: str,
+        abstract: str,
+        gene: str = "the gene of interest",
+        pmid: Optional[str] = None
+    ) -> dict:
+        """
+        Triage a paper based on title and abstract.
+
+        Args:
+            title: Paper title.
+            abstract: Paper abstract or introduction text.
+            gene: Gene symbol being studied.
+            pmid: Optional PMID for logging.
+
+        Returns:
+            Dictionary with:
+                - decision: "KEEP" or "DROP"
+                - reason: Explanation for the decision
+                - confidence: Confidence score (0.0-1.0)
+                - pmid: PMID if provided
+        """
+        if not abstract or not title:
+            logger.warning(f"Missing title or abstract for triage{f' (PMID: {pmid})' if pmid else ''}")
+            return {
+                "decision": "DROP",
+                "reason": "Missing title or abstract",
+                "confidence": 1.0,
+                "pmid": pmid
+            }
+
+        # Construct prompt
+        prompt = self.TRIAGE_PROMPT.format(
+            gene=gene,
+            title=title,
+            abstract=abstract[:2500]  # Truncate very long abstracts
+        )
+
+        try:
+            logger.debug(f"Triaging paper{f' PMID {pmid}' if pmid else ''} for gene {gene}")
+
+            # Call LiteLLM
+            response = completion(
+                model=self.model,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=self.temperature,
+                max_tokens=self.max_tokens,
+                response_format={"type": "json_object"}
+            )
+
+            # Parse response
+            import json
+            result_text = response.choices[0].message.content
+            result_data = json.loads(result_text)
+
+            # Validate and normalize decision
+            decision = result_data.get("decision", "DROP").upper()
+            if decision not in ["KEEP", "DROP"]:
+                logger.warning(f"Invalid decision '{decision}', defaulting to DROP")
+                decision = "DROP"
+
+            reason = result_data.get("reason", "No reason provided")
+            confidence = float(result_data.get("confidence", 0.5))
+            confidence = max(0.0, min(1.0, confidence))  # Clamp to [0, 1]
+
+            result = {
+                "decision": decision,
+                "reason": reason,
+                "confidence": confidence,
+                "pmid": pmid,
+                "model": self.model,
+                "tokens_used": response.usage.total_tokens if hasattr(response, 'usage') else None
+            }
+
+            logger.info(
+                f"Triage result{f' for PMID {pmid}' if pmid else ''}: {decision} "
+                f"(confidence: {confidence:.2f}) - {reason}"
+            )
+
+            return result
+
+        except Exception as e:
+            logger.error(f"Triage failed{f' for PMID {pmid}' if pmid else ''}: {e}")
+            # On error, drop the paper to be conservative
+            return {
+                "decision": "DROP",
+                "reason": f"Triage error: {str(e)}",
+                "confidence": 0.0,
+                "pmid": pmid,
+                "error": str(e)
+            }
+
+    def triage_paper(self, paper: Paper, gene: Optional[str] = None) -> dict:
+        """
+        Triage a Paper object.
+
+        Args:
+            paper: Paper object with title and abstract.
+            gene: Optional gene symbol (uses paper.gene_symbol if not provided).
+
+        Returns:
+            Dictionary with triage results.
+        """
+        gene_symbol = gene or paper.gene_symbol or "the gene of interest"
+
+        return self.triage(
+            title=paper.title or "",
+            abstract=paper.abstract or "",
+            gene=gene_symbol,
+            pmid=paper.pmid
+        )
