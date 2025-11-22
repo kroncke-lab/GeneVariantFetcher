@@ -49,7 +49,6 @@ def automated_variant_extraction_workflow(
     """
     from pubmind_fetcher import fetch_pmids_for_gene
     from harvest_pmc_fulltext import PMCHarvester
-    from pipeline import BiomedicalExtractionPipeline
 
     output_path = Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
     output_path.mkdir(parents=True, exist_ok=True)
@@ -110,9 +109,6 @@ def automated_variant_extraction_workflow(
 
     extraction_dir = output_path / "extractions"
     extraction_dir.mkdir(exist_ok=True)
-
-    # Create pipeline
-    pipeline = BiomedicalExtractionPipeline(email=email)
 
     # Get list of downloaded markdown files
     markdown_files = list(harvest_dir.glob("*_FULL_CONTEXT.md"))
@@ -269,7 +265,7 @@ Examples:
 
     # Run workflow
     try:
-        summary = automated_variant_extraction_workflow(
+        automated_variant_extraction_workflow(
             gene_symbol=args.gene,
             email=args.email,
             max_pmids=args.max_pmids,
