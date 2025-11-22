@@ -110,7 +110,24 @@ AI_INTEGRATIONS_OPENAI_BASE_URL=https://api.openai.com/v1
 
 ## Available Tools
 
-### 1. PMC Full-Text Harvester (`harvest_pmc_fulltext.py`)
+### 1. Automated PMID Discovery (`pubmind_fetcher.py`) 🆕
+
+Automatically discover relevant papers using PubMind - no manual PMID list needed!
+
+**Quick Start:**
+```bash
+python example_automated_workflow.py BRCA1 --email your@email.com
+```
+
+**See detailed documentation:** [PUBMIND_README.md](PUBMIND_README.md)
+
+**Features:**
+- Queries PubMind database for variant-focused papers
+- Falls back to enhanced PubMed queries if needed
+- Integrates with harvester and extraction pipeline
+- Complete hands-free workflow from gene to data
+
+### 2. PMC Full-Text Harvester (`harvest_pmc_fulltext.py`)
 
 Download full-text articles and supplemental materials from PubMed Central.
 
@@ -121,7 +138,7 @@ python harvest_pmc_fulltext.py
 
 **See detailed documentation:** [HARVESTER_QUICKSTART.md](HARVESTER_QUICKSTART.md)
 
-### 2. Extraction Pipeline (`pipeline.py`)
+### 3. Extraction Pipeline (`pipeline.py`)
 
 Extract structured biomedical data from articles using AI.
 
@@ -132,7 +149,7 @@ python example_usage.py
 
 **See detailed documentation:** [README_PIPELINE.md](README_PIPELINE.md)
 
-### 3. Clinical Data Triage (`clinical_data_triage.py`)
+### 4. Clinical Data Triage (`clinical_data_triage.py`)
 
 Process and triage clinical data from various sources.
 
@@ -380,25 +397,58 @@ python example_triage.py
 
 ## Workflow Examples
 
-### Example 1: Downloading and Extracting Data for a Gene
+### Example 1: Fully Automated Workflow (Recommended) 🆕
 
-**Goal**: Get all available data for SCN5A variants
+**Goal**: Get all available variant and patient data for a gene with zero manual work
 
-1. Create a PMID list for your gene of interest
-2. Harvest full-text articles:
+Simply run:
+```bash
+python example_automated_workflow.py BRCA1 --email your@email.com
+```
+
+This automatically:
+1. ✅ Discovers relevant papers from PubMind
+2. ✅ Downloads full-text articles from PMC
+3. ✅ Extracts variant and patient data
+4. ✅ Saves structured JSON results
+
+**Example with custom limits:**
+```bash
+python example_automated_workflow.py SCN5A \
+  --email your@email.com \
+  --max-pmids 200 \
+  --max-downloads 100
+```
+
+### Example 2: Manual Workflow (Step-by-Step)
+
+**Goal**: Get all available data for SCN5A variants with manual control
+
+1. **Discover PMIDs** using PubMind:
+   ```python
+   from pubmind_fetcher import fetch_pmids_for_gene
+
+   pmids = fetch_pmids_for_gene("SCN5A", email="your@email.com",
+                                 output_file="scn5a_pmids.txt")
+   ```
+
+2. **Harvest full-text articles:**
    ```bash
    python harvest_pmc_fulltext.py
    ```
-3. Run extraction pipeline on harvested files:
+   (Edit the script to use your PMID list)
+
+3. **Run extraction pipeline on harvested files:**
    ```bash
    python example_usage.py
    ```
-4. Process and triage the results:
+
+4. **Process and triage the results:**
    ```bash
    python example_triage.py
    ```
 
-### Example 2: Processing a Large PMID List
+### Example 3: Processing a Large PMID List
 
 **Goal**: Process 1000+ articles efficiently
 
