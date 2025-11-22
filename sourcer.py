@@ -3,8 +3,11 @@ Paper sourcing module - queries PubMed and EuropePMC APIs for papers.
 """
 
 import logging
+import re
+from typing import List, Set, Optional, Iterable, Any
+
 import requests
-from typing import List, Set, Optional
+from bs4 import BeautifulSoup
 from tenacity import retry, stop_after_attempt, wait_exponential
 from models import Paper
 
@@ -113,7 +116,9 @@ class PaperSourcer:
         gene_symbol: str,
         max_results_per_source: int = 100,
         use_pubmed: bool = True,
-        use_europepmc: bool = True
+        use_europepmc: bool = True,
+        use_pubmind: bool = False,
+        pubmind_query: Optional[str] = None,
     ) -> List[str]:
         """
         Fetch deduplicated list of PMIDs from multiple sources.
@@ -123,6 +128,8 @@ class PaperSourcer:
             max_results_per_source: Maximum results per API source.
             use_pubmed: Query PubMed API.
             use_europepmc: Query EuropePMC API.
+            use_pubmind: Query PubMind (via API or HTML scrape) for variants.
+            pubmind_query: Optional override for the PubMind search term.
 
         Returns:
             Deduplicated sorted list of PMIDs.
@@ -136,6 +143,13 @@ class PaperSourcer:
         if use_europepmc:
             europepmc_pmids = self._query_europepmc(gene_symbol, max_results_per_source)
             all_pmids.update(europepmc_pmids)
+
+        if use_pubmind:
+            pubmind_sourcer = PubMindSourcer()
+            pubmind_pmids = pubmind_sourcer.search(
+                pubmind_query or gene_symbol, max_results=max_results_per_source
+            )
+            all_pmids.update(pubmind_pmids)
 
         deduplicated_pmids = sorted(list(all_pmids))
         logger.info(
@@ -210,3 +224,99 @@ def query_papers_for_gene(gene_symbol: str, email: str = "your_email@example.com
     """
     sourcer = PaperSourcer(email=email)
     return sourcer.fetch_papers(gene_symbol)
+
+
+class PubMindSourcer:
+    """Utility to source PMIDs from PubMind (https://pubmind.wglab.org/).
+
+    The client first attempts the documented JSON API endpoint and gracefully
+    falls back to scraping the HTML search results when the API is unavailable
+    (common in restricted network environments).
+    """
+
+    api_search_url = "https://pubmind.wglab.org/api/search"
+    html_search_url = "https://pubmind.wglab.org/search"
+
+    def __init__(self, session: Optional[requests.Session] = None):
+        self.session = session or requests.Session()
+
+    def search(self, query: str, max_results: int = 200) -> List[str]:
+        """Return a list of PMIDs relevant to the query.
+
+        Args:
+            query: Gene symbol, variant, or free text for PubMind search.
+            max_results: Maximum records to inspect per source.
+        """
+
+        pmids: Set[str] = set()
+
+        # Try JSON API first
+        try:
+            response = self.session.get(
+                self.api_search_url,
+                params={"query": query, "size": max_results},
+                timeout=30,
+            )
+            response.raise_for_status()
+
+            if "application/json" in response.headers.get("content-type", ""):
+                data = response.json()
+                pmids.update(self._extract_pmids_from_json(data))
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("PubMind API lookup failed, falling back to HTML scrape: %s", exc)
+
+        # Fallback to HTML search page scraping
+        if not pmids:
+            try:
+                html_response = self.session.get(
+                    self.html_search_url,
+                    params={"keyword": query},
+                    timeout=30,
+                )
+                html_response.raise_for_status()
+                pmids.update(self._extract_pmids_from_html(html_response.text))
+            except requests.RequestException as exc:
+                logger.error("PubMind HTML scrape failed: %s", exc)
+
+        return sorted(pmids)
+
+    def _extract_pmids_from_json(self, payload: Any) -> Set[str]:
+        pmids: Set[str] = set()
+
+        def walk(node: Any):
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    if key.lower() == "pmid" and isinstance(value, (str, int)):
+                        pmids.add(str(value))
+                    else:
+                        walk(value)
+            elif isinstance(node, list):
+                for item in node:
+                    walk(item)
+
+        walk(payload)
+        return pmids
+
+    def _extract_pmids_from_html(self, html: str) -> Set[str]:
+        pmids: Set[str] = set()
+        soup = BeautifulSoup(html, "html.parser")
+
+        def _iter_texts(nodes: Iterable) -> Iterable[str]:
+            for node in nodes:
+                text = node.get_text(" ", strip=True)
+                if text:
+                    yield text
+                href = node.get("href")
+                if href:
+                    yield href
+
+        for text in _iter_texts(soup.find_all("a")):
+            pmids.update(re.findall(r"PMID[:\s]*([0-9]{4,10})", text, flags=re.IGNORECASE))
+            pmids.update(re.findall(r"(?<!\d)([0-9]{7,10})(?!\d)", text))
+
+        # Some pages display PMIDs in table cells or plain text
+        if not pmids:
+            page_text = soup.get_text(" ", strip=True)
+            pmids.update(re.findall(r"PMID[:\s]*([0-9]{4,10})", page_text, flags=re.IGNORECASE))
+
+        return pmids
