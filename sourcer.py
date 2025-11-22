@@ -1,5 +1,5 @@
 """
-Paper sourcing module - queries PubMed and EuropePMC APIs for papers.
+Paper sourcing module - queries PubMed, EuropePMC, and PubMind for papers.
 """
 
 import logging
@@ -12,6 +12,14 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 from models import Paper
 
 logger = logging.getLogger(__name__)
+
+# Import PubMindFetcher if available
+try:
+    from pubmind_fetcher import PubMindFetcher
+    PUBMIND_AVAILABLE = True
+except ImportError:
+    PUBMIND_AVAILABLE = False
+    logger.warning("PubMindFetcher not available. Install dependencies or check pubmind_fetcher.py")
 
 
 class PaperSourcer:
@@ -135,6 +143,20 @@ class PaperSourcer:
             Deduplicated sorted list of PMIDs.
         """
         all_pmids: Set[str] = set()
+
+        # Query PubMind first (most relevant for variant-level data)
+        if use_pubmind and PUBMIND_AVAILABLE:
+            try:
+                logger.info(f"Querying PubMind for {gene_symbol}...")
+                pubmind_fetcher = PubMindFetcher(email=self.email, use_fallback=False)
+                pubmind_pmids = pubmind_fetcher.fetch_pmids_for_gene(
+                    gene_symbol,
+                    max_results=max_results_per_source
+                )
+                all_pmids.update(pubmind_pmids)
+                logger.info(f"PubMind contributed {len(pubmind_pmids)} PMIDs")
+            except Exception as e:
+                logger.warning(f"PubMind query failed: {e}, continuing with other sources")
 
         if use_pubmed:
             pubmed_pmids = self._query_pubmed(gene_symbol, max_results_per_source)
