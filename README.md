@@ -10,6 +10,7 @@ A collection of Python tools for extracting genetic variant data, patient-level 
 - [Using the PMC Harvester](#using-the-pmc-harvester)
 - [Using the Extraction Pipeline](#using-the-extraction-pipeline)
 - [Using the Clinical Data Triage Tool](#using-the-clinical-data-triage-tool)
+- [Sourcing PMIDs from PubMind](#sourcing-pmids-from-pubmind)
 - [Troubleshooting](#troubleshooting)
 
 ---
@@ -142,6 +143,17 @@ python example_triage.py
 ```
 
 **See detailed documentation:** [TRIAGE_README.md](TRIAGE_README.md)
+
+### 4. PubMind Sourcing (`example_pubmind_sourcing.py`)
+
+Generate PMID lists by querying [PubMind](https://pubmind.wglab.org/) directly. The helper
+falls back to HTML scraping if the JSON API is blocked, so you still get a candidate set of
+PMIDs to feed into the harvester or extraction pipeline.
+
+**Quick Start:**
+```bash
+python example_pubmind_sourcing.py
+```
 
 ---
 
