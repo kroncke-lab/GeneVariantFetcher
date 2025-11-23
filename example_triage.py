@@ -8,6 +8,10 @@ papers as containing original clinical data or not.
 
 from filters import ClinicalDataTriageFilter
 import json
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 def main():

@@ -46,7 +46,7 @@ class PMCHarvester:
         
         with open(self.paywalled_log, 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['PMID', 'Reason'])
+            writer.writerow(['PMID', 'Reason', 'URL'])
         
         with open(self.success_log, 'w', newline='') as f:
             writer = csv.writer(f)
@@ -88,7 +88,7 @@ class PMCHarvester:
             print(f"  Error fetching full-text for {pmcid}: {e}")
             return None
     
-    def get_supplemental_files(self, pmcid: str) -> List[Dict]:
+    def get_supplemental_files(self, pmcid: str, pmid: str) -> List[Dict]:
         """Get list of supplemental files from EuropePMC."""
         url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/supplementaryFiles"
         
@@ -102,21 +102,30 @@ class PMCHarvester:
             return []
         except Exception as e:
             print(f"  Error fetching supplemental files for {pmcid}: {e}")
+            # Log failed supplemental API call
+            pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+            with open(self.paywalled_log, 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([pmid, 'Supplemental files API failed', pmc_url])
             return []
     
-    def download_supplement(self, url: str, output_path: Path) -> bool:
+    def download_supplement(self, url: str, output_path: Path, pmid: str, filename: str) -> bool:
         """Download a supplemental file."""
         try:
             response = requests.get(url, timeout=60, stream=True)
             response.raise_for_status()
-            
+
             with open(output_path, 'wb') as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
-            
+
             return True
         except Exception as e:
             print(f"    Error downloading {url}: {e}")
+            # Log failed supplemental download
+            with open(self.paywalled_log, 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([pmid, f'Supplemental file failed: {filename}', url])
             return False
     
     def xml_to_markdown(self, xml_content: str) -> str:
@@ -222,9 +231,10 @@ class PMCHarvester:
         
         if not pmcid:
             print(f"  ❌ No PMCID found (likely paywalled)")
+            pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
             with open(self.paywalled_log, 'a', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow([pmid, 'No PMCID found'])
+                writer.writerow([pmid, 'No PMCID found', pubmed_url])
             return False, "No PMCID"
         
         print(f"  ✓ PMCID: {pmcid}")
@@ -233,9 +243,10 @@ class PMCHarvester:
         
         if not xml_content:
             print(f"  ❌ Full-text not available")
+            pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
             with open(self.paywalled_log, 'a', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow([pmid, 'Full-text not available'])
+                writer.writerow([pmid, 'Full-text not available', pmc_url])
             return False, "No full-text"
         
         print(f"  ✓ Full-text XML retrieved")
@@ -245,7 +256,7 @@ class PMCHarvester:
         supplements_dir = self.output_dir / f"{pmid}_supplements"
         supplements_dir.mkdir(exist_ok=True)
         
-        supp_files = self.get_supplemental_files(pmcid)
+        supp_files = self.get_supplemental_files(pmcid, pmid)
         print(f"  Found {len(supp_files)} supplemental files")
         
         supplement_markdown = ""
@@ -261,7 +272,7 @@ class PMCHarvester:
             file_path = supplements_dir / filename
             print(f"    Downloading: {filename}")
             
-            if self.download_supplement(url, file_path):
+            if self.download_supplement(url, file_path, pmid, filename):
                 downloaded_count += 1
                 
                 ext = file_path.suffix.lower()

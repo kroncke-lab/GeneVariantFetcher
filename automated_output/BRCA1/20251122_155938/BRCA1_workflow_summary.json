@@ -1,0 +1,16 @@
+{
+  "gene_symbol": "BRCA1",
+  "workflow_timestamp": "2025-11-22T15:59:52.590676",
+  "statistics": {
+    "pmids_discovered": 5,
+    "papers_downloaded": 1,
+    "papers_extracted": 1,
+    "total_variants_found": 2,
+    "success_rate": "20.0%"
+  },
+  "output_locations": {
+    "pmid_list": "automated_output/BRCA1/20251122_155938/BRCA1_pmids.txt",
+    "full_text_papers": "automated_output/BRCA1/20251122_155938/pmc_fulltext",
+    "extractions": "automated_output/BRCA1/20251122_155938/extractions"
+  }
+}
