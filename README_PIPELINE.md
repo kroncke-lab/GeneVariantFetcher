@@ -194,56 +194,57 @@ Completed Tier 3 (Extraction): 23
 ================================================================================
 ```
 
-## 📊 Output Format
+## 📊 Output Contract
 
-The expert extractor returns structured JSON with:
+The extractor should emit one JSON array **per PMID**. Each element in that array represents an individual who can be linked to a specific variant. Keep the keys consistent so downstream consumers can rely on them:
 
 ```json
-{
-  "paper_metadata": {
+[
+  {
+    "individual_id": "12345678_case1",
     "pmid": "12345678",
-    "title": "Novel BRCA1 variants in breast cancer patients",
-    "extraction_summary": "Extracted 5 pathogenic BRCA1 variants from cohort study"
-  },
-  "variants": [
-    {
-      "gene_symbol": "BRCA1",
-      "cdna_notation": "c.5266dupC",
-      "protein_notation": "p.Gln1756Profs*74",
-      "genomic_position": "chr17:43091434",
-      "clinical_significance": "pathogenic",
-      "patients": {
-        "count": 3,
-        "demographics": "Female, age 35-52",
-        "phenotype": "Early-onset breast cancer"
-      },
-      "functional_data": {
-        "summary": "Loss of BRCA1 protein expression in tumor samples",
-        "assays": ["IHC", "Western blot"]
-      },
-      "segregation_data": "Segregates with disease in 2 families",
-      "population_frequency": "Not found in gnomAD",
-      "evidence_level": "Strong (PS3, PM2, PP1)",
-      "source_location": "Table 2, Row 3",
-      "additional_notes": "All patients had triple-negative breast cancer",
-      "key_quotes": ["The frameshift variant resulted in complete loss of protein function"]
+    "gene": "BRCA1",
+    "variants": {
+      "hgvs": "NM_007294.4:c.5266dupC",
+      "protein": "p.Gln1756Profs*74",
+      "genomic": "GRCh38:17:43091434:dupC",
+      "rsid": "rs80357906"
+    },
+    "age": "37",
+    "sex": "female",
+    "ancestry": "Ashkenazi Jewish",
+    "penetrance_exposures": ["prior chest radiation"],
+    "phenotypes_hpo": ["HP:0003002"],
+    "phenotypes_raw": ["early-onset breast cancer"],
+    "affected_status": "affected",
+    "family_level": false,
+    "data_from": "full_text",
+    "evidence": {
+      "sentence": "The proband (II-2) carried BRCA1 c.5266dupC and was diagnosed with breast cancer at age 37.",
+      "section": "Case description"
     }
-  ],
-  "tables_processed": [
-    {
-      "table_name": "Table 2",
-      "table_caption": "Pathogenic BRCA1 variants identified in cohort",
-      "variants_extracted": 5
-    }
-  ],
-  "extraction_metadata": {
-    "total_variants_found": 5,
-    "extraction_confidence": "high",
-    "challenges": [],
-    "notes": "Full text available with supplementary materials"
   }
-}
+]
 ```
+
+Guidance for generating the JSON:
+
+- **Link-level precision**: Only include an individual when the variant-to-person link is explicit. If a phenotype is only provided at the pedigree level or the variant cannot be tied to a specific person, omit the entry or set `family_level: true`.
+- **Variants**: Prefer HGVS; include genomic coordinates and rsIDs when present, but do not guess missing details or re-interpret notation.
+- **Phenotypes**: Capture raw phrasing in `phenotypes_raw` and map to HPO codes in `phenotypes_hpo` when possible. Include age, sex, ancestry, and any penetrance-relevant exposures.
+- **Affected status**: Use `affected`, `unaffected`, or `uncertain`. Mark carriers as unaffected only when they have clearly passed the risk window without disease; otherwise choose `affected` or `uncertain` and explain in `evidence.sentence`.
+- **Provenance**: Each data point should cite the exact sentence (or table cell text) plus the section label. Flag non-narrative sources with `data_from` values such as `table`, `supplement`, or `full_text`.
+- **Output shape**: Multi-PMID runs should concatenate multiple arrays sequentially (one per PMID), with stable `PMID_caseX` identifiers per article.
+
+## 🧭 Recommended Execution Flow
+
+To reach full coverage (including supplements), the harvester and extraction pipeline should follow this sequence:
+
+1. Convert each PMID to PMCID when available, then pull the full-text XML plus any linked supplemental files.
+2. If the EuropePMC supplemental API fails, resolve the DOI, follow redirects, and try site-specific scraping before doing a generic keyword/link scan.
+3. Parse every narrative section, figure legend, table, and supplemental sheet to detect individuals (e.g., "proband", "II-2", "Case 3"), using a consistent `PMID_caseX` naming scheme.
+4. For each individual, capture all described variants and associated phenotypes, demographics, exposures, and affected status with the provenance sentence/section.
+5. Log failures gracefully (missing supplements, DOI errors, etc.) and continue processing remaining PMIDs so each successful paper yields a fully structured JSON array ready for downstream analysis.
 
 ## 🛠️ Customization
 
