@@ -7,13 +7,24 @@ consolidating different query approaches into a single consistent interface.
 
 import logging
 import os
-from typing import Set, List, Dict, Any, Optional
+from typing import Set, List, Dict, Any, Optional, Tuple, Type
+from urllib.error import HTTPError, URLError
+
 from Bio import Entrez
+from Bio.Entrez.Parser import ValidationError
 import requests
 
 from .retry_utils import api_retry
 
 logger = logging.getLogger(__name__)
+
+# Exceptions that should trigger retries through the @api_retry decorator
+_RETRYABLE_EXCEPTIONS: Tuple[Type[BaseException], ...] = (
+    requests.RequestException,
+    HTTPError,
+    URLError,
+    OSError,
+)
 
 # Configure Entrez email from environment variable
 ENTREZ_EMAIL = os.getenv("ENTREZ_EMAIL", "your.email@example.com")
@@ -61,8 +72,13 @@ def query_pubmed_with_entrez(
 
         return pmids
 
-    except Exception as e:
-        logger.error(f"PubMed query failed: {e}")
+    except _RETRYABLE_EXCEPTIONS as exc:
+        logger.warning(
+            "Transient error during PubMed query for '%s'; raising for retry", query, exc_info=exc
+        )
+        raise
+    except (ValidationError, ValueError) as exc:
+        logger.error("PubMed query returned malformed data for '%s': %s", query, exc)
         return []
 
 
@@ -136,8 +152,13 @@ def fetch_paper_metadata(pmid: str) -> Optional[Dict[str, Any]]:
         logger.debug(f"Successfully fetched metadata for PMID: {pmid}")
         return metadata
 
-    except Exception as e:
-        logger.error(f"Failed to fetch metadata for PMID {pmid}: {e}")
+    except _RETRYABLE_EXCEPTIONS as exc:
+        logger.warning(
+            "Transient error fetching metadata for PMID %s; raising for retry", pmid, exc_info=exc
+        )
+        raise
+    except (ValidationError, ValueError, IndexError, KeyError) as exc:
+        logger.error("Malformed metadata response for PMID %s: %s", pmid, exc)
         return None
 
 
@@ -177,8 +198,13 @@ def fetch_paper_abstract(pmid: str) -> Optional[str]:
             logger.warning(f"No abstract found for PMID: {pmid}")
             return None
 
-    except Exception as e:
-        logger.error(f"Failed to fetch abstract for PMID {pmid}: {e}")
+    except _RETRYABLE_EXCEPTIONS as exc:
+        logger.warning(
+            "Transient error fetching abstract for PMID %s; raising for retry", pmid, exc_info=exc
+        )
+        raise
+    except (ValidationError, ValueError) as exc:
+        logger.error("Malformed abstract response for PMID %s: %s", pmid, exc)
         return None
 
 
@@ -225,8 +251,13 @@ def get_doi_from_pmid(pmid: str) -> Optional[str]:
         logger.warning(f"No DOI found for PMID: {pmid}")
         return None
 
-    except Exception as e:
-        logger.error(f"Failed to fetch DOI for PMID {pmid}: {e}")
+    except _RETRYABLE_EXCEPTIONS as exc:
+        logger.warning(
+            "Transient error fetching DOI for PMID %s; raising for retry", pmid, exc_info=exc
+        )
+        raise
+    except (ValidationError, ValueError, KeyError, IndexError) as exc:
+        logger.error("Malformed DOI response for PMID %s: %s", pmid, exc)
         return None
 
 
@@ -278,8 +309,13 @@ def query_europepmc(
         logger.info(f"Europe PMC returned {len(pmids)} PMIDs for {gene_symbol}")
         return pmids
 
-    except requests.RequestException as e:
-        logger.error(f"Europe PMC query failed: {e}")
+    except _RETRYABLE_EXCEPTIONS as exc:
+        logger.warning(
+            "Transient error querying Europe PMC for %s; raising for retry", gene_symbol, exc_info=exc
+        )
+        raise
+    except ValueError as exc:
+        logger.error("Europe PMC returned malformed data for %s: %s", gene_symbol, exc)
         return set()
 
 
