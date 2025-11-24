@@ -29,24 +29,25 @@ def test_doi_resolution():
         print("=" * 80)
 
         # Test DOI resolution
-        try:
-            response = harvester.session.get(f"https://doi.org/{doi}", allow_redirects=True, timeout=30)
-            final_url = response.url
-            print(f"✓ Resolved to: {final_url}")
+        # Test DOI resolution
+        response = harvester.session.get(f"https://doi.org/{doi}", allow_redirects=True, timeout=30)
+        response.raise_for_status() # Fails test on non-2xx responses
+        final_url = response.url
+        print(f"✓ Resolved to: {final_url}")
+        assert any(d in final_url for d in expected_domain.split(' or '))
 
-            # Test scraping
-            print("\nAttempting to scrape supplemental files...")
-            supp_files = harvester._get_supplemental_files_from_doi(doi, pmid)
+        # Test scraping
+        print("\nAttempting to scrape supplemental files...")
+        supp_files = harvester._get_supplemental_files_from_doi(doi, pmid)
 
-            if supp_files:
-                print(f"✅ Found {len(supp_files)} supplemental file(s):")
-                for idx, file_info in enumerate(supp_files, 1):
-                    print(f"  {idx}. {file_info.get('name', 'Unknown')} - {file_info.get('url', 'No URL')}")
-            else:
-                print("⚠️  No supplemental files found (may be correct or scraper needs refinement)")
-
-        except Exception as e:
-            print(f"❌ Error during resolution/scraping: {e}")
+        if supp_files:
+            print(f"✅ Found {len(supp_files)} supplemental file(s):")
+            for idx, file_info in enumerate(supp_files, 1):
+                print(f"  {idx}. {file_info.get('name', 'Unknown')} - {file_info.get('url', 'No URL')}")
+                assert 'url' in file_info and file_info['url']
+                assert 'name' in file_info and file_info['name']
+        else:
+            print("⚠️  No supplemental files found (may be correct or scraper needs refinement)")
 
     print(f"\n{'=' * 80}")
     print("Test complete!")
