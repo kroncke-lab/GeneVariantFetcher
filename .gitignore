@@ -55,6 +55,10 @@ pipeline.log
 extractions/
 *.json.gz
 
+# PMC Harvester output
+pmc_harvest/
+test_pmc_harvest/
+
 # Testing
 .pytest_cache/
 .coverage
