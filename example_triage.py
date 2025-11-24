@@ -6,7 +6,7 @@ This script shows basic usage of the triage functionality to classify
 papers as containing original clinical data or not.
 """
 
-from filters import ClinicalDataTriageFilter
+from pipeline.filters import ClinicalDataTriageFilter
 import json
 from dotenv import load_dotenv
 

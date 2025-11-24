@@ -18,9 +18,9 @@ from models import (
     FilterTier,
     ExtractionResult
 )
-from sourcer import PaperSourcer
-from filters import KeywordFilter, InternFilter
-from extractor import ExpertExtractor
+from pipeline.sourcing import PaperSourcer
+from pipeline.filters import KeywordFilter, InternFilter
+from pipeline.extraction import ExpertExtractor
 
 # Configure logging
 logging.basicConfig(

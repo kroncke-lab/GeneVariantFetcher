@@ -7,7 +7,7 @@ correctly identifies papers with original clinical data vs. reviews, animal stud
 """
 
 import json
-from filters import ClinicalDataTriageFilter
+from pipeline.filters import ClinicalDataTriageFilter
 
 
 def test_case_report():

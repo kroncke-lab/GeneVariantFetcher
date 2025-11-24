@@ -17,4 +17,8 @@ dependencies = [
     "spyprot>=0.9.6",
     "tabulate>=0.9.0",
     "tenacity>=9.1.2",
+    "typer>=0.9.0",
 ]
+
+[project.scripts]
+gvf = "pipeline.cli:app"

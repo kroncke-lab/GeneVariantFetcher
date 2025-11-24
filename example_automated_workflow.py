@@ -120,7 +120,7 @@ def automated_variant_extraction_workflow(
 
     # Process each paper
     from models import Paper
-    from extractor import ExpertExtractor
+    from pipeline.extraction import ExpertExtractor
 
     extractor = ExpertExtractor(model="gpt-4o")
     extractions = []
@@ -177,7 +177,7 @@ def automated_variant_extraction_workflow(
     # ============================================================================
     logger.info("\n📊 STEP 4: Aggregating penetrance data across papers...")
 
-    from penetrance_aggregator import aggregate_penetrance
+    from pipeline.aggregation import aggregate_penetrance
 
     penetrance_summary_file = output_path / f"{gene_symbol}_penetrance_summary.json"
     penetrance_summary = aggregate_penetrance(

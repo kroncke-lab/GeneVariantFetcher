@@ -11,8 +11,8 @@ import json
 import os
 from dotenv import load_dotenv
 from pipeline import BiomedicalExtractionPipeline, run_pipeline_for_gene
-from filters import KeywordFilter, InternFilter
-from extractor import ExpertExtractor
+from pipeline.filters import KeywordFilter, InternFilter
+from pipeline.extraction import ExpertExtractor
 
 # Load environment variables from .env file
 load_dotenv()

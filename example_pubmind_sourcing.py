@@ -1,6 +1,7 @@
 """Example: build a PubMind-derived PMID list for harvesting or extraction."""
 
-from sourcer import PaperSourcer, PubMindSourcer
+from pipeline.sourcing import PaperSourcer
+# PubMindSourcer - TODO: Update if this class still exists
 
 
 def run_pubmind_only(query: str):
