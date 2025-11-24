@@ -51,7 +51,11 @@ class PaperSourcer:
             Set of PMIDs.
         """
         # Use shared utility function
-        return query_pubmed_for_gene(gene_symbol, max_results=max_results)
+        return query_pubmed_for_gene(
+            gene_symbol,
+            max_results=max_results,
+            email=self.email,
+        )
 
     def _query_europepmc(self, gene_symbol: str, max_results: int = 100) -> Set[str]:
         """
@@ -141,7 +145,7 @@ class PaperSourcer:
 
         try:
             # Use shared utility to fetch metadata
-            metadata = fetch_paper_metadata(pmid)
+            metadata = fetch_paper_metadata(pmid, email=self.email)
 
             if not metadata:
                 logger.warning(f"No metadata found for PMID: {pmid}")

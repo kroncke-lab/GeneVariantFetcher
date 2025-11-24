@@ -6,6 +6,7 @@ PubMind is prioritized as it provides more relevant variant-level data.
 import logging
 from typing import List, Set, Optional
 
+from config.settings import get_settings
 from models import Paper
 from utils.pubmed_utils import query_pubmed_for_gene, query_europepmc
 from utils.retry_utils import standard_retry
@@ -28,15 +29,15 @@ class PaperSourcer:
     Returns deduplicated list of PMIDs.
     """
 
-    def __init__(self, email: str = "your_email@example.com"):
+    def __init__(self, email: Optional[str] = None):
         """
         Initialize the sourcer.
 
         Args:
             email: Email for PubMed API (required by NCBI).
         """
-        self.email = email
-        # Note: email is now configured via ENTREZ_EMAIL environment variable in pubmed_utils
+        settings = get_settings()
+        self.email = email or settings.ncbi_email
 
     def _query_pubmed(self, gene_symbol: str, max_results: int = 100) -> Set[str]:
         """
@@ -50,7 +51,11 @@ class PaperSourcer:
             Set of PMIDs.
         """
         # Use shared utility function
-        return query_pubmed_for_gene(gene_symbol, max_results=max_results)
+        return query_pubmed_for_gene(
+            gene_symbol,
+            max_results=max_results,
+            email=self.email,
+        )
 
     def _query_europepmc(self, gene_symbol: str, max_results: int = 100) -> Set[str]:
         """
@@ -140,7 +145,7 @@ class PaperSourcer:
 
         try:
             # Use shared utility to fetch metadata
-            metadata = fetch_paper_metadata(pmid)
+            metadata = fetch_paper_metadata(pmid, email=self.email)
 
             if not metadata:
                 logger.warning(f"No metadata found for PMID: {pmid}")
