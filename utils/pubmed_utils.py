@@ -6,25 +6,30 @@ consolidating different query approaches into a single consistent interface.
 """
 
 import logging
-import os
 from typing import Set, List, Dict, Any, Optional
 from Bio import Entrez
 import requests
 
+from config.settings import get_settings
 from .retry_utils import api_retry
 
 logger = logging.getLogger(__name__)
 
-# Configure Entrez email from environment variable
-ENTREZ_EMAIL = os.getenv("ENTREZ_EMAIL", "your.email@example.com")
-Entrez.email = ENTREZ_EMAIL
+
+def _set_entrez_email(custom_email: Optional[str] = None) -> str:
+    """Set ``Entrez.email`` to the provided value or the configured default."""
+
+    email = custom_email or get_settings().ncbi_email
+    Entrez.email = email
+    return email
 
 
 @api_retry
 def query_pubmed_with_entrez(
     query: str,
     max_results: int = 100,
-    sort: str = "relevance"
+    sort: str = "relevance",
+    email: Optional[str] = None,
 ) -> List[str]:
     """
     Query PubMed using Bio.Entrez and return PMIDs.
@@ -47,6 +52,7 @@ def query_pubmed_with_entrez(
     logger.info(f"Querying PubMed with query: {query}")
 
     try:
+        _set_entrez_email(email)
         handle = Entrez.esearch(
             db="pubmed",
             term=query,
@@ -69,7 +75,8 @@ def query_pubmed_with_entrez(
 def query_pubmed_for_gene(
     gene_symbol: str,
     max_results: int = 100,
-    include_abstract: bool = True
+    include_abstract: bool = True,
+    email: Optional[str] = None,
 ) -> Set[str]:
     """
     Query PubMed for papers mentioning a specific gene.
@@ -97,12 +104,12 @@ def query_pubmed_for_gene(
     else:
         query = f"{gene_symbol}[Gene Symbol]"
 
-    pmids = query_pubmed_with_entrez(query, max_results=max_results)
+    pmids = query_pubmed_with_entrez(query, max_results=max_results, email=email)
     return set(pmids)
 
 
 @api_retry
-def fetch_paper_metadata(pmid: str) -> Optional[Dict[str, Any]]:
+def fetch_paper_metadata(pmid: str, email: Optional[str] = None) -> Optional[Dict[str, Any]]:
     """
     Fetch metadata for a single paper from PubMed.
 
@@ -122,6 +129,7 @@ def fetch_paper_metadata(pmid: str) -> Optional[Dict[str, Any]]:
     logger.debug(f"Fetching metadata for PMID: {pmid}")
 
     try:
+        _set_entrez_email(email)
         handle = Entrez.esummary(db="pubmed", id=pmid)
         record = Entrez.read(handle)
         handle.close()
@@ -142,7 +150,7 @@ def fetch_paper_metadata(pmid: str) -> Optional[Dict[str, Any]]:
 
 
 @api_retry
-def fetch_paper_abstract(pmid: str) -> Optional[str]:
+def fetch_paper_abstract(pmid: str, email: Optional[str] = None) -> Optional[str]:
     """
     Fetch the abstract text for a paper from PubMed.
 
@@ -161,6 +169,7 @@ def fetch_paper_abstract(pmid: str) -> Optional[str]:
     logger.debug(f"Fetching abstract for PMID: {pmid}")
 
     try:
+        _set_entrez_email(email)
         handle = Entrez.efetch(
             db="pubmed",
             id=pmid,
@@ -183,7 +192,7 @@ def fetch_paper_abstract(pmid: str) -> Optional[str]:
 
 
 @api_retry
-def get_doi_from_pmid(pmid: str) -> Optional[str]:
+def get_doi_from_pmid(pmid: str, email: Optional[str] = None) -> Optional[str]:
     """
     Get the DOI for a paper given its PMID.
 
@@ -201,6 +210,7 @@ def get_doi_from_pmid(pmid: str) -> Optional[str]:
     logger.debug(f"Fetching DOI for PMID: {pmid}")
 
     try:
+        _set_entrez_email(email)
         # Fetch the full record in XML format
         handle = Entrez.efetch(
             db="pubmed",
@@ -283,7 +293,11 @@ def query_europepmc(
         return set()
 
 
-def batch_fetch_metadata(pmids: List[str], batch_size: int = 200) -> Dict[str, Dict[str, Any]]:
+def batch_fetch_metadata(
+    pmids: List[str],
+    batch_size: int = 200,
+    email: Optional[str] = None
+) -> Dict[str, Dict[str, Any]]:
     """
     Fetch metadata for multiple papers in batches.
 
@@ -311,6 +325,7 @@ def batch_fetch_metadata(pmids: List[str], batch_size: int = 200) -> Dict[str, D
         batch_ids = ",".join(batch)
 
         try:
+            _set_entrez_email(email)
             handle = Entrez.esummary(db="pubmed", id=batch_ids)
             records = Entrez.read(handle)
             handle.close()
