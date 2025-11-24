@@ -3,7 +3,7 @@
 Test script to verify DOI resolution and supplemental file scraping.
 """
 
-from harvest_pmc_fulltext import PMCHarvester
+from harvesting import PMCHarvester
 from pathlib import Path
 
 def test_doi_resolution():
