@@ -47,17 +47,15 @@ class PMCHarvester:
         self.markitdown = MarkItDown() if MARKITDOWN_AVAILABLE else None
         
         self.session = requests.Session()
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.9',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Referer': 'https://pubmed.ncbi.nlm.nih.gov/',
-            'DNT': '1',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1'
-        })
+        # Use headers that mimic a real browser to avoid being blocked, as per the plan
+        self.HEADERS = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Referer': 'https://pubmed.ncbi.nlm.nih.gov/'
+        }
+        self.session.headers.update(self.HEADERS)
 
+        # Initialize log files
         with open(self.paywalled_log, 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(['PMID', 'Reason', 'URL'])
@@ -125,6 +123,7 @@ class PMCHarvester:
     def get_supplemental_files(self, pmcid: str, pmid: str, doi: Optional[str]) -> List[Dict]:
         """
         Orchestrates fetching supplemental files, first via API, then by scraping.
+        This method acts as a controller, implementing the "waterfall" strategy.
         """
         # 1. First, try the EuropePMC API
         api_url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/supplementaryFiles"
@@ -132,7 +131,8 @@ class PMCHarvester:
             response = self.session.get(api_url, timeout=30)
             response.raise_for_status()
             data = response.json()
-            if 'result' in data and 'supplementaryFiles' in data['result']:
+            # The API can return a success response with an empty list of files.
+            if data.get('result', {}).get('supplementaryFiles'):
                 print("  ✓ Found supplemental files via EuropePMC API")
                 return data['result']['supplementaryFiles']
         except Exception as e:
@@ -140,7 +140,7 @@ class PMCHarvester:
 
         # 2. If API fails or returns no files, fall back to DOI-based scraping
         if doi:
-            print(f"  - API failed. Falling back to DOI scraping for {doi}")
+            print(f"  - API failed or returned no files. Falling back to DOI scraping for {doi}")
             return self._get_supplemental_files_from_doi(doi, pmid)
         else:
             print("  - API failed and no DOI available. Cannot scrape.")
@@ -151,67 +151,29 @@ class PMCHarvester:
             return []
 
     def _get_supplemental_files_from_doi(self, doi: str, pmid: str) -> List[Dict]:
-        """Resolve DOI to final URL and route to the appropriate scraper."""
-        # Try multiple times with delays to handle rate limiting
-        max_retries = 3
-        for attempt in range(max_retries):
-            try:
-                # Add a delay before each attempt (except the first)
-                if attempt > 0:
-                    delay = 2 ** attempt  # Exponential backoff: 2s, 4s
-                    print(f"  ⏳ Retry {attempt + 1}/{max_retries} after {delay}s delay...")
-                    time.sleep(delay)
+        """
+        Resolves a DOI to its final URL and routes to the appropriate domain-specific scraper.
+        This is the core of the scraping fallback logic.
+        """
+        try:
+            # Use the session with browser-like headers to resolve the DOI.
+            # allow_redirects=True follows the redirect chain to the final publisher page.
+            print(f"  Resolving DOI: https://doi.org/{doi}")
+            response = self.session.get(f"https://doi.org/{doi}", allow_redirects=True, timeout=30)
+            response.raise_for_status()
+            
+            final_url = response.url
+            domain = urlparse(final_url).netloc
+            print(f"  ✓ DOI resolved to: {final_url}")
 
-                response = self.session.get(f"https://doi.org/{doi}", allow_redirects=True, timeout=30)
+        except requests.exceptions.RequestException as e:
+            print(f"  ❌ DOI resolution failed for {doi}: {e}")
+            with open(self.paywalled_log, 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
+            return []
 
-                # Check if we got a successful response
-                if response.status_code == 200:
-                    final_url = response.url
-                    domain = urlparse(final_url).netloc
-                    print(f"  ✓ DOI resolved to: {final_url}")
-                    break
-                elif response.status_code == 403:
-                    print(f"  ⚠️  403 Forbidden (attempt {attempt + 1}/{max_retries})")
-                    if attempt == max_retries - 1:
-                        raise requests.exceptions.HTTPError(f"403 Forbidden after {max_retries} attempts")
-                    continue
-                else:
-                    response.raise_for_status()
-
-            except requests.exceptions.RequestException as e:
-                if attempt == max_retries - 1:
-                    print(f"  ❌ DOI resolution failed for {doi} after {max_retries} attempts: {e}")
-                    # Try constructing URL directly as a fallback
-                    constructed_url = self._construct_url_from_doi(doi)
-                    if constructed_url:
-                        print(f"  ⚡ Trying direct URL construction: {constructed_url}")
-                        try:
-                            response = self.session.get(constructed_url, timeout=30)
-                            print(f"  📊 Response status: {response.status_code}")
-                            if response.status_code == 200:
-                                final_url = constructed_url
-                                domain = urlparse(final_url).netloc
-                                print(f"  ✓ Successfully accessed via constructed URL")
-                                break
-                            else:
-                                print(f"  ⚠️  Constructed URL returned status {response.status_code}")
-                        except requests.exceptions.RequestException as url_error:
-                            print(f"  ❌ Constructed URL also failed: {url_error}")
-
-                    # If all attempts failed, log and return empty
-                    with open(self.paywalled_log, 'a', newline='') as f:
-                        writer = csv.writer(f)
-                        writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
-                    return []
-                continue
-            except Exception as e:
-                print(f"  ❌ Unexpected error during DOI resolution: {e}")
-                with open(self.paywalled_log, 'a', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow([pmid, f'DOI resolution error: {doi}', f"https://doi.org/{doi}"])
-                return []
-
-        # Route to specific scraper based on resolved domain
+        # Route to the specific scraper based on the resolved domain
         if "nature.com" in domain:
             return self._scrape_nature_supplements(response.text, final_url)
         elif "gimjournal.org" in domain or "sciencedirect.com" in domain:
@@ -219,18 +181,6 @@ class PMCHarvester:
         else:
             print(f"  - No specific scraper for domain: {domain}. Using generic scraper.")
             return self._scrape_generic_supplements(response.text, final_url)
-
-    def _construct_url_from_doi(self, doi: str) -> Optional[str]:
-        """Construct publisher URL directly from DOI when resolution fails."""
-        # Nature journals: 10.1038/...
-        if doi.startswith('10.1038/'):
-            return f"https://www.nature.com/articles/{doi}"
-        # Elsevier/GIM: 10.1016/...
-        elif doi.startswith('10.1016/'):
-            # Try both ScienceDirect and GIM journal
-            # Note: This may not always work as Elsevier uses PIIs internally
-            return f"https://www.gimjournal.org/article/{doi}/fulltext"
-        return None
 
     def _scrape_nature_supplements(self, html: str, base_url: str) -> List[Dict]:
         """Scrape supplemental files from a Nature journal page."""
@@ -251,10 +201,10 @@ class PMCHarvester:
             for a in supp_info_section.find_all('a', href=True):
                 href = a['href']
                 # Filter for links that look like file downloads
-                if '/articles/' in href and '/figures/' not in href:
+                if '/articles/' in href and '/figures/' not in href and 'author-information' not in href:
                     url = urljoin(base_url, href)
                     filename = Path(urlparse(url).path).name
-                    if filename:
+                    if filename and not any(f['name'] == filename for f in found_files):
                         found_files.append({'url': url, 'name': filename})
                         print(f"      Found potential supplement: {filename}")
         
@@ -265,32 +215,25 @@ class PMCHarvester:
         return found_files
 
     def _scrape_elsevier_supplements(self, html: str, base_url: str) -> List[Dict]:
-        """Scrape supplemental files from an Elsevier/GIM journal page."""
+        """
+        Scrape supplemental files from an Elsevier/GIM journal page.
+        This uses a multi-step approach as advised in the plan.
+        """
         print("  Scraping with _scrape_elsevier_supplements...")
         soup = BeautifulSoup(html, 'html.parser')
         found_files = []
 
-        # 1. Look for specific "Download file" links in ScienceDirect
-        for a in soup.find_all('a', class_='S_C_9cf8451f', href=True):
-            if 'Download file' in a.get_text():
-                url = urljoin(base_url, a['href'])
-                filename = a.get_text().replace('Download file', '').strip()
-                if filename:
-                    found_files.append({'url': url, 'name': filename})
-                    print(f"    Found ScienceDirect download link: {filename}")
-        if found_files:
-            return found_files
-
-        # 2. Look for data in <script type="application/json">
+        # 1. Look for data in <script type="application/json"> blocks
+        # This is often more reliable than parsing the HTML structure.
         for script in soup.find_all('script', type='application/json'):
             try:
                 data = json.loads(script.string)
-                # This path can be very specific and fragile
+                # This path can be very specific and fragile; may need adjustment
                 supp_data = data.get('article', {}).get('supplementaryMaterials', {}).get('supplementaryMaterial', [])
                 for item in supp_data:
                     url = item.get('downloadUrl')
                     filename = item.get('title')
-                    if url and filename:
+                    if url and filename and not any(f['name'] == filename for f in found_files):
                         found_files.append({'url': url, 'name': filename})
                         print(f"    Found supplement in JSON data: {filename}")
                 if found_files:
@@ -298,14 +241,25 @@ class PMCHarvester:
             except (json.JSONDecodeError, AttributeError):
                 continue
         
-        # 3. Regex for "mmc" (multimedia component) links
-        mmc_links = re.findall(r'href="(/cms/attachment/[^"]+/mmc\d+\.(?:pdf|docx|xlsx|zip))"', html)
+        # 2. Regex for "mmc" (multimedia component) links, a common Elsevier pattern
+        mmc_links = re.findall(r'href="(/cms/attachment/[^"]+/mmc\d+\.(?:pdf|docx|xlsx|zip|csv|txt))"', html)
         for link in mmc_links:
             url = urljoin(base_url, link)
             filename = Path(urlparse(url).path).name
             if filename and not any(f['name'] == filename for f in found_files):
                 found_files.append({'url': url, 'name': filename})
                 print(f"    Found MMC link via regex: {filename}")
+        if found_files:
+            return found_files
+
+        # 3. Look for specific "Download file" links in ScienceDirect as a fallback
+        for a in soup.find_all('a', class_='S_C_9cf8451f', href=True):
+            if 'Download file' in a.get_text():
+                url = urljoin(base_url, a['href'])
+                filename = a.get_text().replace('Download file', '').strip()
+                if filename and not any(f['name'] == filename for f in found_files):
+                    found_files.append({'url': url, 'name': filename})
+                    print(f"    Found ScienceDirect download link: {filename}")
         if found_files:
             return found_files
 
@@ -318,29 +272,35 @@ class PMCHarvester:
         soup = BeautifulSoup(html, 'html.parser')
         found_files = []
         
-        keywords = ['supplement', 'supporting', 'appendix']
-        file_extensions = ['.pdf', '.docx', '.xlsx', '.csv', '.zip', '.rar', '.gz']
+        keywords = ['supplement', 'supporting', 'appendix', 'additional file']
+        file_extensions = ['.pdf', '.docx', '.xlsx', '.csv', '.zip', '.rar', '.gz', '.txt', '.doc']
         
         for a in soup.find_all('a', href=True):
             link_text = a.get_text().lower()
             href = a['href'].lower()
             
             # Check if link text or href contain any of the keywords or file extensions
-            if any(keyword in link_text for keyword in keywords) or \
-               any(href.endswith(ext) for ext in file_extensions):
-                
-                url = urljoin(base_url, a['href'])
-                filename = Path(urlparse(url).path).name
-                
-                if filename:
-                    found_files.append({'url': url, 'name': filename})
-                    print(f"    Found potential supplement: {filename}")
+            is_supplement_link = any(keyword in link_text for keyword in keywords)
+            is_file_link = any(href.endswith(ext) for ext in file_extensions)
+
+            if is_supplement_link or is_file_link:
+                try:
+                    url = urljoin(base_url, a['href'])
+                    filename = Path(urlparse(url).path).name
+                    
+                    # Basic filtering to avoid irrelevant links
+                    if filename and not any(f['name'] == filename for f in found_files):
+                        found_files.append({'url': url, 'name': filename})
+                        print(f"    Found potential supplement: {filename}")
+                except Exception:
+                    continue # Ignore malformed URLs
 
         return found_files
 
     def download_supplement(self, url: str, output_path: Path, pmid: str, filename: str) -> bool:
         """Download a supplemental file."""
         try:
+            # Use the session to download, which includes our headers
             response = self.session.get(url, timeout=60, stream=True)
             response.raise_for_status()
 
@@ -354,7 +314,7 @@ class PMCHarvester:
             # Log failed supplemental download
             with open(self.paywalled_log, 'a', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow([pmid, f'Supplemental file failed: {filename}', url])
+                writer.writerow([pmid, f'Supplemental file download failed: {filename}', url])
             return False
     
     def xml_to_markdown(self, xml_content: str) -> str:
