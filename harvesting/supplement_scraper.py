@@ -78,31 +78,80 @@ class SupplementScraper:
         for script in soup.find_all('script', type='application/json'):
             try:
                 data = json.loads(script.string)
-                # This path can be very specific and fragile; may need adjustment
-                supp_data = data.get('article', {}).get('supplementaryMaterials', {}).get('supplementaryMaterial', [])
+                # Try multiple possible paths in the JSON structure
+                supp_data = (
+                    data.get('article', {}).get('supplementaryMaterials', {}).get('supplementaryMaterial', []) or
+                    data.get('supplementaryMaterials', {}).get('supplementaryMaterial', []) or
+                    data.get('supplementaryMaterial', []) or
+                    []
+                )
                 for item in supp_data:
-                    url = item.get('downloadUrl')
-                    filename = item.get('title')
+                    url = item.get('downloadUrl') or item.get('url') or item.get('href')
+                    filename = item.get('title') or item.get('name') or item.get('filename')
                     if url and filename and not any(f['name'] == filename for f in found_files):
                         found_files.append({'url': url, 'name': filename})
                         print(f"    Found supplement in JSON data: {filename}")
                 if found_files:
                     return found_files
-            except (json.JSONDecodeError, AttributeError):
+            except (json.JSONDecodeError, AttributeError, TypeError):
                 continue
 
-        # 2. Regex for "mmc" (multimedia component) links, a common Elsevier pattern
-        mmc_links = re.findall(r'href="(/cms/attachment/[^"]+/mmc\d+\.(?:pdf|docx|xlsx|zip|csv|txt))"', html)
-        for link in mmc_links:
-            url = urljoin(base_url, link)
-            filename = Path(urlparse(url).path).name
-            if filename and not any(f['name'] == filename for f in found_files):
-                found_files.append({'url': url, 'name': filename})
-                print(f"    Found MMC link via regex: {filename}")
+        # 2. Look for sections with "supplement" or "supporting" in headings
+        supp_keywords = ['supplement', 'supporting', 'additional', 'appendix']
+        for heading in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
+            heading_text = heading.get_text().lower()
+            if any(keyword in heading_text for keyword in supp_keywords):
+                # Look for links in the section containing this heading
+                section = heading.find_next_sibling() or heading.parent
+                if section:
+                    for a in section.find_all('a', href=True):
+                        href = a['href']
+                        link_text = a.get_text().lower()
+                        # Check if it's a file link
+                        if any(ext in href.lower() for ext in ['.pdf', '.docx', '.xlsx', '.zip', '.csv', '.txt', '.doc']):
+                            url = urljoin(base_url, href)
+                            filename = a.get_text().strip() or Path(urlparse(url).path).name
+                            if filename and not any(f['name'] == filename for f in found_files):
+                                found_files.append({'url': url, 'name': filename})
+                                print(f"    Found supplement in section: {filename}")
+
+        # 3. Regex for "mmc" (multimedia component) links, a common Elsevier pattern
+        # More flexible pattern to catch various MMC link formats
+        mmc_patterns = [
+            r'href="(/cms/attachment/[^"]+/mmc\d+\.(?:pdf|docx|xlsx|zip|csv|txt))"',
+            r'href="([^"]*mmc\d+\.(?:pdf|docx|xlsx|zip|csv|txt))"',
+            r'href="([^"]*attachment[^"]*mmc[^"]*\.(?:pdf|docx|xlsx|zip|csv|txt))"',
+        ]
+        for pattern in mmc_patterns:
+            mmc_links = re.findall(pattern, html, re.IGNORECASE)
+            for link in mmc_links:
+                url = urljoin(base_url, link)
+                filename = Path(urlparse(url).path).name
+                if filename and not any(f['name'] == filename for f in found_files):
+                    found_files.append({'url': url, 'name': filename})
+                    print(f"    Found MMC link via regex: {filename}")
         if found_files:
             return found_files
 
-        # 3. Look for specific "Download file" links in ScienceDirect as a fallback
+        # 4. Look for links with "supplement" or "mmc" in the text or href
+        for a in soup.find_all('a', href=True):
+            link_text = a.get_text().lower()
+            href = a['href'].lower()
+            is_supplement = (
+                any(keyword in link_text for keyword in ['supplement', 'supporting', 'additional', 'mmc']) or
+                'mmc' in href or
+                'supplement' in href or
+                'attachment' in href
+            )
+            is_file = any(href.endswith(ext) for ext in ['.pdf', '.docx', '.xlsx', '.zip', '.csv', '.txt', '.doc'])
+            if is_supplement and is_file:
+                url = urljoin(base_url, a['href'])
+                filename = a.get_text().strip() or Path(urlparse(url).path).name
+                if filename and not any(f['name'] == filename for f in found_files):
+                    found_files.append({'url': url, 'name': filename})
+                    print(f"    Found supplement link: {filename}")
+
+        # 5. Look for specific "Download file" links in ScienceDirect as a fallback
         for a in soup.find_all('a', class_='S_C_9cf8451f', href=True):
             if 'Download file' in a.get_text():
                 url = urljoin(base_url, a['href'])
@@ -110,6 +159,7 @@ class SupplementScraper:
                 if filename and not any(f['name'] == filename for f in found_files):
                     found_files.append({'url': url, 'name': filename})
                     print(f"    Found ScienceDirect download link: {filename}")
+
         if found_files:
             return found_files
 

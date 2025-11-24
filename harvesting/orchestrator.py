@@ -38,9 +38,14 @@ class PMCHarvester:
         # Initialize session with browser-like headers
         self.session = requests.Session()
         HEADERS = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Referer': 'https://pubmed.ncbi.nlm.nih.gov/'
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Referer': 'https://pubmed.ncbi.nlm.nih.gov/',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1'
         }
         self.session.headers.update(HEADERS)
 
@@ -76,21 +81,73 @@ class PMCHarvester:
         try:
             response = self.session.get(api_url, timeout=30)
             response.raise_for_status()
-            data = response.json()
-            # The API can return a success response with an empty list of files
-            if data.get('result', {}).get('supplementaryFiles'):
-                print("  ✓ Found supplemental files via EuropePMC API")
-                return data['result']['supplementaryFiles']
+            
+            # Check if response body is not empty
+            if not response.text.strip():
+                raise ValueError("Empty response from API")
+            
+            content_type = response.headers.get('Content-Type', '').lower()
+            
+            # Try to parse as JSON first
+            if 'application/json' in content_type:
+                data = response.json()
+                # The API can return a success response with an empty list of files
+                if data.get('result', {}).get('supplementaryFiles'):
+                    print("  ✓ Found supplemental files via EuropePMC API (JSON)")
+                    return data['result']['supplementaryFiles']
+            # Try to parse as XML if JSON fails
+            elif 'application/xml' in content_type or 'text/xml' in content_type:
+                try:
+                    from xml.etree import ElementTree as ET
+                    root = ET.fromstring(response.text)
+                    # Look for supplementary file elements in the XML
+                    supp_files = []
+                    # Common XML paths for supplementary files
+                    for elem in root.iter():
+                        if 'supplement' in elem.tag.lower() or 'supplementary' in elem.tag.lower():
+                            url = elem.get('url') or elem.get('href') or elem.text
+                            name = elem.get('name') or elem.get('title') or elem.get('filename')
+                            if url and name:
+                                supp_files.append({'url': url, 'name': name})
+                    if supp_files:
+                        print(f"  ✓ Found {len(supp_files)} supplemental files via EuropePMC API (XML)")
+                        return supp_files
+                    # If XML parsing succeeded but no files found, continue to fallback
+                except ET.ParseError as e:
+                    raise ValueError(f"Could not parse XML response: {e}")
+                # If we get here, XML was parsed but no files found - continue to fallback
+            else:
+                raise ValueError(f"Expected JSON or XML but got Content-Type: {content_type}")
+        except requests.exceptions.RequestException as e:
+            print(f"  - EuropePMC supplemental files API request failed for {pmcid}: {e}")
+        except ValueError as e:
+            print(f"  - EuropePMC supplemental files API returned invalid response for {pmcid}: {e}")
         except Exception as e:
             print(f"  - EuropePMC supplemental files API failed for {pmcid}: {e}")
 
-        # 2. If API fails or returns no files, fall back to DOI-based scraping
+        # 2. If API fails, try scraping PMC page directly
+        if pmcid:
+            try:
+                pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+                print(f"  - Trying to scrape PMC page directly: {pmc_url}")
+                pmc_response = self.session.get(pmc_url, timeout=30)
+                pmc_response.raise_for_status()
+                
+                # Use generic scraper for PMC pages
+                pmc_files = self.scraper.scrape_generic_supplements(pmc_response.text, pmc_url)
+                if pmc_files:
+                    print(f"  ✓ Found {len(pmc_files)} supplemental files via PMC page scraping")
+                    return pmc_files
+            except Exception as e:
+                print(f"  - PMC page scraping failed: {e}")
+
+        # 3. If PMC scraping fails, fall back to DOI-based scraping
         if doi:
-            print(f"  - API failed or returned no files. Falling back to DOI scraping for {doi}")
+            print(f"  - Falling back to DOI scraping for {doi}")
             return self.doi_resolver.resolve_and_scrape_supplements(doi, pmid, self.scraper)
         else:
             print("  - API failed and no DOI available. Cannot scrape.")
-            pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+            pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/" if pmcid else "N/A"
             with open(self.paywalled_log, 'a', newline='') as f:
                 writer = csv.writer(f)
                 writer.writerow([pmid, 'Supplemental files API failed, no DOI', pmc_url])

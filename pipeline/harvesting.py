@@ -37,9 +37,14 @@ class PMCHarvester:
         # Initialize session with browser-like headers
         self.session = requests.Session()
         HEADERS = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Referer': 'https://pubmed.ncbi.nlm.nih.gov/'
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Referer': 'https://pubmed.ncbi.nlm.nih.gov/',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1'
         }
         self.session.headers.update(HEADERS)
 
@@ -75,11 +80,25 @@ class PMCHarvester:
         try:
             response = self.session.get(api_url, timeout=30)
             response.raise_for_status()
+            
+            # Check if response is actually JSON before parsing
+            content_type = response.headers.get('Content-Type', '').lower()
+            if 'application/json' not in content_type:
+                raise ValueError(f"Expected JSON but got Content-Type: {content_type}")
+            
+            # Check if response body is not empty
+            if not response.text.strip():
+                raise ValueError("Empty response from API")
+            
             data = response.json()
             # The API can return a success response with an empty list of files
             if data.get('result', {}).get('supplementaryFiles'):
                 print("  ✓ Found supplemental files via EuropePMC API")
                 return data['result']['supplementaryFiles']
+        except requests.exceptions.RequestException as e:
+            print(f"  - EuropePMC supplemental files API request failed for {pmcid}: {e}")
+        except ValueError as e:
+            print(f"  - EuropePMC supplemental files API returned invalid response for {pmcid}: {e}")
         except Exception as e:
             print(f"  - EuropePMC supplemental files API failed for {pmcid}: {e}")
 
