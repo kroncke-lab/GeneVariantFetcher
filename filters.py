@@ -8,9 +8,8 @@ Tier 2: InternFilter - LLM-based classification (gpt-4o-mini)
 import logging
 import re
 from typing import List, Optional
-from litellm import completion
-from tenacity import retry, stop_after_attempt, wait_exponential
 from models import Paper, FilterResult, FilterDecision, FilterTier
+from utils.llm_utils import BaseLLMCaller
 
 logger = logging.getLogger(__name__)
 
@@ -113,7 +112,7 @@ class KeywordFilter:
         )
 
 
-class InternFilter:
+class InternFilter(BaseLLMCaller):
     """
     Tier 2 Filter: LLM-based classification using gpt-4o-mini.
     Classifies papers as "Original Clinical Data" vs "Review/Irrelevant".
@@ -156,11 +155,8 @@ Respond with a JSON object:
             temperature: Model temperature (lower = more deterministic).
             max_tokens: Maximum tokens for response.
         """
-        self.model = model
-        self.temperature = temperature
-        self.max_tokens = max_tokens
+        super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
 
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
     def filter(self, paper: Paper) -> FilterResult:
         """
         Apply LLM-based filter to classify the paper.
@@ -190,19 +186,8 @@ Respond with a JSON object:
         try:
             logger.debug(f"PMID {paper.pmid} - Calling LLM for classification")
 
-            # Call LiteLLM
-            response = completion(
-                model=self.model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=self.temperature,
-                max_tokens=self.max_tokens,
-                response_format={"type": "json_object"}
-            )
-
-            # Parse response
-            import json
-            result_text = response.choices[0].message.content
-            result_data = json.loads(result_text)
+            # Use shared LLM utility (includes retry logic)
+            result_data = self.call_llm_json(prompt)
 
             decision_str = result_data.get("decision", "FAIL").upper()
             decision = FilterDecision.PASS if decision_str == "PASS" else FilterDecision.FAIL
@@ -221,8 +206,7 @@ Respond with a JSON object:
                 pmid=paper.pmid,
                 confidence=confidence,
                 metadata={
-                    "model": self.model,
-                    "tokens_used": response.usage.total_tokens if hasattr(response, 'usage') else None
+                    "model": self.model
                 }
             )
 
@@ -239,7 +223,7 @@ Respond with a JSON object:
             )
 
 
-class ClinicalDataTriageFilter:
+class ClinicalDataTriageFilter(BaseLLMCaller):
     """
     Clinical Data Triage Filter: Determines if text contains ORIGINAL clinical data.
 
@@ -306,11 +290,8 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
             temperature: Model temperature (lower = more deterministic).
             max_tokens: Maximum tokens for response.
         """
-        self.model = model
-        self.temperature = temperature
-        self.max_tokens = max_tokens
+        super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
 
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
     def triage(
         self,
         title: str,
@@ -353,19 +334,8 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
         try:
             logger.debug(f"Triaging paper{f' PMID {pmid}' if pmid else ''} for gene {gene}")
 
-            # Call LiteLLM
-            response = completion(
-                model=self.model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=self.temperature,
-                max_tokens=self.max_tokens,
-                response_format={"type": "json_object"}
-            )
-
-            # Parse response
-            import json
-            result_text = response.choices[0].message.content
-            result_data = json.loads(result_text)
+            # Use shared LLM utility (includes retry logic)
+            result_data = self.call_llm_json(prompt)
 
             # Validate and normalize decision
             decision = result_data.get("decision", "DROP").upper()
@@ -382,8 +352,7 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
                 "reason": reason,
                 "confidence": confidence,
                 "pmid": pmid,
-                "model": self.model,
-                "tokens_used": response.usage.total_tokens if hasattr(response, 'usage') else None
+                "model": self.model
             }
 
             logger.info(

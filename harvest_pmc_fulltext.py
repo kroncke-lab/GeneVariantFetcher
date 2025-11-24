@@ -32,7 +32,9 @@ except ImportError:
     print("WARNING: markitdown not available. Will use basic conversion for docx/xlsx.")
 
 
-Entrez.email = "brett.kroncke@gmail.com"
+# Configure Entrez email from environment variable
+import os
+Entrez.email = os.getenv("ENTREZ_EMAIL", "your.email@example.com")
 Entrez.tool = "PMCHarvester"
 
 
