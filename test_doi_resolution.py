@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+"""
+Test script to verify DOI resolution and supplemental file scraping.
+"""
+
+from harvest_pmc_fulltext import PMCHarvester
+from pathlib import Path
+
+def test_doi_resolution():
+    """Test DOI resolution for various publishers."""
+
+    harvester = PMCHarvester(output_dir="test_pmc_harvest")
+
+    # Test cases: PMID, DOI (hardcoded to avoid rate limiting), Expected Domain, Description
+    test_cases = [
+        ('34931732', '10.1038/s41467-021-27599-6', 'nature.com', 'Nature article'),
+        ('35443093', '10.1016/j.gim.2022.04.004', 'gimjournal.org or sciencedirect.com', 'GIM/Elsevier article'),
+    ]
+
+    print("=" * 80)
+    print("Testing DOI Resolution and Scraping")
+    print("=" * 80)
+
+    for pmid, doi, expected_domain, description in test_cases:
+        print(f"\n{'=' * 80}")
+        print(f"Test Case: {description} (PMID: {pmid})")
+        print(f"Expected Domain: {expected_domain}")
+        print(f"Using DOI: {doi}")
+        print("=" * 80)
+
+        # Test DOI resolution
+        try:
+            response = harvester.session.get(f"https://doi.org/{doi}", allow_redirects=True, timeout=30)
+            final_url = response.url
+            print(f"✓ Resolved to: {final_url}")
+
+            # Test scraping
+            print("\nAttempting to scrape supplemental files...")
+            supp_files = harvester._get_supplemental_files_from_doi(doi, pmid)
+
+            if supp_files:
+                print(f"✅ Found {len(supp_files)} supplemental file(s):")
+                for idx, file_info in enumerate(supp_files, 1):
+                    print(f"  {idx}. {file_info.get('name', 'Unknown')} - {file_info.get('url', 'No URL')}")
+            else:
+                print("⚠️  No supplemental files found (may be correct or scraper needs refinement)")
+
+        except Exception as e:
+            print(f"❌ Error during resolution/scraping: {e}")
+
+    print(f"\n{'=' * 80}")
+    print("Test complete!")
+    print("=" * 80)
+
+if __name__ == "__main__":
+    test_doi_resolution()
