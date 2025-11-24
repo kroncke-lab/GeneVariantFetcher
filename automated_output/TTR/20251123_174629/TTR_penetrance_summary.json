@@ -1,0 +1,54 @@
+{
+  "gene_symbol": "TTR",
+  "aggregation_timestamp": "2025-11-23T17:58:55.576649",
+  "total_variants": 1,
+  "variants": [
+    {
+      "variant_key": "p.Ala101Val",
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.302C>T",
+      "protein_notation": "p.Ala101Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "aggregated_penetrance": {
+        "total_carriers": 12,
+        "affected": 8,
+        "unaffected": 4,
+        "uncertain": 0,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "44-74 years",
+            "penetrance_percentage": 66.67,
+            "carriers_in_range": 6,
+            "affected_in_range": 4
+          },
+          {
+            "age_range": "44-74 years",
+            "penetrance_percentage": 66.67,
+            "carriers_in_range": 6,
+            "affected_in_range": 4
+          }
+        ],
+        "individual_records_count": 12,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    }
+  ],
+  "validation": {
+    "errors": [],
+    "warnings": [
+      "PMID FULL, variant p.Ala101Val: Age at diagnosis (45) > age at evaluation (44)",
+      "PMID FULL, variant p.Ala101Val: Age at diagnosis (45) > age at evaluation (44)"
+    ],
+    "error_count": 0,
+    "warning_count": 2
+  }
+}
