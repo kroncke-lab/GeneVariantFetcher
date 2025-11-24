@@ -48,9 +48,14 @@ class PMCHarvester:
         
         self.session = requests.Session()
         self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Referer': 'https://pubmed.ncbi.nlm.nih.gov/'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Referer': 'https://pubmed.ncbi.nlm.nih.gov/',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1'
         })
 
         with open(self.paywalled_log, 'w', newline='') as f:
@@ -147,18 +152,64 @@ class PMCHarvester:
 
     def _get_supplemental_files_from_doi(self, doi: str, pmid: str) -> List[Dict]:
         """Resolve DOI to final URL and route to the appropriate scraper."""
-        try:
-            response = self.session.get(f"https://doi.org/{doi}", allow_redirects=True, timeout=30)
-            response.raise_for_status()
-            final_url = response.url
-            domain = urlparse(final_url).netloc
-            print(f"  ✓ DOI resolved to: {final_url}")
-        except Exception as e:
-            print(f"  ❌ DOI resolution failed for {doi}: {e}")
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
-            return []
+        # Try multiple times with delays to handle rate limiting
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                # Add a delay before each attempt (except the first)
+                if attempt > 0:
+                    delay = 2 ** attempt  # Exponential backoff: 2s, 4s
+                    print(f"  ⏳ Retry {attempt + 1}/{max_retries} after {delay}s delay...")
+                    time.sleep(delay)
+
+                response = self.session.get(f"https://doi.org/{doi}", allow_redirects=True, timeout=30)
+
+                # Check if we got a successful response
+                if response.status_code == 200:
+                    final_url = response.url
+                    domain = urlparse(final_url).netloc
+                    print(f"  ✓ DOI resolved to: {final_url}")
+                    break
+                elif response.status_code == 403:
+                    print(f"  ⚠️  403 Forbidden (attempt {attempt + 1}/{max_retries})")
+                    if attempt == max_retries - 1:
+                        raise requests.exceptions.HTTPError(f"403 Forbidden after {max_retries} attempts")
+                    continue
+                else:
+                    response.raise_for_status()
+
+            except requests.exceptions.RequestException as e:
+                if attempt == max_retries - 1:
+                    print(f"  ❌ DOI resolution failed for {doi} after {max_retries} attempts: {e}")
+                    # Try constructing URL directly as a fallback
+                    constructed_url = self._construct_url_from_doi(doi)
+                    if constructed_url:
+                        print(f"  ⚡ Trying direct URL construction: {constructed_url}")
+                        try:
+                            response = self.session.get(constructed_url, timeout=30)
+                            print(f"  📊 Response status: {response.status_code}")
+                            if response.status_code == 200:
+                                final_url = constructed_url
+                                domain = urlparse(final_url).netloc
+                                print(f"  ✓ Successfully accessed via constructed URL")
+                                break
+                            else:
+                                print(f"  ⚠️  Constructed URL returned status {response.status_code}")
+                        except requests.exceptions.RequestException as url_error:
+                            print(f"  ❌ Constructed URL also failed: {url_error}")
+
+                    # If all attempts failed, log and return empty
+                    with open(self.paywalled_log, 'a', newline='') as f:
+                        writer = csv.writer(f)
+                        writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
+                    return []
+                continue
+            except Exception as e:
+                print(f"  ❌ Unexpected error during DOI resolution: {e}")
+                with open(self.paywalled_log, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([pmid, f'DOI resolution error: {doi}', f"https://doi.org/{doi}"])
+                return []
 
         # Route to specific scraper based on resolved domain
         if "nature.com" in domain:
@@ -168,6 +219,18 @@ class PMCHarvester:
         else:
             print(f"  - No specific scraper for domain: {domain}. Using generic scraper.")
             return self._scrape_generic_supplements(response.text, final_url)
+
+    def _construct_url_from_doi(self, doi: str) -> Optional[str]:
+        """Construct publisher URL directly from DOI when resolution fails."""
+        # Nature journals: 10.1038/...
+        if doi.startswith('10.1038/'):
+            return f"https://www.nature.com/articles/{doi}"
+        # Elsevier/GIM: 10.1016/...
+        elif doi.startswith('10.1016/'):
+            # Try both ScienceDirect and GIM journal
+            # Note: This may not always work as Elsevier uses PIIs internally
+            return f"https://www.gimjournal.org/article/{doi}/fulltext"
+        return None
 
     def _scrape_nature_supplements(self, html: str, base_url: str) -> List[Dict]:
         """Scrape supplemental files from a Nature journal page."""
