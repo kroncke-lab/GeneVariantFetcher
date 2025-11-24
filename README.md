@@ -1,351 +1,302 @@
-# GeneVariantFetcher - Command-Line Tools
+# GeneVariantFetcher
 
-A collection of Python tools for extracting genetic variant data, patient-level information, and full-text articles from PubMed literature. All tools are designed to run locally on your computer without requiring a web browser.
+Command-line tools for extracting genetic variant and patient data from PubMed literature using AI-powered analysis.
 
-## Table of Contents
+## What It Does
 
-- [What This Tool Does](#what-this-tool-does)
-- [Local Setup](#local-setup)
-- [Available Tools](#available-tools)
-- [Using the PMC Harvester](#using-the-pmc-harvester)
-- [Using the Extraction Pipeline](#using-the-extraction-pipeline)
-- [Using the Clinical Data Triage Tool](#using-the-clinical-data-triage-tool)
-- [Sourcing PMIDs from PubMind](#sourcing-pmids-from-pubmind)
-- [Troubleshooting](#troubleshooting)
+GeneVariantFetcher automates the process of finding, downloading, and extracting structured data from biomedical literature:
 
----
+1. **Discovers papers** - Automatically finds relevant papers for a gene using PubMind/PubMed
+2. **Downloads full-text** - Retrieves complete articles with all supplemental materials from PubMed Central
+3. **Extracts data** - Uses AI to extract patient-level variants, phenotypes, and clinical data
+4. **Outputs structured JSON** - Returns machine-readable data for analysis
 
-## What This Tool Does
-
-**GeneVariantFetcher** provides command-line tools for:
-
-1. **Full-Text Harvester** - Download complete PubMed Central articles with:
-   - Full-text content (not just abstracts)
-   - All supplemental materials (Excel, Word, PDFs)
-   - Everything consolidated into markdown files for LLM processing
-
-2. **Extraction Pipeline** - Extract structured biomedical data from articles:
-   - Individual-level variant and phenotype data
-   - Clinical status (affected/unaffected)
-   - Age, sex, and demographic information
-   - Evidence sentences supporting each extraction
-
-3. **Clinical Data Triage** - Process and triage clinical data:
-   - Extract and organize patient-level information
-   - Filter and classify clinical variants
-   - Generate structured outputs for analysis
+**Key Feature**: Downloads full-text articles with supplemental Excel/Word files, not just abstracts, providing 10-100x more data for extraction.
 
 ---
 
-## Local Setup
+## Quick Start
 
 ### Prerequisites
 
-- Python 3.11 or higher
-- pip (Python package manager)
-- Git
-
-### Step 1: Clone the Repository
-
 ```bash
+# Python 3.11+ required
+python --version
+
+# Clone repository
 git clone https://github.com/kroncke-lab/GeneVariantFetcher.git
 cd GeneVariantFetcher
-```
 
-### Step 2: Set Up Python Environment
-
-**Option A: Using venv (recommended)**
-
-```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate it
-# On Windows:
-venv\Scripts\activate
-# On macOS/Linux:
-source venv/bin/activate
-```
-
-**Option B: Using conda**
-
-```bash
-conda create -n genevariant python=3.11
-conda activate genevariant
-```
-
-### Step 3: Install Dependencies
-
-```bash
+# Install dependencies
 pip install -e .
-```
 
-This installs all required packages listed in `pyproject.toml`.
-
-### Step 4: Set Up OpenAI API Key (for AI extraction features)
-
-The extraction features require an OpenAI API key.
-
-**Option A: Using environment variables (recommended)**
-
-```bash
-# On macOS/Linux:
-export AI_INTEGRATIONS_OPENAI_API_KEY="your-api-key-here"
+# Set OpenAI API key (required for extraction)
+export AI_INTEGRATIONS_OPENAI_API_KEY="your-api-key"
 export AI_INTEGRATIONS_OPENAI_BASE_URL="https://api.openai.com/v1"
-
-# On Windows (PowerShell):
-$env:AI_INTEGRATIONS_OPENAI_API_KEY="your-api-key-here"
-$env:AI_INTEGRATIONS_OPENAI_BASE_URL="https://api.openai.com/v1"
 ```
 
-**Option B: Create a .env file**
+### Automated Workflow (Recommended)
 
-Create a file named `.env` in the project root:
+Run everything with a single command:
 
-```env
-AI_INTEGRATIONS_OPENAI_API_KEY=your-api-key-here
-AI_INTEGRATIONS_OPENAI_BASE_URL=https://api.openai.com/v1
-```
-
----
-
-## Available Tools
-
-### 1. Automated PMID Discovery (`pubmind_fetcher.py`) 🆕
-
-Automatically discover relevant papers using PubMind - no manual PMID list needed!
-
-**Quick Start:**
 ```bash
 python example_automated_workflow.py BRCA1 --email your@email.com
 ```
 
-**See detailed documentation:** [PUBMIND_README.md](PUBMIND_README.md)
+This will:
+1. Find relevant papers from PubMind
+2. Download full-text articles from PMC
+3. Extract variant and patient data
+4. Save results to JSON
 
-**Features:**
-- Queries PubMind database for variant-focused papers
-- Falls back to enhanced PubMed queries if needed
-- Integrates with harvester and extraction pipeline
-- Complete hands-free workflow from gene to data
-
-### 2. PMC Full-Text Harvester (`harvest_pmc_fulltext.py`)
-
-Download full-text articles and supplemental materials from PubMed Central.
-
-**Quick Start:**
+**Custom limits:**
 ```bash
-python harvest_pmc_fulltext.py
-```
-
-**See detailed documentation:** [HARVESTER_QUICKSTART.md](HARVESTER_QUICKSTART.md)
-
-### 3. Extraction Pipeline (`pipeline.py`)
-
-Extract structured biomedical data from articles using AI.
-
-**Quick Start:**
-```bash
-python example_usage.py
-```
-
-**See detailed documentation:** [README_PIPELINE.md](README_PIPELINE.md)
-
-### 4. Clinical Data Triage (`clinical_data_triage.py`)
-
-Process and triage clinical data from various sources.
-
-**Quick Start:**
-```bash
-python example_triage.py
-```
-
-**See detailed documentation:** [TRIAGE_README.md](TRIAGE_README.md)
-
-### 4. PubMind Sourcing (`example_pubmind_sourcing.py`)
-
-Generate PMID lists by querying [PubMind](https://pubmind.wglab.org/) directly. The helper
-falls back to HTML scraping if the JSON API is blocked, so you still get a candidate set of
-PMIDs to feed into the harvester or extraction pipeline.
-
-**Quick Start:**
-```bash
-python example_pubmind_sourcing.py
+python example_automated_workflow.py SCN5A \
+  --email your@email.com \
+  --max-pmids 200 \
+  --max-downloads 100
 ```
 
 ---
 
-## Using the PMC Harvester
+## Core Workflows
 
-The harvesting tool downloads **full-text** PubMed Central articles with all supplemental materials. This provides much richer data than abstracts alone.
+### 1. Full Automated Pipeline
 
-### When to Use the Harvester
+**Best for**: Getting all available data with minimal effort
 
-- You need full article text, not just abstracts
-- You want supplemental tables with patient-level data
-- You're preparing articles for detailed LLM extraction
-- You have a list of PMIDs to process
+```bash
+python example_automated_workflow.py BRCA1 --email your@email.com
+```
 
-### Option 1: Quick Start (Edit the Script)
+**Output**: `automated_output/BRCA1/{timestamp}/extracted_data.json`
 
-1. **Get your PMIDs**
-   - Create a list of PubMed IDs you want to download
+### 2. Step-by-Step Manual Control
 
-2. **Edit the harvesting script**
-   - Open `harvest_pmc_fulltext.py`
-   - Find line 333 (look for `pmids = [`)
-   - Replace with your PMIDs:
+**Best for**: Custom PMID lists or detailed control
 
-   ```python
-   pmids = [
-       '35443093',
-       '33442691',
-       '34931732',
-   ]
-   ```
+**Step 1: Get PMIDs**
+```python
+from pubmind_fetcher import fetch_pmids_for_gene
 
-3. **Set your email** (required by NCBI)
-   - Find line 32: `Entrez.email = "your.email@example.com"`
-   - Change to your actual email
+pmids = fetch_pmids_for_gene("SCN5A", email="your@email.com",
+                              output_file="scn5a_pmids.txt")
+```
 
-4. **Run the script**
-
-   ```bash
-   python harvest_pmc_fulltext.py
-   ```
-
-5. **Check the output**
-   - Look in the `pmc_harvest/` folder
-   - Each article creates a `{PMID}_FULL_CONTEXT.md` file
-   - Also creates:
-     - `successful_downloads.csv` - what worked
-     - `paywalled_missing.csv` - what didn't work
-
-### Option 2: Using a PMID File
-
-1. **Prepare your PMID file**
-   - Create a text file (e.g., `my_pmids.txt`)
-   - One PMID per line:
-   ```
-   35443093
-   33442691
-   34931732
-   ```
-
-2. **Use the example script**
-   ```bash
-   python example_harvest_from_pubmind.py
-   ```
-
-3. **Choose option 1**
-   - Enter the path to your PMID file
-   - Script will process all PMIDs
-
-### Option 3: Python API (Advanced)
-
+**Step 2: Harvest full-text**
 ```python
 from harvest_pmc_fulltext import PMCHarvester
 
-# Load PMIDs from a file
-with open('my_pmids.txt', 'r') as f:
-    pmids = [line.strip() for line in f if line.strip()]
-
-# Create harvester
-harvester = PMCHarvester(output_dir="my_harvest")
-
-# Harvest (delay=2.0 means 2 seconds between requests)
-harvester.harvest(pmids[:50], delay=2.0)  # Start with first 50
-
-print(f"Check the my_harvest/ folder for results")
+harvester = PMCHarvester(output_dir="scn5a_papers")
+harvester.harvest(pmids, delay=2.0)
 ```
 
-### Understanding Harvester Output
-
-Each successful article creates a markdown file with:
-
-```markdown
-# MAIN TEXT
-
-## [Article Title]
-
-### Abstract
-Full abstract text...
-
-### Introduction
-Introduction section...
-
-### Methods
-Methods section...
-
-### Results
-Results with all details...
-
-# SUPPLEMENTAL FILE 1: Table_S1.xlsx
-
-#### Sheet: Patient_Cohort
-
-| Patient_ID | Gene | Variant | Age | Phenotype |
-|------------|------|---------|-----|-----------|
-| P001       | BRCA1 | c.1234G>A | 45 | Breast cancer |
-| P002       | BRCA1 | c.5678C>T | 52 | Ovarian cancer |
+**Step 3: Extract data**
+```bash
+python example_usage.py  # Edit script to point to your harvested papers
 ```
 
-**This is perfect for:**
-- Feeding to LLMs for extraction
-- Manual review of case details
-- Finding patient-level data in supplemental tables
+### 3. Using Your Own PMID List
 
-### Harvester Tips
+**Best for**: Working with specific papers or custom searches
+
+```bash
+# Create pmids.txt with one PMID per line
+# Then edit harvest_pmc_fulltext.py line 333 to load your file
+
+python harvest_pmc_fulltext.py
+```
+
+---
+
+## Tools Reference
+
+### PMC Full-Text Harvester
+
+Downloads complete PubMed Central articles with all supplemental materials.
+
+**Features:**
+- Converts PMID → PMCID automatically
+- Downloads full article text (not just abstracts)
+- Retrieves ALL supplemental files (Excel, Word, PDFs)
+- Converts Excel tables to markdown for AI processing
+- Creates unified `{PMID}_FULL_CONTEXT.md` files
+
+**Usage:**
+```python
+from harvest_pmc_fulltext import PMCHarvester
+
+harvester = PMCHarvester(output_dir="pmc_harvest")
+pmids = ['35443093', '33442691', '34931732']
+harvester.harvest(pmids, delay=2.0)  # 2 second delay between requests
+```
+
+**Output Structure:**
+```
+pmc_harvest/
+├── 35443093_FULL_CONTEXT.md          # Unified markdown (article + supplements)
+├── 35443093_supplements/              # Raw supplemental files
+│   ├── Table_S1.xlsx
+│   └── Figure_S2.pdf
+├── successful_downloads.csv           # Log of successful downloads
+└── paywalled_missing.csv              # Log of unavailable articles
+```
+
+**Important**: Only ~30% of PubMed articles are available full-text in PMC. Paywalled articles are automatically logged and skipped.
+
+**Configuration:**
+```python
+# Required: Set your email (NCBI requirement)
+# Edit line 32 in harvest_pmc_fulltext.py
+Entrez.email = "your.email@example.com"
+
+# Rate limiting (be polite to APIs)
+harvester.harvest(pmids, delay=2.0)  # Recommended: 2-3 seconds
+```
+
+### Extraction Pipeline
+
+Extracts structured individual-level variant and phenotype data from articles using AI.
+
+**What it extracts:**
+- Genetic variants (HGVS notation: c.1234G>A, p.Arg412Gln)
+- Patient phenotypes (with HPO codes when possible)
+- Clinical status (affected/unaffected)
+- Demographics (age, sex, ancestry)
+- Evidence sentences supporting each extraction
+
+**Usage:**
+```python
+from pipeline import BiomedicalExtractionPipeline
+
+pipeline = BiomedicalExtractionPipeline(email="your@email.com")
+results = pipeline.run_for_pmids(['35443093', '33442691'])
+```
+
+**Output Format (JSON):**
+```json
+{
+  "pmid": "35443093",
+  "individuals": [
+    {
+      "individual_id": "P1",
+      "variants": ["c.1234G>A", "p.Arg412Gln"],
+      "phenotypes": ["Cardiomyopathy", "Arrhythmia"],
+      "clinical_status": "affected",
+      "age": "45",
+      "sex": "male",
+      "evidence": "Patient P1 presented with..."
+    }
+  ]
+}
+```
+
+**Cost**: Uses OpenAI GPT models. Typical cost: $0.01-0.10 per paper depending on length.
+
+### Clinical Data Triage
+
+Filters papers to identify those with original clinical data (case reports, cohorts) vs. reviews or basic science.
+
+**Purpose**: Save time and money by processing only papers with extractable patient data.
+
+**Usage:**
+```python
+from filters import ClinicalDataTriageFilter
+
+triage = ClinicalDataTriageFilter()
+result = triage.triage(
+    title="Novel BRCA1 mutation in breast cancer patient",
+    abstract="We report a 32-year-old woman...",
+    gene="BRCA1"
+)
+
+print(result['decision'])    # "KEEP" or "DROP"
+print(result['confidence'])  # 0.0-1.0
+```
+
+**What gets KEPT:**
+- Case reports
+- Case series
+- Clinical cohorts with patient data
+- Functional studies that include patient phenotypes
+
+**What gets DROPPED:**
+- Review articles
+- Meta-analyses
+- Animal studies only
+- Cell/in vitro studies only
+- Computational predictions only
+
+**Cost**: ~$0.0001 per paper (1 cent per 100 papers)
+
+### PubMind Integration
+
+Automatically discovers relevant papers using PubMind, a literature database of variant-disease associations.
+
+**Usage:**
+```python
+from pubmind_fetcher import fetch_pmids_for_gene
+
+# Fetch PMIDs for a gene
+pmids = fetch_pmids_for_gene(
+    gene_symbol="BRCA1",
+    email="your@email.com",
+    max_results=100,
+    output_file="brca1_pmids.txt"
+)
+
+print(f"Found {len(pmids)} papers")
+```
+
+**How it works:**
+1. Queries PubMind database (https://pubmind.wglab.org/)
+2. Falls back to enhanced PubMed queries if PubMind unavailable
+3. Returns deduplicated PMID list
+
+**Fallback**: If PubMind is inaccessible, automatically uses enhanced PubMed queries optimized for clinical variant papers.
+
+---
+
+## Configuration
+
+### Required Setup
+
+**NCBI Email** (required for PubMed API):
+```python
+# Edit line 32 in harvest_pmc_fulltext.py
+Entrez.email = "your.email@example.com"
+```
+
+**OpenAI API Key** (required for extraction):
+```bash
+export AI_INTEGRATIONS_OPENAI_API_KEY="your-api-key"
+export AI_INTEGRATIONS_OPENAI_BASE_URL="https://api.openai.com/v1"
+```
+
+Or create `.env` file:
+```env
+AI_INTEGRATIONS_OPENAI_API_KEY=your-api-key
+AI_INTEGRATIONS_OPENAI_BASE_URL=https://api.openai.com/v1
+```
+
+### Optional Settings
 
 **Rate Limiting:**
-- Use `delay=2.0` (2 seconds) for moderate batches (recommended)
-- Use `delay=3.0` for large batches (>500 PMIDs)
-- Use `delay=1.0` for very small batches (<20 PMIDs)
-
-**Success Rates:**
-- Only ~30% of PubMed articles have full text in PMC
-- Paywalled articles will be logged in `paywalled_missing.csv`
-- This is normal - focus on successful downloads
-
-**Processing Large Lists:**
 ```python
-# For 1000+ PMIDs, process in batches
-pmids = load_your_pmids()  # e.g., 2000 PMIDs
+# Harvester delay (seconds between requests)
+harvester.harvest(pmids, delay=2.0)  # Recommended: 2-3 seconds
 
-batch_size = 100
-for i in range(0, len(pmids), batch_size):
-    batch = pmids[i:i+batch_size]
-    harvester = PMCHarvester(output_dir=f"harvest_batch_{i//batch_size}")
-    harvester.harvest(batch, delay=2.0)
+# For large batches (1000+ PMIDs)
+harvester.harvest(pmids, delay=3.0)  # Be extra polite
 ```
 
----
+**LLM Model Selection:**
+```python
+# Default: gpt-4o-mini (fast, cheap)
+pipeline = BiomedicalExtractionPipeline(model="gpt-4o-mini")
 
-## Using the Extraction Pipeline
-
-See [README_PIPELINE.md](README_PIPELINE.md) for detailed documentation on:
-- Extracting individual-level data from articles
-- Tiered extraction with cost optimization
-- Filtering and post-processing
-- Output formats and usage
-
-**Quick Start:**
-```bash
-python example_usage.py
-```
-
----
-
-## Using the Clinical Data Triage Tool
-
-See [TRIAGE_README.md](TRIAGE_README.md) for detailed documentation on:
-- Clinical data processing and triage
-- Variant classification
-- Quality control and filtering
-- Integration with extraction pipeline
-
-**Quick Start:**
-```bash
-python example_triage.py
+# Higher accuracy (more expensive)
+pipeline = BiomedicalExtractionPipeline(model="gpt-4o")
 ```
 
 ---
@@ -354,145 +305,231 @@ python example_triage.py
 
 ### Harvester Issues
 
-**Problem: "No PMCID found"**
-- **Solution**: This is normal. Only ~30% of PubMed articles are in PMC. These will be logged and skipped automatically.
+**"No PMCID found"**
+- Normal: Only ~30% of PubMed articles are in PMC
+- These are automatically logged to `paywalled_missing.csv`
+- Not an error, just unavailable full-text
 
-**Problem: "Error fetching supplemental files"**
-- **Solution**: Many articles don't have supplements. The script continues and creates markdown from main text.
+**"Full-text not available"**
+- Article has PMCID but XML not accessible
+- Logged and skipped automatically
 
-**Problem: Empty markdown files**
-- **Solution**:
-  - Check the raw XML at: `https://www.ebi.ac.uk/europepmc/webservices/rest/PMC{PMCID}/fullTextXML`
-  - Some PMC articles have parsing issues
-  - File a bug report with the PMCID
-
-**Problem: "Email required" error**
-- **Solution**: Edit line 32 in `harvest_pmc_fulltext.py` and set your email:
+**"Email required"**
+- Set your email in `harvest_pmc_fulltext.py` line 32:
   ```python
   Entrez.email = "your.email@example.com"
   ```
 
-**Problem: Slow processing**
-- **Solution**:
-  - This is normal - processing is intentionally rate-limited
-  - Expect ~1800 articles/hour with default settings
-  - Don't reduce delay below 1.0 seconds (respect NCBI servers)
-
-### Installation Issues
-
-**Problem: `pip install -e .` fails**
-- **Solution**:
-  - Update pip: `pip install --upgrade pip`
-  - Install setuptools: `pip install setuptools wheel`
-  - Try again
-
-**Problem: Import errors when running**
-- **Solution**:
-  - Verify virtual environment is activated (you should see `(venv)` in terminal)
-  - Reinstall: `pip install -e . --force-reinstall`
+**Slow processing**
+- Normal: Rate-limited to respect API servers
+- Expected: ~1800 articles/hour with 2s delay
+- Don't reduce delay below 1 second
 
 ### Extraction Issues
 
-**Problem: OpenAI API errors**
-- **Solution**:
-  - Check that API key is set correctly
-  - Verify you have API credits available
-  - Check the error message for rate limit issues
+**OpenAI API errors**
+- Check API key is set: `echo $AI_INTEGRATIONS_OPENAI_API_KEY`
+- Verify you have API credits available
+- Check for rate limit messages in error output
 
-**Problem: No data extracted**
-- **Solution**:
-  - Works best with case reports and detailed clinical studies
-  - Limited to abstracts unless using harvested full-text
-  - Some articles don't contain individual-level data
+**No data extracted**
+- Works best with case reports and clinical studies
+- Some papers don't contain individual-level data
+- Try full-text (harvested papers) instead of abstracts only
+
+**Import errors**
+- Verify virtual environment is activated: `(venv)` in prompt
+- Reinstall: `pip install -e . --force-reinstall`
+
+### Installation Issues
+
+**`pip install -e .` fails**
+- Update pip: `pip install --upgrade pip`
+- Install build tools: `pip install setuptools wheel`
+- Try again
 
 ---
 
-## Workflow Examples
+## Output Files
 
-### Example 1: Fully Automated Workflow (Recommended) 🆕
+### Harvester Output
 
-**Goal**: Get all available variant and patient data for a gene with zero manual work
-
-Simply run:
-```bash
-python example_automated_workflow.py BRCA1 --email your@email.com
+```
+pmc_harvest/
+├── {PMID}_FULL_CONTEXT.md      # Article + supplements as markdown
+├── {PMID}_supplements/          # Raw supplemental files
+├── successful_downloads.csv     # What worked
+└── paywalled_missing.csv        # What didn't work
 ```
 
-This automatically:
-1. ✅ Discovers relevant papers from PubMind
-2. ✅ Downloads full-text articles from PMC
-3. ✅ Extracts variant and patient data
-4. ✅ Saves structured JSON results
+### Extraction Output
 
-**Example with custom limits:**
-```bash
-python example_automated_workflow.py SCN5A \
-  --email your@email.com \
-  --max-pmids 200 \
-  --max-downloads 100
+```
+automated_output/{GENE}/{TIMESTAMP}/
+├── extracted_data.json          # Structured extraction results
+├── pmc_fulltext/                # Harvested full-text papers
+└── pipeline_log.txt             # Processing log
 ```
 
-### Example 2: Manual Workflow (Step-by-Step)
+### PMID Lists
 
-**Goal**: Get all available data for SCN5A variants with manual control
-
-1. **Discover PMIDs** using PubMind:
-   ```python
-   from pubmind_fetcher import fetch_pmids_for_gene
-
-   pmids = fetch_pmids_for_gene("SCN5A", email="your@email.com",
-                                 output_file="scn5a_pmids.txt")
-   ```
-
-2. **Harvest full-text articles:**
-   ```bash
-   python harvest_pmc_fulltext.py
-   ```
-   (Edit the script to use your PMID list)
-
-3. **Run extraction pipeline on harvested files:**
-   ```bash
-   python example_usage.py
-   ```
-
-4. **Process and triage the results:**
-   ```bash
-   python example_triage.py
-   ```
-
-### Example 3: Processing a Large PMID List
-
-**Goal**: Process 1000+ articles efficiently
-
-1. Split your PMID list into batches
-2. Process each batch:
-   ```python
-   from harvest_pmc_fulltext import PMCHarvester
-
-   batch_size = 100
-   for i in range(0, len(pmids), batch_size):
-       batch = pmids[i:i+batch_size]
-       harvester = PMCHarvester(output_dir=f"batch_{i//batch_size}")
-       harvester.harvest(batch, delay=2.0)
-   ```
+```
+{gene}_pmids.txt                 # One PMID per line
+```
 
 ---
 
-## Additional Resources
+## Performance Tips
 
-- **Full Harvester Documentation**: See `HARVESTER_QUICKSTART.md` and `README_HARVEST.md`
-- **Extraction Pipeline Documentation**: See `README_PIPELINE.md`
-- **Clinical Triage Documentation**: See `TRIAGE_README.md`
-- **NCBI E-utilities**: https://www.ncbi.nlm.nih.gov/books/NBK25501/
-- **OpenAI API Docs**: https://platform.openai.com/docs
+**Large PMID lists (1000+)**: Process in batches of 100
+```python
+batch_size = 100
+for i in range(0, len(pmids), batch_size):
+    batch = pmids[i:i+batch_size]
+    harvester.harvest(batch, delay=2.0)
+```
+
+**Cost optimization**: Use triage filter before extraction
+```python
+# Triage costs ~$0.0001/paper
+# Extraction costs ~$0.05/paper
+# Filter first to save money
+triage = ClinicalDataTriageFilter()
+for paper in papers:
+    if triage.triage_paper(paper)['decision'] == 'KEEP':
+        pipeline.process_paper(paper)  # Only extract clinical papers
+```
+
+**Speed vs. politeness**:
+- Fast (1s delay): 3600 articles/hour - use for small batches only
+- Recommended (2s delay): 1800 articles/hour - good for most use cases
+- Polite (3s delay): 1200 articles/hour - use for large batches (1000+)
 
 ---
 
-## Getting Help
+## API Details
 
-- Check the troubleshooting section above
-- Review the detailed guides in the documentation files
-- For bugs or feature requests, contact the repository maintainers
+### NCBI E-utilities
+- **Purpose**: Convert PMID → PMCID, fetch abstracts
+- **Rate Limit**: 3 requests/second (no API key), 10 requests/second (with key)
+- **Authentication**: Email required, API key optional
+
+### EuropePMC
+- **Purpose**: Download full-text XML and supplemental files
+- **Endpoints**:
+  - Full-text: `https://www.ebi.ac.uk/europepmc/webservices/rest/{PMCID}/fullTextXML`
+  - Supplements: `https://www.ebi.ac.uk/europepmc/webservices/rest/{PMCID}/supplementaryFiles`
+- **Rate Limit**: No official limit (be polite with 2s delays)
+- **Authentication**: None required
+
+### OpenAI API
+- **Purpose**: AI-powered biomedical data extraction
+- **Models**: gpt-4o-mini (recommended), gpt-4o (higher accuracy)
+- **Cost**: ~$0.15-1.50 per 1M tokens
+- **Authentication**: API key required
+
+---
+
+## Example Workflows
+
+### Workflow 1: Quick Gene Analysis
+
+```bash
+# Get all data for a gene in one command
+python example_automated_workflow.py KCNQ1 --email your@email.com
+```
+
+### Workflow 2: Custom PMID List
+
+```bash
+# 1. Create pmids.txt (one PMID per line)
+echo "35443093" > my_pmids.txt
+echo "33442691" >> my_pmids.txt
+
+# 2. Harvest full-text
+python harvest_pmc_fulltext.py  # Edit script to load my_pmids.txt
+
+# 3. Extract data
+python example_usage.py  # Edit script to process harvested papers
+```
+
+### Workflow 3: Large-Scale Processing
+
+```python
+from pubmind_fetcher import fetch_pmids_for_gene
+from harvest_pmc_fulltext import PMCHarvester
+from pipeline import BiomedicalExtractionPipeline
+
+# 1. Get PMIDs
+pmids = fetch_pmids_for_gene("TTR", email="your@email.com", max_results=500)
+
+# 2. Harvest in batches
+batch_size = 100
+for i in range(0, len(pmids), batch_size):
+    batch = pmids[i:i+batch_size]
+    harvester = PMCHarvester(output_dir=f"ttr_batch_{i//batch_size}")
+    harvester.harvest(batch, delay=2.0)
+
+# 3. Extract from harvested papers
+pipeline = BiomedicalExtractionPipeline(email="your@email.com")
+# Process harvested markdown files...
+```
+
+---
+
+## Why Full-Text Matters
+
+**Abstracts only (typical approach):**
+- Summary statistics
+- Limited individual patient data
+- No supplemental tables
+
+**Full-text + supplements (this tool):**
+- Complete case reports with clinical details
+- Supplemental Excel tables with individual patient rows
+- Methods sections with cohort descriptions
+- Figure legends with additional phenotype data
+- **10-100x more extractable data**
+
+**Example**: A paper abstract mentions "15 patients with BRCA1 mutations" but supplemental Table S1 contains individual rows with specific variants, ages, phenotypes for all 15 patients. Harvesting captures this.
+
+---
+
+## Development
+
+**Run tests:**
+```bash
+python test_triage.py  # Test clinical triage
+```
+
+**Project structure:**
+```
+GeneVariantFetcher/
+├── harvest_pmc_fulltext.py      # Full-text harvester
+├── pipeline.py                  # Extraction pipeline
+├── clinical_data_triage.py      # Clinical data triage
+├── pubmind_fetcher.py           # PubMind integration
+├── filters.py                   # Filtering utilities
+├── sourcer.py                   # Paper sourcing utilities
+├── example_*.py                 # Example scripts
+└── README.md                    # This file
+```
+
+---
+
+## Support
+
+- **Troubleshooting**: See sections above
+- **NCBI E-utilities docs**: https://www.ncbi.nlm.nih.gov/books/NBK25501/
+- **EuropePMC API**: https://europepmc.org/RestfulWebService
+- **OpenAI API**: https://platform.openai.com/docs
+- **PubMind**: https://pubmind.wglab.org/
+
+---
+
+## License
+
+See LICENSE file in repository.
 
 ---
 
@@ -500,5 +537,5 @@ python example_automated_workflow.py SCN5A \
 
 - **NCBI E-utilities**: National Library of Medicine
 - **EuropePMC API**: Europe PubMed Central
-- **MarkItDown**: Microsoft Research
+- **PubMind**: Wang Genomics Lab
 - **OpenAI**: GPT models for extraction
