@@ -1,174 +1,85 @@
-<!-- ec8b9a29-af6d-411c-9820-f71bd0498732 640c8514-e34d-4ab0-9ca9-1ec44b8fdc3f -->
-# Penetrance Extraction Enhancement Plan
+# Plan: Enhance Supplemental File Extraction with DOI Resolution and Web Scraping
 
-## Goal
+**Goal:** Reliably extract supplemental files for articles when the PMC API does not provide them. This involves a fallback mechanism that uses the article's DOI to find and scrape the publisher's website.
 
-Enhance the existing variant extraction pipeline to extract penetrance estimates (e.g., "observed in 10 people, 4 with disease") for calibrating disease prediction models. Support both individual-level and aggregated variant-level penetrance data with age tracking.
+**Strategy:** Implement a "waterfall" fallback strategy. The system will first attempt to retrieve files via the PMC API. If that fails, it will resolve the article's DOI to the publisher's page and use a domain-specific scraper to find the supplemental file links.
 
-## Current State
+---
 
-- Extraction system captures basic variant info in `extractor.py`
-- Current schema has `patients.count` but lacks detailed penetrance breakdown
-- Output format: `TTR_PMID_FULL.json` per paper
-- Missing: individual-level records, affected/unaffected counts, age-at-onset, calculated penetrance percentages
+### Revised Plan Steps
 
-## Implementation Plan
+#### 1. Refactor `get_supplemental_files` to be a Controller
 
-### 1. Enhance Extraction Prompt (`extractor.py`)
+The existing `get_supplemental_files` function will be modified to orchestrate the data retrieval process.
 
-**File**: `extractor.py` (lines 24-115)
+- **Current Logic:** Relies solely on the PMC API.
+- **New Logic:**
 
-**Changes**:
+  1.  Call the existing PMC API method.
+  2.  If the PMC method returns no files, call a new internal method, `_get_supplemental_files_from_doi`, passing the article's DOI and PMID.
+  3.  Return the combined results.
 
-- Add explicit instructions to extract individual-level person records
-- Request penetrance data: total carriers, affected count, unaffected count
-- Extract age-at-onset and age-at-evaluation for age-dependent penetrance
-- Extract disease status per individual when linked to variants
-- Capture cohort study data (e.g., "10 carriers, 4 affected, 6 unaffected")
+#### 2. Implement the DOI Resolver and Scraper Router (`_get_supplemental_files_from_doi`)
 
-**Key additions to prompt**:
+This new private method will be the core of the fallback logic. It will resolve the DOI and route to the correct scraper.
 
-- Individual-level extraction: proband, case, patient, family member (II-1, P1, etc.)
-- Penetrance tracking: distinguish affected vs unaffected carriers
-- Age tracking: age-at-onset, age-at-evaluation, age-at-diagnosis
-- Cohort data: extract study-level statistics when provided
+- **Action:** Create a new method `_get_supplemental_files_from_doi(self, doi: str, pmid: str) -> List[Dict]`.
+- **Implementation Details:**
 
-### 2. Update JSON Schema
+  1.  Initialize a `requests.Session` object to persist connections and cookies.
+  2.  Define a standard set of browser headers (e.g., `User-Agent`, `Accept`, `Referer`) to spoof a real browser and avoid being blocked by anti-bot measures.
+  3.  Perform a GET request to `https://doi.org/{doi}` with `allow_redirects=True`.
+  4.  Capture the final URL from the response (`response.url`).
+  5.  Parse the network location (domain) from the final URL using `urllib.parse.urlparse`.
+  6.  Use an `if/elif/else` block to route to the appropriate scraper function based on the domain (e.g., `"nature.com"`, `"gimjournal.org"`, `"sciencedirect.com"`).
+```python
+# Pseudocode for the router
+def _get_supplemental_files_from_doi(self, doi: str, pmid: str) -> List[Dict]:
+    # 1. Resolve DOI to final URL with session and headers
+    try:
+        response = self.session.get(f"https://doi.org/{doi}", allow_redirects=True)
+        final_url = response.url
+        domain = urlparse(final_url).netloc
+    except Exception as e:
+        # Log error and return empty
+        return []
 
-**File**: `extractor.py` (EXTRACTION_PROMPT output format)
-
-**New structure**:
-
-```json
-{
-  "variants": [
-    {
-      // ... existing fields ...
-      "penetrance_data": {
-        "total_carriers_observed": integer,
-        "affected_count": integer,
-        "unaffected_count": integer,
-        "uncertain_count": integer,
-        "penetrance_percentage": float,
-        "age_dependent_penetrance": [
-          {
-            "age_range": "string (e.g., '40-50 years')",
-            "penetrance": float,
-            "carriers_in_range": integer
-          }
-        ]
-      },
-      "individual_records": [
-        {
-          "individual_id": "string",
-          "age_at_evaluation": integer,
-          "age_at_onset": integer,
-          "age_at_diagnosis": integer,
-          "sex": "string",
-          "affected_status": "affected/unaffected/uncertain",
-          "phenotype_details": "string",
-          "evidence_sentence": "string"
-        }
-      ]
-    }
-  ]
-}
+    # 2. Route to specific scraper based on resolved domain
+    if "nature.com" in domain:
+        return self._scrape_nature_supplements(response.text, final_url)
+    elif "gimjournal.org" in domain or "sciencedirect" in domain:
+        return self._scrape_elsevier_supplements(response.text, final_url)
+    else:
+        return self._scrape_generic_supplements(response.text, final_url)
 ```
 
-### 3. Create Post-Processing Aggregation Script
 
-**New file**: `penetrance_aggregator.py`
+#### 3. Implement Publisher-Specific Scrapers
 
-**Purpose**: Aggregate penetrance data across multiple papers for the same variant
+We will create separate methods for each publisher to handle their unique HTML structures.
 
-**Features**:
+- **A. Nature Scraper (`_scrape_nature_supplements`)**
+  - **Input:** HTML content and the final URL.
+  - **Action:** Use `BeautifulSoup` to parse the HTML. Look for sections related to "Supplementary Information" and extract `href` attributes from `<a>` tags.
 
-- Merge individual records from multiple papers
-- Calculate aggregate penetrance statistics per variant
-- Handle age-dependent penetrance aggregation
-- Output variant-level summary for model calibration
+- **B. Elsevier/GIM Scraper (`_scrape_elsevier_supplements`)**
+  - **Input:** HTML content and the final URL.
+  - **Action:** This requires a multi-step approach due to dynamic content loading.
 
-**Output format**: `{GENE}_penetrance_summary.json`:
+    1.  First, use `BeautifulSoup` to look for simple `<a>` tags containing supplemental file links.
+    2.  If that fails, search the HTML for `<script type="application/json">` blocks that might contain article metadata, including file URLs.
+    3.  As a final fallback, use regular expressions to search for patterns like `mmc1.pdf`, `mmc2.xlsx`, which are common in Elsevier's "multimedia components" (MMCs).
 
-```json
-{
-  "gene_symbol": "TTR",
-  "variants": [
-    {
-      "protein_notation": "p.Val30Met",
-      "aggregated_penetrance": {
-        "total_carriers": 150,
-        "affected": 60,
-        "unaffected": 85,
-        "uncertain": 5,
-        "penetrance_percentage": 40.0,
-        "sources": ["PMID1", "PMID2", ...]
-      },
-      "age_dependent_penetrance": [...],
-      "individual_records_count": 150
-    }
-  ]
-}
-```
+- **C. Generic Scraper (`_scrape_generic_supplements`)**
+  - **Input:** HTML content and the final URL.
+  - **Action:** This will be a best-effort scraper. It will use `BeautifulSoup` to find all `<a>` tags and filter them based on keywords in the link text or `href`, such as "supplement", "supporting", "appendix", ".pdf", ".docx", ".xlsx".
 
-### 4. Update Workflow Integration
+#### 4. Integrate and Test
 
-**File**: `example_automated_workflow.py`
+- **Action:**
 
-**Changes**:
+  1.  Wire up all the new methods within the `GeneVariantFetcher` class.
+  2.  Create a set of test cases with DOIs from various publishers (Nature, GIM/Elsevier, and others) to validate that the correct scrapers are called and that they successfully extract file URLs.
+  3.  Ensure that failures (e.g., DOI resolution error, scraping failure) are handled gracefully and do not crash the program.
 
-- Add post-processing step after extractions complete
-- Generate penetrance summary for each gene run
-- Include penetrance statistics in workflow summary
-
-### 5. Validation & Quality Checks
-
-**Add validation**:
-
-- Verify penetrance calculations: affected + unaffected + uncertain = total_carriers
-- Flag inconsistencies (e.g., affected > total_carriers)
-- Validate age data (age-at-onset ≤ age-at-evaluation)
-- Check for duplicate individual records across papers
-
-## Files to Modify
-
-1. **`extractor.py`**:
-
-   - Lines 24-115: Enhance EXTRACTION_PROMPT
-   - Update JSON schema in prompt
-
-2. **`example_automated_workflow.py`**:
-
-   - Lines 179-226: Add penetrance aggregation step
-
-3. **New file: `penetrance_aggregator.py`**:
-
-   - Individual record merging
-   - Variant-level aggregation
-   - Age-dependent penetrance calculations
-
-4. **`models.py`** (optional):
-
-   - Add Pydantic models for penetrance data structures
-
-## Testing Strategy
-
-1. Test with existing TTR extractions
-2. Validate against known penetrance data from literature
-3. Test age-dependent penetrance calculations
-4. Test aggregation across multiple papers for same variant
-
-## Backward Compatibility
-
-- Existing extraction outputs remain valid
-- New fields are additive (optional fields)
-- Can run new extraction alongside old extractions
-
-### To-dos
-
-- [ ] Enhance EXTRACTION_PROMPT in extractor.py to extract individual-level records and penetrance data (affected/unaffected counts, age-at-onset, age-at-evaluation)
-- [ ] Update JSON output schema in extraction prompt to include penetrance_data and individual_records fields with both counts and percentages
-- [ ] Create penetrance_aggregator.py script to aggregate individual records and calculate variant-level penetrance statistics across multiple papers
-- [ ] Integrate penetrance aggregation into example_automated_workflow.py to generate gene-level penetrance summaries
-- [ ] Add validation logic to check penetrance data consistency (counts add up, ages are valid, no duplicates)
-- [ ] Test enhanced extraction on TTR papers and validate penetrance calculations against known literature values
+This revised plan directly addresses the technical challenges of web scraping and provides a more resilient and effective solution for extracting supplemental files.

@@ -17,8 +17,10 @@ import re
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 import xml.etree.ElementTree as ET
+from urllib.parse import urlparse, urljoin
 
 import requests
+from bs4 import BeautifulSoup
 from Bio import Entrez
 import pandas as pd
 
@@ -44,6 +46,13 @@ class PMCHarvester:
         self.success_log = self.output_dir / "successful_downloads.csv"
         self.markitdown = MarkItDown() if MARKITDOWN_AVAILABLE else None
         
+        self.session = requests.Session()
+        self.session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Referer': 'https://pubmed.ncbi.nlm.nih.gov/'
+        })
+
         with open(self.paywalled_log, 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(['PMID', 'Reason', 'URL'])
@@ -69,13 +78,33 @@ class PMCHarvester:
         except Exception as e:
             print(f"  Error converting PMID {pmid} to PMCID: {e}")
             return None
-    
+
+    def get_doi_from_pmid(self, pmid: str) -> Optional[str]:
+        """Fetch the DOI for a given PMID."""
+        try:
+            handle = Entrez.efetch(db="pubmed", id=pmid, retmode="xml")
+            records = Entrez.read(handle)
+            handle.close()
+            article = records['PubmedArticle'][0]['MedlineCitation']['Article']
+            for item in article['ELocationID']:
+                if item.attributes['EIdType'] == 'doi':
+                    return str(item)
+            # Fallback for older records
+            if 'ArticleIdList' in article:
+                 for identifier in article['ArticleIdList']:
+                    if identifier.attributes.get('IdType') == 'doi':
+                        return str(identifier)
+            return None
+        except Exception as e:
+            print(f"  Error fetching DOI for PMID {pmid}: {e}")
+            return None
+
     def get_fulltext_xml(self, pmcid: str) -> Optional[str]:
         """Download full-text XML from EuropePMC."""
         url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML"
         
         try:
-            response = requests.get(url, timeout=30)
+            response = self.session.get(url, timeout=30)
             response.raise_for_status()
             return response.text
         except requests.exceptions.HTTPError as e:
@@ -88,31 +117,168 @@ class PMCHarvester:
             print(f"  Error fetching full-text for {pmcid}: {e}")
             return None
     
-    def get_supplemental_files(self, pmcid: str, pmid: str) -> List[Dict]:
-        """Get list of supplemental files from EuropePMC."""
-        url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/supplementaryFiles"
-        
+    def get_supplemental_files(self, pmcid: str, pmid: str, doi: Optional[str]) -> List[Dict]:
+        """
+        Orchestrates fetching supplemental files, first via API, then by scraping.
+        """
+        # 1. First, try the EuropePMC API
+        api_url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/supplementaryFiles"
         try:
-            response = requests.get(url, timeout=30)
+            response = self.session.get(api_url, timeout=30)
             response.raise_for_status()
             data = response.json()
-            
             if 'result' in data and 'supplementaryFiles' in data['result']:
+                print("  ✓ Found supplemental files via EuropePMC API")
                 return data['result']['supplementaryFiles']
-            return []
         except Exception as e:
-            print(f"  Error fetching supplemental files for {pmcid}: {e}")
-            # Log failed supplemental API call
+            print(f"  - EuropePMC supplemental files API failed for {pmcid}: {e}")
+
+        # 2. If API fails or returns no files, fall back to DOI-based scraping
+        if doi:
+            print(f"  - API failed. Falling back to DOI scraping for {doi}")
+            return self._get_supplemental_files_from_doi(doi, pmid)
+        else:
+            print("  - API failed and no DOI available. Cannot scrape.")
             pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
             with open(self.paywalled_log, 'a', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow([pmid, 'Supplemental files API failed', pmc_url])
+                writer.writerow([pmid, 'Supplemental files API failed, no DOI', pmc_url])
             return []
-    
+
+    def _get_supplemental_files_from_doi(self, doi: str, pmid: str) -> List[Dict]:
+        """Resolve DOI to final URL and route to the appropriate scraper."""
+        try:
+            response = self.session.get(f"https://doi.org/{doi}", allow_redirects=True, timeout=30)
+            response.raise_for_status()
+            final_url = response.url
+            domain = urlparse(final_url).netloc
+            print(f"  ✓ DOI resolved to: {final_url}")
+        except Exception as e:
+            print(f"  ❌ DOI resolution failed for {doi}: {e}")
+            with open(self.paywalled_log, 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
+            return []
+
+        # Route to specific scraper based on resolved domain
+        if "nature.com" in domain:
+            return self._scrape_nature_supplements(response.text, final_url)
+        elif "gimjournal.org" in domain or "sciencedirect.com" in domain:
+            return self._scrape_elsevier_supplements(response.text, final_url)
+        else:
+            print(f"  - No specific scraper for domain: {domain}. Using generic scraper.")
+            return self._scrape_generic_supplements(response.text, final_url)
+
+    def _scrape_nature_supplements(self, html: str, base_url: str) -> List[Dict]:
+        """Scrape supplemental files from a Nature journal page."""
+        print("  Scraping with _scrape_nature_supplements...")
+        soup = BeautifulSoup(html, 'html.parser')
+        found_files = []
+
+        # Nature articles often have a "Supplementary Information" section
+        supp_info_section = soup.find(id='supplementary-information')
+        if not supp_info_section:
+            # Fallback to searching for common heading patterns
+            supp_info_section = soup.find('h2', string=re.compile(r'Supplementary (Information|Data)', re.IGNORECASE))
+            if supp_info_section:
+                supp_info_section = supp_info_section.parent
+        
+        if supp_info_section:
+            print("    Found 'Supplementary Information' section.")
+            for a in supp_info_section.find_all('a', href=True):
+                href = a['href']
+                # Filter for links that look like file downloads
+                if '/articles/' in href and '/figures/' not in href:
+                    url = urljoin(base_url, href)
+                    filename = Path(urlparse(url).path).name
+                    if filename:
+                        found_files.append({'url': url, 'name': filename})
+                        print(f"      Found potential supplement: {filename}")
+        
+        if not found_files:
+            print("    'Supplementary Information' section not found or empty. Trying generic scan.")
+            return self._scrape_generic_supplements(html, base_url)
+
+        return found_files
+
+    def _scrape_elsevier_supplements(self, html: str, base_url: str) -> List[Dict]:
+        """Scrape supplemental files from an Elsevier/GIM journal page."""
+        print("  Scraping with _scrape_elsevier_supplements...")
+        soup = BeautifulSoup(html, 'html.parser')
+        found_files = []
+
+        # 1. Look for specific "Download file" links in ScienceDirect
+        for a in soup.find_all('a', class_='S_C_9cf8451f', href=True):
+            if 'Download file' in a.get_text():
+                url = urljoin(base_url, a['href'])
+                filename = a.get_text().replace('Download file', '').strip()
+                if filename:
+                    found_files.append({'url': url, 'name': filename})
+                    print(f"    Found ScienceDirect download link: {filename}")
+        if found_files:
+            return found_files
+
+        # 2. Look for data in <script type="application/json">
+        for script in soup.find_all('script', type='application/json'):
+            try:
+                data = json.loads(script.string)
+                # This path can be very specific and fragile
+                supp_data = data.get('article', {}).get('supplementaryMaterials', {}).get('supplementaryMaterial', [])
+                for item in supp_data:
+                    url = item.get('downloadUrl')
+                    filename = item.get('title')
+                    if url and filename:
+                        found_files.append({'url': url, 'name': filename})
+                        print(f"    Found supplement in JSON data: {filename}")
+                if found_files:
+                    return found_files
+            except (json.JSONDecodeError, AttributeError):
+                continue
+        
+        # 3. Regex for "mmc" (multimedia component) links
+        mmc_links = re.findall(r'href="(/cms/attachment/[^"]+/mmc\d+\.(?:pdf|docx|xlsx|zip))"', html)
+        for link in mmc_links:
+            url = urljoin(base_url, link)
+            filename = Path(urlparse(url).path).name
+            if filename and not any(f['name'] == filename for f in found_files):
+                found_files.append({'url': url, 'name': filename})
+                print(f"    Found MMC link via regex: {filename}")
+        if found_files:
+            return found_files
+
+        print("    No specific Elsevier/GIM supplements found. Trying generic scan.")
+        return self._scrape_generic_supplements(html, base_url)
+
+    def _scrape_generic_supplements(self, html: str, base_url: str) -> List[Dict]:
+        """A best-effort generic scraper for supplemental files."""
+        print("  Scraping with _scrape_generic_supplements...")
+        soup = BeautifulSoup(html, 'html.parser')
+        found_files = []
+        
+        keywords = ['supplement', 'supporting', 'appendix']
+        file_extensions = ['.pdf', '.docx', '.xlsx', '.csv', '.zip', '.rar', '.gz']
+        
+        for a in soup.find_all('a', href=True):
+            link_text = a.get_text().lower()
+            href = a['href'].lower()
+            
+            # Check if link text or href contain any of the keywords or file extensions
+            if any(keyword in link_text for keyword in keywords) or \
+               any(href.endswith(ext) for ext in file_extensions):
+                
+                url = urljoin(base_url, a['href'])
+                filename = Path(urlparse(url).path).name
+                
+                if filename:
+                    found_files.append({'url': url, 'name': filename})
+                    print(f"    Found potential supplement: {filename}")
+
+        return found_files
+
     def download_supplement(self, url: str, output_path: Path, pmid: str, filename: str) -> bool:
         """Download a supplemental file."""
         try:
-            response = requests.get(url, timeout=60, stream=True)
+            response = self.session.get(url, timeout=60, stream=True)
             response.raise_for_status()
 
             with open(output_path, 'wb') as f:
@@ -227,6 +393,12 @@ class PMCHarvester:
         """Process a single PMID: convert to PMCID, download content, create unified markdown."""
         print(f"\nProcessing PMID: {pmid}")
         
+        doi = self.get_doi_from_pmid(pmid)
+        if doi:
+            print(f"  ✓ DOI: {doi}")
+        else:
+            print("  - No DOI found for this PMID.")
+
         pmcid = self.pmid_to_pmcid(pmid)
         
         if not pmcid:
@@ -256,7 +428,7 @@ class PMCHarvester:
         supplements_dir = self.output_dir / f"{pmid}_supplements"
         supplements_dir.mkdir(exist_ok=True)
         
-        supp_files = self.get_supplemental_files(pmcid, pmid)
+        supp_files = self.get_supplemental_files(pmcid, pmid, doi)
         print(f"  Found {len(supp_files)} supplemental files")
         
         supplement_markdown = ""
@@ -339,9 +511,9 @@ def main():
     """Main entry point."""
     
     pmids = [
-        '34931732',
-        '35443093', 
-        '33442691',
+        '34931732', # Nature
+        '35443093', # GIM
+        '33442691', # Some other
     ]
     
     print("PubMed Central Full-Text & Supplemental Materials Harvester")
