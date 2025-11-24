@@ -8,14 +8,13 @@ genetic variant data using advanced LLM prompting.
 import logging
 import json
 from typing import Optional, Dict, Any
-from litellm import completion
-from tenacity import retry, stop_after_attempt, wait_exponential
 from models import Paper, ExtractionResult
+from utils.llm_utils import BaseLLMCaller
 
 logger = logging.getLogger(__name__)
 
 
-class ExpertExtractor:
+class ExpertExtractor(BaseLLMCaller):
     """
     Tier 3: Expert-level extraction using advanced LLM (GPT-4, etc.).
     Handles full-text papers and markdown tables to extract structured variant data.
@@ -188,9 +187,7 @@ IMPORTANT NOTES:
             temperature: Model temperature (0.0 for most deterministic).
             max_tokens: Maximum tokens for response.
         """
-        self.model = model
-        self.temperature = temperature
-        self.max_tokens = max_tokens
+        super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
 
     def _prepare_full_text(self, paper: Paper) -> str:
         """
@@ -212,7 +209,6 @@ IMPORTANT NOTES:
         else:
             return "[NO TEXT AVAILABLE]"
 
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=2, min=4, max=30))
     def extract(self, paper: Paper) -> ExtractionResult:
         """
         Extract structured variant data from a paper using expert LLM.
@@ -244,36 +240,19 @@ IMPORTANT NOTES:
         )
 
         try:
-            # Call LiteLLM with large context model
-            response = completion(
-                model=self.model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=self.temperature,
-                max_tokens=self.max_tokens,
-                response_format={"type": "json_object"}
-            )
-
-            # Parse response
-            result_text = response.choices[0].message.content
-            extracted_data = json.loads(result_text)
-
-            # Get token usage
-            tokens_used = None
-            if hasattr(response, 'usage'):
-                tokens_used = response.usage.total_tokens
+            # Use shared LLM utility (includes retry logic)
+            extracted_data = self.call_llm_json(prompt)
 
             logger.info(
                 f"PMID {paper.pmid} - Extraction successful. "
-                f"Found {extracted_data.get('extraction_metadata', {}).get('total_variants_found', 0)} variants. "
-                f"Tokens used: {tokens_used}"
+                f"Found {extracted_data.get('extraction_metadata', {}).get('total_variants_found', 0)} variants."
             )
 
             return ExtractionResult(
                 pmid=paper.pmid,
                 success=True,
                 extracted_data=extracted_data,
-                model_used=self.model,
-                tokens_used=tokens_used
+                model_used=self.model
             )
 
         except json.JSONDecodeError as e:
