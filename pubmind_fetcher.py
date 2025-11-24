@@ -10,14 +10,13 @@ data, making it ideal for discovering papers with patient-level variant informat
 Features:
 - Query PubMind by gene symbol or variant
 - Extract PMIDs from search results
-- Fallback to enhanced PubMed queries if PubMind is unavailable
 - De-duplicate and validate PMID lists
 """
 
 import logging
 import time
 import re
-from typing import List, Optional, Set, Dict, Any
+from typing import List, Optional, Set
 from pathlib import Path
 
 import requests
@@ -39,16 +38,14 @@ class PubMindFetcher:
     PUBMIND_BASE_URL = "https://pubmind.wglab.org"
     PUBMIND_SEARCH_URL = f"{PUBMIND_BASE_URL}/search"
 
-    def __init__(self, email: str = "your.email@example.com", use_fallback: bool = True):
+    def __init__(self, email: str = "your.email@example.com"):
         """
         Initialize PubMind fetcher.
 
         Args:
-            email: Email for NCBI E-utilities (required for fallback PubMed queries)
-            use_fallback: If True, fall back to PubMed queries when PubMind fails
+            email: Email for NCBI E-utilities (required for some NCBI interactions)
         """
         self.email = email
-        self.use_fallback = use_fallback
         Entrez.email = email
         Entrez.tool = "PubMindFetcher"
 
@@ -81,17 +78,7 @@ class PubMindFetcher:
         """
         logger.info(f"Fetching PMIDs from PubMind for gene: {gene_symbol}")
 
-        # Try PubMind first
         pmids = self._fetch_from_pubmind_gene(gene_symbol, max_results, delay)
-
-        # If PubMind fails or returns few results, use fallback
-        if not pmids and self.use_fallback:
-            logger.warning(f"PubMind returned no results for {gene_symbol}, using PubMed fallback")
-            pmids = self._fetch_from_pubmed_gene(gene_symbol, max_results)
-        elif len(pmids) < 10 and self.use_fallback:
-            logger.info(f"PubMind returned only {len(pmids)} results, supplementing with PubMed")
-            pubmed_pmids = self._fetch_from_pubmed_gene(gene_symbol, max_results)
-            pmids = list(set(pmids) | set(pubmed_pmids))
 
         logger.info(f"Found {len(pmids)} total PMIDs for {gene_symbol}")
         return pmids[:max_results]
@@ -117,13 +104,7 @@ class PubMindFetcher:
         """
         logger.info(f"Fetching PMIDs for variant: {variant} (gene: {gene_symbol or 'any'})")
 
-        # Try PubMind first
         pmids = self._fetch_from_pubmind_variant(variant, gene_symbol, max_results, delay)
-
-        # Fallback to PubMed
-        if not pmids and self.use_fallback:
-            logger.warning(f"PubMind returned no results for {variant}, using PubMed fallback")
-            pmids = self._fetch_from_pubmed_variant(variant, gene_symbol, max_results)
 
         logger.info(f"Found {len(pmids)} total PMIDs for variant {variant}")
         return pmids[:max_results]
@@ -233,7 +214,7 @@ class PubMindFetcher:
         - Text containing "PMID: 12345678"
         - Table cells or list items with PMIDs
         """
-        pmids = set()
+        pmids: Set[str] = set()
 
         # Pattern 1: Links to PubMed
         pubmed_links = soup.find_all('a', href=re.compile(r'pubmed\.ncbi\.nlm\.nih\.gov/\d+'))
@@ -256,73 +237,6 @@ class PubMindFetcher:
                 pmids.add(text)
 
         return sorted(list(pmids))
-
-    def _fetch_from_pubmed_gene(self, gene_symbol: str, max_results: int) -> List[str]:
-        """
-        Fallback: Fetch PMIDs from PubMed using enhanced gene-specific queries.
-
-        This query is optimized to find papers with clinical variant data by
-        combining gene name with terms indicating patient-level data.
-        """
-        logger.info(f"Using PubMed fallback for gene: {gene_symbol}")
-
-        # Enhanced query to find papers with clinical variant data
-        query = f'''
-            {gene_symbol}[Gene] AND (
-                (mutation[Title/Abstract] OR variant[Title/Abstract] OR variants[Title/Abstract]) AND
-                (patient[Title/Abstract] OR patients[Title/Abstract] OR case[Title/Abstract] OR
-                 cohort[Title/Abstract] OR clinical[Title/Abstract] OR phenotype[Title/Abstract] OR
-                 "case report"[Publication Type] OR "clinical trial"[Publication Type])
-            )
-        '''
-
-        return self._query_pubmed(query.strip(), max_results)
-
-    def _fetch_from_pubmed_variant(
-        self,
-        variant: str,
-        gene_symbol: Optional[str],
-        max_results: int
-    ) -> List[str]:
-        """
-        Fallback: Fetch PMIDs from PubMed for a specific variant.
-        """
-        logger.info(f"Using PubMed fallback for variant: {variant}")
-
-        # Clean variant notation for search
-        variant_clean = variant.replace(':', ' ').replace('>', ' ')
-
-        # Build query
-        if gene_symbol:
-            query = f'({gene_symbol}[Gene] OR {gene_symbol}[Title/Abstract]) AND "{variant_clean}"[Title/Abstract]'
-        else:
-            query = f'"{variant_clean}"[Title/Abstract] AND (mutation OR variant)'
-
-        return self._query_pubmed(query, max_results)
-
-    def _query_pubmed(self, query: str, max_results: int) -> List[str]:
-        """
-        Query PubMed E-utilities and return PMIDs.
-        """
-        try:
-            # Search PubMed
-            handle = Entrez.esearch(
-                db="pubmed",
-                term=query,
-                retmax=max_results,
-                sort="relevance"
-            )
-            record = Entrez.read(handle)
-            handle.close()
-
-            pmids = record.get("IdList", [])
-            logger.info(f"PubMed query returned {len(pmids)} PMIDs")
-
-            return pmids
-
-        except Exception as e:
-            logger.error(f"PubMed query failed: {e}")
-            return []
 
     def save_pmids_to_file(self, pmids: List[str], output_file: Path) -> None:
         """

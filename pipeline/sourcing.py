@@ -96,7 +96,7 @@ class PaperSourcer:
         if use_pubmind and PUBMIND_AVAILABLE:
             try:
                 logger.info(f"Querying PubMind for {gene_symbol}...")
-                pubmind_fetcher = PubMindFetcher(email=self.email, use_fallback=True)
+                pubmind_fetcher = PubMindFetcher(email=self.email)
 
                 # Use custom query if provided, otherwise use gene_symbol
                 search_term = pubmind_query or gene_symbol
