@@ -1,46 +1,83 @@
-"""
-Configuration management for the Gene Variant Fetcher pipeline.
-Loads settings from environment variables and .env file using singleton pattern.
-"""
+"""Validated configuration for the Gene Variant Fetcher pipeline."""
 
-import os
 from functools import lru_cache
 from pathlib import Path
-from dotenv import load_dotenv
+from typing import ClassVar
+
+from pydantic import BaseSettings, Field, SettingsConfigDict, model_validator
 
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
-load_dotenv(_ENV_PATH)
 
 
-class Settings:
+class Settings(BaseSettings):
     """Centralized application settings loaded from environment variables."""
 
-    # API Keys
-    openai_api_key: str
-    anthropic_api_key: str
+    openai_api_key: str | None = Field(default=None, env="OPENAI_API_KEY")
+    anthropic_api_key: str | None = Field(default=None, env="ANTHROPIC_API_KEY")
+    ncbi_email: str | None = Field(default=None, env="NCBI_EMAIL")
+    ncbi_api_key: str | None = Field(default=None, env="NCBI_API_KEY")
 
-    # PubMed/NCBI Configuration
-    ncbi_email: str
-    ncbi_api_key: str
+    intern_model: str = Field(default="gpt-4o-mini", env="INTERN_MODEL")
+    extractor_model: str = Field(default="gpt-4o", env="EXTRACTOR_MODEL")
+    rate_limit_per_minute: int = Field(default=60, env="RATE_LIMIT_PER_MINUTE")
 
-    # Pipeline Configuration
-    intern_model: str
-    extractor_model: str
-    rate_limit_per_minute: int
+    model_config = SettingsConfigDict(
+        env_file=_ENV_PATH,
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
-    def __init__(self):
-        # API Keys
-        self.openai_api_key = os.getenv("OPENAI_API_KEY", "")
-        self.anthropic_api_key = os.getenv("ANTHROPIC_API_KEY", "")
+    _PLACEHOLDER_VALUES: ClassVar[set[str]] = {
+        "your_api_key",
+        "your_email@example.com",
+        "changeme",
+        "change_me",
+        "your-openai-api-key",
+        "your-anthropic-api-key",
+    }
 
-        # PubMed/NCBI Configuration
-        self.ncbi_email = os.getenv("NCBI_EMAIL", "your_email@example.com")
-        self.ncbi_api_key = os.getenv("NCBI_API_KEY", "")
+    @staticmethod
+    def _is_placeholder(value: str) -> bool:
+        normalized = value.strip().lower()
+        return normalized in Settings._PLACEHOLDER_VALUES or "example.com" in normalized
 
-        # Pipeline Configuration
-        self.intern_model = os.getenv("INTERN_MODEL", "gpt-4o-mini")
-        self.extractor_model = os.getenv("EXTRACTOR_MODEL", "gpt-4o")
-        self.rate_limit_per_minute = int(os.getenv("RATE_LIMIT_PER_MINUTE", "60"))
+    @model_validator(mode="after")
+    def validate_required_settings(self):
+        required = {
+            "openai_api_key": "OPENAI_API_KEY",
+            "anthropic_api_key": "ANTHROPIC_API_KEY",
+            "ncbi_email": "NCBI_EMAIL",
+        }
+
+        missing = []
+        placeholders = []
+
+        for field_name, env_var in required.items():
+            value = getattr(self, field_name)
+            if value is None or not str(value).strip():
+                missing.append(env_var)
+                continue
+            if self._is_placeholder(str(value)):
+                placeholders.append(env_var)
+
+        error_parts = []
+        if missing:
+            error_parts.append(
+                "Missing required settings: "
+                + ", ".join(missing)
+                + ". Set these environment variables or update your .env file."
+            )
+        if placeholders:
+            error_parts.append(
+                "The following settings still use placeholder values and must be updated: "
+                + ", ".join(placeholders)
+                + "."
+            )
+
+        if error_parts:
+            raise ValueError(" ".join(error_parts))
+
+        return self
 
 
 @lru_cache(maxsize=1)
