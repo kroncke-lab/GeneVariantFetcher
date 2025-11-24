@@ -195,7 +195,7 @@ class PMCHarvester:
                                 break
                             else:
                                 print(f"  ⚠️  Constructed URL returned status {response.status_code}")
-                        except Exception as url_error:
+                        except requests.exceptions.RequestException as url_error:
                             print(f"  ❌ Constructed URL also failed: {url_error}")
 
                     # If all attempts failed, log and return empty
