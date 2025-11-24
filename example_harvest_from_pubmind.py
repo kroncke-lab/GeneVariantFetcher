@@ -11,7 +11,7 @@ Usage:
     python example_harvest_from_pubmind.py
 """
 
-from harvest_pmc_fulltext import PMCHarvester
+from harvesting import PMCHarvester
 
 
 def load_pmids_from_file(filepath: str) -> list:

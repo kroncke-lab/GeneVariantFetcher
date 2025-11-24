@@ -52,7 +52,7 @@ def automated_variant_extraction_workflow(
         Dictionary with workflow results and statistics
     """
     from pubmind_fetcher import fetch_pmids_for_gene
-    from harvest_pmc_fulltext import PMCHarvester
+    from harvesting import PMCHarvester
 
     output_path = Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
     output_path.mkdir(parents=True, exist_ok=True)

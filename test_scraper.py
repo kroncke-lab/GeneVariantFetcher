@@ -1,5 +1,5 @@
 import pytest
-from harvest_pmc_fulltext import PMCHarvester
+from harvesting import PMCHarvester
 
 # A pytest fixture to create a single harvester instance for all tests.
 # The 'scope="module"' part means this will only run once for this test file.

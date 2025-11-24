@@ -85,7 +85,7 @@ pmids = fetch_pmids_for_gene("SCN5A", email="your@email.com",
 
 **Step 2: Harvest full-text**
 ```python
-from harvest_pmc_fulltext import PMCHarvester
+from harvesting import PMCHarvester
 
 harvester = PMCHarvester(output_dir="scn5a_papers")
 harvester.harvest(pmids, delay=2.0)
@@ -124,7 +124,7 @@ Downloads complete PubMed Central articles with all supplemental materials.
 
 **Usage:**
 ```python
-from harvest_pmc_fulltext import PMCHarvester
+from harvesting import PMCHarvester
 
 harvester = PMCHarvester(output_dir="pmc_harvest")
 pmids = ['35443093', '33442691', '34931732']
@@ -457,7 +457,7 @@ python example_usage.py  # Edit script to process harvested papers
 
 ```python
 from pubmind_fetcher import fetch_pmids_for_gene
-from harvest_pmc_fulltext import PMCHarvester
+from harvesting import PMCHarvester
 from pipeline import BiomedicalExtractionPipeline
 
 # 1. Get PMIDs
