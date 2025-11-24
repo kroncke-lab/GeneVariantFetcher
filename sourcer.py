@@ -1,5 +1,6 @@
 """
-Paper sourcing module - queries PubMed, EuropePMC, and PubMind for papers.
+Paper sourcing module - queries PubMind (primary), PubMed, and EuropePMC for papers.
+PubMind is prioritized as it provides more relevant variant-level data.
 """
 
 import logging
@@ -22,7 +23,8 @@ except ImportError:
 
 class PaperSourcer:
     """
-    Queries PubMed and EuropePMC APIs to find papers related to a gene symbol.
+    Queries PubMind (primary source), PubMed, and EuropePMC APIs to find papers related to a gene symbol.
+    PubMind is prioritized as it provides more relevant variant-level data and reduces false positives.
     Returns deduplicated list of PMIDs.
     """
 
@@ -70,7 +72,7 @@ class PaperSourcer:
         max_results_per_source: int = 100,
         use_pubmed: bool = True,
         use_europepmc: bool = True,
-        use_pubmind: bool = False,
+        use_pubmind: bool = True,
         pubmind_query: Optional[str] = None,
     ) -> List[str]:
         """

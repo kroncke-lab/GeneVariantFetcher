@@ -253,8 +253,8 @@ class BiomedicalExtractionPipeline:
         # ============================================
         # STEP 1: Source Papers
         # ============================================
-        logger.info(f"📚 STEP 1: Sourcing papers from PubMed/EuropePMC...")
-        pmids = self.sourcer.fetch_papers(gene_symbol)
+        logger.info(f"📚 STEP 1: Sourcing papers from PubMind (primary), PubMed, and EuropePMC...")
+        pmids = self.sourcer.fetch_papers(gene_symbol, use_pubmind=True)
         self.stats.total_papers_sourced = len(pmids)
 
         logger.info(f"Found {len(pmids)} unique PMIDs for {gene_symbol}")
