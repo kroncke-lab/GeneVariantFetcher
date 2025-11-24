@@ -18,6 +18,10 @@ import json
 import logging
 from pathlib import Path
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(
@@ -169,9 +173,26 @@ def automated_variant_extraction_workflow(
             continue
 
     # ============================================================================
-    # STEP 4: Compile Results and Statistics
+    # STEP 4: Aggregate Penetrance Data
     # ============================================================================
-    logger.info("\n📊 STEP 4: Compiling results and statistics...")
+    logger.info("\n📊 STEP 4: Aggregating penetrance data across papers...")
+
+    from penetrance_aggregator import aggregate_penetrance
+
+    penetrance_summary_file = output_path / f"{gene_symbol}_penetrance_summary.json"
+    penetrance_summary = aggregate_penetrance(
+        extraction_dir=extraction_dir,
+        gene_symbol=gene_symbol,
+        output_file=penetrance_summary_file
+    )
+
+    logger.info(f"✓ Aggregated penetrance data for {penetrance_summary['total_variants']} variants")
+    logger.info(f"✓ Saved penetrance summary to: {penetrance_summary_file}")
+
+    # ============================================================================
+    # STEP 5: Compile Results and Statistics
+    # ============================================================================
+    logger.info("\n📊 STEP 5: Compiling results and statistics...")
 
     total_variants = 0
     for extraction in extractions:
@@ -179,6 +200,16 @@ def automated_variant_extraction_workflow(
             total_variants += extraction.extracted_data.get(
                 'extraction_metadata', {}
             ).get('total_variants_found', 0)
+
+    # Calculate total carriers and affected from penetrance summary
+    total_carriers = sum(
+        v.get("aggregated_penetrance", {}).get("total_carriers", 0) or 0
+        for v in penetrance_summary.get("variants", [])
+    )
+    total_affected = sum(
+        v.get("aggregated_penetrance", {}).get("affected", 0) or 0
+        for v in penetrance_summary.get("variants", [])
+    )
 
     # Create summary report
     summary = {
@@ -189,12 +220,20 @@ def automated_variant_extraction_workflow(
             "papers_downloaded": num_downloaded,
             "papers_extracted": len(extractions),
             "total_variants_found": total_variants,
+            "variants_with_penetrance_data": penetrance_summary["total_variants"],
+            "total_carriers_observed": total_carriers,
+            "total_affected_carriers": total_affected,
             "success_rate": f"{len(extractions) / len(pmids) * 100:.1f}%" if pmids else "0%"
         },
         "output_locations": {
             "pmid_list": str(pmids_file),
             "full_text_papers": str(harvest_dir),
-            "extractions": str(extraction_dir)
+            "extractions": str(extraction_dir),
+            "penetrance_summary": str(penetrance_summary_file)
+        },
+        "penetrance_validation": {
+            "errors": penetrance_summary.get("validation", {}).get("error_count", 0),
+            "warnings": penetrance_summary.get("validation", {}).get("warning_count", 0)
         }
     }
 
@@ -210,9 +249,13 @@ def automated_variant_extraction_workflow(
     logger.info(f"Papers downloaded: {num_downloaded}")
     logger.info(f"Papers with extractions: {len(extractions)}")
     logger.info(f"Total variants found: {total_variants}")
+    logger.info(f"Variants with penetrance data: {penetrance_summary['total_variants']}")
+    logger.info(f"Total carriers observed: {total_carriers}")
+    logger.info(f"Total affected carriers: {total_affected}")
     logger.info(f"Success rate: {len(extractions) / len(pmids) * 100:.1f}%" if pmids else "0%")
     logger.info(f"\nAll outputs saved to: {output_path}")
     logger.info(f"Summary report: {summary_file}")
+    logger.info(f"Penetrance summary: {penetrance_summary_file}")
     logger.info("="*80)
 
     return summary
