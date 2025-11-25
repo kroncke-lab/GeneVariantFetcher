@@ -177,20 +177,26 @@ IMPORTANT NOTES:
     def __init__(
         self,
         model: Optional[str] = None,
-        temperature: float = 0.0,
-        max_tokens: int = 8000  # Increased to accommodate penetrance data
+        temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None
     ):
         """
         Initialize the Expert Extractor.
 
         Args:
-            model: LiteLLM model identifier (e.g., 'gpt-4o', 'claude-3-opus-20240229'). If None, uses config.
-            temperature: Model temperature (0.0 for most deterministic).
-            max_tokens: Maximum tokens for response.
+            model: LiteLLM model identifier (e.g., 'gpt-4o', 'claude-3-opus-20240229'). If None, uses config (TIER3_MODEL).
+            temperature: Model temperature (0.0 for most deterministic). If None, uses config.
+            max_tokens: Maximum tokens for response. If None, uses config.
         """
         settings = get_settings()
-        model = model or settings.extractor_model
+
+        model = model or settings.tier3_model or settings.extractor_model
+        temperature = temperature if temperature is not None else settings.tier3_temperature
+        max_tokens = max_tokens if max_tokens is not None else settings.tier3_max_tokens
+
         super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
+
+        logger.debug(f"ExpertExtractor initialized with model={model}, temp={temperature}, max_tokens={max_tokens}")
 
     def _prepare_full_text(self, paper: Paper) -> str:
         """

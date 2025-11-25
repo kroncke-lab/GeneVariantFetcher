@@ -2,7 +2,7 @@
 
 ## Overview
 
-GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently gathers and processes genetic variant data from scientific literature. The system uses a cost-optimized approach with progressive filtering to minimize expensive LLM API calls.
+GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently gathers and processes genetic variant data from scientific literature. The system uses a **PubMind-first** sourcing strategy and **configuration-driven tiered classification** to optimize both relevance and cost. Progressive filtering minimizes expensive LLM API calls while maximizing extraction quality.
 
 ## System Architecture
 
@@ -13,14 +13,21 @@ GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  STAGE 1: Paper Sourcing (sourcer.py)                           │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
-│  │   PubMed     │  │  Europe PMC  │  │   PubMind    │         │
-│  │   API        │  │     API      │  │  (optional)  │         │
-│  └──────────────┘  └──────────────┘  └──────────────┘         │
-│         │                 │                 │                    │
-│         └─────────────────┴─────────────────┘                   │
-│                           │                                      │
+│  STAGE 1: Paper Sourcing (pipeline/sourcing.py)                 │
+│                                                                   │
+│  ┌────────────────────────────────────────────────────────┐    │
+│  │              PubMind (PRIMARY SOURCE)                  │    │
+│  │  Variant-focused literature with LLM-extracted data    │    │
+│  └────────────────────────────────────────────────────────┘    │
+│         │                                                        │
+│         │  (Optional fallback sources if PUBMIND_ONLY=false)   │
+│         │                                                        │
+│  ┌──────────────┐  ┌──────────────┐                           │
+│  │   PubMed API │  │ Europe PMC   │                           │
+│  │  (disabled)  │  │  (disabled)  │                           │
+│  └──────────────┘  └──────────────┘                           │
+│         │                 │                                      │
+│         └─────────────────┘                                     │
 │                  Deduplicated PMIDs                             │
 └────────────────────────┬────────────────────────────────────────┘
                          │
@@ -80,46 +87,103 @@ GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently
 
 ## Core Components
 
-### 1. Paper Sourcing (`sourcer.py`)
+### 1. Paper Sourcing (`pipeline/sourcing.py`)
 
-**Purpose:** Query multiple literature databases to find relevant papers.
+**Purpose:** Query literature databases to find relevant papers with variant-level data.
 
 **Classes:**
 - `PaperSourcer`: Main class for aggregating PMIDs from multiple sources
 
-**Data Sources:**
-- **PubMed**: NCBI's primary biomedical literature database
-- **Europe PMC**: European alternative with broader coverage
-- **PubMind** (optional): Variant-specific literature database
+**Data Sources (PubMind-First Strategy):**
+- **PubMind** (PRIMARY): Variant-specific literature database with LLM-extracted data
+  - Provides highly relevant papers with genetic variant information
+  - Reduces false positives compared to broad PubMed searches
+  - **Default configuration**: `PUBMIND_ONLY=true` (only source used)
+- **PubMed** (OPTIONAL): NCBI's primary biomedical literature database
+  - Disabled by default (`USE_PUBMED=false`)
+  - Can be enabled for broader coverage if needed
+- **Europe PMC** (OPTIONAL): European alternative with broader coverage
+  - Disabled by default (`USE_EUROPEPMC=false`)
+  - Can be enabled as additional source
+
+**Configuration-Driven Behavior:**
+The sourcing behavior is fully configurable via environment variables:
+```python
+USE_PUBMIND=true          # Use PubMind (recommended)
+PUBMIND_ONLY=true         # Use ONLY PubMind (ignore other sources)
+USE_PUBMED=false          # Disable PubMed by default
+USE_EUROPEPMC=false       # Disable EuropePMC by default
+MAX_PAPERS_PER_SOURCE=100 # Limit papers per source
+```
 
 **Key Methods:**
-- `fetch_papers()`: Queries all enabled sources and returns deduplicated PMIDs
+- `fetch_papers()`: Queries enabled sources (configuration-driven) and returns deduplicated PMIDs
 - `fetch_paper_metadata()`: Retrieves metadata (title, authors, DOI) for a PMID
 
-### 2. Tiered Filtering (`filters.py`)
+**Why PubMind-First?**
+1. **Higher Relevance**: PubMind pre-filters for variant-level data
+2. **Reduced Noise**: Fewer irrelevant papers = lower processing costs
+3. **Better Quality**: Papers already identified as containing genetic variant information
+4. **Cost Efficiency**: Process fewer papers with higher success rates
+
+### 2. Tiered Filtering (`pipeline/filters.py`)
 
 **Purpose:** Progressively filter papers to reduce expensive LLM API calls.
 
+**Configuration-Driven Tier System:**
+All tiers can be enabled/disabled and configured via environment variables:
+
+```python
+# Enable/disable tiers
+ENABLE_TIER1=true     # Keyword filtering
+ENABLE_TIER2=true     # LLM classification
+ENABLE_TIER3=true     # Expert extraction
+
+# Tier 1 configuration
+TIER1_MIN_KEYWORDS=2  # Minimum keyword matches
+TIER1_USE_LLM=false   # Use LLM instead of keywords (optional)
+
+# Tier 2 configuration
+TIER2_MODEL=gpt-4o-mini           # Cheap model
+TIER2_TEMPERATURE=0.1              # Low temperature for consistency
+TIER2_MAX_TOKENS=150               # Limit response size
+TIER2_CONFIDENCE_THRESHOLD=0.5     # Minimum confidence to pass
+
+# Tier 3 configuration
+TIER3_MODEL=gpt-4o                 # Smart model
+TIER3_TEMPERATURE=0.0              # Deterministic
+TIER3_MAX_TOKENS=8000              # Large for detailed extraction
+```
+
 **Classes:**
 
-#### Tier 1: `KeywordFilter`
-- **Model:** None (keyword matching)
-- **Cost:** Free
-- **Speed:** ~0.1ms per paper
-- **Filters:** Review articles, animal studies, purely computational papers
+#### Tier 1: `KeywordFilter` (Fast & Free)
+- **Model:** None (keyword matching) - or optional lightweight LLM if `TIER1_USE_LLM=true`
+- **Cost:** Free (keywords) or ~$0.00001/paper (LLM)
+- **Speed:** ~0.1ms per paper (keywords) or ~200ms (LLM)
+- **Configuration:** `TIER1_MIN_KEYWORDS`, `TIER1_USE_LLM`
+- **Filters:** Papers lacking clinical/variant keywords
 - **Pass Rate:** ~40-60% to next tier
+- **Purpose:** Eliminate obviously irrelevant papers immediately
 
-#### Tier 2: `InternFilter`
-- **Model:** `gpt-4o-mini` (cost-effective)
+#### Tier 2: `InternFilter` (Smart & Cheap)
+- **Model:** Configurable via `TIER2_MODEL` (default: `gpt-4o-mini`)
 - **Cost:** ~$0.0001 per paper
 - **Speed:** ~500ms per paper
+- **Configuration:** `TIER2_MODEL`, `TIER2_TEMPERATURE`, `TIER2_CONFIDENCE_THRESHOLD`
 - **Filters:** Papers without original clinical data
 - **Pass Rate:** ~20-30% to extraction
+- **Purpose:** LLM-based classification for clinical relevance
+- **Features:**
+  - Confidence threshold filtering
+  - Identifies original clinical data vs reviews
+  - Configurable decision thresholds
 
-#### Tier 2b: `ClinicalDataTriageFilter`
-- **Model:** `gpt-4o-mini`
+#### Tier 2b: `ClinicalDataTriageFilter` (Specialized)
+- **Model:** Configurable via `TIER2_MODEL` (default: `gpt-4o-mini`)
 - **Purpose:** Specialized triage for clinical case identification
 - **Use Case:** More nuanced filtering for edge cases
+- **Configuration:** Uses same settings as Tier 2
 
 **Cost Optimization:**
 ```
@@ -137,16 +201,25 @@ Without filtering: 1000 papers × $0.10 = $100.00
 Savings: $84.95 (85% cost reduction)
 ```
 
-### 3. Expert Extraction (`extractor.py`)
+### 3. Expert Extraction (`pipeline/extraction.py`)
 
 **Purpose:** Extract structured genetic variant data from full-text papers.
 
 **Classes:**
 - `ExpertExtractor`: Uses advanced LLMs for detailed extraction
 
+**Configuration:**
+```python
+TIER3_MODEL=gpt-4o        # Smart extraction model
+TIER3_TEMPERATURE=0.0      # Deterministic extraction
+TIER3_MAX_TOKENS=8000      # Allow detailed responses
+```
+
 **Model Options:**
-- `gpt-4o`: Balanced cost/performance
-- `claude-3-opus`: Higher accuracy for complex papers
+- `gpt-4o`: Balanced cost/performance (default)
+- `gpt-4o-mini`: Cheaper, less accurate
+- `claude-3-opus-20240229`: Higher accuracy for complex papers
+- `claude-3-sonnet-20240229`: Good balance for Claude users
 
 **Extracted Data:**
 - Gene symbols and variant notations (cDNA, protein)
@@ -274,50 +347,137 @@ def fetch_data():
 - `extracted_data`: Structured variant data (dict)
 - `model_used`: LLM model identifier
 
-## Configuration (`config.py`)
+## Configuration (`config/settings.py`)
 
 **Environment Variables:**
-- `OPENAI_API_KEY`: OpenAI API access
-- `ANTHROPIC_API_KEY`: Anthropic (Claude) API access
-- `ENTREZ_EMAIL`: Required for NCBI API access
+
+All pipeline behavior is controlled via environment variables (loaded from `.env` file):
+
+**API Keys:**
+- `OPENAI_API_KEY`: OpenAI API access (required if using GPT models)
+- `ANTHROPIC_API_KEY`: Anthropic (Claude) API access (required if using Claude models)
+- `NCBI_EMAIL`: Required for NCBI/PubMed API access
+- `NCBI_API_KEY`: Optional NCBI API key (increases rate limits)
+
+**Paper Sourcing (PubMind-First):**
+- `USE_PUBMIND=true`: Use PubMind as primary source (default: true)
+- `PUBMIND_ONLY=true`: Use ONLY PubMind, ignore other sources (default: true)
+- `USE_PUBMED=false`: Enable/disable PubMed API (default: false)
+- `USE_EUROPEPMC=false`: Enable/disable EuropePMC (default: false)
+- `MAX_PAPERS_PER_SOURCE=100`: Limit papers per source
+
+**Tiered Classification:**
+- `ENABLE_TIER1=true`: Enable Tier 1 keyword filtering (default: true)
+- `ENABLE_TIER2=true`: Enable Tier 2 LLM classification (default: true)
+- `ENABLE_TIER3=true`: Enable Tier 3 expert extraction (default: true)
+
+**Tier 1 (Keyword Filter):**
+- `TIER1_MIN_KEYWORDS=2`: Minimum keyword matches to pass
+- `TIER1_USE_LLM=false`: Use lightweight LLM instead of keywords (optional)
+- `TIER1_MODEL=`: Optional LLM model for Tier 1 (if TIER1_USE_LLM=true)
+
+**Tier 2 (LLM Classification):**
+- `TIER2_MODEL=gpt-4o-mini`: Model for Tier 2 classification
+- `TIER2_TEMPERATURE=0.1`: Temperature for Tier 2 LLM
+- `TIER2_MAX_TOKENS=150`: Max tokens for Tier 2 response
+- `TIER2_CONFIDENCE_THRESHOLD=0.5`: Minimum confidence to pass
+
+**Tier 3 (Expert Extraction):**
+- `TIER3_MODEL=gpt-4o`: Model for Tier 3 extraction
+- `TIER3_TEMPERATURE=0.0`: Temperature for Tier 3 LLM
+- `TIER3_MAX_TOKENS=8000`: Max tokens for Tier 3 response
+
+**Legacy Settings (backward compatibility):**
+- `INTERN_MODEL`: Alias for TIER2_MODEL
+- `EXTRACTOR_MODEL`: Alias for TIER3_MODEL
 
 **Configuration Class:**
 ```python
-@dataclass
-class PipelineConfig:
-    gene_symbol: str
-    max_papers: int = 100
-    use_pubmind: bool = False
-    keyword_threshold: int = 2
-    intern_model: str = "gpt-4o-mini"
-    expert_model: str = "gpt-4o"
-    output_dir: Path = Path("output")
+class Settings(BaseSettings):
+    """Centralized application settings loaded from environment variables."""
+
+    # API Keys
+    openai_api_key: str | None
+    anthropic_api_key: str | None
+    ncbi_email: str | None
+    ncbi_api_key: str | None
+
+    # Tiered Classification
+    enable_tier1: bool = True
+    enable_tier2: bool = True
+    enable_tier3: bool = True
+
+    tier1_min_keywords: int = 2
+    tier2_model: str = "gpt-4o-mini"
+    tier3_model: str = "gpt-4o"
+
+    # Paper Sourcing
+    use_pubmind: bool = True
+    pubmind_only: bool = True
+    use_pubmed: bool = False
+    use_europepmc: bool = False
+```
+
+**Usage:**
+```python
+from config.settings import get_settings
+
+settings = get_settings()  # Cached singleton
+print(f"Using Tier 2 model: {settings.tier2_model}")
+print(f"PubMind only mode: {settings.pubmind_only}")
 ```
 
 ## Pipeline Orchestration (`pipeline.py`)
 
 **Classes:**
-- `BiomedicalExtractionPipeline`: Coordinates all stages
+- `BiomedicalExtractionPipeline`: Coordinates all stages with configuration-driven behavior
+
+**Configuration-Driven Pipeline:**
+The pipeline automatically reads all settings from environment variables via `config/settings.py`:
+
+```python
+from pipeline import BiomedicalExtractionPipeline
+
+# All configuration from .env file
+pipeline = BiomedicalExtractionPipeline()
+
+# Run for a specific gene
+results = pipeline.run(
+    gene_symbol="BRCA1",
+    max_papers=50  # Optional limit
+)
+```
 
 **Workflow:**
 ```python
-pipeline = BiomedicalExtractionPipeline(config)
+# Stage 1: Source papers (PubMind by default)
+pmids = pipeline.sourcer.fetch_papers(gene_symbol)  # Uses config settings
 
-# Stage 1: Source papers
-pmids = pipeline.source_papers(gene_symbol)
+# Stage 2: Process each paper through tiered filters
+for paper in papers:
+    result = pipeline.process_paper(paper)
 
-# Stage 2: Filter papers
-filtered = pipeline.filter_papers(pmids)
+    # Tier 1: Keyword filter (if ENABLE_TIER1=true)
+    if keyword_filter.filter(paper) == FAIL:
+        continue  # Drop paper
 
-# Stage 3: Harvest full text
-harvested = pipeline.harvest_fulltext(filtered)
+    # Tier 2: LLM classification (if ENABLE_TIER2=true)
+    if intern_filter.filter(paper) == FAIL:
+        continue  # Drop paper
 
-# Stage 4: Extract data
-extracted = pipeline.extract_data(harvested)
+    # Tier 3: Expert extraction (if ENABLE_TIER3=true)
+    extraction = expert_extractor.extract(paper)
 
-# Stage 5: Aggregate results
-results = pipeline.aggregate_results(extracted)
+# Stage 3: Aggregate results and statistics
+pipeline.stats.calculate_cost_savings()
 ```
+
+**Key Features:**
+- **Configuration-driven**: All behavior controlled by environment variables
+- **Automatic tier management**: Tiers enabled/disabled via config
+- **Cost tracking**: Automatic calculation of cost savings from filtering
+- **Logging**: Detailed progress logging at each tier
+- **Error handling**: Graceful degradation on failures
 
 ## Example Workflows
 
