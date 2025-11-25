@@ -74,52 +74,82 @@ class PaperSourcer:
     def fetch_papers(
         self,
         gene_symbol: str,
-        max_results_per_source: int = 100,
-        use_pubmed: bool = True,
-        use_europepmc: bool = True,
-        use_pubmind: bool = True,
+        max_results_per_source: Optional[int] = None,
+        use_pubmed: Optional[bool] = None,
+        use_europepmc: Optional[bool] = None,
+        use_pubmind: Optional[bool] = None,
         pubmind_query: Optional[str] = None,
     ) -> List[str]:
         """
         Fetch deduplicated list of PMIDs from multiple sources.
 
+        PubMind is now the primary/default source for variant-focused literature.
+        Other sources are disabled by default but can be enabled via configuration.
+
         Args:
             gene_symbol: Gene symbol to search for.
-            max_results_per_source: Maximum results per API source.
-            use_pubmed: Query PubMed API.
-            use_europepmc: Query EuropePMC API.
-            use_pubmind: Query PubMind (via PubMindFetcher) for variants.
+            max_results_per_source: Maximum results per API source (uses config default if None).
+            use_pubmed: Query PubMed API (uses config default if None).
+            use_europepmc: Query EuropePMC API (uses config default if None).
+            use_pubmind: Query PubMind for variants (uses config default if None).
             pubmind_query: Optional override for the PubMind search term (defaults to gene_symbol).
 
         Returns:
             Deduplicated sorted list of PMIDs.
         """
+        settings = get_settings()
+
+        # Use config defaults if not explicitly specified
+        if max_results_per_source is None:
+            max_results_per_source = settings.max_papers_per_source
+
+        # Determine which sources to use based on config
+        # If pubmind_only is True, only use PubMind regardless of other settings
+        if settings.pubmind_only:
+            use_pubmind = True if use_pubmind is None else use_pubmind
+            use_pubmed = False
+            use_europepmc = False
+            logger.info("PUBMIND_ONLY mode enabled - using only PubMind as literature source")
+        else:
+            use_pubmind = settings.use_pubmind if use_pubmind is None else use_pubmind
+            use_pubmed = settings.use_pubmed if use_pubmed is None else use_pubmed
+            use_europepmc = settings.use_europepmc if use_europepmc is None else use_europepmc
+
         all_pmids: Set[str] = set()
 
         # Query PubMind first (most relevant for variant-level data)
-        if use_pubmind and PUBMIND_AVAILABLE:
-            try:
-                logger.info(f"Querying PubMind for {gene_symbol}...")
-                pubmind_fetcher = PubMindFetcher(email=self.email)
+        if use_pubmind:
+            if not PUBMIND_AVAILABLE:
+                logger.warning("PubMind requested but not available. Install dependencies or check pubmind_fetcher.py")
+            else:
+                try:
+                    logger.info(f"Querying PubMind for {gene_symbol}...")
+                    pubmind_fetcher = PubMindFetcher(email=self.email)
 
-                # Use custom query if provided, otherwise use gene_symbol
-                search_term = pubmind_query or gene_symbol
-                pubmind_pmids = pubmind_fetcher.fetch_pmids_for_gene(
-                    search_term,
-                    max_results=max_results_per_source
-                )
-                all_pmids.update(pubmind_pmids)
-                logger.info(f"PubMind contributed {len(pubmind_pmids)} PMIDs")
-            except Exception as e:
-                logger.warning(f"PubMind query failed: {e}, continuing with other sources")
+                    # Use custom query if provided, otherwise use gene_symbol
+                    search_term = pubmind_query or gene_symbol
+                    pubmind_pmids = pubmind_fetcher.fetch_pmids_for_gene(
+                        search_term,
+                        max_results=max_results_per_source
+                    )
+                    all_pmids.update(pubmind_pmids)
+                    logger.info(f"PubMind contributed {len(pubmind_pmids)} PMIDs")
+                except Exception as e:
+                    logger.warning(f"PubMind query failed: {e}")
+                    if settings.pubmind_only:
+                        logger.error("PUBMIND_ONLY mode enabled but PubMind failed - no papers will be sourced")
 
         if use_pubmed:
+            logger.info(f"Querying PubMed for {gene_symbol}...")
             pubmed_pmids = self._query_pubmed(gene_symbol, max_results_per_source)
             all_pmids.update(pubmed_pmids)
+            logger.info(f"PubMed contributed {len(pubmed_pmids)} PMIDs")
 
         if use_europepmc:
+            logger.info(f"Querying EuropePMC for {gene_symbol}...")
             europepmc_pmids = self._query_europepmc(gene_symbol, max_results_per_source)
             all_pmids.update(europepmc_pmids)
+            logger.info(f"EuropePMC contributed {len(europepmc_pmids)} PMIDs")
 
         deduplicated_pmids = sorted(list(all_pmids))
         logger.info(

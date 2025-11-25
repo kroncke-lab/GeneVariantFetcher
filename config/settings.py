@@ -13,14 +13,46 @@ _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 class Settings(BaseSettings):
     """Centralized application settings loaded from environment variables."""
 
+    # API Keys
     openai_api_key: str | None = Field(default=None, env="OPENAI_API_KEY")
     anthropic_api_key: str | None = Field(default=None, env="ANTHROPIC_API_KEY")
     ncbi_email: str | None = Field(default=None, env="NCBI_EMAIL")
     ncbi_api_key: str | None = Field(default=None, env="NCBI_API_KEY")
 
+    # Model Configuration
+    tier1_model: str | None = Field(default=None, env="TIER1_MODEL", description="Optional LLM for Tier 1 (if using LLM-based Tier 1)")
+    tier2_model: str = Field(default="gpt-4o-mini", env="TIER2_MODEL", description="Model for Tier 2 classification (cheap)")
+    tier3_model: str = Field(default="gpt-4o", env="TIER3_MODEL", description="Model for Tier 3 extraction (smart)")
+
+    # Legacy aliases for backward compatibility
     intern_model: str = Field(default="gpt-4o-mini", env="INTERN_MODEL")
     extractor_model: str = Field(default="gpt-4o", env="EXTRACTOR_MODEL")
     rate_limit_per_minute: int = Field(default=60, env="RATE_LIMIT_PER_MINUTE")
+
+    # Tiered Classification Configuration
+    enable_tier1: bool = Field(default=True, env="ENABLE_TIER1", description="Enable Tier 1 keyword/heuristic filtering")
+    enable_tier2: bool = Field(default=True, env="ENABLE_TIER2", description="Enable Tier 2 LLM classification")
+    enable_tier3: bool = Field(default=True, env="ENABLE_TIER3", description="Enable Tier 3 expert extraction")
+
+    # Tier 1 Configuration
+    tier1_min_keywords: int = Field(default=2, env="TIER1_MIN_KEYWORDS", description="Minimum keyword matches for Tier 1 to pass")
+    tier1_use_llm: bool = Field(default=False, env="TIER1_USE_LLM", description="Use lightweight LLM for Tier 1 instead of keywords")
+
+    # Tier 2 Configuration
+    tier2_temperature: float = Field(default=0.1, env="TIER2_TEMPERATURE", description="Temperature for Tier 2 LLM")
+    tier2_max_tokens: int = Field(default=150, env="TIER2_MAX_TOKENS", description="Max tokens for Tier 2 LLM response")
+    tier2_confidence_threshold: float = Field(default=0.5, env="TIER2_CONFIDENCE_THRESHOLD", description="Minimum confidence to pass Tier 2")
+
+    # Tier 3 Configuration
+    tier3_temperature: float = Field(default=0.0, env="TIER3_TEMPERATURE", description="Temperature for Tier 3 LLM")
+    tier3_max_tokens: int = Field(default=8000, env="TIER3_MAX_TOKENS", description="Max tokens for Tier 3 LLM response")
+
+    # Paper Sourcing Configuration
+    use_pubmind: bool = Field(default=True, env="USE_PUBMIND", description="Use PubMind as primary literature source")
+    use_pubmed: bool = Field(default=False, env="USE_PUBMED", description="Use PubMed API as additional source")
+    use_europepmc: bool = Field(default=False, env="USE_EUROPEPMC", description="Use EuropePMC as additional source")
+    pubmind_only: bool = Field(default=True, env="PUBMIND_ONLY", description="Use ONLY PubMind (ignore PubMed/EuropePMC)")
+    max_papers_per_source: int = Field(default=100, env="MAX_PAPERS_PER_SOURCE", description="Max papers to fetch per source")
 
     model_config = SettingsConfigDict(
         env_file=_ENV_PATH,

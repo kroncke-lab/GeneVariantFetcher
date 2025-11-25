@@ -42,22 +42,26 @@ class KeywordFilter:
         "carrier", "inheritance", "familial", "sporadic"
     ]
 
-    def __init__(self, keywords: Optional[List[str]] = None, min_keyword_matches: int = 2):
+    def __init__(self, keywords: Optional[List[str]] = None, min_keyword_matches: Optional[int] = None):
         """
         Initialize the keyword filter.
 
         Args:
             keywords: List of keywords to search for. If None, uses DEFAULT_CLINICAL_KEYWORDS.
-            min_keyword_matches: Minimum number of keyword matches required to pass.
+            min_keyword_matches: Minimum number of keyword matches required to pass. If None, uses config default.
         """
+        settings = get_settings()
+
         self.keywords = keywords or self.DEFAULT_CLINICAL_KEYWORDS
-        self.min_keyword_matches = min_keyword_matches
+        self.min_keyword_matches = min_keyword_matches if min_keyword_matches is not None else settings.tier1_min_keywords
 
         # Compile regex patterns for efficiency
         self.patterns = [
             re.compile(r'\b' + re.escape(keyword) + r'\b', re.IGNORECASE)
             for keyword in self.keywords
         ]
+
+        logger.debug(f"KeywordFilter initialized with {len(self.keywords)} keywords, min_matches={self.min_keyword_matches}")
 
     def filter(self, paper: Paper) -> FilterResult:
         """
@@ -145,20 +149,30 @@ Respond with a JSON object:
     def __init__(
         self,
         model: Optional[str] = None,
-        temperature: float = 0.1,
-        max_tokens: int = 150
+        temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None,
+        confidence_threshold: Optional[float] = None
     ):
         """
         Initialize the Intern filter.
 
         Args:
-            model: LiteLLM model identifier. If None, uses config settings.
-            temperature: Model temperature (lower = more deterministic).
-            max_tokens: Maximum tokens for response.
+            model: LiteLLM model identifier. If None, uses config settings (TIER2_MODEL).
+            temperature: Model temperature (lower = more deterministic). If None, uses config.
+            max_tokens: Maximum tokens for response. If None, uses config.
+            confidence_threshold: Minimum confidence to pass (0.0-1.0). If None, uses config.
         """
         settings = get_settings()
-        model = model or settings.intern_model
+
+        # Use config defaults if not specified
+        model = model or settings.tier2_model or settings.intern_model
+        temperature = temperature if temperature is not None else settings.tier2_temperature
+        max_tokens = max_tokens if max_tokens is not None else settings.tier2_max_tokens
+        self.confidence_threshold = confidence_threshold if confidence_threshold is not None else settings.tier2_confidence_threshold
+
         super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
+
+        logger.debug(f"InternFilter initialized with model={model}, temp={temperature}, confidence_threshold={self.confidence_threshold}")
 
     def filter(self, paper: Paper) -> FilterResult:
         """
@@ -193,9 +207,16 @@ Respond with a JSON object:
             result_data = self.call_llm_json(prompt)
 
             decision_str = result_data.get("decision", "FAIL").upper()
-            decision = FilterDecision.PASS if decision_str == "PASS" else FilterDecision.FAIL
             reason = result_data.get("reason", "No reason provided")
             confidence = float(result_data.get("confidence", 0.5))
+
+            # Apply confidence threshold - if confidence is below threshold, fail the paper
+            if decision_str == "PASS" and confidence < self.confidence_threshold:
+                decision = FilterDecision.FAIL
+                reason = f"Low confidence ({confidence:.2f} < {self.confidence_threshold}): {reason}"
+                logger.info(f"PMID {paper.pmid} - Failed due to low confidence: {confidence:.2f}")
+            else:
+                decision = FilterDecision.PASS if decision_str == "PASS" else FilterDecision.FAIL
 
             logger.info(
                 f"PMID {paper.pmid} - Intern filter: {decision.value} "
@@ -209,7 +230,8 @@ Respond with a JSON object:
                 pmid=paper.pmid,
                 confidence=confidence,
                 metadata={
-                    "model": self.model
+                    "model": self.model,
+                    "confidence_threshold": self.confidence_threshold
                 }
             )
 
@@ -282,20 +304,26 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
     def __init__(
         self,
         model: Optional[str] = None,
-        temperature: float = 0.1,
-        max_tokens: int = 200
+        temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None
     ):
         """
         Initialize the Clinical Data Triage filter.
 
         Args:
-            model: LiteLLM model identifier (default: gpt-4o-mini for cost efficiency). If None, uses config.
-            temperature: Model temperature (lower = more deterministic).
-            max_tokens: Maximum tokens for response.
+            model: LiteLLM model identifier (default: uses TIER2_MODEL from config). If None, uses config.
+            temperature: Model temperature (lower = more deterministic). If None, uses config.
+            max_tokens: Maximum tokens for response. If None, uses config default (200).
         """
         settings = get_settings()
-        model = model or settings.intern_model
+
+        model = model or settings.tier2_model or settings.intern_model
+        temperature = temperature if temperature is not None else settings.tier2_temperature
+        max_tokens = max_tokens if max_tokens is not None else 200  # Slightly higher than default for triage
+
         super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
+
+        logger.debug(f"ClinicalDataTriageFilter initialized with model={model}")
 
     def triage(
         self,

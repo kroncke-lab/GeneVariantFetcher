@@ -21,6 +21,7 @@ from models import (
 from pipeline.sourcing import PaperSourcer
 from pipeline.filters import KeywordFilter, InternFilter
 from pipeline.extraction import ExpertExtractor
+from config.settings import get_settings
 
 # Configure logging
 logging.basicConfig(
@@ -62,37 +63,47 @@ class BiomedicalExtractionPipeline:
 
     def __init__(
         self,
-        email: str = "your_email@example.com",
+        email: Optional[str] = None,
         keyword_filter: Optional[KeywordFilter] = None,
         intern_filter: Optional[InternFilter] = None,
         expert_extractor: Optional[ExpertExtractor] = None,
-        enable_tier1: bool = True,
-        enable_tier2: bool = True,
-        enable_tier3: bool = True
+        enable_tier1: Optional[bool] = None,
+        enable_tier2: Optional[bool] = None,
+        enable_tier3: Optional[bool] = None
     ):
         """
         Initialize the pipeline with all components.
 
+        All parameters are optional and will use configuration defaults if not provided.
+
         Args:
-            email: Email for PubMed API.
-            keyword_filter: Custom keyword filter (or uses default).
-            intern_filter: Custom intern filter (or uses default).
-            expert_extractor: Custom expert extractor (or uses default).
-            enable_tier1: Enable Tier 1 keyword filtering.
-            enable_tier2: Enable Tier 2 intern filtering.
-            enable_tier3: Enable Tier 3 extraction.
+            email: Email for PubMed API. If None, uses config NCBI_EMAIL.
+            keyword_filter: Custom keyword filter. If None, creates default from config.
+            intern_filter: Custom intern filter. If None, creates default from config.
+            expert_extractor: Custom expert extractor. If None, creates default from config.
+            enable_tier1: Enable Tier 1 keyword filtering. If None, uses config ENABLE_TIER1.
+            enable_tier2: Enable Tier 2 intern filtering. If None, uses config ENABLE_TIER2.
+            enable_tier3: Enable Tier 3 extraction. If None, uses config ENABLE_TIER3.
         """
+        settings = get_settings()
+
+        # Initialize sourcer with email from config or parameter
         self.sourcer = PaperSourcer(email=email)
 
-        # Initialize filters with defaults if not provided
-        self.keyword_filter = keyword_filter or KeywordFilter(min_keyword_matches=2)
-        self.intern_filter = intern_filter or InternFilter(model="gpt-4o-mini")
-        self.expert_extractor = expert_extractor or ExpertExtractor(model="gpt-4o")
+        # Initialize filters with defaults from config if not provided
+        self.keyword_filter = keyword_filter or KeywordFilter()
+        self.intern_filter = intern_filter or InternFilter()
+        self.expert_extractor = expert_extractor or ExpertExtractor()
 
-        # Tier toggles
-        self.enable_tier1 = enable_tier1
-        self.enable_tier2 = enable_tier2
-        self.enable_tier3 = enable_tier3
+        # Tier toggles - use config defaults if not specified
+        self.enable_tier1 = enable_tier1 if enable_tier1 is not None else settings.enable_tier1
+        self.enable_tier2 = enable_tier2 if enable_tier2 is not None else settings.enable_tier2
+        self.enable_tier3 = enable_tier3 if enable_tier3 is not None else settings.enable_tier3
+
+        logger.info(
+            f"Pipeline initialized - Tiers enabled: "
+            f"T1={self.enable_tier1}, T2={self.enable_tier2}, T3={self.enable_tier3}"
+        )
 
         self.stats = PipelineStats()
 
@@ -253,8 +264,8 @@ class BiomedicalExtractionPipeline:
         # ============================================
         # STEP 1: Source Papers
         # ============================================
-        logger.info(f"📚 STEP 1: Sourcing papers from PubMind (primary), PubMed, and EuropePMC...")
-        pmids = self.sourcer.fetch_papers(gene_symbol, use_pubmind=True)
+        logger.info(f"📚 STEP 1: Sourcing papers (configuration-driven)...")
+        pmids = self.sourcer.fetch_papers(gene_symbol)
         self.stats.total_papers_sourced = len(pmids)
 
         logger.info(f"Found {len(pmids)} unique PMIDs for {gene_symbol}")
@@ -339,15 +350,17 @@ class BiomedicalExtractionPipeline:
 
 def run_pipeline_for_gene(
     gene_symbol: str,
-    email: str = "your_email@example.com",
+    email: Optional[str] = None,
     max_papers: Optional[int] = None
 ) -> Dict[str, Any]:
     """
     Convenience function to run the pipeline for a gene.
 
+    All configuration is loaded from environment variables / .env file.
+
     Args:
         gene_symbol: Gene symbol to search for.
-        email: Email for PubMed API.
+        email: Email for PubMed API (optional, uses config default if None).
         max_papers: Maximum papers to process.
 
     Returns:
