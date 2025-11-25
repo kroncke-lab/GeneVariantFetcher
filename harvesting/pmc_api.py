@@ -8,6 +8,7 @@ Handles interactions with NCBI PubMed Central APIs:
 """
 
 import os
+import time
 from typing import Optional
 import requests
 from Bio import Entrez
@@ -16,6 +17,14 @@ from Bio import Entrez
 # Configure Entrez
 Entrez.email = os.getenv("ENTREZ_EMAIL", "your.email@example.com")
 Entrez.tool = "PMCHarvester"
+Entrez.api_key = os.getenv("NCBI_API_KEY")  # Optional: get API key from https://www.ncbi.nlm.nih.gov/account/
+
+
+# Rate limiting: NCBI allows 3 req/sec without API key, 10 req/sec with API key
+# We'll be conservative and use 0.34 seconds between requests (3 req/sec) without key
+# and 0.11 seconds (9 req/sec) with key to stay safely under the limit
+RATE_LIMIT_DELAY = 0.11 if Entrez.api_key else 0.34
+_last_request_time = 0
 
 
 class PMCAPIClient:
@@ -30,6 +39,18 @@ class PMCAPIClient:
         """
         self.session = session or requests.Session()
 
+    def _rate_limit(self):
+        """Enforce NCBI rate limiting by adding delays between requests."""
+        global _last_request_time
+        current_time = time.time()
+        time_since_last = current_time - _last_request_time
+
+        if time_since_last < RATE_LIMIT_DELAY:
+            sleep_time = RATE_LIMIT_DELAY - time_since_last
+            time.sleep(sleep_time)
+
+        _last_request_time = time.time()
+
     def pmid_to_pmcid(self, pmid: str) -> Optional[str]:
         """
         Convert PMID to PMCID using NCBI E-utilities.
@@ -41,6 +62,7 @@ class PMCAPIClient:
             PMCID string (e.g., "PMC1234567") or None if not found
         """
         try:
+            self._rate_limit()
             handle = Entrez.elink(dbfrom="pubmed", db="pmc", id=pmid, linkname="pubmed_pmc")
             record = Entrez.read(handle)
             handle.close()
@@ -67,6 +89,7 @@ class PMCAPIClient:
             DOI string or None if not found
         """
         try:
+            self._rate_limit()
             handle = Entrez.efetch(db="pubmed", id=pmid, retmode="xml")
             records = Entrez.read(handle)
             handle.close()
