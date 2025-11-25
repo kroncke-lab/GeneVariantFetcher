@@ -5,16 +5,22 @@ SQLite Migration Script for Gene Variant Fetcher
 Migrates file-based extraction data to a normalized SQLite database.
 Includes cleanup and archival functions for the file system.
 
+The script automatically detects the gene symbol from the directory path
+(e.g., automated_output/TTR/...) or extraction JSON files and creates a
+gene-specific database (e.g., TTR.db).
+
 Usage:
     # Point to parent directory containing extractions/ subdirectory
+    # This will create TTR.db automatically
     python migrate_to_sqlite.py --data-dir automated_output/TTR/20251125_114028
 
     # Point directly to directory containing JSON files
+    # Database name will be auto-detected (e.g., TTR.db)
     python migrate_to_sqlite.py --data-dir automated_output/TTR/20251125_114028/extractions
     python migrate_to_sqlite.py --data-dir automated_output/TTR/20251125_114028/extractions_rerun/20251125_151454
 
-    # Specify custom database path
-    python migrate_to_sqlite.py --data-dir /path/to/your/data --db variants.db
+    # Specify custom database path (overrides auto-detection)
+    python migrate_to_sqlite.py --data-dir /path/to/your/data --db custom_name.db
 
 The script will automatically find JSON extraction files in:
 1. The specified directory itself (if it contains *_PMID_*.json files)
@@ -789,6 +795,93 @@ def cleanup_data_directory(
 # MAIN CLI
 # ============================================================================
 
+def extract_gene_from_path(data_dir: Path) -> Optional[str]:
+    """
+    Extract gene symbol from directory path.
+
+    Expected path structure: automated_output/{GENE}/timestamp/...
+
+    Args:
+        data_dir: Path to data directory
+
+    Returns:
+        Gene symbol or None if not found
+    """
+    parts = data_dir.parts
+
+    # Look for 'automated_output' in path and get next component
+    try:
+        for i, part in enumerate(parts):
+            if part == 'automated_output' and i + 1 < len(parts):
+                gene = parts[i + 1]
+                # Validate it looks like a gene symbol (uppercase, reasonable length)
+                if gene.isupper() and 2 <= len(gene) <= 10:
+                    return gene
+    except Exception as e:
+        logger.debug(f"Could not extract gene from path: {e}")
+
+    return None
+
+
+def extract_gene_from_json(json_file: Path) -> Optional[str]:
+    """
+    Extract gene symbol from a JSON extraction file.
+
+    Args:
+        json_file: Path to JSON file
+
+    Returns:
+        Gene symbol or None if not found
+    """
+    try:
+        with open(json_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        # Try to get gene from variants
+        variants = data.get("variants", [])
+        if variants and len(variants) > 0:
+            gene = variants[0].get("gene_symbol")
+            if gene:
+                return gene
+
+    except Exception as e:
+        logger.debug(f"Could not extract gene from JSON: {e}")
+
+    return None
+
+
+def determine_database_name(data_dir: Path, extraction_dir: Optional[Path] = None) -> str:
+    """
+    Determine the appropriate database name based on gene symbol.
+
+    Args:
+        data_dir: Data directory path
+        extraction_dir: Directory containing JSON files (if found)
+
+    Returns:
+        Database filename (e.g., "TTR.db" or "variants.db" as fallback)
+    """
+    # Strategy 1: Try to extract from path
+    gene = extract_gene_from_path(data_dir)
+
+    if gene:
+        logger.info(f"Detected gene '{gene}' from directory path")
+        return f"{gene}.db"
+
+    # Strategy 2: Try to extract from JSON file
+    if extraction_dir:
+        json_files = list(extraction_dir.glob("*_PMID_*.json"))
+        if json_files:
+            gene = extract_gene_from_json(json_files[0])
+            if gene:
+                logger.info(f"Detected gene '{gene}' from extraction data")
+                return f"{gene}.db"
+
+    # Fallback to generic name
+    logger.info("Could not detect gene symbol, using default database name")
+    return "variants.db"
+
+
 def main():
     """Main CLI entrypoint."""
     parser = argparse.ArgumentParser(
@@ -805,8 +898,8 @@ def main():
     parser.add_argument(
         "--db",
         type=str,
-        default="variants.db",
-        help="SQLite database path (default: variants.db)"
+        default=None,
+        help="SQLite database path (default: auto-detect based on gene symbol, e.g., TTR.db)"
     )
 
     parser.add_argument(
@@ -842,28 +935,9 @@ def main():
         logger.error(f"Data directory not found: {data_dir}")
         return 1
 
-    logger.info("="*80)
-    logger.info("GENE VARIANT FETCHER: SQLite MIGRATION")
-    logger.info("="*80)
-    logger.info(f"Data directory: {data_dir}")
-    logger.info(f"Database: {args.db}")
-    logger.info(f"Cleanup: {args.cleanup}")
-    logger.info(f"Dry run: {args.dry_run}")
-    logger.info("="*80)
-
     # ========================================================================
-    # STEP 1: Create database schema
+    # STEP 1: Find extraction directory
     # ========================================================================
-    if not args.dry_run:
-        conn = create_database_schema(args.db)
-    else:
-        logger.info("[DRY RUN] Would create database schema")
-        conn = None
-
-    # ========================================================================
-    # STEP 2: Migrate extraction data
-    # ========================================================================
-
     # Find extraction directory - try multiple strategies
     extraction_dir = None
 
@@ -921,6 +995,36 @@ def main():
         logger.error("Expected files matching pattern: *_PMID_*.json")
         return 1
 
+    # ========================================================================
+    # STEP 2: Determine database name
+    # ========================================================================
+    if args.db:
+        db_path = args.db
+        logger.info(f"Using user-specified database: {db_path}")
+    else:
+        db_path = determine_database_name(data_dir, extraction_dir)
+
+    logger.info("="*80)
+    logger.info("GENE VARIANT FETCHER: SQLite MIGRATION")
+    logger.info("="*80)
+    logger.info(f"Data directory: {data_dir}")
+    logger.info(f"Database: {db_path}")
+    logger.info(f"Cleanup: {args.cleanup}")
+    logger.info(f"Dry run: {args.dry_run}")
+    logger.info("="*80)
+
+    # ========================================================================
+    # STEP 3: Create database schema
+    # ========================================================================
+    if not args.dry_run:
+        conn = create_database_schema(db_path)
+    else:
+        logger.info("[DRY RUN] Would create database schema")
+        conn = None
+
+    # ========================================================================
+    # STEP 4: Migrate extraction data
+    # ========================================================================
     if not args.dry_run:
         migration_stats = migrate_extraction_directory(conn, extraction_dir)
 
@@ -939,7 +1043,7 @@ def main():
         logger.info(f"[DRY RUN] Would migrate {len(list(extraction_dir.glob('*.json')))} JSON files")
 
     # ========================================================================
-    # STEP 3: Database statistics
+    # STEP 5: Database statistics
     # ========================================================================
     if not args.dry_run and conn:
         cursor = conn.cursor()
@@ -968,7 +1072,7 @@ def main():
         conn.close()
 
     # ========================================================================
-    # STEP 4: Cleanup and archival
+    # STEP 6: Cleanup and archival
     # ========================================================================
     if args.cleanup:
         logger.info("\n" + "="*80)
