@@ -6,8 +6,21 @@ Migrates file-based extraction data to a normalized SQLite database.
 Includes cleanup and archival functions for the file system.
 
 Usage:
+    # Point to parent directory containing extractions/ subdirectory
     python migrate_to_sqlite.py --data-dir automated_output/TTR/20251125_114028
+
+    # Point directly to directory containing JSON files
+    python migrate_to_sqlite.py --data-dir automated_output/TTR/20251125_114028/extractions
+    python migrate_to_sqlite.py --data-dir automated_output/TTR/20251125_114028/extractions_rerun/20251125_151454
+
+    # Specify custom database path
     python migrate_to_sqlite.py --data-dir /path/to/your/data --db variants.db
+
+The script will automatically find JSON extraction files in:
+1. The specified directory itself (if it contains *_PMID_*.json files)
+2. An 'extractions' subdirectory
+3. Alternative subdirectories (extractions_rerun, extraction, etc.)
+4. Nested timestamped subdirectories
 """
 
 import os
@@ -786,7 +799,7 @@ def main():
         "--data-dir",
         type=str,
         required=True,
-        help="Path to data directory (e.g., automated_output/TTR/20251125_114028)"
+        help="Path to data directory. Can point to parent dir with extractions/ subdir, or directly to dir containing *_PMID_*.json files"
     )
 
     parser.add_argument(
@@ -850,23 +863,63 @@ def main():
     # ========================================================================
     # STEP 2: Migrate extraction data
     # ========================================================================
-    extraction_dir = data_dir / args.extractions_subdir
 
-    if not extraction_dir.exists():
-        logger.warning(f"Extraction directory not found: {extraction_dir}")
-        logger.info("Searching for alternative extraction directories...")
+    # Find extraction directory - try multiple strategies
+    extraction_dir = None
 
-        # Try common alternatives
-        alternatives = ["extractions_rerun", "extractions", "extraction"]
-        for alt in alternatives:
-            alt_dir = data_dir / alt
-            if alt_dir.exists():
-                extraction_dir = alt_dir
-                logger.info(f"✓ Found extraction directory: {extraction_dir}")
-                break
+    # Strategy 1: Check if data_dir itself contains JSON files
+    json_files_in_data_dir = list(data_dir.glob("*_PMID_*.json"))
+    if json_files_in_data_dir:
+        extraction_dir = data_dir
+        logger.info(f"✓ Found {len(json_files_in_data_dir)} JSON files directly in: {extraction_dir}")
+    else:
+        # Strategy 2: Check specified extractions subdirectory
+        extraction_subdir = data_dir / args.extractions_subdir
+        if extraction_subdir.exists() and extraction_subdir.is_dir():
+            json_files_in_subdir = list(extraction_subdir.glob("*_PMID_*.json"))
+            if json_files_in_subdir:
+                extraction_dir = extraction_subdir
+                logger.info(f"✓ Found {len(json_files_in_subdir)} JSON files in: {extraction_dir}")
+            else:
+                logger.warning(f"Subdirectory exists but no JSON files found: {extraction_subdir}")
         else:
-            logger.error("No extraction directory found")
-            return 1
+            logger.warning(f"Extraction subdirectory not found: {extraction_subdir}")
+
+        # Strategy 3: Search for common alternative subdirectories
+        if not extraction_dir:
+            logger.info("Searching for alternative extraction directories...")
+            alternatives = ["extractions_rerun", "extractions", "extraction"]
+
+            # Look for timestamped subdirectories
+            for subdir in data_dir.iterdir():
+                if subdir.is_dir():
+                    # Check timestamped subdirectories (e.g., 20251125_151454)
+                    for potential_dir in [subdir] + list(subdir.iterdir()):
+                        if potential_dir.is_dir():
+                            json_files = list(potential_dir.glob("*_PMID_*.json"))
+                            if json_files:
+                                extraction_dir = potential_dir
+                                logger.info(f"✓ Found {len(json_files)} JSON files in: {extraction_dir}")
+                                break
+                    if extraction_dir:
+                        break
+
+            # Try predefined alternatives
+            if not extraction_dir:
+                for alt in alternatives:
+                    alt_dir = data_dir / alt
+                    if alt_dir.exists() and alt_dir.is_dir():
+                        json_files_in_alt = list(alt_dir.glob("*_PMID_*.json"))
+                        if json_files_in_alt:
+                            extraction_dir = alt_dir
+                            logger.info(f"✓ Found {len(json_files_in_alt)} JSON files in: {extraction_dir}")
+                            break
+
+    # Final check
+    if not extraction_dir:
+        logger.error(f"No extraction JSON files found in {data_dir} or its subdirectories")
+        logger.error("Expected files matching pattern: *_PMID_*.json")
+        return 1
 
     if not args.dry_run:
         migration_stats = migrate_extraction_directory(conn, extraction_dir)
