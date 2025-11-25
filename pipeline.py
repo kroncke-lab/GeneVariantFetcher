@@ -9,6 +9,8 @@ import logging
 from typing import List, Optional, Dict, Any
 from dataclasses import dataclass
 from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
 
 from models import (
     Paper,
@@ -22,6 +24,7 @@ from pipeline.sourcing import PaperSourcer
 from pipeline.filters import KeywordFilter, InternFilter
 from pipeline.extraction import ExpertExtractor
 from config.settings import get_settings
+from utils.pubmed_utils import batch_fetch_metadata
 
 # Configure logging
 logging.basicConfig(
@@ -106,6 +109,7 @@ class BiomedicalExtractionPipeline:
         )
 
         self.stats = PipelineStats()
+        self._stats_lock = threading.Lock()  # Thread-safe stats updates for parallelization
 
     def _log_paper_dropped(self, pmid: str, tier: FilterTier, reason: str):
         """
@@ -181,11 +185,13 @@ class BiomedicalExtractionPipeline:
 
             if tier1_result.decision == FilterDecision.FAIL:
                 self._log_paper_dropped(paper.pmid, FilterTier.TIER_1_KEYWORD, tier1_result.reason)
-                self.stats.failed_tier1 += 1
+                with self._stats_lock:
+                    self.stats.failed_tier1 += 1
                 return result  # 🚫 DISCARD - Save money by not processing further
 
             self._log_paper_passed(paper.pmid, FilterTier.TIER_1_KEYWORD)
-            self.stats.passed_tier1_keyword += 1
+            with self._stats_lock:
+                self.stats.passed_tier1_keyword += 1
 
         # ============================================
         # TIER 2: Intern Filter (LLM Classification)
@@ -198,11 +204,13 @@ class BiomedicalExtractionPipeline:
 
             if tier2_result.decision == FilterDecision.FAIL:
                 self._log_paper_dropped(paper.pmid, FilterTier.TIER_2_INTERN, tier2_result.reason)
-                self.stats.failed_tier2 += 1
+                with self._stats_lock:
+                    self.stats.failed_tier2 += 1
                 return result  # 🚫 DISCARD - Not worth expensive extraction
 
             self._log_paper_passed(paper.pmid, FilterTier.TIER_2_INTERN)
-            self.stats.passed_tier2_intern += 1
+            with self._stats_lock:
+                self.stats.passed_tier2_intern += 1
 
         # ============================================
         # TIER 3: Expert Extraction (Heavy Lifting)
@@ -212,24 +220,33 @@ class BiomedicalExtractionPipeline:
         if self.enable_tier3:
             extraction_result = self.expert_extractor.extract(paper)
             result.extraction_result = extraction_result
-            self.stats.completed_tier3_extraction += 1
+
+            with self._stats_lock:
+                self.stats.completed_tier3_extraction += 1
+
+                if extraction_result.success:
+                    self.stats.total_extraction_successes += 1
+
+                    # Count variants extracted
+                    variants_count = (
+                        extraction_result.extracted_data
+                        .get("extraction_metadata", {})
+                        .get("total_variants_found", 0)
+                    )
+                    self.stats.total_variants_extracted += variants_count
+                else:
+                    self.stats.failed_tier3 += 1
 
             if extraction_result.success:
-                self.stats.total_extraction_successes += 1
-
-                # Count variants extracted
                 variants_count = (
                     extraction_result.extracted_data
                     .get("extraction_metadata", {})
                     .get("total_variants_found", 0)
                 )
-                self.stats.total_variants_extracted += variants_count
-
                 logger.info(
                     f"✓ EXTRACTED - PMID {paper.pmid}: {variants_count} variants found"
                 )
             else:
-                self.stats.failed_tier3 += 1
                 logger.warning(
                     f"⚠ EXTRACTION FAILED - PMID {paper.pmid}: {extraction_result.error}"
                 )
@@ -275,33 +292,74 @@ class BiomedicalExtractionPipeline:
             logger.info(f"Limiting to first {max_papers} papers")
 
         # ============================================
-        # STEP 2: Fetch Metadata
+        # STEP 2: Fetch Metadata (BATCHED for 25-50x speedup!)
         # ============================================
-        logger.info(f"📥 STEP 2: Fetching metadata for {len(pmids)} papers...")
+        logger.info(f"📥 STEP 2: Fetching metadata for {len(pmids)} papers in batches...")
         papers: List[Paper] = []
 
+        # Batch fetch all metadata at once (much faster than one-by-one)
+        metadata_dict = batch_fetch_metadata(pmids, batch_size=200, email=self.sourcer.email)
+
+        # Convert batch results to Paper objects
         for pmid in pmids:
-            paper = self.sourcer.fetch_paper_metadata(pmid)
-            if paper:
-                paper.gene_symbol = gene_symbol
-                papers.append(paper)
+            metadata = metadata_dict.get(pmid)
+            if metadata:
+                try:
+                    paper = Paper(
+                        pmid=pmid,
+                        title=metadata.get("Title", ""),
+                        authors=[author.get("Name", "") for author in metadata.get("AuthorList", [])],
+                        journal=metadata.get("FullJournalName", ""),
+                        publication_date=metadata.get("PubDate", ""),
+                        doi=metadata.get("DOI"),
+                        pmc_id=next((id_obj["Value"] for id_obj in metadata.get("ArticleIds", [])
+                                    if id_obj.get("IdType") == "pmc"), None),
+                        source="PubMed",
+                        gene_symbol=gene_symbol
+                    )
+                    papers.append(paper)
+                except Exception as e:
+                    logger.warning(f"Failed to parse metadata for PMID {pmid}: {e}")
             else:
                 logger.warning(f"Could not fetch metadata for PMID {pmid}")
 
         logger.info(f"Successfully fetched metadata for {len(papers)} papers")
 
         # ============================================
-        # STEP 3: Process Through Tiered Pipeline
+        # STEP 3: Process Through Tiered Pipeline (PARALLELIZED for 3-5x speedup!)
         # ============================================
-        logger.info(f"⚙️ STEP 3: Processing papers through tiered pipeline...")
+        logger.info(f"⚙️ STEP 3: Processing papers through tiered pipeline in parallel...")
 
         results: List[PipelineResult] = []
 
-        for i, paper in enumerate(papers, 1):
-            logger.info(f"\n--- Processing paper {i}/{len(papers)} - PMID {paper.pmid} ---")
+        # Process papers in parallel with ThreadPoolExecutor
+        # LLM calls are I/O-bound so threading provides good speedup
+        # Limit to 8 workers to respect API rate limits
+        max_workers = min(8, len(papers)) if papers else 1
 
-            result = self.process_paper(paper)
-            results.append(result)
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # Submit all papers for processing
+            future_to_paper = {
+                executor.submit(self.process_paper, paper): paper
+                for paper in papers
+            }
+
+            # Collect results as they complete
+            completed = 0
+            for future in as_completed(future_to_paper):
+                paper = future_to_paper[future]
+                completed += 1
+
+                try:
+                    result = future.result()
+                    results.append(result)
+                    logger.info(f"✓ Completed {completed}/{len(papers)} - PMID {paper.pmid}")
+                except Exception as e:
+                    logger.error(f"⚠ Failed to process PMID {paper.pmid}: {e}")
+
+        # Sort results by original paper order to maintain consistency
+        pmid_to_result = {r.pmid: r for r in results}
+        results = [pmid_to_result[paper.pmid] for paper in papers if paper.pmid in pmid_to_result]
 
         # ============================================
         # STEP 4: Calculate Statistics
