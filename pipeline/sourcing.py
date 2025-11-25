@@ -8,7 +8,7 @@ from typing import List, Set, Optional
 
 from models import Paper
 from utils.pubmed_utils import query_pubmed_for_gene, query_europepmc
-from pipeline.utils.retry_utils import standard_retry
+from utils.retry_utils import standard_retry
 from config.settings import get_settings
 
 logger = logging.getLogger(__name__)

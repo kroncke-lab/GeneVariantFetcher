@@ -20,6 +20,7 @@ import logging
 from pathlib import Path
 from datetime import datetime
 from dotenv import load_dotenv
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Load environment variables from .env file
 load_dotenv()
@@ -119,22 +120,23 @@ def automated_variant_extraction_workflow(
     markdown_files = list(harvest_dir.glob("*_FULL_CONTEXT.md"))
     logger.info(f"Found {len(markdown_files)} markdown files to process")
 
-    # Process each paper
+    # Process papers in parallel (OPTIMIZED for 3-5x speedup!)
     from models import Paper
     from pipeline.extraction import ExpertExtractor
 
     extractor = ExpertExtractor(model="gpt-4o")
     extractions = []
 
-    for md_file in markdown_files:
+    def process_paper_file(md_file):
+        """Process a single paper file (for parallel execution)"""
         # Extract PMID from filename (format: PMID_12345678_FULL_CONTEXT.md)
         pmid_match = md_file.stem.split('_')[1] if '_' in md_file.stem else None
 
         if not pmid_match:
             logger.warning(f"Could not extract PMID from filename: {md_file.name}")
-            continue
+            return None
 
-        logger.info(f"\nProcessing PMID {pmid_match}...")
+        logger.info(f"Processing PMID {pmid_match}...")
 
         # Read the markdown content
         with open(md_file, 'r', encoding='utf-8') as f:
@@ -153,9 +155,7 @@ def automated_variant_extraction_workflow(
             extraction_result = extractor.extract(paper)
 
             if extraction_result.success:
-                extractions.append(extraction_result)
-
-                # Save individual extraction
+                # Save individual extraction (thread-safe: each writes to unique file)
                 output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid_match}.json"
                 with open(output_file, 'w') as f:
                     json.dump(extraction_result.extracted_data, f, indent=2)
@@ -166,12 +166,40 @@ def automated_variant_extraction_workflow(
 
                 logger.info(f"✓ Extracted {num_variants} variants from PMID {pmid_match}")
                 logger.info(f"✓ Saved to: {output_file}")
+
+                return extraction_result
             else:
                 logger.warning(f"✗ Extraction failed for PMID {pmid_match}: {extraction_result.error}")
+                return None
 
         except Exception as e:
             logger.error(f"Error processing PMID {pmid_match}: {e}")
-            continue
+            return None
+
+    # Process papers in parallel with ThreadPoolExecutor
+    # LLM calls are I/O-bound, so threading provides excellent speedup
+    max_workers = min(8, len(markdown_files)) if markdown_files else 1
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all papers for processing
+        future_to_file = {
+            executor.submit(process_paper_file, md_file): md_file
+            for md_file in markdown_files
+        }
+
+        # Collect results as they complete
+        completed = 0
+        for future in as_completed(future_to_file):
+            md_file = future_to_file[future]
+            completed += 1
+
+            try:
+                result = future.result()
+                if result:
+                    extractions.append(result)
+                logger.info(f"✓ Completed {completed}/{len(markdown_files)} papers")
+            except Exception as e:
+                logger.error(f"⚠ Failed to process {md_file.name}: {e}")
 
     # ============================================================================
     # STEP 4: Aggregate Penetrance Data
