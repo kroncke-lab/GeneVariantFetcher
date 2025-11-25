@@ -7,7 +7,7 @@ genetic variant data using advanced LLM prompting.
 
 import logging
 import json
-from typing import Optional, Dict, Any
+from typing import Optional, List
 from models import Paper, ExtractionResult
 from pipeline.utils.llm_utils import BaseLLMCaller
 from config.settings import get_settings
@@ -21,8 +21,11 @@ class ExpertExtractor(BaseLLMCaller):
     Handles full-text papers and markdown tables to extract structured variant data.
     """
 
-    # Complex JSON extraction prompt
-    EXTRACTION_PROMPT = """You are an expert medical geneticist and data extraction specialist. Your task is to extract ALL genetic variant information from the provided scientific paper, with special emphasis on penetrance data (affected vs unaffected carriers).
+    EXTRACTION_PROMPT = """You are an expert medical geneticist and data extraction specialist. Your task is to extract genetic variant information from the provided scientific paper, with special emphasis on penetrance data (affected vs unaffected carriers).
+
+TARGET GENE: {gene_symbol}
+
+CRITICAL: Only extract variants in the gene "{gene_symbol}". Ignore all variants in other genes.
 
 Paper Title: {title}
 
@@ -30,7 +33,7 @@ Full Text (including tables):
 {full_text}
 
 EXTRACTION INSTRUCTIONS:
-Extract ALL genetic variants mentioned in this paper with the following structured information:
+Extract ALL variants in the {gene_symbol} gene mentioned in this paper with the following structured information:
 
 For each variant, provide:
 1. Gene Symbol (e.g., "BRCA1", "TP53")
@@ -168,6 +171,8 @@ Return a JSON object with this structure:
 }}
 
 IMPORTANT NOTES:
+- ONLY include variants in the {gene_symbol} gene. Do NOT include variants from other genes even if they are mentioned in the paper.
+- If the paper mentions the target gene {gene_symbol} but does not report any variants, return an empty variants list.
 - If full text is not available and only abstract is provided, note this limitation
 - Be thorough but accurate - don't invent data not present in the paper
 - If a field is not available, use null or an empty string as appropriate
@@ -176,140 +181,100 @@ IMPORTANT NOTES:
 
     def __init__(
         self,
-        model: Optional[str] = None,
+        models: Optional[List[str]] = None,
         temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None
+        max_tokens: Optional[int] = None,
+        tier_threshold: int = 1,
     ):
         """
         Initialize the Expert Extractor.
 
         Args:
-            model: LiteLLM model identifier (e.g., 'gpt-4o', 'claude-3-opus-20240229'). If None, uses config (TIER3_MODEL).
-            temperature: Model temperature (0.0 for most deterministic). If None, uses config.
+            models: List of LiteLLM model identifiers. If None, uses config (TIER3_MODELS).
+            temperature: Model temperature. If None, uses config.
             max_tokens: Maximum tokens for response. If None, uses config.
+            tier_threshold: If the first model finds fewer variants than this, the next model is tried.
         """
         settings = get_settings()
 
-        model = model or settings.tier3_model or settings.extractor_model
-        temperature = temperature if temperature is not None else settings.tier3_temperature
-        max_tokens = max_tokens if max_tokens is not None else settings.tier3_max_tokens
+        self.models = models or settings.tier3_models
+        self.temperature = temperature if temperature is not None else settings.tier3_temperature
+        self.max_tokens = max_tokens if max_tokens is not None else settings.tier3_max_tokens
+        self.tier_threshold = tier_threshold
 
-        super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
-
-        logger.debug(f"ExpertExtractor initialized with model={model}, temp={temperature}, max_tokens={max_tokens}")
+        super().__init__(model=self.models[0], temperature=self.temperature, max_tokens=self.max_tokens)
+        logger.debug(f"ExpertExtractor initialized with models={self.models}, temp={self.temperature}, max_tokens={self.max_tokens}")
 
     def _prepare_full_text(self, paper: Paper) -> str:
-        """
-        Prepare full text for extraction, including abstract if full text not available.
-
-        Args:
-            paper: Paper object.
-
-        Returns:
-            Formatted text for extraction.
-        """
+        """Prepare full text for extraction."""
         if paper.full_text:
             return paper.full_text
         elif paper.abstract:
-            logger.warning(
-                f"PMID {paper.pmid} - Full text not available, using abstract only"
-            )
+            logger.warning(f"PMID {paper.pmid} - Full text not available, using abstract only")
             return f"[ABSTRACT ONLY - FULL TEXT NOT AVAILABLE]\n\n{paper.abstract}"
         else:
             return "[NO TEXT AVAILABLE]"
 
-    def extract(self, paper: Paper) -> ExtractionResult:
-        """
-        Extract structured variant data from a paper using expert LLM.
+    def _attempt_extraction(self, paper: Paper, model: str) -> ExtractionResult:
+        """Attempt extraction with a single model."""
+        logger.info(f"PMID {paper.pmid} - Starting expert extraction with {model}")
+        self.model = model
 
-        Args:
-            paper: Paper object with full text.
-
-        Returns:
-            ExtractionResult with extracted data or error.
-        """
-        logger.info(f"PMID {paper.pmid} - Starting expert extraction with {self.model}")
-
-        # Prepare full text
         full_text = self._prepare_full_text(paper)
-
         if full_text == "[NO TEXT AVAILABLE]":
-            return ExtractionResult(
-                pmid=paper.pmid,
-                success=False,
-                error="No text available for extraction",
-                model_used=self.model
-            )
+            return ExtractionResult(pmid=paper.pmid, success=False, error="No text available", model_used=model)
 
-        # Construct prompt
         prompt = self.EXTRACTION_PROMPT.format(
+            gene_symbol=paper.gene_symbol or "UNKNOWN",
             title=paper.title or "Unknown Title",
-            full_text=full_text[:30000],  # Truncate extremely long texts
+            full_text=full_text[:30000],
             pmid=paper.pmid
         )
 
         try:
-            # Use shared LLM utility (includes retry logic)
             extracted_data = self.call_llm_json(prompt)
-
-            logger.info(
-                f"PMID {paper.pmid} - Extraction successful. "
-                f"Found {extracted_data.get('extraction_metadata', {}).get('total_variants_found', 0)} variants."
-            )
-
+            num_variants = extracted_data.get('extraction_metadata', {}).get('total_variants_found', 0)
+            logger.info(f"PMID {paper.pmid} - Extraction with {model} successful. Found {num_variants} variants.")
             return ExtractionResult(
                 pmid=paper.pmid,
                 success=True,
                 extracted_data=extracted_data,
-                model_used=self.model
+                model_used=model
             )
-
         except json.JSONDecodeError as e:
-            logger.error(f"PMID {paper.pmid} - JSON parsing error: {e}")
-            return ExtractionResult(
-                pmid=paper.pmid,
-                success=False,
-                error=f"JSON parsing error: {str(e)}",
-                model_used=self.model
-            )
-
+            logger.error(f"PMID {paper.pmid} - JSON parsing error with {model}: {e}")
+            return ExtractionResult(pmid=paper.pmid, success=False, error=f"JSON error: {e}", model_used=model)
         except Exception as e:
-            logger.error(f"PMID {paper.pmid} - Extraction failed: {e}")
-            return ExtractionResult(
-                pmid=paper.pmid,
-                success=False,
-                error=f"Extraction error: {str(e)}",
-                model_used=self.model
-            )
+            logger.error(f"PMID {paper.pmid} - Extraction failed with {model}: {e}")
+            return ExtractionResult(pmid=paper.pmid, success=False, error=f"Extraction error: {e}", model_used=model)
+
+    def extract(self, paper: Paper) -> ExtractionResult:
+        """
+        Extract structured variant data from a paper using a tiered model approach.
+        """
+        if not self.models:
+            return ExtractionResult(pmid=paper.pmid, success=False, error="No models configured for extraction")
+
+        first_model = self.models[0]
+        result = self._attempt_extraction(paper, first_model)
+
+        if result.success:
+            num_variants = result.extracted_data.get('extraction_metadata', {}).get('total_variants_found', 0)
+            if num_variants < self.tier_threshold and len(self.models) > 1:
+                next_model = self.models[1]
+                logger.info(f"PMID {paper.pmid} - Found {num_variants} variants with {first_model} (threshold: {self.tier_threshold}). Retrying with {next_model}.")
+                return self._attempt_extraction(paper, next_model)
+
+        return result
 
     def extract_batch(self, papers: list[Paper]) -> list[ExtractionResult]:
-        """
-        Extract data from multiple papers.
-
-        Args:
-            papers: List of Paper objects.
-
-        Returns:
-            List of ExtractionResults.
-        """
-        results = []
-        for paper in papers:
-            result = self.extract(paper)
-            results.append(result)
-
-        return results
+        """Extract data from multiple papers."""
+        return [self.extract(paper) for paper in papers]
 
 
-def extract_variants_from_paper(paper: Paper, model: Optional[str] = None) -> ExtractionResult:
+def extract_variants_from_paper(paper: Paper, models: Optional[List[str]] = None) -> ExtractionResult:
     """
     Convenience function to extract variants from a single paper.
-
-    Args:
-        paper: Paper object with full text.
-        model: LiteLLM model identifier. If None, uses config.
-
-    Returns:
-        ExtractionResult.
     """
-    extractor = ExpertExtractor(model=model)
+    extractor = ExpertExtractor(models=models)
     return extractor.extract(paper)

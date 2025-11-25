@@ -38,7 +38,8 @@ def automated_variant_extraction_workflow(
     email: str,
     max_pmids: int = 100,
     max_papers_to_download: int = 50,
-    output_dir: str = "automated_output"
+    output_dir: str = "automated_output",
+    tier_threshold: int = 1,
 ):
     """
     Complete automated workflow from gene symbol to extracted variant data.
@@ -49,9 +50,7 @@ def automated_variant_extraction_workflow(
         max_pmids: Maximum PMIDs to fetch from PubMind/PubMed
         max_papers_to_download: Maximum papers to download full-text
         output_dir: Directory to save all outputs
-
-    Returns:
-        Dictionary with workflow results and statistics
+        tier_threshold: If the first model finds fewer variants than this, the next model is tried.
     """
     from pubmind_fetcher import fetch_pmids_for_gene
     from harvesting import PMCHarvester
@@ -124,7 +123,7 @@ def automated_variant_extraction_workflow(
     from models import Paper
     from pipeline.extraction import ExpertExtractor
 
-    extractor = ExpertExtractor(model="gpt-4o")
+    extractor = ExpertExtractor(tier_threshold=tier_threshold)
     extractions = []
 
     def process_paper_file(md_file):
@@ -320,6 +319,8 @@ Examples:
                        help="Maximum papers to download (default: 50)")
     parser.add_argument("--output", "-o", default="automated_output",
                        help="Output directory (default: automated_output)")
+    parser.add_argument("--tier-threshold", type=int, default=None,
+                       help="If the first model finds fewer variants than this, the next model is tried (default: from .env TIER3_THRESHOLD or 1). Set to 0 to only use first model.")
     parser.add_argument("--verbose", "-v", action="store_true",
                        help="Enable verbose logging")
 
@@ -335,6 +336,13 @@ Examples:
         logger.error("Example: export AI_INTEGRATIONS_OPENAI_API_KEY='your-key-here'")
         sys.exit(1)
 
+    # Get tier threshold from settings if not provided via CLI
+    from config.settings import get_settings
+    tier_threshold = args.tier_threshold
+    if tier_threshold is None:
+        settings = get_settings()
+        tier_threshold = settings.tier3_threshold
+
     # Run workflow
     try:
         automated_variant_extraction_workflow(
@@ -342,7 +350,8 @@ Examples:
             email=args.email,
             max_pmids=args.max_pmids,
             max_papers_to_download=args.max_downloads,
-            output_dir=args.output
+            output_dir=args.output,
+            tier_threshold=tier_threshold,
         )
 
         # Exit with success code

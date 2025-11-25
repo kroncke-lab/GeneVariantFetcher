@@ -2,9 +2,9 @@
 
 from functools import lru_cache
 from pathlib import Path
-from typing import ClassVar
+from typing import ClassVar, List
 
-from pydantic import Field, model_validator
+from pydantic import Field, model_validator, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
@@ -22,11 +22,14 @@ class Settings(BaseSettings):
     # Model Configuration
     tier1_model: str | None = Field(default=None, env="TIER1_MODEL", description="Optional LLM for Tier 1 (if using LLM-based Tier 1)")
     tier2_model: str = Field(default="gpt-4o-mini", env="TIER2_MODEL", description="Model for Tier 2 classification (cheap)")
-    tier3_model: str = Field(default="gpt-4o", env="TIER3_MODEL", description="Model for Tier 3 extraction (smart)")
+    tier3_models: str | List[str] = Field(
+        default="gpt-4o-mini,gpt-4o",
+        env="TIER3_MODELS",
+        description="Comma-separated list of models for Tier 3 extraction (e.g., 'gpt-4o-mini,gpt-4o')"
+    )
 
     # Legacy aliases for backward compatibility
     intern_model: str = Field(default="gpt-4o-mini", env="INTERN_MODEL")
-    extractor_model: str = Field(default="gpt-4o", env="EXTRACTOR_MODEL")
     rate_limit_per_minute: int = Field(default=60, env="RATE_LIMIT_PER_MINUTE")
 
     # Tiered Classification Configuration
@@ -46,6 +49,7 @@ class Settings(BaseSettings):
     # Tier 3 Configuration
     tier3_temperature: float = Field(default=0.0, env="TIER3_TEMPERATURE", description="Temperature for Tier 3 LLM")
     tier3_max_tokens: int = Field(default=8000, env="TIER3_MAX_TOKENS", description="Max tokens for Tier 3 LLM response")
+    tier3_threshold: int = Field(default=1, env="TIER3_THRESHOLD", description="Try next model if first finds fewer variants than this (0 = only use first model)")
 
     # Paper Sourcing Configuration
     use_pubmind: bool = Field(default=True, env="USE_PUBMIND", description="Use PubMind as primary literature source")
@@ -59,6 +63,16 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         extra="ignore",
     )
+
+    @field_validator("tier3_models", mode="after")
+    @classmethod
+    def split_str(cls, v):
+        if isinstance(v, str):
+            # Handle empty string by returning default
+            if not v.strip():
+                return ["gpt-4o-mini", "gpt-4o"]
+            return [item.strip() for item in v.split(",") if item.strip()]
+        return v
 
     _PLACEHOLDER_VALUES: ClassVar[set[str]] = {
         "your_api_key",

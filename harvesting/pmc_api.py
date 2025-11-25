@@ -3,7 +3,7 @@ PMC API Module
 
 Handles interactions with NCBI PubMed Central APIs:
 - PMID to PMCID conversion
-- Full-text XML retrieval from EuropePMC
+- Full-text XML retrieval from NCBI
 - DOI fetching from PubMed records
 """
 
@@ -109,7 +109,7 @@ class PMCAPIClient:
 
     def get_fulltext_xml(self, pmcid: str) -> Optional[str]:
         """
-        Download full-text XML from EuropePMC.
+        Download full-text XML from NCBI using E-utilities, with fallback to Europe PMC.
 
         Args:
             pmcid: PubMed Central ID (e.g., "PMC1234567")
@@ -117,18 +117,49 @@ class PMCAPIClient:
         Returns:
             XML content as string or None if not available
         """
-        url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML"
-
-        try:
-            response = self.session.get(url, timeout=30)
-            response.raise_for_status()
-            return response.text
-        except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 404:
-                print(f"  Full-text not available for {pmcid} (404)")
-            else:
-                print(f"  HTTP error fetching {pmcid}: {e}")
+        if not pmcid or not pmcid.upper().startswith("PMC"):
+            print(f"  Invalid PMCID format: {pmcid}")
             return None
+
+        # E-utilities require the numeric part of the PMCID
+        numeric_pmcid = pmcid[3:]
+
+        # Try NCBI E-utilities first
+        try:
+            self._rate_limit()
+            handle = Entrez.efetch(db="pmc", id=numeric_pmcid, rettype="full", retmode="xml")
+            xml_content = handle.read()
+            handle.close()
+
+            # The response is bytes, so decode it to a string
+            xml_string = xml_content.decode('utf-8')
+
+            # Check for an empty or error response from NCBI
+            if not xml_string or "<error>" in xml_string.lower():
+                 print(f"  NCBI E-utilities returned empty or error for {pmcid}, trying Europe PMC...")
+            else:
+                return xml_string
         except Exception as e:
-            print(f"  Error fetching full-text for {pmcid}: {e}")
+            # This can include HTTP errors from Entrez or parsing errors
+            print(f"  NCBI E-utilities failed for {pmcid}: {e}")
+            print(f"  Trying Europe PMC fallback...")
+
+        # Fallback to Europe PMC full-text API
+        try:
+            europe_pmc_url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML"
+            response = self.session.get(europe_pmc_url, timeout=30)
+            response.raise_for_status()
+
+            xml_string = response.text
+
+            # Check for valid XML response
+            if xml_string and "<article" in xml_string.lower() and not "<error>" in xml_string.lower():
+                print(f"  ✓ Retrieved full-text from Europe PMC")
+                return xml_string
+            else:
+                print(f"  Europe PMC returned invalid or empty response for {pmcid}")
+                return None
+
+        except Exception as e:
+            print(f"  Europe PMC fallback also failed for {pmcid}: {e}")
             return None
