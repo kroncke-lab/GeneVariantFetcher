@@ -4,7 +4,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import ClassVar
 
-from pydantic import BaseSettings, Field, SettingsConfigDict, model_validator
+from pydantic import Field, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 

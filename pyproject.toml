@@ -11,6 +11,7 @@ dependencies = [
     "openai>=2.8.1",
     "pandas>=2.3.3",
     "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
     "python-docx>=1.2.0",
     "python-dotenv>=1.0.0",
     "requests>=2.32.5",
@@ -22,3 +23,7 @@ dependencies = [
 
 [project.scripts]
 gvf = "pipeline.cli:app"
+
+[tool.setuptools.packages.find]
+include = ["pipeline*", "harvesting*", "config*", "utils*"]
+exclude = ["test_*", "automated_output*"]

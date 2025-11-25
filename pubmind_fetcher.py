@@ -124,8 +124,9 @@ class PubMindFetcher:
         try:
             # Try to access the search page
             search_params = {
-                'gene': gene_symbol,
-                'type': 'gene'
+                'query': gene_symbol,
+                'field': 'gene',
+                'operator': 'OR'
             }
 
             response = self.session.get(
@@ -171,11 +172,12 @@ class PubMindFetcher:
         """
         try:
             search_params = {
-                'variant': variant,
-                'type': 'variant'
+                'query': variant,
+                'field': 'variant',
+                'operator': 'OR'
             }
             if gene_symbol:
-                search_params['gene'] = gene_symbol
+                search_params['query'] = f"{gene_symbol} {variant}"
 
             response = self.session.get(
                 self.PUBMIND_SEARCH_URL,
@@ -213,6 +215,7 @@ class PubMindFetcher:
         - Links to PubMed (pubmed.ncbi.nlm.nih.gov/PMID)
         - Text containing "PMID: 12345678"
         - Table cells or list items with PMIDs
+        - Any 7-8 digit numbers in the page (common in PubMind)
         """
         pmids: Set[str] = set()
 
@@ -235,6 +238,14 @@ class PubMindFetcher:
             text = tag.get_text(strip=True)
             if text.isdigit() and 7 <= len(text) <= 8:
                 pmids.add(text)
+
+        # Pattern 4: Extract all 7-8 digit numbers from the entire page text
+        # This is a more aggressive approach for PubMind's format
+        if not pmids:
+            all_text = soup.get_text()
+            number_pattern = re.compile(r'\b(\d{7,8})\b')
+            potential_pmids = number_pattern.findall(all_text)
+            pmids.update(potential_pmids)
 
         return sorted(list(pmids))
 
