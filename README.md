@@ -4,14 +4,39 @@ Command-line tools for extracting genetic variant and patient data from PubMed l
 
 ## What It Does
 
-GeneVariantFetcher automates the process of finding, downloading, and extracting structured data from biomedical literature:
+GeneVariantFetcher automates the **complete end-to-end workflow** from gene name to SQLite database:
 
 1. **Discovers papers** - Automatically finds relevant papers for a gene using PubMind/PubMed
 2. **Downloads full-text** - Retrieves complete articles with all supplemental materials from PubMed Central
 3. **Extracts data** - Uses AI to extract patient-level variants, phenotypes, and clinical data
-4. **Outputs structured JSON** - Returns machine-readable data for analysis
+4. **Aggregates penetrance** - Summarizes variant penetrance data across all papers
+5. **Stores in SQLite** - Saves normalized data to a compressed SQLite database for easy querying
 
 **Key Feature**: Downloads full-text articles with supplemental Excel/Word files, not just abstracts, providing 10-100x more data for extraction.
+
+## ⚡ Quick Start (One Command!)
+
+```bash
+# Complete workflow: Papers → Full-text → Extraction → SQLite Database
+python automated_workflow.py BRCA1 --email your@email.com
+
+# This creates:
+# - automated_output/BRCA1/{timestamp}/BRCA1.db  ← SQLite database
+# - automated_output/BRCA1/{timestamp}/extractions/  ← JSON files
+# - automated_output/BRCA1/{timestamp}/pmc_fulltext/  ← Full-text papers
+```
+
+That's it! You now have a complete SQLite database with all variant and penetrance data.
+
+### 🎯 What Changed? (Simplified!)
+
+This codebase has been **dramatically simplified**:
+- ✅ **One workflow**: `automated_workflow.py` does everything end-to-end
+- ✅ **SQLite integrated**: No manual migration step needed
+- ✅ **No duplicates**: Removed redundant code (3 duplicate modules deleted)
+- ✅ **Clear structure**: Straightforward pipeline without complex tiering
+
+The old complex tiered filtering system has been archived to `pipeline_tiered_old.py` if you need it.
 
 ---
 
@@ -37,24 +62,30 @@ export AI_INTEGRATIONS_OPENAI_BASE_URL="https://api.openai.com/v1"
 
 ### Automated Workflow (Recommended)
 
-Run everything with a single command:
+Run the **complete end-to-end workflow** with a single command:
 
 ```bash
-python example_automated_workflow.py BRCA1 --email your@email.com
+python automated_workflow.py BRCA1 --email your@email.com
 ```
 
 This will:
 1. Find relevant papers from PubMind
 2. Download full-text articles from PMC
 3. Extract variant and patient data
-4. Save results to JSON
+4. Aggregate penetrance across papers
+5. **Migrate to SQLite database** ← NEW!
 
 **Custom limits:**
 ```bash
-python example_automated_workflow.py SCN5A \
+python automated_workflow.py SCN5A \
   --email your@email.com \
   --max-pmids 200 \
   --max-downloads 100
+```
+
+**Query your database:**
+```bash
+python query_variants_db.py automated_output/SCN5A/{timestamp}/SCN5A.db --stats
 ```
 
 ---

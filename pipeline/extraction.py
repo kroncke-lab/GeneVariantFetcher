@@ -9,7 +9,7 @@ import logging
 import json
 from typing import Optional, List
 from models import Paper, ExtractionResult
-from pipeline.utils.llm_utils import BaseLLMCaller
+from utils.llm_utils import BaseLLMCaller
 from config.settings import get_settings
 
 logger = logging.getLogger(__name__)

@@ -9,7 +9,7 @@ import logging
 import re
 from typing import List, Optional
 from models import Paper, FilterResult, FilterDecision, FilterTier
-from pipeline.utils.llm_utils import BaseLLMCaller
+from utils.llm_utils import BaseLLMCaller
 from config.settings import get_settings
 
 logger = logging.getLogger(__name__)

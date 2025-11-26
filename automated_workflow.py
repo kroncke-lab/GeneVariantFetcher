@@ -218,9 +218,27 @@ def automated_variant_extraction_workflow(
     logger.info(f"✓ Saved penetrance summary to: {penetrance_summary_file}")
 
     # ============================================================================
-    # STEP 5: Compile Results and Statistics
+    # STEP 5: Migrate to SQLite Database
     # ============================================================================
-    logger.info("\n📊 STEP 5: Compiling results and statistics...")
+    logger.info("\n💾 STEP 5: Migrating data to SQLite database...")
+
+    from migrate_to_sqlite import create_database_schema, migrate_extraction_directory
+
+    # Create gene-specific database
+    db_path = output_path / f"{gene_symbol}.db"
+    conn = create_database_schema(str(db_path))
+
+    # Migrate all extraction files
+    migration_stats = migrate_extraction_directory(conn, extraction_dir)
+    conn.close()
+
+    logger.info(f"✓ Migrated {migration_stats['successful']}/{migration_stats['total_files']} extractions to SQLite")
+    logger.info(f"✓ Database saved to: {db_path}")
+
+    # ============================================================================
+    # STEP 6: Compile Results and Statistics
+    # ============================================================================
+    logger.info("\n📊 STEP 6: Compiling results and statistics...")
 
     total_variants = 0
     for extraction in extractions:
@@ -257,7 +275,13 @@ def automated_variant_extraction_workflow(
             "pmid_list": str(pmids_file),
             "full_text_papers": str(harvest_dir),
             "extractions": str(extraction_dir),
-            "penetrance_summary": str(penetrance_summary_file)
+            "penetrance_summary": str(penetrance_summary_file),
+            "sqlite_database": str(db_path)
+        },
+        "database_migration": {
+            "successful": migration_stats["successful"],
+            "failed": migration_stats["failed"],
+            "total_files": migration_stats["total_files"]
         },
         "penetrance_validation": {
             "errors": penetrance_summary.get("validation", {}).get("error_count", 0),
@@ -281,9 +305,11 @@ def automated_variant_extraction_workflow(
     logger.info(f"Total carriers observed: {total_carriers}")
     logger.info(f"Total affected carriers: {total_affected}")
     logger.info(f"Success rate: {len(extractions) / len(pmids) * 100:.1f}%" if pmids else "0%")
+    logger.info(f"\n💾 Database migrated: {migration_stats['successful']}/{migration_stats['total_files']} extractions")
     logger.info(f"\nAll outputs saved to: {output_path}")
     logger.info(f"Summary report: {summary_file}")
     logger.info(f"Penetrance summary: {penetrance_summary_file}")
+    logger.info(f"SQLite database: {db_path}")
     logger.info("="*80)
 
     return summary
