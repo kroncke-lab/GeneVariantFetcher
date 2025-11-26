@@ -36,7 +36,8 @@ def rerun_extraction_on_folder(
     workflow_folder: str,
     gene_symbol: str,
     tier_threshold: int = 1,
-    max_workers: int = 5
+    max_workers: int = 5,
+    model: str = None
 ):
     """
     Re-run extraction on all markdown files in a workflow output folder.
@@ -46,6 +47,7 @@ def rerun_extraction_on_folder(
         gene_symbol: Gene symbol for filtering variants (e.g., "TTR")
         tier_threshold: If the first model finds fewer variants than this, the next model is tried.
         max_workers: Number of parallel workers for processing papers
+        model: LLM model to use (e.g., 'gpt-4o', 'claude-3-opus'). If None, uses config default.
     """
     from models import Paper
     from pipeline.extraction import ExpertExtractor
@@ -80,7 +82,11 @@ def rerun_extraction_on_folder(
     logger.info(f"Saving new extractions to: {extraction_dir}")
 
     # Initialize extractor
-    extractor = ExpertExtractor(tier_threshold=tier_threshold)
+    if model:
+        extractor = ExpertExtractor(models=[model], tier_threshold=tier_threshold)
+        logger.info(f"Using custom model: {model}")
+    else:
+        extractor = ExpertExtractor(tier_threshold=tier_threshold)
 
     def process_paper_file(md_file):
         """Process a single paper file (for parallel execution)"""
@@ -218,20 +224,51 @@ def rerun_extraction_on_folder(
 
 def main():
     """Command-line entrypoint."""
-    if len(sys.argv) < 3:
-        print("Usage: python3.12 rerun_extraction.py <workflow_output_folder> <gene_symbol>")
-        print("\nExample:")
-        print("  python3.12 rerun_extraction.py automated_output/TTR/20251125_114028 TTR")
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Re-run LLM extraction on already-downloaded papers",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Basic re-extraction
+  python rerun_extraction.py automated_output/TTR/20251125_114028 TTR
+
+  # With custom model
+  python rerun_extraction.py automated_output/TTR/20251125_114028 TTR --model claude-3-opus
+
+  # With custom parallelism
+  python rerun_extraction.py automated_output/TTR/20251125_114028 TTR --max-workers 10
+        """
+    )
+
+    parser.add_argument("workflow_folder", help="Path to workflow output folder")
+    parser.add_argument("gene_symbol", help="Gene symbol (e.g., TTR, BRCA1)")
+    parser.add_argument("--tier-threshold", type=int, default=1,
+                       help="If first model finds fewer variants than this, try next model (default: 1)")
+    parser.add_argument("--max-workers", type=int, default=5,
+                       help="Number of parallel workers (default: 5)")
+    parser.add_argument("--model", type=str, default=None,
+                       help="LLM model to use (e.g., 'gpt-4o', 'claude-3-opus')")
+
+    args = parser.parse_args()
+
+    # Check for API keys (soft warning)
+    import os
+    has_api_key = bool(os.getenv("AI_INTEGRATIONS_OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY"))
+
+    if not has_api_key:
+        logger.error("⚠️  ERROR: OpenAI API key not found!")
+        logger.error("Please set AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY")
+        logger.error("Example: export AI_INTEGRATIONS_OPENAI_API_KEY='your-key-here'")
         sys.exit(1)
 
-    workflow_folder = sys.argv[1]
-    gene_symbol = sys.argv[2]
-
     result = rerun_extraction_on_folder(
-        workflow_folder=workflow_folder,
-        gene_symbol=gene_symbol,
-        tier_threshold=1,
-        max_workers=5
+        workflow_folder=args.workflow_folder,
+        gene_symbol=args.gene_symbol,
+        tier_threshold=args.tier_threshold,
+        max_workers=args.max_workers,
+        model=args.model
     )
 
     if not result["success"]:
