@@ -242,6 +242,22 @@ class DataAggregator:
 
         return variant_groups
 
+    def _sorted_source_pmids(self, variant_group: Dict[str, Any]) -> List[str]:
+        """
+        Return a sorted list of non-null PMIDs for a variant group.
+
+        Args:
+            variant_group: Grouped variant data
+
+        Returns:
+            Sorted list of PMIDs without None values
+        """
+        return sorted(
+            pmid
+            for pmid in variant_group.get("source_pmids", [])
+            if pmid is not None
+        )
+
     def calculate_aggregate_penetrance(
         self, variant_group: Dict[str, Any]
     ) -> Dict[str, Any]:
@@ -260,16 +276,19 @@ class DataAggregator:
         # Count from individual records
         total_from_records = len(individual_records)
         affected_from_records = sum(
-            1 for r in individual_records
-            if r.get("affected_status", "").lower() == "affected"
+            1
+            for r in individual_records
+            if (r.get("affected_status") or "").strip().lower() == "affected"
         )
         unaffected_from_records = sum(
-            1 for r in individual_records
-            if r.get("affected_status", "").lower() == "unaffected"
+            1
+            for r in individual_records
+            if (r.get("affected_status") or "").strip().lower() == "unaffected"
         )
         uncertain_from_records = sum(
-            1 for r in individual_records
-            if r.get("affected_status", "").lower() == "uncertain"
+            1
+            for r in individual_records
+            if (r.get("affected_status") or "").strip().lower() == "uncertain"
         )
 
         # Aggregate from cohort-level penetrance data
@@ -324,6 +343,8 @@ class DataAggregator:
             if age_dep:
                 age_dependent.extend(age_dep)
 
+        source_pmids = self._sorted_source_pmids(variant_group)
+
         return {
             "total_carriers": total_carriers,
             "affected": affected,
@@ -333,7 +354,7 @@ class DataAggregator:
             "age_dependent_penetrance": age_dependent,
             "individual_records_count": len(individual_records),
             "cohort_studies_count": len(penetrance_points),
-            "sources": sorted(list(variant_group["source_pmids"]))
+            "sources": source_pmids
         }
 
     def create_summary(
@@ -357,6 +378,8 @@ class DataAggregator:
 
             aggregated_penetrance = self.calculate_aggregate_penetrance(variant_group)
 
+            source_pmids = aggregated_penetrance["sources"]
+
             aggregated_variant = {
                 "variant_key": variant_key,
                 "gene_symbol": representative_variant.get("gene_symbol", gene_symbol),
@@ -365,8 +388,8 @@ class DataAggregator:
                 "genomic_position": representative_variant.get("genomic_position"),
                 "clinical_significance": representative_variant.get("clinical_significance"),
                 "aggregated_penetrance": aggregated_penetrance,
-                "source_pmids": sorted(list(variant_group["source_pmids"])),
-                "number_of_papers": len(variant_group["source_pmids"])
+                "source_pmids": source_pmids,
+                "number_of_papers": len(source_pmids)
             }
 
             aggregated_variants.append(aggregated_variant)
