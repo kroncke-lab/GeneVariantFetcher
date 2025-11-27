@@ -1,0 +1,50 @@
+{
+  "paper_metadata": {
+    "pmid": "38165928",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant associated with amyloidosis in black-footed cats."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.68G>A",
+      "protein_notation": "p.Gly23Ser",
+      "genomic_position": "ChrD3 52,756,499",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 15,
+        "demographics": "not specified",
+        "phenotype": "amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 15,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The missense deleterious mutation found at the first position of codon 23 in the second exon of the TTR gene is linked to abnormal deposits of TTR protein in various tissues and organs throughout the body.",
+        "assays": []
+      },
+      "segregation_data": "The mutation is associated with amyloidosis in the population of black-footed cats.",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The TTR gene is linked to amyloidosis, a major cause of mortality in captivity for black-footed cats.",
+      "key_quotes": [
+        "We found the frequent presence of missense mutations, including 67 alleles of 29 genes.",
+        "It is worth noting that BFCs carried a missense deleterious mutation (Gly to Ser) in a gene previously linked to amyloidosis (TTR)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the relevant variant information was clearly stated in the text."
+  }
+}

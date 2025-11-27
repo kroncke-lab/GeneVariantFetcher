@@ -1,0 +1,82 @@
+{
+  "paper_metadata": {
+    "pmid": "23936059",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.3140G>T",
+      "protein_notation": "p.Arg1047Leu",
+      "genomic_position": null,
+      "clinical_significance": "Uncertain pathogenic, known mutation",
+      "patients": {
+        "count": 6,
+        "demographics": "Adult women with Turner syndrome",
+        "phenotype": "Long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is often reported as a polymorphism without detectable differences in channel function when compared to the wild type.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Uncertain",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation has been speculated to be associated with particular susceptibility towards hypokalemia or certain drugs.",
+      "key_quotes": [
+        "KCNH2 c.3140G>T heterozygous p.Arg1047Leu. Uncertain pathogenic, known mutation."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2738C>T",
+      "protein_notation": "p.Ala913Val",
+      "genomic_position": null,
+      "clinical_significance": "Definitely pathogenic",
+      "patients": {
+        "count": 6,
+        "demographics": "Adult women with Turner syndrome",
+        "phenotype": "Long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation has been reported to lead to the Romano-Ward syndrome.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "KCNH2 c.2738C>T heterozygous p.Ala913Val. Definitely pathogenic."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted successfully."
+  }
+}

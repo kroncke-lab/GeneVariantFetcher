@@ -1,0 +1,71 @@
+{
+  "paper_metadata": {
+    "pmid": "34585077",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant p.Glu109Gln, including penetrance data from two affected individuals."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.325G>C",
+      "protein_notation": "p.Glu109Gln",
+      "genomic_position": "18q12.1",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Two female patients, ages 66 and 67",
+        "phenotype": "One with polyneuropathy and the other with cardiac involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": 66,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Polyneuropathy with numbness and weakness in limbs.",
+          "evidence_sentence": "In this patient in whom there was a suspicion of familial amyloid polyneuropathy (FAP), a pathologic heterozygous c.325G>C mutation in the TTR gene was detected."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": 67,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac involvement with dyspnea and sensorimotor axonal polyneuropathy.",
+          "evidence_sentence": "Her genetic analysis revealed a heterozygous p.Glu109Gln mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to a loss-of-function protein that forms insoluble amyloid fibrils.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family as both patients are affected.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, Case Report section",
+      "additional_notes": "Both patients are symptomatic but can walk without assistance, indicating Stage I TTR-FAP.",
+      "key_quotes": [
+        "The same mutation may rarely cause different clinical pictures.",
+        "One of our patients had polyneuropathy as the main clinical manifestation, while the other additionally had neuropathy; nevertheless, cardiac involvement was the predominant finding."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

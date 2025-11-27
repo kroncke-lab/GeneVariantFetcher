@@ -1,0 +1,80 @@
+{
+  "paper_metadata": {
+    "pmid": "31312661",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1117A>G",
+      "protein_notation": "p.Asn373Ser",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": 3,
+        "demographics": "3 patients, sex not specified",
+        "phenotype": "gastric cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 0,
+        "unaffected_count": 3,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no disease manifestation reported",
+          "evidence_sentence": "Two germline mutations in BRCA2 (A2466V and N372H) were found."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no disease manifestation reported",
+          "evidence_sentence": "Two germline mutations in BRCA2 (A2466V and N372H) were found."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no disease manifestation reported",
+          "evidence_sentence": "Two germline mutations in BRCA2 (A2466V and N372H) were found."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutations A2466V and N372H are considered benign.",
+        "assays": []
+      },
+      "segregation_data": "The mutations do not segregate with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutations were reported as benign in familial breast cancer.",
+      "key_quotes": [
+        "In ClinVar, A2466V and N372H are considered as benign mutations in familial breast cancer."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data is based on the provided text and variants were confirmed to be in BRCA2."
+  }
+}

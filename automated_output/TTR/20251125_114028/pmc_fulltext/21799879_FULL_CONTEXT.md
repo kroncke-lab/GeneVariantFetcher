@@ -1,0 +1,181 @@
+# MAIN TEXT
+
+## A Dual Role for KRT81: A miR-SNP Associated with Recurrence in Non-Small-Cell Lung Cancer and a Novel Marker of Squamous Cell Lung Carcinoma
+
+### Abstract
+
+MicroRNAs (miRNAs) play an important role in carcinogenesis through the regulation of their target genes. miRNA-related single nucleotide polymorphisms (miR-SNPs) can affect miRNA biogenesis and target sites and can alter microRNA expression and functions. We examined 11 miR-SNPs, including 5 in microRNA genes, 3 in microRNA binding sites and 3 in microRNA-processing machinery components, and evaluated time to recurrence (TTR) according to miR-SNP genotypes in 175 surgically resected non-small-cell lung cancer (NSCLC) patients. Significant differences in TTR were found according to KRT81 rs3660 (median TTR: 20.3 months for the CC genotype versus 86.8 months for the CG or GG genotype; P = 0.003) and XPO5 rs11077 (median TTR: 24.7 months for the AA genotype versus 73.1 months for the AC or CC genotypes; P = 0.029). Moreover, when patients were divided according to stage, these differences were maintained for stage I patients (P = 0.002 for KRT81 rs3660; P<0.001 for XPO5 rs11077). When patients were divided into sub-groups according to histology, the effect of the KRT81 rs3660 genotype on TTR was significant in patients with squamous cell carcinoma (P = 0.004) but not in those with adenocarcinoma. In the multivariate analyses, the KRT81 rs3660 CC genotype (OR = 1.8; P = 0.023) and the XPO5 rs11077 AA genotype (OR = 1.77; P = 0.026) emerged as independent variables influencing TTR. Immunohistochemical analyses in 80 lung specimens showed that 95% of squamous cell carcinomas were positive for KRT81, compared to only 19% of adenocarcinomas (P<0.0001). In conclusion, miR-SNPs are a novel class of SNPs that can add useful prognostic information on the clinical outcome of resected NSCLC patients and may be a potential key tool for selecting high-risk stage I patients. Moreover, KRT81 has emerged as a promising immunohistochemical marker for the identification of squamous cell lung carcinoma.
+
+### Introduction
+
+Lung cancer is the first cause of cancer death worldwide[1]. About 85% of patients have non-small-cell lung cancer (NSCLC) and less than 30% are diagnosed with early-stage disease. The main treatment for early-stage disease is surgery, but even when a complete surgical resection is possible, 20–75% of NSCLC patients will relapse [2]. Given this high rate of relapse, biomarkers to predict the risk of disease progression are needed, especially in stage I, where adjuvant chemotherapy is not routinely administered but where it may be effective in certain subgroups of patients [3].
+
+MicroRNAs (miRNAs) are short non-coding RNAs that regulate post-transcriptional gene expression by binding primarily to the 3′untranslated region (UTR) of their target mRNA and repressing its translation. Several proteins are active in the biogenesis of miRNAs. Briefly, miRNAs are translated by an RNA polymerase II to long primary transcripts (pri-miRNA) and processed in the nucleus by the RNase III Drosha in pre-miRNAs (70–100 nucleotides); the pre-miRNA is transported to the cytoplasm by the XPO5, where the RNase III Dicer generates a duplex molecule of 21-25 nucleotides in length. Through the association with the complex RNA-induced silencing complex (RISC), one of these 2 chains (the mature miRNA) will guide RISC to the target mRNA [4], [5]. miRNAs play important roles in the regulation of such crucial processes as development, cell proliferation, differentiation and apoptosis. Growing evidence shows that miRNAs are aberrantly expressed in human cancers, including NSCLC [6], [7], [8], [9], [10], [11], [12], [13], and they have been linked with the etiology and prognosis of many tumors [14]. Depending on their target genes, miRNAs can act either as oncogenes or tumor suppressor genes [15].
+
+Various mechanisms can explain the deregulation of miRNAs observed in cancer, including genomic changes (deletions, amplifications, translocations), epigenetic changes, mutations/polymorphisms, transcriptional deregulation, and alterations in the miRNA biogenesis machinery [14], [16]. Single nucleotide polymorphisms (SNPs) that can affect miRNA functions, known as miR-SNPs, are found in miRNA genes, in miRNA binding sites (in 3′ UTR of the target gene) or in the components of the miRNA biogenesis machinery [17]. miR-SNPs can affect miRNA expression levels in different ways, resulting in loss or gain of miRNA function [18]. SNPs in miRNA genes can affect the pri-miRNA, pre-miRNA or mature miRNA sequence and can potentially modulate miRNA processing, alter mature miRNA levels or change miRNA-mRNA interactions [19], [20]; SNPs affecting the expression of proteins involved in miRNA biogenesis may alter the miRNAome in the cell [21]; and finally, SNPs in miRNA target sites, which are more frequent and more specific in the human genome, can disrupt or alter the miRNA-mediated repression of a target gene [22].
+
+This novel class of SNPs opens up a new area of research in cancer biology and clinical oncology, especially in the study of disease progression, patient prognosis and treatment efficacy. Recently, various studies have shown that SNPs in miRNA networks can affect both the risk of developing various cancers [20] and also the prognosis of many tumors [23], [24], [25], [26].
+
+In the present study, we have evaluated 11 SNPs (five in miRNA genes, three in miRNA binding sites, and three in miRNA-processing genes) in 175 surgically resected NSCLC patients and correlated our findings with time to recurrence (TTR) and overall survival (OS). In addition, in order to examine potential differences in expression according to histology, we examined the immunostaining pattern of KRT81 in 77 lung cancer specimens and three normal lung controls.
+
+### Materials and Methods
+
+Between March 1996 and December 2009, 175 NSCLC patients underwent complete surgical resection in our institution. All patients had pathologically confirmed stage I-III disease. Approval for the study was obtained from the Institutional Review Board of the Hospital Clinic, Barcelona, Spain. Written informed consent was obtained from each participant in accordance with the Declaration of Helsinki.
+
+We selected 11 SNPs in genes involved in miRNA regulatory pathways: SNPs in miRNA genes; SNPs in miRNA binding sites; and SNPs in miRNA-processing genes. Ten of the SNPs were selected according to the following requirements: firstly, a determined allele frequency for the European population and availability in the National Center for Biotechnology Information (NCBI) SNP database; secondly, a minor genotype frequency for the European population ≥ 0.05; and finally, either a known association with a differential susceptibility to cancer development or a differential expression in solid tumors. For the SNPs in miRNA binding sites, we selected three SNPs with an aberrant allelic frequency in human tumors. In addition, one SNP – in MIR194-2 – was specifically chosen because it had been shown to be differentially expressed in lung cancer [11]. Table 1 summarizes the rationale for the SNP selection.
+
+*One of the selection criteria was a described association with a differential susceptibility to cancer development. In MIR194-2, the association was with the miRNA containing the SNP, while in all other cases, the association was with the miR-SNP itself.
+
+DNA was obtained from paraffin-embedded tumor tissue using the commercial DNeasy tissue kit (Qiagen, Valencia, CA) following the manufacturer's protocol. To measure DNA quantity, a NanoDrop ND-1000 spectrophotometer (Thermo Fisher Scientific Inc., Waltham, MA) was used. Primers and probes were commercially available (TaqMan SNP Genotyping Assays, Applied Biosystems, Foster City, CA). SNP analysis was performed by allelic discrimination in an ABI PRISM 7500 Sequence detection system (Applied Biosystems).
+
+Immunohistochemistry was performed on formalin-fixed, paraffin-embedded tissue sections of 77 lung carcinomas and 3 normal lung controls from the Pathology Service of the Hospital Clinic of Barcelona after review by a thoracic pathologist . Five-µm-thick transverse sections of formalin-fixed, paraffin-embedded tissue were serially cut and mounted onto Dako Silanized Slides (S·3003; Dako, Glostrup, Denmark). For antigen retrieval, the sections were manually immersed in Target Retrieval solution, high pH (Dako) and heated in a water bath at 95–99°C for 20 min. Endogenous peroxidase activity was quenched by immersion in Dako Real Peroxidase-Blocking solution for 10 min. The tissue sections were incubated with primary antibody against KRT81 (dilution 1∶50; clone sc-100929; Santa Cruz Biotechnology, Santa Cruz, CA) for 30 min at room temperature. Immunoperoxidase staining was performed using Advance system/HRP (Dako) and Liquid DAB+ (Dako). Finally, sections were stained with hematoxylin. All slides were blindly scored by the same two pathologists using a 3-point system. The scoring system was as follows: 0, <5% of tumor cells staining; 1, 5% to 50% of tumor cells staining; 2, >50% of tumor cells staining. Uninterpretable results were eliminated from further consideration. Cases scored 1 or 2 were considered positive, and cases scored 0 were considered negative. Only cytoplasmic positivity was evaluated. Tissue sections from normal lung were used as positive controls while negative controls were obtained by incubating the sections without the primary antibody.
+
+The primary objective of the study was TTR. The secondary objective was OS. All statistical analyses were performed using PAS W Statistics 18 (SPSS Inc., Chicago, IL). TTR was calculated from the time of surgical treatment to the date of relapse or last follow-up. OS was calculated from the time of surgical treatment to the date of death or last follow-up. After surgery, patients without tumor progression were followed every 3 months for 2 years, then every 6 months until 5 years after surgery, and then annually. The log-rank test and Kaplan-Meier plots were used to evaluate the association of TTR and OS with each of the SNPs and clinical variables. A Cox multivariate analysis (enter method) was used to calculate the independent odds ratios for TTR and OS. In the immunohistochemical analyses, frequencies were compared by the Fisher's exact test. The level of significance was set at ≤0.05.
+
+### Study population and Ethics Statement
+
+Between March 1996 and December 2009, 175 NSCLC patients underwent complete surgical resection in our institution. All patients had pathologically confirmed stage I-III disease. Approval for the study was obtained from the Institutional Review Board of the Hospital Clinic, Barcelona, Spain. Written informed consent was obtained from each participant in accordance with the Declaration of Helsinki.
+
+### Selection of the miR-SNPs
+
+We selected 11 SNPs in genes involved in miRNA regulatory pathways: SNPs in miRNA genes; SNPs in miRNA binding sites; and SNPs in miRNA-processing genes. Ten of the SNPs were selected according to the following requirements: firstly, a determined allele frequency for the European population and availability in the National Center for Biotechnology Information (NCBI) SNP database; secondly, a minor genotype frequency for the European population ≥ 0.05; and finally, either a known association with a differential susceptibility to cancer development or a differential expression in solid tumors. For the SNPs in miRNA binding sites, we selected three SNPs with an aberrant allelic frequency in human tumors. In addition, one SNP – in MIR194-2 – was specifically chosen because it had been shown to be differentially expressed in lung cancer [11]. Table 1 summarizes the rationale for the SNP selection.
+
+*One of the selection criteria was a described association with a differential susceptibility to cancer development. In MIR194-2, the association was with the miRNA containing the SNP, while in all other cases, the association was with the miR-SNP itself.
+
+### DNA isolation, primers, probes and SNP analysis
+
+DNA was obtained from paraffin-embedded tumor tissue using the commercial DNeasy tissue kit (Qiagen, Valencia, CA) following the manufacturer's protocol. To measure DNA quantity, a NanoDrop ND-1000 spectrophotometer (Thermo Fisher Scientific Inc., Waltham, MA) was used. Primers and probes were commercially available (TaqMan SNP Genotyping Assays, Applied Biosystems, Foster City, CA). SNP analysis was performed by allelic discrimination in an ABI PRISM 7500 Sequence detection system (Applied Biosystems).
+
+### Immunohistochemistry
+
+Immunohistochemistry was performed on formalin-fixed, paraffin-embedded tissue sections of 77 lung carcinomas and 3 normal lung controls from the Pathology Service of the Hospital Clinic of Barcelona after review by a thoracic pathologist . Five-µm-thick transverse sections of formalin-fixed, paraffin-embedded tissue were serially cut and mounted onto Dako Silanized Slides (S·3003; Dako, Glostrup, Denmark). For antigen retrieval, the sections were manually immersed in Target Retrieval solution, high pH (Dako) and heated in a water bath at 95–99°C for 20 min. Endogenous peroxidase activity was quenched by immersion in Dako Real Peroxidase-Blocking solution for 10 min. The tissue sections were incubated with primary antibody against KRT81 (dilution 1∶50; clone sc-100929; Santa Cruz Biotechnology, Santa Cruz, CA) for 30 min at room temperature. Immunoperoxidase staining was performed using Advance system/HRP (Dako) and Liquid DAB+ (Dako). Finally, sections were stained with hematoxylin. All slides were blindly scored by the same two pathologists using a 3-point system. The scoring system was as follows: 0, <5% of tumor cells staining; 1, 5% to 50% of tumor cells staining; 2, >50% of tumor cells staining. Uninterpretable results were eliminated from further consideration. Cases scored 1 or 2 were considered positive, and cases scored 0 were considered negative. Only cytoplasmic positivity was evaluated. Tissue sections from normal lung were used as positive controls while negative controls were obtained by incubating the sections without the primary antibody.
+
+### Statistical analysis
+
+The primary objective of the study was TTR. The secondary objective was OS. All statistical analyses were performed using PAS W Statistics 18 (SPSS Inc., Chicago, IL). TTR was calculated from the time of surgical treatment to the date of relapse or last follow-up. OS was calculated from the time of surgical treatment to the date of death or last follow-up. After surgery, patients without tumor progression were followed every 3 months for 2 years, then every 6 months until 5 years after surgery, and then annually. The log-rank test and Kaplan-Meier plots were used to evaluate the association of TTR and OS with each of the SNPs and clinical variables. A Cox multivariate analysis (enter method) was used to calculate the independent odds ratios for TTR and OS. In the immunohistochemical analyses, frequencies were compared by the Fisher's exact test. The level of significance was set at ≤0.05.
+
+### Results
+
+The analysis included 175 patients, 154 (88%) of whom were male. Median age was 65 years (range, 35–85). Twenty-four (13.7%) patients had Eastern Cooperative Oncology Group (ECOG) performance status (PS) 0 and 149 (85.2%) patients had PS 1. Ninety-eight (56%) patients had stage I disease. Eighty (45.7%) patients had adenocarcinoma and 84 (48%) had squamous cell carcinoma. One hundred and fifty-eight (90.3%) patients were active or former smokers. One hundred and thirty-two (75.4%) patients underwent a lobectomy or bilobectomy. Nine (5.1%) patients had received preoperative chemotherapy or chemoradiotherapy for resectable stage IIIA disease. Sixteen patients (9.1%) received adjuvant chemotherapy (13 for stage II or III disease and 3 for stage I disease with T>4 cm). Mean follow-up was 35 months (range, 2-160). After a follow-up of 160 months, disease recurrence had occurred in 75 (42.9%) patients (Table 2).
+
+*chemotherapy or chemoradiotherapy; **chemotherapy.
+
+Overall median TTR was 39.03 months (95% CI, 3.9–74.1), and median OS was 90.6 months (95% CI, 47.4–133.7). In univariate analyses including only clinical characteristics, stage was associated with TTR (P = 0.008) and age was associated with OS (P = 0.014). A non-significant trend towards an association between sex and TTR was also observed (P = 0.081). Table 3 shows the genotypic frequencies for all 11 miR-SNPs analyzed, both in the present study and as reported in NCBI SNP database (dbSNP) for the European population. Significant differences in TTR were found according to KRT81 rs3660 genotype (P = 0.008; Figure S1). Given the similar distribution in TTR for patients with the CG and GG genotypes, these two groups were combined for further analyses. Median TTR for 45 patients (25.9%) with the CC genotype was 20.3 months versus 86.8 months for patients with the CG or GG genotype (P = 0.003; Figure 1A). Among 98 patients with stage I disease, median TTR was 23.9 months for 25 patients (25.5%) with the CC genotype versus 100.2 months for patients with the CG or GG genotype (P = 0.002; Figure 1B). We also observed a non-significant trend towards a differential TTR according to the XPO5 rs11077 genotype (P = 0.077; Figure S2). Given the similar distribution in TTR for patients with the AC and CC genotypes, these two groups were combined for further analyses. A significantly shorter TTR was observed in patients with the XPO5 rs11077 AA genotype; median TTR was 24.7 months for patients with the AA genotype, versus 73.1 months for those with the AC or CC genotype (P = 0.029; Figure 2A). Among 97 patients with stage I disease, median TTR was 24.13 months for 33 patients (34%) with the AA genotype but was not reached for those with the AC or CC genotype (P<0.001; Figure 2B). No other differences in TTR were observed according to any of the other genotypes analyzed. No significant differences in TTR were observed in stage II-III patients according to any of the SNPs analyzed.
+
+1A: in all patients analyzed. IB: patients with stage I disease.
+
+1A: in all patients analyzed. IB: in patients with stage I disease.
+
+EP: frequencies (%) for European Population in NCBI dbSNP.
+
+In some cases the genotype could not be determined; “n” indicates the number of patients genotyped in each case.
+
+*In these two cases we discontinued the analysis since all patients analyzed had the same genotype.
+
+Median OS was not reached for 49 patients with the MIR423 rs6505162 AA genotype, compared to 61.6 months for 42 patients with the CC genotype and 90.5 months for those with the AC genotype (P = 0.043; Figure S3). No other differences in OS were observed according to any of the other genotypes analyzed.
+
+All variables with a univariate TTR log-rank P≤0.1 (sex, stage, type of surgery, KRT81 rs3660 genotype and XPO5 rs11077 genotype) were included in the Cox multivariate analysis for TTR. Male sex (odds ratio [OR], 3.73; 95% CI, 1.4–9.9; P = 0.008), stage I disease (OR, 0.34; 95% CI, 0.18–0.65; P = 0.001), KRT81 rs3660 CC genotype (OR,1.8; 95% CI, 1.08–2.99; P = 0.023) and XPO5 rs11077 AA genotype (OR, 1.77; 95% CI,1.07–2.91; P = 0.026) emerged as independent variables for TTR (Table 4). All variables with a univariate OS log-rank P≤0.1 (sex, age and MIR423 rs6505162 genotype) and disease stage were included in the Cox multivariate analysis for OS. Age ≤65 (OR, 0.48; 95% CI, 0.25–0.95; P = 0.036) and stage I disease (OR = 0.31, 95% CI 0.14–0.67; P = 0.003) were independent variables for OS.
+
+Since significant differences in TTR were found according to KRT81 rs3660 genotype, we further examined the effect of this genotype on the sub-groups of patients with adenocarcinoma and squamous cell carcinoma. Among the 83 patients with squamous cell carcinoma, TTR was 19.3 months for 24 patients with the CC genotype and 121 months for 59 patients with the CG or GG genotype (P = 0.004; Figure 3A). In contrast, no significant difference was observed according to the KRT81 rs3660 genotype among the 80 patients with adenocarcinoma (P = 0.375; Figure 3B). We then explored the possibility of a similar differential effect for the other ten genotypes but found no differences in TTR between squamous cell carcinoma and adenocarcinoma according to genotype .
+
+A: TTR according to KRT81 rs3660 genotype in 83 of 84 squamous cell carcinoma patients; one patient could not be genotyped. B: TTR according to KRT81 rs3660 genotype in 80 adenocarcinoma patients. C: Squamous cell carcinoma case showing diffuse cytoplasmic KRT81 staining. D: Negative control. E: Negative staining for KRT81 in an adenocarcinoma case. F: Immunohistochemistry in a normal lung tissue section. KRT81 cytoplasmic positivity in the bronchiolar epithelium was used as positive control.
+
+In order to further explore this marked prognostic value of the KRT81 rs3660 genotype in squamous cell carcinoma, we analyzed KRT81 expression by immunohistochemistry in 42 squamous cell carcinoma, 33 adenocarcinoma and 2 adenosquamous carcinoma samples and in three normal lung tissue samples. Table S1 shows the results of each of the 80 samples. Notable differences were observed in the immunostaining pattern according to histological sub-type: 38 of 40 squamous cell carcinomas (95%) were positive, compared to 6 of 32 adenocarcinomas (19%) (Fisher's exact test P<0.0001; Table 5). Moreover, 3 of the 6 positive adenocarcinomas showed only a focal positivity (score 1). Sensitivity, specificity, positive predictive value, negative predictive value and accuracy were 0.95, 0.81, 0.86, 0.93 and 0.89, respectively. Figure 3C-F shows examples of the immunohistochemical evaluation in squamous cell carcinoma, adenocarcinoma and controls.
+
+SCC: squamous cell carcinoma; ADC: adenocarcinoma.
+
+*Immunostaining was not interpretable in 2 SCC and 1 ADC.
+
+### Patient Characteristics
+
+The analysis included 175 patients, 154 (88%) of whom were male. Median age was 65 years (range, 35–85). Twenty-four (13.7%) patients had Eastern Cooperative Oncology Group (ECOG) performance status (PS) 0 and 149 (85.2%) patients had PS 1. Ninety-eight (56%) patients had stage I disease. Eighty (45.7%) patients had adenocarcinoma and 84 (48%) had squamous cell carcinoma. One hundred and fifty-eight (90.3%) patients were active or former smokers. One hundred and thirty-two (75.4%) patients underwent a lobectomy or bilobectomy. Nine (5.1%) patients had received preoperative chemotherapy or chemoradiotherapy for resectable stage IIIA disease. Sixteen patients (9.1%) received adjuvant chemotherapy (13 for stage II or III disease and 3 for stage I disease with T>4 cm). Mean follow-up was 35 months (range, 2-160). After a follow-up of 160 months, disease recurrence had occurred in 75 (42.9%) patients (Table 2).
+
+*chemotherapy or chemoradiotherapy; **chemotherapy.
+
+### TTR, OS and miR-SNPs
+
+Overall median TTR was 39.03 months (95% CI, 3.9–74.1), and median OS was 90.6 months (95% CI, 47.4–133.7). In univariate analyses including only clinical characteristics, stage was associated with TTR (P = 0.008) and age was associated with OS (P = 0.014). A non-significant trend towards an association between sex and TTR was also observed (P = 0.081). Table 3 shows the genotypic frequencies for all 11 miR-SNPs analyzed, both in the present study and as reported in NCBI SNP database (dbSNP) for the European population. Significant differences in TTR were found according to KRT81 rs3660 genotype (P = 0.008; Figure S1). Given the similar distribution in TTR for patients with the CG and GG genotypes, these two groups were combined for further analyses. Median TTR for 45 patients (25.9%) with the CC genotype was 20.3 months versus 86.8 months for patients with the CG or GG genotype (P = 0.003; Figure 1A). Among 98 patients with stage I disease, median TTR was 23.9 months for 25 patients (25.5%) with the CC genotype versus 100.2 months for patients with the CG or GG genotype (P = 0.002; Figure 1B). We also observed a non-significant trend towards a differential TTR according to the XPO5 rs11077 genotype (P = 0.077; Figure S2). Given the similar distribution in TTR for patients with the AC and CC genotypes, these two groups were combined for further analyses. A significantly shorter TTR was observed in patients with the XPO5 rs11077 AA genotype; median TTR was 24.7 months for patients with the AA genotype, versus 73.1 months for those with the AC or CC genotype (P = 0.029; Figure 2A). Among 97 patients with stage I disease, median TTR was 24.13 months for 33 patients (34%) with the AA genotype but was not reached for those with the AC or CC genotype (P<0.001; Figure 2B). No other differences in TTR were observed according to any of the other genotypes analyzed. No significant differences in TTR were observed in stage II-III patients according to any of the SNPs analyzed.
+
+1A: in all patients analyzed. IB: patients with stage I disease.
+
+1A: in all patients analyzed. IB: in patients with stage I disease.
+
+EP: frequencies (%) for European Population in NCBI dbSNP.
+
+In some cases the genotype could not be determined; “n” indicates the number of patients genotyped in each case.
+
+*In these two cases we discontinued the analysis since all patients analyzed had the same genotype.
+
+Median OS was not reached for 49 patients with the MIR423 rs6505162 AA genotype, compared to 61.6 months for 42 patients with the CC genotype and 90.5 months for those with the AC genotype (P = 0.043; Figure S3). No other differences in OS were observed according to any of the other genotypes analyzed.
+
+### Multivariate analyses
+
+All variables with a univariate TTR log-rank P≤0.1 (sex, stage, type of surgery, KRT81 rs3660 genotype and XPO5 rs11077 genotype) were included in the Cox multivariate analysis for TTR. Male sex (odds ratio [OR], 3.73; 95% CI, 1.4–9.9; P = 0.008), stage I disease (OR, 0.34; 95% CI, 0.18–0.65; P = 0.001), KRT81 rs3660 CC genotype (OR,1.8; 95% CI, 1.08–2.99; P = 0.023) and XPO5 rs11077 AA genotype (OR, 1.77; 95% CI,1.07–2.91; P = 0.026) emerged as independent variables for TTR (Table 4). All variables with a univariate OS log-rank P≤0.1 (sex, age and MIR423 rs6505162 genotype) and disease stage were included in the Cox multivariate analysis for OS. Age ≤65 (OR, 0.48; 95% CI, 0.25–0.95; P = 0.036) and stage I disease (OR = 0.31, 95% CI 0.14–0.67; P = 0.003) were independent variables for OS.
+
+### Further analyses of KRT81
+
+Since significant differences in TTR were found according to KRT81 rs3660 genotype, we further examined the effect of this genotype on the sub-groups of patients with adenocarcinoma and squamous cell carcinoma. Among the 83 patients with squamous cell carcinoma, TTR was 19.3 months for 24 patients with the CC genotype and 121 months for 59 patients with the CG or GG genotype (P = 0.004; Figure 3A). In contrast, no significant difference was observed according to the KRT81 rs3660 genotype among the 80 patients with adenocarcinoma (P = 0.375; Figure 3B). We then explored the possibility of a similar differential effect for the other ten genotypes but found no differences in TTR between squamous cell carcinoma and adenocarcinoma according to genotype .
+
+A: TTR according to KRT81 rs3660 genotype in 83 of 84 squamous cell carcinoma patients; one patient could not be genotyped. B: TTR according to KRT81 rs3660 genotype in 80 adenocarcinoma patients. C: Squamous cell carcinoma case showing diffuse cytoplasmic KRT81 staining. D: Negative control. E: Negative staining for KRT81 in an adenocarcinoma case. F: Immunohistochemistry in a normal lung tissue section. KRT81 cytoplasmic positivity in the bronchiolar epithelium was used as positive control.
+
+In order to further explore this marked prognostic value of the KRT81 rs3660 genotype in squamous cell carcinoma, we analyzed KRT81 expression by immunohistochemistry in 42 squamous cell carcinoma, 33 adenocarcinoma and 2 adenosquamous carcinoma samples and in three normal lung tissue samples. Table S1 shows the results of each of the 80 samples. Notable differences were observed in the immunostaining pattern according to histological sub-type: 38 of 40 squamous cell carcinomas (95%) were positive, compared to 6 of 32 adenocarcinomas (19%) (Fisher's exact test P<0.0001; Table 5). Moreover, 3 of the 6 positive adenocarcinomas showed only a focal positivity (score 1). Sensitivity, specificity, positive predictive value, negative predictive value and accuracy were 0.95, 0.81, 0.86, 0.93 and 0.89, respectively. Figure 3C-F shows examples of the immunohistochemical evaluation in squamous cell carcinoma, adenocarcinoma and controls.
+
+SCC: squamous cell carcinoma; ADC: adenocarcinoma.
+
+*Immunostaining was not interpretable in 2 SCC and 1 ADC.
+
+### Discussion
+
+In the present study, we have analyzed 11 miR-SNPs in a series of 175 resected NSCLC patients and correlated our results with TTR and OS. We found that patients with the KRT81 rs3660 CC genotype had a shorter TTR than those with the CG or GG genotype and that patients with the XPO5 rs11077 AA genotype had a shorter TTR than those with the AC or CC genotype. These results also held true in the subgroup of patients with stage I disease. Furthermore, the multivariate analyses showed that the KRT81 rs3660 CC genotype and the XPO5 rs11077 AA genotype were independent prognostic variables for TTR. The univariate analysis for OS showed an association between survival and the MIR423 rs6505162 genotype; however, this was not an independent variable in the multivariate analysis. Furthermore, the prognostic value of the KRT81 rs3660 genotype was more marked in squamous cell carcinoma, indicating that KRT81 may be a novel immunohistochemical marker for squamous cell carcinoma of the lung.
+
+Several miR-SNPs are known to affect lung cancer susceptibility and survival. A SNP in the pre-miR-196a2 rs11614913 was first associated with survival in NSCLC patients [23] and was later linked to a higher risk of developing lung cancer in Chinese [27] and Korean [28] populations. A SNP in the pre-miRNA flanking region miR-30c-1 rs928508 has been related to survival in NSCLC, with a greater effect in stage I and II disease[29]. A miRNA target site SNP in the KRAS gene was associated with a higher risk of developing NSCLC among moderate smokers [22]. Recently, a SNP haplotype in the miRNA biogenesis gene RNASEN was associated with shorter survival in lung cancer [30], and a SNP in another biogenesis-related compound, AGO1 rs636832, was linked to a decreased risk of lung cancer [31]. To date, however, no relation between miR-SNPs and lung cancer recurrence after surgery has been reported.
+
+XPO5 is the RAN-GTP-dependent protein that transports the pre-miRNA from the nucleus to the cytoplasm. Recently, no relation was found between XPO5 rs11077 and lung cancer risk in a Korean population[31]. In contrast, in the present study, we have observed a positive association between this SNP and TTR in a European population. We speculate that a SNP in XPO5 could alter the normal function of the protein to extrude the pre-miRNAs from the nucleus, thus altering the regulation of multiple miRNAs in the cell.
+
+Stage II and III NSCLC patients are routinely treated with adjuvant chemotherapy after surgical resection, which has improved survival in several randomized clinical trials [3], [32], [33], [34]. However, there are many high-risk stage I patients that could also benefit from this treatment, and it has been suggested that patients with tumors ≥4 cm can derive survival benefit from adjuvant chemotherapy [35]. Biomarkers to accurately identify stage I patients with a high risk of recurrence would be a useful tool in the management of these patients. Since the effect on recurrence observed with the genetic variants in KRT81 and XPO5 was maintained in the subgroup of patients with stage I disease, we suggest that these SNPs are ideal candidates for further investigation with a view to individualizing treatment in these patients.
+
+Importantly, tumor recurrence was influenced by the SNP located in the 3′UTR of KRT81, the binding site of several miRNAs: miR-17, miR-93, miR-20b, miR-519d, miR-520g, miR-520h, miR-519c-3p, miR-519b-3p, miR-519a and miR-765. Some of these miRNAs have previously been shown to be altered in NSCLC [11], and the presence of the SNP affects the seed-sequence binding site of these miRNAs, as shown in Figure S4.The allelic frequency of this SNP is different in human cancers than in the normal population [36]. KRT81 encodes for KRT81 protein, also known as Hb-1, a type of hair keratin that is physiologically expressed in hair shafts. Keratins are proteins expressed in all types of epithelial cells [37], with different expression patterns among different carcinomas [38], and they are extensively used as diagnostic markers. They constitute the intermediate filaments of epithelial cells, involved in the maintenance of cell integrity and resistance to mechanical and non-mechanical stressors [39]. Keratins are not only related to the regulation of cellular functions like motility and growth but also to protein synthesis, apico-basal polarization and intracellular signaling, and they have been described as prognostic markers in epithelial tumors [40]. Breast carcinomas ectopically express KRT81[41], and in the present study we have observed KRT81 expression in lung tumor tissue by immunohistochemistry. To date, KRT81 has not been validated as a prognostic marker, and the present study is the first to link a KRT81 variant to tumor recurrence.
+
+In addition, we have found that KRT81 may well be a new immunohistochemical marker of squamous cell carcinoma. KRT81 showed a clear positive staining in squamous cell carcinomas (95% positive), whereas 81% of adenocarcinomas were negative. Interestingly, in the sub-group analyses of TTR according to histological sub-type, the effect of the KRT81 rs3660 genotype on recurrence was more pronounced in patients with squamous cell carcinoma. The fact that several new targeted agents are activespecifically in adenocarcinoma and others should not be used in squamous cell carcinoma because of potential complications underscores the need to further classify NSCLC as squamous or non-squamous carcinoma. In this setting, KRT81 could be a useful novel marker for the differential diagnosis of NSCLC; as such, it could be added to the panel of immunohistochemical markers currently used, such as TTF1 and P63 [42], [43].
+
+The growing evidence of links between miRNAs and cancer makes the analysis of SNPs in miRNA-related genes a potential key technique for selecting patients for risk stratification. Despite certain limitations – including the lack of independent or functional validation and the relatively limited number of SNPs – the present study is the first to observe miR-SNP-related differential patterns of tumor recurrence in surgically treated NSCLC patients. Our findings indicate that SNPs in KRT81 and XPO5 could prove to be useful biomarkers for individualizing therapy in NSCLC patients and that KRT81 may be a novel immunohistochemical marker of squamous cell carcinoma, providing a new diagnostic tool to be used in therapeutic decision-making.
+
+### Supporting Information
+
+TTR according to KRT81 rs3660 genotype.
+
+(TIF)
+
+Click here for additional data file.
+
+TTR according to XPO5 rs11077 genotype.
+
+(TIF)
+
+Click here for additional data file.
+
+OS according to MIR423 rs6505162 genotype.
+
+(TIF)
+
+Click here for additional data file.
+
+Predicted conserved miRNAs targeting KRT81. SNP rs3660, located in the 3′UTR region of KRT81, affects the binding of these miRNAs.
+
+(PPTX)
+
+Click here for additional data file.
+
+Immunostaining of KRT81 in the 80 cases analyzed.
+
+(DOC)
+
+Click here for additional data file.
+
+
+
+# SUPPLEMENTAL FILE 1: pone.0022509.pdf
+
+# Preparing to download ...
+
+[HHS Vulnerability Disclosure](https://www.hhs.gov/vulnerability-disclosure-policy/index.html)

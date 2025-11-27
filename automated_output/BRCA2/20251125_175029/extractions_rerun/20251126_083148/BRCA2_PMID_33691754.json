@@ -1,0 +1,52 @@
+{
+  "paper_metadata": {
+    "pmid": "33691754",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "loss-of-function",
+      "patients": {
+        "count": 290,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 290,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Identified 290 variants classified as loss-of-function mutations for BRCA2.",
+        "assays": [
+          "base editing screens",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variants were identified through a high-throughput base editing screen.",
+      "key_quotes": [
+        "In total, 121 and 290 variants were identified as loss-of-function mutations for BRCA1 and BRCA2, respectively."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant classification was available for BRCA2."
+  }
+}

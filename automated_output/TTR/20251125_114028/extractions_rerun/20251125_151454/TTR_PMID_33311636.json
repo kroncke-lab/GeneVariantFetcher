@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "33311636",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the cleavage of human plasma transthyretin (hTTR) by subtilisin from Bacillus subtilis, leading to the generation of an amyloidogenic fragment. No specific genetic variants in the TTR gene are mentioned."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention any specific genetic variants in the TTR gene."
+    ],
+    "notes": "The focus of the paper was on the proteolytic cleavage of hTTR and its implications in amyloidosis, rather than on genetic variants."
+  }
+}

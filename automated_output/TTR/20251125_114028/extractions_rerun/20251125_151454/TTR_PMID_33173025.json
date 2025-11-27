@@ -1,0 +1,52 @@
+{
+  "paper_metadata": {
+    "pmid": "33173025",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR gene variant V122I in the context of systemic AL amyloidosis, focusing on its prevalence among different racial/ethnic groups and its implications for disease presentation."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 192,
+        "demographics": "non-Hispanic Black patients",
+        "phenotype": "hereditary ATTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 192,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The V122I variant is associated with hereditary ATTR amyloidosis, particularly prevalent in individuals of African ancestry.",
+        "assays": [
+          "isoelectric focusing",
+          "direct DNA-sequencing"
+        ]
+      },
+      "segregation_data": "The variant is screened in self-reported Black patients due to its high prevalence in this population.",
+      "population_frequency": "The variant is notably prevalent among individuals of African ancestry.",
+      "evidence_level": "Moderate evidence based on population studies and functional assays.",
+      "source_location": "Methods, paragraph 3",
+      "additional_notes": "The presence of the V122I allele was confirmed through mass spectrometric analysis of tissue.",
+      "key_quotes": [
+        "In view of the high prevalence of hereditary ATTR amyloidosis among individuals of African ancestry, self-reported Black patients underwent screening for the transthyretin V122I genetic variant."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper specifically focused on the TTR gene variant V122I."
+  }
+}

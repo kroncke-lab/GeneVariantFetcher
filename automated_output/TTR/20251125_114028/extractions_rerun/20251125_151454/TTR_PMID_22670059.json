@@ -1,0 +1,158 @@
+{
+  "paper_metadata": {
+    "pmid": "22670059",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the TTR gene, including functional data and penetrance information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu82Ala",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 0,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "A\u03b2 binding was significantly inhibited only in L82A, indicating that A\u03b2 binding to TTR is mediated through this bulky hydrophobic leucine.",
+        "assays": [
+          "A\u03b2 binding assays"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Main Text, paragraph 4",
+      "additional_notes": "The L82A variant shows altered binding properties but lacks patient data.",
+      "key_quotes": [
+        "A\u03b2 binding was significantly inhibited only in L82A and L110A.",
+        "Enhancement of binding in L17A is postulated to arise from reduced steric restriction."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu110Ala",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 0,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "A\u03b2 binding was significantly inhibited only in L110A, indicating that A\u03b2 binding to TTR is mediated through this bulky hydrophobic leucine.",
+        "assays": [
+          "A\u03b2 binding assays"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Main Text, paragraph 4",
+      "additional_notes": "The L110A variant shows altered binding properties but lacks patient data.",
+      "key_quotes": [
+        "A\u03b2 binding was significantly inhibited only in L82A and L110A."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu17Ala",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 0,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "A\u03b2 binding to L17A was significantly higher than to wild-type TTR.",
+        "assays": [
+          "A\u03b2 binding assays"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Main Text, paragraph 4",
+      "additional_notes": "The L17A variant shows increased binding properties but lacks patient data.",
+      "key_quotes": [
+        "A\u03b2 binding to L17A was significantly higher than to wild-type TTR."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ser85Ala",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 0,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The S85A mutation caused a reduction in TTR tetramer stability; increased A\u03b2 binding is postulated to be a direct consequence of the reduced quaternary stability.",
+        "assays": [
+          "Tetramer stability assays",
+          "A\u03b2 binding assays"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Main Text, paragraph 4",
+      "additional_notes": "The S85A variant shows altered stability but lacks patient data.",
+      "key_quotes": [
+        "The S85A mutation caused a reduction in TTR tetramer stability."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were functional mutations with no patient data available."
+  }
+}

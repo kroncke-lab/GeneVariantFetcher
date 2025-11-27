@@ -1,0 +1,3043 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+    <head >
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        
+        
+
+        
+        
+  <link rel="stylesheet" href="/static/assets/style-8258669d.css" />
+<script type="module" crossorigin="" src="/static/assets/base_style-f4a99799.js"></script>
+
+  <link rel="stylesheet" href="/static/assets/style-ef962842.css" />
+<link rel="stylesheet" href="/static/assets/style-3ade8b5c.css" />
+<script type="module" crossorigin="" src="/static/assets/article_style-d757a0dd.js"></script>
+
+  
+  
+    <style>
+  
+  
+  @media screen and (min-width: 64em) {
+    div.pmc-wm {
+      background: repeat-y;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='350' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cfilter x='-.02' y='0' width='1.05' height='1' id='c'%3E%3CfeFlood flood-color='%23FFF'/%3E%3CfeComposite in='SourceGraphic'/%3E%3C/filter%3E%3Ctext id='b' font-family='Helvetica' font-size='11pt' style='opacity:1;fill:%23005ea2;stroke:none;text-anchor:middle' x='175' y='14'%3E%3C/text%3E%3Cpath id='a' style='fill:%23005ea2' d='M0 8h350v3H0z'/%3E%3C/defs%3E%3Cuse xlink:href='%23a' transform='rotate(90 10 10)'/%3E%3Cuse xlink:href='%23b' transform='rotate(90 10 10)' filter='url(%23c)'/%3E%3C/svg%3E");
+      padding-left: 3rem;
+    }
+  }
+</style>
+
+  
+
+
+
+        
+            <link rel="apple-touch-icon"
+                  sizes="180x180"
+                  href="/static/img/favicons/apple-touch-icon.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="48x48"
+                  href="/static/img/favicons/favicon-48x48.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="32x32"
+                  href="/static/img/favicons/favicon-32x32.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="16x16"
+                  href="/static/img/favicons/favicon-16x16.png" />
+            <link rel="manifest" href="/static/img/favicons/site.webmanifest" />
+            <link rel="mask-icon"
+                  href="/static/img/favicons/safari-pinned-tab.svg"
+                  color="#0071bc" />
+            <meta name="msapplication-config"
+                  content="/static/img/favicons/browserconfig.xml" />
+            <meta name="theme-color" content="#ffffff" />
+        
+
+        <title>
+            Prevalence of BRCA1 and BRCA2 Germline Mutations in Patients of African Descent with Early-Onset and Familial Colombian Breast Cancer - PMC
+        </title>
+
+        
+        
+  
+  <!-- Logging params: Pinger defaults -->
+<meta name="ncbi_app" content="cloudpmc-viewer" />
+<meta name="ncbi_db" content="pmc" />
+<meta name="ncbi_phid" content="DB2B3F66926557933C3F66000ECD6EC4.m_1" />
+<meta name="ncbi_pinger_stat_url" content="https://pmc.ncbi.nlm.nih.gov/stat" />
+<!-- Logging params: Pinger custom -->
+<meta name="ncbi_pdid" content="article" />
+  
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
+    
+        <link rel="preconnect" href="https://cdn.ncbi.nlm.nih.gov" />
+    
+
+    <!-- Include USWDS Init Script -->
+    <script src="/static/assets/uswds-init.js"></script>
+
+
+    <meta name="ncbi_domain" content="oncologist">
+<meta name="ncbi_type" content="fulltext">
+<meta name="ncbi_pcid" content="journal">
+<meta name="ncbi_feature" content="associated_data">
+<link rel="canonical" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8895486/">
+<meta name="robots" content="INDEX,NOFOLLOW,NOARCHIVE">
+<meta name="citation_journal_title" content="The Oncologist">
+<meta name="citation_title" content="Prevalence of BRCA1 and BRCA2 Germline Mutations in Patients of African Descent with Early-Onset and Familial Colombian Breast Cancer">
+<meta name="citation_author" content="Elizabeth Vargas">
+<meta name="citation_author_institution" content="Institute of Human Genetics, Pontificia Universidad Javeriana, Bogota, Colombia">
+<meta name="citation_author_institution" content="Molecular Genetics of Breast Cancer, German Cancer Research Center (DKFZ), Heidelberg, Germany">
+<meta name="citation_author" content="Robert de Deugd">
+<meta name="citation_author_institution" content="CENTOGENE GmbH, Rostock, Germany">
+<meta name="citation_author" content="Victoria E Villegas">
+<meta name="citation_author_institution" content="Centro de Investigaciones en Microbiología y Biotecnología-UR (CIMBIUR), Facultad de Ciencias Naturales, Universidad del Rosario, Bogota, Colombia">
+<meta name="citation_author" content="Fabian Gil">
+<meta name="citation_author_institution" content="Unit of Clinical Epidemiology and Biostatistics, Pontificia Universidad Javeriana, Bogota, Colombia">
+<meta name="citation_author" content="Lina Mora">
+<meta name="citation_author_institution" content="Institute of Human Genetics, Pontificia Universidad Javeriana, Bogota, Colombia">
+<meta name="citation_author" content="Luis Fernando Viaña">
+<meta name="citation_author_institution" content="Cancer League, Cartagena, Colombia">
+<meta name="citation_author" content="Ricardo Bruges">
+<meta name="citation_author_institution" content="Centro Javeriano de Oncología, Pontificia Universidad Javeriana, Bogota, Colombia">
+<meta name="citation_author" content="Alejandro Gonzalez">
+<meta name="citation_author_institution" content="Centro Javeriano de Oncología, Pontificia Universidad Javeriana, Bogota, Colombia">
+<meta name="citation_author" content="Juan Carlos Galvis">
+<meta name="citation_author_institution" content="Centro Javeriano de Oncología, Pontificia Universidad Javeriana, Bogota, Colombia">
+<meta name="citation_author" content="Ute Hamann">
+<meta name="citation_author_institution" content="Molecular Genetics of Breast Cancer, German Cancer Research Center (DKFZ), Heidelberg, Germany">
+<meta name="citation_author" content="Diana Torres">
+<meta name="citation_author_institution" content="Institute of Human Genetics, Pontificia Universidad Javeriana, Bogota, Colombia">
+<meta name="citation_author_institution" content="Molecular Genetics of Breast Cancer, German Cancer Research Center (DKFZ), Heidelberg, Germany">
+<meta name="citation_publication_date" content="2022 Feb 15">
+<meta name="citation_volume" content="27">
+<meta name="citation_issue" content="2">
+<meta name="citation_firstpage" content="e151">
+<meta name="citation_doi" content="10.1093/oncolo/oyab026">
+<meta name="citation_pmid" content="35641219">
+<meta name="citation_abstract_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC8895486/">
+<meta name="citation_fulltext_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC8895486/">
+<meta name="citation_pdf_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC8895486/pdf/oyab026.pdf">
+<meta name="description" content="Pathogenic germline mutations in the BRCA1 and BRCA2 (BRCA1/2) genes contribute to hereditary breast/ovarian cancer (OC) in White/mestizo Colombian women. As there is virtually no genetic data on breast cancer (BC) in Colombians of African descent, ...">
+<meta name="og:title" content="Prevalence of BRCA1 and BRCA2 Germline Mutations in Patients of African Descent with Early-Onset and Familial Colombian Breast Cancer">
+<meta name="og:type" content="article">
+<meta name="og:site_name" content="PubMed Central (PMC)">
+<meta name="og:description" content="Pathogenic germline mutations in the BRCA1 and BRCA2 (BRCA1/2) genes contribute to hereditary breast/ovarian cancer (OC) in White/mestizo Colombian women. As there is virtually no genetic data on breast cancer (BC) in Colombians of African descent, ...">
+<meta name="og:url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC8895486/">
+<meta name="og:image" content="https://cdn.ncbi.nlm.nih.gov/pmc/cms/images/pmc-card-share.jpg?_=0">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ncbi">
+    
+    
+
+    </head>
+    <body >
+        
+    <a class="usa-skipnav " href="#main-content">
+      Skip to main content
+    </a>
+
+
+        
+            
+
+<section class="usa-banner " aria-label="Official website of the United States government" >
+    <div class="usa-accordion">
+        <header class="usa-banner__header">
+            <div class="usa-banner__inner">
+                <div class="grid-col-auto">
+                    <img aria-hidden="true"
+                         class="usa-banner__header-flag"
+                         src="/static/img/us_flag.svg"
+                         alt="" />
+                </div>
+
+                <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                    <p class="usa-banner__header-text">
+                        An official website of the United States government
+                    </p>
+                    <span class="usa-banner__header-action">Here's how you know</span>
+                </div>
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-accordion__button usa-banner__button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    aria-expanded="false"
+    aria-controls="gov-banner-default"
+    
+    data-testid="storybook-django-banner"
+    
+    >
+    
+        
+
+        
+                    <span class="usa-banner__button-text">Here's how you know</span>
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </div>
+        </header>
+
+        <div class="usa-banner__content usa-accordion__content"
+             id="gov-banner-default"
+             hidden>
+            <div class="grid-row grid-gap-lg">
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-dot-gov.svg"
+                         alt=""
+                         aria-hidden="true" />
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Official websites use .gov</strong>
+                            <br />
+                            A
+                            <strong>.gov</strong> website belongs to an official
+                            government organization in the United States.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-https.svg"
+                         alt=""
+                         aria-hidden="true" />
+
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Secure .gov websites use HTTPS</strong>
+                            <br />
+                            A <strong>lock</strong> (
+                            <span class="icon-lock">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="52"
+                                     height="64"
+                                     viewBox="0 0 52 64"
+                                     class="usa-banner__lock-image"
+                                     role="graphics-symbol"
+                                     aria-labelledby="banner-lock-description"
+                                     focusable="false">
+                                    <title id="banner-lock-title">Lock</title>
+                                    <desc id="banner-lock-description">
+                                    Locked padlock icon
+                                    </desc>
+                                    <path fill="#000000"
+                                          fill-rule="evenodd"
+                                          d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z" />
+                                </svg>
+</span>) or <strong>https://</strong> means you've safely
+                                connected to the .gov website. Share sensitive
+                                information only on official, secure websites.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        
+
+        
+    
+    
+    
+
+<div class="usa-overlay">
+</div>
+
+
+
+<header class="usa-header usa-header--extended usa-header--wide" data-header data-testid="header"    >
+    <div class="ncbi-header">
+        <div class="ncbi-header__container">
+            <a class="ncbi-header__logo-container"
+               href="https://www.ncbi.nlm.nih.gov/">
+                <img alt="NCBI home page"
+                     class="ncbi-header__logo-image"
+                     src="/static/img/ncbi-logos/nih-nlm-ncbi--white.svg"
+                     width="410"
+                     height="100" />
+            </a>
+
+            <!-- Mobile menu hamburger button -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-menu-btn ncbi-header__hamburger-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Show menu"
+    data-testid="navMenuButton"
+    
+    >
+    
+        
+
+        
+                <svg aria-hidden="true"
+                     class="ncbi-hamburger-icon"
+                     fill="none"
+                     focusable="false"
+                     height="21"
+                     viewBox="0 0 31 21"
+                     width="31"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M0.125 20.75H30.875V17.3333H0.125V20.75ZM0.125 12.2083H30.875V8.79167H0.125V12.2083ZM0.125 0.25V3.66667H30.875V0.25H0.125Z"
+                          fill="#F1F1F1"
+                          fill-rule="evenodd" />
+                </svg>
+            
+
+        
+    
+        
+            </button>
+        
+
+
+
+            
+                <!-- Desktop buttons-->
+                <div class="ncbi-header__desktop-buttons">
+                    
+                        <!-- Desktop search button -->
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button
+           "
+    aria-expanded="false"
+    aria-controls="search-field-desktop-navigation"
+    aria-label="Show search overlay"
+    data-testid="toggleSearchPanelButton"
+    data-toggle-search-panel-button
+    >
+    
+        
+
+        
+                            
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#search" />
+    </svg>
+
+
+                            Search
+                        
+
+        
+    
+        
+            </button>
+        
+
+
+                    
+
+                    <!-- Desktop login dropdown -->
+                    
+                        <div class="ncbi-header__login-dropdown">
+                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button ncbi-header__login-dropdown-button
+           "
+    aria-expanded="false"
+    aria-controls="login-dropdown-menu"
+    aria-label="Show login menu"
+    data-testid="toggleLoginMenuDropdown"
+    data-desktop-login-button
+    >
+    
+        
+
+        
+                                
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#person" />
+    </svg>
+
+
+
+                                <span data-login-dropdown-text>Log in</span>
+
+                                <!-- Dropdown icon pointing up -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-less ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-up-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_less" />
+    </svg>
+
+
+
+                                <!-- Dropdown icon pointing down -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-more ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-down-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_more" />
+    </svg>
+
+
+                            
+
+        
+    
+        
+            </button>
+        
+
+
+
+                            <!-- Login dropdown menu -->
+                            <ul class="usa-nav__submenu ncbi-header__login-dropdown-menu"
+                                id="login-dropdown-menu"
+                                data-desktop-login-menu-dropdown
+                                hidden>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                <li class="usa-nav__submenu-item">
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--outline ncbi-header__login-dropdown-logout-button
+           "
+    
+    
+    
+    data-testid="desktopLogoutButton"
+    data-desktop-logout-button
+    >
+    
+        
+
+        Log out
+
+        
+    
+        
+            </button>
+        
+
+
+                                </li>
+                            </ul>
+                        </div>
+                    
+                </div>
+            
+        </div>
+    </div>
+
+    <!-- Search panel -->
+    
+        <div class="ncbi-search-panel ncbi--show-only-at-desktop"
+             data-header-search-panel
+             hidden>
+            <div class="ncbi-search-panel__container">
+                <form action="https://www.ncbi.nlm.nih.gov/search/all/"
+                      
+                      autocomplete="off"
+                      class="usa-search usa-search--big ncbi-search-panel__form"
+                      data-testid="desktop-navigation-search-form"
+                      method="GET"
+                      role="search">
+                    <label class="usa-sr-only" for="search-field-desktop-navigation">
+                        Search…
+                    </label>
+                    <input class="usa-input"
+                           id="search-field-desktop-navigation"
+                           name="term"
+                           
+                               placeholder="Search NCBI"
+                           
+                           type="search"
+                           value="" />
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                        <span class="usa-search__submit-text">
+                            Search NCBI
+                        </span>
+                    
+
+        
+    
+        
+            </button>
+        
+
+
+                </form>
+
+                
+            </div>
+        </div>
+    
+
+    <nav aria-label="Primary navigation" class="usa-nav">
+        <p class="usa-sr-only" id="primary-navigation-sr-only-title">
+            Primary site navigation
+        </p>
+
+        <!-- Mobile menu close button -->
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-nav__close ncbi-nav__close-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Close navigation menu"
+    data-testid="navCloseButton"
+    
+    >
+    
+        
+
+        
+            <img src="/static/img/usa-icons/close.svg" alt="Close" />
+        
+
+        
+    
+        
+            </button>
+        
+
+
+
+        
+            <!-- Mobile search component -->
+            <form class="usa-search usa-search--small ncbi--hide-at-desktop margin-top-6"
+                  action="https://www.ncbi.nlm.nih.gov/search/all/"
+                  
+                  autocomplete="off"
+                  data-testid="mobile-navigation-search-form"
+                  method="GET"
+                  role="search">
+                <label class="usa-sr-only" for="search-field-mobile-navigation">
+                    Search
+                </label>
+
+                <input class="usa-input"
+                       id="search-field-mobile-navigation"
+                       type="search"
+                       
+                           placeholder="Search NCBI"
+                       
+                       name="term" />
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                    <!-- This SVG should be kept inline and not replaced with a link to the icon as otherwise it will render in the wrong color -->
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0E2LjQ3MSA2LjQ3MSAwIDAgMCAxNiA5LjUgNi41IDYuNSAwIDEgMCA5LjUgMTZjMS42MSAwIDMuMDktLjU5IDQuMjMtMS41N2wuMjcuMjh2Ljc5bDUgNC45OUwyMC40OSAxOWwtNC45OS01em0tNiAwQzcuMDEgMTQgNSAxMS45OSA1IDkuNVM3LjAxIDUgOS41IDUgMTQgNy4wMSAxNCA5LjUgMTEuOTkgMTQgOS41IDE0eiIvPjwvc3ZnPg=="
+                         class="usa-search__submit-icon"
+                         alt="Search" />
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </form>
+
+            
+        
+
+        <!-- Primary navigation menu items -->
+        <!-- This usa-nav__inner wrapper is required to correctly style the navigation items on Desktop -->
+        
+
+        
+            <div class="ncbi-nav__mobile-login-menu ncbi--hide-at-desktop"
+                 data-mobile-login-menu
+                 hidden>
+                <p class="ncbi-nav__mobile-login-menu-status">
+                    Logged in as:
+                    <strong class="ncbi-nav__mobile-login-menu-email"
+                            data-mobile-login-email-text></strong>
+                </p>
+                <ul class="usa-nav__primary usa-accordion">
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           ncbi-nav__mobile-login-button ncbi--hide-at-desktop
+           "
+    
+    
+    
+    data-testid="mobileLoginButton"
+    data-mobile-login-button
+    >
+    
+        
+
+        Log in
+
+        
+    
+        
+            </button>
+        
+
+
+    </nav>
+</header>
+
+    
+    
+        
+
+<section class="pmc-header pmc-header--basic" aria-label="PMC Header with search box">
+    <div class="pmc-nav-container">
+        <div class="pmc-header__bar">
+           <div class="pmc-header__logo">
+               <a href="/" title="Home" aria-label="PMC Home"></a>
+           </div>
+            <button
+                    type="button"
+                    class="usa-button usa-button--unstyled pmc-header__search__button"
+                    aria-label="Open search"
+                    data-ga-category="search"
+                    data-ga-action="PMC"
+                    data-ga-label="pmc_search_panel_mobile"
+            >
+                <svg class="usa-icon width-4 height-4 pmc-icon__open" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#search"></use>
+                </svg>
+                <svg class="usa-icon width-4 height-4 pmc-icon__close" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="pmc-header__search">
+            
+
+
+<form class="usa-search usa-search--extra usa-search--article-right-column  pmc-header__search__form" id="pmc-search-form" autocomplete="off" role="search">
+<label class="usa-sr-only" for="pmc-search">Search PMC Full-Text Archive</label>
+<span class="autoComplete_wrapper flex-1">
+<input class="usa-input width-full maxw-none" required="required" placeholder="Search PMC Full-Text Archive" id="pmc-search"  type="search" name="term" data-autocomplete-url="https://pmc.ncbi.nlm.nih.gov/autocomp/search/autocomp/"/>
+</span>
+<button
+class="usa-button"
+type="submit"
+formaction="https://pmc.ncbi.nlm.nih.gov/search/"
+data-ga-category="search"
+data-ga-action="PMC"
+data-ga-label="PMC_search_button"
+>
+<span class="usa-search__submit-text">Search in PMC</span>
+<img
+src="/static/img/usa-icons-bg/search--white.svg"
+class="usa-search__submit-icon"
+alt="Search"
+/>
+</button>
+</form>
+            <div class="display-flex flex-column tablet:flex-row tablet:flex-justify flex-justify-center flex-align-center width-full desktop:maxw-44">
+                <ul class="pmc-header__search__menu">
+                    <li>
+                        
+                            <a class="usa-link" href="/journals/" data-ga-action="featured_link" data-ga-label="journal list">
+                                Journal List
+                            </a>
+                        
+                    </li>
+                    <li>
+                        
+                            <a class="usa-link" href="/about/userguide/" data-ga-action="featured_link"
+                            data-ga-label="user guide">
+                                User Guide
+                            </a>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+    
+
+
+        
+        
+
+       
+  <div class="usa-section padding-top-0 desktop:padding-top-6 pmc-article-section" data-article-db="pmc" data-article-id="8895486">
+
+    
+
+   
+
+
+
+<div class="grid-container pmc-actions-bar" aria-label="Actions bar" role="complementary">
+    <div class="grid-row">
+        <div class="grid-col-fill display-flex">
+             <div class="display-flex">
+                <ul class="usa-list usa-list--unstyled usa-list--horizontal">
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <button
+                                type="button"
+                                class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                                aria-label="Open resources"
+                                data-extra-class="is-visible-resources"
+                                data-ga-category="resources_accordion"
+                                data-ga-action="click"
+                                data-ga-label="mobile_icon"
+                        >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#more_vert"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <a
+                                href="https://doi.org/10.1093/oncolo/oyab026"
+                                class="usa-link display-flex usa-tooltip"
+                                role="button"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                title="View on publisher site"
+                                data-position="bottom"
+                                aria-label="View on publisher site"
+                                data-ga-category="actions"
+                                data-ga-action="click"
+                                data-ga-label="publisher_link_mobile"
+                        >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#launch"></use>
+                                </svg>
+                        </a>
+                    </li>
+                    
+                    
+                        <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                             <a
+                                     href="pdf/oyab026.pdf"
+                                     class="usa-link display-flex usa-tooltip"
+                                     role="button"
+                                     title="Download PDF"
+                                     data-position="bottom"
+                                     aria-label="Download PDF"
+                                     data-ga-category="actions"
+                                     data-ga-action="click"
+                                     data-ga-label="pdf_download_mobile"
+                             >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                                </svg>
+                            </a>
+                        </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button
+                            class="usa-button usa-button--unstyled  usa-tooltip collections-dialog-trigger collections-button display-flex collections-button-empty"
+                            title="Add to Collections"
+                            data-position="bottom"
+                            aria-label="Save article in MyNCBI collections."
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="collections_button_mobile"
+                            data-collections-open-dialog-enabled="false"
+                            data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC8895486%2F%23open-collections-dialog"
+                            data-in-collections="false"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button role="button" class="usa-button usa-button--unstyled usa-tooltip citation-dialog-trigger display-flex"
+                            aria-label="Open dialog with citation text in different styles"
+                            title="Cite"
+                            data-position="bottom"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="cite_mobile"
+                            data-all-citations-url="/resources/citations/8895486/"
+                            data-citation-style="nlm"
+                            data-download-format-link="/resources/citations/8895486/export/"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="pmc-permalink display-flex" >
+                         <button
+                                 type="button"
+                                 title="Permalink"
+                                 data-position="bottom"
+                                 class="usa-button usa-button--unstyled display-flex usa-tooltip"
+                                 aria-label="Show article permalink"
+                                 aria-expanded="false"
+                                 aria-haspopup="true"
+                                 data-ga-category="actions"
+                                 data-ga-action="open"
+                                 data-ga-label="permalink_mobile"
+                         >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#share"></use>
+                            </svg>
+                        </button>
+                        
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC8895486/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+                    </li>
+                </ul>
+            </div>
+            <button
+                    type="button"
+                    class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                    aria-label="Open article navigation"
+                    data-extra-class="is-visible-in-page"
+                    data-ga-category="actions"
+                    data-ga-action="open"
+                    data-ga-label="article_nav_mobile"
+            >
+                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#list"></use>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+    <div class="grid-container desktop:padding-left-6">
+      <div id="article-container" class="grid-row grid-gap">
+        <div class="grid-col-12 desktop:grid-col-8 order-2 pmc-layout__content">
+            <div class="grid-container padding-left-0 padding-right-0">
+                <div class="grid-row desktop:margin-left-neg-6">
+                    <div class="grid-col-12">
+                        <div class="pmc-layout__disclaimer" role="complementary" aria-label="Disclaimer note">
+    As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+    the contents by NLM or the National Institutes of Health.<br/>
+    Learn more:
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="Disclaimer" data-ga-label="New disclaimer box" href="/about/disclaimer/">PMC Disclaimer</a>
+    |
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="PMC Copyright Notice" data-ga-label="New disclaimer box" href="/about/copyright/">
+        PMC Copyright Notice
+    </a>
+</div>
+                    </div>
+                </div>
+                <div class="grid-row pmc-wm desktop:margin-left-neg-6">
+                    <!-- Main content -->
+                    <main
+                      id="main-content"
+                      class="usa-layout-docs__main usa-layout-docs grid-col-12 pmc-layout pmc-prose padding-0"
+                    >
+
+                      
+                        <section class="pmc-journal-banner text-center line-height-none" aria-label="Journal banner"><img src="https://cdn.ncbi.nlm.nih.gov/pmc/banners/logo-oncologist.png" alt="The Oncologist logo" usemap="#pmc-banner-imagemap" width="500" height="75"><map name="pmc-banner-imagemap"><area alt="Link to The Oncologist" title="Link to The Oncologist" shape="default" href="https://academic.oup.com/oncolo" target="_blank" rel="noopener noreferrer"></map></section><article lang="en"><section aria-label="Article citation and metadata"><section class="pmc-layout__citation font-secondary font-xs"><div>
+<div class="display-inline-block"><button type="button" class="cursor-pointer text-no-underline bg-transparent border-0 padding-0 text-left margin-0 text-normal text-primary" aria-controls="journal_context_menu">Oncologist</button></div>. 2022 Feb 15;27(2):e151–e157. doi: <a href="https://doi.org/10.1093/oncolo/oyab026" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">10.1093/oncolo/oyab026</a>
+</div>
+<nav id="journal_context_menu" hidden="hidden"><ul class="menu-list font-family-ui" role="menu">
+<li role="presentation"><a href="https://pmc.ncbi.nlm.nih.gov/search/?term=%22Oncologist%22%5Bjour%5D" class="usa-link" role="menuitem">Search in PMC</a></li>
+<li role="presentation"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Oncologist%22%5Bjour%5D" lang="en" class="usa-link" role="menuitem">Search in PubMed</a></li>
+<li role="presentation"><a href="https://www.ncbi.nlm.nih.gov/nlmcatalog?term=%22Oncologist%22%5BTitle%20Abbreviation%5D" class="usa-link" role="menuitem">View in NLM Catalog</a></li>
+<li role="presentation"><a href="?term=%22Oncologist%22%5Bjour%5D" class="usa-link" role="menuitem" data-add-to-search="true">Add to search</a></li>
+</ul></nav></section><section class="front-matter"><div class="ameta p font-secondary font-xs">
+<hgroup><h1>Prevalence of <em>BRCA1</em> and <em>BRCA2</em> Germline Mutations in Patients of African Descent with Early-Onset and Familial Colombian Breast Cancer</h1></hgroup><div class="cg p">
+<a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Vargas%20E%22%5BAuthor%5D" class="usa-link" aria-describedby="id1"><span class="name western">Elizabeth Vargas</span></a><div hidden="hidden" id="id1">
+<h3><span class="name western">Elizabeth Vargas</span></h3>
+<div class="p">
+<sup>1</sup>
+Institute of Human Genetics, Pontificia Universidad Javeriana, Bogota, Colombia</div>
+<div class="p">
+<sup>2</sup>
+Molecular Genetics of Breast Cancer, German Cancer Research Center (DKFZ), Heidelberg, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Vargas%20E%22%5BAuthor%5D" class="usa-link"><span class="name western">Elizabeth Vargas</span></a>
+</div>
+</div>
+<sup>1,</sup><sup>2,</sup><sup>#</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22de%20Deugd%20R%22%5BAuthor%5D" class="usa-link" aria-describedby="id2"><span class="name western">Robert de Deugd</span></a><div hidden="hidden" id="id2">
+<h3><span class="name western">Robert de Deugd</span></h3>
+<div class="p">
+<sup>3</sup>
+CENTOGENE GmbH, Rostock, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22de%20Deugd%20R%22%5BAuthor%5D" class="usa-link"><span class="name western">Robert de Deugd</span></a>
+</div>
+</div>
+<sup>3</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Villegas%20VE%22%5BAuthor%5D" class="usa-link" aria-describedby="id3"><span class="name western">Victoria E Villegas</span></a><div hidden="hidden" id="id3">
+<h3><span class="name western">Victoria E Villegas</span></h3>
+<div class="p">
+<sup>4</sup>
+Centro de Investigaciones en Microbiología y Biotecnología-UR (CIMBIUR), Facultad de Ciencias Naturales, Universidad del Rosario, Bogota, Colombia</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Villegas%20VE%22%5BAuthor%5D" class="usa-link"><span class="name western">Victoria E Villegas</span></a>
+</div>
+</div>
+<sup>4,</sup><sup>✉</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Gil%20F%22%5BAuthor%5D" class="usa-link" aria-describedby="id4"><span class="name western">Fabian Gil</span></a><div hidden="hidden" id="id4">
+<h3><span class="name western">Fabian Gil</span></h3>
+<div class="p">
+<sup>5</sup>
+Unit of Clinical Epidemiology and Biostatistics, Pontificia Universidad Javeriana, Bogota, Colombia</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Gil%20F%22%5BAuthor%5D" class="usa-link"><span class="name western">Fabian Gil</span></a>
+</div>
+</div>
+<sup>5</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Mora%20L%22%5BAuthor%5D" class="usa-link" aria-describedby="id5"><span class="name western">Lina Mora</span></a><div hidden="hidden" id="id5">
+<h3><span class="name western">Lina Mora</span></h3>
+<div class="p">
+<sup>1</sup>
+Institute of Human Genetics, Pontificia Universidad Javeriana, Bogota, Colombia</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Mora%20L%22%5BAuthor%5D" class="usa-link"><span class="name western">Lina Mora</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Via%C3%B1a%20LF%22%5BAuthor%5D" class="usa-link" aria-describedby="id6"><span class="name western">Luis Fernando Viaña</span></a><div hidden="hidden" id="id6">
+<h3><span class="name western">Luis Fernando Viaña</span></h3>
+<div class="p">
+<sup>6</sup>
+Cancer League, Cartagena, Colombia</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Via%C3%B1a%20LF%22%5BAuthor%5D" class="usa-link"><span class="name western">Luis Fernando Viaña</span></a>
+</div>
+</div>
+<sup>6</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Bruges%20R%22%5BAuthor%5D" class="usa-link" aria-describedby="id7"><span class="name western">Ricardo Bruges</span></a><div hidden="hidden" id="id7">
+<h3><span class="name western">Ricardo Bruges</span></h3>
+<div class="p">
+<sup>7</sup>
+Centro Javeriano de Oncología, Pontificia Universidad Javeriana, Bogota, Colombia</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Bruges%20R%22%5BAuthor%5D" class="usa-link"><span class="name western">Ricardo Bruges</span></a>
+</div>
+</div>
+<sup>7</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Gonzalez%20A%22%5BAuthor%5D" class="usa-link" aria-describedby="id8"><span class="name western">Alejandro Gonzalez</span></a><div hidden="hidden" id="id8">
+<h3><span class="name western">Alejandro Gonzalez</span></h3>
+<div class="p">
+<sup>7</sup>
+Centro Javeriano de Oncología, Pontificia Universidad Javeriana, Bogota, Colombia</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Gonzalez%20A%22%5BAuthor%5D" class="usa-link"><span class="name western">Alejandro Gonzalez</span></a>
+</div>
+</div>
+<sup>7</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Galvis%20JC%22%5BAuthor%5D" class="usa-link" aria-describedby="id9"><span class="name western">Juan Carlos Galvis</span></a><div hidden="hidden" id="id9">
+<h3><span class="name western">Juan Carlos Galvis</span></h3>
+<div class="p">
+<sup>7</sup>
+Centro Javeriano de Oncología, Pontificia Universidad Javeriana, Bogota, Colombia</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Galvis%20JC%22%5BAuthor%5D" class="usa-link"><span class="name western">Juan Carlos Galvis</span></a>
+</div>
+</div>
+<sup>7</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Hamann%20U%22%5BAuthor%5D" class="usa-link" aria-describedby="id10"><span class="name western">Ute Hamann</span></a><div hidden="hidden" id="id10">
+<h3><span class="name western">Ute Hamann</span></h3>
+<div class="p">
+<sup>2</sup>
+Molecular Genetics of Breast Cancer, German Cancer Research Center (DKFZ), Heidelberg, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Hamann%20U%22%5BAuthor%5D" class="usa-link"><span class="name western">Ute Hamann</span></a>
+</div>
+</div>
+<sup>2</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Torres%20D%22%5BAuthor%5D" class="usa-link" aria-describedby="id11"><span class="name western">Diana Torres</span></a><div hidden="hidden" id="id11">
+<h3><span class="name western">Diana Torres</span></h3>
+<div class="p">
+<sup>1</sup>
+Institute of Human Genetics, Pontificia Universidad Javeriana, Bogota, Colombia</div>
+<div class="p">
+<sup>2</sup>
+Molecular Genetics of Breast Cancer, German Cancer Research Center (DKFZ), Heidelberg, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Torres%20D%22%5BAuthor%5D" class="usa-link"><span class="name western">Diana Torres</span></a>
+</div>
+</div>
+<sup>1,</sup><sup>2,</sup><sup>✉,</sup><sup>#</sup>
+</div>
+<ul class="d-buttons inline-list">
+<li><button class="d-button" aria-controls="aip_a" aria-expanded="false">Author information</button></li>
+<li><button class="d-button" aria-controls="anp_a" aria-expanded="false">Article notes</button></li>
+<li><button class="d-button" aria-controls="clp_a" aria-expanded="false">Copyright and License information</button></li>
+</ul>
+<div class="d-panels font-secondary-light">
+<div id="aip_a" class="d-panel p" style="display: none">
+<div class="p" id="AF0001">
+<sup>1</sup>
+Institute of Human Genetics, Pontificia Universidad Javeriana, Bogota, Colombia</div>
+<div id="AF0002">
+<sup>2</sup>
+Molecular Genetics of Breast Cancer, German Cancer Research Center (DKFZ), Heidelberg, Germany</div>
+<div id="AF0003">
+<sup>3</sup>
+CENTOGENE GmbH, Rostock, Germany</div>
+<div id="AF0004">
+<sup>4</sup>
+Centro de Investigaciones en Microbiología y Biotecnología-UR (CIMBIUR), Facultad de Ciencias Naturales, Universidad del Rosario, Bogota, Colombia</div>
+<div id="AF0005">
+<sup>5</sup>
+Unit of Clinical Epidemiology and Biostatistics, Pontificia Universidad Javeriana, Bogota, Colombia</div>
+<div id="AF0006">
+<sup>6</sup>
+Cancer League, Cartagena, Colombia</div>
+<div id="AF0007">
+<sup>7</sup>
+Centro Javeriano de Oncología, Pontificia Universidad Javeriana, Bogota, Colombia</div>
+<div class="author-notes p">
+<div class="fn" id="c1">
+<sup>✉</sup><p class="display-inline">Corresponding author: Diana Torres, Institute of Human Genetics, Pontificia Universidad Javeriana, Bogota, Colombia; Tel: +57(1) 3208320; Email: <span>dmtorres@javeriana.edu.co</span></p>
+</div>
+<div class="fn" id="c2">
+<sup>✉</sup><p class="display-inline">Victoria E. Villegas, Centro de Investigaciones en Microbiología y Biotecnología-UR (CIMBIUR), Facultad de Ciencias Naturales, Universidad del Rosario, Bogotá, Colombia; Tel: +57(1) 2970200; Email: <span>victoria.villegas@urosario.edu.co</span>.</p>
+</div>
+<div class="fn" id="fn-0001">
+<sup>#</sup><p class="display-inline">Contributed equally.</p>
+</div>
+</div>
+</div>
+<div id="anp_a" class="d-panel p" style="display: none"><div class="notes p"><section id="historyarticle-meta1" class="history"><p>Received 2021 Feb 17; Accepted 2021 Sep 8; Collection date 2022 Feb.</p></section></div></div>
+<div id="clp_a" class="d-panel p" style="display: none">
+<div>© The Author(s) 2022. Published by Oxford University Press.</div>
+<p>This is an Open Access article distributed under the terms of the Creative Commons Attribution License (<a href="https://creativecommons.org/licenses/by/4.0/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://creativecommons.org/licenses/by/4.0/</a>), which permits unrestricted reuse, distribution, and reproduction in any medium, provided the original work is properly cited.</p>
+<div class="p"><a href="/about/copyright/" class="usa-link">PMC Copyright notice</a></div>
+</div>
+</div>
+<div>PMCID: PMC8895486  PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/35641219/" class="usa-link">35641219</a>
+</div>
+</div></section></section><section aria-label="Article content"><section class="body main-article-body"><section class="abstract" id="abstract1"><h2>Abstract</h2>
+<section id="s100"><h3 class="pmc_sec_title">Background</h3>
+<p>Pathogenic germline mutations in the <em>BRCA1</em> and <em>BRCA2</em> (<em>BRCA1/2</em>) genes contribute to hereditary breast/ovarian cancer (OC) in White/mestizo Colombian women. As there is virtually no genetic data on breast cancer (BC) in Colombians of African descent, we conducted a comprehensive <em>BRCA1/2</em> mutational analysis of 60 Afro-Colombian families affected by breast/OC.</p></section><section id="s101"><h3 class="pmc_sec_title">Materials and Methods</h3>
+<p>Mutation screening of the complete <em>BRCA1/2</em> genes for small-scale mutations and large genomic alterations was performed in these families using next-generation sequencing and multiplex ligation-dependent probe amplification analysis.</p></section><section id="s102"><h3 class="pmc_sec_title">Results</h3>
+<p>Four pathogenic germline mutations, including one novel mutation, were identified, comprising 3 in <em>BRCA1</em> and one in <em>BRCA2</em>. The prevalence of <em>BRCA1/2</em> mutations, including one <em>BRCA1</em> founder mutation (c.5123C&gt;A) previously identified in this sample set, was 3.9% (2/51) in female BC-affected families and 33.3% (3/9) in those affected by both breast and OC. Haplotype analysis of 2 <em>BRCA2</em>_c.2701delC carriers (one Afro-Colombian and one previously identified White/mestizo Colombian patient with BC) suggested that the mutation arose in a common ancestor.</p></section><section id="s103"><h3 class="pmc_sec_title">Conclusion</h3>
+<p>Our data showed that 2/5 (40%) mutations (including the one previously identified in this sample set) are shared by White/mestizo Colombian and Afro-Colombian populations. This suggests that these 2 populations are closely related. Nevertheless, variations in the <em>BRCA1/2</em> mutational spectrum among Afro-Colombian subgroups from different regions of the country were observed, suggesting that specific genetic risk assessment strategies need to be developed.</p></section><section id="kwd-group1" class="kwd-group"><p><strong>Keywords:</strong> <em>BRCA1/2</em>, breast cancer, germline mutation, Afro-Colombian</p></section></section><section class="abstract" id="abstract2"><hr class="headless">
+<p>Pathogenic germline mutations in the <em>BRCA1</em> and <em>BRCA2</em> (<em>BRCA1/2</em>) genes contribute to hereditary breast and ovarian cancer in white/mestizo Colombian women, but there is virtually no genetic data on breast cancer in Colombians of African descent. This article provides a comprehensive <em>BRCA1/2</em> mutational analysis of 60 Afro-Colombian families affected by breast or ovarian.</p></section><hr class="headless">
+<section class="bt xbox font-sm" id="B1"><h2 class="obj_head">Implications for Practice.</h2>
+<p>The differences in the frequency and spectrum of mutations in <em>BRCA1/2</em> genes show considerable variation among ethnic groups. However, only limited data on the contribution of <em>BRCA1/2</em> mutations to hereditary breast/ovarian cancer in the African population are currently available and there is no information on the Afro-Colombian population. Therefore, more research of the genetic factors contributing to breast and/or ovarian cancer in Colombian families of African descent is needed, which will enable the detection of mutations to guide prevention and therapy, considering that Colombia is the second most ethnically diverse country in the Americas, after Brazil.</p></section><section id="s1"><h2 class="pmc_sec_title">Introduction</h2>
+<p>Breast cancer (BC) is a major public health concern worldwide, with an estimate of more 2 million newly diagnosed cases and 684.996 deaths in 2020.<sup><a href="#CIT0001" class="usa-link" aria-describedby="CIT0001">1</a></sup> In Colombia, BC is the most frequent cancer among women, with incidence and mortality age-standardized rates of 48.3 and 13.1 cases per 100 000 people per year, respectively.<sup><a href="#CIT0001" class="usa-link" aria-describedby="CIT0001">1</a></sup></p>
+<p>The Colombian population is ethnically diverse as a result of interracial relationships between indigenous peoples, Spanish colonizers, and enslaved Africans.<sup><a href="#CIT0002" class="usa-link" aria-describedby="CIT0002">2</a></sup>. Its 3 main ethnic groups are the mestizos (53%), White European Colombians (20%), and African Colombians (25%).<sup><a href="#CIT0003" class="usa-link" aria-describedby="CIT0003">3</a></sup> The Afro-Colombian population concentrated on the northwest Caribbean coast and the Pacific coast is the second largest population of African descendants in Latin America.<sup><a href="#CIT0004" class="usa-link" aria-describedby="CIT0004">4</a></sup> It consists of 3 ethnic categories: Raizal, Palenquero, and Mulatte.<sup><a href="#CIT0005" class="usa-link" aria-describedby="CIT0005">5</a></sup> Raizal refers to people derived from admixture on the Caribbean islands, mostly between English, Dutch, and African slaves and slaves to other Caribbean islands.<sup><a href="#CIT0006" class="usa-link" aria-describedby="CIT0006">6-8</a></sup> The Palenquero population refers to descendants of enslaved Africans who fled and established isolated and anti-colonial residences, forming the village of Palenque de San Basilio’s. Mulatte refers to first-generation offspring of African and European ancestry.<sup><a href="#CIT0005" class="usa-link" aria-describedby="CIT0005">5</a></sup></p>
+<p>Approximately 10% of BC cases are due to genetic factors and associated with a family history, which can be attributed to germline mutations in BC susceptibility genes, in particular <em>BRCA1</em> and <em>BRCA2</em> (<em>BRCA1/2</em>).<sup><a href="#CIT0009" class="usa-link" aria-describedby="CIT0009">9</a>,<a href="#CIT0010" class="usa-link" aria-describedby="CIT0010">10</a></sup> The contribution of <em>BRCA1/2</em> germline mutations to early-onset and hereditary breast/ovarian cancer (OC) in the Colombian population was previously described by us in 2 studies conducted among a total of 121 White/mestizo breast/OC-affected families and unselected patients with BC. In these studies, we reported on the prevalence of pathogenic <em>BRCA1/2</em> germline mutation and the identification of 4 small-scale founder mutations and 1 large deletion, 2 in <em>BRCA1</em> (HGVS/BIC: c.3331_3334delCAAG/3450del4 and c.5123C&gt;A/A1708E) and 3 in <em>BRCA2</em> (c.1763_1766delATAA/1991del4, c.2808_2811delACAA/-3034del4, and ex1-14del), which accounted for 89% and 44% of all <em>BRCA1</em> and <em>BRCA2</em> mutations, respectively.<sup><a href="#CIT0011" class="usa-link" aria-describedby="CIT0011">11</a>,<a href="#CIT0012" class="usa-link" aria-describedby="CIT0012">12</a></sup> The overall prevalence of <em>BRCA1/2</em> mutations was 16% in families with multiple female cases of BC and 21% in families affected by both breast and OC. Furthermore, 2 other previous studies on unselected patients with breast cancer and OC showed mutation frequencies of 1.2% and 15%, respectively.<sup><a href="#CIT0013" class="usa-link" aria-describedby="CIT0013">13</a>,<a href="#CIT0014" class="usa-link" aria-describedby="CIT0014">14</a></sup></p>
+<p>Currently, limited information is available on the contribution of the <em>BRCA1/2</em> genes to hereditary BC in the Colombian population of African descent. In a single previous study conducted regarding this ethnic group, screening for the 4 small-scale Colombian <em>BRCA1/2</em> founder mutations led to the identification of one <em>BRCA1</em> mutation in 60 Afro-Colombian families affected by breast/OC.<sup><a href="#CIT0015" class="usa-link" aria-describedby="CIT0015">15</a></sup> To define the spectrum of mutations and to estimate mutation frequencies, we have now comprehensively analyzed the complete <em>BRCA1/2</em> genes for small-scale mutations and large genomic rearrangements (LGRs) in the same sample set using next-generation sequencing (NGS) and multiplex ligation-dependent probe amplification (MLPA).</p></section><section id="s2"><h2 class="pmc_sec_title">Materials and Methods</h2>
+<section id="s3"><h3 class="pmc_sec_title">Study Population</h3>
+<p>All Afro-Colombian families affected by breast/OC who were investigated in this study have previously been described.<sup><a href="#CIT0015" class="usa-link" aria-describedby="CIT0015">15</a></sup> In summary, a total of 60 families comprising 51 affected by BC and 9 affected by both breast and OC were recruited at the Cancer Leagues in Cartagena, Quibdó, and San Andres Island, Colombia, from March to December 2016. Of the 60 index patients, 52 were Afro-Colombians and 8 were Raizales. All patients had previously been screened for the 4 Colombian <em>BRCA1/2</em> founder mutations (<em>BRCA1</em>/c.3331_3334delCAAG, <em>BRCA1</em>_c.5123C&gt;A, <em>BRCA2/</em>c.1763_1766delATAA, and <em>BRCA2</em>/c.2808_2811delACAA) and a mutation carrier (<em>BRCA1</em>_c.5123C&gt;A) was identified.<sup><a href="#CIT0015" class="usa-link" aria-describedby="CIT0015">15</a></sup> All patients were selected for genetic <em>BRCA1/2</em> testing using NGS. They were classified into 3 categories based on the family history of cancer: group A1: families with one female case of BC diagnosed at or before 35 years of age; group A2: families with 2 or more BC cases diagnosed at any age; and group A3: families with one or more female BC cases and one or more OC cases diagnosed at any age.</p>
+<p>Information on ethnicity, as well as personal and family history of BC, was obtained from all study participants through self-administered questionnaires. Written informed consent was provided by all study participants. The research protocol was approved by the Ethics Committee of the Pontificia Universidad Javeriana in Bogota, Colombia (approval number: 06/2019).</p></section><section id="s4"><h3 class="pmc_sec_title">DNA Isolation and <em>BRCA1/2</em> Mutation Analyses</h3>
+<p>Genomic DNA was extracted from 14 mL of peripheral blood collected into an ethylenediaminetetraacetic acid tube using the salting-out extraction method.<sup><a href="#CIT0016" class="usa-link" aria-describedby="CIT0016">16</a></sup> The <em>BRCA1/2</em> genes were screened for small-scale mutations using NGS (CENTOGENE, Rostock, Germany) in the 60 index patients. Genomic DNA was enzymatically fragmented and regions of interest were selectively enriched using capture probes targeted against coding regions of the panel genes. Libraries were generated with Illumina-compatible adaptors and sequenced on an Illumina platform. For the <em>BRCA1/2</em> panel, the entire coding region of the <em>BRCA1/2</em> genes including 10 bp of flanking intronic sequences was targeted. The panel included analysis of all reported disease-causing deep intronic and regulatory mutations described outside the coding ±10 boundary. Owing to the limitations of this method, all the targeted sequences within the requested panel may not be covered. Missing regions or regions of poor quality were then further examined using Sanger sequencing to achieve 100% coverage. Clinically relevant variants identified by NGS were validated according to quality standards. Raw sequence data analysis including base calling, demultiplexing, alignment to the hg19 human reference genome (Genome Reference Consortium GRCh37), and variant calling was performed using validated in-house software. The American College of Medical Genetics and Genomics nomenclature guidelines were used to annotate identified variants. The Human Gene Mutation Database constituting a comprehensive collection of published germline mutations, and the ClinVar database and CentoMD were used to determine the biological significance of the identified variants.</p>
+<p>Families negative for small-scale mutations were analyzed for LGRs using the MLPA technique, as previously described.<sup><a href="#CIT0017" class="usa-link" aria-describedby="CIT0017">17</a></sup> In summary, MLPA analysis was performed using probe mix P002 and P087 for <em>BRCA1</em> (Catalogue No. P002-100R) and P045, P090, and P077 (Catalogue No. P090-100R) for <em>BRCA2</em>, in accordance with the manufacturer’s instructions (MRC Holland, Amsterdam, The Netherlands). The separation and relative quantification of the amplified product was achieved using the Beckman CEQ 8000XL DNA Analysis System (Beckman Coulter, Fullerton, CA). The variation in peak height was evaluated by comparing each sample with normal controls using SeqPilot software version 3.5.2 (JSI Medical Systems, Kippenheim, Germany).</p></section><section id="s5"><h3 class="pmc_sec_title">Haplotype Analysis</h3>
+<p>Two patients with BC carrying the <em>BRCA2</em>_c.2701delC mutation (one Afro-Colombian carrier identified in the present study and one previously identified White/mestizo carrier<sup><a href="#CIT0011" class="usa-link" aria-describedby="CIT0011">11</a></sup>) were scored for allele sharing indicative of a common ancestor. Haplotype analysis was performed at the 4 extragenic microsatellite loci D13S290, D13S260, D13S171, and D13S267, flanking the <em>BRCA2</em> gene.<sup><a href="#CIT0018" class="usa-link" aria-describedby="CIT0018">18</a></sup> Microsatellite alleles were identified by automated fluorescent-based fragment detection from amplified PCR products using a CEQ 8000 XL DNA Analysis System (Beckman Coulter).</p></section><section id="s6"><h3 class="pmc_sec_title">Statistical Analysis</h3>
+<p>Comparison of the age of diagnosis between <em>BRCA1/2</em> carriers and noncarriers was performed using the Wilcoxon rank-sum test with continuity correction. Results were judged as statistically significant at a <em>P</em>-value of .05 or less. All statistical analyses were performed using R software (<a href="https://www.r-project.org/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.r-project.org/</a>).</p></section></section><section id="s7"><h2 class="pmc_sec_title">Results</h2>
+<section id="s8"><h3 class="pmc_sec_title">Description of the Afro-Colombian Families</h3>
+<p>The present study included 60 index cases from 60 Afro-Colombian families affected by breast/OC. Three patients had been diagnosed with BC before 35 years of age (5%); 48 belonged to families with at least 2 BC cases (80%) and 9 to families with both breast and OC (15%). The median ages of disease onset differed between <em>BRCA1/2</em> carriers (<em>n</em> = 5, including the previously identified <em>BRCA1</em>_c.5123C&gt;A carrier)<sup><a href="#CIT0015" class="usa-link" aria-describedby="CIT0015">15</a></sup> and noncarriers (<em>n</em> = 55; 40 years, range 30-45 vs 51 years, range 33-70 years, <em>P</em> = .019 by Wilcoxon rank-sum test).</p></section><section id="s9"><h3 class="pmc_sec_title">
+<em>BRCA1/2</em> Mutations and Frequencies</h3>
+<p>Using NGS analysis, 4 deleterious mutations were identified: 3 in <em>BRCA1</em>, including one novel mutation, and one in <em>BRCA2</em>. Additionally, 3 distinct <em>BRCA2</em> variants of uncertain clinical significance were detected (<a href="#sup2" class="usa-link">Supplementary Table S1</a>). The <em>BRCA1/2</em> mutation frequency including the known <em>BRCA1</em>_5123C&gt;A mutation was 3.9% (2/51) in families with female BC cases and 33.3% (3/9) in families affected by both breast and OC. Descriptions of the <em>BRCA1/2</em> mutations and frequencies by risk group are presented in <a href="#T1" class="usa-link">Tables 1</a> and <a href="#T2" class="usa-link">2</a>.</p>
+<section class="tw xbox font-sm" id="T1"><h4 class="obj_head">Table 1.</h4>
+<div class="caption p"><p>
+<em>BRCA1/2</em> mutation frequencies in the 60 Afro-Colombian families affected by breast/ovarian cancer by risk groups.</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups" width="100%" border="1">
+<thead>
+<tr>
+<th align="left" rowspan="2" colspan="1">Risk group</th>
+<th align="left" rowspan="2" colspan="1">Family phenotype</th>
+<th align="left" rowspan="2" colspan="1">No. of families</th>
+<th align="left" colspan="3" rowspan="1">No. (%) of families with mutations in</th>
+</tr>
+<tr>
+<th align="left" rowspan="1" colspan="1">
+<em>BRCA1</em>
+</th>
+<th align="left" rowspan="1" colspan="1">
+<em>BRCA2</em>
+</th>
+<th align="left" rowspan="1" colspan="1">
+<em>BRCA1/2</em>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" rowspan="1" colspan="1"></td>
+<td align="left" rowspan="1" colspan="1">Families with female BC cases</td>
+<td align="left" rowspan="1" colspan="1">51</td>
+<td align="left" rowspan="1" colspan="1">2 (3.9)</td>
+<td align="left" rowspan="1" colspan="1">0 (0.0)</td>
+<td align="left" rowspan="1" colspan="1">2 (3.9)</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A1</td>
+<td align="left" rowspan="1" colspan="1">1 case ≤35 years</td>
+<td align="left" rowspan="1" colspan="1">3</td>
+<td align="left" rowspan="1" colspan="1">0 (0.0)</td>
+<td align="left" rowspan="1" colspan="1">0 (0.0)</td>
+<td align="left" rowspan="1" colspan="1">0 (0.0)</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A2</td>
+<td align="left" rowspan="1" colspan="1">Multiple cases</td>
+<td align="left" rowspan="1" colspan="1">48</td>
+<td align="left" rowspan="1" colspan="1">2 (4.2)</td>
+<td align="left" rowspan="1" colspan="1">0 (0.0)</td>
+<td align="left" rowspan="1" colspan="1">2 (4.2)</td>
+</tr>
+<tr>
+<td align="left" rowspan="2" colspan="1">A3</td>
+<td align="left" rowspan="1" colspan="1">Families with both BC and OC</td>
+<td align="left" rowspan="1" colspan="1">9</td>
+<td align="left" rowspan="1" colspan="1">2 (22.2)</td>
+<td align="left" rowspan="1" colspan="1">1 (11.1)</td>
+<td align="left" rowspan="1" colspan="1">3 (33.3)</td>
+</tr>
+<tr><td align="left" colspan="5" rowspan="1">≥1 BC and ≥1 OC, at any age</td></tr>
+<tr>
+<td align="left" rowspan="1" colspan="1"></td>
+<td align="left" rowspan="1" colspan="1">All families</td>
+<td align="left" rowspan="1" colspan="1">60</td>
+<td align="left" rowspan="1" colspan="1">4<a href="#T1Fn1" class="usa-link"><sup>a</sup></a> (6.7)</td>
+<td align="left" rowspan="1" colspan="1">1 (1.7)</td>
+<td align="left" rowspan="1" colspan="1">5 (8.3)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/T1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<div class="tw-foot p">
+<div class="fn" id="T1Fn1"><p>Including the <em>BRCA1</em>_c.5123C&gt;A mutation previously identified.<sup><a href="#CIT0015" class="usa-link" aria-describedby="CIT0015">15</a></sup></p></div>
+<div class="fn" id="T1Fn2"><p>BC, breast cancer; OC, ovarian cancer.</p></div>
+</div></section><section class="tw xbox font-sm" id="T2"><h4 class="obj_head">Table 2.</h4>
+<div class="caption p"><p>Description of the <em>BRCA1/2</em> mutations in Afro-Colombian families affected by breast/ovarian cancer.</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups" width="100%" border="1">
+<thead>
+<tr>
+<th align="left" rowspan="2" colspan="1">Family</th>
+<th align="left" rowspan="2" colspan="1">Ethnic group</th>
+<th align="left" rowspan="2" colspan="1">Gene</th>
+<th align="left" colspan="3" rowspan="1">Mutation nomenclature</th>
+<th align="left" colspan="6" rowspan="1">No. of BIC entries<a href="#T2Fn2" class="usa-link"><sup>a</sup></a>
+</th>
+<th align="left" rowspan="2" colspan="1">No. of ClinVar Entries<a href="#T2Fn8" class="usa-link"><sup>g</sup></a>
+</th>
+<th align="left" rowspan="2" colspan="1">Total entries<a href="#T2Fn9" class="usa-link"><sup>h</sup></a>
+</th>
+</tr>
+<tr>
+<th align="left" rowspan="1" colspan="1">BIC<a href="#T2Fn2" class="usa-link"><sup>a</sup></a>: Genomic Level</th>
+<th align="left" rowspan="1" colspan="1">HGVS<a href="#T2Fn3" class="usa-link"><sup>b</sup></a>: genomic level</th>
+<th align="left" rowspan="1" colspan="1">HGVS:protein level</th>
+<th align="left" rowspan="1" colspan="1">Asian descent</th>
+<th align="left" rowspan="1" colspan="1">European descent</th>
+<th align="left" rowspan="1" colspan="1">African descent<a href="#T2Fn4" class="usa-link"><sup>c</sup></a>
+</th>
+<th align="left" rowspan="1" colspan="1">Hispanic descent<a href="#T2Fn5" class="usa-link"><sup>d</sup></a>
+</th>
+<th align="left" rowspan="1" colspan="1">Unknown<a href="#T2Fn6" class="usa-link"><sup>e</sup></a>
+</th>
+<th align="left" rowspan="1" colspan="1">Total<a href="#T2Fn7" class="usa-link"><sup>f</sup></a>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr><td align="left" colspan="14" rowspan="1">
+<em>Deleterious BRCA1/2 mutations</em>
+</td></tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A004</td>
+<td align="left" rowspan="1" colspan="1">Afro</td>
+<td align="left" rowspan="1" colspan="1">
+<em>BRCA1</em>
+</td>
+<td align="left" rowspan="1" colspan="1">IVS5-12A&gt;G</td>
+<td align="left" rowspan="1" colspan="1">c.213-12A&gt;G</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">1</td>
+<td align="left" rowspan="1" colspan="1">16</td>
+<td align="left" rowspan="1" colspan="1">1<a href="#T2Fn11" class="usa-link"><sup>j</sup></a>
+</td>
+<td align="left" rowspan="1" colspan="1">2<a href="#T2Fn13" class="usa-link"><sup>l</sup></a>
+</td>
+<td align="left" rowspan="1" colspan="1">8</td>
+<td align="left" rowspan="1" colspan="1">28</td>
+<td align="left" rowspan="1" colspan="1">55</td>
+<td align="left" rowspan="1" colspan="1">83</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A012</td>
+<td align="left" rowspan="1" colspan="1">Afro</td>
+<td align="left" rowspan="1" colspan="1">
+<em>BRCA1</em>
+</td>
+<td align="left" rowspan="1" colspan="1">4282insA</td>
+<td align="left" rowspan="1" colspan="1">c.4163_4164insA</td>
+<td align="left" rowspan="1" colspan="1">p.Ser1389Glufs</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">1<a href="#T2Fn11" class="usa-link"><sup>j</sup></a>
+</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">1</td>
+<td align="left" rowspan="1" colspan="1">4</td>
+<td align="left" rowspan="1" colspan="1">5</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A035</td>
+<td align="left" rowspan="1" colspan="1">Afro</td>
+<td align="left" rowspan="1" colspan="1">
+<em>BRCA1</em>
+</td>
+<td align="left" rowspan="1" colspan="1">5242C&gt;A<a href="#T2Fn10" class="usa-link"><sup>i</sup></a>
+</td>
+<td align="left" rowspan="1" colspan="1">c.5123C&gt;A</td>
+<td align="left" rowspan="1" colspan="1">p.Ala1708Glu</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">15</td>
+<td align="left" rowspan="1" colspan="1">1<a href="#T2Fn11" class="usa-link"><sup>j</sup></a>
+</td>
+<td align="left" rowspan="1" colspan="1">12</td>
+<td align="left" rowspan="1" colspan="1">19</td>
+<td align="left" rowspan="1" colspan="1">47</td>
+<td align="left" rowspan="1" colspan="1">77</td>
+<td align="left" rowspan="1" colspan="1">124</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A036</td>
+<td align="left" rowspan="1" colspan="1">Raizal</td>
+<td align="left" rowspan="1" colspan="1">
+<em>BRCA1</em>
+</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">
+<strong>c.4203delT</strong>
+</td>
+<td align="left" rowspan="1" colspan="1">
+<strong>p.Gln1401Hisfs</strong>
+</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">1<a href="#T2Fn12" class="usa-link"><sup>k</sup></a>
+</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">1</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">1</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A015</td>
+<td align="left" rowspan="1" colspan="1">Afro</td>
+<td align="left" rowspan="1" colspan="1">
+<em>BRCA2</em>
+</td>
+<td align="left" rowspan="1" colspan="1">2929delC</td>
+<td align="left" rowspan="1" colspan="1">c.2701delC</td>
+<td align="left" rowspan="1" colspan="1">p.Ala902Leufs</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">1<a href="#T2Fn11" class="usa-link"><sup>j</sup></a>
+</td>
+<td align="left" rowspan="1" colspan="1">2<a href="#T2Fn14" class="usa-link"><sup>m</sup></a>
+</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">3</td>
+<td align="left" rowspan="1" colspan="1">13</td>
+<td align="left" rowspan="1" colspan="1">16</td>
+</tr>
+<tr><td align="left" colspan="14" rowspan="1">
+<em>Variants of uncertain significance</em>
+</td></tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A032</td>
+<td align="left" rowspan="1" colspan="1">Afro</td>
+<td align="left" rowspan="1" colspan="1">
+<em>BRCA2</em>
+</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">c.9259C&gt;A</td>
+<td align="left" rowspan="1" colspan="1">p.Leu3087Ile</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">1<a href="#T2Fn11" class="usa-link"><sup>j</sup></a>
+</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">1</td>
+<td align="left" rowspan="1" colspan="1">2</td>
+<td align="left" rowspan="1" colspan="1">3</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A038</td>
+<td align="left" rowspan="1" colspan="1">Raizal</td>
+<td align="left" rowspan="1" colspan="1">
+<em>BRCA2</em>
+</td>
+<td align="left" rowspan="1" colspan="1">1778A&gt;G</td>
+<td align="left" rowspan="1" colspan="1">c.1550A&gt;G</td>
+<td align="left" rowspan="1" colspan="1">p.Asn517Ser</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">2</td>
+<td align="left" rowspan="1" colspan="1">1<a href="#T2Fn11" class="usa-link"><sup>j</sup></a>
+</td>
+<td align="left" rowspan="1" colspan="1">1<a href="#T2Fn15" class="usa-link"><sup>n</sup></a>
+</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">4</td>
+<td align="left" rowspan="1" colspan="1">16</td>
+<td align="left" rowspan="1" colspan="1">20</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A058</td>
+<td align="left" rowspan="1" colspan="1">Afro</td>
+<td align="left" rowspan="1" colspan="1">
+<em>BRCA2</em>
+</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">c.3685G&gt;A</td>
+<td align="left" rowspan="1" colspan="1">p.Val1229Ile</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">1<a href="#T2Fn11" class="usa-link"><sup>j</sup></a>
+</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">0</td>
+<td align="left" rowspan="1" colspan="1">1</td>
+<td align="left" rowspan="1" colspan="1">2</td>
+<td align="left" rowspan="1" colspan="1">3</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/T2/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<div class="tw-foot p">
+<div class="fn" id="T2Fn1"><p>The novel mutation is marked in bold.</p></div>
+<div class="fn" id="T2Fn2"><p>BIC, Breast Cancer Information Core database as of November 2020 (<a href="https://research.nhgri.nih.gov/bic/" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://research.nhgri.nih.gov/bic/</a>).</p></div>
+<div class="fn" id="T2Fn3"><p>Nomenclature follows Human Genome Variation Society (HGVS) (<a href="https://www.hgvs.org/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.hgvs.org/</a>).</p></div>
+<div class="fn" id="T2Fn4"><p>African descent was used for the African-American population.</p></div>
+<div class="fn" id="T2Fn5"><p>Hispanic descent was used for individuals of Spanish, Mexican, Central and South American, Cuban, or Puerto Rican descent.</p></div>
+<div class="fn" id="T2Fn6"><p>Unknown, no information available.</p></div>
+<div class="fn" id="T2Fn7"><p>Total reported in BIC and those from the present study.</p></div>
+<div class="fn" id="T2Fn8"><p>ClinVar as of November 2020 (<a href="https://www.ncbi.nlm.nih.gov/clinvar/" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.ncbi.nlm.nih.gov/clinvar/</a>).</p></div>
+<div class="fn" id="T2Fn9"><p>Total from BIC, ClinVar, and those from the present study.</p></div>
+<div class="fn" id="T2Fn10"><p>Mutation previously reported.<sup><a href="#CIT0015" class="usa-link" aria-describedby="CIT0015">15</a></sup></p></div>
+<div class="fn" id="T2Fn11"><p>Mutations identified in the present study.</p></div>
+<div class="fn" id="T2Fn12"><p>Novel mutation identified in the present study.</p></div>
+<div class="fn" id="T2Fn13"><p>Reported in 2 patients with BC from Colombia.<sup><a href="#CIT0028" class="usa-link" aria-describedby="CIT0028">28</a></sup></p></div>
+<div class="fn" id="T2Fn14"><p>Reported in 2 White-mestizo families from Colombia<sup><a href="#CIT0011" class="usa-link" aria-describedby="CIT0011">11</a></sup> and Spain<sup><a href="#CIT0025" class="usa-link" aria-describedby="CIT0025">25</a></sup> with multiple breast cancer cases.</p></div>
+<div class="fn" id="T2Fn15"><p>Reported in the Spanish population.</p></div>
+</div></section><p>The intronic <em>BRCA1</em>_c.213-12A&gt;G mutation was identified in an Afro-Colombian index patient diagnosed with BC at 37 years of age from a family featuring multiple BC cases from Bolivar (northern coast of Colombia). The proband’s mother was diagnosed with bilateral BC at the ages of 35 and 55 years and a deceased maternal aunt with BC at 30 years of age. Four other maternal family members were diagnosed with various cancer types: 2 with colon cancer at the ages of 41 and 60 years, and 2 with uterine cancer at the ages of 50 and 70 years (<a href="#sup1" class="usa-link">Supplementary Fig. S1A</a>). The pathogenic <em>BRCA1</em>/c.4163_4164insA mutation was identified in an Afro-Colombian family affected by both breast and OC, with the proband diagnosed with BC at the age of 45, a deceased sister diagnosed with OC at the age 47, and a maternal female cousin diagnosed with BC at the age of 47. Three other family members were diagnosed with various cancer types: 2 with colon cancer at 71 years of age and another with uterine cancer at 58 years of age (<a href="#sup1" class="usa-link">Supplementary Fig. S1B</a>). A novel pathogenic frameshift mutation, <em>BRCA1</em>_c.4203delT, was identified in an index patient diagnosed with BC at the age of 43 years from a family of the Raizal ethnic group from San Andres Island affected by multiple cases of BC. A deceased proband’s cousin on the maternal side was diagnosed with BC at the age of 45. Four other maternal family members were diagnosed with various cancer types: one with colon cancer at the age of 28 and 3 with uterine cancer at the ages of 25, 40, and 71 years (<a href="#sup1" class="usa-link">Supplementary Fig. S1C</a>). The <em>BRCA2</em>_c.2701delC mutation was identified in an Afro-Colombian family affected by breast/OC, with the proband diagnosed with BC at the age of 40, a deceased aunt diagnosed with BC at the age of 50, and 2 maternal cousins diagnosed with BC at the age of 50 or OC at the age of 36 (already deceased; <a href="#sup1" class="usa-link">Supplementary Fig. S1D</a>). The phenotypes of all families harboring deleterious <em>BRCA1/2</em> germline mutations are shown in <a href="#T3" class="usa-link">Table 3</a>.</p>
+<section class="tw xbox font-sm" id="T3"><h4 class="obj_head">Table 3.</h4>
+<div class="caption p"><p>Characteristics of the Afro-Colombian families affected by breast/ovarian cancer harboring <em>BRCA1/2</em> mutations and variants.</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups" width="100%" border="1">
+<thead>
+<tr>
+<th align="left" rowspan="2" colspan="1">Family</th>
+<th align="left" colspan="2" rowspan="1">No. of cancers</th>
+<th align="left" colspan="2" rowspan="1">Age at onset (years)</th>
+<th align="left" rowspan="2" colspan="1">Other cancers: age at onset (years)</th>
+</tr>
+<tr>
+<th align="left" rowspan="1" colspan="1">Female BC (bilateral)</th>
+<th align="left" rowspan="1" colspan="1">OC</th>
+<th align="left" rowspan="1" colspan="1">Female BC</th>
+<th align="left" rowspan="1" colspan="1">OC</th>
+</tr>
+</thead>
+<tbody>
+<tr><td align="left" colspan="6" rowspan="1">
+<em>Families carrying deleterious BRCA1 mutations</em>
+</td></tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A004</td>
+<td align="left" rowspan="1" colspan="1">3 (1)</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">37<a href="#T3Fn1" class="usa-link"><sup>a</sup></a>, 35/55, 30</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">2× colon (41, 60), 2× uterus (50, 70)</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A012</td>
+<td align="left" rowspan="1" colspan="1">2</td>
+<td align="left" rowspan="1" colspan="1">1</td>
+<td align="left" rowspan="1" colspan="1">45<a href="#T3Fn1" class="usa-link"><sup>a</sup></a>, 47</td>
+<td align="left" rowspan="1" colspan="1">47</td>
+<td align="left" rowspan="1" colspan="1">2× colon (71), uterus (58)</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A035</td>
+<td align="left" rowspan="1" colspan="1">3 (1)</td>
+<td align="left" rowspan="1" colspan="1">1</td>
+<td align="left" rowspan="1" colspan="1">30/33<a href="#T3Fn1" class="usa-link"><sup>a</sup></a>, 52, 30</td>
+<td align="left" rowspan="1" colspan="1">60</td>
+<td align="left" rowspan="1" colspan="1">Brain (60), stomach (59), prostate (60)</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A036</td>
+<td align="left" rowspan="1" colspan="1">2</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">43<a href="#T3Fn1" class="usa-link"><sup>a</sup></a>, 45</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">3× uterus (25, 40, 71), colon (28)</td>
+</tr>
+<tr><td align="left" colspan="6" rowspan="1">
+<em>Families carrying deleterious BRCA2 mutations</em>
+</td></tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A015</td>
+<td align="left" rowspan="1" colspan="1">3</td>
+<td align="left" rowspan="1" colspan="1">1</td>
+<td align="left" rowspan="1" colspan="1">40<a href="#T3Fn1" class="usa-link"><sup>a</sup></a>, 50, 50</td>
+<td align="left" rowspan="1" colspan="1">36</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+</tr>
+<tr><td align="left" colspan="6" rowspan="1">
+<em>Families carrying BRCA2 variants of uncertain clinical significance</em>
+</td></tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A032</td>
+<td align="left" rowspan="1" colspan="1">2</td>
+<td align="left" rowspan="1" colspan="1">——</td>
+<td align="left" rowspan="1" colspan="1">55<a href="#T3Fn1" class="usa-link"><sup>a</sup></a>, 63</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">2× leukemia (75, 80), esophagus (70), colon (65), bone (50)</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A038</td>
+<td align="left" rowspan="1" colspan="1">2</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">56<sup>∗</sup>,?</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">Prostate (66)</td>
+</tr>
+<tr>
+<td align="left" rowspan="1" colspan="1">A058</td>
+<td align="left" rowspan="1" colspan="1">2</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">48<sup>∗</sup>, 53</td>
+<td align="left" rowspan="1" colspan="1">—</td>
+<td align="left" rowspan="1" colspan="1">Stomach (66), prostate (61), uterus (72)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/T3/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<div class="tw-foot p">
+<div class="fn" id="T3Fn1"><p>Probands.</p></div>
+<div class="fn" id="T3Fn2"><p>BC, breast cancer; OC, ovarian cancer.</p></div>
+</div></section><p>Multiplex ligation-dependent probe amplification screening of the 55 index cases negative for small-scale <em>BRCA1/2</em> mutations did not reveal any LGRs.</p>
+<p>Haplotype analysis of the recurrent <em>BRCA2</em>_c.2701delC mutation was performed on 2 mutation carriers (one Afro-Colombian BC patient identified in the present study and one previously identified White/mestizo BC patient <sup><a href="#CIT0011" class="usa-link" aria-describedby="CIT0011">11</a></sup>) at 4 <em>BRCA2</em> flanking loci. The 2 <em>BRCA2</em>_c.2701delC carriers shared the same haplotype (<a href="#F1" class="usa-link">Fig. 1</a>).</p>
+<figure class="fig xbox font-sm" id="F1"><h4 class="obj_head">Figure 1.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><img class="graphic" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/2211/8895486/fc2e7bc1bae8/oyab026f0001.jpg" loading="lazy" height="487" width="800" alt="Figure 1."></p>
+<div class="p text-right font-secondary"><a href="figure/F1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Haplotype analysis of breast cancer patients carrying the <em>BRCA2</em>_2929delC mutation at 4 microsatellite loci flanking the <em>BRCA2</em> gene. A015: Afro-Colombian carrier; 382: White/mestizo carrier.<sup><a href="#CIT0011" class="usa-link" aria-describedby="CIT0011">11</a></sup> Alleles are coded by numbers. D13S290: allele 2 (CA)12, <a href="https://www.ncbi.nlm.nih.gov/nuccore/D13260" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">D13260</a>: allele 2 (CA)19, allele 6 (CA)23, allele 8 (CA)25, D13S171: allele 1 (CA)13, allele 2 (CA)14, allele 3 (CA)15, D13S267: allele 3 (CA)34, allele 4 (CA)35. Common haplotypes are indicated by a bold bar.</p></figcaption></figure></section></section><section id="s10"><h2 class="pmc_sec_title">Discussion</h2>
+<p>This is the first report that describes the frequency and spectrum of small-scale mutations and LGRs in the <em>BRCA1/2</em> genes of patients with early-onset and familial breast and OC among Colombians of African descent. Four <em>BRCA1/2</em> pathogenic/likely pathogenic variants (including the recurrent <em>BRCA2</em>_c.2701delC mutation, which showed a founder origin) were identified, and one variation was already confirmed <em>(BRCA1</em>_c.5123C&gt;A) in 60 Afro-Colombian families affected by breast and OC (8.3%). Overall, <em>BRCA1</em> mutations (80%) were more common than those in <em>BRCA2</em> (20%), which is similar to the findings observed in most Latin American countries.<sup><a href="#CIT0019" class="usa-link" aria-describedby="CIT0019">19</a>,<a href="#CIT0020" class="usa-link" aria-describedby="CIT0020">20</a></sup> This is in line with a report describing that women of African (15.6%) and Latin American (14.8%) descent have a significantly higher prevalence of deleterious <em>BRCA1/2</em> mutations than women of Western European ancestry (12.1%), mainly due to an increased prevalence of <em>BRCA1</em> mutations in these 2 groups.<sup><a href="#CIT0021" class="usa-link" aria-describedby="CIT0021">21</a></sup></p>
+<p>It has been reported that African-American patients with BC are more likely to be affected at a younger age, have a more aggressive disease, and have a higher likelihood of dying from this disease than women from other ethnic groups.<sup><a href="#CIT0022" class="usa-link" aria-describedby="CIT0022">22</a></sup> Additionally, it has been shown that African-American patients with BC harboring pathogenic <em>BRCA1/2</em> mutations are younger at the age of diagnosis than noncarriers (median ages: 37 years vs 47 years).<sup><a href="#CIT0023" class="usa-link" aria-describedby="CIT0023">23</a></sup> This is consistent with what was observed in our Afro-Colombian study, where the median age of BC onset among <em>BRCA1/2</em> carriers was 40 and of 51 for noncarriers. In another study on the African-American population in Washington, DC, the median age of BC diagnosis was 38 in <em>BRCA2</em> carriers, whereas that of noncarriers was 47.<sup><a href="#CIT0024" class="usa-link" aria-describedby="CIT0024">24</a></sup> This differs from the findings in the White/mestizo Colombian population, where there was no difference in the age of BC diagnosis between <em>BRCA1/2</em> carriers (median ages: 41 vs 45.5, respectively) and noncarriers (median age: 42).<sup><a href="#CIT0012" class="usa-link" aria-describedby="CIT0012">12</a></sup> These results suggest that, to ensure diagnosis of BC at the earliest possible age among Afro-Colombian <em>BRCA1/2</em> mutation carriers, priority should be placed on giving access to genetic tests to this specific population group. This should be brought to the attention of health authorities because the healthcare of those of African descent in Latin America continues to be neglected compared with that of the general population.</p>
+<p>The 2 <em>BRCA2</em>_c.2701delC mutation carriers (one Afro-Colombian BC patient from our study cohort and one White/mestizo BC patient previously reported<sup><a href="#CIT0011" class="usa-link" aria-describedby="CIT0011">11</a></sup>) shared a conserved haplotype at the 4 informative loci, implying that this mutation may have a common ancestor. This mutation was also previously identified in 2 families (one from Spain and one from Brazil).<sup><a href="#CIT0025" class="usa-link" aria-describedby="CIT0025">25</a>,<a href="#CIT0026" class="usa-link" aria-describedby="CIT0026">26</a></sup> This finding does not allow us to infer the possible origin of this mutation because it was identified in both Hispanic and Afro-descendant populations. However, it is likely that this mutation arose during the colonization of Latin America.<sup><a href="#CIT0027" class="usa-link" aria-describedby="CIT0027">27</a></sup></p>
+<p>The intronic <em>BRCA1</em>_c.213-12A&gt;G mutation identified in our cohort was previously described in 2 patients with BC from Antioquia (west of Colombia) at the ages of 30 and 39, respectively.<sup><a href="#CIT0028" class="usa-link" aria-describedby="CIT0028">28</a></sup> Unfortunately, data on the ethnicity of the 2 mutation carriers were not provided by the authors. However, given that Antioquia is one of the regions of Colombia with the highest proportion of Afro-Colombians<sup><a href="#CIT0004" class="usa-link" aria-describedby="CIT0004">4</a></sup>, it is possible that these 2 carriers were of African descent. This recurrent mutation should be further characterized in future larger-scale studies.</p>
+<p>In our study, a novel <em>BRCA1</em>_c.4203delT mutation in a BC patient from San Andres Island was identified, where the highest BC incidence and mortality rates occur (along with the Caribbean coast and Cali).<sup><a href="#CIT0029" class="usa-link" aria-describedby="CIT0029">29</a>,<a href="#CIT0030" class="usa-link" aria-describedby="CIT0030">30</a></sup> These results could be explained by the diverse genetic admixture that characterizes the Raizal population. Furthermore, the high incidence and mortality rates of BC have been linked to precarious socioeconomic conditions, poor healthcare systems, limited access to medications, and shortages of care facilities and genetic counseling; collectively, these conditions are often common among less favored populations, which frequently correspond to islands and departments off the coast of Colombia.</p></section><section id="s11"><h2 class="pmc_sec_title">Conclusion</h2>
+<p>Of the 5 pathogenic Afro-Colombian mutations, 2 mutations, <em>BRCA1</em>_c.5123C&gt;A <sup><a href="#CIT0012" class="usa-link" aria-describedby="CIT0012">12</a></sup> and <em>BRCA2</em>_c.2701delC, were previously reported in White/mestizo patients with BC,<sup><a href="#CIT0011" class="usa-link" aria-describedby="CIT0011">11</a></sup> whereas the other 3 <em>BRCA1</em> mutations, <em>BRCA1</em>_c.213-12A&gt;G, c.4163_4164insA, and c.4203delT, were only detected in Afro-Colombians. The spectrum of mutations of the <em>BRCA1/2</em> genes could thus vary by ethnic group. Despite the small sample size and the number of pathogenic mutations identified, our findings may point to differences in the <em>BRCA1/2</em> mutation spectrum between these 2 population groups from Colombia.</p></section><section id="sec16"><h2 class="pmc_sec_title">Supplementary Material</h2>
+<section class="sm xbox font-sm" id="sup1"><div class="caption p"><span>oyab026_suppl_Supplementary_Figures</span></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/8895486/bin/oyab026_suppl_supplementary_figures.pdf" data-ga-action="click_feat_suppl" class="usa-link">Click here for additional data file.</a><sup> (197.8KB, pdf) </sup>
+</div></div></section><section class="sm xbox font-sm" id="sup2"><div class="caption p"><span>oyab026_suppl_Supplementary_Tables</span></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/8895486/bin/oyab026_suppl_supplementary_tables.pdf" data-ga-action="click_feat_suppl" class="usa-link">Click here for additional data file.</a><sup> (86.1KB, pdf) </sup>
+</div></div></section></section><section id="a1" class="ack"><h2 class="pmc_sec_title">Acknowledgments</h2>
+<p>We are grateful to all of the women who participated in this study. We thank Michael Gilbert for his expert technical assistance. This work was supported by the Pontificia Universidad Javeriana, Universidad del Rosario, AstraZeneca, and Colciencias, from Colombia, as well as the Alexander von Humboldt Foundation (return fellowship to D.M.T.L.) and the Deutsches Krebsforschungszentrum (DKFZ), from Germany. We also thank CENTOGENE for their support in the genotyping analysis. Finally, we thank Edanz (<a href="https://en-author-services.edanz.com/ac" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://en-author-services.edanz.com/ac</a>) for editing the English text of a draft of this manuscript.</p></section><section id="s154"><h2 class="pmc_sec_title">Funding</h2>
+<p>This study was supported by the Pontificia Universidad Javeriana (Project No. 6601); AstraZeneca (Project No. D0810L00012); Universidad del Rosario and Ministerio de Ciencia Tecnología e Innovación (Minciencias) Ph.D. scholarship (Convocatoria 757 de 2016-Doctorados Nacionales) from Colombia, as well as the Alexander von Humboldt Foundation (return fellowship to D.M.T.L.) and the Deutsches Krebsforschungszentrum (DKFZ), from Germany and by CENTOGENE.</p></section><section id="s150"><h2 class="pmc_sec_title">Conflict of Interest</h2>
+<p>The authors indicated no financial relationships.</p></section><section id="s151"><h2 class="pmc_sec_title">Author Contributions</h2>
+<p>Conception/design: E.V., D.T., U.H. Provision of study material or patients: L.F.V., R.B. Collection and/or assembly of data: F.G., E.V., D.T.. Data analysis and interpretation: E.V., R.D., V.E. V., F.G., L.M., L.F.V., R.B., A.G., J.C.G., D.T. Manuscript writing: E.V., R.D., V.E.V., U.H., D.T. Final approval of manuscript: all authors.</p></section><section id="s152"><h2 class="pmc_sec_title">Data Availability</h2>
+<p>The data underlying this article will be shared on reasonable request to the corresponding author.</p></section><section id="s153"><h2 class="pmc_sec_title">Ethical Approval</h2>
+<p>All procedures performed in this study involving human participants were in accordance with the ethical standards of the institutional and/or national research committee and with the 1964 Declaration of Helsinki and its later amendments or comparable ethical standards.</p></section><section id="r1" class="ref-list"><h2 class="pmc_sec_title">References</h2>
+<section id="r1_sec2"><ul class="ref-list font-sm" style="list-style-type:none">
+<li id="CIT0001">
+<span class="label">1.</span><cite>
+Sung H, Ferlay J, Siegel RL, et al. 
+Global cancer statistics 2020: GLOBOCAN estimates of incidence and mortality20 worldwide for 36 cancers in 185 countries. CA Cancer J Clin. 2021;0(0):1-41.</cite> [<a href="https://doi.org/10.3322/caac.21660" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33538338/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=CA%20Cancer%20J%20Clin.&amp;title=Global%20cancer%20statistics%202020:%20GLOBOCAN%20estimates%20of%20incidence%20and%20mortality20%20worldwide%20for%2036%20cancers%20in%20185%20countries&amp;volume=0&amp;issue=0&amp;publication_year=2021&amp;pages=1-41&amp;pmid=33538338&amp;doi=10.3322/caac.21660&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0002">
+<span class="label">2.</span><cite>
+Wang S, Ray N, Rojas W, et al. 
+Geographic patterns of genome admixture in Latin American mestizos. PLoS Genet. 2008;4(3):1-9.</cite> [<a href="https://doi.org/10.1371/journal.pgen.1000037" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC2265669/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/18369456/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=PLoS%20Genet.&amp;title=Geographic%20patterns%20of%20genome%20admixture%20in%20Latin%20American%20mestizos&amp;volume=4&amp;issue=3&amp;publication_year=2008&amp;pages=1-9&amp;pmid=18369456&amp;doi=10.1371/journal.pgen.1000037&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0003">
+<span class="label">3.</span><cite>
+Fernández FL.
+Composición étnica de las tres áreas culturales del contienente americano al comienzo del siglo XXI. Converg Rev Ciencias Soc. 2005;12(38):185-232.</cite> [<a href="https://scholar.google.com/scholar_lookup?journal=Converg%20Rev%20Ciencias%20Soc.&amp;title=Composici%C3%B3n%20%C3%A9tnica%20de%20las%20tres%20%C3%A1reas%20culturales%20del%20contienente%20americano%20al%20comienzo%20del%20siglo%20XXI&amp;volume=12&amp;issue=38&amp;publication_year=2005&amp;pages=185-232&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0004">
+<span class="label">4.</span><cite>
+DANE.
+Población Negra, Afrocolombiana, Raizal Y Palenquera Resultados Del Censo Nacional De Población Y Vivienda 2018. Estadísticas Vitales (EEVV) Nacimientos y Defunciones, 69. 2020. Available from: <a href="https://www.dane.gov.co/files/investigaciones/boletines/grupos-etnicos/presentacion-grupos-etnicos-poblacion-NARP-2019.pdf" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.dane.gov.co/files/investigaciones/boletines/grupos-etnicos/presentacion-grupos-etnicos-poblacion-NARP-2019.pdf</a></cite> [<a href="https://scholar.google.com/scholar_lookup?title=Poblaci%C3%B3n%20Negra,%20Afrocolombiana,%20Raizal%20Y%20Palenquera%20Resultados%20Del%20Censo%20Nacional%20De%20Poblaci%C3%B3n%20Y%20Vivienda%202018&amp;publication_year=2020&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0005">
+<span class="label">5.</span><cite>
+Ministerio de Cultura. República de Colombia. Afrocolombianos, población con huellas de africanía. Minist Cult. 2010;(2000):1-13. Available from: <a href="https://www.mincultura.gov.co/areas/poblaciones/comunidades-negras-afrocolombianas-raizales-y-palenqueras/Documents/Caracterizaci%C3%B3n%20comunidades%20negras%20y%20afrocolombianas.pdf" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.mincultura.gov.co/areas/poblaciones/comunidades-negras-afrocolombianas-raizales-y-palenqueras/Documents/Caracterizaci%C3%B3n%20comunidades%20negras%20y%20afrocolombianas.pdf</a></cite> [<a href="https://scholar.google.com/scholar_lookup?journal=Minist%20Cult&amp;title=Afrocolombianos,%20poblaci%C3%B3n%20con%20huellas%20de%20african%C3%ADa&amp;issue=2000&amp;publication_year=2010&amp;pages=1-13&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0006">
+<span class="label">6.</span><cite>
+Moreno-Estrada A, Gravel S, Zakharia F, et al. 
+Reconstructing the population genetic history of the Caribbean. PLoS Genet. 2013;9(11):1-19.</cite> [<a href="https://doi.org/10.1371/journal.pgen.1003925" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3828151/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/24244192/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=PLoS%20Genet.&amp;title=Reconstructing%20the%20population%20genetic%20history%20of%20the%20Caribbean&amp;volume=9&amp;issue=11&amp;publication_year=2013&amp;pages=1-19&amp;pmid=24244192&amp;doi=10.1371/journal.pgen.1003925&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0007">
+<span class="label">7.</span><cite>
+Ruiz-Linares A, Adhikari K, Acuña-Alonzo V, et al. 
+Admixture in Latin America: Geographic structure, phenotypic diversity and self-perception of ancestry based on 7,342 individuals. PLoS Genet. 2014;10(9):1-13.</cite> [<a href="https://doi.org/10.1371/journal.pgen.1004572" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4177621/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/25254375/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=PLoS%20Genet.&amp;title=Admixture%20in%20Latin%20America:%20Geographic%20structure,%20phenotypic%20diversity%20and%20self-perception%20of%20ancestry%20based%20on%207,342%20individuals&amp;volume=10&amp;issue=9&amp;publication_year=2014&amp;pages=1-13&amp;pmid=25254375&amp;doi=10.1371/journal.pgen.1004572&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0008">
+<span class="label">8.</span><cite>
+Salzano FM, Bortolini MC.. 
+The Evolution and Genetics of Latin American Populations. Cambridge, UK: Cambridge University Press. 2005;28.</cite> [<a href="https://scholar.google.com/scholar_lookup?title=The%20Evolution%20and%20Genetics%20of%20Latin%20American%20Populations&amp;publication_year=2005&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0009">
+<span class="label">9.</span><cite>
+Fackenthal JD, Olopade OI.. 
+Breast cancer risk associated with BRCA1 and BRCA2 in diverse populations. Nat Rev Cancer. 2007;7(12):937-948.</cite> [<a href="https://doi.org/10.1038/nrc2054" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/18034184/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Nat%20Rev%20Cancer.&amp;title=Breast%20cancer%20risk%20associated%20with%20BRCA1%20and%20BRCA2%20in%20diverse%20populations&amp;volume=7&amp;issue=12&amp;publication_year=2007&amp;pages=937-948&amp;pmid=18034184&amp;doi=10.1038/nrc2054&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0010">
+<span class="label">10.</span><cite>
+Harbeck N, Penault-Llorca F, Cortes J, et al. 
+Breast cancer. Vol. 5, nature reviews. Disease Primers. 2019;1-31.</cite> [<a href="https://doi.org/10.1038/s41572-019-0111-2" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31548545/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Disease%20Primers.&amp;title=Breast%20cancer.%20Vol.%205,%20nature%20reviews&amp;publication_year=2019&amp;pages=1-31&amp;pmid=31548545&amp;doi=10.1038/s41572-019-0111-2&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0011">
+<span class="label">11.</span><cite>
+Torres D, Bermejo JL, Rashid MU, et al. 
+Prevalence and penetrance of BRCA1 and BRCA2 germline mutations in colombian breast cancer patients. Sci Rep. 2017;7(1):4713. Available from: <a href="https://pubmed.ncbi.nlm.nih.gov/28680148/#:~:text=The%20estimated%20cumulative%20risk%20of,risk%20of%20breast%20cancer%204.05).%5Cr%5Cn" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://pubmed.ncbi.nlm.nih.gov/28680148/#:~:text=The%20estimated%20cumulative%20risk%20of,risk%20of%20breast%20cancer%204.05).</a></cite> [<a href="https://doi.org/10.1038/s41598-017-05056-y" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5498630/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28680148/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Sci%20Rep.&amp;title=Prevalence%20and%20penetrance%20of%20BRCA1%20and%20BRCA2%20germline%20mutations%20in%20colombian%20breast%20cancer%20patients&amp;volume=7&amp;issue=1&amp;publication_year=2017&amp;pages=4713&amp;pmid=28680148&amp;doi=10.1038/s41598-017-05056-y&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0012">
+<span class="label">12.</span><cite>
+Torres D, Rashid MU, Gil F, et al. 
+High proportion of BRCA1/2 founder mutations in Hispanic breast/ovarian cancer families from Colombia. Breast Cancer Res Treat. 2007;103(2):225-232.</cite> [<a href="https://doi.org/10.1007/s10549-006-9370-1" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/17080309/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Breast%20Cancer%20Res%20Treat.&amp;title=High%20proportion%20of%20BRCA1/2%20founder%20mutations%20in%20Hispanic%20breast/ovarian%20cancer%20families%20from%20Colombia&amp;volume=103&amp;issue=2&amp;publication_year=2007&amp;pages=225-232&amp;pmid=17080309&amp;doi=10.1007/s10549-006-9370-1&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0013">
+<span class="label">13.</span><cite>
+Esteban J, Hernández L, Llacuachaqui M, et al. 
+Prevalence of BRCA1 and BRCA2 mutations in unselected breast cancer patients from medellín, Colombia. Hered Cancer Clin Pract. 2014;12:1-5.</cite> [<a href="https://doi.org/10.1186/1897-4287-12-11" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3998735/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/24742220/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Hered%20Cancer%20Clin%20Pract.&amp;title=Prevalence%20of%20BRCA1%20and%20BRCA2%20mutations%20in%20unselected%20breast%20cancer%20patients%20from%20medell%C3%ADn,%20Colombia&amp;volume=12&amp;publication_year=2014&amp;pages=1-5&amp;pmid=24742220&amp;doi=10.1186/1897-4287-12-11&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0014">
+<span class="label">14.</span><cite>
+Rodríguez AO, Llacuachaqui M, Pardo GG, et al. 
+BRCA1 and BRCA2 mutations among ovarian cancer patients from Colombia. Gynecol Oncol. 2012;124(2):236-243. Available from: 10.1016/j.ygyno.2011.10.027</cite> [<a href="https://doi.org/10.1016/j.ygyno.2011.10.027" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/22044689/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Gynecol%20Oncol.&amp;title=BRCA1%20and%20BRCA2%20mutations%20among%20ovarian%20cancer%20patients%20from%20Colombia&amp;volume=124&amp;issue=2&amp;publication_year=2012&amp;pages=236-243&amp;pmid=22044689&amp;doi=10.1016/j.ygyno.2011.10.027&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0015">
+<span class="label">15.</span><cite>
+Vargas E, Lopez DMT, de Deugd R, et al. 
+Low prevalence of the four common Colombian founder mutations in BRCA1 and BRCA2 in early-onset and Familial Afro-Colombian patients with breast cancer. Oncologist. 2019;24(7):e475-e479.</cite> [<a href="https://doi.org/10.1634/theoncologist.2018-0346" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6656434/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30541753/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Oncologist.&amp;title=Low%20prevalence%20of%20the%20four%20common%20Colombian%20founder%20mutations%20in%20BRCA1%20and%20BRCA2%20in%20early-onset%20and%20Familial%20Afro-Colombian%20patients%20with%20breast%20cancer&amp;volume=24&amp;issue=7&amp;publication_year=2019&amp;pages=e475-e479&amp;pmid=30541753&amp;doi=10.1634/theoncologist.2018-0346&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0016">
+<span class="label">16.</span><cite>
+Laitinen J, Samarut J, Hölttä E.. 
+A nontoxic and versatile protein salting-out method for isolation of DNA. Biotechniques. 1994;17(2):316, 318, 320-322. Available from: <a href="http://europepmc.org/abstract/MED/7980935" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://europepmc.org/abstract/MED/7980935</a></cite> [<a href="https://pubmed.ncbi.nlm.nih.gov/7980935/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Biotechniques&amp;title=A%20nontoxic%20and%20versatile%20protein%20salting-out%20method%20for%20isolation%20of%20DNA&amp;volume=17&amp;issue=2&amp;publication_year=1994&amp;pages=316&amp;pmid=7980935&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0017">
+<span class="label">17.</span><cite>
+Hansen TVO, Jønson L, Albrechtsen A, Andersen MK, Ejlertsen B, Nielsen FC.. 
+Large BRCA1 and BRCA2 genomic rearrangements in Danish high risk breast-ovarian cancer families. Breast Cancer Res Treat. 2009;115(2):315-323.</cite> [<a href="https://doi.org/10.1007/s10549-008-0088-0" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/18546071/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Breast%20Cancer%20Res%20Treat.&amp;title=Large%20BRCA1%20and%20BRCA2%20genomic%20rearrangements%20in%20Danish%20high%20risk%20breast-ovarian%20cancer%20families&amp;volume=115&amp;issue=2&amp;publication_year=2009&amp;pages=315-323&amp;pmid=18546071&amp;doi=10.1007/s10549-008-0088-0&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0018">
+<span class="label">18.</span><cite>
+Neuhausen SL, Godwin AK, Gershoni-baruch R, et al. 
+Haplotype and phenotype analysis of nine recurrent BRCA2 mutations in 111 families: results of an international study. Am J Med Genet. 1998;62:1381-1388.</cite> [<a href="https://doi.org/10.1086/301885" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC1377164/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/9585613/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Am%20J%20Med%20Genet.&amp;title=Haplotype%20and%20phenotype%20analysis%20of%20nine%20recurrent%20BRCA2%20mutations%20in%20111%20families:%20results%20of%20an%20international%20study&amp;volume=62&amp;publication_year=1998&amp;pages=1381-1388&amp;pmid=9585613&amp;doi=10.1086/301885&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0019">
+<span class="label">19.</span><cite>
+Dutil J, Golubeva VA, Pacheco-Torres AL, Diaz-Zabala HJ, Matta JL, Monteiro AN.. 
+The spectrum of BRCA1 and BRCA2 alleles in Latin America and the Caribbean: a clinical perspective. Breast Cancer Res Treat. 2015;154(3):441-453.</cite> [<a href="https://doi.org/10.1007/s10549-015-3629-3" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4661195/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/26564481/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Breast%20Cancer%20Res%20Treat.&amp;title=The%20spectrum%20of%20BRCA1%20and%20BRCA2%20alleles%20in%20Latin%20America%20and%20the%20Caribbean:%20a%20clinical%20perspective&amp;volume=154&amp;issue=3&amp;publication_year=2015&amp;pages=441-453&amp;pmid=26564481&amp;doi=10.1007/s10549-015-3629-3&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0020">
+<span class="label">20.</span><cite>
+Jara L, Morales S, de Mayo T, Gonzalez-Hormazabal P, Carrasco V, Godoy R.. 
+Mutations in BRCA1, BRCA2 and other breast and ovarian cancer susceptibility genes in Central and South American populations. Biol Res. 2017;50(1):35.</cite> [<a href="https://doi.org/10.1186/s40659-017-0139-2" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6389095/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28985766/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Biol%20Res.&amp;title=Mutations%20in%20BRCA1,%20BRCA2%20and%20other%20breast%20and%20ovarian%20cancer%20susceptibility%20genes%20in%20Central%20and%20South%20American%20populations&amp;volume=50&amp;issue=1&amp;publication_year=2017&amp;pages=35&amp;pmid=28985766&amp;doi=10.1186/s40659-017-0139-2&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0021">
+<span class="label">21.</span><cite>
+Hall MJ, Reid JE, Burbidge LA, et al. 
+BRCA1 and BRCA2 mutations in women of different ethnicities undergoing testing for hereditary breast-ovarian cancer. Cancer. 2009;115(10):2222-2233.</cite> [<a href="https://doi.org/10.1002/cncr.24200" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC2771545/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/19241424/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Cancer.&amp;title=BRCA1%20and%20BRCA2%20mutations%20in%20women%20of%20different%20ethnicities%20undergoing%20testing%20for%20hereditary%20breast-ovarian%20cancer&amp;volume=115&amp;issue=10&amp;publication_year=2009&amp;pages=2222-2233&amp;pmid=19241424&amp;doi=10.1002/cncr.24200&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0022">
+<span class="label">22.</span><cite>
+Churpek JE, Walsh T, Zheng Y, et al. 
+Inherited predisposition to breast cancer among African American women. Breast Cancer Res Treat. 2015;149(1):31-39.</cite> [<a href="https://doi.org/10.1007/s10549-014-3195-0" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4298662/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/25428789/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Breast%20Cancer%20Res%20Treat.&amp;title=Inherited%20predisposition%20to%20breast%20cancer%20among%20African%20American%20women&amp;volume=149&amp;issue=1&amp;publication_year=2015&amp;pages=31-39&amp;pmid=25428789&amp;doi=10.1007/s10549-014-3195-0&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0023">
+<span class="label">23.</span><cite>
+Gao Q, Tomlinson G, Das S, et al. 
+Prevalence of BRCA1 and BRCA2 mutations among clinic-based African American families with breast cancer. Hum Genet. 2000;107(2):186-191.</cite> [<a href="https://doi.org/10.1007/s004390000290" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/11030417/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Hum%20Genet.&amp;title=Prevalence%20of%20BRCA1%20and%20BRCA2%20mutations%20among%20clinic-based%20African%20American%20families%20with%20breast%20cancer&amp;volume=107&amp;issue=2&amp;publication_year=2000&amp;pages=186-191&amp;pmid=11030417&amp;doi=10.1007/s004390000290&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0024">
+<span class="label">24.</span><cite>
+Kanaan Y, Kpenu E, Utley K, et al. 
+Inherited BRCA2 mutations in African Americans with breast and/or ovarian cancer: a study of familial and early onset cases.
+Hum Genet.
+2003;113(5):452-460.</cite> [<a href="https://doi.org/10.1007/s00439-003-0999-0" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/12942367/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Hum%20Genet.&amp;title=Inherited%20BRCA2%20mutations%20in%20African%20Americans%20with%20breast%20and/or%20ovarian%20cancer:%20a%20study%20of%20familial%20and%20early%20onset%20cases.&amp;volume=113&amp;issue=5&amp;publication_year=2003&amp;pages=452-460&amp;pmid=12942367&amp;doi=10.1007/s00439-003-0999-0&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0025">
+<span class="label">25.</span><cite>
+Miramar MD, Calvo MT, Rodriguez A, et al. 
+Genetic analysis of BRCA1 and BRCA2 in breast/ovarian cancer families from Aragon (Spain): two novel truncating mutations and a large genomic deletion in BRCA1. Breast Cancer Res Treat. 2008;112(2):353-358.</cite> [<a href="https://doi.org/10.1007/s10549-007-9868-1" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/18176857/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Breast%20Cancer%20Res%20Treat.&amp;title=Genetic%20analysis%20of%20BRCA1%20and%20BRCA2%20in%20breast/ovarian%20cancer%20families%20from%20Aragon%20(Spain):%20two%20novel%20truncating%20mutations%20and%20a%20large%20genomic%20deletion%20in%20BRCA1&amp;volume=112&amp;issue=2&amp;publication_year=2008&amp;pages=353-358&amp;pmid=18176857&amp;doi=10.1007/s10549-007-9868-1&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0026">
+<span class="label">26.</span><cite>
+Palmero EI, Carraro DM, Alemar B, et al. 
+The germline mutational landscape of BRCA1 and BRCA2 in Brazil. Sci Rep. 2018;8(1):1-10.</cite> [<a href="https://doi.org/10.1038/s41598-018-27315-2" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6003960/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29907814/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Sci%20Rep.&amp;title=The%20germline%20mutational%20landscape%20of%20BRCA1%20and%20BRCA2%20in%20Brazil&amp;volume=8&amp;issue=1&amp;publication_year=2018&amp;pages=1-10&amp;pmid=29907814&amp;doi=10.1038/s41598-018-27315-2&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0027">
+<span class="label">27.</span><cite>
+Tuazon AMDA, Lott P, Bohórquez M, et al. 
+Haplotype analysis of the internationally distributed BRCA1 c.3331_3334delCAAG founder mutation reveals a common ancestral origin in Iberia. Breast Cancer Res. 2020;22(1):108.</cite> [<a href="https://doi.org/10.1186/s13058-020-01341-3" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC7579869/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33087180/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Breast%20Cancer%20Res.&amp;title=Haplotype%20analysis%20of%20the%20internationally%20distributed%20BRCA1%20c.3331_3334delCAAG%20founder%20mutation%20reveals%20a%20common%20ancestral%20origin%20in%20Iberia&amp;volume=22&amp;issue=1&amp;publication_year=2020&amp;pages=108&amp;pmid=33087180&amp;doi=10.1186/s13058-020-01341-3&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0028">
+<span class="label">28.</span><cite>
+Cock-Rada AM, Ossa CA, Garcia HI, Gomez LR.. 
+A multi-gene panel study in hereditary breast and ovarian cancer in Colombia. Fam Cancer. 2018;17(1):23-30.</cite> [<a href="https://doi.org/10.1007/s10689-017-0004-z" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28528518/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Fam%20Cancer.&amp;title=A%20multi-gene%20panel%20study%20in%20hereditary%20breast%20and%20ovarian%20cancer%20in%20Colombia&amp;volume=17&amp;issue=1&amp;publication_year=2018&amp;pages=23-30&amp;pmid=28528518&amp;doi=10.1007/s10689-017-0004-z&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0029">
+<span class="label">29.</span><cite>
+Pardo C, de Vries E, Buitrago L, Gamboa O.. 
+Atlas de Mortalidad por Cáncer en Colombia, cuarta edición. Bogotá D. C. Instituto Nacional de Cancerología. 2017. 1-124 p.</cite> [<a href="https://scholar.google.com/scholar_lookup?title=Atlas%20de%20Mortalidad%20por%20C%C3%A1ncer%20en%20Colombia,%20cuarta%20edici%C3%B3n&amp;publication_year=2017&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="CIT0030">
+<span class="label">30.</span><cite>
+Pardo C, Cendales R.. 
+Cancer incidence estimates and mortality for the top 5 cancer in Colombia, 2007-2011. Colomb Med. 2018;49(1):16-22.</cite> [<a href="https://doi.org/10.25100/cm.v49i1.3596" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6018817/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29983460/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Colomb%20Med.&amp;title=Cancer%20incidence%20estimates%20and%20mortality%20for%20the%20top%205%20cancer%20in%20Colombia,%202007-2011&amp;volume=49&amp;issue=1&amp;publication_year=2018&amp;pages=16-22&amp;pmid=29983460&amp;doi=10.25100/cm.v49i1.3596&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+</ul></section></section><section id="_ad93_" lang="en" class="associated-data"><h2 class="pmc_sec_title">Associated Data</h2>
+<p class="font-secondary"><em>This section collects any data citations, data availability statements, or supplementary materials included in this article.</em></p>
+<section id="_adsm93_" lang="en" class="supplementary-materials"><h3 class="pmc_sec_title">Supplementary Materials</h3>
+<section class="sm xbox font-sm" id="db_ds_supplementary-material1_reqid_"><div class="caption p"><span>oyab026_suppl_Supplementary_Figures</span></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/8895486/bin/oyab026_suppl_supplementary_figures.pdf" data-ga-action="click_feat_suppl" class="usa-link">Click here for additional data file.</a><sup> (197.8KB, pdf) </sup>
+</div></div></section><section class="sm xbox font-sm" id="db_ds_supplementary-material2_reqid_"><div class="caption p"><span>oyab026_suppl_Supplementary_Tables</span></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/8895486/bin/oyab026_suppl_supplementary_tables.pdf" data-ga-action="click_feat_suppl" class="usa-link">Click here for additional data file.</a><sup> (86.1KB, pdf) </sup>
+</div></div></section></section><section id="_adda93_" lang="en" class="data-availability-statement"><h3 class="pmc_sec_title">Data Availability Statement</h3>
+<p>The data underlying this article will be shared on reasonable request to the corresponding author.</p></section></section></section><footer class="p courtesy-note font-secondary font-sm text-center"><hr class="headless">
+<p>Articles from The Oncologist are provided here courtesy of <strong>Oxford University Press</strong></p></footer></section></article>
+
+                      
+
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+<!-- Secondary navigation placeholder -->
+<div class="pmc-sidenav desktop:grid-col-4 display-flex">
+    <section class="pmc-sidenav__container" aria-label="Article resources and navigation">
+        <button type="button" class="usa-button pmc-sidenav__container__close usa-button--unstyled">
+            <img src="/static/img/usa-icons/close.svg" role="img" alt="Close" />
+        </button>
+    <div class="display-none desktop:display-block">
+       <section class="margin-top-4 desktop:margin-top-0">
+              <h2 class="margin-top-0">ACTIONS</h2>
+           <ul class="usa-list usa-list--unstyled usa-list--actions">
+               
+               <li>
+                     <a
+                             href="https://doi.org/10.1093/oncolo/oyab026"
+                             class="usa-button usa-button--outline width-24 font-xs display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                             target="_blank"
+                             rel="noreferrer noopener"
+                             data-ga-category="actions"
+                             data-ga-action="click"
+                             data-ga-label="publisher_link_desktop"
+                     >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#launch"></use>
+                         </svg>
+                         <span class="display-inline-flex flex-justify-center flex-1 padding-right-2">View on publisher site</span>
+                     </a>
+               </li>
+               
+               
+               <li>
+                    <a
+                            href="pdf/oyab026.pdf"
+                            class="usa-button usa-button--outline width-24 display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="pdf_download_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1">PDF (303.1 KB)</span>
+                    </a>
+               </li>
+               
+                
+               <li>
+                   <button role="button" class="usa-button width-24 citation-dialog-trigger display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                        aria-label="Open dialog with citation text in different styles"
+                        data-ga-category="actions"
+                        data-ga-action="open"
+                        data-ga-label="cite_desktop"
+                        data-all-citations-url="/resources/citations/8895486/"
+                        data-citation-style="nlm"
+                        data-download-format-link="/resources/citations/8895486/export/"
+                    >
+                        <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                        </svg>
+                       <span class="display-inline-flex flex-justify-center flex-1 button-label">Cite</span>
+                    </button>
+               </li>
+                
+               <li>
+
+                        <button class="usa-button width-24 collections-dialog-trigger collections-button display-inline-flex flex-align-center flex-justify-start padding-left-1 collections-button-empty"
+                              aria-label="Save article in MyNCBI collections."
+                              data-ga-category="actions"
+                              data-ga-action="click"
+                              data-ga-label="collections_button_desktop"
+                              data-collections-open-dialog-enabled="false"
+                              data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC8895486%2F%23open-collections-dialog"
+                              data-in-collections="false">
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                            <span class="display-inline-flex flex-justify-center flex-1">Collections</span>
+                       </button>
+               </li>
+               <li class="pmc-permalink">
+                    <button
+                            type="button"
+                            class="usa-button width-24 display-inline-flex flex-align-center flex-justify padding-left-1 shadow-none"
+                            aria-label="Show article permalink"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="permalink_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#share"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1 button-label">Permalink</span>
+                    </button>
+                   
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC8895486/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+               </li>
+           </ul>
+       </section>
+     </div>
+
+        <section class="pmc-resources margin-top-6 desktop:margin-top-4" data-page-path="/articles/PMC8895486/">
+            <h2 class="margin-top-0">RESOURCES</h2>
+            
+                <div class="usa-accordion usa-accordion--multiselectable" data-allow-multiple>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-similar-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_similar_articles"
+                        data-ga-label="/articles/PMC8895486/"
+                        data-action-open="open_similar_articles"
+                        data-action-close="close_similar_articles"
+                        >
+                            Similar articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-similar-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/similar-article-links/35641219/"
+                            
+                    >
+                        
+                    </div>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-cited-by-other-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_cited_by"
+                        data-ga-label="/articles/PMC8895486/"
+                        data-action-open="open_cited_by"
+                        data-action-close="close_cited_by"
+                        >
+                             Cited by other articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-cited-by-other-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/cited-by-links/35641219/"
+                            
+                    >
+                          
+                    </div>
+                    
+                        <h3 class="usa-accordion__heading">
+                            <button
+                            type="button"
+                            class="usa-accordion__button"
+                            aria-expanded="false"
+                            aria-controls="resources-links-to-ncbi-databases"
+                            data-ga-category="resources_accordion"
+                            data-ga-action="open_NCBI_links"
+                            data-ga-label="/articles/PMC8895486/"
+                            data-action-open="open_NCBI_links"
+                            data-action-close="close_NCBI_link"
+                            >
+                                 Links to NCBI Databases
+                            </button>
+                        </h3>
+                        <div
+                                id="resources-links-to-ncbi-databases"
+                                class="usa-accordion__content usa-prose"
+                                data-source-url="/resources/db-links/8895486/"
+                        >
+                        </div>
+                    
+                    
+                </div>
+            
+        </section>
+
+
+        <section
+        class="usa-in-page-nav usa-in-page-nav--wide margin-top-6 desktop:margin-top-4"
+        data-title-text="On this page"
+        data-title-heading-level="h2"
+        data-scroll-offset="0"
+        data-root-margin="-10% 0px -80% 0px"
+        data-main-content-selector="main"
+        data-threshold="1"
+        hidden
+        ></section>
+    </section>
+</div>
+
+
+        
+
+<div class="overlay" role="dialog" aria-label="Citation Dialog" hidden>
+    <div class="dialog citation-dialog" aria-hidden="true">
+        <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+            <h2 class="usa-modal__heading margin-0">Cite</h2>
+             <button type="button" class="usa-button usa-button--unstyled close-overlay text-black width-auto"  tabindex="1">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+             </button>
+        </div>
+
+        
+
+<div class="citation-text-block">
+  <div class="citation-text margin-bottom-2"></div>
+  <ul class="usa-list usa-list--unstyled display-inline-flex flex-justify width-full flex-align-center">
+      <li>
+        <button
+          class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center copy-button dialog-focus"
+          data-ga-category="save_share"
+          data-ga-action="cite"
+          data-ga-label="copy"
+          tabindex="2">
+            <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+            </svg>
+            <span>Copy</span>
+        </button>
+      </li>
+      <li>
+          <a
+              href="#"
+              role="button"
+              class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center export-button"
+              data-ga-category="save_share"
+              data-ga-action="cite"
+              data-ga-label="download"
+              title="Download a file for external citation management software"
+              tabindex="3">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                </svg>
+                <span class="display-none mobile-lg:display-inline">Download .nbib</span>
+                <span class="display-inline mobile-lg:display-none">.nbib</span>
+            </a>
+      </li>
+      <li>
+          
+
+<div class="display-inline-flex flex-align-center">
+  <label class="usa-label margin-top-0">Format:</label>
+  <select aria-label="Format" class="usa-select citation-style-selector padding-1 margin-top-0 border-0 padding-right-4" tabindex="4" >
+    
+      <option data-style-url-name="ama"
+              value="AMA"
+              >
+        AMA
+      </option>
+    
+      <option data-style-url-name="apa"
+              value="APA"
+              >
+        APA
+      </option>
+    
+      <option data-style-url-name="mla"
+              value="MLA"
+              >
+        MLA
+      </option>
+    
+      <option data-style-url-name="nlm"
+              value="NLM"
+              selected="selected">
+        NLM
+      </option>
+    
+  </select>
+</div>
+      </li>
+  </ul>
+</div>
+    </div>
+</div>
+
+        <div class="overlay" role="dialog" hidden>
+  <div id="collections-action-dialog" class="dialog collections-dialog" aria-hidden="true">
+   <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+        <h2 class="usa-modal__heading margin-0">Add to Collections</h2>
+    </div>
+    <div class="collections-action-panel action-panel">
+      
+
+
+<form id="collections-action-dialog-form"
+      class="usa-form maxw-full collections-action-panel-form action-panel-content action-form action-panel-smaller-selectors"
+      data-existing-collections-url="/list-existing-collections/"
+      data-add-to-existing-collection-url="/add-to-existing-collection/"
+      data-create-and-add-to-new-collection-url="/create-and-add-to-new-collection/"
+      data-myncbi-max-collection-name-length="100"
+      data-collections-root-url="https://www.ncbi.nlm.nih.gov/myncbi/collections/">
+
+    <input type="hidden" name="csrfmiddlewaretoken" value="Lzzr7xfANLnJHlylfE9nQqlpM1L4F8SPnJZETpI84tR3Sr3mvDxXnye5TTahITnk">
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-new"
+            class="usa-radio__input usa-radio__input--tile collections-new  margin-top-0"
+            name="collections"
+            value="new"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_new" />
+            <label class="usa-radio__label" for="collections-action-dialog-new">Create a new collection</label>
+        </div>
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-existing"
+            class="usa-radio__input usa-radio__input--tile collections-existing"
+            name="collections"
+            value="existing"
+            checked="true"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_existing" />
+            <label class="usa-radio__label" for="collections-action-dialog-existing">Add to an existing collection</label>
+        </div>
+    </fieldset>
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="action-panel-control-wrap new-collections-controls">
+           <label for="collections-action-dialog-add-to-new" class="usa-label margin-top-0">
+                Name your collection
+               <abbr title="required" class="usa-hint usa-hint--required text-no-underline">*</abbr>
+          </label>
+          <input
+            type="text"
+            name="add-to-new-collection"
+            id="collections-action-dialog-add-to-new"
+            class="usa-input collections-action-add-to-new"
+            pattern="[^&quot;&amp;=&lt;&gt;/]*" title="The following characters are not allowed in the Name field: &quot;&amp;=&lt;&gt;/"
+            maxlength=""
+            data-ga-category="collections_button"
+            data-ga-action="create_collection"
+            data-ga-label="non_favorties_collection"
+            required
+          />
+        </div>
+        <div class="action-panel-control-wrap existing-collections-controls">
+             <label for="collections-action-dialog-add-to-existing" class="usa-label margin-top-0">
+                Choose a collection
+              </label>
+              <select id="collections-action-dialog-add-to-existing"
+                      class="usa-select collections-action-add-to-existing"
+                      data-ga-category="collections_button"
+                      data-ga-action="select_collection"
+                      data-ga-label="($('.collections-action-add-to-existing').val() === 'Favorites') ? 'Favorites' : 'non_favorites_collection'">
+              </select>
+              <div class="collections-retry-load-on-error usa-input-error-message selection-validation-message">
+                Unable to load your collection due to an error<br>
+                <a href="#">Please try again</a>
+              </div>
+        </div>
+    </fieldset>
+
+    <div class="display-inline-flex">
+        <button class="usa-button margin-top-0 action-panel-submit"
+            type="submit"
+            data-loading-label="Adding..."
+            data-pinger-ignore
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="add">
+          Add
+        </button>
+        <button class="usa-button usa-button--outline margin-top-0 action-panel-cancel"
+                aria-label="Close 'Add to Collections' panel"
+                ref="linksrc=close_collections_panel"
+                data-ga-category="collections_button"
+                data-ga-action="click"
+                data-ga-label="cancel">
+          Cancel
+        </button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>
+
+        
+
+      </div>
+    </div>
+  </div>
+
+
+
+        
+    
+    
+
+<footer class="ncbi-footer ncbi-dark-background " >
+    
+        <div class="ncbi-footer__icon-section">
+            <div class="ncbi-footer__social-header">
+                Follow NCBI
+            </div>
+
+            <div class="grid-container ncbi-footer__ncbi-social-icons-container">
+                
+                    <a href="https://twitter.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="40"
+                             height="40"
+                             viewBox="0 0 40 40"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on X (formerly known as Twitter)</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.facebook.com/ncbi.nlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="16"
+                             height="29"
+                             focusable="false"
+                             aria-hidden="true"
+                             viewBox="0 0 16 29"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.8809 21.4002C3.8809 19.0932 3.8809 16.7876 3.8809 14.478C3.8809 14.2117 3.80103 14.1452 3.54278 14.1492C2.53372 14.1638 1.52334 14.1492 0.514288 14.1598C0.302626 14.1598 0.248047 14.0972 0.248047 13.8936C0.256034 12.4585 0.256034 11.0239 0.248047 9.58978C0.248047 9.37013 0.302626 9.30224 0.528931 9.3049C1.53798 9.31688 2.54837 9.3049 3.55742 9.31555C3.80103 9.31555 3.8809 9.26097 3.87957 9.00272C3.87158 8.00565 3.85428 7.00592 3.90753 6.00884C3.97142 4.83339 4.31487 3.73115 5.04437 2.78467C5.93095 1.63318 7.15699 1.09005 8.56141 0.967577C10.5582 0.79319 12.555 0.982221 14.5518 0.927641C14.7102 0.927641 14.7462 0.99287 14.7449 1.13664C14.7449 2.581 14.7449 4.02668 14.7449 5.47104C14.7449 5.67604 14.6517 5.68669 14.4946 5.68669C13.4523 5.68669 12.4113 5.68669 11.3703 5.68669C10.3506 5.68669 9.92057 6.10868 9.90593 7.13904C9.89661 7.7647 9.91525 8.39303 9.89794 9.01869C9.88995 9.26364 9.96583 9.31822 10.2015 9.31688C11.7204 9.30623 13.2393 9.31688 14.7595 9.3049C15.0257 9.3049 15.0723 9.3728 15.0444 9.62439C14.89 10.9849 14.7515 12.3467 14.6144 13.7085C14.5691 14.1571 14.5785 14.1585 14.1458 14.1585C12.8386 14.1585 11.5313 14.1665 10.2254 14.1518C9.95119 14.1518 9.89794 14.2317 9.89794 14.4899C9.90593 19.0799 9.89794 23.6752 9.91125 28.2612C9.91125 28.5674 9.8407 28.646 9.53186 28.6433C7.77866 28.6273 6.02414 28.6366 4.27094 28.634C3.82499 28.634 3.87158 28.6992 3.87158 28.22C3.87602 25.9472 3.87913 23.6739 3.8809 21.4002Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on Facebook</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.linkedin.com/company/ncbinlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="25"
+                             height="23"
+                             viewBox="0 0 26 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M14.6983 9.98423C15.6302 9.24808 16.5926 8.74754 17.6762 8.51991C19.673 8.09126 21.554 8.30824 23.1262 9.7526C24.2351 10.7723 24.7529 12.1115 25.0165 13.5612C25.1486 14.3363 25.2105 15.1218 25.2015 15.9081C25.2015 18.3043 25.2015 20.6898 25.2082 23.0806C25.2082 23.3468 25.1549 23.444 24.8621 23.4414C23.1297 23.4272 21.3992 23.4272 19.6704 23.4414C19.4041 23.4414 19.3429 23.3588 19.3442 23.1019C19.3535 20.5194 19.3442 17.9368 19.3442 15.3543C19.3442 14.0005 18.3258 12.9448 17.0266 12.9488C15.7273 12.9528 14.6983 14.0071 14.6983 15.361C14.6983 17.9328 14.6917 20.5047 14.6983 23.0753C14.6983 23.3708 14.6198 23.444 14.3296 23.4427C12.6185 23.4294 10.9079 23.4294 9.19779 23.4427C8.93155 23.4427 8.86099 23.3735 8.86232 23.1086C8.8783 19.7619 8.88628 16.4144 8.88628 13.066C8.88628 11.5688 8.87874 10.0708 8.86365 8.57182C8.86365 8.3575 8.90758 8.27896 9.14054 8.28029C10.9048 8.29094 12.6687 8.29094 14.4321 8.28029C14.6464 8.28029 14.6983 8.34818 14.6983 8.54653C14.6903 9.00047 14.6983 9.45441 14.6983 9.98423Z">
+                            </path>
+                            <path d="M6.55316 15.8443C6.55316 18.2564 6.55316 20.6699 6.55316 23.082C6.55316 23.3629 6.48127 23.4388 6.19906 23.4374C4.47737 23.4241 2.75568 23.4241 1.03399 23.4374C0.767751 23.4374 0.69986 23.3629 0.701191 23.1006C0.709178 18.2648 0.709178 13.4281 0.701191 8.59053C0.701191 8.34026 0.765089 8.27237 1.01669 8.2737C2.74991 8.28435 4.48048 8.28435 6.20838 8.2737C6.47462 8.2737 6.5465 8.33627 6.54517 8.6065C6.54783 11.0186 6.55316 13.4308 6.55316 15.8443Z">
+                            </path>
+                            <path d="M3.65878 0.243898C5.36804 0.243898 6.58743 1.45529 6.58743 3.1406C6.58743 4.75801 5.32145 5.95742 3.60819 5.96807C3.22177 5.97614 2.83768 5.90639 2.47877 5.76299C2.11985 5.61959 1.79344 5.40546 1.51897 5.13334C1.24449 4.86123 1.02755 4.53668 0.881058 4.17902C0.734563 3.82136 0.661505 3.43788 0.666231 3.05141C0.67555 1.42601 1.9362 0.242566 3.65878 0.243898Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on LinkedIn</span>
+                    </a>
+                
+
+                
+                    <a href="https://github.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="28"
+                             height="27"
+                             viewBox="0 0 28 28"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M16.7228 20.6334C17.5057 20.5527 18.2786 20.3944 19.0301 20.1608C21.3108 19.4193 22.5822 17.8259 22.963 15.4909C23.1228 14.5112 23.1814 13.5287 22.9883 12.5437C22.8106 11.6423 22.4013 10.8028 21.8007 10.1076C21.7526 10.0605 21.7197 10 21.7064 9.934C21.6931 9.86799 21.7 9.79952 21.7262 9.73748C22.0856 8.6206 21.9711 7.51969 21.601 6.42677C21.582 6.3497 21.5345 6.2827 21.468 6.23923C21.4016 6.19577 21.3211 6.17906 21.2429 6.19248C20.7329 6.21649 20.2313 6.33051 19.7611 6.52928C19.1103 6.7908 18.4899 7.12198 17.9104 7.51703C17.84 7.56996 17.7581 7.60551 17.6713 7.62078C17.5846 7.63605 17.4954 7.6306 17.4112 7.60489C15.2596 7.05882 13.0054 7.06203 10.8554 7.61421C10.7806 7.63586 10.7018 7.63967 10.6253 7.62534C10.5487 7.611 10.4766 7.57892 10.4148 7.53167C9.64788 7.03247 8.85171 6.58918 7.96368 6.33359C7.65781 6.24338 7.34123 6.19458 7.02239 6.18849C6.94879 6.17986 6.87462 6.19893 6.81432 6.242C6.75402 6.28507 6.71191 6.34904 6.69621 6.42145C6.32342 7.51437 6.2209 8.61527 6.56307 9.73348C6.59635 9.84264 6.64694 9.93316 6.54177 10.0516C5.47666 11.2604 5.09988 12.6834 5.19574 14.2676C5.2663 15.4244 5.46201 16.5466 6.01454 17.5769C6.84399 19.1171 8.21664 19.9119 9.85158 20.3352C10.3938 20.4706 10.9444 20.5698 11.4998 20.632C11.5384 20.7492 11.4506 20.7798 11.408 20.8291C11.1734 21.1179 10.9894 21.4441 10.8634 21.7942C10.7622 22.0458 10.8315 22.4039 10.6065 22.5516C10.263 22.7766 9.83827 22.8485 9.42421 22.8871C8.17936 23.0056 7.26471 22.4877 6.6283 21.4348C6.25552 20.8184 5.76956 20.3325 5.08523 20.0663C4.76981 19.9325 4.42139 19.8967 4.08537 19.9638C3.7898 20.029 3.73788 20.1901 3.93891 20.4111C4.03639 20.5234 4.14989 20.6207 4.27575 20.6999C4.9796 21.1318 5.51717 21.7884 5.80152 22.5636C6.37002 23.9973 7.48039 24.5697 8.93825 24.6323C9.43741 24.6575 9.93768 24.615 10.4254 24.5058C10.5892 24.4672 10.6531 24.4872 10.6517 24.6762C10.6451 25.4936 10.6637 26.3123 10.6517 27.131C10.6517 27.6635 10.1684 27.9297 9.58663 27.7393C8.17396 27.2671 6.84977 26.5631 5.66838 25.656C2.59555 23.2891 0.720966 20.1861 0.217704 16.3376C-0.357453 11.9127 0.911353 8.00824 3.98551 4.73881C6.11909 2.42656 8.99932 0.939975 12.1203 0.540191C16.5351 -0.0601815 20.4347 1.14323 23.7232 4.16373C26.2449 6.47869 27.724 9.37672 28.1048 12.7726C28.5828 17.0325 27.3686 20.7945 24.4768 23.9827C22.9762 25.6323 21.0956 26.8908 18.9982 27.6488C18.8783 27.6927 18.7585 27.738 18.636 27.7726C18.0356 27.9404 17.6189 27.6395 17.6189 27.0098C17.6189 25.7452 17.6308 24.4806 17.6295 23.2159C17.6329 22.9506 17.6128 22.6856 17.5696 22.4238C17.4325 21.6664 17.3419 21.484 16.7228 20.6334Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on GitHub</span>
+                    </a>
+                
+
+                
+                    <a href="https://ncbiinsights.ncbi.nlm.nih.gov/"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="26"
+                             height="26"
+                             viewBox="0 0 27 27"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M23.7778 26.4574C23.1354 26.3913 22.0856 26.8024 21.636 26.3087C21.212 25.8444 21.4359 24.8111 21.324 24.0347C19.9933 14.8323 14.8727 8.80132 6.09057 5.85008C4.37689 5.28406 2.58381 4.99533 0.779072 4.99481C0.202773 4.99481 -0.0229751 4.83146 0.00455514 4.21479C0.0660406 3.08627 0.0660406 1.95525 0.00455514 0.826734C-0.0413285 0.0815827 0.259669 -0.0193618 0.896534 0.00266238C6.96236 0.222904 12.3693 2.24179 16.9889 6.16209C22.9794 11.2478 26.1271 17.7688 26.4372 25.648C26.4629 26.294 26.3179 26.5271 25.6609 26.4684C25.0827 26.417 24.4991 26.4574 23.7778 26.4574Z">
+                            </path>
+                            <path d="M14.8265 26.441C14.0924 26.441 13.2371 26.6795 12.6626 26.3786C12.0092 26.0372 12.3781 25.0644 12.246 24.378C11.1154 18.5324 6.6849 14.5497 0.74755 14.1001C0.217135 14.0615 -0.0104482 13.9422 0.0134113 13.3659C0.0519536 12.1454 0.0482829 10.9213 0.0134113 9.69524C-0.00127145 9.14464 0.196946 9.03268 0.703502 9.04736C9.21217 9.27128 16.5994 16.2511 17.2804 24.7231C17.418 26.4446 17.418 26.4446 15.6579 26.4446H14.832L14.8265 26.441Z">
+                            </path>
+                            <path d="M3.58928 26.4555C2.64447 26.4618 1.73584 26.0925 1.06329 25.4289C0.39073 24.7653 0.00933763 23.8617 0.0030097 22.9169C-0.00331824 21.9721 0.365937 21.0635 1.02954 20.3909C1.69315 19.7184 2.59675 19.337 3.54156 19.3306C4.48637 19.3243 5.39499 19.6936 6.06755 20.3572C6.7401 21.0208 7.1215 21.9244 7.12782 22.8692C7.13415 23.814 6.7649 24.7226 6.10129 25.3952C5.43768 26.0677 4.53409 26.4491 3.58928 26.4555Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI RSS feed</span>
+                    </a>
+                
+            </div>
+        </div>
+    
+
+    <div data-testid="gridContainer"
+         class="grid-container ncbi-footer__container">
+        <div class="grid-row ncbi-footer__main-content-container"
+             data-testid="grid">
+            
+                <div class="ncbi-footer__column">
+                    
+                        <p class="ncbi-footer__circled-icons-heading">
+                            Connect with NLM
+                        </p>
+                    
+
+                    <div class="ncbi-footer__circled-icons-list">
+                        
+                            <a href=https://twitter.com/nlm_nih class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="32"
+                                     height="32"
+                                     viewBox="0 0 40 40"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on X (formerly known as Twitter)</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.facebook.com/nationallibraryofmedicine class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="13"
+                                     height="24"
+                                     viewBox="0 0 13 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M4.11371 23.1369C4.11371 23.082 4.11371 23.0294 4.11371 22.9745V12.9411H0.817305C0.6709 12.9411 0.670898 12.9411 0.670898 12.8016C0.670898 11.564 0.670898 10.3287 0.670898 9.09341C0.670898 8.97903 0.705213 8.95158 0.815017 8.95158C1.8673 8.95158 2.91959 8.95158 3.97417 8.95158H4.12057V8.83263C4.12057 7.8055 4.12057 6.7738 4.12057 5.74897C4.1264 4.92595 4.31387 4.11437 4.66959 3.37217C5.12916 2.38246 5.94651 1.60353 6.95717 1.1921C7.64827 0.905008 8.3913 0.764035 9.13953 0.778051C10.0019 0.791777 10.8644 0.830666 11.7268 0.860404C11.8869 0.860404 12.047 0.894717 12.2072 0.90158C12.2964 0.90158 12.3261 0.940469 12.3261 1.02968C12.3261 1.5421 12.3261 2.05452 12.3261 2.56465C12.3261 3.16857 12.3261 3.7725 12.3261 4.37642C12.3261 4.48165 12.2964 4.51367 12.1912 4.51138C11.5369 4.51138 10.8804 4.51138 10.2261 4.51138C9.92772 4.51814 9.63058 4.5526 9.33855 4.61433C9.08125 4.6617 8.84537 4.78881 8.66431 4.97766C8.48326 5.16652 8.3662 5.40755 8.32972 5.66661C8.28476 5.89271 8.26027 6.1224 8.25652 6.35289C8.25652 7.19014 8.25652 8.02969 8.25652 8.86923C8.25652 8.89439 8.25652 8.91955 8.25652 8.95615H12.0219C12.1797 8.95615 12.182 8.95616 12.1614 9.10714C12.0768 9.76596 11.9876 10.4248 11.9029 11.0813C11.8312 11.6319 11.7626 12.1824 11.697 12.733C11.6719 12.9434 11.6787 12.9434 11.4683 12.9434H8.26338V22.899C8.26338 22.979 8.26338 23.0591 8.26338 23.1392L4.11371 23.1369Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on Facebook</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.youtube.com/user/NLMNIH class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="21"
+                                     height="15"
+                                     viewBox="0 0 21 15"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M19.2561 1.47914C18.9016 1.15888 18.5699 0.957569 17.2271 0.834039C15.5503 0.678484 13.2787 0.655608 11.563 0.65332H9.43556C7.71987 0.65332 5.4483 0.678484 3.77151 0.834039C2.43098 0.957569 2.097 1.15888 1.74242 1.47914C0.813665 2.32097 0.619221 4.62685 0.598633 6.89384C0.598633 7.31781 0.598633 7.74101 0.598633 8.16345C0.626084 10.4121 0.827391 12.686 1.74242 13.521C2.097 13.8412 2.4287 14.0425 3.77151 14.1661C5.4483 14.3216 7.71987 14.3445 9.43556 14.3468H11.563C13.2787 14.3468 15.5503 14.3216 17.2271 14.1661C18.5676 14.0425 18.9016 13.8412 19.2561 13.521C20.1712 12.6929 20.3725 10.451 20.3999 8.22064C20.3999 7.74025 20.3999 7.25986 20.3999 6.77946C20.3725 4.54907 20.1689 2.30724 19.2561 1.47914ZM8.55942 10.5311V4.65201L13.5601 7.50005L8.55942 10.5311Z"
+                                          fill="white" />
+                                </svg>
+                                <span class="usa-sr-only">NLM on YouTube</span>
+                            </a>
+                        
+                    </div>
+                </div>
+            
+
+            
+                <address class="ncbi-footer__address ncbi-footer__column">
+                    
+        <p>
+            <a class="usa-link usa-link--external"
+            href="https://www.google.com/maps/place/8600+Rockville+Pike,+Bethesda,+MD+20894/%4038.9959508,
+            -77.101021,17z/data%3D!3m1!4b1!4m5!3m4!1s0x89b7c95e25765ddb%3A0x19156f88b27635b8!8m2!3d38.9959508!
+            4d-77.0988323"
+            rel="noopener noreferrer" target="_blank">National Library of Medicine
+            <br/> 8600 Rockville Pike<br/> Bethesda, MD 20894</a>
+        </p>
+    
+                </address>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/web_policies.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Web Policies
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/institutes-nih/nih-office-director/office-communications-public-liaison/freedom-information-act-office" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            FOIA
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/vulnerability-disclosure-policy/index.html" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS Vulnerability Disclosure
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://support.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Help
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/accessibility.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Accessibility
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/careers/careers.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Careers
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+        </div>
+
+        
+            <div class="grid-row grid-col-12" data-testid="grid">
+                <ul class="ncbi-footer__bottom-links-list">
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NLM
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NIH
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.usa.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            USA.gov
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+    </div>
+</footer>
+
+    
+
+
+        
+        
+    
+  <script  type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/pinger/pinger.js"> </script>
+
+
+    
+        
+
+<button class="back-to-top" data-ga-category="pagination" data-ga-action="back_to_top">
+    <label>Back to Top</label>
+    <svg class="usa-icon order-0" aria-hidden="true" focusable="false" role="img">
+        <use xlink:href="/static/img/sprite.svg#arrow_upward"></use>
+    </svg>
+</button>
+    
+
+
+        
+    
+    
+    
+        
+    <script type="application/javascript">
+    window.ncbi = window.ncbi || {};
+    window.ncbi.pmc = window.ncbi.pmc || {};
+    window.ncbi.pmc.options = {
+        logLevel: 'INFO',
+        
+        staticEndpoint: '/static/',
+        
+        citeCookieName: 'pmc-cf',
+    };
+</script>
+    <script type="module" crossorigin="" src="/static/assets/base-133c6271.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/jquery/jquery-3.6.0.min.js">&#xA0;</script>
+    <script type="text/javascript">
+        jQuery.getScript("https://cdn.ncbi.nlm.nih.gov/core/alerts/alerts.js", function () {
+            galert(['div.nav_and_browser', 'div.header', '#universal_header', '.usa-banner', 'body > *:nth-child(1)'])
+        });
+    </script>
+
+
+    <script type="text/javascript">var exports = {};</script>
+     <script src="/static/CACHE/js/output.13b077bc3ffd.js"></script>
+
+    <script type="module" crossorigin="" src="/static/assets/article-44d04358.js"></script>
+    
+    
+
+    </body>
+</html>

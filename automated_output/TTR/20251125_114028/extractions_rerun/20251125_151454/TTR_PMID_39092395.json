@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "39092395",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.V142I",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1415,
+        "demographics": "patients enrolled in the Cardiac Amyloidosis Registry Study (CARS)",
+        "phenotype": "ATTR cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1415,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The p.V142I mutation is associated with ATTR cardiac amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "The study suggests familial patterns but does not provide specific segregation data.",
+      "population_frequency": "68% of patients with ATTR cardiac amyloidosis had this mutation.",
+      "evidence_level": "moderate",
+      "source_location": "Introduction and background, paragraph 3",
+      "additional_notes": "The prevalence of the p.V142I mutation is significant in the context of ATTR cardiac amyloidosis.",
+      "key_quotes": [
+        "71% of them having the wild-type and 68% with the p.V142I mutation."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.68A>T",
+      "protein_notation": "p.Ile68Leu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 325,
+        "demographics": "patients with ATTRv mutations in Bologna, Italy",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 325,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Ile68Leu variant is one of the most prevalent mutations associated with ATTRv.",
+        "assays": []
+      },
+      "segregation_data": "The study indicates familial patterns but does not provide specific segregation data.",
+      "population_frequency": "41.8% of patients with ATTRv mutations had this variant.",
+      "evidence_level": "moderate",
+      "source_location": "Review, paragraph 3",
+      "additional_notes": "The variant is significant in the context of familial amyloidosis.",
+      "key_quotes": [
+        "TTR gene variants were identified in the study, with the most prevalent ones being Ile68Leu (41.8%)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Glu89Gln",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 325,
+        "demographics": "patients with ATTRv mutations in Bologna, Italy",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 325,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Glu89Gln variant is one of the notable mutations associated with ATTRv.",
+        "assays": []
+      },
+      "segregation_data": "The study indicates familial patterns but does not provide specific segregation data.",
+      "population_frequency": "10% of patients with ATTRv mutations had this variant.",
+      "evidence_level": "moderate",
+      "source_location": "Review, paragraph 3",
+      "additional_notes": "The variant is significant in the context of familial amyloidosis.",
+      "key_quotes": [
+        "TTR gene variants were identified in the study, with the most prevalent ones being Glu89Gln (10%)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.30G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 325,
+        "demographics": "patients with ATTRv mutations in Bologna, Italy",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 325,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val30Met variant is one of the most common mutations associated with ATTRv.",
+        "assays": []
+      },
+      "segregation_data": "The study indicates familial patterns but does not provide specific segregation data.",
+      "population_frequency": "19% of patients with ATTRv mutations had this variant.",
+      "evidence_level": "moderate",
+      "source_location": "Review, paragraph 3",
+      "additional_notes": "The variant is significant in the context of familial amyloidosis.",
+      "key_quotes": [
+        "TTR gene variants were identified in the study, with the most prevalent ones being Val30Met (19%)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant TTR variants were extracted with associated penetrance data."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "paper_metadata": {
+    "pmid": "30833571",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No variants in the KCNH2 gene were reported in the paper."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "SNPs significantly associated with carpal tunnel syndrome",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not report any variants in the KCNH2 gene."
+    ],
+    "notes": "The paper focused on carpal tunnel syndrome and did not provide any specific variant information for the KCNH2 gene."
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "31608315",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted pathogenic germline BRCA2 mutations and penetrance data from three Japanese patients with gastric cancer."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.89insA",
+      "protein_notation": "p.L29fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "73-year-old male",
+        "phenotype": "Moderately differentiated tubular adenocarcinoma classified as Lauren intestinal type."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": 73,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Moderately differentiated tubular adenocarcinoma classified as Lauren intestinal type.",
+          "evidence_sentence": "Genetic testing detected a pathogenic frameshift germline mutation in BRCA2 c.89insA (p.L29fs), which was identical to the variant detected in tumor."
+        }
+      ],
+      "functional_data": {
+        "summary": "Pathogenic mutation identified in tumor and germline.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identical variant detected in tumor.",
+      "key_quotes": [
+        "Genetic testing detected a pathogenic frameshift germline mutation in BRCA2 c.89insA (p.L29fs), which was identical to the variant detected in tumor."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6922A>T",
+      "protein_notation": "p.K2308X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "66-year-old female",
+        "phenotype": "Mucinous and moderately differentiated adenocarcinoma classified as Lauren intestinal type."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": 66,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Mucinous and moderately differentiated adenocarcinoma classified as Lauren intestinal type.",
+          "evidence_sentence": "Genetic testing detected double pathogenic nonsense germline mutations in BRCA1 c.188T>A (p.L63X) and in BRCA2 c.6922A>T (p.K2308X), which were identical to the variants detected in tumor."
+        }
+      ],
+      "functional_data": {
+        "summary": "Pathogenic mutation identified in tumor and germline.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identical variant detected in tumor.",
+      "key_quotes": [
+        "Genetic testing detected double pathogenic nonsense germline mutations in BRCA1 c.188T>A (p.L63X) and in BRCA2 c.6922A>T (p.K2308X), which were identical to the variants detected in tumor."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9310A>T",
+      "protein_notation": "p.K3104X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "56-year-old male",
+        "phenotype": "Poorly differentiated variant of tubular adenocarcinoma classified as Lauren indeterminate type."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Poorly differentiated variant of tubular adenocarcinoma classified as Lauren indeterminate type.",
+          "evidence_sentence": "Genetic testing detected a pathogenic nonsense germline mutation in BRCA2 c.9310A>T (p.K3104X), which was identical to the variant detected in tumor."
+        }
+      ],
+      "functional_data": {
+        "summary": "Pathogenic mutation identified in tumor and germline.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identical variant detected in tumor.",
+      "key_quotes": [
+        "Genetic testing detected a pathogenic nonsense germline mutation in BRCA2 c.9310A>T (p.K3104X), which was identical to the variant detected in tumor."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 3",
+      "table_caption": "Details of Somatic and Germline BRCA1/2 Mutations in Seven Japanese Patients With Gastric Cancer",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants and penetrance data were successfully extracted."
+  }
+}

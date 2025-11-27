@@ -1,0 +1,18 @@
+# MAIN TEXT
+
+## BRCA1 and BRCA2 Unclassified Variants and Missense Polymorphisms in Algerian Breast/Ovarian Cancer Families
+
+### Abstract
+
+Background: BRCA1 and BRCA2 germline mutations predispose heterozygous carriers to hereditary breast/ovarian cancer. However, unclassified variants (UVs) (variants with unknown clinical significance) and missense polymorphisms in BRCA1 and BRCA2 genes pose a problem in genetic counseling, as their impact on risk of breast and ovarian cancer is still unclear. The objective of our study was to identify UVs and missense polymorphisms in Algerian breast/ovarian cancer patients and relatives tested previously for BRCA1 and BRCA2 genes germline mutations analysis. 
+Methods: We analyzed 101 DNA samples from 79 breast/ovarian cancer families. The approach used is based on BRCA1 and BRCA2 sequence variants screening by SSCP or High-Resolution Melting (HRM) curve analysis followed by direct sequencing. In silico analyses have been performed using different bioinformatics programs to individualize genetics variations that can disrupt the BRCA1 and BRCA2 genes function. 
+Results: Among 80 UVs and polymorphisms detected in BRCA1/2 genes (33 BRCA2 and 47 BRCA2), 31 were new UVs (10 BRCA2 and 21 BRCA2), 7 were rare UVs (4 BRCA2 and 3 BRCA2) and 42 were polymorphic variants (19 BRCA2 and 23 BRCA2). Moreover, 8 new missense UVs identified in this study: two BRCA1 (c.4066C>A/p.Gln1356Lys, c.4901G>T/p.Arg1634Met) located respectively in exons 11 and 16, and six BRCA2 (c.1099G>A/p.Asp367Asn, c.2636C>A/p.Ser879Tyr, c.3868T>A/p.Cys1290Ser, c.5428G>T/p.Val1810Phe, c.6346C>G/p.His2116Asp and c.9256G>A/p.Gly3086Arg) located respectively in exons 10, 11 and 24, show a damaging PSIC score yielded by PolyPhen2 program and could be pathogenic. In addition, 5 new BRCA2 missense UVs out of six that were found to be damaging by PolyPhen2 program, also were deleterious according to SIFT program. The rare BRCA2 UV c.5332G>A/p.Asp1778Asn was found here for the first time in co-occurrence in trans with the deleterious BRCA1 mutation c.798_799delTT/p.Ser267LysfsX19 in young breast cancer patient. Moreover, 10 new identified intronic variants with unknown clinical significance (3 BRCA1 and 7 BRCA2) in the present study, could be considered as benign, because GeneSplicer, SpliceSiteFinder and MaxEntScan prediction programs show no splice site alteration for these variants. Several missense polymorphisms of BRCA1 c.2612C>T/p.Pro871Leu, c.3548A>G/p.Lys1183Arg, c.4837A>G/p.Ser1613Gly and BRCA2 c.865A>C/p.Asn289His, c.1114A>C/p.Asn372His, c.2971A>G/p.Asn991Asp, c.7150C>A/p.Gly2384Lys have been identified with high frequency in patients who were tested negative for BRCA1 and BRCA2 mutations. These missense polymorphisms could have a role as susceptibility breast cancer markers in Algerian breast/ovarian cancer families where pathological BRCA1 and BRCA2 mutations were not present. 
+Conclusions: For the first time, UVs and missense polymorphisms in BRCA1 and BRCA2 genes have been identified in Algerian breast/ovarian cancer families. Evaluation of breast/ovarian cancer risk induced by the eight new missense UVs and common polymorphisms detected in our present work is on going in a larger study.
+
+
+
+# SUPPLEMENTAL FILE 1: DM32-06-234136.pdf
+
+# Preparing to download ...
+
+[HHS Vulnerability Disclosure](https://www.hhs.gov/vulnerability-disclosure-policy/index.html)

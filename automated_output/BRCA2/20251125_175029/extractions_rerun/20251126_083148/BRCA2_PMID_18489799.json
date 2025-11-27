@@ -1,0 +1,311 @@
+{
+  "paper_metadata": {
+    "pmid": "18489799",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7913_7917del5",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The BRCA2 c.7913_7917del5 mutation was found in an affected female with a severe family history of breast cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "Truncating mutation leading to loss of function.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a family with a strong history of breast cancer.",
+      "key_quotes": [
+        "The BRCA2 c.7913_7917del5 mutation was found in an affected female with a severe family history of breast cancer."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9403delC",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The BRCA2 c.9403delC mutation was found in an affected male with a family history of breast cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "Truncating mutation leading to loss of function.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a family with a strong history of breast cancer.",
+      "key_quotes": [
+        "The BRCA2 c.9403delC mutation was found in an affected male with a family history of breast cancer."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.475G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The G to A transition in the last nucleotide of BRCA2 exon 5 (c.475G>A) results in a transcript lacking in frame exon 5."
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "This mutation was identified in two unrelated families that were too small to evaluate segregation."
+        }
+      ],
+      "functional_data": {
+        "summary": "Results in a transcript lacking in frame exon 5.",
+        "assays": []
+      },
+      "segregation_data": "Not clearly established due to small family size.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in two unrelated families.",
+      "key_quotes": [
+        "The G to A transition in the last nucleotide of BRCA2 exon 5 (c.475G>A) results in a transcript lacking in frame exon 5."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7007G>A",
+      "protein_notation": "p.Arg2336His",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The BRCA2 c.7007G>A mutation was found in an affected female with a severe family history of breast cancer."
+        },
+        {
+          "individual_id": "Case_6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The BRCA2 c.7007G>A mutation was found in an affected male with a maternal aunt and cousin diagnosed with breast cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "Results in transcripts lacking exon 13.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a family with a strong history of breast cancer.",
+      "key_quotes": [
+        "The BRCA2 c.7007G>A mutation was found in an affected female with a severe family history of breast cancer."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8755-1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The BRCA2 c.8755-1G>A mutation was found in an affected female with a severe family history of breast cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "Truncating mutation leading to loss of function.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a family with a strong history of breast cancer.",
+      "key_quotes": [
+        "The BRCA2 c.8755-1G>A mutation was found in an affected female with a severe family history of breast cancer."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9117+2T>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The BRCA2 c.9117+2T>A mutation was found in an affected female with a severe family history of breast cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "Truncating mutation leading to loss of function.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a family with a strong history of breast cancer.",
+      "key_quotes": [
+        "The BRCA2 c.9117+2T>A mutation was found in an affected female with a severe family history of breast cancer."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Spectrum of frame-shift and nonsense BRCA2 germline mutations detected in Czech patients.",
+      "variants_extracted": 6
+    },
+    {
+      "table_name": "Table 3",
+      "table_caption": "Splice-site alterations detected in Czech high-risk breast/ovarian cancer patients.",
+      "variants_extracted": 6
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 6,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted with detailed penetrance data."
+  }
+}

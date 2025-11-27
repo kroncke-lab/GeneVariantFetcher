@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "16848979",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.unknown",
+      "protein_notation": "p.unknown",
+      "genomic_position": "unknown",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Multiethnic Cohort",
+        "phenotype": "sporadic breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "increased risk for breast cancer",
+          "evidence_sentence": "Specifically, a single SNP in intron 24 was associated with a two-fold increased risk for breast cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The SNP in intron 24 suggests a subtle variant can serve as a marker for increased risk for cancer.",
+        "assays": []
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": "unknown",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The SNP is associated with a two-fold increased risk for breast cancer.",
+      "key_quotes": [
+        "genetic variation in BRCA2 was shown to result in an increased risk for sporadic breast cancer in the Multiethnic Cohort (MEC).",
+        "Specifically, a single SNP in intron 24 was associated with a two-fold increased risk for breast cancer."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data was primarily from the main text with no tables containing BRCA2 variants."
+  }
+}

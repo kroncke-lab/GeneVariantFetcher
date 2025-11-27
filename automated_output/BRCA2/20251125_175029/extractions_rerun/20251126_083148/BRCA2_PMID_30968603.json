@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "30968603",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from a study on high-risk breast cancer patients in China."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.304A>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Han Chinese",
+        "phenotype": "high-risk breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 7,
+        "affected_count": 1,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 14.29,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "high-risk breast cancer",
+          "evidence_sentence": "Six BRCA2 pathogenic variants were detected in seven (3.2%) of the 216 patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Novel mutation identified in a patient with high-risk breast cancer.",
+        "assays": []
+      },
+      "segregation_data": "Segregated with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of three novel BRCA2 mutations identified in the study.",
+      "key_quotes": [
+        "Six BRCA2 pathogenic variants were detected in seven (3.2%) of the 216 patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7552_7553insT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Han Chinese",
+        "phenotype": "high-risk breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 7,
+        "affected_count": 1,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 14.29,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "high-risk breast cancer",
+          "evidence_sentence": "Six BRCA2 pathogenic variants were detected in seven (3.2%) of the 216 patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Novel mutation identified in a patient with high-risk breast cancer.",
+        "assays": []
+      },
+      "segregation_data": "Segregated with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of three novel BRCA2 mutations identified in the study.",
+      "key_quotes": [
+        "Six BRCA2 pathogenic variants were detected in seven (3.2%) of the 216 patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9548_9549insA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Han Chinese",
+        "phenotype": "high-risk breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 7,
+        "affected_count": 1,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 14.29,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "high-risk breast cancer",
+          "evidence_sentence": "Six BRCA2 pathogenic variants were detected in seven (3.2%) of the 216 patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Novel mutation identified in a patient with high-risk breast cancer.",
+        "assays": []
+      },
+      "segregation_data": "Segregated with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of three novel BRCA2 mutations identified in the study.",
+      "key_quotes": [
+        "Six BRCA2 pathogenic variants were detected in seven (3.2%) of the 216 patients."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Distribution of BRCA2 mutations in 216 patients with high-risk breast cancer",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

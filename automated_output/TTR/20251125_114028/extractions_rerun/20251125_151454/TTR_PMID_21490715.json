@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "21490715",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper describes a heterozygous missense mutation in the TTR gene (p.Tyr78Phe) associated with a patient presenting predominantly motor neuropathy."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.293A>T",
+      "protein_notation": "p.Tyr78Phe",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "63-year-old male",
+        "phenotype": "predominantly motor neuropathy with mild sensory and dysautonomic signs"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "rapidly progressive axonal motor neuropathy, dysphagia, muscle atrophy, and fasciculations",
+          "evidence_sentence": "The patient presented with increasing weakness of the lower limbs, muscle fatigue, and dysphagia, which began at the age of 59 years."
+        }
+      ],
+      "functional_data": {
+        "summary": "The pathogenic role of this mutation was confirmed through a sural nerve biopsy analysis, which showed a mild axonal neuropathic pattern characteristic of amyloidosis.",
+        "assays": [
+          "sural nerve biopsy",
+          "Congo red staining"
+        ]
+      },
+      "segregation_data": "Not available; samples from parents were not available for further investigation.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation has been previously described in a single case.",
+      "key_quotes": [
+        "Molecular analysis revealed the presence of the heterozygous missense mutation p.Tyr78Phe in the TTR gene.",
+        "The amyloidogenic properties of the Tyr78Phe mutation of the TTR gene have also been demonstrated by Redondo et al."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information regarding the TTR variant."
+  }
+}

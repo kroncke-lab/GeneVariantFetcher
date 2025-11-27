@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "2891727",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Tyr-77 associated with hereditary amyloidosis."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.230A>T",
+      "protein_notation": "p.Tyr77Ser",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "German descent",
+        "phenotype": "peripheral neuropathy and bowel dysfunction"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "peripheral neuropathy and bowel dysfunction",
+          "evidence_sentence": "We recently studied a patient of German descent with peripheral neuropathy and bowel dysfunction."
+        }
+      ],
+      "functional_data": {
+        "summary": "Variant detected in patient's DNA using restriction enzyme SspI and a specifically tailored genomic prealbumin probe.",
+        "assays": [
+          "restriction enzyme analysis",
+          "genomic probe analysis"
+        ]
+      },
+      "segregation_data": "Detected in other family members identified as gene carriers.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Main Text, Abstract",
+      "additional_notes": "This is the sixth prealbumin variant implicated in amyloidosis.",
+      "key_quotes": [
+        "This is the sixth prealbumin variant implicated in amyloidosis.",
+        "Amino acid sequence analysis of the patient's plasma prealbumin revealed both normal and variant prealbumin molecules."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Full text provided, allowing for thorough extraction of relevant data."
+  }
+}

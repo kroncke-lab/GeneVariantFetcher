@@ -1,0 +1,80 @@
+{
+  "paper_metadata": {
+    "pmid": "36471404",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 13,
+        "demographics": "Median age at diagnosis was 42 years (30\u201375); all were affected individuals.",
+        "phenotype": "All had sensorimotor polyneuropathy, with some having additional symptoms."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": 13,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 42,
+          "age_at_onset": null,
+          "age_at_diagnosis": 42,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy",
+          "evidence_sentence": "Among patients with p.Val50Met mutation, the median age at diagnosis was 42 years (30\u201375)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 67,
+          "age_at_onset": null,
+          "age_at_diagnosis": 67,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTR-CM, 20% had ATTR-PN, and 40% carpal tunnel syndrome.",
+          "evidence_sentence": "Patients carrying p.Val142Ile mutation had a median age of 67 years (54\u201369) at diagnosis."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 45,
+          "age_at_onset": null,
+          "age_at_diagnosis": 45,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "mixed phenotype of ATTR-CM and ATTR-PN.",
+          "evidence_sentence": "The patient with p.Glu109Lys mutation was diagnosed by the age of 45 years and had a mixed phenotype of ATTR-CM and ATTR-PN."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutations identified in TTR were associated with clinical manifestations of amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "The variants segregate with disease in families as they are associated with clinical symptoms.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All identified mutations were linked to clinical presentations of amyloidosis.",
+      "key_quotes": [
+        "Thirteen patients had ATTRv, with the following mutations identified: p.Val50Met (54%; n\u2009=\u20097), p.Val142Ile (38%; n\u2009=\u20095), and p.Glu109Lys (8%; n\u2009=\u20091)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text."
+  }
+}

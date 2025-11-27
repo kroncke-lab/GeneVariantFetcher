@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "37340491",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No variants in the KCNH2 gene were mentioned in the provided text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The provided text did not contain any specific genetic variant information for the KCNH2 gene."
+    ],
+    "notes": "The extraction was limited to the provided text, which did not include any specific mention of KCNH2 variants."
+  }
+}

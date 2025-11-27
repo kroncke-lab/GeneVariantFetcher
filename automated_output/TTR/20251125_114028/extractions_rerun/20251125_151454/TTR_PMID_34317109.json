@@ -1,0 +1,191 @@
+{
+  "paper_metadata": {
+    "pmid": "34317109",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the Thr60Ala mutation in the TTR gene, including penetrance data from family members."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.179A>C",
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "23 years old, female, Afro-Caribbean",
+        "phenotype": "TTR amyloidosis with polyneuropathy and cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": 13,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "KP",
+          "age_at_evaluation": 23,
+          "age_at_onset": 23,
+          "age_at_diagnosis": 23,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Clinical signs of heart failure and polyneuropathy",
+          "evidence_sentence": "We report an unusual case of a young Afro-Caribbean woman harboring a Thr60Ala mutation who presented with clinical signs of heart failure and polyneuropathy confirmed with genetic testing."
+        },
+        {
+          "individual_id": "Family Member 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        },
+        {
+          "individual_id": "Family Member 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        },
+        {
+          "individual_id": "Family Member 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        },
+        {
+          "individual_id": "Family Member 4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        },
+        {
+          "individual_id": "Family Member 5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        },
+        {
+          "individual_id": "Family Member 6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        },
+        {
+          "individual_id": "Family Member 7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        },
+        {
+          "individual_id": "Family Member 8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        },
+        {
+          "individual_id": "Family Member 9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        },
+        {
+          "individual_id": "Family Member 10",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        },
+        {
+          "individual_id": "Family Member 11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        },
+        {
+          "individual_id": "Family Member 12",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        },
+        {
+          "individual_id": "Family Member 13",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Similar symptoms as the proband",
+          "evidence_sentence": "In the pedigree analysis, 13 family members were determined to also be affected with similar symptoms."
+        }
+      ],
+      "functional_data": {
+        "summary": "TTR mutations lead to misfolding and aggregation of the protein, causing amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Yes, it segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The penetrance of TTR amyloidosis in the family is noted to be 100%.",
+      "key_quotes": [
+        "This condition has an autosomal dominant inheritance pattern.",
+        "Pedigree analysis showed that of the 13 individuals in her family affected by the disease, 11 are now deceased, all before the age of 41 years."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant and penetrance were extracted."
+  }
+}

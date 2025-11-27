@@ -1,0 +1,70 @@
+{
+  "paper_metadata": {
+    "pmid": "20809527",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the KCNH2 gene, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.81_82del",
+      "protein_notation": "p.IleAlaGln",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Chinese families",
+        "phenotype": "arrhythmias"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "documented arrhythmias",
+          "evidence_sentence": "Two pathogenic mutations were found in two families: p.81_82delIleAlaGln in KCNH2."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "documented arrhythmias",
+          "evidence_sentence": "Two pathogenic mutations were found in two families: p.81_82delIleAlaGln in KCNH2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is associated with documented arrhythmias.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation was found in two families with arrhythmias.",
+      "key_quotes": [
+        "Two pathogenic mutations were found in two families: p.81_82delIleAlaGln in KCNH2."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

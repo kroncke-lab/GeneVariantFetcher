@@ -1,0 +1,91 @@
+{
+  "paper_metadata": {
+    "pmid": "38549855",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val142Ile, including penetrance data and individual patient details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.424G>A",
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "African American, ages 18 to 65",
+        "phenotype": "hypertrophic cardiomyopathy (HCM)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": 34,
+          "age_at_onset": 16,
+          "age_at_diagnosis": 16,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "mid-ventricular phenotypic HCM",
+          "evidence_sentence": "Patient 1 is a 34-year-old African American man with a history of mid-ventricular phenotypic HCM and found to have a Val142Ile variant."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": 65,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "basal septal phenotypic HCM",
+          "evidence_sentence": "Patient 2 is a 65-year-old African American woman with newly diagnosed basal septal phenotypic HCM discovered after episodes of NSVT for which an ICD was placed."
+        },
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": 57,
+          "age_at_onset": 21,
+          "age_at_diagnosis": 21,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "basal septal phenotype HCM",
+          "evidence_sentence": "Patient 3 is a 57-year-old African-American woman with a history of basal septal phenotype HCM diagnosed at age 21 years due to the detection of a heart murmur."
+        },
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": 18,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "apical phenotype HCM",
+          "evidence_sentence": "Patient 4 is an 18-year-old African American man with a new diagnosis of apical phenotype HCM that was discovered after a presyncopal episode while playing basketball."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR Val142Ile variant is associated with hypertrophic cardiomyopathy but does not show evidence of amyloidosis in the studied patients.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned in the paper.",
+      "population_frequency": "4.7% prevalence in cohort of patients with phenotypic HCM.",
+      "evidence_level": "Strong evidence based on clinical presentation and genetic testing.",
+      "source_location": "Discussion, paragraph 1",
+      "additional_notes": "All patients with the TTR Val142Ile variant were Black, indicating a potential population-specific prevalence.",
+      "key_quotes": [
+        "The presence of pathogenic TTR gene variants in patients with phenotypic HCM is an underrecognized and clinically important entity.",
+        "In our cohort of patients with phenotypic HCM undergoing genetic testing, the overall prevalence of concomitant TTR Val142Ile variant was 4.7%."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant Val142Ile was extracted successfully."
+  }
+}

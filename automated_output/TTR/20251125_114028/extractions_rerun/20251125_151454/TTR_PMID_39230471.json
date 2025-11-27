@@ -1,0 +1,90 @@
+{
+  "paper_metadata": {
+    "pmid": "39230471",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper investigates the association of TTR gene variants c.76G>A and c.337\u201018G>C with idiopathic small-fiber neuropathy (SFN). It concludes that these variants are not associated with SFN."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.76G>A",
+      "protein_notation": "p.Gly26Ser",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": 55,
+        "demographics": "not specified",
+        "phenotype": "idiopathic small-fiber neuropathy (SFN)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 12,
+        "affected_count": 0,
+        "unaffected_count": 12,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "No evidence of amyloid deposition was found in skin or labial salivary gland biopsies.",
+        "assays": []
+      },
+      "segregation_data": "Does not segregate with disease.",
+      "population_frequency": "7.27% in SFN cohort, 9% in control cohort, 5.14% in gnomAD.",
+      "evidence_level": "Moderate evidence for likely benign classification.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is considered nonpathogenic based on the study's findings.",
+      "key_quotes": [
+        "The c.76G>A and c.337\u201018G>C TTR gene variants are not associated with SFN.",
+        "No amyloid deposits were found in the skin or labial salivary gland biopsy specimens of our SFN patients, suggesting that both the VOIs are benign or nonpathogenic."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.337\u201018G>C",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": 55,
+        "demographics": "not specified",
+        "phenotype": "idiopathic small-fiber neuropathy (SFN)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 12,
+        "affected_count": 0,
+        "unaffected_count": 12,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "No evidence of amyloid deposition was found in skin or labial salivary gland biopsies.",
+        "assays": []
+      },
+      "segregation_data": "Does not segregate with disease.",
+      "population_frequency": "5.45% in SFN cohort, 8% in control cohort, 5.74% in gnomAD.",
+      "evidence_level": "Moderate evidence for likely benign classification.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is considered nonpathogenic based on the study's findings.",
+      "key_quotes": [
+        "The c.76G>A and c.337\u201018G>C TTR gene variants are not associated with SFN.",
+        "No amyloid deposits were found in the skin or labial salivary gland biopsy specimens of our SFN patients, suggesting that both the VOIs are benign or nonpathogenic."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Number of carriers and allelic frequencies for the two variants of interest.",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

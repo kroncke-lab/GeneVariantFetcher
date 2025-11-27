@@ -1,0 +1,187 @@
+{
+  "paper_metadata": {
+    "pmid": "32000831",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the Glu54Gln mutation in the TTR gene associated with hereditary transthyretin amyloidosis (ATTRh) in Romanian patients, detailing penetrance data and clinical characteristics."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.162G>A",
+      "protein_notation": "p.Glu54Gln",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 18,
+        "demographics": "10 females, 8 males; age range: 16-53 years; Romanian ethnic group",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTRh) with neurological and cardiac involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 18,
+        "affected_count": 10,
+        "unaffected_count": 5,
+        "uncertain_count": 3,
+        "penetrance_percentage": 55.56,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "1",
+          "age_at_evaluation": 48,
+          "age_at_onset": 36,
+          "age_at_diagnosis": 48,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, heart failure, dysphagia, diarrhea",
+          "evidence_sentence": "Patient 1 [A] age at diagnosis 48, symptoms at onset: Paresthesia, heart failure, dysphagia, diarrhea."
+        },
+        {
+          "individual_id": "2",
+          "age_at_evaluation": 43,
+          "age_at_onset": 36,
+          "age_at_diagnosis": 43,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac symptoms, heart failure",
+          "evidence_sentence": "Patient 2 [B] age at diagnosis 43, symptoms at onset: Cardiac symptoms, heart failure."
+        },
+        {
+          "individual_id": "3",
+          "age_at_evaluation": 35,
+          "age_at_onset": 11,
+          "age_at_diagnosis": 35,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Weight loss, heart failure, paresthesia",
+          "evidence_sentence": "Patient 3 [C1*] age at diagnosis 35, symptoms at onset: Weight loss, heart failure, paresthesia."
+        },
+        {
+          "individual_id": "4",
+          "age_at_evaluation": 49,
+          "age_at_onset": 24,
+          "age_at_diagnosis": 49,
+          "sex": "female",
+          "affected_status": "alive",
+          "phenotype_details": "Paresthesia, weight loss, heart failure",
+          "evidence_sentence": "Patient 4 (C2*) age at diagnosis 49, symptoms at onset: Paresthesia, weight loss, heart failure."
+        },
+        {
+          "individual_id": "5",
+          "age_at_evaluation": 51,
+          "age_at_onset": 48,
+          "age_at_diagnosis": 51,
+          "sex": "male",
+          "affected_status": "alive",
+          "phenotype_details": "Diarrhea, weight loss",
+          "evidence_sentence": "Patient 5 [D] age at diagnosis 51, symptoms at onset: Diarrhea, weight loss."
+        },
+        {
+          "individual_id": "6",
+          "age_at_evaluation": 52,
+          "age_at_onset": 9,
+          "age_at_diagnosis": 52,
+          "sex": "male",
+          "affected_status": "alive",
+          "phenotype_details": "Paresthesia, weight loss",
+          "evidence_sentence": "Patient 6 [E1*] age at diagnosis 52, symptoms at onset: Paresthesia, weight loss."
+        },
+        {
+          "individual_id": "7",
+          "age_at_evaluation": 47,
+          "age_at_onset": 24,
+          "age_at_diagnosis": 47,
+          "sex": "female",
+          "affected_status": "alive",
+          "phenotype_details": "Paresthesia, weight loss",
+          "evidence_sentence": "Patient 7 [E2*] age at diagnosis 47, symptoms at onset: Paresthesia, weight loss."
+        },
+        {
+          "individual_id": "8",
+          "age_at_evaluation": 47,
+          "age_at_onset": 7,
+          "age_at_diagnosis": 47,
+          "sex": "female",
+          "affected_status": "alive",
+          "phenotype_details": "Paresthesia",
+          "evidence_sentence": "Patient 8 [E3**] age at diagnosis 47, symptoms at onset: Paresthesia."
+        },
+        {
+          "individual_id": "9",
+          "age_at_evaluation": 49,
+          "age_at_onset": 36,
+          "age_at_diagnosis": 49,
+          "sex": "female",
+          "affected_status": "alive",
+          "phenotype_details": "Paresthesia, heart failure",
+          "evidence_sentence": "Patient 9 [F] age at diagnosis 49, symptoms at onset: Paresthesia, heart failure."
+        },
+        {
+          "individual_id": "10",
+          "age_at_evaluation": 49,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 49,
+          "sex": "female",
+          "affected_status": "alive",
+          "phenotype_details": "Paresthesia, heart failure",
+          "evidence_sentence": "Patient 10 [G] age at diagnosis 49, symptoms at onset: Paresthesia, heart failure."
+        },
+        {
+          "individual_id": "11",
+          "age_at_evaluation": 42,
+          "age_at_onset": 6,
+          "age_at_diagnosis": 42,
+          "sex": "female",
+          "affected_status": "alive",
+          "phenotype_details": "Weight loss, gastroparesis",
+          "evidence_sentence": "Patient 11 [H] age at diagnosis 42, symptoms at onset: Weight loss, gastroparesis."
+        },
+        {
+          "individual_id": "12",
+          "age_at_evaluation": 41,
+          "age_at_onset": 48,
+          "age_at_diagnosis": 41,
+          "sex": "female",
+          "affected_status": "alive",
+          "phenotype_details": "Paresthesia, weight loss",
+          "evidence_sentence": "Patient 12 [I1*] age at diagnosis 41, symptoms at onset: Paresthesia, weight loss."
+        },
+        {
+          "individual_id": "13",
+          "age_at_evaluation": 46,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 46,
+          "sex": "female",
+          "affected_status": "alive",
+          "phenotype_details": "Paresthesia, weight loss",
+          "evidence_sentence": "Patient 13 [I2*] age at diagnosis 46, symptoms at onset: Paresthesia, weight loss."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Glu54Gln mutation in TTR is associated with destabilization and aggregation of TTR protein, leading to amyloid fibril formation.",
+        "assays": []
+      },
+      "segregation_data": "The Glu54Gln variant segregates with disease in families, as indicated by family history of neurological involvement or death at a young age.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the first report of the Glu54Gln mutation in the Romanian population.",
+      "key_quotes": [
+        "This is the largest Glu54Gln-mutated ATTRh cohort diagnosed to date, and to our knowledge the first describing this variant worldwide.",
+        "All symptomatic patients had a family history of neurological involvement or death at a young age."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Characteristics of symptomatic ATTR patients with the Glu54Gln mutation",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR gene variant were extracted successfully."
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "23593081",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from a study on breast cancer in multiple ethnic regions of China."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6873delCTCC",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Kazakh ethnic Chinese",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.3,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Among 6 of BRCA-related tumors, three BRCA1- and one BRCA2-associated tumors were in triple negative status."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is a deletion that likely results in a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in a Kazakh ethnic Chinese patient.",
+      "key_quotes": [
+        "BRCA2 variants 6873delCTCC and 9481delA (both are Kazakh ethnic Chinese), were identified and they had never been reported in breast cancer information core (BIC) database before."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9481delA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Kazakh ethnic Chinese",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.3,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Among 6 of BRCA-related tumors, three BRCA1- and one BRCA2-associated tumors were in triple negative status."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is a deletion that likely results in a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in a Kazakh ethnic Chinese patient.",
+      "key_quotes": [
+        "BRCA2 variants 6873delCTCC and 9481delA (both are Kazakh ethnic Chinese), were identified and they had never been reported in breast cancer information core (BIC) database before."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1627A>T",
+      "protein_notation": "p.Lys467X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Han ethnic Chinese",
+        "phenotype": "triple negative breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.3,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": 42,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "triple negative breast cancer",
+          "evidence_sentence": "BRCA2 1627A-T (K467X) was previously reported in a Korean population and identified as recurrent mutation in the Korean population."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is a nonsense mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in a Han ethnic Chinese patient.",
+      "key_quotes": [
+        "BRCA2 1627A-T (K467X) was previously reported in a Korean population and identified as recurrent mutation in the Korean population."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Summary of BRCA1 and BRCA2 mutations identified in the study.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

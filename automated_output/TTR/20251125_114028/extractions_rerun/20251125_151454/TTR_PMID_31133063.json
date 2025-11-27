@@ -1,0 +1,680 @@
+{
+  "paper_metadata": {
+    "pmid": "31133063",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val28Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val28Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Gly47Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Thr49Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Thr49Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Gly53Glu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Lys80Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Gly83Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P10",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Glu89Gln",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ala97Gly",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P12",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Tyr114Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P13",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Tyr114Cys",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Not specified",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": 38,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P14",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "We detected variant TTRs in 38 (91%) of 42 serum samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Direct MALDI method successfully detected variant TTRs.",
+        "assays": [
+          "MALDI-TOF MS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Direct MALDI could not distinguish between Glu61Lys and Glu89Gln.",
+      "key_quotes": [
+        "We detected variant TTRs in 38 (91%) of 42 serum samples.",
+        "Direct MALDI could not distinguish between two variant TTRs\u2014Glu61Lys and Glu89Gln."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Variant TTRs detected in 42 serum samples obtained from 42 patients with ATTRv amyloidosis by means of the direct MALDI method",
+      "variants_extracted": 15
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 15,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were from the TTR gene."
+  }
+}

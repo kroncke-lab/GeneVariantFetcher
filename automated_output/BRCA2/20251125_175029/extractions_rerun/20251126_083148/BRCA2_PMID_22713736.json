@@ -1,0 +1,110 @@
+{
+  "paper_metadata": {
+    "pmid": "22713736",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from a study on familial breast cancer patients in Lebanon."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5576_5579delTTAA",
+      "protein_notation": "p.I1859KfsX3",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, diagnosed at age 51",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 51,
+          "age_at_onset": null,
+          "age_at_diagnosis": 51,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer diagnosed at age 51, family history includes breast cancer in mother at age 63.",
+          "evidence_sentence": "This mutation was identified in a patient diagnosed at the age of 51\u2009years and was considered as a truncating mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "Deletion leading to a frameshift and a stop codon.",
+        "assays": []
+      },
+      "segregation_data": "Yes, family history includes breast cancer.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Considered a truncating mutation.",
+      "key_quotes": [
+        "This mutation was identified in a patient diagnosed at the age of 51\u2009years and was considered as a truncating mutation."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9485-1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, diagnosed at age 33",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 33,
+          "age_at_onset": null,
+          "age_at_diagnosis": 33,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer diagnosed at age 33, family history includes breast cancer diagnosis of the father and the paternal aunt.",
+          "evidence_sentence": "The second mutation is at position c.9485-1\u2009G\u2009>\u2009A leading to exon 26 skipping."
+        }
+      ],
+      "functional_data": {
+        "summary": "Disrupts an acceptor splice site consensus sequence.",
+        "assays": []
+      },
+      "segregation_data": "Yes, family history includes breast cancer.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Considered a mutation affecting splicing.",
+      "key_quotes": [
+        "The second mutation is at position c.9485-1\u2009G\u2009>\u2009A leading to exon 26 skipping."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Sequence variants identified in the BRCA2 gene",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants and penetrance data were successfully extracted."
+  }
+}

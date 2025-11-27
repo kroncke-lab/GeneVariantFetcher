@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "26286643",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses genetic modifiers of age at onset in familial amyloid polyneuropathy (FAP ATTRV30M) but does not provide specific variant data for the TTR gene."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focuses on genetic modifiers in other genes and does not provide specific TTR variant data."
+    ],
+    "notes": "The paper mentions the TTR gene in the context of FAP ATTRV30M but does not report any specific variants in the TTR gene."
+  }
+}

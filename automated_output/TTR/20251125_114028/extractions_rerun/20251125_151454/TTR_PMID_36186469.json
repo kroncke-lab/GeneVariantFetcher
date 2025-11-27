@@ -1,0 +1,81 @@
+{
+  "paper_metadata": {
+    "pmid": "36186469",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper reports a heterozygous mutation in the TTR gene (p.G103R) associated with hereditary transthyretin amyloidosis in a Han Chinese family, detailing penetrance data and individual cases."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.307G>C",
+      "protein_notation": "p.G103R",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "48-year-old female proband, 26-year-old female daughter, and fourth sister (age not specified)",
+        "phenotype": "Proband and fourth sister had low vision; daughter was an asymptomatic carrier."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 2,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "IV-13",
+          "age_at_evaluation": 48,
+          "age_at_onset": 36,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Progressive visual impairment, vitreous hemorrhage.",
+          "evidence_sentence": "The proband was a 48-year-old woman who had progressive visual impairment in both eyes for 12 years."
+        },
+        {
+          "individual_id": "IV-9",
+          "age_at_evaluation": 26,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Asymptomatic carrier.",
+          "evidence_sentence": "The clinical phenotype of her daughter (26 years old) was normal, while the proband and her fourth sister had low vision."
+        },
+        {
+          "individual_id": "III-11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Low vision.",
+          "evidence_sentence": "The proband and her fourth sister had low vision."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation has been reported to be pathogenic and related to ATTRv amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the first report of the p.G103R mutation associated with vitreous hemorrhage in China.",
+      "key_quotes": [
+        "This mutation has been reported to be pathogenic and related to ATTRv amyloidosis.",
+        "To our knowledge, this is the first case of ATTRv amyloidosis caused by a p.G103R mutation of the TTR gene associated with vitreous hemorrhage in China."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

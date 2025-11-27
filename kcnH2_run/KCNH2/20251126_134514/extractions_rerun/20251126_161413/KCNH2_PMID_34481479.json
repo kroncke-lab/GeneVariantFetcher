@@ -1,0 +1,71 @@
+{
+  "paper_metadata": {
+    "pmid": "34481479",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper reports a c.1815delC heterozygous mutation in the KCNH2 gene associated with Long QT syndrome type 2 (LQT2) in a patient misdiagnosed with epilepsy."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1815delC",
+      "protein_notation": "p.Ser606fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "35-year-old female, mother also carries the mutation",
+        "phenotype": "Long QT syndrome type 2 (LQT2) with symptoms mimicking epilepsy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 35,
+          "age_at_onset": 13,
+          "age_at_diagnosis": 35,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Long QT syndrome type 2 with episodes of syncope and ventricular tachycardia.",
+          "evidence_sentence": "The diagnosis of LQT2 was confirmed by ECG and the detection of potassium voltage-gated channel subfamily H member 2 gene (KCNH2) mutation."
+        },
+        {
+          "individual_id": "Mother",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "uncertain",
+          "phenotype_details": "Carried the same mutation but refused further evaluation.",
+          "evidence_sentence": "The patient and her mother carried the mutation whereas her father had wild type at this point."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.1815delC mutation causes a frameshift leading to premature termination of the protein.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregates with disease in the family as the mother also carries it.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient was misdiagnosed with epilepsy for 22 years before the correct diagnosis of LQT2 was made.",
+      "key_quotes": [
+        "The diagnosis of LQT2 was confirmed by ECG and the detection of potassium voltage-gated channel subfamily H member 2 gene (KCNH2) mutation.",
+        "The patient and her mother carried the mutation whereas her father had wild type at this point."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant was extracted from the main text."
+  }
+}

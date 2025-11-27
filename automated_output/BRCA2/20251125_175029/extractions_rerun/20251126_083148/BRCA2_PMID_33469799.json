@@ -1,0 +1,206 @@
+{
+  "paper_metadata": {
+    "pmid": "33469799",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on four BRCA2 variants, including clinical significance, penetrance data, and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.68-3T>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 16,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 16,
+        "affected_count": 0,
+        "unaffected_count": 16,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "The history weighting algorithm called this variant benign based on the relative severity of personal and family cancer history for c.68-3T>G carriers compared to negative controls."
+        }
+      ],
+      "functional_data": {
+        "summary": "Partial splice defect with some functional transcript produced.",
+        "assays": [
+          "RNA analysis",
+          "RT-PCR",
+          "Sanger sequencing"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "16/244,208 chromosomes; 0.01% allele frequency",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Conflicting evidence regarding pathogenicity.",
+      "key_quotes": [
+        "c.68-3T>G results in a partial splice defect.",
+        "The variant was classified as a variant of uncertain significance (VUS) in ClinVar."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.68-2A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 11,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": 0,
+        "unaffected_count": 11,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "BRCA2 c.68-2A>G did not meet the threshold to be classified as benign by the history weighting algorithm."
+        }
+      ],
+      "functional_data": {
+        "summary": "In-frame cryptic acceptor utilized, producing aberrant transcripts.",
+        "assays": [
+          "RNA analysis",
+          "RT-PCR",
+          "Sanger sequencing"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "1/243,416 chromosomes; 0% allele frequency",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Trending benign but classified as VUS.",
+      "key_quotes": [
+        "The sequence change affects the invariant AG dinucleotide of the splice acceptor.",
+        "Utilization of the cryptic splice site would produce a transcript with the in-frame deletion of two amino acids."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.425G>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 0,
+        "unaffected_count": 10,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "The history weighting algorithm analysis based on 10 observations."
+        }
+      ],
+      "functional_data": {
+        "summary": "Expected to cause skipping of exon 4, leading to pathogenic effects.",
+        "assays": [
+          "RNA analysis",
+          "RT-PCR",
+          "Sanger sequencing"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not present in large population databases",
+      "evidence_level": "Strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Classified as likely pathogenic based on multiple lines of evidence.",
+      "key_quotes": [
+        "c.425G>T was classified as likely pathogenic in ClinVar by six submitting laboratories.",
+        "Published RNA analysis showing skipping of exon 4 with predicted protein truncation."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8331+2T>C",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 0,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Partial splice defect with some functional transcript produced.",
+        "assays": [
+          "RNA analysis",
+          "RT-PCR",
+          "Sanger sequencing"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not present in large population databases",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Classified as VUS due to conflicting evidence.",
+      "key_quotes": [
+        "BRCA2 c.8331+2T>C may utilize a functional GC donor in place of the wild-type GT donor."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Summary of evidence for variant classification.",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text and tables."
+  }
+}

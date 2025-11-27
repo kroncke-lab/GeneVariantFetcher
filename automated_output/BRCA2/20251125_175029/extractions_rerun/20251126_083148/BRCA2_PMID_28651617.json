@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "28651617",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the development and validation of a variant detection workflow for BRCA1 and BRCA2 genes using Ion Torrent technology. It reports the identification of 22 distinct mutations in clinical samples, but specific BRCA2 variants are not detailed in the provided text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The provided text does not include specific BRCA2 variant details."
+    ],
+    "notes": "The extraction was limited by the absence of specific BRCA2 variant data in the provided text."
+  }
+}

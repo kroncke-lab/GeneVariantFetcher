@@ -1,0 +1,114 @@
+{
+  "paper_metadata": {
+    "pmid": "23840331",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the KCNH2 gene, specifically the E637K variant, and its implications in Long QT syndrome type 2 (LQT2)."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1910A>T",
+      "protein_notation": "p.Glu637Lys",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 6,
+        "demographics": "Not specified",
+        "phenotype": "Long QT syndrome type 2 (LQT2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 0,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "WT/E637K-hERG cells demonstrated a significant reduction in maximal current amplitude compared to WT-hERG cells."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "WT/E637K-hERG cells demonstrated a significant reduction in maximal current amplitude compared to WT-hERG cells."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "WT/E637K-hERG cells demonstrated a significant reduction in maximal current amplitude compared to WT-hERG cells."
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "WT/E637K-hERG cells demonstrated a significant reduction in maximal current amplitude compared to WT-hERG cells."
+        },
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "WT/E637K-hERG cells demonstrated a significant reduction in maximal current amplitude compared to WT-hERG cells."
+        },
+        {
+          "individual_id": "Case_6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "WT/E637K-hERG cells demonstrated a significant reduction in maximal current amplitude compared to WT-hERG cells."
+        }
+      ],
+      "functional_data": {
+        "summary": "The E637K variant leads to a significant reduction in current amplitude and does not rescue channel function with PD-118057 or thapsigargin treatment.",
+        "assays": [
+          "whole-cell patch-clamp technique",
+          "Western blot analysis"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The E637K variant is described as a dominant-negative mutation.",
+      "key_quotes": [
+        "The E637K-hERG mutant, which substitutes lysine for glutamic acid at position 637 in the pore-S6 loop transmembrane segment of hERG, has been identified as a dominant-negative mutation.",
+        "Our findings illustrate that neither PD-118057 nor thapsigargin play a role in correcting the dominant-negative effect of the E637K-hERG mutant."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on the KCNH2 gene and its variants."
+  }
+}

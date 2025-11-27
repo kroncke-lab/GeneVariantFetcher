@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "34991732",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant ATTRD18E, including clinical significance, patient demographics, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.54G>A",
+      "protein_notation": "p.Asp18Glu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "43-year-old Caucasian male",
+        "phenotype": "ATTRD18E amyloidosis with systemic involvement and ocular abnormalities"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 43,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Diffuse systemic involvement including cardiovascular, pulmonary, and gastrointestinal symptoms, significant ocular involvement including vitreous opacities, retinal angiopathy, and conjunctival lymphangiectasia.",
+          "evidence_sentence": "He had diffuse systemic involvement, including cardiovascular, pulmonary, and gastrointestinal symptoms."
+        }
+      ],
+      "functional_data": {
+        "summary": "The ATTRD18E mutation is associated with severe systemic disease and ocular manifestations.",
+        "assays": []
+      },
+      "segregation_data": "The patient's father died from cardiac arrest secondary to amyloidosis, suggesting familial segregation.",
+      "population_frequency": "Rare, with only 1/1411 patients in a large study from continental Western Europe.",
+      "evidence_level": "Moderate, based on case report and familial history.",
+      "source_location": "Discussion, paragraph 1",
+      "additional_notes": "This is the first documented case of ATTRD18E amyloidosis with significant ocular involvement.",
+      "key_quotes": [
+        "To our knowledge, this is the first documented case of ATTRD18E amyloidosis with significant ocular involvement.",
+        "The presence of conjunctival lymphangiectasia as a biomarker may also be relevant in ATTRD18E amyloidosis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on a single variant in the TTR gene."
+  }
+}

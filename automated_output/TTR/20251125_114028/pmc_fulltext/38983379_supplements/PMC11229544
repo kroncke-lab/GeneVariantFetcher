@@ -1,0 +1,3237 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+    <head >
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        
+        
+
+        
+        
+  <link rel="stylesheet" href="/static/assets/style-8258669d.css" />
+<script type="module" crossorigin="" src="/static/assets/base_style-f4a99799.js"></script>
+
+  <link rel="stylesheet" href="/static/assets/style-ef962842.css" />
+<link rel="stylesheet" href="/static/assets/style-3ade8b5c.css" />
+<script type="module" crossorigin="" src="/static/assets/article_style-d757a0dd.js"></script>
+
+  
+  
+    <style>
+  
+  
+  @media screen and (min-width: 64em) {
+    div.pmc-wm {
+      background: repeat-y;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='350' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cfilter x='-.02' y='0' width='1.05' height='1' id='c'%3E%3CfeFlood flood-color='%23FFF'/%3E%3CfeComposite in='SourceGraphic'/%3E%3C/filter%3E%3Ctext id='b' font-family='Helvetica' font-size='11pt' style='opacity:1;fill:%23005ea2;stroke:none;text-anchor:middle' x='175' y='14'%3E%3C/text%3E%3Cpath id='a' style='fill:%23005ea2' d='M0 8h350v3H0z'/%3E%3C/defs%3E%3Cuse xlink:href='%23a' transform='rotate(90 10 10)'/%3E%3Cuse xlink:href='%23b' transform='rotate(90 10 10)' filter='url(%23c)'/%3E%3C/svg%3E");
+      padding-left: 3rem;
+    }
+  }
+</style>
+
+  
+
+
+
+        
+            <link rel="apple-touch-icon"
+                  sizes="180x180"
+                  href="/static/img/favicons/apple-touch-icon.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="48x48"
+                  href="/static/img/favicons/favicon-48x48.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="32x32"
+                  href="/static/img/favicons/favicon-32x32.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="16x16"
+                  href="/static/img/favicons/favicon-16x16.png" />
+            <link rel="manifest" href="/static/img/favicons/site.webmanifest" />
+            <link rel="mask-icon"
+                  href="/static/img/favicons/safari-pinned-tab.svg"
+                  color="#0071bc" />
+            <meta name="msapplication-config"
+                  content="/static/img/favicons/browserconfig.xml" />
+            <meta name="theme-color" content="#ffffff" />
+        
+
+        <title>
+            Race and Socioeconomic Status Impact Diagnosis and Clinical Outcomes in Transthyretin Cardiac Amyloidosis - PMC
+        </title>
+
+        
+        
+  
+  <!-- Logging params: Pinger defaults -->
+<meta name="ncbi_app" content="cloudpmc-viewer" />
+<meta name="ncbi_db" content="pmc" />
+<meta name="ncbi_phid" content="8E59BC8C926091D33ABC8C000F5DA67E.m_1" />
+<meta name="ncbi_pinger_stat_url" content="https://pmc.ncbi.nlm.nih.gov/stat" />
+<!-- Logging params: Pinger custom -->
+<meta name="ncbi_pdid" content="article" />
+  
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
+    
+        <link rel="preconnect" href="https://cdn.ncbi.nlm.nih.gov" />
+    
+
+    <!-- Include USWDS Init Script -->
+    <script src="/static/assets/uswds-init.js"></script>
+
+
+    <meta name="ncbi_domain" content="jaccao">
+<meta name="ncbi_type" content="fulltext">
+<meta name="ncbi_pcid" content="journal">
+<meta name="ncbi_feature" content="associated_data">
+<link rel="canonical" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11229544/">
+<meta name="robots" content="INDEX,NOFOLLOW,NOARCHIVE">
+<meta name="citation_journal_title" content="JACC: CardioOncology">
+<meta name="citation_title" content="Race and Socioeconomic Status Impact Diagnosis and Clinical Outcomes in Transthyretin Cardiac Amyloidosis">
+<meta name="citation_author" content="Bairavi Shankar">
+<meta name="citation_author_institution" content="Department of Medicine, Johns Hopkins Hospital, Baltimore, Maryland, USA">
+<meta name="citation_author" content="Lisa Yanek">
+<meta name="citation_author_institution" content="Division of General Internal Medicine, Department of Medicine, Johns Hopkins University School of Medicine, Baltimore, Maryland, USA">
+<meta name="citation_author" content="Artrish Jefferson">
+<meta name="citation_author_institution" content="Department of Medicine, Johns Hopkins Hospital, Baltimore, Maryland, USA">
+<meta name="citation_author" content="Vivek Jani">
+<meta name="citation_author_institution" content="Department of Medicine, Johns Hopkins Hospital, Baltimore, Maryland, USA">
+<meta name="citation_author" content="Emily Brown">
+<meta name="citation_author_institution" content="Department of Medicine, Johns Hopkins Hospital, Baltimore, Maryland, USA">
+<meta name="citation_author" content="Daniel Tsottles">
+<meta name="citation_author_institution" content="Department of Neurology, Johns Hopkins Hospital, Baltimore, Maryland, USA">
+<meta name="citation_author" content="Jennifer Barranco">
+<meta name="citation_author_institution" content="Department of Neurology, Johns Hopkins Hospital, Baltimore, Maryland, USA">
+<meta name="citation_author" content="Serena Zampino">
+<meta name="citation_author_institution" content="Department of Medicine, Johns Hopkins Hospital, Baltimore, Maryland, USA">
+<meta name="citation_author" content="Mark Ranek">
+<meta name="citation_author_institution" content="Department of Cardiology, Johns Hopkins Hospital, Baltimore, Maryland, USA">
+<meta name="citation_author" content="Kavita Sharma">
+<meta name="citation_author_institution" content="Department of Cardiology, Johns Hopkins Hospital, Baltimore, Maryland, USA">
+<meta name="citation_author" content="Michael Polydefkis">
+<meta name="citation_author_institution" content="Department of Neurology, Johns Hopkins Hospital, Baltimore, Maryland, USA">
+<meta name="citation_author" content="Joban Vaishnav">
+<meta name="citation_author_institution" content="Department of Cardiology, Johns Hopkins Hospital, Baltimore, Maryland, USA">
+<meta name="citation_publication_date" content="2024 Jun 18">
+<meta name="citation_volume" content="6">
+<meta name="citation_issue" content="3">
+<meta name="citation_firstpage" content="454">
+<meta name="citation_doi" content="10.1016/j.jaccao.2024.05.001">
+<meta name="citation_pmid" content="38983379">
+<meta name="citation_abstract_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC11229544/">
+<meta name="citation_fulltext_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC11229544/">
+<meta name="citation_pdf_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC11229544/pdf/main.pdf">
+<meta name="description" content="Transthyretin amyloid cardiomyopathy (ATTR-CM) is associated with significant mortality. The Val122Ile variant, highly prevalent in Black patients, portends poorer survival compared with other ATTR-CM subtypes. Although Val122Ile is biologically ...">
+<meta name="og:title" content="Race and Socioeconomic Status Impact Diagnosis and Clinical Outcomes in Transthyretin Cardiac Amyloidosis">
+<meta name="og:type" content="article">
+<meta name="og:site_name" content="PubMed Central (PMC)">
+<meta name="og:description" content="Transthyretin amyloid cardiomyopathy (ATTR-CM) is associated with significant mortality. The Val122Ile variant, highly prevalent in Black patients, portends poorer survival compared with other ATTR-CM subtypes. Although Val122Ile is biologically ...">
+<meta name="og:url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC11229544/">
+<meta name="og:image" content="https://cdn.ncbi.nlm.nih.gov/pmc/cms/images/pmc-card-share.jpg?_=0">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ncbi">
+    
+    
+
+    </head>
+    <body >
+        
+    <a class="usa-skipnav " href="#main-content">
+      Skip to main content
+    </a>
+
+
+        
+            
+
+<section class="usa-banner " aria-label="Official website of the United States government" >
+    <div class="usa-accordion">
+        <header class="usa-banner__header">
+            <div class="usa-banner__inner">
+                <div class="grid-col-auto">
+                    <img aria-hidden="true"
+                         class="usa-banner__header-flag"
+                         src="/static/img/us_flag.svg"
+                         alt="" />
+                </div>
+
+                <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                    <p class="usa-banner__header-text">
+                        An official website of the United States government
+                    </p>
+                    <span class="usa-banner__header-action">Here's how you know</span>
+                </div>
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-accordion__button usa-banner__button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    aria-expanded="false"
+    aria-controls="gov-banner-default"
+    
+    data-testid="storybook-django-banner"
+    
+    >
+    
+        
+
+        
+                    <span class="usa-banner__button-text">Here's how you know</span>
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </div>
+        </header>
+
+        <div class="usa-banner__content usa-accordion__content"
+             id="gov-banner-default"
+             hidden>
+            <div class="grid-row grid-gap-lg">
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-dot-gov.svg"
+                         alt=""
+                         aria-hidden="true" />
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Official websites use .gov</strong>
+                            <br />
+                            A
+                            <strong>.gov</strong> website belongs to an official
+                            government organization in the United States.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-https.svg"
+                         alt=""
+                         aria-hidden="true" />
+
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Secure .gov websites use HTTPS</strong>
+                            <br />
+                            A <strong>lock</strong> (
+                            <span class="icon-lock">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="52"
+                                     height="64"
+                                     viewBox="0 0 52 64"
+                                     class="usa-banner__lock-image"
+                                     role="graphics-symbol"
+                                     aria-labelledby="banner-lock-description"
+                                     focusable="false">
+                                    <title id="banner-lock-title">Lock</title>
+                                    <desc id="banner-lock-description">
+                                    Locked padlock icon
+                                    </desc>
+                                    <path fill="#000000"
+                                          fill-rule="evenodd"
+                                          d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z" />
+                                </svg>
+</span>) or <strong>https://</strong> means you've safely
+                                connected to the .gov website. Share sensitive
+                                information only on official, secure websites.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        
+
+        
+    
+    
+    
+
+<div class="usa-overlay">
+</div>
+
+
+
+<header class="usa-header usa-header--extended usa-header--wide" data-header data-testid="header"    >
+    <div class="ncbi-header">
+        <div class="ncbi-header__container">
+            <a class="ncbi-header__logo-container"
+               href="https://www.ncbi.nlm.nih.gov/">
+                <img alt="NCBI home page"
+                     class="ncbi-header__logo-image"
+                     src="/static/img/ncbi-logos/nih-nlm-ncbi--white.svg"
+                     width="410"
+                     height="100" />
+            </a>
+
+            <!-- Mobile menu hamburger button -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-menu-btn ncbi-header__hamburger-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Show menu"
+    data-testid="navMenuButton"
+    
+    >
+    
+        
+
+        
+                <svg aria-hidden="true"
+                     class="ncbi-hamburger-icon"
+                     fill="none"
+                     focusable="false"
+                     height="21"
+                     viewBox="0 0 31 21"
+                     width="31"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M0.125 20.75H30.875V17.3333H0.125V20.75ZM0.125 12.2083H30.875V8.79167H0.125V12.2083ZM0.125 0.25V3.66667H30.875V0.25H0.125Z"
+                          fill="#F1F1F1"
+                          fill-rule="evenodd" />
+                </svg>
+            
+
+        
+    
+        
+            </button>
+        
+
+
+
+            
+                <!-- Desktop buttons-->
+                <div class="ncbi-header__desktop-buttons">
+                    
+                        <!-- Desktop search button -->
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button
+           "
+    aria-expanded="false"
+    aria-controls="search-field-desktop-navigation"
+    aria-label="Show search overlay"
+    data-testid="toggleSearchPanelButton"
+    data-toggle-search-panel-button
+    >
+    
+        
+
+        
+                            
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#search" />
+    </svg>
+
+
+                            Search
+                        
+
+        
+    
+        
+            </button>
+        
+
+
+                    
+
+                    <!-- Desktop login dropdown -->
+                    
+                        <div class="ncbi-header__login-dropdown">
+                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button ncbi-header__login-dropdown-button
+           "
+    aria-expanded="false"
+    aria-controls="login-dropdown-menu"
+    aria-label="Show login menu"
+    data-testid="toggleLoginMenuDropdown"
+    data-desktop-login-button
+    >
+    
+        
+
+        
+                                
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#person" />
+    </svg>
+
+
+
+                                <span data-login-dropdown-text>Log in</span>
+
+                                <!-- Dropdown icon pointing up -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-less ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-up-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_less" />
+    </svg>
+
+
+
+                                <!-- Dropdown icon pointing down -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-more ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-down-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_more" />
+    </svg>
+
+
+                            
+
+        
+    
+        
+            </button>
+        
+
+
+
+                            <!-- Login dropdown menu -->
+                            <ul class="usa-nav__submenu ncbi-header__login-dropdown-menu"
+                                id="login-dropdown-menu"
+                                data-desktop-login-menu-dropdown
+                                hidden>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                <li class="usa-nav__submenu-item">
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--outline ncbi-header__login-dropdown-logout-button
+           "
+    
+    
+    
+    data-testid="desktopLogoutButton"
+    data-desktop-logout-button
+    >
+    
+        
+
+        Log out
+
+        
+    
+        
+            </button>
+        
+
+
+                                </li>
+                            </ul>
+                        </div>
+                    
+                </div>
+            
+        </div>
+    </div>
+
+    <!-- Search panel -->
+    
+        <div class="ncbi-search-panel ncbi--show-only-at-desktop"
+             data-header-search-panel
+             hidden>
+            <div class="ncbi-search-panel__container">
+                <form action="https://www.ncbi.nlm.nih.gov/search/all/"
+                      
+                      autocomplete="off"
+                      class="usa-search usa-search--big ncbi-search-panel__form"
+                      data-testid="desktop-navigation-search-form"
+                      method="GET"
+                      role="search">
+                    <label class="usa-sr-only" for="search-field-desktop-navigation">
+                        Search…
+                    </label>
+                    <input class="usa-input"
+                           id="search-field-desktop-navigation"
+                           name="term"
+                           
+                               placeholder="Search NCBI"
+                           
+                           type="search"
+                           value="" />
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                        <span class="usa-search__submit-text">
+                            Search NCBI
+                        </span>
+                    
+
+        
+    
+        
+            </button>
+        
+
+
+                </form>
+
+                
+            </div>
+        </div>
+    
+
+    <nav aria-label="Primary navigation" class="usa-nav">
+        <p class="usa-sr-only" id="primary-navigation-sr-only-title">
+            Primary site navigation
+        </p>
+
+        <!-- Mobile menu close button -->
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-nav__close ncbi-nav__close-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Close navigation menu"
+    data-testid="navCloseButton"
+    
+    >
+    
+        
+
+        
+            <img src="/static/img/usa-icons/close.svg" alt="Close" />
+        
+
+        
+    
+        
+            </button>
+        
+
+
+
+        
+            <!-- Mobile search component -->
+            <form class="usa-search usa-search--small ncbi--hide-at-desktop margin-top-6"
+                  action="https://www.ncbi.nlm.nih.gov/search/all/"
+                  
+                  autocomplete="off"
+                  data-testid="mobile-navigation-search-form"
+                  method="GET"
+                  role="search">
+                <label class="usa-sr-only" for="search-field-mobile-navigation">
+                    Search
+                </label>
+
+                <input class="usa-input"
+                       id="search-field-mobile-navigation"
+                       type="search"
+                       
+                           placeholder="Search NCBI"
+                       
+                       name="term" />
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                    <!-- This SVG should be kept inline and not replaced with a link to the icon as otherwise it will render in the wrong color -->
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0E2LjQ3MSA2LjQ3MSAwIDAgMCAxNiA5LjUgNi41IDYuNSAwIDEgMCA5LjUgMTZjMS42MSAwIDMuMDktLjU5IDQuMjMtMS41N2wuMjcuMjh2Ljc5bDUgNC45OUwyMC40OSAxOWwtNC45OS01em0tNiAwQzcuMDEgMTQgNSAxMS45OSA1IDkuNVM3LjAxIDUgOS41IDUgMTQgNy4wMSAxNCA5LjUgMTEuOTkgMTQgOS41IDE0eiIvPjwvc3ZnPg=="
+                         class="usa-search__submit-icon"
+                         alt="Search" />
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </form>
+
+            
+        
+
+        <!-- Primary navigation menu items -->
+        <!-- This usa-nav__inner wrapper is required to correctly style the navigation items on Desktop -->
+        
+
+        
+            <div class="ncbi-nav__mobile-login-menu ncbi--hide-at-desktop"
+                 data-mobile-login-menu
+                 hidden>
+                <p class="ncbi-nav__mobile-login-menu-status">
+                    Logged in as:
+                    <strong class="ncbi-nav__mobile-login-menu-email"
+                            data-mobile-login-email-text></strong>
+                </p>
+                <ul class="usa-nav__primary usa-accordion">
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           ncbi-nav__mobile-login-button ncbi--hide-at-desktop
+           "
+    
+    
+    
+    data-testid="mobileLoginButton"
+    data-mobile-login-button
+    >
+    
+        
+
+        Log in
+
+        
+    
+        
+            </button>
+        
+
+
+    </nav>
+</header>
+
+    
+    
+        
+
+<section class="pmc-header pmc-header--basic" aria-label="PMC Header with search box">
+    <div class="pmc-nav-container">
+        <div class="pmc-header__bar">
+           <div class="pmc-header__logo">
+               <a href="/" title="Home" aria-label="PMC Home"></a>
+           </div>
+            <button
+                    type="button"
+                    class="usa-button usa-button--unstyled pmc-header__search__button"
+                    aria-label="Open search"
+                    data-ga-category="search"
+                    data-ga-action="PMC"
+                    data-ga-label="pmc_search_panel_mobile"
+            >
+                <svg class="usa-icon width-4 height-4 pmc-icon__open" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#search"></use>
+                </svg>
+                <svg class="usa-icon width-4 height-4 pmc-icon__close" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="pmc-header__search">
+            
+
+
+<form class="usa-search usa-search--extra usa-search--article-right-column  pmc-header__search__form" id="pmc-search-form" autocomplete="off" role="search">
+<label class="usa-sr-only" for="pmc-search">Search PMC Full-Text Archive</label>
+<span class="autoComplete_wrapper flex-1">
+<input class="usa-input width-full maxw-none" required="required" placeholder="Search PMC Full-Text Archive" id="pmc-search"  type="search" name="term" data-autocomplete-url="https://pmc.ncbi.nlm.nih.gov/autocomp/search/autocomp/"/>
+</span>
+<button
+class="usa-button"
+type="submit"
+formaction="https://pmc.ncbi.nlm.nih.gov/search/"
+data-ga-category="search"
+data-ga-action="PMC"
+data-ga-label="PMC_search_button"
+>
+<span class="usa-search__submit-text">Search in PMC</span>
+<img
+src="/static/img/usa-icons-bg/search--white.svg"
+class="usa-search__submit-icon"
+alt="Search"
+/>
+</button>
+</form>
+            <div class="display-flex flex-column tablet:flex-row tablet:flex-justify flex-justify-center flex-align-center width-full desktop:maxw-44">
+                <ul class="pmc-header__search__menu">
+                    <li>
+                        
+                            <a class="usa-link" href="/journals/" data-ga-action="featured_link" data-ga-label="journal list">
+                                Journal List
+                            </a>
+                        
+                    </li>
+                    <li>
+                        
+                            <a class="usa-link" href="/about/userguide/" data-ga-action="featured_link"
+                            data-ga-label="user guide">
+                                User Guide
+                            </a>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+    
+
+
+        
+        
+
+       
+  <div class="usa-section padding-top-0 desktop:padding-top-6 pmc-article-section" data-article-db="pmc" data-article-id="11229544">
+
+    
+
+   
+
+
+
+<div class="grid-container pmc-actions-bar" aria-label="Actions bar" role="complementary">
+    <div class="grid-row">
+        <div class="grid-col-fill display-flex">
+             <div class="display-flex">
+                <ul class="usa-list usa-list--unstyled usa-list--horizontal">
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <button
+                                type="button"
+                                class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                                aria-label="Open resources"
+                                data-extra-class="is-visible-resources"
+                                data-ga-category="resources_accordion"
+                                data-ga-action="click"
+                                data-ga-label="mobile_icon"
+                        >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#more_vert"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <a
+                                href="https://doi.org/10.1016/j.jaccao.2024.05.001"
+                                class="usa-link display-flex usa-tooltip"
+                                role="button"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                title="View on publisher site"
+                                data-position="bottom"
+                                aria-label="View on publisher site"
+                                data-ga-category="actions"
+                                data-ga-action="click"
+                                data-ga-label="publisher_link_mobile"
+                        >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#launch"></use>
+                                </svg>
+                        </a>
+                    </li>
+                    
+                    
+                        <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                             <a
+                                     href="pdf/main.pdf"
+                                     class="usa-link display-flex usa-tooltip"
+                                     role="button"
+                                     title="Download PDF"
+                                     data-position="bottom"
+                                     aria-label="Download PDF"
+                                     data-ga-category="actions"
+                                     data-ga-action="click"
+                                     data-ga-label="pdf_download_mobile"
+                             >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                                </svg>
+                            </a>
+                        </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button
+                            class="usa-button usa-button--unstyled  usa-tooltip collections-dialog-trigger collections-button display-flex collections-button-empty"
+                            title="Add to Collections"
+                            data-position="bottom"
+                            aria-label="Save article in MyNCBI collections."
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="collections_button_mobile"
+                            data-collections-open-dialog-enabled="false"
+                            data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC11229544%2F%23open-collections-dialog"
+                            data-in-collections="false"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button role="button" class="usa-button usa-button--unstyled usa-tooltip citation-dialog-trigger display-flex"
+                            aria-label="Open dialog with citation text in different styles"
+                            title="Cite"
+                            data-position="bottom"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="cite_mobile"
+                            data-all-citations-url="/resources/citations/11229544/"
+                            data-citation-style="nlm"
+                            data-download-format-link="/resources/citations/11229544/export/"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="pmc-permalink display-flex" >
+                         <button
+                                 type="button"
+                                 title="Permalink"
+                                 data-position="bottom"
+                                 class="usa-button usa-button--unstyled display-flex usa-tooltip"
+                                 aria-label="Show article permalink"
+                                 aria-expanded="false"
+                                 aria-haspopup="true"
+                                 data-ga-category="actions"
+                                 data-ga-action="open"
+                                 data-ga-label="permalink_mobile"
+                         >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#share"></use>
+                            </svg>
+                        </button>
+                        
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC11229544/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+                    </li>
+                </ul>
+            </div>
+            <button
+                    type="button"
+                    class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                    aria-label="Open article navigation"
+                    data-extra-class="is-visible-in-page"
+                    data-ga-category="actions"
+                    data-ga-action="open"
+                    data-ga-label="article_nav_mobile"
+            >
+                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#list"></use>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+    <div class="grid-container desktop:padding-left-6">
+      <div id="article-container" class="grid-row grid-gap">
+        <div class="grid-col-12 desktop:grid-col-8 order-2 pmc-layout__content">
+            <div class="grid-container padding-left-0 padding-right-0">
+                <div class="grid-row desktop:margin-left-neg-6">
+                    <div class="grid-col-12">
+                        <div class="pmc-layout__disclaimer" role="complementary" aria-label="Disclaimer note">
+    As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+    the contents by NLM or the National Institutes of Health.<br/>
+    Learn more:
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="Disclaimer" data-ga-label="New disclaimer box" href="/about/disclaimer/">PMC Disclaimer</a>
+    |
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="PMC Copyright Notice" data-ga-label="New disclaimer box" href="/about/copyright/">
+        PMC Copyright Notice
+    </a>
+</div>
+                    </div>
+                </div>
+                <div class="grid-row pmc-wm desktop:margin-left-neg-6">
+                    <!-- Main content -->
+                    <main
+                      id="main-content"
+                      class="usa-layout-docs__main usa-layout-docs grid-col-12 pmc-layout pmc-prose padding-0"
+                    >
+
+                      
+                        <section class="pmc-journal-banner text-center line-height-none" aria-label="Journal banner"><img src="https://cdn.ncbi.nlm.nih.gov/pmc/banners/logo-jaccao.gif" alt="JACC: CardioOncology logo" usemap="#pmc-banner-imagemap" width="500" height="75"><map name="pmc-banner-imagemap"><area alt="Link to JACC: CardioOncology" title="Link to JACC: CardioOncology" shape="default" href="https://www.journals.elsevier.com/jacc-cardiooncology" target="_blank" rel="noopener noreferrer"></map></section><article lang="en"><section aria-label="Article citation and metadata"><section class="pmc-layout__citation font-secondary font-xs"><div>
+<div class="display-inline-block"><button type="button" class="cursor-pointer text-no-underline bg-transparent border-0 padding-0 text-left margin-0 text-normal text-primary" aria-controls="journal_context_menu">JACC CardioOncol</button></div>. 2024 Jun 18;6(3):454–463. doi: <a href="https://doi.org/10.1016/j.jaccao.2024.05.001" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">10.1016/j.jaccao.2024.05.001</a>
+</div>
+<nav id="journal_context_menu" hidden="hidden"><ul class="menu-list font-family-ui" role="menu">
+<li role="presentation"><a href="https://pmc.ncbi.nlm.nih.gov/search/?term=%22JACC%20CardioOncol%22%5Bjour%5D" class="usa-link" role="menuitem">Search in PMC</a></li>
+<li role="presentation"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22JACC%20CardioOncol%22%5Bjour%5D" lang="en" class="usa-link" role="menuitem">Search in PubMed</a></li>
+<li role="presentation"><a href="https://www.ncbi.nlm.nih.gov/nlmcatalog?term=%22JACC%20CardioOncol%22%5BTitle%20Abbreviation%5D" class="usa-link" role="menuitem">View in NLM Catalog</a></li>
+<li role="presentation"><a href="?term=%22JACC%20CardioOncol%22%5Bjour%5D" class="usa-link" role="menuitem" data-add-to-search="true">Add to search</a></li>
+</ul></nav></section><section class="front-matter"><div class="ameta p font-secondary font-xs">
+<hgroup><h1>Race and Socioeconomic Status Impact Diagnosis and Clinical Outcomes in Transthyretin Cardiac Amyloidosis</h1></hgroup><div class="cg p">
+<a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Shankar%20B%22%5BAuthor%5D" class="usa-link" aria-describedby="id1"><span class="name western">Bairavi Shankar</span></a><div hidden="hidden" id="id1">
+<h3>
+<span class="name western">Bairavi Shankar</span>, <span class="degrees">MD</span>
+</h3>
+<div class="p">
+<sup>a</sup>Department of Medicine, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Shankar%20B%22%5BAuthor%5D" class="usa-link"><span class="name western">Bairavi Shankar</span></a>
+</div>
+</div>
+<sup>a</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Yanek%20L%22%5BAuthor%5D" class="usa-link" aria-describedby="id2"><span class="name western">Lisa Yanek</span></a><div hidden="hidden" id="id2">
+<h3>
+<span class="name western">Lisa Yanek</span>, <span class="degrees">MPH</span>
+</h3>
+<div class="p">
+<sup>b</sup>Division of General Internal Medicine, Department of Medicine, Johns Hopkins University School of Medicine, Baltimore, Maryland, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Yanek%20L%22%5BAuthor%5D" class="usa-link"><span class="name western">Lisa Yanek</span></a>
+</div>
+</div>
+<sup>b</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Jefferson%20A%22%5BAuthor%5D" class="usa-link" aria-describedby="id3"><span class="name western">Artrish Jefferson</span></a><div hidden="hidden" id="id3">
+<h3>
+<span class="name western">Artrish Jefferson</span>, <span class="degrees">MD</span>
+</h3>
+<div class="p">
+<sup>a</sup>Department of Medicine, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Jefferson%20A%22%5BAuthor%5D" class="usa-link"><span class="name western">Artrish Jefferson</span></a>
+</div>
+</div>
+<sup>a</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Jani%20V%22%5BAuthor%5D" class="usa-link" aria-describedby="id4"><span class="name western">Vivek Jani</span></a><div hidden="hidden" id="id4">
+<h3>
+<span class="name western">Vivek Jani</span>, <span class="degrees">MS</span>
+</h3>
+<div class="p">
+<sup>a</sup>Department of Medicine, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Jani%20V%22%5BAuthor%5D" class="usa-link"><span class="name western">Vivek Jani</span></a>
+</div>
+</div>
+<sup>a</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Brown%20E%22%5BAuthor%5D" class="usa-link" aria-describedby="id5"><span class="name western">Emily Brown</span></a><div hidden="hidden" id="id5">
+<h3>
+<span class="name western">Emily Brown</span>, <span class="degrees">CGC</span>
+</h3>
+<div class="p">
+<sup>a</sup>Department of Medicine, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Brown%20E%22%5BAuthor%5D" class="usa-link"><span class="name western">Emily Brown</span></a>
+</div>
+</div>
+<sup>a</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Tsottles%20D%22%5BAuthor%5D" class="usa-link" aria-describedby="id6"><span class="name western">Daniel Tsottles</span></a><div hidden="hidden" id="id6">
+<h3>
+<span class="name western">Daniel Tsottles</span>, <span class="degrees">BS</span>
+</h3>
+<div class="p">
+<sup>c</sup>Department of Neurology, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Tsottles%20D%22%5BAuthor%5D" class="usa-link"><span class="name western">Daniel Tsottles</span></a>
+</div>
+</div>
+<sup>c</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Barranco%20J%22%5BAuthor%5D" class="usa-link" aria-describedby="id7"><span class="name western">Jennifer Barranco</span></a><div hidden="hidden" id="id7">
+<h3>
+<span class="name western">Jennifer Barranco</span>, <span class="degrees">BS</span>
+</h3>
+<div class="p">
+<sup>c</sup>Department of Neurology, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Barranco%20J%22%5BAuthor%5D" class="usa-link"><span class="name western">Jennifer Barranco</span></a>
+</div>
+</div>
+<sup>c</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Zampino%20S%22%5BAuthor%5D" class="usa-link" aria-describedby="id8"><span class="name western">Serena Zampino</span></a><div hidden="hidden" id="id8">
+<h3>
+<span class="name western">Serena Zampino</span>, <span class="degrees">BS</span>
+</h3>
+<div class="p">
+<sup>a</sup>Department of Medicine, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Zampino%20S%22%5BAuthor%5D" class="usa-link"><span class="name western">Serena Zampino</span></a>
+</div>
+</div>
+<sup>a</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Ranek%20M%22%5BAuthor%5D" class="usa-link" aria-describedby="id9"><span class="name western">Mark Ranek</span></a><div hidden="hidden" id="id9">
+<h3>
+<span class="name western">Mark Ranek</span>, <span class="degrees">PhD</span>
+</h3>
+<div class="p">
+<sup>d</sup>Department of Cardiology, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Ranek%20M%22%5BAuthor%5D" class="usa-link"><span class="name western">Mark Ranek</span></a>
+</div>
+</div>
+<sup>d</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Sharma%20K%22%5BAuthor%5D" class="usa-link" aria-describedby="id10"><span class="name western">Kavita Sharma</span></a><div hidden="hidden" id="id10">
+<h3>
+<span class="name western">Kavita Sharma</span>, <span class="degrees">MD</span>
+</h3>
+<div class="p">
+<sup>d</sup>Department of Cardiology, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Sharma%20K%22%5BAuthor%5D" class="usa-link"><span class="name western">Kavita Sharma</span></a>
+</div>
+</div>
+<sup>d</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Polydefkis%20M%22%5BAuthor%5D" class="usa-link" aria-describedby="id11"><span class="name western">Michael Polydefkis</span></a><div hidden="hidden" id="id11">
+<h3>
+<span class="name western">Michael Polydefkis</span>, <span class="degrees">MD</span>
+</h3>
+<div class="p">
+<sup>c</sup>Department of Neurology, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Polydefkis%20M%22%5BAuthor%5D" class="usa-link"><span class="name western">Michael Polydefkis</span></a>
+</div>
+</div>
+<sup>c</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Vaishnav%20J%22%5BAuthor%5D" class="usa-link" aria-describedby="id12"><span class="name western">Joban Vaishnav</span></a><div hidden="hidden" id="id12">
+<h3>
+<span class="name western">Joban Vaishnav</span>, <span class="degrees">MD</span>
+</h3>
+<div class="p">
+<sup>d</sup>Department of Cardiology, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Vaishnav%20J%22%5BAuthor%5D" class="usa-link"><span class="name western">Joban Vaishnav</span></a>
+</div>
+</div>
+<sup>d,</sup><sup>∗</sup>
+</div>
+<ul class="d-buttons inline-list">
+<li><button class="d-button" aria-controls="aip_a" aria-expanded="false">Author information</button></li>
+<li><button class="d-button" aria-controls="anp_a" aria-expanded="false">Article notes</button></li>
+<li><button class="d-button" aria-controls="clp_a" aria-expanded="false">Copyright and License information</button></li>
+</ul>
+<div class="d-panels font-secondary-light">
+<div id="aip_a" class="d-panel p" style="display: none">
+<div class="p" id="aff1">
+<sup>a</sup>Department of Medicine, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div id="aff2">
+<sup>b</sup>Division of General Internal Medicine, Department of Medicine, Johns Hopkins University School of Medicine, Baltimore, Maryland, USA</div>
+<div id="aff3">
+<sup>c</sup>Department of Neurology, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div id="aff4">
+<sup>d</sup>Department of Cardiology, Johns Hopkins Hospital, Baltimore, Maryland, USA</div>
+<div class="author-notes p"><div class="fn" id="cor1">
+<sup>∗</sup><p class="display-inline"><strong>Address for correspondence:</strong> Dr Joban Vaishnav, Advanced Heart Failure and Transplant Cardiology, 600 N Wolfe Street, Carnegie 568E, Baltimore, Maryland 21287, USA. <span>jvaishn1@jhmi.edu</span>@jvaishnavmd</p>
+</div></div>
+</div>
+<div id="anp_a" class="d-panel p" style="display: none"><div class="notes p"><section id="historyarticle-meta1" class="history"><p>Received 2024 Mar 7; Revised 2024 May 8; Accepted 2024 May 8; Collection date 2024 Jun.</p></section></div></div>
+<div id="clp_a" class="d-panel p" style="display: none">
+<div>© 2024 The Authors</div>
+<p>This is an open access article under the CC BY-NC-ND license (http://creativecommons.org/licenses/by-nc-nd/4.0/).</p>
+<div class="p"><a href="/about/copyright/" class="usa-link">PMC Copyright notice</a></div>
+</div>
+</div>
+<div>PMCID: PMC11229544  PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/38983379/" class="usa-link">38983379</a>
+</div>
+<div class="ra xbox p" role="complementary" aria-label="Related or updated information about this article"><div>See editorial "<a href="/articles/PMC11229539/" class="usa-link">Understanding Race, Genotype, and Socioeconomic Status in Transthyretin Amyloid Cardiomyopathy</a>" on page 464.</div></div>
+</div></section></section><section aria-label="Article content"><section class="body main-article-body"><section class="abstract" id="abs0010"><h2>Abstract</h2>
+<section id="sec1_pmc"><h3 class="pmc_sec_title">Background</h3>
+<p>Transthyretin amyloid cardiomyopathy (ATTR-CM) is associated with significant mortality. The Val122Ile variant, highly prevalent in Black patients, portends poorer survival compared with other ATTR-CM subtypes. Although Val122Ile is biologically more aggressive, the contribution of race and socioeconomic status (SES) to disease outcomes in patients with ATTR-CM is undefined.</p></section><section id="sec2_pmc"><h3 class="pmc_sec_title">Objectives</h3>
+<p>The aim of this study was to evaluate the impact of race and SES on clinical outcomes in patients with ATTR-CM.</p></section><section id="sec3_pmc"><h3 class="pmc_sec_title">Methods</h3>
+<p>Patients with ATTR-CM who received care at Johns Hopkins Hospital between 2006 and 2022 were included. SES was assessed using area deprivation index (ADI). Associations of race and ADI with heart failure (HF) hospitalization and/or death were measured using multivariable logistic or Cox proportional hazards models.</p></section><section id="sec4_pmc"><h3 class="pmc_sec_title">Results</h3>
+<p>Of 282 patients, 225 (80%) were men, and 129 (46%) were Black. Black vs White patients disproportionately constituted the highest ADI (most deprived) category (66% vs 28%; <em>P</em> = 0.004), and Black patients were more likely to have HF hospitalization or death over 5 years compared with White patients (log-rank <em>P</em> &lt; 0.001). Among those with ADI &gt;25, Black patients had a significantly greater hazard of HF hospitalization or death compared with White patients, independent of disease stage at diagnosis (HR: 2.77; 95% CI: 1.45-5.32; <em>P</em> = 0.002).</p></section><section id="sec5"><h3 class="pmc_sec_title">Conclusions</h3>
+<p>Black patients with low SES may be at greater risk for underdiagnosis and adverse outcomes compared with White patients. Ongoing efforts are needed to improve outcomes in this subset of patients with ATTR-CM.</p></section><section id="kwrds0010" class="kwd-group"><p><strong>Key Words:</strong> cardiac amyloidosis, health care disparities, outcomes, transthyretin</p></section></section><section class="abstract" id="abs0015"><h2>Central Illustration</h2>
+<figure class="fig xbox font-sm" id="undfig1"><p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=11229544_ga1.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1e18/11229544/59f5dcc002c2/ga1.jpg" loading="lazy" height="527" width="765" alt="graphic file with name ga1.jpg"></a></p>
+<div class="p text-right font-secondary"><a href="figure/undfig1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></figure></section><hr class="headless">
+<p id="p0010">Transthyretin amyloid cardiomyopathy (ATTR-CM) is an underdiagnosed cause of heart failure (HF) associated with significant morbidity and mortality. ATTR-CM can result from either wild-type or hereditary genetic sequences, which will influence disease course and clinical outcomes. In particular, the pathogenic variant resulting from the substitution of valine for isoleucine at position 122 (Val122Ile), present in approximately 3% to 4% of Black individuals in the United States, is associated with more severe disease at onset and poorer survival compared with other ATTR-CM subtypes.<a href="#bib1" class="usa-link" aria-describedby="bib1">1</a>, <a href="#bib2" class="usa-link" aria-describedby="bib2">2</a>, <a href="#bib3" class="usa-link" aria-describedby="bib3">3</a>, <a href="#bib4" class="usa-link" aria-describedby="bib4">4</a> It has been hypothesized that this discrepancy in outcomes arises because Val122Ile hereditary transthyretin amyloidosis (ATTRv) is a biologically more aggressive disease; however, the impact of race and socioeconomic status (SES) on disease presentation and outcomes in patients with ATTR-CM is unexplored.<a href="#bib1" class="usa-link" aria-describedby="bib1"><sup>1</sup></a> We aimed to evaluate the impact of race and socioeconomic conditions on disease severity at presentation and clinical outcomes in patients with ATTR-CM.</p>
+<section id="sec1"><h2 class="pmc_sec_title">Methods</h2>
+<section id="sec1.1"><h3 class="pmc_sec_title">Study population</h3>
+<p id="p0015">This study was conducted with approval from the Johns Hopkins University Institutional Review Board. Patients with ATTR-CM seen at Johns Hopkins Hospital between 2006 and 2022 were included for analysis. A diagnosis of ATTR-CM was defined as either histopathologic via endomyocardial biopsy and confirmed using mass spectrometry (Rochester, Minnesota) or as positive (grade 2 or grade 3) findings on <sup>99m</sup>Tc-labeled pyrophosphate scintigraphy (PYP) and negative results on light-chain testing.<a href="#bib5" class="usa-link" aria-describedby="bib5">5</a>, <a href="#bib6" class="usa-link" aria-describedby="bib6">6</a>, <a href="#bib7" class="usa-link" aria-describedby="bib7">7</a> All patients underwent genetic testing including sequencing and deletion and duplication analysis of the TTR gene. Follow-up data were collected for up to 5 years from index visit. Patients were excluded from race analysis if they were not self-reported to be Black or White because of insufficient sample size of other races (n = 18). Patients were excluded from outcome analyses if they were followed for &lt;6 months (n = 83).</p></section><section id="sec1.2"><h3 class="pmc_sec_title">Study variables</h3>
+<p id="p0020">Clinical, radiologic, hemodynamic, and pathologic data were collected via retrospective chart review. Race was self-reported at the index visit. Individual socioeconomic metrics were collected including work status, insurance status, and marital status. Area-level SES was measured using the national area deprivation index (ADI). ADI is validated for use at the neighborhood level for assessing health outcomes and has been used extensively in research on social determinants of health.<a href="#bib8" class="usa-link" aria-describedby="bib8">8</a>, <a href="#bib9" class="usa-link" aria-describedby="bib9">9</a>, <a href="#bib10" class="usa-link" aria-describedby="bib10">10</a> For comparison of clinical characteristics, ADI was split into 3 groups (group 1, ADI ≤25; group 2, ADI 26-50; and group 3, AD 51-100), with increasing group number corresponding to increasing area-level deprivation; additionally, for outcome analysis, ADI was dichotomized at 25, comparing values ≤25 with those of 26 to 100. We chose this categorization because of insufficient sample size in the highest ADI quantile. Outcome data including HF hospitalization and mortality were collected via the electronic medical record, including the Care Everywhere network (Epic) and the Chesapeake regional health information exchange (Chesapeake Regional Information System for Our Patients). HF hospitalizations were assessed by 2 blinded adjudicators and were determined on the basis of review of the hospitalization record and the use of intravenous diuresis to treat symptoms. HF hospitalization and/or death were combined as the primary endpoint for analysis.</p></section><section id="sec1.3"><h3 class="pmc_sec_title">Statistical analysis</h3>
+<p id="p0025">Data were analyzed using SAS version 9.4 (SAS Institute). Data are presented as mean ± SD for normally distributed variables, as median (Q1-Q3) if not normally distributed, and as count (percentage) for categorical variables. Associations between demographic and clinical variables and ADI were measured using the chi-square test or Fisher exact test for categorical variables, Student’s <em>t</em>-test or the Mann Whitney <em>U</em> test for comparing 2 continuous variables, and analysis of variance or the Kruskal-Wallis test for comparing &gt;2 groups. Associations between race and ADI with disease stage at diagnosis, HF hospitalization, and/or death were measured using multivariable logistic or Cox proportional hazards regression models, adjusted for age, sex, ADI, marital status (married vs not married), coronary artery disease, and National Amyloidosis Center (NAC) stage at diagnosis. Additional Cox proportional hazards models analyzed association modification by race on ADI for risk for HF hospitalization or death, adjusted for age and sex and for age, sex, and NAC stage and included an interaction term between race and ADI. Model results are presented as ORs with 95% CIs or as HRs with 95% CIs. The assumption of proportional hazards was tested using the SAS PHREG procedure with the “proportionality test” function with time-dependent covariates (generated as interactions between the covariate and survival time). Time to events was visualized using Kaplan-Meier curves and compared using log-rank tests. <em>P</em> values &lt;0.05 were considered to indicate statistical significance.</p></section></section><section id="sec2"><h2 class="pmc_sec_title">Results</h2>
+<section id="sec2.1"><h3 class="pmc_sec_title">Baseline characteristics</h3>
+<p id="p0030">Of the 282 patients with ATTR-CM who were included in the study, 225 (80%) were men, and 129 (46%) were Black. The median age of the Black patients was 74.3 years (Q1-Q3: 69.5-79.3 years), and the median age of the White patients was 75.9 years (Q1-Q3: 69.2-82.2 years). A total of 127 patients (45%) were classified as having wild-type transthyretin amyloidosis (ATTRwt) and 155 (55%) patients as having ATTRv; the most common genotype was p.Val122Ile (n = 110 [39%]). There were 140 patients (49%) in ADI group 1 (least deprived), 89 (32%) in group 2, and 53 (19%) in group 3 (most deprived). There was a significant difference in proportion of Black patients compared with White patients within ADI groups, with Black patients constituting most of ADI group 3 (66% vs 28%; <em>P</em> = 0.004) (<a href="#fig1" class="usa-link">Figure 1</a>).</p>
+<figure class="fig xbox font-sm" id="fig1"><h4 class="obj_head">Figure 1.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=11229544_gr1.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1e18/11229544/ee2c848633fe/gr1.jpg" loading="lazy" height="458" width="668" alt="Figure 1"></a></p>
+<div class="p text-right font-secondary"><a href="figure/fig1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Percentage of Patients Diagnosed With Transthyretin Amyloid Cardiomyopathy at Johns Hopkins Hospital by Race and ADI</p>
+<p>Most patients were diagnosed from a high (less deprived) area deprivation index (ADI) category, and the proportion of Black patients (blue) increased with increasing ADI category compared with White patients (red) (<em>P</em> = 0.004).</p></figcaption></figure></section><section id="sec2.2"><h3 class="pmc_sec_title">Comparison of ATTR-CM disease characteristics by race and SES</h3>
+<p id="p0035">Of the 282 patients included in the study, 264 were either Black or White and were included in the race analysis, and the rest (n = 18) were excluded because of small sample size. Black patients were similar in age, less likely to be male (71% vs 87%, <em>P</em> &lt; 0.001) and less likely to have ATTRwt (19% vs 71%; <em>P</em> &lt; 0.001) compared with White patients in our cohort (<a href="#tbl1" class="usa-link">Table 1</a>). Black patients more commonly had Val122Ile disease compared with White patients (79% vs 1%; <em>P</em> &lt; 0.001), though other genotypes were less common in Black patients compared with White patients. Black patients were more likely to be unmarried (single, separated, or widowed; <em>P</em> = 0.001) and more likely to be in ADI group 3 compared with White patients (66% vs 28%; <em>P</em> = 0.004). There was no difference in work status or insurance status or type by race. In comparing clinical data, Black patients were less likely to undergo PYP for diagnosis (33% vs 48%; <em>P</em> = 0.012). Of note, there were 8 patients with grade 0 results on PYP, the majority of whom (n = 7) were White. Of these, 6 patients had a specific variant, Leu58His, that is more prevalent in our region and is associated with a high false-negative rate on PYP. There was no significant difference in comorbidity burden by race including atrial fibrillation, carpal tunnel syndrome, or lumbar spinal stenosis except for a lower burden of coronary artery disease (19% vs 35%; <em>P</em> = 0.007) and a lower frequency of indwelling pacemaker (8% vs 20%; <em>P</em> = 0.004) at the time of index visit in Black compared with White patients. Black patients were more likely to have had prior HF hospitalizations (49% vs 26%; <em>P</em> &lt; 0.001) and more likely to be on loop diuretic agents (82% vs 60%; <em>P</em> &lt; 0.001) at a higher median dose (40 mg [Q1-Q3: 20-80 mg] vs 80 mg [Q1-Q3: 40-120 mg]; <em>P</em> = 0.001) compared with White patients at the time of index visit. Black patients had significantly worse renal function (estimated glomerular filtration rate 53.8 ± 20.8 mL/min/1.73 m<sup>2</sup> vs 66.1 ± 19.2 mL/min/1.73 m<sup>2</sup>; <em>P</em> &lt; 0.001) compared with White patients. There was a higher proportion of Black patients classified in NYHA functional class III compared with White patients at time of index visit (42% vs 21%; <em>P</em> = 0.002). On electrocardiography, Black patients had significantly lower total QRS voltage compared with White patients (106 ± 32 mV vs 115 ± 34 mV; <em>P</em> = 0.038).</p>
+<section class="tw xbox font-sm" id="tbl1"><h4 class="obj_head">Table 1.</h4>
+<div class="caption p"><p>Baseline Characteristics by Race of Patients With Transthyretin Amyloid Cardiomyopathy</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
+<thead><tr>
+<th colspan="1" rowspan="1"></th>
+<th colspan="1" rowspan="1">White (n = 135)</th>
+<th colspan="1" rowspan="1">Black (n = 129)</th>
+<th colspan="1" rowspan="1">
+<em>P</em> Value</th>
+</tr></thead>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">Demographics</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Age, y</td>
+<td align="center" colspan="1" rowspan="1">75.9 (69.2-82.2)</td>
+<td align="center" colspan="1" rowspan="1">74.3 (69.5-79.3)</td>
+<td align="center" colspan="1" rowspan="1">0.18</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Male</td>
+<td align="center" colspan="1" rowspan="1">118 (87.4)</td>
+<td align="center" colspan="1" rowspan="1">91 (70.5)</td>
+<td align="center" colspan="1" rowspan="1">0.001</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Work status</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td align="center" colspan="1" rowspan="1">0.78</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Employed</td>
+<td align="center" colspan="1" rowspan="1">14 (10.4)</td>
+<td align="center" colspan="1" rowspan="1">14 (10.9)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Unemployed</td>
+<td align="center" colspan="1" rowspan="1">4 (3.0)</td>
+<td align="center" colspan="1" rowspan="1">7 (5.4)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Retired</td>
+<td align="center" colspan="1" rowspan="1">101 (74.8)</td>
+<td align="center" colspan="1" rowspan="1">97 (75.2)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Unable to work/disability</td>
+<td align="center" colspan="1" rowspan="1">1 (0.7)</td>
+<td align="center" colspan="1" rowspan="1">1 (0.8)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Marital status</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td align="center" colspan="1" rowspan="1">0.002</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Single</td>
+<td align="center" colspan="1" rowspan="1">5 (3.7)</td>
+<td align="center" colspan="1" rowspan="1">9 (7.0)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Married</td>
+<td align="center" colspan="1" rowspan="1">111 (82.2)</td>
+<td align="center" colspan="1" rowspan="1">78 (60.5)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Separated/divorced</td>
+<td align="center" colspan="1" rowspan="1">7 (5.2)</td>
+<td align="center" colspan="1" rowspan="1">15 (11.6)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Widowed</td>
+<td align="center" colspan="1" rowspan="1">9 (6.7)</td>
+<td align="center" colspan="1" rowspan="1">25 (19.4)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Insurance</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td align="center" colspan="1" rowspan="1">0.91</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> None</td>
+<td align="center" colspan="1" rowspan="1">2 (1.5)</td>
+<td align="center" colspan="1" rowspan="1">1 (0.8)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Medicare</td>
+<td align="center" colspan="1" rowspan="1">46 (34.1)</td>
+<td align="center" colspan="1" rowspan="1">39 (30.2)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Medicaid</td>
+<td align="center" colspan="1" rowspan="1">5 (3.7)</td>
+<td align="center" colspan="1" rowspan="1">5 (3.9)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Private</td>
+<td align="center" colspan="1" rowspan="1">73 (54.1)</td>
+<td align="center" colspan="1" rowspan="1">73 (56.6)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Clinical characteristics</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Amyloid subtype</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td align="center" colspan="1" rowspan="1">&lt;0.001</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Wild-type</td>
+<td align="center" colspan="1" rowspan="1">96 (71.1)</td>
+<td align="center" colspan="1" rowspan="1">23 (18.8)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Val122Ile</td>
+<td align="center" colspan="1" rowspan="1">2 (1)</td>
+<td align="center" colspan="1" rowspan="1">102 (79)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Val30Met</td>
+<td align="center" colspan="1" rowspan="1">6 (4.4)</td>
+<td align="center" colspan="1" rowspan="1">0 (0)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Thr60Ala</td>
+<td align="center" colspan="1" rowspan="1">10 (7.4)</td>
+<td align="center" colspan="1" rowspan="1">0 (0)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Other</td>
+<td align="center" colspan="1" rowspan="1">21 (15.6)</td>
+<td align="center" colspan="1" rowspan="1">4 (3.1)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Endomyocardial biopsy</td>
+<td align="center" colspan="1" rowspan="1">110 (82.2)</td>
+<td align="center" colspan="1" rowspan="1">108 (86.1)</td>
+<td align="center" colspan="1" rowspan="1">0.40</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> PYP<a href="#tbl1fna" class="usa-link"><sup>a</sup></a>
+</td>
+<td align="center" colspan="1" rowspan="1">64 (47.8)</td>
+<td align="center" colspan="1" rowspan="1">42 (32.6)</td>
+<td align="center" colspan="1" rowspan="1">0.012</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Grade 0</td>
+<td align="center" colspan="1" rowspan="1">7 (12.7)</td>
+<td align="center" colspan="1" rowspan="1">1 (2.6)</td>
+<td align="center" colspan="1" rowspan="1">0.23</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Grade 1</td>
+<td align="center" colspan="1" rowspan="1">0 (0.0)</td>
+<td align="center" colspan="1" rowspan="1">0 (0.0)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Grade 2</td>
+<td align="center" colspan="1" rowspan="1">6 (10.9)</td>
+<td align="center" colspan="1" rowspan="1">5 (13.2)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Grade 3</td>
+<td align="center" colspan="1" rowspan="1">42 (76.4)</td>
+<td align="center" colspan="1" rowspan="1">32 (84.2)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Symptoms</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Dyspnea</td>
+<td align="center" colspan="1" rowspan="1">69 (53.5)</td>
+<td align="center" colspan="1" rowspan="1">71 (60.7)</td>
+<td align="center" colspan="1" rowspan="1">0.52</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Orthopnea</td>
+<td align="center" colspan="1" rowspan="1">12 (9.3)</td>
+<td align="center" colspan="1" rowspan="1">29 (24.6)</td>
+<td align="center" colspan="1" rowspan="1">0.005</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Fatigue</td>
+<td align="center" colspan="1" rowspan="1">51 (39.5)</td>
+<td align="center" colspan="1" rowspan="1">43 (36.8)</td>
+<td align="center" colspan="1" rowspan="1">0.002</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Edema</td>
+<td align="center" colspan="1" rowspan="1">57 (44.2)</td>
+<td align="center" colspan="1" rowspan="1">62 (53.0)</td>
+<td align="center" colspan="1" rowspan="1">0.19</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Decreased exercise tolerance</td>
+<td align="center" colspan="1" rowspan="1">52 (40.3)</td>
+<td align="center" colspan="1" rowspan="1">50 (42.4)</td>
+<td align="center" colspan="1" rowspan="1">0.019</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> NYHA functional class</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td align="center" colspan="1" rowspan="1">0.002</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> I</td>
+<td align="center" colspan="1" rowspan="1">12 (9.3)</td>
+<td align="center" colspan="1" rowspan="1">3 (2.6)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> II</td>
+<td align="center" colspan="1" rowspan="1">58 (45.0)</td>
+<td align="center" colspan="1" rowspan="1">39 (34.2)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> III</td>
+<td align="center" colspan="1" rowspan="1">27 (20.9)</td>
+<td align="center" colspan="1" rowspan="1">48 (42.1)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> IV</td>
+<td align="center" colspan="1" rowspan="1">1 (0.8)</td>
+<td align="center" colspan="1" rowspan="1">3 (2.6)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> NAC stage</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td align="center" colspan="1" rowspan="1">0.011</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> 1</td>
+<td align="center" colspan="1" rowspan="1">58 (50.4)</td>
+<td align="center" colspan="1" rowspan="1">39 (39.0)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> 2</td>
+<td align="center" colspan="1" rowspan="1">50 (43.5)</td>
+<td align="center" colspan="1" rowspan="1">42 (42.0)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> 3</td>
+<td align="center" colspan="1" rowspan="1">7 (6.1)</td>
+<td align="center" colspan="1" rowspan="1">19 (19.0)</td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> On tafamidis</td>
+<td align="center" colspan="1" rowspan="1">28 (10.6)</td>
+<td align="center" colspan="1" rowspan="1">23 (8.7)</td>
+<td align="center" colspan="1" rowspan="1">0.55</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> On a loop diuretic agent</td>
+<td align="center" colspan="1" rowspan="1">78 (60.0)</td>
+<td align="center" colspan="1" rowspan="1">98 (81.7)</td>
+<td align="center" colspan="1" rowspan="1">&lt;0.001</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Furosemide equivalent loop diuretic agent dose, mg</td>
+<td colspan="1" rowspan="1">80 (40-120)</td>
+<td colspan="1" rowspan="1">40 (20-80)</td>
+<td colspan="1" rowspan="1">0.001</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> eGFR, mL/min/1.73 m<sup>2</sup>
+</td>
+<td align="center" colspan="1" rowspan="1">66.1 ± 19.2</td>
+<td align="center" colspan="1" rowspan="1">53.8 ± 20.8</td>
+<td align="center" colspan="1" rowspan="1">&lt;0.001</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Troponin I, ng/mL</td>
+<td align="center" colspan="1" rowspan="1">1.1 ± 8.9</td>
+<td align="center" colspan="1" rowspan="1">0.2 ± 0.3</td>
+<td align="center" colspan="1" rowspan="1">0.36</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">NT-proBNP, pg/mL</td>
+<td align="center" colspan="1" rowspan="1">2,438 ± 3,725</td>
+<td align="center" colspan="1" rowspan="1">2,659 ± 4,801</td>
+<td align="center" colspan="1" rowspan="1">0.16</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Total QRS voltage on ECG, mV</td>
+<td align="center" colspan="1" rowspan="1">115.3 ± 32.2</td>
+<td align="center" colspan="1" rowspan="1">105.6 ± 34.3</td>
+<td align="center" colspan="1" rowspan="1">0.038</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Medical history</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Atrial fibrillation</td>
+<td align="center" colspan="1" rowspan="1">74 (56.9)</td>
+<td align="center" colspan="1" rowspan="1">51 (43.2)</td>
+<td align="center" colspan="1" rowspan="1">0.064</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Carpal tunnel syndrome</td>
+<td align="center" colspan="1" rowspan="1">70 (54.3)</td>
+<td align="center" colspan="1" rowspan="1">57 (48.0)</td>
+<td align="center" colspan="1" rowspan="1">0.32</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Lumbar spinal stenosis</td>
+<td align="center" colspan="1" rowspan="1">22 (16.9)</td>
+<td align="center" colspan="1" rowspan="1">16 (13.5)</td>
+<td align="center" colspan="1" rowspan="1">0.71</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Coronary artery disease</td>
+<td align="center" colspan="1" rowspan="1">45 (35.2)</td>
+<td align="center" colspan="1" rowspan="1">22 (18.5)</td>
+<td align="center" colspan="1" rowspan="1">0.008</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Pacemaker implanted</td>
+<td align="center" colspan="1" rowspan="1">26 (20.2)</td>
+<td align="center" colspan="1" rowspan="1">9 (7.6)</td>
+<td align="center" colspan="1" rowspan="1">0.004</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> ICD implanted</td>
+<td align="center" colspan="1" rowspan="1">7 (5.4)</td>
+<td align="center" colspan="1" rowspan="1">13 (10.9)</td>
+<td align="center" colspan="1" rowspan="1">0.12</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> HF hospitalization &lt;12 mo prior</td>
+<td align="center" colspan="1" rowspan="1">34 (26.2)</td>
+<td align="center" colspan="1" rowspan="1">57 (48.7)</td>
+<td align="center" colspan="1" rowspan="1">&lt;0.001</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/tbl1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<div class="tw-foot p">
+<div class="fn" id="tspara0015"><p>Values are median (Q1-Q3), n (%), or mean ± SD.</p></div>
+<div class="fn" id="tspara0020"><p>ECG = electrocardiography; eGFR = estimated glomerular filtration rate; HF = heart failure; ICD = implantable cardioverter-defibrillator; NAC = National Amyloidosis Center; NT-proBNP = N-terminal pro–brain natriuretic peptide; PYP = <sup>99m</sup>Tc-labeled pyrophosphate scintigraphy.</p></div>
+<div class="fn" id="tbl1fna">
+<sup>a</sup><p class="display-inline" id="ntpara0010">Grade was not reported for 13 scans.</p>
+</div>
+</div></section><p id="p0040">On echocardiography, Black patients had significantly lower left ventricular ejection fractions, higher incidence of moderate or severe mitral regurgitation, higher E/A ratios, higher right ventricular systolic pressures, and lower calculated stroke volumes (<a href="#tbl2" class="usa-link">Table 2</a>). In the subset of patients who underwent right heart catheterization for diagnosis (n = 167; 76 White and 85 Black patients), Black patients had significantly worse hemodynamic status compared with White patients across all parameters, including higher filling pressures, lower cardiac output and cardiac index, lower pulmonary arterial saturation, and higher pulmonary vascular resistance (<a href="#tbl2" class="usa-link">Table 2</a>).</p>
+<section class="tw xbox font-sm" id="tbl2"><h4 class="obj_head">Table 2.</h4>
+<div class="caption p"><p>Baseline Echocardiographic and Hemodynamic Data by Race of Patients With Transthyretin Amyloid Cardiomyopathy</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
+<thead><tr>
+<th colspan="1" rowspan="1"></th>
+<th colspan="1" rowspan="1">White (n = 135)</th>
+<th colspan="1" rowspan="1">Black (n = 129)</th>
+<th colspan="1" rowspan="1">
+<em>P</em> Value</th>
+</tr></thead>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">Echocardiography</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Ejection fraction, %</td>
+<td align="center" colspan="1" rowspan="1">51.5 ± 12.5</td>
+<td align="center" colspan="1" rowspan="1">41.3 ± 14.3</td>
+<td align="center" colspan="1" rowspan="1">&lt;0.001</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> TAPSE, cm</td>
+<td align="center" colspan="1" rowspan="1">1.6 ± 0.5</td>
+<td align="center" colspan="1" rowspan="1">1.5 ± 0.5</td>
+<td align="center" colspan="1" rowspan="1">0.46</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> LV diastolic dimension, cm</td>
+<td align="center" colspan="1" rowspan="1">4.3 ± 0.6</td>
+<td align="center" colspan="1" rowspan="1">4.3 ± 0.8</td>
+<td align="center" colspan="1" rowspan="1">0.79</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> IVSd, cm</td>
+<td align="center" colspan="1" rowspan="1">1.7 ± 0.3</td>
+<td align="center" colspan="1" rowspan="1">1.7 ± 0.3</td>
+<td align="center" colspan="1" rowspan="1">0.98</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> LVPWd, cm</td>
+<td align="center" colspan="1" rowspan="1">1.6 ± 0.3</td>
+<td align="center" colspan="1" rowspan="1">1.6 ± 0.4</td>
+<td align="center" colspan="1" rowspan="1">0.84</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> LA systolic diameter, cm</td>
+<td align="center" colspan="1" rowspan="1">4.4 ± 0.8</td>
+<td align="center" colspan="1" rowspan="1">4.5 ± 0.6</td>
+<td align="center" colspan="1" rowspan="1">0.76</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> LVOT VTI, cm</td>
+<td align="center" colspan="1" rowspan="1">21.8 ± 18.1</td>
+<td align="center" colspan="1" rowspan="1">14.2 ± 4.5</td>
+<td align="center" colspan="1" rowspan="1">0.010</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> E/A ratio</td>
+<td align="center" colspan="1" rowspan="1">2.0 ± 1.2</td>
+<td align="center" colspan="1" rowspan="1">2.6 ± 1.3</td>
+<td align="center" colspan="1" rowspan="1">0.034</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> E/e′ ratio</td>
+<td align="center" colspan="1" rowspan="1">18.3 ± 8.0</td>
+<td align="center" colspan="1" rowspan="1">19.4 ± 8.5</td>
+<td align="center" colspan="1" rowspan="1">0.56</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> RV systolic pressure, mm Hg</td>
+<td align="center" colspan="1" rowspan="1">37.7 ± 11.6</td>
+<td align="center" colspan="1" rowspan="1">43.4 ± 12.0</td>
+<td align="center" colspan="1" rowspan="1">0.005</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> GLS, % (n = 67)</td>
+<td align="center" colspan="1" rowspan="1">−10.7 ± 4.7</td>
+<td align="center" colspan="1" rowspan="1">−9.2 ± 3.6</td>
+<td align="center" colspan="1" rowspan="1">0.20</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Right heart catheterization<a href="#tbl2fna" class="usa-link"><sup>a</sup></a>
+</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Heart rate, beats/min</td>
+<td align="center" colspan="1" rowspan="1">72.1 ± 14.1</td>
+<td align="center" colspan="1" rowspan="1">81.2 ± 16</td>
+<td align="center" colspan="1" rowspan="1">0.001</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> mRAP, mm Hg</td>
+<td align="center" colspan="1" rowspan="1">8.7 ± 4.9</td>
+<td align="center" colspan="1" rowspan="1">11.6 ± 6.5</td>
+<td align="center" colspan="1" rowspan="1">0.001</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> RV systolic pressure, mm Hg</td>
+<td align="center" colspan="1" rowspan="1">40.8 ± 11.8</td>
+<td align="center" colspan="1" rowspan="1">48.1 ± 13.6</td>
+<td align="center" colspan="1" rowspan="1">0.001</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> RV diastolic pressure, mm Hg</td>
+<td align="center" colspan="1" rowspan="1">8.8 ± 4.4</td>
+<td align="center" colspan="1" rowspan="1">11.6 ± 6.4</td>
+<td align="center" colspan="1" rowspan="1">0.002</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> PA diastolic pressure</td>
+<td align="center" colspan="1" rowspan="1">18.0 ± 6.8</td>
+<td align="center" colspan="1" rowspan="1">20.3 ± 6.9</td>
+<td align="center" colspan="1" rowspan="1">0.037</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> mPAP, mm Hg</td>
+<td align="center" colspan="1" rowspan="1">25.7 ± 8.4</td>
+<td align="center" colspan="1" rowspan="1">29.5 ± 8.2</td>
+<td align="center" colspan="1" rowspan="1">0.005</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> PCWP, mm Hg</td>
+<td align="center" colspan="1" rowspan="1">17.1 ± 6.4</td>
+<td align="center" colspan="1" rowspan="1">19.6 ± 6.8</td>
+<td align="center" colspan="1" rowspan="1">0.020</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Cardiac output (thermodilution), L/min</td>
+<td align="center" colspan="1" rowspan="1">4.0 ± 1.1</td>
+<td align="center" colspan="1" rowspan="1">3.4 ± 1.2</td>
+<td align="center" colspan="1" rowspan="1">0.002</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> Cardiac index, L/min/m<sup>2</sup>
+</td>
+<td align="center" colspan="1" rowspan="1">2.0 ± 0.6</td>
+<td align="center" colspan="1" rowspan="1">1.7 ± 0.5</td>
+<td align="center" colspan="1" rowspan="1">0.001</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> PA saturation, %</td>
+<td align="center" colspan="1" rowspan="1">63.4 ± 7.4</td>
+<td align="center" colspan="1" rowspan="1">57.2 ± 8.4</td>
+<td align="center" colspan="1" rowspan="1">&lt;0.001</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> SVRI, dyne · s · m<sup>2</sup>/cm<sup>5</sup>
+</td>
+<td align="center" colspan="1" rowspan="1">3,673.3 ± 1,133.4</td>
+<td align="center" colspan="1" rowspan="1">4,121.6 ± 1,387.1</td>
+<td align="center" colspan="1" rowspan="1">0.045</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"> PVR, Wood units</td>
+<td align="center" colspan="1" rowspan="1">2.4 ± 1.1</td>
+<td align="center" colspan="1" rowspan="1">3.1 ± 1.6</td>
+<td align="center" colspan="1" rowspan="1">0.002</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/tbl2/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<div class="tw-foot p">
+<div class="fn" id="tspara0030"><p>Values are mean ± SD.</p></div>
+<div class="fn" id="tspara0035"><p>GLS = global longitudinal strain; IVSd = intraventricular septal diastolic dimension; LA = left atrial; LV = left ventricular; LVOT = left ventricular outflow tract; LVPWd = left ventricular posterior wall diastolic dimension; mRAP = mean right atrial pressure; mPAP = mean pulmonary artery pressure; PA = pulmonary artery; PCWP = pulmonary capillary wedge pressure; PVR = pulmonary vascular resistance; RV = right ventricular; SVRI = systemic vascular resistance index; TAPSE = tricuspid annular plane systolic excursion; VTI = velocity-time integral.</p></div>
+<div class="fn" id="tbl2fna">
+<sup>a</sup><p class="display-inline" id="ntpara0015">Only a subset of patients underwent right heart catheterization (n = 167; 76 White patients and 85 Black patients).</p>
+</div>
+</div></section><p id="p0045">When comparing the cohort by ADI groups, no significant difference was found in baseline demographics except for a higher proportion of Black patients in the most deprived ADI group compared with White patients, as noted previously. There were no significant differences in disease characteristics, echocardiographic findings, and hemodynamic data by ADI group (<a href="#mmc1" class="usa-link">Supplemental Tables 1</a> and <a href="#mmc1" class="usa-link">2</a>).</p></section><section id="sec2.3"><h3 class="pmc_sec_title">Comparison of ATTR-CM disease outcomes by race and SES</h3>
+<p id="p0050">Black patients were more likely to experience HF hospitalization or death (log-rank <em>P</em> &lt; 0.001) (<a href="#fig2" class="usa-link">Figure 2A</a>) and death alone over 5 years of follow-up (log-rank <em>P</em> = 0.008) (<a href="#fig2" class="usa-link">Figure 2B</a>). In adjusted analyses, Black race was significantly associated with higher odds of being diagnosed at NAC stage 3 (OR: 3.32; 95% CI: 1.17-9.45; <em>P</em> = 0.025), and being married appeared to be protective against this (OR: 0.31; 95% CI: 0.11-0.89; <em>P</em> = 0.029), as shown in <a href="#fig3" class="usa-link">Figure 3A</a>. Black race (HR: 1.97; 95% CI: 1.21-3.21; <em>P</em> = 0.007) and NAC stage 2 (HR: 2.29; 95% CI: 1.31-3.98; <em>P</em> = 0.004) or 3 (HR: 4.15; 95% CI: 2.10-8.19; <em>P</em> &lt; 0.001) were associated with HF hospitalization or death at 5 years (<a href="#fig3" class="usa-link">Figure 3B</a>). When limiting the outcome to death alone, there was no longer a significant association with Black race, though higher NAC state remained significant, as did age &gt; 75 years (<a href="#fig3" class="usa-link">Figure 3C</a>). In a sensitivity analysis performed in patients with Val122Ile disease, ADI &gt;25 was a significant predictor of HF hospitalization and death (HR: 1.81; 95% CI: 1.03-3.17; <em>P</em> = 0.039) when adjusted for age and sex. Race was not included in this model given the large proportion of patients with Val122Ile disease who were Black. A sensitivity analysis to assess race as a predictor of HF hospitalization or death among those with wild-type disease was not performed, because of insufficient sample size of Black patients (n = 12).</p>
+<figure class="fig xbox font-sm" id="fig2"><h4 class="obj_head">Figure 2.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=11229544_gr2.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1e18/11229544/751abdf5cc5f/gr2.jpg" loading="lazy" height="328" width="728" alt="Figure 2"></a></p>
+<div class="p text-right font-secondary"><a href="figure/fig2/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Kaplan-Meier Curves Depicting the Association Between Race and Heart Failure Hospitalization or Mortality and Mortality Alone</p>
+<p>Black patients with transthyretin amyloid cardiomyopathy were more likely to experience (A) heart failure hospitalization or mortality at 5 years (log-rank <em>P</em> &lt; 0.001) and (B) mortality alone at 5 years (log-rank <em>P</em> = 0.008) compared with White patients.</p></figcaption></figure><figure class="fig xbox font-sm" id="fig3"><h4 class="obj_head">Figure 3.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=11229544_gr3.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1e18/11229544/d6454e326fc8/gr3.jpg" loading="lazy" height="1693" width="750" alt="Figure 3"></a></p>
+<div class="p text-right font-secondary"><a href="figure/fig3/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Forest Plots Depicting ORs or HRs, 95% CIs, and <em>P</em> Values for Various Outcomes</p>
+<p>(A) Black race was associated with National Amyloidosis Center (NAC) stage 3 at diagnosis. (B) Black race and higher NAC stage were associated with heart failure (HF) hospitalization or death at 5 years. (C) Elderly age and higher NAC stage were associated with death alone at 5 years. ADI = area deprivation index; CAD = coronary artery disease.</p></figcaption></figure><p id="p0055">There was no significant difference in HF hospitalization or mortality or in mortality alone by ADI category in unadjusted and adjusted analyses (<a href="#mmc1" class="usa-link">Supplemental Figure 1</a>). When race was stratified by ADI category (≤25 and &gt;25), there was a significant difference in event-free survival among the groups. Black patients with high ADI had lower event-free survival compared with White patients in either ADI category, with Black patients in the highest ADI category having the lowest event-free survival overall (log-rank <em>P</em> = 0.001) (<a href="#fig4" class="usa-link">Figure 4</a>).</p>
+<figure class="fig xbox font-sm" id="fig4"><h4 class="obj_head">Figure 4.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=11229544_gr4.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1e18/11229544/729c76b1b009/gr4.jpg" loading="lazy" height="253" width="730" alt="Figure 4"></a></p>
+<div class="p text-right font-secondary"><a href="figure/fig4/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Kaplan-Meier Curves Depicting Associations of Race and ADI With Heart Failure Hospitalization or Mortality</p>
+<p>Black patients in the highest area deprivation index (ADI) category had the lowest event-free survival overall for both (A) HF hospitalization and mortality (log-rank <em>P</em> = 0.001) and (B) mortality alone (log rank <em>P</em> = 0.029). Low ADI is defined as ADI ≤25 and high ADI as ADI &gt;25.</p></figcaption></figure><p id="p0060">In Cox proportional hazards models, among patients with ADI &gt;25, Black patients had a significantly higher hazard of HF hospitalization or death compared with White patients when adjusted for age and sex (HR: 3.33; 95% CI: 1.88-5.89; <em>P</em> &lt; 0.001) and when adjusted for age, sex, and NAC stage (HR: 2.77; 95% CI: 1.45-5.32; <em>P</em> = 0.002). Additionally, ADI &gt;25 was associated with a higher hazard of HF hospitalization or death in Black patients (HR: 1.72; 95% CI: 1.04-2.83; <em>P</em> = 0.034) when adjusted for age and sex, whereas in White patients, this was not significant (<a href="#tbl3" class="usa-link">Table 3</a>). This finding in Black patients was attenuated when additionally adjusting for NAC stage (HR: 1.69; 95% CI: 0.95–2.99; <em>P</em> = 0.073). Last, there was a significant interaction between ADI and race in predicting HF hospitalization or death (<em>P</em> for interaction = 0.034), although this effect was attenuated after adjusting for NAC stage (<em>P</em> = 0.081). Results of Cox proportional hazards regression models for outcome of HF hospitalization and death alone are shown in <a href="#mmc1" class="usa-link">Supplemental Tables 3</a> and <a href="#mmc1" class="usa-link">4</a>.</p>
+<section class="tw xbox font-sm" id="tbl3"><h4 class="obj_head">Table 3.</h4>
+<div class="caption p"><p>Cox Proportional Hazards Models With Analysis Between Race and ADI for Composite Outcome</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
+<thead>
+<tr>
+<th rowspan="3" colspan="1"></th>
+<th colspan="6" rowspan="1">HF Hospitalization or Mortality<hr>
+</th>
+</tr>
+<tr>
+<th colspan="3" rowspan="1">Model A<a href="#tbl3fna" class="usa-link"><sup>a</sup></a><hr>
+</th>
+<th colspan="3" rowspan="1">Model B<a href="#tbl3fnb" class="usa-link"><sup>b</sup></a><hr>
+</th>
+</tr>
+<tr>
+<th colspan="1" rowspan="1">HR</th>
+<th colspan="1" rowspan="1">95% CI</th>
+<th colspan="1" rowspan="1">
+<em>P</em> Value</th>
+<th colspan="1" rowspan="1">HR</th>
+<th colspan="1" rowspan="1">95% CI</th>
+<th colspan="1" rowspan="1">
+<em>P</em> Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">Black vs White for ADI ≤25</td>
+<td align="center" colspan="1" rowspan="1">1.42</td>
+<td align="center" colspan="1" rowspan="1">0.82-2.46</td>
+<td align="center" colspan="1" rowspan="1">0.21</td>
+<td align="center" colspan="1" rowspan="1">0.42</td>
+<td align="center" colspan="1" rowspan="1">0.42-0.42</td>
+<td align="center" colspan="1" rowspan="1">0.42</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">Black vs White for ADI &gt;25</td>
+<td align="center" colspan="1" rowspan="1">3.33</td>
+<td align="center" colspan="1" rowspan="1">1.88-5.89</td>
+<td align="center" colspan="1" rowspan="1">&lt;0.001</td>
+<td align="center" colspan="1" rowspan="1">2.77</td>
+<td align="center" colspan="1" rowspan="1">1.45-5.32</td>
+<td align="center" colspan="1" rowspan="1">0.002</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">ADI &gt;25 vs ADI ≤25 for Black race</td>
+<td align="center" colspan="1" rowspan="1">1.72</td>
+<td align="center" colspan="1" rowspan="1">1.04-2.83</td>
+<td align="center" colspan="1" rowspan="1">0.034</td>
+<td align="center" colspan="1" rowspan="1">1.69</td>
+<td align="center" colspan="1" rowspan="1">0.95-2.99</td>
+<td align="center" colspan="1" rowspan="1">0.073</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">ADI &gt;25 vs ADI ≤25 for White race</td>
+<td align="center" colspan="1" rowspan="1">0.73</td>
+<td align="center" colspan="1" rowspan="1">0.40-1.35</td>
+<td align="center" colspan="1" rowspan="1">0.32</td>
+<td align="center" colspan="1" rowspan="1">0.78</td>
+<td align="center" colspan="1" rowspan="1">0.41-1.50</td>
+<td align="center" colspan="1" rowspan="1">0.46</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">NAC stage 2 vs stage 1</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td align="center" colspan="1" rowspan="1">2.29</td>
+<td align="center" colspan="1" rowspan="1">1.39-3.77</td>
+<td align="center" colspan="1" rowspan="1">0.001</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1">NAC stage 3 vs stage 1</td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td colspan="1" rowspan="1"></td>
+<td align="center" colspan="1" rowspan="1">4.15</td>
+<td align="center" colspan="1" rowspan="1">2.15-8.02</td>
+<td align="center" colspan="1" rowspan="1">&lt;0.001</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/tbl3/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<div class="tw-foot p">
+<div class="fn" id="tspara0045"><p>For interaction between race and ADI, <em>P</em> = 0.034 (model A) and <em>P</em> = 0.081 (model B).</p></div>
+<div class="fn" id="tspara0050"><p>ADI = area of deprivation index; HF = heart failure; NAC = National Amyloidosis Center.</p></div>
+<div class="fn" id="tbl3fna">
+<sup>a</sup><p class="display-inline" id="ntpara0020">Model A was adjusted for age and sex.</p>
+</div>
+<div class="fn" id="tbl3fnb">
+<sup>b</sup><p class="display-inline" id="ntpara0025">Model B was adjusted for age, sex, and NAC stage.</p>
+</div>
+</div></section></section></section><section id="sec3"><h2 class="pmc_sec_title">Discussion</h2>
+<p id="p0065">This is the first study evaluating the impact of race and SES on disease presentation and outcomes in patients with ATTR-CM. Our findings highlight that Black patients with low SES may be at greater risk for underdiagnosis and have poorer longitudinal outcomes independent of disease severity at diagnosis compared with White patients (<a href="#fig5" class="usa-link">Central Illustration</a>). We observed a difference in the proportion of patients diagnosed with ATTR-CM by SES, with most patients diagnosed from a high-SES area and Black patients constituting the majority of individuals diagnosed from a low SES area. Furthermore, Black patients, the majority of whom had Val122Ile disease, had more advanced cardiac disease at diagnosis and worse clinical outcomes compared with White patients. Black patients from the most socioeconomically deprived areas had the poorest event-free survival compared with other groups. Importantly, among patients with ADI &gt;25, the hazard of HF hospitalization or mortality was significantly higher in Black compared with White patients, even when adjusting for disease severity at diagnosis. This difference was not appreciated in patients with low ADI (&lt;25).</p>
+<figure class="fig xbox font-sm" id="fig5"><h3 class="obj_head">Central Illustration.</h3>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=11229544_gr5.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1e18/11229544/59f5dcc002c2/gr5.jpg" loading="lazy" height="527" width="765" alt="Central Illustration"></a></p>
+<div class="p text-right font-secondary"><a href="figure/fig5/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>The Impact of Race and Socioeconomic Status on Clinical Outcomes in Patients With ATTR-CM</p>
+<p>Among patients with transthyretin amyloid cardiomyopathy (ATTR-CM) with high area deprivation index (ADI) (&gt;25), Black patients had worse outcomes independent of disease severity compared with White patients. HF = heart failure.</p></figcaption></figure><p id="p0070">These new findings are hypothesis generating and warrant ongoing investigation. It is possible that this difference was observed because of racially influenced determinants of health heightened in patients with high ADI. Other possibilities include a higher burden and/or rate of progression of nonamyloid comorbidities contributing to poorer outcomes. Last, in a broader cohort, the lack of access to treatment compounded with the propensity for Val122Ile to progress at a more rapid rate than wild-type disease could contribute to differences in outcomes in those with high ADI. However, this is unlikely the explanation in our cohort, as no significant difference in tafamidis treatment by race or ADI was observed.</p>
+<p id="p0075">Several prior reports have highlighted an adverse prognosis of Val122Ile cardiomyopathy compared with other forms of ATTR-CM. In data from THAOS (Transthyretin Amyloid Outcome Survey), Val122Ile was the most common ATTR-CM mutation in the United States and was associated with a significantly higher incidence of heart transplantation from time of diagnosis.<a href="#bib4" class="usa-link" aria-describedby="bib4"><sup>4</sup></a><sup>,</sup><a href="#bib11" class="usa-link" aria-describedby="bib11"><sup>11</sup></a> Data from the NAC inclusive of &gt;1,000 patients with ATTR-CM and about 20% with Val122Ile highlight that subjects with Val122Ile have lower left ventricular ejection fractions, higher N-terminal pro–brain natriuretic peptide levels, and shorter 6-minute walk distances at the time of diagnosis.<a href="#bib1" class="usa-link" aria-describedby="bib1"><sup>1</sup></a> Furthermore, median survival was significantly reduced in the Val122Ile cohort compared with those with ATTRwt cardiomyopathy (31 vs 57 months; <em>P</em> &lt; 0.001).<a href="#bib1" class="usa-link" aria-describedby="bib1"><sup>1</sup></a> Given the access to health care available in the United Kingdom, it was hypothesized that the variation in disease severity at time of diagnosis was because Val122Ile is pathologically more aggressive, above other environmental factors such as SES. However, racial disparity, including HF hospitalization and premature death in Black individuals in a broader HF population, has increased over the past several years compared with White individuals, and therefore, pathobiology is unlikely to be the only contributor to this phenomenon observed in Val122Ile ATTR-CM.<a href="#bib12" class="usa-link" aria-describedby="bib12"><sup>12</sup></a><sup>,</sup><a href="#bib13" class="usa-link" aria-describedby="bib13"><sup>13</sup></a> Our findings highlight that within Black patients, there is lower event-free survival by SES category, further supporting this notion. More so, Alexander et al<a href="#bib14" class="usa-link" aria-describedby="bib14"><sup>14</sup></a> demonstrated large geographic variations in reported mortality due to amyloidosis, including states with the highest proportion of Black individuals having the lowest mortality, likely reflective of the disparities in diagnosis. In a recent single-center cohort study, Khedraki et al<a href="#bib15" class="usa-link" aria-describedby="bib15"><sup>15</sup></a> investigated disparities by race and genotype categories in ATTR-CM and included 53 patients who were Black with wild-type disease. Similar to our findings, Black patients had worse outcomes than White patients. There were no differences in outcomes between Black patients with Val122Ile and wild-type disease, though the analysis may have been underpowered to detect differences. Our study is unique in that we not only measured genetic and racial factors but also incorporated ADI as a measure of SES on disease outcomes. Given the high risk for adverse outcomes seen in our Black patients as well as in other cohorts, significant global efforts are needed to help mitigate socioeconomic burdens and improve early diagnosis in this vulnerable patient population.</p>
+<p id="p0080">Prior to the U.S. Food and Drug Administration’s approval of tafamidis, there were no disease-altering therapies that improved outcomes for ATTR-CM. Since then, there have been several therapies under investigation for the disease.<a href="#bib16" class="usa-link" aria-describedby="bib16">16</a>, <a href="#bib17" class="usa-link" aria-describedby="bib17">17</a>, <a href="#bib18" class="usa-link" aria-describedby="bib18">18</a>, <a href="#bib19" class="usa-link" aria-describedby="bib19">19</a> Although the current therapeutic landscape for ATTR-CM is promising, the majority of these therapies in later stage development slow progression of disease rather than reversing existing myocardial damage. Contemporary ATTR-CM trials have predominantly enrolled White subjects, with only 14% of patients in the landmark ATTR-ACT (Safety and Efficacy of Tafamidis in Patients With Transthyretin Cardiomyopathy) trial and 9% of patients in APOLLO-B (A Study to Evaluate Patisiran in Participants With Transthyretin Amyloidosis With Cardiomyopathy) being Black.<a href="#bib16" class="usa-link" aria-describedby="bib16"><sup>16</sup></a><sup>,</sup><a href="#bib20" class="usa-link" aria-describedby="bib20"><sup>20</sup></a> As such, there needs to be a greater emphasis on prioritizing racial diversity in ATTR-CM clinical trials, as Black patients are at higher risk for adverse outcomes compared with White patients and in great need of effective treatment.</p>
+<section id="sec3.1"><h3 class="pmc_sec_title">Study limitations</h3>
+<p id="p0085">This study was conducted at a single center, and therefore its findings need to be replicated at other centers to show external validity. Furthermore, ADI is a population rather than an individual measure of SES. However, it remains a useful aggregating tool that encompasses the multifaceted nature of SES. The ADI was determined on the basis of patients’ addresses at the time they were enrolled in the electronic medical record, but these may have changed at the time of chart review, although a sensitivity analysis with patient data from 2017 and later showed no difference in the principal outcomes. Importantly, the combination of pathobiological factors with socioeconomic factors leads to some uncertainty regarding the true effect size of our results. We acknowledge that most of the Black patients in our cohort had the Val122Ile variant, and the White patients had wild-type disease. Given the small proportion of Black patients with wild-type disease, we were unable to perform an analysis by race in those with wild-type disease. This is a known limitation of our study and a clear area in need of further exploration.<a href="#bib15" class="usa-link" aria-describedby="bib15"><sup>15</sup></a></p></section></section><section id="sec4"><h2 class="pmc_sec_title">Conclusions</h2>
+<p id="p0090">There are limited data on the impact of SES on timely diagnosis and clinical outcomes in patients with ATTR-CM. Our study is the first to demonstrate that Black patients with lower SES have worse outcomes compared with those with higher SES and White patients and thus provides groundwork for ongoing health care disparities research in ATTR-CM. Going forward, it will be important to prioritize enrollment of Black patients in ATTR-CM clinical trials to better identify effective therapies for this vulnerable population.</p></section><section id="sec17"><h2 class="pmc_sec_title">Funding Support and Author Disclosures</h2>
+<p id="p0095">The authors have reported that they have no relationships relevant to the contents of this paper to disclose.</p>
+<section class="bt xbox font-sm" id="dtbox1"><h3 class="obj_head">Perspectives.</h3>
+<p id="p0100"><strong>COMPETENCY IN MEDICAL KNOWLEDGE:</strong> Hereditary ATTR-CM related to the Val122Ile genetic variant is a highly morbid cause of HF in Black individuals and leads to worse outcomes compared with wild-type ATTR-CM disease. Black patients from the most socioeconomically deprived areas had the poorest event-free survival compared with other groups. Among patients with ADI &gt; 25, the hazard of HF hospitalization or mortality was significantly higher in Black compared with White patients, even when adjusting for disease severity at diagnosis.</p>
+<p id="p0105"><strong>TRANSLATIONAL OUTLOOK:</strong> Black patients are underrepresented in contemporary ATTR-CM clinical trials. Future trial designs need to focus on increasing representation of Black patients as well as those with Val122Ile disease to identify effective therapies for patients at risk for worse outcomes to patients with wild-type disease. Moreover, a greater understanding of the more aggressive pathobiology of Val122Ile is needed in this vulnerable patient subset.</p></section></section><section id="fn-group1" class="fn-group"><h2 class="pmc_sec_title">Footnotes</h2>
+<div class="fn-group p font-secondary-light font-sm">
+<div class="fn p" id="d36e1085"><p id="ntpara0015aa">The authors attest they are in compliance with human studies committees and animal welfare regulations of the authors’ institutions and Food and Drug Administration guidelines, including patient consent where appropriate. For more information, visit the <a href="https://www.jacc.org/author-center" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Author Center</a>.</p></div>
+<div class="fn p" id="appsec2">
+<p>Appendix</p>
+<p id="p0115">For supplemental tables and a figure, please see the online version of this paper.</p>
+</div>
+</div></section><section id="appsec1"><h2 class="pmc_sec_title">Appendix</h2>
+<section class="sm xbox font-sm" id="mmc1"><div class="caption p"><span>Supplementary Tables 1-4 and Supplementary Figure 1</span></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/11229544/bin/mmc1.docx" data-ga-action="click_feat_suppl" class="usa-link">mmc1.docx</a><sup> (123KB, docx) </sup>
+</div></div></section></section><section id="cebib0010" class="ref-list"><h2 class="pmc_sec_title">References</h2>
+<section id="cebib0010_sec2"><ul class="ref-list font-sm" style="list-style-type:none">
+<li id="bib1">
+<span class="label">1.</span><cite>Lane T., Fontana M., Martinez-Naharro A., et al.  Natural history, quality of life, and outcome in cardiac transthyretin amyloidosis. Circulation. 2019;140:16–26. doi: 10.1161/circulationaha.118.038169.</cite> [<a href="https://doi.org/10.1161/circulationaha.118.038169" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31109193/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circulation&amp;title=Natural%20history,%20quality%20of%20life,%20and%20outcome%20in%20cardiac%20transthyretin%20amyloidosis&amp;author=T.%20Lane&amp;author=M.%20Fontana&amp;author=A.%20Martinez-Naharro&amp;volume=140&amp;publication_year=2019&amp;pages=16-26&amp;pmid=31109193&amp;doi=10.1161/circulationaha.118.038169&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib2">
+<span class="label">2.</span><cite>Damrauer S.M., Chaudhary K., Cho J.H., et al.  Association of the V122I hereditary transthyretin amyloidosis genetic variant with heart failure among individuals of African or Hispanic/Latino ancestry. JAMA. 2019;322:2191–2202. doi: 10.1001/jama.2019.17935.</cite> [<a href="https://doi.org/10.1001/jama.2019.17935" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC7081752/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31821430/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=JAMA&amp;title=Association%20of%20the%20V122I%20hereditary%20transthyretin%20amyloidosis%20genetic%20variant%20with%20heart%20failure%20among%20individuals%20of%20African%20or%20Hispanic/Latino%20ancestry&amp;author=S.M.%20Damrauer&amp;author=K.%20Chaudhary&amp;author=J.H.%20Cho&amp;volume=322&amp;publication_year=2019&amp;pages=2191-2202&amp;pmid=31821430&amp;doi=10.1001/jama.2019.17935&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib3">
+<span class="label">3.</span><cite>Shah K.B., Mankad A.K., Castano A., et al.  Transthyretin cardiac amyloidosis in Black Americans. Circ Heart Fail. 2016;9 doi: 10.1161/CIRCHEARTFAILURE.115.002558.</cite> [<a href="https://doi.org/10.1161/CIRCHEARTFAILURE.115.002558" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4874558/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27188913/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circ%20Heart%20Fail&amp;title=Transthyretin%20cardiac%20amyloidosis%20in%20Black%20Americans&amp;author=K.B.%20Shah&amp;author=A.K.%20Mankad&amp;author=A.%20Castano&amp;volume=9&amp;publication_year=2016&amp;pmid=27188913&amp;doi=10.1161/CIRCHEARTFAILURE.115.002558&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib4">
+<span class="label">4.</span><cite>Maurer M.S., Hanna M., Grogan M., et al.  Genotype and phenotype of transthyretin cardiac amyloidosis: THAOS (Transthyretin Amyloid Outcome Survey) J Am Coll Cardiol. 2016;68:161–172. doi: 10.1016/j.jacc.2016.03.596.</cite> [<a href="https://doi.org/10.1016/j.jacc.2016.03.596" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4940135/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27386769/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%C2%A0Am%20Coll%20Cardiol&amp;title=Genotype%20and%20phenotype%20of%20transthyretin%20cardiac%20amyloidosis:%20THAOS%20(Transthyretin%20Amyloid%20Outcome%20Survey)&amp;author=M.S.%20Maurer&amp;author=M.%20Hanna&amp;author=M.%20Grogan&amp;volume=68&amp;publication_year=2016&amp;pages=161-172&amp;pmid=27386769&amp;doi=10.1016/j.jacc.2016.03.596&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib5">
+<span class="label">5.</span><cite>Gillmore J.D., Maurer M.S., Falk R.H., et al.  Nonbiopsy diagnosis of cardiac transthyretin amyloidosis. Circulation. 2016;133:2404–2412. doi: 10.1161/circulationaha.116.021612.</cite> [<a href="https://doi.org/10.1161/circulationaha.116.021612" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27143678/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circulation&amp;title=Nonbiopsy%20diagnosis%20of%20cardiac%20transthyretin%20amyloidosis&amp;author=J.D.%20Gillmore&amp;author=M.S.%20Maurer&amp;author=R.H.%20Falk&amp;volume=133&amp;publication_year=2016&amp;pages=2404-2412&amp;pmid=27143678&amp;doi=10.1161/circulationaha.116.021612&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib6">
+<span class="label">6.</span><cite>Kittleson M.M., Ruberg F.L., Ambardekar A.V., et al.  2023 ACC expert consensus decision pathway on comprehensive multidisciplinary care for the patient with cardiac amyloidosis. J Am Coll Cardiol. 2023;81:1076–1126. doi: 10.1016/j.jacc.2022.11.022.</cite> [<a href="https://doi.org/10.1016/j.jacc.2022.11.022" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/36697326/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%C2%A0Am%20Coll%20Cardiol&amp;title=2023%20ACC%20expert%20consensus%20decision%20pathway%20on%20comprehensive%20multidisciplinary%20care%20for%20the%20patient%20with%20cardiac%20amyloidosis&amp;author=M.M.%20Kittleson&amp;author=F.L.%20Ruberg&amp;author=A.V.%20Ambardekar&amp;volume=81&amp;publication_year=2023&amp;pages=1076-1126&amp;pmid=36697326&amp;doi=10.1016/j.jacc.2022.11.022&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib7">
+<span class="label">7.</span><cite>Dorbala S., Ando Y., Bokhari S., et al.  ASNC/AHA/ASE/EANM/HFSA/ISA/SCMR/SNMMI expert consensus recommendations for multimodality imaging in cardiac amyloidosis: part 1 of 2—evidence base and standardized methods of imaging. Circ Cardiovasc Imaging. 2021;14 doi: 10.1161/HCI.0000000000000029.</cite> [<a href="https://doi.org/10.1161/HCI.0000000000000029" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34196223/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circ%20Cardiovasc%20Imaging&amp;title=ASNC/AHA/ASE/EANM/HFSA/ISA/SCMR/SNMMI%20expert%20consensus%20recommendations%20for%20multimodality%20imaging%20in%20cardiac%20amyloidosis:%20part%201%20of%202%E2%80%94evidence%20base%20and%20standardized%20methods%20of%20imaging&amp;author=S.%20Dorbala&amp;author=Y.%20Ando&amp;author=S.%20Bokhari&amp;volume=14&amp;publication_year=2021&amp;pmid=34196223&amp;doi=10.1161/HCI.0000000000000029&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib8">
+<span class="label">8.</span><cite>Shirey T.E., Hu Y., Ko Y.-A., et al.  Relation of neighborhood disadvantage to heart failure symptoms and hospitalizations. Am J Cardiol. 2021;140:83–90. doi: 10.1016/j.amjcard.2020.10.057.</cite> [<a href="https://doi.org/10.1016/j.amjcard.2020.10.057" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8764641/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33144159/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Am%20J%20Cardiol&amp;title=Relation%20of%20neighborhood%20disadvantage%20to%20heart%20failure%20symptoms%20and%20hospitalizations&amp;author=T.E.%20Shirey&amp;author=Y.%20Hu&amp;author=Y.-A.%20Ko&amp;volume=140&amp;publication_year=2021&amp;pages=83-90&amp;pmid=33144159&amp;doi=10.1016/j.amjcard.2020.10.057&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib9">
+<span class="label">9.</span><cite>Mathews L., Ding N., Mok Y., et al.  Impact of socioeconomic status on mortality and readmission in patients with heart failure with reduced ejection fraction: the ARIC study. J Am Heart Assoc. 2022;11 doi: 10.1161/jaha.121.024057.</cite> [<a href="https://doi.org/10.1161/jaha.121.024057" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC9683665/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/36102228/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%C2%A0Am%20Heart%20Assoc&amp;title=Impact%20of%20socioeconomic%20status%20on%20mortality%20and%20readmission%20in%20patients%20with%20heart%20failure%20with%20reduced%20ejection%20fraction:%20the%20ARIC%20study&amp;author=L.%20Mathews&amp;author=N.%20Ding&amp;author=Y.%20Mok&amp;volume=11&amp;publication_year=2022&amp;pmid=36102228&amp;doi=10.1161/jaha.121.024057&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib10">
+<span class="label">10.</span><cite>Bevan G.H., Josephson R., Al-Kindi S.G. Socioeconomic deprivation and heart failure mortality in the United States. J Card Fail. 2020;26:1106–1107. doi: 10.1016/j.cardfail.2020.07.014.</cite> [<a href="https://doi.org/10.1016/j.cardfail.2020.07.014" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/32755627/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%C2%A0Card%20Fail&amp;title=Socioeconomic%20deprivation%20and%20heart%20failure%20mortality%20in%20the%20United%20States&amp;author=G.H.%20Bevan&amp;author=R.%20Josephson&amp;author=S.G.%20Al-Kindi&amp;volume=26&amp;publication_year=2020&amp;pages=1106-1107&amp;pmid=32755627&amp;doi=10.1016/j.cardfail.2020.07.014&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib11">
+<span class="label">11.</span><cite>Coelho T., Maurer M.S., Suhr O.B. THAOS—the Transthyretin Amyloidosis Outcomes Survey: initial report on clinical manifestations in patients with hereditary and wild-type transthyretin amyloidosis. Curr Med Res Opin. 2013;29:63–76. doi: 10.1185/03007995.2012.754348.</cite> [<a href="https://doi.org/10.1185/03007995.2012.754348" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/23193944/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Curr%20Med%20Res%20Opin&amp;title=THAOS%E2%80%94the%20Transthyretin%20Amyloidosis%20Outcomes%20Survey:%20initial%20report%20on%20clinical%20manifestations%20in%20patients%20with%20hereditary%20and%20wild-type%20transthyretin%20amyloidosis&amp;author=T.%20Coelho&amp;author=M.S.%20Maurer&amp;author=O.B.%20Suhr&amp;volume=29&amp;publication_year=2013&amp;pages=63-76&amp;pmid=23193944&amp;doi=10.1185/03007995.2012.754348&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib12">
+<span class="label">12.</span><cite>Tsao C.W., Aday A.W., Almarzooq Z.I., et al.  Heart disease and stroke statistics—2022 update: a report from the American Heart Association. Circulation. 2022;145:e153–e639. doi: 10.1161/CIR.0000000000001052.</cite> [<a href="https://doi.org/10.1161/CIR.0000000000001052" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/35078371/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circulation&amp;title=Heart%20disease%20and%20stroke%20statistics%E2%80%942022%20update:%20a%20report%20from%20the%20American%20Heart%20Association&amp;author=C.W.%20Tsao&amp;author=A.W.%20Aday&amp;author=Z.I.%20Almarzooq&amp;volume=145&amp;publication_year=2022&amp;pages=e153-e639&amp;pmid=35078371&amp;doi=10.1161/CIR.0000000000001052&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib13">
+<span class="label">13.</span><cite>Virani S.S., Alonso A., Benjamin E.J., et al.  Heart disease and stroke statistics—2020 update: a report from the American Heart Association. Circulation. 2020;141:e139–e596. doi: 10.1161/cir.0000000000000757.</cite> [<a href="https://doi.org/10.1161/cir.0000000000000757" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31992061/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circulation&amp;title=Heart%20disease%20and%20stroke%20statistics%E2%80%942020%20update:%20a%20report%20from%20the%20American%20Heart%20Association&amp;author=S.S.%20Virani&amp;author=A.%20Alonso&amp;author=E.J.%20Benjamin&amp;volume=141&amp;publication_year=2020&amp;pages=e139-e596&amp;pmid=31992061&amp;doi=10.1161/cir.0000000000000757&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib14">
+<span class="label">14.</span><cite>Alexander K.M., Orav J., Singh A., et al.  Geographic disparities in reported US amyloidosis mortality from 1979 to 2015: potential underdetection of cardiac amyloidosis. JAMA Cardiol. 2018;3:865–870. doi: 10.1001/jamacardio.2018.2093.</cite> [<a href="https://doi.org/10.1001/jamacardio.2018.2093" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6233639/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30046835/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=JAMA%20Cardiol&amp;title=Geographic%20disparities%20in%20reported%20US%20amyloidosis%20mortality%20from%201979%20to%202015:%20potential%20underdetection%20of%20cardiac%20amyloidosis&amp;author=K.M.%20Alexander&amp;author=J.%20Orav&amp;author=A.%20Singh&amp;volume=3&amp;publication_year=2018&amp;pages=865-870&amp;pmid=30046835&amp;doi=10.1001/jamacardio.2018.2093&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib15">
+<span class="label">15.</span><cite>Khedraki R., Saef J., Martens P., et al.  Race, genotype, and prognosis in Black patients with transthyretin cardiac amyloidosis. Am J Cardiol. 2024;216:66–76. doi: 10.1016/j.amjcard.2024.01.009.</cite> [<a href="https://doi.org/10.1016/j.amjcard.2024.01.009" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/38278432/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Am%20J%20Cardiol&amp;title=Race,%20genotype,%20and%20prognosis%20in%20Black%20patients%20with%20transthyretin%20cardiac%20amyloidosis&amp;author=R.%20Khedraki&amp;author=J.%20Saef&amp;author=P.%20Martens&amp;volume=216&amp;publication_year=2024&amp;pages=66-76&amp;pmid=38278432&amp;doi=10.1016/j.amjcard.2024.01.009&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib16">
+<span class="label">16.</span><cite>Maurer M.S., Kale P., Fontana M., et al.  Patisiran treatment in patients with transthyretin cardiac amyloidosis. N Engl J Med. 2023;389:1553–1565. doi: 10.1056/NEJMoa2300757.</cite> [<a href="https://doi.org/10.1056/NEJMoa2300757" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC10757426/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/37888916/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N%C2%A0Engl%20J%20Med&amp;title=Patisiran%20treatment%20in%20patients%20with%20transthyretin%20cardiac%20amyloidosis&amp;author=M.S.%20Maurer&amp;author=P.%20Kale&amp;author=M.%20Fontana&amp;volume=389&amp;publication_year=2023&amp;pages=1553-1565&amp;pmid=37888916&amp;doi=10.1056/NEJMoa2300757&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib17">
+<span class="label">17.</span><cite>Gillmore J.D., Gane E., Taubel J., et al.  CRISPR-Cas9 in vivo gene editing for transthyretin amyloidosis. N Engl J Med. 2021;385:493–502. doi: 10.1056/NEJMoa2107454.</cite> [<a href="https://doi.org/10.1056/NEJMoa2107454" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34215024/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N%C2%A0Engl%20J%20Med&amp;title=CRISPR-Cas9%20in%C2%A0vivo%20gene%20editing%20for%20transthyretin%20amyloidosis&amp;author=J.D.%20Gillmore&amp;author=E.%20Gane&amp;author=J.%20Taubel&amp;volume=385&amp;publication_year=2021&amp;pages=493-502&amp;pmid=34215024&amp;doi=10.1056/NEJMoa2107454&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib18">
+<span class="label">18.</span><cite>Judge D.P., Heitner S.B., Falk R.H., et al.  Transthyretin stabilization by AG10 in symptomatic transthyretin amyloid cardiomyopathy. J Am Coll Cardiol. 2019;74:285–295. doi: 10.1016/j.jacc.2019.03.012.</cite> [<a href="https://doi.org/10.1016/j.jacc.2019.03.012" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30885685/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%C2%A0Am%20Coll%20Cardiol&amp;title=Transthyretin%20stabilization%20by%20AG10%20in%20symptomatic%20transthyretin%20amyloid%20cardiomyopathy&amp;author=D.P.%20Judge&amp;author=S.B.%20Heitner&amp;author=R.H.%20Falk&amp;volume=74&amp;publication_year=2019&amp;pages=285-295&amp;pmid=30885685&amp;doi=10.1016/j.jacc.2019.03.012&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib19">
+<span class="label">19.</span><cite>Coelho T., Marques W., Jr., Dasgupta N.R., et al.  Eplontersen for hereditary transthyretin amyloidosis with polyneuropathy. JAMA. 2023;330:1448–1458. doi: 10.1001/jama.2023.18688.</cite> [<a href="https://doi.org/10.1001/jama.2023.18688" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC10540057/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/37768671/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=JAMA&amp;title=Eplontersen%20for%20hereditary%20transthyretin%20amyloidosis%20with%20polyneuropathy&amp;author=T.%20Coelho&amp;author=W.%20Marques&amp;author=N.R.%20Dasgupta&amp;volume=330&amp;publication_year=2023&amp;pages=1448-1458&amp;pmid=37768671&amp;doi=10.1001/jama.2023.18688&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib20">
+<span class="label">20.</span><cite>Maurer M.S., Schwartz J.H., Gundapaneni B., et al.  Tafamidis treatment for patients with transthyretin amyloid cardiomyopathy. N Engl J Med. 2018;379:1007–1016. doi: 10.1056/NEJMoa1805689.</cite> [<a href="https://doi.org/10.1056/NEJMoa1805689" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30145929/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N%C2%A0Engl%20J%20Med&amp;title=Tafamidis%20treatment%20for%20patients%20with%20transthyretin%20amyloid%20cardiomyopathy&amp;author=M.S.%20Maurer&amp;author=J.H.%20Schwartz&amp;author=B.%20Gundapaneni&amp;volume=379&amp;publication_year=2018&amp;pages=1007-1016&amp;pmid=30145929&amp;doi=10.1056/NEJMoa1805689&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+</ul></section></section><section id="_ad93_" lang="en" class="associated-data"><h2 class="pmc_sec_title">Associated Data</h2>
+<p class="font-secondary"><em>This section collects any data citations, data availability statements, or supplementary materials included in this article.</em></p>
+<section id="_adsm93_" lang="en" class="supplementary-materials"><h3 class="pmc_sec_title">Supplementary Materials</h3>
+<section class="sm xbox font-sm" id="db_ds_supplementary-material1_reqid_"><div class="caption p"><span>Supplementary Tables 1-4 and Supplementary Figure 1</span></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/11229544/bin/mmc1.docx" data-ga-action="click_feat_suppl" class="usa-link">mmc1.docx</a><sup> (123KB, docx) </sup>
+</div></div></section></section></section></section><footer class="p courtesy-note font-secondary font-sm text-center"><hr class="headless">
+<p>Articles from JACC: CardioOncology are provided here courtesy of <strong>Elsevier</strong></p></footer></section></article>
+
+                      
+
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+<!-- Secondary navigation placeholder -->
+<div class="pmc-sidenav desktop:grid-col-4 display-flex">
+    <section class="pmc-sidenav__container" aria-label="Article resources and navigation">
+        <button type="button" class="usa-button pmc-sidenav__container__close usa-button--unstyled">
+            <img src="/static/img/usa-icons/close.svg" role="img" alt="Close" />
+        </button>
+    <div class="display-none desktop:display-block">
+       <section class="margin-top-4 desktop:margin-top-0">
+              <h2 class="margin-top-0">ACTIONS</h2>
+           <ul class="usa-list usa-list--unstyled usa-list--actions">
+               
+               <li>
+                     <a
+                             href="https://doi.org/10.1016/j.jaccao.2024.05.001"
+                             class="usa-button usa-button--outline width-24 font-xs display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                             target="_blank"
+                             rel="noreferrer noopener"
+                             data-ga-category="actions"
+                             data-ga-action="click"
+                             data-ga-label="publisher_link_desktop"
+                     >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#launch"></use>
+                         </svg>
+                         <span class="display-inline-flex flex-justify-center flex-1 padding-right-2">View on publisher site</span>
+                     </a>
+               </li>
+               
+               
+               <li>
+                    <a
+                            href="pdf/main.pdf"
+                            class="usa-button usa-button--outline width-24 display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="pdf_download_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1">PDF (1.1 MB)</span>
+                    </a>
+               </li>
+               
+                
+               <li>
+                   <button role="button" class="usa-button width-24 citation-dialog-trigger display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                        aria-label="Open dialog with citation text in different styles"
+                        data-ga-category="actions"
+                        data-ga-action="open"
+                        data-ga-label="cite_desktop"
+                        data-all-citations-url="/resources/citations/11229544/"
+                        data-citation-style="nlm"
+                        data-download-format-link="/resources/citations/11229544/export/"
+                    >
+                        <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                        </svg>
+                       <span class="display-inline-flex flex-justify-center flex-1 button-label">Cite</span>
+                    </button>
+               </li>
+                
+               <li>
+
+                        <button class="usa-button width-24 collections-dialog-trigger collections-button display-inline-flex flex-align-center flex-justify-start padding-left-1 collections-button-empty"
+                              aria-label="Save article in MyNCBI collections."
+                              data-ga-category="actions"
+                              data-ga-action="click"
+                              data-ga-label="collections_button_desktop"
+                              data-collections-open-dialog-enabled="false"
+                              data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC11229544%2F%23open-collections-dialog"
+                              data-in-collections="false">
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                            <span class="display-inline-flex flex-justify-center flex-1">Collections</span>
+                       </button>
+               </li>
+               <li class="pmc-permalink">
+                    <button
+                            type="button"
+                            class="usa-button width-24 display-inline-flex flex-align-center flex-justify padding-left-1 shadow-none"
+                            aria-label="Show article permalink"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="permalink_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#share"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1 button-label">Permalink</span>
+                    </button>
+                   
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC11229544/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+               </li>
+           </ul>
+       </section>
+     </div>
+
+        <section class="pmc-resources margin-top-6 desktop:margin-top-4" data-page-path="/articles/PMC11229544/">
+            <h2 class="margin-top-0">RESOURCES</h2>
+            
+                <div class="usa-accordion usa-accordion--multiselectable" data-allow-multiple>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-similar-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_similar_articles"
+                        data-ga-label="/articles/PMC11229544/"
+                        data-action-open="open_similar_articles"
+                        data-action-close="close_similar_articles"
+                        >
+                            Similar articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-similar-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/similar-article-links/38983379/"
+                            
+                    >
+                        
+                    </div>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-cited-by-other-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_cited_by"
+                        data-ga-label="/articles/PMC11229544/"
+                        data-action-open="open_cited_by"
+                        data-action-close="close_cited_by"
+                        >
+                             Cited by other articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-cited-by-other-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/cited-by-links/38983379/"
+                            
+                    >
+                          
+                    </div>
+                    
+                        <h3 class="usa-accordion__heading">
+                            <button
+                            type="button"
+                            class="usa-accordion__button"
+                            aria-expanded="false"
+                            aria-controls="resources-links-to-ncbi-databases"
+                            data-ga-category="resources_accordion"
+                            data-ga-action="open_NCBI_links"
+                            data-ga-label="/articles/PMC11229544/"
+                            data-action-open="open_NCBI_links"
+                            data-action-close="close_NCBI_link"
+                            >
+                                 Links to NCBI Databases
+                            </button>
+                        </h3>
+                        <div
+                                id="resources-links-to-ncbi-databases"
+                                class="usa-accordion__content usa-prose"
+                                data-source-url="/resources/db-links/11229544/"
+                        >
+                        </div>
+                    
+                    
+                </div>
+            
+        </section>
+
+
+        <section
+        class="usa-in-page-nav usa-in-page-nav--wide margin-top-6 desktop:margin-top-4"
+        data-title-text="On this page"
+        data-title-heading-level="h2"
+        data-scroll-offset="0"
+        data-root-margin="-10% 0px -80% 0px"
+        data-main-content-selector="main"
+        data-threshold="1"
+        hidden
+        ></section>
+    </section>
+</div>
+
+
+        
+
+<div class="overlay" role="dialog" aria-label="Citation Dialog" hidden>
+    <div class="dialog citation-dialog" aria-hidden="true">
+        <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+            <h2 class="usa-modal__heading margin-0">Cite</h2>
+             <button type="button" class="usa-button usa-button--unstyled close-overlay text-black width-auto"  tabindex="1">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+             </button>
+        </div>
+
+        
+
+<div class="citation-text-block">
+  <div class="citation-text margin-bottom-2"></div>
+  <ul class="usa-list usa-list--unstyled display-inline-flex flex-justify width-full flex-align-center">
+      <li>
+        <button
+          class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center copy-button dialog-focus"
+          data-ga-category="save_share"
+          data-ga-action="cite"
+          data-ga-label="copy"
+          tabindex="2">
+            <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+            </svg>
+            <span>Copy</span>
+        </button>
+      </li>
+      <li>
+          <a
+              href="#"
+              role="button"
+              class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center export-button"
+              data-ga-category="save_share"
+              data-ga-action="cite"
+              data-ga-label="download"
+              title="Download a file for external citation management software"
+              tabindex="3">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                </svg>
+                <span class="display-none mobile-lg:display-inline">Download .nbib</span>
+                <span class="display-inline mobile-lg:display-none">.nbib</span>
+            </a>
+      </li>
+      <li>
+          
+
+<div class="display-inline-flex flex-align-center">
+  <label class="usa-label margin-top-0">Format:</label>
+  <select aria-label="Format" class="usa-select citation-style-selector padding-1 margin-top-0 border-0 padding-right-4" tabindex="4" >
+    
+      <option data-style-url-name="ama"
+              value="AMA"
+              >
+        AMA
+      </option>
+    
+      <option data-style-url-name="apa"
+              value="APA"
+              >
+        APA
+      </option>
+    
+      <option data-style-url-name="mla"
+              value="MLA"
+              >
+        MLA
+      </option>
+    
+      <option data-style-url-name="nlm"
+              value="NLM"
+              selected="selected">
+        NLM
+      </option>
+    
+  </select>
+</div>
+      </li>
+  </ul>
+</div>
+    </div>
+</div>
+
+        <div class="overlay" role="dialog" hidden>
+  <div id="collections-action-dialog" class="dialog collections-dialog" aria-hidden="true">
+   <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+        <h2 class="usa-modal__heading margin-0">Add to Collections</h2>
+    </div>
+    <div class="collections-action-panel action-panel">
+      
+
+
+<form id="collections-action-dialog-form"
+      class="usa-form maxw-full collections-action-panel-form action-panel-content action-form action-panel-smaller-selectors"
+      data-existing-collections-url="/list-existing-collections/"
+      data-add-to-existing-collection-url="/add-to-existing-collection/"
+      data-create-and-add-to-new-collection-url="/create-and-add-to-new-collection/"
+      data-myncbi-max-collection-name-length="100"
+      data-collections-root-url="https://www.ncbi.nlm.nih.gov/myncbi/collections/">
+
+    <input type="hidden" name="csrfmiddlewaretoken" value="oNXpr5CFU1HliHGjIBCQxhfjIXfDrXjXpwK6UQ0RRnWRCaZEWPHwlVHTtLvd4x0B">
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-new"
+            class="usa-radio__input usa-radio__input--tile collections-new  margin-top-0"
+            name="collections"
+            value="new"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_new" />
+            <label class="usa-radio__label" for="collections-action-dialog-new">Create a new collection</label>
+        </div>
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-existing"
+            class="usa-radio__input usa-radio__input--tile collections-existing"
+            name="collections"
+            value="existing"
+            checked="true"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_existing" />
+            <label class="usa-radio__label" for="collections-action-dialog-existing">Add to an existing collection</label>
+        </div>
+    </fieldset>
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="action-panel-control-wrap new-collections-controls">
+           <label for="collections-action-dialog-add-to-new" class="usa-label margin-top-0">
+                Name your collection
+               <abbr title="required" class="usa-hint usa-hint--required text-no-underline">*</abbr>
+          </label>
+          <input
+            type="text"
+            name="add-to-new-collection"
+            id="collections-action-dialog-add-to-new"
+            class="usa-input collections-action-add-to-new"
+            pattern="[^&quot;&amp;=&lt;&gt;/]*" title="The following characters are not allowed in the Name field: &quot;&amp;=&lt;&gt;/"
+            maxlength=""
+            data-ga-category="collections_button"
+            data-ga-action="create_collection"
+            data-ga-label="non_favorties_collection"
+            required
+          />
+        </div>
+        <div class="action-panel-control-wrap existing-collections-controls">
+             <label for="collections-action-dialog-add-to-existing" class="usa-label margin-top-0">
+                Choose a collection
+              </label>
+              <select id="collections-action-dialog-add-to-existing"
+                      class="usa-select collections-action-add-to-existing"
+                      data-ga-category="collections_button"
+                      data-ga-action="select_collection"
+                      data-ga-label="($('.collections-action-add-to-existing').val() === 'Favorites') ? 'Favorites' : 'non_favorites_collection'">
+              </select>
+              <div class="collections-retry-load-on-error usa-input-error-message selection-validation-message">
+                Unable to load your collection due to an error<br>
+                <a href="#">Please try again</a>
+              </div>
+        </div>
+    </fieldset>
+
+    <div class="display-inline-flex">
+        <button class="usa-button margin-top-0 action-panel-submit"
+            type="submit"
+            data-loading-label="Adding..."
+            data-pinger-ignore
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="add">
+          Add
+        </button>
+        <button class="usa-button usa-button--outline margin-top-0 action-panel-cancel"
+                aria-label="Close 'Add to Collections' panel"
+                ref="linksrc=close_collections_panel"
+                data-ga-category="collections_button"
+                data-ga-action="click"
+                data-ga-label="cancel">
+          Cancel
+        </button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>
+
+        
+
+      </div>
+    </div>
+  </div>
+
+
+
+        
+    
+    
+
+<footer class="ncbi-footer ncbi-dark-background " >
+    
+        <div class="ncbi-footer__icon-section">
+            <div class="ncbi-footer__social-header">
+                Follow NCBI
+            </div>
+
+            <div class="grid-container ncbi-footer__ncbi-social-icons-container">
+                
+                    <a href="https://twitter.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="40"
+                             height="40"
+                             viewBox="0 0 40 40"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on X (formerly known as Twitter)</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.facebook.com/ncbi.nlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="16"
+                             height="29"
+                             focusable="false"
+                             aria-hidden="true"
+                             viewBox="0 0 16 29"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.8809 21.4002C3.8809 19.0932 3.8809 16.7876 3.8809 14.478C3.8809 14.2117 3.80103 14.1452 3.54278 14.1492C2.53372 14.1638 1.52334 14.1492 0.514288 14.1598C0.302626 14.1598 0.248047 14.0972 0.248047 13.8936C0.256034 12.4585 0.256034 11.0239 0.248047 9.58978C0.248047 9.37013 0.302626 9.30224 0.528931 9.3049C1.53798 9.31688 2.54837 9.3049 3.55742 9.31555C3.80103 9.31555 3.8809 9.26097 3.87957 9.00272C3.87158 8.00565 3.85428 7.00592 3.90753 6.00884C3.97142 4.83339 4.31487 3.73115 5.04437 2.78467C5.93095 1.63318 7.15699 1.09005 8.56141 0.967577C10.5582 0.79319 12.555 0.982221 14.5518 0.927641C14.7102 0.927641 14.7462 0.99287 14.7449 1.13664C14.7449 2.581 14.7449 4.02668 14.7449 5.47104C14.7449 5.67604 14.6517 5.68669 14.4946 5.68669C13.4523 5.68669 12.4113 5.68669 11.3703 5.68669C10.3506 5.68669 9.92057 6.10868 9.90593 7.13904C9.89661 7.7647 9.91525 8.39303 9.89794 9.01869C9.88995 9.26364 9.96583 9.31822 10.2015 9.31688C11.7204 9.30623 13.2393 9.31688 14.7595 9.3049C15.0257 9.3049 15.0723 9.3728 15.0444 9.62439C14.89 10.9849 14.7515 12.3467 14.6144 13.7085C14.5691 14.1571 14.5785 14.1585 14.1458 14.1585C12.8386 14.1585 11.5313 14.1665 10.2254 14.1518C9.95119 14.1518 9.89794 14.2317 9.89794 14.4899C9.90593 19.0799 9.89794 23.6752 9.91125 28.2612C9.91125 28.5674 9.8407 28.646 9.53186 28.6433C7.77866 28.6273 6.02414 28.6366 4.27094 28.634C3.82499 28.634 3.87158 28.6992 3.87158 28.22C3.87602 25.9472 3.87913 23.6739 3.8809 21.4002Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on Facebook</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.linkedin.com/company/ncbinlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="25"
+                             height="23"
+                             viewBox="0 0 26 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M14.6983 9.98423C15.6302 9.24808 16.5926 8.74754 17.6762 8.51991C19.673 8.09126 21.554 8.30824 23.1262 9.7526C24.2351 10.7723 24.7529 12.1115 25.0165 13.5612C25.1486 14.3363 25.2105 15.1218 25.2015 15.9081C25.2015 18.3043 25.2015 20.6898 25.2082 23.0806C25.2082 23.3468 25.1549 23.444 24.8621 23.4414C23.1297 23.4272 21.3992 23.4272 19.6704 23.4414C19.4041 23.4414 19.3429 23.3588 19.3442 23.1019C19.3535 20.5194 19.3442 17.9368 19.3442 15.3543C19.3442 14.0005 18.3258 12.9448 17.0266 12.9488C15.7273 12.9528 14.6983 14.0071 14.6983 15.361C14.6983 17.9328 14.6917 20.5047 14.6983 23.0753C14.6983 23.3708 14.6198 23.444 14.3296 23.4427C12.6185 23.4294 10.9079 23.4294 9.19779 23.4427C8.93155 23.4427 8.86099 23.3735 8.86232 23.1086C8.8783 19.7619 8.88628 16.4144 8.88628 13.066C8.88628 11.5688 8.87874 10.0708 8.86365 8.57182C8.86365 8.3575 8.90758 8.27896 9.14054 8.28029C10.9048 8.29094 12.6687 8.29094 14.4321 8.28029C14.6464 8.28029 14.6983 8.34818 14.6983 8.54653C14.6903 9.00047 14.6983 9.45441 14.6983 9.98423Z">
+                            </path>
+                            <path d="M6.55316 15.8443C6.55316 18.2564 6.55316 20.6699 6.55316 23.082C6.55316 23.3629 6.48127 23.4388 6.19906 23.4374C4.47737 23.4241 2.75568 23.4241 1.03399 23.4374C0.767751 23.4374 0.69986 23.3629 0.701191 23.1006C0.709178 18.2648 0.709178 13.4281 0.701191 8.59053C0.701191 8.34026 0.765089 8.27237 1.01669 8.2737C2.74991 8.28435 4.48048 8.28435 6.20838 8.2737C6.47462 8.2737 6.5465 8.33627 6.54517 8.6065C6.54783 11.0186 6.55316 13.4308 6.55316 15.8443Z">
+                            </path>
+                            <path d="M3.65878 0.243898C5.36804 0.243898 6.58743 1.45529 6.58743 3.1406C6.58743 4.75801 5.32145 5.95742 3.60819 5.96807C3.22177 5.97614 2.83768 5.90639 2.47877 5.76299C2.11985 5.61959 1.79344 5.40546 1.51897 5.13334C1.24449 4.86123 1.02755 4.53668 0.881058 4.17902C0.734563 3.82136 0.661505 3.43788 0.666231 3.05141C0.67555 1.42601 1.9362 0.242566 3.65878 0.243898Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on LinkedIn</span>
+                    </a>
+                
+
+                
+                    <a href="https://github.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="28"
+                             height="27"
+                             viewBox="0 0 28 28"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M16.7228 20.6334C17.5057 20.5527 18.2786 20.3944 19.0301 20.1608C21.3108 19.4193 22.5822 17.8259 22.963 15.4909C23.1228 14.5112 23.1814 13.5287 22.9883 12.5437C22.8106 11.6423 22.4013 10.8028 21.8007 10.1076C21.7526 10.0605 21.7197 10 21.7064 9.934C21.6931 9.86799 21.7 9.79952 21.7262 9.73748C22.0856 8.6206 21.9711 7.51969 21.601 6.42677C21.582 6.3497 21.5345 6.2827 21.468 6.23923C21.4016 6.19577 21.3211 6.17906 21.2429 6.19248C20.7329 6.21649 20.2313 6.33051 19.7611 6.52928C19.1103 6.7908 18.4899 7.12198 17.9104 7.51703C17.84 7.56996 17.7581 7.60551 17.6713 7.62078C17.5846 7.63605 17.4954 7.6306 17.4112 7.60489C15.2596 7.05882 13.0054 7.06203 10.8554 7.61421C10.7806 7.63586 10.7018 7.63967 10.6253 7.62534C10.5487 7.611 10.4766 7.57892 10.4148 7.53167C9.64788 7.03247 8.85171 6.58918 7.96368 6.33359C7.65781 6.24338 7.34123 6.19458 7.02239 6.18849C6.94879 6.17986 6.87462 6.19893 6.81432 6.242C6.75402 6.28507 6.71191 6.34904 6.69621 6.42145C6.32342 7.51437 6.2209 8.61527 6.56307 9.73348C6.59635 9.84264 6.64694 9.93316 6.54177 10.0516C5.47666 11.2604 5.09988 12.6834 5.19574 14.2676C5.2663 15.4244 5.46201 16.5466 6.01454 17.5769C6.84399 19.1171 8.21664 19.9119 9.85158 20.3352C10.3938 20.4706 10.9444 20.5698 11.4998 20.632C11.5384 20.7492 11.4506 20.7798 11.408 20.8291C11.1734 21.1179 10.9894 21.4441 10.8634 21.7942C10.7622 22.0458 10.8315 22.4039 10.6065 22.5516C10.263 22.7766 9.83827 22.8485 9.42421 22.8871C8.17936 23.0056 7.26471 22.4877 6.6283 21.4348C6.25552 20.8184 5.76956 20.3325 5.08523 20.0663C4.76981 19.9325 4.42139 19.8967 4.08537 19.9638C3.7898 20.029 3.73788 20.1901 3.93891 20.4111C4.03639 20.5234 4.14989 20.6207 4.27575 20.6999C4.9796 21.1318 5.51717 21.7884 5.80152 22.5636C6.37002 23.9973 7.48039 24.5697 8.93825 24.6323C9.43741 24.6575 9.93768 24.615 10.4254 24.5058C10.5892 24.4672 10.6531 24.4872 10.6517 24.6762C10.6451 25.4936 10.6637 26.3123 10.6517 27.131C10.6517 27.6635 10.1684 27.9297 9.58663 27.7393C8.17396 27.2671 6.84977 26.5631 5.66838 25.656C2.59555 23.2891 0.720966 20.1861 0.217704 16.3376C-0.357453 11.9127 0.911353 8.00824 3.98551 4.73881C6.11909 2.42656 8.99932 0.939975 12.1203 0.540191C16.5351 -0.0601815 20.4347 1.14323 23.7232 4.16373C26.2449 6.47869 27.724 9.37672 28.1048 12.7726C28.5828 17.0325 27.3686 20.7945 24.4768 23.9827C22.9762 25.6323 21.0956 26.8908 18.9982 27.6488C18.8783 27.6927 18.7585 27.738 18.636 27.7726C18.0356 27.9404 17.6189 27.6395 17.6189 27.0098C17.6189 25.7452 17.6308 24.4806 17.6295 23.2159C17.6329 22.9506 17.6128 22.6856 17.5696 22.4238C17.4325 21.6664 17.3419 21.484 16.7228 20.6334Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on GitHub</span>
+                    </a>
+                
+
+                
+                    <a href="https://ncbiinsights.ncbi.nlm.nih.gov/"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="26"
+                             height="26"
+                             viewBox="0 0 27 27"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M23.7778 26.4574C23.1354 26.3913 22.0856 26.8024 21.636 26.3087C21.212 25.8444 21.4359 24.8111 21.324 24.0347C19.9933 14.8323 14.8727 8.80132 6.09057 5.85008C4.37689 5.28406 2.58381 4.99533 0.779072 4.99481C0.202773 4.99481 -0.0229751 4.83146 0.00455514 4.21479C0.0660406 3.08627 0.0660406 1.95525 0.00455514 0.826734C-0.0413285 0.0815827 0.259669 -0.0193618 0.896534 0.00266238C6.96236 0.222904 12.3693 2.24179 16.9889 6.16209C22.9794 11.2478 26.1271 17.7688 26.4372 25.648C26.4629 26.294 26.3179 26.5271 25.6609 26.4684C25.0827 26.417 24.4991 26.4574 23.7778 26.4574Z">
+                            </path>
+                            <path d="M14.8265 26.441C14.0924 26.441 13.2371 26.6795 12.6626 26.3786C12.0092 26.0372 12.3781 25.0644 12.246 24.378C11.1154 18.5324 6.6849 14.5497 0.74755 14.1001C0.217135 14.0615 -0.0104482 13.9422 0.0134113 13.3659C0.0519536 12.1454 0.0482829 10.9213 0.0134113 9.69524C-0.00127145 9.14464 0.196946 9.03268 0.703502 9.04736C9.21217 9.27128 16.5994 16.2511 17.2804 24.7231C17.418 26.4446 17.418 26.4446 15.6579 26.4446H14.832L14.8265 26.441Z">
+                            </path>
+                            <path d="M3.58928 26.4555C2.64447 26.4618 1.73584 26.0925 1.06329 25.4289C0.39073 24.7653 0.00933763 23.8617 0.0030097 22.9169C-0.00331824 21.9721 0.365937 21.0635 1.02954 20.3909C1.69315 19.7184 2.59675 19.337 3.54156 19.3306C4.48637 19.3243 5.39499 19.6936 6.06755 20.3572C6.7401 21.0208 7.1215 21.9244 7.12782 22.8692C7.13415 23.814 6.7649 24.7226 6.10129 25.3952C5.43768 26.0677 4.53409 26.4491 3.58928 26.4555Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI RSS feed</span>
+                    </a>
+                
+            </div>
+        </div>
+    
+
+    <div data-testid="gridContainer"
+         class="grid-container ncbi-footer__container">
+        <div class="grid-row ncbi-footer__main-content-container"
+             data-testid="grid">
+            
+                <div class="ncbi-footer__column">
+                    
+                        <p class="ncbi-footer__circled-icons-heading">
+                            Connect with NLM
+                        </p>
+                    
+
+                    <div class="ncbi-footer__circled-icons-list">
+                        
+                            <a href=https://twitter.com/nlm_nih class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="32"
+                                     height="32"
+                                     viewBox="0 0 40 40"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on X (formerly known as Twitter)</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.facebook.com/nationallibraryofmedicine class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="13"
+                                     height="24"
+                                     viewBox="0 0 13 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M4.11371 23.1369C4.11371 23.082 4.11371 23.0294 4.11371 22.9745V12.9411H0.817305C0.6709 12.9411 0.670898 12.9411 0.670898 12.8016C0.670898 11.564 0.670898 10.3287 0.670898 9.09341C0.670898 8.97903 0.705213 8.95158 0.815017 8.95158C1.8673 8.95158 2.91959 8.95158 3.97417 8.95158H4.12057V8.83263C4.12057 7.8055 4.12057 6.7738 4.12057 5.74897C4.1264 4.92595 4.31387 4.11437 4.66959 3.37217C5.12916 2.38246 5.94651 1.60353 6.95717 1.1921C7.64827 0.905008 8.3913 0.764035 9.13953 0.778051C10.0019 0.791777 10.8644 0.830666 11.7268 0.860404C11.8869 0.860404 12.047 0.894717 12.2072 0.90158C12.2964 0.90158 12.3261 0.940469 12.3261 1.02968C12.3261 1.5421 12.3261 2.05452 12.3261 2.56465C12.3261 3.16857 12.3261 3.7725 12.3261 4.37642C12.3261 4.48165 12.2964 4.51367 12.1912 4.51138C11.5369 4.51138 10.8804 4.51138 10.2261 4.51138C9.92772 4.51814 9.63058 4.5526 9.33855 4.61433C9.08125 4.6617 8.84537 4.78881 8.66431 4.97766C8.48326 5.16652 8.3662 5.40755 8.32972 5.66661C8.28476 5.89271 8.26027 6.1224 8.25652 6.35289C8.25652 7.19014 8.25652 8.02969 8.25652 8.86923C8.25652 8.89439 8.25652 8.91955 8.25652 8.95615H12.0219C12.1797 8.95615 12.182 8.95616 12.1614 9.10714C12.0768 9.76596 11.9876 10.4248 11.9029 11.0813C11.8312 11.6319 11.7626 12.1824 11.697 12.733C11.6719 12.9434 11.6787 12.9434 11.4683 12.9434H8.26338V22.899C8.26338 22.979 8.26338 23.0591 8.26338 23.1392L4.11371 23.1369Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on Facebook</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.youtube.com/user/NLMNIH class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="21"
+                                     height="15"
+                                     viewBox="0 0 21 15"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M19.2561 1.47914C18.9016 1.15888 18.5699 0.957569 17.2271 0.834039C15.5503 0.678484 13.2787 0.655608 11.563 0.65332H9.43556C7.71987 0.65332 5.4483 0.678484 3.77151 0.834039C2.43098 0.957569 2.097 1.15888 1.74242 1.47914C0.813665 2.32097 0.619221 4.62685 0.598633 6.89384C0.598633 7.31781 0.598633 7.74101 0.598633 8.16345C0.626084 10.4121 0.827391 12.686 1.74242 13.521C2.097 13.8412 2.4287 14.0425 3.77151 14.1661C5.4483 14.3216 7.71987 14.3445 9.43556 14.3468H11.563C13.2787 14.3468 15.5503 14.3216 17.2271 14.1661C18.5676 14.0425 18.9016 13.8412 19.2561 13.521C20.1712 12.6929 20.3725 10.451 20.3999 8.22064C20.3999 7.74025 20.3999 7.25986 20.3999 6.77946C20.3725 4.54907 20.1689 2.30724 19.2561 1.47914ZM8.55942 10.5311V4.65201L13.5601 7.50005L8.55942 10.5311Z"
+                                          fill="white" />
+                                </svg>
+                                <span class="usa-sr-only">NLM on YouTube</span>
+                            </a>
+                        
+                    </div>
+                </div>
+            
+
+            
+                <address class="ncbi-footer__address ncbi-footer__column">
+                    
+        <p>
+            <a class="usa-link usa-link--external"
+            href="https://www.google.com/maps/place/8600+Rockville+Pike,+Bethesda,+MD+20894/%4038.9959508,
+            -77.101021,17z/data%3D!3m1!4b1!4m5!3m4!1s0x89b7c95e25765ddb%3A0x19156f88b27635b8!8m2!3d38.9959508!
+            4d-77.0988323"
+            rel="noopener noreferrer" target="_blank">National Library of Medicine
+            <br/> 8600 Rockville Pike<br/> Bethesda, MD 20894</a>
+        </p>
+    
+                </address>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/web_policies.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Web Policies
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/institutes-nih/nih-office-director/office-communications-public-liaison/freedom-information-act-office" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            FOIA
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/vulnerability-disclosure-policy/index.html" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS Vulnerability Disclosure
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://support.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Help
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/accessibility.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Accessibility
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/careers/careers.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Careers
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+        </div>
+
+        
+            <div class="grid-row grid-col-12" data-testid="grid">
+                <ul class="ncbi-footer__bottom-links-list">
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NLM
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NIH
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.usa.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            USA.gov
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+    </div>
+</footer>
+
+    
+
+
+        
+        
+    
+  <script  type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/pinger/pinger.js"> </script>
+
+
+    
+        
+
+<button class="back-to-top" data-ga-category="pagination" data-ga-action="back_to_top">
+    <label>Back to Top</label>
+    <svg class="usa-icon order-0" aria-hidden="true" focusable="false" role="img">
+        <use xlink:href="/static/img/sprite.svg#arrow_upward"></use>
+    </svg>
+</button>
+    
+
+
+        
+    
+    
+    
+        
+    <script type="application/javascript">
+    window.ncbi = window.ncbi || {};
+    window.ncbi.pmc = window.ncbi.pmc || {};
+    window.ncbi.pmc.options = {
+        logLevel: 'INFO',
+        
+        staticEndpoint: '/static/',
+        
+        citeCookieName: 'pmc-cf',
+    };
+</script>
+    <script type="module" crossorigin="" src="/static/assets/base-133c6271.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/jquery/jquery-3.6.0.min.js">&#xA0;</script>
+    <script type="text/javascript">
+        jQuery.getScript("https://cdn.ncbi.nlm.nih.gov/core/alerts/alerts.js", function () {
+            galert(['div.nav_and_browser', 'div.header', '#universal_header', '.usa-banner', 'body > *:nth-child(1)'])
+        });
+    </script>
+
+
+    <script type="text/javascript">var exports = {};</script>
+     <script src="/static/CACHE/js/output.13b077bc3ffd.js"></script>
+
+    <script type="module" crossorigin="" src="/static/assets/article-44d04358.js"></script>
+    
+    
+
+    </body>
+</html>

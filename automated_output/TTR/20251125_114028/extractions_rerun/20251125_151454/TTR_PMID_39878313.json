@@ -1,0 +1,347 @@
+{
+  "paper_metadata": {
+    "pmid": "39878313",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ser77Tyr",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 35,
+        "demographics": "Mean age 62.5 \u00b1 6.7 years, 25 males (71.4%)",
+        "phenotype": "ATTRv amyloidosis, initial symptoms related to carpal tunnel syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 68,
+        "affected_count": 23,
+        "unaffected_count": 45,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.82,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "70 years",
+            "penetrance_percentage": 100,
+            "carriers_in_range": 68,
+            "affected_in_range": 68
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 62,
+          "age_at_onset": 57,
+          "age_at_diagnosis": 62,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Carpal tunnel syndrome, sensory disturbance",
+          "evidence_sentence": "Thirty\u2010five individuals were ATTRv amyloidosis patients (25 males, 71.4%), diagnosed at a mean age of 62.5\u2009\u00b1\u20096.7\u2009years."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 41,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Sixty individuals (27 males, 45%) were heterozygous carriers of one of the five TTR variants but did not fulfill the diagnostic criteria for ATTRv amyloidosis."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Ser77Tyr variant is associated with a high prevalence of ATTRv amyloidosis in the Jewish Yemenite population.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families, particularly in Jewish Yemenite families.",
+      "population_frequency": "Detected in 68 subjects of Jewish Yemenite descent.",
+      "evidence_level": "Strong evidence based on clinical presentation and family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Complete penetrance estimated at age 70.",
+      "key_quotes": [
+        "We estimated that in this population, complete penetrance of the disease occurs at approximately age 70\u2009years."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 35,
+        "demographics": "Mean age 62.5 \u00b1 6.7 years, 25 males (71.4%)",
+        "phenotype": "ATTRv amyloidosis, initial symptoms related to carpal tunnel syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 0,
+        "unaffected_count": 9,
+        "uncertain_count": null,
+        "penetrance_percentage": 0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 45,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Nine individuals, all of Muslim Arab origin, were detected with the Val122Ile variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile variant is the only variant detected in individuals of Arab ethnicity.",
+        "assays": []
+      },
+      "segregation_data": "Not reported to segregate with disease.",
+      "population_frequency": "Identified in 9 subjects of Arab ethnicity.",
+      "evidence_level": "Moderate evidence based on population frequency.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No affected individuals reported among carriers.",
+      "key_quotes": [
+        "Val122Ile was found in 9 (9.4%) subjects and was the only variant detected in individuals of Arab ethnicity."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 35,
+        "demographics": "Mean age 62.5 \u00b1 6.7 years, 25 males (71.4%)",
+        "phenotype": "ATTRv amyloidosis, initial symptoms related to carpal tunnel syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 7,
+        "affected_count": 0,
+        "unaffected_count": 7,
+        "uncertain_count": null,
+        "penetrance_percentage": 0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "The Thr60Ala (p.Thr80Ala) was the third most common variant, detected in seven subjects."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Thr60Ala variant is associated with ATTRv amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Not reported to segregate with disease.",
+      "population_frequency": "Detected in 7 subjects from a large Jewish family of Iraqi descent.",
+      "evidence_level": "Moderate evidence based on family data.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No affected individuals reported among carriers.",
+      "key_quotes": [
+        "The Thr60Ala (p.Thr80Ala) was the third most common variant, detected in seven subjects."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 35,
+        "demographics": "Mean age 62.5 \u00b1 6.7 years, 25 males (71.4%)",
+        "phenotype": "ATTRv amyloidosis, initial symptoms related to carpal tunnel syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 0,
+        "unaffected_count": 5,
+        "uncertain_count": null,
+        "penetrance_percentage": 0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Five individuals from three unrelated Jewish families, two of Ashkenazi ancestry and one originally from Tunisia, carried the Val30Met (p.Val50Met) variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met variant is associated with ATTRv amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Not reported to segregate with disease.",
+      "population_frequency": "Detected in 5 subjects from three unrelated Jewish families.",
+      "evidence_level": "Moderate evidence based on family data.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No affected individuals reported among carriers.",
+      "key_quotes": [
+        "Five individuals from three unrelated Jewish families, two of Ashkenazi ancestry and one originally from Tunisia, carried the Val30Met (p.Val50Met) variant."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val32Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 35,
+        "demographics": "Mean age 62.5 \u00b1 6.7 years, 25 males (71.4%)",
+        "phenotype": "ATTRv amyloidosis, initial symptoms related to carpal tunnel syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 0,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "The Val32Ala (p.Val52Ala) variant was identified in four of her family members."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val32Ala variant is associated with ATTRv amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Not reported to segregate with disease.",
+      "population_frequency": "Detected in 4 subjects from a single Jewish Iranian family.",
+      "evidence_level": "Moderate evidence based on family data.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No affected individuals reported among carriers.",
+      "key_quotes": [
+        "The Val32Ala (p.Val52Ala) variant was identified in four of her family members."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ala81Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 35,
+        "demographics": "Mean age 62.5 \u00b1 6.7 years, 25 males (71.4%)",
+        "phenotype": "ATTRv amyloidosis, initial symptoms related to carpal tunnel syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Two variants, Ala81Val (p.Ala101Val) and Glu89Val (p.Glu109Val) were identified, each in a single subject."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Ala81Val variant is associated with ATTRv amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Not reported to segregate with disease.",
+      "population_frequency": "Detected in 1 subject.",
+      "evidence_level": "Moderate evidence based on individual case.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No affected individuals reported among carriers.",
+      "key_quotes": [
+        "Two variants, Ala81Val (p.Ala101Val) and Glu89Val (p.Glu109Val) were identified, each in a single subject."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Glu89Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 35,
+        "demographics": "Mean age 62.5 \u00b1 6.7 years, 25 males (71.4%)",
+        "phenotype": "ATTRv amyloidosis, initial symptoms related to carpal tunnel syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Two variants, Ala81Val (p.Ala101Val) and Glu89Val (p.Glu109Val) were identified, each in a single subject."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Glu89Val variant is associated with ATTRv amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Not reported to segregate with disease.",
+      "population_frequency": "Detected in 1 subject.",
+      "evidence_level": "Moderate evidence based on individual case.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No affected individuals reported among carriers.",
+      "key_quotes": [
+        "Two variants, Ala81Val (p.Ala101Val) and Glu89Val (p.Glu109Val) were identified, each in a single subject."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Disease\u2010causing variants in TTR, identified among 95 clinically evaluated participants.",
+      "variants_extracted": 7
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 7,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text and tables."
+  }
+}

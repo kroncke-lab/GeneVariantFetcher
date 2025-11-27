@@ -1,0 +1,74 @@
+{
+  "paper_metadata": {
+    "pmid": null,
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 G1681A variant, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1681G>A",
+      "protein_notation": "p.Ala561Thr",
+      "genomic_position": "7q36.1",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Patient: 15 years, female; Mother: 55 years, female",
+        "phenotype": "Patient presented with 11 episodes of syncope and prolonged QTc interval; Mother is asymptomatic with prolonged QTc."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient",
+          "age_at_evaluation": 15,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "11 episodes of syncope, QTc interval up to 571 ms.",
+          "evidence_sentence": "The female LQT2 patient in this study presented at age of 15 years with 11 episodes of syncope in 12 months with seizure on occasions."
+        },
+        {
+          "individual_id": "Mother",
+          "age_at_evaluation": 55,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Asymptomatic carrier with prolonged QTc of up to 514 ms.",
+          "evidence_sentence": "The patient's mother (55 years) is an asymptomatic carrier of the same mutation and is not currently under treatment but does have a prolonged QTc of up to 514 ms."
+        }
+      ],
+      "functional_data": {
+        "summary": "The KCNH2 G1681A mutation leads to prolonged action potential duration in cardiomyocytes derived from patient-specific hiPSCs.",
+        "assays": [
+          "multi-electrode array analysis",
+          "patch-clamp analysis"
+        ]
+      },
+      "segregation_data": "The mutation segregates with disease in the family; the patient is affected while the mother is an unaffected carrier.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on clinical presentation and functional assays.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is located in the pore-forming region of the Ikr channel.",
+      "key_quotes": [
+        "The mutation causes an alanine to threonine substitution at position 561 of the encoded protein (p.Ala561Thr).",
+        "With a QTc >500 ms, a documented LQT2 gene mutation, and an adverse clinical history, the patient was felt to be at significant risk of a future arrhythmic event."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

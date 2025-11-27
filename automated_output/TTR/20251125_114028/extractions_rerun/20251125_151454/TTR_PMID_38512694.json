@@ -1,0 +1,28 @@
+{
+  "paper_metadata": {
+    "pmid": "38512694",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the impact of baseline neuropathy severity on vutrisiran treatment response in patients with hereditary transthyretin amyloidosis. No specific genetic variants in the TTR gene are mentioned in the text."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Baseline demographics and disease characteristics of patients across the NIS quartiles and the mITT population",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Treatment discontinuations across the NIS quartiles",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant data for the TTR gene."
+    ],
+    "notes": "The paper focuses on treatment response and does not detail specific TTR gene variants."
+  }
+}

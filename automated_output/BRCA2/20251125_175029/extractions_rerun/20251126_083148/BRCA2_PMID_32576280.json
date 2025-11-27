@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "32576280",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No BRCA2 variants were mentioned in the paper."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No BRCA2 variants were mentioned in the paper."
+    ],
+    "notes": "The paper did not provide any specific information on BRCA2 variants."
+  }
+}

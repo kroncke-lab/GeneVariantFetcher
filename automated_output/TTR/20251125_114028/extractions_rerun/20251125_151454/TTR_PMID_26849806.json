@@ -1,0 +1,127 @@
+{
+  "paper_metadata": {
+    "pmid": "26849806",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses various mutations in the TTR gene associated with hereditary transthyretin amyloidosis, focusing on the V30M mutation and several other non-V30M mutations."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.118G>A",
+      "protein_notation": "p.Val40Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 48,
+        "demographics": "Majority male, ages 26-82",
+        "phenotype": "ATTR amyloidosis, primarily cardiac and neuropathic symptoms"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 48,
+        "affected_count": 30,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 62.5,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 68,
+          "age_at_onset": 63,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac symptoms",
+          "evidence_sentence": "A total of 97% with type A and none of the patients with type B fibrils displayed 99mTc-DPD uptake at scintigraphy."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 65,
+          "age_at_onset": 60,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Neuropathy symptoms",
+          "evidence_sentence": "The V30M mutation (n\u2009=\u200948) dominated, but seven other non-V30M mutations were found."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V30M mutation is associated with a high degree of amyloid fibril formation.",
+        "assays": [
+          "Western blot",
+          "99mTc-DPD scintigraphy"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, particularly in those with early-onset symptoms.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Moderate evidence based on clinical presentation and family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study primarily focused on the V30M mutation, with additional non-V30M mutations mentioned.",
+      "key_quotes": [
+        "The V30M mutation (n\u2009=\u200948) dominated, but seven other non-V30M mutations were found.",
+        "None of the patients with type B fibrils displayed uptake of 99mTc-DPD at scintigraphy."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.163A>G",
+      "protein_notation": "p.Tyr55Cys",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Age 60, female",
+        "phenotype": "Cardiac symptoms"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 60,
+          "age_at_onset": 60,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac symptoms",
+          "evidence_sentence": "The Y114C mutation was noted in patients carrying the Y114C mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Y114C mutation is associated with amyloid fibril formation.",
+        "assays": [
+          "Western blot",
+          "99mTc-DPD scintigraphy"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Moderate evidence based on clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Y114C mutation is rare and associated with specific phenotypes.",
+      "key_quotes": [
+        "Type B fibrils have thus far only been found in predominantly early-onset V30M and in patients carrying the Y114C mutation."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table I",
+      "table_caption": "Patient characteristics.",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

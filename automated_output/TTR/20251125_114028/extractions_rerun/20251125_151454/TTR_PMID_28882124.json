@@ -1,0 +1,136 @@
+{
+  "paper_metadata": {
+    "pmid": "28882124",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR Ala97Ser mutation in Taiwanese patients with hereditary transthyretin-related amyloidosis (ATTR), detailing clinical presentations, penetrance data, and individual patient information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.289G>A",
+      "protein_notation": "p.Ala97Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 8,
+        "demographics": "61.7 \u00b1 5.5 years, 5 males and 3 females",
+        "phenotype": "Hereditary transthyretin-related amyloidosis (ATTR) with various symptoms including peripheral neuropathy, gastrointestinal issues, and cardiac involvement."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": 6,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 75.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 61,
+          "age_at_onset": 55,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Progressive tingling, occasional throbbing pain, paresthesia in feet, walking difficulty.",
+          "evidence_sentence": "All patients gradually developed peripheral neuropathy, including progressive tingling, occasional throbbing/shooting pain, or paresthesia/dysesthesia in the feet."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 37,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Normal nerve conduction study findings.",
+          "evidence_sentence": "In contrast, patient 2 had a normal nerve conduction study at the age of 37."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 72,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Developed higher degree AV block or complete BBB.",
+          "evidence_sentence": "The patients had developed higher degree AV block or complete BBB during the observation period."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Bilateral carpal tunnel syndrome.",
+          "evidence_sentence": "Bilateral carpal tunnel syndromes were detected in patients 4, 6 and 8."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Symptoms of heart failure.",
+          "evidence_sentence": "Cardiac involvement was common and could lead to symptoms of heart failure."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Positive for Congo red staining in colonic tissue biopsy.",
+          "evidence_sentence": "Colonic tissue biopsies were positive for Congo red staining in patients 6 and 7."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Symptoms of heart failure and elevated BNP levels.",
+          "evidence_sentence": "Patients 1, 5 and 7 presented with elevated brain natriuretic peptide (BNP) at levels up to 200, 108, and 232 pg/ml."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Symptoms of heart failure.",
+          "evidence_sentence": "Cardiac involvement was common and could lead to symptoms of heart failure."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR Ala97Ser mutation leads to amyloid fibril deposition, causing various clinical manifestations.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregates with disease in families, as family members with similar symptoms were observed in six patients (6/8, 75%).",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the importance of early diagnosis and recognition of symptoms for effective management.",
+      "key_quotes": [
+        "This study broadens the recognition of the initial signs and symptoms, including cardiographic findings and longitudinal manifestations in Taiwanese individuals with ATTR Ala97Ser mutation."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical course of patients with ATTR Ala97Ser mutation",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on the TTR Ala97Ser mutation."
+  }
+}

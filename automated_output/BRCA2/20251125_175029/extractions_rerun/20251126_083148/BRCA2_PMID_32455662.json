@@ -1,0 +1,198 @@
+{
+  "paper_metadata": {
+    "pmid": "32455662",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data from affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1859del",
+      "protein_notation": "p.Ile1859fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "43-year-old female",
+        "phenotype": "triple-negative breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient No. 1",
+          "age_at_evaluation": 43,
+          "age_at_onset": null,
+          "age_at_diagnosis": 43,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "right breast cancer (invasive ductal carcinoma, stage T2N0M0, triple-negative)",
+          "evidence_sentence": "Patient No. 1, a premenopausal 43-year-old woman, developed right breast cancer (invasive ductal carcinoma, stage T2N0M0, Figure 2) that was estrogen receptor (ER)-negative, progesterone receptor (PR)-negative, and human epidermal growth factor receptor 2 (HER2)-negative (i.e., triple-negative) in January 2016."
+        }
+      ],
+      "functional_data": {
+        "summary": "Frame shift mutation leading to truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in family history.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 2",
+      "additional_notes": "Patient underwent preventive salpingo-oophorectomy and right preventive mastectomy.",
+      "key_quotes": [
+        "This patient underwent preventive salpingo-oophorectomy and right preventive mastectomy."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1200_1201ins",
+      "protein_notation": "p.Asp1199_Cys1200insTer",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "36-year-old female",
+        "phenotype": "triple-negative breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient No. 2",
+          "age_at_evaluation": 36,
+          "age_at_onset": null,
+          "age_at_diagnosis": 36,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "triple-negative right breast cancer (invasive ductal carcinoma, stage T2N0M0)",
+          "evidence_sentence": "Patient No. 2, a 36-year-old woman, developed triple-negative right breast cancer (invasive ductal carcinoma, stage T2N0M0) in October 2015."
+        }
+      ],
+      "functional_data": {
+        "summary": "Insertion leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in family history.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Four years of routine follow-up revealed no evidence of disease.",
+      "key_quotes": [
+        "Four years of routine follow-up revealed no evidence of disease."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7480C>T",
+      "protein_notation": "p.Arg2494Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "31-year-old female",
+        "phenotype": "bilateral breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient No. 3",
+          "age_at_evaluation": 31,
+          "age_at_onset": null,
+          "age_at_diagnosis": 31,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "bilateral breast cancer (right invasive ductal carcinoma and left ductal carcinoma in situ)",
+          "evidence_sentence": "Patient No. 3, a 31-year-old woman, was diagnosed with bilateral breast cancer (right invasive ductal carcinoma and left ductal carcinoma in situ) in October 2011."
+        }
+      ],
+      "functional_data": {
+        "summary": "Base substitution leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in family history.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 6",
+      "additional_notes": "Patient underwent preventive bilateral salpingo-oophorectomy.",
+      "key_quotes": [
+        "This patient underwent preventive bilateral salpingo-oophorectomy and has been taking tamoxifen as adjuvant hormone therapy for 8 years."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1399C>T",
+      "protein_notation": "p.Lys467Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "35-year-old female",
+        "phenotype": "triple-negative breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient No. 4",
+          "age_at_evaluation": 35,
+          "age_at_onset": null,
+          "age_at_diagnosis": 35,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "left breast cancer (triple-negative) and subsequent right breast cancer",
+          "evidence_sentence": "Patient No. 4, a 35-year-old woman, developed left breast cancer (triple-negative) in October 2003."
+        }
+      ],
+      "functional_data": {
+        "summary": "Base substitution leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in family history.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 8",
+      "additional_notes": "No recurrence of breast cancer over a follow-up period of 126 months.",
+      "key_quotes": [
+        "There was no recurrence of breast cancer over a follow-up period of 126 months."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Summary of BRCA1 and BRCA2 mutations and variants of uncertain significance",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

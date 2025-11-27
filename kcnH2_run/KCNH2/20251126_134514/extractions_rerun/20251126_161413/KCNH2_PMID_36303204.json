@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "36303204",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.G2075A",
+      "protein_notation": "p.Arg692Gln",
+      "genomic_position": "chr7:150644473",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 patient, male, age 32",
+        "phenotype": "Brugada syndrome, ICD therapy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 18",
+          "age_at_evaluation": 32,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "ICD therapy",
+          "evidence_sentence": "KCNH2 (p.R692Q) may cause Brugada syndrome."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is predicted to be damaging based on computational tools.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not available",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is associated with Brugada syndrome.",
+      "key_quotes": [
+        "KCNH2 (p.R692Q) may cause Brugada syndrome."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.G481A",
+      "protein_notation": "p.Asp161Asn",
+      "genomic_position": "chr7:150649569",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 patient, female, age 16",
+        "phenotype": "Long QT syndrome, ICD therapy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 21",
+          "age_at_evaluation": 16,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ICD therapy",
+          "evidence_sentence": "KCNH2 (p.D161N) may lead to long QT syndrome."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is predicted to be damaging based on computational tools.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not available",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is associated with Long QT syndrome.",
+      "key_quotes": [
+        "KCNH2 (p.D161N) may lead to long QT syndrome."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.563_564del",
+      "protein_notation": "p.A188Gfs*143",
+      "genomic_position": "chr7:150655499",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 patient, age 16",
+        "phenotype": "Long QT syndrome, ICD therapy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 13",
+          "age_at_evaluation": 16,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ICD therapy",
+          "evidence_sentence": "A patient of LQTs carried a frameshift mutation of KCNH2 p.A188Gfs*143."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is predicted to result in a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not available",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is associated with Long QT syndrome.",
+      "key_quotes": [
+        "A patient of LQTs carried a frameshift mutation of KCNH2 p.A188Gfs*143."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "The known and likely pathogenic mutations of Brugada syndrome and long QT syndrome",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant KCNH2 variants were extracted successfully."
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "paper_metadata": {
+    "pmid": "37460984",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 9,
+        "demographics": "Median age 56 years, 6 males",
+        "phenotype": "ATTR cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 9,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Confirmed to have amyloidosis with positive immunohistochemical staining for Congo red and TTR.",
+          "evidence_sentence": "In addition, eight out of nine patients diagnosed with ATTR CA underwent TTR gene analysis, and all were found to have mutations in TTR."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Confirmed to have amyloidosis with positive immunohistochemical staining for Congo red and TTR.",
+          "evidence_sentence": "In addition, eight out of nine patients diagnosed with ATTR CA underwent TTR gene analysis, and all were found to have mutations in TTR."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Confirmed to have amyloidosis with positive immunohistochemical staining for Congo red and TTR.",
+          "evidence_sentence": "In addition, eight out of nine patients diagnosed with ATTR CA underwent TTR gene analysis, and all were found to have mutations in TTR."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Confirmed to have amyloidosis with positive immunohistochemical staining for Congo red and TTR.",
+          "evidence_sentence": "In addition, eight out of nine patients diagnosed with ATTR CA underwent TTR gene analysis, and all were found to have mutations in TTR."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Confirmed to have amyloidosis with positive immunohistochemical staining for Congo red and TTR.",
+          "evidence_sentence": "In addition, eight out of nine patients diagnosed with ATTR CA underwent TTR gene analysis, and all were found to have mutations in TTR."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Confirmed to have amyloidosis with positive immunohistochemical staining for Congo red and TTR.",
+          "evidence_sentence": "In addition, eight out of nine patients diagnosed with ATTR CA underwent TTR gene analysis, and all were found to have mutations in TTR."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Confirmed to have amyloidosis with positive immunohistochemical staining for Congo red and TTR.",
+          "evidence_sentence": "In addition, eight out of nine patients diagnosed with ATTR CA underwent TTR gene analysis, and all were found to have mutations in TTR."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Confirmed to have amyloidosis with positive immunohistochemical staining for Congo red and TTR.",
+          "evidence_sentence": "In addition, eight out of nine patients diagnosed with ATTR CA underwent TTR gene analysis, and all were found to have mutations in TTR."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Confirmed to have amyloidosis with positive immunohistochemical staining for Congo red and TTR.",
+          "evidence_sentence": "In addition, eight out of nine patients diagnosed with ATTR CA underwent TTR gene analysis, and all were found to have mutations in TTR."
+        }
+      ],
+      "functional_data": {
+        "summary": "All patients had positive immunohistochemical staining for Congo red and TTR.",
+        "assays": []
+      },
+      "segregation_data": "All patients with TTR mutations were diagnosed with ATTR CA.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All identified variants were confirmed in patients diagnosed with ATTR CA.",
+      "key_quotes": [
+        "Identified variants were p.Asp58Ala, p.Met33dup, p.Asp119Asn, p.Glu109Lys, and p.Thr79Lys, with p.Asp58Ala the most common variant (n\u2009=\u20094)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

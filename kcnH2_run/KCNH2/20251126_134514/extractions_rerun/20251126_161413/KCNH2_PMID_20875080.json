@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "20875080",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Arg176Trp",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "mean age of 40 \u00b1 16 years",
+        "phenotype": "Sudden Unexpected Death in Epilepsy (SUDEP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Sudden Unexpected Death in Epilepsy (SUDEP)",
+          "evidence_sentence": "Specifically, KCNH2 Arg176Trp and SCN5A Pro1090Leu were identified once in SUDEP cases and absent in control alleles."
+        }
+      ],
+      "functional_data": {
+        "summary": "Variant previously identified in the pathogenesis of LQTS.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Absent in control alleles",
+      "evidence_level": "Strong evidence based on previous reports",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variant identified in the context of SUDEP.",
+      "key_quotes": [
+        "Genetic analysis revealed 6 (13%) non\u2010synonymous (amino acid changing) variants in KCNH2 (n = 2) and SCN5A (n = 4), all previously reported in LQTS patients."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data extracted from the main text with no supplementary tables available."
+  }
+}

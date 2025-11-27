@@ -1,0 +1,75 @@
+{
+  "paper_metadata": {
+    "pmid": "23387326",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR gene, specifically the V30M mutation, and provides penetrance data for carriers of this variant."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 200,
+        "demographics": "asymptomatic (n = 180), symptomatic heterozygotic (n = 12), homozygotic (n = 3)",
+        "phenotype": "familial amyloidotic polyneuropathy (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 200,
+        "affected_count": 12,
+        "unaffected_count": 188,
+        "uncertain_count": null,
+        "penetrance_percentage": 6.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic heterozygotic carrier",
+          "evidence_sentence": "Plasma from asymptomatic V30M carriers (n = 200) and symptomatic heterozygotic (n = 12) were tested."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic carrier",
+          "evidence_sentence": "Plasma samples from asymptomatic (n = 180) were obtained."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V30M mutation leads to the production of a glycosylated form of TTR that is detectable in plasma.",
+        "assays": [
+          "ELISA",
+          "immunoblotting",
+          "mass spectrometry"
+        ]
+      },
+      "segregation_data": "The V30M mutation segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the presence of a slow migrating TTR band in V30M carriers.",
+      "key_quotes": [
+        "The intensity of the reaction did not correlate between hetero and homozygotic patients.",
+        "Plasma from asymptomatic V30M carriers (n = 200) and symptomatic heterozygotic (n = 12) were tested."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on the TTR gene and provided clear data."
+  }
+}

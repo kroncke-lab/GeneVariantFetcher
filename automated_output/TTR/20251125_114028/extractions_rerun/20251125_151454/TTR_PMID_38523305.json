@@ -1,0 +1,165 @@
+{
+  "paper_metadata": {
+    "pmid": "38523305",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.133T>C",
+      "protein_notation": "p.Phe44Leu",
+      "genomic_position": null,
+      "clinical_significance": "Conflicting classifications of pathogenicity",
+      "patients": {
+        "count": 2,
+        "demographics": "Age: 58.8 (mean), Sex: 100% Female, Ethnicity: African",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 58,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "Phe44Leu was observed only in AFR individuals."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Conflicting classifications of pathogenicity",
+      "source_location": "Table 1, Row 1",
+      "additional_notes": "No associations were observed with respect to TTR Phe44Leu variant.",
+      "key_quotes": [
+        "Phe44Leu was observed only in AFR individuals."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.241C>T",
+      "protein_notation": "p.Ala81Thr",
+      "genomic_position": null,
+      "clinical_significance": "Conflicting classifications of pathogenicity",
+      "patients": {
+        "count": 5,
+        "demographics": "Age: 56.8 (mean), Sex: 55% Female, Ethnicity: European",
+        "phenotype": "Respiratory outcomes, atrioventricular block"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Conflicting classifications of pathogenicity",
+      "source_location": "Table 1, Row 2",
+      "additional_notes": "Ala81Thr showed multiple associations with respiratory outcomes.",
+      "key_quotes": [
+        "the strongest association was with atrioventricular block (phecode 426.2, p\u2009=\u20092.81\u2009\u00d7\u200910\u2212\u20094)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.269A>C",
+      "protein_notation": "p.His90Asn",
+      "genomic_position": null,
+      "clinical_significance": "Conflicting classifications of pathogenicity",
+      "patients": {
+        "count": 5,
+        "demographics": "Age: 57 (mean), Sex: 100% Female, Ethnicity: Central-South Asian and Middle Eastern",
+        "phenotype": "Dermatologic outcomes, neoplasms"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Conflicting classifications of pathogenicity",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "His90Asn mutation was associated with dermatologic outcomes.",
+      "key_quotes": [
+        "His90Asn mutation was associated with dermatologic outcomes (fold-enrichment\u2009=\u200928, p\u2009=\u20090.001)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 54,
+        "demographics": "Age: 52.8 (mean), Sex: 100% Female, Ethnicity: African, Admixed-American, Central-South Asian, European, Middle Eastern",
+        "phenotype": "Circulatory system disorders, peripheral nerve disorders"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 54,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Pathogenic",
+      "source_location": "Table 1, Row 4",
+      "additional_notes": "Val122Ile mutation was linked to multiple outcomes related to the circulatory system.",
+      "key_quotes": [
+        "Val122Ile mutation was linked to multiple outcomes related to the circulatory system."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "TTR amyloidogenic mutations and matched controls from UKB.",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for TTR variants were extracted successfully."
+  }
+}

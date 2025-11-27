@@ -1,0 +1,74 @@
+{
+  "paper_metadata": {
+    "pmid": "36923113",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.424G>A",
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "67-year-old Black man, 71-year-old Black man",
+        "phenotype": "dilated cardiomyopathy attributed to amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient 1",
+          "age_at_evaluation": 67,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "dilated cardiomyopathy with severe LV dilation and reduced EF",
+          "evidence_sentence": "Genetic testing revealed a pathogenic TTR c.424G > A mutation."
+        },
+        {
+          "individual_id": "Patient 3",
+          "age_at_evaluation": 71,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "non-ischaemic dilated cardiomyopathy attributed to amyloidosis",
+          "evidence_sentence": "Mass spectrometry showed Val142Ile and genetic testing revealed the pathogenic TTR c.424G > A variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val142Ile variant is associated with TTR amyloidosis and has been implicated in the development of dilated cardiomyopathy.",
+        "assays": [
+          "mass spectrometry",
+          "genetic testing"
+        ]
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Common in Black patients, approximately 3% carrier frequency.",
+      "evidence_level": "Strong evidence based on clinical presentation and genetic testing.",
+      "source_location": "Results, Patient 1 and Patient 3 sections",
+      "additional_notes": "Both patients developed complications commonly seen in amyloidosis.",
+      "key_quotes": [
+        "The pathogenic Val142Ile variant seen in two of these patients, a variant common in Black patients, suggests a need for further investigation into the potential relationship between TTRv amyloidosis and dilated cardiomyopathy.",
+        "Genetic testing revealed a pathogenic TTR c.424G > A mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

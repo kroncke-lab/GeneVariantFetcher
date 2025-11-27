@@ -1,0 +1,55 @@
+{
+  "paper_metadata": {
+    "pmid": "37691654",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the KCNH2 gene and specifically the G572R variant associated with Long QT syndrome type 2 (LQT2). It provides insights into the functional effects of the variant and potential therapeutic interventions."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1715G>A",
+      "protein_notation": "p.Gly572Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "Long QT syndrome type 2 (LQT2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The G572R variant causes hERG transport disorders by stimulating the endoplasmic reticulum stress (ERS) response.",
+        "assays": [
+          "whole-cell patch-clamp experiment",
+          "western blot (WB)",
+          "quantitative real-time polymerase chain reaction (qPCR)",
+          "co-immunoprecipitation (co-IP)"
+        ]
+      },
+      "segregation_data": "The G572R variant is a Mendelian inherited disease and exhibits a dominant negative effect when coexpressed with the wild type.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on functional assays and clinical correlation with LQT2.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study suggests that 4-PBA may be a therapeutic agent for correcting the transport defects caused by the G572R variant.",
+      "key_quotes": [
+        "hERG mutations in LQT2 cause hERG transport disorders by stimulating the endoplasmic reticulum stress (ERS) response, such as point mutation hERG/G572R.",
+        "hERG/G572R is a Mendelian inherited disease, and when mutated genes are coexpressed with normally functioning wild type (WT) gene subunits to form alleles, they cause a significant dominant negative suppressor effect."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on the KCNH2 gene and its G572R variant."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "paper_metadata": {
+    "pmid": "26779294",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper investigates the role of BRCA1 and BRCA2 mutations in gastric cancer in the Polish population. No BRCA2 variants were detected in the study cohort."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "The clinicopathological features of GC patients",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No BRCA2 variants were reported in the study cohort."
+    ],
+    "notes": "The study focused on BRCA1 and BRCA2 mutations but did not find any BRCA2 variants in the gastric cancer patients."
+  }
+}

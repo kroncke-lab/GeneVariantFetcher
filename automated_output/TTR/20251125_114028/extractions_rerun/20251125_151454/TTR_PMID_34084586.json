@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "34084586",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 120,
+        "demographics": "not specified",
+        "phenotype": "ATTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Over 120 different mutations in the TTR gene.",
+        "assays": []
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Main Text, ATTR amyloidosis section",
+      "additional_notes": "Most common ATTR mutations include TTR T60A, TTR V30M, and TTR V122I.",
+      "key_quotes": [
+        "There are over 120 different mutations in the TTR gene, but the most common ATTR mutations are the ATTR T60A variant, ATTR V30M variant, and ATTR V122I variant."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant type was mentioned without specific cDNA or protein notation."
+  }
+}

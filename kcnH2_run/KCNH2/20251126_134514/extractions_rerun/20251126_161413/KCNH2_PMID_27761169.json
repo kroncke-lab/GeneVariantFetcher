@@ -1,0 +1,66 @@
+{
+  "paper_metadata": {
+    "pmid": "27761169",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper reports a novel mutation A78T in the KCNH2 gene associated with Long QT Syndrome Type 2 (LQT2) in a 7-year-old boy."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.G232A",
+      "protein_notation": "p.Ala78Thr",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "7-year-old male",
+        "phenotype": "Long QT Syndrome Type 2 (LQT2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 7,
+          "age_at_onset": null,
+          "age_at_diagnosis": 7,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "QT interval was 535 ms and QT interval corrected for heart rate was 496 ms.",
+          "evidence_sentence": "A 7-year-old boy was diagnosed with LQT2. The QT interval was 535 ms and the QT interval corrected for heart rate was 496 ms."
+        }
+      ],
+      "functional_data": {
+        "summary": "The A78T-HERG protein showed reduced stability and failed to transfer to the plasma membrane, with significant ubiquitination and impaired maturation.",
+        "assays": [
+          "immunoblotting",
+          "immunoprecipitation",
+          "immunofluorescence",
+          "whole-cell patch clamping"
+        ]
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The mutation was characterized by protein instability and reduced expression on the plasma membrane.",
+      "key_quotes": [
+        "A78T-HERG was characterized by protein instability and reduced expression on the plasma membrane.",
+        "Direct sequencing of HERG (KCNH2) alleles identified the mutation G232A (A78T) in one allele."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information regarding the KCNH2 variant."
+  }
+}

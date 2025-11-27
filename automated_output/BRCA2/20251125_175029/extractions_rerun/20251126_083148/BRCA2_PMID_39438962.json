@@ -1,0 +1,272 @@
+{
+  "paper_metadata": {
+    "pmid": "39438962",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6024dupG",
+      "protein_notation": "p.Gln2009AlafsTer",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 6,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Detected in one family, accounting for 12.5% of this subgroup.",
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was detected in multiple families.",
+      "key_quotes": [
+        "The pathogenic variant c.6024dupG in the BRCA2 gene was detected in 6 unrelated families."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2808_2811delACAA",
+      "protein_notation": "p.Lys936Glnfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was found in 5 different families.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2457delA",
+      "protein_notation": "p.Asp820MetfsTer",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was found in 2 different families.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2701delC",
+      "protein_notation": "p.Ala902LeufsTer",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was found in 2 different families.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5116_5119delAATA",
+      "protein_notation": "p.Asn1706LeufsTer",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was found in 2 different families.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6275delTT",
+      "protein_notation": "p.Leu2092ProfsTer",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was found in 2 different families.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7558 C>T",
+      "protein_notation": "p.Arg2520Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was found in 2 different families.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7617+1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was found in 2 different families.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 4",
+      "table_caption": "Germline pathogenic variants of BRCA2 in breast and ovarian cancer families in La Rioja",
+      "variants_extracted": 8
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 8,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

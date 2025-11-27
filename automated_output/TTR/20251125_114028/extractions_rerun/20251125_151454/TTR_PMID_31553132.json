@@ -1,0 +1,221 @@
+{
+  "paper_metadata": {
+    "pmid": "31553132",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 3856,
+        "demographics": "African Americans, predominantly over 60 years of age",
+        "phenotype": "late-onset restrictive cardiomyopathy, mimicking hypertensive cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3856,
+        "affected_count": 3,
+        "unaffected_count": 3853,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.078,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "60+ years",
+            "penetrance_percentage": 0.078,
+            "carriers_in_range": 3856,
+            "affected_in_range": 3
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "typical echocardiographic findings characteristic of CA",
+          "evidence_sentence": "Echocardiogram revealed that only three (7%) carriers had typical echocardiographic findings characteristic of CA."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "typical echocardiographic findings characteristic of CA",
+          "evidence_sentence": "Echocardiogram revealed that only three (7%) carriers had typical echocardiographic findings characteristic of CA."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "typical echocardiographic findings characteristic of CA",
+          "evidence_sentence": "Echocardiogram revealed that only three (7%) carriers had typical echocardiographic findings characteristic of CA."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile variant is associated with a significantly increased risk of heart failure.",
+        "assays": []
+      },
+      "segregation_data": "The Val122Ile variant segregates with disease in families.",
+      "population_frequency": "3.4% in African Americans",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is predominantly associated with late-onset restrictive cardiomyopathy.",
+      "key_quotes": [
+        "The Val122Ile variant is the most frequent form of TTR amyloid in the USA and prevalent in 3.4% of African Americans.",
+        "A prospective observational Atherosclerosis Risk in Communities study, which analysed 3856 African Americans, reported a low clinical penetrance of the disease."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.179C>T",
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "population of Northwestern Ireland",
+        "phenotype": "both neurologic and cardiac phenotypes"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Thr60Ala variant causes both neurologic and cardiac phenotypes, with symptom onset mainly between 50 and 60 years of age.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "up to 1% in Northwestern Ireland",
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant has a later onset compared to other variants.",
+      "key_quotes": [
+        "The Thr60Ala variant, the second most frequent form of TTR amyloid in the USA, affects up to 1% of the population of Northwestern Ireland.",
+        "The Thr60Ala variant causes both neurologic and cardiac phenotypes, and symptom onset mainly occurs between 50 and 60 years of age."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.202A>T",
+      "protein_notation": "p.Ile68Leu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "central-northern Italy",
+        "phenotype": "exclusively cardiac phenotype with male predominance"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Ile68Leu variant shows exclusively cardiac phenotype with male predominance and age-dependent penetrance.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is endemic in central-northern Italy.",
+      "key_quotes": [
+        "The Ile68Leu variant is endemic in central-northern Italy and shows exclusively cardiac phenotype with male predominance and age-dependent penetrance."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.332T>C",
+      "protein_notation": "p.Leu111Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "Danish families",
+        "phenotype": "exclusively cardiac phenotype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Patients with the Leu111Met variant were significantly younger at symptom onset compared to other known cardiac variants.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant has only been found in Danish families.",
+      "key_quotes": [
+        "In Denmark, the Leu111Met variant, which shows exclusively cardiac phenotype, has only been found in Danish families."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.90G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "endemic regions in Portugal, Brazil, and Japan",
+        "phenotype": "neurologic phenotype in early-onset cases, cardiac phenotype in late-onset cases"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val30Met variant is the most frequent form of TTR amyloid in Europe and is associated with both neurologic and cardiac phenotypes depending on the population.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant has a bimodal distribution of onset age in Japan.",
+      "key_quotes": [
+        "The Val30Met variant, known as transthyretin familial amyloid polyneuropathy (ATTR\u2010FAP), is the most frequent form of TTR amyloid in Europe and other countries."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted with detailed penetrance data."
+  }
+}

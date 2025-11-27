@@ -1,0 +1,486 @@
+{
+  "paper_metadata": {
+    "pmid": "29802286",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.53G>A",
+      "protein_notation": "p.Arg18His",
+      "genomic_position": null,
+      "clinical_significance": "benign",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 29",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2R18H was enriched in tumor tissues."
+        }
+      ],
+      "functional_data": {
+        "summary": "Predicted to be benign.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.00004",
+      "evidence_level": "low",
+      "source_location": "Table 1, Row 2",
+      "additional_notes": "",
+      "key_quotes": [
+        "BRCA2R18H was enriched in tumor tissues."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.551T>C",
+      "protein_notation": "p.Leu184Pro",
+      "genomic_position": null,
+      "clinical_significance": "conflicting interpretations of pathogenicity",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2L184P was found in a patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Predicted to be damaging.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.00006",
+      "evidence_level": "medium",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.623T>G",
+      "protein_notation": "p.Val208Gly",
+      "genomic_position": null,
+      "clinical_significance": "uncertain significance",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 32",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2V208G was found in a patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Predicted to be damaging.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.00006",
+      "evidence_level": "medium",
+      "source_location": "Table 1, Row 4",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.964A>C",
+      "protein_notation": "p.Lys322Gln",
+      "genomic_position": null,
+      "clinical_significance": "uncertain significance",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2K322Q was found in a patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Predicted to be damaging.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.00006",
+      "evidence_level": "medium",
+      "source_location": "Table 1, Row 5",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1744A>C",
+      "protein_notation": "p.Thr582Pro",
+      "genomic_position": null,
+      "clinical_significance": "uncertain significance",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2T582P was found in a patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Predicted to be damaging.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.0002",
+      "evidence_level": "medium",
+      "source_location": "Table 1, Row 6",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2350A>G",
+      "protein_notation": "p.Met784Val",
+      "genomic_position": null,
+      "clinical_significance": "benign",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 19",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2M784V was found in a patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Predicted to be benign.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.0003",
+      "evidence_level": "low",
+      "source_location": "Table 1, Row 7",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2396A>G",
+      "protein_notation": "p.Lys799Arg",
+      "genomic_position": null,
+      "clinical_significance": "benign",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 28",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2K799R was found in a patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Predicted to be benign.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 1, Row 8",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6131G>T",
+      "protein_notation": "p.Gly2044Val",
+      "genomic_position": null,
+      "clinical_significance": "benign",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2G2044V was found in a patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Predicted to be benign.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.00004",
+      "evidence_level": "low",
+      "source_location": "Table 1, Row 9",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6444_6445del",
+      "protein_notation": "p.Ser2148fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 24",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2S2148fs was known to be pathogenic."
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Table 1, Row 10",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8891G>T",
+      "protein_notation": "p.Arg2964Thr",
+      "genomic_position": null,
+      "clinical_significance": "uncertain significance",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 35",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2R2964T was found in a patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Predicted to be damaging.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Table 1, Row 11",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9875C>T",
+      "protein_notation": "p.Pro3292Leu",
+      "genomic_position": null,
+      "clinical_significance": "uncertain significance",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "One patient (Case 11) harbored multiple germline mutations: BRCA2K322Q and BRCA2P3292L."
+        }
+      ],
+      "functional_data": {
+        "summary": "Predicted to be damaging.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Table 1, Row 12",
+      "additional_notes": "",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Mutations in BRCA pathway genes in pancreatic ductal adenocarcinoma.",
+      "variants_extracted": 11
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 11,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

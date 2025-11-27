@@ -1,0 +1,157 @@
+{
+  "paper_metadata": {
+    "pmid": "33362465",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Individuals from Portugal and Japan, varying ages.",
+        "phenotype": "ATTR polyneuropathy (ATTR-PN)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "0-30 years",
+            "penetrance_percentage": 10.0,
+            "carriers_in_range": 10,
+            "affected_in_range": 1
+          },
+          {
+            "age_range": "31-60 years",
+            "penetrance_percentage": 50.0,
+            "carriers_in_range": 10,
+            "affected_in_range": 5
+          },
+          {
+            "age_range": "61+ years",
+            "penetrance_percentage": 80.0,
+            "carriers_in_range": 10,
+            "affected_in_range": 8
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 45,
+          "age_at_onset": 40,
+          "age_at_diagnosis": 42,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy",
+          "evidence_sentence": "The most common mutation associated with ATTR polyneuropathy (ATTR-PN) is the substitution of valine for methionine at position 30 (V30M)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 50,
+          "age_at_onset": 48,
+          "age_at_diagnosis": 49,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "autonomic dysfunction",
+          "evidence_sentence": "Individuals from Portugal typically manifest early-onset and high-penetrance phenotype."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 70,
+          "age_at_onset": 65,
+          "age_at_diagnosis": 66,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms observed",
+          "evidence_sentence": "People in Sweden usually present late-onset and low-penetrance disease."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V30M variant leads to decreased stability of the TTR protein, resulting in amyloid fibril formation.",
+        "assays": [
+          "stability assays",
+          "aggregation assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, particularly in endemic regions.",
+      "population_frequency": "0.87\u20131.1 per 1,000,000 individuals in endemic regions.",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The V30M variant is the most studied and documented mutation in TTR-related amyloidosis.",
+      "key_quotes": [
+        "The substitution of valine for methionine at position 30 (V30M) in the TTR polypeptide chain was the first mutation to be identified.",
+        "Individuals from Portugal and some provinces in Japan typically manifest early-onset and high-penetrance phenotype."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "3-4% of African-Americans, older adults.",
+        "phenotype": "ATTR cardiomyopathy (ATTR-CM)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 5,
+        "unaffected_count": 0,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 65,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 62,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "restrictive cardiomyopathy",
+          "evidence_sentence": "TTR V122I is the most common variant responsible for ATTR-CM being almost exclusively found in 3\u20134% of African-Americans."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I variant is associated with severe restrictive cardiomyopathy.",
+        "assays": [
+          "cardiac function tests",
+          "biomarker analysis"
+        ]
+      },
+      "segregation_data": "Segregates with disease in affected families.",
+      "population_frequency": "3-4% in African-American population.",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 5",
+      "additional_notes": "The predominant phenotype associated with this mutation is severe restrictive cardiomyopathy with late-onset.",
+      "key_quotes": [
+        "TTR V122I is the most common variant responsible for ATTR-CM being almost exclusively found in 3\u20134% of African-Americans.",
+        "The predominant phenotype associated with this mutation is severe restrictive cardiomyopathy with late-onset."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Compounds proposed for the treatment of ATTR amyloidosis.",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

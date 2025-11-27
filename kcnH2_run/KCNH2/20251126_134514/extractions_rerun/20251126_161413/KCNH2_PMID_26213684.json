@@ -1,0 +1,188 @@
+{
+  "paper_metadata": {
+    "pmid": "26213684",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1956G>A",
+      "protein_notation": "p.Ser654Gly",
+      "genomic_position": null,
+      "clinical_significance": "class I",
+      "patients": {
+        "count": 5,
+        "demographics": "Family members including a 15-year-old boy (proband), two sisters, and parents.",
+        "phenotype": "Only the proband presented with LQTS clinically."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 1,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 20.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Proband",
+          "age_at_evaluation": 15,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Diagnosed with LQTS after presport ECG screening.",
+          "evidence_sentence": "The proband in this study is a healthy 15-year-old boy with no history of syncope diagnosed with LQTS after presport ECG screening."
+        },
+        {
+          "individual_id": "Sister 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Had normal QTc at baseline and during exercise.",
+          "evidence_sentence": "Sister 2 (KCNH2-A013V) had normal QTc at baseline (0.42 second)."
+        },
+        {
+          "individual_id": "Mother",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No history of LQTS despite carrying the mutation.",
+          "evidence_sentence": "The mother\u2019s genotype, both SCN5A-F1596I and KCNH2-S654G, increased APD90 by approximately 75 ms."
+        },
+        {
+          "individual_id": "Father",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No history of LQTS despite carrying the mutation.",
+          "evidence_sentence": "The father/sister hERG-A913V gives an approximately 30-ms prolongation of APD."
+        },
+        {
+          "individual_id": "Sister 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Had normal QTc at baseline and during exercise.",
+          "evidence_sentence": "Sister 1 (SCN5A-F1596I) had normal QTc at baseline (0.41 second)."
+        }
+      ],
+      "functional_data": {
+        "summary": "hERG-S654G showed a distinct loss of function, with tail current density decreased approximately 70%.",
+        "assays": [
+          "Functional characterization in HEK293 cells"
+        ]
+      },
+      "segregation_data": "The KCNH2-S654G mutation does not segregate with disease in the family as only the proband is affected.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on functional characterization.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The presence of KCNH2-S654G alone is insufficient to cause LQTS without the combination of other mutations.",
+      "key_quotes": [
+        "This combination explains the LQTS seen in the proband, who therefore presents with a polygenic case of LQTS."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2738G>A",
+      "protein_notation": "p.Ala913Val",
+      "genomic_position": null,
+      "clinical_significance": "class II",
+      "patients": {
+        "count": 5,
+        "demographics": "Family members including a 15-year-old boy (proband), two sisters, and parents.",
+        "phenotype": "Only the proband presented with LQTS clinically."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 1,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 20.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Proband",
+          "age_at_evaluation": 15,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Diagnosed with LQTS after presport ECG screening.",
+          "evidence_sentence": "The proband in this study is a healthy 15-year-old boy with no history of syncope diagnosed with LQTS after presport ECG screening."
+        },
+        {
+          "individual_id": "Sister 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Had normal QTc at baseline and during exercise.",
+          "evidence_sentence": "Sister 2 (KCNH2-A013V) had normal QTc at baseline (0.42 second)."
+        },
+        {
+          "individual_id": "Mother",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No history of LQTS despite carrying the mutation.",
+          "evidence_sentence": "The mother\u2019s genotype, both SCN5A-F1596I and KCNH2-S654G, increased APD90 by approximately 75 ms."
+        },
+        {
+          "individual_id": "Father",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No history of LQTS despite carrying the mutation.",
+          "evidence_sentence": "The father/sister hERG-A913V gives an approximately 30-ms prolongation of APD."
+        },
+        {
+          "individual_id": "Sister 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Had normal QTc at baseline and during exercise.",
+          "evidence_sentence": "Sister 1 (SCN5A-F1596I) had normal QTc at baseline (0.41 second)."
+        }
+      ],
+      "functional_data": {
+        "summary": "hERG-A913V resulted in a 37% decrease in tail current.",
+        "assays": [
+          "Functional characterization in HEK293 cells"
+        ]
+      },
+      "segregation_data": "The KCNH2-A913V mutation does not segregate with disease in the family as only the proband is affected.",
+      "population_frequency": null,
+      "evidence_level": "Low evidence based on minor biophysical changes.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The presence of KCNH2-A913V alone is insufficient to cause LQTS without the combination of other mutations.",
+      "key_quotes": [
+        "It seems this mutation alone is insufficient to lead to an LQT phenotype, experimentally and phenotypically."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted successfully."
+  }
+}

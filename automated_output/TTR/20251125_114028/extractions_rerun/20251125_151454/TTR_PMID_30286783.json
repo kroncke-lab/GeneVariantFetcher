@@ -1,0 +1,23 @@
+{
+  "paper_metadata": {
+    "pmid": "30286783",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the investigation of TTR mutations in a cohort of Italian patients with undiagnosed axonal sensory-motor neuropathy, classified as CMT2. No TTR pathogenic variants were found in this cohort."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Main clinical features",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No TTR variants were reported in the study cohort."
+    ],
+    "notes": "The study focused on screening for TTR mutations in a specific patient cohort but did not identify any TTR variants."
+  }
+}

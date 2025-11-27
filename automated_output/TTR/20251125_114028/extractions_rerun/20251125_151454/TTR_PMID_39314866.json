@@ -1,0 +1,101 @@
+{
+  "paper_metadata": {
+    "pmid": "39314866",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the Gly103Arg variant in the TTR gene, detailing its clinical significance, penetrance data, and individual case reports."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.307G>C",
+      "protein_notation": "p.G103R",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 44,
+        "demographics": "Mean age 39.1 \u00b1 4.27 years, 21 males and 23 females, all from China",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTRv) with symptoms including blurred vision, vitreous opacity, and peripheral neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 44,
+        "affected_count": 21,
+        "unaffected_count": 23,
+        "uncertain_count": null,
+        "penetrance_percentage": 47.73,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "III-5",
+          "age_at_evaluation": 48,
+          "age_at_onset": 45,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Severe peripheral neuropathy, blurred vision, vitreous opacity",
+          "evidence_sentence": "The proband was a 48-year-old male diagnosed with ATTRv due to the Gly103Arg variant, who had severe peripheral neuropathy."
+        },
+        {
+          "individual_id": "II-6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "History of vitreous opacity and lower extremity weakness",
+          "evidence_sentence": "The proband\u2019s mother (II-6), maternal uncle (II-9), and eldest brother (III-1) had a history of vitreous opacity and lower extremity weakness."
+        },
+        {
+          "individual_id": "II-9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "History of vitreous opacity and lower extremity weakness",
+          "evidence_sentence": "The proband\u2019s mother (II-6), maternal uncle (II-9), and eldest brother (III-1) had a history of vitreous opacity and lower extremity weakness."
+        },
+        {
+          "individual_id": "III-1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "History of vitreous opacity and lower extremity weakness",
+          "evidence_sentence": "The proband\u2019s mother (II-6), maternal uncle (II-9), and eldest brother (III-1) had a history of vitreous opacity and lower extremity weakness."
+        },
+        {
+          "individual_id": "IV-1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms",
+          "evidence_sentence": "His niece (IV-1) did not have any symptoms."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Gly103Arg variant leads to instability in the TTR protein structure, causing amyloid deposition.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Gly103Arg variant is unique to the Chinese population, frequently occurring in southern China.",
+      "key_quotes": [
+        "The Gly103Arg variant is unique to the Chinese population, frequently occurring in southern China.",
+        "The initial clinical manifestations were primarily blurred vision, with only one case presenting with numbness of the upper limbs."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

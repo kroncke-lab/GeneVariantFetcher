@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "31297148",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2948C>T",
+      "protein_notation": "p.Thr983Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "arrhythmogenic disorders like QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The T983I variant in KCNH2 is associated with arrhythmogenic disorders.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Not specified",
+      "source_location": "Genome editing and stem cell differentiation section",
+      "additional_notes": "The variant is linked to long-QT syndrome.",
+      "key_quotes": [
+        "genetic variants of missense mutations (T983I) in the KCNH2 (LQT2) gene frequently relate to and arrhythmogenic disorders like QT syndrome"
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in KCNH2 was found in the text."
+  }
+}

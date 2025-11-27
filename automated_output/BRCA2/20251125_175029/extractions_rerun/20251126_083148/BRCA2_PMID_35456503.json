@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "35456503",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants and penetrance data from the paper."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1938C>T",
+      "protein_notation": "p.Ser646Ser",
+      "genomic_position": null,
+      "clinical_significance": "benign",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "PT0198",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 45,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "diagnosed with HGSC",
+          "evidence_sentence": "Interestingly, this case (PT0198) had previously been reported as negative for pathogenic variants in BRCA1 or BRCA2 as well as in MLH1, MSH2, MSH6 and PMS2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is classified as benign.",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was found in one of the familial OC carrier cases.",
+      "key_quotes": [
+        "Interestingly, this case (PT0198) had previously been reported as negative for pathogenic variants in BRCA1 or BRCA2."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was reported in the paper."
+  }
+}

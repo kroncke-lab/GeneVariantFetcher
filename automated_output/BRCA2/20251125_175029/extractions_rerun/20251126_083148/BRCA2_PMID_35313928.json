@@ -1,0 +1,146 @@
+{
+  "paper_metadata": {
+    "pmid": "35313928",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4075delGT",
+      "protein_notation": "p.Val1283fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 2",
+      "additional_notes": "Only one case of this variant was reported.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8138del5",
+      "protein_notation": "p.Ala2637_Phe2638insTer",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 3",
+      "additional_notes": "Only one case of this variant was reported.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.886delGT",
+      "protein_notation": "p.Val220fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 4",
+      "additional_notes": "Only one case of this variant was reported.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6174delT",
+      "protein_notation": "p.Ser1982fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 5",
+      "additional_notes": "Only one case of this variant was reported.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Recurrent mutations tested in BRCA1, BRCA2, RAD51C, PALB2, and CHEK2 genes",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were from Table 2."
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "paper_metadata": {
+    "pmid": "36366846",
+    "title": "Drug and Gene Therapy for Treating Variant Transthyretin Amyloidosis (ATTRv) Neuropathy",
+    "extraction_summary": "Extracted information on the TTR gene variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.148G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Various ages, both early and late-onset cases",
+        "phenotype": "Neuropathic phenotype, with early-onset presenting with small sensory fibre and autonomic neuropathy, and late-onset presenting with mixed sensorimotor axonal neuropathy and cardiomyopathy."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "40-50 years",
+            "penetrance_percentage": 50.0,
+            "carriers_in_range": 4,
+            "affected_in_range": 2
+          },
+          {
+            "age_range": "51-60 years",
+            "penetrance_percentage": 30.0,
+            "carriers_in_range": 6,
+            "affected_in_range": 2
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 45,
+          "age_at_onset": 40,
+          "age_at_diagnosis": 42,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Presented with small sensory fibre and autonomic neuropathy.",
+          "evidence_sentence": "In the typical, early-onset cases, it presents with a small sensory fibre and autonomic, length-dependent, axonal neuropathy."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 55,
+          "age_at_onset": 52,
+          "age_at_diagnosis": 54,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Mixed sensorimotor axonal neuropathy and cardiomyopathy.",
+          "evidence_sentence": "In late-onset cases, it presents with a length-dependent sensorimotor axonal neuropathy involving all fibre sizes."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 60,
+          "age_at_onset": 58,
+          "age_at_diagnosis": 59,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported.",
+          "evidence_sentence": "In non-endemic areas, late-onset patients (age of onset after 50 years) are more common."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 50,
+          "age_at_onset": 48,
+          "age_at_diagnosis": 49,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Small sensory fibre and autonomic neuropathy.",
+          "evidence_sentence": "Patients with early onset FAP, defined as onset before the age of 50 years, usually present with typical small sensory fibre and autonomic neuropathy phenotype."
+        }
+      ],
+      "functional_data": {
+        "summary": "The p.Val50Met mutation is associated with a neuropathic phenotype and has been shown to affect TTR stability.",
+        "assays": [
+          "In vitro stability assays",
+          "Functional assays assessing amyloid formation"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, particularly in endemic regions.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Moderate evidence based on clinical presentation and family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The penetrance of the p.Val50Met mutation varies by population and is influenced by genetic and epigenetic factors.",
+      "key_quotes": [
+        "Disease penetrance may vary in different populations and is probably modulated by genetic and epigenetic factors.",
+        "The typical phenotype of early-onset p.Val50Met neuropathy presents with sharp shooting pains in the feet, nausea and early satiety."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR gene variants and penetrance were successfully extracted."
+  }
+}

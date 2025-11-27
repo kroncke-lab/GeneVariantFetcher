@@ -1,0 +1,121 @@
+{
+  "paper_metadata": {
+    "pmid": "39021317",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 306,
+        "demographics": "geriatric patients, predominantly male, diverse ethnic backgrounds",
+        "phenotype": "transthyretin cardiac amyloidosis (ATTRv)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 7,
+        "affected_count": 3,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 42.86,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "85 years and older",
+            "penetrance_percentage": 0,
+            "carriers_in_range": 7,
+            "affected_in_range": 0
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 85,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "transthyretin cardiac amyloidosis",
+          "evidence_sentence": "Among those patients who presented at 90 years or older, and for whom renal function tests were available, fewer were at stage II and more at stage I and III."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 86,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "transthyretin cardiac amyloidosis",
+          "evidence_sentence": "In contrast, among ATTRwt patients, the incidence of stage III increased with age."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 87,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "Among geriatric patients, ATTR Val30Met was the second most commonly observed mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile mutation is associated with a higher prevalence of cardiac symptoms.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the importance of recognizing the Val122Ile mutation in geriatric patients.",
+      "key_quotes": [
+        "Val122Ile mutation was highly prevalent among geriatric patients.",
+        "Among ATTRv patients, the proportion of patients with symptomatic peripheral neuropathy and/or orthostatic hypotension was significantly higher among non-geriatric patients."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 306,
+        "demographics": "geriatric patients, predominantly male, diverse ethnic backgrounds",
+        "phenotype": "transthyretin cardiac amyloidosis (ATTRv)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val30Met mutation is associated with a different clinical presentation.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Val30Met mutation was noted as the second most common in geriatric patients.",
+      "key_quotes": [
+        "Among geriatric patients, ATTR Val30Met was the second most commonly observed mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

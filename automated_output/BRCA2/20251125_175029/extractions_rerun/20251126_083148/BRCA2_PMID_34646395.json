@@ -1,0 +1,114 @@
+{
+  "paper_metadata": {
+    "pmid": "34646395",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1310_1313delAAGA",
+      "protein_notation": "p.Lys437Ilefs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "early onset women diagnosed with TNBC at ages 35 and 38",
+        "phenotype": "triple negative breast cancer and ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 35,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with TNBC",
+          "evidence_sentence": "The BRCA2 c.1310_1313delAAGA variant, a specific founder variant from the North-East of Morocco, was detected in early onset women diagnosed with both TNBC (at the age of 35) and OC (at the age of 38)."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 38,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with ovarian cancer",
+          "evidence_sentence": "The BRCA2 c.1310_1313delAAGA variant, a specific founder variant from the North-East of Morocco, was detected in early onset women diagnosed with both TNBC (at the age of 35) and OC (at the age of 38)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant causes a frame-shift which changes a Lysine to an Isoleucine at codon 437 and creates a premature stop codon at position 22 of the new reading frame.",
+        "assays": []
+      },
+      "segregation_data": "The variant is found in affected individuals.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on clinical presentation and family history.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is a founder mutation in the North-East of Morocco.",
+      "key_quotes": [
+        "The BRCA2 c.1310_1313delAAGA variant, a specific founder variant from the North-East of Morocco, was detected in early onset women diagnosed with both TNBC (at the age of 35) and OC (at the age of 38)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1658T>G",
+      "protein_notation": "p.Leu553Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "one patient without family history, diagnosed at age 36",
+        "phenotype": "triple negative breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 36,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with TNBC",
+          "evidence_sentence": "The BRCA2 c.1658T>G (p.Leu553Ter) variant, located in exon 11, causes a non-sense substitution. It was observed in one patient without family history, diagnosed with TNBC at the age of 36."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant causes a non-sense substitution leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "The variant is found in an affected individual.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was associated with breast-ovarian cancer and hereditary cancer-predisposing syndrome.",
+      "key_quotes": [
+        "The BRCA2 c.1658T>G (p.Leu553Ter) variant, located in exon 11, causes a non-sense substitution. It was observed in one patient without family history, diagnosed with TNBC at the age of 36."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 variants were successfully extracted."
+  }
+}

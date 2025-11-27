@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "28435766",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the Val122Ile variant in the TTR gene, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "62-year-old Afro-Caribbean male",
+        "phenotype": "familial ATTR cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "congestive heart failure with LVEF 35%, progressive shortness of breath, paroxysmal nocturnal dyspnea, orthopnea",
+          "evidence_sentence": "Further genetic sequencing analysis showed pathogenic Val122Ile mutation and confirmed familial ATTR cardiomyopathy."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile mutation is associated with a late-onset amyloid cardiomyopathy characterized by progressive severe heart failure.",
+        "assays": []
+      },
+      "segregation_data": "The variant is associated with familial ATTR cardiomyopathy.",
+      "population_frequency": "3-4% in African-American and Afro-Caribbean populations",
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient was evaluated for heart and liver transplants but was deemed not a candidate due to increased pulmonary vascular resistance.",
+      "key_quotes": [
+        "One of the most common mutations is caused by the Val122Ile mutation, which presents in three to four percent of the African-American and Afro-Caribbean populations.",
+        "Further genetic sequencing analysis showed pathogenic Val122Ile mutation and confirmed familial ATTR cardiomyopathy."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variant."
+  }
+}

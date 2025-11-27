@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "36333337",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the KCNH2 T618I mutation associated with Short QT Syndrome, detailing its functional effects, clinical significance, and penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1853A>T",
+      "protein_notation": "p.Thr618Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Chinese family",
+        "phenotype": "Short QT syndrome with family history of sudden cardiac death"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 30,
+          "age_at_onset": 25,
+          "age_at_diagnosis": 28,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Short QT syndrome with episodes of syncope",
+          "evidence_sentence": "The ECG screening showed a strong family history of SCD, and characteristics of SQTS including abbreviated QT intervals and peaked T-waves were also observed on the ECG."
+        }
+      ],
+      "functional_data": {
+        "summary": "The T618I mutation leads to a gain-of-function effect, increasing IKr and altering action potential dynamics.",
+        "assays": [
+          "Electrophysiological tests",
+          "Markov chain modeling"
+        ]
+      },
+      "segregation_data": "The T618I mutation segregates with disease in the family.",
+      "population_frequency": "Not reported in population databases.",
+      "evidence_level": "Strong evidence based on functional assays and clinical correlation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study emphasizes the arrhythmogenic potential of the T618I mutation and its implications for treatment.",
+      "key_quotes": [
+        "The IKr was markedly increased in the T618I mutant channel, which was mainly caused by the significantly altered inactivation curve that shifted almost 50\u2009mV towards the depolarized direction."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 T618I mutation was successfully extracted."
+  }
+}

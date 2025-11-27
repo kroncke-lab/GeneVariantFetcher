@@ -1,0 +1,110 @@
+{
+  "paper_metadata": {
+    "pmid": "33693203",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.90G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 13,
+        "demographics": "Mean age 48.3\u00b113.9 years; 11 male, 3 female",
+        "phenotype": "Hereditary amyloidogenic transthyretin amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": 1,
+        "unaffected_count": 12,
+        "uncertain_count": null,
+        "penetrance_percentage": 7.69,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 70,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Positive for technetium pyrophosphate (99 mTc-PYP) amyloid deposition in the heart (99 mTc-PYP visual grade 2) and died from a cardiovascular event 17 years after DLT.",
+          "evidence_sentence": "One patient who received the graft with the Ser50Ile TTR mutation was positive for technetium pyrophosphate (99 mTc-PYP) amyloid deposition in the heart (99 mTc-PYP visual grade 2) and died from a cardiovascular event 17 years after DLT."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met mutation is the most common type of TTR mutation worldwide.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families, as indicated by the presence of the mutation in affected individuals.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included a total of 14 DLT recipients, with 13 carrying the Val30Met mutation.",
+      "key_quotes": [
+        "Thirteen patients received domino liver grafts with the Val30Met mutation in the TTR gene, the most common type of TTR mutation worldwide."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149C>T",
+      "protein_notation": "p.Ser50Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Age 60 years; male",
+        "phenotype": "Hereditary amyloidogenic transthyretin amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 75,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Positive for technetium pyrophosphate (99 mTc-PYP) amyloid deposition in the heart and died from a cardiovascular event.",
+          "evidence_sentence": "One patient who received the graft with the Ser50Ile TTR mutation was positive for technetium pyrophosphate (99 mTc-PYP) amyloid deposition in the heart (99 mTc-PYP visual grade 2) and died from a cardiovascular event 17 years after DLT."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Ser50Ile mutation is associated with amyloid deposition.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the individual case.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Only one patient was reported with this mutation.",
+      "key_quotes": [
+        "Only 1 patient received a graft with the Ser50Ile TTR mutation."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical Characteristics of DLT Recipients",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding TTR variants and penetrance were extracted."
+  }
+}

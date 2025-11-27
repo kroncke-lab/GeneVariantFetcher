@@ -1,0 +1,187 @@
+{
+  "paper_metadata": {
+    "pmid": "35116935",
+    "title": "Mutational analysis of BRCA1 and BRCA2 in northwest Chinese breast cancer patients",
+    "extraction_summary": "Extracted variants in the BRCA2 gene along with penetrance data from the study."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3109C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic variant associated with breast cancer.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was mentioned as a pathogenic variant.",
+      "key_quotes": [
+        "Pathogenic variant (BRCA2: c.3109C>T) was detected in 8 participants."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.31delT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "potential pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Potential harmful mutation.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was mentioned as a potential pathogenic variant.",
+      "key_quotes": [
+        "Potential pathogenic variant (BRCA2: c.31delT) was detected in 8 participants."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6408delA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "potential pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Potential harmful mutation.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was mentioned as a potential pathogenic variant.",
+      "key_quotes": [
+        "Potential pathogenic variant (BRCA2: c.6408delA) was detected in 8 participants."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6705delG",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "potential pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Potential harmful mutation.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was mentioned as a potential pathogenic variant.",
+      "key_quotes": [
+        "Potential pathogenic variant (BRCA2: c.6705delG) was detected in 8 participants."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.677delC",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "potential pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Potential harmful mutation.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was mentioned as a potential pathogenic variant.",
+      "key_quotes": [
+        "Potential pathogenic variant (BRCA2: c.677delC) was detected in 8 participants."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "BRCA1/2 mutation status among patients",
+      "variants_extracted": 5
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

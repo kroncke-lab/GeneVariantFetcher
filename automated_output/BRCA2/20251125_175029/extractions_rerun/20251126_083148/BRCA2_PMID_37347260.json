@@ -1,0 +1,141 @@
+{
+  "paper_metadata": {
+    "pmid": "37347260",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.156_157insAlu",
+      "protein_notation": "null",
+      "genomic_position": "null",
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "Ages 33 to 67, male",
+        "phenotype": "Male breast cancer, prostate cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 55,
+        "affected_count": 4,
+        "unaffected_count": 51,
+        "uncertain_count": 0,
+        "penetrance_percentage": 7.27,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "A",
+          "age_at_evaluation": 63,
+          "age_at_onset": null,
+          "age_at_diagnosis": 60,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Luminal IDC in left breast with vascular invasion and focal nipple ulceration",
+          "evidence_sentence": "Patient A: Luminal IDC in left breast with vascular invasion and focal nipple ulceration."
+        },
+        {
+          "individual_id": "D",
+          "age_at_evaluation": 46,
+          "age_at_onset": null,
+          "age_at_diagnosis": 44,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Prostate adenocarcinoma Gleason 8 (4+4) with perineural invasion and disseminated bone metastasis",
+          "evidence_sentence": "Patient D: Prostate adenocarcinoma Gleason 8 (4+4) with perineural invasion and disseminated bone metastasis."
+        },
+        {
+          "individual_id": "I",
+          "age_at_evaluation": 67,
+          "age_at_onset": null,
+          "age_at_diagnosis": 65,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Prostate adenocarcinoma Gleason 9 (4+5) with biochemical relapse",
+          "evidence_sentence": "Patient I: Prostate adenocarcinoma Gleason 9 (4+5) with biochemical relapse."
+        },
+        {
+          "individual_id": "J",
+          "age_at_evaluation": 72,
+          "age_at_onset": null,
+          "age_at_diagnosis": 77,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "In situ choroidal melanoma in right eye, glioblastoma IDH wild type",
+          "evidence_sentence": "Patient J: In situ choroidal melanoma in right eye, glioblastoma IDH wild type."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is classified as pathogenic based on clinical evidence.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": "null",
+      "evidence_level": "Strong evidence based on clinical data.",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "The variant is associated with male breast cancer and prostate cancer.",
+      "key_quotes": [
+        "Patient A: Luminal IDC in left breast with vascular invasion and focal nipple ulceration.",
+        "Patient D: Prostate adenocarcinoma Gleason 8 (4+4) with perineural invasion and disseminated bone metastasis."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.608C>A",
+      "protein_notation": "p.(Thr203Asn)",
+      "genomic_position": "null",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Age 62, male",
+        "phenotype": "Invasive ductal carcinoma in left breast"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 55,
+        "affected_count": 0,
+        "unaffected_count": 54,
+        "uncertain_count": 1,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "B",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": 59,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "IDC in left breast",
+          "evidence_sentence": "Patient B: IDC in left breast."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is classified as a variant of uncertain significance.",
+        "assays": []
+      },
+      "segregation_data": "null",
+      "population_frequency": "null",
+      "evidence_level": "Limited evidence due to VUS classification.",
+      "source_location": "Table 2, Row 2",
+      "additional_notes": "The clinical significance of this variant remains uncertain.",
+      "key_quotes": [
+        "Patient B: IDC in left breast."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Symptomatic patients\u2019 characteristics [n=10]",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants and penetrance data were extracted."
+  }
+}

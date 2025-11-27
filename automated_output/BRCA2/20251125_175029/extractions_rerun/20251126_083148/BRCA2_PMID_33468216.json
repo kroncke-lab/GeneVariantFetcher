@@ -1,0 +1,208 @@
+{
+  "paper_metadata": {
+    "pmid": "33468216",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from the study."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1310_1313delAAGA",
+      "protein_notation": "p.Lys437fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Reported for the first time in Latvia.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "Found in a single family.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1813dupA",
+      "protein_notation": "p.Ile605Asnfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Reported for the first time in Latvia.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 2",
+      "additional_notes": "Found in a single family.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5946delT",
+      "protein_notation": "p.Ser1982fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Reported for the first time in Latvia.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 3",
+      "additional_notes": "Found in a single family.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8572C>T",
+      "protein_notation": "p.Gln2858*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Reported for the first time in Latvia.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 4",
+      "additional_notes": "Found in a single family.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9097delA",
+      "protein_notation": "p.Thr3033Leufs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Reported for the first time in Latvia.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 5",
+      "additional_notes": "Found in a single family.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9381G>A",
+      "protein_notation": "p.Trp3127*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Reported for the first time in Latvia.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 6",
+      "additional_notes": "Found in a single family.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "BRCA1/2 non-founder pathogenic variants",
+      "variants_extracted": 6
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 6,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All BRCA2 variants were found in single families with no additional demographic details provided."
+  }
+}

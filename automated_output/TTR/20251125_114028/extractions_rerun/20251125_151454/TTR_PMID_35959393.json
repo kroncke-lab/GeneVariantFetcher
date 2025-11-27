@@ -1,0 +1,77 @@
+{
+  "paper_metadata": {
+    "pmid": "35959393",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the V122I mutation in the TTR gene, its prevalence in African Americans with bilateral carpal tunnel syndrome, and provides penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Both patients were women in their sixth decade of life.",
+        "phenotype": "Both patients had the V122I mutation; one reported symptoms of cardiomyopathy."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Reported symptoms of cardiomyopathy.",
+          "evidence_sentence": "The one with homozygous mutation reported symptoms of cardiomyopathy but had no specific diagnosis."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported.",
+          "evidence_sentence": "The other was heterozygous, and the other had a diagnosis of hypothyroidism."
+        }
+      ],
+      "functional_data": {
+        "summary": "The functional impact of the V122I mutation on TTR protein stability and amyloid formation is implied but not directly studied in this paper.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": "3-4% in the general African American population.",
+      "evidence_level": "Moderate evidence based on prevalence and clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study suggests that the presence of bilateral CTS may justify screening for the TTR mutation.",
+      "key_quotes": [
+        "Two of the 16 patients (12.5%) had the V122I TTR mutation.",
+        "Both were women and in the sixth decade of life."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Results of TTR mutation screening, with red flag symptom, CTS risk factors, and family history of CTS and cardiomyopathy.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR gene and its variants were extracted accurately."
+  }
+}

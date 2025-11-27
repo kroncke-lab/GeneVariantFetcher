@@ -1,0 +1,52 @@
+{
+  "paper_metadata": {
+    "pmid": null,
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the KCNH2 gene and its variants, specifically focusing on the R56Q mutation, but does not provide detailed penetrance data or individual patient information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.167C>A",
+      "protein_notation": "p.Arg56Gln",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "Long QT syndrome type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The hERG R56Q mutation accelerates deactivation kinetics and alters steady-state inactivation properties.",
+        "assays": [
+          "whole-cell patch-clamp recordings",
+          "FRET spectroscopy"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The paper primarily focuses on the functional effects of the R56Q mutation in vitro.",
+      "key_quotes": [
+        "One of the most profound mutations is an arginine to glutamine change at position 56 in the hERG eag domain."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The paper discusses the KCNH2 gene and its variants but lacks detailed penetrance data or individual patient information."
+  }
+}

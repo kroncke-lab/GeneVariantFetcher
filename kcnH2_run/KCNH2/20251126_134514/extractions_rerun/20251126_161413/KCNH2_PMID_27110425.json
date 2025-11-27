@@ -1,0 +1,119 @@
+{
+  "paper_metadata": {
+    "pmid": "27110425",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1681G>A",
+      "protein_notation": "p.A561T",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "15-year-old female and her mother",
+        "phenotype": "LQT syndrome; daughter symptomatic, mother asymptomatic"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 15,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "showed symptoms of LQT syndrome",
+          "evidence_sentence": "iPSCs were obtained from a fifteen-year-old female that showed symptoms of LQT syndrome and carried the missense c.1681G>A (p.A561T) mutation in KCNH2."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic carrier of the mutation",
+          "evidence_sentence": "iPSCs were obtained from a fifteen-year-old female that showed symptoms of LQT syndrome and her mother who was an asymptomatic carrier of the mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "Cardiomyocytes from both individuals showed prolonged field/action potential duration compared to control cells.",
+        "assays": [
+          "electrophysiological studies",
+          "action potential duration measurement"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The daughter had a more pronounced elongation of the action potential compared to her mother.",
+      "key_quotes": [
+        "Cardiomyocytes obtained from both daughter's and mother's iPSCs showed prolonged field/action potential duration as compared to control cells."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.614G>T",
+      "protein_notation": "p.A205S",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "LQT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "LQT syndrome",
+          "evidence_sentence": "Patient-specific iPSCs carrying different mutations in KCNH2 that encodes alpha-subunit of I_Kr channels have been generated."
+        }
+      ],
+      "functional_data": {
+        "summary": "Electrophysiological studies revealed a decrease in I_Kr and increase in action potential duration.",
+        "assays": [
+          "electrophysiological studies"
+        ]
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 5",
+      "additional_notes": "The specific patient details were not provided.",
+      "key_quotes": [
+        "Electrophysiological studies of the iPSC-derived cardiomyocytes revealed a number of pathological manifestations."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted successfully."
+  }
+}

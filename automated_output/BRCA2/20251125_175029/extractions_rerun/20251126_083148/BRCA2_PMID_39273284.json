@@ -1,0 +1,114 @@
+{
+  "paper_metadata": {
+    "pmid": "39273284",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene with detailed penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.658_659del",
+      "protein_notation": "p.Val220Ilefs*4",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Polish and Czech patients",
+        "phenotype": "hereditary breast-ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "hereditary breast-ovarian cancer",
+          "evidence_sentence": "Poland and the Czech Republic also show a high frequency of BRCA2 c.658_659del (p.Val220Ilefs*4) variant (6% and 3%, respectively; Supplementary Table S1; [70])."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no disease manifestation",
+          "evidence_sentence": "Poland and the Czech Republic also show a high frequency of BRCA2 c.658_659del (p.Val220Ilefs*4) variant (6% and 3%, respectively; Supplementary Table S1; [70])."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a significant risk of hereditary breast-ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "6% in Poland, 3% in Czech Republic",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the more common BRCA2 mutations in Slavic populations.",
+      "key_quotes": [
+        "Poland and the Czech Republic also show a high frequency of BRCA2 c.658_659del (p.Val220Ilefs*4) variant."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5286T>G",
+      "protein_notation": "p.Tyr1762*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Northern Russian patients",
+        "phenotype": "hereditary breast-ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "hereditary breast-ovarian cancer",
+          "evidence_sentence": "BRCA2 c.5286T>G (p.Tyr1762*) is a Northern Russian founder variant accounting for half of BRCA2 pathogenic alleles in hereditary breast-ovarian cancer patients from the Arkhangelsk region."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to a premature stop codon, resulting in a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Half of BRCA2 pathogenic alleles in Arkhangelsk region",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is significant in the Northern Russian population.",
+      "key_quotes": [
+        "BRCA2 c.5286T>G (p.Tyr1762*) is a Northern Russian founder variant accounting for half of BRCA2 pathogenic alleles in hereditary breast-ovarian cancer patients from the Arkhangelsk region."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

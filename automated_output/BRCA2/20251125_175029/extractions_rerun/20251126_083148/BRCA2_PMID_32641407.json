@@ -1,0 +1,53 @@
+{
+  "paper_metadata": {
+    "pmid": "32641407",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.231T>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "benign",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "A neutral leaky variant that does not cause any increase in cancer risk.",
+        "assays": [
+          "minigene splicing assays",
+          "patients\u2019 RNA analyses",
+          "mouse embryonic stem cell (mESC) complementation assay"
+        ]
+      },
+      "segregation_data": "not pathogenic given that mESCs are fully viable and resistant to DNA-damaging agents in those conditions.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was shown to reduce FL BRCA2 transcripts to ~60% without increasing cancer risk.",
+      "key_quotes": [
+        "Analysis of a neutral leaky variant (c.231T>G) showed that a reduction to ~60% of FL BRCA2 transcripts from a mutant allele does not cause any increase in cancer risk."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was reported in the paper."
+  }
+}

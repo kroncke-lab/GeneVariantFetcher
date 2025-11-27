@@ -1,0 +1,62 @@
+{
+  "paper_metadata": {
+    "pmid": "33803538",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a KCNH2 variant mentioned in the context of a case report on cardiomyopathy."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.442C>T",
+      "protein_notation": "p.Arg148Trp",
+      "genomic_position": null,
+      "clinical_significance": "VUS (Variant of Uncertain Significance)",
+      "patients": {
+        "count": 1,
+        "demographics": "74-year-old male, Korean",
+        "phenotype": "Restrictive cardiomyopathy (RCM)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "I-1",
+          "age_at_evaluation": 74,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Restrictive cardiomyopathy with biatrial enlargement and pericardial effusion",
+          "evidence_sentence": "A 74-year-old male was admitted for the evaluation of exertional dyspnea, palpitations, and pitting edema in both legs for several months."
+        }
+      ],
+      "functional_data": {
+        "summary": "No functional studies reported for this variant.",
+        "assays": []
+      },
+      "segregation_data": "No segregation with disease in family members.",
+      "population_frequency": "Not listed in public genome databases from gnomAD.",
+      "evidence_level": "Low",
+      "source_location": "Case Presentation, paragraph 4",
+      "additional_notes": "The variant was identified in the proband but did not correlate with the clinical phenotype in family members.",
+      "key_quotes": [
+        "Although the four remaining variants (KALRN: NM_007064.5: c.1702C>T, p.Pro568Ser; KCNH2: NM_000238.4:c.442C>T, p.Arg148Trp; SKI: NM_003036.4: c.30T>G, p.Cys10Trp; TTN: NM_133378.4: c.54293T>C, p.Ile18098Thr) were the likely candidates, there was no exact correlation between the genotype of these variants and the clinical phenotype in the proband and his family members as determined by Sanger sequencing."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper primarily focused on MYBPC3 mutations, with limited information on KCNH2."
+    ],
+    "notes": "The extraction focused on the single mention of a KCNH2 variant in the context of a broader study on cardiomyopathy."
+  }
+}

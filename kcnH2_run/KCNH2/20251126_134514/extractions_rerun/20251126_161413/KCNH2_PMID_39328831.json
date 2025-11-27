@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "39328831",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variants, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1681G>A",
+      "protein_notation": "p.Glu561Lys",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "LQT2 (Long QT Syndrome Type 2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "prolonged action potential duration and increased sensitivity to early after depolarizations",
+          "evidence_sentence": "They found that LQT2\u2013iPSC-CM exhibited prolonged APD and increased sensitivity to early after depolarizations (EADs) with isoprenaline treatment."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to prolonged action potential duration and increased susceptibility to arrhythmias.",
+        "assays": [
+          "action potential duration measurement",
+          "isoprenaline treatment response"
+        ]
+      },
+      "segregation_data": "The variant segregates with the disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the functional impact of the KCNH2 variant in patient-derived iPSC-CMs.",
+      "key_quotes": [
+        "LQT2\u2013iPSC-CM exhibited prolonged APD and increased sensitivity to early after depolarizations (EADs) with isoprenaline treatment."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the KCNH2 variant was successfully extracted."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "26664897",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the role of misfolded proteins in cardiac diseases, particularly focusing on TTR amyloidosis. It mentions therapeutic approaches but does not provide specific genetic variant data for TTR."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant data for TTR."
+    ],
+    "notes": "The paper discusses TTR in the context of amyloidosis and therapeutic approaches but does not mention specific genetic variants or penetrance data."
+  }
+}

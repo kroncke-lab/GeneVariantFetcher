@@ -1,0 +1,82 @@
+{
+  "paper_metadata": {
+    "pmid": "36385461",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7480C>T",
+      "protein_notation": "p.Arg2494Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 104289,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6815,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Most common Asian BRCA2 pathogenic variant.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is noted as the most common pathogenic variant in the Asian population.",
+      "key_quotes": [
+        "c.7480C>T was the most common Asian BRCA2 pathogenic variant (4%, 6815 carriers in the tested 104\u2009289 cancer and 67\u2009467 non\u2010cancer individuals)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2808_2811del",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Common in breast cancer in Western European and African populations.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Noted as a founder variant.",
+      "key_quotes": [
+        "BRCA2 c.2808_2811del common in breast cancer in Western European and African."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted from the main text."
+  }
+}

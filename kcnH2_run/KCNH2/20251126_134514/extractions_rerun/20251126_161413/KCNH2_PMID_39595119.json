@@ -1,0 +1,104 @@
+{
+  "paper_metadata": {
+    "pmid": "39595119",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Gln81Pro",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "LQTS (Long QT Syndrome)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No clinical symptoms reported.",
+          "evidence_sentence": "This patient has not complained of syncope or any clinical symptoms to date."
+        }
+      ],
+      "functional_data": {
+        "summary": "No data available.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variant remains classified as VUS due to lack of available data.",
+      "key_quotes": [
+        "This variant was previously classified as a VUS following the ACMG/AMP recommendations."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Arg1135His",
+      "genomic_position": "rs199473547",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Borderline SQTS (Short QT Syndrome)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No clinical symptoms reported.",
+          "evidence_sentence": "Neither syncope or clinical symptoms have been reported to date."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional studies showed that this change caused a gain of function in the KCNH2 gene.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "MAF: 0.0003%",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variant classified as VUS despite functional studies indicating a potential role.",
+      "key_quotes": [
+        "This variant shows a very low population frequency (MAF:0.0003%) and was previously reported in an individual with a short QT interval."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted successfully."
+  }
+}

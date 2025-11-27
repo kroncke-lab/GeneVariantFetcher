@@ -1,0 +1,246 @@
+{
+  "paper_metadata": {
+    "pmid": "32365798",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1238delT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "male, age 62.5 years",
+        "phenotype": "male breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 16.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": 62,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "male breast cancer",
+          "evidence_sentence": "In BRCA2 gene, we identified five PVs in six patients, c.1238delT, c.1813delA, c.3195_3198delTAAT, c.5073dupA in single patients and c.6039delA in two unrelated patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Identified as pathogenic variant associated with male breast cancer.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was already reported and classified as pathogenic.",
+      "key_quotes": [
+        "In BRCA2 gene, we identified five PVs in six patients, c.1238delT, c.1813delA, c.3195_3198delTAAT, c.5073dupA in single patients and c.6039delA in two unrelated patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1813delA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "male, age 62.5 years",
+        "phenotype": "male breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 16.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": 62,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "male breast cancer",
+          "evidence_sentence": "In BRCA2 gene, we identified five PVs in six patients, c.1238delT, c.1813delA, c.3195_3198delTAAT, c.5073dupA in single patients and c.6039delA in two unrelated patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Identified as pathogenic variant associated with male breast cancer.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was already reported and classified as pathogenic.",
+      "key_quotes": [
+        "In BRCA2 gene, we identified five PVs in six patients, c.1238delT, c.1813delA, c.3195_3198delTAAT, c.5073dupA in single patients and c.6039delA in two unrelated patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3195_3198delTAAT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "male, age 62.5 years",
+        "phenotype": "male breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 16.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": 62,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "male breast cancer",
+          "evidence_sentence": "In BRCA2 gene, we identified five PVs in six patients, c.1238delT, c.1813delA, c.3195_3198delTAAT, c.5073dupA in single patients and c.6039delA in two unrelated patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Identified as pathogenic variant associated with male breast cancer.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was already reported and classified as pathogenic.",
+      "key_quotes": [
+        "In BRCA2 gene, we identified five PVs in six patients, c.1238delT, c.1813delA, c.3195_3198delTAAT, c.5073dupA in single patients and c.6039delA in two unrelated patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5073dupA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "male, age 62.5 years",
+        "phenotype": "male breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 16.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": 62,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "male breast cancer",
+          "evidence_sentence": "In BRCA2 gene, we identified five PVs in six patients, c.1238delT, c.1813delA, c.3195_3198delTAAT, c.5073dupA in single patients and c.6039delA in two unrelated patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Identified as pathogenic variant associated with male breast cancer.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was already reported and classified as pathogenic.",
+      "key_quotes": [
+        "In BRCA2 gene, we identified five PVs in six patients, c.1238delT, c.1813delA, c.3195_3198delTAAT, c.5073dupA in single patients and c.6039delA in two unrelated patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6039delA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "male, age 62.5 years",
+        "phenotype": "male breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 2,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": 62,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "male breast cancer",
+          "evidence_sentence": "In BRCA2 gene, we identified five PVs in six patients, c.1238delT, c.1813delA, c.3195_3198delTAAT, c.5073dupA in single patients and c.6039delA in two unrelated patients."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": 62,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "male breast cancer",
+          "evidence_sentence": "In BRCA2 gene, we identified five PVs in six patients, c.1238delT, c.1813delA, c.3195_3198delTAAT, c.5073dupA in single patients and c.6039delA in two unrelated patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Identified as pathogenic variant associated with male breast cancer.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was already reported and classified as pathogenic.",
+      "key_quotes": [
+        "In BRCA2 gene, we identified five PVs in six patients, c.1238delT, c.1813delA, c.3195_3198delTAAT, c.5073dupA in single patients and c.6039delA in two unrelated patients."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants were extracted from the main text."
+  }
+}

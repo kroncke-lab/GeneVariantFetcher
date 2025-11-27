@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "34025432",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the KCNH2 gene variant N588K associated with Short QT Syndrome Type 1, detailing its clinical significance, penetrance data, and functional effects."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1763A>G",
+      "protein_notation": "p.Asn588Lys",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Short QT Syndrome Type 1"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Short QT Syndrome Type 1",
+          "evidence_sentence": "The patient with familial SQTS1 carries the N588K mutation in hERG channel."
+        }
+      ],
+      "functional_data": {
+        "summary": "The N588K mutation leads to enhanced hERG channel current, affecting drug sensitivity and channel gating kinetics.",
+        "assays": [
+          "patch-clamp recording",
+          "current-voltage relationship analysis"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Introduction, paragraph 3",
+      "additional_notes": "The study emphasizes the differential effects of drugs on hERG channels with this mutation.",
+      "key_quotes": [
+        "The patient with familial SQTS1 carries the N588K mutation in hERG channel."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly mentioned in the text."
+  }
+}

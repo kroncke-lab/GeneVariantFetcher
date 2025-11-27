@@ -1,0 +1,28 @@
+{
+  "paper_metadata": {
+    "pmid": "28279176",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No BRCA2 variants were reported in the paper. The study focused on PALB2 mutations in BRCA1/2-mutation negative breast and ovarian cancer patients from Poland."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Truncating and putative pathogenic missense mutations in the PALB2 gene revealed by NGS of samples from 460 breast cancer patients",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "PALB2 genetic variants in familial breast and/or ovarian cancer and in non-familial breast cancer patients identified by NGS and TaqMan genotyping",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not report any BRCA2 variants, only PALB2 variants were discussed."
+    ],
+    "notes": "The extraction was straightforward as the paper did not mention any BRCA2 variants."
+  }
+}

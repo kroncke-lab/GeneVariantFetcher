@@ -1,0 +1,81 @@
+{
+  "paper_metadata": {
+    "pmid": "33345470",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR variant p.Ser43Asn, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.128G>A",
+      "protein_notation": "p.Ser43Asn",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "2 females, 1 male; ages 45, 44, and 55 (deceased)",
+        "phenotype": "familial amyloidosis with isolated cardiac phenotype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 2,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "A",
+          "age_at_evaluation": 45,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic, marked left ventricular hypertrophy, normal ejection fraction",
+          "evidence_sentence": "At presentation, she was completely asymptomatic, reported regular sport activity, and declined symptoms pertaining to ATTR amyloidosis."
+        },
+        {
+          "individual_id": "B",
+          "age_at_evaluation": 44,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "denied having any symptoms, echocardiography showed LVH",
+          "evidence_sentence": "He denied having any symptoms and his past medical history was unremarkable."
+        },
+        {
+          "individual_id": "C",
+          "age_at_evaluation": 55,
+          "age_at_onset": 53,
+          "age_at_diagnosis": 53,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with cardiac ATTR amyloidosis, died due to refractory heart failure",
+          "evidence_sentence": "Patient C had received an ICD for primary prevention of sudden cardiac death but died due to refractory heart failure 2 years after diagnosis at the age of 55."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with an aggressive clinical course leading to advanced heart failure.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": "Observed in one out of 1286 participants of the THAOS registry.",
+      "evidence_level": "Strong evidence based on multiple case reports and family history.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is very rare and has been associated with an isolated cardiac phenotype.",
+      "key_quotes": [
+        "In the vast majority of patients, an isolated cardiac phenotype was observed with patients having already typical findings of cardiac amyloid infiltration (LVH, diastolic dysfunction) at their early 40\u2019s.",
+        "Both our patients have no offspring while other maternal relatives have lived or live in Italy."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

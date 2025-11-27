@@ -1,0 +1,104 @@
+{
+  "paper_metadata": {
+    "pmid": "9150150",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variants with penetrance data from families with breast or ovarian cancer."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.995delCAAAT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Puerto Rican Hispanic",
+        "phenotype": "breast or ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast or ovarian cancer",
+          "evidence_sentence": "The families with novel mutations were Puerto Rican Hispanic (exon 9 deletion 995delCAAAT)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Novel mutation leading to a premature-termination codon.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is novel and associated with high penetrance.",
+      "key_quotes": [
+        "The families with novel mutations were Puerto Rican Hispanic (exon 9 deletion 995delCAAAT)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6425delTT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Ashkenazi Jewish",
+        "phenotype": "breast or ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast or ovarian cancer",
+          "evidence_sentence": "The families with novel mutations were Ashkenazi Jewish (exon 11 deletion 6425delTT)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Novel mutation leading to a premature-termination codon.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is novel and associated with high penetrance.",
+      "key_quotes": [
+        "The families with novel mutations were Ashkenazi Jewish (exon 11 deletion 6425delTT)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

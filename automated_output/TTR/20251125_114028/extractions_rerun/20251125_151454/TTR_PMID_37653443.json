@@ -1,0 +1,70 @@
+{
+  "paper_metadata": {
+    "pmid": "37653443",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "UK and Ireland population",
+        "phenotype": "hereditary transthyretin amyloidosis (hATTR) cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "hATTR cardiac amyloidosis",
+          "evidence_sentence": "the two which are responsible for the majority of disease-causing hATTR cardiac amyloidosis in the UK and Ireland are the V142I (formerly V122I) and T80A (formerly T60A) variants"
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "hATTR cardiac amyloidosis",
+          "evidence_sentence": "the two which are responsible for the majority of disease-causing hATTR cardiac amyloidosis in the UK and Ireland are the V142I (formerly V122I) and T80A (formerly T60A) variants"
+        }
+      ],
+      "functional_data": {
+        "summary": "The V142I and T80A variants are known to be pathogenic and associated with hATTR cardiac amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Yes, these variants segregate with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Main Text, Overview of cardiac amyloidosis",
+      "additional_notes": "Variants V142I and T80A are the most common in the UK and Ireland.",
+      "key_quotes": [
+        "the two which are responsible for the majority of disease-causing hATTR cardiac amyloidosis in the UK and Ireland are the V142I (formerly V122I) and T80A (formerly T60A) variants"
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

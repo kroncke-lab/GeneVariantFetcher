@@ -1,0 +1,82 @@
+{
+  "paper_metadata": {
+    "pmid": "30555256",
+    "title": "Germline BRCA1 and BRCA2 deleterious mutations and variants of unknown clinical significance associated with breast/ovarian cancer: a report from North India",
+    "extraction_summary": "Extracted BRCA2 variant information including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.932_933insT",
+      "protein_notation": "p.Phe312Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast/ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 17,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Insertion of a single base T modifies the frame to generate two subsequent phenylalanines and formats an early stop codon.",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified as novel.",
+      "key_quotes": [
+        "The first novel BRCA2 mutation, c.932_933insT, was recognized."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 17,
+        "demographics": "not specified",
+        "phenotype": "breast/ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 17,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "7/16 (44%) of these mutations were VUS, among which 6/7 were missense mutations.",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "VUS status indicates uncertainty in pathogenicity.",
+      "key_quotes": [
+        "Furthermore, 7/16 (44%) of these mutations were VUS, among which 6/7 were missense mutations."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

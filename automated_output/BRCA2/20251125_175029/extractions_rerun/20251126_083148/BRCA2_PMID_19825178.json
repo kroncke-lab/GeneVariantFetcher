@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "19825178",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the role of BRCA1/2 in ovarian cancer, treatment implications, and penetrance data. No specific BRCA2 variants are mentioned."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention specific BRCA2 variants."
+    ],
+    "notes": "The paper focused on the general role of BRCA1/2 in cancer and treatment, without detailing specific BRCA2 genetic variants."
+  }
+}

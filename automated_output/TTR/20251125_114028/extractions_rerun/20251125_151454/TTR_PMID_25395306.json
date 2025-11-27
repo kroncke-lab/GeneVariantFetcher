@@ -1,0 +1,99 @@
+{
+  "paper_metadata": {
+    "pmid": "25395306",
+    "title": "Amyloidogenic and non-amyloidogenic transthyretin variants interact differently with human cardiomyocytes: insights into early events of non-fibrillar tissue damage",
+    "extraction_summary": "Extracted information on TTR variants V122I and T119M, including clinical significance, penetrance data, and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.122G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "4% of African\u2013Americans",
+        "phenotype": "late onset familial amyloid cardiomyopathy (FAC), resulting in congestive heart failure and death"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "congestive heart failure",
+          "evidence_sentence": "The most common TTR mutation worldwide is V122I which is found in 4% of African\u2013Americans and produces late onset FAC, resulting in congestive heart failure and death."
+        }
+      ],
+      "functional_data": {
+        "summary": "V122I TTR variant is cytotoxic to human cardiac cells, generating superoxide species and activating caspase 3/7.",
+        "assays": [
+          "cell viability assays",
+          "caspase activation assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "4% in African\u2013Americans",
+      "evidence_level": "strong evidence for pathogenicity",
+      "source_location": "Introduction, paragraph 4",
+      "additional_notes": "V122I TTR is associated with significant cytotoxic effects in cardiomyocytes.",
+      "key_quotes": [
+        "V122I TTR variant is cytotoxic to human cardiac cells.",
+        "Incubation of the human cardiomyocytes with V122I TTR but not with T119M TTR, generates superoxide species and activates caspase 3/7."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.118A>C",
+      "protein_notation": "p.Thr119Met",
+      "genomic_position": null,
+      "clinical_significance": "benign",
+      "patients": {
+        "count": 10,
+        "demographics": null,
+        "phenotype": "non-amyloidogenic variant, does not induce cytotoxicity"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "T119M TTR variant is stable and non-amyloidogenic, does not induce cytotoxicity in cardiomyocytes.",
+        "assays": [
+          "cell viability assays"
+        ]
+      },
+      "segregation_data": "Does not segregate with disease.",
+      "population_frequency": null,
+      "evidence_level": "evidence suggests benign nature",
+      "source_location": "Introduction, paragraph 4",
+      "additional_notes": "T119M TTR is used as a control in functional studies.",
+      "key_quotes": [
+        "the stable and non-amyloidogenic T119M TTR variant does not have such effects."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

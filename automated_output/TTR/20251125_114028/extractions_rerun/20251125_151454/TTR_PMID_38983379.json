@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "38983379",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, focusing on the Val122Ile variant and its penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 110,
+        "demographics": "Median age 74.3 years for Black patients, 75.9 years for White patients; 46% Black",
+        "phenotype": "Transthyretin amyloid cardiomyopathy (ATTR-CM)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 110,
+        "affected_count": 110,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 74,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "Transthyretin amyloid cardiomyopathy",
+          "evidence_sentence": "Black patients more commonly had Val122Ile disease compared with White patients (79% vs 1%; P < 0.001)"
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile variant is associated with a more aggressive form of ATTR-CM.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families, particularly in Black patients.",
+      "population_frequency": "High prevalence in Black patients, specifically noted in the study.",
+      "evidence_level": "Strong evidence based on clinical association and statistical significance.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is the most common genotype in the cohort studied.",
+      "key_quotes": [
+        "The most common genotype was p.Val122Ile (n = 110 [39%]).",
+        "Black patients more commonly had Val122Ile disease compared with White patients (79% vs 1%; P < 0.001)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text, focusing on the TTR gene."
+  }
+}

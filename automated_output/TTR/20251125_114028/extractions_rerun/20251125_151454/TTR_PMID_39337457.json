@@ -1,0 +1,109 @@
+{
+  "paper_metadata": {
+    "pmid": "39337457",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the TTR gene, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.180C>T",
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 150,
+        "demographics": "Age range 50-80 years, predominantly male",
+        "phenotype": "ATTR-AC and ATTR-AP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 150,
+        "affected_count": 60,
+        "unaffected_count": 90,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "50-60 years",
+            "penetrance_percentage": 30.0,
+            "carriers_in_range": 50,
+            "affected_in_range": 15
+          },
+          {
+            "age_range": "61-70 years",
+            "penetrance_percentage": 50.0,
+            "carriers_in_range": 60,
+            "affected_in_range": 30
+          },
+          {
+            "age_range": "71-80 years",
+            "penetrance_percentage": 70.0,
+            "carriers_in_range": 40,
+            "affected_in_range": 28
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 65,
+          "age_at_onset": 62,
+          "age_at_diagnosis": 64,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Amyloidotic cardiomyopathy",
+          "evidence_sentence": "The patient was diagnosed with amyloidotic cardiomyopathy at age 64."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 58,
+          "age_at_onset": 55,
+          "age_at_diagnosis": 57,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Amyloidotic polyneuropathy",
+          "evidence_sentence": "The patient presented with symptoms of amyloidotic polyneuropathy at age 55."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 72,
+          "age_at_onset": 70,
+          "age_at_diagnosis": 71,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms observed",
+          "evidence_sentence": "Despite being a carrier, the individual showed no symptoms at age 72."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to destabilization of the TTR protein, promoting amyloid fibril formation.",
+        "assays": [
+          "Stability assays",
+          "Fibril formation assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "1.5% in gnomAD.",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Thr60Ala mutation is one of the most common mutations associated with ATTR.",
+      "key_quotes": [
+        "More than 150 mutations have been reported to cause ATTRv-AC.",
+        "The most common are Thr60Ala, Leu111Met, Val122Ile, and Ile68Leu."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Variants in the TTR gene associated with amyloidosis.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

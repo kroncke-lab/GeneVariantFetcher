@@ -1,0 +1,122 @@
+{
+  "paper_metadata": {
+    "pmid": "23766769",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.G1681A",
+      "protein_notation": "p.Gly561Asp",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "mother: asymptomatic, QTc interval 445 ms; daughter: symptomatic, QTc interval 571 ms",
+        "phenotype": "LQT2, with the mother being asymptomatic and the daughter experiencing syncope-like events"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Mother",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic, QTc interval 445 ms",
+          "evidence_sentence": "The LQT patients in this work (mother: asymptomatic, QTc interval 445 ms; daughter: symptomatic, QTc interval 571 ms) showed contrarious phenotypes despite the same mutation."
+        },
+        {
+          "individual_id": "Daughter",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic, syncope-like events after arousal from sleep, QTc interval 571 ms",
+          "evidence_sentence": "In the symptomatic patient, syncope-like events took place after arousal from sleep, as typical for LQT2."
+        }
+      ],
+      "functional_data": {
+        "summary": "hiPSC-CMs from both symptomatic and asymptomatic patients showed different action potential durations reflecting in vivo penetrance.",
+        "assays": [
+          "action potential duration measurement",
+          "electrophysiological stimulation with isoprenaline"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The penetrance of the G1681 mutation in KCNH2 shows variability between family members.",
+      "key_quotes": [
+        "The LQT patients in this work (mother: asymptomatic, QTc interval 445 ms; daughter: symptomatic, QTc interval 571 ms) showed contrarious phenotypes despite the same mutation.",
+        "In the symptomatic patient, syncope-like events took place after arousal from sleep, as typical for LQT2."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.R176W",
+      "protein_notation": "p.Arg176Trp",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "asymptomatic individual",
+        "phenotype": "LQT2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Asymptomatic Individual",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic with a missense mutation in KCNH2",
+          "evidence_sentence": "Lahti et al. used skin biopsy-derived iPSCs of an asymptomatic individual with a missense mutation in KCNH2 causing arginine-to-tryptophan substitution at position 176 (R176, hERG-FinB)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Ventricular-like APs showed significant elongation, especially at low frequencies.",
+        "assays": [
+          "action potential duration measurement",
+          "electrophysiological stimulation"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "EADs were observed in LQT2-hiPSC-CMs but not in WT-hiPSC-CMs.",
+      "key_quotes": [
+        "Only ventricular-like APs showed a significant elongation, especially at low frequencies.",
+        "EADs were observed in 1 out of 20 LQT2-hiPSC-CMs and were never observed in WT- hiPSC-CMs."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted thoroughly."
+  }
+}

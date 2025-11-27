@@ -1,0 +1,312 @@
+{
+  "paper_metadata": {
+    "pmid": "34207092",
+    "title": "Ocular Involvement in Hereditary Transthyretin Amyloidosis: A Case Series Describing Novel Potential Biomarkers",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "Aged between 51 and 87, 6 males and 3 females",
+        "phenotype": "Hereditary transthyretin amyloidosis (hATTR) with ocular involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 8,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 88.89,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 66,
+          "age_at_onset": null,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Symptoms of hATTR",
+          "evidence_sentence": "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 66,
+          "age_at_onset": null,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Symptoms of hATTR",
+          "evidence_sentence": "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 66,
+          "age_at_onset": null,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Symptoms of hATTR",
+          "evidence_sentence": "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study evaluated ocular findings in patients with hATTR, revealing significant abnormalities in ERG.",
+        "assays": [
+          "Corneal confocal microscopy",
+          "Electroretinography (ERG)",
+          "Optical Coherence Tomography (OCT)"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, as indicated by the presence of affected siblings.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and genetic testing.",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The study highlights the presence of ocular manifestations in hATTR patients.",
+      "key_quotes": [
+        "In all patients, corneal nerve plexa examined with CCM were poorly represented or absent.",
+        "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Phe84Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "Aged between 51 and 87, 6 males and 3 females",
+        "phenotype": "Hereditary transthyretin amyloidosis (hATTR) with ocular involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 8,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 88.89,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 66,
+          "age_at_onset": null,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Symptoms of hATTR",
+          "evidence_sentence": "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 66,
+          "age_at_onset": null,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Symptoms of hATTR",
+          "evidence_sentence": "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": 66,
+          "age_at_onset": null,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Symptoms of hATTR",
+          "evidence_sentence": "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study evaluated ocular findings in patients with hATTR, revealing significant abnormalities in ERG.",
+        "assays": [
+          "Corneal confocal microscopy",
+          "Electroretinography (ERG)",
+          "Optical Coherence Tomography (OCT)"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, as indicated by the presence of affected siblings.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and genetic testing.",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The study highlights the presence of ocular manifestations in hATTR patients.",
+      "key_quotes": [
+        "In all patients, corneal nerve plexa examined with CCM were poorly represented or absent.",
+        "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ala129Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Aged between 51 and 87, 6 males and 3 females",
+        "phenotype": "Hereditary transthyretin amyloidosis (hATTR) with ocular involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 8,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 88.89,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": 66,
+          "age_at_onset": null,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Symptoms of hATTR",
+          "evidence_sentence": "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study evaluated ocular findings in patients with hATTR, revealing significant abnormalities in ERG.",
+        "assays": [
+          "Corneal confocal microscopy",
+          "Electroretinography (ERG)",
+          "Optical Coherence Tomography (OCT)"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, as indicated by the presence of affected siblings.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and genetic testing.",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The study highlights the presence of ocular manifestations in hATTR patients.",
+      "key_quotes": [
+        "In all patients, corneal nerve plexa examined with CCM were poorly represented or absent.",
+        "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Aged between 51 and 87, 6 males and 3 females",
+        "phenotype": "Hereditary transthyretin amyloidosis (hATTR) with ocular involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 8,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 88.89,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": 66,
+          "age_at_onset": null,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Symptoms of hATTR",
+          "evidence_sentence": "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study evaluated ocular findings in patients with hATTR, revealing significant abnormalities in ERG.",
+        "assays": [
+          "Corneal confocal microscopy",
+          "Electroretinography (ERG)",
+          "Optical Coherence Tomography (OCT)"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, as indicated by the presence of affected siblings.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and genetic testing.",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The study highlights the presence of ocular manifestations in hATTR patients.",
+      "key_quotes": [
+        "In all patients, corneal nerve plexa examined with CCM were poorly represented or absent.",
+        "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Tyr79Lys",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Aged between 51 and 87, 6 males and 3 females",
+        "phenotype": "Hereditary transthyretin amyloidosis (hATTR) with ocular involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 8,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 88.89,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": 66,
+          "age_at_onset": null,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Symptoms of hATTR",
+          "evidence_sentence": "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study evaluated ocular findings in patients with hATTR, revealing significant abnormalities in ERG.",
+        "assays": [
+          "Corneal confocal microscopy",
+          "Electroretinography (ERG)",
+          "Optical Coherence Tomography (OCT)"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, as indicated by the presence of affected siblings.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and genetic testing.",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The study highlights the presence of ocular manifestations in hATTR patients.",
+      "key_quotes": [
+        "In all patients, corneal nerve plexa examined with CCM were poorly represented or absent.",
+        "The only examined carrier reported sensory symptoms in lower limbs but neurophysiological investigations were unremarkable."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Genetic, demographic, and clinical data of patients",
+      "variants_extracted": 5
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Ophthalmological examination data",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "paper_metadata": {
+    "pmid": "36248126",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.381T>G",
+      "protein_notation": "p.Ile127Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 8,
+        "demographics": "5 male and 3 female subjects, aged between 38 and 69 years (mean age 50.8 years)",
+        "phenotype": "diffuse or extensive amyloidosis involving most often the brain together with the spinal cord"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": 4,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 45,
+          "age_at_onset": 41,
+          "age_at_diagnosis": 43,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "gait disturbance, paresis of the lower extremities, voiding dysfunction",
+          "evidence_sentence": "A 45-year-old man was admitted to our neurosurgical outpatient clinic with progressive gait disturbance and voiding dysfunction."
+        },
+        {
+          "individual_id": "Sister of P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "uncertain",
+          "phenotype_details": null,
+          "evidence_sentence": "The underlying mutation - c381T>G (p.(Ile127Met) - is also carried by his sister and suspected in his maternal grandfather, uncle and cousin."
+        },
+        {
+          "individual_id": "Maternal Grandfather of P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "uncertain",
+          "phenotype_details": null,
+          "evidence_sentence": "The underlying mutation - c381T>G (p.(Ile127Met) - is also carried by his sister and suspected in his maternal grandfather, uncle and cousin."
+        },
+        {
+          "individual_id": "Uncle of P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "uncertain",
+          "phenotype_details": null,
+          "evidence_sentence": "The underlying mutation - c381T>G (p.(Ile127Met) - is also carried by his sister and suspected in his maternal grandfather, uncle and cousin."
+        },
+        {
+          "individual_id": "Cousin of P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "uncertain",
+          "phenotype_details": null,
+          "evidence_sentence": "The underlying mutation - c381T>G (p.(Ile127Met) - is also carried by his sister and suspected in his maternal grandfather, uncle and cousin."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to amyloid fibril deposits in tissues, causing organ dysfunction.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The paper discusses multiple cases of TTR mutations, but only the c.381T>G variant is detailed with penetrance data.",
+      "key_quotes": [
+        "The underlying mutation - c381T>G (p.(Ile127Met) - is also carried by his sister and suspected in his maternal grandfather, uncle and cousin.",
+        "All patients suffered from diffuse or extensive amyloidosis involving most often the brain together with the spinal cord."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Reported cases in the literature with spinal amyloid deposits in hereditary amyloidosis.",
+      "variants_extracted": 6
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR gene and its variants were successfully extracted."
+  }
+}

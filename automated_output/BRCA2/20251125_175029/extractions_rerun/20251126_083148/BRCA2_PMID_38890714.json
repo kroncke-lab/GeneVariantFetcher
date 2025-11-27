@@ -1,0 +1,399 @@
+{
+  "paper_metadata": {
+    "pmid": "38890714",
+    "title": "Germline mutations of breast cancer susceptibility genes through expanded genetic analysis in unselected Colombian patients",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2380dupA",
+      "protein_notation": "p.Met794Asnfs*8",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 8,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 80.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "BRCA2 NM_000059.3:c.2380dupA (p.Met794Asnfs*8) was identified in 1 patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Pathogenic (BRCAexchange)",
+      "source_location": "Table 3, Row 1",
+      "additional_notes": "First report of this variant in the population.",
+      "key_quotes": [
+        "BRCA2 NM_000059.3:c.2380dupA (p.Met794Asnfs*8) was identified in 1 patient."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3860delA",
+      "protein_notation": "p.Asn1287Ilefs*6",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 8,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 80.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "BRCA2 NM_000059.3:c.3860delA (p.Asn1287Ilefs*6) was identified in 1 patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Pathogenic (BRCAexchange)",
+      "source_location": "Table 3, Row 2",
+      "additional_notes": "First report of this variant in the population.",
+      "key_quotes": [
+        "BRCA2 NM_000059.3:c.3860delA (p.Asn1287Ilefs*6) was identified in 1 patient."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4889C>G",
+      "protein_notation": "p.Ser1630Ter",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 8,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 80.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "BRCA2 NM_000059.3:c.4889C>G (p.Ser1630Ter) was identified in 1 patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Pathogenic (BRCAexchange)",
+      "source_location": "Table 3, Row 3",
+      "additional_notes": "First report of this variant in the population.",
+      "key_quotes": [
+        "BRCA2 NM_000059.3:c.4889C>G (p.Ser1630Ter) was identified in 1 patient."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5773C>T",
+      "protein_notation": "p.Gln1925Ter",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 8,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 80.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "BRCA2 NM_000059.3:c.5773C>T (p.Gln1925Ter) was identified in 1 patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Pathogenic (BRCAexchange)",
+      "source_location": "Table 3, Row 4",
+      "additional_notes": "First report of this variant in the population.",
+      "key_quotes": [
+        "BRCA2 NM_000059.3:c.5773C>T (p.Gln1925Ter) was identified in 1 patient."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5851_5854delAGTT",
+      "protein_notation": "p.Ser1951Trpfs*11",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 8,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 80.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "BRCA2 NM_000059.3:c.5851_5854delAGTT (p.Ser1951Trpfs*11) was identified in 1 patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Pathogenic (BRCAexchange)",
+      "source_location": "Table 3, Row 5",
+      "additional_notes": "First report of this variant in the population.",
+      "key_quotes": [
+        "BRCA2 NM_000059.3:c.5851_5854delAGTT (p.Ser1951Trpfs*11) was identified in 1 patient."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2808_2811delACAA",
+      "protein_notation": "p.Ala938Profs*21",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Female, age not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 8,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 80.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "BRCA2 NM_000059.3:c.2808_2811delACAA (p.Ala938Profs*21) was identified in 2 patients."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "BRCA2 NM_000059.3:c.2808_2811delACAA (p.Ala938Profs*21) was identified in 2 patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Pathogenic (BRCAexchange)",
+      "source_location": "Table 3, Row 6",
+      "additional_notes": "First report of this variant in the population.",
+      "key_quotes": [
+        "BRCA2 NM_000059.3:c.2808_2811delACAA (p.Ala938Profs*21) was identified in 2 patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1763_1766delATAA",
+      "protein_notation": "p.Asn588Serfs*25",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Female, age not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 8,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 80.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "BRCA2 NM_000059.3:c.1763_1766delATAA (p.Asn588Serfs*25) was identified in 2 patients."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "BRCA2 NM_000059.3:c.1763_1766delATAA (p.Asn588Serfs*25) was identified in 2 patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Pathogenic (BRCAexchange)",
+      "source_location": "Table 3, Row 7",
+      "additional_notes": "First report of this variant in the population.",
+      "key_quotes": [
+        "BRCA2 NM_000059.3:c.1763_1766delATAA (p.Asn588Serfs*25) was identified in 2 patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9097dupA",
+      "protein_notation": "p.Thr3033Asnfs*11",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 8,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 80.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P10",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "BRCA2 NM_000059.4:c.9097dupA (p.Thr3033Asnfs*11) was identified in 1 patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Pathogenic (BRCAexchange)",
+      "source_location": "Table 3, Row 8",
+      "additional_notes": "First report of this variant in the population.",
+      "key_quotes": [
+        "BRCA2 NM_000059.4:c.9097dupA (p.Thr3033Asnfs*11) was identified in 1 patient."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Frequency of P/LP variants in the population of study and their distribution by genes",
+      "variants_extracted": 10
+    },
+    {
+      "table_name": "Table 3",
+      "table_caption": "Molecular and clinicopathological description of germline mutations",
+      "variants_extracted": 10
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 10,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text and tables."
+  }
+}

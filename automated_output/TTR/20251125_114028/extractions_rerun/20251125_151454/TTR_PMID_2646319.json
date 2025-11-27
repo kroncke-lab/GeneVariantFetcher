@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "2646319",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a new TTR variant associated with systemic senile amyloidosis, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.365A>T",
+      "protein_notation": "p.Ile122Val",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "systemic senile amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "systemic senile amyloidosis",
+          "evidence_sentence": "Identification of a new variant Pa (TTr) molecule in one case suggests further that SSA may be a genetically determined disease expressed late in life."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant was identified through complete sequence analysis and showed immunologic and biochemical similarity to familial amyloidotic polyneuropathy.",
+        "assays": [
+          "immunologic assays",
+          "biochemical assays",
+          "Western blots"
+        ]
+      },
+      "segregation_data": "The variant was identified in a single case, suggesting potential genetic determination.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was associated with systemic senile amyloidosis, indicating a potential late-onset genetic condition.",
+      "key_quotes": [
+        "Identification of a new variant Pa (TTr) molecule in one case suggests further that SSA may be a genetically determined disease expressed late in life."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data was straightforward as the paper focused on a single TTR variant."
+  }
+}

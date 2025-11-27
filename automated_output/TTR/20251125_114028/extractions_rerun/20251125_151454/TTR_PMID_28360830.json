@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "28360830",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 77,
+        "demographics": "not specified",
+        "phenotype": "Familial Amyloidotic Polyneuropathy and Familial Amyloidotic Cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 77,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Mutant forms of TTR cause a spectrum of human systemic amyloid syndromes.",
+        "assays": []
+      },
+      "segregation_data": "Yes, variants segregate with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "The TTR amyloidoses section",
+      "additional_notes": "Variants are found in 77 of the 127 amino acids in the protein.",
+      "key_quotes": [
+        "Amyloidogenic protein variants causing the autosomal dominant clinical disorders Familial Amyloidotic Polyneuropathy (a sensori-motor and autonomic polyneuropathy) and Familial Amyloidotic Cardiomyopathy have been found in 77 of the 127 amino acids in the protein."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant-related entry for TTR gene was found."
+  }
+}

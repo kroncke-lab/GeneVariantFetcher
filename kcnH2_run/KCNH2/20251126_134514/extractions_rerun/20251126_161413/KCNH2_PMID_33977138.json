@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "33977138",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1489 G > A",
+      "protein_notation": "p.Gly497Ser",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "61-year-old female",
+        "phenotype": "trigeminal neuralgia"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": 61,
+          "age_at_onset": 60,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "severe attacks of unilateral facial pain",
+          "evidence_sentence": "The patient was a 61-year-old woman with severe attacks of unilateral facial pain, beginning at the age of 60."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a novel missense variant in KCNH2.",
+        "assays": [
+          "Ca2+ imaging",
+          "whole-cell patch-clamp recording"
+        ]
+      },
+      "segregation_data": "The patient and her older brother also had a history of trigeminal neuralgia.",
+      "population_frequency": "Not reported in gnomAD.",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is novel and classified as a variant of uncertain significance.",
+      "key_quotes": [
+        "The patient carried a novel missense variant c.1489 G > A (p.Gly497Ser) in KCNH2."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 was extracted from the main text."
+  }
+}

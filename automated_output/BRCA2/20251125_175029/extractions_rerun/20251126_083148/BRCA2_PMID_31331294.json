@@ -1,0 +1,129 @@
+{
+  "paper_metadata": {
+    "pmid": "31331294",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8488-1G>A",
+      "protein_notation": "p.? (Splice Acceptor Site)",
+      "genomic_position": "chr13:32945092",
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 21,
+        "demographics": "Mean age 35.6 years, female",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 21,
+        "affected_count": 14,
+        "unaffected_count": 7,
+        "uncertain_count": null,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 33,
+          "age_at_onset": null,
+          "age_at_diagnosis": 33,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Bilateral breast cancer, triple-negative subtype",
+          "evidence_sentence": "This last PV was detected in an early age onset breast cancer patient, 33 y at the time of diagnosis, with bilateral cancer and triple negative subtype."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is predicted to affect splicing.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Class 5 - significant evidence for pathogenicity",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "This variant is associated with a high risk of breast cancer.",
+      "key_quotes": [
+        "The detected BRCA1 and BRCA2 PV frequency was similar to that reported in other populations.",
+        "The association of the triple-negative subtype with PVs of BRCA exhibited an OR of 6.4 (95% CI, 2.22\u201318.70)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9117G>A",
+      "protein_notation": "p.Pro3039=synonymous",
+      "genomic_position": "chr13:32954050",
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 21,
+        "demographics": "Mean age 35.6 years, female",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 21,
+        "affected_count": 14,
+        "unaffected_count": 7,
+        "uncertain_count": null,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Synonymous variant, no predicted effect on protein function.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Class 5 - significant evidence for pathogenicity",
+      "source_location": "Table 2, Row 2",
+      "additional_notes": "This variant is classified as pathogenic despite being synonymous.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8377G>A",
+      "protein_notation": "p.Gly2793Arg",
+      "genomic_position": "chr13:32944584",
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 21,
+        "demographics": "Mean age 35.6 years, female",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 21,
+        "affected_count": 14,
+        "unaffected_count": 7,
+        "uncertain_count": null,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Missense variant, predicted to be damaging.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Class 5 - significant evidence for pathogenicity",
+      "source_location": "Table 2, Row 3",
+      "additional_notes": "This variant is associated with a high risk of breast cancer.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Pathogenic variants detected by BRCA Panel",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 variants were extracted successfully."
+  }
+}

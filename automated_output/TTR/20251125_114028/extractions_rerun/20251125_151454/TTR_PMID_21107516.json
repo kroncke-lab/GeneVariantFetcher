@@ -1,0 +1,185 @@
+{
+  "paper_metadata": {
+    "pmid": "21107516",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR gene and its variants, specifically focusing on the ATTRV30M mutation and its implications in familial transthyretin amyloidosis. It provides insights into penetrance data, clinical significance, and individual patient records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.30G>A",
+      "protein_notation": "p.Val10Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 12,
+        "demographics": "Swedish patients, age range 40-80 years",
+        "phenotype": "familial ATTR amyloidosis with varying clinical presentations"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 12,
+        "affected_count": 12,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 69,
+          "age_at_onset": 55,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic disease with cardiac involvement",
+          "evidence_sentence": "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 72,
+          "age_at_onset": 69,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic disease with cardiac involvement",
+          "evidence_sentence": "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008)."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 73,
+          "age_at_onset": 71,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic disease with cardiac involvement",
+          "evidence_sentence": "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008)."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 73,
+          "age_at_onset": 71,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic disease with cardiac involvement",
+          "evidence_sentence": "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008)."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 75,
+          "age_at_onset": 74,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic disease with cardiac involvement",
+          "evidence_sentence": "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008)."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": 74,
+          "age_at_onset": 71,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic disease with cardiac involvement",
+          "evidence_sentence": "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008)."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": 65,
+          "age_at_onset": 61,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic disease with cardiac involvement",
+          "evidence_sentence": "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008)."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": 51,
+          "age_at_onset": 49,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic disease with cardiac involvement",
+          "evidence_sentence": "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008)."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": 57,
+          "age_at_onset": 54,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic disease with cardiac involvement",
+          "evidence_sentence": "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008)."
+        },
+        {
+          "individual_id": "P10",
+          "age_at_evaluation": 57,
+          "age_at_onset": 55,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic disease with cardiac involvement",
+          "evidence_sentence": "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008)."
+        },
+        {
+          "individual_id": "P11",
+          "age_at_evaluation": 57,
+          "age_at_onset": 54,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic disease with cardiac involvement",
+          "evidence_sentence": "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008)."
+        },
+        {
+          "individual_id": "P12",
+          "age_at_evaluation": 57,
+          "age_at_onset": 54,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic disease with cardiac involvement",
+          "evidence_sentence": "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study indicates that the presence of the ATTRV30M mutation leads to a higher incorporation of wild-type TTR in amyloid fibrils, particularly in cardiac tissue.",
+        "assays": [
+          "Western blot",
+          "MALDI-TOF mass spectrometry"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families as all patients with the mutation presented with symptoms.",
+      "population_frequency": "Not available in gnomAD or ExAC databases.",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study emphasizes the importance of distinguishing between fibril types in assessing disease progression.",
+      "key_quotes": [
+        "Individuals with fibril type A had a clearly higher proportion of wild-type molecules than patients with type B (73\u2009\u00b1\u20092.1% to 52\u2009\u00b1\u20095.7%, p\u2009=\u20090.008).",
+        "The special vulnerability of heart tissue for continued deposition after transplantation and the reason why some patients benefit from the procedure, whereas amyloid progression is triggered in others, are not understood."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical data of patients and proportion of wt to total ATTR in cardiac tissue",
+      "variants_extracted": 1
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Clinical data of patients and proportion of wt to total ATTR in adipose tissue",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear data on the TTR gene and its associated variants."
+  }
+}

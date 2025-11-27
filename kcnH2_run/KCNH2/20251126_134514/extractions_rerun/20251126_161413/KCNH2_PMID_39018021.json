@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "39018021",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant N588K, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1763A>G",
+      "protein_notation": "p.Asn588Lys",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Short QT syndrome type 1 (SQT1)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Short QT syndrome type 1",
+          "evidence_sentence": "In the most frequent subtype, short QT syndrome type 1 (SQT1), gain-of-function mutations in KCNH2/HERG (N588K) lead to an increased rapid delayed-rectifier K+ current (IKr) and a consecutive shortening of action potential (AP) duration (APD) and QT-duration."
+        }
+      ],
+      "functional_data": {
+        "summary": "The N588K variant leads to an increased rapid delayed-rectifier K+ current (IKr), resulting in shortened action potential duration and QT-duration.",
+        "assays": [
+          "Electrocardiograms (ECGs)",
+          "Monophasic action potentials (APs)",
+          "Cellular ventricular APs and ion currents"
+        ]
+      },
+      "segregation_data": "The variant segregates with the disease phenotype in the SQT1 rabbit model.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Introduction, paragraph 4",
+      "additional_notes": "The variant is associated with a high risk of ventricular arrhythmias and sudden cardiac death.",
+      "key_quotes": [
+        "In the most frequent subtype, short QT syndrome type 1 (SQT1), gain-of-function mutations in KCNH2/HERG (N588K) lead to an increased rapid delayed-rectifier K+ current (IKr) and a consecutive shortening of action potential (AP) duration (APD) and QT-duration."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly mentioned in the text."
+  }
+}

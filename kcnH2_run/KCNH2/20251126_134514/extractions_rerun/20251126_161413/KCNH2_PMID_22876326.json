@@ -1,0 +1,54 @@
+{
+  "paper_metadata": {
+    "pmid": "22876326",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the G628S mutation in the KCNH2 gene, its functional effects, and its implications in Long QT Syndrome."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1883G>A",
+      "protein_notation": "p.Gly628Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The G628S mutation results in non-functional channels that dominantly suppress wild-type hERG1 current.",
+        "assays": [
+          "Western blot",
+          "Patch-clamp electrophysiology",
+          "Co-immunoprecipitation"
+        ]
+      },
+      "segregation_data": "The G628S mutation is associated with Long QT Syndrome and shows dominant-negative effects.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The G628S mutation was primarily characterized in the context of hERG1a and hERG1b isoforms.",
+      "key_quotes": [
+        "hERG1a-G628S channels have been found to be non-functional and to dominantly suppress wild-type hERG1 current.",
+        "The dominant-negative suppression of hERG1 current by the mutant hERG1a and hERG1b channels is clearly shown."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The paper primarily focused on the G628S mutation in KCNH2 without additional variants."
+  }
+}

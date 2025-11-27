@@ -1,0 +1,134 @@
+{
+  "paper_metadata": {
+    "pmid": "35914747",
+    "title": "Clinical Application of Next-Generation Sequencing in Patients With Breast Cancer: Real-World Data",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 8,
+        "demographics": "female, age range not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": 4,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "A patient with a BRCA2 p.I1859fs mutation received olaparib at her own expense."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "A patient with a BRCA2 c.8633-2A>T mutation tested negative for germline BRCA mutations and received olaparib as part of a clinical trial."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Another patient with a BRCA1 p.K608fs mutation entered the clinical trial and received olaparib."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "A patient with a BRCA2 p.R2494 mutation was enrolled in a phase 1 clinical trial of a PARP/TNK inhibitor."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The decision to enroll in the clinical trial was based on the NGS results."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The patient did not undergo germline BRCA testing."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The patient remained in the MP-guided treatment group."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The patient did not undergo germline BRCA testing."
+        }
+      ],
+      "functional_data": {
+        "summary": "BRCA2 mutations are associated with breast cancer susceptibility.",
+        "assays": [
+          "NGS testing",
+          "germline BRCA testing"
+        ]
+      },
+      "segregation_data": "Segregation with disease in families not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The exact nature of the BRCA2 variants was not specified.",
+      "key_quotes": [
+        "Among the 81 patients with advanced breast cancer with targetable genomic alterations, 6 (7.4%) received MP-guided treatment.",
+        "Of the 4 patients with BRCA mutations, one with a BRCA2 p.I1859fs mutation received olaparib at her own expense."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data was primarily from the results section and individual patient descriptions."
+  }
+}

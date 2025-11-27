@@ -1,0 +1,8 @@
+# MAIN TEXT
+
+## Confirmation of associations between ion channel gene SNPs and QTc interval duration in healthy subjects
+
+### Abstract
+
+Population-based association studies have identified several polymorphic variants in genes encoding ion channel subunits associated with the electrocardiographic heart-rate corrected QT (QTc) length in healthy populations of Caucasian origin (KCNH2 rs1805123 (K897T) and rs3815459, SCN5A rs1805126 (D1819D), 1141-3 C>A, rs1805124 (H558R), and IVS24+116 G>A, KCNQ1 rs757092, KCNE1 IVS2-128 G>A and rs1805127 (G38S), and KCNE2 rs2234916 (T8A). However, few of these results have been replicated in independent populations. We tested the association of SNPs KCNQ1 rs757092, KCNH2 rs3815459, SCN5A IVS24+116 G>A, KCNE1 IVS2-128 G>A and KCNE2 rs2234916 with QTc length in two groups of 200 subjects presenting the shortest and the longest QTc from a cohort of 2008 healthy subjects. All polymorphisms were in Hardy-Weinberg equilibrium in both groups. The minor allele SCN5A IVS24+116 A was more frequent in the group of subjects with the shortest QTc, while the minor alleles KCNQ1 rs757092 G and KCNH2 rs3815459 A were more frequent in the group with the longest QTc. There was no significant difference for KCNE1 IVS2-128 G>A and KCNE2 rs2234916 between the two groups. Haplotype analysis showed a 2-fold increased risk of QTc lengthening for carriers of the haplotype combining alleles C and A of the two common KCNE1 SNPs, IVS2-129 C>T (rs2236609) and rs1805127 (G38S), respectively. In conclusion, our study confirms the reported associations between QTc length and KCNQ1 rs757092 and KCNH2 rs3815459.
+

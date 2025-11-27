@@ -1,0 +1,74 @@
+{
+  "paper_metadata": {
+    "pmid": "26330336",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant A561P, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.150648800G>C",
+      "protein_notation": "p.Ala561Pro",
+      "genomic_position": "chromosome 7: 150648800",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Patient: 22 years old, male; Mother: 46 years old, female",
+        "phenotype": "Patient presented syncope and torsades de pointes arrhythmia; Mother was asymptomatic with a normal ECG"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 22,
+          "age_at_onset": 13,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Presented syncope and torsades de pointes arrhythmia",
+          "evidence_sentence": "The patient carries a missense mutation in the KCNH2 gene, encoding the HERG K+ channel \u03b1-subunit, causing an alanine-to-proline substitution at position 561."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 46,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No clinical symptoms and a normal ECG",
+          "evidence_sentence": "As a control, somatic cells from a urine sample were also obtained from the patient\u2019s mother, aged 46 years, who had no clinical symptoms and a normal ECG and who was negative for the KCNH2 mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation led to a trafficking defect that resulted in reduced delayed rectifier K+ current (IKr), causing action potential prolongation and arrhythmias.",
+        "assays": [
+          "high-throughput optical techniques",
+          "patch-clamp techniques"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the family; the patient is affected while the mother is unaffected.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on functional assays and segregation data",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the use of UhiPS cells to model the electrophysiological characteristics of the KCNH2 mutation.",
+      "key_quotes": [
+        "This phenotype gave rise to action potential prolongation and arrhythmias.",
+        "Comparison of HERG expression from the patient\u2019s UhiPS-CMs to the mother\u2019s UhiPS-CMs showed that the mutation led to a trafficking defect."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant A561P was successfully extracted."
+  }
+}

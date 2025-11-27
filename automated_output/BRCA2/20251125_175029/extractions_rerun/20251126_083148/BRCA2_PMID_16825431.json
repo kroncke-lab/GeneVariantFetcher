@@ -1,0 +1,192 @@
+{
+  "paper_metadata": {
+    "pmid": "16825431",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene along with penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "IVS7+1G\u2192A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "associated with AML"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "associated with AML",
+          "evidence_sentence": "IVS7+1G\u2192A and IVS7+2T\u2192G were associated with AML."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "not specified",
+      "source_location": "Main Text, paragraph 4",
+      "additional_notes": "Part of a group of patients with biallelic mutations in BRCA2.",
+      "key_quotes": [
+        "IVS7+1G\u2192A and IVS7+2T\u2192G were associated with AML."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "IVS7+2T\u2192G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "associated with AML"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "associated with AML",
+          "evidence_sentence": "IVS7+1G\u2192A and IVS7+2T\u2192G were associated with AML."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "not specified",
+      "source_location": "Main Text, paragraph 4",
+      "additional_notes": "Part of a group of patients with biallelic mutations in BRCA2.",
+      "key_quotes": [
+        "IVS7+1G\u2192A and IVS7+2T\u2192G were associated with AML."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "886delGT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "associated with brain tumours"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "associated with brain tumours",
+          "evidence_sentence": "886delGT and 6174delT with brain tumours."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "not specified",
+      "source_location": "Main Text, paragraph 4",
+      "additional_notes": "Part of a group of patients with biallelic mutations in BRCA2.",
+      "key_quotes": [
+        "886delGT and 6174delT with brain tumours."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "6174delT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "associated with brain tumours"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "associated with brain tumours",
+          "evidence_sentence": "886delGT and 6174delT with brain tumours."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "not specified",
+      "source_location": "Main Text, paragraph 4",
+      "additional_notes": "Part of a group of patients with biallelic mutations in BRCA2.",
+      "key_quotes": [
+        "886delGT and 6174delT with brain tumours."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in BRCA2 were extracted successfully."
+  }
+}

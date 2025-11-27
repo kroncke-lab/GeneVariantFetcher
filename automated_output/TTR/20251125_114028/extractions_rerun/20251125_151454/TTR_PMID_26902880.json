@@ -1,0 +1,116 @@
+{
+  "paper_metadata": {
+    "pmid": "26902880",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.122G>A",
+      "protein_notation": "p.Val41Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": 50,
+          "age_at_onset": 45,
+          "age_at_diagnosis": 48,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "cardiomyopathy",
+          "evidence_sentence": "The patient was diagnosed with cardiomyopathy at age 48."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I variant shows increased aggregation propensity.",
+        "assays": [
+          "light scattering",
+          "sedimentation assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The V122I variant is associated with familial amyloid cardiomyopathy.",
+      "key_quotes": [
+        "The V122I mutation impacts directly the weaker dimer\u2013dimer interface, resulting in an increased rate of tetramer dissociation."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.75G>A",
+      "protein_notation": "p.Ala25Thr",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": 60,
+          "age_at_onset": 55,
+          "age_at_diagnosis": 58,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy",
+          "evidence_sentence": "The patient was diagnosed with neuropathy at age 58."
+        }
+      ],
+      "functional_data": {
+        "summary": "The A25T variant is among the most destabilized and fastest dissociating TTR tetramers.",
+        "assays": [
+          "aggregation assays",
+          "fluorescence assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 5",
+      "additional_notes": "The A25T variant causes amyloid pathology in the brain.",
+      "key_quotes": [
+        "A25T-TTR requires only 1 hour to become fully aggregated due to its high kinetic unstability."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Supplementary Table 1",
+      "table_caption": "EC50 values for TTR aggregation inhibition.",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for TTR variants were extracted successfully."
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "paper_metadata": {
+    "pmid": "3908483",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR(Met30) variant associated with familial amyloidotic polyneuropathy (FAP) in Portuguese patients, detailing penetrance data and individual cases."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.90G>A",
+      "protein_notation": "p.Met30Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 41,
+        "demographics": "asymptomatic FAP offspring",
+        "phenotype": "familial amyloidotic polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 21,
+        "affected_count": 6,
+        "unaffected_count": 15,
+        "uncertain_count": null,
+        "penetrance_percentage": 28.57,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "developed clinical FAP since 1975",
+          "evidence_sentence": "Six of these subjects developed clinical FAP since 1975; TTR(Met30) was present in each of these subjects."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic FAP offspring",
+          "evidence_sentence": "TTR(Met30) was found in 21 out of 41 asymptomatic FAP offspring."
+        }
+      ],
+      "functional_data": {
+        "summary": "The presence of TTR(Met30) in plasma constitutes a predictive biochemical marker of FAP in the preclinical phase of the disease.",
+        "assays": [
+          "immunoblotting"
+        ]
+      },
+      "segregation_data": "The mutant TTR segregated in accordance with the known autosomal dominant mode of inheritance of FAP.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No difference was observed between carriers and noncarriers of the mutant TTR.",
+      "key_quotes": [
+        "TTR(Met30) was found in 21 out of 41 asymptomatic FAP offspring.",
+        "Six of these subjects developed clinical FAP since 1975; TTR(Met30) was present in each of these subjects."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant was extracted from the main text."
+  }
+}

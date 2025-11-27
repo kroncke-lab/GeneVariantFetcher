@@ -1,0 +1,111 @@
+{
+  "paper_metadata": {
+    "pmid": "25367359",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.G26S",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": 108,
+        "demographics": "Caucasian males, age 59\u201387 years",
+        "phenotype": "cardiomyopathy due to wild-type TTR deposition"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 108,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The p.G26S polymorphism was predicted to be a protective factor.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "7% in ATTRwt subjects, 12% in controls",
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was significantly associated with age at onset and survival.",
+      "key_quotes": [
+        "Exon analyses demonstrated the occurrence of the p.G26S (G6S) polymorphism in 7% of ATTRwt subjects and 12% of controls; this variant was predicted to be a protective factor (p = 0.051)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.78G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 108,
+        "demographics": "Caucasian males, age 59\u201387 years",
+        "phenotype": "cardiomyopathy due to wild-type TTR deposition"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 108,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional impact not specified.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Further investigation is warranted.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.1234C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 108,
+        "demographics": "Caucasian males, age 59\u201387 years",
+        "phenotype": "cardiomyopathy due to wild-type TTR deposition"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 108,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional impact not specified.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Further investigation is warranted.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted pertain to the TTR gene."
+  }
+}

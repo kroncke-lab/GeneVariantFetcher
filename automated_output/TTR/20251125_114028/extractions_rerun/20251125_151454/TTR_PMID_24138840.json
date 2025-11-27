@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "24138840",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the incidence of hereditary amyloidosis, particularly familial amyloidotic polyneuropathy (FAP), in Sweden, focusing on the TTR gene mutations. However, specific TTR variants are not detailed in the text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific TTR genetic variant data."
+    ],
+    "notes": "The paper discusses the incidence and geographic distribution of FAP in Sweden but does not specify individual TTR variants or penetrance data."
+  }
+}

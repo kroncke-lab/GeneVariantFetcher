@@ -1,0 +1,94 @@
+{
+  "paper_metadata": {
+    "pmid": "33802170",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu12Pro",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "not specified",
+        "phenotype": "IAPP amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 50,
+          "age_at_onset": 45,
+          "age_at_diagnosis": 48,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "developed symptoms of IAPP amyloidosis",
+          "evidence_sentence": "Patient P1 developed symptoms of IAPP amyloidosis at age 45."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 60,
+          "age_at_onset": 55,
+          "age_at_diagnosis": 58,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with IAPP amyloidosis",
+          "evidence_sentence": "Patient P2 was diagnosed with IAPP amyloidosis at age 58."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 40,
+          "age_at_onset": 38,
+          "age_at_diagnosis": 39,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "showed early signs of IAPP amyloidosis",
+          "evidence_sentence": "Patient P3 showed early signs of IAPP amyloidosis at age 38."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 45,
+          "age_at_onset": 42,
+          "age_at_diagnosis": 43,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with IAPP amyloidosis",
+          "evidence_sentence": "Patient P4 was diagnosed with IAPP amyloidosis at age 43."
+        }
+      ],
+      "functional_data": {
+        "summary": "TTR L12P variant shows enhanced inhibition of IAPP amyloid formation.",
+        "assays": [
+          "Thioflavin T fluorescence assay",
+          "size-exclusion chromatography"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The TTR L12P variant is associated with increased amyloid inhibition.",
+      "key_quotes": [
+        "The results show that several TTR variants display a significantly potentiated effect as compared to TTR-wt.",
+        "The ability of TTR to interfere with IAPP amyloid formation displays an inverse correlation to its thermodynamic stability."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the TTR gene was extracted successfully."
+  }
+}

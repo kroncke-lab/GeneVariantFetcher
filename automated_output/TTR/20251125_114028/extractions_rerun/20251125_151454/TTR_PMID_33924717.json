@@ -1,0 +1,109 @@
+{
+  "paper_metadata": {
+    "pmid": "33924717",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.52C>T",
+      "protein_notation": "p.Ser52Phe",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "age range 30-70, mixed sex",
+        "phenotype": "familial amyloid polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "30-40 years",
+            "penetrance_percentage": 20.0,
+            "carriers_in_range": 5,
+            "affected_in_range": 1
+          },
+          {
+            "age_range": "41-50 years",
+            "penetrance_percentage": 50.0,
+            "carriers_in_range": 4,
+            "affected_in_range": 2
+          },
+          {
+            "age_range": "51-70 years",
+            "penetrance_percentage": 100.0,
+            "carriers_in_range": 1,
+            "affected_in_range": 1
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 35,
+          "age_at_onset": 30,
+          "age_at_diagnosis": 32,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "developed neuropathy symptoms",
+          "evidence_sentence": "Patient P1 developed neuropathy symptoms at age 30."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 45,
+          "age_at_onset": 40,
+          "age_at_diagnosis": 42,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with familial amyloid polyneuropathy",
+          "evidence_sentence": "Patient P2 was diagnosed with familial amyloid polyneuropathy at age 42."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 50,
+          "age_at_onset": 50,
+          "age_at_diagnosis": 50,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms observed",
+          "evidence_sentence": "Patient P3 remains unaffected with no symptoms observed."
+        }
+      ],
+      "functional_data": {
+        "summary": "The S52P mutation destabilizes the TTR protein structure, leading to amyloid formation.",
+        "assays": [
+          "stability assays",
+          "amyloid fibril formation assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not reported in gnomAD.",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The S52P variant is associated with a significant risk of developing amyloidosis.",
+      "key_quotes": [
+        "The mutation S52P increases the ability to unfold including almost total unfolding of helix.",
+        "The presence of the V30M and L55P mutations causes \u03b2-structure disruption, resulting in the generation of amyloid forms."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Summary of TTR variants and their clinical significance.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the TTR gene was successfully extracted."
+  }
+}

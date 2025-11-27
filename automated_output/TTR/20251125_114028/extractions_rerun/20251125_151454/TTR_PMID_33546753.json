@@ -1,0 +1,73 @@
+{
+  "paper_metadata": {
+    "pmid": "33546753",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant V142I, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.424G>A",
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 34,
+        "demographics": "Predominantly African American/African or Hispanic/Latinx",
+        "phenotype": "Hereditary transthyretin amyloidosis (hATTR)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 34,
+        "affected_count": 3,
+        "unaffected_count": 31,
+        "uncertain_count": null,
+        "penetrance_percentage": 8.8,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin amyloidosis",
+          "evidence_sentence": "Notably, the individual with a prior diagnosis of hATTR was the only EA individual to receive a TTR result and the only individual not harboring V142I."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Three of 34 (8.8%) TTR results were disclosed with a third-party Spanish interpreter to participants whose preferred language was Spanish."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V142I variant is associated with hereditary transthyretin amyloidosis, particularly in African ancestry populations.",
+        "assays": [
+          "Sanger sequencing"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families, as indicated by the affected status of some carriers.",
+      "population_frequency": "Common in African ancestry populations",
+      "evidence_level": "Strong evidence based on clinical significance and population studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the importance of including TTR in genomic screening programs for diverse populations.",
+      "key_quotes": [
+        "The addition of TTR to a pilot genomic screening program meant that we returned results to a higher proportion of AA and HL participants.",
+        "Three of 34 (8.8%) TTR results were disclosed with a third-party Spanish interpreter to participants whose preferred language was Spanish."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text, focusing on the TTR gene."
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "35402557",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on TTR gene variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "3-4% of African Americans",
+        "phenotype": "hereditary cardiac amyloidosis (hATTR)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 60,
+          "age_at_onset": 55,
+          "age_at_diagnosis": 58,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "cardiac amyloidosis with heart failure",
+          "evidence_sentence": "In a study by Itzhaki Ben Zadok et al., echocardiograms in AL and ATTR-CA patients analyzed in the years prior to a formal diagnosis found LVH \u2265 12 mm in 79% of patients more than 3 years prior to diagnosis."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile variant is associated with increased amyloid fibril deposition leading to cardiac dysfunction.",
+        "assays": [
+          "echocardiography",
+          "genetic testing"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families with hATTR.",
+      "population_frequency": "3-4% in African Americans",
+      "evidence_level": "moderate",
+      "source_location": "Introduction, paragraph 2",
+      "additional_notes": "The variant is the most common mutation in the United States.",
+      "key_quotes": [
+        "There are more than 130 TTR mutations identified, with the most common mutation in the United States being Val122Ile, present in 3\u20134% of African Americans."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

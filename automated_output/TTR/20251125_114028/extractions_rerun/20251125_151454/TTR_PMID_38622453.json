@@ -1,0 +1,76 @@
+{
+  "paper_metadata": {
+    "pmid": "38622453",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 40,
+        "demographics": "Median age 70 years, 10 females (25%), 30 males (75%)",
+        "phenotype": "Hereditary transthyretin amyloidosis with polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 40,
+        "affected_count": 31,
+        "unaffected_count": 9,
+        "uncertain_count": null,
+        "penetrance_percentage": 77.5,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 70,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin amyloidosis with polyneuropathy",
+          "evidence_sentence": "At 48 months of follow-up, FAP stage and PND class were available in 31 patients."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 70,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin amyloidosis with polyneuropathy",
+          "evidence_sentence": "At 48 months of follow-up, FAP stage and PND class were available in 31 patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR gene mutations lead to misfolding of the protein, causing amyloid deposits.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families as it is an autosomal dominant disorder.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The most common TTR variant mentioned is V30M, which is linked to early and late onset of disease.",
+      "key_quotes": [
+        "About 50% of patients with ATTRv amyloidosis carry this mutation, which has been linked to both an early (30\u201355 years of age) and a late onset of disease."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Baseline characteristics of the study population and disease status",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR gene variants and penetrance were extracted."
+  }
+}

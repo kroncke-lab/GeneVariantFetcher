@@ -1,0 +1,198 @@
+{
+  "paper_metadata": {
+    "pmid": "22359612",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the role of the S4\u2013S5 linker in the hERG K+ channel, focusing on mutations in the KCNH2 gene and their effects on channel gating kinetics. No specific patient-level penetrance data or clinical significance ratings for the variants were provided."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Asp540Ala",
+      "genomic_position": null,
+      "clinical_significance": "",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Mutation D540A affects the rate of activation, making it significantly faster at low voltage gradients.",
+        "assays": [
+          "Electrophysiology",
+          "NMR spectroscopy"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Functional data from in vitro studies",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "Numerous previous studies have investigated the effects of mutations in the hERG S4\u2013S5 linker and identified important roles for Asp540."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Ser543Ala",
+      "genomic_position": null,
+      "clinical_significance": "",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Mutation S543A causes a significant hyperpolarising shift in the V0.5 for steady-state activation.",
+        "assays": [
+          "Electrophysiology",
+          "NMR spectroscopy"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Functional data from in vitro studies",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "Mutations to Ser543 had more complex phenotypes indicating additional interactions."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Tyr545Ala",
+      "genomic_position": null,
+      "clinical_significance": "",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Mutation Y545A affects the rate of activation, making it significantly slower at high voltage gradients.",
+        "assays": [
+          "Electrophysiology",
+          "NMR spectroscopy"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Functional data from in vitro studies",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "Mutations to Tyr545 had more complex phenotypes indicating additional interactions."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Gly546Ala",
+      "genomic_position": null,
+      "clinical_significance": "",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Mutation G546A causes a significant hyperpolarising shift in the V0.5 for steady-state activation.",
+        "assays": [
+          "Electrophysiology",
+          "NMR spectroscopy"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Functional data from in vitro studies",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "Numerous previous studies have investigated the effects of mutations in the hERG S4\u2013S5 linker and identified important roles for Gly546."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Ala548Val",
+      "genomic_position": null,
+      "clinical_significance": "",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Mutation A548V causes a significant hyperpolarising shift in the V0.5 for steady-state activation and affects the rate of activation.",
+        "assays": [
+          "Electrophysiology",
+          "NMR spectroscopy"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Functional data from in vitro studies",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "Mutations to Ala548 had more complex phenotypes indicating additional interactions."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No specific patient-level penetrance data or clinical significance ratings were provided."
+    ],
+    "notes": "The paper focused on functional studies of mutations in the KCNH2 gene without providing detailed clinical or penetrance data."
+  }
+}

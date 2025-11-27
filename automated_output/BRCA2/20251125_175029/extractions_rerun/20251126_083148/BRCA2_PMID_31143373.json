@@ -1,0 +1,208 @@
+{
+  "paper_metadata": {
+    "pmid": "31143373",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from the study."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5576_5579delTAA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 76,
+        "demographics": "Japanese breast cancer patients",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 76,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional impact not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "unknown",
+      "source_location": "Table 2",
+      "additional_notes": "This variant was one of the pathogenic variants identified in the study.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1278delA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 76,
+        "demographics": "Japanese breast cancer patients",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 76,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional impact not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "unknown",
+      "source_location": "Table 2",
+      "additional_notes": "This variant was one of the pathogenic variants identified in the study.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8504C>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 76,
+        "demographics": "Japanese breast cancer patients",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 76,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional impact not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "unknown",
+      "source_location": "Table 2",
+      "additional_notes": "This variant was one of the pathogenic variants identified in the study.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9117G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 76,
+        "demographics": "Japanese breast cancer patients",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 76,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional impact not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "unknown",
+      "source_location": "Table 2",
+      "additional_notes": "This variant was one of the pathogenic variants identified in the study.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6952C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 76,
+        "demographics": "Japanese breast cancer patients",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 76,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional impact not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "unknown",
+      "source_location": "Table 2",
+      "additional_notes": "This variant was one of the pathogenic variants identified in the study.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8589insA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 76,
+        "demographics": "Japanese breast cancer patients",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 76,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional impact not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "unknown",
+      "source_location": "Table 2",
+      "additional_notes": "This variant was one of the pathogenic variants identified in the study.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "BRCA2 pathogenic variants identified in the study.",
+      "variants_extracted": 6
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 6,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All BRCA2 variants were extracted from Table 2."
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "paper_metadata": {
+    "pmid": "1729888",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR variant TTR (122 Val----Ile) associated with cardiac amyloidosis in blacks, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.365G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 177,
+        "demographics": "black individuals",
+        "phenotype": "cardiac amyloidosis in one homozygous individual, healthy in others"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 1,
+        "unaffected_count": 3,
+        "uncertain_count": null,
+        "penetrance_percentage": 25.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "cardiac amyloidosis",
+          "evidence_sentence": "This variant has previously been detected by PCR around codon 122, followed by MaeIII digestion, but this test is not specific."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "healthy",
+          "evidence_sentence": "4/177 healthy black individuals."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "healthy",
+          "evidence_sentence": "4/177 healthy black individuals."
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "healthy",
+          "evidence_sentence": "4/177 healthy black individuals."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant was confirmed using PCR-primer-introduced restriction analysis.",
+        "assays": [
+          "PCR-PIRA"
+        ]
+      },
+      "segregation_data": "The variant was found in a homozygous individual with cardiac amyloidosis.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The study confirms the presence of the TTR variant in both affected and unaffected individuals.",
+      "key_quotes": [
+        "This variant has previously been detected by PCR around codon 122.",
+        "4/177 healthy black individuals."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted from the main text with no supplementary tables available."
+  }
+}

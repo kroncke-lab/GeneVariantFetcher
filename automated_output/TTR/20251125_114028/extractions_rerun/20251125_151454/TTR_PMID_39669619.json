@@ -1,0 +1,78 @@
+{
+  "paper_metadata": {
+    "pmid": "39669619",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349G>T",
+      "protein_notation": "p.Ala117Ser",
+      "genomic_position": "g.31598580G>T",
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Not specified",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "None",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.424G>A",
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": "g.31598655G>A",
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Not specified",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "None",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant TTR variants were extracted successfully."
+  }
+}

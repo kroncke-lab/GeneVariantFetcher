@@ -1,0 +1,101 @@
+{
+  "paper_metadata": {
+    "pmid": "36659956",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR Gly83Arg variant, including penetrance data and individual patient details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.248G>A",
+      "protein_notation": "p.Gly83Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "mean age 52.00\u00b17.23 years",
+        "phenotype": "retinal amyloid angiopathy (RAA)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 5,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 52,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with RAA, vitreous opacity in both eyes",
+          "evidence_sentence": "These patients were previously diagnosed with hereditary transthyretin amyloidosis caused by the TTR Gly83Arg variant."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 52,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with RAA, vitreous opacity in both eyes",
+          "evidence_sentence": "These patients were previously diagnosed with hereditary transthyretin amyloidosis caused by the TTR Gly83Arg variant."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 52,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with RAA, vitreous opacity in both eyes",
+          "evidence_sentence": "These patients were previously diagnosed with hereditary transthyretin amyloidosis caused by the TTR Gly83Arg variant."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 52,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with RAA, vitreous opacity in both eyes",
+          "evidence_sentence": "These patients were previously diagnosed with hereditary transthyretin amyloidosis caused by the TTR Gly83Arg variant."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 52,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with RAA, vitreous opacity in both eyes",
+          "evidence_sentence": "These patients were previously diagnosed with hereditary transthyretin amyloidosis caused by the TTR Gly83Arg variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR Gly83Arg variant is associated with hereditary transthyretin amyloidosis leading to retinal complications.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the affected individuals.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All patients presented with similar clinical features related to RAA.",
+      "key_quotes": [
+        "This is the first report of RAA in patients with the TTR Gly83Arg variant.",
+        "Complications such as RAA and glaucoma will seriously affect the visual prognosis of patients."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

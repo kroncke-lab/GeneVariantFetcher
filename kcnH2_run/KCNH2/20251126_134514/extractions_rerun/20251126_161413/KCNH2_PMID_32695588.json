@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "32695588",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 variant c.3103delC, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.3103delC",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "41-year-old female",
+        "phenotype": "Congenital Long QT Syndrome Type 2 (LQT2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 41,
+          "age_at_onset": 18,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Episodes of syncope with remarkable QT interval prolongation.",
+          "evidence_sentence": "Genetic testing in the 41-year-old case patient revealed a mutation in KCNH2 (c.3103delC)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is identified as pathogenic based on previous studies.",
+        "assays": []
+      },
+      "segregation_data": "The variant was found in the proband with a family history of QT prolongation.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Case report, paragraph 4",
+      "additional_notes": "The patient had a family history of QT prolongation and TdP.",
+      "key_quotes": [
+        "Genetic testing in the 41-year-old case patient revealed a mutation in KCNH2 (c.3103delC).",
+        "The previous study identified the mutation in the cohort of patients with LQTS as pathogenic."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant was successfully extracted."
+  }
+}

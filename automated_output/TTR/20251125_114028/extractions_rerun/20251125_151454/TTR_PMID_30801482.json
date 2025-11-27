@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "30801482",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Thr60Ala, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.179A>G",
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "72-year-old male of Irish descent",
+        "phenotype": "cardiac amyloidosis with peripheral neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 72,
+          "age_at_onset": 66,
+          "age_at_diagnosis": 66,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "cardiac amyloidosis with transthyretin Thr60Ala mutation, developed demyelinating neuropathy",
+          "evidence_sentence": "A 72-year-old man of Irish descent, diagnosed at age 66 with cardiac amyloidosis with transthyretin Threonine60Alanine mutation (treated with diflunisal)..."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with severe demyelinating neuropathy.",
+        "assays": []
+      },
+      "segregation_data": "The variant is present in a family with a history of amyloidosis.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Main Text, Case Report",
+      "additional_notes": "The patient had a family history of amyloidosis.",
+      "key_quotes": [
+        "This case expands the clinicopathologic spectrum of transthyretin amyloidosis and may represent complex disease and treatment effects.",
+        "Patients with transthyretin amyloidosis usually present with an axonal polyneuropathy, with occasional segmental demyelination."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted detailed information on the TTR variant Thr60Ala and its penetrance data."
+  }
+}

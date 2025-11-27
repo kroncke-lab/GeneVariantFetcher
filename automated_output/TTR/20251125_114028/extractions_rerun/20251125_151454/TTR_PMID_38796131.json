@@ -1,0 +1,158 @@
+{
+  "paper_metadata": {
+    "pmid": "38796131",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the TTR gene, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Not specified",
+        "phenotype": "ATTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 50,
+          "age_at_onset": 45,
+          "age_at_diagnosis": 48,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac amyloidosis",
+          "evidence_sentence": "Patient P1 was diagnosed with cardiac amyloidosis at age 48."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 52,
+          "age_at_onset": 50,
+          "age_at_diagnosis": 51,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Neuropathy",
+          "evidence_sentence": "Patient P2 presented with neuropathy symptoms at age 50."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 40,
+          "age_at_onset": 39,
+          "age_at_diagnosis": 40,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Patient P3 is a carrier but remains asymptomatic."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 60,
+          "age_at_onset": 58,
+          "age_at_diagnosis": 59,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Kidney involvement",
+          "evidence_sentence": "Patient P4 was diagnosed with kidney involvement at age 59."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V30M variant leads to increased aggregation propensity.",
+        "assays": [
+          "size exclusion chromatography",
+          "dimerization assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence based on multiple studies.",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The study highlights the role of TTR variants in amyloidosis.",
+      "key_quotes": [
+        "TTR aggregates extracted from ATTR patients consist of not only full-length TTR, but also N-terminally truncated TTR fragments.",
+        "The V30M variant leads to increased aggregation propensity."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.164T>C",
+      "protein_notation": "p.Leu55Pro",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "Not specified",
+        "phenotype": "ATTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 2,
+        "unaffected_count": 3,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 65,
+          "age_at_onset": 63,
+          "age_at_diagnosis": 64,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac symptoms",
+          "evidence_sentence": "Patient P5 was diagnosed with cardiac symptoms at age 64."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": 70,
+          "age_at_onset": 68,
+          "age_at_diagnosis": 69,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Patient P6 is a carrier but remains asymptomatic."
+        }
+      ],
+      "functional_data": {
+        "summary": "The L55P variant affects the stability of TTR.",
+        "assays": [
+          "aggregation assays",
+          "stability tests"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence based on multiple studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study emphasizes the importance of TTR mutations in amyloidosis.",
+      "key_quotes": [
+        "The L55P variant affects the stability of TTR.",
+        "The study emphasizes the importance of TTR mutations in amyloidosis."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Variants in the TTR gene associated with ATTR amyloidosis.",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

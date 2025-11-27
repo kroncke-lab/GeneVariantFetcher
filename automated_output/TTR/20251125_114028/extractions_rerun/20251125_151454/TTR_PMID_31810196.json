@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "31810196",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant D18G, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.53A>G",
+      "protein_notation": "p.Asp18Gly",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "familial amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "familial amyloidosis",
+          "evidence_sentence": "Interestingly, however, a disease-related mutation (D18G) of TTR destabilizes the polypeptides and exposes a cryptic N-glycosylation site."
+        }
+      ],
+      "functional_data": {
+        "summary": "The D18G mutation destabilizes TTR and exposes a cryptic N-glycosylation site.",
+        "assays": []
+      },
+      "segregation_data": "The variant is associated with familial amyloidosis.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Main Text, Section 3",
+      "additional_notes": "The mutation facilitates the clearance of mutant TTR by bringing the protein to the ER-associated degradation (ERAD) machinery.",
+      "key_quotes": [
+        "Interestingly, however, a disease-related mutation (D18G) of TTR destabilizes the polypeptides and exposes a cryptic N-glycosylation site."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variant."
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "paper_metadata": {
+    "pmid": "26521788",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 9,
+        "demographics": "5 males, 4 females, ages 25 to 85 years",
+        "phenotype": "hereditary TTR amyloidosis with symptoms including paresthesia, weakness, dysautonomia, cardiomyopathy, and vitreous opacity"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 8,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 88.89,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "severe loss of myelinated fibers, amyloid deposits",
+          "evidence_sentence": "Seven patients (1, 2, 3, 4, 6, 7, and 8) had severe loss of myelinated fibers, three (1, 2, and 4) of whom had amyloid deposits."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "severe loss of myelinated fibers, amyloid deposits",
+          "evidence_sentence": "Seven patients (1, 2, 3, 4, 6, 7, and 8) had severe loss of myelinated fibers, three (1, 2, and 4) of whom had amyloid deposits."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "severe loss of myelinated fibers, amyloid deposits",
+          "evidence_sentence": "Seven patients (1, 2, 3, 4, 6, 7, and 8) had severe loss of myelinated fibers, three (1, 2, and 4) of whom had amyloid deposits."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "severe loss of myelinated fibers, amyloid deposits",
+          "evidence_sentence": "Seven patients (1, 2, 3, 4, 6, 7, and 8) had severe loss of myelinated fibers, three (1, 2, and 4) of whom had amyloid deposits."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "nearly normal sural nerve, amyloid deposits in skin",
+          "evidence_sentence": "One patient (5) had nearly normal sural nerve and skin with no amyloid deposits from light microscopic examinations, but with amyloid deposits among the capillary from skin electron microscopic examinations."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "severe loss of myelinated fibers, amyloid deposits",
+          "evidence_sentence": "Seven patients (1, 2, 3, 4, 6, 7, and 8) had severe loss of myelinated fibers, three (1, 2, and 4) of whom had amyloid deposits."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "severe loss of myelinated fibers, amyloid deposits",
+          "evidence_sentence": "Seven patients (1, 2, 3, 4, 6, 7, and 8) had severe loss of myelinated fibers, three (1, 2, and 4) of whom had amyloid deposits."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "severe loss of myelinated fibers, amyloid deposits",
+          "evidence_sentence": "Seven patients (1, 2, 3, 4, 6, 7, and 8) had severe loss of myelinated fibers, three (1, 2, and 4) of whom had amyloid deposits."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "At the diagnostic time, all the patients had paresthesia except patient 9."
+        }
+      ],
+      "functional_data": {
+        "summary": "Different missense mutations in the TTR gene were identified in the eight families.",
+        "assays": []
+      },
+      "segregation_data": "Patients 1 and 2 came from the same family. Patient 5 had a family history of autosomal-dominant inheritance.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The most common mutation type Val30Met was found in three families.",
+      "key_quotes": [
+        "Different missense mutations in the TTR gene were identified in the eight families, including Val30Met (patients 1, 2, 8, and 9), Phe33Leu (patient 3), Ala36Pro (patient 4), Val30Ala (patient 5), Phe33Val (patient 6), and Glu42Gly (patient 7).",
+        "The most common mutation type Val30Met was found in three families."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

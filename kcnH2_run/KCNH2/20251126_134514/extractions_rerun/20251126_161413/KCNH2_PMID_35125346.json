@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "35125346",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a high-throughput screening assay for identifying drugs that improve membrane expression of trafficking-deficient KV11.1 (KCNH2) variants. No specific KCNH2 genetic variants with penetrance data were reported."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant data for KCNH2, focusing instead on assay development."
+    ],
+    "notes": "The paper primarily focuses on the development of a high-throughput assay and does not provide detailed genetic variant information or penetrance data for KCNH2."
+  }
+}

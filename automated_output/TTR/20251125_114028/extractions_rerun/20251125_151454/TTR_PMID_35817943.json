@@ -1,0 +1,85 @@
+{
+  "paper_metadata": {
+    "pmid": "35817943",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 50,
+        "demographics": "Mean age 77.4 \u00b1 8.2 years, 40 men and 10 women",
+        "phenotype": "cardiac transthyretin-related amyloidosis (cATTR) with and without polyneuropathy (PNP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 50,
+        "affected_count": 25,
+        "unaffected_count": 15,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 77,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy",
+          "evidence_sentence": "The NVC measurements revealed 25 patients with presentation of sensorimotor polyneuropathy (19x wtATTR, 6x hATTR)"
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 77,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no sign of polyneuropathy",
+          "evidence_sentence": "The group of the remaining 15 patients did not show any sign of polyneuropathy (13 x wtATTR, 2 x hATTR)"
+        }
+      ],
+      "functional_data": {
+        "summary": "The study suggests that DPD bone scintigraphy is a useful tool for identification of patients with cATTR and a risk for PNP due to increased DPD soft tissue uptake.",
+        "assays": [
+          "nerve conduction studies (NCS)",
+          "DPD bone scintigraphy"
+        ]
+      },
+      "segregation_data": "Not explicitly mentioned in the paper.",
+      "population_frequency": "Not provided in the paper.",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included both wild-type and hereditary forms of TTR-related amyloidosis.",
+      "key_quotes": [
+        "The NVC measurements revealed 25 patients with presentation of sensorimotor polyneuropathy (19x wtATTR, 6x hATTR)",
+        "The group of the remaining 15 patients did not show any sign of polyneuropathy (13 x wtATTR, 2 x hATTR)"
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Patient population",
+      "variants_extracted": 5
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Patients with additional quantitative thoracic SPECT/CT",
+      "variants_extracted": 5
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding TTR variants and penetrance were extracted."
+  }
+}

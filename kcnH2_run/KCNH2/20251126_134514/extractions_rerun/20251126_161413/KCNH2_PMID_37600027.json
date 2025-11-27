@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "37600027",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses genetic variants associated with cardiac ion channelopathies, particularly focusing on the KCNH2 gene in the context of long QT syndrome (LQTS) in Asian populations. However, no specific KCNH2 variants are detailed in the text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific KCNH2 variant data."
+    ],
+    "notes": "The paper mentions the KCNH2 gene in the context of LQTS but does not provide specific variant information or penetrance data."
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "19957170",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on genetic variants in the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.3331-9-8 delGT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "3-year-old male",
+        "phenotype": "syncope, baseline QTc 427 ms, Schwartz score 1, negative epinephrine response"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 3,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "syncope, baseline QTc 427 ms, Schwartz score 1, negative epinephrine response",
+          "evidence_sentence": "Furthermore, two mutations of questionable pathogenicity were found in a 3-year-old male subject with syncope, baseline QTc 427 ms, Schwartz score 1, and negative epinephrine response."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided for this variant.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": null,
+      "evidence_level": "Low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variant is of questionable pathogenicity.",
+      "key_quotes": [
+        "two mutations of questionable pathogenicity were found in a 3-year-old male subject with syncope, baseline QTc 427 ms, Schwartz score 1, and negative epinephrine response."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in the KCNH2 gene was found in the paper."
+  }
+}

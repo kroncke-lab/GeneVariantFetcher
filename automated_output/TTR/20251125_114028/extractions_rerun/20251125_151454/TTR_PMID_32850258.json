@@ -1,0 +1,71 @@
+{
+  "paper_metadata": {
+    "pmid": "32850258",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant V122I, including penetrance data from two case reports."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "51-year-old Afro-Caribbean male, 40-year-old African American female",
+        "phenotype": "Cardiomyopathy with neurological symptoms"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 51,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Progressive and refractory congestive HF, echocardiographic features of restrictive cardiomyopathy.",
+          "evidence_sentence": "Genetic testing after pretest counseling revealed the presence of V122I gene mutation (heterozygote)."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 40,
+          "age_at_onset": 16,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Worsening dyspnea on exertion, intermittent bilateral hand tremors.",
+          "evidence_sentence": "The patient had testing after appropriate genetic counseling, which revealed heterozygosity for the V122I transthyretin protein."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I mutation is associated with a cardiomyopathy phenotype and may also present with neurological symptoms.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family as both cases are affected.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Main Text, Case presentation",
+      "additional_notes": "Both cases show significant clinical manifestations of the V122I mutation.",
+      "key_quotes": [
+        "Patients with hereditary ATTR secondary to V122I mutation usually present with a cardiomyopathy phenotype.",
+        "Genetic testing after pretest counseling revealed the presence of V122I gene mutation (heterozygote)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted detailed penetrance data from individual cases."
+  }
+}

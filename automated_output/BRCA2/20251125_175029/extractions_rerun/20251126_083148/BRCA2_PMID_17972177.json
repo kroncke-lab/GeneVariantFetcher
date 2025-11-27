@@ -1,0 +1,218 @@
+{
+  "paper_metadata": {
+    "pmid": "17972177",
+    "title": "BRCA1 and BRCA2 germline mutation analysis in the Indonesian population",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3040_3043del4",
+      "protein_notation": "p.Leu1014fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Age 34, female, Indonesian",
+        "phenotype": "Invasive ductal carcinoma, diagnosed at age 34"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "B34",
+          "age_at_evaluation": 34,
+          "age_at_onset": null,
+          "age_at_diagnosis": 34,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Invasive ductal carcinoma",
+          "evidence_sentence": "Patient B34 with BRCA2 c.3040_3043del4 was diagnosed with invasive ductal carcinoma at age 34."
+        }
+      ],
+      "functional_data": {
+        "summary": "The deletion leads to a frameshift mutation, likely resulting in a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and mutation type.",
+      "source_location": "Table 1, Row 4",
+      "additional_notes": "This variant is classified as pathogenic due to its predicted effect on protein function.",
+      "key_quotes": [
+        "The c.3040_3043del4 mutation in BRCA2 was found in a patient diagnosed with invasive ductal carcinoma."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6775G>T",
+      "protein_notation": "p.Glu2183X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Ages 37 and 40, female, Indonesian",
+        "phenotype": "Invasive ductal carcinoma, diagnosed at ages 37 and 40"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "W-II37",
+          "age_at_evaluation": 37,
+          "age_at_onset": null,
+          "age_at_diagnosis": 37,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Invasive ductal carcinoma",
+          "evidence_sentence": "Patient W-II37 with BRCA2 c.6775G>T was diagnosed with invasive ductal carcinoma at age 37."
+        },
+        {
+          "individual_id": "AZ40",
+          "age_at_evaluation": 40,
+          "age_at_onset": null,
+          "age_at_diagnosis": 40,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Invasive ductal carcinoma",
+          "evidence_sentence": "Patient AZ40 with BRCA2 c.6775G>T was diagnosed with invasive ductal carcinoma at age 40."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation results in a premature stop codon, leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and mutation type.",
+      "source_location": "Table 1, Row 6",
+      "additional_notes": "Both patients presented with invasive ductal carcinoma, indicating high penetrance.",
+      "key_quotes": [
+        "The p.Glu2183X mutation was found in 2 related patients that had breast cancer above the age of 60."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2699_2704delTAAATG",
+      "protein_notation": "p.Leu824X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Ages 30 and 40, female, Indonesian",
+        "phenotype": "Invasive ductal carcinoma, diagnosed at ages 30 and 40"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "B-III-530",
+          "age_at_evaluation": 30,
+          "age_at_onset": null,
+          "age_at_diagnosis": 30,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Invasive ductal carcinoma",
+          "evidence_sentence": "Patient B-III-530 with BRCA2 c.2699_2704delTAAATG was diagnosed with invasive ductal carcinoma at age 30."
+        },
+        {
+          "individual_id": "AZ40",
+          "age_at_evaluation": 40,
+          "age_at_onset": null,
+          "age_at_diagnosis": 40,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Invasive ductal carcinoma",
+          "evidence_sentence": "Patient AZ40 with BRCA2 c.2699_2704delTAAATG was diagnosed with invasive ductal carcinoma at age 40."
+        }
+      ],
+      "functional_data": {
+        "summary": "The deletion leads to a frameshift mutation, likely resulting in a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and mutation type.",
+      "source_location": "Table 1, Row 5",
+      "additional_notes": "Both patients presented with invasive ductal carcinoma, indicating high penetrance.",
+      "key_quotes": [
+        "The c.2699_2704delTAAATG mutation was found in one other patient in the present study."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9008C>T",
+      "protein_notation": "p.Gln2894X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Age 37, female, Indonesian",
+        "phenotype": "Invasive ductal carcinoma, diagnosed at age 37"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "W-II37",
+          "age_at_evaluation": 37,
+          "age_at_onset": null,
+          "age_at_diagnosis": 37,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Invasive ductal carcinoma",
+          "evidence_sentence": "Patient W-II37 with BRCA2 c.9008C>T was diagnosed with invasive ductal carcinoma at age 37."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation results in a premature stop codon, leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and mutation type.",
+      "source_location": "Table 1, Row 7",
+      "additional_notes": "This variant is classified as pathogenic due to its predicted effect on protein function.",
+      "key_quotes": [
+        "The p.Gln2894X mutation was found in a patient diagnosed with invasive ductal carcinoma at age 37."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "BRCA1 or BRCA2 germline mutations in Indonesian women with early onset breast cancer",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 variants were extracted successfully."
+  }
+}

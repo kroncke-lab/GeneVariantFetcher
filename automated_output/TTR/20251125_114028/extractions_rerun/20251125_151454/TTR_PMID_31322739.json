@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "31322739",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the pharmacokinetics and pharmacodynamics of Patisiran in patients with hereditary transthyretin-mediated amyloidosis. No specific genetic variants in the TTR gene are mentioned."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention any specific genetic variants in the TTR gene."
+    ],
+    "notes": "The extraction process was straightforward as the paper did not provide any specific TTR variants to extract."
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "paper_metadata": {
+    "pmid": "37655225",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "not specified",
+        "phenotype": "ATTRv amyloidosis with varying clinical presentations"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "40-50 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "early-onset disease with small-fiber neuropathy",
+          "evidence_sentence": "the predominant genotype, Val50Met (V50M), is responsible for ATTRv amyloidosis in endemic foci, where it is typically associated with early-onset disease (age < 50 years)"
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "In contrast, in non-endemic areas, patients with the V50M variant usually have late-onset disease (age \u2265 50 years) with more severe motor neuropathy"
+        }
+      ],
+      "functional_data": {
+        "summary": "The V50M variant is associated with a neurological phenotype and has been linked to disease severity.",
+        "assays": []
+      },
+      "segregation_data": "Yes, it segregates with disease in families.",
+      "population_frequency": "not specified",
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The V50M variant is the most common and has significant implications for disease progression and treatment outcomes.",
+      "key_quotes": [
+        "the 5-year post-OLT survival rate has been reported to be approximately 100% for V50M patients and 59% for non-ATTR V50M patients."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.74G>A",
+      "protein_notation": "p.Glu74Gly",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "neuropathy and autonomic dysfunction"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "progressive sensorimotor neuropathy",
+          "evidence_sentence": "a post-OLT patient with the Glu74Gly variant experienced a continued worsening of sensorimotor neuropathy despite tafamidis treatment"
+        }
+      ],
+      "functional_data": {
+        "summary": "The Glu74Gly variant has been associated with worsening neuropathy despite treatment.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant's impact on treatment response highlights its clinical significance.",
+      "key_quotes": [
+        "the Glu74Gly patient improved after switching from tafamidis to patisiran."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Characteristics and clinical outcomes of patients who underwent OLT at Bellvitge University Hospital from January 1997 to August 2019.",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for TTR variants were extracted from the main text and tables."
+  }
+}

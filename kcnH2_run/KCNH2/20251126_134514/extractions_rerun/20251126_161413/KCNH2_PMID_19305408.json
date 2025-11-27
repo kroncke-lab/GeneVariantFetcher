@@ -1,0 +1,50 @@
+{
+  "paper_metadata": {
+    "pmid": "19305408",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 0,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The common SNP rs4725982, 3\u2032 of KCNH2, was associated with QT interval (+0.09 SD/minor allele, MAF=0.22, P = 6\u00d710\u22129). A second SNP at KCNH2, rs2968864 was associated with shorter QT interval duration for increasing minor allele count, but did not reach genome-wide significance.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variants rs4725982 and rs2968864 were associated with QT interval but specific patient data was not provided.",
+      "key_quotes": [
+        "The common SNP rs4725982, 3\u2032 of KCNH2, was associated with QT interval (+0.09 SD/minor allele, MAF=0.22, P = 6\u00d710\u22129).",
+        "A second SNP at KCNH2, rs2968864 was associated with shorter QT interval duration for increasing minor allele count, but did not reach our pre-specified genome-wide significance threshold."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "No individual patient data was available for the KCNH2 variants."
+  }
+}

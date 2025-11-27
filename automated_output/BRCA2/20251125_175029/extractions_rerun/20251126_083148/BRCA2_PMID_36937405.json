@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "36937405",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a variant in the BRCA2 gene, including clinical significance and penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1816C>T",
+      "protein_notation": "p.Pro606Ser",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "70-year-old male",
+        "phenotype": "locally advanced adenocarcinoma of the prostate"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 70,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "locally advanced adenocarcinoma of the prostate",
+          "evidence_sentence": "Prior germline genetic testing had established that the patient carried a pathogenic variant in c.319delinsAATAAGGCATC (p.Ala107fs) in the MSH2 gene and a variant of uncertain significance c.1816C>T (p.Pro606Ser) in the BRCA2 gene."
+        }
+      ],
+      "functional_data": {
+        "summary": "No functional data provided in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Case description, paragraph 4",
+      "additional_notes": "The BRCA2 variant is classified as a variant of uncertain significance (VUS).",
+      "key_quotes": [
+        "Prior germline genetic testing had established that the patient carried a pathogenic variant in c.319delinsAATAAGGCATC (p.Ala107fs) in the MSH2 gene and a variant of uncertain significance c.1816C>T (p.Pro606Ser) in the BRCA2 gene."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in the BRCA2 gene was reported in the paper."
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "30560216",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a TTR gene variant associated with familial transthyretin-associated amyloidosis."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.157 T>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "35-year-old male",
+        "phenotype": "familial transthyretin-associated amyloidosis with bilateral vitreous opacities"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 35,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "bilateral vitreous opacities and recurrence of ocular amyloid",
+          "evidence_sentence": "A 35-year-old man with autosomal-dominant, familial transthyretin-associated amyloidosis and bilateral vitreous opacities had a recurrence of amyloidosis following vitrectomy."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to the production of an abnormal protein, which deposits extracellularly in the form of amyloid fibrils.",
+        "assays": [
+          "DNA sequence analysis",
+          "mass spectrometry of vitreous sample"
+        ]
+      },
+      "segregation_data": "The variant is associated with familial amyloidosis as evidenced by family history.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Case report, paragraph 4",
+      "additional_notes": "The patient had a family history of amyloidosis in the father and paternal grandmother.",
+      "key_quotes": [
+        "A transthoracic echocardiogram was performed, which showed a thickened ventricular septum, suggestive of an infiltrative cardiomyopathy.",
+        "An abdominal fat aspirate was positive for amyloidosis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variant."
+  }
+}

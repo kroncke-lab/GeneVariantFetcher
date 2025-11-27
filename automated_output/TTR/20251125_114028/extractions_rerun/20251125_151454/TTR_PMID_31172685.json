@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "31172685",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No specific genetic variants in the TTR gene were mentioned in the provided text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focused on the pharmacokinetics and pharmacodynamics of AG10, with no mention of specific TTR gene variants."
+    ],
+    "notes": "The paper did not provide any genetic variant data for the TTR gene, focusing instead on the clinical trial of AG10."
+  }
+}

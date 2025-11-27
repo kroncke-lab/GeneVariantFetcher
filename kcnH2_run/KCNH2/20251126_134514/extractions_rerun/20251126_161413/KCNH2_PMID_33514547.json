@@ -1,0 +1,206 @@
+{
+  "paper_metadata": {
+    "pmid": "33514547",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses various mutations in the KCNH2 gene related to C-type inactivation in the hERG potassium channel, including their functional effects and implications for disease."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1880T>A",
+      "protein_notation": "p.F627Y",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "enhanced C-type inactivation"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "enhanced C-type inactivation",
+          "evidence_sentence": "The mutation F627Y, which is known to enhance C-type inactivation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation favors the constricted filter and enhances C-type inactivation.",
+        "assays": [
+          "electrophysiological recordings",
+          "MD simulations"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation introduces a new hydrogen bond contributing to the stability of the constricted conformation.",
+      "key_quotes": [
+        "The mutation favors the constricted filter.",
+        "C-type inactivation is faster and much more complete compared to WT."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1886A>T",
+      "protein_notation": "p.N629D",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "abolished C-type inactivation"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "abolished C-type inactivation",
+          "evidence_sentence": "The N629D filter prefers to adopt a conductive conformation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation abolishes C-type inactivation by stabilizing the conductive conformation.",
+        "assays": [
+          "electrophysiological recordings",
+          "MD simulations"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation switches the local minimum in the PMF to the conductive state.",
+      "key_quotes": [
+        "The N629D filter prefers to adopt a conductive conformation."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1860C>A",
+      "protein_notation": "p.S620T",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "decreased C-type inactivation"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "decreased C-type inactivation",
+          "evidence_sentence": "S620T, which decreases C-type inactivation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation decreases C-type inactivation by shifting the free energy basin toward the conductive state.",
+        "assays": [
+          "electrophysiological recordings",
+          "MD simulations"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The side-chain rotation of F627 is blocked in S620T.",
+      "key_quotes": [
+        "S620T decreases C-type inactivation."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1880T>A",
+      "protein_notation": "p.F627Y",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "enhanced C-type inactivation"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "enhanced C-type inactivation",
+          "evidence_sentence": "The mutation F627Y, which is known to enhance C-type inactivation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation favors the constricted filter and enhances C-type inactivation.",
+        "assays": [
+          "electrophysiological recordings",
+          "MD simulations"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation introduces a new hydrogen bond contributing to the stability of the constricted conformation.",
+      "key_quotes": [
+        "The mutation favors the constricted filter.",
+        "C-type inactivation is faster and much more complete compared to WT."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in KCNH2 were extracted successfully."
+  }
+}

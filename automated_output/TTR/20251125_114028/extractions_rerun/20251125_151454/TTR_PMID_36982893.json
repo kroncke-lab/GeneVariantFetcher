@@ -1,0 +1,144 @@
+{
+  "paper_metadata": {
+    "pmid": "36982893",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the TTR gene, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 9,
+        "demographics": "not specified",
+        "phenotype": "transthyretin-related hereditary amyloidosis (ATTR)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 9,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy and cardiomyopathy",
+          "evidence_sentence": "Patients carrying the most common variants of TTR, p.Val30Met, accounting for 85% of cases worldwide, were demonstrated to be protected by Tafamidis."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy and cardiomyopathy",
+          "evidence_sentence": "A successive study demonstrated that Tafamidis is also effective on eight variants other than p.Val30Met."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy and cardiomyopathy",
+          "evidence_sentence": "Many other conformational variants of the TTR protein have been treated with Tafamidis."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy and cardiomyopathy",
+          "evidence_sentence": "Patients carrying the most common variants of TTR, p.Val30Met, accounting for 85% of cases worldwide, were demonstrated to be protected by Tafamidis."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy and cardiomyopathy",
+          "evidence_sentence": "A successive study demonstrated that Tafamidis is also effective on eight variants other than p.Val30Met."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy and cardiomyopathy",
+          "evidence_sentence": "Many other conformational variants of the TTR protein have been treated with Tafamidis."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy and cardiomyopathy",
+          "evidence_sentence": "Patients carrying the most common variants of TTR, p.Val30Met, accounting for 85% of cases worldwide, were demonstrated to be protected by Tafamidis."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy and cardiomyopathy",
+          "evidence_sentence": "A successive study demonstrated that Tafamidis is also effective on eight variants other than p.Val30Met."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy and cardiomyopathy",
+          "evidence_sentence": "Many other conformational variants of the TTR protein have been treated with Tafamidis."
+        }
+      ],
+      "functional_data": {
+        "summary": "Tafamidis stabilizes TTR and slows disease progression.",
+        "assays": [
+          "binding affinity assays",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": "not specified",
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Tafamidis is FDA approved and marketed as Vyndamax.",
+      "key_quotes": [
+        "Patients carrying the most common variants of TTR, p.Val30Met, accounting for 85% of cases worldwide, were demonstrated to be protected by Tafamidis.",
+        "A successive study demonstrated that Tafamidis is also effective on eight variants other than p.Val30Met."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

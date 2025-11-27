@@ -1,0 +1,134 @@
+{
+  "paper_metadata": {
+    "pmid": "23028338",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8297delC",
+      "protein_notation": "p.Thr2766Asnfs*11",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "1 male, 2 females; ages 30-60",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 2,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 60,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The index case in the FANCC c.67delG family developed breast cancer at age 60 but independent clinical testing subsequently identified a deleterious mutation in BRCA2 (c.8297delC, p.Thr2766Asnfs*11) in other breast cancer-affected family members."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The mutation is present in a male diagnosed with breast cancer but not in the youngest affected female relative in the family."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "unaffected",
+          "evidence_sentence": "The mutation is present in a male diagnosed with breast cancer but not in the youngest affected female relative in the family."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is predicted to cause a frameshift leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "The mutation co-segregated with breast cancer in the family.",
+      "population_frequency": "Not reported in 1000 Genomes data.",
+      "evidence_level": "Strong evidence based on segregation and clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The BRCA2 mutation was identified in a family previously classified as BRCA1/2 negative.",
+      "key_quotes": [
+        "The index case in the FANCC c.67delG family developed breast cancer at age 60 but independent clinical testing subsequently identified a deleterious mutation in BRCA2 (c.8297delC, p.Thr2766Asnfs*11) in other breast cancer-affected family members."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.26delC",
+      "protein_notation": "p.Pro9Glnfs*16",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "1 female, ages 30-36",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 30,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In family 6, exome sequencing identified a deleterious BRCA2 mutation (c.26delC, p.Pro9Glnfs*16) in a female diagnosed with breast cancer at age 30."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 36,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "unaffected",
+          "evidence_sentence": "In family 6, exome sequencing identified a deleterious BRCA2 mutation (c.26delC, p.Pro9Glnfs*16) in a female diagnosed with breast cancer at age 30, but not in her cousin who was diagnosed at age 36."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is predicted to cause a frameshift leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "The mutation co-segregated with breast cancer in the family.",
+      "population_frequency": "Not reported in 1000 Genomes data.",
+      "evidence_level": "Strong evidence based on segregation and clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The BRCA2 mutation was identified in a family previously classified as BRCA1/2 negative.",
+      "key_quotes": [
+        "In family 6, exome sequencing identified a deleterious BRCA2 mutation (c.26delC, p.Pro9Glnfs*16) in a female diagnosed with breast cancer at age 30, but not in her cousin who was diagnosed at age 36."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

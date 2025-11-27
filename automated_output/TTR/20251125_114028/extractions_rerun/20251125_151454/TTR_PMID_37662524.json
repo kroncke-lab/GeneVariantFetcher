@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "37662524",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No specific genetic variants in the TTR gene were mentioned in the paper."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focused on the treatment effects of tafamidis in ATTR-CM and did not provide specific genetic variant data for the TTR gene."
+    ],
+    "notes": "The paper did not mention any specific TTR gene variants, so no variant data could be extracted."
+  }
+}

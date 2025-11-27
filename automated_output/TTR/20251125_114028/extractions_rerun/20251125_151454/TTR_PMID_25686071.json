@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": null,
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Tyr114Cys, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.341T>C",
+      "protein_notation": "p.Tyr114Cys",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "68-year-old Caucasian female",
+        "phenotype": "nonfamilial amyloidosis with bilateral optic neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 68,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "bilateral glass wool-like vitreous opacities and optic atrophy",
+          "evidence_sentence": "Genetic testing revealed a Tyr114Cys mutation in the transthyretin gene."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Tyr114Cys mutation is associated with amyloidosis, leading to visual impairment.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Main Text, Case Report section",
+      "additional_notes": "The penetrance is inferred from the single case report.",
+      "key_quotes": [
+        "Genetic testing revealed a Tyr114Cys mutation in the transthyretin gene.",
+        "In our patient, both nonextensive and extensive PPV could not prevent the recurrence of bilateral intraocular amyloid deposits."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variant."
+  }
+}

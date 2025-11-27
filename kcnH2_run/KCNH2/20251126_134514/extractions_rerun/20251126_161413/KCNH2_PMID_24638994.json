@@ -1,0 +1,86 @@
+{
+  "paper_metadata": {
+    "pmid": "24638994",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses variants in the KCNH2 gene, specifically L646E and F557L, and their implications in channel function and disease."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1937T>A",
+      "protein_notation": "p.Leu646Glu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The L646E mutation eliminated activity of PD, indicating steric interference with ligand binding.",
+        "assays": [
+          "voltage-clamp experiments",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation was studied in the context of its effects on hERG1 channel function.",
+      "key_quotes": [
+        "A point mutation in S6 (L646E) eliminated activity of PD, and molecular modeling predicted this was caused by steric interference with ligand binding."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1669T>C",
+      "protein_notation": "p.Phe557Leu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The F557L mutation was introduced in the context of studying hERG1 channel properties.",
+        "assays": [
+          "voltage-clamp experiments",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation was part of the study on the effects of various mutations on hERG1 channel function.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding KCNH2 variants were extracted from the main text."
+  }
+}

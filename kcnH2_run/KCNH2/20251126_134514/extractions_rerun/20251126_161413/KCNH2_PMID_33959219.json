@@ -1,0 +1,74 @@
+{
+  "paper_metadata": {
+    "pmid": "33959219",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the KCNH2 gene, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1820A>G",
+      "protein_notation": "p.Lys607Arg",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Two family members, one symptomatic and one asymptomatic",
+        "phenotype": "Long QT syndrome (LQTS2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 30,
+          "age_at_onset": 25,
+          "age_at_diagnosis": 28,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Symptomatic with prolonged action potential and arrhythmias.",
+          "evidence_sentence": "The derived-CMs exhibited substantial prolongation of the action potential, diminished IKr, early after depolarizations (EADs), and triggered arrhythmias."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 32,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "Asymptomatic with no clinical manifestations.",
+          "evidence_sentence": "Although the action potential duration was increased in the iPSC-CMs derived from both the clinically symptomatic patient and the clinically asymptomatic mother."
+        }
+      ],
+      "functional_data": {
+        "summary": "iPSC-CMs derived from the patient with KCNH2-A561V mutation exhibited prolonged action potential and reduced IKr.",
+        "assays": [
+          "electrophysiological recordings",
+          "calcium imaging"
+        ]
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The penetrance data indicates variability in clinical presentation among carriers.",
+      "key_quotes": [
+        "The derived-CMs exhibited substantial prolongation of the action potential, diminished IKr, early after depolarizations (EADs), and triggered arrhythmias.",
+        "Although the action potential duration was increased in the iPSC-CMs derived from both the clinically symptomatic patient and the clinically asymptomatic mother."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 gene was extracted successfully."
+  }
+}

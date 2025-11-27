@@ -1,0 +1,136 @@
+{
+  "paper_metadata": {
+    "pmid": "39575713",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.V142I",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1263,
+        "demographics": "Median age at testing: 71 years; 45% female; predominantly Black (81.9%)",
+        "phenotype": "Hereditary transthyretin amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1263,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "60-70 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 71,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin amyloidosis",
+          "evidence_sentence": "The median (IQR) age at testing in all patients with the p.V142I variant was 71 (59\u201378) years."
+        }
+      ],
+      "functional_data": {
+        "summary": "The p.V142I variant is the most common pathogenic variant associated with hATTR amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "The p.V142I variant had the lowest known family history rate despite being the most common variant in this study.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The p.V142I variant was identified most often with the cardiogenetics panel.",
+      "key_quotes": [
+        "Only 31.7% of patients with a pathogenic TTR variant reported a known family history.",
+        "Patients with the p.V142I variant were predominantly Black (81.9%)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.T80A",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 75,
+        "demographics": "Median age at testing: 57 years; 52% female; predominantly White (85.3%)",
+        "phenotype": "Hereditary transthyretin amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 75,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The p.T80A variant is one of the pathogenic variants associated with hATTR amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The p.T80A variant was identified most often with the TTR single gene test.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.V50M",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 62,
+        "demographics": "Median age at testing: 57 years; 47% female; predominantly White (72.6%)",
+        "phenotype": "Hereditary transthyretin amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 62,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The p.V50M variant is one of the pathogenic variants associated with hATTR amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The p.V50M variant was identified most often with the TTR single gene test.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table S5",
+      "table_caption": "Complete list of TTR variants identified in this study.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for TTR variants were extracted successfully."
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "paper_metadata": {
+    "pmid": "35592550",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.191C>T",
+      "protein_notation": "p.Phe64Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "Age: 69 (male), 62 (male), 51 (female)",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTRv) with varying degrees of neuropathy and cardiac involvement."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 2,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": 69,
+          "age_at_onset": 68,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Distal weakness, sensory loss, gastrointestinal upset, and cardiac symptoms.",
+          "evidence_sentence": "Genetic test for ATTRv found a Phe64Leu (p.Phe84Leu) mutation of the TTR gene."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": 62,
+          "age_at_onset": 60,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Distal sensory loss, family history of severe polyneuropathy.",
+          "evidence_sentence": "A genetic testing showed a Phe64Leu (p.Phe84Leu) mutation in the TTR gene."
+        },
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": 51,
+          "age_at_onset": 50,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Asymptomatic carrier with a known family history of ATTRv.",
+          "evidence_sentence": "The patient already knew to be a carrier of a Glu89Gln (p.Glu109Gln) mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Phe64Leu mutation is associated with hereditary transthyretin amyloidosis, leading to misfolded TTR protein aggregation.",
+        "assays": []
+      },
+      "segregation_data": "The Phe64Leu mutation segregates with disease in families, as seen in the affected siblings.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Case Reports, paragraph 1 and 2",
+      "additional_notes": "The Glu89Gln mutation was also mentioned but is not the focus of this extraction.",
+      "key_quotes": [
+        "Genetic test for ATTRv found a Phe64Leu (p.Phe84Leu) mutation of the TTR gene.",
+        "A genetic testing showed a Phe64Leu (p.Phe84Leu) mutation in the TTR gene."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.265G>A",
+      "protein_notation": "p.Glu89Gln",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Age: 55 (male), 51 (female)",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTRv) with gastrointestinal and neurological symptoms."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": 55,
+          "age_at_onset": 50,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Diarrhea, weight loss, and neurological symptoms.",
+          "evidence_sentence": "Genetic testing, performed in July 2019, confirmed the presence of Glu89Gln (p.Glu109Gln) mutation on the TTR gene."
+        },
+        {
+          "individual_id": "Case 5",
+          "age_at_evaluation": 51,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Asymptomatic carrier with a known family history of ATTRv.",
+          "evidence_sentence": "The patient already knew to be a carrier of a Glu89Gln (p.Glu109Gln) mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Glu89Gln mutation is associated with hereditary transthyretin amyloidosis, leading to misfolded TTR protein aggregation.",
+        "assays": []
+      },
+      "segregation_data": "The Glu89Gln mutation segregates with disease in families, as seen in the affected sibling.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Case Reports, paragraph 3",
+      "additional_notes": "The Phe64Leu mutation was also mentioned but is not the focus of this extraction.",
+      "key_quotes": [
+        "Genetic testing, performed in July 2019, confirmed the presence of Glu89Gln (p.Glu109Gln) mutation on the TTR gene."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

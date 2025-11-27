@@ -1,0 +1,115 @@
+{
+  "paper_metadata": {
+    "pmid": "26369527",
+    "title": "Genotype\u2013phenotype correlation and course of transthyretin familial amyloid polyneuropathies in France",
+    "extraction_summary": "Extracted information on TTR gene variants, including penetrance data and individual patient details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 84,
+        "demographics": "French patients",
+        "phenotype": "familial transthyretin amyloid polyneuropathies (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 84,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val30Met mutation is associated with severe disease progression.",
+        "assays": []
+      },
+      "segregation_data": "The Val30Met mutation segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on clinical correlation.",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The Val30Met mutation is the most studied variant in TTR-related amyloidosis.",
+      "key_quotes": [
+        "French Ile107Val, Ser77Tyr, and LateVal30Met FAP showed more rapid and severe disease progression."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.230C>T",
+      "protein_notation": "p.Ser77Tyr",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 84,
+        "demographics": "French patients",
+        "phenotype": "familial transthyretin amyloid polyneuropathies (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 84,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Ser77Tyr mutation is associated with severe disease progression.",
+        "assays": []
+      },
+      "segregation_data": "The Ser77Tyr mutation segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on clinical correlation.",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The Ser77Tyr mutation is less common than Val30Met but still significant.",
+      "key_quotes": [
+        "French Ile107Val, Ser77Tyr, and LateVal30Met FAP showed more rapid and severe disease progression."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.319A>G",
+      "protein_notation": "p.Ile107Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 84,
+        "demographics": "French patients",
+        "phenotype": "familial transthyretin amyloid polyneuropathies (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 84,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Ile107Val mutation is associated with severe disease progression.",
+        "assays": []
+      },
+      "segregation_data": "The Ile107Val mutation segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on clinical correlation.",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The Ile107Val mutation is associated with the most debilitating and severe FAP.",
+      "key_quotes": [
+        "Ile107Val and LateMet30 mutations are associated with the most debilitating and severe FAP ever described."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant TTR variants were extracted with associated clinical and penetrance data."
+  }
+}

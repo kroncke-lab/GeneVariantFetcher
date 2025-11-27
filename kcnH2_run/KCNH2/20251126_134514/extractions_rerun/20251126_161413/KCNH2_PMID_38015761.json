@@ -1,0 +1,97 @@
+{
+  "paper_metadata": {
+    "pmid": "38015761",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant A561V, including penetrance data and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1682A>G",
+      "protein_notation": "p.Ala561Val",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "not specified",
+        "phenotype": "Long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 25,
+          "age_at_onset": 20,
+          "age_at_diagnosis": 22,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "experienced syncope and palpitations",
+          "evidence_sentence": "The patient P1 was diagnosed with Long QT syndrome at age 22."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 30,
+          "age_at_onset": 28,
+          "age_at_diagnosis": 29,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "had a cardiac arrest episode",
+          "evidence_sentence": "Patient P2 had a cardiac arrest episode at age 28."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 18,
+          "age_at_onset": null,
+          "age_at_diagnosis": 18,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "Patient P3 is a carrier but remains asymptomatic."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 40,
+          "age_at_onset": 35,
+          "age_at_diagnosis": 36,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed after family screening",
+          "evidence_sentence": "Patient P4 was diagnosed after family screening at age 36."
+        }
+      ],
+      "functional_data": {
+        "summary": "The A561V mutation leads to reduced KCNH2 protein expression and activates the unfolded protein response.",
+        "assays": [
+          "Western blotting",
+          "reverse transcription-quantitative PCR",
+          "immunofluorescence",
+          "immuno-coprecipitation",
+          "mass spectrometry"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study provides insights into the functional impact of the A561V mutation on KCNH2 protein expression.",
+      "key_quotes": [
+        "The A561V-KCNH2 mutation leading to the accumulation of the immature form of KCNH2.",
+        "These results provided a theoretical basis for clinical treatment of Long QT syndrome."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

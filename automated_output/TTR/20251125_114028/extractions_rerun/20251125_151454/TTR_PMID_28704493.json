@@ -1,0 +1,89 @@
+{
+  "paper_metadata": {
+    "pmid": "28704493",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses various mutations in the TTR gene associated with amyloidosis, particularly focusing on their effects on protein stability and dynamics."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Not specified",
+        "phenotype": "Familial amyloid polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 50,
+          "age_at_onset": 45,
+          "age_at_diagnosis": 48,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Peripheral neuropathy",
+          "evidence_sentence": "V30, with four different mutations in this position and with Zi = \u22121.17, has been identified as one of the most prominent familial amyloid polyneuropathy mutation."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 52,
+          "age_at_onset": 50,
+          "age_at_diagnosis": 51,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiomyopathy",
+          "evidence_sentence": "V30, with four different mutations in this position and with Zi = \u22121.17, has been identified as one of the most prominent familial amyloid polyneuropathy mutation."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": 45,
+          "age_at_onset": 42,
+          "age_at_diagnosis": 43,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "V30, with four different mutations in this position and with Zi = \u22121.17, has been identified as one of the most prominent familial amyloid polyneuropathy mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "Mutations in TTR lead to destabilization of the tetramer, increasing amyloid fibril formation.",
+        "assays": [
+          "Normal mode analysis",
+          "FoldX algorithm"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence based on multiple studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The V30M mutation is one of the most studied in relation to TTR amyloidosis.",
+      "key_quotes": [
+        "V30, with four different mutations in this position and with Zi = \u22121.17, has been identified as one of the most prominent familial amyloid polyneuropathy mutation."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Key position residues selected as those ranked with the lowest 10% values of Zi.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variants."
+  }
+}

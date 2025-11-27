@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "27535653",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant rs1137617, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 41,
+        "demographics": "adults (\u226519 years of age), diverse ethnic backgrounds",
+        "phenotype": "Acquired hypothyroidism"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 41,
+        "affected_count": 3,
+        "unaffected_count": 38,
+        "uncertain_count": null,
+        "penetrance_percentage": 7.32,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The variant rs1137617 in KCNH2 is associated with long QT syndrome.",
+        "assays": []
+      },
+      "segregation_data": "The variant is associated with the phenotype but segregation data is not provided.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The association was significant with p-discovery = 5.31x10-3 and p-replicating = 1.15x10-3.",
+      "key_quotes": [
+        "Among the novel results consistently associated in both the discovery and replication datasets at the 3-digit level was a variant in KCNH2 (rs1137617) a gene known to cause long QT syndrome with ICD-9 codes 244 'Acquired hypothyroidism'."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward with clear information on the KCNH2 variant."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "22253860",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant Asn372His, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.Asn372His",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 151,
+        "demographics": "Patients with tobacco-related multiple primary neoplasms, primarily from North India.",
+        "phenotype": "Tobacco-related cancers, specifically in the upper aero digestive tract."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The BRCA2 Asn372His SNP showed significant risk association for dominant model for at least one TRC in UADT category.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is located in a conserved region of the BRCA2 gene.",
+      "key_quotes": [
+        "The BRCA2 Asn372His SNP showed significant risk association for dominant model for at least one TRC in UADT category."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in BRCA2 was reported in the paper."
+  }
+}

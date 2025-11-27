@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "29745381",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper was retracted due to errors in data analysis, and no valid BRCA2 variant data was extracted."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper was retracted, and no valid data was available for extraction."
+    ],
+    "notes": "The retraction note indicated that the conclusions about the BRCA2 variant c.68\u20137 T>A were incorrect, and no other BRCA2 variants were mentioned."
+  }
+}

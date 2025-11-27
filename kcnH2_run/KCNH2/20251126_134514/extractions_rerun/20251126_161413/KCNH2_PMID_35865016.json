@@ -1,0 +1,70 @@
+{
+  "paper_metadata": {
+    "pmid": "35865016",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a novel KCNH2 variant associated with congenital heart defects and long QT syndrome."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1907C>G",
+      "protein_notation": "p.S636*",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "23-year-old female fetus",
+        "phenotype": "long QT syndrome combined with tetralogy of fallot"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Fetus",
+          "age_at_evaluation": 30,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "long QT syndrome and congenital heart defects including tetralogy of fallot",
+          "evidence_sentence": "In conclusion, our study described an additional case of LQT2 combined with tetralogy of fallot in a fetus with a KCNH2 mutation."
+        },
+        {
+          "individual_id": "Mother",
+          "age_at_evaluation": 23,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no obvious cardiac phenotype",
+          "evidence_sentence": "the KCNH2 mutation in the fetus was inherited from her mother, who had no obvious cardiac phenotype."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is predicted to affect protein structure/function.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregates with the disease in the family.",
+      "population_frequency": "No frequency was found in the databases of gnomAD, 1,000 genomes, dbSNP, and ExAC.",
+      "evidence_level": "PVS1, PM2_Supporting according to ACMG guidelines.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation was classified as a likely pathogenic variant according to ACMG guidelines.",
+      "key_quotes": [
+        "A novel nonsense mutation of c.1907C > G (p.S636*) in the KCNH2 gene was identified in the fetus by WES technology, which was inherited from the mother and further confirmed by Sanger sequencing."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant was successfully extracted."
+  }
+}

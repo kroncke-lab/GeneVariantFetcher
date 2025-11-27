@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "36337276",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No specific TTR genetic variants were mentioned in the paper."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant data for the TTR gene."
+    ],
+    "notes": "The paper focused on diagnostic methods for amyloidosis and did not include specific genetic variant information for the TTR gene."
+  }
+}

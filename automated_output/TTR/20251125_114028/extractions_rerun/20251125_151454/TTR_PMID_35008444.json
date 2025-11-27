@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "35008444",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "aggressive, highly penetrant systemic amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "aggressive, highly penetrant systemic amyloidosis",
+          "evidence_sentence": "The S52P variant causes aggressive, highly penetrant systemic amyloidosis."
+        }
+      ],
+      "functional_data": {
+        "summary": "Proteolytic cleavage generates a residue 49\u2013127 fragment of TTR that rapidly self-aggregates into amyloid fibrils.",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The S52P variant is noted for its high penetrance.",
+      "key_quotes": [
+        "The S52P variant causes aggressive, highly penetrant systemic amyloidosis."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "individuals of African descent",
+        "phenotype": "familial cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "familial cardiomyopathy",
+          "evidence_sentence": "The V122I TTR is the most common amyloidogenic mutation worldwide, producing familial cardiomyopathy primarily in individuals of African descent."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I variant is associated with familial cardiomyopathy.",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The V122I variant is noted for its prevalence in specific populations.",
+      "key_quotes": [
+        "The V122I TTR is the most common amyloidogenic mutation worldwide, producing familial cardiomyopathy primarily in individuals of African descent."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "susceptible to plasmin-mediated proteolysis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "susceptible to plasmin-mediated proteolysis",
+          "evidence_sentence": "V30M TTR is susceptible to plasmin-mediated proteolysis."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V30M variant is associated with increased susceptibility to proteolysis.",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The V30M variant is noted for its susceptibility to proteolysis.",
+      "key_quotes": [
+        "V30M TTR is susceptible to plasmin-mediated proteolysis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant TTR variants were extracted with detailed penetrance data."
+  }
+}

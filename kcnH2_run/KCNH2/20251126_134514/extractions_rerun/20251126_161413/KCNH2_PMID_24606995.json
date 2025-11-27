@@ -1,0 +1,83 @@
+{
+  "paper_metadata": {
+    "pmid": "24606995",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.F29L",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "Danish, unspecified age and sex",
+        "phenotype": "Long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Demonstrated to have an in vitro electrophysiological effect compatible with LQTS.",
+        "assays": [
+          "in vitro electrophysiological characterization"
+        ]
+      },
+      "segregation_data": "Found in 5 unrelated families, indicating potential founder effect.",
+      "population_frequency": "Not found in 364 control alleles.",
+      "evidence_level": "Strong evidence based on functional data and absence in controls.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Considered disease-causing based on evolutionary conservation and absence in controls.",
+      "key_quotes": [
+        "A large founder family with p.F29L in KCNH2 was identified.",
+        "Only one of these missense mutations, p.F29L, had been demonstrated to have an in vitro electrophysiological effect compatible with LQTS."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.K101E",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Danish, unspecified age and sex",
+        "phenotype": "Long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional data not specified.",
+        "assays": []
+      },
+      "segregation_data": "Found in 2 unrelated families.",
+      "population_frequency": "Not found in 364 control alleles.",
+      "evidence_level": "Strong evidence based on absence in controls.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Considered disease-causing based on evolutionary conservation and absence in controls.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

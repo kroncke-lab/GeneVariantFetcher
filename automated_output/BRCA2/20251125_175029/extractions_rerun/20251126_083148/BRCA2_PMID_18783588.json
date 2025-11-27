@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "18783588",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant IVS16-2A>G, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "IVS16-2A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Slovenian breast cancer families",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 61,
+        "affected_count": 15,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 24.6,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 IVS16-2A>G families we found a breast cancer incidence of 24.6% (15/61)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The IVS16-2A>G mutation is a splice site mutation found frequently in Slovenian breast cancer families.",
+        "assays": []
+      },
+      "segregation_data": "Yes, it segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The penetrance of ovarian cancer is much lower in IVS16-2A>G BRCA2 families than in BRCA1 families.",
+      "key_quotes": [
+        "The IVS16-2A>G in the BRCA2 gene appears to be a unique founder mutation in the Slovenian population.",
+        "In BRCA2 IVS16-2A>G families we found a breast cancer incidence of 24.6% (15/61)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted all relevant data for the BRCA2 variant IVS16-2A>G."
+  }
+}

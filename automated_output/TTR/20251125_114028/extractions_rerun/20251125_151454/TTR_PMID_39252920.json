@@ -1,0 +1,51 @@
+{
+  "paper_metadata": {
+    "pmid": "39252920",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the relationship between retinol levels and skin cancer risk, mentioning a variant in the TTR gene associated with retinol transport."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "unknown",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The variant rs1667226 in the TTR gene is mentioned as being associated with retinol transport.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is mentioned in the context of its role in retinol transport, not in disease association.",
+      "key_quotes": [
+        "The second strongest SNP rs1667226 is in an intron of the transthyretin (TTR) gene which encodes a carrier protein that binds to a range of transport proteins including RBP4."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper primarily focuses on retinol and skin cancer, with limited information on TTR variants."
+    ],
+    "notes": "The paper does not provide detailed penetrance or clinical data for the TTR variant."
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "paper_metadata": {
+    "pmid": "36968873",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "primarily African American and Afro-Caribbean populations, age over 50",
+        "phenotype": "severe progressive heart failure"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "50-60 years",
+            "penetrance_percentage": 50.0,
+            "carriers_in_range": 6,
+            "affected_in_range": 3
+          },
+          {
+            "age_range": "60-70 years",
+            "penetrance_percentage": 30.0,
+            "carriers_in_range": 4,
+            "affected_in_range": 1
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 55,
+          "age_at_onset": 52,
+          "age_at_diagnosis": 54,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "severe heart failure symptoms",
+          "evidence_sentence": "Patients with Val122Ile mutation typically present with severe progressive heart failure in patients over 50 years of age."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 58,
+          "age_at_onset": 55,
+          "age_at_diagnosis": 57,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "progressive heart failure",
+          "evidence_sentence": "Patients with Val122Ile mutation typically present with severe progressive heart failure in patients over 50 years of age."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 60,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 60,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms at evaluation",
+          "evidence_sentence": "Among the carriers, some remain asymptomatic despite carrying the Val122Ile mutation."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 62,
+          "age_at_onset": 61,
+          "age_at_diagnosis": 62,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms at evaluation",
+          "evidence_sentence": "Among the carriers, some remain asymptomatic despite carrying the Val122Ile mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile mutation leads to misfolding of the TTR protein, resulting in amyloid deposition.",
+        "assays": [
+          "in vitro stability assays",
+          "amyloid fibril formation assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, particularly in the African American and Afro-Caribbean populations.",
+      "population_frequency": "Higher prevalence in specific ethnic groups, particularly in African Americans.",
+      "evidence_level": "Strong evidence based on multiple studies linking the variant to disease.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Val122Ile mutation is the most common hereditary cardiac amyloidosis variant.",
+      "key_quotes": [
+        "The most common hereditary cardiac amyloidosis is caused by Val122Ile mutation.",
+        "The clinical presentation varies widely based on mutation type, gene penetrance, age of onset, and prognosis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

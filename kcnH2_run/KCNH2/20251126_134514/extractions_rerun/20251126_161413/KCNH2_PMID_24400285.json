@@ -1,0 +1,50 @@
+{
+  "paper_metadata": {
+    "pmid": "24400285",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on variants in the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "LQTS2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic mutations in this gene that reduces the Kv11.1 channel function prolongs duration of the QT interval.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Common polymorphic variants in the KCNH2 gene could also modulate the disease severity.",
+      "key_quotes": [
+        "KCNH2 encodes for the HERG protein (Kv11.1), which is the \u03b1-subunit of the rapidly activating delayed rectifier K+ current (IKr).",
+        "Pathogenic mutations in this gene that reduces the Kv11.1 channel function prolongs duration of the QT interval."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant related to KCNH2 was mentioned without specific cDNA or protein notations."
+  }
+}

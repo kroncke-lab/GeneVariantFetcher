@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "37441025",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the development of a quality of life questionnaire for transthyretin amyloidosis (ATTR) but does not provide specific genetic variant information for the TTR gene."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focuses on quality of life measures and does not provide genetic variant data for the TTR gene."
+    ],
+    "notes": "The paper does not contain any specific genetic variant information for the TTR gene, hence no variants were extracted."
+  }
+}

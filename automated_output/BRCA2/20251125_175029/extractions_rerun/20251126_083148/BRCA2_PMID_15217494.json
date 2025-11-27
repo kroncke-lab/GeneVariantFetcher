@@ -1,0 +1,57 @@
+{
+  "paper_metadata": {
+    "pmid": "15217494",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the BRCA2 999del5 variant, its expression, and implications for cancer risk in heterozygous individuals."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.999del5",
+      "protein_notation": "p.(?)",
+      "genomic_position": "not specified",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 24,
+        "demographics": "heterozygous individuals, specific demographics not detailed",
+        "phenotype": "increased risk of breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 24,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The BRCA2 999del5 variant leads to unstable mRNA and no detectable protein product, suggesting haploinsufficiency contributes to cancer risk.",
+        "assays": [
+          "cDNA synthesis",
+          "sequencing",
+          "Western blotting",
+          "immunoprecipitation",
+          "affinity purification",
+          "ELISA"
+        ]
+      },
+      "segregation_data": "The variant is associated with increased breast cancer risk in heterozygous individuals.",
+      "population_frequency": "not specified",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study emphasizes the instability of the BRCA2 999del5 protein and its implications for cancer risk.",
+      "key_quotes": [
+        "Our results show that the protein product of BRCA2 999del5 is extremely unstable.",
+        "An increase in breast cancer risk in BRCA2 999del5 carriers is due to haploinsufficiency at the BRCA2 locus."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on a single variant in BRCA2."
+  }
+}

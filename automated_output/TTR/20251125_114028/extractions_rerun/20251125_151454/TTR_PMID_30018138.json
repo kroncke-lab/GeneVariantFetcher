@@ -1,0 +1,207 @@
+{
+  "paper_metadata": {
+    "pmid": "30018138",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses various TTR variants, particularly focusing on their role in amyloidogenesis and associated penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ser52Pro",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "TTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "S52P TTR is highly amyloidogenic and forms abundant amyloid fibrils in vitro.",
+        "assays": [
+          "ThT fluorescence assay",
+          "SDS-PAGE",
+          "immunoblot analysis",
+          "electron microscopy"
+        ]
+      },
+      "segregation_data": "The observations are consistent with earlier onset and more aggressive phenotypes in carriers of amyloidogenic TTR mutations.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on functional studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "S52P TTR was shown to be cleaved by plasmin and forms amyloid fibrils.",
+      "key_quotes": [
+        "The most aggressive, earlier onset forms of the disease are caused by highly destabilizing mutations.",
+        "All the amyloidogenic TTR variants tested so far, as well as WT TTR, were cleaved by plasmin."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "TTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "V30M TTR is amyloidogenic but forms lower yields of fibrils compared to S52P.",
+        "assays": [
+          "ThT fluorescence assay",
+          "SDS-PAGE",
+          "immunoblot analysis",
+          "electron microscopy"
+        ]
+      },
+      "segregation_data": "The yield of fibrils was lower with V30M compared to S52P.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on functional studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "V30M TTR was cleaved by plasmin but yielded lower fibril formation.",
+      "key_quotes": [
+        "The yields were lower with V30M, L55P, and V122I TTR than with S52P."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu55Pro",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "TTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "L55P TTR is amyloidogenic but forms lower yields of fibrils compared to S52P.",
+        "assays": [
+          "ThT fluorescence assay",
+          "SDS-PAGE",
+          "immunoblot analysis",
+          "electron microscopy"
+        ]
+      },
+      "segregation_data": "The yield of fibrils was lower with L55P compared to S52P.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on functional studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "L55P TTR was cleaved by plasmin but yielded lower fibril formation.",
+      "key_quotes": [
+        "The yields were lower with V30M, L55P, and V122I TTR than with S52P."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "TTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "V122I TTR is amyloidogenic but forms lower yields of fibrils compared to S52P.",
+        "assays": [
+          "ThT fluorescence assay",
+          "SDS-PAGE",
+          "immunoblot analysis",
+          "electron microscopy"
+        ]
+      },
+      "segregation_data": "The yield of fibrils was lower with V122I compared to S52P.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on functional studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "V122I TTR was cleaved by plasmin but yielded lower fibril formation.",
+      "key_quotes": [
+        "The yields were lower with V30M, L55P, and V122I TTR than with S52P."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Thr119Met",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "protective against TTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "T119M TTR is superstable and not cleaved by plasmin.",
+        "assays": [
+          "ThT fluorescence assay",
+          "SDS-PAGE",
+          "immunoblot analysis",
+          "electron microscopy"
+        ]
+      },
+      "segregation_data": "Co-inheritance of T119M variant protects against TTR amyloidosis.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for protective effect.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "T119M TTR was not cleaved at all by plasmin.",
+      "key_quotes": [
+        "The known, superstable, T119M TTR variant was not cleaved at all."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant TTR variants were extracted with associated functional and penetrance data."
+  }
+}

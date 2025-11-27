@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "39010205",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val30Met, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "47-year-old Caucasian male",
+        "phenotype": "Hereditary transthyretin amyloidosis with motor aphasia, right hemiparesis, and episodes of transient focal neurological deficits."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 47,
+          "age_at_onset": 20,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Progressive distal tetraparesis and anesthesia affecting lower limbs, trunk, and distal segments of upper limbs due to severe polyneuropathy.",
+          "evidence_sentence": "The patient\u2019s condition, resulting from a Val30Met mutation in the TTR gene, began at age 20 years and progressively led to distal tetraparesis and anesthesia affecting the lower limbs, trunk, and distal segments of the upper limbs due to severe polyneuropathy."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met mutation is known to cause amyloid deposition leading to systemic and neurological symptoms.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Strong evidence based on clinical presentation and known pathogenicity of the variant.",
+      "source_location": "Case presentation, paragraph 2",
+      "additional_notes": "This case highlights the complexities in assessment and management of patients with TTR mutations.",
+      "key_quotes": [
+        "This represents the first known case report documenting palinacousis in hereditary transthyretin amyloidosis attributed to central nervous system involvement."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variant."
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "paper_metadata": {
+    "pmid": "34290354",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6193C>T",
+      "protein_notation": "p.Gln2065Ter",
+      "genomic_position": null,
+      "clinical_significance": "novel",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not reported in detail.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is noted as novel and has not been reported previously.",
+      "key_quotes": [
+        "To our knowledge, two mutations in BRCA2 (c.6193C>T in exon 11 and c.1013del in exon 10) have not been reported previously in any database."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1013del",
+      "protein_notation": "p.Ala338Metfs",
+      "genomic_position": null,
+      "clinical_significance": "novel",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not reported in detail.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is noted as novel and has not been reported previously.",
+      "key_quotes": [
+        "To our knowledge, two mutations in BRCA2 (c.6193C>T in exon 11 and c.1013del in exon 10) have not been reported previously in any database."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2254_2257del",
+      "protein_notation": "p.Asp752Phefs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 11,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not reported in detail.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Detected in multiple patients.",
+      "key_quotes": [
+        "Nineteen (25.3%) of the mutations detected in our patients were either (c.2254_2257del) or (exon 5\u201311 duplication); both in BRCA2 gene and were detected in 11 and 8 different patients, respectively."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "exon 5\u201311 duplication",
+      "protein_notation": "Absent or disrupted protein product",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 8,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not reported in detail.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Detected in multiple patients.",
+      "key_quotes": [
+        "Nineteen (25.3%) of the mutations detected in our patients were either (c.2254_2257del) or (exon 5\u201311 duplication); both in BRCA2 gene and were detected in 11 and 8 different patients, respectively."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Rates of positive BRCA1 and BRCA2 mutations; subgroup analysis.",
+      "variants_extracted": 4
+    },
+    {
+      "table_name": "Table 4",
+      "table_caption": "Types of BRCA2 mutations.",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

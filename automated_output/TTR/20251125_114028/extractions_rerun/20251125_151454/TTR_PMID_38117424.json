@@ -1,0 +1,117 @@
+{
+  "paper_metadata": {
+    "pmid": "38117424",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.127G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 461,
+        "demographics": "Median age 66.5 years, 68.9% male, 73.0% White",
+        "phenotype": "mixed phenotype ATTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 461,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "V30M is primarily associated with neurologic or mixed phenotypes.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Most frequent genotype in the mixed phenotype population.",
+      "key_quotes": [
+        "The most frequent genotype was V30M (38.9%) followed by wild type (24.3%)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 88,
+        "demographics": "Not specified",
+        "phenotype": "mixed phenotype ATTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 88,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Associated with mixed phenotype.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, Table 2",
+      "additional_notes": "Common non-V30M variant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.265G>A",
+      "protein_notation": "p.Glu89Gly",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 81,
+        "demographics": "Not specified",
+        "phenotype": "mixed phenotype ATTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 81,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Associated with mixed phenotype.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, Table 2",
+      "additional_notes": "Common non-V30M variant.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Genotype distribution of patients with mixed phenotype ATTR amyloidosis enrolled in THAOS",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted."
+  }
+}

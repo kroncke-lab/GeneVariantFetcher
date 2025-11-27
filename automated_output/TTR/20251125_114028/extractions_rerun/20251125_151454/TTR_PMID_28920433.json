@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "28920433",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the incorporation of fluorotryptophan into TTR and its effects on structure and stability, but does not mention specific genetic variants in the TTR gene."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant data for the TTR gene."
+    ],
+    "notes": "The paper focused on biochemical studies of TTR and did not include genetic variant information."
+  }
+}

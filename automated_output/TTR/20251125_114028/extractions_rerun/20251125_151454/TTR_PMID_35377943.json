@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "35377943",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val122Ile, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349T>C",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 7514,
+        "demographics": "Black individuals in the US",
+        "phenotype": "heart failure"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 7514,
+        "affected_count": 15,
+        "unaffected_count": 7,
+        "uncertain_count": null,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val122Ile variant is associated with an increased risk of heart failure.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Abstract",
+      "additional_notes": "The study indicates a significant association between the Val122Ile variant and heart failure risk.",
+      "key_quotes": [
+        "the incidence of heart failure was 15.6 per 1000 person-years among Val122Ile variant carriers compared with 7.2 per 1000 person-years among noncarriers"
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in the TTR gene was reported in the paper."
+  }
+}

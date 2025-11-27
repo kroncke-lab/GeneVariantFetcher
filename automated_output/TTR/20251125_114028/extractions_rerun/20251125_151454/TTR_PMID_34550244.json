@@ -1,0 +1,135 @@
+{
+  "paper_metadata": {
+    "pmid": "34550244",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 26,
+        "demographics": "Patients with ATTRv V30M, including individuals with early and late onset.",
+        "phenotype": "Neuropathy and cardiomyopathy."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 140,
+        "affected_count": 80,
+        "unaffected_count": 60,
+        "uncertain_count": null,
+        "penetrance_percentage": 57.14,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "50 years",
+            "penetrance_percentage": 80,
+            "carriers_in_range": 100,
+            "affected_in_range": 80
+          },
+          {
+            "age_range": "70 years",
+            "penetrance_percentage": 91,
+            "carriers_in_range": 40,
+            "affected_in_range": 36
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 50,
+          "age_at_onset": 45,
+          "age_at_diagnosis": 48,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiomyopathy with neuropathy.",
+          "evidence_sentence": "A muta\u00e7\u00e3o TTRv V30Met, por exemplo, tem penetr\u00e2ncia em Portugal de 80% aos 50 anos."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 70,
+          "age_at_onset": 65,
+          "age_at_diagnosis": 68,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Neuropathy.",
+          "evidence_sentence": "Na Su\u00e9cia, a mesma muta\u00e7\u00e3o tem os valores de 11% e 36%, respectivamente."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V30M mutation leads to destabilization of the TTR protein, resulting in amyloid deposition.",
+        "assays": [
+          "In vitro stability assays",
+          "Functional assays assessing amyloid formation"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families with a history of ATTRv.",
+      "population_frequency": "Endemic in Portugal, Sweden, and Japan.",
+      "evidence_level": "High",
+      "source_location": "Main Text, Section 3.3",
+      "additional_notes": "The V30M mutation is the most common variant associated with ATTRv.",
+      "key_quotes": [
+        "A muta\u00e7\u00e3o V30M \u00e9 a mais disseminada pelo mundo.",
+        "A penetr\u00e2ncia da muta\u00e7\u00e3o TTRv V30Met \u00e9 vari\u00e1vel dependendo da regi\u00e3o."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "Afro-American patients over 60 years.",
+        "phenotype": "Cardiomyopathy."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 100,
+        "affected_count": 34,
+        "unaffected_count": 66,
+        "uncertain_count": null,
+        "penetrance_percentage": 34,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": 62,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 61,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiomyopathy with heart failure.",
+          "evidence_sentence": "Outra muta\u00e7\u00e3o bastante frequente \u00e9 a V122I, que est\u00e1 presente em 3,4% dos afro-americanos."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I mutation is associated with increased amyloidogenicity of TTR.",
+        "assays": [
+          "Stability assays",
+          "Amyloid fibril formation assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families with a history of cardiomyopathy.",
+      "population_frequency": "3.4% in Afro-American population.",
+      "evidence_level": "High",
+      "source_location": "Main Text, Section 3.3",
+      "additional_notes": "The V122I mutation is particularly associated with late-onset cardiomyopathy.",
+      "key_quotes": [
+        "A muta\u00e7\u00e3o V122I est\u00e1 presente em 3,4% dos afro-americanos.",
+        "A progress\u00e3o da neuropatia leva \u00e0 incapacidade sensitivo-motora."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

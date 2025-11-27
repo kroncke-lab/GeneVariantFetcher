@@ -1,0 +1,81 @@
+{
+  "paper_metadata": {
+    "pmid": "39101566",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the Val50Met variant in the TTR gene, its prevalence, and associated penetrance data in individuals with hereditary transthyretin amyloidosis (ATTRv)."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 49,
+        "demographics": "Mean age 40 years, 63% female, 84% Caucasian",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTRv)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 49,
+        "affected_count": 28,
+        "unaffected_count": 21,
+        "uncertain_count": null,
+        "penetrance_percentage": 57.1,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic with sensorimotor polyneuropathy",
+          "evidence_sentence": "Of the 49 patients evaluated, 28 were symptomatic (57.1%) and 21 were asymptomatic (42.9%)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic with cardiac conduction disorders",
+          "evidence_sentence": "Of the 49 patients evaluated, 28 were symptomatic (57.1%) and 21 were asymptomatic (42.9%)."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic, positive genetic test",
+          "evidence_sentence": "Of the 49 patients evaluated, 28 were symptomatic (57.1%) and 21 were asymptomatic (42.9%)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val50Met mutation is associated with hereditary transthyretin amyloidosis, leading to renal tubular dysfunction.",
+        "assays": []
+      },
+      "segregation_data": "The Val50Met mutation is known to segregate with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the high prevalence of the Val50Met variant in the population studied.",
+      "key_quotes": [
+        "94% had the genetic variant Val50Met and 57% were symptomatic.",
+        "Nephropathy is more common in women, in patients with late-onset neuropathy, in cases with low family penetrance."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on the Val50Met variant in the TTR gene."
+  }
+}

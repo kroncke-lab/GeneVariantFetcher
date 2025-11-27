@@ -1,0 +1,284 @@
+{
+  "paper_metadata": {
+    "pmid": "26577449",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.582G>T",
+      "protein_notation": "p.Trp194*",
+      "genomic_position": null,
+      "clinical_significance": "novel",
+      "patients": {
+        "count": 1,
+        "demographics": "Black",
+        "phenotype": "Premenopausal breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Premenopausal breast cancer",
+          "evidence_sentence": "7Black PM BRCA2 7c.582G>T p.Trp194* Nonsense Novel"
+        }
+      ],
+      "functional_data": {
+        "summary": "Novel nonsense mutation leading to premature termination of the protein.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "novel mutation",
+      "source_location": "Table 3, Row 7",
+      "additional_notes": "This variant is classified as novel and has not been previously reported.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5771_5774delTTCA",
+      "protein_notation": "p.Ile1924fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Black",
+        "phenotype": "Triple negative breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Triple negative breast cancer",
+          "evidence_sentence": "8Black TNBC BRCA2 11c.5771_5774delTTCA p.Ile1924fs Frameshift [10]"
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity",
+      "source_location": "Table 3, Row 8",
+      "additional_notes": "This variant is associated with a significant risk of breast cancer.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5213_5216delCTTA",
+      "protein_notation": "p.Thr1738fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "White",
+        "phenotype": "Premenopausal breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Premenopausal breast cancer",
+          "evidence_sentence": "9White PM BRCA2 11c.5213_5216delCTTA p.Thr1738fs Frameshift [56]"
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity",
+      "source_location": "Table 3, Row 9",
+      "additional_notes": "This variant is associated with a significant risk of breast cancer.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7934delG",
+      "protein_notation": "p.Arg2645fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "White",
+        "phenotype": "Premenopausal breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 10",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Premenopausal breast cancer",
+          "evidence_sentence": "10White TNBC BRCA2 17c.7934delG p.Arg2645fs Frameshift [10]"
+        },
+        {
+          "individual_id": "Case 11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Premenopausal breast cancer",
+          "evidence_sentence": "11White PM BRCA2 17c.7934delG p.Arg2645fs Frameshift [10]"
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity",
+      "source_location": "Table 3, Row 10 and Row 11",
+      "additional_notes": "This variant is associated with a significant risk of breast cancer.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8754+1G>A",
+      "protein_notation": "Non-coding",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Indian",
+        "phenotype": "Triple negative and Premenopausal breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 12",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Triple negative and Premenopausal breast cancer",
+          "evidence_sentence": "12Indian TNBC/PM BRCA2 21c.8754+1G>A Non-coding Splice site [57]"
+        }
+      ],
+      "functional_data": {
+        "summary": "Variant of uncertain significance affecting splicing.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 3, Row 12",
+      "additional_notes": "Further studies needed to clarify the significance of this variant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9097_9098insA",
+      "protein_notation": "p.Thr3033fs",
+      "genomic_position": null,
+      "clinical_significance": "novel",
+      "patients": {
+        "count": 1,
+        "demographics": "Black",
+        "phenotype": "Premenopausal breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 13",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Premenopausal breast cancer",
+          "evidence_sentence": "13Black PM BRCA2 23c.9097_9098insA p.Thr3033fs Frameshift [53]"
+        }
+      ],
+      "functional_data": {
+        "summary": "Novel frameshift mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "novel mutation",
+      "source_location": "Table 3, Row 13",
+      "additional_notes": "This variant is classified as novel and has not been previously reported.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 3",
+      "table_caption": "BRCA1, BRCA2 and CHEK2 germline pathogenic mutations identified in triple negative and premenopausal breast cancer patients using NGS and MLPA",
+      "variants_extracted": 7
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 7,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted with detailed penetrance data."
+  }
+}

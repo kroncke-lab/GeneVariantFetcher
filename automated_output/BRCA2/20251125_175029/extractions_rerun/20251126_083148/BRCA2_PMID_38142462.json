@@ -1,0 +1,65 @@
+{
+  "paper_metadata": {
+    "pmid": "38142462",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the BRCA2 R2645G variant, its functional implications, and potential clinical significance in breast cancer."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7934G>A",
+      "protein_notation": "p.Arg2645Gly",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, breast cancer patient",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Here, we report that the variant R2645G, identified in breast cancer..."
+        }
+      ],
+      "functional_data": {
+        "summary": "The R2645G variant increases ssDNA binding activity and induces a hyper-recombination phenotype.",
+        "assays": [
+          "gene targeting reporter assay",
+          "viability assays in mouse embryonic stem cells",
+          "PARP inhibitor sensitivity assays"
+        ]
+      },
+      "segregation_data": "The variant was identified in a breast cancer patient, suggesting potential segregation with disease.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant's effects on DNA binding and recombination suggest a role in cancer predisposition.",
+      "key_quotes": [
+        "This function is executed in part by its canonical DNA binding domain located at the C-terminus.",
+        "Human cells expressing this variant display a hyper-recombination phenotype."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly described in the text."
+  }
+}

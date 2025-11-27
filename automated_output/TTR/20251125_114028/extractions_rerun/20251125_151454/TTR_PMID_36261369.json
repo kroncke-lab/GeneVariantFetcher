@@ -1,0 +1,336 @@
+{
+  "paper_metadata": {
+    "pmid": "36261369",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.V50M",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 15,
+        "demographics": "8 men and 7 women, average age of onset 57.1\u00b116.8 years",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 10,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "V30M (p.V50M) was the most common mutation, being noted in 10 cases."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "V30M (p.V50M) was the most common mutation, being noted in 10 cases."
+        },
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "V30M (p.V50M) was the most common mutation, being noted in 10 cases."
+        },
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "V30M (p.V50M) was the most common mutation, being noted in 10 cases."
+        },
+        {
+          "individual_id": "Case 5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "V30M (p.V50M) was the most common mutation, being noted in 10 cases."
+        },
+        {
+          "individual_id": "Case 6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "V30M (p.V50M) was the most common mutation, being noted in 10 cases."
+        },
+        {
+          "individual_id": "Case 7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "V30M (p.V50M) was the most common mutation, being noted in 10 cases."
+        },
+        {
+          "individual_id": "Case 8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "V30M (p.V50M) was the most common mutation, being noted in 10 cases."
+        },
+        {
+          "individual_id": "Case 9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "V30M (p.V50M) was the most common mutation, being noted in 10 cases."
+        },
+        {
+          "individual_id": "Case 10",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "V30M (p.V50M) was the most common mutation, being noted in 10 cases."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on multiple cases.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The V30M variant is the most common mutation associated with ATTRv amyloidosis.",
+      "key_quotes": [
+        "V30M (p.V50M) was the most common mutation, being noted in 10 cases."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Y134H",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 15,
+        "demographics": "8 men and 7 women, average age of onset 57.1\u00b116.8 years",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "Y114H (p.Y134H) in 2 cases."
+        },
+        {
+          "individual_id": "Case 12",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "Y114H (p.Y134H) in 2 cases."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on multiple cases.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Y114H variant is associated with ATTRv amyloidosis.",
+      "key_quotes": [
+        "Y114H (p.Y134H) in 2 cases."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.A140S",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 15,
+        "demographics": "8 men and 7 women, average age of onset 57.1\u00b116.8 years",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 13",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "A120S (p.A140S) in 1 case."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on multiple cases.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The A120S variant is associated with ATTRv amyloidosis.",
+      "key_quotes": [
+        "A120S (p.A140S) in 1 case."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.S70R",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 15,
+        "demographics": "8 men and 7 women, average age of onset 57.1\u00b116.8 years",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 14",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "S50R (p.S70R) in 1 case."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on multiple cases.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The S50R variant is associated with ATTRv amyloidosis.",
+      "key_quotes": [
+        "S50R (p.S70R) in 1 case."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.E112K",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 15,
+        "demographics": "8 men and 7 women, average age of onset 57.1\u00b116.8 years",
+        "phenotype": "ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 15",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis",
+          "evidence_sentence": "E92K (p.E112K) in 1 case."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on multiple cases.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The E92K variant is associated with ATTRv amyloidosis.",
+      "key_quotes": [
+        "E92K (p.E112K) in 1 case."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted with detailed penetrance data."
+  }
+}

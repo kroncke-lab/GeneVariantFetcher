@@ -1,0 +1,119 @@
+{
+  "paper_metadata": {
+    "pmid": "39039431",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a synonymous SNP in the TTR gene associated with decompression sickness resistance in rats, detailing its frequency in different populations and the expression levels of TTR mRNA."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.138 C>T",
+      "protein_notation": "p.Val46=",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": 10,
+        "demographics": "5 males and 5 females from DCS-resistant and standard strains",
+        "phenotype": "DCS resistance in rats"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 0,
+        "unaffected_count": 10,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "M1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "DCS-resistant",
+          "evidence_sentence": "In DCS\u2010resistant strain (five males and five females), there are no thymine homozygous rats but there are three rats of each sex heterozygous thymine/cytosine and two rats of each sex homozygous with cytosine on position 138 from CDS."
+        },
+        {
+          "individual_id": "M2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "DCS-resistant",
+          "evidence_sentence": "In DCS\u2010resistant strain (five males and five females), there are no thymine homozygous rats but there are three rats of each sex heterozygous thymine/cytosine and two rats of each sex homozygous with cytosine on position 138 from CDS."
+        },
+        {
+          "individual_id": "M3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "DCS-resistant",
+          "evidence_sentence": "In DCS\u2010resistant strain (five males and five females), there are no thymine homozygous rats but there are three rats of each sex heterozygous thymine/cytosine and two rats of each sex homozygous with cytosine on position 138 from CDS."
+        },
+        {
+          "individual_id": "F1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "DCS-resistant",
+          "evidence_sentence": "In DCS\u2010resistant strain (five males and five females), there are no thymine homozygous rats but there are three rats of each sex heterozygous thymine/cytosine and two rats of each sex homozygous with cytosine on position 138 from CDS."
+        },
+        {
+          "individual_id": "F2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "DCS-resistant",
+          "evidence_sentence": "In DCS\u2010resistant strain (five males and five females), there are no thymine homozygous rats but there are three rats of each sex heterozygous thymine/cytosine and two rats of each sex homozygous with cytosine on position 138 from CDS."
+        },
+        {
+          "individual_id": "F3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "DCS-resistant",
+          "evidence_sentence": "In DCS\u2010resistant strain (five males and five females), there are no thymine homozygous rats but there are three rats of each sex heterozygous thymine/cytosine and two rats of each sex homozygous with cytosine on position 138 from CDS."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study indicates that TTR mRNA levels were lower in DCS-resistant rats compared to standard rats.",
+        "assays": [
+          "Sanger sequencing",
+          "RT-qPCR"
+        ]
+      },
+      "segregation_data": "The variant does not segregate with disease as all DCS-resistant rats are unaffected.",
+      "population_frequency": "Thymine allele present in 90% and 100% of standard males and females, respectively; 30% in DCS-resistant males and females.",
+      "evidence_level": "Moderate evidence based on allele frequency and expression data.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study suggests a potential association between the SNP and lower TTR expression in DCS-resistant rats.",
+      "key_quotes": [
+        "The frequency of thymine is 90% and 100% in standard males and females, respectively, whereas this allele is present in only 30% of resistant males and females."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Frequencies of TTR coding sequence variant (444\u2009bp) in standard and DCS\u2010resistant rats.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant was extracted from the main text and tables."
+  }
+}

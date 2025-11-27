@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "36577523",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a somatic BRCA2 pathogenic variant from a case report involving a patient with metastatic lung adenocarcinoma."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1411G>T",
+      "protein_notation": "p.Glu471Ter",
+      "genomic_position": "Chr 13:32907026",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "64-year-old male, Chinese",
+        "phenotype": "metastatic lung adenocarcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 64,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "metastatic lung adenocarcinoma with a somatic BRCA2 pathogenic variant",
+          "evidence_sentence": "In May 2020, next-generation sequencing (NGS) (Oncomine Comprehensive Assay v3) was conducted on the lung biopsy, which revealed a somatic BRCA2 c.1411G > T (p.Glu471Ter) pathogenic variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is predicted to result in an amino acid substitution of glutamic acid with a stop codon, causing a nonsense variant that leads to loss of normal protein function.",
+        "assays": [
+          "Next-generation sequencing (NGS)"
+        ]
+      },
+      "segregation_data": "Not applicable; only one patient reported.",
+      "population_frequency": "Not provided.",
+      "evidence_level": "Strong evidence for pathogenicity based on loss-of-function effects.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient had a germline BRCA2 wild type.",
+      "key_quotes": [
+        "Loss-of-function variants in BRCA2 are known to be pathogenic.",
+        "The absence of BRCA2 leads to defective DNA double-strand break repair by homologous recombination."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the BRCA2 variant was extracted from the main text."
+  }
+}

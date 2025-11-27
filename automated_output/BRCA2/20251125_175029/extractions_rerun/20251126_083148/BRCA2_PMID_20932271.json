@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "20932271",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a BRCA2 variant, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1114A>C",
+      "protein_notation": "p.Asn372His",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Caucasian female",
+        "phenotype": "no mutations at 67 of the 68 sites; heterozygous mutation at one site"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "uncertain",
+          "phenotype_details": "heterozygous mutation at one site in BRCA2",
+          "evidence_sentence": "The Caucasian female had no mutations at 67 of the 68 sites, but she has a heterozygous mutation at one site in BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation causes a single amino acid change.",
+        "assays": []
+      },
+      "segregation_data": "Not provided",
+      "population_frequency": "Not provided",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation was originally reported to carry a 30-40% increased risk of breast cancer, although a subsequent study reported no increased cancer risk.",
+      "key_quotes": [
+        "This A-C mutation causes a single amino acid change, N372 H, in exon 10, which in homozygous form was originally reported to carry a 30-40% increased risk of breast cancer."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data was straightforward as only one BRCA2 variant was reported."
+  }
+}

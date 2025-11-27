@@ -1,0 +1,138 @@
+{
+  "paper_metadata": {
+    "pmid": "39800979",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 49,
+        "demographics": "early-onset patients",
+        "phenotype": "hereditary transthyretin amyloidosis with polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 49,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "0-50 years",
+            "penetrance_percentage": 94.0,
+            "carriers_in_range": 49,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The p.Val50Met variant is associated with early-onset hereditary transthyretin amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the most common mutations associated with ATTRv-PN.",
+      "key_quotes": [
+        "The age of onset of early-onset p.Val50Met patients was significantly lower than late-onset p.Val50Met and non-p.Val50Met patients."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 58,
+        "demographics": "late-onset patients",
+        "phenotype": "hereditary transthyretin amyloidosis with polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 58,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "51-70 years",
+            "penetrance_percentage": 64.0,
+            "carriers_in_range": 58,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The p.Val50Met variant is associated with late-onset hereditary transthyretin amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the most common mutations associated with ATTRv-PN.",
+      "key_quotes": [
+        "The age of onset of late-onset p.Val50Met patients was significantly higher than early-onset p.Val50Met patients."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 6,
+        "demographics": "non-p.Val50Met patients",
+        "phenotype": "hereditary transthyretin amyloidosis with polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The p.Val142Ile variant is associated with hereditary transthyretin amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the mutations associated with ATTRv-PN.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Demographic characteristics of the studied population.",
+      "variants_extracted": 3
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Amyloid deposition frequencies of labial salivary gland biopsy (LSGB), punch skin biopsy (SB), and combination (SB/LSGB) in the general study population and sub-populations.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant TTR variants were extracted successfully."
+  }
+}

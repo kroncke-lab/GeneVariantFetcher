@@ -1,0 +1,224 @@
+{
+  "paper_metadata": {
+    "pmid": "38863777",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.100G>T",
+      "protein_notation": "p.Glu34Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "70 breast cancer patients, Kurdish women",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The other two pathogenic variants (PVs) were on the BRCA2 gene: c.100G>T and c.1813delA."
+        }
+      ],
+      "functional_data": {
+        "summary": "Pathogenic variant leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Detected once among the 70 samples.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1813delA",
+      "protein_notation": "p.Ile605Tyrfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "70 breast cancer patients, Kurdish women",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The other two pathogenic variants (PVs) were on the BRCA2 gene: c.100G>T and c.1813delA."
+        }
+      ],
+      "functional_data": {
+        "summary": "Pathogenic variant leading to a frameshift mutation.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Detected once among the 70 samples.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1909+12delT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "conflict interpretation of pathogenicity",
+      "patients": {
+        "count": 1,
+        "demographics": "70 breast cancer patients, Kurdish women",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Variant with conflicting interpretations.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Reported previously on the ClinVar database.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3318C>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "conflict interpretation of pathogenicity",
+      "patients": {
+        "count": 1,
+        "demographics": "70 breast cancer patients, Kurdish women",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Variant with conflicting interpretations.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Reported previously on the ClinVar database.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6966G>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "70 breast cancer patients, Kurdish women",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Variant of uncertain significance.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Reported previously on the ClinVar database.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3787A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "novel",
+      "patients": {
+        "count": 1,
+        "demographics": "70 breast cancer patients, Kurdish women",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Novel variant detected.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Detected as a new variant.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 6,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

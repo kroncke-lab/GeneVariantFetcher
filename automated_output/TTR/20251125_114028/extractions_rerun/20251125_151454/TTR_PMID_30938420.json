@@ -1,0 +1,221 @@
+{
+  "paper_metadata": {
+    "pmid": "30938420",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1286,
+        "demographics": "677 males (52.6%) and 609 females (47.4%)",
+        "phenotype": "hereditary ATTR (ATTRm) amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1286,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The TTR gene mutations are associated with a range of phenotypes, primarily cardiac.",
+        "assays": []
+      },
+      "segregation_data": "Yes, mutations segregate with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The most frequent mutation was Val30Met, with 1038 subjects (73.6%) affected.",
+      "key_quotes": [
+        "There were 54 different TTR mutations represented in the population; 16 of these were shared by \u22655 subjects.",
+        "In subjects with ATTRm in European countries in the THAOS registry, Val30Met was the most frequent mutation (1038 subjects, 73.6%)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 125,
+        "demographics": "115 males (92.0%) and 10 females (8.0%)",
+        "phenotype": "wild-type ATTR (ATTRwt) amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 125,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "ATTRwt is associated with a mainly cardiac phenotype.",
+        "assays": []
+      },
+      "segregation_data": "Yes, ATTRwt is associated with disease.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "ATTRwt was observed in all countries except Portugal, Belgium, and Cyprus.",
+      "key_quotes": [
+        "Subjects with cardiac mutations or ATTRwt (or cardiac or mixed phenotype) had a lower survival rate than subjects in other genotype categories."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "cardiac phenotype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Associated with a mainly cardiac phenotype showing symmetric left ventricular hypertrophy.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation is one of the cardiac mutations associated with ATTR amyloidosis.",
+      "key_quotes": [
+        "Four mutations (Val122Ile, Leu111Met, Thr60Ala, and Ile68Leu) were associated with a mainly cardiac phenotype."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.332T>C",
+      "protein_notation": "p.Leu111Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "cardiac phenotype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Associated with a mainly cardiac phenotype.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation is one of the cardiac mutations associated with ATTR amyloidosis.",
+      "key_quotes": [
+        "Four mutations (Val122Ile, Leu111Met, Thr60Ala, and Ile68Leu) were associated with a mainly cardiac phenotype."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.179C>G",
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "cardiac phenotype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Associated with a mainly cardiac phenotype.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation is one of the cardiac mutations associated with ATTR amyloidosis.",
+      "key_quotes": [
+        "Four mutations (Val122Ile, Leu111Met, Thr60Ala, and Ile68Leu) were associated with a mainly cardiac phenotype."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.203A>T",
+      "protein_notation": "p.Ile68Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "cardiac phenotype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Associated with a mainly cardiac phenotype.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation is one of the cardiac mutations associated with ATTR amyloidosis.",
+      "key_quotes": [
+        "Four mutations (Val122Ile, Leu111Met, Thr60Ala, and Ile68Leu) were associated with a mainly cardiac phenotype."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Phenotype and genotype by country",
+      "variants_extracted": 5
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant TTR variants were extracted, including penetrance data where available."
+  }
+}

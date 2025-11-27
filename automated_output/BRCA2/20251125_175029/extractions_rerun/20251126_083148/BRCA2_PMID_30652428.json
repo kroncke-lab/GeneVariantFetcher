@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "30652428",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "deletion",
+      "patients": {
+        "count": 8,
+        "demographics": "Japanese women with ductal carcinoma in situ",
+        "phenotype": "Ductal carcinoma in situ (DCIS)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 29,
+        "affected_count": 8,
+        "unaffected_count": 21,
+        "uncertain_count": null,
+        "penetrance_percentage": 27.5,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "BRCA2 mutations are associated with a higher incidence of DCIS.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study indicates a significant difference in incidence of DCIS between BRCA2 carriers and non-carriers.",
+      "key_quotes": [
+        "Incidence of DCIS was 3.0% (1/33) of BRCA1 mutations and 27.5% (8/29) of BRCA2 mutation (p = 0.009)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8490C>T",
+      "protein_notation": "p.S2835X",
+      "genomic_position": null,
+      "clinical_significance": "deletion",
+      "patients": {
+        "count": 1,
+        "demographics": "Japanese women with ductal carcinoma in situ",
+        "phenotype": "Ductal carcinoma in situ (DCIS)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "This variant is classified as deleterious.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was detected in one subject and is far unreported in the BIC database.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8817insA",
+      "protein_notation": "p.K567X",
+      "genomic_position": null,
+      "clinical_significance": "suspected deleterious",
+      "patients": {
+        "count": 1,
+        "demographics": "Japanese women with ductal carcinoma in situ",
+        "phenotype": "Ductal carcinoma in situ (DCIS)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "This variant is classified as suspected deleterious.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was detected in one subject and is far unreported in the BIC database.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1299E>X",
+      "protein_notation": "p.E1299X",
+      "genomic_position": null,
+      "clinical_significance": "deletion",
+      "patients": {
+        "count": 1,
+        "demographics": "Japanese women with ductal carcinoma in situ",
+        "phenotype": "Ductal carcinoma in situ (DCIS)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "This variant is classified as deleterious.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was detected in one subject and is far unreported in the BIC database.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "BRCA1/2 mutations in DCIS patients: clinical aspects and molecular description",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

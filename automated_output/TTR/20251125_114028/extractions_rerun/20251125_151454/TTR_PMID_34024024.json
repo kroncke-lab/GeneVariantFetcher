@@ -1,0 +1,50 @@
+{
+  "paper_metadata": {
+    "pmid": "34024024",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the Val30Met mutation in the TTR gene, focusing on its clinical implications in late- and early-onset transthyretin amyloidosis."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.148G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1389,
+        "demographics": "491 late-onset patients, 898 early-onset patients",
+        "phenotype": "ATTRv Val30Met amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1389,
+        "affected_count": 491,
+        "unaffected_count": 898,
+        "uncertain_count": null,
+        "penetrance_percentage": 35.3,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val30Met mutation is associated with hereditary transthyretin amyloidosis, leading to severe neurological and cardiac symptoms.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregates with disease in families, particularly in endemic regions.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Strong evidence based on clinical presentation and family history.",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The mutation is the most common variant associated with ATTRv amyloidosis.",
+      "key_quotes": [
+        "Hereditary transthyretin amyloidosis (ATTRv amyloidosis) is a clinically heterogeneous disease caused by mutations in the transthyretin (TTR) gene.",
+        "The most common mutation, Val30Met, can manifest as an early- or late-onset disease."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction focused solely on the TTR gene and its associated variant."
+  }
+}

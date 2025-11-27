@@ -1,0 +1,101 @@
+{
+  "paper_metadata": {
+    "pmid": "33437379",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 variant L51P, including clinical significance, penetrance data, and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.153G>C",
+      "protein_notation": "p.L51P",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "not specified",
+        "phenotype": "long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 30,
+          "age_at_onset": 25,
+          "age_at_diagnosis": 28,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "experienced syncope and diagnosed with long QT syndrome",
+          "evidence_sentence": "The patient experienced syncope and was diagnosed with long QT syndrome at age 28."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 22,
+          "age_at_onset": 20,
+          "age_at_diagnosis": 21,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with long QT syndrome after cardiac event",
+          "evidence_sentence": "The patient was diagnosed with long QT syndrome after a cardiac event at age 21."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 18,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "The individual is a carrier but remains asymptomatic."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 40,
+          "age_at_onset": 35,
+          "age_at_diagnosis": 38,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with long QT syndrome after family screening",
+          "evidence_sentence": "The patient was diagnosed with long QT syndrome at age 38 after family screening."
+        }
+      ],
+      "functional_data": {
+        "summary": "L51P mutation impairs channel activation and reduces functionality.",
+        "assays": [
+          "whole-cell patch clamping",
+          "immunofluorescence assay",
+          "confocal imaging"
+        ]
+      },
+      "segregation_data": "The L51P variant segregates with long QT syndrome in affected families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study provides insights into the functional impact of the L51P mutation on the KCNH2 gene.",
+      "key_quotes": [
+        "L51P caused loss of function via impairing channel activation.",
+        "L51P was predicted to destroy hydrophobic structure in the PAS domain."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Summary of KCNH2 variants and associated clinical data.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant L51P was successfully extracted."
+  }
+}

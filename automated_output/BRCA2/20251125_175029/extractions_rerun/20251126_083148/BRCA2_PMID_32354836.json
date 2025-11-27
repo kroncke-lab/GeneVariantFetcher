@@ -1,0 +1,182 @@
+{
+  "paper_metadata": {
+    "pmid": "32354836",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2330dupA",
+      "protein_notation": "p.Asp777Glufs*11",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Two female siblings, ages 20 and 23",
+        "phenotype": "Atypical Fanconi anemia with congenital abnormalities and elevated chromosomal breakage"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 0,
+        "unaffected_count": 2,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Sister_1",
+          "age_at_evaluation": 20,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No history of malignancy or bone marrow failure",
+          "evidence_sentence": "Neither sibling displayed the typical clinical findings of the FA-D1 complementation group, with no history of malignancy or bone marrow failure at the ages of 20 and 23."
+        },
+        {
+          "individual_id": "Sister_2",
+          "age_at_evaluation": 23,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No history of malignancy or bone marrow failure",
+          "evidence_sentence": "Neither sibling displayed the typical clinical findings of the FA-D1 complementation group, with no history of malignancy or bone marrow failure at the ages of 20 and 23."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.2330dupA variant results in a frameshift and premature truncation of BRCA2, leading to loss of replication fork protection.",
+        "assays": [
+          "Whole-exome sequencing",
+          "Chromosome breakage analysis",
+          "Cell survival assays"
+        ]
+      },
+      "segregation_data": "The variant is present in both siblings, suggesting it segregates with the atypical phenotype.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on functional assays and family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The siblings have a family history of breast cancer diagnosed later in life.",
+      "key_quotes": [
+        "Biallelic BRCA2/FANCD1 variants (c.2330dupA and c.8524C>T) were identified by whole-exome sequencing.",
+        "There is no reported family history of FA, but there are cases of breast cancer that were diagnosed later in life."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8524C>T",
+      "protein_notation": "p.Arg2842Cys",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 2,
+        "demographics": "Two female siblings, ages 20 and 23",
+        "phenotype": "Atypical Fanconi anemia with congenital abnormalities and elevated chromosomal breakage"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 0,
+        "unaffected_count": 2,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Sister_1",
+          "age_at_evaluation": 20,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No history of malignancy or bone marrow failure",
+          "evidence_sentence": "Neither sibling displayed the typical clinical findings of the FA-D1 complementation group, with no history of malignancy or bone marrow failure at the ages of 20 and 23."
+        },
+        {
+          "individual_id": "Sister_2",
+          "age_at_evaluation": 23,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No history of malignancy or bone marrow failure",
+          "evidence_sentence": "Neither sibling displayed the typical clinical findings of the FA-D1 complementation group, with no history of malignancy or bone marrow failure at the ages of 20 and 23."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.8524C>T variant results in a missense change in the highly conserved DNA-binding domain of BRCA2.",
+        "assays": [
+          "Whole-exome sequencing",
+          "Chromosome breakage analysis",
+          "Cell survival assays"
+        ]
+      },
+      "segregation_data": "The variant is present in both siblings, suggesting it segregates with the atypical phenotype.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on functional assays and family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The siblings have a family history of breast cancer diagnosed later in life.",
+      "key_quotes": [
+        "Biallelic BRCA2/FANCD1 variants (c.2330dupA and c.8524C>T) were identified by whole-exome sequencing.",
+        "There is no reported family history of FA, but there are cases of breast cancer that were diagnosed later in life."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8488-1G>A",
+      "protein_notation": "p.W2830_K2833del",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "One individual with FA, age 30",
+        "phenotype": "Atypical presentation of Fanconi anemia"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Individual_FA",
+          "age_at_evaluation": 30,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "Homozygous for the c.8488-1G>A variant, born with a thumb malformation, no history of bone marrow failure or malignancy.",
+          "evidence_sentence": "This individual was 30 yr of age at last follow up, was born with a thumb malformation, but had no history of bone marrow failure or malignancy."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.8488-1G>A variant alters the splice acceptor site of exon 20, leading to a deletion of amino acids.",
+        "assays": [
+          "cDNA analysis",
+          "Chromosome breakage analysis"
+        ]
+      },
+      "segregation_data": "The individual is homozygous for the variant, indicating it segregates with the atypical phenotype.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on functional assays and individual case report.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The individual has a history of congenital abnormalities.",
+      "key_quotes": [
+        "This individual was homozygous for the c.8488-1G>A variant (alias 'IVS19-1G>A') that alters the splice acceptor site of exon 20.",
+        "This individual was 30 yr of age at last follow up, was born with a thumb malformation, but had no history of bone marrow failure or malignancy."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

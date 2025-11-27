@@ -1,0 +1,83 @@
+# MAIN TEXT
+
+## Presentation and genetic confirmation of long QT syndrome in the fetus
+
+### Introduction
+
+Long QT syndrome (LQTS) is an ion channelopathy that may cause life-threatening ventricular arrhythmias resulting in intrauterine death, cardiac arrest, or sudden death at any age.1, 2, 3 LQTS is often an inherited condition but may present as a de novo mutation, and its prevalence has been reported as high as 1:2000.4Key Teaching Points•Prenatal ultrasound features of long QT syndrome in the fetus can be detected as early as the first trimester.•Genetic testing for LQTS should be offered when ultrasound features are present in a fetus.•Fetal diagnosis of LQTS facilitates cascade testing of family members.
+
+•Prenatal ultrasound features of long QT syndrome in the fetus can be detected as early as the first trimester.•Genetic testing for LQTS should be offered when ultrasound features are present in a fetus.•Fetal diagnosis of LQTS facilitates cascade testing of family members.
+
+Prenatal ultrasound features of long QT syndrome in the fetus can be detected as early as the first trimester.
+
+Genetic testing for LQTS should be offered when ultrasound features are present in a fetus.
+
+Fetal diagnosis of LQTS facilitates cascade testing of family members.
+
+Ventricular tachycardia, torsades de pointes (TdP), and functional 2:1 atrioventricular (AV) block are well-described electrocardiographic (ECG) features of LQTS, but these are not commonly seen prenatally. A fetal heart rate (FHR) <3rd centile for gestational age (GA) has been proposed as a more accurate indicator of LQTS than a fixed-cutoff FHR in the prenatal detection of LQTS.5, 6, 7, 8
+
+Currently, there is no availability of fetal ECG or fetal magnetocardiography in a clinical setting in the United Kingdom. Proxy measures of the QT interval, such as prolongation of isovolumic relaxation time (IVRT) indexed to cycle length,9 have been proposed as a further feature aid to prenatal diagnosis of LQTS by echocardiography.
+
+We report the clinical course and echocardiographic and genetic findings of 4 fetuses seen in a 1-year period where LQTS was suspected prenatally in the absence of a pre-existing parental diagnosis of LQTS. In all cases, the parents were nonconsanguineous, there was no history or symptoms of inherited arrhythmia syndromes, and anti-Ro/SSA antibodies were not present. The percentiles/Z-score for FHR are based on published data10 from our unit. Heart rate correction of QT interval was based on Bazett’s formula throughout. The echocardiographic cutoff values for suspicion of LQTS based on the ratio of IVRT to cycle length are based on the study of Clur and colleagues.9 Prior to LQTS molecular testing, all couples were seen by a clinical geneticist and all parents were reviewed by an adult cardiologist.
+
+All patients have consented to publication of their data.
+
+### Case report
+
+Case 1 was referred at 21+6 weeks’ GA for fetal arrhythmia and had persistent functional 2:1 AV block with an atrial rate of 118 beats per minute (bpm) and ventricular rate of 59 bpm (Figure 1) in the presence of an otherwise normal echocardiogram. This was the parents’ first pregnancy. The paternal ECG was normal, but the maternal ECG demonstrated a sinus bradycardia with QTc interval 458 ms. At 13 weeks’ GA the FHR was 137 bpm (Z-score: -1.88, <3rd centile).Figure 1Pulsed inflow-outflow Doppler of the left ventricle (LV) shows fused mitral E/A waves (asterisks) occurring at a regular rate with alternate “conduction,” as demonstrated on the aortic outflow Doppler in this fetus at 20 weeks’ gestational age with atrial rate of 118 beats/min and ventricular rate of 59 beats/min.
+
+Pulsed inflow-outflow Doppler of the left ventricle (LV) shows fused mitral E/A waves (asterisks) occurring at a regular rate with alternate “conduction,” as demonstrated on the aortic outflow Doppler in this fetus at 20 weeks’ gestational age with atrial rate of 118 beats/min and ventricular rate of 59 beats/min.
+
+Trio exome sequencing for pathogenic variants in LQTS and catecholaminergic polymorphic tachycardia (CPVT) genes were requested. A heterozygous, maternally inherited, pathogenic variant in the KCNQ1 gene, c.573_577delGCTGC, p.(Arg192CysfsTer91), was confirmed in the fetus. The mother was not commenced on beta-blocker therapy, as she was asymptomatic, with a normal QT interval and a resting bradycardia.
+
+At 26 weeks’ GA, mean FHR was 113 bpm (Z-score: -4.0, <1st centile) with 1:1 AV conduction. The indexed IVRT was normal at 11% of the cycle length, below the proposed LQTS value for GA (14.2 [95% confidence interval (CI): 11.9–14.3]). The fetus remained stable in sinus bradycardia.
+
+A male infant was born at 38 weeks’ GA by induced vaginal delivery, in good condition, weighing 2236 g. The postnatal ECG showed a sinus rhythm at 117 bpm and prolonged QTc of 550 ms. The baby was commenced on beta-blocker therapy (propranolol) and remains well at the age of 13 months.
+
+Case 2 was referred at 29+1 weeks’ GA owing to bradycardia. The FHR was 107 bpm (Z-score: -4.3, <1st centile) with 1:1 AV conduction with otherwise normal echocardiogram. The indexed IVRT was normal at 13.5% of the cycle length, below the proposed LQTS value for GA (14.2 [95% CI: 11.9–14.3]).
+
+This was parents’ second pregnancy. The maternal ECG demonstrated a prolonged QTc of 503 ms. The pregnant mother underwent testing using a targeted cardiac panel for LQTS. A heterozygous, likely pathogenic, in-frame deletion of exon 8 of the KCNQ1 mutation was identified and she was commenced on bisoprolol. Subsequently, the same mutation was confirmed in the baby after birth. At 34+6 weeks’ GA FHR was sinus rhythm at 95 bpm (Z-score: -4.9, <1st centile).
+
+A male infant was born at 38 weeks’ GA by induced vaginal delivery, birthweight 2800 g. The ECG on day 1 showed heart rate 108 bpm and QTc 658 ms. Propranolol was initiated on day 1 of life and converted to nadolol after 2 days. Twenty-four-hour ECG monitoring showed sinus bradycardia with a blunted heart rate profile and low burden of ventricular ectopy.
+
+Sensorineural hearing loss was subsequently identified, suggesting a diagnosis of Jervell and Lange-Nielson (J-LN) syndrome. Further DNA analysis was performed on the baby and a second genetic mutation (a pathogenic KCNQ1 nonsense variant: c.1552C>T, p.(Arg518Ter)) was identified. Following family screening, the proband’s sibling was also found to have prolonged QT along maternally inherited mutation and has been commenced on beta blocker. The father has declined genetic testing.
+
+The baby remains well on nadolol at the age of 8 months and with no significant arrhythmic events. Prophylactic left-sided cardiac sympathetic denervation has been discussed.
+
+Case 3 was referred at 20 weeks’ GA owing to an abnormal heart rhythm. On review, fetal heart rhythm oscillated between 1:1 AV conduction and functional 2:1 AV block. When in 1:1 AV conduction, the mean FHR was 113 bpm (Z-score: -4.7, <1st centile) and when in 2:1 AV block, the atrial rate was 114 bpm and ventricular rate was 57 bpm. The indexed IVRT was abnormal at 13.7% of the cycle length, above the proposed LQTS value for GA (11.3 [95% CI: 11.3–14.1]).
+
+This was the parents’ first pregnancy. Their ECGs were normal. On review of earlier imaging, the FHR was 137 bpm (Z-score: -2.31, <1st centile) at 12+6 weeks’ GA.
+
+An amniocentesis was undertaken and panel testing for LQTS and CPVT genes was requested. The fetus was found to be homozygous for pathogenic KCNQ1 gene, c.1175G>A p.(Trp392∗) variants, which is associated with autosomal recessive J-LN syndrome. The couple chose to terminate the pregnancy. Parents were heterozygous for the mutation.
+
+Case 4 was referred for fetal cardiac assessment at 34 weeks’ GA owing to fetal arrhythmia. The fetus oscillated between different cardiac rhythms: sinus bradycardia with FHR 118 bpm (Z-score: -2.54, <1st centile), periods of functional 2:1 AV block (atrial rate 134 bpm and ventricular rate 67 bpm), ventricular tachycardia [VT] 212 bpm, which was likely TdP as evidenced by the VT with beat-to-beat variation in output (Figure 2). The indexed IVRT was abnormal at 14% of the cycle length, above the proposed LQTS value for GA (13.3 [95% CI: 10.9–15.0]).Figure 2M-mode shows fetal ventricular tachycardia at 35weeks’ gestational age with an atrial rate of 110 beats/min (asterisk) and ventricular rate of 240 beats/min (arrows) in case 4. LV = left ventricle; PE = pericardial effusion; RA = right atrium.
+
+M-mode shows fetal ventricular tachycardia at 35weeks’ gestational age with an atrial rate of 110 beats/min (asterisk) and ventricular rate of 240 beats/min (arrows) in case 4. LV = left ventricle; PE = pericardial effusion; RA = right atrium.
+
+There was cardiomegaly, hydrops, and severely impaired myocardial contractility, moderate tricuspid valve regurgitation, and normal cardiac connections. This was the parents’ first pregnancy. Their ECGs were normal. The FHR had consistently been 115 bpm (<1st centile) since 24 weeks’ gestation and at the 12-week ultrasound scan the FHR was 130 bpm, (Z-score: -4.5, <1st centile).10 Transplacental treatment with maternal magnesium infusion and oral metoprolol was started and VT/TdP resolved after 10 days. The fetus remained in either sinus bradycardia (FHR 90–116 bpm) or functional 2:1 AV block (atrial rate 90–100, ventricular rate 45–50 bpm) for the remainder of pregnancy while maintained on these drugs with the aim to deliver close to term. Prenatal genetic testing was discussed but owing to severity of presentation and the small risk of inducing preterm labor, this was not undertaken. A female infant was delivered at 38+5 weeks’ GA by planned cesarean section, in good condition, weighing 3.1 kg, in sinus bradycardia (heart rate 90–100 bpm). Postnatal genetic testing confirmed a de novo, heterozygous KCNH2 gene, c.1882G>A p.(Gly628Ser), mutation. The QTc measured 640 ms and there were short episodes of both monomorphic VT and TdP without hemodynamic compromise. The baby was continued on magnesium infusion and started on esmolol, which was subsequently converted to nadolol. An epicardial, single-chamber pacemaker was implanted owing to frequent episodes of bradycardia-dependent VT. She remains stable at 7 months of age.
+
+### Discussion
+
+We report 4 fetuses (Table 1) with second-trimester bradycardia that proved to be LQTS. Early suspicion of the underlying etiology facilitated prenatal genetic testing in a timely fashion. This early recognition allowed appropriate investigation of parents and the fetus/infant to guide management, resulting in deliveries at term and thus avoiding the added complications of prematurity. In 1 case a particularly severe form of LQTS was identified, and the parents elected to terminate the pregnancy. Our study has demonstrated that sinus bradycardia (FHR <3rd centile) can be present as early as the first trimester, and that there was a progressive reduction in FHR Z-score with advancement of pregnancy. Prolongation of IVRT has been proposed as a marker of fetal LQTS,9 but 2 of 4 cases did not demonstrate such prolongation; thus a normal value does not exclude the diagnosis. Fetal magnetocardiography1,2 remains the gold standard for measurement of the QT interval during fetal life, which may assist in risk stratification, but genetic confirmation is still required. In our series, each fetus was the index case triggering investigation of LQTS in first-degree relatives, which led to identification of mutations in the mother (cases 1, 2, and 3), father (case 3), and sibling (case 2). Hence early suspicion of LQTS may not only lead to identification of the index case, but also allow cascade screening to identify presymptomatic family members. This in turn can result in initiation of appropriate treatment and reduction in their risk of arrhythmias.Table 1Fetal heart rate association between genetic mutation and parental QTc1st trim FHR bpm2nd trim FHR bpm, mean (range)3rd trim FHR bpm, mean (range)IVRT 2nd–3rd trimGenetic mutationParental ECGs, maternal/paternal QTc, msCase 1137‡113 (110–118) and 2:1 fAVB at 118:59111 (106–116)11%Heterozygous KCNQ1 gene, c.573_577delGCTGC, p.(Arg192CysfsTer91)458†/418Case 2Unknown107‡103 (95–109)13.5%In-frame deletion of exon 8 of KCNQ1 and pathogenic KCNQ1 nonsense variant: c.1552C>T, p.(Arg518Ter)503†/unknownCase 3137‡113 (103–119) and 2:1 fAVB at 114:57N/A13.7%Homozygous KCNQ1 gene, c.1175G>A p.(Trp392∗)455†/414†Case 4130‡115‡VT of 218 (200–240), 100 (90–116) and 2:1 fAVB at 134:6714%De novo, heterozygous KCNH2 gene, c.1882G>A p.(Gly628Ser)429/412bpm = beats per minute; ECG = electrocardiogram; fAVB = functional atrioventricular block; FHR = fetal heart rate; IVRT = isovolumic relaxation time; LQTS = long QT syndrome; ms = milliseconds; QTc = corrected QT interval; N/A = not applicable; trim = trimester; VT = ventricular tachycardia.†Parent confirmed with LQTS genetic mutation.‡FHR measurement during routine nonspecialist fetal scan.
+
+Fetal heart rate association between genetic mutation and parental QTc
+
+bpm = beats per minute; ECG = electrocardiogram; fAVB = functional atrioventricular block; FHR = fetal heart rate; IVRT = isovolumic relaxation time; LQTS = long QT syndrome; ms = milliseconds; QTc = corrected QT interval; N/A = not applicable; trim = trimester; VT = ventricular tachycardia.
+
+Parent confirmed with LQTS genetic mutation.
+
+FHR measurement during routine nonspecialist fetal scan.
+
+With respect to phenotype-genotype relationship, previous studies2,7 suggest that a subtle fetal sinus bradycardia in absence of VT and functional AV block is typical for a single KCNQ1 mutation, with more favorable prognosis.1 However, case 1 (heterozygous KCNQ1) presented with functional AV block. Similar to published data,1,2,7 fetuses with double mutations in our series (cases 2 and 3) presented with marked bradycardia (<1st centile) and functional AV block. Case 4 (KCNH2) presented with VT and had a complicated course. Double gene mutations causing J-LN syndrome, a most severe variant of LQTS,11 were confirmed in 2 cases (cases 2 and 3). Presence of J-LN syndrome explains the extreme QTc prolongation11 in case 2. In this case a second mutation was confirmed postnatally after initial prenatal genetic testing confirmed heterozygous KCNQ1 in maternal blood sample. Parental ECGs are indicated when fetal LQTS is suspected; however, a normal single ECG does not exclude LQTS in the parent or a de novo mutation in the fetus. Moreover, only offering parental genetic testing when their ECGs are abnormal will not exclude compound heterozygous or homozygous or de novo mutation in the baby. In our series, genetic testing included both analysis for LQTS and CPVT because the latter has also been associated with sinus bradycardia and ventricular arrhythmias.12 Prenatal testing of the fetus is complementary to parental testing, as a mutation might be either de novo or recessively inherited. A prenatal genetic diagnosis of LQTS may aid fetal treatment, by impacting prenatal therapy to reduce fetal/neonatal morbidity and mortality. It may also avoid misinterpretation of bradycardia as fetal distress, leading to premature delivery.6 Some of these pathogenic variants are very severe, and parents may consider discontinuing the pregnancy if identified.
+
+Limited data is available regarding antiarrhythmic agent use in nontachycardic fetal cases. Intrauterine beta-blocker use is considered when the mother has phenotypic/genotypic features of LQTS. Many beta blockers, eg, bisoprolol and metoprolol,13 can cross the placenta, leading to fetal bradycardia irrespective of genotype.6 Potential side effects such as fetal growth restriction and placental dysfunction should be considered and monitored.
+
+In summary, first- and second-trimester FHR assessment may give an early clue to the diagnosis of LQTS. Prenatal genetic confirmation of LQTS in either parent or fetus can assist in management of the fetus and mother, allowing for more prompt and often presymptomatic therapy. Identification of LQTS in the fetus/infant can lead to identification of the condition in the parent(s) or other family members by cascade screening.
+
+
+
+# SUPPLEMENTAL FILE 1: main.pdf
+
+# Preparing to download ...
+
+[HHS Vulnerability Disclosure](https://www.hhs.gov/vulnerability-disclosure-policy/index.html)

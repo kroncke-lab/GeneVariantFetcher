@@ -1,0 +1,82 @@
+{
+  "paper_metadata": {
+    "pmid": "30683924",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the TTR gene, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.424G>A",
+      "protein_notation": "p.(Val142Ile)",
+      "genomic_position": null,
+      "clinical_significance": "affects function",
+      "patients": {
+        "count": null,
+        "demographics": "African population",
+        "phenotype": "ATTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Variant is classified as affects function.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "MAF 0.01602; prevalence of 1:31",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Most frequently detected variant.",
+      "key_quotes": [
+        "c.424G>A (p.(Val142Ile)) was especially prevalent in African population (MAF 0.01602; prevalence of 1:31)"
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.148G>A",
+      "protein_notation": "p.(Val50Met)",
+      "genomic_position": null,
+      "clinical_significance": "affects function",
+      "patients": {
+        "count": null,
+        "demographics": "European population",
+        "phenotype": "ATTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Variant is classified as affects function.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "MAF 0.000179; prevalence of 1:2792",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Second most frequently detected variant.",
+      "key_quotes": [
+        "c.148G>A (p.(Val50Met)) in European population (MAF 0.000179; prevalence of 1:2792)"
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

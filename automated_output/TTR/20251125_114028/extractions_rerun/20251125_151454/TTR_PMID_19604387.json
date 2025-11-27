@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "19604387",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses Familial Amyloid Polyneuropathy (FAP) and mentions the TTR gene variant TTR Met30, but does not provide detailed penetrance data or individual case information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89T>C",
+      "protein_notation": "p.Met30Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 20,
+        "demographics": "Mean age 31.8 years, 11 males",
+        "phenotype": "Familial Amyloid Polyneuropathy (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The TTR Met30 variant is associated with FAP, characterized by progressive peripheral and autonomic neuropathy.",
+        "assays": []
+      },
+      "segregation_data": "The variant is known to segregate with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Background section",
+      "additional_notes": "The variant is produced predominantly by the liver.",
+      "key_quotes": [
+        "The amyloid protein in type 1 FAP of Portuguese, Swedish and Japanese origin is the variant of transthyretin 8TTR, in which methionine is a substitute for valine at position 30 (TTR Met)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The paper primarily discusses the TTR gene variant but lacks detailed penetrance data or individual case information."
+  }
+}

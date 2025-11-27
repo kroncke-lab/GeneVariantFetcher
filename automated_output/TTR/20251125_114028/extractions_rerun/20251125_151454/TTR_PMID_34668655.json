@@ -1,0 +1,288 @@
+{
+  "paper_metadata": {
+    "pmid": "34668655",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 107,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 107,
+        "affected_count": 6,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 5.61,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 54,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "The mean age at diagnosis was 54 years."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Not specified",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Most prevalent genetic variant.",
+      "key_quotes": [
+        "The most frequent genetic variant was p.Val50Met."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Thr80Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 16,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 16,
+        "affected_count": 9,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 56.25,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "The mutations found were p.Thr80Ala 9."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Not specified",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Not specified.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ala117Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 9,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Not specified",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Not specified.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Not specified",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Not specified.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Phe84Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Not specified",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Not specified.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ile127Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Not specified",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Not specified.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Tyr134Cys",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Not specified",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Not specified.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ala56Pro",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Not specified",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Not specified.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 8,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

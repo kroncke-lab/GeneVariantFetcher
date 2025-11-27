@@ -1,0 +1,82 @@
+{
+  "paper_metadata": {
+    "pmid": "24217263",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.917-3T>C",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Splice-site analysis suggests disruption of the splice acceptor of exon 5, likely leading to reduced Kv11.1 protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant has not been previously reported.",
+      "key_quotes": [
+        "KCNH2:c.917-3T>C has not been previously reported; however, splice-site analysis suggests that the tentative consequence of this variant is disruption the splice acceptor of exon 5."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.R328C",
+      "genomic_position": null,
+      "clinical_significance": "uncertain significance",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assessment determined that Kv11.1 channels carrying p.R328C were normally trafficked to the membrane and conferred no functional phenotype.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Discussion, paragraph 4",
+      "additional_notes": "The p.R328C variant is likely a rare polymorphism.",
+      "key_quotes": [
+        "Further functional assessment of KCNH2:p.R328C by Anderson et al. (2006) determined the Kv11.1 channels carrying p.R328C were normally trafficked to the membrane and conferred no functional phenotype."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted from the main text."
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "37719284",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.425T>C",
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "65-year-old male",
+        "phenotype": "cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 65,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with hereditary TTR amyloidosis",
+          "evidence_sentence": "Genetic testing found a substitution of valine to isoleucine at position 142 on the TTR gene confirming the diagnosis of hereditary TTR amyloidosis."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with hereditary TTR amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "The variant is confirmed to be pathogenic in the context of hereditary TTR amyloidosis.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, Patient 2",
+      "additional_notes": "The patient was started on tafamadis for treatment.",
+      "key_quotes": [
+        "Genetic testing found a substitution of valine to isoleucine at position 142 on the TTR gene confirming the diagnosis of hereditary TTR amyloidosis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in the TTR gene was reported in the paper."
+  }
+}

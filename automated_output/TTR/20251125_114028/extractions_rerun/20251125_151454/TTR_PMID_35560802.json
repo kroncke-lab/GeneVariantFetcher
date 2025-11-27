@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "35560802",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the prevalence, characteristics, and mortality of patients with transthyretin amyloid cardiomyopathy (ATTR-CM) in the Nordic countries. However, it does not provide specific genetic variant information for the TTR gene."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant information for the TTR gene."
+    ],
+    "notes": "The paper focused on epidemiological data and clinical characteristics of ATTR-CM but did not include specific genetic variant data for the TTR gene."
+  }
+}

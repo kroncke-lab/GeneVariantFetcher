@@ -1,0 +1,261 @@
+{
+  "paper_metadata": {
+    "pmid": "21939546",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper reports on various variants in the BRCA2 gene, including a total deletion of exon 3 and several other mutations, along with their clinical significance and penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.71T>A",
+      "protein_notation": "p.Leu24X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 5,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "This study reports the first large rearrangement of the BRCA2 gene that includes all of exon 3 and leads to an in frame deletion of exon 3 at the transcriptional level."
+        }
+      ],
+      "functional_data": {
+        "summary": "The deletion leads to an in-frame deletion of exon 3, affecting transcript levels.",
+        "assays": [
+          "fragment analysis",
+          "allelic expression",
+          "competitive quantitative RT-PCR"
+        ]
+      },
+      "segregation_data": "The exclusive expression of the delta3 transcript by the mutant allele and segregation data provide evidence for a causal effect of the exon 3 deletion.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The functional role of the affected protein exon 3 domain is not yet fully established.",
+      "key_quotes": [
+        "Deletion of exon 3, which is in phase, does not alter the reading frame.",
+        "Exclusive expression of the delta3 transcript by the mutant allele and segregation data provide evidence for a causal effect of the exon 3 deletion."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.244A>T",
+      "protein_notation": "p.Lys82X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 5,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "This study reports the first large rearrangement of the BRCA2 gene that includes all of exon 3 and leads to an in frame deletion of exon 3 at the transcriptional level."
+        }
+      ],
+      "functional_data": {
+        "summary": "The deletion leads to an in-frame deletion of exon 3, affecting transcript levels.",
+        "assays": [
+          "fragment analysis",
+          "allelic expression",
+          "competitive quantitative RT-PCR"
+        ]
+      },
+      "segregation_data": "The exclusive expression of the delta3 transcript by the mutant allele and segregation data provide evidence for a causal effect of the exon 3 deletion.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The functional role of the affected protein exon 3 domain is not yet fully established.",
+      "key_quotes": [
+        "Deletion of exon 3, which is in phase, does not alter the reading frame.",
+        "Exclusive expression of the delta3 transcript by the mutant allele and segregation data provide evidence for a causal effect of the exon 3 deletion."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.250C>T",
+      "protein_notation": "p.Gln84X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 5,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "This study reports the first large rearrangement of the BRCA2 gene that includes all of exon 3 and leads to an in frame deletion of exon 3 at the transcriptional level."
+        }
+      ],
+      "functional_data": {
+        "summary": "The deletion leads to an in-frame deletion of exon 3, affecting transcript levels.",
+        "assays": [
+          "fragment analysis",
+          "allelic expression",
+          "competitive quantitative RT-PCR"
+        ]
+      },
+      "segregation_data": "The exclusive expression of the delta3 transcript by the mutant allele and segregation data provide evidence for a causal effect of the exon 3 deletion.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The functional role of the affected protein exon 3 domain is not yet fully established.",
+      "key_quotes": [
+        "Deletion of exon 3, which is in phase, does not alter the reading frame.",
+        "Exclusive expression of the delta3 transcript by the mutant allele and segregation data provide evidence for a causal effect of the exon 3 deletion."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.125A>G",
+      "protein_notation": "p.Tyr42Cys",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 5,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "This study reports the first large rearrangement of the BRCA2 gene that includes all of exon 3 and leads to an in frame deletion of exon 3 at the transcriptional level."
+        }
+      ],
+      "functional_data": {
+        "summary": "The deletion leads to an in-frame deletion of exon 3, affecting transcript levels.",
+        "assays": [
+          "fragment analysis",
+          "allelic expression",
+          "competitive quantitative RT-PCR"
+        ]
+      },
+      "segregation_data": "The exclusive expression of the delta3 transcript by the mutant allele and segregation data provide evidence for a causal effect of the exon 3 deletion.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The functional role of the affected protein exon 3 domain is not yet fully established.",
+      "key_quotes": [
+        "Deletion of exon 3, which is in phase, does not alter the reading frame.",
+        "Exclusive expression of the delta3 transcript by the mutant allele and segregation data provide evidence for a causal effect of the exon 3 deletion."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.223G>C",
+      "protein_notation": "p.Ala75Pro",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 5,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "This study reports the first large rearrangement of the BRCA2 gene that includes all of exon 3 and leads to an in frame deletion of exon 3 at the transcriptional level."
+        }
+      ],
+      "functional_data": {
+        "summary": "The deletion leads to an in-frame deletion of exon 3, affecting transcript levels.",
+        "assays": [
+          "fragment analysis",
+          "allelic expression",
+          "competitive quantitative RT-PCR"
+        ]
+      },
+      "segregation_data": "The exclusive expression of the delta3 transcript by the mutant allele and segregation data provide evidence for a causal effect of the exon 3 deletion.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The functional role of the affected protein exon 3 domain is not yet fully established.",
+      "key_quotes": [
+        "Deletion of exon 3, which is in phase, does not alter the reading frame.",
+        "Exclusive expression of the delta3 transcript by the mutant allele and segregation data provide evidence for a causal effect of the exon 3 deletion."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

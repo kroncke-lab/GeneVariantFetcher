@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "36661908",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the Gly67Ala mutation in the TTR gene, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.200G>C",
+      "protein_notation": "p.Gly67Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "50-year-old Asian female",
+        "phenotype": "Hereditary transthyretin cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 50,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac amyloidosis with symptoms including dysphagia, diarrhea, nausea, vomiting, and orthostatic hypotension.",
+          "evidence_sentence": "Hereditary transthyretin cardiac amyloidosis secondary to Gly67Ala mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Gly67Ala mutation is associated with transthyretin amyloidosis, leading to misfolded proteins and amyloid fibril formation.",
+        "assays": []
+      },
+      "segregation_data": "The patient has a strong family history of amyloidosis, with four out of seven siblings affected.",
+      "population_frequency": "Very rare, previously documented in German, Italian, and Mediterranean populations.",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Limited data on the Gly67Ala mutation in Asian populations.",
+      "key_quotes": [
+        "Interestingly, our patient was discovered to have a very rare Gly67Ala TTR mutation typically not found in individuals of Asian descent.",
+        "Of note, the patient does have a strong family history of amyloidosis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant Gly67Ala was extracted successfully."
+  }
+}

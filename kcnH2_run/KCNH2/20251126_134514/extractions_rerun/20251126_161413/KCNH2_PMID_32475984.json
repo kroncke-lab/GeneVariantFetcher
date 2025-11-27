@@ -1,0 +1,135 @@
+{
+  "paper_metadata": {
+    "pmid": "32475984",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted KCNH2 variants associated with Long QT Syndrome type 2, focusing on protein solubility and trafficking data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.V41F",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "Long QT Syndrome type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Variant introduces larger side-chains at conserved and buried residues, likely causing PASD destabilization through conformational strain.",
+        "assays": [
+          "solubility assay",
+          "immunoblot analysis",
+          "trafficking assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Solubility tends to decrease as hydrophobic side-chain volume increases.",
+      "key_quotes": [
+        "Destabilization can result from loss of non-covalent interactions. For example, the LQT2-linked variants V41F and C64Y/W introduce larger side-chains at conserved and buried residues and likely cause PASD destabilization through conformational strain."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.C64Y",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "Long QT Syndrome type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Variant introduces larger side-chains at conserved and buried residues, likely causing PASD destabilization through conformational strain.",
+        "assays": [
+          "solubility assay",
+          "immunoblot analysis",
+          "trafficking assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Solubility tends to decrease as hydrophobic side-chain volume increases.",
+      "key_quotes": [
+        "Destabilization can result from loss of non-covalent interactions. For example, the LQT2-linked variants V41F and C64Y/W introduce larger side-chains at conserved and buried residues and likely cause PASD destabilization through conformational strain."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.C64W",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "Long QT Syndrome type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Variant introduces larger side-chains at conserved and buried residues, likely causing PASD destabilization through conformational strain.",
+        "assays": [
+          "solubility assay",
+          "immunoblot analysis",
+          "trafficking assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Solubility tends to decrease as hydrophobic side-chain volume increases.",
+      "key_quotes": [
+        "Destabilization can result from loss of non-covalent interactions. For example, the LQT2-linked variants V41F and C64Y/W introduce larger side-chains at conserved and buried residues and likely cause PASD destabilization through conformational strain."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table S1",
+      "table_caption": "Conservation and solvent accessibility of LQT2 residues",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No individual-level penetrance data was provided in the text."
+    ],
+    "notes": "The paper focused on functional assays and solubility as a proxy for pathogenicity, without detailed patient-level data."
+  }
+}

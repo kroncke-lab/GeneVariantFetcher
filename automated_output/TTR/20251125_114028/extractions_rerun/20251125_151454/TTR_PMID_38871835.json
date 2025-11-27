@@ -1,0 +1,28 @@
+{
+  "paper_metadata": {
+    "pmid": "38871835",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses adverse events related to tafamidis, focusing on cardiac and ear disorders. No specific genetic variants in the TTR gene are mentioned."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Basic information of tafamidis AE reports.",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Potential AE signals.",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention any specific genetic variants in the TTR gene."
+    ],
+    "notes": "The paper focused on adverse events related to tafamidis and did not provide any genetic variant data for the TTR gene."
+  }
+}

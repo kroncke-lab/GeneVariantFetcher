@@ -1,0 +1,53 @@
+{
+  "paper_metadata": {
+    "pmid": "30233647",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No specific BRCA2 variants were mentioned in the paper."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Supplementary Table 2",
+      "table_caption": "List of variants with % score variation obtained from each splicing tool.",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Performance of the individual in silico tools in the discovery dataset.",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Supplementary Table 3",
+      "table_caption": "Accuracy of predictor combinations for 5\u2032 donor splice sites.",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Supplementary Table 4",
+      "table_caption": "Accuracy of predictor combinations for 3\u2032 acceptor splice sites.",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Supplementary Table 5",
+      "table_caption": "Accuracy of predictor combinations for global splice sites.",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Supplementary Table 6",
+      "table_caption": "In vitro RNA results for donor region variants in the validation set.",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Supplementary Table 7",
+      "table_caption": "In vitro RNA results for acceptor region variants in the validation set.",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No specific BRCA2 variants were detailed in the text or tables."
+    ],
+    "notes": "The paper discusses splicing prediction tools and their performance but does not provide specific BRCA2 variant data."
+  }
+}

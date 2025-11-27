@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "32999234",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant c.187C>T (p.P63S) and associated penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.187C>T",
+      "protein_notation": "p.P63S",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "82-year-old Japanese male",
+        "phenotype": "elderly-onset cardiac-dominant ATTRv amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 82,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "bilateral leg edema, shortness of breath, atrial fibrillation, concentric LV hypertrophy, severe ATTR amyloid deposits",
+          "evidence_sentence": "We suspected the patient of having ATTRwt amyloidosis, as he showed an elderly-onset sporadic cardiac phenotype."
+        }
+      ],
+      "functional_data": {
+        "summary": "In silico analyses predicted that the p.P63S variant only modestly altered the structure and function of the TTR protein.",
+        "assays": [
+          "bioinformatics tools (SIFT, Polyphen2, Mutation Tester, CADD)",
+          "LC-MS/MS analysis of cardiac amyloid deposits"
+        ]
+      },
+      "segregation_data": "The possibility that this patient had a de novo variant could not be excluded, since the parents were unavailable for testing.",
+      "population_frequency": "The c.187C>T (p.P63S) variant has not been described in disease-causing variant databases or healthy individual databases.",
+      "evidence_level": "modestly pathogenic based on in silico analyses and LC-MS/MS findings",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The P63 amino acid is conserved across mammalian species.",
+      "key_quotes": [
+        "The c.187C>T (p.P63S) variant has not been described in disease-causing variant databases.",
+        "The cardiac amyloid was predominantly composed of the variant TTR."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant was extracted from the main text."
+  }
+}

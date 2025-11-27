@@ -1,0 +1,143 @@
+{
+  "paper_metadata": {
+    "pmid": "28078281",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variants and penetrance data related to pancreatic cancer."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6174delT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1255,
+        "demographics": "Ashkenazi Jews",
+        "phenotype": "increased risk of pancreatic cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1255,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The 6174delT mutation is associated with increased risk of pancreatic cancer.",
+        "assays": []
+      },
+      "segregation_data": "The mutation is associated with increased risk in families.",
+      "population_frequency": "1% (CI = 0.6\u20131.5)",
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is prevalent in Ashkenazi Jewish populations.",
+      "key_quotes": [
+        ">90% of Ashkenazi patients that carried BRCA2 mutations detected in blood sample showed an association with increased risk of pancreatic cancer.",
+        "The 6174delT mutation of BRCA2 was determined to be present in 1% (CI = 0.6\u20131.5) of 1.255 Jewish individuals."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6158insT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 31,
+        "demographics": "not specified",
+        "phenotype": "pancreatic cancer with family history"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 31,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is associated with pancreatic cancer.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is part of a study on familial pancreatic cancer.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.16-2A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 0,
+        "demographics": null,
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The splice site mutation is associated with lower expression of BRCA2 RNA.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Associated with sporadic pancreatic cancer.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.15-1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 0,
+        "demographics": null,
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The splice site mutation is associated with lower expression of BRCA2 RNA.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Associated with sporadic pancreatic cancer.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

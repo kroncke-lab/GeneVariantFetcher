@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "35262576",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 83,
+        "demographics": "Median age 66 years, 62 males",
+        "phenotype": "Amyloidosis due to transthyretin (ATTR)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 83,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "50-60 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          },
+          {
+            "age_range": "70-80 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The most prevalent mutations were Val142Ile (45.6%) and Val50Met (40.3%).",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included both hereditary (ATTRh) and wild-type (ATTRw) forms of amyloidosis.",
+      "key_quotes": [
+        "As muta\u00e7\u00f5es mais prevalentes foram Val142Ile (45,6%) e Val50Met (40,3%).",
+        "Na ATTR, 68,7% eram de car\u00e1ter heredit\u00e1rio (ATTRh) e 31,3% do tipo selvagem (ATTRw)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data focused on the TTR gene variants and their penetrance."
+  }
+}

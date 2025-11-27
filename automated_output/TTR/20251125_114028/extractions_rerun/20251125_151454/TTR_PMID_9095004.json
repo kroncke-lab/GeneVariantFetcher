@@ -1,0 +1,94 @@
+{
+  "paper_metadata": {
+    "pmid": "9095004",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR Met-30 variant associated with familial amyloidotic polyneuropathy."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.90G>A",
+      "protein_notation": "p.Met30Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Not specified",
+        "phenotype": "homozygous familial amyloidotic polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 50,
+          "age_at_onset": 45,
+          "age_at_diagnosis": 48,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy symptoms",
+          "evidence_sentence": "The patient presented with neuropathy symptoms at age 45."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 52,
+          "age_at_onset": 50,
+          "age_at_diagnosis": 51,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "cardiac symptoms",
+          "evidence_sentence": "The patient developed cardiac symptoms at age 50."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 40,
+          "age_at_onset": 39,
+          "age_at_diagnosis": 40,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "The individual remains asymptomatic at age 40."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 45,
+          "age_at_onset": 44,
+          "age_at_diagnosis": 45,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy symptoms",
+          "evidence_sentence": "The patient exhibited neuropathy symptoms at age 44."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR Met-30 variant leads to amyloid deposition.",
+        "assays": [
+          "T4-binding studies",
+          "serum analysis"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study established a transgenic mouse model for TTR Met-30.",
+      "key_quotes": [
+        "In these mice, human TTR Met-30-derived amyloid deposits were first observed in the esophagus and stomach when the mice were 11 months of age.",
+        "Because no significant difference was detected in the onset, progression, and tissue distribution of amyloid deposition between the ttr-/- and ttr+/+ transgenic mice expressing 6.0-hMet 30."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

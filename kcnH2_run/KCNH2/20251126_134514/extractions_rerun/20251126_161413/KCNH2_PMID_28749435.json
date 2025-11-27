@@ -1,0 +1,134 @@
+{
+  "paper_metadata": {
+    "pmid": "28749435",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data from a family case study of Long QT Syndrome."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.G323A",
+      "protein_notation": "p.C108Y",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 5,
+        "demographics": "Italian family",
+        "phenotype": "Long QT Syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 3,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 60.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "II-1",
+          "age_at_evaluation": 12,
+          "age_at_onset": 10,
+          "age_at_diagnosis": 12,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "Prolongation of QT interval (QTc 560 ms)",
+          "evidence_sentence": "The proband (II-1 in Figure 1A; Table 1) had syncope at 10 and 11 years of age, but cardiac evaluation showed no apparent anomalies."
+        },
+        {
+          "individual_id": "II-2",
+          "age_at_evaluation": null,
+          "age_at_onset": 9,
+          "age_at_diagnosis": 9,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "Long QTc (530 ms) after syncope episode.",
+          "evidence_sentence": "At age nine years he suffered an episode of syncope. After this episode, a complete cardiac evaluation revealed a long QTc (530 ms)."
+        },
+        {
+          "individual_id": "II-3",
+          "age_at_evaluation": 6,
+          "age_at_onset": null,
+          "age_at_diagnosis": 6,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "QTc of ~470 ms, experienced extreme bradycardia with sinus pauses followed by syncope.",
+          "evidence_sentence": "Although asymptomatic, the other brother (II-3 in Figure 1A; Table 1) was screened because of the family history of LQTS and was found to have a QTc of ~470 ms at age six years."
+        },
+        {
+          "individual_id": "Father",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "QTc values at the upper limit of normal (QTc: 440 ms)",
+          "evidence_sentence": "the father\u2019s QTc values were at the upper limit of normal (QTc: 440 ms)"
+        },
+        {
+          "individual_id": "Mother",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "QTc values at the upper limit of borderline prolongation (QTc 471 ms)",
+          "evidence_sentence": "the mother\u2019s were at the upper limit of borderline prolongation (QTc 471 ms)"
+        }
+      ],
+      "functional_data": {
+        "summary": "KCNH2-p.C108Y is a non-functional channel with dominant-negative effects.",
+        "assays": [
+          "whole-cell patch clamp experiments"
+        ]
+      },
+      "segregation_data": "No variant clearly segregated with the disease.",
+      "population_frequency": "Not reported in the ExAC database.",
+      "evidence_level": "Moderate evidence based on functional studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "KCNH2-p.C108Y is considered a novel variant.",
+      "key_quotes": [
+        "Heterologous expression studies demonstrated that KCNH2-p.C108Y is a non-functional channel.",
+        "These results indicate that KCNH2-p.C108Y confers a loss-of-function with dominant-negative features consistent with a pathogenic mutation causing autosomal dominant LQTS."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.A2690C",
+      "protein_notation": "p.K897T",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": 5,
+        "demographics": "Italian family",
+        "phenotype": "Long QT Syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "KCNH2-p.K897T is a common variant that may act as a modifier.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": "MAF = 0.187.",
+      "evidence_level": "Low evidence based on population frequency.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "KCNH2-p.K897T was previously reported to influence the electrical activity of cardiac cells.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted successfully."
+  }
+}

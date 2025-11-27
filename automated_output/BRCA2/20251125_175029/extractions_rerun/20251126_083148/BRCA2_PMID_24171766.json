@@ -1,0 +1,33 @@
+{
+  "paper_metadata": {
+    "pmid": "24171766",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses genetic variants associated with breast cancer in Polish women, focusing on low-penetrance SNPs. No specific BRCA2 variants were reported in the study population."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Mutations detected in the selected regions of BRCA1 gene among study participants",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 3",
+      "table_caption": "SNPs selected for analysis",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 4",
+      "table_caption": "The significant SNP associations with breast cancer considering allelic and Cochran-Armitage trend tests",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No BRCA2 variants were reported in the study population."
+    ],
+    "notes": "The study focused on SNPs associated with breast cancer risk, but no specific BRCA2 variants were identified in the participants."
+  }
+}

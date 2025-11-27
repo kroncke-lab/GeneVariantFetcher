@@ -1,0 +1,198 @@
+{
+  "paper_metadata": {
+    "pmid": "19949876",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5213_5216del4",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The four probands missed with BRCAPRO were also missed with Myriad."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was one of four BRCA2 mutations missed by the BRCAPRO and Myriad models.",
+      "key_quotes": [
+        "The four probands missed with BRCAPRO were also missed with Myriad."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5645C>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The four probands missed with BRCAPRO were also missed with Myriad."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was one of four BRCA2 mutations missed by the BRCAPRO and Myriad models.",
+      "key_quotes": [
+        "The four probands missed with BRCAPRO were also missed with Myriad."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2685_2686delAA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The four probands missed with BRCAPRO were also missed with Myriad."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was one of four BRCA2 mutations missed by the BRCAPRO and Myriad models.",
+      "key_quotes": [
+        "The four probands missed with BRCAPRO were also missed with Myriad."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6396_6397insA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The four probands missed with BRCAPRO were also missed with Myriad."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was one of four BRCA2 mutations missed by the BRCAPRO and Myriad models.",
+      "key_quotes": [
+        "The four probands missed with BRCAPRO were also missed with Myriad."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Genetic variants identified",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

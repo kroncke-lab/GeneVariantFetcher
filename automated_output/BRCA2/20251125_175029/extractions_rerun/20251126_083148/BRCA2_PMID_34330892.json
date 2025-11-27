@@ -1,0 +1,115 @@
+{
+  "paper_metadata": {
+    "pmid": "34330892",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene with associated penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7802A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "germline mutation",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Skipping the last four nucleotides of exon 16.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 1",
+      "additional_notes": "Single base substitution affecting splicing.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.67+3A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "germline mutation",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Skipping of exon 2.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 1",
+      "additional_notes": "Single base substitution affecting splicing.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.212-1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "germline mutation",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Deletion of 80-85 bases of exon 2.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 1",
+      "additional_notes": "Single base substitution affecting splicing.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "The aberrant changes of cis element of splicing.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were related to BRCA2 and included relevant details."
+  }
+}

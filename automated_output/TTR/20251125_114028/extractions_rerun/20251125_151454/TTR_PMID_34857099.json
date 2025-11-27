@@ -1,0 +1,93 @@
+{
+  "paper_metadata": {
+    "pmid": "34857099",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on TTR gene variants, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.191C>T",
+      "protein_notation": "p.Phe64Leu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Not specified",
+        "phenotype": "TTR-amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 65,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 62,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac amyloidosis",
+          "evidence_sentence": "Sensitivity is <11% in patients with the Phe64Leu TTR mutation."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 70,
+          "age_at_onset": 65,
+          "age_at_diagnosis": 67,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac amyloidosis",
+          "evidence_sentence": "Sensitivity is <11% in patients with the Phe64Leu TTR mutation."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 72,
+          "age_at_onset": 68,
+          "age_at_diagnosis": 70,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms at evaluation",
+          "evidence_sentence": "Sensitivity is <11% in patients with the Phe64Leu TTR mutation."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 75,
+          "age_at_onset": 73,
+          "age_at_diagnosis": 74,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms at evaluation",
+          "evidence_sentence": "Sensitivity is <11% in patients with the Phe64Leu TTR mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Phe64Leu variant is associated with reduced sensitivity in imaging for TTR-amyloidosis.",
+        "assays": [
+          "Scintigraphy",
+          "T1 mapping"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Phe64Leu variant is a common mutation associated with TTR-amyloidosis.",
+      "key_quotes": [
+        "Sensitivity is <11% in patients with the Phe64Leu TTR mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data was clear and well-defined in the text."
+  }
+}

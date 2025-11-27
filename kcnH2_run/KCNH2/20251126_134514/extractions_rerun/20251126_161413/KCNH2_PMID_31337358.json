@@ -1,0 +1,67 @@
+{
+  "paper_metadata": {
+    "pmid": "31337358",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.211G>C",
+      "protein_notation": "p.G71R",
+      "genomic_position": null,
+      "clinical_significance": "Likely Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "LQT2 (Long QT Syndrome Type 2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "LQT2",
+          "evidence_sentence": "A greater prevalence of mutations amongst female cases was seen with respect to LQTS/BrS risk-mutations (p\u2009=\u20090.03)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Variant associated with Long QT Syndrome Type 2.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "This variant has been previously associated with disease.",
+      "key_quotes": [
+        "A novel truncation p.W323* was detected in KCNQ1 and predicted to cause nonsense-mediated decay.",
+        "Two were disease-associated mutations (variants C and V in Table 1)."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Rare Variants identified in SADS Cases",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were successfully extracted."
+  }
+}

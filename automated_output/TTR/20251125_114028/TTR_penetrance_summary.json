@@ -1,0 +1,313 @@
+{
+  "gene_symbol": "TTR",
+  "aggregation_timestamp": "2025-11-25T14:50:25.414507",
+  "total_variants": 12,
+  "variants": [
+    {
+      "variant_key": "FHL1_unknown_variant",
+      "gene_symbol": "FHL1",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 2,
+        "unaffected": 0,
+        "uncertain": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "FBXO38_unknown_variant",
+      "gene_symbol": "FBXO38",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 2,
+        "unaffected": 0,
+        "uncertain": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "POLG_unknown_variant",
+      "gene_symbol": "POLG",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 2,
+        "unaffected": 0,
+        "uncertain": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "OPA1_unknown_variant",
+      "gene_symbol": "OPA1",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 2,
+        "unaffected": 0,
+        "uncertain": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "ATX3_unknown_variant",
+      "gene_symbol": "ATX3",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 2,
+        "unaffected": 0,
+        "uncertain": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "FGF23_unknown_variant",
+      "gene_symbol": "FGF23",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 2,
+        "unaffected": 0,
+        "uncertain": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "CAPN3_unknown_variant",
+      "gene_symbol": "CAPN3",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 0,
+        "unaffected": 0,
+        "uncertain": 2,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "TTN_unknown_variant",
+      "gene_symbol": "TTN",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 0,
+        "unaffected": 0,
+        "uncertain": 2,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "SCN4A_unknown_variant",
+      "gene_symbol": "SCN4A",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 0,
+        "unaffected": 0,
+        "uncertain": 2,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "DYSF_unknown_variant",
+      "gene_symbol": "DYSF",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 0,
+        "unaffected": 0,
+        "uncertain": 2,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "TK2_unknown_variant",
+      "gene_symbol": "TK2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 0,
+        "unaffected": 0,
+        "uncertain": 2,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "DES_unknown_variant",
+      "gene_symbol": "DES",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 0,
+        "unaffected": 0,
+        "uncertain": 2,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    }
+  ],
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "error_count": 0,
+    "warning_count": 0
+  }
+}

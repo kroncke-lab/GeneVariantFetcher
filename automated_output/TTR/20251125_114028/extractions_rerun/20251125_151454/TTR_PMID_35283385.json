@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "35283385",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR variant Leu58Arg (p.Leu78Arg) including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu78Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "44-year-old Japanese male",
+        "phenotype": "ATTRv amyloidosis with sensory, motor, and autonomic neuropathy symptoms"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 44,
+          "age_at_onset": 24,
+          "age_at_diagnosis": 34,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Gradual deterioration of sensory, motor, and autonomic neuropathy symptoms after liver transplantation.",
+          "evidence_sentence": "This patient showed gradual deterioration of sensory, motor, and autonomic neuropathy symptoms after LT."
+        }
+      ],
+      "functional_data": {
+        "summary": "The patient showed deterioration of symptoms despite treatment, indicating a complex response to therapies.",
+        "assays": []
+      },
+      "segregation_data": "The variant was identified in a family with a history of ATTRv amyloidosis.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Main Text, Case Report section",
+      "additional_notes": "The patient had a long clinical course of 21 years, including a 9-year follow-up after liver transplantation.",
+      "key_quotes": [
+        "The present patient had clinical manifestations of both affected members with a longer clinical course.",
+        "Although the present case showed deterioration of the symptoms after disease-modifying treatments, LT might be suitable in patients with the same variant if they are young and in good condition."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant was extracted from the main text."
+  }
+}

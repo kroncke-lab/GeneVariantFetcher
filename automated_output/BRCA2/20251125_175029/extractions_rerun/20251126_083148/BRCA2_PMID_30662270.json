@@ -1,0 +1,62 @@
+{
+  "paper_metadata": {
+    "pmid": "30662270",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper primarily discusses a case report of a patient with BRAF-mutated metastatic colorectal cancer. A BRCA2 variant is mentioned in the context of genetic testing results, but no detailed penetrance or functional data is provided for BRCA2."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.Asp306Val",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "44-year-old male",
+        "phenotype": "metastatic colorectal cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 44,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "metastatic colorectal cancer",
+          "evidence_sentence": "NGS testing identified BRAFV600E mutation with extended wild-type RAS. Other genetic anomalies identified by NGS included the following mutations and amplifications: BRCA2D306V, ATMR337C, L1814F, RNF43R132, TP53R248W, Myc (copy number increase), and MCL1 (copy number increase)."
+        }
+      ],
+      "functional_data": {
+        "summary": "No functional data provided for BRCA2D306V.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Case presentation, paragraph 4",
+      "additional_notes": "The clinical relevance of the BRCA2D306V variant in CRC is not established.",
+      "key_quotes": [
+        "NGS testing identified BRAFV600E mutation with extended wild-type RAS. Other genetic anomalies identified by NGS included the following mutations and amplifications: BRCA2D306V, ATMR337C, L1814F, RNF43R132, TP53R248W, Myc (copy number increase), and MCL1 (copy number increase)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [
+      "Limited information on BRCA2 variant significance and penetrance."
+    ],
+    "notes": "The paper focuses on BRAF mutations in colorectal cancer, with limited data on BRCA2."
+  }
+}

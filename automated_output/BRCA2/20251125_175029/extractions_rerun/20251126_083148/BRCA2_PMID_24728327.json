@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "24728327",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses genetic variation in cancer-susceptibility genes in a healthy cohort, with a focus on BRCA2 among others. However, no specific BRCA2 variants are detailed in the text or tables."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper does not provide specific BRCA2 variant data."
+    ],
+    "notes": "The paper mentions BRCA2 as a gene of interest but does not provide detailed variant information for BRCA2."
+  }
+}

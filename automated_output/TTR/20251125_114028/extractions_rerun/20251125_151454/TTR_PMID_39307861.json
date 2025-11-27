@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "39307861",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val40Met, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.118G>A",
+      "protein_notation": "p.Val40Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 22,
+        "demographics": "age 83 \u00b1 4.6 years, 57% males",
+        "phenotype": "ATTR-CM"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 22,
+        "affected_count": 1,
+        "unaffected_count": 21,
+        "uncertain_count": null,
+        "penetrance_percentage": 4.55,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Transthyretin amyloid cardiomyopathy",
+          "evidence_sentence": "Among those diagnosed with ATTR-CM, 22 underwent genetic testing, which revealed that 21 (95%) had wild-type ATTR, and 1 (5%) exhibited a transthyretin mutation (Val40Met)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val40Met variant is associated with transthyretin amyloid cardiomyopathy.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family of the affected individual.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on genetic testing results.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The majority of carriers were unaffected, indicating low penetrance.",
+      "key_quotes": [
+        "Among those diagnosed with ATTR-CM, 22 underwent genetic testing, which revealed that 21 (95%) had wild-type ATTR, and 1 (5%) exhibited a transthyretin mutation (Val40Met)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data is based on the information provided in the main text."
+  }
+}

@@ -1,0 +1,20 @@
+# MAIN TEXT
+
+## Calibration of pathogenicity due to variant-induced leaky splicing defects by using BRCA2 exon 3 as a model system
+
+### Abstract
+
+BRCA2 is a clinically actionable gene implicated in breast and ovarian cancer predisposition that has become a high priority target for improving the classification of variants of unknown significance (VUS). Amongst all BRCA2 VUS, those causing partial/leaky splicing defects are the most challenging to classify because the minimal level of full-length transcripts (FL) required for normal function remains to be established. Here, we explored BRCA2 exon 3 (BRCA2e3) as a model for calibrating variant-induced spliceogenicity and estimating thresholds for BRCA2 haploinsufficiency. In silico predictions, minigene splicing assays, patients’ RNA analyses, a mouse embryonic stem cell (mESC) complementation assay and retrieval of patient-related information were combined to determine the minimal requirement of FL BRCA2 transcripts. Of 100 BRCA2e3 variants tested in the minigene assay, 64 were found to be spliceogenic causing mild to severe RNA defects. Splicing defects were also confirmed in patients’ RNA when available. Analysis of a neutral leaky variant (c.231T>G) showed that a reduction to ~60% of FL BRCA2 transcripts from a mutant allele does not cause any increase in cancer risk. Moreover, data obtained from mESCs suggest that variants causing a decline in FL BRCA2 to ~30% of wild-type are not pathogenic given that mESCs are fully viable and resistant to DNA-damaging agents in those conditions. In contrast, mESCs producing lower relative amounts of FL BRCA2 exhibited either null or hypomorphic phenotypes. Overall, our findings are likely to have broader implications on the interpretation of BRCA2 variants affecting the splicing pattern of other essential exons.
+
+
+
+# SUPPLEMENTAL FILE 1: nihms-1618243.pdf
+
+# Preparing to download ...
+
+[HHS Vulnerability Disclosure](https://www.hhs.gov/vulnerability-disclosure-policy/index.html)
+
+# SUPPLEMENTAL FILE 2: PMC7484206
+
+[File available at: automated_output/BRCA2/20251125_175029/pmc_fulltext/32641407_supplements/PMC7484206]
+

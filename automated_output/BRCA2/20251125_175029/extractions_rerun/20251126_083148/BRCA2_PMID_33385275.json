@@ -1,0 +1,67 @@
+{
+  "paper_metadata": {
+    "pmid": "33385275",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant V208G, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.623G>A",
+      "protein_notation": "p.Val208Gly",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Male, 50s",
+        "phenotype": "Advanced colorectal cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": 2,
+        "unaffected_count": 9,
+        "uncertain_count": null,
+        "penetrance_percentage": 18.18,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Advanced colorectal cancer",
+          "evidence_sentence": "All 11 sites annotated BRCA2 V208G as a germline variant of uncertain significance (VUS). Considering the familial history of breast cancers, two EPs (Sites D and H) recommended genetic counseling."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is classified as a variant of uncertain significance (VUS) with no specific functional data provided.",
+        "assays": []
+      },
+      "segregation_data": "Segregation data not provided.",
+      "population_frequency": "Population frequency data not provided.",
+      "evidence_level": "VUS",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was discussed in the context of familial breast cancer history.",
+      "key_quotes": [
+        "All 11 sites annotated BRCA2 V208G as a germline variant of uncertain significance (VUS).",
+        "Considering the familial history of breast cancers, two EPs (Sites D and H) recommended genetic counseling."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical information and the CGP results of simulated cases",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly mentioned in the context of the simulated cases."
+  }
+}

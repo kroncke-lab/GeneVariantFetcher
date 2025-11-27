@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "37901698",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses various types of amyloidosis affecting the kidney, with a focus on AA amyloidosis. It mentions transthyretin (TTR) amyloidosis but does not provide specific genetic variant information for TTR."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant information for the TTR gene."
+    ],
+    "notes": "The paper discusses amyloidosis types and mentions TTR amyloidosis but lacks specific TTR variant data."
+  }
+}

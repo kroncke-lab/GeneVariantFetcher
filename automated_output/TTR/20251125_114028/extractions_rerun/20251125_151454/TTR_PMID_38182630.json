@@ -1,0 +1,73 @@
+{
+  "paper_metadata": {
+    "pmid": "38182630",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the V30M variant in the TTR gene, focusing on its clinical significance, penetrance data, and biomarker potential in ATTRv amyloidosis."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 29,
+        "demographics": "Mean age 69 years, 37.9% female",
+        "phenotype": "A-ATTR-V30M patients with neurological involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 31,
+        "affected_count": 29,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 93.55,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 69,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Neurological involvement, late disease onset",
+          "evidence_sentence": "All but 4 A-ATTRv patients had neurological involvement, most of them with late disease onset (20 patients, 80.0%)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 69,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Neurological involvement, late disease onset",
+          "evidence_sentence": "All but 4 A-ATTRv patients had neurological involvement, most of them with late disease onset (20 patients, 80.0%)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V30M variant is associated with elevated NfL levels, indicating axonal damage.",
+        "assays": [
+          "ELISA for NfL levels"
+        ]
+      },
+      "segregation_data": "The V30M variant segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the importance of early diagnosis and monitoring of disease progression in A-ATTRv.",
+      "key_quotes": [
+        "V30M (p.V50M) is the most common TTR variant and is associated with ATTR amyloidosis-related polyneuropathy.",
+        "Median NfL levels were 116 pg/mL in A-ATTRv patients, significantly higher than in asymptomatic carriers."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on the V30M variant in TTR."
+  }
+}

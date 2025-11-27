@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "35751086",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the Val30Met mutation in the TTR gene associated with hereditary transthyretin amyloidosis."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "64-year-old male of East-Asian descent",
+        "phenotype": "hereditary transthyretin amyloidosis (hATTR) with gastrointestinal symptoms, peripheral neuropathy, and hematologic abnormalities"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 64,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "presented with diarrhea, mild anemia, and symptoms of peripheral neuropathy",
+          "evidence_sentence": "Genetic testing confirmed a Val30Met mutation of the TTR gene consistent with hereditary TTR amyloidosis (hATTR)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to misfolding of the TTR protein, contributing to amyloid deposition.",
+        "assays": [
+          "mass spectrometry",
+          "Congo-red staining"
+        ]
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Strong evidence based on clinical presentation and genetic confirmation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient was started on patisiran therapy after diagnosis.",
+      "key_quotes": [
+        "Genetic testing confirmed a Val30Met mutation of the TTR gene consistent with hereditary TTR amyloidosis (hATTR)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variant."
+  }
+}

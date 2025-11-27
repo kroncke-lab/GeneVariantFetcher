@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "27273296",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.140G>C",
+      "protein_notation": "p.Gly47Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "50-year-old male",
+        "phenotype": "advanced TTR-FAP with polyneuropathy disability (PND) score of 2 and GI symptoms"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": 50,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "advanced TTR-FAP with polyneuropathy disability (PND) score of 2 and GI symptoms",
+          "evidence_sentence": "A 50\u2010year\u2010old man with advanced TTR\u2010FAP due to a TTR Gly47Ala (p. Gly67Ala) mutation [late stage 1 disease with polyneuropathy disability (PND) score of 2 and GI symptoms]"
+        }
+      ],
+      "functional_data": {
+        "summary": "The Gly47Ala mutation is associated with advanced TTR-FAP.",
+        "assays": []
+      },
+      "segregation_data": "Yes, it segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Case 1",
+      "additional_notes": "The patient did not want to disclose the hereditary nature of his condition to family members.",
+      "key_quotes": [
+        "A 50\u2010year\u2010old man with advanced TTR\u2010FAP due to a TTR Gly47Ala (p. Gly67Ala) mutation [late stage 1 disease with polyneuropathy disability (PND) score of 2 and GI symptoms]"
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149C>G",
+      "protein_notation": "p.Ser50Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "35-year-old female",
+        "phenotype": "asymptomatic carrier, developed neuropathic symptoms after 3 years"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": 35,
+          "age_at_onset": 38,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "developed neuropathic symptoms after 3 years of being an asymptomatic carrier",
+          "evidence_sentence": "An asymptomatic 35\u2010year\u2010old woman and mother of 2 asked for genetic testing, after 1 parent and 1 sibling tested positive for the TTR Ser50Arg (p.Ser70Arg) mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Ser50Arg mutation is associated with TTR-FAP.",
+        "assays": []
+      },
+      "segregation_data": "Yes, it segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Case 2",
+      "additional_notes": "The patient initially refused to return for follow-up after testing positive.",
+      "key_quotes": [
+        "An asymptomatic 35\u2010year\u2010old woman and mother of 2 asked for genetic testing, after 1 parent and 1 sibling tested positive for the TTR Ser50Arg (p.Ser70Arg) mutation."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89T>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "40-year-old male",
+        "phenotype": "liver transplant recipient with TTR-FAP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": 40,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "liver transplant recipient with TTR-FAP",
+          "evidence_sentence": "A 40\u2010year\u2010old liver transplant recipient with TTR\u2010FAP due to a TTR Val30Met (p.Val50Met) mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met mutation is associated with TTR-FAP.",
+        "assays": []
+      },
+      "segregation_data": "Yes, it segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Case 4",
+      "additional_notes": "The patient and his wife wanted to know if their newborn child carried the mutation.",
+      "key_quotes": [
+        "A 40\u2010year\u2010old liver transplant recipient with TTR\u2010FAP due to a TTR Val30Met (p.Val50Met) mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were from the TTR gene, with detailed penetrance data provided."
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "paper_metadata": {
+    "pmid": "31869745",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8168 A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 20,
+        "demographics": "Not specified",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The c.8168 A>G variant is noted as the most prevalent among BRCA2 mutations.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Table 2, Row 25",
+      "additional_notes": "This variant was found in 25% of BRCA2 mutation cases.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5116-5119 del AATA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 20,
+        "demographics": "Not specified",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "This variant is classified as pathogenic.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Table 2, Row 20",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4749-4750 del AG",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 20,
+        "demographics": "Not specified",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "This variant is classified as pathogenic.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Table 2, Row 21",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5542 del A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 20,
+        "demographics": "Not specified",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "This variant is classified as pathogenic.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Table 2, Row 22",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5616-5620 del AGTAA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 20,
+        "demographics": "Not specified",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "This variant is classified as pathogenic.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Table 2, Row 23",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5631 del C",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 20,
+        "demographics": "Not specified",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "This variant is classified as pathogenic.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Table 2, Row 24",
+      "additional_notes": "",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "BRCA Status of Ovarian Cancer Patients",
+      "variants_extracted": 6
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 6,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted from the main text and tables."
+  }
+}

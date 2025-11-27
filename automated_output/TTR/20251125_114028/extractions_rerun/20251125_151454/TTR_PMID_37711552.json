@@ -1,0 +1,81 @@
+{
+  "paper_metadata": {
+    "pmid": "37711552",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val142Ile, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.424G>A",
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": "null",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Caucasian, 65 years old, male",
+        "phenotype": "TTR systemic amyloidosis with prominent heart involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "20-30 years",
+            "penetrance_percentage": 0.0,
+            "carriers_in_range": 2,
+            "affected_in_range": 0
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 65,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "TTR systemic amyloidosis with cardiac involvement",
+          "evidence_sentence": "We present a case of a Caucasian 65-year-old man with cardiac amyloidosis and the homozygous mutation Val142Ile (classically, Val122Ile) in the transthyretin gene."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 27,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms or significant disease",
+          "evidence_sentence": "The genetic analysis was extended to the 27-year-old son and 20-year-old daughter of the proband and, as expected, both harbor in heterozygous status the same mutation identified in the father."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val142Ile mutation causes an altered speed of tetramer dissociation, greater formation of amyloid fibrils, and an unstable TTR tetramer compared to wild type.",
+        "assays": [
+          "in vitro studies",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the family, as the proband's children are heterozygous carriers but unaffected.",
+      "population_frequency": "The Val142Ile mutation is extremely rare in Caucasian patients.",
+      "evidence_level": "Strong evidence for pathogenicity based on multiple publications.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is well-known and has been previously reported in patients with TTR amyloidosis.",
+      "key_quotes": [
+        "This variant is very well known as pathogenic because it has been already published several times in patients clinically affected by TTR amyloidosis.",
+        "The Val142Ile mutation is extremely rare in Caucasian patients with few cases reported of ATTRv amyloidosis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant was successfully extracted."
+  }
+}

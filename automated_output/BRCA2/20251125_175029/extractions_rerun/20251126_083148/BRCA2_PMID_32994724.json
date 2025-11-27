@@ -1,0 +1,218 @@
+{
+  "paper_metadata": {
+    "pmid": "32994724",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene along with penetrance data from breast cancer patients in Saudi Arabia."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1166C>A",
+      "protein_notation": "p.Thr389Asn",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We identified a total of fourteen point mutations and one deletion related to BRCA1, BRCA2, and RAD50 genes from our BRCA panel analysis of breast cancer samples."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We identified a total of fourteen point mutations and one deletion related to BRCA1, BRCA2, and RAD50 genes from our BRCA panel analysis of breast cancer samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is likely to lead to an aberrant transcript with a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was reported for the first time in breast cancer patients from Saudi Arabia.",
+      "key_quotes": [
+        "The mutations of TP53 (p.R81X), VHL (p.E52X), and BRCA2 (p.K3326X), which lead to an aberrant transcript with a premature stop codon, were reported for the first time in Saudi breast cancer patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8755-1G>C",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We identified a total of fourteen point mutations and one deletion related to BRCA1, BRCA2, and RAD50 genes from our BRCA panel analysis of breast cancer samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is likely to lead to an aberrant transcript.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was reported for the first time in breast cancer patients from Saudi Arabia.",
+      "key_quotes": [
+        "We identified a total of fourteen point mutations and one deletion related to BRCA1, BRCA2, and RAD50 genes from our BRCA panel analysis of breast cancer samples."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.122C>T",
+      "protein_notation": "p.Pro41Leu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We identified a total of fourteen point mutations and one deletion related to BRCA1, BRCA2, and RAD50 genes from our BRCA panel analysis of breast cancer samples."
+        },
+        {
+          "individual_id": "Case 5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We identified a total of fourteen point mutations and one deletion related to BRCA1, BRCA2, and RAD50 genes from our BRCA panel analysis of breast cancer samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is likely to lead to an aberrant transcript.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was reported for the first time in breast cancer patients from Saudi Arabia.",
+      "key_quotes": [
+        "We identified a total of fourteen point mutations and one deletion related to BRCA1, BRCA2, and RAD50 genes from our BRCA panel analysis of breast cancer samples."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5291C>G",
+      "protein_notation": "p.Ser1764X",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We identified a total of fourteen point mutations and one deletion related to BRCA1, BRCA2, and RAD50 genes from our BRCA panel analysis of breast cancer samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is likely to lead to an aberrant transcript.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was reported for the first time in breast cancer patients from Saudi Arabia.",
+      "key_quotes": [
+        "We identified a total of fourteen point mutations and one deletion related to BRCA1, BRCA2, and RAD50 genes from our BRCA panel analysis of breast cancer samples."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Short listed and validated variants in BRCA1 & BRCA2.",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

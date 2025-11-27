@@ -1,0 +1,231 @@
+{
+  "paper_metadata": {
+    "pmid": "33891299",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The extraction focused on BRCA2 variants, particularly the BRCA2:c.7806-2A>G and BRCA2:c.3975_3978dupTGCT, detailing their clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7806-2A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 9,
+        "demographics": "Males, ages 38 to 72",
+        "phenotype": "Male breast cancer (MBC)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 19,
+        "affected_count": 9,
+        "unaffected_count": 10,
+        "uncertain_count": null,
+        "penetrance_percentage": 47.4,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 64,
+          "age_at_onset": null,
+          "age_at_diagnosis": 64,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, luminal B",
+          "evidence_sentence": "MBC (64); 4 FBC (30,61,70,79); bil FBC (68)"
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": 56,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "DCIS",
+          "evidence_sentence": "DCIS(56)"
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": 64,
+          "age_at_onset": null,
+          "age_at_diagnosis": 64,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, luminal B HER2+",
+          "evidence_sentence": "IDC, luminal B HER2\u2009+(64)"
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": 58,
+          "age_at_onset": null,
+          "age_at_diagnosis": 58,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, luminal B",
+          "evidence_sentence": "IDC, luminal B(58)M (68)"
+        },
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": 38,
+          "age_at_onset": null,
+          "age_at_diagnosis": 38,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, luminal B",
+          "evidence_sentence": "IDC, luminal B(38)\u2013FBC (65)"
+        },
+        {
+          "individual_id": "Case_6",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": 62,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Bil MBC: IDC, luminal B",
+          "evidence_sentence": "Bil MBC: IDC, luminal B(62, 66)M (50)"
+        },
+        {
+          "individual_id": "Case_7",
+          "age_at_evaluation": 55,
+          "age_at_onset": null,
+          "age_at_diagnosis": 55,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, luminal B",
+          "evidence_sentence": "IDC, luminal B(55)\u2013FBC (48); 2 PrC (61,64); 2 PaC (74,77)"
+        },
+        {
+          "individual_id": "Case_8",
+          "age_at_evaluation": 65,
+          "age_at_onset": null,
+          "age_at_diagnosis": 65,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, luminal A",
+          "evidence_sentence": "IDC, luminal A(65)\u2013\u2013"
+        },
+        {
+          "individual_id": "Case_9",
+          "age_at_evaluation": 74,
+          "age_at_onset": null,
+          "age_at_diagnosis": 74,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Massive DCIS with microinvasion",
+          "evidence_sentence": "Masive DCIS with microinvasion (74)\u2013\u2013"
+        }
+      ],
+      "functional_data": {
+        "summary": "The splice-site variant is associated with a higher risk of breast cancer in males.",
+        "assays": []
+      },
+      "segregation_data": "Detected in families with multiple cases of MBC.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Table 2, Row 2",
+      "additional_notes": "This variant is a founder mutation in Slovenia.",
+      "key_quotes": [
+        "We observed a high mutation detection rate and conclude this may be due to the prevalent BRCA2:c.7806-2A\u2009>\u2009G variant in Slovenia.",
+        "In families with BRCA2:c.7806-2A\u2009>\u2009G, the incidence of MBC cases was higher compared to families with other P/LPVs in BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3975_3978dupTGCT",
+      "protein_notation": "p.Ala1327Cysfs*4",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "Males, ages 50 to 68",
+        "phenotype": "Male breast cancer (MBC)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 5,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 50,
+          "age_at_onset": null,
+          "age_at_diagnosis": 50,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Mixed IDC and ILC",
+          "evidence_sentence": "Mixed IDC and ILC(50)\u2013OC (40); FBC (59)"
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 68,
+          "age_at_onset": null,
+          "age_at_diagnosis": 68,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, luminal B",
+          "evidence_sentence": "IDC, luminal B(68)\u2013FBC (30); PrC (72)"
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": 63,
+          "age_at_onset": null,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "IDC",
+          "evidence_sentence": "IDC(63)\u20132 FBC (53,59)"
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": 50,
+          "age_at_onset": null,
+          "age_at_diagnosis": 50,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, luminal B HER2+",
+          "evidence_sentence": "IDC, luminal B HER2\u2009+(50)\u2013\u2013"
+        },
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": 80,
+          "age_at_onset": null,
+          "age_at_diagnosis": 80,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Massive DCIS with microinvasion",
+          "evidence_sentence": "Masive DCIS with microinvasion (80)\u20133 FBC (41,54,65)"
+        }
+      ],
+      "functional_data": {
+        "summary": "The duplication leads to a frameshift and is associated with breast cancer.",
+        "assays": []
+      },
+      "segregation_data": "Detected in families with multiple cases of MBC.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Table 2, Row 11",
+      "additional_notes": "This variant is also recurrent in the cohort.",
+      "key_quotes": [
+        "The two most common recurrent variants were BRCA2:c.7806-2A\u2009>\u2009G and BRCA2:c.3975_3978dupTGCT."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Spectrum of detected P/LPVs in BRCA1 and BRCA2",
+      "variants_extracted": 20
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

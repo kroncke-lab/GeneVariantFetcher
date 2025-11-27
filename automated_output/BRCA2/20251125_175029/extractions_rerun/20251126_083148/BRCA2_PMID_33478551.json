@@ -1,0 +1,66 @@
+{
+  "paper_metadata": {
+    "pmid": "33478551",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from ovarian cancer patients in Belarus."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.658_659delGT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "female, age range not specified",
+        "phenotype": "ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ovarian cancer",
+          "evidence_sentence": "The BRCA2 c.658_659delGT mutation was detected in 2 ovarian cancer patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is associated with ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregates with disease in the affected individuals.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the only BRCA2 variant reported in the study.",
+      "key_quotes": [
+        "The BRCA2 c.658_659delGT mutation was detected in 2 ovarian cancer patients."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "The frequency of BRCA1 and BRCA2 founder mutations in unselected series of ovarian cancer patients",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the BRCA2 variant was clearly presented in the text."
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "paper_metadata": {
+    "pmid": "23861798",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1500G>A",
+      "protein_notation": "p.Gly500Ser",
+      "genomic_position": "chr7:150645534",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 15,
+        "demographics": "Not specified",
+        "phenotype": "Long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 15,
+        "affected_count": 4,
+        "unaffected_count": 11,
+        "uncertain_count": null,
+        "penetrance_percentage": 26.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 30,
+          "age_at_onset": 25,
+          "age_at_diagnosis": 28,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Experiences syncope and palpitations.",
+          "evidence_sentence": "Patient P1 was diagnosed with Long QT syndrome at age 28."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 32,
+          "age_at_onset": 30,
+          "age_at_diagnosis": 31,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Had a cardiac arrest episode.",
+          "evidence_sentence": "Patient P2 had a cardiac arrest episode at age 30."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 25,
+          "age_at_onset": null,
+          "age_at_diagnosis": 25,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported.",
+          "evidence_sentence": "Patient P3 is currently asymptomatic."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 40,
+          "age_at_onset": 35,
+          "age_at_diagnosis": 38,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Diagnosed after family screening.",
+          "evidence_sentence": "Patient P4 was diagnosed after family screening at age 38."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional assays showed altered ion channel activity.",
+        "assays": [
+          "Patch clamp analysis",
+          "Calcium influx measurement"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was confirmed by Sanger sequencing.",
+      "key_quotes": [
+        "The KCNH2 variant c.1500G>A was identified in multiple affected individuals.",
+        "Functional studies indicated that the p.Gly500Ser variant alters channel activity."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Variants identified in KCNH2 gene",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were successfully extracted."
+  }
+}

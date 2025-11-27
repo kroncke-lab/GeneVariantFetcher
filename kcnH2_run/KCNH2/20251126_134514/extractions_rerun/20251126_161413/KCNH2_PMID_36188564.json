@@ -1,0 +1,157 @@
+{
+  "paper_metadata": {
+    "pmid": "36188564",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses mutations in the KCNH2 gene, specifically S620T, S641A, and S641T, and their effects on hERG channel function and drug interactions."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1860C>T",
+      "protein_notation": "p.Ser620Thr",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "abolished inactivation and significantly attenuated dofetilide block"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "abolished inactivation and significantly attenuated dofetilide block",
+          "evidence_sentence": "Replacing S620 with threonine (S620T) has been shown to abolish inactivation and significantly attenuate dofetilide block of hERG."
+        }
+      ],
+      "functional_data": {
+        "summary": "The S620T mutation abolishes inactivation and affects drug binding.",
+        "assays": [
+          "in vitro studies",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is associated with significant functional changes in the hERG channel.",
+      "key_quotes": [
+        "Replacing S620 with threonine (S620T) has been shown to abolish inactivation and significantly attenuate dofetilide block of hERG."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1921C>T",
+      "protein_notation": "p.Ser641Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "strongly increases hERG channel inactivation and attenuates binding of E-4031"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "strongly increases hERG channel inactivation and attenuates binding of E-4031",
+          "evidence_sentence": "The S641A mutation has been shown to strongly increase hERG channel inactivation and attenuate the binding of E-4031."
+        }
+      ],
+      "functional_data": {
+        "summary": "The S641A mutation enhances inactivation and alters drug binding.",
+        "assays": [
+          "in vitro studies",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation significantly affects the functional properties of the hERG channel.",
+      "key_quotes": [
+        "The S641A mutation has been shown to strongly increase hERG channel inactivation and attenuate the binding of E-4031."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1921C>A",
+      "protein_notation": "p.Ser641Thr",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "non-inactivating mutation"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "non-inactivating mutation",
+          "evidence_sentence": "The S641T mutation suggested a potential molecular mechanism preventing F627 side chain from shifting into the ion conduction pathway during the proposed inactivation process."
+        }
+      ],
+      "functional_data": {
+        "summary": "The S641T mutation is associated with non-inactivating properties.",
+        "assays": [
+          "in vitro studies",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": "not specified",
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The functional impact of this mutation is less clear compared to S620T and S641A.",
+      "key_quotes": [
+        "The S641T mutation suggested a potential molecular mechanism preventing F627 side chain from shifting into the ion conduction pathway during the proposed inactivation process."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in KCNH2 were extracted successfully."
+  }
+}

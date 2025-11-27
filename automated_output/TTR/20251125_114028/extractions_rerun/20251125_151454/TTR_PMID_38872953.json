@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "38872953",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant V122I, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "78-year-old female",
+        "phenotype": "variant-type transthyretin amyloidosis (ATTRv) with symptoms including heart failure and macroglossia"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 78,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Heart failure with left ventricular hypertrophy, macroglossia, and progressive deterioration despite treatment.",
+          "evidence_sentence": "Genetic testing confirmed a mutation in V122I, variant-type transthyretin amyloidosis (ATTRv)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I mutation in TTR is associated with variant-type amyloidosis, leading to amyloid deposition in tissues.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Main Text, Case presentation",
+      "additional_notes": "The patient exhibited atypical manifestations for ATTRv, complicating the clinical picture.",
+      "key_quotes": [
+        "Genetic testing confirmed a mutation in V122I, variant-type transthyretin amyloidosis (ATTRv).",
+        "Despite the administration of patisiran, her condition exhibited progressive deterioration."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly mentioned in the case report."
+  }
+}

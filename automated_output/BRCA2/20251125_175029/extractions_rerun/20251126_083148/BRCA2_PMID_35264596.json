@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "35264596",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1813delA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 72,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Among mutation carriers, there were eight patients carrying exonic deletions, including: BRCA1 (2), MUTYH (2), ATM (1), BRCA (1), MLH1 (1), RAD51C (1); and five presenting Alu insertions in BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional impact not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Not specified.",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "Only one specific variant was detailed.",
+      "key_quotes": [
+        "Among mutation carriers, there were eight patients carrying exonic deletions, including: BRCA1 (2), MUTYH (2), ATM (1), BRCA (1), MLH1 (1), RAD51C (1); and five presenting Alu insertions in BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1813dupA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 72,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Among mutation carriers, there were eight patients carrying exonic deletions, including: BRCA1 (2), MUTYH (2), ATM (1), BRCA (1), MLH1 (1), RAD51C (1); and five presenting Alu insertions in BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional impact not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Not specified.",
+      "source_location": "Table 2, Row 2",
+      "additional_notes": "Only one specific variant was detailed.",
+      "key_quotes": [
+        "Among mutation carriers, there were eight patients carrying exonic deletions, including: BRCA1 (2), MUTYH (2), ATM (1), BRCA (1), MLH1 (1), RAD51C (1); and five presenting Alu insertions in BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2808_2811delACAA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 72,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Among mutation carriers, there were eight patients carrying exonic deletions, including: BRCA1 (2), MUTYH (2), ATM (1), BRCA (1), MLH1 (1), RAD51C (1); and five presenting Alu insertions in BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional impact not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Not specified.",
+      "source_location": "Table 2, Row 3",
+      "additional_notes": "Only one specific variant was detailed.",
+      "key_quotes": [
+        "Among mutation carriers, there were eight patients carrying exonic deletions, including: BRCA1 (2), MUTYH (2), ATM (1), BRCA (1), MLH1 (1), RAD51C (1); and five presenting Alu insertions in BRCA2."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Pathogenic and likely pathogenic variants per gene in a cohort of breast cancer patients submitted to multigene panel testing",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted all relevant BRCA2 variants and associated penetrance data."
+  }
+}

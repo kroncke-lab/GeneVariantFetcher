@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "31362019",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the inhibition of hERG channels by sarizotan, focusing on the KCNH2 gene. No specific genetic variants in KCNH2 were reported."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not report any specific genetic variants in the KCNH2 gene."
+    ],
+    "notes": "The paper focused on the functional effects of sarizotan on hERG channels without detailing specific genetic variants in KCNH2."
+  }
+}

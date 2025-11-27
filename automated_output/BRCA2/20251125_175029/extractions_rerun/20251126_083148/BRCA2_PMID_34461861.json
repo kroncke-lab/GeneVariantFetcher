@@ -1,0 +1,130 @@
+{
+  "paper_metadata": {
+    "pmid": "34461861",
+    "title": "Genetic predisposition to male breast cancer in Poland",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from a study on male breast cancer in Poland."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.658_659delGT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 165,
+        "demographics": "Polish male breast cancer patients",
+        "phenotype": "male breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "male breast cancer",
+          "evidence_sentence": "A BRCA2 mutation was found in two patients (1.2%)"
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "male breast cancer",
+          "evidence_sentence": "A BRCA2 mutation was found in two patients (1.2%)"
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Only two BRCA2 mutations were reported in the study.",
+      "key_quotes": [
+        "A BRCA2 mutation was found in two patients (1.2%)"
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5946delT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 165,
+        "demographics": "Polish male breast cancer patients",
+        "phenotype": "male breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "male breast cancer",
+          "evidence_sentence": "A BRCA2 mutation was found in two patients (1.2%)"
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "male breast cancer",
+          "evidence_sentence": "A BRCA2 mutation was found in two patients (1.2%)"
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Only two BRCA2 mutations were reported in the study.",
+      "key_quotes": [
+        "A BRCA2 mutation was found in two patients (1.2%)"
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "The frequencies of mutation detected in study in a series of 165 male breast cancer patients by family history of breast and ovarian cancer",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted all relevant BRCA2 variants and penetrance data."
+  }
+}

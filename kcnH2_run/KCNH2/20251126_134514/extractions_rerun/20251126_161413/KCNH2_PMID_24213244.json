@@ -1,0 +1,65 @@
+{
+  "paper_metadata": {
+    "pmid": "24213244",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the c.A2987T (N996I) mutation in the KCNH2 gene associated with long-QT syndrome, detailing its functional effects and penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.A2987T",
+      "protein_notation": "p.Asn996Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "38-year-old female",
+        "phenotype": "familial type-2 LQTS"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 38,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosis of familial type-2 LQTS",
+          "evidence_sentence": "Dermal fibroblasts were obtained from a 38-year-old woman with a diagnosis of familial type-2 LQTS."
+        }
+      ],
+      "functional_data": {
+        "summary": "The N996I KCNH2 mutation causes a significant reduction in IKr and prolongs action potential duration in cardiomyocytes.",
+        "assays": [
+          "Electrophysiological characterization",
+          "Quantitative RT-PCR",
+          "Western blot analysis"
+        ]
+      },
+      "segregation_data": "The mutation is present in a patient diagnosed with familial type-2 LQTS.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the pathogenic mechanism of the N996I mutation in the context of long-QT syndrome.",
+      "key_quotes": [
+        "Our results demonstrated that the c.A2987T KCNH2 mutation is the primary cause of the LQTS phenotype.",
+        "The N996I mutation appears to interfere with the maturation and trafficking of the channel to the membrane."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on a single variant in the KCNH2 gene."
+  }
+}

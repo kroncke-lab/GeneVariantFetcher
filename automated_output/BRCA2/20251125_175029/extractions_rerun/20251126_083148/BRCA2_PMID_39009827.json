@@ -1,0 +1,68 @@
+{
+  "paper_metadata": {
+    "pmid": "39009827",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant T298I/V299L/V300R, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.892T>A, c.893C>T, c.894G>A",
+      "protein_notation": "p.T298I/p.V299L/p.V300R",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "We cross-validated the fold-change in affinity for the binding of the MAP1LC3B ATG8 domain to wild-type/mutant (T298I/V299L/V300R) BRCA2292-307 peptide by isothermal titration calorimetry."
+        }
+      ],
+      "functional_data": {
+        "summary": "The binding effect of the BRCA2 variant was validated by isothermal titration calorimetry, confirming higher affinity for the mutant peptide.",
+        "assays": [
+          "isothermal titration calorimetry"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": "not specified",
+      "evidence_level": "high",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "The variant was part of a study assessing the impact of mutations on protein interactions.",
+      "key_quotes": [
+        "We cross-validated the fold-change in affinity for the binding of the MAP1LC3B ATG8 domain to wild-type/mutant (T298I/V299L/V300R) BRCA2292-307 peptide by isothermal titration calorimetry."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Overview of affinity data.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data was clear and specific to the BRCA2 variant."
+  }
+}

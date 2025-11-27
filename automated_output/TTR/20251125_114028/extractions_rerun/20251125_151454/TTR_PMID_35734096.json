@@ -1,0 +1,76 @@
+{
+  "paper_metadata": {
+    "pmid": "35734096",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a case of late-onset hereditary transthyretin amyloidosis associated with the TTR gene variant Val30Met."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.148G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "76-year-old male",
+        "phenotype": "late-onset hereditary transthyretin amyloidosis, familial amyloid polyneuropathy, cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 76,
+          "age_at_onset": 69,
+          "age_at_diagnosis": 76,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "progressive numbness, pain and weakness in limbs, sweating, constipation, unexplained weight loss, cardiac involvement",
+          "evidence_sentence": "A missense mutation c. 148 G-A Val30Met (p.Val50Met) was detected in TTR gene sequencing."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "Recently, the patient\u2019s first son developed limb numbness and found the same TTR gene abnormality."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant causes TTR tetramers to destabilize and dissociate into variant TTR monomers that form amyloid fibrils.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient had a family history of limb numbness and systemic edema.",
+      "key_quotes": [
+        "The genetic finding confirmed hATTR Val30Met, familial amyloid polyneuropathy (FAP) and CA for the patient."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Gene Sequencing Revealed TTR Gene Missense Mutation",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly described in the text."
+  }
+}

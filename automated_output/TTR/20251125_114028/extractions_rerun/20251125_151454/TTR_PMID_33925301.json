@@ -1,0 +1,181 @@
+{
+  "paper_metadata": {
+    "pmid": "33925301",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.F84L",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 81,
+        "demographics": "Mean age 46.6, range 28\u201366, 20 men and 20 women were asymptomatic.",
+        "phenotype": "Neuropathic phenotype, with frequent cardiac involvement."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 81,
+        "affected_count": null,
+        "unaffected_count": 40,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The F64L variant is associated with late onset and a neuropathic phenotype.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "This variant was the most frequently encountered in the study cohort.",
+      "key_quotes": [
+        "The most frequently encountered mutation was F64L (p.F84L) in 81 patients."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.E109Q",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 56,
+        "demographics": null,
+        "phenotype": "Early onset, frequent cardiac involvement."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 56,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The E89Q variant is associated with early onset and significant cardiac involvement.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "This variant is noted for its early onset presentation.",
+      "key_quotes": [
+        "The age of onset of patients with the E89Q variant is usually around 50."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.T69A",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 8,
+        "demographics": null,
+        "phenotype": "Early onset."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The T49A variant is associated with early onset.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "This variant is noted for its early onset presentation.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.V142I",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 11,
+        "demographics": null,
+        "phenotype": "Commonly described as causing an almost exclusive cardiac phenotype."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The V122I variant is associated with a cardiac phenotype.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "This variant is noted for its cardiac phenotype.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.V30M",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": null,
+        "phenotype": "Typical neuropathic phenotype, described in non-endemic areas."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The V30M variant is associated with a typical neuropathic phenotype.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "This variant is noted for its typical neuropathic phenotype.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical characteristics of patients with ATTRv amyloidosis.",
+      "variants_extracted": 5
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted, including penetrance data."
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "paper_metadata": {
+    "pmid": "36561083",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "73-year-old White female",
+        "phenotype": "asymptomatic subclinical ATTR-CM"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 73,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "asymptomatic subclinical ATTR-CM",
+          "evidence_sentence": "A 73-year-old White female underwent carpal tunnel release surgery; Congo red staining of removed tenosynovial tissue was amyloid (+), typed as ATTR by mass spectrometry."
+        }
+      ],
+      "functional_data": {
+        "summary": "The patient remained asymptomatic, with minimal to no change on echo and NT-proBNP, but she developed grade 3 diffuse uptake on 99mTc-PYP scan.",
+        "assays": [
+          "Congo red staining",
+          "mass spectrometry",
+          "echocardiography",
+          "99mTc-PYP scan"
+        ]
+      },
+      "segregation_data": "The variant was found in a patient with cardiac involvement.",
+      "population_frequency": "3% to 4% of African Americans are heterozygote carriers.",
+      "evidence_level": "strong",
+      "source_location": "Part IV: Opportunities for Earlier Identification of Cardiac Amyloidosis",
+      "additional_notes": "The patient was started on tafamidis after shared decision making.",
+      "key_quotes": [
+        "Congo red staining of removed tenosynovial tissue was amyloid (+), typed as ATTR by mass spectrometry.",
+        "At 4-year follow-up (age 77), the patient remained asymptomatic, with minimal to no change on echo and NT-proBNP, but she developed grade 3 diffuse uptake on 99mTc-PYP scan."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data was clear and well-defined in the text."
+  }
+}

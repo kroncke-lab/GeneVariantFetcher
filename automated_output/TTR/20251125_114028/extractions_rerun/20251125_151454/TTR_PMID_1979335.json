@@ -1,0 +1,134 @@
+{
+  "paper_metadata": {
+    "pmid": "1979335",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a TTR gene variant associated with euthyroid hyperthyroxinemia, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.327G>A",
+      "protein_notation": "p.Thr109Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 8,
+        "demographics": "3 generations of a family, specific ages not mentioned",
+        "phenotype": "euthyroid hyperthyroxinemia"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": 5,
+        "unaffected_count": 3,
+        "uncertain_count": null,
+        "penetrance_percentage": 62.5,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "elevated total T4 concentrations, clinically euthyroid",
+          "evidence_sentence": "Although five of eight individuals had elevated total T4 concentrations, all affected individuals were clinically euthyroid and all had normal free T4 levels."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "elevated total T4 concentrations, clinically euthyroid",
+          "evidence_sentence": "Although five of eight individuals had elevated total T4 concentrations, all affected individuals were clinically euthyroid and all had normal free T4 levels."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "elevated total T4 concentrations, clinically euthyroid",
+          "evidence_sentence": "Although five of eight individuals had elevated total T4 concentrations, all affected individuals were clinically euthyroid and all had normal free T4 levels."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "elevated total T4 concentrations, clinically euthyroid",
+          "evidence_sentence": "Although five of eight individuals had elevated total T4 concentrations, all affected individuals were clinically euthyroid and all had normal free T4 levels."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "elevated total T4 concentrations, clinically euthyroid",
+          "evidence_sentence": "Although five of eight individuals had elevated total T4 concentrations, all affected individuals were clinically euthyroid and all had normal free T4 levels."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "normal free T4 levels",
+          "evidence_sentence": "Although five of eight individuals had elevated total T4 concentrations, all affected individuals were clinically euthyroid and all had normal free T4 levels."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "normal free T4 levels",
+          "evidence_sentence": "Although five of eight individuals had elevated total T4 concentrations, all affected individuals were clinically euthyroid and all had normal free T4 levels."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "normal free T4 levels",
+          "evidence_sentence": "Although five of eight individuals had elevated total T4 concentrations, all affected individuals were clinically euthyroid and all had normal free T4 levels."
+        }
+      ],
+      "functional_data": {
+        "summary": "Purified TTR from the propositus had an affinity for 125I-T4 three times that of control TTR.",
+        "assays": [
+          "PCR amplification",
+          "restriction digestion with Fnu 4H I"
+        ]
+      },
+      "segregation_data": "The variant segregates with the phenotype in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation was confirmed by amino acid sequencing of tryptic peptides derived from purified plasma TTR.",
+      "key_quotes": [
+        "In 50% of clones amplified from exon 4, a substitution of adenine (ACC) for guanine (GCC) in codon 109 resulted in the replacement of threonine-for-alanine.",
+        "The adenine-for-guanine substitution abolishes one of two Fnu 4H I restriction sites in exon 4."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

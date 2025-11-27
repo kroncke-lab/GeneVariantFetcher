@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "31093980",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the impact of hereditary transthyretin (hATTR) amyloidosis on quality of life, focusing on the NEURO-TTR trial. It mentions the Val30Met TTR mutation but does not provide detailed genetic variant information or penetrance data for TTR variants."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant data or penetrance information for TTR variants."
+    ],
+    "notes": "The paper primarily focuses on quality of life assessments and does not delve into specific genetic variant details or penetrance data for TTR."
+  }
+}

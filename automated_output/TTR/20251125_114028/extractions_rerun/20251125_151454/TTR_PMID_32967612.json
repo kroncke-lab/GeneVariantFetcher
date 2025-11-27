@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "32967612",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349G>A",
+      "protein_notation": "p.Val117Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "African American, 3.4% carrier frequency",
+        "phenotype": "elevated risk for cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "cardiac amyloidosis",
+          "evidence_sentence": "One genetic variant, V122I, is carried by 3.4% of African Americans."
+        }
+      ],
+      "functional_data": {
+        "summary": "Variant associated with increased risk of cardiac amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "3.4% in African Americans",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variant V122I is a well-known pathogenic variant associated with ATTR amyloidosis.",
+      "key_quotes": [
+        "One genetic variant, V122I, is carried by 3.4% of African Americans."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data is based on the information provided in the main text."
+  }
+}

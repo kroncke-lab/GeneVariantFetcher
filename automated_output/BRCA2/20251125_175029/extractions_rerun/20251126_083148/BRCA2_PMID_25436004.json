@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "25436004",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the expression levels of BRCA2 in oesophageal cancer tissues but does not report specific genetic variants in the BRCA2 gene."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific BRCA2 genetic variants."
+    ],
+    "notes": "The paper focused on expression levels of BRCA2 and other genes in oesophageal cancer tissues, without detailing specific genetic variants."
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "36551808",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "NM_000371:c.76G>A",
+      "protein_notation": "p.G26S",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "hereditary transthyretin amyloidosis (hATTR)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "carrying two mutations in TTR",
+          "evidence_sentence": "One patient with hATTR had two variants in TTR (NM_000371:c.76G>A, p.G26S and NM_000371:c.114T>G,p.D38E)"
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The patient carrying this variant had evidence of monoclonal protein due to an abnormal FLC ratio.",
+      "key_quotes": [
+        "One patient with hATTR had two variants in TTR (NM_000371:c.76G>A, p.G26S and NM_000371:c.114T>G,p.D38E)"
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "NM_000371:c.114T>G",
+      "protein_notation": "p.D38E",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "hereditary transthyretin amyloidosis (hATTR)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "carrying two mutations in TTR",
+          "evidence_sentence": "One patient with hATTR had two variants in TTR (NM_000371:c.76G>A, p.G26S and NM_000371:c.114T>G,p.D38E)"
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The patient carrying this variant had evidence of monoclonal protein due to an abnormal FLC ratio.",
+      "key_quotes": [
+        "One patient with hATTR had two variants in TTR (NM_000371:c.76G>A, p.G26S and NM_000371:c.114T>G,p.D38E)"
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "NM_000371:c.206C>T",
+      "protein_notation": "p.T69I",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "hereditary transthyretin amyloidosis (hATTR)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "carrying one mutation in TTR",
+          "evidence_sentence": "another patient had one mutation (NM_000371:c.206C>T, p.T69I)"
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The patient carrying this variant had unremarkable FLC assessment results.",
+      "key_quotes": [
+        "another patient had one mutation (NM_000371:c.206C>T, p.T69I)"
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

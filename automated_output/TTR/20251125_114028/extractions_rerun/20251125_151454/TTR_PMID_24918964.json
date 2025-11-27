@@ -1,0 +1,75 @@
+{
+  "paper_metadata": {
+    "pmid": "24918964",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR V30M variant in the context of familial amyloidotic polyneuropathy (FAP) and its effects on disease pathology and treatment."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.90G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 20,
+        "demographics": "Hsf/V30M mice, 4.5 months old",
+        "phenotype": "Familial amyloidotic polyneuropathy (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": 10,
+        "unaffected_count": 10,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Hsf/V30M_1",
+          "age_at_evaluation": 4,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "Exhibited symptoms of FAP",
+          "evidence_sentence": "We treated 4.5-month-old Hsf/V30M mice, thus before TTR starts to deposit in the peripheral nervous system."
+        },
+        {
+          "individual_id": "Hsf/V30M_2",
+          "age_at_evaluation": 4,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms of FAP observed",
+          "evidence_sentence": "Age-matched control Hsf/V30M untreated mice were injected with phosphate buffer saline (PBS, n\u2009=\u200910)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR V30M variant leads to the formation of non-fibrillar deposits in the peripheral nervous system.",
+        "assays": [
+          "qPCR",
+          "immunohistochemistry",
+          "morphometric analysis"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the Hsf/V30M mouse model.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study utilized a transgenic mouse model to assess the effects of the TTR V30M variant.",
+      "key_quotes": [
+        "The most common TTR mutation in FAP results from an exchange of a methionine for a valine at position 30 \u2013 TTR V30M.",
+        "Treated mice presented a markedly reduction on TTR deposition in sciatic nerve (43%) as compared to non-treated animals."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on the TTR V30M variant."
+  }
+}

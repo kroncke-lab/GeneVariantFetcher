@@ -1,0 +1,200 @@
+{
+  "paper_metadata": {
+    "pmid": "34541275",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variants from the study focusing on tumors with multiple BRCA1/2 variants associated with POLE pathogenic variants."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1475C>T",
+      "protein_notation": "p.(Ser492Phe)",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Patient 1, Female, Age 53",
+        "phenotype": "Ovarian cancer, Endometrioid subtype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient_1",
+          "age_at_evaluation": 53,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Ovarian cancer, Endometrioid subtype",
+          "evidence_sentence": "Patient 1: Ovary (53) Endometrioid 2 FIGO IA"
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "Variant of uncertain significance (VUS) in BRCA2.",
+      "key_quotes": [
+        "Patient 1: Ovary (53) Endometrioid 2 FIGO IA"
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2046C>A",
+      "protein_notation": "p.(=)",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Patient 1, Female, Age 53",
+        "phenotype": "Ovarian cancer, Endometrioid subtype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient_1",
+          "age_at_evaluation": 53,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Ovarian cancer, Endometrioid subtype",
+          "evidence_sentence": "Patient 1: Ovary (53) Endometrioid 2 FIGO IA"
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "Variant of uncertain significance (VUS) in BRCA2.",
+      "key_quotes": [
+        "Patient 1: Ovary (53) Endometrioid 2 FIGO IA"
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3890C>A",
+      "protein_notation": "p.(Ser1297Tyr)",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Patient 1, Female, Age 53",
+        "phenotype": "Ovarian cancer, Endometrioid subtype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient_1",
+          "age_at_evaluation": 53,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Ovarian cancer, Endometrioid subtype",
+          "evidence_sentence": "Patient 1: Ovary (53) Endometrioid 2 FIGO IA"
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "Variant of uncertain significance (VUS) in BRCA2.",
+      "key_quotes": [
+        "Patient 1: Ovary (53) Endometrioid 2 FIGO IA"
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2432A>C",
+      "protein_notation": "p.(Lys811Thr)",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Patient 1, Female, Age 53",
+        "phenotype": "Ovarian cancer, Endometrioid subtype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient_1",
+          "age_at_evaluation": 53,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Ovarian cancer, Endometrioid subtype",
+          "evidence_sentence": "Patient 1: Ovary (53) Endometrioid 2 FIGO IA"
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "Variant of uncertain significance (VUS) in BRCA2.",
+      "key_quotes": [
+        "Patient 1: Ovary (53) Endometrioid 2 FIGO IA"
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Molecular results of BRCA1/2 and POLE testing.",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No genomic positions provided for variants."
+    ],
+    "notes": "All extracted variants are classified as variants of uncertain significance (VUS)."
+  }
+}

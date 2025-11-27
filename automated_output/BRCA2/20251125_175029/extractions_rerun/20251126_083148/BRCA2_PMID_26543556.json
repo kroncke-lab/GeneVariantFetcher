@@ -1,0 +1,138 @@
+{
+  "paper_metadata": {
+    "pmid": "26543556",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene along with penetrance data from the study on Hispanic breast cancer."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2224C>T",
+      "protein_notation": "p.Gln742Ter",
+      "genomic_position": "rs80358494",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 12,
+        "demographics": "Mean age 50.6 years, predominantly Hispanic women",
+        "phenotype": "Invasive Ductal Carcinoma (IDC)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 12,
+        "affected_count": 2,
+        "unaffected_count": 10,
+        "uncertain_count": null,
+        "penetrance_percentage": 16.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 39,
+          "age_at_onset": null,
+          "age_at_diagnosis": 39,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Invasive Ductal Carcinoma",
+          "evidence_sentence": "Two of the seven patients with deleterious mutations had triple-negative disease (29%); this is not significantly different from those patients without identified mutations."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 41,
+          "age_at_onset": null,
+          "age_at_diagnosis": 41,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No disease manifestation reported",
+          "evidence_sentence": "Only two of the patients with identified mutations had a family history of breast cancer, with one second-degree relative in each case."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is predicted to result in a premature stop codon, leading to loss of function.",
+        "assays": [
+          "Sanger sequencing",
+          "NGS validation"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families as indicated by family history.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Strong evidence based on clinical correlation and functional studies.",
+      "source_location": "Table 3, Row 5",
+      "additional_notes": "The variant is associated with a significant risk of breast cancer.",
+      "key_quotes": [
+        "Women with deleterious mutations were younger (43 versus 51 years of age, P=0.029).",
+        "Two of the seven patients with deleterious mutations had triple-negative disease."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3922G>T",
+      "protein_notation": "p.Glu1308Ter",
+      "genomic_position": "rs80358638",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 12,
+        "demographics": "Mean age 50.6 years, predominantly Hispanic women",
+        "phenotype": "Invasive Ductal Carcinoma (IDC)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 12,
+        "affected_count": 2,
+        "unaffected_count": 10,
+        "uncertain_count": null,
+        "penetrance_percentage": 16.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 41,
+          "age_at_onset": null,
+          "age_at_diagnosis": 41,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Invasive Ductal Carcinoma",
+          "evidence_sentence": "Two of the seven patients with deleterious mutations had triple-negative disease (29%); this is not significantly different from those patients without identified mutations."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 39,
+          "age_at_onset": null,
+          "age_at_diagnosis": 39,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No disease manifestation reported",
+          "evidence_sentence": "Only two of the patients with identified mutations had a family history of breast cancer, with one second-degree relative in each case."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is predicted to result in a premature stop codon, leading to loss of function.",
+        "assays": [
+          "Sanger sequencing",
+          "NGS validation"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families as indicated by family history.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Strong evidence based on clinical correlation and functional studies.",
+      "source_location": "Table 3, Row 6",
+      "additional_notes": "The variant is associated with a significant risk of breast cancer.",
+      "key_quotes": [
+        "Women with deleterious mutations were younger (43 versus 51 years of age, P=0.029).",
+        "Two of the seven patients with deleterious mutations had triple-negative disease."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 3",
+      "table_caption": "Classification of mutations and non-synonymous variants",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

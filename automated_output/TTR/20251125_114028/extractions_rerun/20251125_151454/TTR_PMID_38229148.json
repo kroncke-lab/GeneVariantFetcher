@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "38229148",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No variants in the TTR gene were mentioned in the paper."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No TTR variants were mentioned in the paper."
+    ],
+    "notes": "The paper focused on epilepsy, cardiomyopathy, and arrhythmia genes, but did not mention any variants in the TTR gene."
+  }
+}

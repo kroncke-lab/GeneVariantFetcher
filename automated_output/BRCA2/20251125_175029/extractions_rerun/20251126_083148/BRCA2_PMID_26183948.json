@@ -1,0 +1,370 @@
+{
+  "paper_metadata": {
+    "pmid": "26183948",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The extraction focused on BRCA2 variants, detailing their clinical significance, penetrance data, and individual records of carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5718_5719delCT",
+      "protein_notation": "p.Asn1906_Ser1907=fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, age 50",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 50,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The deletion c.5718_5719delCT was observed in one patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "The frameshift mutation is expected to lead to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "This variant is one of the frameshift mutations identified in the study.",
+      "key_quotes": [
+        "Seven damaging frameshift mutations were found in BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5851_5854delAGTT",
+      "protein_notation": "p.Ser1951_Leu1952delinsTrpfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "female, ages 48 and 53",
+        "phenotype": "invasive ductal carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 48,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "invasive ductal carcinoma",
+          "evidence_sentence": "The deletion c.5851_5854delAGTT was found in two patients."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": 53,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "invasive ductal carcinoma",
+          "evidence_sentence": "The deletion c.5851_5854delAGTT was found in two patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "The frameshift mutation is expected to lead to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 2",
+      "additional_notes": "This variant is one of the frameshift mutations identified in the study.",
+      "key_quotes": [
+        "Seven damaging frameshift mutations were found in BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5946delT",
+      "protein_notation": "p.Ser1982Argfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, age 41",
+        "phenotype": "bilateral breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": 41,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "bilateral breast cancer",
+          "evidence_sentence": "The deletion c.5946delT was observed in one patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "The frameshift mutation is expected to lead to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 3",
+      "additional_notes": "This variant is one of the frameshift mutations identified in the study.",
+      "key_quotes": [
+        "Seven damaging frameshift mutations were found in BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7910_7914delCCTTT",
+      "protein_notation": "p.Ala2637_Phe2638delinsAlafs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, age 59",
+        "phenotype": "invasive ductal carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": 59,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "invasive ductal carcinoma",
+          "evidence_sentence": "The deletion c.7910_7914delCCTTT was observed in one patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "The frameshift mutation is expected to lead to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 4",
+      "additional_notes": "This variant is one of the frameshift mutations identified in the study.",
+      "key_quotes": [
+        "Seven damaging frameshift mutations were found in BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9098_9099insA",
+      "protein_notation": "p.Thr3033delinsThrSerfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "female, ages 50-59",
+        "phenotype": "invasive ductal carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_6",
+          "age_at_evaluation": 50,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "invasive ductal carcinoma",
+          "evidence_sentence": "The insertion c.9098_9099insA was observed in four patients."
+        },
+        {
+          "individual_id": "Case_7",
+          "age_at_evaluation": 52,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "invasive ductal carcinoma",
+          "evidence_sentence": "The insertion c.9098_9099insA was observed in four patients."
+        },
+        {
+          "individual_id": "Case_8",
+          "age_at_evaluation": 58,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "invasive ductal carcinoma",
+          "evidence_sentence": "The insertion c.9098_9099insA was observed in four patients."
+        },
+        {
+          "individual_id": "Case_9",
+          "age_at_evaluation": 59,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "invasive ductal carcinoma",
+          "evidence_sentence": "The insertion c.9098_9099insA was observed in four patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "The frameshift mutation is expected to lead to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 5",
+      "additional_notes": "This variant is one of the frameshift mutations identified in the study.",
+      "key_quotes": [
+        "Seven damaging frameshift mutations were found in BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8532_8533delAA",
+      "protein_notation": "p.Glu2844fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, age 30",
+        "phenotype": "bilateral breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_10",
+          "age_at_evaluation": 30,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "bilateral breast cancer",
+          "evidence_sentence": "The deletion c.8532_8533delAA was observed in one patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "The frameshift mutation is expected to lead to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 6",
+      "additional_notes": "This variant is one of the frameshift mutations identified in the study.",
+      "key_quotes": [
+        "Seven damaging frameshift mutations were found in BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9682delA",
+      "protein_notation": "p.Gln3227fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, age 52",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_11",
+          "age_at_evaluation": 52,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The deletion c.9682delA was observed in one patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "The frameshift mutation is expected to lead to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 7",
+      "additional_notes": "This variant is one of the frameshift mutations identified in the study.",
+      "key_quotes": [
+        "Seven damaging frameshift mutations were found in BRCA2."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "BRCA1/2 damaging mutations in Bulgarian BC patients",
+      "variants_extracted": 7
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 7,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

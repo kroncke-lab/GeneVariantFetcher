@@ -1,0 +1,53 @@
+{
+  "paper_metadata": {
+    "pmid": "39747609",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a frameshift mutation in the BRCA2 gene and its effects on male fertility in a rat model."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5825_5847del",
+      "protein_notation": "p.T1942Kfs*8",
+      "genomic_position": "ENSRNOT00000001475.8",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": "male subfertility"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The frameshift mutation leads to increased DNA double-strand breaks and apoptosis in testicular germ cells, resulting in male subfertility.",
+        "assays": [
+          "CRISPR/Cas9 genome editing",
+          "immunohistochemical analysis",
+          "genotyping PCR"
+        ]
+      },
+      "segregation_data": "The homozygous mutants were embryonic lethal, and the heterozygous mutants developed normally but exhibited reproductive dysfunction.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence based on functional assays and phenotypic outcomes.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study emphasizes the importance of considering reproductive capacity in BRCA2 carriers.",
+      "key_quotes": [
+        "The heterozygous mutants developed normally but exhibited increased DNA DSBs and apoptosis in testicular germ cells, along with deteriorating sperm quality as they aged, ultimately leading to early reproductive dysfunction."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on a specific BRCA2 variant."
+  }
+}

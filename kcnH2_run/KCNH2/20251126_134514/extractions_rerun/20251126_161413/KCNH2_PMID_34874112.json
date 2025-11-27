@@ -1,0 +1,62 @@
+{
+  "paper_metadata": {
+    "pmid": "34874112",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on genetic variants in the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1411T>C",
+      "protein_notation": "p.T474I",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "long QT syndrome",
+          "evidence_sentence": "KCNH2-T474I mutations induce long QT syndrome."
+        }
+      ],
+      "functional_data": {
+        "summary": "C-to-T base editing occurred with efficiencies over 30%.",
+        "assays": [
+          "targeted deep sequencing"
+        ]
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was specifically mentioned in the context of pathogenic mutations.",
+      "key_quotes": [
+        "KCNH2-T474I mutations induce long QT syndrome."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data was specific to the KCNH2 gene and included detailed penetrance information."
+  }
+}

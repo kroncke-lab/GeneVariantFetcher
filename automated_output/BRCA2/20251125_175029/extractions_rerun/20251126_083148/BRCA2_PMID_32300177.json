@@ -1,0 +1,80 @@
+{
+  "paper_metadata": {
+    "pmid": "null",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants and penetrance data from the study on prostate cancer mutations."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.N372H",
+      "protein_notation": "p.Asn372His",
+      "genomic_position": "null",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 33,
+        "demographics": "Caucasian men, ages 46-89",
+        "phenotype": "prostate cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 33,
+        "affected_count": 14,
+        "unaffected_count": 19,
+        "uncertain_count": null,
+        "penetrance_percentage": 42.42,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 60,
+          "age_at_onset": null,
+          "age_at_diagnosis": 60,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "prostate cancer diagnosed at age 60",
+          "evidence_sentence": "In Caucasians, the most frequently mutated DNA repairome genes were... BRCA2 (42.4%)..."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 65,
+          "age_at_onset": null,
+          "age_at_diagnosis": 65,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "prostate cancer diagnosed at age 65",
+          "evidence_sentence": "In Caucasians, the most frequently mutated DNA repairome genes were... BRCA2 (42.4%)..."
+        }
+      ],
+      "functional_data": {
+        "summary": "BRCA2 mutations are associated with higher mutational burden in prostate cancer.",
+        "assays": [
+          "mutation analysis",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "null",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "BRCA2 mutations were found in both African American and Caucasian cohorts.",
+      "key_quotes": [
+        "BRCA2 (42.4%) was one of the most frequently mutated DNA repairome genes in Caucasians.",
+        "BRCA2 and NEIL3 were found to be associated with higher mutational burden."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Distribution of recurrent somatic substitutions in prostate tumors in Caucasian men (n=33).",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data was clear and well-defined in the text."
+  }
+}

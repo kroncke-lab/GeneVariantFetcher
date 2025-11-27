@@ -1,0 +1,77 @@
+{
+  "paper_metadata": {
+    "pmid": "33054844",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR gene in the context of familial amyloid polyneuropathy (ATTR-FAP) and reports on the p.TTRV30M variant, including patient demographics and penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.90G>A",
+      "protein_notation": "p.TTRV30M",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 32,
+        "demographics": "Mean age 53.3 years, 79% male",
+        "phenotype": "ATTR-FAP with symptoms affecting nerves, heart, gastrointestinal tract, kidneys, and eyes"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 32,
+        "affected_count": 15,
+        "unaffected_count": 7,
+        "uncertain_count": 10,
+        "penetrance_percentage": 46.9,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Peripheral neuropathy symptoms",
+          "evidence_sentence": "p.TTRV30M 46.9% (n = 15)"
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Non p.TTRV30M 21.9% (n = 7)"
+        }
+      ],
+      "functional_data": {
+        "summary": "The p.TTRV30M variant is associated with ATTR-FAP, leading to amyloid fibril deposition.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "The variant is the most common mutation associated with ATTR-FAP.",
+      "key_quotes": [
+        "The most common mutation is Val30Met.",
+        "ATTR-FAP is characterized by the deposition of TTR amyloid fibrils in different organ systems."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Summary of patient characteristics",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the relevant variant data was clearly presented."
+  }
+}

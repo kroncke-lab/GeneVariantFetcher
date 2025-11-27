@@ -1,0 +1,79 @@
+{
+  "paper_metadata": {
+    "pmid": "28713573",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2414G>A",
+      "protein_notation": "p.R805L",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 25,
+        "demographics": "female dogs from various breeds",
+        "phenotype": "canine mammary tumours (CMT)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 25,
+        "affected_count": 10,
+        "unaffected_count": 15,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "CMT",
+          "evidence_sentence": "The study cohort was comprised of only ESS dogs, but interestingly, dogs from Swedish as well as Norwegian and British populations were examined."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "CMT",
+          "evidence_sentence": "The study cohort was comprised of only ESS dogs, but interestingly, dogs from Swedish as well as Norwegian and British populations were examined."
+        }
+      ],
+      "functional_data": {
+        "summary": "The presence of p.R805L was reported in normal mammary tissues and is suggested to be a germline BRCA2 variation.",
+        "assays": [
+          "Sanger sequencing"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in affected dogs.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Further investigation is required to confirm the association of this variant with CMT.",
+      "key_quotes": [
+        "The associated SNPs were intronic or appeared non-functional, so the quest to identify the exact risk variants remains open.",
+        "Overall, statistically significant associations were detected for one variant in BRCA2 and two in BRCA1."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Reported canine germline coding variants in orthologs of known or candidate BC susceptibility genes",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data is based on the information provided in the main text and tables."
+  }
+}

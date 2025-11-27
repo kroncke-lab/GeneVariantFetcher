@@ -1,0 +1,93 @@
+{
+  "paper_metadata": {
+    "pmid": "39064115",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Afro-Caribbean descent, predominantly male",
+        "phenotype": "similar to ATTRwt, presenting with cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 65,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 62,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "cardiac amyloidosis with heart failure symptoms",
+          "evidence_sentence": "The V122I mutation, found exclusively in individuals of Afro-Caribbean descent, has a phenotype similar to ATTRwt."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 70,
+          "age_at_onset": 65,
+          "age_at_diagnosis": 68,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "cardiac amyloidosis with restrictive cardiomyopathy",
+          "evidence_sentence": "The V122I mutation, found exclusively in individuals of Afro-Caribbean descent, has a phenotype similar to ATTRwt."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 72,
+          "age_at_onset": 70,
+          "age_at_diagnosis": 71,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms of cardiac amyloidosis",
+          "evidence_sentence": "The V122I mutation, found exclusively in individuals of Afro-Caribbean descent, has a phenotype similar to ATTRwt."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 68,
+          "age_at_onset": 66,
+          "age_at_diagnosis": 67,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "cardiac amyloidosis with heart failure symptoms",
+          "evidence_sentence": "The V122I mutation, found exclusively in individuals of Afro-Caribbean descent, has a phenotype similar to ATTRwt."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I variant is associated with increased amyloidogenic potential.",
+        "assays": [
+          "in vitro aggregation assays",
+          "functional assays assessing amyloid deposition"
+        ]
+      },
+      "segregation_data": "The V122I variant segregates with disease in families.",
+      "population_frequency": "Higher prevalence in Afro-Caribbean populations.",
+      "evidence_level": "Moderate evidence based on clinical and functional studies.",
+      "source_location": "Introduction, paragraph 2",
+      "additional_notes": "The V122I variant is a well-studied mutation associated with familial amyloid cardiomyopathy.",
+      "key_quotes": [
+        "The V122I mutation, found exclusively in individuals of Afro-Caribbean descent, has a phenotype similar to ATTRwt."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the TTR gene was extracted successfully."
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "paper_metadata": {
+    "pmid": "29158857",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the BRCA2 variant c.68-7T>A, its association with breast cancer, and provides penetrance data for carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.68-7T>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "possibly pathogenic",
+      "patients": {
+        "count": 17,
+        "demographics": "unrelated breast cancer kindreds",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 17,
+        "affected_count": 3,
+        "unaffected_count": 14,
+        "uncertain_count": null,
+        "penetrance_percentage": 17.65,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 58,
+          "age_at_onset": null,
+          "age_at_diagnosis": 58,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Ductal cancer; 15 mm; high grade; ER negative; PR negative",
+          "evidence_sentence": "Patient 1 was diagnosed with breast cancer at age 58."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 68,
+          "age_at_onset": null,
+          "age_at_diagnosis": 68,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Ductal cancer; high grade; 35 mm; ER positive; PR positive",
+          "evidence_sentence": "Patient 2 was diagnosed with breast cancer at age 68."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 40,
+          "age_at_onset": null,
+          "age_at_diagnosis": 40,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Ductal cancer; high grade; 30 mm; ER negative; PR negative",
+          "evidence_sentence": "Patient 3 was diagnosed with breast cancer at first examination at age 40."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant causes aberrant splicing, potentially leading to lower penetrance.",
+        "assays": []
+      },
+      "segregation_data": "Inconclusive (likelihood ratio = 0.36)",
+      "population_frequency": "0.2% in the population",
+      "evidence_level": "limited evidence for pathogenicity",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant may have lower penetrance than average pathogenic BRCA2 variants.",
+      "key_quotes": [
+        "BRCA2 c.68-7T>A is associated with breast cancer.",
+        "It is, however, possible that the variant has lower penetrance than the average pathogenic BRCA2 variants."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

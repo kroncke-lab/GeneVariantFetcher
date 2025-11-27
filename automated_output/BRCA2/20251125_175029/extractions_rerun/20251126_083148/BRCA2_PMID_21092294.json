@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "21092294",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the methylation patterns and polymorphisms in the BRCA2 gene in relation to sporadic breast cancer, identifying a specific polymorphism and its association with disease susceptibility."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.-26G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 81,
+        "demographics": "female patients aged 25 to 77 years, median age 48 years",
+        "phenotype": "sporadic breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The study indicates that the BRCA2 -26 G/A 5'UTR polymorphism is associated with susceptibility to sporadic breast tumors.",
+        "assays": []
+      },
+      "segregation_data": "The polymorphism was observed in the context of methylation patterns but specific segregation data was not provided.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the potential role of BRCA2 methylation in breast cancer development.",
+      "key_quotes": [
+        "The observation of BRCA2 -26 G/A 5'UTR polymorphism concomitant with the presence of methylation in the promoter region was novel and emerged as a strong candidate for susceptibility to sporadic breast tumors."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper specifically mentioned a variant in the BRCA2 gene."
+  }
+}

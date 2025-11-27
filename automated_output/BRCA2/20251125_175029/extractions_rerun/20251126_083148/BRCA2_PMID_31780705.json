@@ -1,0 +1,252 @@
+{
+  "paper_metadata": {
+    "pmid": "31780705",
+    "title": "Germline and somatic mutations of homologous recombination-associated genes in Japanese ovarian cancer patients",
+    "extraction_summary": "Extracted variants in the BRCA2 gene along with penetrance data from the study."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9127delG",
+      "protein_notation": "p.E3043fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Age not specified, HGSC subtype",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "HGSC",
+          "evidence_sentence": "We detected 24 germline mutations in 22 ovarian cancer patients. Among the 24 germline HR-associated gene mutations, 12 (50%) were detected in HGSC patients, and almost all of them were either BRCA1 or BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The specific functional impact of this variant was not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical correlation",
+      "source_location": "Table 2, Row 5",
+      "additional_notes": "This variant was identified in a patient with HGSC.",
+      "key_quotes": [
+        "BRCA2 mutation was identified in one patient each of CCC, EC, and MC."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.845_846insTTTGG",
+      "protein_notation": "p.H282fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Age not specified, HGSC subtype",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "HGSC",
+          "evidence_sentence": "We detected 24 germline mutations in 22 ovarian cancer patients. Among the 24 germline HR-associated gene mutations, 12 (50%) were detected in HGSC patients, and almost all of them were either BRCA1 or BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The specific functional impact of this variant was not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical correlation",
+      "source_location": "Table 2, Row 6",
+      "additional_notes": "This variant was identified in a patient with HGSC.",
+      "key_quotes": [
+        "BRCA2 mutation was identified in one patient each of CCC, EC, and MC."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.C9076T",
+      "protein_notation": "p.Q3026X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Age not specified, one in HGSC and one in CCC subtype",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "HGSC",
+          "evidence_sentence": "We detected 24 germline mutations in 22 ovarian cancer patients. Among the 24 germline HR-associated gene mutations, 12 (50%) were detected in HGSC patients, and almost all of them were either BRCA1 or BRCA2."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "CCC",
+          "evidence_sentence": "We detected 24 germline mutations in 22 ovarian cancer patients. Among the 24 germline HR-associated gene mutations, 12 (50%) were detected in HGSC patients, and almost all of them were either BRCA1 or BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The specific functional impact of this variant was not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical correlation",
+      "source_location": "Table 2, Row 7",
+      "additional_notes": "This variant was identified in patients with HGSC and CCC.",
+      "key_quotes": [
+        "BRCA2 mutation was identified in one patient each of CCC, EC, and MC."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5718_5719del",
+      "protein_notation": "p.N1906fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Age not specified, EC subtype",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "EC",
+          "evidence_sentence": "We detected 24 germline mutations in 22 ovarian cancer patients. Among the 24 germline HR-associated gene mutations, 12 (50%) were detected in HGSC patients, and almost all of them were either BRCA1 or BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The specific functional impact of this variant was not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical correlation",
+      "source_location": "Table 2, Row 8",
+      "additional_notes": "This variant was identified in a patient with EC.",
+      "key_quotes": [
+        "BRCA2 mutation was identified in one patient each of CCC, EC, and MC."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.958delC",
+      "protein_notation": "p.L320fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Age not specified, MC subtype",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "MC",
+          "evidence_sentence": "We detected 24 germline mutations in 22 ovarian cancer patients. Among the 24 germline HR-associated gene mutations, 12 (50%) were detected in HGSC patients, and almost all of them were either BRCA1 or BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The specific functional impact of this variant was not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical correlation",
+      "source_location": "Table 2, Row 9",
+      "additional_notes": "This variant was identified in a patient with MC.",
+      "key_quotes": [
+        "BRCA2 mutation was identified in one patient each of CCC, EC, and MC."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Germline variants and clinical features.",
+      "variants_extracted": 5
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

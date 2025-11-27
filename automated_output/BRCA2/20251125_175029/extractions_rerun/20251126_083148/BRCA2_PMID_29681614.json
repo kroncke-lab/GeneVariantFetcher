@@ -1,0 +1,604 @@
+{
+  "paper_metadata": {
+    "pmid": "29681614",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.182_182delT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "A BRCA2 mutation was also detected in 1 patient who had early-onset bilateral breast cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the novel pathogenic mutations identified.",
+      "key_quotes": [
+        "A BRCA2 mutation was also detected in 1 patient who had early-onset bilateral breast cancer."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9400_9400delG",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Two recurrent mutations (c.3109C>T and c.9400_9400delG) were detected in this cohort."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Two recurrent mutations (c.3109C>T and c.9400_9400delG) were detected in this cohort."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the recurrent mutations identified.",
+      "key_quotes": [
+        "Two recurrent mutations (c.3109C>T and c.9400_9400delG) were detected in this cohort."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.304_304delA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, ...) were identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the novel pathogenic mutations identified.",
+      "key_quotes": [
+        "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, ...) were identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3559G>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, ...) were identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the novel pathogenic mutations identified.",
+      "key_quotes": [
+        "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, ...) were identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8955_8956insA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, ...) were identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the novel pathogenic mutations identified.",
+      "key_quotes": [
+        "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, ...) were identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8827C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, ...) were identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the novel pathogenic mutations identified.",
+      "key_quotes": [
+        "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, ...) were identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.464_468delGAGAT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, ...) were identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the novel pathogenic mutations identified.",
+      "key_quotes": [
+        "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, ...) were identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8517C>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, c.8517C>A, ...) were identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the novel pathogenic mutations identified.",
+      "key_quotes": [
+        "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, c.8517C>A, ...) were identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5574_5577delAATT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_10",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, c.8517C>A, c.5574_5577delAATT, ...) were identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the novel pathogenic mutations identified.",
+      "key_quotes": [
+        "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, c.8517C>A, c.5574_5577delAATT, ...) were identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3163_3166delAATC",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, c.8517C>A, c.5574_5577delAATT, c.3163_3166delAATC, ...) were identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the novel pathogenic mutations identified.",
+      "key_quotes": [
+        "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, c.8517C>A, c.5574_5577delAATT, c.3163_3166delAATC, ...) were identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5900_5901insG",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_12",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, c.8517C>A, c.5574_5577delAATT, c.3163_3166delAATC, c.5900_5901insG, ...) were identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the novel pathogenic mutations identified.",
+      "key_quotes": [
+        "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, c.8517C>A, c.5574_5577delAATT, c.3163_3166delAATC, c.5900_5901insG, ...) were identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8576_8576delA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_13",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, c.8517C>A, c.5574_5577delAATT, c.3163_3166delAATC, c.5900_5901insG, c.8576_8576delA, ...) were identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the novel pathogenic mutations identified.",
+      "key_quotes": [
+        "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, c.8517C>A, c.5574_5577delAATT, c.3163_3166delAATC, c.5900_5901insG, c.8576_8576delA, ...) were identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7562_7563delTC",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_14",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, c.8517C>A, c.5574_5577delAATT, c.3163_3166delAATC, c.5900_5901insG, c.8576_8576delA, c.7562_7563delTC) were identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the novel pathogenic mutations identified.",
+      "key_quotes": [
+        "Thirteen novel pathogenic mutations (c.182_182delT, c.9400_9400delG, c.304_304delA, c.3559G>T, c.8955_8956insA, c.8827C>T, c.464_468delGAGAT, c.8517C>A, c.5574_5577delAATT, c.3163_3166delAATC, c.5900_5901insG, c.8576_8576delA, c.7562_7563delTC) were identified."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Summary of BRCA2 mutations identified in the study.",
+      "variants_extracted": 25
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 25,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

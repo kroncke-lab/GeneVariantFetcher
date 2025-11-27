@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "27067391",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": "intragenic 32.1 kb interval likely hemizygous",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "An intragenic 32.1 kb interval in BRCA2 that was likely hemizygous was detected in one patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Identified as a variant of uncertain significance.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No specific details on the patient's demographics or phenotype were provided.",
+      "key_quotes": [
+        "An intragenic 32.1 kb interval in BRCA2 that was likely hemizygous was detected in one patient."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in BRCA2 was identified in the text."
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "paper_metadata": {
+    "pmid": "30286154",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Two BRCA2 variants of unknown significance were identified, with details on their clinical significance, patient demographics, penetrance data, and functional information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9334G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 2,
+        "demographics": "Polish early-onset melanoma patients",
+        "phenotype": "Melanoma, potential predisposition to breast and prostate cancers"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Melanoma",
+          "evidence_sentence": "The c.9334G>A variant, classified as a rare variant of unknown significance, on current evidence may predispose to cancers of the breast, prostate and melanoma."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Melanoma",
+          "evidence_sentence": "The c.9334G>A variant, classified as a rare variant of unknown significance, on current evidence may predispose to cancers of the breast, prostate and melanoma."
+        }
+      ],
+      "functional_data": {
+        "summary": "The MutationTaster, Polyphen2 and SIFT algorithms indicate that c.9334G>A is a damaging variant.",
+        "assays": [
+          "MutationTaster",
+          "Polyphen2",
+          "SIFT"
+        ]
+      },
+      "segregation_data": "The variant segregated with the disease.",
+      "population_frequency": "Absent among unselected cancer patients and healthy controls.",
+      "evidence_level": "Current evidence suggests potential predisposition to cancers.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Functional studies to describe how the DNA change affects the protein function and a large multi-center study to evaluate its penetrance are required.",
+      "key_quotes": [
+        "The c.9334G>A variant, classified as a rare variant of unknown significance, on current evidence may predispose to cancers of the breast, prostate and melanoma."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4534C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Polish early-onset melanoma patients",
+        "phenotype": "Melanoma, no segregation with disease"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No disease manifestation",
+          "evidence_sentence": "The c.4534 C>T variant did not segregate with disease, there was no LOH of the variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "No functional impact was established as it did not segregate with disease.",
+        "assays": []
+      },
+      "segregation_data": "Did not segregate with disease.",
+      "population_frequency": "Absent among unselected cancer patients and healthy controls.",
+      "evidence_level": "Insufficient evidence for pathogenicity.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Functional studies are needed to clarify the role of this variant.",
+      "key_quotes": [
+        "The c.4534 C>T variant did not segregate with disease, there was no LOH of the variant."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "paper_metadata": {
+    "pmid": "38214277",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ala97Ser",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 13,
+        "demographics": "Age range: 59.33\u00b15.5 years (eplontersen group), 62.43\u00b16.2 years (control group); 83% male in eplontersen group, 71% male in control group.",
+        "phenotype": "Hereditary transthyretin amyloid cardiomyopathy (hATTR\u2010CM)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": 6,
+        "unaffected_count": 7,
+        "uncertain_count": null,
+        "penetrance_percentage": 46.15,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR\u2010CM",
+          "evidence_sentence": "All patients in the eplontersen group (100%) carried the Ala97Ser (A97S) mutation."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR\u2010CM",
+          "evidence_sentence": "All patients in the eplontersen group (100%) carried the Ala97Ser (A97S) mutation."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR\u2010CM",
+          "evidence_sentence": "All patients in the eplontersen group (100%) carried the Ala97Ser (A97S) mutation."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR\u2010CM",
+          "evidence_sentence": "All patients in the eplontersen group (100%) carried the Ala97Ser (A97S) mutation."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR\u2010CM",
+          "evidence_sentence": "All patients in the eplontersen group (100%) carried the Ala97Ser (A97S) mutation."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR\u2010CM",
+          "evidence_sentence": "All patients in the eplontersen group (100%) carried the Ala97Ser (A97S) mutation."
+        },
+        {
+          "individual_id": "C1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "hATTR\u2010CM",
+          "evidence_sentence": "One of the 7 patients in the control group (14%) carried the Glu89Lys (E89K) mutation, whereas the other 6 carried the A97S mutation."
+        },
+        {
+          "individual_id": "C2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "hATTR\u2010CM",
+          "evidence_sentence": "One of the 7 patients in the control group (14%) carried the Glu89Lys (E89K) mutation, whereas the other 6 carried the A97S mutation."
+        },
+        {
+          "individual_id": "C3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "hATTR\u2010CM",
+          "evidence_sentence": "One of the 7 patients in the control group (14%) carried the Glu89Lys (E89K) mutation, whereas the other 6 carried the A97S mutation."
+        },
+        {
+          "individual_id": "C4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "hATTR\u2010CM",
+          "evidence_sentence": "One of the 7 patients in the control group (14%) carried the Glu89Lys (E89K) mutation, whereas the other 6 carried the A97S mutation."
+        },
+        {
+          "individual_id": "C5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "hATTR\u2010CM",
+          "evidence_sentence": "One of the 7 patients in the control group (14%) carried the Glu89Lys (E89K) mutation, whereas the other 6 carried the A97S mutation."
+        },
+        {
+          "individual_id": "C6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "hATTR\u2010CM",
+          "evidence_sentence": "One of the 7 patients in the control group (14%) carried the Glu89Lys (E89K) mutation, whereas the other 6 carried the A97S mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "Eplontersen treatment may be effective in patients with hereditary transthyretin amyloid cardiomyopathy.",
+        "assays": []
+      },
+      "segregation_data": "The A97S mutation is associated with hATTR\u2010CM.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the potential efficacy of eplontersen in treating hATTR\u2010CM.",
+      "key_quotes": [
+        "All patients in the eplontersen group (100%) carried the Ala97Ser (A97S) mutation.",
+        "One of the 7 patients in the control group (14%) carried the Glu89Lys (E89K) mutation, whereas the other 6 carried the A97S mutation."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Baseline demographic and clinical variables of the 2 groups",
+      "variants_extracted": 1
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Biochemical, Echocardiographic, and 99mTc\u2010PYP Data Before and After Treatment in the Eplontersen Group and the Control Group",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 3",
+      "table_caption": "99mTc\u2010PYP Cardiac Data Changes Between the Eplontersen Group and the Control Group",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the TTR gene was extracted successfully."
+  }
+}

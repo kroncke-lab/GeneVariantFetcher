@@ -1,0 +1,118 @@
+{
+  "paper_metadata": {
+    "pmid": "37296477",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene with detailed penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2808_2811del",
+      "protein_notation": "p.Ala938Profs*21",
+      "genomic_position": "rs80359351",
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Not specified",
+        "phenotype": "Colorectal cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "S.03 (F.7)",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 34,
+          "sex": "Not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Colorectal cancer",
+          "evidence_sentence": "S.03 (F.7) NM_000059.4(BRCA2):c.2808_2811del (p.Ala938Profs*21), rs80359351"
+        },
+        {
+          "individual_id": "S.04 (F.7)",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 31,
+          "sex": "Not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Colorectal cancer",
+          "evidence_sentence": "S.04 (F.7) NM_000059.4(BRCA2):c.2808_2811del (p.Ala938Profs*21), rs80359351"
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is predicted to result in a truncated protein, likely leading to loss of function.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence based on clinical significance.",
+      "source_location": "Table 4, Row 1",
+      "additional_notes": "Both patients with this variant were diagnosed with colorectal cancer.",
+      "key_quotes": [
+        "14 are pathogenic/likely pathogenic, 6 are VUS, and 4 have conflicting interpretation between pathogenic/likely pathogenic and VUS according to ClinVar."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7977-1G>C",
+      "protein_notation": "p.?",
+      "genomic_position": "rs81002874",
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Colorectal cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "S.21",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 12,
+          "sex": "Not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Colorectal cancer",
+          "evidence_sentence": "S.21 NM_000059.4(BRCA2):c.7977-1G>C (p.?), rs81002874"
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a splice site mutation, potentially affecting mRNA processing.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence based on clinical significance.",
+      "source_location": "Table 4, Row 2",
+      "additional_notes": "The patient with this variant was diagnosed with colorectal cancer at a young age.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 4",
+      "table_caption": "List of known cancer genes and associated variants",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

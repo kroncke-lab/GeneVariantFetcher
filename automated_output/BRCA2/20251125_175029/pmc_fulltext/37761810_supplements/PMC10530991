@@ -1,0 +1,2641 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+    <head >
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        
+        
+
+        
+        
+  <link rel="stylesheet" href="/static/assets/style-8258669d.css" />
+<script type="module" crossorigin="" src="/static/assets/base_style-f4a99799.js"></script>
+
+  <link rel="stylesheet" href="/static/assets/style-ef962842.css" />
+<link rel="stylesheet" href="/static/assets/style-3ade8b5c.css" />
+<script type="module" crossorigin="" src="/static/assets/article_style-d757a0dd.js"></script>
+
+  
+  
+    <style>
+  
+  
+  @media screen and (min-width: 64em) {
+    div.pmc-wm {
+      background: repeat-y;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='350' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cfilter x='-.02' y='0' width='1.05' height='1' id='c'%3E%3CfeFlood flood-color='%23FFF'/%3E%3CfeComposite in='SourceGraphic'/%3E%3C/filter%3E%3Ctext id='b' font-family='Helvetica' font-size='11pt' style='opacity:1;fill:%23005ea2;stroke:none;text-anchor:middle' x='175' y='14'%3E%3C/text%3E%3Cpath id='a' style='fill:%23005ea2' d='M0 8h350v3H0z'/%3E%3C/defs%3E%3Cuse xlink:href='%23a' transform='rotate(90 10 10)'/%3E%3Cuse xlink:href='%23b' transform='rotate(90 10 10)' filter='url(%23c)'/%3E%3C/svg%3E");
+      padding-left: 3rem;
+    }
+  }
+</style>
+
+  
+
+
+
+        
+            <link rel="apple-touch-icon"
+                  sizes="180x180"
+                  href="/static/img/favicons/apple-touch-icon.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="48x48"
+                  href="/static/img/favicons/favicon-48x48.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="32x32"
+                  href="/static/img/favicons/favicon-32x32.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="16x16"
+                  href="/static/img/favicons/favicon-16x16.png" />
+            <link rel="manifest" href="/static/img/favicons/site.webmanifest" />
+            <link rel="mask-icon"
+                  href="/static/img/favicons/safari-pinned-tab.svg"
+                  color="#0071bc" />
+            <meta name="msapplication-config"
+                  content="/static/img/favicons/browserconfig.xml" />
+            <meta name="theme-color" content="#ffffff" />
+        
+
+        <title>
+            Simultaneous Occurrence of Multiple Neoplasms in Children with Cancer Predisposition Syndromes: Collaborating with Abnormal Genes - PMC
+        </title>
+
+        
+        
+  
+  <!-- Logging params: Pinger defaults -->
+<meta name="ncbi_app" content="cloudpmc-viewer" />
+<meta name="ncbi_db" content="pmc" />
+<meta name="ncbi_phid" content="ABCBAAA9926513B33DAAA90050DCDA9C.m_1" />
+<meta name="ncbi_pinger_stat_url" content="https://pmc.ncbi.nlm.nih.gov/stat" />
+<!-- Logging params: Pinger custom -->
+<meta name="ncbi_pdid" content="article" />
+  
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
+    
+        <link rel="preconnect" href="https://cdn.ncbi.nlm.nih.gov" />
+    
+
+    <!-- Include USWDS Init Script -->
+    <script src="/static/assets/uswds-init.js"></script>
+
+
+    <meta name="ncbi_domain" content="genes">
+<meta name="ncbi_type" content="fulltext">
+<meta name="ncbi_pcid" content="journal">
+<meta name="ncbi_feature" content="associated_data">
+<link rel="canonical" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10530991/">
+<meta name="robots" content="INDEX,NOFOLLOW,NOARCHIVE">
+<meta name="citation_journal_title" content="Genes">
+<meta name="citation_title" content="Simultaneous Occurrence of Multiple Neoplasms in Children with Cancer Predisposition Syndromes: Collaborating with Abnormal Genes">
+<meta name="citation_author" content="Gabriela Telman">
+<meta name="citation_author_institution" content="Department of Pediatric Oncology, Hematology and Transplantology, Poznan University of Medical Sciences, Szpitalna 27/33, 60-572 Poznan, Poland; gabriela.telman@gmail.com (G.T.);">
+<meta name="citation_author" content="Ewa Strauss">
+<meta name="citation_author_institution" content="Institute of Human Genetics, Polish Academy of Sciences, Strzeszynska 32, 60-479 Poznan, Poland; strauss@man.poznan.pl">
+<meta name="citation_author" content="Patrycja Sosnowska-Sienkiewicz">
+<meta name="citation_author_institution" content="Department of Pediatric Surgery, Traumatology and Urology, Poznan University of Medical Sciences, Szpitalna 27/33, 60-572 Poznan, Poland; sosnowska@ump.edu.pl">
+<meta name="citation_author" content="Magdalena Halasz">
+<meta name="citation_author_institution" content="Department of Pediatric Oncology, Hematology and Transplantology, Poznan University of Medical Sciences, Szpitalna 27/33, 60-572 Poznan, Poland; gabriela.telman@gmail.com (G.T.);">
+<meta name="citation_author" content="Danuta Januszkiewicz-Lewandowska">
+<meta name="citation_author_institution" content="Department of Pediatric Oncology, Hematology and Transplantology, Poznan University of Medical Sciences, Szpitalna 27/33, 60-572 Poznan, Poland; gabriela.telman@gmail.com (G.T.);">
+<meta name="citation_publication_date" content="2023 Aug 24">
+<meta name="citation_volume" content="14">
+<meta name="citation_issue" content="9">
+<meta name="citation_firstpage" content="1670">
+<meta name="citation_doi" content="10.3390/genes14091670">
+<meta name="citation_pmid" content="37761810">
+<meta name="citation_abstract_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC10530991/">
+<meta name="citation_fulltext_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC10530991/">
+<meta name="citation_pdf_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC10530991/pdf/genes-14-01670.pdf">
+<meta name="description" content="The identification of cancer predisposition syndromes (CPSs) plays a crucial role in understanding the etiology of pediatric cancers. CPSs are genetic mutations that increase the risk of developing cancer at an earlier age compared to the risk for ...">
+<meta name="og:title" content="Simultaneous Occurrence of Multiple Neoplasms in Children with Cancer Predisposition Syndromes: Collaborating with Abnormal Genes">
+<meta name="og:type" content="article">
+<meta name="og:site_name" content="PubMed Central (PMC)">
+<meta name="og:description" content="The identification of cancer predisposition syndromes (CPSs) plays a crucial role in understanding the etiology of pediatric cancers. CPSs are genetic mutations that increase the risk of developing cancer at an earlier age compared to the risk for ...">
+<meta name="og:url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC10530991/">
+<meta name="og:image" content="https://cdn.ncbi.nlm.nih.gov/pmc/cms/images/pmc-card-share.jpg?_=0">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ncbi">
+    
+    
+
+    </head>
+    <body >
+        
+    <a class="usa-skipnav " href="#main-content">
+      Skip to main content
+    </a>
+
+
+        
+            
+
+<section class="usa-banner " aria-label="Official website of the United States government" >
+    <div class="usa-accordion">
+        <header class="usa-banner__header">
+            <div class="usa-banner__inner">
+                <div class="grid-col-auto">
+                    <img aria-hidden="true"
+                         class="usa-banner__header-flag"
+                         src="/static/img/us_flag.svg"
+                         alt="" />
+                </div>
+
+                <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                    <p class="usa-banner__header-text">
+                        An official website of the United States government
+                    </p>
+                    <span class="usa-banner__header-action">Here's how you know</span>
+                </div>
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-accordion__button usa-banner__button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    aria-expanded="false"
+    aria-controls="gov-banner-default"
+    
+    data-testid="storybook-django-banner"
+    
+    >
+    
+        
+
+        
+                    <span class="usa-banner__button-text">Here's how you know</span>
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </div>
+        </header>
+
+        <div class="usa-banner__content usa-accordion__content"
+             id="gov-banner-default"
+             hidden>
+            <div class="grid-row grid-gap-lg">
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-dot-gov.svg"
+                         alt=""
+                         aria-hidden="true" />
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Official websites use .gov</strong>
+                            <br />
+                            A
+                            <strong>.gov</strong> website belongs to an official
+                            government organization in the United States.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-https.svg"
+                         alt=""
+                         aria-hidden="true" />
+
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Secure .gov websites use HTTPS</strong>
+                            <br />
+                            A <strong>lock</strong> (
+                            <span class="icon-lock">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="52"
+                                     height="64"
+                                     viewBox="0 0 52 64"
+                                     class="usa-banner__lock-image"
+                                     role="graphics-symbol"
+                                     aria-labelledby="banner-lock-description"
+                                     focusable="false">
+                                    <title id="banner-lock-title">Lock</title>
+                                    <desc id="banner-lock-description">
+                                    Locked padlock icon
+                                    </desc>
+                                    <path fill="#000000"
+                                          fill-rule="evenodd"
+                                          d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z" />
+                                </svg>
+</span>) or <strong>https://</strong> means you've safely
+                                connected to the .gov website. Share sensitive
+                                information only on official, secure websites.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        
+
+        
+    
+    
+    
+
+<div class="usa-overlay">
+</div>
+
+
+
+<header class="usa-header usa-header--extended usa-header--wide" data-header data-testid="header"    >
+    <div class="ncbi-header">
+        <div class="ncbi-header__container">
+            <a class="ncbi-header__logo-container"
+               href="https://www.ncbi.nlm.nih.gov/">
+                <img alt="NCBI home page"
+                     class="ncbi-header__logo-image"
+                     src="/static/img/ncbi-logos/nih-nlm-ncbi--white.svg"
+                     width="410"
+                     height="100" />
+            </a>
+
+            <!-- Mobile menu hamburger button -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-menu-btn ncbi-header__hamburger-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Show menu"
+    data-testid="navMenuButton"
+    
+    >
+    
+        
+
+        
+                <svg aria-hidden="true"
+                     class="ncbi-hamburger-icon"
+                     fill="none"
+                     focusable="false"
+                     height="21"
+                     viewBox="0 0 31 21"
+                     width="31"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M0.125 20.75H30.875V17.3333H0.125V20.75ZM0.125 12.2083H30.875V8.79167H0.125V12.2083ZM0.125 0.25V3.66667H30.875V0.25H0.125Z"
+                          fill="#F1F1F1"
+                          fill-rule="evenodd" />
+                </svg>
+            
+
+        
+    
+        
+            </button>
+        
+
+
+
+            
+                <!-- Desktop buttons-->
+                <div class="ncbi-header__desktop-buttons">
+                    
+                        <!-- Desktop search button -->
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button
+           "
+    aria-expanded="false"
+    aria-controls="search-field-desktop-navigation"
+    aria-label="Show search overlay"
+    data-testid="toggleSearchPanelButton"
+    data-toggle-search-panel-button
+    >
+    
+        
+
+        
+                            
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#search" />
+    </svg>
+
+
+                            Search
+                        
+
+        
+    
+        
+            </button>
+        
+
+
+                    
+
+                    <!-- Desktop login dropdown -->
+                    
+                        <div class="ncbi-header__login-dropdown">
+                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button ncbi-header__login-dropdown-button
+           "
+    aria-expanded="false"
+    aria-controls="login-dropdown-menu"
+    aria-label="Show login menu"
+    data-testid="toggleLoginMenuDropdown"
+    data-desktop-login-button
+    >
+    
+        
+
+        
+                                
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#person" />
+    </svg>
+
+
+
+                                <span data-login-dropdown-text>Log in</span>
+
+                                <!-- Dropdown icon pointing up -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-less ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-up-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_less" />
+    </svg>
+
+
+
+                                <!-- Dropdown icon pointing down -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-more ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-down-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_more" />
+    </svg>
+
+
+                            
+
+        
+    
+        
+            </button>
+        
+
+
+
+                            <!-- Login dropdown menu -->
+                            <ul class="usa-nav__submenu ncbi-header__login-dropdown-menu"
+                                id="login-dropdown-menu"
+                                data-desktop-login-menu-dropdown
+                                hidden>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                <li class="usa-nav__submenu-item">
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--outline ncbi-header__login-dropdown-logout-button
+           "
+    
+    
+    
+    data-testid="desktopLogoutButton"
+    data-desktop-logout-button
+    >
+    
+        
+
+        Log out
+
+        
+    
+        
+            </button>
+        
+
+
+                                </li>
+                            </ul>
+                        </div>
+                    
+                </div>
+            
+        </div>
+    </div>
+
+    <!-- Search panel -->
+    
+        <div class="ncbi-search-panel ncbi--show-only-at-desktop"
+             data-header-search-panel
+             hidden>
+            <div class="ncbi-search-panel__container">
+                <form action="https://www.ncbi.nlm.nih.gov/search/all/"
+                      
+                      autocomplete="off"
+                      class="usa-search usa-search--big ncbi-search-panel__form"
+                      data-testid="desktop-navigation-search-form"
+                      method="GET"
+                      role="search">
+                    <label class="usa-sr-only" for="search-field-desktop-navigation">
+                        Search…
+                    </label>
+                    <input class="usa-input"
+                           id="search-field-desktop-navigation"
+                           name="term"
+                           
+                               placeholder="Search NCBI"
+                           
+                           type="search"
+                           value="" />
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                        <span class="usa-search__submit-text">
+                            Search NCBI
+                        </span>
+                    
+
+        
+    
+        
+            </button>
+        
+
+
+                </form>
+
+                
+            </div>
+        </div>
+    
+
+    <nav aria-label="Primary navigation" class="usa-nav">
+        <p class="usa-sr-only" id="primary-navigation-sr-only-title">
+            Primary site navigation
+        </p>
+
+        <!-- Mobile menu close button -->
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-nav__close ncbi-nav__close-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Close navigation menu"
+    data-testid="navCloseButton"
+    
+    >
+    
+        
+
+        
+            <img src="/static/img/usa-icons/close.svg" alt="Close" />
+        
+
+        
+    
+        
+            </button>
+        
+
+
+
+        
+            <!-- Mobile search component -->
+            <form class="usa-search usa-search--small ncbi--hide-at-desktop margin-top-6"
+                  action="https://www.ncbi.nlm.nih.gov/search/all/"
+                  
+                  autocomplete="off"
+                  data-testid="mobile-navigation-search-form"
+                  method="GET"
+                  role="search">
+                <label class="usa-sr-only" for="search-field-mobile-navigation">
+                    Search
+                </label>
+
+                <input class="usa-input"
+                       id="search-field-mobile-navigation"
+                       type="search"
+                       
+                           placeholder="Search NCBI"
+                       
+                       name="term" />
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                    <!-- This SVG should be kept inline and not replaced with a link to the icon as otherwise it will render in the wrong color -->
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0E2LjQ3MSA2LjQ3MSAwIDAgMCAxNiA5LjUgNi41IDYuNSAwIDEgMCA5LjUgMTZjMS42MSAwIDMuMDktLjU5IDQuMjMtMS41N2wuMjcuMjh2Ljc5bDUgNC45OUwyMC40OSAxOWwtNC45OS01em0tNiAwQzcuMDEgMTQgNSAxMS45OSA1IDkuNVM3LjAxIDUgOS41IDUgMTQgNy4wMSAxNCA5LjUgMTEuOTkgMTQgOS41IDE0eiIvPjwvc3ZnPg=="
+                         class="usa-search__submit-icon"
+                         alt="Search" />
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </form>
+
+            
+        
+
+        <!-- Primary navigation menu items -->
+        <!-- This usa-nav__inner wrapper is required to correctly style the navigation items on Desktop -->
+        
+
+        
+            <div class="ncbi-nav__mobile-login-menu ncbi--hide-at-desktop"
+                 data-mobile-login-menu
+                 hidden>
+                <p class="ncbi-nav__mobile-login-menu-status">
+                    Logged in as:
+                    <strong class="ncbi-nav__mobile-login-menu-email"
+                            data-mobile-login-email-text></strong>
+                </p>
+                <ul class="usa-nav__primary usa-accordion">
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           ncbi-nav__mobile-login-button ncbi--hide-at-desktop
+           "
+    
+    
+    
+    data-testid="mobileLoginButton"
+    data-mobile-login-button
+    >
+    
+        
+
+        Log in
+
+        
+    
+        
+            </button>
+        
+
+
+    </nav>
+</header>
+
+    
+    
+        
+
+<section class="pmc-header pmc-header--basic" aria-label="PMC Header with search box">
+    <div class="pmc-nav-container">
+        <div class="pmc-header__bar">
+           <div class="pmc-header__logo">
+               <a href="/" title="Home" aria-label="PMC Home"></a>
+           </div>
+            <button
+                    type="button"
+                    class="usa-button usa-button--unstyled pmc-header__search__button"
+                    aria-label="Open search"
+                    data-ga-category="search"
+                    data-ga-action="PMC"
+                    data-ga-label="pmc_search_panel_mobile"
+            >
+                <svg class="usa-icon width-4 height-4 pmc-icon__open" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#search"></use>
+                </svg>
+                <svg class="usa-icon width-4 height-4 pmc-icon__close" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="pmc-header__search">
+            
+
+
+<form class="usa-search usa-search--extra usa-search--article-right-column  pmc-header__search__form" id="pmc-search-form" autocomplete="off" role="search">
+<label class="usa-sr-only" for="pmc-search">Search PMC Full-Text Archive</label>
+<span class="autoComplete_wrapper flex-1">
+<input class="usa-input width-full maxw-none" required="required" placeholder="Search PMC Full-Text Archive" id="pmc-search"  type="search" name="term" data-autocomplete-url="https://pmc.ncbi.nlm.nih.gov/autocomp/search/autocomp/"/>
+</span>
+<button
+class="usa-button"
+type="submit"
+formaction="https://pmc.ncbi.nlm.nih.gov/search/"
+data-ga-category="search"
+data-ga-action="PMC"
+data-ga-label="PMC_search_button"
+>
+<span class="usa-search__submit-text">Search in PMC</span>
+<img
+src="/static/img/usa-icons-bg/search--white.svg"
+class="usa-search__submit-icon"
+alt="Search"
+/>
+</button>
+</form>
+            <div class="display-flex flex-column tablet:flex-row tablet:flex-justify flex-justify-center flex-align-center width-full desktop:maxw-44">
+                <ul class="pmc-header__search__menu">
+                    <li>
+                        
+                            <a class="usa-link" href="/journals/" data-ga-action="featured_link" data-ga-label="journal list">
+                                Journal List
+                            </a>
+                        
+                    </li>
+                    <li>
+                        
+                            <a class="usa-link" href="/about/userguide/" data-ga-action="featured_link"
+                            data-ga-label="user guide">
+                                User Guide
+                            </a>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+    
+
+
+        
+        
+
+       
+  <div class="usa-section padding-top-0 desktop:padding-top-6 pmc-article-section" data-article-db="pmc" data-article-id="10530991">
+
+    
+
+   
+
+
+
+<div class="grid-container pmc-actions-bar" aria-label="Actions bar" role="complementary">
+    <div class="grid-row">
+        <div class="grid-col-fill display-flex">
+             <div class="display-flex">
+                <ul class="usa-list usa-list--unstyled usa-list--horizontal">
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <button
+                                type="button"
+                                class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                                aria-label="Open resources"
+                                data-extra-class="is-visible-resources"
+                                data-ga-category="resources_accordion"
+                                data-ga-action="click"
+                                data-ga-label="mobile_icon"
+                        >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#more_vert"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <a
+                                href="https://doi.org/10.3390/genes14091670"
+                                class="usa-link display-flex usa-tooltip"
+                                role="button"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                title="View on publisher site"
+                                data-position="bottom"
+                                aria-label="View on publisher site"
+                                data-ga-category="actions"
+                                data-ga-action="click"
+                                data-ga-label="publisher_link_mobile"
+                        >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#launch"></use>
+                                </svg>
+                        </a>
+                    </li>
+                    
+                    
+                        <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                             <a
+                                     href="pdf/genes-14-01670.pdf"
+                                     class="usa-link display-flex usa-tooltip"
+                                     role="button"
+                                     title="Download PDF"
+                                     data-position="bottom"
+                                     aria-label="Download PDF"
+                                     data-ga-category="actions"
+                                     data-ga-action="click"
+                                     data-ga-label="pdf_download_mobile"
+                             >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                                </svg>
+                            </a>
+                        </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button
+                            class="usa-button usa-button--unstyled  usa-tooltip collections-dialog-trigger collections-button display-flex collections-button-empty"
+                            title="Add to Collections"
+                            data-position="bottom"
+                            aria-label="Save article in MyNCBI collections."
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="collections_button_mobile"
+                            data-collections-open-dialog-enabled="false"
+                            data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC10530991%2F%23open-collections-dialog"
+                            data-in-collections="false"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button role="button" class="usa-button usa-button--unstyled usa-tooltip citation-dialog-trigger display-flex"
+                            aria-label="Open dialog with citation text in different styles"
+                            title="Cite"
+                            data-position="bottom"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="cite_mobile"
+                            data-all-citations-url="/resources/citations/10530991/"
+                            data-citation-style="nlm"
+                            data-download-format-link="/resources/citations/10530991/export/"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="pmc-permalink display-flex" >
+                         <button
+                                 type="button"
+                                 title="Permalink"
+                                 data-position="bottom"
+                                 class="usa-button usa-button--unstyled display-flex usa-tooltip"
+                                 aria-label="Show article permalink"
+                                 aria-expanded="false"
+                                 aria-haspopup="true"
+                                 data-ga-category="actions"
+                                 data-ga-action="open"
+                                 data-ga-label="permalink_mobile"
+                         >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#share"></use>
+                            </svg>
+                        </button>
+                        
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC10530991/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+                    </li>
+                </ul>
+            </div>
+            <button
+                    type="button"
+                    class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                    aria-label="Open article navigation"
+                    data-extra-class="is-visible-in-page"
+                    data-ga-category="actions"
+                    data-ga-action="open"
+                    data-ga-label="article_nav_mobile"
+            >
+                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#list"></use>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+    <div class="grid-container desktop:padding-left-6">
+      <div id="article-container" class="grid-row grid-gap">
+        <div class="grid-col-12 desktop:grid-col-8 order-2 pmc-layout__content">
+            <div class="grid-container padding-left-0 padding-right-0">
+                <div class="grid-row desktop:margin-left-neg-6">
+                    <div class="grid-col-12">
+                        <div class="pmc-layout__disclaimer" role="complementary" aria-label="Disclaimer note">
+    As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+    the contents by NLM or the National Institutes of Health.<br/>
+    Learn more:
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="Disclaimer" data-ga-label="New disclaimer box" href="/about/disclaimer/">PMC Disclaimer</a>
+    |
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="PMC Copyright Notice" data-ga-label="New disclaimer box" href="/about/copyright/">
+        PMC Copyright Notice
+    </a>
+</div>
+                    </div>
+                </div>
+                <div class="grid-row pmc-wm desktop:margin-left-neg-6">
+                    <!-- Main content -->
+                    <main
+                      id="main-content"
+                      class="usa-layout-docs__main usa-layout-docs grid-col-12 pmc-layout pmc-prose padding-0"
+                    >
+
+                      
+                        <section class="pmc-journal-banner text-center line-height-none" aria-label="Journal banner"><img src="https://cdn.ncbi.nlm.nih.gov/pmc/banners/logo-genes.png" alt="Genes logo" usemap="#pmc-banner-imagemap" width="500" height="75"><map name="pmc-banner-imagemap"><area alt="Link to Genes" title="Link to Genes" shape="default" href="http://www.mdpi.com/journal/genes" target="_blank" rel="noopener noreferrer"></map></section><article lang="en"><section aria-label="Article citation and metadata"><section class="pmc-layout__citation font-secondary font-xs"><div>
+<div class="display-inline-block"><button type="button" class="cursor-pointer text-no-underline bg-transparent border-0 padding-0 text-left margin-0 text-normal text-primary" aria-controls="journal_context_menu">Genes (Basel)</button></div>. 2023 Aug 24;14(9):1670. doi: <a href="https://doi.org/10.3390/genes14091670" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">10.3390/genes14091670</a>
+</div>
+<nav id="journal_context_menu" hidden="hidden"><ul class="menu-list font-family-ui" role="menu">
+<li role="presentation"><a href="https://pmc.ncbi.nlm.nih.gov/search/?term=%22Genes%20(Basel)%22%5Bjour%5D" class="usa-link" role="menuitem">Search in PMC</a></li>
+<li role="presentation"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Genes%20(Basel)%22%5Bjour%5D" lang="en" class="usa-link" role="menuitem">Search in PubMed</a></li>
+<li role="presentation"><a href="https://www.ncbi.nlm.nih.gov/nlmcatalog?term=%22Genes%20(Basel)%22%5BTitle%20Abbreviation%5D" class="usa-link" role="menuitem">View in NLM Catalog</a></li>
+<li role="presentation"><a href="?term=%22Genes%20(Basel)%22%5Bjour%5D" class="usa-link" role="menuitem" data-add-to-search="true">Add to search</a></li>
+</ul></nav></section><section class="front-matter"><div class="ameta p font-secondary font-xs">
+<hgroup><h1>Simultaneous Occurrence of Multiple Neoplasms in Children with Cancer Predisposition Syndromes: Collaborating with Abnormal Genes</h1></hgroup><div class="cg p">
+<a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Telman%20G%22%5BAuthor%5D" class="usa-link" aria-describedby="id1"><span class="name western">Gabriela Telman</span></a><div hidden="hidden" id="id1">
+<h3><span class="name western">Gabriela Telman</span></h3>
+<div class="p">
+<sup>1</sup>Department of Pediatric Oncology, Hematology and Transplantology, Poznan University of Medical Sciences, Szpitalna 27/33, 60-572 Poznan, Poland; gabriela.telman@gmail.com (G.T.); </div>
+<div>Conceptualization, Methodology, Software, Investigation, Data curation, Writing – original draft, Visualization, Project administration</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Telman%20G%22%5BAuthor%5D" class="usa-link"><span class="name western">Gabriela Telman</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Strauss%20E%22%5BAuthor%5D" class="usa-link" aria-describedby="id2"><span class="name western">Ewa Strauss</span></a><div hidden="hidden" id="id2">
+<h3><span class="name western">Ewa Strauss</span></h3>
+<div class="p">
+<sup>2</sup>Institute of Human Genetics, Polish Academy of Sciences, Strzeszynska 32, 60-479 Poznan, Poland; strauss@man.poznan.pl</div>
+<div>Conceptualization, Methodology, Software, Validation, Formal analysis, Writing – original draft</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Strauss%20E%22%5BAuthor%5D" class="usa-link"><span class="name western">Ewa Strauss</span></a>
+</div>
+</div>
+<sup>2</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Sosnowska-Sienkiewicz%20P%22%5BAuthor%5D" class="usa-link" aria-describedby="id3"><span class="name western">Patrycja Sosnowska-Sienkiewicz</span></a><div hidden="hidden" id="id3">
+<h3><span class="name western">Patrycja Sosnowska-Sienkiewicz</span></h3>
+<div class="p">
+<sup>3</sup>Department of Pediatric Surgery, Traumatology and Urology, Poznan University of Medical Sciences, Szpitalna 27/33, 60-572 Poznan, Poland; sosnowska@ump.edu.pl</div>
+<div>Conceptualization, Methodology, Software, Investigation, Writing – review &amp; editing</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Sosnowska-Sienkiewicz%20P%22%5BAuthor%5D" class="usa-link"><span class="name western">Patrycja Sosnowska-Sienkiewicz</span></a>
+</div>
+</div>
+<sup>3</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Halasz%20M%22%5BAuthor%5D" class="usa-link" aria-describedby="id4"><span class="name western">Magdalena Halasz</span></a><div hidden="hidden" id="id4">
+<h3><span class="name western">Magdalena Halasz</span></h3>
+<div class="p">
+<sup>1</sup>Department of Pediatric Oncology, Hematology and Transplantology, Poznan University of Medical Sciences, Szpitalna 27/33, 60-572 Poznan, Poland; gabriela.telman@gmail.com (G.T.); </div>
+<div>Investigation, Data curation, Writing – original draft</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Halasz%20M%22%5BAuthor%5D" class="usa-link"><span class="name western">Magdalena Halasz</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Januszkiewicz-Lewandowska%20D%22%5BAuthor%5D" class="usa-link" aria-describedby="id5"><span class="name western">Danuta Januszkiewicz-Lewandowska</span></a><div hidden="hidden" id="id5">
+<h3><span class="name western">Danuta Januszkiewicz-Lewandowska</span></h3>
+<div class="p">
+<sup>1</sup>Department of Pediatric Oncology, Hematology and Transplantology, Poznan University of Medical Sciences, Szpitalna 27/33, 60-572 Poznan, Poland; gabriela.telman@gmail.com (G.T.); </div>
+<div>Conceptualization, Methodology, Software, Validation, Formal analysis, Investigation, Resources, Data curation, Writing – original draft, Visualization, Supervision, Project administration, Funding acquisition</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Januszkiewicz-Lewandowska%20D%22%5BAuthor%5D" class="usa-link"><span class="name western">Danuta Januszkiewicz-Lewandowska</span></a>
+</div>
+</div>
+<sup>1,</sup><sup>*</sup>
+</div>
+<ul class="d-buttons inline-list">
+<li><button class="d-button" aria-controls="aip_a" aria-expanded="false">Author information</button></li>
+<li><button class="d-button" aria-controls="anp_a" aria-expanded="false">Article notes</button></li>
+<li><button class="d-button" aria-controls="clp_a" aria-expanded="false">Copyright and License information</button></li>
+</ul>
+<div class="d-panels font-secondary-light">
+<div id="aip_a" class="d-panel p" style="display: none">
+<div class="p" id="af1-genes-14-01670">
+<sup>1</sup>Department of Pediatric Oncology, Hematology and Transplantology, Poznan University of Medical Sciences, Szpitalna 27/33, 60-572 Poznan, Poland; gabriela.telman@gmail.com (G.T.); </div>
+<div id="af2-genes-14-01670">
+<sup>2</sup>Institute of Human Genetics, Polish Academy of Sciences, Strzeszynska 32, 60-479 Poznan, Poland; strauss@man.poznan.pl</div>
+<div id="af3-genes-14-01670">
+<sup>3</sup>Department of Pediatric Surgery, Traumatology and Urology, Poznan University of Medical Sciences, Szpitalna 27/33, 60-572 Poznan, Poland; sosnowska@ump.edu.pl</div>
+<div class="author-notes p"><div class="fn" id="c1-genes-14-01670">
+<sup>*</sup><p class="display-inline">Correspondence: <span>danuta.januszkiewicz@ump.edu.pl</span>; Tel.: +48-(61)-849-16-64</p>
+</div></div>
+<h4 class="font-secondary">Roles</h4>
+<div class="p">
+<strong class="contrib"><span class="name western">Gabriela Telman</span></strong>: <span class="role">Conceptualization, Methodology, Software, Investigation, Data curation, Writing – original draft, Visualization, Project administration</span>
+</div>
+<div>
+<strong class="contrib"><span class="name western">Ewa Strauss</span></strong>: <span class="role">Conceptualization, Methodology, Software, Validation, Formal analysis, Writing – original draft</span>
+</div>
+<div>
+<strong class="contrib"><span class="name western">Patrycja Sosnowska-Sienkiewicz</span></strong>: <span class="role">Conceptualization, Methodology, Software, Investigation, Writing – review &amp; editing</span>
+</div>
+<div>
+<strong class="contrib"><span class="name western">Magdalena Halasz</span></strong>: <span class="role">Investigation, Data curation, Writing – original draft</span>
+</div>
+<div>
+<strong class="contrib"><span class="name western">Danuta Januszkiewicz-Lewandowska</span></strong>: <span class="role">Conceptualization, Methodology, Software, Validation, Formal analysis, Investigation, Resources, Data curation, Writing – original draft, Visualization, Supervision, Project administration, Funding acquisition</span>
+</div>
+</div>
+<div id="anp_a" class="d-panel p" style="display: none"><div class="notes p"><section id="historyarticle-meta1" class="history"><p>Received 2023 Jun 29; Revised 2023 Aug 17; Accepted 2023 Aug 23; Collection date 2023 Sep.</p></section></div></div>
+<div id="clp_a" class="d-panel p" style="display: none">
+<div>© 2023 by the authors.</div>
+<p>Licensee MDPI, Basel, Switzerland. This article is an open access article distributed under the terms and conditions of the Creative Commons Attribution (CC BY) license (<a href="https://creativecommons.org/licenses/by/4.0/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://creativecommons.org/licenses/by/4.0/</a>).</p>
+<div class="p"><a href="/about/copyright/" class="usa-link">PMC Copyright notice</a></div>
+</div>
+</div>
+<div>PMCID: PMC10530991  PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/37761810/" class="usa-link">37761810</a>
+</div>
+</div></section></section><section aria-label="Article content"><section class="body main-article-body"><section class="abstract" id="abstract1"><h2>Abstract</h2>
+<p>The identification of cancer predisposition syndromes (CPSs) plays a crucial role in understanding the etiology of pediatric cancers. CPSs are genetic mutations that increase the risk of developing cancer at an earlier age compared to the risk for the general population. This article aims to provide a comprehensive analysis of three unique cases involving pediatric patients with CPS who were diagnosed with multiple simultaneous or metachronous cancers. The first case involves a child with embryonal rhabdomyosarcoma, nephroblastoma, glioma, and subsequent medulloblastoma. Genetic analysis identified two pathogenic variants in the <em>BRCA2</em> gene. The second case involves a child with alveolar rhabdomyosarcoma, juvenile xanthogranuloma, gliomas, and subsequent JMML/MDS/MPS. A pathogenic variant in the <em>NF1</em> gene was identified. The third case involves a child with pleuropulmonary blastoma and pediatric cystic nephroma/nephroblastoma, in whom a pathogenic variant in the <em>DICER1</em> gene was identified. Multiple simultaneous and metachronous cancers in pediatric patients with CPSs are a rare but significant phenomenon. Comprehensive analysis and genetic testing play significant roles in understanding the underlying mechanisms and guiding treatment strategies for these unique cases. Early detection and targeted interventions are important for improving outcomes in these individuals.</p>
+<section id="kwd-group1" class="kwd-group"><p><strong>Keywords:</strong> cancer predisposition syndromes, genetic abnormalities, neoplasms, simultaneous occurrence, pediatric cancers, personalized treatment, tumor suppressor genes</p></section></section><section id="sec1-genes-14-01670"><h2 class="pmc_sec_title">1. Introduction</h2>
+<p>Cancer incidence is increasing in all age groups in the general population, but neoplasms in children and adolescents are still considered rare diseases [<a href="#B1-genes-14-01670" class="usa-link" aria-describedby="B1-genes-14-01670">1</a>,<a href="#B2-genes-14-01670" class="usa-link" aria-describedby="B2-genes-14-01670">2</a>,<a href="#B3-genes-14-01670" class="usa-link" aria-describedby="B3-genes-14-01670">3</a>]. The global incidence of childhood cancer is estimated to be nearly 400,000 cases per year [<a href="#B4-genes-14-01670" class="usa-link" aria-describedby="B4-genes-14-01670">4</a>]. Multiple diagnoses are extremely rare. While the exact causes of oncological diseases remain largely unknown, the role of genetic factors and the identification of syndromes that predispose individuals to cancer are gradually being identified and understood with advancements in genetics and genomics [<a href="#B5-genes-14-01670" class="usa-link" aria-describedby="B5-genes-14-01670">5</a>,<a href="#B6-genes-14-01670" class="usa-link" aria-describedby="B6-genes-14-01670">6</a>,<a href="#B7-genes-14-01670" class="usa-link" aria-describedby="B7-genes-14-01670">7</a>,<a href="#B8-genes-14-01670" class="usa-link" aria-describedby="B8-genes-14-01670">8</a>,<a href="#B9-genes-14-01670" class="usa-link" aria-describedby="B9-genes-14-01670">9</a>]. With medical advancements, targeted treatments, anticipatory screening, and the prevention of subsequent cancers are possible, which is especially important for individuals with cancer predisposition syndromes (CPSs) [<a href="#B10-genes-14-01670" class="usa-link" aria-describedby="B10-genes-14-01670">10</a>,<a href="#B11-genes-14-01670" class="usa-link" aria-describedby="B11-genes-14-01670">11</a>,<a href="#B12-genes-14-01670" class="usa-link" aria-describedby="B12-genes-14-01670">12</a>,<a href="#B13-genes-14-01670" class="usa-link" aria-describedby="B13-genes-14-01670">13</a>]. Despite widespread prevention efforts, the early detection of cancer is not fully effective.</p>
+<p>As early as the 19th century, it was suggested that the possibility of developing a second cancer should not be excluded, even if the first cancer has been completely removed through surgery [<a href="#B14-genes-14-01670" class="usa-link" aria-describedby="B14-genes-14-01670">14</a>]. An increased risk of developing a second primary cancer among cancer survivors is well-known, but the simultaneous occurrence of multiple cancers remains unclear. Depending on the timing of the onset of multiple cancers, they can be classified as concurrent, synchronous, or metachronous. Most authors consider a time frame of two months or less for calling a cancer synchronous. For simultaneous cancers, some authors refer to them as a subset of lesions or use the term “metachronous” cancer [<a href="#B14-genes-14-01670" class="usa-link" aria-describedby="B14-genes-14-01670">14</a>].</p>
+<p>Given the rarity of CPS, the main aim of this article is to identify cases with concomitant or metachronous multiple neoplasms in a Polish single-center study and to present a comprehensive genetic, phenotypic and a clinical analysis on disease progression and treatment.</p></section><section id="sec2-genes-14-01670"><h2 class="pmc_sec_title">2. Materials and Methods</h2>
+<section id="sec2dot1-genes-14-01670"><h3 class="pmc_sec_title">2.1. Study Population</h3>
+<p>Out of the 2387 patients who were newly diagnosed with cancer and hospitalized at the Karol Jonscher Clinical Hospital of the Karol Marcinkowski Medical University in Poznan between 2000 and 2021, 182 were identified as having CPSs. Cancer predisposing syndromes were defined based on the presence of characteristic phenotypic abnormalities, such as Down syndrome, neurofibromatosis type 1 (NF1), Beckwith–Wiedemann syndrome (BWS), Fanconi anemia, tuberous sclerosis complex (TSC), Turner syndrome, dyskeratosis congenita, and others, or through confirmation of mutations in genetic tests. In the case of Down syndrome, the parents and the child were consulted in each case by a specialist geneticist, who confirmed the syndrome with karyotype testing from peripheral blood lymphocyte cultures. Qualification for genetic testing was carried out based on consultation with a clinical geneticist specialist. The patient was referred to a genetic clinic in specific situations; where the family history of first- or second-degree relatives was burdened with cancer, in the case of developing cancer at an infant age, or in situations where histopathological diagnosis indicated a high likelihood of a CPS, such as pleuropulmonary blastoma, adrenal cortex carcinoma, infantile myofibromatosis, or retinoblastoma. Among them, only three cases of simultaneous or metachronous multiple cancers were recognized.</p></section><section id="sec2dot2-genes-14-01670"><h3 class="pmc_sec_title">2.2. Molecular Analysis</h3>
+<p>For genotype analysis, genomic DNA was extracted from circulating blood lymphocytes using the QIAamp DNA Kit (Qiagen GmbH, Hilden, Germany), following the manufacturer’s instructions. Targeted next-generation sequencing (NGS) was utilized for the identification of pathogenic variants (performed at the Medical University of Lodz, CeGaT’s Diagnostics, GENOMED, and Blueprint Genetics). NGS using the TriSight One Expanded Sequencing Panel by Illumina allows the analysis of 6699 genes with documented clinical significance. The sequencing, consisting of 298 cycles, was performed on the NextSeq 550 instrument by Illumina. The minimal read depth for the individual sequence was 30× and was achieved for 99% of the examined genes. The final analysis of the oncology gene subpanel was conducted using Variant Studio v.3.0 (Illumina Inc., San Diego, CA, USA), Agilent SureCall v.4.1 (Agilent Technologies; Santa Clara, CA, USA), and IGV v.2.3 (Broad Institute, Cambridge, MA, USA) software. Bioinformatics prediction was carried out using Mutation Taster, SIFT, and PolyPhen platforms. Pathogenicity classifications were determined based on ACMG guidelines. It is worth noting that this method does not allow for the detection of copy number variations (CNV). The examined oncology gene subpanel includes 130 genes. A detailed list of genes in the oncology panel is given in <a href="#app1-genes-14-01670" class="usa-link">Supplementary Table S1</a>. Flow cytometry analysis was conducted to assess the immunophenotype of bone marrow cells using GUAVA EasyCyte 6HT-2L flow cytometer at Poznan University of Medical Sciences Core Facility. Fluorescence in situ hybridization (FISH) analysis was performed to analyze chromosome number aberrations at the Department and Clinic of Hematology and Bone Marrow Transplantation, Poznan University of Medical Sciences. Additional molecular diagnostic analyses included the assessment of loss of heterozygosity (LOH) of the <em>NF1</em> gene, and the analysis of somatic mutations associated with juvenile myelomonocytic leukemia (JMML) conducted by The European Working Group of Myelodysplastic Syndrome in children at the University of Freiburg. Chromosome 11 methylation abnormality tests and analysis of deletions and duplications in the 11p15 region using the Multiplex Ligation-dependent Probe Amplification (MLPA) method were performed at Centogene GmbH, Germany. Blood fetal hemoglobin (HbF) levels were measured using the high-performance liquid chromatography (HPLC) method at Diagnostyka company in Poznan, Poland.</p></section><section id="sec2dot3-genes-14-01670"><h3 class="pmc_sec_title">2.3. Cytological and Histological Analysis</h3>
+<p>Smear analyses were also performed using peripheral blood and bone marrow aspirate smear tests. For this purpose, the May–Grunwald–Giemsa method of staining was used. All the slides were analyzed and reported by a hematology specialist. All the diagnostic core biopsies of tumors were assessed using formalin-fixed, paraffin-embedded (FFPE) tissue sections stained with Hematoxylin and Eosin (H&amp;E).</p></section><section id="sec2dot4-genes-14-01670"><h3 class="pmc_sec_title">2.4. Data Visualization</h3>
+<p>The diagrams were prepared using Creately software, available at URL: <a href="https://creately.com" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://creately.com</a> (accessed on 26 June 2023).</p></section></section><section id="sec3-genes-14-01670"><h2 class="pmc_sec_title">3. Results</h2>
+<section id="sec3dot1-genes-14-01670"><h3 class="pmc_sec_title">3.1. Identification of Cases with Simultaneous/Metachronous Multiple Cancers in a Studied Cohort</h3>
+<p>Out of the 2387 patients who were newly diagnosed with cancer, 182 were identified as having CPSs, which represents 7.6%. This group included 25 patients with Down syndrome, 49 with neurofibromatosis type 1-NF1, 2 with neurofibromatosis type 2-NF2, 2 with multiple endocrine neoplasia type 1-MEN1, 14 with Beckwith–Wiedemann syndrome BWS or isolated hemihyperplasia syndrome, 1 with Wilms tumor-aniridia syndrome-WAGR syndrome, 1 with Wiskott–Aldrich syndrome-WAS, 20 with Li–Fraumeni syndrome-LFS, 2 with Von Hippel–Lindau (VHL), 2 with Noonan-like syndrome, 1 with tyrosinemia type 1 (FAH), 1 with trisomy 18 (Edwards syndrome), 1 with tuberous sclerosis complex (TSC), 3 with Turner syndrome, and 1 with dyskeratosis congenita. All the children with Down syndrome were found to have trisomy of chromosome 21 on karyotype testing. The remaining children presented mutations in the following genes (number of cases in parentheses): <em>ALK</em> (1), <em>ATM</em> (1), <em>BRCA1/2</em> (7), <em>CDKN2A</em> (2), <em>CHEK2</em> (5), <em>DICER1</em> (3), <em>FACC</em> (4), <em>FAP</em> (1), <em>FGFR3</em> (1), <em>GATA2</em> (3), <em>KIT</em> (2), <em>MSH2</em> (2), <em>MSH6</em> (2), <em>NBN</em> (2), <em>PDGFRA</em> (1), <em>PDGFRB</em> (1), <em>PHOX2B</em> (2), <em>PIK3</em> (1), <em>PMS2</em> (2), <em>PTEN</em> (1), <em>PTPN11</em> (1), <em>RB1</em> (5), <em>RET</em> (2), <em>SMARCA4</em> (1), <em>SMARCB1</em> (1), <em>TSC1</em> (2), and <em>WT1</em> (1). Despite the relatively large number of patients included in the analysis, only three children were found to have simultaneous or metachronous multiple cancers, which are described in detail. A diagram showing the analysis and workflow is presented in <a href="#genes-14-01670-f001" class="usa-link">Figure 1</a>.</p>
+<figure class="fig xbox font-sm" id="genes-14-01670-f001"><h4 class="obj_head">Figure 1.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=10530991_genes-14-01670-g001.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/7f32/10530991/caa4ff725f4a/genes-14-01670-g001.jpg" loading="lazy" height="429" width="781" alt="Figure 1"></a></p>
+<div class="p text-right font-secondary"><a href="figure/genes-14-01670-f001/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>A diagram showing the analysis and workflow. CPS—cancer predisposition syndrome.</p></figcaption></figure></section><section id="sec3dot2-genes-14-01670"><h3 class="pmc_sec_title">3.2. Pathogenic Variants of the BRCA2 Gene—Case 1</h3>
+<p>The first patient is the firstborn child of a mother with hypothyroidism. The parents are unrelated, and the father has no history of chronic diseases. There is no family history of cancer. The girl was born at full term (at 40 weeks’ gestation) with a birth weight of 2950 g and scored 10 on the Apgar scale. Soon after birth, extensive café-au-lait spots were observed, primarily on the right thigh, which resembled those seen in the mother. Starting from the second month of life, the child exhibited left hemiplegic hypertrophy (<a href="#genes-14-01670-f002" class="usa-link">Figure 2</a>) and a slight delay in psychomotor development.</p>
+<figure class="fig xbox font-sm" id="genes-14-01670-f002"><h4 class="obj_head">Figure 2.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=10530991_genes-14-01670-g002.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/7f32/10530991/ecf039f6580d/genes-14-01670-g002.jpg" loading="lazy" height="479" width="767" alt="Figure 2"></a></p>
+<div class="p text-right font-secondary"><a href="figure/genes-14-01670-f002/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Photographs of the first patient, taken in January 2021, showing left-sided hemihypertrophy (<strong>a</strong>) and café-au-lait spots on the right thigh (<strong>b</strong>).</p></figcaption></figure><p>At 7 months of age, the child was admitted to hospital due to isolated swelling of the left upper limb. During this hospitalization, additional abnormalities were detected, including a horseshoe kidney and an accessory spleen. At 14 months of age, the parents noticed a nodule in the child’s left scapular region, which was subsequently diagnosed as embryonal rhabdomyosarcoma (ERMS) following its removal. On ultrasound, this tumor measured 2.5 cm × 1.8 cm × 1.0 cm and showed a probable connection to the muscle. Further tests revealed a horseshoe-shaped tumor in the kidney, measuring 8.0 cm × 5.7 cm × 8.7 cm, as identified by abdominal ultrasound, and confirmed by computed tomography (CT) scan. The biopsy results confirmed it to be a nephroblastoma (Wilms tumor, WT) of mixed, intermediate-risk, G3 type. Furthermore, an optic nerve glioma was detected during magnetic resonance imaging (MRI). To validate the histopathological findings, multiple diagnostic centers in Poland (The Children’s Memorial Health Institute in Warsaw) and Germany (at the University of Bonn and the Heidelberg University) were consulted, all of which confirmed the diagnoses of ERMS and Wilms tumor.</p>
+<p>Given the concurrence of these three cancers, additional NGS testing was conducted. This revealed two distinct heterozygous pathogenic variants in the <em>BRCA2</em> gene, namely c.1773_1776delTTAT (p.Ile591MetfsTer22; dbSNP rs80359304) inherited from the mother, and 886delGT(c.658_659delGT; p.Val220fs; dbSNP rs80359604) inherited from the father.</p>
+<p>As a result of the hemihypertrophy, chromosome 11 methylation abnormality tests and chromosome 11 MLPA were conducted, which did not identify any large deletions or duplications in the 11p15 region. Utilizing Illumina TruSight One Expanded Sequencing Panel and Illumina NexSeq 550 instrument (Illumina Inc., San Diego, CA, USA), NGS analysis was performed, focusing on genes with documented clinical relevance to oncologic disorders. The analysis, conducted using Variant Studio v.3.0 and IGV v.2.3 software, did not reveal the presence of any other pathogenic changes. Additionally, imprinted DNA methylation analysis was carried out at various loci, including <em>DIRAS3</em> (1p31); <em>PLAGL1</em> (6q24); <em>GRB10</em> (7p12); <em>PEG1</em>/<em>MEST</em> (7q32); <em>KCNQ1OT1/H19/IGF2 DMRO</em> (11p15); <em>DLK1</em> (14q32); <em>SNRPN</em> (15q11); <em>PEG3</em> (19q32); and <em>NESPAS/GNAS</em> (20q13). Chemotherapy was initiated based on the Cooperative Weichteilsarkomstudiengruppe (CWS) protocol and, following the confirmation of Wilms tumor through histopathological examination, the treatment continued according to the UMBRELLA protocol of the International Society of Pediatric Oncology Renal Tumor Study Group (SIOP-RTSG). Two and a half years after the original diagnosis, an MRI revealed the presence of a medulloblastoma tumor (classic type, central nervous system (CNS) WHO G4) in the left cerebellar hemisphere. Considering the outcome of the non-radical surgery and tumor progression during chemotherapy, the child necessitated not only surgical intervention but also chemotherapy and radiation therapy. The presence of <em>BRCA2</em> pathogenic variants posed a risk of Fanconi anemia. Anticipating bone marrow aplasia due to the treatment, anticipatory allogeneic hematopoietic stem cell transplantation (HSCT) was performed. <a href="#genes-14-01670-f003" class="usa-link">Figure 3</a> provides a timeline of the patient’s disease progression.</p>
+<figure class="fig xbox font-sm" id="genes-14-01670-f003"><h4 class="obj_head">Figure 3.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=10530991_genes-14-01670-g003.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/7f32/10530991/2e2dff7451ff/genes-14-01670-g003.jpg" loading="lazy" height="298" width="770" alt="Figure 3"></a></p>
+<div class="p text-right font-secondary"><a href="figure/genes-14-01670-f003/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Timeline illustrating the disease course of Case 1.</p></figcaption></figure></section><section id="sec3dot3-genes-14-01670"><h3 class="pmc_sec_title">3.3. Pathogenic Variant of the NF1 Gene—Case 2</h3>
+<p>The second patient is the first-born child of unrelated parents, both of whom are healthy with no family history of chronic diseases. However, each parent has more than 5 café-au-lait spots. The girl was born prematurely at 36 weeks’ gestation due to premature rupture of the fetal membranes, with a birth weight of 3315 g and an Apgar score of 10. Café-au-lait spots were initially observed on the patient’s skin after birth, and their number increased over time. The patient now has multiple café-au-lait spots distributed throughout the body. At 12 months of age, the patient’s mother noticed blood in her diaper, which prompted her to seek medical attention. An abdominal ultrasound revealed a pelvic tumor measuring over 10.0 cm in diameter. A subsequent MRI confirmed a vaginal tumor measuring 11.0 cm × 7.7 cm × 5.8 cm (<a href="#genes-14-01670-f004" class="usa-link">Figure 4</a>).</p>
+<figure class="fig xbox font-sm" id="genes-14-01670-f004"><h4 class="obj_head">Figure 4.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=10530991_genes-14-01670-g004.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/7f32/10530991/1e46fc32209d/genes-14-01670-g004.jpg" loading="lazy" height="300" width="745" alt="Figure 4"></a></p>
+<div class="p text-right font-secondary"><a href="figure/genes-14-01670-f004/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Pelvic MRI scan illustrating a large vaginal tumor (indicated by arrow) in the second patient presented.</p></figcaption></figure><p>A histopathological examination of the biopsy led to a diagnosis of alveolar rhabdomyosarcoma (ARMS). Simultaneous MRI of the CNS revealed eight gliomas, including one involving the optic nerve, measuring up to 1.5 cm × 1.4 cm × 1.2 cm. Additionally, three yellow-brown skin lesions were found in the craniofacial region, which were confirmed to be Xanthogranuloma Juvenile through histopathological examination. The patient underwent treatment following the CWS protocol, which included chemotherapy and postponed radical surgery. After treatment, complete remission of ARMS was achieved, and the Xanthogranuloma Juvenile lesions also resolved. The results of NGS genetic analysis with a TruSight One Expanded Sequencing Panel revealed the presence of a heterozygous pathogenic mutation in the <em>NF1</em> gene (c.574C&gt;T; p.Arg192Ter; dbSNP rs397514641). Neither the mother nor the father was a carrier of the change in the <em>NF1</em> gene, so mutation in the <em>NF1</em> gene in Case 2 was identified as a de novo mutation.</p>
+<p>After 2.5 years from the initial diagnosis of malignancy, a follow-up blood examination showed thrombocytopenia, which progressed to bicytopenia, with the addition of transfusion-dependent anemia. Further studies were conducted on peripheral blood and bone marrow smears (<a href="#genes-14-01670-f005" class="usa-link">Figure 5</a> and <a href="#genes-14-01670-f006" class="usa-link">Figure 6</a>, respectively).</p>
+<figure class="fig xbox font-sm" id="genes-14-01670-f005"><h4 class="obj_head">Figure 5.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=10530991_genes-14-01670-g005.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/7f32/10530991/79e40e2866b5/genes-14-01670-g005.jpg" loading="lazy" height="292" width="764" alt="Figure 5"></a></p>
+<div class="p text-right font-secondary"><a href="figure/genes-14-01670-f005/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Peripheral blood smear showing leukocytosis with monocytosis, left-shifted neutrophils and immature cells, dysplastic granulocytes with pseudo Pelger cells and pycnotic nuclei, and 6% blasts.</p></figcaption></figure><figure class="fig xbox font-sm" id="genes-14-01670-f006"><h4 class="obj_head">Figure 6.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=10530991_genes-14-01670-g006.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/7f32/10530991/58c0a93fa52d/genes-14-01670-g006.jpg" loading="lazy" height="291" width="764" alt="Figure 6"></a></p>
+<div class="p text-right font-secondary"><a href="figure/genes-14-01670-f006/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Bone marrow smear showing reduced cell content, absence of megakaryocytes, monocytosis with dysplastic and immature monocytes, very dysplastic myelopoiesis with pseudo Pelger cells, and aplastic erythropoiesis. Additionally, 13% blasts are observed.</p></figcaption></figure><p>Flow cytometry studies revealed the presence of immature myeloid cells with the immunophenotype CD33 + CD38 + CD31 + CD11b +/− CD11c + CD64 + CD19 − CD10 − CD13 + CD34 − CD117 – HLADR − CD20 − CD22 − CD3 − CD5 − CD7 − CD65 + CD15 + CD123 + MPO + TdT − FSC mid, SSC high. In the bone marrow, these cells accounted for 77% of the total cell population, with 13% of them being myeloblasts.</p>
+<p>Several additional tests were performed. FISH analysis showed that 85% of the cells exhibited chromosome 5 monosomy. Further molecular analyses revealed <em>NF1</em> LOH but no somatic mutations typically associated with JMML. No mutations were found in <em>PTPN11</em>, <em>NRAS</em>, <em>KRAS</em>, <em>CBL</em>, <em>JAK2</em> exon 12, <em>CALR</em> exon 9, <em>MPL</em> exon 10, or <em>ASXL1</em> exon 13.</p>
+<p>Although <em>NF1</em> mutations are risk factors for JMML, the presence of monosomy of chromosome 5, and low levels of fetal hemoglobin (HbF), were more indicative of secondary myelodysplastic/myeloproliferative syndrome (MDS/MPS). Following three courses of treatment with azacitidine, the patient underwent allogeneic hematopoietic stem cell transplantation (allo-HSCT). The disease course timeline for the second patient is depicted in <a href="#genes-14-01670-f007" class="usa-link">Figure 7</a>.</p>
+<figure class="fig xbox font-sm" id="genes-14-01670-f007"><h4 class="obj_head">Figure 7.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=10530991_genes-14-01670-g007.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/7f32/10530991/7f8ccc8407c2/genes-14-01670-g007.jpg" loading="lazy" height="327" width="745" alt="Figure 7"></a></p>
+<div class="p text-right font-secondary"><a href="figure/genes-14-01670-f007/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Timeline illustrating the disease course of Case 2.</p></figcaption></figure></section><section id="sec3dot4-genes-14-01670"><h3 class="pmc_sec_title">3.4. Pathogenic Variant of the DICER1 Gene—Case 3</h3>
+<p>The third patient is a second-born child. His parents are unrelated, with no family history of chronic diseases other than polycystic thyroid goiter (in the mother), which is also present in the child’s grandmother and aunt. He was born at 38 weeks’ gestation with a birth weight of 4220 g and a 10-point Apgar score. At the age of 6 months, he was admitted to our hospital due to suspected lung abscess. A CT scan revealed a 4.6 cm × 4.5 cm × 5.5 cm lesion in the right lung, and an ultrasound showed a 2.7 cm × 1.9 cm × 3.0 cm lithocystic lesion in the left kidney.</p>
+<p>Considering the family history of multinodular thyroid goiter and the presence of a lung and kidney tumor in the boy, there was a suspicion of pleuropulmonary blastoma in the right lung and nephroma in the left kidney. Following the removal of the lung tumor, histopathological examination confirmed pleuropulmonary blastoma type II (PPB II). Due to the incomplete removal of the tumor during surgery (a non-radical surgery), chemotherapy was administered according to the Cooperative Weichteilsarkomstudiengruppe (CWS) protocol. After three months of chemotherapy, a follow-up abdominal ultrasound revealed progression of the left kidney tumor, leading to the decision to perform a nephrectomy. Histopathological examination confirmed pediatric cystic nephroma/nefroblastoma (Wilms tumor, WT). The boy continued chemotherapy as per the CWS protocol, and a resection of the residual lung tumor was also performed. The child successfully completed the treatment and remained in complete remission. NGS genetic analysis, using the same TruSight One Expanded Sequencing Panel, identified a pathogenic heterozygous variant in the <em>DICER1</em> gene (c.4930T&gt;G, p.Leu1573Arg). An identical change in the <em>DICER1</em> gene was confirmed in the child’s mother (the father showed no changes in the genes tested). Genetic counseling was extended to the entire maternal family. <a href="#genes-14-01670-f008" class="usa-link">Figure 8</a> illustrates the disease course timeline of the patient.</p>
+<figure class="fig xbox font-sm" id="genes-14-01670-f008"><h4 class="obj_head">Figure 8.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=10530991_genes-14-01670-g008.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/7f32/10530991/e3c6f7b7f5d0/genes-14-01670-g008.jpg" loading="lazy" height="265" width="754" alt="Figure 8"></a></p>
+<div class="p text-right font-secondary"><a href="figure/genes-14-01670-f008/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Timeline illustrating the disease course of Case 3.</p></figcaption></figure></section></section><section id="sec4-genes-14-01670"><h2 class="pmc_sec_title">4. Discussion</h2>
+<p>As the incidence of cancer increases with age, cancers in the pediatric population remain in the group of rare diseases, and their multiple diagnoses, especially within 3 years, represent an even rarer phenomenon [<a href="#B15-genes-14-01670" class="usa-link" aria-describedby="B15-genes-14-01670">15</a>]. Although the nomenclature of multiple neoplasms seems clear, in each case there is at least one complexity. Due to the time each disease takes to develop to reach the picture presented in examination studies, it is not known whether the first lesion occurred within two months of the other when both are seen at the same time. Although malignant tumors imply a shorter expansion time, this still depends on individual and accurate diagnosis.</p>
+<p>Depending on the type of mutation, the presence of a genetic background is associated with the onset of the disease (sometimes indicating a better or worse prognosis) or enables its prevention [<a href="#B5-genes-14-01670" class="usa-link" aria-describedby="B5-genes-14-01670">5</a>,<a href="#B8-genes-14-01670" class="usa-link" aria-describedby="B8-genes-14-01670">8</a>,<a href="#B11-genes-14-01670" class="usa-link" aria-describedby="B11-genes-14-01670">11</a>,<a href="#B16-genes-14-01670" class="usa-link" aria-describedby="B16-genes-14-01670">16</a>]. The clinical cases reported in this paper exemplify the links identified between specific mutations in the genome and the induction of cancers in infancy and early childhood (at 14, 12, and 6 months of age at diagnosis, respectively). The simultaneously diagnosed tumors in the first reported case were embryonal rhabdomyosarcoma (ERMS), nephroblastoma (Wilms’ tumor, WT), and glioma, which (after 2.5 years from the first oncological diagnosis) progressed to medulloblastoma classical CNS type WHO G4, which can be classified as a metachronous tumor. What is more, this individual suffered Fanconi anemia. This complex phenotype was diagnosed in a carrier of two different heterozygous variants in the <em>BRCA2</em> gene. These variants were previously associated with hereditary CPSs [<a href="#B17-genes-14-01670" class="usa-link" aria-describedby="B17-genes-14-01670">17</a>,<a href="#B18-genes-14-01670" class="usa-link" aria-describedby="B18-genes-14-01670">18</a>]. The second clinical case involved a carrier of the de novo <em>NF1</em> gene mutation who was concurrently diagnosed with alveolar rhabdomyosarcoma (ARMS), juvenile xanthogranuloma, and gliomas located in the central nervous system (CNS), including in the optic nerve. Approximately 2.5 years from the first oncological diagnosis, the metachronous disease—JMML/MDS/MPS—was found, but it remains in full remission of previous neoplasms. The observed variant of NF1 was previously associated several times with hereditary CPSs and, based on that, was assigned using Ambry Genetics<sup>®</sup> General Variant Classification Scheme as a pathogenic. The third patient (with a history of polycystic thyroid goiter in the female line in his mother’s family members) was simultaneously diagnosed with pleumopulmonary blastoma type II (PPB II) and pediatric cystic nephroma/nefroblastoma related to mutations in the <em>DICER1</em> gene. After 1.5 years of follow-up, the child remains in full remission. The identified variant had been previously shown to be associated with pleuropulmonary blastoma [<a href="#B19-genes-14-01670" class="usa-link" aria-describedby="B19-genes-14-01670">19</a>] and may also be involved in other cancers [<a href="#B20-genes-14-01670" class="usa-link" aria-describedby="B20-genes-14-01670">20</a>]. No occurrence of cancer in the mother of the third child presented (despite carrying the same <em>DICER1</em> gene mutation) can be explained by the methodological limitations of the study. This may result from the analysis of only 130 genes from the oncology subpanel and not all the 6699 genes of TriSight One Sight One Expanded Sequencing Panel by Illumina with documented clinical significance. It should also be kept in mind that the possibility of gene copy number variations (CNV), that are impossible to determine by the technique used, can be revealed through a high-resolution whole-genome array.</p>
+<p>The characterization of <em>BRCA2</em>, <em>NF1</em>, and <em>DICER1</em> genes, in terms of the function of the proteins they encode and their impact on tumorigenesis, is presented in <a href="#genes-14-01670-t001" class="usa-link">Table 1</a>.</p>
+<section class="tw xbox font-sm" id="genes-14-01670-t001"><h3 class="obj_head">Table 1.</h3>
+<div class="caption p"><p>Characterization of <em>BRCA2</em>, <em>NF1</em>, and <em>DICER1</em> genes in terms of the function of the proteins they encode and their impact on tumorigenesis (based on previous data [<a href="#B7-genes-14-01670" class="usa-link" aria-describedby="B7-genes-14-01670">7</a>,<a href="#B11-genes-14-01670" class="usa-link" aria-describedby="B11-genes-14-01670">11</a>,<a href="#B21-genes-14-01670" class="usa-link" aria-describedby="B21-genes-14-01670">21</a>,<a href="#B22-genes-14-01670" class="usa-link" aria-describedby="B22-genes-14-01670">22</a>,<a href="#B23-genes-14-01670" class="usa-link" aria-describedby="B23-genes-14-01670">23</a>,<a href="#B24-genes-14-01670" class="usa-link" aria-describedby="B24-genes-14-01670">24</a>,<a href="#B25-genes-14-01670" class="usa-link" aria-describedby="B25-genes-14-01670">25</a>,<a href="#B26-genes-14-01670" class="usa-link" aria-describedby="B26-genes-14-01670">26</a>,<a href="#B27-genes-14-01670" class="usa-link" aria-describedby="B27-genes-14-01670">27</a>,<a href="#B28-genes-14-01670" class="usa-link" aria-describedby="B28-genes-14-01670">28</a>,<a href="#B29-genes-14-01670" class="usa-link" aria-describedby="B29-genes-14-01670">29</a>]).</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
+<thead><tr>
+<th align="center" valign="middle" style="border-top:solid thin;border-bottom:solid thin" rowspan="1" colspan="1">Gene</th>
+<th align="center" valign="middle" style="border-top:solid thin;border-bottom:solid thin" rowspan="1" colspan="1">Function</th>
+<th align="center" valign="middle" style="border-top:solid thin;border-bottom:solid thin" rowspan="1" colspan="1">Mutation Consequences</th>
+<th align="center" valign="middle" style="border-top:solid thin;border-bottom:solid thin" rowspan="1" colspan="1">Health Conditions Related to Genetic Changes</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="left" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">
+<strong>
+<em>BRCA2</em>
+</strong>
+</td>
+<td align="left" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">
+<ul class="list" style="list-style-type:disc">
+<li><p>Encodes the protein BRCA2 (BReast CAncer gene 2)</p></li>
+<li><p>This protein plays a crucial role in repairing DNA damage and functions as a tumor suppressor.</p></li>
+</ul>
+</td>
+<td align="left" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">Most pathogenic variants of the <em>BRCA2</em> gene result in the production of an abnormally small and nonfunctional form of the BRCA2 protein from one copy of the gene in each cell. This leads to a reduced amount of available protein, which impairs efficient DNA repair. The accumulation of these defects can trigger uncontrolled cell growth and division, ultimately leading to carcinogenesis.</td>
+<td align="left" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">
+<ul class="list" style="list-style-type:disc">
+<li><p>Breast cancer in men and women</p></li>
+<li><p>Ovarian/Prostate cancer</p></li>
+<li><p>Fanconi anemia</p></li>
+<li><p>Acute myeloid leukemia (AML)</p></li>
+<li><p>Acute lymphoblastic leukemia (ALL)</p></li>
+<li><p>Blastomas: nephroblastoma (Wilms tumor), hepatoblastoma, neuroblastoma, medulloblastoma</p></li>
+<li><p>Central nervous system (CNS) tumors</p></li>
+<li><p>Pancreatic cancer</p></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td align="left" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">
+<strong>
+<em>NF1</em>
+</strong>
+</td>
+<td align="left" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">
+<ul class="list" style="list-style-type:disc">
+<li><p>Encodes the protein neurofibromin 1</p></li>
+<li><p>This protein stimulates the GTPase activity of G proteins, including the proto-oncogene RAS, and acts as a tumor suppressor</p></li>
+<li><p>Plays a role in cAMP level regulation in astrocytes and Schwann cells</p></li>
+<li><p>Regulates melanosomes transport</p></li>
+</ul>
+</td>
+<td align="left" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">Many pathogenic variants of the <em>NF1</em> gene lead to the production of an extremely short version of neurofibromin, which is unable to inhibit cell division. The presence of these variants may result in a constitutive activation of the signal transduction pathway, as the G proteins are constantly active due to the failure to degrade the attached GTP molecule. The loss of protein activity also increases susceptibility to harmful UV effects.</td>
+<td align="left" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">
+<ul class="list" style="list-style-type:disc">
+<li><p>Neurofibromatosis type 1</p></li>
+<li><p>Juvenile myelomonocytic leukemia</p></li>
+<li><p>Malignant peripheral nerve sheath tumors (MPNST)</p></li>
+<li><p>Central nervous system (CNS) gliomas (mainly optic nerve glioma)</p></li>
+<li><p>Pilocytic astrocytoma</p></li>
+<li><p>Gastrointestinal stromal tumor</p></li>
+<li><p>Pheochromocytoma</p></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td align="left" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">
+<strong>
+<em>DICER1</em>
+</strong>
+</td>
+<td align="left" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">
+<ul class="list" style="list-style-type:disc">
+<li><p>Encodes the protein ribonuclease III, which contains an RNA helicase motif with a DEXH box in its amino terminus and an RNA motif in the carboxy terminus.</p></li>
+<li><p>Functions as a ribonuclease and is essential for the RNA interference and small temporal RNA (stRNA) pathways, producing the active small RNA component that represses gene expression and may initiate apoptosis.</p></li>
+<li><p>Also acts as a potent antiviral agent, exhibiting activity against RNA viruses, including the Zika and SARS-CoV-2 viruses.</p></li>
+<li><p>Alternative splicing leads to the formation of multiple transcript variants.</p></li>
+</ul>
+</td>
+<td align="left" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">
+<em>DICER1</em> can be considered both a tumor suppressor gene, due to loss-of-function mutations, and an oncogene, due to gain-of-function mutations. It is believed to function as a haploinsufficient tumor suppressor gene, where the loss of one allele leads to tumor progression, but the loss of both alleles has an inhibitory effect on tumor development, implying that one intact allele is necessary for cell survival.</td>
+<td align="left" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">
+<ul class="list" style="list-style-type:disc">
+<li><p>Multinodular goiter (MNG), thyroid cancer</p></li>
+<li><p>Blastomas: pleumopulmonary blastoma (PPB), pineoblastoma, medulloblastoma, pituinary blastoma, nephroblastoma (Wilms tumor)</p></li>
+<li><p>Cystic nephroma</p></li>
+<li><p>Rhabdomyosarcoma (RMS)</p></li>
+<li><p>Sertoli–Leydig cell tumor</p></li>
+<li><p>Hodgkin lymphoma</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/genes-14-01670-t001/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></section><p>Awareness of CPS, manifesting in increased susceptibility to cancer formation, should lead to adjustments in therapy, insofar as the proposed procedures may increase the possibility of neogenesis. However, the indications are very often ambiguous due to the benefit/risk ratio, which clinicians must keep in mind and consider. Avoiding high-risk courses of treatment can lead to the progression of the current cancer and may lead to the patient’s death before developing another cancer due to the procedure under consideration. These topics are indirectly related to medical futility [<a href="#B30-genes-14-01670" class="usa-link" aria-describedby="B30-genes-14-01670">30</a>], an awareness of which should be an ethical challenge for everyone, as it brings more suffering than long-term or even short-term benefit to the patient.</p>
+<p>Given the current knowledge of CPS, which is augmented by case-studies, defining the standards for treatment modification is crucial for the transparency of medical procedures with oncology protocols. Priority must be placed upon the quality of life of the patients and their families, not only during but also after the treatment offered. Minimizing the risk of adverse events, with the development of another metachronous cancer as one of the most important side effects, can improve healthcare delivery [<a href="#B31-genes-14-01670" class="usa-link" aria-describedby="B31-genes-14-01670">31</a>,<a href="#B32-genes-14-01670" class="usa-link" aria-describedby="B32-genes-14-01670">32</a>,<a href="#B33-genes-14-01670" class="usa-link" aria-describedby="B33-genes-14-01670">33</a>]. Very often, patients with CPSs are at higher risk of developing several cancers, not just one type [<a href="#B1-genes-14-01670" class="usa-link" aria-describedby="B1-genes-14-01670">1</a>,<a href="#B16-genes-14-01670" class="usa-link" aria-describedby="B16-genes-14-01670">16</a>], so preventive management is essential to avoid increasing the already elevated risk of cancer in these cases. The question “How should we guide treatment?” remains open, as long as we discuss the very or even extremely rare genetic disorders that cause CPS. There is currently one well-known genetic disorder, Down syndrome, for which distinct diagnostic and treatment pathways have been developed, leading to early diagnosis and reduced mortality among these patients [<a href="#B5-genes-14-01670" class="usa-link" aria-describedby="B5-genes-14-01670">5</a>]. Such supportive care efforts should also be undertaken in other cases of CPS and lead to the establishment of dedicated procedures for such patients.</p>
+<p>As suggested above, diagnostic and therapeutic management should not further increase the risk of developing secondary cancers in patients with CPSs. The radiation used not only in CT scans and other imaging procedures, but especially in therapy, should be avoided if proven to cause carcinogenesis, even when considering long-term risks measured in decades, not just a few years [<a href="#B34-genes-14-01670" class="usa-link" aria-describedby="B34-genes-14-01670">34</a>,<a href="#B35-genes-14-01670" class="usa-link" aria-describedby="B35-genes-14-01670">35</a>,<a href="#B36-genes-14-01670" class="usa-link" aria-describedby="B36-genes-14-01670">36</a>]. Moreover, an awareness of the implications of CPS should prompt therapists to be more vigilant in monitoring in order to detect cancers at an early stage. The lack of developed standards should motivate most specialist centers to introduce such management algorithms in the face of the growing number of patients with CPSs and the detection of new mutations that cause carcinogenesis. The validity of anticipatory treatment could also be considered, but further studies calculating the benefit/risk ratio would be needed to fully discuss and answer this thesis. So far, there is no targeted treatment, however, further dynamic development in this field will help in its generation.</p></section><section id="app1-genes-14-01670" class="app"><h2 class="pmc_sec_title">Supplementary Materials</h2>
+<p>The following supporting information can be downloaded at: <a href="https://www.mdpi.com/article/10.3390/genes14091670/s1" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.mdpi.com/article/10.3390/genes14091670/s1</a>, Table S1. A detailed list of genes in the NGS oncology panel.</p>
+<section class="sm xbox font-sm" id="genes-14-01670-s001"><div class="media p"><div class="caption">
+<a href="/articles/instance/10530991/bin/genes-14-01670-s001.zip" data-ga-action="click_feat_suppl" class="usa-link">Click here for additional data file.</a><sup> (64.8KB, zip) </sup>
+</div></div></section></section><section id="notes1"><h2 class="pmc_sec_title">Author Contributions</h2>
+<p>Conceptualization, G.T., E.S., P.S.-S. and D.J.-L.; methodology, G.T., E.S., P.S.-S. and D.J.-L.; software, G.T., E.S., P.S.-S. and D.J.-L.; validation, E.S. and D.J.-L.; formal analysis, E.S. and D.J.-L.; investigation, G.T., P.S.-S., M.H. and D.J.-L.; resources, D.J.-L.; data curation, G.T., M.H. and D.J.-L.; writing—original draft preparation, G.T., E.S., M.H. and D.J.-L.; writing—review and editing, P.S.-S.; visualization, G.T. and D.J.-L.; supervision, D.J.-L.; project administration, G.T. and D.J.-L.; funding acquisition, D.J.-L. All authors have read and agreed to the published version of the manuscript.</p></section><section id="notes2"><h2 class="pmc_sec_title">Institutional Review Board Statement</h2>
+<p>Ethical review and approval were waived for this study due to the retrospective and non-invasive nature of the study. These rules are compliant with the guidelines of the Bioethical Commission of Poznan University of Medical Science, Poland (the decision number 574/23).</p></section><section id="notes3"><h2 class="pmc_sec_title">Informed Consent Statement</h2>
+<p>Written informed consent has been obtained from the parents to publish this paper, including consent to process the child’s image for scientific purposes (Case 1; 1 January 2021).</p></section><section id="notes4"><h2 class="pmc_sec_title">Data Availability Statement</h2>
+<p>Data available on request due to restrictions.</p></section><section id="notes5"><h2 class="pmc_sec_title">Conflicts of Interest</h2>
+<p>The authors declare no conflict of interest.</p></section><section id="funding-statement1" lang="en"><h2 class="pmc_sec_title">Funding Statement</h2>
+<p>This research received no external funding.</p></section><section id="fn-group1" class="fn-group"><h2 class="pmc_sec_title">Footnotes</h2>
+<div class="fn-group p font-secondary-light font-sm"><div class="fn p" id="fn1"><p><strong>Disclaimer/Publisher’s Note:</strong> The statements, opinions and data contained in all publications are solely those of the individual author(s) and contributor(s) and not of MDPI and/or the editor(s). MDPI and/or the editor(s) disclaim responsibility for any injury to people or property resulting from any ideas, methods, instructions or products referred to in the content.</p></div></div></section><section id="ref-list1" class="ref-list"><h2 class="pmc_sec_title">References</h2>
+<section id="ref-list1_sec2"><ul class="ref-list font-sm" style="list-style-type:none">
+<li id="B1-genes-14-01670">
+<span class="label">1.</span><cite>Siegel R.L., Miller K.D., Fuchs H.E., Jemal A. Cancer statistics, 2022. CA Cancer J. Clin. 2022;72:7–33. doi: 10.3322/caac.21708.</cite> [<a href="https://doi.org/10.3322/caac.21708" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/35020204/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=CA%20Cancer%20J.%20Clin.&amp;title=Cancer%20statistics,%202022&amp;author=R.L.%20Siegel&amp;author=K.D.%20Miller&amp;author=H.E.%20Fuchs&amp;author=A.%20Jemal&amp;volume=72&amp;publication_year=2022&amp;pages=7-33&amp;pmid=35020204&amp;doi=10.3322/caac.21708&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B2-genes-14-01670">
+<span class="label">2.</span><cite>Steliarova-Foucher E., Colombet M., Ries L.A.G., Moreno F., Dolya A., Bray F., Hesseling P., Shin H.Y., Stiller C.A. International incidence of childhood cancer, 2001–2010: A population-based registry study. Lancet Oncol. 2017;18:719–731. doi: 10.1016/S1470-2045(17)30186-9.</cite> [<a href="https://doi.org/10.1016/S1470-2045(17)30186-9" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5461370/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28410997/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Lancet%20Oncol.&amp;title=International%20incidence%20of%20childhood%20cancer,%202001%E2%80%932010:%20A%20population-based%20registry%20study&amp;author=E.%20Steliarova-Foucher&amp;author=M.%20Colombet&amp;author=L.A.G.%20Ries&amp;author=F.%20Moreno&amp;author=A.%20Dolya&amp;volume=18&amp;publication_year=2017&amp;pages=719-731&amp;pmid=28410997&amp;doi=10.1016/S1470-2045(17)30186-9&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B3-genes-14-01670">
+<span class="label">3.</span><cite>Kentsis A. Why do young people get cancer? Pediatr. Blood Cancer. 2020;67:e28335. doi: 10.1002/pbc.28335.</cite> [<a href="https://doi.org/10.1002/pbc.28335" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC7582786/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/32391946/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Pediatr.%20Blood%20Cancer&amp;title=Why%20do%20young%20people%20get%20cancer?&amp;author=A.%20Kentsis&amp;volume=67&amp;publication_year=2020&amp;pages=e28335&amp;pmid=32391946&amp;doi=10.1002/pbc.28335&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B4-genes-14-01670">
+<span class="label">4.</span><cite>Ward Z.J., Yeh J.M., Bhakta N., Frazier A.L., Atun R. Estimating the total incidence of global childhood cancer: A simulation-based analysis. Lancet Oncol. 2019;20:483–493. doi: 10.1016/S1470-2045(18)30909-4.</cite> [<a href="https://doi.org/10.1016/S1470-2045(18)30909-4" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30824204/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Lancet%20Oncol.&amp;title=Estimating%20the%20total%20incidence%20of%20global%20childhood%20cancer:%20A%20simulation-based%20analysis&amp;author=Z.J.%20Ward&amp;author=J.M.%20Yeh&amp;author=N.%20Bhakta&amp;author=A.L.%20Frazier&amp;author=R.%20Atun&amp;volume=20&amp;publication_year=2019&amp;pages=483-493&amp;pmid=30824204&amp;doi=10.1016/S1470-2045(18)30909-4&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B5-genes-14-01670">
+<span class="label">5.</span><cite>Shahani S.A., Marcotte E.L. Landscape of germline cancer predisposition mutations testing and management in pediatrics: Implications for research and clinical care. Front. Pediatr. 2022;10:1011873. doi: 10.3389/fped.2022.1011873.</cite> [<a href="https://doi.org/10.3389/fped.2022.1011873" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC9548803/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/36225340/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Front.%20Pediatr.&amp;title=Landscape%20of%20germline%20cancer%20predisposition%20mutations%20testing%20and%20management%20in%20pediatrics:%20Implications%20for%20research%20and%20clinical%20care&amp;author=S.A.%20Shahani&amp;author=E.L.%20Marcotte&amp;volume=10&amp;publication_year=2022&amp;pages=1011873&amp;pmid=36225340&amp;doi=10.3389/fped.2022.1011873&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B6-genes-14-01670">
+<span class="label">6.</span><cite>Newman S., Nakitandwe J., Kesserwan C.A., Azzato E.M., Wheeler D.A., Rusch M., Shurtleff S., Hedges D.J., Hamilton K.V., Foy S.G., et al.  Genomes for Kids: The Scope of Pathogenic Mutations in Pediatric Cancer Revealed by Comprehensive DNA and RNA Sequencing. Cancer Discov. 2021;11:3008–3027. doi: 10.1158/2159-8290.CD-20-1631.</cite> [<a href="https://doi.org/10.1158/2159-8290.CD-20-1631" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8783930/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34301788/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Cancer%20Discov.&amp;title=Genomes%20for%20Kids:%20The%20Scope%20of%20Pathogenic%20Mutations%20in%20Pediatric%20Cancer%20Revealed%20by%20Comprehensive%20DNA%20and%20RNA%20Sequencing&amp;author=S.%20Newman&amp;author=J.%20Nakitandwe&amp;author=C.A.%20Kesserwan&amp;author=E.M.%20Azzato&amp;author=D.A.%20Wheeler&amp;volume=11&amp;publication_year=2021&amp;pages=3008-3027&amp;pmid=34301788&amp;doi=10.1158/2159-8290.CD-20-1631&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B7-genes-14-01670">
+<span class="label">7.</span><cite>Kratz C.P., Jongmans M.C., Cavé H., Wimmer K., Behjati S., Guerrini-Rousseau L., Milde T., Pajtler K.W., Golmard L., Gauthier-Villars M., et al.  Predisposition to cancer in children and adolescents. Lancet Child Adolesc. Health. 2021;5:142–154. doi: 10.1016/S2352-4642(20)30275-3.</cite> [<a href="https://doi.org/10.1016/S2352-4642(20)30275-3" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33484663/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Lancet%20Child%20Adolesc.%20Health&amp;title=Predisposition%20to%20cancer%20in%20children%20and%20adolescents&amp;author=C.P.%20Kratz&amp;author=M.C.%20Jongmans&amp;author=H.%20Cav%C3%A9&amp;author=K.%20Wimmer&amp;author=S.%20Behjati&amp;volume=5&amp;publication_year=2021&amp;pages=142-154&amp;pmid=33484663&amp;doi=10.1016/S2352-4642(20)30275-3&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B8-genes-14-01670">
+<span class="label">8.</span><cite>Benton M.L., Abraham A., LaBella A.L., Abbot P., Rokas A., Capra J.A. The influence of evolutionary history on human health and disease. Nat. Rev. Genet. 2021;22:269–283. doi: 10.1038/s41576-020-00305-9.</cite> [<a href="https://doi.org/10.1038/s41576-020-00305-9" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC7787134/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33408383/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Nat.%20Rev.%20Genet.&amp;title=The%20influence%20of%20evolutionary%20history%20on%20human%20health%20and%20disease&amp;author=M.L.%20Benton&amp;author=A.%20Abraham&amp;author=A.L.%20LaBella&amp;author=P.%20Abbot&amp;author=A.%20Rokas&amp;volume=22&amp;publication_year=2021&amp;pages=269-283&amp;pmid=33408383&amp;doi=10.1038/s41576-020-00305-9&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B9-genes-14-01670">
+<span class="label">9.</span><cite>Zhang J., Walsh M.F., Wu G., Edmonson M.N., Gruber T.A., Easton J., Hedges D., Ma X., Zhou X., Yergeau D.A., et al.  Germline Mutations in Predisposition Genes in Pediatric Cancer. N. Engl. J. Med. 2015;373:2336–2346. doi: 10.1056/NEJMoa1508054.</cite> [<a href="https://doi.org/10.1056/NEJMoa1508054" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4734119/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/26580448/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N.%20Engl.%20J.%20Med.&amp;title=Germline%20Mutations%20in%20Predisposition%20Genes%20in%20Pediatric%20Cancer&amp;author=J.%20Zhang&amp;author=M.F.%20Walsh&amp;author=G.%20Wu&amp;author=M.N.%20Edmonson&amp;author=T.A.%20Gruber&amp;volume=373&amp;publication_year=2015&amp;pages=2336-2346&amp;pmid=26580448&amp;doi=10.1056/NEJMoa1508054&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B10-genes-14-01670">
+<span class="label">10.</span><cite>Fair D., Potter S.L., Venkatramani R. Challenges and solutions to the study of rare childhood tumors. Curr. Opin. Pediatr. 2020;32:7–12. doi: 10.1097/MOP.0000000000000857.</cite> [<a href="https://doi.org/10.1097/MOP.0000000000000857" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31789973/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Curr.%20Opin.%20Pediatr.&amp;title=Challenges%20and%20solutions%20to%20the%20study%20of%20rare%20childhood%20tumors&amp;author=D.%20Fair&amp;author=S.L.%20Potter&amp;author=R.%20Venkatramani&amp;volume=32&amp;publication_year=2020&amp;pages=7-12&amp;pmid=31789973&amp;doi=10.1097/MOP.0000000000000857&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B11-genes-14-01670">
+<span class="label">11.</span><cite>Scollon S., Anglin A.K., Thomas M., Turner J.T., Wolfe Schneider K. A Comprehensive Review of Pediatric Tumors and Associated Cancer Predisposition Syndromes. J. Genet. Couns. 2017;26:387–434. doi: 10.1007/s10897-017-0077-8.</cite> [<a href="https://doi.org/10.1007/s10897-017-0077-8" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28357779/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Genet.%20Couns.&amp;title=A%20Comprehensive%20Review%20of%20Pediatric%20Tumors%20and%20Associated%20Cancer%20Predisposition%20Syndromes&amp;author=S.%20Scollon&amp;author=A.K.%20Anglin&amp;author=M.%20Thomas&amp;author=J.T.%20Turner&amp;author=K.%20Wolfe%20Schneider&amp;volume=26&amp;publication_year=2017&amp;pages=387-434&amp;pmid=28357779&amp;doi=10.1007/s10897-017-0077-8&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B12-genes-14-01670">
+<span class="label">12.</span><cite>Malkin D., Nichols K.E., Schiffman J.D., Plon S.E., Brodeur G.M. The Future of Surveillance in the Context of Cancer Predisposition: Through the Murky Looking Glass. Clin. Cancer Res. 2017;23:e133–e137. doi: 10.1158/1078-0432.CCR-17-2026.</cite> [<a href="https://doi.org/10.1158/1078-0432.CCR-17-2026" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC7336256/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29093018/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Clin.%20Cancer%20Res.&amp;title=The%20Future%20of%20Surveillance%20in%20the%20Context%20of%20Cancer%20Predisposition:%20Through%20the%20Murky%20Looking%20Glass&amp;author=D.%20Malkin&amp;author=K.E.%20Nichols&amp;author=J.D.%20Schiffman&amp;author=S.E.%20Plon&amp;author=G.M.%20Brodeur&amp;volume=23&amp;publication_year=2017&amp;pages=e133-e137&amp;pmid=29093018&amp;doi=10.1158/1078-0432.CCR-17-2026&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B13-genes-14-01670">
+<span class="label">13.</span><cite>Druker H., Zelley K., McGee R.B., Scollon S.R., Kohlmann W.K., Schneider K.A., Wolfe Schneider K. Genetic Counselor Recommendations for Cancer Predisposition Evaluation and Surveillance in the Pediatric Oncology Patient. Clin. Cancer Res. 2017;23:e91–e97. doi: 10.1158/1078-0432.CCR-17-0834.</cite> [<a href="https://doi.org/10.1158/1078-0432.CCR-17-0834" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28674117/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Clin.%20Cancer%20Res.&amp;title=Genetic%20Counselor%20Recommendations%20for%20Cancer%20Predisposition%20Evaluation%20and%20Surveillance%20in%20the%20Pediatric%20Oncology%20Patient&amp;author=H.%20Druker&amp;author=K.%20Zelley&amp;author=R.B.%20McGee&amp;author=S.R.%20Scollon&amp;author=W.K.%20Kohlmann&amp;volume=23&amp;publication_year=2017&amp;pages=e91-e97&amp;pmid=28674117&amp;doi=10.1158/1078-0432.CCR-17-0834&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B14-genes-14-01670">
+<span class="label">14.</span><cite>Krueger H., McLean D., Williams D.  The Prevention of Second Primary Cancers: A Resource for Clinicians and Health Managers. S. Karger AG; Basel, Switzerland: 2008. </cite> [<a href="https://scholar.google.com/scholar_lookup?title=The%20Prevention%20of%20Second%20Primary%20Cancers:%20A%20Resource%20for%20Clinicians%20and%20Health%20Managers&amp;author=H.%20Krueger&amp;author=D.%20McLean&amp;author=D.%20Williams&amp;publication_year=2008&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B15-genes-14-01670">
+<span class="label">15.</span><cite>Zahnreich S., Schmidberger H. Childhood Cancer: Occurrence, Treatment and Risk of Second Primary Malignancies. Cancers. 2021;13:2607.  doi: 10.3390/cancers13112607.</cite> [<a href="https://doi.org/10.3390/cancers13112607" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8198981/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34073340/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Cancers&amp;title=Childhood%20Cancer:%20Occurrence,%20Treatment%20and%20Risk%20of%20Second%20Primary%20Malignancies&amp;author=S.%20Zahnreich&amp;author=H.%20Schmidberger&amp;volume=13&amp;publication_year=2021&amp;pages=2607&amp;pmid=34073340&amp;doi=10.3390/cancers13112607&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B16-genes-14-01670">
+<span class="label">16.</span><cite>Bakhuizen J.J., Hopman S.M.J., Bosscha M.I., Dommering C.J., van den Heuvel-Eibrink M.M., Hol J.A., Kester L.A., Koudijs M.J., Langenberg K.P.S., Loeffen J.L.C., et al.  Assessment of Cancer Predisposition Syndromes in a National Cohort of Children with a Neoplasm. JAMA Netw. Open. 2023;6:e2254157. doi: 10.1001/jamanetworkopen.2022.54157.</cite> [<a href="https://doi.org/10.1001/jamanetworkopen.2022.54157" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC9898819/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/36735256/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=JAMA%20Netw.%20Open&amp;title=Assessment%20of%20Cancer%20Predisposition%20Syndromes%20in%20a%20National%20Cohort%20of%20Children%20with%20a%20Neoplasm&amp;author=J.J.%20Bakhuizen&amp;author=S.M.J.%20Hopman&amp;author=M.I.%20Bosscha&amp;author=C.J.%20Dommering&amp;author=M.M.%20van%20den%20Heuvel-Eibrink&amp;volume=6&amp;publication_year=2023&amp;pages=e2254157&amp;pmid=36735256&amp;doi=10.1001/jamanetworkopen.2022.54157&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B17-genes-14-01670">
+<span class="label">17.</span><cite>Duzkale N., Kandemir O. The Relationship of Mutation Carriage of BRCA1/2 and Family History in Triple-Negative Breast Cancer: Experience from a Diagnostic Center in Turkey. Eur. J. Breast Health. 2021;17:137–144. doi: 10.4274/ejbh.galenos.2020.5909.</cite> [<a href="https://doi.org/10.4274/ejbh.galenos.2020.5909" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8025727/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33870113/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Eur.%20J.%20Breast%20Health&amp;title=The%20Relationship%20of%20Mutation%20Carriage%20of%20BRCA1/2%20and%20Family%20History%20in%20Triple-Negative%20Breast%20Cancer:%20Experience%20from%20a%20Diagnostic%20Center%20in%20Turkey&amp;author=N.%20Duzkale&amp;author=O.%20Kandemir&amp;volume=17&amp;publication_year=2021&amp;pages=137-144&amp;pmid=33870113&amp;doi=10.4274/ejbh.galenos.2020.5909&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B18-genes-14-01670">
+<span class="label">18.</span><cite>Offit K., Levran O., Mullaney B., Mah K., Nafa K., Batish S.D., Diotti R., Schneider H., Deffenbaugh A., Scholl T., et al.  Shared genetic susceptibility to breast cancer, brain tumors, and Fanconi anemia. J. Natl. Cancer Inst. 2003;95:1548–1551. doi: 10.1093/jnci/djg072.</cite> [<a href="https://doi.org/10.1093/jnci/djg072" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/14559878/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Natl.%20Cancer%20Inst.&amp;title=Shared%20genetic%20susceptibility%20to%20breast%20cancer,%20brain%20tumors,%20and%20Fanconi%20anemia&amp;author=K.%20Offit&amp;author=O.%20Levran&amp;author=B.%20Mullaney&amp;author=K.%20Mah&amp;author=K.%20Nafa&amp;volume=95&amp;publication_year=2003&amp;pages=1548-1551&amp;pmid=14559878&amp;doi=10.1093/jnci/djg072&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B19-genes-14-01670">
+<span class="label">19.</span><cite>Hill D.A., Ivanovich J., Priest J.R., Gurnett C.A., Dehner L.P., Desruisseau D., Jarzembowski J.A., Wikenheiser-Brokamp K.A., Suarez B.K., Whelan A.J., et al.  DICER1 mutations in familial pleuropulmonary blastoma. Science. 2009;325:965. doi: 10.1126/science.1174334.</cite> [<a href="https://doi.org/10.1126/science.1174334" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3098036/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/19556464/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Science&amp;title=DICER1%20mutations%20in%20familial%20pleuropulmonary%20blastoma&amp;author=D.A.%20Hill&amp;author=J.%20Ivanovich&amp;author=J.R.%20Priest&amp;author=C.A.%20Gurnett&amp;author=L.P.%20Dehner&amp;volume=325&amp;publication_year=2009&amp;pages=965&amp;pmid=19556464&amp;doi=10.1126/science.1174334&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B20-genes-14-01670">
+<span class="label">20.</span><cite>Hata A., Kashima R. Dysregulation of microRNA biogenesis machinery in cancer. Crit. Rev. Biochem. Mol. Biol. 2016;51:121–134. doi: 10.3109/10409238.2015.1117054.</cite> [<a href="https://doi.org/10.3109/10409238.2015.1117054" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5226641/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/26628006/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Crit.%20Rev.%20Biochem.%20Mol.%20Biol.&amp;title=Dysregulation%20of%20microRNA%20biogenesis%20machinery%20in%20cancer&amp;author=A.%20Hata&amp;author=R.%20Kashima&amp;volume=51&amp;publication_year=2016&amp;pages=121-134&amp;pmid=26628006&amp;doi=10.3109/10409238.2015.1117054&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B21-genes-14-01670">
+<span class="label">21.</span><cite>Meyer S., Tischkowitz M., Chandler K., Gillespie A., Birch J.M., Evans D.G. Fanconi anaemia, BRCA2 mutations and childhood cancer: A developmental perspective from clinical and epidemiological observations with implications for genetic counselling. J. Med. Genet. 2014;51:71–75. doi: 10.1136/jmedgenet-2013-101642.</cite> [<a href="https://doi.org/10.1136/jmedgenet-2013-101642" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/24259538/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Med.%20Genet.&amp;title=Fanconi%20anaemia,%20BRCA2%20mutations%20and%20childhood%20cancer:%20A%20developmental%20perspective%20from%20clinical%20and%20epidemiological%20observations%20with%20implications%20for%20genetic%20counselling&amp;author=S.%20Meyer&amp;author=M.%20Tischkowitz&amp;author=K.%20Chandler&amp;author=A.%20Gillespie&amp;author=J.M.%20Birch&amp;volume=51&amp;publication_year=2014&amp;pages=71-75&amp;pmid=24259538&amp;doi=10.1136/jmedgenet-2013-101642&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B22-genes-14-01670">
+<span class="label">22.</span><cite>Rosenbaum T., Wimmer K. Neurofibromatosis type 1 (NF1) and associated tumors. Klin. Pädiatrie. 2014;226:309–315. doi: 10.1055/s-0034-1382021.</cite> [<a href="https://doi.org/10.1055/s-0034-1382021" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/25062113/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Klin.%20P%C3%A4diatrie&amp;title=Neurofibromatosis%20type%201%20(NF1)%20and%20associated%20tumors&amp;author=T.%20Rosenbaum&amp;author=K.%20Wimmer&amp;volume=226&amp;publication_year=2014&amp;pages=309-315&amp;pmid=25062113&amp;doi=10.1055/s-0034-1382021&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B23-genes-14-01670">
+<span class="label">23.</span><cite>Robertson J.C., Jorcyk C.L., Oxford J.T. DICER1 syndrome: DICER1 mutations in rare cancers. Cancers. 2018;10:143.  doi: 10.3390/cancers10050143.</cite> [<a href="https://doi.org/10.3390/cancers10050143" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5977116/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29762508/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Cancers&amp;title=DICER1%20syndrome:%20DICER1%20mutations%20in%20rare%20cancers&amp;author=J.C.%20Robertson&amp;author=C.L.%20Jorcyk&amp;author=J.T.%20Oxford&amp;volume=10&amp;publication_year=2018&amp;pages=143&amp;pmid=29762508&amp;doi=10.3390/cancers10050143&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B24-genes-14-01670">
+<span class="label">24.</span><cite>González I.A., Stewart D.R., Schultz K.A.P., Field A.P., Hill D.A., Dehner L.P. DICER1 tumor predisposition syndrome: An evolving story initiated with the pleuropulmonary blastoma. Mod. Pathol. 2022;35:4–22. doi: 10.1038/s41379-021-00905-8.</cite> [<a href="https://doi.org/10.1038/s41379-021-00905-8" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8695383/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34599283/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Mod.%20Pathol.&amp;title=DICER1%20tumor%20predisposition%20syndrome:%20An%20evolving%20story%20initiated%20with%20the%20pleuropulmonary%20blastoma&amp;author=I.A.%20Gonz%C3%A1lez&amp;author=D.R.%20Stewart&amp;author=K.A.P.%20Schultz&amp;author=A.P.%20Field&amp;author=D.A.%20Hill&amp;volume=35&amp;publication_year=2022&amp;pages=4-22&amp;pmid=34599283&amp;doi=10.1038/s41379-021-00905-8&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B25-genes-14-01670">
+<span class="label">25.</span><cite>Grant C.N., Rhee D., Tracy E.T., Aldrink J.H., Baertschiger R.M., Lautz T.B., Glick R.D., Rodeberg D.A., Ehrlich P.F., Christison-Lagay E. Pediatric solid tumors and associated cancer predisposition syndromes: Workup, management, and surveillance. A summary from the APSA Cancer Committee. J. Pediatr. Surg. 2022;57:430–442. doi: 10.1016/j.jpedsurg.2021.08.008.</cite> [<a href="https://doi.org/10.1016/j.jpedsurg.2021.08.008" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34503817/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Pediatr.%20Surg.&amp;title=Pediatric%20solid%20tumors%20and%20associated%20cancer%20predisposition%20syndromes:%20Workup,%20management,%20and%20surveillance.%20A%20summary%20from%20the%20APSA%20Cancer%20Committee&amp;author=C.N.%20Grant&amp;author=D.%20Rhee&amp;author=E.T.%20Tracy&amp;author=J.H.%20Aldrink&amp;author=R.M.%20Baertschiger&amp;volume=57&amp;publication_year=2022&amp;pages=430-442&amp;pmid=34503817&amp;doi=10.1016/j.jpedsurg.2021.08.008&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B26-genes-14-01670">
+<span class="label">26.</span><cite>Patil P., Pencheva B.B., Patil V.M., Fangusaro J. Nervous system (NS) Tumors in Cancer Predisposition Syndromes. Neurotherapeutics. 2022;19:1752–1771. doi: 10.1007/s13311-022-01277-w.</cite> [<a href="https://doi.org/10.1007/s13311-022-01277-w" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC9723057/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/36056180/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Neurotherapeutics&amp;title=Nervous%20system%20(NS)%20Tumors%20in%20Cancer%20Predisposition%20Syndromes&amp;author=P.%20Patil&amp;author=B.B.%20Pencheva&amp;author=V.M.%20Patil&amp;author=J.%20Fangusaro&amp;volume=19&amp;publication_year=2022&amp;pages=1752-1771&amp;pmid=36056180&amp;doi=10.1007/s13311-022-01277-w&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B27-genes-14-01670">
+<span class="label">27.</span><cite>Woodward E.R., Meyer S. Fanconi Anaemia, Childhood Cancer and the BRCA Genes. Genes. 2021;12:1520.  doi: 10.3390/genes12101520.</cite> [<a href="https://doi.org/10.3390/genes12101520" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8535386/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34680915/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Genes&amp;title=Fanconi%20Anaemia,%20Childhood%20Cancer%20and%20the%20BRCA%20Genes&amp;author=E.R.%20Woodward&amp;author=S.%20Meyer&amp;volume=12&amp;publication_year=2021&amp;pages=1520&amp;pmid=34680915&amp;doi=10.3390/genes12101520&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B28-genes-14-01670">
+<span class="label">28.</span><cite>Radtke H.B., Berger A., Skelton T., Goetsch Weisman A. Neurofibromatosis Type 1 (NF1): Addressing the Transition from Pediatric to Adult Care. Pediatr. Health Med. Ther. 2023;14:19–32. doi: 10.2147/PHMT.S362679.</cite> [<a href="https://doi.org/10.2147/PHMT.S362679" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC9925753/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/36798587/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Pediatr.%20Health%20Med.%20Ther.&amp;title=Neurofibromatosis%20Type%201%20(NF1):%20Addressing%20the%20Transition%20from%20Pediatric%20to%20Adult%20Care&amp;author=H.B.%20Radtke&amp;author=A.%20Berger&amp;author=T.%20Skelton&amp;author=A.%20Goetsch%20Weisman&amp;volume=14&amp;publication_year=2023&amp;pages=19-32&amp;pmid=36798587&amp;doi=10.2147/PHMT.S362679&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B29-genes-14-01670">
+<span class="label">29.</span><cite>Caroleo A.M., De Ioris M.A., Boccuto L., Alessi I., Del Baldo G., Cacchione A., Agolini E., Rinelli M., Serra A., Carai A., et al.  DICER1 Syndrome and Cancer Predisposition: From a Rare Pediatric Tumor to Lifetime Risk. Front. Oncol. 2020;10:614541. doi: 10.3389/fonc.2020.614541.</cite> [<a href="https://doi.org/10.3389/fonc.2020.614541" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC7859642/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33552988/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Front.%20Oncol.&amp;title=DICER1%20Syndrome%20and%20Cancer%20Predisposition:%20From%20a%20Rare%20Pediatric%20Tumor%20to%20Lifetime%20Risk&amp;author=A.M.%20Caroleo&amp;author=M.A.%20De%20Ioris&amp;author=L.%20Boccuto&amp;author=I.%20Alessi&amp;author=G.%20Del%20Baldo&amp;volume=10&amp;publication_year=2020&amp;pages=614541&amp;pmid=33552988&amp;doi=10.3389/fonc.2020.614541&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B30-genes-14-01670">
+<span class="label">30.</span><cite>Ferdynus M.P. Why the term ‘persistent therapy’ is not worse than the term ‘medical futility’. J. Med. Ethics. 2022;48:350–352. doi: 10.1136/medethics-2021-107609.</cite> [<a href="https://doi.org/10.1136/medethics-2021-107609" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34702765/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Med.%20Ethics&amp;title=Why%20the%20term%20%E2%80%98persistent%20therapy%E2%80%99%20is%20not%20worse%20than%20the%20term%20%E2%80%98medical%20futility%E2%80%99&amp;author=M.P.%20Ferdynus&amp;volume=48&amp;publication_year=2022&amp;pages=350-352&amp;pmid=34702765&amp;doi=10.1136/medethics-2021-107609&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B31-genes-14-01670">
+<span class="label">31.</span><cite>Rossini L., Durante C., Bresolin S., Opocher E., Marzollo A., Biffi A. Diagnostic Strategies and Algorithms for Investigating Cancer Predisposition Syndromes in Children Presenting with Malignancy. Cancers. 2022;14:3741.  doi: 10.3390/cancers14153741.</cite> [<a href="https://doi.org/10.3390/cancers14153741" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC9367486/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/35954404/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Cancers&amp;title=Diagnostic%20Strategies%20and%20Algorithms%20for%20Investigating%20Cancer%20Predisposition%20Syndromes%20in%20Children%20Presenting%20with%20Malignancy&amp;author=L.%20Rossini&amp;author=C.%20Durante&amp;author=S.%20Bresolin&amp;author=E.%20Opocher&amp;author=A.%20Marzollo&amp;volume=14&amp;publication_year=2022&amp;pages=3741&amp;pmid=35954404&amp;doi=10.3390/cancers14153741&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B32-genes-14-01670">
+<span class="label">32.</span><cite>Al-Sarhani H., Gottumukkala R.V., Grasparil A.D.S., 2nd, Tung E.L., Gee M.S., Greer M.C. Screening of cancer predisposition syndromes. Pediatr. Radiol. 2022;52:401–417. doi: 10.1007/s00247-021-05023-w.</cite> [<a href="https://doi.org/10.1007/s00247-021-05023-w" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33791839/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Pediatr.%20Radiol.&amp;title=Screening%20of%20cancer%20predisposition%20syndromes&amp;author=H.%20Al-Sarhani&amp;author=R.V.%20Gottumukkala&amp;author=A.D.S.%20Grasparil&amp;author=E.L.%20Tung&amp;author=M.S.%20Gee&amp;volume=52&amp;publication_year=2022&amp;pages=401-417&amp;pmid=33791839&amp;doi=10.1007/s00247-021-05023-w&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B33-genes-14-01670">
+<span class="label">33.</span><cite>Huber S., Schimmel M., Dunstheimer D., Nemes K., Richter M., Streble J., Vollert K., Walden U., Frühwald M.C., Kuhlen M. The need for tumor surveillance of children and adolescents with cancer predisposition syndromes: A retrospective cohort study in a tertiary-care children’s hospital. Eur. J. Pediatr. 2022;181:1585–1596. doi: 10.1007/s00431-021-04347-x.</cite> [<a href="https://doi.org/10.1007/s00431-021-04347-x" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8964590/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34950979/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Eur.%20J.%20Pediatr.&amp;title=The%20need%20for%20tumor%20surveillance%20of%20children%20and%20adolescents%20with%20cancer%20predisposition%20syndromes:%20A%20retrospective%20cohort%20study%20in%20a%20tertiary-care%20children%E2%80%99s%20hospital&amp;author=S.%20Huber&amp;author=M.%20Schimmel&amp;author=D.%20Dunstheimer&amp;author=K.%20Nemes&amp;author=M.%20Richter&amp;volume=181&amp;publication_year=2022&amp;pages=1585-1596&amp;pmid=34950979&amp;doi=10.1007/s00431-021-04347-x&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B34-genes-14-01670">
+<span class="label">34.</span><cite>Khanna L., Prasad S.R., Yedururi S., Parameswaran A.M., Marcal L.P., Sandrasegaran K., Tirumani S.H., Menias C.O., Katabathina V.S. Second Malignancies after Radiation Therapy: Update on Pathogenesis and Cross-sectional Imaging Findings. Radiographics. 2021;41:876–894. doi: 10.1148/rg.2021200171.</cite> [<a href="https://doi.org/10.1148/rg.2021200171" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33891523/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Radiographics&amp;title=Second%20Malignancies%20after%20Radiation%20Therapy:%20Update%20on%20Pathogenesis%20and%20Cross-sectional%20Imaging%20Findings&amp;author=L.%20Khanna&amp;author=S.R.%20Prasad&amp;author=S.%20Yedururi&amp;author=A.M.%20Parameswaran&amp;author=L.P.%20Marcal&amp;volume=41&amp;publication_year=2021&amp;pages=876-894&amp;pmid=33891523&amp;doi=10.1148/rg.2021200171&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B35-genes-14-01670">
+<span class="label">35.</span><cite>Tanjak P., Suktitipat B., Vorasan N., Juengwiwattanakitti P., Thiengtrong B., Songjang C., Therasakvichya S., Laiteerapong S., Chinswangwatanakul V. Risks and cancer associations of metachronous and synchronous multiple primary cancers: A 25-year retrospective study. BMC Cancer. 2021;21:1045.  doi: 10.1186/s12885-021-08766-9.</cite> [<a href="https://doi.org/10.1186/s12885-021-08766-9" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8461969/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34556087/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=BMC%20Cancer&amp;title=Risks%20and%20cancer%20associations%20of%20metachronous%20and%20synchronous%20multiple%20primary%20cancers:%20A%2025-year%20retrospective%20study&amp;author=P.%20Tanjak&amp;author=B.%20Suktitipat&amp;author=N.%20Vorasan&amp;author=P.%20Juengwiwattanakitti&amp;author=B.%20Thiengtrong&amp;volume=21&amp;publication_year=2021&amp;pages=1045&amp;pmid=34556087&amp;doi=10.1186/s12885-021-08766-9&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B36-genes-14-01670">
+<span class="label">36.</span><cite>Bhatia S., Chen Y., Wong F.L., Hageman L., Smith K., Korf B., Cannon A., Leidy D.J., Paz A., Andress J.E., et al.  Subsequent Neoplasms after a Primary Tumor in Individuals with Neurofibromatosis Type 1. J. Clin. Oncol. Off. J. Am. Soc. Clin. Oncol. 2019;37:3050–3058. doi: 10.1200/JCO.19.00114.</cite> [<a href="https://doi.org/10.1200/JCO.19.00114" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6839906/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31532722/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Clin.%20Oncol.%20Off.%20J.%20Am.%20Soc.%20Clin.%20Oncol.&amp;title=Subsequent%20Neoplasms%20after%20a%20Primary%20Tumor%20in%20Individuals%20with%20Neurofibromatosis%20Type%201&amp;author=S.%20Bhatia&amp;author=Y.%20Chen&amp;author=F.L.%20Wong&amp;author=L.%20Hageman&amp;author=K.%20Smith&amp;volume=37&amp;publication_year=2019&amp;pages=3050-3058&amp;pmid=31532722&amp;doi=10.1200/JCO.19.00114&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+</ul></section></section><section id="_ad93_" lang="en" class="associated-data"><h2 class="pmc_sec_title">Associated Data</h2>
+<p class="font-secondary"><em>This section collects any data citations, data availability statements, or supplementary materials included in this article.</em></p>
+<section id="_adsm93_" lang="en" class="supplementary-materials"><h3 class="pmc_sec_title">Supplementary Materials</h3>
+<section class="sm xbox font-sm" id="db_ds_supplementary-material1_reqid_"><div class="media p"><div class="caption">
+<a href="/articles/instance/10530991/bin/genes-14-01670-s001.zip" data-ga-action="click_feat_suppl" class="usa-link">Click here for additional data file.</a><sup> (64.8KB, zip) </sup>
+</div></div></section></section><section id="_adda93_" lang="en" class="data-availability-statement"><h3 class="pmc_sec_title">Data Availability Statement</h3>
+<p>Data available on request due to restrictions.</p></section></section></section><footer class="p courtesy-note font-secondary font-sm text-center"><hr class="headless">
+<p>Articles from Genes are provided here courtesy of <strong>Multidisciplinary Digital Publishing Institute  (MDPI)</strong></p></footer></section></article>
+
+                      
+
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+<!-- Secondary navigation placeholder -->
+<div class="pmc-sidenav desktop:grid-col-4 display-flex">
+    <section class="pmc-sidenav__container" aria-label="Article resources and navigation">
+        <button type="button" class="usa-button pmc-sidenav__container__close usa-button--unstyled">
+            <img src="/static/img/usa-icons/close.svg" role="img" alt="Close" />
+        </button>
+    <div class="display-none desktop:display-block">
+       <section class="margin-top-4 desktop:margin-top-0">
+              <h2 class="margin-top-0">ACTIONS</h2>
+           <ul class="usa-list usa-list--unstyled usa-list--actions">
+               
+               <li>
+                     <a
+                             href="https://doi.org/10.3390/genes14091670"
+                             class="usa-button usa-button--outline width-24 font-xs display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                             target="_blank"
+                             rel="noreferrer noopener"
+                             data-ga-category="actions"
+                             data-ga-action="click"
+                             data-ga-label="publisher_link_desktop"
+                     >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#launch"></use>
+                         </svg>
+                         <span class="display-inline-flex flex-justify-center flex-1 padding-right-2">View on publisher site</span>
+                     </a>
+               </li>
+               
+               
+               <li>
+                    <a
+                            href="pdf/genes-14-01670.pdf"
+                            class="usa-button usa-button--outline width-24 display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="pdf_download_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1">PDF (2.5 MB)</span>
+                    </a>
+               </li>
+               
+                
+               <li>
+                   <button role="button" class="usa-button width-24 citation-dialog-trigger display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                        aria-label="Open dialog with citation text in different styles"
+                        data-ga-category="actions"
+                        data-ga-action="open"
+                        data-ga-label="cite_desktop"
+                        data-all-citations-url="/resources/citations/10530991/"
+                        data-citation-style="nlm"
+                        data-download-format-link="/resources/citations/10530991/export/"
+                    >
+                        <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                        </svg>
+                       <span class="display-inline-flex flex-justify-center flex-1 button-label">Cite</span>
+                    </button>
+               </li>
+                
+               <li>
+
+                        <button class="usa-button width-24 collections-dialog-trigger collections-button display-inline-flex flex-align-center flex-justify-start padding-left-1 collections-button-empty"
+                              aria-label="Save article in MyNCBI collections."
+                              data-ga-category="actions"
+                              data-ga-action="click"
+                              data-ga-label="collections_button_desktop"
+                              data-collections-open-dialog-enabled="false"
+                              data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC10530991%2F%23open-collections-dialog"
+                              data-in-collections="false">
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                            <span class="display-inline-flex flex-justify-center flex-1">Collections</span>
+                       </button>
+               </li>
+               <li class="pmc-permalink">
+                    <button
+                            type="button"
+                            class="usa-button width-24 display-inline-flex flex-align-center flex-justify padding-left-1 shadow-none"
+                            aria-label="Show article permalink"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="permalink_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#share"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1 button-label">Permalink</span>
+                    </button>
+                   
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC10530991/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+               </li>
+           </ul>
+       </section>
+     </div>
+
+        <section class="pmc-resources margin-top-6 desktop:margin-top-4" data-page-path="/articles/PMC10530991/">
+            <h2 class="margin-top-0">RESOURCES</h2>
+            
+                <div class="usa-accordion usa-accordion--multiselectable" data-allow-multiple>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-similar-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_similar_articles"
+                        data-ga-label="/articles/PMC10530991/"
+                        data-action-open="open_similar_articles"
+                        data-action-close="close_similar_articles"
+                        >
+                            Similar articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-similar-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/similar-article-links/37761810/"
+                            
+                    >
+                        
+                    </div>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-cited-by-other-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_cited_by"
+                        data-ga-label="/articles/PMC10530991/"
+                        data-action-open="open_cited_by"
+                        data-action-close="close_cited_by"
+                        >
+                             Cited by other articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-cited-by-other-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/cited-by-links/37761810/"
+                            
+                    >
+                          
+                    </div>
+                    
+                        <h3 class="usa-accordion__heading">
+                            <button
+                            type="button"
+                            class="usa-accordion__button"
+                            aria-expanded="false"
+                            aria-controls="resources-links-to-ncbi-databases"
+                            data-ga-category="resources_accordion"
+                            data-ga-action="open_NCBI_links"
+                            data-ga-label="/articles/PMC10530991/"
+                            data-action-open="open_NCBI_links"
+                            data-action-close="close_NCBI_link"
+                            >
+                                 Links to NCBI Databases
+                            </button>
+                        </h3>
+                        <div
+                                id="resources-links-to-ncbi-databases"
+                                class="usa-accordion__content usa-prose"
+                                data-source-url="/resources/db-links/10530991/"
+                        >
+                        </div>
+                    
+                    
+                </div>
+            
+        </section>
+
+
+        <section
+        class="usa-in-page-nav usa-in-page-nav--wide margin-top-6 desktop:margin-top-4"
+        data-title-text="On this page"
+        data-title-heading-level="h2"
+        data-scroll-offset="0"
+        data-root-margin="-10% 0px -80% 0px"
+        data-main-content-selector="main"
+        data-threshold="1"
+        hidden
+        ></section>
+    </section>
+</div>
+
+
+        
+
+<div class="overlay" role="dialog" aria-label="Citation Dialog" hidden>
+    <div class="dialog citation-dialog" aria-hidden="true">
+        <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+            <h2 class="usa-modal__heading margin-0">Cite</h2>
+             <button type="button" class="usa-button usa-button--unstyled close-overlay text-black width-auto"  tabindex="1">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+             </button>
+        </div>
+
+        
+
+<div class="citation-text-block">
+  <div class="citation-text margin-bottom-2"></div>
+  <ul class="usa-list usa-list--unstyled display-inline-flex flex-justify width-full flex-align-center">
+      <li>
+        <button
+          class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center copy-button dialog-focus"
+          data-ga-category="save_share"
+          data-ga-action="cite"
+          data-ga-label="copy"
+          tabindex="2">
+            <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+            </svg>
+            <span>Copy</span>
+        </button>
+      </li>
+      <li>
+          <a
+              href="#"
+              role="button"
+              class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center export-button"
+              data-ga-category="save_share"
+              data-ga-action="cite"
+              data-ga-label="download"
+              title="Download a file for external citation management software"
+              tabindex="3">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                </svg>
+                <span class="display-none mobile-lg:display-inline">Download .nbib</span>
+                <span class="display-inline mobile-lg:display-none">.nbib</span>
+            </a>
+      </li>
+      <li>
+          
+
+<div class="display-inline-flex flex-align-center">
+  <label class="usa-label margin-top-0">Format:</label>
+  <select aria-label="Format" class="usa-select citation-style-selector padding-1 margin-top-0 border-0 padding-right-4" tabindex="4" >
+    
+      <option data-style-url-name="ama"
+              value="AMA"
+              >
+        AMA
+      </option>
+    
+      <option data-style-url-name="apa"
+              value="APA"
+              >
+        APA
+      </option>
+    
+      <option data-style-url-name="mla"
+              value="MLA"
+              >
+        MLA
+      </option>
+    
+      <option data-style-url-name="nlm"
+              value="NLM"
+              selected="selected">
+        NLM
+      </option>
+    
+  </select>
+</div>
+      </li>
+  </ul>
+</div>
+    </div>
+</div>
+
+        <div class="overlay" role="dialog" hidden>
+  <div id="collections-action-dialog" class="dialog collections-dialog" aria-hidden="true">
+   <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+        <h2 class="usa-modal__heading margin-0">Add to Collections</h2>
+    </div>
+    <div class="collections-action-panel action-panel">
+      
+
+
+<form id="collections-action-dialog-form"
+      class="usa-form maxw-full collections-action-panel-form action-panel-content action-form action-panel-smaller-selectors"
+      data-existing-collections-url="/list-existing-collections/"
+      data-add-to-existing-collection-url="/add-to-existing-collection/"
+      data-create-and-add-to-new-collection-url="/create-and-add-to-new-collection/"
+      data-myncbi-max-collection-name-length="100"
+      data-collections-root-url="https://www.ncbi.nlm.nih.gov/myncbi/collections/">
+
+    <input type="hidden" name="csrfmiddlewaretoken" value="HZgoJuvBp3wRrQN3pUxr1MJARkkDe02fj9GBvmY9GL0bCWi4FTV1yUCgYcJQhLxK">
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-new"
+            class="usa-radio__input usa-radio__input--tile collections-new  margin-top-0"
+            name="collections"
+            value="new"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_new" />
+            <label class="usa-radio__label" for="collections-action-dialog-new">Create a new collection</label>
+        </div>
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-existing"
+            class="usa-radio__input usa-radio__input--tile collections-existing"
+            name="collections"
+            value="existing"
+            checked="true"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_existing" />
+            <label class="usa-radio__label" for="collections-action-dialog-existing">Add to an existing collection</label>
+        </div>
+    </fieldset>
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="action-panel-control-wrap new-collections-controls">
+           <label for="collections-action-dialog-add-to-new" class="usa-label margin-top-0">
+                Name your collection
+               <abbr title="required" class="usa-hint usa-hint--required text-no-underline">*</abbr>
+          </label>
+          <input
+            type="text"
+            name="add-to-new-collection"
+            id="collections-action-dialog-add-to-new"
+            class="usa-input collections-action-add-to-new"
+            pattern="[^&quot;&amp;=&lt;&gt;/]*" title="The following characters are not allowed in the Name field: &quot;&amp;=&lt;&gt;/"
+            maxlength=""
+            data-ga-category="collections_button"
+            data-ga-action="create_collection"
+            data-ga-label="non_favorties_collection"
+            required
+          />
+        </div>
+        <div class="action-panel-control-wrap existing-collections-controls">
+             <label for="collections-action-dialog-add-to-existing" class="usa-label margin-top-0">
+                Choose a collection
+              </label>
+              <select id="collections-action-dialog-add-to-existing"
+                      class="usa-select collections-action-add-to-existing"
+                      data-ga-category="collections_button"
+                      data-ga-action="select_collection"
+                      data-ga-label="($('.collections-action-add-to-existing').val() === 'Favorites') ? 'Favorites' : 'non_favorites_collection'">
+              </select>
+              <div class="collections-retry-load-on-error usa-input-error-message selection-validation-message">
+                Unable to load your collection due to an error<br>
+                <a href="#">Please try again</a>
+              </div>
+        </div>
+    </fieldset>
+
+    <div class="display-inline-flex">
+        <button class="usa-button margin-top-0 action-panel-submit"
+            type="submit"
+            data-loading-label="Adding..."
+            data-pinger-ignore
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="add">
+          Add
+        </button>
+        <button class="usa-button usa-button--outline margin-top-0 action-panel-cancel"
+                aria-label="Close 'Add to Collections' panel"
+                ref="linksrc=close_collections_panel"
+                data-ga-category="collections_button"
+                data-ga-action="click"
+                data-ga-label="cancel">
+          Cancel
+        </button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>
+
+        
+
+      </div>
+    </div>
+  </div>
+
+
+
+        
+    
+    
+
+<footer class="ncbi-footer ncbi-dark-background " >
+    
+        <div class="ncbi-footer__icon-section">
+            <div class="ncbi-footer__social-header">
+                Follow NCBI
+            </div>
+
+            <div class="grid-container ncbi-footer__ncbi-social-icons-container">
+                
+                    <a href="https://twitter.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="40"
+                             height="40"
+                             viewBox="0 0 40 40"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on X (formerly known as Twitter)</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.facebook.com/ncbi.nlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="16"
+                             height="29"
+                             focusable="false"
+                             aria-hidden="true"
+                             viewBox="0 0 16 29"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.8809 21.4002C3.8809 19.0932 3.8809 16.7876 3.8809 14.478C3.8809 14.2117 3.80103 14.1452 3.54278 14.1492C2.53372 14.1638 1.52334 14.1492 0.514288 14.1598C0.302626 14.1598 0.248047 14.0972 0.248047 13.8936C0.256034 12.4585 0.256034 11.0239 0.248047 9.58978C0.248047 9.37013 0.302626 9.30224 0.528931 9.3049C1.53798 9.31688 2.54837 9.3049 3.55742 9.31555C3.80103 9.31555 3.8809 9.26097 3.87957 9.00272C3.87158 8.00565 3.85428 7.00592 3.90753 6.00884C3.97142 4.83339 4.31487 3.73115 5.04437 2.78467C5.93095 1.63318 7.15699 1.09005 8.56141 0.967577C10.5582 0.79319 12.555 0.982221 14.5518 0.927641C14.7102 0.927641 14.7462 0.99287 14.7449 1.13664C14.7449 2.581 14.7449 4.02668 14.7449 5.47104C14.7449 5.67604 14.6517 5.68669 14.4946 5.68669C13.4523 5.68669 12.4113 5.68669 11.3703 5.68669C10.3506 5.68669 9.92057 6.10868 9.90593 7.13904C9.89661 7.7647 9.91525 8.39303 9.89794 9.01869C9.88995 9.26364 9.96583 9.31822 10.2015 9.31688C11.7204 9.30623 13.2393 9.31688 14.7595 9.3049C15.0257 9.3049 15.0723 9.3728 15.0444 9.62439C14.89 10.9849 14.7515 12.3467 14.6144 13.7085C14.5691 14.1571 14.5785 14.1585 14.1458 14.1585C12.8386 14.1585 11.5313 14.1665 10.2254 14.1518C9.95119 14.1518 9.89794 14.2317 9.89794 14.4899C9.90593 19.0799 9.89794 23.6752 9.91125 28.2612C9.91125 28.5674 9.8407 28.646 9.53186 28.6433C7.77866 28.6273 6.02414 28.6366 4.27094 28.634C3.82499 28.634 3.87158 28.6992 3.87158 28.22C3.87602 25.9472 3.87913 23.6739 3.8809 21.4002Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on Facebook</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.linkedin.com/company/ncbinlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="25"
+                             height="23"
+                             viewBox="0 0 26 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M14.6983 9.98423C15.6302 9.24808 16.5926 8.74754 17.6762 8.51991C19.673 8.09126 21.554 8.30824 23.1262 9.7526C24.2351 10.7723 24.7529 12.1115 25.0165 13.5612C25.1486 14.3363 25.2105 15.1218 25.2015 15.9081C25.2015 18.3043 25.2015 20.6898 25.2082 23.0806C25.2082 23.3468 25.1549 23.444 24.8621 23.4414C23.1297 23.4272 21.3992 23.4272 19.6704 23.4414C19.4041 23.4414 19.3429 23.3588 19.3442 23.1019C19.3535 20.5194 19.3442 17.9368 19.3442 15.3543C19.3442 14.0005 18.3258 12.9448 17.0266 12.9488C15.7273 12.9528 14.6983 14.0071 14.6983 15.361C14.6983 17.9328 14.6917 20.5047 14.6983 23.0753C14.6983 23.3708 14.6198 23.444 14.3296 23.4427C12.6185 23.4294 10.9079 23.4294 9.19779 23.4427C8.93155 23.4427 8.86099 23.3735 8.86232 23.1086C8.8783 19.7619 8.88628 16.4144 8.88628 13.066C8.88628 11.5688 8.87874 10.0708 8.86365 8.57182C8.86365 8.3575 8.90758 8.27896 9.14054 8.28029C10.9048 8.29094 12.6687 8.29094 14.4321 8.28029C14.6464 8.28029 14.6983 8.34818 14.6983 8.54653C14.6903 9.00047 14.6983 9.45441 14.6983 9.98423Z">
+                            </path>
+                            <path d="M6.55316 15.8443C6.55316 18.2564 6.55316 20.6699 6.55316 23.082C6.55316 23.3629 6.48127 23.4388 6.19906 23.4374C4.47737 23.4241 2.75568 23.4241 1.03399 23.4374C0.767751 23.4374 0.69986 23.3629 0.701191 23.1006C0.709178 18.2648 0.709178 13.4281 0.701191 8.59053C0.701191 8.34026 0.765089 8.27237 1.01669 8.2737C2.74991 8.28435 4.48048 8.28435 6.20838 8.2737C6.47462 8.2737 6.5465 8.33627 6.54517 8.6065C6.54783 11.0186 6.55316 13.4308 6.55316 15.8443Z">
+                            </path>
+                            <path d="M3.65878 0.243898C5.36804 0.243898 6.58743 1.45529 6.58743 3.1406C6.58743 4.75801 5.32145 5.95742 3.60819 5.96807C3.22177 5.97614 2.83768 5.90639 2.47877 5.76299C2.11985 5.61959 1.79344 5.40546 1.51897 5.13334C1.24449 4.86123 1.02755 4.53668 0.881058 4.17902C0.734563 3.82136 0.661505 3.43788 0.666231 3.05141C0.67555 1.42601 1.9362 0.242566 3.65878 0.243898Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on LinkedIn</span>
+                    </a>
+                
+
+                
+                    <a href="https://github.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="28"
+                             height="27"
+                             viewBox="0 0 28 28"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M16.7228 20.6334C17.5057 20.5527 18.2786 20.3944 19.0301 20.1608C21.3108 19.4193 22.5822 17.8259 22.963 15.4909C23.1228 14.5112 23.1814 13.5287 22.9883 12.5437C22.8106 11.6423 22.4013 10.8028 21.8007 10.1076C21.7526 10.0605 21.7197 10 21.7064 9.934C21.6931 9.86799 21.7 9.79952 21.7262 9.73748C22.0856 8.6206 21.9711 7.51969 21.601 6.42677C21.582 6.3497 21.5345 6.2827 21.468 6.23923C21.4016 6.19577 21.3211 6.17906 21.2429 6.19248C20.7329 6.21649 20.2313 6.33051 19.7611 6.52928C19.1103 6.7908 18.4899 7.12198 17.9104 7.51703C17.84 7.56996 17.7581 7.60551 17.6713 7.62078C17.5846 7.63605 17.4954 7.6306 17.4112 7.60489C15.2596 7.05882 13.0054 7.06203 10.8554 7.61421C10.7806 7.63586 10.7018 7.63967 10.6253 7.62534C10.5487 7.611 10.4766 7.57892 10.4148 7.53167C9.64788 7.03247 8.85171 6.58918 7.96368 6.33359C7.65781 6.24338 7.34123 6.19458 7.02239 6.18849C6.94879 6.17986 6.87462 6.19893 6.81432 6.242C6.75402 6.28507 6.71191 6.34904 6.69621 6.42145C6.32342 7.51437 6.2209 8.61527 6.56307 9.73348C6.59635 9.84264 6.64694 9.93316 6.54177 10.0516C5.47666 11.2604 5.09988 12.6834 5.19574 14.2676C5.2663 15.4244 5.46201 16.5466 6.01454 17.5769C6.84399 19.1171 8.21664 19.9119 9.85158 20.3352C10.3938 20.4706 10.9444 20.5698 11.4998 20.632C11.5384 20.7492 11.4506 20.7798 11.408 20.8291C11.1734 21.1179 10.9894 21.4441 10.8634 21.7942C10.7622 22.0458 10.8315 22.4039 10.6065 22.5516C10.263 22.7766 9.83827 22.8485 9.42421 22.8871C8.17936 23.0056 7.26471 22.4877 6.6283 21.4348C6.25552 20.8184 5.76956 20.3325 5.08523 20.0663C4.76981 19.9325 4.42139 19.8967 4.08537 19.9638C3.7898 20.029 3.73788 20.1901 3.93891 20.4111C4.03639 20.5234 4.14989 20.6207 4.27575 20.6999C4.9796 21.1318 5.51717 21.7884 5.80152 22.5636C6.37002 23.9973 7.48039 24.5697 8.93825 24.6323C9.43741 24.6575 9.93768 24.615 10.4254 24.5058C10.5892 24.4672 10.6531 24.4872 10.6517 24.6762C10.6451 25.4936 10.6637 26.3123 10.6517 27.131C10.6517 27.6635 10.1684 27.9297 9.58663 27.7393C8.17396 27.2671 6.84977 26.5631 5.66838 25.656C2.59555 23.2891 0.720966 20.1861 0.217704 16.3376C-0.357453 11.9127 0.911353 8.00824 3.98551 4.73881C6.11909 2.42656 8.99932 0.939975 12.1203 0.540191C16.5351 -0.0601815 20.4347 1.14323 23.7232 4.16373C26.2449 6.47869 27.724 9.37672 28.1048 12.7726C28.5828 17.0325 27.3686 20.7945 24.4768 23.9827C22.9762 25.6323 21.0956 26.8908 18.9982 27.6488C18.8783 27.6927 18.7585 27.738 18.636 27.7726C18.0356 27.9404 17.6189 27.6395 17.6189 27.0098C17.6189 25.7452 17.6308 24.4806 17.6295 23.2159C17.6329 22.9506 17.6128 22.6856 17.5696 22.4238C17.4325 21.6664 17.3419 21.484 16.7228 20.6334Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on GitHub</span>
+                    </a>
+                
+
+                
+                    <a href="https://ncbiinsights.ncbi.nlm.nih.gov/"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="26"
+                             height="26"
+                             viewBox="0 0 27 27"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M23.7778 26.4574C23.1354 26.3913 22.0856 26.8024 21.636 26.3087C21.212 25.8444 21.4359 24.8111 21.324 24.0347C19.9933 14.8323 14.8727 8.80132 6.09057 5.85008C4.37689 5.28406 2.58381 4.99533 0.779072 4.99481C0.202773 4.99481 -0.0229751 4.83146 0.00455514 4.21479C0.0660406 3.08627 0.0660406 1.95525 0.00455514 0.826734C-0.0413285 0.0815827 0.259669 -0.0193618 0.896534 0.00266238C6.96236 0.222904 12.3693 2.24179 16.9889 6.16209C22.9794 11.2478 26.1271 17.7688 26.4372 25.648C26.4629 26.294 26.3179 26.5271 25.6609 26.4684C25.0827 26.417 24.4991 26.4574 23.7778 26.4574Z">
+                            </path>
+                            <path d="M14.8265 26.441C14.0924 26.441 13.2371 26.6795 12.6626 26.3786C12.0092 26.0372 12.3781 25.0644 12.246 24.378C11.1154 18.5324 6.6849 14.5497 0.74755 14.1001C0.217135 14.0615 -0.0104482 13.9422 0.0134113 13.3659C0.0519536 12.1454 0.0482829 10.9213 0.0134113 9.69524C-0.00127145 9.14464 0.196946 9.03268 0.703502 9.04736C9.21217 9.27128 16.5994 16.2511 17.2804 24.7231C17.418 26.4446 17.418 26.4446 15.6579 26.4446H14.832L14.8265 26.441Z">
+                            </path>
+                            <path d="M3.58928 26.4555C2.64447 26.4618 1.73584 26.0925 1.06329 25.4289C0.39073 24.7653 0.00933763 23.8617 0.0030097 22.9169C-0.00331824 21.9721 0.365937 21.0635 1.02954 20.3909C1.69315 19.7184 2.59675 19.337 3.54156 19.3306C4.48637 19.3243 5.39499 19.6936 6.06755 20.3572C6.7401 21.0208 7.1215 21.9244 7.12782 22.8692C7.13415 23.814 6.7649 24.7226 6.10129 25.3952C5.43768 26.0677 4.53409 26.4491 3.58928 26.4555Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI RSS feed</span>
+                    </a>
+                
+            </div>
+        </div>
+    
+
+    <div data-testid="gridContainer"
+         class="grid-container ncbi-footer__container">
+        <div class="grid-row ncbi-footer__main-content-container"
+             data-testid="grid">
+            
+                <div class="ncbi-footer__column">
+                    
+                        <p class="ncbi-footer__circled-icons-heading">
+                            Connect with NLM
+                        </p>
+                    
+
+                    <div class="ncbi-footer__circled-icons-list">
+                        
+                            <a href=https://twitter.com/nlm_nih class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="32"
+                                     height="32"
+                                     viewBox="0 0 40 40"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on X (formerly known as Twitter)</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.facebook.com/nationallibraryofmedicine class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="13"
+                                     height="24"
+                                     viewBox="0 0 13 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M4.11371 23.1369C4.11371 23.082 4.11371 23.0294 4.11371 22.9745V12.9411H0.817305C0.6709 12.9411 0.670898 12.9411 0.670898 12.8016C0.670898 11.564 0.670898 10.3287 0.670898 9.09341C0.670898 8.97903 0.705213 8.95158 0.815017 8.95158C1.8673 8.95158 2.91959 8.95158 3.97417 8.95158H4.12057V8.83263C4.12057 7.8055 4.12057 6.7738 4.12057 5.74897C4.1264 4.92595 4.31387 4.11437 4.66959 3.37217C5.12916 2.38246 5.94651 1.60353 6.95717 1.1921C7.64827 0.905008 8.3913 0.764035 9.13953 0.778051C10.0019 0.791777 10.8644 0.830666 11.7268 0.860404C11.8869 0.860404 12.047 0.894717 12.2072 0.90158C12.2964 0.90158 12.3261 0.940469 12.3261 1.02968C12.3261 1.5421 12.3261 2.05452 12.3261 2.56465C12.3261 3.16857 12.3261 3.7725 12.3261 4.37642C12.3261 4.48165 12.2964 4.51367 12.1912 4.51138C11.5369 4.51138 10.8804 4.51138 10.2261 4.51138C9.92772 4.51814 9.63058 4.5526 9.33855 4.61433C9.08125 4.6617 8.84537 4.78881 8.66431 4.97766C8.48326 5.16652 8.3662 5.40755 8.32972 5.66661C8.28476 5.89271 8.26027 6.1224 8.25652 6.35289C8.25652 7.19014 8.25652 8.02969 8.25652 8.86923C8.25652 8.89439 8.25652 8.91955 8.25652 8.95615H12.0219C12.1797 8.95615 12.182 8.95616 12.1614 9.10714C12.0768 9.76596 11.9876 10.4248 11.9029 11.0813C11.8312 11.6319 11.7626 12.1824 11.697 12.733C11.6719 12.9434 11.6787 12.9434 11.4683 12.9434H8.26338V22.899C8.26338 22.979 8.26338 23.0591 8.26338 23.1392L4.11371 23.1369Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on Facebook</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.youtube.com/user/NLMNIH class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="21"
+                                     height="15"
+                                     viewBox="0 0 21 15"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M19.2561 1.47914C18.9016 1.15888 18.5699 0.957569 17.2271 0.834039C15.5503 0.678484 13.2787 0.655608 11.563 0.65332H9.43556C7.71987 0.65332 5.4483 0.678484 3.77151 0.834039C2.43098 0.957569 2.097 1.15888 1.74242 1.47914C0.813665 2.32097 0.619221 4.62685 0.598633 6.89384C0.598633 7.31781 0.598633 7.74101 0.598633 8.16345C0.626084 10.4121 0.827391 12.686 1.74242 13.521C2.097 13.8412 2.4287 14.0425 3.77151 14.1661C5.4483 14.3216 7.71987 14.3445 9.43556 14.3468H11.563C13.2787 14.3468 15.5503 14.3216 17.2271 14.1661C18.5676 14.0425 18.9016 13.8412 19.2561 13.521C20.1712 12.6929 20.3725 10.451 20.3999 8.22064C20.3999 7.74025 20.3999 7.25986 20.3999 6.77946C20.3725 4.54907 20.1689 2.30724 19.2561 1.47914ZM8.55942 10.5311V4.65201L13.5601 7.50005L8.55942 10.5311Z"
+                                          fill="white" />
+                                </svg>
+                                <span class="usa-sr-only">NLM on YouTube</span>
+                            </a>
+                        
+                    </div>
+                </div>
+            
+
+            
+                <address class="ncbi-footer__address ncbi-footer__column">
+                    
+        <p>
+            <a class="usa-link usa-link--external"
+            href="https://www.google.com/maps/place/8600+Rockville+Pike,+Bethesda,+MD+20894/%4038.9959508,
+            -77.101021,17z/data%3D!3m1!4b1!4m5!3m4!1s0x89b7c95e25765ddb%3A0x19156f88b27635b8!8m2!3d38.9959508!
+            4d-77.0988323"
+            rel="noopener noreferrer" target="_blank">National Library of Medicine
+            <br/> 8600 Rockville Pike<br/> Bethesda, MD 20894</a>
+        </p>
+    
+                </address>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/web_policies.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Web Policies
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/institutes-nih/nih-office-director/office-communications-public-liaison/freedom-information-act-office" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            FOIA
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/vulnerability-disclosure-policy/index.html" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS Vulnerability Disclosure
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://support.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Help
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/accessibility.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Accessibility
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/careers/careers.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Careers
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+        </div>
+
+        
+            <div class="grid-row grid-col-12" data-testid="grid">
+                <ul class="ncbi-footer__bottom-links-list">
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NLM
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NIH
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.usa.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            USA.gov
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+    </div>
+</footer>
+
+    
+
+
+        
+        
+    
+  <script  type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/pinger/pinger.js"> </script>
+
+
+    
+        
+
+<button class="back-to-top" data-ga-category="pagination" data-ga-action="back_to_top">
+    <label>Back to Top</label>
+    <svg class="usa-icon order-0" aria-hidden="true" focusable="false" role="img">
+        <use xlink:href="/static/img/sprite.svg#arrow_upward"></use>
+    </svg>
+</button>
+    
+
+
+        
+    
+    
+    
+        
+    <script type="application/javascript">
+    window.ncbi = window.ncbi || {};
+    window.ncbi.pmc = window.ncbi.pmc || {};
+    window.ncbi.pmc.options = {
+        logLevel: 'INFO',
+        
+        staticEndpoint: '/static/',
+        
+        citeCookieName: 'pmc-cf',
+    };
+</script>
+    <script type="module" crossorigin="" src="/static/assets/base-133c6271.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/jquery/jquery-3.6.0.min.js">&#xA0;</script>
+    <script type="text/javascript">
+        jQuery.getScript("https://cdn.ncbi.nlm.nih.gov/core/alerts/alerts.js", function () {
+            galert(['div.nav_and_browser', 'div.header', '#universal_header', '.usa-banner', 'body > *:nth-child(1)'])
+        });
+    </script>
+
+
+    <script type="text/javascript">var exports = {};</script>
+     <script src="/static/CACHE/js/output.13b077bc3ffd.js"></script>
+
+    <script type="module" crossorigin="" src="/static/assets/article-44d04358.js"></script>
+    
+    
+
+    </body>
+</html>

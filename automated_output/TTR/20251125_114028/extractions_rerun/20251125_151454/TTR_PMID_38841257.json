@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "38841257",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant p.D58Y, including clinical significance, patient demographics, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.172G>T",
+      "protein_notation": "p.D58Y",
+      "genomic_position": "chr18:31592998-31592998",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "55-year-old male, Chinese",
+        "phenotype": "transthyretin amyloid cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 55,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "transthyretin amyloid cardiomyopathy with symptoms including syncope and reduced ejection fraction",
+          "evidence_sentence": "A previously healthy 55-year-old man underwent a physical examination where a reduction in ejection fraction (EF) was found accidentally."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is associated with transthyretin amyloid cardiomyopathy.",
+        "assays": []
+      },
+      "segregation_data": "No family history of amyloidosis was reported.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the first detailed clinical phenotype report for the p.D58Y mutation.",
+      "key_quotes": [
+        "Here, we report a rare transthyretin mutation p.D58Y in a Chinese patient and provide detailed CA information for the first time."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variant."
+  }
+}

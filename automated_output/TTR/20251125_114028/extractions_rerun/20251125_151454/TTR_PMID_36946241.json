@@ -1,0 +1,120 @@
+{
+  "paper_metadata": {
+    "pmid": "36946241",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.30G>A",
+      "protein_notation": "p.Val10Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 25,
+        "demographics": "Mean age 77 years, 20% female",
+        "phenotype": "ATTRv CM"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 25,
+        "affected_count": 10,
+        "unaffected_count": 15,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 78,
+          "age_at_onset": 75,
+          "age_at_diagnosis": 76,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic ATTRv CM",
+          "evidence_sentence": "The 25 patients with ATTRv CM had the following mutations: Val30Met (n = 10)."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 80,
+          "age_at_onset": 78,
+          "age_at_diagnosis": 79,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic ATTRv CM",
+          "evidence_sentence": "The 25 patients with ATTRv CM had the following mutations: Val30Met (n = 10)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met mutation is associated with a hereditary form of ATTR CM.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified.",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No specific functional assays were mentioned.",
+      "key_quotes": [
+        "The 25 patients with ATTRv CM had the following mutations: Val30Met (n = 10)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 25,
+        "demographics": "Mean age 77 years, 20% female",
+        "phenotype": "ATTRv CM"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 25,
+        "affected_count": 2,
+        "unaffected_count": 23,
+        "uncertain_count": null,
+        "penetrance_percentage": 8.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": 82,
+          "age_at_onset": 80,
+          "age_at_diagnosis": 81,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic ATTRv CM",
+          "evidence_sentence": "The 25 patients with ATTRv CM had the following mutations: Val122Ile (n = 2)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile mutation is associated with a hereditary form of ATTR CM.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified.",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No specific functional assays were mentioned.",
+      "key_quotes": [
+        "The 25 patients with ATTRv CM had the following mutations: Val122Ile (n = 2)."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Patient characteristics",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for TTR variants were extracted successfully."
+  }
+}

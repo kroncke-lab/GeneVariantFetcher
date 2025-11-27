@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "30628647",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the L539fs/47-hERG mutation in the KCNH2 gene, detailing its effects on cell apoptosis and endoplasmic reticulum stress."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1619_1637del",
+      "protein_notation": "p.L539fs",
+      "genomic_position": "not specified",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Congenital Long QT Syndrome Type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Cell apoptosis due to endoplasmic reticulum stress",
+          "evidence_sentence": "The L539fs/47-hERG homozygous mutant protein only exhibited a band at 60-70 kDa, which was attributed to protein truncation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The L539fs/47-hERG mutation leads to protein retention in the endoplasmic reticulum and induces cell apoptosis.",
+        "assays": [
+          "Western blot analysis",
+          "Hoechst 33342 apoptosis staining",
+          "Confocal laser scanning microscopy"
+        ]
+      },
+      "segregation_data": "The mutation segregates with disease in families.",
+      "population_frequency": "not specified",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is associated with increased apoptosis in cardiomyocytes.",
+      "key_quotes": [
+        "The results demonstrate that L539fs/47-hERG induces cell apoptosis and the potential molecular mechanism involves the activation of ERS and ERS-mediated cell apoptosis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on the KCNH2 gene variant."
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "35616356",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant identified in the study, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.181T>C",
+      "protein_notation": "p.Cys61Gly",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Family 13",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "Only four families consented to receiving these results, with one known pathogenic variant in BRCA2 identified in Family 13 (NM_007294.4: c.181\u2009T\u2009>\u2009C; p.Cys61Gly) (ClinVar VCV000017661.55)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Not specified",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Family members have received follow-up genetic counseling, and further members were offered testing and were/will be enrolled in appropriate cancer surveillance programs.",
+      "key_quotes": [
+        "Only four families consented to receiving these results, with one known pathogenic variant in BRCA2 identified in Family 13 (NM_007294.4: c.181\u2009T\u2009>\u2009C; p.Cys61Gly) (ClinVar VCV000017661.55)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was reported in the paper."
+  }
+}

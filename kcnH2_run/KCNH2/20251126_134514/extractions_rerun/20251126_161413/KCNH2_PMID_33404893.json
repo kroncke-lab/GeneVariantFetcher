@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "33404893",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variants, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Long QT syndrome (LQT2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Long QT syndrome",
+          "evidence_sentence": "Mutations in three genes are responsible for the vast majority of LQTS cases in humans, namely KCNQ1 encoding Kv7.1 channel \u03b1-subunit (LQT1, 35% of cases), KCNH2 encoding Kv11.1 channel \u03b1-subunit (LQT2, 30% of cases), and SCN5A encoding Nav1.5 Na+ channel \u03b1-subunit (LQT3, 10% of cases)."
+        }
+      ],
+      "functional_data": {
+        "summary": "KCNH2 mutations lead to loss-of-function K+ channel activity, reducing repolarizing K+ currents and causing AP prolongation.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Introduction, paragraph 4",
+      "additional_notes": "No specific variant notation provided.",
+      "key_quotes": [
+        "Mutations in three genes are responsible for the vast majority of LQTS cases in humans, namely KCNQ1 encoding Kv7.1 channel \u03b1-subunit (LQT1, 35% of cases), KCNH2 encoding Kv11.1 channel \u03b1-subunit (LQT2, 30% of cases), and SCN5A encoding Nav1.5 Na+ channel \u03b1-subunit (LQT3, 10% of cases)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant related to KCNH2 was found, with no specific cDNA or protein notation provided."
+  }
+}

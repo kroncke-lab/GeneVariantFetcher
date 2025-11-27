@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "34066384",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses cardiac amyloidosis awareness among Romanian cardiologists, focusing on transthyretin amyloidosis (ATTR) but does not provide specific genetic variant data for the TTR gene."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant data for the TTR gene."
+    ],
+    "notes": "The paper focused on the awareness and diagnostic challenges of cardiac amyloidosis among cardiologists, without detailing specific genetic variants in the TTR gene."
+  }
+}

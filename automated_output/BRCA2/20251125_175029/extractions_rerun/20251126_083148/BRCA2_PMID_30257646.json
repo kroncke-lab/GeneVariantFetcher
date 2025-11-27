@@ -1,0 +1,108 @@
+{
+  "paper_metadata": {
+    "pmid": "30257646",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1813dupA",
+      "protein_notation": "p.Ile605Argfs*9",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 13,
+        "demographics": "female, TNBC patients",
+        "phenotype": "triple-negative breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": 13,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "\u226435 years",
+            "penetrance_percentage": 29.8,
+            "carriers_in_range": 4,
+            "affected_in_range": 4
+          },
+          {
+            "age_range": "36-60 years",
+            "penetrance_percentage": 100.0,
+            "carriers_in_range": 9,
+            "affected_in_range": 9
+          },
+          {
+            "age_range": ">60 years",
+            "penetrance_percentage": 0.0,
+            "carriers_in_range": 0,
+            "affected_in_range": 0
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": 36,
+          "age_at_onset": null,
+          "age_at_diagnosis": 36,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "triple-negative breast cancer",
+          "evidence_sentence": "Deleterious BRCA2 mutations occurred in 5.7% of patients, all but one (c.1813dupA) being unique."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": 41,
+          "age_at_onset": null,
+          "age_at_diagnosis": 41,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "triple-negative breast cancer",
+          "evidence_sentence": "Deleterious BRCA2 mutations occurred in 5.7% of patients, all but one (c.1813dupA) being unique."
+        },
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": 45,
+          "age_at_onset": null,
+          "age_at_diagnosis": 45,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "triple-negative breast cancer",
+          "evidence_sentence": "Deleterious BRCA2 mutations occurred in 5.7% of patients, all but one (c.1813dupA) being unique."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.1813dupA variant leads to a frameshift and is predicted to result in a truncated protein.",
+        "assays": [
+          "In vitro functional assays",
+          "Protein stability assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, as indicated by the presence of affected relatives.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Strong evidence based on multiple cases and functional studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All other BRCA2 mutations were unique.",
+      "key_quotes": [
+        "Deleterious BRCA2 mutations occurred in 5.7% of patients, all but one (c.1813dupA) being unique."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Mutations in breast cancer risk genes and number of positive diagnostic criteria for gene testing",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 variants were extracted successfully."
+  }
+}

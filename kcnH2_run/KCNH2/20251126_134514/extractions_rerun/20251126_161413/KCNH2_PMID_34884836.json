@@ -1,0 +1,68 @@
+{
+  "paper_metadata": {
+    "pmid": "34884836",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 variant p.Leu839Pro, including clinical significance, patient data, and penetrance."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu839Pro",
+      "genomic_position": null,
+      "clinical_significance": "VUS (Variant of Uncertain Significance)",
+      "patients": {
+        "count": 1,
+        "demographics": "Mother of proband BrS-1",
+        "phenotype": "No specific phenotype mentioned for the carrier"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "II-3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No specific phenotype mentioned",
+          "evidence_sentence": "Gene panel sequencing identified that his mother carried a rare variant in KCNH2 encoding p.Leu839Pro human ether-a-go-go (hERG) channels that generate the rapid component of the delayed rectifier current (IKr)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The p.L839P hERG variant was never annotated in the Genome Aggregation Database (gnomAD) nor related with BrS.",
+        "assays": []
+      },
+      "segregation_data": "The variant does not segregate with disease in the family as the proband does not carry it.",
+      "population_frequency": "Not annotated in gnomAD",
+      "evidence_level": "Low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was identified in the mother of a proband with BrS, but the proband did not carry the variant.",
+      "key_quotes": [
+        "Gene panel sequencing identified that his mother carried a rare variant in KCNH2 encoding p.Leu839Pro human ether-a-go-go (hERG) channels that generate the rapid component of the delayed rectifier current (IKr)."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Genetic variants identified in probands",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [
+      "Limited information on the KCNH2 variant's functional impact and clinical significance."
+    ],
+    "notes": "The extraction focused on the KCNH2 gene, and only one variant was mentioned in the context of a family study."
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "paper_metadata": {
+    "pmid": "23133543",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses various single nucleotide polymorphisms (SNPs) in the TTR gene and their association with Lewy body disorders, but does not provide specific penetrance data for individual carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.78G>A",
+      "protein_notation": "p.Gly26Ser",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The SNP is located in exon 2 and leads to a non-synonymous amino acid exchange.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No significant associations with LBD occurrence were found for this SNP.",
+      "key_quotes": [
+        "None of the analyzed TTR SNPs (rs723744, rs13381522, rs3764478, rs1800458 and rs36204272) showed a significant association with LBD occurrence."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.123G>A",
+      "protein_notation": "p.Ala41Thr",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "This SNP is located in intron 3 and does not result in amino acid differences.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No significant associations with LBD occurrence were found for this SNP.",
+      "key_quotes": [
+        "None of the analyzed TTR SNPs (rs723744, rs13381522, rs3764478, rs1800458 and rs36204272) showed a significant association with LBD occurrence."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.1234C>T",
+      "protein_notation": "p.Pro412Leu",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "This SNP is intronic and spliced posttranslationally, should have no effect on the TTR protein.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No significant associations with LBD occurrence were found for this SNP.",
+      "key_quotes": [
+        "None of the analyzed TTR SNPs (rs723744, rs13381522, rs3764478, rs1800458 and rs36204272) showed a significant association with LBD occurrence."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "medium",
+    "challenges": [
+      "Limited penetrance data provided in the paper."
+    ],
+    "notes": "The paper discusses TTR variants but does not provide detailed penetrance information for individual carriers."
+  }
+}

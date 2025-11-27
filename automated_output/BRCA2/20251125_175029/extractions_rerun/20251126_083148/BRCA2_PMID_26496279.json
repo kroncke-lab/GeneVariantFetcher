@@ -1,0 +1,50 @@
+{
+  "paper_metadata": {
+    "pmid": "26496279",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 N372H polymorphism, including penetrance data and variant details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1115A>C",
+      "protein_notation": "p.Asn372His",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": 2344,
+        "demographics": "not specified",
+        "phenotype": "ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2344,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.17,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The N372H polymorphism is associated with increased risk of ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": "Allele frequency not specified.",
+      "evidence_level": "Moderate evidence for association with ovarian cancer risk.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The allele H might increase the risk of ovarian cancer, especially for serous subtype.",
+      "key_quotes": [
+        "Our meta-analysis suggests that the N372H polymorphism is associated with susceptibility of ovarian cancer.",
+        "The risk may be even greater for ovarian cancers of the serous subtype."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data extracted from the main text; no tables were provided."
+  }
+}

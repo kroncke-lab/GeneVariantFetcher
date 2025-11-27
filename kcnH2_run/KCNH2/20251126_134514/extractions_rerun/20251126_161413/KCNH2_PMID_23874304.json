@@ -1,0 +1,84 @@
+{
+  "paper_metadata": {
+    "pmid": "23874304",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "34-year-old male, unrelated SCN5A-negative BrS patients",
+        "phenotype": "Brugada-type ECG and short QT interval"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 3,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 34,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Brugada-type ECG and short QT interval",
+          "evidence_sentence": "In 2009, Itoh et al., as the 'first', identified a mutation (R1135H) in KCNH2 in a 34-year old man with Brugada-type ECG and short QT interval."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Brugada-type ECG",
+          "evidence_sentence": "Verkerk et al. in 2005, identified two mutations (G873S and N985S) in two unrelated SCN5A-negative BrS patients."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Brugada-type ECG",
+          "evidence_sentence": "Verkerk et al. in 2005, identified two mutations (G873S and N985S) in two unrelated SCN5A-negative BrS patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional investigation revealed an increase in the rectifying current, namely an increase in peak current during phase 0 and phase 1 of the ventricular AP.",
+        "assays": [
+          "computer simulations",
+          "functional investigation"
+        ]
+      },
+      "segregation_data": "The G873S variant was found in 2 of 500 unrelated Han Chinese controls suggesting that the variant has only a modifying role or is an innocent bystander.",
+      "population_frequency": "G873S was found in 2 of 500 unrelated Han Chinese controls.",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The glycine at position 873 is not conserved between human, mouse and rat.",
+      "key_quotes": [
+        "Functional investigation revealed an increase in the rectifying current, namely an increase in peak current during phase 0 and phase 1 of the ventricular AP.",
+        "G873S, however, was found in 2 of 500 unrelated Han Chinese controls suggesting that the variant has only a modifying role or is an innocent bystander."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted successfully."
+  }
+}

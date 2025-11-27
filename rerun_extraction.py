@@ -154,22 +154,14 @@ def rerun_extraction_on_folder(
     extraction_files = list(extraction_dir.glob(f"{gene_symbol}_PMID_*.json"))
     logger.info(f"Found {len(extraction_files)} extraction files to aggregate")
 
-    all_extracted_data = []
-    for json_file in extraction_files:
-        with open(json_file, 'r') as f:
-            data = json.load(f)
-            all_extracted_data.append(data)
+    summary_file = workflow_path / f"{gene_symbol}_penetrance_summary_rerun_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
 
     # Aggregate penetrance data
     penetrance_summary = aggregate_penetrance(
-        extracted_papers=all_extracted_data,
-        gene_symbol=gene_symbol
+        extraction_dir=extraction_dir,
+        gene_symbol=gene_symbol,
+        output_file=summary_file
     )
-
-    # Save aggregated results
-    summary_file = workflow_path / f"{gene_symbol}_penetrance_summary_rerun_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-    with open(summary_file, 'w') as f:
-        json.dump(penetrance_summary, f, indent=2)
 
     logger.info(f"✓ Penetrance summary saved to: {summary_file}")
 

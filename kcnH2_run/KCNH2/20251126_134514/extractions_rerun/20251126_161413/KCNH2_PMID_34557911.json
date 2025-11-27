@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "34557911",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "definitive",
+      "patients": {
+        "count": 18,
+        "demographics": "Caucasian and Asian ethnicity",
+        "phenotype": "Short QT syndrome (SQTS)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 18,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Variants identified in SQTS probands, including p.Thr618Ile and p.Asn588Lys.",
+        "assays": []
+      },
+      "segregation_data": "Variants identified in 18 SQTS probands.",
+      "population_frequency": null,
+      "evidence_level": "definitive",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "KCNH2 was classified as definitive for disease causality in SQTS.",
+      "key_quotes": [
+        "KCNH2 was the only gene classified as Definitive for disease causality in SQTS, with variants identified in 18 SQTS probands, including seven unrelated probands of both Caucasian and Asian ethnicity with p.Thr618Ile and six with p.Asn588Lys."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted from the main text."
+  }
+}

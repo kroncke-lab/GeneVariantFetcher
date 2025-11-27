@@ -1,0 +1,361 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html
+      xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Distinct roles of BRCA2 in replication fork protection in response to hydroxyurea and DNA interstrand cross-links — Supplemental
+         Material 
+      </title>
+      <meta name="googlebot" content="NOODP" />
+      <meta name="description"
+            content="A biweekly scientific journal publishing high-quality research in molecular biology and genetics, cancer biology, biochemistry, and related fields" />
+      <link rel="stylesheet" type="text/css" media="all" href="/shared/css/hw-global.css" />
+      <link rel="stylesheet" type="text/css" media="all"
+            href="/shared/css/standard-designs/design2/main.css" />
+      <link rel="stylesheet" type="text/css" media="all"
+            href="/publisher/css/hw-cshljnls-global.css" />
+      <link rel="stylesheet" type="text/css" media="all"
+            href="/local/css/hw-journal-global.css" />
+      <link rel="stylesheet" type="text/css" media="all"
+            href="/shared/css/hw-citation-2.0-hacks.css" />
+      <link rel="stylesheet" type="text/css" media="print" href="/shared/css/hw-print.css" />
+      <link rel="stylesheet" type="text/css" media="print"
+            href="/publisher/css/hw-cshljnls-print.css" />
+      <link rel="stylesheet" type="text/css" media="all"
+            href="/shared/css/hw-page-content.css" />
+      <link rel="stylesheet" type="text/css" media="all"
+            href="/shared/css/hw-page-data-supp.css" />
+      <link rel="stylesheet" type="text/css" media="all"
+            href="/publisher/css/hw-cshljnls-page-content.css" /><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
+		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-5VXGQJCX');</script><link rel="stylesheet" type="text/css" media="all"
+            href="/site/misc/custom-global.css" /><script type="text/javascript" id="session-d50237320e1">var callbackToken='5162DF376F7BC2A';</script><script type="text/javascript" src="/shared/js/jquery-min.js"></script><script type="text/javascript" src="/shared/js/fingerprint.js"></script><script type="text/javascript" src="/shared/js/hw-shared.js"></script><script type="text/javascript" src="/shared/js/design/hw-design1.js"></script><script type="text/javascript" src="/publisher/js/cshl-shared.js"></script><script type="text/javascript" src="/site/misc/csh-library.js"></script><script type="text/javascript" src="/site/misc/custom-global.js"></script></head>
+   <body>
+      <div class="hw-gen-page pagetype-content" id="pageid-data-supp">
+         <div id="header">
+            
+            <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5VXGQJCX" height="0"
+                       width="0"
+                       style="display:none;visibility:hidden"></iframe></noscript><a href="http://www.cshlpress.com" rel="external-nw"><img src="/local/img/society_logo.gif" width="74" height="83" alt="Publisher Logo"
+                    id="main-logo" /></a><a href="/"><img title="Genes &amp; Development" alt="Genes &amp; Development" width="313" height="83"
+                    src="/local/img/journal_logo_standalone.gif" /></a>
+            
+            <p id="skip-link">
+               <a href="#content-block">Skip to main page content</a>
+               
+            </p>
+            
+            <ul class="button-list header-buttons">
+               <li class="first"><a href="/" title="HOME"><span>HOME</span></a></li>
+               <li><a href="/site/misc/about.xhtml" title="ABOUT"><span>ABOUT</span></a></li>
+               <li><a href="http://submit.genesdev.org/" rel="external-nw" title="SUBMIT"><span>SUBMIT</span></a></li>
+               <li><a href="/site/subscriptions/" title="SUBSCRIBE"><span>SUBSCRIBE</span></a></li>
+               <li><a href="/site/misc/adinfo.xhtml" title="ADVERTISE"><span>ADVERTISE</span></a></li>
+               <li><a href="/site/misc/ifora.xhtml" title="AUTHOR INFO"><span>AUTHOR INFO</span></a></li>
+               <li><a href="/content/by/year" title="ARCHIVE"><span>ARCHIVE</span></a></li>
+               <li><a href="/feedback" title="CONTACT"><span>CONTACT</span></a></li>
+               <li class="last"><a href="/help/" title="HELP"><span>HELP</span></a></li>
+            </ul>
+            
+            
+            <div class="header-qs">
+               
+               <form class="searchbox" action="/search" method="get">
+                  <div>
+                     	<label for="header-qs-input" id="header-qs-search-label">Search for Keyword:</label>
+                     	<input value="" title="Search Genes &amp; Development" type="text" name="fulltext"
+                            id="header-qs-input" /><input type="hidden" name="submit" value="yes" /><label for="header-qs-search" id="header-qs-search-label">GO</label><input value="GO" alt="Link: Go" type="image" id="header-qs-search-go"
+                            src="/shared/img/standard-design/design2/go.gif" />
+                     
+                  </div>
+                  <div class="adv-search-link"><a href="/search">Advanced Search</a></div>
+               </form>
+               
+               
+            </div>
+            
+            <div class="header-ac-elements">
+               
+               <div class="inst-branding">
+                  
+               </div>
+               
+               <div id="authstring" class="suppress-header-login">
+                  
+                  
+               </div> 
+               
+               
+               <div id="hdr-login" class="suppress-header-login"></div>
+               
+            </div>
+            
+            <div class="banner-ads">
+               
+               <ul>
+                  <li><a href="/cgi/adclick/?ad=57960&amp;adclick=true&amp;url=https%3A%2F%2Fwww.aacr.org%2Fprofessionals%2Fmeetings%2Fmeetings-and-workshops-calendar%2F%3Futm_source%3Dcshl%26utm_medium%3Dwebbanner%26utm_campaign%3Dupcomingconf25"
+                        target="_blank"><img class="adborder0" title="AACR Annual Meeting"
+                             src="//genesdev.cshlp.org/adsystem/graphics/09806250544902562/genesdev/2501044D_MCS_25_26Upcom_SpecConf_CSHL_468x60_012.jpg?ad=57960&amp;adview=true"
+                             alt="AACR Annual Meeting" /></a></li>
+               </ul>
+               
+            </div>
+            
+            <div class="bar">
+               
+               <div class="bar-inner"></div>
+               
+            </div>
+            
+         </div>
+         <div id="content-block">
+            <h1 class="data-supp-article-title">Distinct roles of BRCA2 in replication fork protection in response to hydroxyurea and DNA interstrand cross-links</h1>
+            <div><span class="highwire-journal-article-marker-start"></span><div class="auto-clean"><span style="font-family: Verdana,Arial,Helvetica,sans-serif;  font-size: 83.33%">
+                     
+                     
+                     <h2>Supplemental Material</h2>
+                     
+                     <ul>
+                        <li><a href="/content/suppl/2020/04/30/gad.336446.120.DC1/Supplemental_material.pdf">Supplemental_material.pdf</a> 
+                           
+                           
+                        </li>
+                     </ul>
+                     </span>
+                  
+                  
+               </div><span class="highwire-journal-article-marker-end"></span></div><span id="related-urls"></span><div id="content-end-sb" class="sb-div"></div>
+         </div>
+         <div id="col-2">
+            
+            <div class="content-box" id="article-cb-main">
+               <div class="cb-contents">
+                  <h3 class="cb-contents-header"><span>This Article</span></h3>
+                  <div class="cb-section cb-slug">
+                     <ol>
+                        <li>
+                           <div id="slugline">
+                              
+                              	<span class="slug-metadata-note ahead-of-print">
+                                 
+                                 Published in Advance
+                                 
+                                 <span class="slug-ahead-of-print-date">April 30, 2020</span>,
+                                 doi:
+                                 <span title="10.1101/gad.336446.120" class="slug-doi">10.1101/gad.336446.120</span>
+                                 </span>
+                              
+                              
+                              
+                              <cite>
+                                 	    <abbr title="Genes &amp; Development" class="slug-jnl-abbrev">
+                                    Genes &amp; Dev.</abbr><span class="slug-pub-date">
+                                    June 1, 2020 
+                                    </span>
+                                 	    <span class="slug-vol">
+                                    vol. 34 
+                                    </span><span class="slug-issue">
+                                    no. 11-12 
+                                    </span><span class="slug-pages">
+                                    832-846
+                                    </span>
+                                 </cite>
+                              
+                           </div>
+                        </li>
+                     </ol>
+                  </div>
+                  <div class="cb-section">
+                     <ol>
+                        <li><a href="/content/34/11-12/832.abstract" rel="view-abstract">Abstract</a><span class="free">Free</span></li>
+                        <li class="notice"><a href="/content/34/11-12/832.full" rel="view-full-text">Full Text</a><span class="free">Free</span></li>
+                        <li class="notice"><a href="/content/34/11-12/832.full.pdf+html" rel="view-full-text.pdf">Full Text (PDF)</a></li>
+                        <li><span class="variant-indicator">» <span>Supplemental Material</span></span></li>
+                     </ol>
+                  </div>
+               </div>
+            </div>
+            
+            
+            
+            <div id="col-2-widget-placeholder"></div>
+            
+            <div class="content-box" id="article-cb-main">
+               
+               <div class="cb-contents">
+                  
+                  <div class="cb-section collapsible default-closed" id="cb-art-gs-cshl"></div>
+                  
+               </div>
+               
+            </div>
+            
+            <ul class="tower-ads">
+               <li class="no-ad tower_col_2"><span>  </span></li>
+            </ul>
+            
+         </div>
+         <div id="col-3">
+            
+            <div class="content-box" id="sidebar-current-issue">
+               <div class="cb-contents">
+                  <h3 class="cb-contents-header"><span>Current Issue</span></h3>
+                  <div class="cb-section">
+                     <ol>
+                        <li><span><a href="/content/current" rel="current-issue">November 1, 2025, 39 (21-22)</a></span></li>
+                     </ol>
+                  </div>
+                  <div class="cb-section">
+                     <ol>
+                        <li>
+                           <div class="current-issue"><a href="/content/current" rel="current-issue"><img src="/content/39/21-22.cover.gif" width="67" height="89" alt="Current Issue" /></a></div>
+                        </li>
+                     </ol>
+                  </div>
+                  
+                  <cb:item xmlns:cb="http://schema.highwire.org/Site/Content-Box">
+                     <div class="cb-section collapsible default-closed" id="sidebar-cur-issue-coverlines">
+                        
+                        <h4 class="cb-section-header">
+                           <span>In This Issue</span>
+                           
+                        </h4>
+                        
+                        <ul>
+                           <li>
+                              <a href="/content/39/21-22/1355">Functional implications of EZH2 variants in development and growth disorders</a>
+                              
+                           </li>
+                           <li>
+                              <a href="/content/39/21-22/1338">Dynamics of cortical neurogenesis-to-gliogenesis transition</a>
+                              
+                           </li>
+                           <li>
+                              <a href="/content/39/21-22/1377">Kinetic control of poly(A) tail length</a>
+                              
+                           </li>
+                           <li>
+                              <a href="/content/39/21-22/1271">Review: Vitamin B6 in cancer metabolism and signaling</a>
+                              
+                           </li>
+                        </ul>
+                        
+                     </div>
+                  </cb:item>
+                  
+                  <div class="cb-section sidebar-etoc-link">
+                     <ol>
+                        <li><a href="/cgi/alerts/etoc">Alert me to new issues of G&amp;D</a></li>
+                     </ol>
+                  </div>
+               </div>
+            </div>
+            <div id="sidebar-global-nav">
+               
+               
+               <ul class="button-list pub-links">
+                  <li class="first"><a href="/content/early/recent" title="Advance Online Articles "><span>Advance Online Articles </span></a></li>
+                  <li><a href="http://submit.genesdev.org" rel="external-nw" title="Submit a Manuscript"><span>Submit a Manuscript</span></a></li>
+                  <li><a href="/site/misc/press_releases.xhtml" title="G&amp;D in the News"><span>G&amp;D in the News</span></a></li>
+                  <li><a href="/site/misc/edboard.xhtml" title="Editorial Board"><span>Editorial Board</span></a></li>
+                  <li><a href="/site/misc/ifora.xhtml" title="Author Information"><span>Author Information</span></a></li>
+                  <li><a href=" /site/misc/alertland.xhtml" title="E-mail Alerts &amp; RSS Feeds"><span>E-mail Alerts &amp; RSS Feeds</span></a></li>
+                  <li><a href="http://www.cshlpress.com/library/?hwinfo"
+                        title="Recommend to Your Library"><span>Recommend to Your Library</span></a></li>
+                  <li class="last"><a href="/site/misc/careertracks.xhtml" title="Job Opportunities"><span>Job Opportunities</span></a></li>
+               </ul>
+               
+            </div>
+            
+            
+            <ul class="tower-ads">
+               <li><a href="/cgi/adclick/?ad=57961&amp;adclick=true&amp;url=https%3A%2F%2Fwww.aacr.org%2Fmeeting%2Faacr-annual-meeting-2025%2F%3Futm_source%3Dcshl%26utm_medium%3Dwebbanner%26utm_campaign%3Daacr2025"
+                     target="_blank"><img class="adborder0" title="AACR Annual Meeting"
+                          src="//genesdev.cshlp.org/adsystem/graphics/09806250544902562/genesdev/2501044D_MCS_25_26Upcom_SpecConf_CSHL_160x800_012.jpg?ad=57961&amp;adview=true"
+                          alt="AACR Annual Meeting" /></a></li>
+            </ul>
+            
+            <div id="col-3-widget-placeholder" style="padding-top:12px;">
+               
+               <p style="text-align:center;font-weight:bold;font-size:12px;line-height:15px;margin-top:0;padding-top:0;margin-bottom:0px;color:black;">
+                  <a href="https://www.life-science-alliance.org/?v=genes_and_development">
+                     <img src="/site/misc/images/LSA120x600.jpg" alt="Life Science Alliance" />
+                     </a>
+                  
+               </p>
+               
+               <div id="ads3" style="padding:0p;margin:0;">
+                   
+               </div>
+               <script type="text/javascript" src="/site/misc/figure_lib.js"></script>
+               </div>
+            
+            
+         </div>
+         <div id="footer">
+            
+            <div class="bar">
+               	  
+               <div class="footer-group footer-col-left">
+                  	    
+                  <ul class="button-list footer-buttons">
+                     <li class="first"><a href="/" title="Home"><span>Home</span></a></li>
+                     <li><a href="/site/misc/about.xhtml" title="About"><span>About</span></a></li>
+                     <li><a href="http://submit.genesdev.org/" rel="external-nw" title="Submit"><span>Submit</span></a></li>
+                     <li><a href="/site/subscriptions/" title="Subscribe"><span>Subscribe</span></a></li>
+                     <li><a href="/site/misc/adinfo.xhtml" title="Advertise"><span>Advertise</span></a></li>
+                     <li><a href="/site/misc/ifora.xhtml" title="Author Info"><span>Author Info</span></a></li>
+                     <li><a href="/content/by/year" title="Archive"><span>Archive</span></a></li>
+                     <li><a href="/feedback" title="Contact"><span>Contact</span></a></li>
+                     <li class="last"><a href="/help/" title="Help"><span>Help</span></a></li>
+                  </ul>
+                  	    
+                  <p class="copyright"><a href="http://www.cshlpress.com/" rel="external-nw">Copyright © 2025 by Cold Spring Harbor Laboratory Press</a></p>
+                  	  
+               </div>
+               	  
+               <div class="footer-group footer-col-right">
+                  	    
+                  <ul class="issns">
+                     <li>
+                        <span>Print ISSN: </span>
+                        <span class="issn">0890-9369</span>
+                        
+                     </li>
+                     <li>
+                        <span>Online ISSN: </span>
+                        <span class="issn">1549-5477</span>
+                        
+                     </li>
+                  </ul>
+                  	  
+               </div>
+               	
+            </div>
+            
+            
+            
+            <div class="block-2 sb-div"></div>
+            <script type="text/javascript">
+document.write(unescape("%3Cscript async src='https://www.googletagmanager.com/gtag/js?id=G-PVCB8E488B'%3E%3C/script%3E"));
+</script><script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-PVCB8E488B');
+</script>
+            </div><script type="text/javascript">
+document.write(unescape("%3Cscript async src='https://www.googletagmanager.com/gtag/js?id=G-1CWXPJ6EVC'%3E%3C/script%3E"));
+</script><script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-1CWXPJ6EVC');
+</script></div>
+   </body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "paper_metadata": {
+    "pmid": "22199116",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No variants in the KCNH2 gene were mentioned in the provided text."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical characteristics, mutation types, and ECG parameters of the study populations from the AMC and the Mayo Clinic",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Single nucleotide polymorphisms found in the 3\u2032untranslated region of KCNQ1",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focused on KCNQ1 gene variants, not KCNH2."
+    ],
+    "notes": "The extraction was straightforward as the paper did not mention any KCNH2 variants."
+  }
+}

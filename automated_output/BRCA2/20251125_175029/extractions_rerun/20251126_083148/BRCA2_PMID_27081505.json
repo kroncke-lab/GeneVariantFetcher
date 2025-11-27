@@ -1,0 +1,28 @@
+{
+  "paper_metadata": {
+    "pmid": "27081505",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses genetic variants in BRCA1, BRCA2, CHEK2, and TP53 in a Northeast Brazilian population at high risk for HBOC. However, no specific BRCA2 variants were reported in the main text or tables."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Demographic and clinical characteristics of the study population",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Clinic and pathological characteristics of mutation carriers",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No BRCA2 variants were mentioned in the paper, so extraction was straightforward."
+    ],
+    "notes": "The paper focused on BRCA1 and TP53 mutations, with no specific BRCA2 variants reported."
+  }
+}

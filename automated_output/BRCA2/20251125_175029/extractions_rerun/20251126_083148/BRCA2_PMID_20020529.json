@@ -1,0 +1,52 @@
+{
+  "paper_metadata": {
+    "pmid": "20020529",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 c.7977-1G>C variant, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7977-1G>C",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "BRCA2 c.7977-1G>C was shown to increase the expression of two naturally occurring transcripts that contain frameshifts.",
+        "assays": [
+          "in vitro splicing assays"
+        ]
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for causality",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is associated with disease and should be managed clinically like classical truncating mutations.",
+      "key_quotes": [
+        "The Bayes scores from five informative families with BRCA2 c.7977-1G>C was 47401:1.",
+        "Multifactorial likelihood analysis indicates that the BRCA2 c.7977-1G>C variant is a disease-associated mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the BRCA2 variant was extracted from the main text."
+  }
+}

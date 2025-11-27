@@ -1,0 +1,112 @@
+{
+  "paper_metadata": {
+    "pmid": "39455978",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.332379755CTGAG",
+      "protein_notation": "p.S2988fs",
+      "genomic_position": "chr13:332379755",
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Prostate cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Prostate cancer",
+          "evidence_sentence": "Among these patients, four men (3.6%) carried a germline DDR PTV, including BRCA2 (n=2)..."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a protein-truncating variant (PTV) associated with prostate cancer.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence based on clinical significance",
+      "source_location": "Table 1, Row 1",
+      "additional_notes": "This variant is one of two BRCA2 mutations identified in the study.",
+      "key_quotes": [
+        "We also identified two BRCA2 mutations...",
+        "Among these patients, four men (3.6%) carried a germline DDR PTV, including BRCA2 (n=2)..."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.33232496G>T",
+      "protein_notation": "p.E340*",
+      "genomic_position": "chr13:33232496",
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Prostate cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Prostate cancer",
+          "evidence_sentence": "Among these patients, four men (3.6%) carried a germline DDR PTV, including BRCA2 (n=2)..."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a protein-truncating variant (PTV) associated with prostate cancer.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence based on clinical significance",
+      "source_location": "Table 1, Row 2",
+      "additional_notes": "This variant is one of two BRCA2 mutations identified in the study.",
+      "key_quotes": [
+        "We also identified two BRCA2 mutations...",
+        "Among these patients, four men (3.6%) carried a germline DDR PTV, including BRCA2 (n=2)..."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "List of DNA repair germline mutations annotated by different methods",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 variants were successfully extracted."
+  }
+}

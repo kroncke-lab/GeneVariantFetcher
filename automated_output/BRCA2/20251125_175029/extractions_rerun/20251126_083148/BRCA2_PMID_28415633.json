@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "28415633",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant BRCA2N372H, including clinical significance and penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.Asn372His",
+      "genomic_position": null,
+      "clinical_significance": "benign",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "Variants in genes associated with chromatin remodeling and DNA repair were detected. These included BRCA1Q356R, BRCA2N372H, and EZH2D185H."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant has a population frequency of > 5% and has not been associated with an increased cancer risk.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "> 5%",
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is noted to be benign and not associated with increased cancer risk.",
+      "key_quotes": [
+        "Variants in genes associated with chromatin remodeling and DNA repair were detected. These included BRCA1Q356R, BRCA2N372H, and EZH2D185H. However, each of these variants appears in dbSNP, has a population frequency of > 5%, and has not been associated with an increased cancer risk."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was found in the text."
+  }
+}

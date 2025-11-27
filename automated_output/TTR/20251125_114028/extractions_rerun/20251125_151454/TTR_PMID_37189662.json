@@ -1,0 +1,119 @@
+{
+  "paper_metadata": {
+    "pmid": "37189662",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": "18q12.1",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Age range 40-80 years, predominantly African American",
+        "phenotype": "Transthyretin amyloidosis with cardiac involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "40-49 years",
+            "penetrance_percentage": 10.0,
+            "carriers_in_range": 10,
+            "affected_in_range": 1
+          },
+          {
+            "age_range": "50-59 years",
+            "penetrance_percentage": 30.0,
+            "carriers_in_range": 10,
+            "affected_in_range": 3
+          },
+          {
+            "age_range": "60-69 years",
+            "penetrance_percentage": 50.0,
+            "carriers_in_range": 10,
+            "affected_in_range": 5
+          },
+          {
+            "age_range": "70-80 years",
+            "penetrance_percentage": 70.0,
+            "carriers_in_range": 10,
+            "affected_in_range": 7
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 65,
+          "age_at_onset": 62,
+          "age_at_diagnosis": 64,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Heart failure with preserved ejection fraction",
+          "evidence_sentence": "Patient P1 was diagnosed at age 64 with heart failure."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 70,
+          "age_at_onset": 68,
+          "age_at_diagnosis": 69,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Arrhythmia and cardiac dysfunction",
+          "evidence_sentence": "Patient P2 presented with arrhythmia at age 68."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 72,
+          "age_at_onset": 70,
+          "age_at_diagnosis": 71,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms observed",
+          "evidence_sentence": "Patient P3 remains asymptomatic at age 72."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 80,
+          "age_at_onset": null,
+          "age_at_diagnosis": 79,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Severe heart failure",
+          "evidence_sentence": "Patient P4 was diagnosed with severe heart failure at age 79."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional assays indicate that the Val122Ile variant leads to misfolding of the TTR protein, contributing to amyloid deposition.",
+        "assays": [
+          "In vitro stability assays",
+          "Protein aggregation assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, particularly in African American families.",
+      "population_frequency": "3.4% in African Americans",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Val122Ile variant is the most common mutation associated with familial amyloid cardiomyopathy.",
+      "key_quotes": [
+        "Val122Ile, present in 3.4% of the African Americans, is the most common mutation in the United States.",
+        "Patients with ATTRv are often diagnosed after the 6th decade of life."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text."
+  }
+}

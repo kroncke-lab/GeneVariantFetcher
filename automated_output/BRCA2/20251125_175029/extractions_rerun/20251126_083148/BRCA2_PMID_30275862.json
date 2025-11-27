@@ -1,0 +1,84 @@
+{
+  "paper_metadata": {
+    "pmid": "30275862",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant c.849dupT, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.849dupT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female patient",
+        "phenotype": "familial breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 1,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "familial breast cancer",
+          "evidence_sentence": "A novel mutation (c.849dupT) in BRCA2 was identified in a female patient and her unaffected brothers."
+        },
+        {
+          "individual_id": "Brother_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": null,
+          "evidence_sentence": "A novel mutation (c.849dupT) in BRCA2 was identified in a female patient and her unaffected brothers."
+        },
+        {
+          "individual_id": "Brother_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": null,
+          "evidence_sentence": "A novel mutation (c.849dupT) in BRCA2 was identified in a female patient and her unaffected brothers."
+        }
+      ],
+      "functional_data": {
+        "summary": "This mutation leads to the truncation of BRCA2 functional domains and significantly reduces BRCA2 mRNA expression levels.",
+        "assays": [
+          "immunofluorescence",
+          "western blot"
+        ]
+      },
+      "segregation_data": "This mutation is strongly associated with familial breast cancer.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The effects of this BRCA2 mutation on drug resistance should be taken into consideration during treatment.",
+      "key_quotes": [
+        "This mutation leads to the truncation of BRCA2 functional domains.",
+        "BRCA2 mRNA expression levels in mutation carriers are significantly reduced compared to noncarriers."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

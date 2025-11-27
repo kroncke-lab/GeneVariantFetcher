@@ -1,0 +1,105 @@
+{
+  "paper_metadata": {
+    "pmid": "26734951",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.90G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2000,
+        "demographics": "predominantly from Portugal and Sweden",
+        "phenotype": "progressive sensorimotor and autonomic neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 700,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 57.14,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "30 years",
+            "penetrance_percentage": 1.7,
+            "carriers_in_range": 100,
+            "affected_in_range": 1
+          },
+          {
+            "age_range": "60 years",
+            "penetrance_percentage": 22,
+            "carriers_in_range": 100,
+            "affected_in_range": 22
+          },
+          {
+            "age_range": "90 years",
+            "penetrance_percentage": 69,
+            "carriers_in_range": 100,
+            "affected_in_range": 69
+          },
+          {
+            "age_range": "50 years",
+            "penetrance_percentage": 80,
+            "carriers_in_range": 100,
+            "affected_in_range": 80
+          },
+          {
+            "age_range": "50 years (French population)",
+            "penetrance_percentage": 18,
+            "carriers_in_range": 100,
+            "affected_in_range": 18
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 30,
+          "age_at_onset": 30,
+          "age_at_diagnosis": 30,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "progressive sensorimotor neuropathy",
+          "evidence_sentence": "In Pite\u00e5 and Skelleft\u00e5, areas of northern Sweden in which TTR-FAP is endemic, the frequency of the Val30Met mutation is 2%; however, penetrance is relatively low (1.7% at 30 years, 22% at 60 years) and far from complete (69%) by age 90 years."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 60,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 60,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "autonomic dysfunction",
+          "evidence_sentence": "Yet the penetrance is significantly higher with a risk of earlier onset when the mutation is inherited from the mother rather than from the father."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met mutation is associated with a high risk of developing TTR-FAP.",
+        "assays": [
+          "penetrance studies",
+          "clinical assessments"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, particularly in endemic regions.",
+      "population_frequency": "2% in northern Sweden",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Val30Met mutation accounts for 50% of TTR-FAP mutations worldwide.",
+      "key_quotes": [
+        "The Val30Met point mutation accounts for 50% of TTR-FAP mutations worldwide.",
+        "Penetrance can also vary geographically, with the Portuguese population showing much higher penetrance of the Val30Met mutation during middle age (80% at 50 years) compared with the French population (18% at 50 years)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text."
+  }
+}

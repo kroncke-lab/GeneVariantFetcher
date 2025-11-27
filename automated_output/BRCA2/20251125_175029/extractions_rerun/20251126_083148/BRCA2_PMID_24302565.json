@@ -1,0 +1,53 @@
+{
+  "paper_metadata": {
+    "pmid": "24302565",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant c.67+3A>G, including clinical significance, functional data, and penetrance information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.67+3A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 0,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "BRCA2:c.67+3A>G results in an aberrantly spliced transcript deleting exon 2 and the consensus ATG site, leading to loss of protein function.",
+        "assays": [
+          "in vitro GFP-reporter assays",
+          "mRNA analysis"
+        ]
+      },
+      "segregation_data": "Further clinical data is required to confirm if these variants are associated with a high cancer risk.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant's clinical significance remains uncertain pending further studies.",
+      "key_quotes": [
+        "BRCA2:c.67+3A>G was shown by mRNA analysis to result in an aberrantly spliced transcript deleting exon 2 and the consensus ATG site.",
+        "Initiation from any of the downstream alternative sites tested in both genes would lead to loss of protein function, but further clinical data is required to confirm if these variants are associated with a high cancer risk."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was identified in the text."
+  }
+}

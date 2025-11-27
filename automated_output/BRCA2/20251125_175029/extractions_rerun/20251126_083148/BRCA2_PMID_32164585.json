@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "32164585",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene along with penetrance data from the study on high-grade serous ovarian cancer."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.276dupA",
+      "protein_notation": "p.S93Ifs*8",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2p.S93Ifs*8c.276dupAFrameshift"
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation leading to truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "This variant is associated with high-grade serous ovarian cancer.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1806delA",
+      "protein_notation": "p.I605Yfs*9",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2p.I605Yfs*9c.1806delAFrameshift"
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation leading to truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 2",
+      "additional_notes": "This variant is associated with high-grade serous ovarian cancer.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3896A>T",
+      "protein_notation": "p.E1299V",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2p.E1299Vc.3896A>T"
+        }
+      ],
+      "functional_data": {
+        "summary": "Missense mutation with uncertain functional impact.",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Table 2, Row 3",
+      "additional_notes": "This variant may contribute to cancer risk.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Inconsistent germline and somatic BRCA1/2 variations",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

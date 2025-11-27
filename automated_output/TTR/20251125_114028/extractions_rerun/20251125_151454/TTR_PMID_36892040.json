@@ -1,0 +1,83 @@
+{
+  "paper_metadata": {
+    "pmid": "36892040",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant V122I, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349T>C",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "Black individuals",
+        "phenotype": "linked with heart failure"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 100,
+        "affected_count": 4,
+        "unaffected_count": 96,
+        "uncertain_count": null,
+        "penetrance_percentage": 4.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 60,
+          "age_at_onset": 55,
+          "age_at_diagnosis": 58,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "heart failure",
+          "evidence_sentence": "A TTR V122I variant (found in 3%\u20134% of Black individuals) may promote amyloid fibril deposition, leading to heart failure."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 62,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 61,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "heart failure",
+          "evidence_sentence": "A TTR V122I variant (found in 3%\u20134% of Black individuals) may promote amyloid fibril deposition, leading to heart failure."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 55,
+          "age_at_onset": 50,
+          "age_at_diagnosis": 52,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "A TTR V122I variant (found in 3%\u20134% of Black individuals) may promote amyloid fibril deposition, leading to heart failure."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with destabilization of the TTR-RBP4 complex.",
+        "assays": [
+          "in vitro studies",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "Yes, it segregates with disease in families.",
+      "population_frequency": "3%\u20134% in Black individuals",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is linked to heart failure through amyloid fibril deposition.",
+      "key_quotes": [
+        "A TTR V122I variant (found in 3%\u20134% of Black individuals) may promote amyloid fibril deposition, leading to heart failure."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text."
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "paper_metadata": {
+    "pmid": "39180423",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses variants in the TTR gene associated with transthyretin cardiac amyloidosis (ATTR-CA), specifically focusing on the Val122Ile mutation and its implications for penetrance and clinical presentation."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 40,
+        "demographics": "Mean age 78.1 years, 91.1% male, 80.7% White, 14.6% African American",
+        "phenotype": "ATTR-CA with various heart failure phenotypes"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 40,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val122Ile mutation is the most frequently identified mutation in patients with hereditary ATTR.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the prevalence of the Val122Ile mutation among patients with hereditary ATTR.",
+      "key_quotes": [
+        "Among patients with hATTR with available data on their genotype (n = 40), the most frequently identified mutation was Val122Ile (67.5%)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 40,
+        "demographics": "Mean age 78.1 years, 91.1% male, 80.7% White, 14.6% African American",
+        "phenotype": "ATTR-CA with various heart failure phenotypes"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 40,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Thr60Ala mutation is one of the identified mutations in patients with hereditary ATTR.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the prevalence of the Thr60Ala mutation among patients with hereditary ATTR.",
+      "key_quotes": [
+        "Among patients with hATTR with available data on their genotype (n = 40), the most frequently identified mutation was Val122Ile (67.5%), followed by Thr60Ala (20%)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 40,
+        "demographics": "Mean age 78.1 years, 91.1% male, 80.7% White, 14.6% African American",
+        "phenotype": "ATTR-CA with various heart failure phenotypes"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 40,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val30Met mutation is one of the identified mutations in patients with hereditary ATTR.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the prevalence of the Val30Met mutation among patients with hereditary ATTR.",
+      "key_quotes": [
+        "Among patients with hATTR with available data on their genotype (n = 40), the most frequently identified mutation was Val122Ile (67.5%), followed by Thr60Ala (20%) and Val30Met (5%)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted successfully."
+  }
+}

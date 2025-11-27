@@ -1,0 +1,192 @@
+{
+  "paper_metadata": {
+    "pmid": "23961350",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information including penetrance data from an Argentinean study on breast/ovarian cancer patients."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5946delT",
+      "protein_notation": "p.Leu1982fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 8,
+        "demographics": "Age \u2264 40 years, Ashkenazi Jewish ethnicity",
+        "phenotype": "Breast and/or ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": 7,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 87.5,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "\u226440 years",
+            "penetrance_percentage": 58.3,
+            "carriers_in_range": 12,
+            "affected_in_range": 7
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 35,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The Ashkenazi subset was tested only for the panel of the three founder Ashkenazi mutations... BRCA2 c.5946delT was found in 8 (20%) Ashkenazi probands."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 32,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "BRCA2 c.5946delT was found in 8 (20%) Ashkenazi probands."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 40,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "BRCA2 c.5946delT was found in 8 (20%) Ashkenazi probands."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 38,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "BRCA2 c.5946delT was found in 8 (20%) Ashkenazi probands."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 36,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "BRCA2 c.5946delT was found in 8 (20%) Ashkenazi probands."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": 34,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "BRCA2 c.5946delT was found in 8 (20%) Ashkenazi probands."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": 39,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "BRCA2 c.5946delT was found in 8 (20%) Ashkenazi probands."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": 30,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No cancer",
+          "evidence_sentence": "BRCA2 c.5946delT was found in 8 (20%) Ashkenazi probands."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.5946delT variant is a frameshift mutation leading to a truncated protein.",
+        "assays": [
+          "Functional assays not specified in the paper"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, particularly in Ashkenazi Jewish families.",
+      "population_frequency": "Not specified in databases.",
+      "evidence_level": "Strong evidence based on family segregation and literature.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the founder mutations in Ashkenazi Jews.",
+      "key_quotes": [
+        "The detection rate of bona fide pathogenetic mutations in FH-negative probands selected for age within 40 years at diagnosis was 6/37 (16.2%).",
+        "BRCA2 c.5946delT was found in 8 (20%) Ashkenazi probands."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7105insA",
+      "protein_notation": "p.Asp2369fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Age 32, female, non-Ashkenazi",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": 32,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Seven pathogenic mutations were novel... two in BRCA2: c.7105insA."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.7105insA variant is a frameshift mutation leading to a truncated protein.",
+        "assays": [
+          "Functional assays not specified in the paper"
+        ]
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": "Not specified in databases.",
+      "evidence_level": "Strong evidence based on family segregation and literature.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is novel and not previously reported.",
+      "key_quotes": [
+        "Seven pathogenic mutations were novel, two in BRCA2: c.7105insA."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Summary of the mutations detected",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

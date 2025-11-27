@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "32005245",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.10204ins/delAAA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "English springer spaniel",
+        "phenotype": "mammary tumors"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The NLS2 variation 10204insAAA causes an amino acid change, which enhances nuclear localization.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the English springer spaniel breed.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Table 1, Row 1",
+      "additional_notes": "Associated with higher morbidity rates in dogs.",
+      "key_quotes": [
+        "the morbidity rate of dogs was higher with AAA insertion than with AAA deletion"
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.10398A>G",
+      "protein_notation": "p.Tyr3397Cys",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 5,
+        "demographics": "canine mammary tumor-bearing dogs",
+        "phenotype": "mammary tumors"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 3,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 60.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Missense mutation that may alter protein function.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 1, Row 2",
+      "additional_notes": "Further studies needed to clarify significance.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.10421A>C",
+      "protein_notation": "p.Thr3405Pro",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 5,
+        "demographics": "canine mammary tumor-bearing dogs",
+        "phenotype": "mammary tumors"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 3,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 60.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Missense mutation that may alter protein function.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "Further studies needed to clarify significance.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2414G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 11,
+        "demographics": "canine mammary tumor-bearing dogs",
+        "phenotype": "mammary tumors"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": 7,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 63.6,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Associated with significant structural changes in BRCA2 protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Table 1, Row 4",
+      "additional_notes": "Strong association with mammary tumors.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Variations found in the canine BRCA2 gene",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants and penetrance data were extracted."
+  }
+}

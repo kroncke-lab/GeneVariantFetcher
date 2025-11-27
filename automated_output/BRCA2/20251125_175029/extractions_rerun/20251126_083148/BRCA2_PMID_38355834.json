@@ -1,0 +1,65 @@
+{
+  "paper_metadata": {
+    "pmid": "38355834",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5945delT",
+      "protein_notation": "p.S1982Rfs*22",
+      "genomic_position": "Exon 11",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "56-year-old male",
+        "phenotype": "metastatic castration-resistant prostate cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 9,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": 56,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Gleason 9 (5+4) prostate adenocarcinoma metastatic to the bone and lymph nodes",
+          "evidence_sentence": "A 56-year-old man with a germline BRCA2 mutation (S1982Rfs*22, exon 11) was found to have a prostate-specific antigen (PSA) of 32\u2009ng/ml and subsequently diagnosed with Gleason 9 (5\u2009+\u20094) prostate adenocarcinoma metastatic to the bone and lymph nodes."
+        }
+      ],
+      "functional_data": {
+        "summary": "The reversion mutations are predicted to restore BRCA2 function by re-establishing the open reading frame or excising the germline mutation.",
+        "assays": [
+          "NGS using MSK-ACCESS",
+          "NGS using MSK-IMPACT",
+          "whole exome sequencing (WES)"
+        ]
+      },
+      "segregation_data": "The presence of the BRCA2 mutation is associated with the disease in the patient.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient exhibited extensive intratumoral heterogeneity with multiple BRCA2 reversion mutations.",
+      "key_quotes": [
+        "Genomic sequencing of 11 sites of metastatic disease demonstrated extensive intratumoral heterogeneity, with ten unique BRCA2 reversion mutations across ten sites.",
+        "The 10 reversion mutations identified on autopsy are predicted to re-establish BRCA2 function by restoring the open reading frame (7 mutations) or excising the germline mutation (3 mutations)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding BRCA2 variants and penetrance were successfully extracted."
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "paper_metadata": {
+    "pmid": "33844361",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the TTR gene, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.148G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3371,
+        "demographics": "55.5% male; mean age at onset 39.7 years",
+        "phenotype": "transthyretin amyloid polyneuropathy (ATTRv)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3371,
+        "affected_count": 1389,
+        "unaffected_count": 1982,
+        "uncertain_count": null,
+        "penetrance_percentage": 41.2,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 43,
+          "age_at_onset": 39,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic with lower limb sensory/motor deficits",
+          "evidence_sentence": "Patients with ATTRv in THAOS with recorded nerve conduction values were included."
+        }
+      ],
+      "functional_data": {
+        "summary": "Nerve conduction studies indicate progressive deterioration in nerve conduction.",
+        "assays": [
+          "nerve conduction studies"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified.",
+      "evidence_level": "Strong evidence based on clinical data.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The predominant TTR genotype was Val30Met.",
+      "key_quotes": [
+        "Patients with ATTRv in THAOS with recorded nerve conduction values were included.",
+        "The most common genotypes were Val30Met (p.Val50Met; 63.4%)"
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Demographic characteristics of patients with ATTRv amyloidosis and nerve conduction studies at enrollment in THAOS",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text and tables."
+  }
+}

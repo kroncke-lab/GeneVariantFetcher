@@ -1,0 +1,28 @@
+{
+  "paper_metadata": {
+    "pmid": "24620715",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the presence of transthyretin (TTR) amyloid deposits in patients with lumbar spinal stenosis, suggesting a potential link to senile systemic amyloidosis (SSA). However, no specific genetic variants in the TTR gene are mentioned."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table I",
+      "table_caption": "Total material analyzed for presence of amyloid from patients with lumbar spinal stenosis.",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table II",
+      "table_caption": "Amyloid-containing materials with or without reactivity with an anti TTR antibody at immunohistochemistry.",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No specific genetic variants in the TTR gene were mentioned in the paper."
+    ],
+    "notes": "The paper focuses on the presence of TTR amyloid deposits in spinal stenosis but does not provide specific genetic variant data for TTR."
+  }
+}

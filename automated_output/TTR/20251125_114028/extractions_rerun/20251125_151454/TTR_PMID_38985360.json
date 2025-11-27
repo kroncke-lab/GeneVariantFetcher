@@ -1,0 +1,111 @@
+{
+  "paper_metadata": {
+    "pmid": "38985360",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information related to the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 441,
+        "demographics": "24% of patients with ATTRv-CM",
+        "phenotype": "Transthyretin amyloid cardiomyopathy (ATTR-CM)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 106,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val122Ile mutation is associated with increased risk of amyloid fibril formation.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Occurs in approximately 3.4% of the African American population.",
+      "evidence_level": "Strong evidence for pathogenicity based on clinical studies.",
+      "source_location": "Main text, paragraph 3",
+      "additional_notes": "This variant is the most common mutation associated with cardiac involvement.",
+      "key_quotes": [
+        "The most common mutation (Val122Ile) occurs in approximately 3.4% of the African American population and exclusively has cardiac involvement."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.179C>G",
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 441,
+        "demographics": null,
+        "phenotype": "Transthyretin amyloid cardiomyopathy (ATTR-CM)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Thr60Ala mutation is associated with increased risk of amyloid fibril formation.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence for pathogenicity based on clinical studies.",
+      "source_location": "Main text, paragraph 3",
+      "additional_notes": "This variant is one of the prevalent mutations in ATTR-CM.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.203A>T",
+      "protein_notation": "p.Ile68Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 441,
+        "demographics": null,
+        "phenotype": "Transthyretin amyloid cardiomyopathy (ATTR-CM)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Ile68Leu mutation is associated with increased risk of amyloid fibril formation.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence for pathogenicity based on clinical studies.",
+      "source_location": "Main text, paragraph 3",
+      "additional_notes": "This variant is one of the prevalent mutations in ATTR-CM.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted successfully."
+  }
+}

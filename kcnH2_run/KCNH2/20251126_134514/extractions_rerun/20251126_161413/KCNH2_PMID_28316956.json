@@ -1,0 +1,138 @@
+{
+  "paper_metadata": {
+    "pmid": "28316956",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.R1047L",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 24,
+        "demographics": "not specified",
+        "phenotype": "SIDS or near-SIDS cases"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 24,
+        "affected_count": 4,
+        "unaffected_count": 20,
+        "uncertain_count": null,
+        "penetrance_percentage": 16.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SIDS",
+          "evidence_sentence": "KCNH2 p.R1047L was identified in 4 affected individuals."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "KCNH2 p.R1047L was identified in 20 unaffected individuals."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional assays indicated that the KCNH2 mutations lead to loss of function.",
+        "assays": [
+          "electrophysiological studies",
+          "cell culture expression"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Table 1, Row 2",
+      "additional_notes": "The variant was part of a broader study on LQTS and SIDS.",
+      "key_quotes": [
+        "KCNH2 p.R1047L was identified in 4 affected individuals.",
+        "KCNH2 mutations lead to loss of function."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.A561V",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 12,
+        "demographics": "not specified",
+        "phenotype": "SIDS or near-SIDS cases"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 12,
+        "affected_count": 2,
+        "unaffected_count": 10,
+        "uncertain_count": null,
+        "penetrance_percentage": 16.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SIDS",
+          "evidence_sentence": "KCNH2 p.A561V was identified in 2 affected individuals."
+        },
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "KCNH2 p.A561V was identified in 10 unaffected individuals."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional assays indicated that the KCNH2 mutations lead to loss of function.",
+        "assays": [
+          "electrophysiological studies",
+          "cell culture expression"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "The variant was part of a broader study on LQTS and SIDS.",
+      "key_quotes": [
+        "KCNH2 p.A561V was identified in 2 affected individuals.",
+        "KCNH2 mutations lead to loss of function."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Long QT syndrome as a causative factor of SIDS and implicated mutations\u2014Broad genetic studies",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted from the main text and tables."
+  }
+}

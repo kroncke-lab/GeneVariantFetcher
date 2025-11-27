@@ -1,0 +1,130 @@
+{
+  "paper_metadata": {
+    "pmid": "33679409",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information related to the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 23,
+        "demographics": "Asian population, age range not specified",
+        "phenotype": "aggressive cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 23,
+        "affected_count": 5,
+        "unaffected_count": 18,
+        "uncertain_count": null,
+        "penetrance_percentage": 21.74,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "congestive heart failure, conduction block, and intractable arrhythmia",
+          "evidence_sentence": "Within the 23 patients, only five patients were observed to possess a low left ventricle ejection fraction (ejection fraction <50%)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to a significant increase in the rate of dissociation of TTR tetramers into monomers, promoting amyloidogenesis.",
+        "assays": [
+          "19F-NMR technology",
+          "Gibbs free energy calculations"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is frequently associated with familial amyloid cardiomyopathy.",
+      "key_quotes": [
+        "Val122Ile is the frequently occurred mutation that causes FAC.",
+        "Patients with congestive heart failure, conduction block, and intractable arrhythmia need the implantation of pacemakers with/without cardioverter defibrillators."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.179C>T",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "not specified",
+        "phenotype": "familial amyloid polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is known to cause familial amyloid polyneuropathy, leading to various clinical manifestations.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Cardiac manifestations are mainly manifested in different types of heart block.",
+      "key_quotes": [
+        "Val30Met mutation usually causes FAP."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.179C>A",
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "not specified",
+        "phenotype": "restrictive cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation can lead to late-onset restrictive cardiomyopathy as well as sensorimotor and autonomic polyneuropathy.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Patients with Thr60Ala mutation can develop late-onset restrictive cardiomyopathy.",
+      "key_quotes": [
+        "Patients with Thr60Ala mutation can develop late-onset restrictive cardiomyopathy as well as sensorimotor and autonomic polyneuropathy."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant TTR variants and penetrance data were extracted successfully."
+  }
+}

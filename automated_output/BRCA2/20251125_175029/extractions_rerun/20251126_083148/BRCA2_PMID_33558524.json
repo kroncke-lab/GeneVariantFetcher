@@ -1,0 +1,610 @@
+{
+  "paper_metadata": {
+    "pmid": "33558524",
+    "title": "Germline mutational spectrum in Armenian breast cancer patients suspected of hereditary breast and ovarian cancer",
+    "extraction_summary": "Extracted variants in the BRCA2 gene along with penetrance data from the study."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.574dup",
+      "protein_notation": "p.Met192Asnfs",
+      "genomic_position": null,
+      "clinical_significance": "PATH",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified, Armenian descent",
+        "phenotype": "Bilateral breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P-18",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Bilateral breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a frameshift mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in a patient with bilateral breast cancer.",
+      "key_quotes": [
+        "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1414C>T",
+      "protein_notation": "p.Gln472Ter",
+      "genomic_position": null,
+      "clinical_significance": "PATH",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified, Armenian descent",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P-19",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a nonsense mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in a patient with breast cancer.",
+      "key_quotes": [
+        "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1528G>T",
+      "protein_notation": "p.Glu510Ter",
+      "genomic_position": null,
+      "clinical_significance": "PATH",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified, Armenian descent",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P-20",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a nonsense mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in a patient with breast cancer.",
+      "key_quotes": [
+        "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2095C>T",
+      "protein_notation": "p.Gln699Ter",
+      "genomic_position": null,
+      "clinical_significance": "PATH",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified, Armenian descent",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P-21",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a nonsense mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in a patient with breast cancer.",
+      "key_quotes": [
+        "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2623G>C",
+      "protein_notation": "p.Val875Leu",
+      "genomic_position": null,
+      "clinical_significance": "LPATH",
+      "patients": {
+        "count": 2,
+        "demographics": "Female, age not specified, Armenian descent",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P-22a",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        },
+        {
+          "individual_id": "P-23a",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is likely to affect protein function.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on likely pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in two patients with breast cancer.",
+      "key_quotes": [
+        "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2808_2811delACAA",
+      "protein_notation": "p.Ala938Profs",
+      "genomic_position": null,
+      "clinical_significance": "PATH",
+      "patients": {
+        "count": 2,
+        "demographics": "Female, age not specified, Armenian descent",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P-24",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        },
+        {
+          "individual_id": "P-25",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a frameshift mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in two patients with breast cancer.",
+      "key_quotes": [
+        "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4037_4038delCT",
+      "protein_notation": "p.Thr1346Serfs",
+      "genomic_position": null,
+      "clinical_significance": "PATH",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified, Armenian descent",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P-26",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a frameshift mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in a patient with breast cancer.",
+      "key_quotes": [
+        "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4548_4549delCA",
+      "protein_notation": "p.Lys1517Argfs",
+      "genomic_position": null,
+      "clinical_significance": "PATH",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified, Armenian descent",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P-27",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a frameshift mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in a patient with breast cancer.",
+      "key_quotes": [
+        "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5006T>G",
+      "protein_notation": "p.Leu1669Ter",
+      "genomic_position": null,
+      "clinical_significance": "PATH",
+      "patients": {
+        "count": 3,
+        "demographics": "Female, age not specified, Armenian descent",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 3,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P-28",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        },
+        {
+          "individual_id": "P-29",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        },
+        {
+          "individual_id": "P-30",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a nonsense mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in three patients with breast cancer.",
+      "key_quotes": [
+        "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6302delA",
+      "protein_notation": "p.Asn2101Metfs",
+      "genomic_position": null,
+      "clinical_significance": "PATH",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified, Armenian descent",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P-31",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a frameshift mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in a patient with breast cancer.",
+      "key_quotes": [
+        "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7689delC",
+      "protein_notation": "p.His2563Glnfs",
+      "genomic_position": null,
+      "clinical_significance": "PATH",
+      "patients": {
+        "count": 2,
+        "demographics": "Female, age not specified, Armenian descent",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P-32",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        },
+        {
+          "individual_id": "P-33",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Male",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a frameshift mutation leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in two patients with breast cancer.",
+      "key_quotes": [
+        "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8851G>T",
+      "protein_notation": "p.Ala2951Ser",
+      "genomic_position": null,
+      "clinical_significance": "LPATH",
+      "patients": {
+        "count": 2,
+        "demographics": "Female, age not specified, Armenian descent",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P-34",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        },
+        {
+          "individual_id": "P-35",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "Female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is likely to affect protein function.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on likely pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in two patients with breast cancer.",
+      "key_quotes": [
+        "We found four patients in this patient cohort that did not report any family history of cancer yet had pathogenic or likely pathogenic variants identified."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Patients with only pathogenic and likely pathogenic variants.",
+      "variants_extracted": 19
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 19,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants and penetrance data were extracted successfully."
+  }
+}

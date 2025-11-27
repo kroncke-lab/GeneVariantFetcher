@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "25488473",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Leu12Pro, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.34T>C",
+      "protein_notation": "p.Leu12Pro",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "43-year-old male, Nigerian",
+        "phenotype": "Oculoleptomeningeal amyloidosis with neurological decline, weight loss, confusion, fatigue, urinary and erectile dysfunction, slurred speech, right-sided weakness, hearing difficulties, and painless paraesthesia."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 43,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Rapidly progressive neurological decline with symptoms including weight loss, confusion, fatigue, erectile dysfunction, urinary urgency, slurred speech, right-sided weakness, hearing difficulties, and painless paraesthesia.",
+          "evidence_sentence": "A 43-year-old right-handed Nigerian man was referred to our centre with rapidly progressive neurological decline."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Leu12Pro mutation is associated with oculoleptomeningeal amyloidosis, but specific functional assays were not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned in the paper.",
+      "population_frequency": "Not available.",
+      "evidence_level": "Moderate, based on clinical presentation and mutation association.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the first reported case of the TTR Leu12Pro variant in an African patient.",
+      "key_quotes": [
+        "He was heterozygous for the leucine 12 proline mutation.",
+        "TTR amyloidosis is a rare cause of leptomeningeal enhancement, but should be considered if there is evidence of peripheral or autonomic neuropathy with cardiac or ocular involvement."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variant."
+  }
+}

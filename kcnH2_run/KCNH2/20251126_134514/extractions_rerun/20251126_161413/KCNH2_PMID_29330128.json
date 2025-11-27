@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "null",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 variant Ser55Leu, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Ser55Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "27-year-old female",
+        "phenotype": "long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 27,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "long QT syndrome",
+          "evidence_sentence": "A 27-year-old female was seen for long QT syndrome."
+        }
+      ],
+      "functional_data": {
+        "summary": "KCNH2 Ser55Leu is positioned at domains critical for KCNH2 fast inactivation.",
+        "assays": [
+          "co-segregation analysis",
+          "patch clamp in vitro electrophysiology",
+          "structural analysis"
+        ]
+      },
+      "segregation_data": "Yes, it segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on clinical phenotyping and electrophysiologic study.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was correctly classified as pathogenic based on structural analysis.",
+      "key_quotes": [
+        "KCNH2 Ser55Leu is correctly classified as pathogenic."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the KCNH2 variant was extracted from the main text."
+  }
+}

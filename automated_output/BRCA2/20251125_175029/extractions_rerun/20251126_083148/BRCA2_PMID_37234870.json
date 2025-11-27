@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "37234870",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted pathogenic variants in the BRCA2 gene from a study on pancreatic ductal adenocarcinoma patients."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7977-1G>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "pancreatic ductal adenocarcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "pancreatic ductal adenocarcinoma",
+          "evidence_sentence": "Two of them (BRCA2 c.7977-1G>T; SPINK1 c.194 + 2T>C) are listed in the ClinVar database."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is reported to be pathogenic.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on ClinVar listing",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant has been consistently reported to be pathogenic.",
+      "key_quotes": [
+        "The BRCA2 variant was consistently reported to be pathogenic."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in BRCA2 was reported in the paper."
+  }
+}

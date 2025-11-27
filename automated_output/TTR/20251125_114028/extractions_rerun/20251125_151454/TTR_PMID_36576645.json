@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "36576645",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val30Met, including penetrance data and individual patient details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.90G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "71-year-old male",
+        "phenotype": "Familial amyloid polyneuropathy (FAP) stage I, sensory-motor axonal polyneuropathy, hypertrophic cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 71,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Progressive imbalance during walking, unintentional weight loss, sensory-motor axonal polyneuropathy, hypertrophic cardiomyopathy",
+          "evidence_sentence": "A 71-year-old man complained of 1-year history of progressive imbalance during walking associated with unintentional weight loss."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met variant is associated with hereditary transthyretin amyloidosis, leading to amyloid fibril deposition.",
+        "assays": []
+      },
+      "segregation_data": "The variant is known to segregate with disease in families affected by ATTRv.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Case report section",
+      "additional_notes": "The patient developed severe liver enzyme increase after inotersen treatment, which normalized after discontinuation.",
+      "key_quotes": [
+        "TTR genetic test resulted positive for Val30Met mutation.",
+        "His baseline evaluation showed familial amyloid polyneuropathy (FAP) stage I."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variant."
+  }
+}

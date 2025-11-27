@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "36310718",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant found in the paper, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1882G>A",
+      "protein_notation": "p.(Gly628Ser)",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, age 0 months",
+        "phenotype": "long QT syndrome with episodes of ventricular tachycardia and TdP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": 0,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "long QT syndrome, episodes of ventricular tachycardia and TdP",
+          "evidence_sentence": "Postnatal genetic testing confirmed a de novo, heterozygous KCNH2 gene, c.1882G>A p.(Gly628Ser), mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with long QT syndrome and resulted in episodes of ventricular tachycardia.",
+        "assays": []
+      },
+      "segregation_data": "The variant is de novo.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, Case 4",
+      "additional_notes": "The patient was treated with magnesium infusion and nadolol.",
+      "key_quotes": [
+        "The QTc measured 640 ms and there were short episodes of both monomorphic VT and TdP without hemodynamic compromise."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in the KCNH2 gene was reported in the paper."
+  }
+}

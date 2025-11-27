@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "33990324",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1234G>A",
+      "protein_notation": "p.Arg412His",
+      "genomic_position": "not provided",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 38,
+        "demographics": "not specified",
+        "phenotype": "Atrial Fibrillation (AF)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 38,
+        "affected_count": 38,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Atrial Fibrillation",
+          "evidence_sentence": "We identified 38 variants with PPA > 10% in cardiomyocyte cCREs, including previously reported variants at the KCNH2 locus."
+        }
+      ],
+      "functional_data": {
+        "summary": "The KCNH2 enhancer carrying the AF risk allele displayed significantly weaker enhancer activity than when containing the nonrisk variants.",
+        "assays": [
+          "reporter assays",
+          "CRISPR-Cas9 mediated cCRE deletion"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "not provided",
+      "evidence_level": "strong evidence based on functional assays and segregation data",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The KCNH2 gene is primarily expressed in ventricular and atrial cardiomyocytes in the adult human heart.",
+      "key_quotes": [
+        "The cCRE appeared to be activated during hPSC-cardiomyocyte differentiation, as evidenced by an increase in H3K27ac signal that correlated with KCNH2 expression.",
+        "Results from these studies confirmed that in D15 hPSC cardiomyocytes, the KCNH2 enhancer carrying the rs7789146-G/rs7789585-G AF risk allele displayed significantly weaker enhancer activity than when containing the nonrisk variants."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the KCNH2 gene was extracted successfully."
+  }
+}

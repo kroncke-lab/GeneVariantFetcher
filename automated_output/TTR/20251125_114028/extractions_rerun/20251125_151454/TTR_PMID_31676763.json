@@ -1,0 +1,75 @@
+{
+  "paper_metadata": {
+    "pmid": "31676763",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the Val30Met variant of the TTR gene in the context of hereditary ATTR amyloidosis, detailing its structural implications and clinical significance."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.90G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "polyneuropathy with cardiac involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "polyneuropathy with cardiac involvement",
+          "evidence_sentence": "Both patients show polyneuropathy with cardiac involvement."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "polyneuropathy with cardiac involvement",
+          "evidence_sentence": "Both patients show polyneuropathy with cardiac involvement."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met variant leads to the formation of type A amyloid fibrils.",
+        "assays": [
+          "Cryo-EM",
+          "Mass spectrometry",
+          "Reversed phase chromatography"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the two patients described.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The study highlights the structural implications of the Val30Met variant in TTR and its association with amyloid fibril formation.",
+      "key_quotes": [
+        "Well over 120 mutational variants of TTR are known to give rise to hereditary ATTR amyloidosis with Val30Met being a particularly important one.",
+        "Both patients show polyneuropathy with cardiac involvement."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant was extracted from the main text."
+  }
+}

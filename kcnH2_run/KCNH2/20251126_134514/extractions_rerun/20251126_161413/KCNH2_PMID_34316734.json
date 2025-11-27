@@ -1,0 +1,71 @@
+{
+  "paper_metadata": {
+    "pmid": "34316734",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a variant in the KCNH2 gene associated with a patient presenting with bidirectional ventricular tachycardia."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Val535Met",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "11-year-old male",
+        "phenotype": "bidirectional ventricular tachycardia, long QTU phenotype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Proband",
+          "age_at_evaluation": 11,
+          "age_at_onset": 6,
+          "age_at_diagnosis": 11,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "recurrent syncope during exercise, bidirectional ventricular tachycardia",
+          "evidence_sentence": "The patient harbors a variation in KCNH2 gene that encodes the potassium voltage-gated channel subfamily H member 2 protein."
+        },
+        {
+          "individual_id": "Father",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic, normal baseline ECG",
+          "evidence_sentence": "the patient\u2019s father harbored the same variation in the KCNH2 gene."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with long QT syndrome and may contribute to the expressed phenotype.",
+        "assays": []
+      },
+      "segregation_data": "The KCNH2 variant segregates with the disease in the proband and his father.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on family segregation and clinical presentation.",
+      "source_location": "Discussion, paragraph 4",
+      "additional_notes": "The variant was classified as a variant of unclear significance (VUS).",
+      "key_quotes": [
+        "The identified variant in the present patient has been previously reported in a proband and his mother with LQTS2.",
+        "The association between HCM and QTc prolongation has been reported with prolongation of repolarization attributed to the sheer mass of ventricular myocardium."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant was extracted from the main text."
+  }
+}

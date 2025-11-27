@@ -1,0 +1,112 @@
+{
+  "paper_metadata": {
+    "pmid": "38100909",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for TTR gene mutations associated with hereditary transthyretin amyloidosis with polyneuropathy (ATTR-PN)."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349G>T",
+      "protein_notation": "p.Ala97Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "75-year-old East Asian female",
+        "phenotype": "hereditary transthyretin amyloidosis with polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 75,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "hereditary transthyretin amyloidosis with polyneuropathy",
+          "evidence_sentence": "The first patient, a 75-year-old East Asian female (SCVIi091-A), possessed the pathogenic c.349G > T variant, resulting in the Ala97Ser mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "iPSC lines derived from patients exhibited normal morphology and pluripotency marker expression.",
+        "assays": [
+          "RT-qPCR analysis",
+          "Sanger sequencing",
+          "Karyotyping analysis"
+        ]
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is associated with hereditary amyloidosis.",
+      "key_quotes": [
+        "These iPSC lines exhibited normal morphology, karyotype, high pluripotency marker expression, and differentiation into cells representing all germ layers."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.250T>C",
+      "protein_notation": "p.Phe64Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "68-year-old Caucasian female",
+        "phenotype": "hereditary transthyretin amyloidosis with polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 68,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "hereditary transthyretin amyloidosis with polyneuropathy",
+          "evidence_sentence": "The second patient, a 68-year-old Caucasian female (SCVIi092-A), carried the pathogenic c.250 T > C variant, leading to the Phe64Leu mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "iPSC lines derived from patients exhibited normal morphology and pluripotency marker expression.",
+        "assays": [
+          "RT-qPCR analysis",
+          "Sanger sequencing",
+          "Karyotyping analysis"
+        ]
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is associated with hereditary amyloidosis.",
+      "key_quotes": [
+        "These iPSC lines exhibited normal morphology, karyotype, high pluripotency marker expression, and differentiation into cells representing all germ layers."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "paper_metadata": {
+    "pmid": "38974244",
+    "title": "BRCA-associated hereditary male cancers: can gender affect the prevalence and spectrum of germline pathogenic variants?",
+    "extraction_summary": "Extracted genetic variant information specifically for BRCA2, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4284dup",
+      "protein_notation": "p.Gln1429fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "male, age unspecified",
+        "phenotype": "MBC and melanoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 26,
+        "affected_count": 17,
+        "unaffected_count": 9,
+        "uncertain_count": null,
+        "penetrance_percentage": 65.4,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "MBC and melanoma",
+          "evidence_sentence": "The BRCA2 variant named c.4284dup (p.Gln1429fs) has been observed in both melanoma and MBC."
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift variant leading to truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Low frequency rates (0.82% in women with breast and/or ovarian cancer).",
+      "evidence_level": "Moderate evidence based on family history and clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variant detected in multiple patients with different cancer types.",
+      "key_quotes": [
+        "The BRCA2 variant named c.4284dup (p.Gln1429fs) has been observed in both melanoma and MBC."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7681C>T",
+      "protein_notation": "p.Gln2561Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "male, age unspecified",
+        "phenotype": "MBC and PC"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 26,
+        "affected_count": 17,
+        "unaffected_count": 9,
+        "uncertain_count": null,
+        "penetrance_percentage": 65.4,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "MBC",
+          "evidence_sentence": "Another BRCA2 variant named c.7681C>T (p.Gln2561Ter) was present in one individual with MBC and one with PC."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "PC",
+          "evidence_sentence": "Another BRCA2 variant named c.7681C>T (p.Gln2561Ter) was present in one individual with MBC and one with PC."
+        }
+      ],
+      "functional_data": {
+        "summary": "Nonsense variant leading to truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Low frequency rates (1.03% in women with breast and/or ovarian cancer).",
+      "evidence_level": "Moderate evidence based on family history and clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variant detected in multiple patients with different cancer types.",
+      "key_quotes": [
+        "Another BRCA2 variant named c.7681C>T (p.Gln2561Ter) was present in one individual with MBC and one with PC."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6078_6079del",
+      "protein_notation": "p.Glu2028fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "male, age unspecified",
+        "phenotype": "MBC"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 26,
+        "affected_count": 17,
+        "unaffected_count": 9,
+        "uncertain_count": null,
+        "penetrance_percentage": 65.4,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "MBC",
+          "evidence_sentence": "The BRCA2 variants named c.6078_6079del (p.Glu2028fs) have been detected each in two different MBC patients."
+        },
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "MBC",
+          "evidence_sentence": "The BRCA2 variants named c.6078_6079del (p.Glu2028fs) have been detected each in two different MBC patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift variant leading to truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified.",
+      "evidence_level": "Moderate evidence based on family history and clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variant detected in multiple patients with MBC.",
+      "key_quotes": [
+        "The BRCA2 variants named c.6078_6079del (p.Glu2028fs) have been detected each in two different MBC patients."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 5",
+      "table_caption": "Germline BRCA PVs/LPVs harbored by patients with MBC, PCa, PC or melanoma.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants and penetrance data were extracted."
+  }
+}

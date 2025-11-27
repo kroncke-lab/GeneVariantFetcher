@@ -1,0 +1,70 @@
+{
+  "paper_metadata": {
+    "pmid": "38988097",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant V30M, including penetrance data and patient demographics."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 24,
+        "demographics": "Mean age 67.3 years, 66.7% male",
+        "phenotype": "Hereditary transthyretin\u2010mediated amyloidosis with polyneuropathy (ATTRv\u2010PN)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 24,
+        "affected_count": 12,
+        "unaffected_count": 12,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 67,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Progressive neuropathy symptoms",
+          "evidence_sentence": "Among the 24 patients with ATTRv\u2010PN included in the study, 50.0% had a V30M variant."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 67,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Among the 24 patients with ATTRv\u2010PN included in the study, 50.0% had a V30M variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V30M variant is associated with hereditary transthyretin\u2010mediated amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included a total of 24 patients, half of whom had the V30M variant.",
+      "key_quotes": [
+        "Half (50.0%) of the patients had a V30M variant."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data focused solely on the TTR gene variant V30M."
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "39796670",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from a study on breast cancer."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2471T>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "61-year-old female",
+        "phenotype": "bilateral breast ductal carcinoma diagnosed at age 44"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 61,
+          "age_at_onset": null,
+          "age_at_diagnosis": 44,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "bilateral breast ductal carcinoma",
+          "evidence_sentence": "The BRCA2 variant NM_000059.4:c.2471T>G was identified in a 61 year-old patient that was diagnosed with bilateral breast ductal carcinoma at the age of 44."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with breast cancer.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Strong evidence based on clinical presentation",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No additional functional assays or population frequency data provided.",
+      "key_quotes": [
+        "The BRCA2 variant NM_000059.4:c.2471T>G was identified in a 61 year-old patient that was diagnosed with bilateral breast ductal carcinoma at the age of 44."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5576_5579delTTAA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "42-year-old female",
+        "phenotype": "no history of breast or ovarian neoplasia"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 42,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "uncertain",
+          "phenotype_details": "no history of breast or ovarian neoplasia",
+          "evidence_sentence": "The BRCA2 variant NM_000059.4:c.5576_5579delTTAA has been cited in breast and ovarian cancer cases."
+        }
+      ],
+      "functional_data": {
+        "summary": "The deletion of four nucleotides leads to a frameshift that likely causes a truncated protein or a complete absence of the transcript.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Moderate evidence based on variant characteristics",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No additional functional assays or population frequency data provided.",
+      "key_quotes": [
+        "The BRCA2 variant NM_000059.4:c.5576_5579delTTAA has been cited in breast and ovarian cancer cases."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8331+1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "52-year-old female",
+        "phenotype": "bilateral BC at ages 39 and 47"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": 52,
+          "age_at_onset": 39,
+          "age_at_diagnosis": 39,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "bilateral BC with lobular carcinoma in the right breast and ductal carcinoma in the left breast",
+          "evidence_sentence": "The BRCA2 variant NM_000059.3:c.8331+1G>A was identified in a 52-year-old patient that was diagnosed with bilateral BC at the ages of 39, with lobular carcinoma in the right breast, and 47, with ductal carcinoma in the left breast."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with breast cancer.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Strong evidence based on clinical presentation",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No additional functional assays or population frequency data provided.",
+      "key_quotes": [
+        "The BRCA2 variant NM_000059.3:c.8331+1G>A was identified in a 52-year-old patient that was diagnosed with bilateral BC at the ages of 39, with lobular carcinoma in the right breast, and 47, with ductal carcinoma in the left breast."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Clinical pathological findings of the patients",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants and penetrance data were successfully extracted."
+  }
+}

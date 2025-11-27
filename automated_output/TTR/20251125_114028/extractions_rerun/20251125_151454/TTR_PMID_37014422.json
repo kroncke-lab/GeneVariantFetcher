@@ -1,0 +1,87 @@
+{
+  "paper_metadata": {
+    "pmid": "37014422",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.148G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 20,
+        "demographics": "Mean age 64.1 \u00b1 2.9 years, 15 male, 5 female",
+        "phenotype": "ATTRv amyloidosis (6 ATTRv-CM, 14 ATTRv-PN)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": 15,
+        "unaffected_count": 5,
+        "uncertain_count": null,
+        "penetrance_percentage": 75.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 64,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv-CM",
+          "evidence_sentence": "Six patients were classified as ATTRv-CM patients (3 male, 3 female, mean age 67.7 \u00b1 5.8 years)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv-PN",
+          "evidence_sentence": "14 as ATTRv-PN patients (12 male, 2 female, mean age 62.9 \u00b1 3.1 years)."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 40,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "presymptomatic carrier",
+          "evidence_sentence": "5 presymptomatic carriers (2 male, 3 female, mean age 40.4 \u00b1 2.8 years)."
+        }
+      ],
+      "functional_data": {
+        "summary": "CCM identifies small nerve fibre damage in presymptomatic carriers and symptomatic patients.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the genetic heterogeneity and clinical variability of TTR mutations.",
+      "key_quotes": [
+        "To date, more than 120 amyloidogenic mutations of the TTR gene have been identified.",
+        "Age at disease onset ranges from 20 to 80 years, and penetrance is incomplete."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Characteristics of patients with ATTRv amyloidosis and presymptomatic carriers",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the TTR gene was extracted successfully."
+  }
+}

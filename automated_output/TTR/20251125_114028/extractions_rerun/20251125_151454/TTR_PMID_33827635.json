@@ -1,0 +1,179 @@
+{
+  "paper_metadata": {
+    "pmid": "33827635",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses hereditary transthyretin amyloidosis (ATTRv) and reports several variants in the TTR gene, including their clinical significance and penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.118G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 39,
+        "demographics": "Mean age 66.1 years, 75.2% male",
+        "phenotype": "ATTRv-PN"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 39,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val30Met mutation is associated with late-onset ATTRv, leading to sensory and motor neuropathy.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 1",
+      "additional_notes": "This variant is one of the most common mutations associated with ATTRv.",
+      "key_quotes": [
+        "late-onset patients with common mutation Val30Met from non-endemic areas have different phenotype from early-onset cases from endemic foci in Portugal and Japan."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.191C>T",
+      "protein_notation": "p.Phe64Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 33,
+        "demographics": "Mean age 66.1 years, 75.2% male",
+        "phenotype": "ATTRv-PN"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 33,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Phe64Leu mutation is associated with neuropathic symptoms.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 1",
+      "additional_notes": "This variant is less common than Val30Met but still significant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.265G>A",
+      "protein_notation": "p.Glu89Gln",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 25,
+        "demographics": "Mean age 66.1 years, 75.2% male",
+        "phenotype": "ATTRv-PN"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 25,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Glu89Gln mutation is linked to a range of symptoms including neuropathy.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 1",
+      "additional_notes": "This variant is associated with a significant clinical phenotype.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.203A>T",
+      "protein_notation": "p.Ile68Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 14,
+        "demographics": "Mean age 66.1 years, 75.2% male",
+        "phenotype": "ATTRv-PN"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 14,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Ile68Leu mutation is associated with neuropathic symptoms.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 1",
+      "additional_notes": "This variant is less common but still relevant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364T>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 7,
+        "demographics": "Mean age 66.1 years, 75.2% male",
+        "phenotype": "ATTRv-CM"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 7,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val122Ile mutation is associated with cardiac amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 1",
+      "additional_notes": "This variant is particularly associated with cardiac symptoms.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Patients and relatives socio-demographic characteristics and patients\u2019 clinical variables",
+      "variants_extracted": 5
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted successfully."
+  }
+}

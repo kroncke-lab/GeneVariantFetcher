@@ -1,0 +1,236 @@
+{
+  "paper_metadata": {
+    "pmid": "33921571",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 18,
+        "demographics": "Age at onset varied from 45 to 75 years (mean: 59.6)",
+        "phenotype": "hATTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 18,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P10",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P11",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P12",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P13",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P14",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P15",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P16",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P17",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        },
+        {
+          "individual_id": "P18",
+          "age_at_evaluation": 63,
+          "age_at_onset": 59,
+          "age_at_diagnosis": 62,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "hATTR amyloidosis",
+          "evidence_sentence": "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": "Not specified.",
+      "evidence_level": "Not specified.",
+      "source_location": "Results, paragraph 3.1",
+      "additional_notes": "The study involved 18 patients with various TTR mutations.",
+      "key_quotes": [
+        "The 18 patients harbored six different TTR mutations: Phe64Leu (n.7), Glu89Gln (n.5), Val30Met (n.2), Thr49Ala (n.2), Val122Ile (n.1), and Ala109Ser (n.1)."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "TTR mutations in patients with hATTR amyloidosis",
+      "variants_extracted": 6
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 6,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding TTR variants and penetrance were extracted."
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "paper_metadata": {
+    "pmid": "32579544",
+    "title": "Germline BRCA2 Truncating Mutation in Familial Esophageal Squamous Cell Carcinoma: A Case Controlled Study in China",
+    "extraction_summary": "The paper reports a novel BRCA2 splice variant c.426-2A>G identified in familial esophageal squamous cell carcinoma (ESCC) patients, detailing penetrance data and individual case information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.426-2A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "2 affected sisters, ages 53 and 48",
+        "phenotype": "esophageal squamous cell carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 2,
+        "unaffected_count": 5,
+        "uncertain_count": 0,
+        "penetrance_percentage": 22.22,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 53,
+          "age_at_onset": null,
+          "age_at_diagnosis": 53,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with ESCC, underwent neoadjuvant chemoradiation and esophagectomy",
+          "evidence_sentence": "The proband was a female diagnosed with ESCC at age 53 years."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 48,
+          "age_at_onset": null,
+          "age_at_diagnosis": 48,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with ESCC, underwent neoadjuvant chemotherapy and esophagectomy",
+          "evidence_sentence": "Six months after her diagnosis of ESCC, her sister was also diagnosed with ESCC with symptoms of dysphagia, at the age of 48 years old."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "carried the mutation but not diagnosed with any cancers",
+          "evidence_sentence": "Screening of other family members revealed that other sisters were negative for this mutation while brothers carried the mutation."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "carried the mutation but not diagnosed with any cancers",
+          "evidence_sentence": "Screening of other family members revealed that other sisters were negative for this mutation while brothers carried the mutation."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "carried the mutation but not diagnosed with any cancers",
+          "evidence_sentence": "Screening of other family members revealed that other sisters were negative for this mutation while brothers carried the mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.426-2A>G mutation leads to exon 5 skipping and a premature stop codon in exon 6, resulting in a truncated BRCA2 protein.",
+        "assays": [
+          "RT-PCR",
+          "direct sequencing"
+        ]
+      },
+      "segregation_data": "The mutation segregates with disease in the affected sisters.",
+      "population_frequency": "Not identified in 50 sporadic ESCC patients screened.",
+      "evidence_level": "Moderate evidence based on familial segregation and functional impact.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation was confirmed to be novel and not found in healthy controls.",
+      "key_quotes": [
+        "The splice variant mutation results in exon 5 skipping with a frame shift leading to a premature stop codon in exon 6 and truncation.",
+        "Screening of other family members revealed that other sisters were negative for this mutation while brothers carried the mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

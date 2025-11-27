@@ -1,0 +1,166 @@
+{
+  "paper_metadata": {
+    "pmid": "30420954",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1764C>A",
+      "protein_notation": "p.N588K",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Short QT Syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Short QT Syndrome",
+          "evidence_sentence": "The hotspot variant (p.T618I) causes a major gain of function in IKr, leading to acceleration of repolarization, which underlies the abbreviation of the QT interval."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a gain of function in the potassium channel, leading to shortened QT intervals.",
+        "assays": [
+          "in vitro studies",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the most common associated with SQTS.",
+      "key_quotes": [
+        "The first genetic alteration associated with the disease was reported in 2004, located in the KCNH2 gene.",
+        "Currently, more than 30 rare variants have been identified in 8 genes, including KCNH2."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1764C>G",
+      "protein_notation": "p.N588K",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Short QT Syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Short QT Syndrome",
+          "evidence_sentence": "The hotspot variant (p.T618I) causes a major gain of function in IKr, leading to acceleration of repolarization, which underlies the abbreviation of the QT interval."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a gain of function in the potassium channel, leading to shortened QT intervals.",
+        "assays": [
+          "in vitro studies",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the most common associated with SQTS.",
+      "key_quotes": [
+        "The first genetic alteration associated with the disease was reported in 2004, located in the KCNH2 gene.",
+        "Currently, more than 30 rare variants have been identified in 8 genes, including KCNH2."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1680G>A",
+      "protein_notation": "p.I560T",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Short QT Syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Short QT Syndrome",
+          "evidence_sentence": "The hotspot variant (p.T618I) causes a major gain of function in IKr, leading to acceleration of repolarization, which underlies the abbreviation of the QT interval."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a gain of function in the potassium channel, leading to shortened QT intervals.",
+        "assays": [
+          "in vitro studies",
+          "functional assays"
+        ]
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the most common associated with SQTS.",
+      "key_quotes": [
+        "The first genetic alteration associated with the disease was reported in 2004, located in the KCNH2 gene.",
+        "Currently, more than 30 rare variants have been identified in 8 genes, including KCNH2."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Genes associated with Short QT Syndrome or Shorter than normal QT interval.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were from the KCNH2 gene."
+  }
+}

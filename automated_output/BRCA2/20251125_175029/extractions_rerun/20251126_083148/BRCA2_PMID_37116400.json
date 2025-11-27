@@ -1,0 +1,244 @@
+{
+  "paper_metadata": {
+    "pmid": "37116400",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3847_3848del",
+      "protein_notation": "p.V1283Kfs*2",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "I",
+      "source_location": "Table 1, Row 1",
+      "additional_notes": "All patients with BRCA2 mutations were germline mutations.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.36del",
+      "protein_notation": "p.F12Lfs*13",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "I",
+      "source_location": "Table 1, Row 2",
+      "additional_notes": "All patients with BRCA2 mutations were germline mutations.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5576_5579del",
+      "protein_notation": "p.I1859Kfs*3",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "I",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "All patients with BRCA2 mutations were germline mutations.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3319del",
+      "protein_notation": "p.Q1107Kfs*12",
+      "genomic_position": null,
+      "clinical_significance": "Likely Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "I",
+      "source_location": "Table 1, Row 4",
+      "additional_notes": "All patients with BRCA2 mutations were germline mutations.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8537_8538del",
+      "protein_notation": "p.E2846Gfs*22",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "I",
+      "source_location": "Table 1, Row 5",
+      "additional_notes": "All patients with BRCA2 mutations were germline mutations.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6468_6469del",
+      "protein_notation": "p.Q2157Ifs*18",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "I",
+      "source_location": "Table 1, Row 6",
+      "additional_notes": "All patients with BRCA2 mutations were germline mutations.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9253dup",
+      "protein_notation": "p.T3085Nfs*26",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "I",
+      "source_location": "Table 1, Row 7",
+      "additional_notes": "All patients with BRCA2 mutations were germline mutations.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Germline validation in 14 BRCA1/2 mutation-positive patients.",
+      "variants_extracted": 7
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Subgroups of breast cancer patients according to GSS and BRCA1/2 mutations.",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 7,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were BRCA2 variants with detailed information."
+  }
+}

@@ -1,0 +1,303 @@
+{
+  "paper_metadata": {
+    "pmid": "29115008",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 21,
+        "demographics": "mean age 63.1 years, 61.9% male, predominantly Caucasian",
+        "phenotype": "transthyretin familial amyloid polyneuropathy (TTR-FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 21,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Tafamidis treatment delayed neurological progression comparably in non-Val30Met and Val30Met patients.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Methods, paragraph 2",
+      "additional_notes": "The study included patients with eight different non-Val30Met mutations.",
+      "key_quotes": [
+        "Tafamidis has also been evaluated in a multicentre, open\u2010label, 12\u2010month study to assess the safety and efficacy in 21 patients with TTR\u2010FAP due to eight non\u2010Val30Met mutations."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.115A>G",
+      "protein_notation": "p.Asp38Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "TTR-FAP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Methods, paragraph 2",
+      "additional_notes": "Only one patient with this specific variant was mentioned.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.140G>C",
+      "protein_notation": "p.Gly47Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "not specified",
+        "phenotype": "TTR-FAP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Methods, paragraph 2",
+      "additional_notes": "Three patients with this specific variant were mentioned.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.173T>C",
+      "protein_notation": "p.Leu58His",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "not specified",
+        "phenotype": "TTR-FAP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Methods, paragraph 2",
+      "additional_notes": "Four patients with this specific variant were mentioned.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.179C>T",
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "not specified",
+        "phenotype": "TTR-FAP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Methods, paragraph 2",
+      "additional_notes": "Four patients with this specific variant were mentioned.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.191C>T",
+      "protein_notation": "p.Phe64Leu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "not specified",
+        "phenotype": "TTR-FAP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Methods, paragraph 2",
+      "additional_notes": "Four patients with this specific variant were mentioned.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.230C>T",
+      "protein_notation": "p.Ser77Phe",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "TTR-FAP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Methods, paragraph 2",
+      "additional_notes": "Only one patient with this specific variant was mentioned.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.230C>A",
+      "protein_notation": "p.Ser77Tyr",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "TTR-FAP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Methods, paragraph 2",
+      "additional_notes": "Two patients with this specific variant were mentioned.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.319A>G",
+      "protein_notation": "p.Ile107Val",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "TTR-FAP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Methods, paragraph 2",
+      "additional_notes": "Two patients with this specific variant were mentioned.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Change from baseline in NIS-LL to month 12 for Val30Met and non-Val30Met groups",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 8,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were related to the TTR gene."
+  }
+}

@@ -1,0 +1,238 @@
+{
+  "paper_metadata": {
+    "pmid": "37371673",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9502-1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "3 females, 1 male, median age 63.75 years",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 c.9502-1G > A (AF: 4.27%) mutations, treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 c.9502-1G > A (AF: 4.27%) mutations, treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 c.9502-1G > A (AF: 4.27%) mutations, treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 c.9502-1G > A (AF: 4.27%) mutations, treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+        }
+      ],
+      "functional_data": {
+        "summary": "The BRCA2 mutations are associated with breast cancer and have treatment implications.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All patients with this variant were affected.",
+      "key_quotes": [
+        "In BRCA2 c.9502-1G > A (AF: 4.27%) mutations, treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.794-1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "3 females, 1 male, median age 63.75 years",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 c.794-1G > A (AF: 3.82%) mutations, treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+        },
+        {
+          "individual_id": "Case_6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 c.794-1G > A (AF: 3.82%) mutations, treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+        },
+        {
+          "individual_id": "Case_7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 c.794-1G > A (AF: 3.82%) mutations, treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+        },
+        {
+          "individual_id": "Case_8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 c.794-1G > A (AF: 3.82%) mutations, treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+        }
+      ],
+      "functional_data": {
+        "summary": "The BRCA2 mutations are associated with breast cancer and have treatment implications.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All patients with this variant were affected.",
+      "key_quotes": [
+        "In BRCA2 c.794-1G > A (AF: 3.82%) mutations, treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.R3052W",
+      "protein_notation": "p.Arg3052Trp",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "3 females, 1 male, median age 63.75 years",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 R3052W (AF: 6.10%), treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+        },
+        {
+          "individual_id": "Case_10",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 R3052W (AF: 6.10%), treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+        },
+        {
+          "individual_id": "Case_11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 R3052W (AF: 6.10%), treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+        },
+        {
+          "individual_id": "Case_12",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In BRCA2 R3052W (AF: 6.10%), treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+        }
+      ],
+      "functional_data": {
+        "summary": "The BRCA2 mutations are associated with breast cancer and have treatment implications.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All patients with this variant were affected.",
+      "key_quotes": [
+        "In BRCA2 R3052W (AF: 6.10%), treatment options (Tier IA) were olaparib, talazoparib, bevacizumab plus olaparib, and rucaparib."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were related to BRCA2 and included penetrance data."
+  }
+}

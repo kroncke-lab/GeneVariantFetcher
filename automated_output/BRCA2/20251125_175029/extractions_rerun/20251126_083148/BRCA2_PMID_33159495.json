@@ -1,0 +1,104 @@
+{
+  "paper_metadata": {
+    "pmid": "33159495",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 c.682-2delA variant, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.682-2delA",
+      "protein_notation": "p.Asn228Thrfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "33-year-old Italian female",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 7,
+        "affected_count": 3,
+        "unaffected_count": 4,
+        "uncertain_count": 0,
+        "penetrance_percentage": 42.86,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 33,
+          "age_at_onset": null,
+          "age_at_diagnosis": 33,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In a 33\u2010year\u2010old Italian breast cancer patient belonging to a HBOC family (BRCAPro score: 88%) with no other known pathogenic BRCA mutation, we identified a novel c.682\u20102delA variant."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 58,
+          "age_at_onset": null,
+          "age_at_diagnosis": 58,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ovarian cancer",
+          "evidence_sentence": "The family pedigree showed that two aunts on the paternal side died with ovarian and breast cancer at the age of 58 and 38, respectively."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 38,
+          "age_at_onset": null,
+          "age_at_diagnosis": 38,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The family pedigree showed that two aunts on the paternal side died with ovarian and breast cancer at the age of 58 and 38, respectively."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "prostate cancer",
+          "evidence_sentence": "The segregation analysis performed in three relatives revealed that the variant cosegregates with the disease in one case of prostate cancer occurring in the father."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 67,
+          "age_at_onset": null,
+          "age_at_diagnosis": 67,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "colon cancer",
+          "evidence_sentence": "The segregation analysis performed in three relatives revealed that the variant cosegregates with the disease in one case of prostate cancer occurring in the father, but not in the relative affected with colon cancer at the age 67."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.682-2delA variant disrupts the canonical splice acceptor site, leading to a truncated protein.",
+        "assays": [
+          "RT-PCR analysis",
+          "Sequencing analysis of transcripts"
+        ]
+      },
+      "segregation_data": "The variant cosegregates with the disease in one case of prostate cancer occurring in the father.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is classified as pathogenic based on multiple prediction tools and functional assays.",
+      "key_quotes": [
+        "We proposed that the novel c.682\u20102delA BRCA2 variant should be considered a class V pathogenic variant.",
+        "The segregation analysis performed in three relatives revealed that the variant cosegregates with the disease in one case of prostate cancer occurring in the father."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

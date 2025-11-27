@@ -1,0 +1,54 @@
+{
+  "paper_metadata": {
+    "pmid": "31667381",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the inhibition of hERG channels by components of Tripterygium wilfordii Hook F., specifically focusing on Celastrol. Several mutations in the KCNH2 gene were studied for their effects on Celastrol binding, but no clinical variant data or penetrance information was provided."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "Not applicable",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Mutations T623A, S624A, V625A, Y652A, and F656A in the KCNH2 gene were studied for their impact on Celastrol binding. S624A showed the strongest effect in reducing Celastrol inhibition.",
+        "assays": [
+          "Patch clamp electrophysiology",
+          "Alanine-scanning mutagenesis"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Functional assay data",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study focuses on the functional impact of specific mutations on drug binding rather than clinical variant data.",
+      "key_quotes": [
+        "Mutations of T623A, S624A and F656A significantly alter the inhibition and S624A has the strongest effect."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No clinical variant or penetrance data was provided in the paper."
+    ],
+    "notes": "The paper primarily focuses on functional studies of mutations in the KCNH2 gene related to drug binding, without providing clinical or penetrance data."
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "paper_metadata": {
+    "pmid": "32761968",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, age 50",
+        "phenotype": "bilateral breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 50,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "bilateral breast cancer",
+          "evidence_sentence": "PT1 (a 50\u2010year\u2010old woman) was referred for genetic counseling after a diagnosis of bilateral IDC and was found to be HR+ and HER2/neu\u2010."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional analysis of the intronic variant identified a deletion within exon 12 in the BRIP1 gene, which caused abnormal transcriptional production.",
+        "assays": [
+          "RT-PCR"
+        ]
+      },
+      "segregation_data": "Segregates with disease in family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient had a family history of cancer.",
+      "key_quotes": [
+        "The proband's father died from lung cancer at 61 years old, and her sister was also diagnosed with bilateral breast cancer."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data focused solely on BRCA2 variants as per instructions."
+  }
+}

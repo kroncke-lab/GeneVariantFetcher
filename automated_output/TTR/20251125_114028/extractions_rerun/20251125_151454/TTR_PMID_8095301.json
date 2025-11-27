@@ -1,0 +1,95 @@
+{
+  "paper_metadata": {
+    "pmid": "8095301",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a TTR variant associated with familial amyloidotic polyneuropathy, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.49A>G",
+      "protein_notation": "p.Ala49Thr",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "French family",
+        "phenotype": "familial amyloidotic polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": 0,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": 35,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "early onset with carpal tunnel syndrome",
+          "evidence_sentence": "The syndrome is of early onset (approximate age 35 to 40) with carpal tunnel syndrome."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": 35,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "early onset with carpal tunnel syndrome",
+          "evidence_sentence": "The syndrome is of early onset (approximate age 35 to 40) with carpal tunnel syndrome."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": 35,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "early onset with carpal tunnel syndrome",
+          "evidence_sentence": "The syndrome is of early onset (approximate age 35 to 40) with carpal tunnel syndrome."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": 35,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "early onset with carpal tunnel syndrome",
+          "evidence_sentence": "The syndrome is of early onset (approximate age 35 to 40) with carpal tunnel syndrome."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation results in an alanine to threonine substitution in the transthyretin protein.",
+        "assays": [
+          "direct genomic DNA sequencing",
+          "amino acid sequencing",
+          "PCR-IMRA"
+        ]
+      },
+      "segregation_data": "The mutation segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation was confirmed by amino acid sequencing of transthyretin isolated from the plasma of an affected subject.",
+      "key_quotes": [
+        "A transthyretin mutation was discovered in a French family with familial amyloidotic polyneuropathy.",
+        "The predicted alanine for threonine substitution in the transthyretin protein was proven by amino acid sequencing."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

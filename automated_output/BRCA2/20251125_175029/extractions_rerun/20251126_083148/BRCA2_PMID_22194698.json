@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "22194698",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the functional domains of BRCA2 in homologous recombination but does not report specific genetic variants in BRCA2."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focuses on functional domains and interactions of BRCA2 without mentioning specific genetic variants."
+    ],
+    "notes": "The extraction process was straightforward as the paper did not provide specific BRCA2 variants."
+  }
+}

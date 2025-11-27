@@ -1,0 +1,69 @@
+{
+  "paper_metadata": {
+    "pmid": "18925456",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR-Val30Met variant, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 77,
+        "demographics": "Swedish families",
+        "phenotype": "familial amyloid polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 77,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "30 years",
+            "penetrance_percentage": 1.7,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          },
+          {
+            "age_range": "60 years",
+            "penetrance_percentage": 22,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          },
+          {
+            "age_range": "90 years",
+            "penetrance_percentage": 69,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The penetrance estimates were low and varied by age and parental inheritance.",
+        "assays": []
+      },
+      "segregation_data": "Yes, penetrance was significantly higher when the mutation was inherited from the mother than from the father.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Main Text, Abstract and Results",
+      "additional_notes": "The study highlights the importance of low penetrance in TTR-FAP kindreds for genetic counseling.",
+      "key_quotes": [
+        "The penetrance estimates were low i.e. 1.7% and 22% at age 30 and 60 years, respectively and far from complete (69%), by age 90 years.",
+        "Moreover, penetrance was significantly higher when the mutation was inherited from the mother than from the father."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR-Val30Met variant was extracted from the main text."
+  }
+}

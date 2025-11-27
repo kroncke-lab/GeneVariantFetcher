@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "26986100",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper reports a heterozygous Gly47Val mutation in the TTR gene associated with familial amyloid polyneuropathy (FAP)."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.140G>T",
+      "protein_notation": "p.Gly47Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "71-year-old Japanese female",
+        "phenotype": "Familial amyloid polyneuropathy with gastrointestinal involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 71,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Recurrent diarrhea, muscle weakness, peripheral paresthesia, autonomic nervous system disorders",
+          "evidence_sentence": "A heterozygous Gly47Val mutation in the TTR gene was identified by DNA analysis."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Gly47Val mutation is associated with familial amyloid polyneuropathy.",
+        "assays": []
+      },
+      "segregation_data": "The variant is associated with the disease in the reported patient.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the first reported case of the Gly47Val mutation in Japan.",
+      "key_quotes": [
+        "A heterozygous Gly47Val mutation in the TTR gene was identified by DNA analysis.",
+        "Thus a diagnosis of FAP was established."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly reported in the text."
+  }
+}

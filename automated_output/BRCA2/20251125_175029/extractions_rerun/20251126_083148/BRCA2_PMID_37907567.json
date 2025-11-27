@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "37907567",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2133C>A",
+      "protein_notation": "p.(Cys711*)",
+      "genomic_position": "NM 000059.3, rs535547513",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation was described as deleterious and pathogenic in the UMD BRCA share\u2122 and ClinVar database.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned.",
+      "population_frequency": "Not mentioned.",
+      "evidence_level": "Not specified.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was used in CRISPR/Cas9 experiments to induce mutations in cell lines.",
+      "key_quotes": [
+        "Each mutation was described as deleterious and pathogenic in the UMD BRCA share\u2122 and ClinVar database."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was found in the paper."
+  }
+}

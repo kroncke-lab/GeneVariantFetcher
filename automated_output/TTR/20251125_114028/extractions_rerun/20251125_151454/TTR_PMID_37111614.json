@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "37111614",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the role of TTR stabilizers and seeding inhibitors in the treatment of amyloid transthyretin cardiomyopathy (ATTR-CM). However, no specific genetic variants in the TTR gene are mentioned in the text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant data for the TTR gene."
+    ],
+    "notes": "The extraction process was straightforward as the paper did not contain any specific TTR genetic variant information."
+  }
+}

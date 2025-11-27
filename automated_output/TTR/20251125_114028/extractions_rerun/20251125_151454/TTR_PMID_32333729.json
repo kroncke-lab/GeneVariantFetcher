@@ -1,0 +1,81 @@
+{
+  "paper_metadata": {
+    "pmid": "32333729",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 55,
+        "demographics": "mean age 50.4 years, 31 males, 24 females",
+        "phenotype": "hereditary transthyretin amyloidosis with polyneuropathy (ATTRv\u2010PNP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 55,
+        "affected_count": 25,
+        "unaffected_count": 30,
+        "uncertain_count": null,
+        "penetrance_percentage": 45.45,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "22-76 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": 55,
+            "affected_in_range": 25
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 58,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic ATTRv\u2010PNP with moderate to severe clinical symptoms",
+          "evidence_sentence": "Symptomatic ATTRv\u2010PNP patients presented with moderate to severe clinical symptoms and abnormalities in sensory and motor function tests."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 43,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic mutTTR-carrier with normal NCS results",
+          "evidence_sentence": "NCS revealed normal results of peroneal and tibial DMLs, CMAPs, and NCVs, as well as of sural SNAPs and NCVs in all asymptomatic mutTTR\u2010carriers."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study utilized magnetization transfer ratio (MTR) imaging to assess nerve lesions in carriers.",
+        "assays": [
+          "magnetization transfer contrast imaging",
+          "nerve conduction studies"
+        ]
+      },
+      "segregation_data": "The Val30Met mutation was found in 14 out of 25 asymptomatic mutTTR\u2010carriers and in 15 out of 30 symptomatic ATTRv\u2010PNP patients.",
+      "population_frequency": "Val30Met was the most prevalent point mutation found in the cohort.",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the importance of early diagnosis and treatment in ATTRv amyloidosis.",
+      "key_quotes": [
+        "Val30Met was the most prevalent point mutation found in 14 out of 25 asymptomatic mutTTR\u2010carriers (56%) and in 15 out of 30 patients with symptomatic ATTRv\u2010PNP (50%).",
+        "In symptomatic ATTRv\u2010PNP, PNP severity was further subclassified as either mild to moderate (NIS\u2010LL \u2264 44) or severe (NIS\u2010LL> 44)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the TTR gene was extracted successfully."
+  }
+}

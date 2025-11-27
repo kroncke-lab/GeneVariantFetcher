@@ -1,0 +1,208 @@
+{
+  "paper_metadata": {
+    "pmid": "32486089",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5224C>T",
+      "protein_notation": "p.Arg174Cys",
+      "genomic_position": "rs41293469",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 346,
+        "demographics": "334 with breast and/or ovarian cancer, 12 with prostate cancer",
+        "phenotype": "hereditary breast and/or ovarian cancer syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "unaffected",
+          "phenotype_details": "no additional pathogenic event in the germline samples",
+          "evidence_sentence": "Case analysis of the likely pathogenic reclassified VUS variant BRCA1 p.V1653L (rs80357261) by MH BRCA revealed in our cohort three breast and/or ovarian cancer patients with otherwise no additional pathogenic event in the germline samples."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional assays indicated no damaging effect.",
+        "assays": [
+          "complementation assay",
+          "HR capacity",
+          "cisplatin sensitivity"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variant reclassified from pathogenic to VUS.",
+      "key_quotes": [
+        "the missense variants BRCA2 p.R174C (rs41293469) ... were reclassified in MH BRCA from pathogenic to VUS"
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3065_3066del",
+      "protein_notation": "p.N1023_I1024del",
+      "genomic_position": "rs730881605",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 346,
+        "demographics": "334 with breast and/or ovarian cancer, 12 with prostate cancer",
+        "phenotype": "hereditary breast and/or ovarian cancer syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "unaffected",
+          "phenotype_details": "no additional pathogenic event in the germline samples",
+          "evidence_sentence": "the small deletion BRCA2 p.N1023_I1024del (rs730881605) ... were reclassified in MH BRCA from pathogenic to VUS"
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional assays indicated no damaging effect.",
+        "assays": [
+          "complementation assay",
+          "HR capacity",
+          "cisplatin sensitivity"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variant reclassified from pathogenic to VUS.",
+      "key_quotes": [
+        "the small deletion BRCA2 p.N1023_I1024del (rs730881605) ... were reclassified in MH BRCA from pathogenic to VUS"
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.10255C>T",
+      "protein_notation": "p.R3052Q",
+      "genomic_position": "rs80359171",
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": 346,
+        "demographics": "334 with breast and/or ovarian cancer, 12 with prostate cancer",
+        "phenotype": "hereditary breast and/or ovarian cancer syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "unaffected",
+          "phenotype_details": "no damaging effect in the complementation assay",
+          "evidence_sentence": "the variant BRCA2 p.R3052Q (rs80359171) to likely benign"
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional assays indicated no damaging effect.",
+        "assays": [
+          "complementation assay",
+          "HR capacity",
+          "cisplatin sensitivity"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variant classified as likely benign.",
+      "key_quotes": [
+        "the variant BRCA2 p.R3052Q (rs80359171) to likely benign"
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.10230_10231del",
+      "protein_notation": "p.N3407fs",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 346,
+        "demographics": "334 with breast and/or ovarian cancer, 12 with prostate cancer",
+        "phenotype": "hereditary breast and/or ovarian cancer syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "unaffected",
+          "phenotype_details": "no additional pathogenic event in the germline samples",
+          "evidence_sentence": "the last exon frameshift BRCA2 p.N3407fs were reclassified in MH BRCA from pathogenic to VUS"
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional assays indicated no damaging effect.",
+        "assays": [
+          "complementation assay",
+          "HR capacity",
+          "cisplatin sensitivity"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variant reclassified from pathogenic to VUS.",
+      "key_quotes": [
+        "the last exon frameshift BRCA2 p.N3407fs were reclassified in MH BRCA from pathogenic to VUS"
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted with detailed penetrance data."
+  }
+}

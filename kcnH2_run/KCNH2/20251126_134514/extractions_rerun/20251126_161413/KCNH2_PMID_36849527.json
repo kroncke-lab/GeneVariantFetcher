@@ -1,0 +1,23 @@
+{
+  "paper_metadata": {
+    "pmid": "36849527",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No variants in the KCNH2 gene were reported in the paper."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical and molecular characteristics of nine patients with KCNQ2-related neonatal seizures.",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focused on KCNQ2 gene variants, not KCNH2."
+    ],
+    "notes": "The paper did not mention any variants in the KCNH2 gene."
+  }
+}

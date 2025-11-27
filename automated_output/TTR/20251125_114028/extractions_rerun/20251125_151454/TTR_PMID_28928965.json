@@ -1,0 +1,126 @@
+{
+  "paper_metadata": {
+    "pmid": "28928965",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 124,
+        "demographics": "African-American carriers",
+        "phenotype": "increased risk of heart failure development"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 124,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "increased risk of heart failure development",
+          "evidence_sentence": "In a study that included 3,856 African-Americans, 124 carriers were detected, and over a follow-up period of 21.5 years, those patients were at increased risk of heart failure development, but there were no statistically significant differences in mortality."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I variant is associated with hereditary transthyretin amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "The variant is associated with increased risk of heart failure but specific segregation data is not provided.",
+      "population_frequency": "Approximately 3% in African-Americans.",
+      "evidence_level": "Moderate evidence based on population studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is the most common point mutation associated with hereditary transthyretin amyloidosis.",
+      "key_quotes": [
+        "The V122I variant, where isoleucine is substituted for valine, has a prevalence of approximately 3% in African-Americans and is the most common point mutation associated with hereditary transthyretin amyloidosis."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "Portuguese, Spanish",
+        "phenotype": "commonly affects the nerves and the heart"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val30Met variant is known to affect both nerve and heart function.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Limited evidence based on demographic associations.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Early cardiac involvement is not as frequent in Val30Met.",
+      "key_quotes": [
+        "Other genetic variants include Val30Met (Any, Portuguese, Spanish) and Thr60Ala (Irish), both of which commonly affect the nerves and the heart."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.179C>T",
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "Irish",
+        "phenotype": "commonly affects the nerves and the heart"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Thr60Ala variant is known to affect both nerve and heart function.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Limited evidence based on demographic associations.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Early cardiac involvement is not as frequent in Thr60Ala.",
+      "key_quotes": [
+        "Other genetic variants include Val30Met (Any, Portuguese, Spanish) and Thr60Ala (Irish), both of which commonly affect the nerves and the heart."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant TTR variants were extracted successfully."
+  }
+}

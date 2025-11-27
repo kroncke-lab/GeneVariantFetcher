@@ -1,0 +1,232 @@
+{
+  "paper_metadata": {
+    "pmid": "35753294",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1414C>T",
+      "protein_notation": "p.Q472*",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "More than one variation in BRCA2: c.1414C>T p.Q472*"
+        }
+      ],
+      "functional_data": {
+        "summary": "not specified",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "not specified",
+      "source_location": "Table 1",
+      "additional_notes": "not specified",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8359C>T",
+      "protein_notation": "p.R2787C",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "More than one variation in BRCA2: c.8359C>T p.R2787C"
+        }
+      ],
+      "functional_data": {
+        "summary": "not specified",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "not specified",
+      "source_location": "Table 1",
+      "additional_notes": "not specified",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4587_4588insA",
+      "protein_notation": "p.V1532Sfs*2",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "More than one variation in BRCA2: c.4587_4588insA p.V1532Sfs*2"
+        }
+      ],
+      "functional_data": {
+        "summary": "not specified",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "not specified",
+      "source_location": "Table 1",
+      "additional_notes": "not specified",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8020_8021dupAA",
+      "protein_notation": "p.I2675fs*2",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "More than one variation in BRCA2: c.8020_8021dupAA p.I2675fs*2"
+        }
+      ],
+      "functional_data": {
+        "summary": "not specified",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "not specified",
+      "source_location": "Table 1",
+      "additional_notes": "not specified",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1343G>A",
+      "protein_notation": "p.R448H",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "More than one variation in BRCA2: c.1343G>A p.R448H"
+        }
+      ],
+      "functional_data": {
+        "summary": "not specified",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "not specified",
+      "source_location": "Table 1",
+      "additional_notes": "not specified",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Variant distribution of patients carry more than one mutation in either BRCA1 or BRCA2 genes.",
+      "variants_extracted": 5
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

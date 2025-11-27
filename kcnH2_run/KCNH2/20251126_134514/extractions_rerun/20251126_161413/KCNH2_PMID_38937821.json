@@ -1,0 +1,55 @@
+{
+  "paper_metadata": {
+    "pmid": "38937821",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant associated with Long QT syndrome type 2, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "not specified",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "Long QT syndrome type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Gene therapy: single suppression-replacement of KCNH2 gene therapy using shRNA in iPSC- patient-derived cardiomyocyte.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": null,
+      "source_location": "Table 1",
+      "additional_notes": "No specific variant details provided.",
+      "key_quotes": [
+        "Long QT syndrome (LQTS) type 2 KCNH2 Dimer"
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Autosomal dominant monogenic diseases caused by mutant secretory and membranal proteins",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant related to KCNH2 was mentioned, with no specific details on cDNA or protein notation."
+  }
+}

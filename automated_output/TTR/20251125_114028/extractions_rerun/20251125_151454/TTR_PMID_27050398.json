@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "27050398",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the binding properties of luteolin and its analogues to the TTR protein, but does not mention any specific genetic variants in the TTR gene."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focuses on biochemical interactions and drug binding, not on genetic variants."
+    ],
+    "notes": "The paper does not provide any genetic variant information for the TTR gene."
+  }
+}

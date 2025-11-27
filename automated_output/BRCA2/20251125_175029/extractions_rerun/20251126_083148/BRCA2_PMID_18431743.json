@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "18431743",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant N372H, including clinical significance and penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.Asn372His",
+      "genomic_position": "rs144848",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 4624,
+        "demographics": "white non-Hispanic origin",
+        "phenotype": "invasive epithelial ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "No significant association with ovarian cancer risk was found.",
+        "assays": []
+      },
+      "segregation_data": "Not reported",
+      "population_frequency": "Not reported",
+      "evidence_level": "Suggestive but not statistically significant",
+      "source_location": "Main Text, paragraph 1",
+      "additional_notes": "The variant showed no association with ovarian cancer risk in the studied population.",
+      "key_quotes": [
+        "The other 5 SNPs in BRCA2... showed no association with ovarian cancer risk."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in BRCA2 was reported, and it was classified as a variant of uncertain significance."
+  }
+}

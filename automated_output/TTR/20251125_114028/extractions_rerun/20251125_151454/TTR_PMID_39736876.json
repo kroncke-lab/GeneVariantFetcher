@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "39736876",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant V122I, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "63-year-old Black woman",
+        "phenotype": "AL amyloidosis with Mayo Stage IIIA cardiac and soft tissue involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 63,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "AL amyloidosis with cardiac and soft tissue involvement",
+          "evidence_sentence": "The patient was diagnosed with AL amyloidosis with Mayo Stage IIIA cardiac and soft tissue involvement."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I variant is associated with hereditary ATTR cardiac amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Not provided",
+      "population_frequency": "3.9% of Black individuals carry TTR mutations, particularly V122I.",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient has a family history of cardiac deaths, which may indicate a hereditary component.",
+      "key_quotes": [
+        "the p.Val122Ile (V122I) mutation",
+        "the V122I TTR variant may predispose her to develop hereditary ATTR cardiac amyloidosis in the future"
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly described in the case report."
+  }
+}

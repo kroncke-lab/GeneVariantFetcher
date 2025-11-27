@@ -1,0 +1,215 @@
+{
+  "paper_metadata": {
+    "pmid": "30198232",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.113A>G",
+      "protein_notation": "p.Asp38Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 8,
+        "demographics": "Mean age at onset 55.9 years, 5 males and 3 females",
+        "phenotype": "Mixed phenotype with severe axonal polyneuropathy, cardiac disease, and autonomic neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": 8,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": 44,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Severe axonal polyneuropathy, cardiac disease, and autonomic neuropathy",
+          "evidence_sentence": "The mean age at onset in these patients was 55.9 years, with early onset in only two of these patients (nos. 4 and 15, at 44 and 47.2 years of age, respectively)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": 47.2,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Severe axonal polyneuropathy, cardiac disease, and autonomic neuropathy",
+          "evidence_sentence": "The mean age at onset in these patients was 55.9 years, with early onset in only two of these patients (nos. 4 and 15, at 44 and 47.2 years of age, respectively)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Asp38Ala mutation is associated with severe clinical manifestations including polyneuropathy and cardiac involvement.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families as all carriers were affected.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Asp38Ala mutation was the most common in this cohort.",
+      "key_quotes": [
+        "The most-common mutation pattern in South Korea was Asp38Ala, which was detected in eight patients.",
+        "Eight patients with Asp38Ala had similar clinical symptoms, such as severe axonal polyneuropathy, cardiac disease, and autonomic neuropathy."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.104A>C",
+      "protein_notation": "p.Lys35Asn",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Not specified",
+        "phenotype": "Similar symptoms including sensorimotor polyneuropathy and autonomic dysfunction"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Sensorimotor polyneuropathy and autonomic dysfunction",
+          "evidence_sentence": "Two patients with Lys35Asn also shared similar symptoms including sensorimotor polyneuropathy and autonomic dysfunction."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Sensorimotor polyneuropathy and autonomic dysfunction",
+          "evidence_sentence": "Two patients with Lys35Asn also shared similar symptoms including sensorimotor polyneuropathy and autonomic dysfunction."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Lys35Asn mutation is associated with similar clinical symptoms as other TTR mutations.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families as both carriers were affected.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Both patients with Lys35Asn exhibited similar symptoms.",
+      "key_quotes": [
+        "Two patients with Lys35Asn also shared similar symptoms including sensorimotor polyneuropathy and autonomic dysfunction."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.118G>A",
+      "protein_notation": "p.Asp38Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "The other three late-onset patients (nos. 1, 5, and 11) were genotyped as Lys35Asn, Asp38Val, and Ala97Ser, respectively."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Asp38Val mutation is associated with TTR amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families as the carrier was affected.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The specific phenotype for this patient was not detailed.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.290C>T",
+      "protein_notation": "p.Ala97Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "The other three late-onset patients (nos. 1, 5, and 11) were genotyped as Lys35Asn, Asp38Val, and Ala97Ser, respectively."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Ala97Ser mutation is associated with TTR amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families as the carrier was affected.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The specific phenotype for this patient was not detailed.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Characteristics of patients with TTR mutations",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

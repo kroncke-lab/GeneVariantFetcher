@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "38481354",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No TTR variants were reported in the paper."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not report any TTR variants."
+    ],
+    "notes": "The paper focused on Charcot-Marie-Tooth disease and related neuropathies, with no specific mention of TTR variants."
+  }
+}

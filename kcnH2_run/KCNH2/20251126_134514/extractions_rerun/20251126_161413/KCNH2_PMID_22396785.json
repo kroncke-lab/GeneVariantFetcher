@@ -1,0 +1,348 @@
+{
+  "paper_metadata": {
+    "pmid": "22396785",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on KCNH2 gene variants associated with LQT2, focusing on trafficking properties and stability of PAS domain mutations."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Lys28Glu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "LQT2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "K28E is known to be traffic deficient and has a lower melting temperature indicating decreased stability.",
+        "assays": [
+          "Western blot",
+          "Differential Scanning Fluorimetry"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "K28E is a LQT2-mutant that is known to be traffic deficient."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Phe29Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "LQT2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "F29L shows a clear trafficking defect and has a lower melting temperature.",
+        "assays": [
+          "Western blot",
+          "Differential Scanning Fluorimetry"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "HERG 1a subunits harboring the single point mutants, K28E, F29L, G53R, C66G or L86R show a clear trafficking defect."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Gly53Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "LQT2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "G53R shows a clear trafficking defect and has a lower melting temperature.",
+        "assays": [
+          "Western blot",
+          "Differential Scanning Fluorimetry"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "HERG 1a subunits harboring the single point mutants, K28E, F29L, G53R, C66G or L86R show a clear trafficking defect."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Cys66Gly",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "LQT2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "C66G shows a clear trafficking defect and has a lower melting temperature.",
+        "assays": [
+          "Western blot",
+          "Differential Scanning Fluorimetry"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "HERG 1a subunits harboring the single point mutants, K28E, F29L, G53R, C66G or L86R show a clear trafficking defect."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu86Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "LQT2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "L86R shows a clear trafficking defect and has a lower melting temperature.",
+        "assays": [
+          "Western blot",
+          "Differential Scanning Fluorimetry"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "HERG 1a subunits harboring the single point mutants, K28E, F29L, G53R, C66G or L86R show a clear trafficking defect."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Asn33Thr",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "LQT2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "N33T does not alter trafficking properties and has a melting temperature close to WT.",
+        "assays": [
+          "Western blot",
+          "Differential Scanning Fluorimetry"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "HERG1a subunits harboring the N33T, R56Q, H70R and A78P mutations show both the mature and immature species consistent with a wild-type trafficking phenotype."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Arg56Gln",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "LQT2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "R56Q does not alter trafficking properties and has a melting temperature close to WT.",
+        "assays": [
+          "Western blot",
+          "Differential Scanning Fluorimetry"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "HERG1a subunits harboring the N33T, R56Q, H70R and A78P mutations show both the mature and immature species consistent with a wild-type trafficking phenotype."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.His70Arg",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "LQT2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "H70R does not alter trafficking properties and has a melting temperature close to WT.",
+        "assays": [
+          "Western blot",
+          "Differential Scanning Fluorimetry"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "HERG1a subunits harboring the N33T, R56Q, H70R and A78P mutations show both the mature and immature species consistent with a wild-type trafficking phenotype."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Ala78Pro",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "LQT2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "A78P does not alter trafficking properties and has a melting temperature close to WT.",
+        "assays": [
+          "Western blot",
+          "Differential Scanning Fluorimetry"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": [
+        "HERG1a subunits harboring the N33T, R56Q, H70R and A78P mutations show both the mature and immature species consistent with a wild-type trafficking phenotype."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Western blot of membrane protein extracts from stable HEK293 cell lines expressing full-length WT or LQT2 mutant forms of HERG 1a channel subunit.",
+      "variants_extracted": 9
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 9,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No individual-level penetrance data was provided in the paper."
+    ],
+    "notes": "The paper focused on functional assays and trafficking properties rather than individual patient data."
+  }
+}

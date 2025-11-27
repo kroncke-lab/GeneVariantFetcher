@@ -1,0 +1,84 @@
+{
+  "paper_metadata": {
+    "pmid": "34357002",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 variant p.(Ser631Pro) and penetrance data from a family with Long QT Syndrome."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "NM_000238.3:c.1891T > C",
+      "protein_notation": "NP_000229.1:p.(Ser631Pro)",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "31-year-old male, 67-year-old female, 10-year-old female",
+        "phenotype": "Long QT Syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 2,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 31,
+          "age_at_onset": null,
+          "age_at_diagnosis": 31,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with LQT2, experienced aborted cardiac arrest",
+          "evidence_sentence": "A 31-year-old male was transferred to VUH SK intensive cardiac care unit after successful resuscitation and an intravenous fibrinolysis for suspected acute coronary syndrome."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 67,
+          "age_at_onset": 23,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "recurrent syncopes during post-partum period, diagnosed with LQT2",
+          "evidence_sentence": "Medical history of the patient\u2019s mother revealed that she underwent recurrent syncopes (six or more episodes, typically in the mornings) during post-partum period at the ages between 23\u201327."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 10,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "remains asymptomatic with no previous history of arrhythmias or loss of consciousness",
+          "evidence_sentence": "The proband\u2019s daughter remains asymptomatic with no previous history of arrhythmias or loss of consciousness."
+        }
+      ],
+      "functional_data": {
+        "summary": "In silico analysis predicts the variant to be probably deleterious to the protein structure and/or function.",
+        "assays": [
+          "SIFT",
+          "PolyPhen-2",
+          "Mutation Taster"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": "GnomAD database frequency 0",
+      "evidence_level": "likely pathogenic based on ACMG criteria",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The variant has not been previously defined in the scientific literature.",
+      "key_quotes": [
+        "This novel variant causes amino acid change in the evolutionarily conserved position of the protein, which might impact its secondary structure due to the differences of these residues in polarity, charge, size, and/or other characteristics."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

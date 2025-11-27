@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "33281182",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a case of cardiac amyloidosis attributed to wild-type transthyretin (ATTR) without any mutations in the TTR gene. No specific TTR genetic variants were reported."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not report any specific TTR variants."
+    ],
+    "notes": "The paper confirmed the diagnosis of wild-type ATTR, indicating no mutations in the TTR gene were found."
+  }
+}

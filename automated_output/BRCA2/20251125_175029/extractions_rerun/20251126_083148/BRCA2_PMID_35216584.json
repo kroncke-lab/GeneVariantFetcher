@@ -1,0 +1,210 @@
+{
+  "paper_metadata": {
+    "pmid": "35216584",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1310_1313delAAGA",
+      "protein_notation": "p.Lys437IlefsX22",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 26,
+        "demographics": "North African (Moroccan, Algerian, Tunisian)",
+        "phenotype": "breast cancer, ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 34,
+        "affected_count": 17,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The deletion causes a frameshift after codon 437 and the creation of a premature translational stop signal 22 amino acid residues.",
+        "assays": []
+      },
+      "segregation_data": "Identified in families with breast and ovarian cancer.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on familial segregation and functional impact.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Geographical clustering in the North-Eastern area of Morocco suggests a founder effect.",
+      "key_quotes": [
+        "The BRCA2 c.1310_1313delAAGA frameshift PV is considered as a North African recurrent mutation since it has been identified in Moroccan, Algerian, and Tunisian BC patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6450del",
+      "protein_notation": "p.Val2151PhefsX17",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Algerian",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The deletion results in a frameshift mutation.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on case report.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a single case.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3381delT",
+      "protein_notation": "p.Phe1127LeufsX1",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Moroccan",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The deletion results in a frameshift mutation.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on case report.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a single case.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7110delA",
+      "protein_notation": "p.Lys2370AsnfsX2",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Moroccan",
+        "phenotype": "breast cancer, ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The deletion results in a frameshift mutation.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on case report.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a single case.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1976_1800delCTTAT",
+      "protein_notation": "p.Ser599LeufsX1",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Tunisian",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The deletion results in a frameshift mutation.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on case report.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a single case.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.250C>T",
+      "protein_notation": "p.Gln84Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Algerian",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation introduces a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on case report.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a single case.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Pathogenic BRCA1 and BRCA2 variants identified in North African breast/ovarian cancer patients",
+      "variants_extracted": 6
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 6,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted with associated penetrance data."
+  }
+}

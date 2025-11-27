@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "31358790",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the fluorescence properties of monomeric transthyretin (M-TTR) and its variants, focusing on conformational changes. No specific genetic variants in the TTR gene are reported."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not report any specific genetic variants in the TTR gene."
+    ],
+    "notes": "The paper focused on the biochemical properties of TTR and its variants but did not provide genetic variant data."
+  }
+}

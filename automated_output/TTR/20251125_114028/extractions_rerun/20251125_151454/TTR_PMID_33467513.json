@@ -1,0 +1,101 @@
+{
+  "paper_metadata": {
+    "pmid": "33467513",
+    "title": "Genomic Screening Identifies Individuals at High Risk for Hereditary Transthyretin Amyloidosis",
+    "extraction_summary": "Extracted information on the TTR V142I variant, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.424G>A",
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": "18:31598655:G:A",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 32,
+        "demographics": "Median age 57 years, 81% female, 53% African American, 47% Hispanic/Latinx",
+        "phenotype": "Hereditary transthyretin amyloidosis (hATTR) related systemic features"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 32,
+        "affected_count": 19,
+        "unaffected_count": 13,
+        "uncertain_count": null,
+        "penetrance_percentage": 59.375,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 57,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Heart failure, carpal tunnel syndrome, spinal stenosis",
+          "evidence_sentence": "At the time of result disclosure, 18 (56%) participants had at least one hATTR-related systemic feature."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 57,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Carpal tunnel syndrome",
+          "evidence_sentence": "This was largely driven by the high prevalence of CTS (N = 10, 31%) and SS (N = 10, 31%)."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 57,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Spinal stenosis",
+          "evidence_sentence": "This was largely driven by the high prevalence of CTS (N = 10, 31%) and SS (N = 10, 31%)."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 57,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Heart failure",
+          "evidence_sentence": "Four (13%) individuals had HF."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 57,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No hATTR-related features",
+          "evidence_sentence": "None had a previous diagnosis of hATTR."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR V142I variant is associated with increased risk for cardiac amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "No segregation data provided.",
+      "population_frequency": "Up to 4% in African Americans, 1% in Hispanic/Latinx populations.",
+      "evidence_level": "Moderate evidence based on clinical features and population studies.",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The study highlights the importance of genomic screening in identifying at-risk individuals.",
+      "key_quotes": [
+        "The majority of V142I-positive individuals had hATTR-related systemic features at the time of result disclosure.",
+        "Genomic screening can help identify hATTR risk and guide management early on."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text."
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "31565484",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted pathogenic germline BRCA2 mutations and penetrance data from a study on Chinese NSCLC patients."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 49,
+        "demographics": "Median age 59 years; 26 females, 38 males.",
+        "phenotype": "Advanced non-small cell lung cancer (NSCLC)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 49,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "<50 years",
+            "penetrance_percentage": 1.69,
+            "carriers_in_range": 16,
+            "affected_in_range": null
+          },
+          {
+            "age_range": "\u226550 years",
+            "penetrance_percentage": 0.91,
+            "carriers_in_range": 45,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The majority of the pathogenic BRCA2 variants were frameshift mutations (57.2%).",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No specific individual-level penetrance data was provided.",
+      "key_quotes": [
+        "Results revealed a gBRCA2 predominance with 49 (76.6%) gBRCA2 LOF mutation carriers.",
+        "Among the pathogenic gBRCA2 variants, we observed four types of mutations, with frameshift mutations being the most predominant mutation type accounting for 57.2% (28/49)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "No individual-level penetrance data was available."
+  }
+}

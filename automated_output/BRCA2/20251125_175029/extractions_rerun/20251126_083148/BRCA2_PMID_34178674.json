@@ -1,0 +1,242 @@
+{
+  "paper_metadata": {
+    "pmid": "34178674",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9839C>A",
+      "protein_notation": "p.Pro3280His",
+      "genomic_position": "Exon 26",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 3,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "The c.9839C>A variant, located in coding exon 26 of the BRCA2 gene at nucleotide position 9839, has been shown to cause a change in a poorly conserved region of the encoded protein sequence."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "Some experimental lines of evidence supported by functional assays reported that this alteration is to be considered as likely benign due to its high frequency in the population and neutral effect on protein function."
+        },
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "For these reasons, the clinical significance of this variant remains yet unclear."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.9839C>A variant is located in a poorly conserved region and has conflicting interpretations regarding its pathogenicity.",
+        "assays": [
+          "Functional assays"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Unclear",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The clinical significance remains unclear due to conflicting evidence.",
+      "key_quotes": [
+        "The c.9839C>A variant, located in coding exon 26 of the BRCA2 gene at nucleotide position 9839, has been shown to cause a change in a poorly conserved region of the encoded protein sequence."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1769T>G",
+      "protein_notation": "p.Phe590Cys",
+      "genomic_position": "Not specified",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 3,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "The other c.1769T>G alteration causes a nucleotide substitution which involves the replacement of a phenylalanine with a cysteine at codon 590."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "Based on current evidence reporting discordant findings, this variant still has an unclear significance."
+        },
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "For these reasons, the clinical significance of this variant remains yet unclear."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.1769T>G variant has unclear significance due to conflicting evidence.",
+        "assays": [
+          "Functional assays"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Unclear",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The clinical significance remains unclear due to conflicting evidence.",
+      "key_quotes": [
+        "The other c.1769T>G alteration causes a nucleotide substitution which involves the replacement of a phenylalanine with a cysteine at codon 590."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4960T>G",
+      "protein_notation": "p.Cys1654Gly",
+      "genomic_position": "Exon 10",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "The c.4960T>G alteration involves the change of a thymine with guanine at nucleotide position 4,960 in coding exon 10 of the BRCA2 gene."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.4960T>G variant results in a substitution of a cysteine with a glycine.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Unclear",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The clinical significance remains unclear due to conflicting evidence.",
+      "key_quotes": [
+        "The c.4960T>G alteration involves the change of a thymine with guanine at nucleotide position 4,960 in coding exon 10 of the BRCA2 gene."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4516T>C",
+      "protein_notation": "p.Phe1506Leu",
+      "genomic_position": "Not specified",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "The other sequence variant c.4516T>C, instead, determines minor physicochemical changes through the replacement of phenylalanine with leucine at codon 1,506."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.4516T>C variant results in a minor physicochemical change.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Unclear",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The clinical significance remains unclear due to conflicting evidence.",
+      "key_quotes": [
+        "The other sequence variant c.4516T>C, instead, determines minor physicochemical changes through the replacement of phenylalanine with leucine at codon 1,506."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 3",
+      "table_caption": "BRCA2 gene variants of unclear significance harboured by patients with breast and ovarian cancers.",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted with detailed penetrance data."
+  }
+}

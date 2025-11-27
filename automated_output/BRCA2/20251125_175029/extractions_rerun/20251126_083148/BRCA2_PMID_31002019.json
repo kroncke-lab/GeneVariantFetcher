@@ -1,0 +1,69 @@
+{
+  "paper_metadata": {
+    "pmid": "31002019",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a case of pancreatic acinar cell carcinoma associated with a germline BRCA2 mutation and reviews literature on BRCA2 mutations in similar cases."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7974C>G",
+      "protein_notation": "p.Tyr2658*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Mean age 62 years (SD: 8.7; range: 50\u201378), 7 males (67%), 3 females (33%)",
+        "phenotype": "Pancreatic acinar cell carcinoma (ACC)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 10,
+        "unaffected_count": 0,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": 52,
+          "age_at_onset": null,
+          "age_at_diagnosis": 52,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Pancreatic acinar cell carcinoma with extensive intraductal growth.",
+          "evidence_sentence": "A 52-year-old man carrying a germline BRCA2 mutation presented with steatorrhea, abdominal pain and weight loss."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is considered pathogenic by ClinVar and indicates loss of the wild-type allele.",
+        "assays": [
+          "Next-generation sequencing",
+          "MLPA analysis"
+        ]
+      },
+      "segregation_data": "Loss of the wild-type BRCA2 allele was detected in all cases with known zygosity.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence due to multiple case reports and literature review.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All specified BRCA2 mutations were truncating.",
+      "key_quotes": [
+        "Loss of the wild-type BRCA2 allele, observed in all cases with known zygosity, supports the causal relation between BRCA2 germline mutation and the onset of ACC."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Germline BRCA1/2 mutations in pancreatic ACCs.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the relevant data was clearly presented in the text and tables."
+  }
+}

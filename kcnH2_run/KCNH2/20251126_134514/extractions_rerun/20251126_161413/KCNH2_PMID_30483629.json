@@ -1,0 +1,93 @@
+{
+  "paper_metadata": {
+    "pmid": "30483629",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the KCNH2 gene associated with Brugada syndrome, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "not specified",
+        "phenotype": "Brugada syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "increased IKr density and negative shift of voltage-dependent inactivation",
+          "evidence_sentence": "Both mutations led to an increased IKr density and caused a negative shift of voltage-dependent inactivation, resulting in increased rectification."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "increased IKr density and negative shift of voltage-dependent inactivation",
+          "evidence_sentence": "Both mutations led to an increased IKr density and caused a negative shift of voltage-dependent inactivation, resulting in increased rectification."
+        },
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "increased IKr density and negative shift of voltage-dependent inactivation",
+          "evidence_sentence": "Both mutations led to an increased IKr density and caused a negative shift of voltage-dependent inactivation, resulting in increased rectification."
+        },
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "increased IKr density and negative shift of voltage-dependent inactivation",
+          "evidence_sentence": "Both mutations led to an increased IKr density and caused a negative shift of voltage-dependent inactivation, resulting in increased rectification."
+        }
+      ],
+      "functional_data": {
+        "summary": "Mutations in KCNH2 lead to increased IKr density, contributing to Brugada syndrome.",
+        "assays": [
+          "whole cell patch clamp studies"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The KCNH2 gene is thought to play a modifying role in BrS.",
+      "key_quotes": [
+        "the KCNH2 gene is thought to play a modifying role in BrS.",
+        "Both mutations led to an increased IKr density and caused a negative shift of voltage-dependent inactivation, resulting in increased rectification."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted successfully."
+  }
+}

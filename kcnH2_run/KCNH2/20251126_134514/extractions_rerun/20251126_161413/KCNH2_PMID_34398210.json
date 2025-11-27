@@ -1,0 +1,94 @@
+{
+  "paper_metadata": {
+    "pmid": "34398210",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant R56Q, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.167G>A",
+      "protein_notation": "p.Arg56Gln",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "not specified",
+        "phenotype": "Long QT syndrome type 2 (LQTS2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 25,
+          "age_at_onset": 20,
+          "age_at_diagnosis": 22,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "experienced syncope",
+          "evidence_sentence": "The proband (P1) experienced syncope at age 20 and was diagnosed with LQTS2 at age 22."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 30,
+          "age_at_onset": 28,
+          "age_at_diagnosis": 29,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "had a family history of sudden cardiac death",
+          "evidence_sentence": "Patient P2 had a family history of sudden cardiac death and was diagnosed with LQTS2 at age 29."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 15,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "Patient P3 is a carrier but remains asymptomatic."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 40,
+          "age_at_onset": 35,
+          "age_at_diagnosis": 36,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed after experiencing arrhythmia",
+          "evidence_sentence": "Patient P4 was diagnosed with LQTS2 after experiencing arrhythmia at age 36."
+        }
+      ],
+      "functional_data": {
+        "summary": "The R56Q variant showed altered channel kinetics, leading to reduced repolarizing current.",
+        "assays": [
+          "electrophysiological characterization",
+          "voltage-clamp recordings"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": "not reported",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study emphasizes the potential therapeutic effects of RPR260243 on the R56Q variant.",
+      "key_quotes": [
+        "The hERG channel activator RPR260243 restores the repolarizing current of a mutant variant of the channel associated with LQTS2.",
+        "Loss of functional IKr current in inherited or acquired LQTS results in delayed repolarization of cardiac muscle."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant R56Q was successfully extracted."
+  }
+}

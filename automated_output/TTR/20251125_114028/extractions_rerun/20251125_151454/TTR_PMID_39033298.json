@@ -1,0 +1,77 @@
+{
+  "paper_metadata": {
+    "pmid": "39033298",
+    "title": "Clinical and genetic profiles of patients with hereditary and wild-type transthyretin amyloidosis: the Transthyretin Cardiac Amyloidosis Registry in the state of S\u00e3o Paulo, Brazil (REACT-SP)",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data and individual patient records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 644,
+        "demographics": "Predominantly male (62.8%), median age 65 years, majority white (74.5%)",
+        "phenotype": "Hereditary and wild-type transthyretin amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 505,
+        "affected_count": 222,
+        "unaffected_count": 283,
+        "uncertain_count": null,
+        "penetrance_percentage": 43.9,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac involvement",
+          "evidence_sentence": "More than half of the patients presented cardiac involvement, and the difference between the ATTRv and ATTRwt groups was significant (43.9 vs. 89.9%; p\u2009<\u20090.001)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Asymptomatic",
+          "evidence_sentence": "A group of patients remained asymptomatic (10.4%), with a lower proportion of asymptomatic ATTRwt patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study highlights the considerable phenotypic heterogeneity of neurological and cardiac manifestations in patients with variant and wild-type ATTR.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned in the paper.",
+      "population_frequency": "Val50Met (47.5%), Val142Ile (39.2%), Thr80Ala (2.37%), Ala39Asp (1.38%), Phe64Ser (1.18%), Glu109Lys (1.18%)",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4; Table 2",
+      "additional_notes": "The study provides a comprehensive overview of the clinical and genetic spectrum of patients with ATTR.",
+      "key_quotes": [
+        "Eleven different mutations were detected, the most common being Val50Met (47.5%) and Val142Ile (39.2%).",
+        "The prevalence of the neurological phenotype also differed between ATTRv and ATTRwt (56.8 vs. 31.7%; p\u2009<\u20090.001)."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Detected mutations in the transthyretin gene",
+      "variants_extracted": 11
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 11,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding TTR variants and penetrance were successfully extracted."
+  }
+}

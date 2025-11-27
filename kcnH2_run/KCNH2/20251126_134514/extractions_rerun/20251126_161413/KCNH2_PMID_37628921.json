@@ -1,0 +1,66 @@
+{
+  "paper_metadata": {
+    "pmid": "37628921",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper reports a novel frameshift mutation in the KCNH2 gene associated with Long QT Syndrome Type 2, detailing its functional effects and potential therapeutic interventions."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2941-2948AGCGACAC",
+      "protein_notation": "p.S981fs",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "30-year-old female, Taiwanese",
+        "phenotype": "Type 2 Long QT Syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 30,
+          "age_at_onset": 15,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "History of seizures misinterpreted as epilepsy, later identified as episodes of ventricular tachycardia.",
+          "evidence_sentence": "The proband experienced an episode of ventricular tachycardia with loss of consciousness, requiring immediate defibrillation in the emergency department."
+        }
+      ],
+      "functional_data": {
+        "summary": "The S981fs mutation leads to reduced cell surface expression and lower current amplitude compared to wild-type hERG channels.",
+        "assays": [
+          "whole-cell patch clamp recordings",
+          "Western blot analysis",
+          "co-immunoprecipitation experiments",
+          "confocal imaging"
+        ]
+      },
+      "segregation_data": "Parental DNA analysis was not conducted, so segregation with disease in families could not be determined.",
+      "population_frequency": "Not reported in Taiwan Biobank or gnomAD.",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is novel and has not been previously reported.",
+      "key_quotes": [
+        "This deletion induces a frameshift and premature termination of the protein (p.S981fs).",
+        "The identified mutation in our study is considered novel, as it has not been previously reported in the Taiwan Biobank and the Genome Aggregation Database (gnomAD)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant was extracted from the main text."
+  }
+}

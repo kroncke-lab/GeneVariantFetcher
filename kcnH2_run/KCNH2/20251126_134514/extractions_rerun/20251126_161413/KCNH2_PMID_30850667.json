@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "30850667",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant associated with long QT syndrome and its clinical implications."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1714G>A",
+      "protein_notation": "p.Gly572Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "63-year-old female",
+        "phenotype": "endometrial cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 63,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "endometrial cancer with prolonged QTc interval",
+          "evidence_sentence": "One 63-year-old patient with endometrial cancer had the c.1714G>A (p.Gly572Ser) variant in KCNH2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with long QT syndrome 2.",
+        "assays": []
+      },
+      "segregation_data": "No family segregation data provided.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and variant classification.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient experienced a significant increase in QTc interval after chemotherapy.",
+      "key_quotes": [
+        "The baseline EKG, which was performed before surgery, showed normal sinus rhythm with the QTc around 390 ms.",
+        "After the first cycle of chemotherapy, the QTc interval significantly increased from 390 to 521 ms."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly described in the text."
+  }
+}

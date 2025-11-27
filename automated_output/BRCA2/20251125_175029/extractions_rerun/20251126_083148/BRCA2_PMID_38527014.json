@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "38527014",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the development of a homologous recombination deficiency prediction model using the Oncomine Comprehensive Assay Plus and SOPHiA DDM HRD Solution. It mentions BRCA2 but does not provide specific variant data for BRCA2."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific BRCA2 variant data."
+    ],
+    "notes": "The paper mentions BRCA2 in the context of HRD but does not detail specific variants or penetrance data for BRCA2."
+  }
+}

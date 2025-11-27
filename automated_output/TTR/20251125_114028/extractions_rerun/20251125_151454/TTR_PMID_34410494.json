@@ -1,0 +1,86 @@
+{
+  "paper_metadata": {
+    "pmid": "34410494",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 38,
+        "demographics": "Mean age 59.2 years; 22 men, 16 women",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTRv) with axonal polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 17,
+        "affected_count": 21,
+        "unaffected_count": 17,
+        "uncertain_count": null,
+        "penetrance_percentage": 55.26,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 63,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Axonal polyneuropathy",
+          "evidence_sentence": "21 (55%) ATTRv subjects had axonal polyneuropathy (15 men; mean age 63.9; mean BMI 25.2, 17 FAP stage 1, 4 FAP stage 2)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 53,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "Pre-symptomatic carrier",
+          "evidence_sentence": "17 subjects (45%) were pre-symptomatic carriers (7 men; mean age 53.5; mean BMI 27.0)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Nerve ultrasound evaluation showed progressive brachial plexus enlargement.",
+        "assays": []
+      },
+      "segregation_data": "Segregation with disease in families not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on clinical presentation and ultrasound findings.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the importance of brachial plexus CSA as a potential biomarker for disease progression.",
+      "key_quotes": [
+        "Brachial plexus CSA may candidate as longitudinal biomarker of peripheral nerve involvement in ATTRv."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Demographic data of the study cohort",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "All subjects CSA data.",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 3",
+      "table_caption": "Delta CSA data of the two groups (ATTRv-PN and carriers).",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward with clear data on TTR variants and penetrance."
+  }
+}

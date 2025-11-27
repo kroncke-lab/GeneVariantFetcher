@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "30133284",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant T119M, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.356C>T",
+      "protein_notation": "p.Thr119Met",
+      "genomic_position": null,
+      "clinical_significance": "likely protective",
+      "patients": {
+        "count": 10,
+        "demographics": "not specified",
+        "phenotype": "Transthyretin amyloidosis (ATTR-CM) protection"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 0,
+        "unaffected_count": 10,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 50,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms of ATTR-CM",
+          "evidence_sentence": "The T119M variant stabilizes TTRm and prevents disease."
+        }
+      ],
+      "functional_data": {
+        "summary": "The T119M variant stabilizes TTR tetramers, preventing the development of ATTR-CM.",
+        "assays": [
+          "binding affinity assays",
+          "stability assays"
+        ]
+      },
+      "segregation_data": "The T119M variant does not segregate with disease in families.",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 2",
+      "additional_notes": "The T119M variant is noted for its protective effect against ATTR-CM.",
+      "key_quotes": [
+        "The T119M variant stabilizes TTRm and prevents disease."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data is based on the information provided in the main text."
+  }
+}

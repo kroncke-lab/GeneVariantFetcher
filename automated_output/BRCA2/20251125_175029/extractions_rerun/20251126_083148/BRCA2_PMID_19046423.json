@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "19046423",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No BRCA2 variants were reported in the paper."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focused on TP53 mutations, specifically R337H, and did not report any BRCA2 variants."
+    ],
+    "notes": "The paper primarily discussed the TP53 R337H mutation in relation to breast cancer in southern Brazil. No BRCA2 variants were mentioned."
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "paper_metadata": {
+    "pmid": "37400873",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2254_2257del",
+      "protein_notation": "p.Asp752Phefs*19",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 55,
+        "demographics": "young female patients, age < 40 years",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 55,
+        "affected_count": 11,
+        "unaffected_count": 44,
+        "uncertain_count": null,
+        "penetrance_percentage": 20.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "BRCA2 c.2254_2257del p.(Asp752Phefs*19) is the most common variant, accounting for 11/55 (20%) BRCA2 variant findings in the cohort of young patients."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "none",
+          "evidence_sentence": "This variant has only been reported previously in a Palestinian patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a frameshift leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "The variant co-occurs with c.5351dup in several patients, suggesting shared ancestry.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 1, Row 1",
+      "additional_notes": "This variant is recurrent and has been identified in multiple cohorts.",
+      "key_quotes": [
+        "BRCA2 c.2254_2257del p.(Asp752Phefs*19) is the most common variant, accounting for 11/55 (20%) BRCA2 variant findings in the cohort of young patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5351dup",
+      "protein_notation": "p.Asn1784Lysfs*3",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 48,
+        "demographics": "high-risk female patients, median age 39 years",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 48,
+        "affected_count": 8,
+        "unaffected_count": 40,
+        "uncertain_count": null,
+        "penetrance_percentage": 16.7,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Five (six) of the patients, additionally carry BRCA2 c.5351dup p.(Asn1784Lysfs*3) in the first (second) cohort."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a frameshift leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "The variant co-occurs with c.2254_2257del in several patients, suggesting shared ancestry.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Table 1, Row 2",
+      "additional_notes": "This variant is recurrent and has been identified in multiple cohorts.",
+      "key_quotes": [
+        "Five (six) of the patients, additionally carry BRCA2 c.5351dup p.(Asn1784Lysfs*3) in the first (second) cohort."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4222_4223del",
+      "protein_notation": "p.Gln1408Argfs*5",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 55,
+        "demographics": "young female patients, age < 40 years",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 55,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The variant is associated with a frameshift leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "This variant is novel and has been reported in a limited number of cases.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6685G>T",
+      "protein_notation": "p.Glu2229Ter",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 55,
+        "demographics": "young female patients, age < 40 years",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 55,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The variant is associated with a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Table 1, Row 4",
+      "additional_notes": "This variant is recurrent and has been identified in multiple cohorts.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6627_6634del",
+      "protein_notation": "p.Ile2209Metfs*13",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 55,
+        "demographics": "young female patients, age < 40 years",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 55,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The variant is associated with a frameshift leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Table 1, Row 5",
+      "additional_notes": "This variant is recurrent and has been identified in multiple cohorts.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Recurrent pathogenic and likely pathogenic BRCA2 variants of Jordanian patients with breast cancer",
+      "variants_extracted": 5
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

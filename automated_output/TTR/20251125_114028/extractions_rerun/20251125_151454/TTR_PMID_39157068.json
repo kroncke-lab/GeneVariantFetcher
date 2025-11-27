@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "39157068",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a pathogenic variant in the TTR gene associated with hereditary cardiac amyloidosis."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.424G>A",
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "probable pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "72-year-old male",
+        "phenotype": "hereditary cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 72,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with hereditary cardiac amyloidosis",
+          "evidence_sentence": "A genetic study was requested to distinguish between hereditary ATTR (ATTRh) and wild-type ATTR (ATTRwt), revealing a probable pathogenic mutation c.424G>A (p.Val142Ile) in heterozygosity in the TTR gene, thus confirming the diagnosis of ATTRh."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with hereditary cardiac amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "The variant is present in the patient diagnosed with hereditary ATTR.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Case Report, paragraph 4",
+      "additional_notes": "The patient was treated with tafamidis, which is a TTR stabilizer.",
+      "key_quotes": [
+        "A genetic study was requested to distinguish between hereditary ATTR (ATTRh) and wild-type ATTR (ATTRwt), revealing a probable pathogenic mutation c.424G>A (p.Val142Ile) in heterozygosity in the TTR gene, thus confirming the diagnosis of ATTRh."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly described in the case report."
+  }
+}

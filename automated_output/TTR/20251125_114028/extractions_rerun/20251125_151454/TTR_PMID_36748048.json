@@ -1,0 +1,62 @@
+{
+  "paper_metadata": {
+    "pmid": "36748048",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a modified surgical technique for managing secondary open-angle glaucoma in hereditary transthyretin amyloidosis (hATTR) patients. It mentions the Val30Met mutation in the TTR gene but does not provide detailed variant-specific data or penetrance information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "hereditary transthyretin amyloidosis (hATTR)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val30Met mutation is the most common TTR variant associated with hATTR.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Introduction, paragraph 2",
+      "additional_notes": "The paper focuses on surgical outcomes rather than genetic analysis.",
+      "key_quotes": [
+        "The Val30Met mutation is the most common TTR variant in Portugal and around the world."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Baseline Data",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Early and Late Surgical Complications",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper primarily focuses on surgical techniques and outcomes, with limited genetic data."
+    ],
+    "notes": "The paper mentions the Val30Met mutation but does not provide detailed penetrance or individual-level genetic data."
+  }
+}

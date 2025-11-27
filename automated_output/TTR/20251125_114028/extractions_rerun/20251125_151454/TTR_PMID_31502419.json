@@ -1,0 +1,89 @@
+{
+  "paper_metadata": {
+    "pmid": "31502419",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR gene variants, specifically focusing on the A97S mutation, its clinical significance, penetrance data, and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.290C>T",
+      "protein_notation": "p.Ala97Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Taiwanese patients, mean age of onset 58.2 years",
+        "phenotype": "familial amyloid polyneuropathy (FAP) with late onset and rapid deterioration"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 5,
+        "unaffected_count": 5,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "50-60 years",
+            "penetrance_percentage": 60.0,
+            "carriers_in_range": 5,
+            "affected_in_range": 3
+          },
+          {
+            "age_range": "60-70 years",
+            "penetrance_percentage": 80.0,
+            "carriers_in_range": 5,
+            "affected_in_range": 4
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 60,
+          "age_at_onset": 58,
+          "age_at_diagnosis": 59,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "developed neuropathy and cardiac arrhythmia",
+          "evidence_sentence": "The patients with A97S TTR-FAP have a much later onset with the mean age of onset of 58.2 years but would become bedridden or wheelchair dependent within 8.4 years of the onset on average."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 62,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 61,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms observed",
+          "evidence_sentence": "Although only a limited number of cases were available to provide a longitudinal follow-up information, unfavorable events like syncope tended to occur approximately 4 years after the appearance of the initial neurological symptoms."
+        }
+      ],
+      "functional_data": {
+        "summary": "A97S-TTR shows lower conformational stability compared to WT-TTR, indicating its pathogenicity.",
+        "assays": [
+          "urea denaturation assay",
+          "differential scanning calorimetry (DSC)",
+          "isothermal titration calorimetry (ITC)",
+          "NMR spectroscopy"
+        ]
+      },
+      "segregation_data": "The A97S variant segregates with disease in families.",
+      "population_frequency": "Not provided",
+      "evidence_level": "Strong evidence based on clinical and functional studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study emphasizes the late onset and rapid progression of the disease associated with the A97S variant.",
+      "key_quotes": [
+        "A97S is the major transthyretin (TTR) mutation in Taiwanese patients of familial amyloid polyneuropathy (FAP).",
+        "The rapidly deteriorative course may be partially due to severe cardiac dysfunction."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text, focusing on the TTR gene."
+  }
+}

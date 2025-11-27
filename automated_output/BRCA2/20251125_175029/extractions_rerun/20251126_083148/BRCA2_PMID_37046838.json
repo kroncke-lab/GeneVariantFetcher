@@ -1,0 +1,108 @@
+{
+  "paper_metadata": {
+    "pmid": "37046838",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7805G>C",
+      "protein_notation": "p.Gly2602Arg",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "exon 16 skipping",
+          "evidence_sentence": "The c.7805G > C variation in the BRCA2 gene, leading to exon 16 skipping, was detected with a junction between exon 15 and exon 17 in ovarian and salpingian tissue samples from patient 20X0175."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to exon skipping, which may affect protein function.",
+        "assays": [
+          "SEALigHTS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "not available",
+      "evidence_level": "likely pathogenic based on functional impact",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant has not been previously described.",
+      "key_quotes": [
+        "The c.7805G > C variation in the BRCA2 gene, leading to exon 16 skipping, was detected with a junction between exon 15 and exon 17 in ovarian and salpingian tissue samples from patient 20X0175."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.67+3A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "exon 2 skipping",
+          "evidence_sentence": "The BRCA2 c.67+3A > G variation (patient 20X0140), leading to exon 2 skipping, was found thanks to an abnormal junction of exons 1 to 3."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to exon skipping, which may affect protein function.",
+        "assays": [
+          "SEALigHTS"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "not available",
+      "evidence_level": "likely pathogenic based on functional impact",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This skipping of exons 2 and 3 has never been described before.",
+      "key_quotes": [
+        "The BRCA2 c.67+3A > G variation (patient 20X0140), leading to exon 2 skipping, was found thanks to an abnormal junction of exons 1 to 3."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 variants were extracted successfully."
+  }
+}

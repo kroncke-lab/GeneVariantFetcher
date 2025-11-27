@@ -1,0 +1,814 @@
+{
+  "paper_metadata": {
+    "pmid": "37922907",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including clinical significance, penetrance data, and functional data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7022G>T",
+      "protein_notation": "p.Arg2341Leu",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 1",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7021C>G",
+      "protein_notation": "p.Arg2341Gly",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 2",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7078T>C",
+      "protein_notation": "p.Ser2360Pro",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7040C>A",
+      "protein_notation": "p.Pro2347Gln",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 4",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7082A>G",
+      "protein_notation": "p.His2361Arg",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 5",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7069C>G",
+      "protein_notation": "p.Leu2357Val",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 6",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7010C>T",
+      "protein_notation": "p.Thr2337Ile",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 7",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7033C>G",
+      "protein_notation": "p.Gln2345Glu",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 8",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7042A>C",
+      "protein_notation": "p.Asn2348His",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 9",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7049C>T",
+      "protein_notation": "p.Thr2350Ile",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 10",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7022G>A",
+      "protein_notation": "p.Arg2341His",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 11",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7066T>G",
+      "protein_notation": "p.Phe2356Val",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 12",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7067T>A",
+      "protein_notation": "p.Phe2356Tyr",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 13",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7037A>G",
+      "protein_notation": "p.Asn2346Ser",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 14",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7051G>T",
+      "protein_notation": "p.Ala2351Ser",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 15",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7081C>T",
+      "protein_notation": "p.His2361Tyr",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 16",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7034A>G",
+      "protein_notation": "p.Gln2345Arg",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 17",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7030A>G",
+      "protein_notation": "p.Ile2344Val",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 18",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7017G>C",
+      "protein_notation": "p.Lys2339Asn",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 19",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7027G>A",
+      "protein_notation": "p.Glu2343Lys",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 20",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7051G>C",
+      "protein_notation": "p.Ala2351Pro",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 21",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7081C>T",
+      "protein_notation": "p.His2361Tyr",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 22",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7034A>G",
+      "protein_notation": "p.Gln2345Arg",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 23",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7030A>G",
+      "protein_notation": "p.Ile2344Val",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional assays indicate uncertain significance.",
+        "assays": [
+          "mESC-based assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Table 1, Row 24",
+      "additional_notes": "",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Classification of variants using the mESC-based assay",
+      "variants_extracted": 223
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 223,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted are classified as VUS."
+  }
+}

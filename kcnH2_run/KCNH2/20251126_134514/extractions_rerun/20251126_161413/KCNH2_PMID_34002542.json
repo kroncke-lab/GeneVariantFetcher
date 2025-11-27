@@ -1,0 +1,190 @@
+{
+  "paper_metadata": {
+    "pmid": "34002542",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.R744X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 90,
+        "demographics": "Unrelated SUDEP patients",
+        "phenotype": "Sudden Unexpected Death in Epilepsy (SUDEP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 8,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 80.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SUDEP",
+          "evidence_sentence": "KCNH2 variants were found in 11.1% (10/90) of SUDEP individuals."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SUDEP",
+          "evidence_sentence": "KCNH2 variants were found in 11.1% (10/90) of SUDEP individuals."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional analysis revealed a significant reduction in current amplitude (> 20%) for R744X mutated channels relative to wild-type channels.",
+        "assays": [
+          "Two-electrode voltage clamp"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "<5% minor allele frequency",
+      "evidence_level": "Strong evidence based on functional analysis",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "R744X is reported as pathogenic in ClinVar.",
+      "key_quotes": [
+        "Loss\u2010of\u2010function KCNH2 variants, defined as causing >20% reduction in maximal amplitude, were observed in 8.9% (8/90) SUDEP patients."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.R1047L",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 90,
+        "demographics": "Unrelated SUDEP patients",
+        "phenotype": "Sudden Unexpected Death in Epilepsy (SUDEP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 8,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 80.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SUDEP",
+          "evidence_sentence": "KCNH2 variants were found in 11.1% (10/90) of SUDEP individuals."
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SUDEP",
+          "evidence_sentence": "KCNH2 variants were found in 11.1% (10/90) of SUDEP individuals."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional analysis revealed a significant reduction in current amplitude (> 20%) for R1047L mutated channels relative to wild-type channels.",
+        "assays": [
+          "Two-electrode voltage clamp"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "<5% minor allele frequency",
+      "evidence_level": "Moderate evidence based on functional analysis",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "R1047L is classified as a variant of uncertain significance in ClinVar.",
+      "key_quotes": [
+        "KCNH2 variants were found in 11.1% (10/90) of SUDEP individuals."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.G924A",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 90,
+        "demographics": "Unrelated SUDEP patients",
+        "phenotype": "Sudden Unexpected Death in Epilepsy (SUDEP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 8,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 80.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SUDEP",
+          "evidence_sentence": "KCNH2 variants were found in 11.1% (10/90) of SUDEP individuals."
+        },
+        {
+          "individual_id": "Case_6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SUDEP",
+          "evidence_sentence": "KCNH2 variants were found in 11.1% (10/90) of SUDEP individuals."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional analysis revealed a significant reduction in current amplitude (> 20%) for G924A mutated channels relative to wild-type channels.",
+        "assays": [
+          "Two-electrode voltage clamp"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "<5% minor allele frequency",
+      "evidence_level": "Moderate evidence based on functional analysis",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "G924A is classified as a variant of uncertain significance in ClinVar.",
+      "key_quotes": [
+        "KCNH2 variants were found in 11.1% (10/90) of SUDEP individuals."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "KCNH2 variants found in SUDEP and epilepsy control populations.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant KCNH2 variants were extracted with detailed penetrance data."
+  }
+}

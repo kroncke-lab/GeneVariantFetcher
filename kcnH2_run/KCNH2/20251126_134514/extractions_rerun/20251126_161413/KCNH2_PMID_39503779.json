@@ -1,0 +1,239 @@
+{
+  "paper_metadata": {
+    "pmid": "39503779",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.150G>A",
+      "protein_notation": "p.Glu50Asp",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "SQTS"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Lack of data impedes a conclusive role.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "VUS-LP",
+      "source_location": "Table 1, Row 1",
+      "additional_notes": "Predicted to have a highly deleterious role.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.455C>T",
+      "protein_notation": "p.Thr152Ile",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "BrS with stnQT"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Related to a phenotypic condition of BrS and stnQT.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "VUS-LP",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Classified as VUS due to lack of data.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.490C>T",
+      "protein_notation": "p.Arg164Cys",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "BrS with stnQT"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Related to a phenotypic condition of BrS and stnQT.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "VUS-LP",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Classified as VUS due to lack of data.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1679T>C",
+      "protein_notation": "p.Ile560Thr",
+      "genomic_position": null,
+      "clinical_significance": "LP",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "SQTS"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Classified as likely pathogenic.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "LP",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Classified as LP following ACMG recommendations.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1764C>G",
+      "protein_notation": "p.Asn588Lys",
+      "genomic_position": null,
+      "clinical_significance": "LP",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "SQTS"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Classified as likely pathogenic.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "LP",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Classified as LP following ACMG recommendations.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1853C>T",
+      "protein_notation": "p.Thr618Ile",
+      "genomic_position": null,
+      "clinical_significance": "LP",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "SQTS"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Classified as likely pathogenic.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "LP",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Classified as LP following ACMG recommendations.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1891T>G",
+      "protein_notation": "p.Ser631Ala",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "SQTS"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Lack of data impedes a conclusive role.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "VUS-LP",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Predicted to have a highly deleterious role.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Rare variants associated or potentially associated with short QT syndrome or overlapping phenotypes",
+      "variants_extracted": 6
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 6,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant KCNH2 variants were extracted successfully."
+  }
+}

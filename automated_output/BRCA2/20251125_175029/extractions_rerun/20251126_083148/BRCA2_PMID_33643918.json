@@ -1,0 +1,202 @@
+{
+  "paper_metadata": {
+    "pmid": "33643918",
+    "title": "Globally Rare BRCA2 Variants With Founder Haplotypes in the South African Population: Implications for Point-of-Care Testing Based on a Single-Institution BRCA1/2 Next-Generation Sequencing Study",
+    "extraction_summary": "Extracted BRCA2 variant information including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5771_5774delTTCA",
+      "protein_notation": "p.Ile1924Argfs",
+      "genomic_position": "rs80359535",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 8,
+        "demographics": "Black and Coloured patients, ages 35-53",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": 8,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": 35,
+          "age_at_diagnosis": 35,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The deletion is predicted to cause loss of normal protein function through either protein truncation or nonsense-mediated mRNA decay."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": 40,
+          "age_at_diagnosis": 40,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The deletion is predicted to cause loss of normal protein function through either protein truncation or nonsense-mediated mRNA decay."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": 53,
+          "age_at_diagnosis": 53,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The deletion is predicted to cause loss of normal protein function through either protein truncation or nonsense-mediated mRNA decay."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": 36,
+          "age_at_diagnosis": 36,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The deletion is predicted to cause loss of normal protein function through either protein truncation or nonsense-mediated mRNA decay."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": 38,
+          "age_at_diagnosis": 38,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The deletion is predicted to cause loss of normal protein function through either protein truncation or nonsense-mediated mRNA decay."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": 40,
+          "age_at_diagnosis": 40,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The deletion is predicted to cause loss of normal protein function through either protein truncation or nonsense-mediated mRNA decay."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": 41,
+          "age_at_diagnosis": 41,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The deletion is predicted to cause loss of normal protein function through either protein truncation or nonsense-mediated mRNA decay."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": 39,
+          "age_at_diagnosis": 39,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The deletion is predicted to cause loss of normal protein function through either protein truncation or nonsense-mediated mRNA decay."
+        }
+      ],
+      "functional_data": {
+        "summary": "The deletion is predicted to cause loss of normal protein function through either protein truncation or nonsense-mediated mRNA decay.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified.",
+      "evidence_level": "Strong evidence based on multiple cases.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Most common pathogenic variant observed in both the Black and Coloured populations.",
+      "key_quotes": [
+        "The deletion is predicted to cause loss of normal protein function through either protein truncation or nonsense-mediated mRNA decay."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7934delG",
+      "protein_notation": "p.Arg2645Asnfs",
+      "genomic_position": "rs80359688",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 11,
+        "demographics": "Afrikaner population, ages 21-73",
+        "phenotype": "Breast cancer, ovarian cancer, prostate cancer, pancreatic cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 151,
+        "affected_count": 99,
+        "unaffected_count": 52,
+        "uncertain_count": null,
+        "penetrance_percentage": 65.56,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The variant is located in the gene\u2019s helical domain responsible for binding single- and double-stranded DNA.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified.",
+      "evidence_level": "Strong evidence based on genealogical and haplotype analysis.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Most common Afrikaner founder variant.",
+      "key_quotes": [
+        "The genealogical study involved 12 independent families linked to the variant, mapped over a minimum of 10 generations."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.582G>A",
+      "protein_notation": null,
+      "genomic_position": "rs80358810",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 7,
+        "demographics": "Black population",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 7,
+        "affected_count": 7,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Confirmed as a new SA founder variant based on SNP haplotype analysis results.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified.",
+      "evidence_level": "Strong evidence based on haplotype analysis.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Newly identified founder variant.",
+      "key_quotes": [
+        "This variant has not yet been included in the BRCA 1.0 POC Research Assay."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Details of the most common BRCA2 pathogenic variants observed and their recurrence internationally.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted with detailed penetrance data."
+  }
+}

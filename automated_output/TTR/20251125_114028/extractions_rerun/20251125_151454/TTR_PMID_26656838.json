@@ -1,0 +1,198 @@
+{
+  "paper_metadata": {
+    "pmid": "26656838",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ser50Arg",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 woman",
+        "phenotype": "early disease onset"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "early disease onset",
+          "evidence_sentence": "The only combined LTx/HTx patient with the Ser50Arg mutation was a woman."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Only one patient with this mutation was reported.",
+      "key_quotes": [
+        "The only combined LTx/HTx patient with the Ser50Arg mutation was a woman."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ser77Tyr",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 39,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 39,
+        "affected_count": 13,
+        "unaffected_count": 26,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The largest group consisted of the Ser77Tyr mutation, representing 39 patients.",
+      "key_quotes": [
+        "The largest group consisted of the Ser77Tyr mutation, representing 39 patients."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val71Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Excellent 10-year survival (>70%) was noted for mutations such as Val71Ala.",
+      "key_quotes": [
+        "Excellent 10-year survival (>70%) was noted for mutations, such as Val71Ala."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu111Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Excellent survival was noted for mutations such as Leu111Met.",
+      "key_quotes": [
+        "Excellent survival was noted for mutations, such as Leu111Met."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu58His",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Excellent survival was noted for mutations such as Leu58His.",
+      "key_quotes": [
+        "Excellent survival was noted for mutations, such as Leu58His."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Clinical data and survival associated with the 9 most prevalent mutations, each with 10 or more patients.",
+      "variants_extracted": 5
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant TTR variants were extracted with associated penetrance data."
+  }
+}

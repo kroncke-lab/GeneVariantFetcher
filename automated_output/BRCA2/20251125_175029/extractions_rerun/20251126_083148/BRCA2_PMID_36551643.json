@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "36551643",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted pathogenic variant information for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 16,
+        "demographics": "female, Finnish population",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 16,
+        "affected_count": 16,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The BRCA2 variants are associated with a high risk of breast cancer.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 3.3",
+      "additional_notes": "Four of the BRCA2 variants have previously been detected in more than one Finnish BC family.",
+      "key_quotes": [
+        "In more detail, 8/1356 (0.6%) patients had a BRCA1 and 16/1356 (1.2%) had a BRCA2 variant."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was reported in the paper."
+  }
+}

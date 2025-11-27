@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "38323364",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant c.968dupT, including clinical significance, patient demographics, penetrance data, and functional information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.968dupT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "15-year-old male",
+        "phenotype": "pericardial synovial sarcoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 15,
+          "age_at_onset": null,
+          "age_at_diagnosis": 15,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "pericardial synovial sarcoma",
+          "evidence_sentence": "Here, we first present a PSS patient who experienced disease relapse, BRCA2 mutation was identified by next\u2010generation sequencing (NGS) and had a robust response to pazopanib plus nivolumab with PFS of 14 months."
+        }
+      ],
+      "functional_data": {
+        "summary": "The insertion of 'T' leads to a frameshift mutation resulting in a new nonsense mutation, causing loss of amino acids from code 326 to code 3419.",
+        "assays": [
+          "next-generation sequencing",
+          "protein analysis"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant has not previously been reported in PSS.",
+      "key_quotes": [
+        "BRCA2 c.968dupT has not previously been reported in PSS and its response to targeted combination immunotherapy are not well characterized.",
+        "The patient in our study was treated with pazopanib plus nivolumab with a partial response of up to 14 months."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the BRCA2 variant was extracted successfully."
+  }
+}

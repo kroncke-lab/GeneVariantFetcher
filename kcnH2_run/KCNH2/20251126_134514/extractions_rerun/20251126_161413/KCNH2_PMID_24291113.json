@@ -1,0 +1,73 @@
+{
+  "paper_metadata": {
+    "pmid": "24291113",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Not specified",
+        "phenotype": "Short QT Syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Short QT Syndrome",
+          "evidence_sentence": "A pathogenic mutation in potassium channels was identified in 5 of 45 patients (11%): 2 (4.4%) in the KCNH2 gene (N588K, T618I)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Short QT Syndrome",
+          "evidence_sentence": "A pathogenic mutation in potassium channels was identified in 5 of 45 patients (11%): 2 (4.4%) in the KCNH2 gene (N588K, T618I)."
+        }
+      ],
+      "functional_data": {
+        "summary": "In vitro characterization confirmed functional effects.",
+        "assays": [
+          "in vitro characterization using patch clamp techniques"
+        ]
+      },
+      "segregation_data": "Segregated with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on segregation and functional studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Both mutations were identified in patients with Short QT Syndrome.",
+      "key_quotes": [
+        "A pathogenic mutation in potassium channels was identified in 5 of 45 patients (11%): 2 (4.4%) in the KCNH2 gene (N588K, T618I).",
+        "Interestingly, the penetrance of mutations, defined by a QTc interval \u2264360 ms, was 100% in the pedigrees with multiple carriers."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted successfully."
+  }
+}

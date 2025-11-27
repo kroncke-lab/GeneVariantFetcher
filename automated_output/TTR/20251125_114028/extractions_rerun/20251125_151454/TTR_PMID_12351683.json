@@ -1,0 +1,81 @@
+{
+  "paper_metadata": {
+    "pmid": null,
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Mutations influence the kinetics and thermodynamics of misfolding, affecting disease phenotype.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Main Text, paragraph 2",
+      "additional_notes": "Variants mentioned include V30M, L55P, T119M, V122I.",
+      "key_quotes": [
+        "L55P TTR exhibits severe pathology because the tetramer both dissociates quickly and is highly destabilized.",
+        "V122I cardiomyopathy, unlike WT cardiomyopathy, has nearly complete penetrance\u2014presumably because of its 2-fold increase in dissociation rate."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is associated with a significant increase in amyloidogenicity.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Main Text, paragraph 2",
+      "additional_notes": "The variant is mentioned in the context of its impact on disease severity.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data focused solely on the TTR gene variants mentioned in the text."
+  }
+}

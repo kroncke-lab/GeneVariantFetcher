@@ -1,0 +1,208 @@
+{
+  "paper_metadata": {
+    "pmid": "33067490",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The extraction focused on BRCA2 variants, detailing their clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2254_2257delGACT",
+      "protein_notation": "p.Asp752Phefs*19",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 14,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 14,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Frameshift mutation leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical data.",
+      "source_location": "Table 3, Row 1",
+      "additional_notes": "This variant is confirmed pathogenic.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5042_5043delTG",
+      "protein_notation": "p.Val1681Glufs*7",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 14,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 14,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Frameshift mutation leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical data.",
+      "source_location": "Table 3, Row 2",
+      "additional_notes": "This variant is confirmed pathogenic.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5351dupA",
+      "protein_notation": "p.Asn1784Lysfs*3",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 14,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 14,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Frameshift mutation leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical data.",
+      "source_location": "Table 3, Row 3",
+      "additional_notes": "This variant is confirmed pathogenic.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6634_6637delTGTT",
+      "protein_notation": "p.Cys2212Leufs*16",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 14,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 14,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Frameshift mutation leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical data.",
+      "source_location": "Table 3, Row 4",
+      "additional_notes": "This variant is confirmed pathogenic.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6224_6225delAA",
+      "protein_notation": "p.Lys2075Serfs*2",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 14,
+        "demographics": "Not specified",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 14,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Frameshift mutation leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical data.",
+      "source_location": "Table 3, Row 5",
+      "additional_notes": "This variant is confirmed pathogenic.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8696A>G",
+      "protein_notation": "p.Gln2899Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 14,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 14,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Missense mutation with potential deleterious effects.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical data.",
+      "source_location": "Table 3, Row 6",
+      "additional_notes": "This variant is confirmed pathogenic.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 3",
+      "table_caption": "Pathogenic BRCA1/BRCA2 variants found in breast/ovarian cancer patients (n\u2009=\u2009200).",
+      "variants_extracted": 6
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 6,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

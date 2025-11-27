@@ -1,0 +1,198 @@
+{
+  "paper_metadata": {
+    "pmid": "31161121",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene along with penetrance data from familial breast cancer patients."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1286_1287insA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Korean female breast cancer patients",
+        "phenotype": "familial breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "familial breast cancer",
+          "evidence_sentence": "Two BRCA1 mutations and five BRCA2 mutations were found only in a single nucleotide polymorphism database and one mutation had been reported in a Korean."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is a frameshift variant.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was identified as a novel variant.",
+      "key_quotes": [
+        "Two BRCA1 mutations and five BRCA2 mutations were found only in a single nucleotide polymorphism database and one mutation had been reported in a Korean."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "Arg2336Alafs (7006delC)",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Korean female breast cancer patients",
+        "phenotype": "familial breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "familial breast cancer",
+          "evidence_sentence": "Interestingly, three novel mutations and four reported mutations involved two unique frameshift... and Arg2336Alafs (7006delC) in BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is a frameshift variant.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was identified as a novel variant.",
+      "key_quotes": [
+        "Interestingly, three novel mutations and four reported mutations involved... Arg2336Alafs (7006delC) in BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "Arg2494Ter",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Korean female breast cancer patients",
+        "phenotype": "familial breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "familial breast cancer",
+          "evidence_sentence": "Two mutations... Arg2494Ter... are frequently reported in Asians."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is a nonsense variant.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation is frequently reported in Asian populations.",
+      "key_quotes": [
+        "Two mutations... Arg2494Ter... are frequently reported in Asians."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "Glu1113Ter",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Korean female breast cancer patients",
+        "phenotype": "familial breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "familial breast cancer",
+          "evidence_sentence": "Three nonsense mutations... Glu1113Ter in BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is a nonsense variant.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation is associated with familial breast cancer.",
+      "key_quotes": [
+        "Three nonsense mutations... Glu1113Ter in BRCA2."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Distribution of mutations in BRCA1 and BRCA2.",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

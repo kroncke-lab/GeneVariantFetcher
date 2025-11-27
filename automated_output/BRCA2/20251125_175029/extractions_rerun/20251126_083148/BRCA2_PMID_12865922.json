@@ -1,0 +1,28 @@
+{
+  "paper_metadata": {
+    "pmid": "12865922",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No BRCA2 variants were mentioned in the paper. The paper focused on LKB1/STK11 mutations in Peutz\u2013Jeghers syndrome."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Family history, clinical characteristics and LKB1/STK11 status of index patients",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Location of LKB1/STK11 mutations in PJS patients in this study and published reports. Also shown are the cancers associated with mutations",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention any BRCA2 variants."
+    ],
+    "notes": "The paper focused exclusively on LKB1/STK11 mutations related to Peutz\u2013Jeghers syndrome, with no mention of BRCA2 variants."
+  }
+}

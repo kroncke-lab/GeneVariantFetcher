@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "33868731",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a case of transthyretin cardiac amyloidosis (ATTR) in an elderly woman, but no specific genetic variants in the TTR gene are reported."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No specific TTR variants were reported in the paper."
+    ],
+    "notes": "The paper focused on the clinical presentation and diagnosis of ATTR, specifically wild-type ATTR, without identifying any genetic variants in the TTR gene."
+  }
+}

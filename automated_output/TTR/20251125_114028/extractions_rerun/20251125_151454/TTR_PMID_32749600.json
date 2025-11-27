@@ -1,0 +1,92 @@
+{
+  "paper_metadata": {
+    "pmid": "32749600",
+    "title": "Nerve ultrasound in hereditary transthyretin amyloidosis: red flags and possible progression biomarkers",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 62,
+        "demographics": "Mean age 59.8 years (\u00b1 12), 34 men, 28 women",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTRv), with manifestations including carpal tunnel syndrome and polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 62,
+        "affected_count": 34,
+        "unaffected_count": 28,
+        "uncertain_count": null,
+        "penetrance_percentage": 54.84,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "36-86 years",
+            "penetrance_percentage": 54.84,
+            "carriers_in_range": 62,
+            "affected_in_range": 34
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 64,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Axonal polyneuropathy",
+          "evidence_sentence": "According to the neurophysiologic findings, 34 (55%) ATTRv subjects (mean age 64.4, range 36\u201386, mean BMI 24.2, range 14\u201338) were diagnosed with axonal polyneuropathy."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 54,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Pre-symptomatic carrier with no symptoms or signs of systemic amyloidosis",
+          "evidence_sentence": "28 subjects (45%) did not show symptoms or signs of systemic amyloidosis including polyneuropathy."
+        }
+      ],
+      "functional_data": {
+        "summary": "Nerve ultrasound evaluation showed differences in cross-sectional area between affected and unaffected carriers.",
+        "assays": [
+          "Nerve ultrasound",
+          "Neurophysiological studies"
+        ]
+      },
+      "segregation_data": "Segregation with disease in families is implied but not explicitly stated.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The most frequent mutations were Phe64Leu, Val30Met, and Glu89Gln.",
+      "key_quotes": [
+        "The most frequent mutations were Phe64Leu (22 subjects), Val30Met (13 subjects), Glu89Gln (11 subjects).",
+        "Prevalence of ATTRv polyneuropathy across the different mutations is reported in Table 2."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "TTR gene mutations in our ATTRv populations",
+      "variants_extracted": 3
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Prevalence and severity of ATTRv polyneuropathy (PN) in the different genotypes",
+      "variants_extracted": 6
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "paper_metadata": {
+    "pmid": "1729893",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant M119, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Thr119Met",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 5,
+        "demographics": "northern- and western-European descent",
+        "phenotype": "high frequency of early-onset venous insufficiency and perhaps mild renal dysfunction"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "high frequency of early-onset venous insufficiency and perhaps mild renal dysfunction",
+          "evidence_sentence": "Clinical records, initial clinical interviews, and family history of these patients hint at a high frequency of early-onset venous insufficiency and perhaps mild renal dysfunction."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "high frequency of early-onset venous insufficiency and perhaps mild renal dysfunction",
+          "evidence_sentence": "Clinical records, initial clinical interviews, and family history of these patients hint at a high frequency of early-onset venous insufficiency and perhaps mild renal dysfunction."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "high frequency of early-onset venous insufficiency and perhaps mild renal dysfunction",
+          "evidence_sentence": "Clinical records, initial clinical interviews, and family history of these patients hint at a high frequency of early-onset venous insufficiency and perhaps mild renal dysfunction."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "high frequency of early-onset venous insufficiency and perhaps mild renal dysfunction",
+          "evidence_sentence": "Clinical records, initial clinical interviews, and family history of these patients hint at a high frequency of early-onset venous insufficiency and perhaps mild renal dysfunction."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "high frequency of early-onset venous insufficiency and perhaps mild renal dysfunction",
+          "evidence_sentence": "Clinical records, initial clinical interviews, and family history of these patients hint at a high frequency of early-onset venous insufficiency and perhaps mild renal dysfunction."
+        }
+      ],
+      "functional_data": {
+        "summary": "The putative functional deficiency caused by TTR M119 should be most marked in the homozygotes.",
+        "assays": [
+          "PASA assay",
+          "haplotype analysis"
+        ]
+      },
+      "segregation_data": "Future family studies can determine whether the heterozygous state for TTR M119 cosegregates with a disease or trait.",
+      "population_frequency": "1/333",
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The M119 variant does not cause FAP.",
+      "key_quotes": [
+        "The putative functional deficiency caused by TTR M119 should be most marked in the homozygotes.",
+        "Although the nature (if any) of disease caused by TTR M119 remains to be defined, the genetic and clinical data indicate that this mutation does not cause FAP."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

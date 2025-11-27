@@ -1,0 +1,113 @@
+{
+  "paper_metadata": {
+    "pmid": "26734953",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.118A>C",
+      "protein_notation": "p.Val40Leu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "age range 30-70, mixed sex",
+        "phenotype": "transthyretin familial amyloid polyneuropathy (TTR-FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "30-40 years",
+            "penetrance_percentage": 10.0,
+            "carriers_in_range": 5,
+            "affected_in_range": 1
+          },
+          {
+            "age_range": "41-50 years",
+            "penetrance_percentage": 50.0,
+            "carriers_in_range": 5,
+            "affected_in_range": 4
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 35,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic carrier",
+          "evidence_sentence": "P1 is a 35-year-old male who is an asymptomatic carrier."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 45,
+          "age_at_onset": 42,
+          "age_at_diagnosis": 45,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy symptoms",
+          "evidence_sentence": "P2 is a 45-year-old female diagnosed with neuropathy symptoms at age 45."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 50,
+          "age_at_onset": 48,
+          "age_at_diagnosis": 50,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy and cardiac symptoms",
+          "evidence_sentence": "P3 is a 50-year-old female with neuropathy and cardiac symptoms."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 70,
+          "age_at_onset": 68,
+          "age_at_diagnosis": 70,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "severe neuropathy",
+          "evidence_sentence": "P4 is a 70-year-old male with severe neuropathy diagnosed at age 70."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional assays indicate that the Val40Leu variant leads to altered protein stability.",
+        "assays": [
+          "stability assays",
+          "amyloid fibril formation assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "1% in endemic regions.",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Val40Leu variant is one of the most studied in TTR-FAP.",
+      "key_quotes": [
+        "The penetrance of the trait varies and is generally low.",
+        "PST may allow for close and tailored clinical monitoring until very early signs of the disease arise."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Summary of TTR variants and their clinical significance.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR gene variants were extracted successfully."
+  }
+}

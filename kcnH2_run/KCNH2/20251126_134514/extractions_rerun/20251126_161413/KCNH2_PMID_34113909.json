@@ -1,0 +1,50 @@
+{
+  "paper_metadata": {
+    "pmid": "34113909",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on genetic variants in the KCNH2 gene associated with Long QT syndrome, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "Long QT syndrome (LQT2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Mutations in hERG channel that cause LQT2 can reduce the amplitude of IKr by several different mechanisms.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Molecular underpinning of LQTS section",
+      "additional_notes": "KCNH2 mutations are associated with LQT2 syndrome, characterized by reduced IKr current.",
+      "key_quotes": [
+        "Genetic mutations in both hERG 1a and hERG 1b subunits are associated with LQT2 syndrome.",
+        "Diminution in the repolarizing IKr current contributes to lengthening of the QT interval."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant related to KCNH2 was identified, with no specific individual-level data available."
+  }
+}

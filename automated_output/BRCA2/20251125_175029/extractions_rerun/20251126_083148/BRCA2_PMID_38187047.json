@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "38187047",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted one pathogenic variant in the BRCA2 gene with associated penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.Met1Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Pakistani HNSC patients",
+        "phenotype": "Head and Neck Squamous Cell Carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Head and Neck Squamous Cell Carcinoma",
+          "evidence_sentence": "We identified three pathogenic mutations, including one within BRCA2 (p.Met1Val), among Pakistani HNSC patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study revealed elevated expression levels of BRCA2 in HNSC samples harboring pathogenic mutations.",
+        "assays": [
+          "RT-qPCR",
+          "Immunohistochemistry"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was unique to the Pakistani population studied.",
+      "key_quotes": [
+        "The key discovery of our research lies in the identification of three pathogenic mutations, including one within BRCA2 (p.Met1Val)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in BRCA2 was reported in the paper."
+  }
+}

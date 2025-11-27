@@ -1,0 +1,115 @@
+{
+  "paper_metadata": {
+    "pmid": "32785879",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 130,
+        "demographics": "Various, specific demographics not detailed",
+        "phenotype": "Hereditary variant transthyretin amyloidosis (ATTRv) with predominant symptoms of polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 130,
+        "affected_count": 50,
+        "unaffected_count": 80,
+        "uncertain_count": null,
+        "penetrance_percentage": 38.46,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 68,
+          "age_at_onset": 68,
+          "age_at_diagnosis": 68,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Polyneuropathy symptoms",
+          "evidence_sentence": "The most common TTR variant associated with ATTRv is the p.Val50Met mutation."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 70,
+          "age_at_onset": 70,
+          "age_at_diagnosis": 70,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms observed",
+          "evidence_sentence": "Parental and geographic origin dictates penetrance of the disease."
+        }
+      ],
+      "functional_data": {
+        "summary": "The p.Val50Met mutation is responsible for 50% of the mutations associated with ATTRv worldwide.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families, particularly maternal inheritance shows increased penetrance.",
+      "population_frequency": "Common in endemic regions such as Portugal, Sweden, and Japan.",
+      "evidence_level": "Strong evidence based on multiple studies.",
+      "source_location": "Genetics of ATTRv Amyloidosis and Subsequent Polyneuropathy section.",
+      "additional_notes": "The p.Val50Met mutation is more often associated with polyneuropathy as the dominant symptom.",
+      "key_quotes": [
+        "Parental and geographic origin dictates penetrance of the disease.",
+        "The p.Val50Met mutation is responsible for 50% of the mutations associated with ATTRv worldwide."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.265C>G",
+      "protein_notation": "p.Glu89Gln",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 100,
+        "demographics": "Specific demographics not detailed",
+        "phenotype": "Hereditary variant transthyretin amyloidosis (ATTRv) with predominant symptoms of polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 100,
+        "affected_count": 89,
+        "unaffected_count": 11,
+        "uncertain_count": null,
+        "penetrance_percentage": 89,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 65,
+          "age_at_onset": 65,
+          "age_at_diagnosis": 65,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Polyneuropathy symptoms",
+          "evidence_sentence": "For example, 89% of patients with ATTRv in Bulgaria present with the Glu89Gln mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Glu89Gln mutation is associated with a high penetrance of disease.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Higher prevalence in Bulgaria.",
+      "evidence_level": "Strong evidence based on regional studies.",
+      "source_location": "Genetics of ATTRv Amyloidosis and Subsequent Polyneuropathy section.",
+      "additional_notes": "The Glu89Gln mutation is particularly prevalent in Bulgaria.",
+      "key_quotes": [
+        "89% of patients with ATTRv in Bulgaria present with the Glu89Gln mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

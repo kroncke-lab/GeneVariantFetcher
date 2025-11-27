@@ -1,0 +1,194 @@
+{
+  "paper_metadata": {
+    "pmid": "32284662",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.125A>G",
+      "protein_notation": "p.Tyr42Cys",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age 39",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 39,
+          "age_at_onset": null,
+          "age_at_diagnosis": 39,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The mutation c.125A>G (p.Tyr42Cys) was identified in a patient diagnosed with breast cancer at the age of 39, whose mother and two aunts also presented the neoplasia."
+        }
+      ],
+      "functional_data": {
+        "summary": "Classified as a variant of uncertain significance.",
+        "assays": []
+      },
+      "segregation_data": "Found in a family with a history of breast cancer.",
+      "population_frequency": null,
+      "evidence_level": "Low",
+      "source_location": "Table 2, Row 4",
+      "additional_notes": "This variant has been reported in the Mexican population.",
+      "key_quotes": [
+        "The mutation c.125A>G (p.Tyr42Cys) was identified in a patient diagnosed with breast cancer at the age of 39."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.865A>G",
+      "protein_notation": "p.Asn289Asp",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 6,
+        "demographics": "Ages between 41 and 51",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 6,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 41,
+          "age_at_onset": null,
+          "age_at_diagnosis": 41,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The most prevalent mutation was c.865A>G, found in six (10.3%) of the families analyzed, in five of them, the age of diagnosis of index cases was between 41 and 51 years."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": 42,
+          "age_at_onset": null,
+          "age_at_diagnosis": 42,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The most prevalent mutation was c.865A>G, found in six (10.3%) of the families analyzed, in five of them, the age of diagnosis of index cases was between 41 and 51 years."
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": 45,
+          "age_at_onset": null,
+          "age_at_diagnosis": 45,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The most prevalent mutation was c.865A>G, found in six (10.3%) of the families analyzed, in five of them, the age of diagnosis of index cases was between 41 and 51 years."
+        },
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": 49,
+          "age_at_onset": null,
+          "age_at_diagnosis": 49,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The most prevalent mutation was c.865A>G, found in six (10.3%) of the families analyzed, in five of them, the age of diagnosis of index cases was between 41 and 51 years."
+        },
+        {
+          "individual_id": "Case_6",
+          "age_at_evaluation": 51,
+          "age_at_onset": null,
+          "age_at_diagnosis": 51,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The most prevalent mutation was c.865A>G, found in six (10.3%) of the families analyzed, in five of them, the age of diagnosis of index cases was between 41 and 51 years."
+        }
+      ],
+      "functional_data": {
+        "summary": "Classified as a variant of uncertain significance.",
+        "assays": []
+      },
+      "segregation_data": "Found in multiple families with breast cancer.",
+      "population_frequency": null,
+      "evidence_level": "Low",
+      "source_location": "Table 2, Row 3",
+      "additional_notes": "This is the first report in South America.",
+      "key_quotes": [
+        "The most prevalent mutation was c.865A>G, found in six (10.3%) of the families analyzed."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6427T>C",
+      "protein_notation": "p.Ser2143Pro",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified",
+        "phenotype": "Breast cancer and prostate cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer and prostate cancer",
+          "evidence_sentence": "A new mutation not previously described was found in the BRCA2 gene, that is, the transition c.6427T>C that generates a serine to proline change (p.Ser2143Pro), this variant was found in a family with two cases of breast cancer and one case of prostate cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "Classified as a variant of uncertain significance.",
+        "assays": []
+      },
+      "segregation_data": "Found in a family with breast cancer and prostate cancer.",
+      "population_frequency": null,
+      "evidence_level": "Low",
+      "source_location": "Table 2, Row 5",
+      "additional_notes": "This variant has not been reported in the BIC databases.",
+      "key_quotes": [
+        "A new mutation not previously described was found in the BRCA2 gene, that is, the transition c.6427T>C."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "BRCA1 and BRCA2 germline mutations detected in Colombian pacific high-risk breast/ovarian cancer families",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

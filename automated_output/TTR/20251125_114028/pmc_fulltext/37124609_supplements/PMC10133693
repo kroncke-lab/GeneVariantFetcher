@@ -1,0 +1,3037 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+    <head >
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        
+        
+
+        
+        
+  <link rel="stylesheet" href="/static/assets/style-8258669d.css" />
+<script type="module" crossorigin="" src="/static/assets/base_style-f4a99799.js"></script>
+
+  <link rel="stylesheet" href="/static/assets/style-ef962842.css" />
+<link rel="stylesheet" href="/static/assets/style-3ade8b5c.css" />
+<script type="module" crossorigin="" src="/static/assets/article_style-d757a0dd.js"></script>
+
+  
+  
+    <style>
+  
+  
+  @media screen and (min-width: 64em) {
+    div.pmc-wm {
+      background: repeat-y;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='350' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cfilter x='-.02' y='0' width='1.05' height='1' id='c'%3E%3CfeFlood flood-color='%23FFF'/%3E%3CfeComposite in='SourceGraphic'/%3E%3C/filter%3E%3Ctext id='b' font-family='Helvetica' font-size='11pt' style='opacity:1;fill:%23005ea2;stroke:none;text-anchor:middle' x='175' y='14'%3E%3C/text%3E%3Cpath id='a' style='fill:%23005ea2' d='M0 8h350v3H0z'/%3E%3C/defs%3E%3Cuse xlink:href='%23a' transform='rotate(90 10 10)'/%3E%3Cuse xlink:href='%23b' transform='rotate(90 10 10)' filter='url(%23c)'/%3E%3C/svg%3E");
+      padding-left: 3rem;
+    }
+  }
+</style>
+
+  
+
+
+
+        
+            <link rel="apple-touch-icon"
+                  sizes="180x180"
+                  href="/static/img/favicons/apple-touch-icon.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="48x48"
+                  href="/static/img/favicons/favicon-48x48.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="32x32"
+                  href="/static/img/favicons/favicon-32x32.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="16x16"
+                  href="/static/img/favicons/favicon-16x16.png" />
+            <link rel="manifest" href="/static/img/favicons/site.webmanifest" />
+            <link rel="mask-icon"
+                  href="/static/img/favicons/safari-pinned-tab.svg"
+                  color="#0071bc" />
+            <meta name="msapplication-config"
+                  content="/static/img/favicons/browserconfig.xml" />
+            <meta name="theme-color" content="#ffffff" />
+        
+
+        <title>
+            Prevalence estimation of ATTRv in China based on genetic databases - PMC
+        </title>
+
+        
+        
+  
+  <!-- Logging params: Pinger defaults -->
+<meta name="ncbi_app" content="cloudpmc-viewer" />
+<meta name="ncbi_db" content="pmc" />
+<meta name="ncbi_phid" content="DB2B0DE4925FD6533C0DE40056072939.m_1" />
+<meta name="ncbi_pinger_stat_url" content="https://pmc.ncbi.nlm.nih.gov/stat" />
+<!-- Logging params: Pinger custom -->
+<meta name="ncbi_pdid" content="article" />
+  
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
+    
+        <link rel="preconnect" href="https://cdn.ncbi.nlm.nih.gov" />
+    
+
+    <!-- Include USWDS Init Script -->
+    <script src="/static/assets/uswds-init.js"></script>
+
+
+    <meta name="ncbi_domain" content="frontgene">
+<meta name="ncbi_type" content="fulltext">
+<meta name="ncbi_pcid" content="journal">
+<meta name="ncbi_feature" content="associated_data">
+<link rel="canonical" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10133693/">
+<meta name="robots" content="INDEX,NOFOLLOW,NOARCHIVE">
+<meta name="citation_journal_title" content="Frontiers in Genetics">
+<meta name="citation_title" content="Prevalence estimation of ATTRv in China based on genetic databases">
+<meta name="citation_author" content="Zheng Yongsheng">
+<meta name="citation_author_institution" content="Department of Neurology, Huashan Hospital Fudan University, Shanghai, China">
+<meta name="citation_author" content="Sun Chong">
+<meta name="citation_author_institution" content="Department of Neurology, Huashan Hospital Fudan University, Shanghai, China">
+<meta name="citation_author" content="Liu Bingyou">
+<meta name="citation_author_institution" content="Department of Neurology, Huashan Hospital Fudan University, Shanghai, China">
+<meta name="citation_author" content="Hu Jianian">
+<meta name="citation_author_institution" content="Department of Neurology, Huashan Hospital Fudan University, Shanghai, China">
+<meta name="citation_author" content="Chen Haofeng">
+<meta name="citation_author_institution" content="Department of Neurology, Huashan Hospital Fudan University, Shanghai, China">
+<meta name="citation_author" content="Zhao Chongbo">
+<meta name="citation_author_institution" content="Department of Neurology, Huashan Hospital Fudan University, Shanghai, China">
+<meta name="citation_author" content="Victor Wei Zhang">
+<meta name="citation_author_institution" content="Amcarelab Genetic Commercial Company, Guangzhou, China">
+<meta name="citation_author" content="Lin Jie">
+<meta name="citation_author_institution" content="Department of Neurology, Huashan Hospital Fudan University, Shanghai, China">
+<meta name="citation_publication_date" content="2023 Apr 13">
+<meta name="citation_volume" content="14">
+<meta name="citation_firstpage" content="1126836">
+<meta name="citation_doi" content="10.3389/fgene.2023.1126836">
+<meta name="citation_pmid" content="37124609">
+<meta name="citation_abstract_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC10133693/">
+<meta name="citation_fulltext_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC10133693/">
+<meta name="citation_pdf_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC10133693/pdf/fgene-14-1126836.pdf">
+<meta name="description" content="Introduction: Amyloid transthyretin (ATTR) is divided into either hereditary (ATTRv) or sporadic (ATTRwt) and ATTRv is a rare hereditary disease transmitted as an autosomal dominant manner. Its global prevalence is traditionally estimated as 5,000 ...">
+<meta name="og:title" content="Prevalence estimation of ATTRv in China based on genetic databases">
+<meta name="og:type" content="article">
+<meta name="og:site_name" content="PubMed Central (PMC)">
+<meta name="og:description" content="Introduction: Amyloid transthyretin (ATTR) is divided into either hereditary (ATTRv) or sporadic (ATTRwt) and ATTRv is a rare hereditary disease transmitted as an autosomal dominant manner. Its global prevalence is traditionally estimated as 5,000 ...">
+<meta name="og:url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC10133693/">
+<meta name="og:image" content="https://cdn.ncbi.nlm.nih.gov/pmc/cms/images/pmc-card-share.jpg?_=0">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ncbi">
+    
+    
+
+    </head>
+    <body >
+        
+    <a class="usa-skipnav " href="#main-content">
+      Skip to main content
+    </a>
+
+
+        
+            
+
+<section class="usa-banner " aria-label="Official website of the United States government" >
+    <div class="usa-accordion">
+        <header class="usa-banner__header">
+            <div class="usa-banner__inner">
+                <div class="grid-col-auto">
+                    <img aria-hidden="true"
+                         class="usa-banner__header-flag"
+                         src="/static/img/us_flag.svg"
+                         alt="" />
+                </div>
+
+                <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                    <p class="usa-banner__header-text">
+                        An official website of the United States government
+                    </p>
+                    <span class="usa-banner__header-action">Here's how you know</span>
+                </div>
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-accordion__button usa-banner__button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    aria-expanded="false"
+    aria-controls="gov-banner-default"
+    
+    data-testid="storybook-django-banner"
+    
+    >
+    
+        
+
+        
+                    <span class="usa-banner__button-text">Here's how you know</span>
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </div>
+        </header>
+
+        <div class="usa-banner__content usa-accordion__content"
+             id="gov-banner-default"
+             hidden>
+            <div class="grid-row grid-gap-lg">
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-dot-gov.svg"
+                         alt=""
+                         aria-hidden="true" />
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Official websites use .gov</strong>
+                            <br />
+                            A
+                            <strong>.gov</strong> website belongs to an official
+                            government organization in the United States.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-https.svg"
+                         alt=""
+                         aria-hidden="true" />
+
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Secure .gov websites use HTTPS</strong>
+                            <br />
+                            A <strong>lock</strong> (
+                            <span class="icon-lock">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="52"
+                                     height="64"
+                                     viewBox="0 0 52 64"
+                                     class="usa-banner__lock-image"
+                                     role="graphics-symbol"
+                                     aria-labelledby="banner-lock-description"
+                                     focusable="false">
+                                    <title id="banner-lock-title">Lock</title>
+                                    <desc id="banner-lock-description">
+                                    Locked padlock icon
+                                    </desc>
+                                    <path fill="#000000"
+                                          fill-rule="evenodd"
+                                          d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z" />
+                                </svg>
+</span>) or <strong>https://</strong> means you've safely
+                                connected to the .gov website. Share sensitive
+                                information only on official, secure websites.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        
+
+        
+    
+    
+    
+
+<div class="usa-overlay">
+</div>
+
+
+
+<header class="usa-header usa-header--extended usa-header--wide" data-header data-testid="header"    >
+    <div class="ncbi-header">
+        <div class="ncbi-header__container">
+            <a class="ncbi-header__logo-container"
+               href="https://www.ncbi.nlm.nih.gov/">
+                <img alt="NCBI home page"
+                     class="ncbi-header__logo-image"
+                     src="/static/img/ncbi-logos/nih-nlm-ncbi--white.svg"
+                     width="410"
+                     height="100" />
+            </a>
+
+            <!-- Mobile menu hamburger button -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-menu-btn ncbi-header__hamburger-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Show menu"
+    data-testid="navMenuButton"
+    
+    >
+    
+        
+
+        
+                <svg aria-hidden="true"
+                     class="ncbi-hamburger-icon"
+                     fill="none"
+                     focusable="false"
+                     height="21"
+                     viewBox="0 0 31 21"
+                     width="31"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M0.125 20.75H30.875V17.3333H0.125V20.75ZM0.125 12.2083H30.875V8.79167H0.125V12.2083ZM0.125 0.25V3.66667H30.875V0.25H0.125Z"
+                          fill="#F1F1F1"
+                          fill-rule="evenodd" />
+                </svg>
+            
+
+        
+    
+        
+            </button>
+        
+
+
+
+            
+                <!-- Desktop buttons-->
+                <div class="ncbi-header__desktop-buttons">
+                    
+                        <!-- Desktop search button -->
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button
+           "
+    aria-expanded="false"
+    aria-controls="search-field-desktop-navigation"
+    aria-label="Show search overlay"
+    data-testid="toggleSearchPanelButton"
+    data-toggle-search-panel-button
+    >
+    
+        
+
+        
+                            
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#search" />
+    </svg>
+
+
+                            Search
+                        
+
+        
+    
+        
+            </button>
+        
+
+
+                    
+
+                    <!-- Desktop login dropdown -->
+                    
+                        <div class="ncbi-header__login-dropdown">
+                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button ncbi-header__login-dropdown-button
+           "
+    aria-expanded="false"
+    aria-controls="login-dropdown-menu"
+    aria-label="Show login menu"
+    data-testid="toggleLoginMenuDropdown"
+    data-desktop-login-button
+    >
+    
+        
+
+        
+                                
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#person" />
+    </svg>
+
+
+
+                                <span data-login-dropdown-text>Log in</span>
+
+                                <!-- Dropdown icon pointing up -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-less ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-up-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_less" />
+    </svg>
+
+
+
+                                <!-- Dropdown icon pointing down -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-more ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-down-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_more" />
+    </svg>
+
+
+                            
+
+        
+    
+        
+            </button>
+        
+
+
+
+                            <!-- Login dropdown menu -->
+                            <ul class="usa-nav__submenu ncbi-header__login-dropdown-menu"
+                                id="login-dropdown-menu"
+                                data-desktop-login-menu-dropdown
+                                hidden>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                <li class="usa-nav__submenu-item">
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--outline ncbi-header__login-dropdown-logout-button
+           "
+    
+    
+    
+    data-testid="desktopLogoutButton"
+    data-desktop-logout-button
+    >
+    
+        
+
+        Log out
+
+        
+    
+        
+            </button>
+        
+
+
+                                </li>
+                            </ul>
+                        </div>
+                    
+                </div>
+            
+        </div>
+    </div>
+
+    <!-- Search panel -->
+    
+        <div class="ncbi-search-panel ncbi--show-only-at-desktop"
+             data-header-search-panel
+             hidden>
+            <div class="ncbi-search-panel__container">
+                <form action="https://www.ncbi.nlm.nih.gov/search/all/"
+                      
+                      autocomplete="off"
+                      class="usa-search usa-search--big ncbi-search-panel__form"
+                      data-testid="desktop-navigation-search-form"
+                      method="GET"
+                      role="search">
+                    <label class="usa-sr-only" for="search-field-desktop-navigation">
+                        Search…
+                    </label>
+                    <input class="usa-input"
+                           id="search-field-desktop-navigation"
+                           name="term"
+                           
+                               placeholder="Search NCBI"
+                           
+                           type="search"
+                           value="" />
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                        <span class="usa-search__submit-text">
+                            Search NCBI
+                        </span>
+                    
+
+        
+    
+        
+            </button>
+        
+
+
+                </form>
+
+                
+            </div>
+        </div>
+    
+
+    <nav aria-label="Primary navigation" class="usa-nav">
+        <p class="usa-sr-only" id="primary-navigation-sr-only-title">
+            Primary site navigation
+        </p>
+
+        <!-- Mobile menu close button -->
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-nav__close ncbi-nav__close-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Close navigation menu"
+    data-testid="navCloseButton"
+    
+    >
+    
+        
+
+        
+            <img src="/static/img/usa-icons/close.svg" alt="Close" />
+        
+
+        
+    
+        
+            </button>
+        
+
+
+
+        
+            <!-- Mobile search component -->
+            <form class="usa-search usa-search--small ncbi--hide-at-desktop margin-top-6"
+                  action="https://www.ncbi.nlm.nih.gov/search/all/"
+                  
+                  autocomplete="off"
+                  data-testid="mobile-navigation-search-form"
+                  method="GET"
+                  role="search">
+                <label class="usa-sr-only" for="search-field-mobile-navigation">
+                    Search
+                </label>
+
+                <input class="usa-input"
+                       id="search-field-mobile-navigation"
+                       type="search"
+                       
+                           placeholder="Search NCBI"
+                       
+                       name="term" />
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                    <!-- This SVG should be kept inline and not replaced with a link to the icon as otherwise it will render in the wrong color -->
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0E2LjQ3MSA2LjQ3MSAwIDAgMCAxNiA5LjUgNi41IDYuNSAwIDEgMCA5LjUgMTZjMS42MSAwIDMuMDktLjU5IDQuMjMtMS41N2wuMjcuMjh2Ljc5bDUgNC45OUwyMC40OSAxOWwtNC45OS01em0tNiAwQzcuMDEgMTQgNSAxMS45OSA1IDkuNVM3LjAxIDUgOS41IDUgMTQgNy4wMSAxNCA5LjUgMTEuOTkgMTQgOS41IDE0eiIvPjwvc3ZnPg=="
+                         class="usa-search__submit-icon"
+                         alt="Search" />
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </form>
+
+            
+        
+
+        <!-- Primary navigation menu items -->
+        <!-- This usa-nav__inner wrapper is required to correctly style the navigation items on Desktop -->
+        
+
+        
+            <div class="ncbi-nav__mobile-login-menu ncbi--hide-at-desktop"
+                 data-mobile-login-menu
+                 hidden>
+                <p class="ncbi-nav__mobile-login-menu-status">
+                    Logged in as:
+                    <strong class="ncbi-nav__mobile-login-menu-email"
+                            data-mobile-login-email-text></strong>
+                </p>
+                <ul class="usa-nav__primary usa-accordion">
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           ncbi-nav__mobile-login-button ncbi--hide-at-desktop
+           "
+    
+    
+    
+    data-testid="mobileLoginButton"
+    data-mobile-login-button
+    >
+    
+        
+
+        Log in
+
+        
+    
+        
+            </button>
+        
+
+
+    </nav>
+</header>
+
+    
+    
+        
+
+<section class="pmc-header pmc-header--basic" aria-label="PMC Header with search box">
+    <div class="pmc-nav-container">
+        <div class="pmc-header__bar">
+           <div class="pmc-header__logo">
+               <a href="/" title="Home" aria-label="PMC Home"></a>
+           </div>
+            <button
+                    type="button"
+                    class="usa-button usa-button--unstyled pmc-header__search__button"
+                    aria-label="Open search"
+                    data-ga-category="search"
+                    data-ga-action="PMC"
+                    data-ga-label="pmc_search_panel_mobile"
+            >
+                <svg class="usa-icon width-4 height-4 pmc-icon__open" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#search"></use>
+                </svg>
+                <svg class="usa-icon width-4 height-4 pmc-icon__close" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="pmc-header__search">
+            
+
+
+<form class="usa-search usa-search--extra usa-search--article-right-column  pmc-header__search__form" id="pmc-search-form" autocomplete="off" role="search">
+<label class="usa-sr-only" for="pmc-search">Search PMC Full-Text Archive</label>
+<span class="autoComplete_wrapper flex-1">
+<input class="usa-input width-full maxw-none" required="required" placeholder="Search PMC Full-Text Archive" id="pmc-search"  type="search" name="term" data-autocomplete-url="https://pmc.ncbi.nlm.nih.gov/autocomp/search/autocomp/"/>
+</span>
+<button
+class="usa-button"
+type="submit"
+formaction="https://pmc.ncbi.nlm.nih.gov/search/"
+data-ga-category="search"
+data-ga-action="PMC"
+data-ga-label="PMC_search_button"
+>
+<span class="usa-search__submit-text">Search in PMC</span>
+<img
+src="/static/img/usa-icons-bg/search--white.svg"
+class="usa-search__submit-icon"
+alt="Search"
+/>
+</button>
+</form>
+            <div class="display-flex flex-column tablet:flex-row tablet:flex-justify flex-justify-center flex-align-center width-full desktop:maxw-44">
+                <ul class="pmc-header__search__menu">
+                    <li>
+                        
+                            <a class="usa-link" href="/journals/" data-ga-action="featured_link" data-ga-label="journal list">
+                                Journal List
+                            </a>
+                        
+                    </li>
+                    <li>
+                        
+                            <a class="usa-link" href="/about/userguide/" data-ga-action="featured_link"
+                            data-ga-label="user guide">
+                                User Guide
+                            </a>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+    
+
+
+        
+        
+
+       
+  <div class="usa-section padding-top-0 desktop:padding-top-6 pmc-article-section" data-article-db="pmc" data-article-id="10133693">
+
+    
+
+   
+
+
+
+<div class="grid-container pmc-actions-bar" aria-label="Actions bar" role="complementary">
+    <div class="grid-row">
+        <div class="grid-col-fill display-flex">
+             <div class="display-flex">
+                <ul class="usa-list usa-list--unstyled usa-list--horizontal">
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <button
+                                type="button"
+                                class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                                aria-label="Open resources"
+                                data-extra-class="is-visible-resources"
+                                data-ga-category="resources_accordion"
+                                data-ga-action="click"
+                                data-ga-label="mobile_icon"
+                        >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#more_vert"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <a
+                                href="https://doi.org/10.3389/fgene.2023.1126836"
+                                class="usa-link display-flex usa-tooltip"
+                                role="button"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                title="View on publisher site"
+                                data-position="bottom"
+                                aria-label="View on publisher site"
+                                data-ga-category="actions"
+                                data-ga-action="click"
+                                data-ga-label="publisher_link_mobile"
+                        >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#launch"></use>
+                                </svg>
+                        </a>
+                    </li>
+                    
+                    
+                        <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                             <a
+                                     href="pdf/fgene-14-1126836.pdf"
+                                     class="usa-link display-flex usa-tooltip"
+                                     role="button"
+                                     title="Download PDF"
+                                     data-position="bottom"
+                                     aria-label="Download PDF"
+                                     data-ga-category="actions"
+                                     data-ga-action="click"
+                                     data-ga-label="pdf_download_mobile"
+                             >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                                </svg>
+                            </a>
+                        </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button
+                            class="usa-button usa-button--unstyled  usa-tooltip collections-dialog-trigger collections-button display-flex collections-button-empty"
+                            title="Add to Collections"
+                            data-position="bottom"
+                            aria-label="Save article in MyNCBI collections."
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="collections_button_mobile"
+                            data-collections-open-dialog-enabled="false"
+                            data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC10133693%2F%23open-collections-dialog"
+                            data-in-collections="false"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button role="button" class="usa-button usa-button--unstyled usa-tooltip citation-dialog-trigger display-flex"
+                            aria-label="Open dialog with citation text in different styles"
+                            title="Cite"
+                            data-position="bottom"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="cite_mobile"
+                            data-all-citations-url="/resources/citations/10133693/"
+                            data-citation-style="nlm"
+                            data-download-format-link="/resources/citations/10133693/export/"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="pmc-permalink display-flex" >
+                         <button
+                                 type="button"
+                                 title="Permalink"
+                                 data-position="bottom"
+                                 class="usa-button usa-button--unstyled display-flex usa-tooltip"
+                                 aria-label="Show article permalink"
+                                 aria-expanded="false"
+                                 aria-haspopup="true"
+                                 data-ga-category="actions"
+                                 data-ga-action="open"
+                                 data-ga-label="permalink_mobile"
+                         >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#share"></use>
+                            </svg>
+                        </button>
+                        
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC10133693/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+                    </li>
+                </ul>
+            </div>
+            <button
+                    type="button"
+                    class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                    aria-label="Open article navigation"
+                    data-extra-class="is-visible-in-page"
+                    data-ga-category="actions"
+                    data-ga-action="open"
+                    data-ga-label="article_nav_mobile"
+            >
+                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#list"></use>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+    <div class="grid-container desktop:padding-left-6">
+      <div id="article-container" class="grid-row grid-gap">
+        <div class="grid-col-12 desktop:grid-col-8 order-2 pmc-layout__content">
+            <div class="grid-container padding-left-0 padding-right-0">
+                <div class="grid-row desktop:margin-left-neg-6">
+                    <div class="grid-col-12">
+                        <div class="pmc-layout__disclaimer" role="complementary" aria-label="Disclaimer note">
+    As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+    the contents by NLM or the National Institutes of Health.<br/>
+    Learn more:
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="Disclaimer" data-ga-label="New disclaimer box" href="/about/disclaimer/">PMC Disclaimer</a>
+    |
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="PMC Copyright Notice" data-ga-label="New disclaimer box" href="/about/copyright/">
+        PMC Copyright Notice
+    </a>
+</div>
+                    </div>
+                </div>
+                <div class="grid-row pmc-wm desktop:margin-left-neg-6">
+                    <!-- Main content -->
+                    <main
+                      id="main-content"
+                      class="usa-layout-docs__main usa-layout-docs grid-col-12 pmc-layout pmc-prose padding-0"
+                    >
+
+                      
+                        <section class="pmc-journal-banner text-center line-height-none" aria-label="Journal banner"><img src="https://cdn.ncbi.nlm.nih.gov/pmc/banners/logo-frontgene.gif" alt="Frontiers in Genetics logo" usemap="#pmc-banner-imagemap" width="500" height="75"><map name="pmc-banner-imagemap"><area alt="Link to Frontiers in Genetics" title="Link to Frontiers in Genetics" shape="default" href="http://www.frontiersin.org/genetics" target="_blank" rel="noopener noreferrer"></map></section><article lang="en"><section aria-label="Article citation and metadata"><section class="pmc-layout__citation font-secondary font-xs"><div>
+<div class="display-inline-block"><button type="button" class="cursor-pointer text-no-underline bg-transparent border-0 padding-0 text-left margin-0 text-normal text-primary" aria-controls="journal_context_menu">Front Genet</button></div>. 2023 Apr 13;14:1126836. doi: <a href="https://doi.org/10.3389/fgene.2023.1126836" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">10.3389/fgene.2023.1126836</a>
+</div>
+<nav id="journal_context_menu" hidden="hidden"><ul class="menu-list font-family-ui" role="menu">
+<li role="presentation"><a href="https://pmc.ncbi.nlm.nih.gov/search/?term=%22Front%20Genet%22%5Bjour%5D" class="usa-link" role="menuitem">Search in PMC</a></li>
+<li role="presentation"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Front%20Genet%22%5Bjour%5D" lang="en" class="usa-link" role="menuitem">Search in PubMed</a></li>
+<li role="presentation"><a href="https://www.ncbi.nlm.nih.gov/nlmcatalog?term=%22Front%20Genet%22%5BTitle%20Abbreviation%5D" class="usa-link" role="menuitem">View in NLM Catalog</a></li>
+<li role="presentation"><a href="?term=%22Front%20Genet%22%5Bjour%5D" class="usa-link" role="menuitem" data-add-to-search="true">Add to search</a></li>
+</ul></nav></section><section class="front-matter"><div class="ameta p font-secondary font-xs">
+<hgroup><h1>Prevalence estimation of ATTRv in China based on genetic databases</h1></hgroup><div class="cg p">
+<a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Yongsheng%20Z%22%5BAuthor%5D" class="usa-link" aria-describedby="id1"><span class="name western">Zheng Yongsheng</span></a><div hidden="hidden" id="id1">
+<h3><span class="name western">Zheng Yongsheng</span></h3>
+<div class="p">
+<sup>1</sup>
+Department of Neurology, Huashan Hospital Fudan University, Shanghai, China
+</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Yongsheng%20Z%22%5BAuthor%5D" class="usa-link"><span class="name western">Zheng Yongsheng</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Chong%20S%22%5BAuthor%5D" class="usa-link" aria-describedby="id2"><span class="name western">Sun Chong</span></a><div hidden="hidden" id="id2">
+<h3><span class="name western">Sun Chong</span></h3>
+<div class="p">
+<sup>1</sup>
+Department of Neurology, Huashan Hospital Fudan University, Shanghai, China
+</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Chong%20S%22%5BAuthor%5D" class="usa-link"><span class="name western">Sun Chong</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Bingyou%20L%22%5BAuthor%5D" class="usa-link" aria-describedby="id3"><span class="name western">Liu Bingyou</span></a><div hidden="hidden" id="id3">
+<h3><span class="name western">Liu Bingyou</span></h3>
+<div class="p">
+<sup>1</sup>
+Department of Neurology, Huashan Hospital Fudan University, Shanghai, China
+</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Bingyou%20L%22%5BAuthor%5D" class="usa-link"><span class="name western">Liu Bingyou</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Jianian%20H%22%5BAuthor%5D" class="usa-link" aria-describedby="id4"><span class="name western">Hu Jianian</span></a><div hidden="hidden" id="id4">
+<h3><span class="name western">Hu Jianian</span></h3>
+<div class="p">
+<sup>1</sup>
+Department of Neurology, Huashan Hospital Fudan University, Shanghai, China
+</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Jianian%20H%22%5BAuthor%5D" class="usa-link"><span class="name western">Hu Jianian</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Haofeng%20C%22%5BAuthor%5D" class="usa-link" aria-describedby="id5"><span class="name western">Chen Haofeng</span></a><div hidden="hidden" id="id5">
+<h3><span class="name western">Chen Haofeng</span></h3>
+<div class="p">
+<sup>1</sup>
+Department of Neurology, Huashan Hospital Fudan University, Shanghai, China
+</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Haofeng%20C%22%5BAuthor%5D" class="usa-link"><span class="name western">Chen Haofeng</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Chongbo%20Z%22%5BAuthor%5D" class="usa-link" aria-describedby="id6"><span class="name western">Zhao Chongbo</span></a><div hidden="hidden" id="id6">
+<h3><span class="name western">Zhao Chongbo</span></h3>
+<div class="p">
+<sup>1</sup>
+Department of Neurology, Huashan Hospital Fudan University, Shanghai, China
+</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Chongbo%20Z%22%5BAuthor%5D" class="usa-link"><span class="name western">Zhao Chongbo</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Zhang%20VW%22%5BAuthor%5D" class="usa-link" aria-describedby="id7"><span class="name western">Victor Wei Zhang</span></a><div hidden="hidden" id="id7">
+<h3><span class="name western">Victor Wei Zhang</span></h3>
+<div class="p">
+<sup>2</sup>
+Amcarelab Genetic Commercial Company, Guangzhou, China
+</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Zhang%20VW%22%5BAuthor%5D" class="usa-link"><span class="name western">Victor Wei Zhang</span></a>
+</div>
+</div>
+<sup>2</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Jie%20L%22%5BAuthor%5D" class="usa-link" aria-describedby="id8"><span class="name western">Lin Jie</span></a><div hidden="hidden" id="id8">
+<h3><span class="name western">Lin Jie</span></h3>
+<div class="p">
+<sup>1</sup>
+Department of Neurology, Huashan Hospital Fudan University, Shanghai, China
+</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Jie%20L%22%5BAuthor%5D" class="usa-link"><span class="name western">Lin Jie</span></a>
+</div>
+</div>
+<sup>1,</sup><sup>*</sup>
+</div>
+<ul class="d-buttons inline-list">
+<li><button class="d-button" aria-controls="aip_a" aria-expanded="false">Author information</button></li>
+<li><button class="d-button" aria-controls="anp_a" aria-expanded="false">Article notes</button></li>
+<li><button class="d-button" aria-controls="clp_a" aria-expanded="false">Copyright and License information</button></li>
+</ul>
+<div class="d-panels font-secondary-light">
+<div id="aip_a" class="d-panel p" style="display: none">
+<div class="p" id="aff1">
+<sup>1</sup>
+Department of Neurology, Huashan Hospital Fudan University, Shanghai, China
+</div>
+<div id="aff2">
+<sup>2</sup>
+Amcarelab Genetic Commercial Company, Guangzhou, China
+</div>
+<div class="author-notes p">
+<div class="fn" id="fn1"><p>
+<strong>Edited by:</strong>
+<a href="https://loop.frontiersin.org/people/437033/overview" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Sarah H. Elsea</a>, Baylor College of Medicine, United States</p></div>
+<div class="fn" id="fn2">
+<p>
+<strong>Reviewed by:</strong>
+<a href="https://loop.frontiersin.org/people/949480/overview" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Dario Ronchi</a>, University of Milan, Italy</p>
+<p>
+<a href="https://loop.frontiersin.org/people/734185/overview" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Michel Satya Naslavsky</a>, University of São Paulo, Brazil</p>
+</div>
+<div class="fn" id="c001">
+<sup>✉</sup><p class="display-inline">*Correspondence: Lin Jie, <span>linjie15@fudan.edu.cn</span>
+</p>
+</div>
+</div>
+</div>
+<div id="anp_a" class="d-panel p" style="display: none"><div class="notes p"><section id="historyarticle-meta1" class="history"><p>Received 2022 Dec 18; Accepted 2023 Apr 4; Collection date 2023.</p></section></div></div>
+<div id="clp_a" class="d-panel p" style="display: none">
+<div>Copyright © 2023 Yongsheng, Chong, Bingyou, Jianian, Haofeng, Chongbo, Zhang and Jie.</div>
+<p>This is an open-access article distributed under the terms of the Creative Commons Attribution License (CC BY). The use, distribution or reproduction in other forums is permitted, provided the original author(s) and the copyright owner(s) are credited and that the original publication in this journal is cited, in accordance with accepted academic practice. No use, distribution or reproduction is permitted which does not comply with these terms.</p>
+<div class="p"><a href="/about/copyright/" class="usa-link">PMC Copyright notice</a></div>
+</div>
+</div>
+<div>PMCID: PMC10133693  PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/37124609/" class="usa-link">37124609</a>
+</div>
+</div></section></section><section aria-label="Article content"><section class="body main-article-body"><section class="abstract" id="abstract1"><h2>Abstract</h2>
+<p>
+<strong>Introduction:</strong> Amyloid transthyretin (ATTR) is divided into either hereditary (ATTRv) or sporadic (ATTRwt) and ATTRv is a rare hereditary disease transmitted as an autosomal dominant manner. Its global prevalence is traditionally estimated as 5,000 to 10,000 persons. However, it may be underestimated and the exact prevalence of ATTRv in China mainland remains unknown.</p>
+<p>
+<strong>Methods:</strong> The Genome Aggregation database (gnomAD) database (containing 125,748 exomes) and two genomic sequencing databases——China Metabolic Analytics Project (ChinaMAP) (containing 10588 individuals) and Amcarelab gene database (containing 45392 exomes), were integrated to estimate the prevalence of ATTRv in the world and mainland Chinese populations. Pathogenic variants allele frequency and the prevalence of ATTRv was calculated.</p>
+<p>
+<strong>Results:</strong> Six variants, counting 470 alleles, were defined as pathogenic variants in gnomAD. The prevalence of ATTRv in the world population was 57.4/100,000. Two variants (2 allele counts) and 15 variants (34 individuals) were defined as pathogenic variants in the ChinaMAP database and the Amcarelab exome database, respectively. Thus, the estimated prevalence interval of ATTRv in mainland China was 18.9/100,000-74,9/100,000.</p>
+<p>
+<strong>Conclusion:</strong> The present study demonstrated that the previous prevalence was greatly underestimated using traditional methods. Therefore, raising awareness of the disease is essential for recognizing ATTRv in its early stage.</p>
+<section id="kwd-group1" class="kwd-group"><p><strong>Keywords:</strong> amyloid transthyretin (ATTR), ChinaMap, GnomAD, prevalence, genetic database</p></section></section><section id="s1"><h2 class="pmc_sec_title">Introduction</h2>
+<p>Amyloid transthyretin (ATTR) amyloidosis is characterized by pathologic accumulation of extracellular protein arising from unstable transthyretin (TTR) tetramers, which dissociate into monomers that misfold, aggregate, and form insoluble fibrils that are resistant to proteolysis (<a href="#B13" class="usa-link" aria-describedby="B13">Finsterer et al., 2019</a>). TTR misfolding can lead to two distinct forms of amyloidosis: hereditary (ATTRv) and wild-type (ATTRwt) (<a href="#B31" class="usa-link" aria-describedby="B31">Yamamoto and Yokochi, 2019</a>). ATTRv is a rare hereditary disease transmitted as an autosomal dominant manner (<a href="#B4" class="usa-link" aria-describedby="B4">Adams et al., 2016</a>; <a href="#B2" class="usa-link" aria-describedby="B2">Adams et al., 2021a</a>). It is caused by mutations in the transthyretin gene located on chromosome 18 (18q12.1). There is considerable heterogeneity in the clinical presentation of ATTRv, ranging from primarily cardiac, primarily neuropathic, or other progressive multisystem disorders (<a href="#B24" class="usa-link" aria-describedby="B24">Rapezzi et al., 2010</a>). ATTRv usually proves fatal within 7–12 years from the onset of symptoms, causing a heavy economic burden for families and society (<a href="#B29" class="usa-link" aria-describedby="B29">Takeshima et al., 2019</a>; <a href="#B14" class="usa-link" aria-describedby="B14">Galan et al., 2021</a>).</p>
+<p>ATTRv is an underdiagnosed disease and the true incidence and prevalence are currently unknown (<a href="#B23" class="usa-link" aria-describedby="B23">Obi et al., 2022</a>). Its global prevalence is traditionally and somewhat anecdotally estimated as 5,000 to 10,000 persons but only several countries in Europe and Japan have relatively exact prevalence (<a href="#B28" class="usa-link" aria-describedby="B28">Sousa et al., 1995</a>; <a href="#B18" class="usa-link" aria-describedby="B18">Kato-Motozaki et al., 2008</a>; <a href="#B12" class="usa-link" aria-describedby="B12">Dardiotis et al., 2009</a>; <a href="#B17" class="usa-link" aria-describedby="B17">Ines et al., 2018</a>; <a href="#B21" class="usa-link" aria-describedby="B21">Lauppe et al., 2021</a>). In epidemic regions such as Portugal, Sweden, and Japan, the prevalence varies from 10/100,000 to 100/100,000 people. Recently, the prevalence of transthyretin familial amyloid polyneuropathy (ATTR-FAP) in China was estimated to be approximately 2000 (range 435–10,134) [1,347.7 million persons in total] (<a href="#B27" class="usa-link" aria-describedby="B27">Schmidt et al., 2018</a>). However, the prevalence estimation and information supporting prevalence calculations were extracted from records yielded by reference-databases searches, conference proceedings and published cases or case series, which certainly had it underestimated.</p>
+<p>Previous prevalence estimation was given using traditional methods, namely, case reports, epidemiological surveys and patient registries (<a href="#B16" class="usa-link" aria-describedby="B16">Ikeda et al., 2002</a>; <a href="#B17" class="usa-link" aria-describedby="B17">Ines et al., 2018</a>). These traditional methods are prone to underestimations due to diagnostic bias and small sample size. In recent years, population-based genomic sequencing projects provided a new genetic perspective on the estimation of disease-related prevalences (<a href="#B19" class="usa-link" aria-describedby="B19">Lahuerta Pueyo et al., 2019</a>). To date, several studies have employed publicly available large-population databases to infer pathogenicity, penetrance or prevalence of rare diseases (<a href="#B26" class="usa-link" aria-describedby="B26">Rutten et al., 2016</a>; <a href="#B19" class="usa-link" aria-describedby="B19">Lahuerta Pueyo et al., 2019</a>; <a href="#B22" class="usa-link" aria-describedby="B22">Liu et al., 2019</a>). Herein, we utilized an integrated world population and Chinese population genomic sequencing databases to reevaluate the ATTRv prevalence in the mainland Chinese population.</p></section><section id="s2"><h2 class="pmc_sec_title">Materials and methods</h2>
+<section id="s2-1"><h3 class="pmc_sec_title">The Genome Aggregation database</h3>
+<p>GnomAD contained 125,748 exomes from unrelated individuals and from different populations, sequenced as part of various disease-specific and population genetic studies. All <em>TTR</em> (canonical transcript ENST00000237014) variants were selected from the gnomAD version 2.1.1 (<a href="http://gnomad.broadinstitute.org/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://gnomad.broadinstitute.org/</a>). The analysis of the gnomAD data was carried out from June 2022 to August 2022. In terms of populations, all variants analyzed were classified according to the diverse ethnicities defined in the gnomAD database. The population classifications were as follows: non-Finnish European, African/African American, Latino, Finnish, Ashkenazi Jewish, East Asian, South Asian and other. Population in mainland China was not included in the gnomAD.</p></section><section id="s2-2"><h3 class="pmc_sec_title">The China metabolic analytics project database</h3>
+<p>The ChinaMAP was based on cohort studies across diverse regions and ethnic groups in China. ChinaMAP (beta version, 2020-03) provided allele frequencies data of variants identified in the Chinese population (<em>n</em> = 10588). It randomly selected participants from 8 ethnic groups (Han, Hui, Manchu, Miao, Mongolian, Yi, Tibetan and Zhuang) across 27 provinces of China without biased selection or filtration (<a href="#B8" class="usa-link" aria-describedby="B8">Cao et al., 2020</a>). Therefore, the ChinaMAP database may be considered as a genetic database for the general Chinese population. All <em>TTR</em> (transcript <a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.3" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.3</a>) variants were extracted from <a href="http://www.mBiobank.com" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">www.mBiobank.com</a> on August 2022.</p></section><section id="s2-3"><h3 class="pmc_sec_title">The Amcarelab gene database</h3>
+<p>The Amcarelab gene database was provided by the Amcarelab genetic commercial company. It is composed of 45392 individuals who were suspected to have gene related disorders by medical practitioners from different clinical specialties. Therefore, this database included a subpopulation with negative results from genetic testing as well as patients with definite genetic disorders. All <em>TTR</em> (transcript <a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a>) variants were extracted on June 2022.</p></section><section id="s2-4"><h3 class="pmc_sec_title">Data analysis and variant annotation</h3>
+<p>The present study is focused on missense mutations, genetic variations that result in the substitution of one amino acid with another. The disease-associated variants analyzed in this study specifically affect protein folding, which leads to the accumulation of misfolded proteins, rather than the truncation of protein function. For this reason, the study excluded splicing variants, stop codons, and frameshift changes, as these variants may lead to the production of truncated or non-functional proteins. Additionally, intronic variants, variants in non-coding regions, and synonymous variants were not considered in the study. Following the recommendations of American College of Medical Genetics and Genomics (ACMG), the variants were divided into the following categories: pathogenic, likely pathogenic, uncertain significance, likely benign, benign. In present study, pathogenic and likely pathogenic variants were further defined as disease-causing variant. The calculation of the prevalence of disease-causing variants is our main goal.</p></section></section><section id="s3"><h2 class="pmc_sec_title">Results</h2>
+<section id="s3-1"><h3 class="pmc_sec_title">Allele frequency of pathogenic variants in gnomAD</h3>
+<p>About 66 missense variants were found in the <em>TTR</em> gene, with an average of 125,780 exomes studied. According to our definition, six disease-causing variants (including 470 alleles count) were identified and their minor allelic frequency (MAF) was described in <a href="#T1" class="usa-link">Table 1</a>. There were 3 homozygotes identified. The disease-causing amyloidogenic variants MAF was 0.00186 and so the overall prevalence was 371.3/100,000. This is about 4-fold–40-fold higher than what would be expected based on the current epidemic regions prevalence estimation of 10/100,000 (actually from 10/100,000 to 100/100,000) (<a href="#B16" class="usa-link" aria-describedby="B16">Ikeda et al., 2002</a>; <a href="#B18" class="usa-link" aria-describedby="B18">Kato-Motozaki et al., 2008</a>). This huge prevalence gap between the estimation based on gene databases and traditional methods led us to conduct a further investigation. At first, we analyzed the relationship between population ethnicities and variants. Interestingly, we found a strong relation between the African population and the variant c.424G&gt;A (p. (Val142Ile)) (<a href="#F1" class="usa-link">Figure 1</a>). Among the amyloidogenic <em>TTR</em> pathogenic variants, the point change c.424G&gt;A is unusual for its overwhelmingly predominant occurrence in individuals of documented African descent. Previous studies have shown that the c.424G&gt;A variant was reported in the European population with an allele frequency of 0.00004, while in the African population it was reported with an allele frequency of 0.016 (<a href="#B19" class="usa-link" aria-describedby="B19">Lahuerta Pueyo et al., 2019</a>). According to more recent data, the worldwide prevalence of this variant ranges from 0.3% to 1.6% in the general population. However, studies have reported higher prevalence rates of the c.424G&gt;A variant among people of African descent, ranging from 1.1% to 9.8%. It is important to note that the prevalence of the c.424G&gt;A variant in a specific region is highly dependent on the percentage of people with African ancestry residing in that region (<a href="#B9" class="usa-link" aria-describedby="B9">Chandrashekar et al., 2021</a>). For its predominance in African/African-American, we further classified pathogenic missense variants found in gnomAD into two groups: African/African-American population and non-African. Then, the allele counts of the African/African-American population group based on gnomAD was 402 in 12487 exomes, and the allele frequency was 0.016, which was consistent with the prevalence previously reported. At last, the allele counts of the non-African group was 65 in 113261 exomes and the allele frequency was 0.0000287 (prevalence: 57.4/100,000).</p>
+<section class="tw xbox font-sm" id="T1"><h4 class="obj_head">TABLE 1.</h4>
+<div class="caption p"><p>Variants in the <em>TTR</em> gene classified as disease-causing variants from the gnomAD database global population.</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
+<thead valign="top"><tr>
+<th align="center" rowspan="1" colspan="1">Genomic location (GRCh37)</th>
+<th align="center" rowspan="1" colspan="1">Transcript</th>
+<th align="center" rowspan="1" colspan="1">Protein ID</th>
+<th align="center" rowspan="1" colspan="1">Variant</th>
+<th align="center" rowspan="1" colspan="1">Protein change</th>
+<th align="center" rowspan="1" colspan="1">Allele count</th>
+<th align="center" rowspan="1" colspan="1">Homozygote count</th>
+<th align="center" rowspan="1" colspan="1">Allele frequency</th>
+<th align="center" rowspan="1" colspan="1">Variants categories</th>
+</tr></thead>
+<tbody valign="top">
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29172937</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.148G&gt;A</td>
+<td align="center" rowspan="1" colspan="1">p.V50M</td>
+<td align="center" rowspan="1" colspan="1">26</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">0.000103</td>
+<td align="center" rowspan="1" colspan="1">Pathogenic</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29175120</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.238A&gt;G</td>
+<td align="center" rowspan="1" colspan="1">p.T80A</td>
+<td align="center" rowspan="1" colspan="1">1</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">0.00000398</td>
+<td align="center" rowspan="1" colspan="1">Pathogenic</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29175132</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.250T&gt;C</td>
+<td align="center" rowspan="1" colspan="1">p.F84L</td>
+<td align="center" rowspan="1" colspan="1">1</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">0.00000398</td>
+<td align="center" rowspan="1" colspan="1">Pathogenic</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29175144</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.262A&gt;T</td>
+<td align="center" rowspan="1" colspan="1">p.I88L</td>
+<td align="center" rowspan="1" colspan="1">5</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">0.0000199</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29178543</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.349G&gt;T</td>
+<td align="center" rowspan="1" colspan="1">p.A117S</td>
+<td align="center" rowspan="1" colspan="1">2</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">0.00000795</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29178618</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.424G&gt;A</td>
+<td align="center" rowspan="1" colspan="1">p.V142I</td>
+<td align="center" rowspan="1" colspan="1">435</td>
+<td align="center" rowspan="1" colspan="1">3</td>
+<td align="center" rowspan="1" colspan="1">0.00174</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/T1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></section><figure class="fig xbox font-sm" id="F1"><h4 class="obj_head">FIGURE 1.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=10133693_fgene-14-1126836-g001.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/3174/10133693/f44285df986c/fgene-14-1126836-g001.jpg" loading="lazy" height="610" width="675" alt="FIGURE 1"></a></p>
+<div class="p text-right font-secondary"><a href="figure/F1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Population and pathogenic variant correlation in gnomAD Abbreviations: The ethical information was achieved from gnomAD database. The line connecting represent the pathogenic variant present in the ethnic population. The thicker the line, the higher the proportion of the corresponding variant in that ethnic population.</p></figcaption></figure></section><section id="s3-2"><h3 class="pmc_sec_title">Prevalence estimation based on the ChinaMAP database</h3>
+<p>Analysis of the 10588 Chinese individuals identified 32 <em>TTR</em> missense mutation variants (<a href="#s9" class="usa-link">Supplementary Material S1</a>). Importantly, 2 variants (allele counts: 2), c.148 &gt; A (p.Val50Met) and c.424G&gt;A (p.Val142Ile) were classified as disease-causing variants according to this study. The allele frequency of disease-causing variants in the <em>TTR</em> within the Chinese population was estimated to be 0.0000944 (prevalence: 18.9/100,000).</p></section><section id="s3-3"><h3 class="pmc_sec_title">Prevalence estimation based on the Amcarelab exome database</h3>
+<p>Excluding synonymous, non-sense, splice variants, intron variants and variants in non-coding regions, analysis of the 45392 exomes identified 107 missense <em>TTR</em> variants <strong>(</strong>
+<a href="#s9" class="usa-link">Supplementary Material S2</a>
+<strong>)</strong> and 15 variants were pathogenic and likely pathogenic (34 individuals) (<a href="#T2" class="usa-link">Table 2</a>). Thus, the prevalence of disease-causing variants in Chinese population was estimated to be 34 in 45392, namely 74.9/100,000. Herein, the estimated prevalence interval of ATTRv in mainland China was 18.9∼74.9/100,000, based on the public exome, ChinaMAP, and the commercial exome databases.</p>
+<section class="tw xbox font-sm" id="T2"><h4 class="obj_head">TABLE 2.</h4>
+<div class="caption p"><p>Variants in the <em>TTR</em> gene classified as pathogenic variants from the Amcarelab database.</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
+<thead valign="top"><tr>
+<th align="center" rowspan="1" colspan="1">Genomic location (GRCh37)</th>
+<th align="center" rowspan="1" colspan="1">Transcript</th>
+<th align="center" rowspan="1" colspan="1">Protein ID</th>
+<th align="center" rowspan="1" colspan="1">Variant</th>
+<th align="center" rowspan="1" colspan="1">Protein change</th>
+<th align="center" rowspan="1" colspan="1">Individual count</th>
+<th align="center" rowspan="1" colspan="1">Number of homozygotes</th>
+<th align="center" rowspan="1" colspan="1">Variants categories</th>
+<th align="center" rowspan="1" colspan="1">Previously reported</th>
+</tr></thead>
+<tbody valign="top">
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29172902</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.113A&gt;G</td>
+<td align="center" rowspan="1" colspan="1">p.D38G</td>
+<td align="center" rowspan="1" colspan="1">4</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29172937</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.148G&gt;A</td>
+<td align="center" rowspan="1" colspan="1">p.V50M</td>
+<td align="center" rowspan="1" colspan="1">8</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29172954</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.165G&gt;T</td>
+<td align="center" rowspan="1" colspan="1">p.K55N</td>
+<td align="center" rowspan="1" colspan="1">1</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29172988</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.199G&gt;A</td>
+<td align="center" rowspan="1" colspan="1">p.G67R</td>
+<td align="center" rowspan="1" colspan="1">1</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29175092</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.210T&gt;A</td>
+<td align="center" rowspan="1" colspan="1">p.S70R</td>
+<td align="center" rowspan="1" colspan="1">1</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29175096</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.214T&gt;C</td>
+<td align="center" rowspan="1" colspan="1">p.S72P</td>
+<td align="center" rowspan="1" colspan="1">1</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29175103</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.221A&gt;C</td>
+<td align="center" rowspan="1" colspan="1">p.E74A</td>
+<td align="center" rowspan="1" colspan="1">1</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29175106</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.224T&gt;G</td>
+<td align="center" rowspan="1" colspan="1">p.L75R</td>
+<td align="center" rowspan="1" colspan="1">1</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29175123</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.241G&gt;A</td>
+<td align="center" rowspan="1" colspan="1">p.E81K</td>
+<td align="center" rowspan="1" colspan="1">3</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29175172</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.290C&gt;T</td>
+<td align="center" rowspan="1" colspan="1">p.S97F</td>
+<td align="center" rowspan="1" colspan="1">1</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29175193</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.311T&gt;A</td>
+<td align="center" rowspan="1" colspan="1">p.I104N</td>
+<td align="center" rowspan="1" colspan="1">1</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29175207</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.325G&gt;A</td>
+<td align="center" rowspan="1" colspan="1">p.E109K</td>
+<td align="center" rowspan="1" colspan="1">3</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29178543</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.349G&gt;T</td>
+<td align="center" rowspan="1" colspan="1">p.A117S</td>
+<td align="center" rowspan="1" colspan="1">5</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29178595</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.401A&gt;G</td>
+<td align="center" rowspan="1" colspan="1">p.Y134C</td>
+<td align="center" rowspan="1" colspan="1">1</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">chr18: 29178618</td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000371.4" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000371.4</a></td>
+<td align="center" rowspan="1" colspan="1"><a href="https://www.ncbi.nlm.nih.gov/protein/NP_000362.1" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NP_000362.1</a></td>
+<td align="center" rowspan="1" colspan="1">c.424G&gt;A</td>
+<td align="center" rowspan="1" colspan="1">p.V142I</td>
+<td align="center" rowspan="1" colspan="1">2</td>
+<td align="center" rowspan="1" colspan="1">0</td>
+<td align="center" rowspan="1" colspan="1">Likely pathogenic</td>
+<td align="center" rowspan="1" colspan="1">Yes</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/T2/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></section></section><section id="s3-4"><h3 class="pmc_sec_title">Prevalence estimation in the previous reported studies and in present study</h3>
+<p>
+<a href="#T3" class="usa-link">Table 3</a> showed the prevalence of ATTRv in previous reports. In epidemic regions such as Portugal, Japan, and Sweden, the prevalence ranges from 1.1/100,000 to 151/100,000 according to different estimation methods. In non-epidemic regions, the prevalence various from 0.433/100,000 to 3.72/100,000. Specially, ATTRv prevalence in Saudi was estimated to 21.5/100,000 using genome sequencing database.</p>
+<section class="tw xbox font-sm" id="T3"><h4 class="obj_head">TABLE 3.</h4>
+<div class="caption p"><p>Previous ATTRv prevalence estimations.</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
+<thead valign="top"><tr>
+<th align="center" rowspan="1" colspan="1">Country</th>
+<th align="center" rowspan="1" colspan="1">Disease classification</th>
+<th align="center" rowspan="1" colspan="1">Prevalence</th>
+<th align="center" rowspan="1" colspan="1">Method</th>
+<th align="center" rowspan="1" colspan="1">Published year</th>
+<th align="center" rowspan="1" colspan="1">References</th>
+</tr></thead>
+<tbody valign="top">
+<tr>
+<td align="center" rowspan="1" colspan="1">Northern Sweden</td>
+<td align="center" rowspan="1" colspan="1">ATTR-FAP</td>
+<td align="center" rowspan="1" colspan="1">104/100,000</td>
+<td align="center" rowspan="1" colspan="1">Traditional methods</td>
+<td align="center" rowspan="1" colspan="1">1976</td>
+<td align="center" rowspan="1" colspan="1">
+<a href="#B5" class="usa-link" aria-describedby="B5">Andersson (1976)</a>
+</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">Japan</td>
+<td align="center" rowspan="1" colspan="1">ATTRv</td>
+<td align="center" rowspan="1" colspan="1">15/100,000</td>
+<td align="center" rowspan="1" colspan="1">Traditional methods</td>
+<td align="center" rowspan="1" colspan="1">2002</td>
+<td align="center" rowspan="1" colspan="1">
+<a href="#B16" class="usa-link" aria-describedby="B16">Ikeda et al. (2002)</a>
+</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">Japan</td>
+<td align="center" rowspan="1" colspan="1">ATTRv</td>
+<td align="center" rowspan="1" colspan="1">1.1/100,000</td>
+<td align="center" rowspan="1" colspan="1">Traditional methods</td>
+<td align="center" rowspan="1" colspan="1">2008</td>
+<td align="center" rowspan="1" colspan="1">
+<a href="#B18" class="usa-link" aria-describedby="B18">Kato-Motozaki et al. (2008)</a>
+</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">Cyprus</td>
+<td align="center" rowspan="1" colspan="1">ATTR-FAP</td>
+<td align="center" rowspan="1" colspan="1">3.72/100,000</td>
+<td align="center" rowspan="1" colspan="1">Traditional methods</td>
+<td align="center" rowspan="1" colspan="1">2009</td>
+<td align="center" rowspan="1" colspan="1">
+<a href="#B12" class="usa-link" aria-describedby="B12">Dardiotis et al. (2009)</a>
+</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">Northern Portugal</td>
+<td align="center" rowspan="1" colspan="1">ATTR-FAP</td>
+<td align="center" rowspan="1" colspan="1">151/100,000</td>
+<td align="center" rowspan="1" colspan="1">Traditional methods</td>
+<td align="center" rowspan="1" colspan="1">1995</td>
+<td align="center" rowspan="1" colspan="1">
+<a href="#B28" class="usa-link" aria-describedby="B28">Sousa et al. (1995)</a>
+</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">Austria</td>
+<td align="center" rowspan="1" colspan="1">ATTRv</td>
+<td align="center" rowspan="1" colspan="1">0.5/100,000</td>
+<td align="center" rowspan="1" colspan="1">Traditional methods</td>
+<td align="center" rowspan="1" colspan="1">2019</td>
+<td align="center" rowspan="1" colspan="1">
+<a href="#B6" class="usa-link" aria-describedby="B6">Auer-Grumbach et al. (2020)</a>
+</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">Italy</td>
+<td align="center" rowspan="1" colspan="1">ATTRv</td>
+<td align="center" rowspan="1" colspan="1">0.433/100,000</td>
+<td align="center" rowspan="1" colspan="1">Traditional methods</td>
+<td align="center" rowspan="1" colspan="1">2020</td>
+<td align="center" rowspan="1" colspan="1">
+<a href="#B25" class="usa-link" aria-describedby="B25">Russo et al. (2020)</a>
+</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">Saudi</td>
+<td align="center" rowspan="1" colspan="1">ATTRv</td>
+<td align="center" rowspan="1" colspan="1">21.5/100,000</td>
+<td align="center" rowspan="1" colspan="1">Genome database</td>
+<td align="center" rowspan="1" colspan="1">2021</td>
+<td align="center" rowspan="1" colspan="1">
+<a href="#B1" class="usa-link" aria-describedby="B1">Abouelhoda et al. (2021)</a>
+</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">Worldwide</td>
+<td align="center" rowspan="1" colspan="1">ATTR-FAP</td>
+<td align="center" rowspan="1" colspan="1">10186-38,468 individuals</td>
+<td align="center" rowspan="1" colspan="1">Traditional methods</td>
+<td align="center" rowspan="1" colspan="1">2017</td>
+<td align="center" rowspan="1" colspan="1">
+<a href="#B27" class="usa-link" aria-describedby="B27">Schmidt et al. (2018)</a>
+</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">Worldwide</td>
+<td align="center" rowspan="1" colspan="1">ATTRv</td>
+<td align="center" rowspan="1" colspan="1">57.4/100,000</td>
+<td align="center" rowspan="1" colspan="1">Genome database</td>
+<td align="center" rowspan="1" colspan="1">—</td>
+<td align="center" rowspan="1" colspan="1">Present study</td>
+</tr>
+<tr>
+<td align="center" rowspan="1" colspan="1">China</td>
+<td align="center" rowspan="1" colspan="1">ATTRv</td>
+<td align="center" rowspan="1" colspan="1">18.9–74.9/100,000</td>
+<td align="center" rowspan="1" colspan="1">Genome database</td>
+<td align="center" rowspan="1" colspan="1">—</td>
+<td align="center" rowspan="1" colspan="1">Present study</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/T3/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<div class="tw-foot p"><div class="fn" id="fn3"><p>ATTRv, transthyretin amyloidosis; ATTR-FAP, transthyretin familial amyloid polyneuropathy; Traditional methods refers to case reports, epidemiological surveys, and patient registries.</p></div></div></section></section></section><section id="s4"><h2 class="pmc_sec_title">Discussion</h2>
+<p>This is the first study to identify and investigate the prevalence of disease-causing <em>TTR</em> variants in the Chinese mainland population. The estimated prevalence interval of ATTRv was 18.9–74.9/100,000 based on the public exome ChinaMAP and commercial exome databases. The lower limit of the prevalence interval was as high as or near 20-fold higher than that in Japan (prevalence: 1/100,000) concluded by traditional epidemiological methods (<a href="#B18" class="usa-link" aria-describedby="B18">Kato-Motozaki et al., 2008</a>). Our results suggested that ATTRv in the Chinese was observed much more prevalent than previously recognized.</p>
+<p>To determine whether the prevalence in China is high, we estimated the prevalence of different populations and various cohorts using gnomAD data. The gnomAD database consisted of eight ethnic groups but not all populations were equally represented, with the European population being the most represented and the Asian and Latino the least represented (<a href="#B10" class="usa-link" aria-describedby="B10">Collins et al., 2020</a>). Noteworthy, these databases did not contain the Chinese population. Comparisons to other population may aid in determine the prevalence gap of a number of disorders that exist between the Chinese and world populations. Not surprisingly, the ATTRv prevalence was 57.4 per 100,000 persons estimated by the genomic sequencing projects approach. It was equal to or even higher than that in epidemic regions such as Portugal, Sweden, and Japan, whose prevalence were calculated by case reports, epidemiological surveys and patient registries. A recent study using a national population-based exome sequence database reported the prevalence of 21.5 per 100,000 persons in Saudi (<a href="#B1" class="usa-link" aria-describedby="B1">Abouelhoda et al., 2021</a>), an Asian country that was not reported as an ATTRv epidemic region. This further supported that the true prevalence of ATTRv was much higher than that reported in previous studies.</p>
+<p>There are four plausible explanations for the unexpected high prevalence: 1) the pathogenic variants in the ChinaMAP and Amcarelab databases differ from those found in ATTRv in reality and variants were not pathogenic but were polymorphisms, 2) all of the individuals with a <em>TTR</em> pathogenic variant in the ChinaMAP and Amcarelab databases have an undiagnosed or unreported classical <em>TTR</em> variant; 3) a late onset, mild <em>TTR</em> phenotype which was less readily diagnosed, may be much more prevalent than recognized to date. However, it is highly unlikely that any of the 15 disease-causing amyloidogenic <em>TTR</em> variants found in ChinaMAP and Amcarelab databases were polymorphisms as most the 15 pathogenic variants have been previously reported in <em>TTR</em> pedigrees. Taking the results from the gnomAD and Saudi databases into consideration, low prevalence estimation from previous traditional methods may be from penetrance <em>TTR</em> variability, misdiagnosis or missed diagnosis, delayed diagnosis and/or for other reasons (<a href="#B24" class="usa-link" aria-describedby="B24">Rapezzi et al., 2010</a>).</p>
+<p>A high prevalence highlights the importance of diagnosing ATTRv clinically at an early stage. Recent years have seen the description of a series of novel and effective therapies for ATTRv. Tafamidis, patisiran, inotersen as well as the most promising NTLA-2001 have shown great benefits for patients with ATTRv. Specifically, these benefits are better received when ATTRv is diagnosed at an early stage of disease (<a href="#B7" class="usa-link" aria-describedby="B7">Benson et al., 2018</a>; <a href="#B20" class="usa-link" aria-describedby="B20">Lamb and Deeks, 2019</a>; <a href="#B3" class="usa-link" aria-describedby="B3">Adams et al., 2021b</a>; <a href="#B15" class="usa-link" aria-describedby="B15">Gillmore et al., 2021</a>). It challenges and encourage clinical practitioners to raise awareness and have a deeper and broader understanding of ATTRv because early diagnosis of amyloidosis remains an elusive goal that requires education of both physicians and patients (<a href="#B30" class="usa-link" aria-describedby="B30">Wechalekar et al., 2016</a>). Further examinations or even gene sequencing must be performed when there is any suspicion of hereditary amyloidosis with initial signs and symptoms, to enter the screening process for amyloidosis and improve early diagnosis (<a href="#B11" class="usa-link" aria-describedby="B11">Conceicao et al., 2019</a>).</p>
+<p>Our study has several limitations. First, in the present study, only “pathogenic” and “likely pathogenic” variants were defined as disease-causing variants. In fact, some variants in the “uncertain significance” group may also be disease-causing. Thus, the prevalence of ATTRv may be even higher. Secondly, penetrance analysis of the <em>TTR</em> gene could not be determined. Lastly, the characteristics of the Chinese variants and the relationship between variants and clinical characteristics were not analyzed.</p>
+<p>In conclusion, we confirmed the high prevalence of ATTRv in the Chinese mainland population, demonstrating that the previous prevalence was greatly underestimated obtained using traditional methods. Therefore, raising awareness of the disease is essential for recognizing ATTRv in its early stage.</p></section><section id="ack1" class="ack"><h2 class="pmc_sec_title">Acknowledgments</h2>
+<p>We want to express our gratitude to the curators who help maintain the online genetic databases this study included.</p></section><section id="s5"><h2 class="pmc_sec_title">Data availability statement</h2>
+<p>The raw data supporting the conclusions of this article will be made available by the authors, without undue reservation.</p></section><section id="s6"><h2 class="pmc_sec_title">Author contributions</h2>
+<p>ZY wrote, checked and revised draft manuscripts; ZY, SC, LB, HJ, CH searched data from databases and collected and analyzed data together. LJ and VZ conceptualized the manuscript. LJ and ZC reviewed the draft and revised it.</p></section><section id="s7"><h2 class="pmc_sec_title">Conflict of interest</h2>
+<p>Author VZ was employed by the company Amcarelab Genetic Commercial Company.</p>
+<p>The remaining authors declare that the research was conducted in the absence of any commercial or financial relationships that could be construed as a potential conflict of interest.</p></section><section id="s8"><h2 class="pmc_sec_title">Publisher’s note</h2>
+<p>All claims expressed in this article are solely those of the authors and do not necessarily represent those of their affiliated organizations, or those of the publisher, the editors and the reviewers. Any product that may be evaluated in this article, or claim that may be made by its manufacturer, is not guaranteed or endorsed by the publisher.</p></section><section id="s9"><h2 class="pmc_sec_title">Supplementary material</h2>
+<p>The Supplementary Material for this article can be found online at: <a href="https://www.frontiersin.org/articles/10.3389/fgene.2023.1126836/full#supplementary-material" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.frontiersin.org/articles/10.3389/fgene.2023.1126836/full#supplementary-material</a>
+</p>
+<section class="sm xbox font-sm" id="SM1"><div class="media p"><div class="caption">
+<a href="/articles/instance/10133693/bin/DataSheet2.PDF" data-ga-action="click_feat_suppl" class="usa-link">Click here for additional data file.</a><sup> (42.5KB, PDF) </sup>
+</div></div></section><section class="sm xbox font-sm" id="SM2"><div class="media p"><div class="caption">
+<a href="/articles/instance/10133693/bin/DataSheet1.PDF" data-ga-action="click_feat_suppl" class="usa-link">Click here for additional data file.</a><sup> (59.5KB, PDF) </sup>
+</div></div></section></section><section id="s10"><h2 class="pmc_sec_title">Abbreviations</h2>
+<p>ACMG, American College of Medical Genetics and Genomics; ATTR, amyloid transthyretin; ATTR-FAP, transthyretin familial amyloid polyneuropathy; ATTRv, hereditary amyloid transthyretin; ATTRwt, wild-type amyloid transthyretin; ChinaMAP, China Metabolic Analytics Project; GnomAD, Genome Aggregation database; HGVS, Human Genome Variation Society; TTR, transthyretin.</p></section><section id="ref-list1" class="ref-list"><h2 class="pmc_sec_title">References</h2>
+<section id="ref-list1_sec2"><ol class="ref-list font-sm">
+<li id="B1">
+<cite>
+Abouelhoda M., Mohty D., Alayary I., Meyer B. F., Arold S. T., Fadel B. M., et al.  (2021). Established and candidate transthyretin amyloidosis variants identified in the Saudi population by data mining. Hum. Genomics
+15, 52. 10.1186/s40246-021-00351-2
+</cite> [<a href="https://doi.org/10.1186/s40246-021-00351-2" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8359098/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34380564/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Hum.%20Genomics&amp;title=Established%20and%20candidate%20transthyretin%20amyloidosis%20variants%20identified%20in%20the%20Saudi%20population%20by%20data%20mining&amp;author=M.%20Abouelhoda&amp;author=D.%20Mohty&amp;author=I.%20Alayary&amp;author=B.%20F.%20Meyer&amp;author=S.%20T.%20Arold&amp;volume=15&amp;publication_year=2021&amp;pages=52&amp;pmid=34380564&amp;doi=10.1186/s40246-021-00351-2&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B2">
+<cite>
+Adams D., Ando Y., Beirao J. M., Coelho T., Gertz M. A., Gillmore J. D., et al.  (2021). Expert consensus recommendations to improve diagnosis of ATTR amyloidosis with polyneuropathy. J. Neurol.
+268, 2109–2122. 10.1007/s00415-019-09688-0
+</cite> [<a href="https://doi.org/10.1007/s00415-019-09688-0" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8179912/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31907599/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Neurol.&amp;title=Expert%20consensus%20recommendations%20to%20improve%20diagnosis%20of%20ATTR%20amyloidosis%20with%20polyneuropathy&amp;author=D.%20Adams&amp;author=Y.%20Ando&amp;author=J.%20M.%20Beirao&amp;author=T.%20Coelho&amp;author=M.%20A.%20Gertz&amp;volume=268&amp;publication_year=2021&amp;pages=2109-2122&amp;pmid=31907599&amp;doi=10.1007/s00415-019-09688-0&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B3">
+<cite>
+Adams D., Polydefkis M., Gonzalez-Duarte A., Wixner J., Kristen A. V., Schmidt H. H., et al.  (2021). Long-term safety and efficacy of patisiran for hereditary transthyretin-mediated amyloidosis with polyneuropathy: 12-month results of an open-label extension study. Lancet Neurol.
+20, 49–59. 10.1016/S1474-4422(20)30368-9
+</cite> [<a href="https://doi.org/10.1016/S1474-4422(20)30368-9" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33212063/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Lancet%20Neurol.&amp;title=Long-term%20safety%20and%20efficacy%20of%20patisiran%20for%20hereditary%20transthyretin-mediated%20amyloidosis%20with%20polyneuropathy:%2012-month%20results%20of%20an%20open-label%20extension%20study&amp;author=D.%20Adams&amp;author=M.%20Polydefkis&amp;author=A.%20Gonzalez-Duarte&amp;author=J.%20Wixner&amp;author=A.%20V.%20Kristen&amp;volume=20&amp;publication_year=2021&amp;pages=49-59&amp;pmid=33212063&amp;doi=10.1016/S1474-4422(20)30368-9&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B4">
+<cite>
+Adams D., Suhr O. B., Hund E., Obici L., Tournev I., Campistol J. M., et al.  (2016). First European consensus for diagnosis, management, and treatment of transthyretin familial amyloid polyneuropathy. Curr. Opin. Neurol.
+29 (1), S14–S26. 10.1097/WCO.0000000000000289
+</cite> [<a href="https://doi.org/10.1097/WCO.0000000000000289" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4739312/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/26734952/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Curr.%20Opin.%20Neurol.&amp;title=First%20European%20consensus%20for%20diagnosis,%20management,%20and%20treatment%20of%20transthyretin%20familial%20amyloid%20polyneuropathy&amp;author=D.%20Adams&amp;author=O.%20B.%20Suhr&amp;author=E.%20Hund&amp;author=L.%20Obici&amp;author=I.%20Tournev&amp;volume=29&amp;issue=1&amp;publication_year=2016&amp;pages=S14-S26&amp;pmid=26734952&amp;doi=10.1097/WCO.0000000000000289&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B5">
+<cite>
+Andersson R. (1976). Familial amyloidosis with polyneuropathy. A clinical study based on patients living in northern Sweden. Acta Med. Scand. Suppl.
+590, 1–64.</cite> [<a href="https://pubmed.ncbi.nlm.nih.gov/1064291/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Acta%20Med.%20Scand.%20Suppl.&amp;title=Familial%20amyloidosis%20with%20polyneuropathy.%20A%20clinical%20study%20based%20on%20patients%20living%20in%20northern%20Sweden&amp;author=R.%20Andersson&amp;volume=590&amp;publication_year=1976&amp;pages=1-64&amp;pmid=1064291&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B6">
+<cite>
+Auer-Grumbach M., Rettl R., Ablasser K., Agis H., Beetz C., Duca F., et al.  (2020). Hereditary ATTR amyloidosis in Austria: Prevalence and epidemiological hot spots. J. Clin. Med.
+9, 2234. 10.3390/jcm9072234
+</cite> [<a href="https://doi.org/10.3390/jcm9072234" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC7408866/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/32674397/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Clin.%20Med.&amp;title=Hereditary%20ATTR%20amyloidosis%20in%20Austria:%20Prevalence%20and%20epidemiological%20hot%20spots&amp;author=M.%20Auer-Grumbach&amp;author=R.%20Rettl&amp;author=K.%20Ablasser&amp;author=H.%20Agis&amp;author=C.%20Beetz&amp;volume=9&amp;publication_year=2020&amp;pages=2234&amp;pmid=32674397&amp;doi=10.3390/jcm9072234&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B7">
+<cite>
+Benson M. D., Waddington-Cruz M., Berk J. L., Polydefkis M., Dyck P. J., Wang A. K., et al.  (2018). Inotersen treatment for patients with hereditary transthyretin amyloidosis. N. Engl. J. Med.
+379, 22–31. 10.1056/NEJMoa1716793
+</cite> [<a href="https://doi.org/10.1056/NEJMoa1716793" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC12611561/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29972757/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N.%20Engl.%20J.%20Med.&amp;title=Inotersen%20treatment%20for%20patients%20with%20hereditary%20transthyretin%20amyloidosis&amp;author=M.%20D.%20Benson&amp;author=M.%20Waddington-Cruz&amp;author=J.%20L.%20Berk&amp;author=M.%20Polydefkis&amp;author=P.%20J.%20Dyck&amp;volume=379&amp;publication_year=2018&amp;pages=22-31&amp;pmid=29972757&amp;doi=10.1056/NEJMoa1716793&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B8">
+<cite>
+Cao Y., Li L., Xu M., Feng Z., Sun X., Lu J., et al.  (2020). The ChinaMAP analytics of deep whole genome sequences in 10,588 individuals. Cell Res.
+30, 717–731. 10.1038/s41422-020-0322-9
+</cite> [<a href="https://doi.org/10.1038/s41422-020-0322-9" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC7609296/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/32355288/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Cell%20Res.&amp;title=The%20ChinaMAP%20analytics%20of%20deep%20whole%20genome%20sequences%20in%2010,588%20individuals&amp;author=Y.%20Cao&amp;author=L.%20Li&amp;author=M.%20Xu&amp;author=Z.%20Feng&amp;author=X.%20Sun&amp;volume=30&amp;publication_year=2020&amp;pages=717-731&amp;pmid=32355288&amp;doi=10.1038/s41422-020-0322-9&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B9">
+<cite>
+Chandrashekar P., Alhuneafat L., Mannello M., Al-Rashdan L., Kim M. M., Dungu J., et al.  (2021). Prevalence and outcomes of p.Val142Ile TTR amyloidosis cardiomyopathy: A systematic review. Circ. Genom Precis. Med.
+14, e003356. 10.1161/CIRCGEN.121.003356
+</cite> [<a href="https://doi.org/10.1161/CIRCGEN.121.003356" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8530896/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34461737/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circ.%20Genom%20Precis.%20Med.&amp;title=Prevalence%20and%20outcomes%20of%20p.Val142Ile%20TTR%20amyloidosis%20cardiomyopathy:%20A%20systematic%20review&amp;author=P.%20Chandrashekar&amp;author=L.%20Alhuneafat&amp;author=M.%20Mannello&amp;author=L.%20Al-Rashdan&amp;author=M.%20M.%20Kim&amp;volume=14&amp;publication_year=2021&amp;pages=e003356&amp;pmid=34461737&amp;doi=10.1161/CIRCGEN.121.003356&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B10">
+<cite>
+Collins R. L., Brand H., Karczewski K. J., Zhao X., Alföldi J., Francioli L. C., et al.  (2020). A structural variation reference for medical and population genetics. Nature
+581, 444–451. 10.1038/s41586-020-2287-8
+</cite> [<a href="https://doi.org/10.1038/s41586-020-2287-8" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC7334194/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/32461652/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Nature&amp;title=A%20structural%20variation%20reference%20for%20medical%20and%20population%20genetics&amp;author=R.%20L.%20Collins&amp;author=H.%20Brand&amp;author=K.%20J.%20Karczewski&amp;author=X.%20Zhao&amp;author=J.%20Alf%C3%B6ldi&amp;volume=581&amp;publication_year=2020&amp;pages=444-451&amp;pmid=32461652&amp;doi=10.1038/s41586-020-2287-8&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B11">
+<cite>
+Conceicao I., Damy T., Romero M., Galán L., Attarian S., Luigetti M., et al.  (2019). Early diagnosis of ATTR amyloidosis through targeted follow-up of identified carriers of TTR gene mutations. Amyloid
+26, 3–9. 10.1080/13506129.2018.1556156
+</cite> [<a href="https://doi.org/10.1080/13506129.2018.1556156" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30793974/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Amyloid&amp;title=Early%20diagnosis%20of%20ATTR%20amyloidosis%20through%20targeted%20follow-up%20of%20identified%20carriers%20of%20TTR%20gene%20mutations&amp;author=I.%20Conceicao&amp;author=T.%20Damy&amp;author=M.%20Romero&amp;author=L.%20Gal%C3%A1n&amp;author=S.%20Attarian&amp;volume=26&amp;publication_year=2019&amp;pages=3-9&amp;pmid=30793974&amp;doi=10.1080/13506129.2018.1556156&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B12">
+<cite>
+Dardiotis E., Koutsou P., Papanicolaou E. Z., Vonta I., Kladi A., Vassilopoulos D., et al.  (2009). Epidemiological, clinical and genetic study of familial amyloidotic polyneuropathy in Cyprus. Amyloid
+16, 32–37. 10.1080/13506120802676948
+</cite> [<a href="https://doi.org/10.1080/13506120802676948" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/19291512/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Amyloid&amp;title=Epidemiological,%20clinical%20and%20genetic%20study%20of%20familial%20amyloidotic%20polyneuropathy%20in%20Cyprus&amp;author=E.%20Dardiotis&amp;author=P.%20Koutsou&amp;author=E.%20Z.%20Papanicolaou&amp;author=I.%20Vonta&amp;author=A.%20Kladi&amp;volume=16&amp;publication_year=2009&amp;pages=32-37&amp;pmid=19291512&amp;doi=10.1080/13506120802676948&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B13">
+<cite>
+Finsterer J., Iglseder S., Wanschitz J., Topakian R., Loscher W. N., Grisold W. (2019). Hereditary transthyretin-related amyloidosis. Acta Neurol. Scand.
+139, 92–105. 10.1111/ane.13035
+</cite> [<a href="https://doi.org/10.1111/ane.13035" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30295933/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Acta%20Neurol.%20Scand.&amp;title=Hereditary%20transthyretin-related%20amyloidosis&amp;author=J.%20Finsterer&amp;author=S.%20Iglseder&amp;author=J.%20Wanschitz&amp;author=R.%20Topakian&amp;author=W.%20N.%20Loscher&amp;volume=139&amp;publication_year=2019&amp;pages=92-105&amp;pmid=30295933&amp;doi=10.1111/ane.13035&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B14">
+<cite>
+Galan L., Gonzalez-Moreno J., Martinez-Sesmero J. M., Muñoz-Beamud F., Santos-Rubio M. D., Tran D., et al.  (2021). Estimating the annual economic burden for the management of patients with transthyretin amyloid polyneuropathy in Spain. Expert Rev. Pharmacoecon Outcomes Res.
+21, 967–973. 10.1080/14737167.2021.1900738
+</cite> [<a href="https://doi.org/10.1080/14737167.2021.1900738" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33724140/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Expert%20Rev.%20Pharmacoecon%20Outcomes%20Res.&amp;title=Estimating%20the%20annual%20economic%20burden%20for%20the%20management%20of%20patients%20with%20transthyretin%20amyloid%20polyneuropathy%20in%20Spain&amp;author=L.%20Galan&amp;author=J.%20Gonzalez-Moreno&amp;author=J.%20M.%20Martinez-Sesmero&amp;author=F.%20Mu%C3%B1oz-Beamud&amp;author=M.%20D.%20Santos-Rubio&amp;volume=21&amp;publication_year=2021&amp;pages=967-973&amp;pmid=33724140&amp;doi=10.1080/14737167.2021.1900738&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B15">
+<cite>
+Gillmore J. D., Gane E., Taubel J., Kao J., Fontana M., Maitland M. L., et al.  (2021). CRISPR-Cas9 <em>in vivo</em> gene editing for transthyretin amyloidosis. N. Engl. J. Med.
+385, 493–502. 10.1056/NEJMoa2107454
+</cite> [<a href="https://doi.org/10.1056/NEJMoa2107454" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34215024/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N.%20Engl.%20J.%20Med.&amp;title=CRISPR-Cas9%20in%20vivo%20gene%20editing%20for%20transthyretin%20amyloidosis&amp;author=J.%20D.%20Gillmore&amp;author=E.%20Gane&amp;author=J.%20Taubel&amp;author=J.%20Kao&amp;author=M.%20Fontana&amp;volume=385&amp;publication_year=2021&amp;pages=493-502&amp;pmid=34215024&amp;doi=10.1056/NEJMoa2107454&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B16">
+<cite>
+Ikeda S., Nakazato M., Ando Y., Sobue G. (2002). Familial transthyretin-type amyloid polyneuropathy in Japan: Clinical and genetic heterogeneity. Neurology
+58, 1001–1007. 10.1212/wnl.58.7.1001
+</cite> [<a href="https://doi.org/10.1212/wnl.58.7.1001" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/11940682/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Neurology&amp;title=Familial%20transthyretin-type%20amyloid%20polyneuropathy%20in%20Japan:%20Clinical%20and%20genetic%20heterogeneity&amp;author=S.%20Ikeda&amp;author=M.%20Nakazato&amp;author=Y.%20Ando&amp;author=G.%20Sobue&amp;volume=58&amp;publication_year=2002&amp;pages=1001-1007&amp;pmid=11940682&amp;doi=10.1212/wnl.58.7.1001&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B17">
+<cite>
+Ines M., Coelho T., Conceicao I., Duarte-Ramos F., de Carvalho M., Costa J. (2018). Epidemiology of transthyretin familial amyloid polyneuropathy in Portugal: A nationwide study. Neuroepidemiology
+51, 177–182. 10.1159/000490553
+</cite> [<a href="https://doi.org/10.1159/000490553" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30153683/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Neuroepidemiology&amp;title=Epidemiology%20of%20transthyretin%20familial%20amyloid%20polyneuropathy%20in%20Portugal:%20A%20nationwide%20study&amp;author=M.%20Ines&amp;author=T.%20Coelho&amp;author=I.%20Conceicao&amp;author=F.%20Duarte-Ramos&amp;author=M.%20de%20Carvalho&amp;volume=51&amp;publication_year=2018&amp;pages=177-182&amp;pmid=30153683&amp;doi=10.1159/000490553&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B18">
+<cite>
+Kato-Motozaki Y., Ono K., Shima K., Morinaga A., Machiya T., Nozaki I., et al.  (2008). Epidemiology of familial amyloid polyneuropathy in Japan: Identification of a novel endemic focus. J. Neurol. Sci.
+270, 133–140. 10.1016/j.jns.2008.02.019
+</cite> [<a href="https://doi.org/10.1016/j.jns.2008.02.019" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/18410945/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Neurol.%20Sci.&amp;title=Epidemiology%20of%20familial%20amyloid%20polyneuropathy%20in%20Japan:%20Identification%20of%20a%20novel%20endemic%20focus&amp;author=Y.%20Kato-Motozaki&amp;author=K.%20Ono&amp;author=K.%20Shima&amp;author=A.%20Morinaga&amp;author=T.%20Machiya&amp;volume=270&amp;publication_year=2008&amp;pages=133-140&amp;pmid=18410945&amp;doi=10.1016/j.jns.2008.02.019&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B19">
+<cite>
+Lahuerta Pueyo C., Aibar Arregui M. A., Gracia Gutierrez A., Bueno Juana E., Menao Guillen S. (2019). Estimating the prevalence of allelic variants in the transthyretin gene by analysing large-scale sequencing data. Eur. J. Hum. Genet.
+27, 783–791. 10.1038/s41431-019-0337-1
+</cite> [<a href="https://doi.org/10.1038/s41431-019-0337-1" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6461877/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30683924/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Eur.%20J.%20Hum.%20Genet.&amp;title=Estimating%20the%20prevalence%20of%20allelic%20variants%20in%20the%20transthyretin%20gene%20by%20analysing%20large-scale%20sequencing%20data&amp;author=C.%20Lahuerta%20Pueyo&amp;author=M.%20A.%20Aibar%20Arregui&amp;author=A.%20Gracia%20Gutierrez&amp;author=E.%20Bueno%20Juana&amp;author=S.%20Menao%20Guillen&amp;volume=27&amp;publication_year=2019&amp;pages=783-791&amp;pmid=30683924&amp;doi=10.1038/s41431-019-0337-1&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B20">
+<cite>
+Lamb Y. N., Deeks E. D. (2019). Tafamidis: A review in transthyretin amyloidosis with polyneuropathy. Drugs
+79, 863–874. 10.1007/s40265-019-01129-6
+</cite> [<a href="https://doi.org/10.1007/s40265-019-01129-6" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31098895/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Drugs&amp;title=Tafamidis:%20A%20review%20in%20transthyretin%20amyloidosis%20with%20polyneuropathy&amp;author=Y.%20N.%20Lamb&amp;author=E.%20D.%20Deeks&amp;volume=79&amp;publication_year=2019&amp;pages=863-874&amp;pmid=31098895&amp;doi=10.1007/s40265-019-01129-6&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B21">
+<cite>
+Lauppe R. E., Liseth Hansen J., Gerdeskold C., Rozenbaum M. H., Strand A. M., Vakevainen M., et al.  (2021). Nationwide prevalence and characteristics of transthyretin amyloid cardiomyopathy in Sweden. Open Heart
+8, e001755. 10.1136/openhrt-2021-001755
+</cite> [<a href="https://doi.org/10.1136/openhrt-2021-001755" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8515473/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34645699/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Open%20Heart&amp;title=Nationwide%20prevalence%20and%20characteristics%20of%20transthyretin%20amyloid%20cardiomyopathy%20in%20Sweden&amp;author=R.%20E.%20Lauppe&amp;author=J.%20Liseth%20Hansen&amp;author=C.%20Gerdeskold&amp;author=M.%20H.%20Rozenbaum&amp;author=A.%20M.%20Strand&amp;volume=8&amp;publication_year=2021&amp;pages=e001755&amp;pmid=34645699&amp;doi=10.1136/openhrt-2021-001755&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B22">
+<cite>
+Liu W., Pajusalu S., Lake N. J., Zhou G., Ioannidis N., Mittal P., et al.  (2019). Estimating prevalence for limb-girdle muscular dystrophy based on public sequencing databases. Genet. Med.
+21, 2512–2520. 10.1038/s41436-019-0544-8
+</cite> [<a href="https://doi.org/10.1038/s41436-019-0544-8" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31105274/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Genet.%20Med.&amp;title=Estimating%20prevalence%20for%20limb-girdle%20muscular%20dystrophy%20based%20on%20public%20sequencing%20databases&amp;author=W.%20Liu&amp;author=S.%20Pajusalu&amp;author=N.%20J.%20Lake&amp;author=G.%20Zhou&amp;author=N.%20Ioannidis&amp;volume=21&amp;publication_year=2019&amp;pages=2512-2520&amp;pmid=31105274&amp;doi=10.1038/s41436-019-0544-8&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B23">
+<cite>
+Obi C. A., Mostertz W. C., Griffin J. M., Judge D. P. (2022). ATTR epidemiology, genetics, and prognostic factors. Methodist Debakey Cardiovasc J.
+18, 17–26. 10.14797/mdcvj.1066
+</cite> [<a href="https://doi.org/10.14797/mdcvj.1066" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8932385/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/35414855/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Methodist%20Debakey%20Cardiovasc%20J.&amp;title=ATTR%20epidemiology,%20genetics,%20and%20prognostic%20factors&amp;author=C.%20A.%20Obi&amp;author=W.%20C.%20Mostertz&amp;author=J.%20M.%20Griffin&amp;author=D.%20P.%20Judge&amp;volume=18&amp;publication_year=2022&amp;pages=17-26&amp;pmid=35414855&amp;doi=10.14797/mdcvj.1066&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B24">
+<cite>
+Rapezzi C., Quarta C. C., Riva L., Longhi S., Gallelli I., Lorenzini M., et al.  (2010). Transthyretin-related amyloidoses and the heart: A clinical overview. Nat. Rev. Cardiol.
+7, 398–408. 10.1038/nrcardio.2010.67
+</cite> [<a href="https://doi.org/10.1038/nrcardio.2010.67" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/20479782/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Nat.%20Rev.%20Cardiol.&amp;title=Transthyretin-related%20amyloidoses%20and%20the%20heart:%20A%20clinical%20overview&amp;author=C.%20Rapezzi&amp;author=C.%20C.%20Quarta&amp;author=L.%20Riva&amp;author=S.%20Longhi&amp;author=I.%20Gallelli&amp;volume=7&amp;publication_year=2010&amp;pages=398-408&amp;pmid=20479782&amp;doi=10.1038/nrcardio.2010.67&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B25">
+<cite>
+Russo M., Obici L., Bartolomei I., Cappelli F., Luigetti M., Fenu S., et al.  (2020). ATTRv amyloidosis Italian registry: Clinical and epidemiological data. Amyloid
+27, 259–265. 10.1080/13506129.2020.1794807
+</cite> [<a href="https://doi.org/10.1080/13506129.2020.1794807" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/32696671/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Amyloid&amp;title=ATTRv%20amyloidosis%20Italian%20registry:%20Clinical%20and%20epidemiological%20data&amp;author=M.%20Russo&amp;author=L.%20Obici&amp;author=I.%20Bartolomei&amp;author=F.%20Cappelli&amp;author=M.%20Luigetti&amp;volume=27&amp;publication_year=2020&amp;pages=259-265&amp;pmid=32696671&amp;doi=10.1080/13506129.2020.1794807&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B26">
+<cite>
+Rutten J. W., Dauwerse H. G., Gravesteijn G., van Belzen M. J., van der Grond J., Polke J. M., et al.  (2016). Archetypal NOTCH3 mutations frequent in public exome: Implications for CADASIL. Ann. Clin. Transl. Neurol.
+3, 844–853. 10.1002/acn3.344
+</cite> [<a href="https://doi.org/10.1002/acn3.344" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5099530/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27844030/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Ann.%20Clin.%20Transl.%20Neurol.&amp;title=Archetypal%20NOTCH3%20mutations%20frequent%20in%20public%20exome:%20Implications%20for%20CADASIL&amp;author=J.%20W.%20Rutten&amp;author=H.%20G.%20Dauwerse&amp;author=G.%20Gravesteijn&amp;author=M.%20J.%20van%20Belzen&amp;author=J.%20van%20der%20Grond&amp;volume=3&amp;publication_year=2016&amp;pages=844-853&amp;pmid=27844030&amp;doi=10.1002/acn3.344&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B27">
+<cite>
+Schmidt H. H., Waddington-Cruz M., Botteman M. F., Carter J. A., Chopra A. S., Hopps M., et al.  (2018). Estimating the global prevalence of transthyretin familial amyloid polyneuropathy. Muscle Nerve
+57, 829–837. 10.1002/mus.26034
+</cite> [<a href="https://doi.org/10.1002/mus.26034" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5947118/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29211930/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Muscle%20Nerve&amp;title=Estimating%20the%20global%20prevalence%20of%20transthyretin%20familial%20amyloid%20polyneuropathy&amp;author=H.%20H.%20Schmidt&amp;author=M.%20Waddington-Cruz&amp;author=M.%20F.%20Botteman&amp;author=J.%20A.%20Carter&amp;author=A.%20S.%20Chopra&amp;volume=57&amp;publication_year=2018&amp;pages=829-837&amp;pmid=29211930&amp;doi=10.1002/mus.26034&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B28">
+<cite>
+Sousa A., Coelho T., Barros J., Sequeiros J. (1995). Genetic epidemiology of familial amyloidotic polyneuropathy (FAP)-type I in Povoa do Varzim and Vila do Conde (north of Portugal). Am. J. Med. Genet.
+60, 512–521. 10.1002/ajmg.1320600606
+</cite> [<a href="https://doi.org/10.1002/ajmg.1320600606" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/8825887/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Am.%20J.%20Med.%20Genet.&amp;title=Genetic%20epidemiology%20of%20familial%20amyloidotic%20polyneuropathy%20(FAP)-type%20I%20in%20Povoa%20do%20Varzim%20and%20Vila%20do%20Conde%20(north%20of%20Portugal)&amp;author=A.%20Sousa&amp;author=T.%20Coelho&amp;author=J.%20Barros&amp;author=J.%20Sequeiros&amp;volume=60&amp;publication_year=1995&amp;pages=512-521&amp;pmid=8825887&amp;doi=10.1002/ajmg.1320600606&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B29">
+<cite>
+Takeshima T., Wan Q., Zhang Y., Komori M., Stretton S., Rajan N., et al.  (2019). Prevalence, burden, and clinical management of migraine in China, Japan, and South Korea: A comprehensive review of the literature. J. Headache Pain
+20, 111. 10.1186/s10194-019-1062-4
+</cite> [<a href="https://doi.org/10.1186/s10194-019-1062-4" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6896325/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31805851/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Headache%20Pain&amp;title=Prevalence,%20burden,%20and%20clinical%20management%20of%20migraine%20in%20China,%20Japan,%20and%20South%20Korea:%20A%20comprehensive%20review%20of%20the%20literature&amp;author=T.%20Takeshima&amp;author=Q.%20Wan&amp;author=Y.%20Zhang&amp;author=M.%20Komori&amp;author=S.%20Stretton&amp;volume=20&amp;publication_year=2019&amp;pages=111&amp;pmid=31805851&amp;doi=10.1186/s10194-019-1062-4&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B30">
+<cite>
+Wechalekar A. D., Gillmore J. D., Hawkins P. N. (2016). Systemic amyloidosis. Lancet
+387, 2641–2654. 10.1016/S0140-6736(15)01274-X
+</cite> [<a href="https://doi.org/10.1016/S0140-6736(15)01274-X" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/26719234/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Lancet&amp;title=Systemic%20amyloidosis&amp;author=A.%20D.%20Wechalekar&amp;author=J.%20D.%20Gillmore&amp;author=P.%20N.%20Hawkins&amp;volume=387&amp;publication_year=2016&amp;pages=2641-2654&amp;pmid=26719234&amp;doi=10.1016/S0140-6736(15)01274-X&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B31">
+<cite>
+Yamamoto H., Yokochi T. (2019). Transthyretin cardiac amyloidosis: An update on diagnosis and treatment. Esc. Heart Fail
+6, 1128–1139. 10.1002/ehf2.12518
+</cite> [<a href="https://doi.org/10.1002/ehf2.12518" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6989279/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31553132/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Esc.%20Heart%20Fail&amp;title=Transthyretin%20cardiac%20amyloidosis:%20An%20update%20on%20diagnosis%20and%20treatment&amp;author=H.%20Yamamoto&amp;author=T.%20Yokochi&amp;volume=6&amp;publication_year=2019&amp;pages=1128-1139&amp;pmid=31553132&amp;doi=10.1002/ehf2.12518&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+</ol></section></section><section id="_ad93_" lang="en" class="associated-data"><h2 class="pmc_sec_title">Associated Data</h2>
+<p class="font-secondary"><em>This section collects any data citations, data availability statements, or supplementary materials included in this article.</em></p>
+<section id="_adsm93_" lang="en" class="supplementary-materials"><h3 class="pmc_sec_title">Supplementary Materials</h3>
+<section class="sm xbox font-sm" id="db_ds_supplementary-material1_reqid_"><div class="media p"><div class="caption">
+<a href="/articles/instance/10133693/bin/DataSheet2.PDF" data-ga-action="click_feat_suppl" class="usa-link">Click here for additional data file.</a><sup> (42.5KB, PDF) </sup>
+</div></div></section><section class="sm xbox font-sm" id="db_ds_supplementary-material2_reqid_"><div class="media p"><div class="caption">
+<a href="/articles/instance/10133693/bin/DataSheet1.PDF" data-ga-action="click_feat_suppl" class="usa-link">Click here for additional data file.</a><sup> (59.5KB, PDF) </sup>
+</div></div></section></section><section id="_adda93_" lang="en" class="data-availability-statement"><h3 class="pmc_sec_title">Data Availability Statement</h3>
+<p>The raw data supporting the conclusions of this article will be made available by the authors, without undue reservation.</p></section></section></section><footer class="p courtesy-note font-secondary font-sm text-center"><hr class="headless">
+<p>Articles from Frontiers in Genetics are provided here courtesy of <strong>Frontiers Media SA</strong></p></footer></section></article>
+
+                      
+
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+<!-- Secondary navigation placeholder -->
+<div class="pmc-sidenav desktop:grid-col-4 display-flex">
+    <section class="pmc-sidenav__container" aria-label="Article resources and navigation">
+        <button type="button" class="usa-button pmc-sidenav__container__close usa-button--unstyled">
+            <img src="/static/img/usa-icons/close.svg" role="img" alt="Close" />
+        </button>
+    <div class="display-none desktop:display-block">
+       <section class="margin-top-4 desktop:margin-top-0">
+              <h2 class="margin-top-0">ACTIONS</h2>
+           <ul class="usa-list usa-list--unstyled usa-list--actions">
+               
+               <li>
+                     <a
+                             href="https://doi.org/10.3389/fgene.2023.1126836"
+                             class="usa-button usa-button--outline width-24 font-xs display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                             target="_blank"
+                             rel="noreferrer noopener"
+                             data-ga-category="actions"
+                             data-ga-action="click"
+                             data-ga-label="publisher_link_desktop"
+                     >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#launch"></use>
+                         </svg>
+                         <span class="display-inline-flex flex-justify-center flex-1 padding-right-2">View on publisher site</span>
+                     </a>
+               </li>
+               
+               
+               <li>
+                    <a
+                            href="pdf/fgene-14-1126836.pdf"
+                            class="usa-button usa-button--outline width-24 display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="pdf_download_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1">PDF (763.0 KB)</span>
+                    </a>
+               </li>
+               
+                
+               <li>
+                   <button role="button" class="usa-button width-24 citation-dialog-trigger display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                        aria-label="Open dialog with citation text in different styles"
+                        data-ga-category="actions"
+                        data-ga-action="open"
+                        data-ga-label="cite_desktop"
+                        data-all-citations-url="/resources/citations/10133693/"
+                        data-citation-style="nlm"
+                        data-download-format-link="/resources/citations/10133693/export/"
+                    >
+                        <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                        </svg>
+                       <span class="display-inline-flex flex-justify-center flex-1 button-label">Cite</span>
+                    </button>
+               </li>
+                
+               <li>
+
+                        <button class="usa-button width-24 collections-dialog-trigger collections-button display-inline-flex flex-align-center flex-justify-start padding-left-1 collections-button-empty"
+                              aria-label="Save article in MyNCBI collections."
+                              data-ga-category="actions"
+                              data-ga-action="click"
+                              data-ga-label="collections_button_desktop"
+                              data-collections-open-dialog-enabled="false"
+                              data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC10133693%2F%23open-collections-dialog"
+                              data-in-collections="false">
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                            <span class="display-inline-flex flex-justify-center flex-1">Collections</span>
+                       </button>
+               </li>
+               <li class="pmc-permalink">
+                    <button
+                            type="button"
+                            class="usa-button width-24 display-inline-flex flex-align-center flex-justify padding-left-1 shadow-none"
+                            aria-label="Show article permalink"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="permalink_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#share"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1 button-label">Permalink</span>
+                    </button>
+                   
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC10133693/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+               </li>
+           </ul>
+       </section>
+     </div>
+
+        <section class="pmc-resources margin-top-6 desktop:margin-top-4" data-page-path="/articles/PMC10133693/">
+            <h2 class="margin-top-0">RESOURCES</h2>
+            
+                <div class="usa-accordion usa-accordion--multiselectable" data-allow-multiple>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-similar-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_similar_articles"
+                        data-ga-label="/articles/PMC10133693/"
+                        data-action-open="open_similar_articles"
+                        data-action-close="close_similar_articles"
+                        >
+                            Similar articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-similar-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/similar-article-links/37124609/"
+                            
+                    >
+                        
+                    </div>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-cited-by-other-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_cited_by"
+                        data-ga-label="/articles/PMC10133693/"
+                        data-action-open="open_cited_by"
+                        data-action-close="close_cited_by"
+                        >
+                             Cited by other articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-cited-by-other-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/cited-by-links/37124609/"
+                            
+                    >
+                          
+                    </div>
+                    
+                        <h3 class="usa-accordion__heading">
+                            <button
+                            type="button"
+                            class="usa-accordion__button"
+                            aria-expanded="false"
+                            aria-controls="resources-links-to-ncbi-databases"
+                            data-ga-category="resources_accordion"
+                            data-ga-action="open_NCBI_links"
+                            data-ga-label="/articles/PMC10133693/"
+                            data-action-open="open_NCBI_links"
+                            data-action-close="close_NCBI_link"
+                            >
+                                 Links to NCBI Databases
+                            </button>
+                        </h3>
+                        <div
+                                id="resources-links-to-ncbi-databases"
+                                class="usa-accordion__content usa-prose"
+                                data-source-url="/resources/db-links/10133693/"
+                        >
+                        </div>
+                    
+                    
+                </div>
+            
+        </section>
+
+
+        <section
+        class="usa-in-page-nav usa-in-page-nav--wide margin-top-6 desktop:margin-top-4"
+        data-title-text="On this page"
+        data-title-heading-level="h2"
+        data-scroll-offset="0"
+        data-root-margin="-10% 0px -80% 0px"
+        data-main-content-selector="main"
+        data-threshold="1"
+        hidden
+        ></section>
+    </section>
+</div>
+
+
+        
+
+<div class="overlay" role="dialog" aria-label="Citation Dialog" hidden>
+    <div class="dialog citation-dialog" aria-hidden="true">
+        <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+            <h2 class="usa-modal__heading margin-0">Cite</h2>
+             <button type="button" class="usa-button usa-button--unstyled close-overlay text-black width-auto"  tabindex="1">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+             </button>
+        </div>
+
+        
+
+<div class="citation-text-block">
+  <div class="citation-text margin-bottom-2"></div>
+  <ul class="usa-list usa-list--unstyled display-inline-flex flex-justify width-full flex-align-center">
+      <li>
+        <button
+          class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center copy-button dialog-focus"
+          data-ga-category="save_share"
+          data-ga-action="cite"
+          data-ga-label="copy"
+          tabindex="2">
+            <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+            </svg>
+            <span>Copy</span>
+        </button>
+      </li>
+      <li>
+          <a
+              href="#"
+              role="button"
+              class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center export-button"
+              data-ga-category="save_share"
+              data-ga-action="cite"
+              data-ga-label="download"
+              title="Download a file for external citation management software"
+              tabindex="3">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                </svg>
+                <span class="display-none mobile-lg:display-inline">Download .nbib</span>
+                <span class="display-inline mobile-lg:display-none">.nbib</span>
+            </a>
+      </li>
+      <li>
+          
+
+<div class="display-inline-flex flex-align-center">
+  <label class="usa-label margin-top-0">Format:</label>
+  <select aria-label="Format" class="usa-select citation-style-selector padding-1 margin-top-0 border-0 padding-right-4" tabindex="4" >
+    
+      <option data-style-url-name="ama"
+              value="AMA"
+              >
+        AMA
+      </option>
+    
+      <option data-style-url-name="apa"
+              value="APA"
+              >
+        APA
+      </option>
+    
+      <option data-style-url-name="mla"
+              value="MLA"
+              >
+        MLA
+      </option>
+    
+      <option data-style-url-name="nlm"
+              value="NLM"
+              selected="selected">
+        NLM
+      </option>
+    
+  </select>
+</div>
+      </li>
+  </ul>
+</div>
+    </div>
+</div>
+
+        <div class="overlay" role="dialog" hidden>
+  <div id="collections-action-dialog" class="dialog collections-dialog" aria-hidden="true">
+   <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+        <h2 class="usa-modal__heading margin-0">Add to Collections</h2>
+    </div>
+    <div class="collections-action-panel action-panel">
+      
+
+
+<form id="collections-action-dialog-form"
+      class="usa-form maxw-full collections-action-panel-form action-panel-content action-form action-panel-smaller-selectors"
+      data-existing-collections-url="/list-existing-collections/"
+      data-add-to-existing-collection-url="/add-to-existing-collection/"
+      data-create-and-add-to-new-collection-url="/create-and-add-to-new-collection/"
+      data-myncbi-max-collection-name-length="100"
+      data-collections-root-url="https://www.ncbi.nlm.nih.gov/myncbi/collections/">
+
+    <input type="hidden" name="csrfmiddlewaretoken" value="eqa2fVVyiuYZhTbPfQCetoUIDdQa3ni6f9XJIGjKfQdvBmuat4HUh2mio16KGXZK">
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-new"
+            class="usa-radio__input usa-radio__input--tile collections-new  margin-top-0"
+            name="collections"
+            value="new"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_new" />
+            <label class="usa-radio__label" for="collections-action-dialog-new">Create a new collection</label>
+        </div>
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-existing"
+            class="usa-radio__input usa-radio__input--tile collections-existing"
+            name="collections"
+            value="existing"
+            checked="true"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_existing" />
+            <label class="usa-radio__label" for="collections-action-dialog-existing">Add to an existing collection</label>
+        </div>
+    </fieldset>
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="action-panel-control-wrap new-collections-controls">
+           <label for="collections-action-dialog-add-to-new" class="usa-label margin-top-0">
+                Name your collection
+               <abbr title="required" class="usa-hint usa-hint--required text-no-underline">*</abbr>
+          </label>
+          <input
+            type="text"
+            name="add-to-new-collection"
+            id="collections-action-dialog-add-to-new"
+            class="usa-input collections-action-add-to-new"
+            pattern="[^&quot;&amp;=&lt;&gt;/]*" title="The following characters are not allowed in the Name field: &quot;&amp;=&lt;&gt;/"
+            maxlength=""
+            data-ga-category="collections_button"
+            data-ga-action="create_collection"
+            data-ga-label="non_favorties_collection"
+            required
+          />
+        </div>
+        <div class="action-panel-control-wrap existing-collections-controls">
+             <label for="collections-action-dialog-add-to-existing" class="usa-label margin-top-0">
+                Choose a collection
+              </label>
+              <select id="collections-action-dialog-add-to-existing"
+                      class="usa-select collections-action-add-to-existing"
+                      data-ga-category="collections_button"
+                      data-ga-action="select_collection"
+                      data-ga-label="($('.collections-action-add-to-existing').val() === 'Favorites') ? 'Favorites' : 'non_favorites_collection'">
+              </select>
+              <div class="collections-retry-load-on-error usa-input-error-message selection-validation-message">
+                Unable to load your collection due to an error<br>
+                <a href="#">Please try again</a>
+              </div>
+        </div>
+    </fieldset>
+
+    <div class="display-inline-flex">
+        <button class="usa-button margin-top-0 action-panel-submit"
+            type="submit"
+            data-loading-label="Adding..."
+            data-pinger-ignore
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="add">
+          Add
+        </button>
+        <button class="usa-button usa-button--outline margin-top-0 action-panel-cancel"
+                aria-label="Close 'Add to Collections' panel"
+                ref="linksrc=close_collections_panel"
+                data-ga-category="collections_button"
+                data-ga-action="click"
+                data-ga-label="cancel">
+          Cancel
+        </button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>
+
+        
+
+      </div>
+    </div>
+  </div>
+
+
+
+        
+    
+    
+
+<footer class="ncbi-footer ncbi-dark-background " >
+    
+        <div class="ncbi-footer__icon-section">
+            <div class="ncbi-footer__social-header">
+                Follow NCBI
+            </div>
+
+            <div class="grid-container ncbi-footer__ncbi-social-icons-container">
+                
+                    <a href="https://twitter.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="40"
+                             height="40"
+                             viewBox="0 0 40 40"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on X (formerly known as Twitter)</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.facebook.com/ncbi.nlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="16"
+                             height="29"
+                             focusable="false"
+                             aria-hidden="true"
+                             viewBox="0 0 16 29"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.8809 21.4002C3.8809 19.0932 3.8809 16.7876 3.8809 14.478C3.8809 14.2117 3.80103 14.1452 3.54278 14.1492C2.53372 14.1638 1.52334 14.1492 0.514288 14.1598C0.302626 14.1598 0.248047 14.0972 0.248047 13.8936C0.256034 12.4585 0.256034 11.0239 0.248047 9.58978C0.248047 9.37013 0.302626 9.30224 0.528931 9.3049C1.53798 9.31688 2.54837 9.3049 3.55742 9.31555C3.80103 9.31555 3.8809 9.26097 3.87957 9.00272C3.87158 8.00565 3.85428 7.00592 3.90753 6.00884C3.97142 4.83339 4.31487 3.73115 5.04437 2.78467C5.93095 1.63318 7.15699 1.09005 8.56141 0.967577C10.5582 0.79319 12.555 0.982221 14.5518 0.927641C14.7102 0.927641 14.7462 0.99287 14.7449 1.13664C14.7449 2.581 14.7449 4.02668 14.7449 5.47104C14.7449 5.67604 14.6517 5.68669 14.4946 5.68669C13.4523 5.68669 12.4113 5.68669 11.3703 5.68669C10.3506 5.68669 9.92057 6.10868 9.90593 7.13904C9.89661 7.7647 9.91525 8.39303 9.89794 9.01869C9.88995 9.26364 9.96583 9.31822 10.2015 9.31688C11.7204 9.30623 13.2393 9.31688 14.7595 9.3049C15.0257 9.3049 15.0723 9.3728 15.0444 9.62439C14.89 10.9849 14.7515 12.3467 14.6144 13.7085C14.5691 14.1571 14.5785 14.1585 14.1458 14.1585C12.8386 14.1585 11.5313 14.1665 10.2254 14.1518C9.95119 14.1518 9.89794 14.2317 9.89794 14.4899C9.90593 19.0799 9.89794 23.6752 9.91125 28.2612C9.91125 28.5674 9.8407 28.646 9.53186 28.6433C7.77866 28.6273 6.02414 28.6366 4.27094 28.634C3.82499 28.634 3.87158 28.6992 3.87158 28.22C3.87602 25.9472 3.87913 23.6739 3.8809 21.4002Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on Facebook</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.linkedin.com/company/ncbinlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="25"
+                             height="23"
+                             viewBox="0 0 26 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M14.6983 9.98423C15.6302 9.24808 16.5926 8.74754 17.6762 8.51991C19.673 8.09126 21.554 8.30824 23.1262 9.7526C24.2351 10.7723 24.7529 12.1115 25.0165 13.5612C25.1486 14.3363 25.2105 15.1218 25.2015 15.9081C25.2015 18.3043 25.2015 20.6898 25.2082 23.0806C25.2082 23.3468 25.1549 23.444 24.8621 23.4414C23.1297 23.4272 21.3992 23.4272 19.6704 23.4414C19.4041 23.4414 19.3429 23.3588 19.3442 23.1019C19.3535 20.5194 19.3442 17.9368 19.3442 15.3543C19.3442 14.0005 18.3258 12.9448 17.0266 12.9488C15.7273 12.9528 14.6983 14.0071 14.6983 15.361C14.6983 17.9328 14.6917 20.5047 14.6983 23.0753C14.6983 23.3708 14.6198 23.444 14.3296 23.4427C12.6185 23.4294 10.9079 23.4294 9.19779 23.4427C8.93155 23.4427 8.86099 23.3735 8.86232 23.1086C8.8783 19.7619 8.88628 16.4144 8.88628 13.066C8.88628 11.5688 8.87874 10.0708 8.86365 8.57182C8.86365 8.3575 8.90758 8.27896 9.14054 8.28029C10.9048 8.29094 12.6687 8.29094 14.4321 8.28029C14.6464 8.28029 14.6983 8.34818 14.6983 8.54653C14.6903 9.00047 14.6983 9.45441 14.6983 9.98423Z">
+                            </path>
+                            <path d="M6.55316 15.8443C6.55316 18.2564 6.55316 20.6699 6.55316 23.082C6.55316 23.3629 6.48127 23.4388 6.19906 23.4374C4.47737 23.4241 2.75568 23.4241 1.03399 23.4374C0.767751 23.4374 0.69986 23.3629 0.701191 23.1006C0.709178 18.2648 0.709178 13.4281 0.701191 8.59053C0.701191 8.34026 0.765089 8.27237 1.01669 8.2737C2.74991 8.28435 4.48048 8.28435 6.20838 8.2737C6.47462 8.2737 6.5465 8.33627 6.54517 8.6065C6.54783 11.0186 6.55316 13.4308 6.55316 15.8443Z">
+                            </path>
+                            <path d="M3.65878 0.243898C5.36804 0.243898 6.58743 1.45529 6.58743 3.1406C6.58743 4.75801 5.32145 5.95742 3.60819 5.96807C3.22177 5.97614 2.83768 5.90639 2.47877 5.76299C2.11985 5.61959 1.79344 5.40546 1.51897 5.13334C1.24449 4.86123 1.02755 4.53668 0.881058 4.17902C0.734563 3.82136 0.661505 3.43788 0.666231 3.05141C0.67555 1.42601 1.9362 0.242566 3.65878 0.243898Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on LinkedIn</span>
+                    </a>
+                
+
+                
+                    <a href="https://github.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="28"
+                             height="27"
+                             viewBox="0 0 28 28"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M16.7228 20.6334C17.5057 20.5527 18.2786 20.3944 19.0301 20.1608C21.3108 19.4193 22.5822 17.8259 22.963 15.4909C23.1228 14.5112 23.1814 13.5287 22.9883 12.5437C22.8106 11.6423 22.4013 10.8028 21.8007 10.1076C21.7526 10.0605 21.7197 10 21.7064 9.934C21.6931 9.86799 21.7 9.79952 21.7262 9.73748C22.0856 8.6206 21.9711 7.51969 21.601 6.42677C21.582 6.3497 21.5345 6.2827 21.468 6.23923C21.4016 6.19577 21.3211 6.17906 21.2429 6.19248C20.7329 6.21649 20.2313 6.33051 19.7611 6.52928C19.1103 6.7908 18.4899 7.12198 17.9104 7.51703C17.84 7.56996 17.7581 7.60551 17.6713 7.62078C17.5846 7.63605 17.4954 7.6306 17.4112 7.60489C15.2596 7.05882 13.0054 7.06203 10.8554 7.61421C10.7806 7.63586 10.7018 7.63967 10.6253 7.62534C10.5487 7.611 10.4766 7.57892 10.4148 7.53167C9.64788 7.03247 8.85171 6.58918 7.96368 6.33359C7.65781 6.24338 7.34123 6.19458 7.02239 6.18849C6.94879 6.17986 6.87462 6.19893 6.81432 6.242C6.75402 6.28507 6.71191 6.34904 6.69621 6.42145C6.32342 7.51437 6.2209 8.61527 6.56307 9.73348C6.59635 9.84264 6.64694 9.93316 6.54177 10.0516C5.47666 11.2604 5.09988 12.6834 5.19574 14.2676C5.2663 15.4244 5.46201 16.5466 6.01454 17.5769C6.84399 19.1171 8.21664 19.9119 9.85158 20.3352C10.3938 20.4706 10.9444 20.5698 11.4998 20.632C11.5384 20.7492 11.4506 20.7798 11.408 20.8291C11.1734 21.1179 10.9894 21.4441 10.8634 21.7942C10.7622 22.0458 10.8315 22.4039 10.6065 22.5516C10.263 22.7766 9.83827 22.8485 9.42421 22.8871C8.17936 23.0056 7.26471 22.4877 6.6283 21.4348C6.25552 20.8184 5.76956 20.3325 5.08523 20.0663C4.76981 19.9325 4.42139 19.8967 4.08537 19.9638C3.7898 20.029 3.73788 20.1901 3.93891 20.4111C4.03639 20.5234 4.14989 20.6207 4.27575 20.6999C4.9796 21.1318 5.51717 21.7884 5.80152 22.5636C6.37002 23.9973 7.48039 24.5697 8.93825 24.6323C9.43741 24.6575 9.93768 24.615 10.4254 24.5058C10.5892 24.4672 10.6531 24.4872 10.6517 24.6762C10.6451 25.4936 10.6637 26.3123 10.6517 27.131C10.6517 27.6635 10.1684 27.9297 9.58663 27.7393C8.17396 27.2671 6.84977 26.5631 5.66838 25.656C2.59555 23.2891 0.720966 20.1861 0.217704 16.3376C-0.357453 11.9127 0.911353 8.00824 3.98551 4.73881C6.11909 2.42656 8.99932 0.939975 12.1203 0.540191C16.5351 -0.0601815 20.4347 1.14323 23.7232 4.16373C26.2449 6.47869 27.724 9.37672 28.1048 12.7726C28.5828 17.0325 27.3686 20.7945 24.4768 23.9827C22.9762 25.6323 21.0956 26.8908 18.9982 27.6488C18.8783 27.6927 18.7585 27.738 18.636 27.7726C18.0356 27.9404 17.6189 27.6395 17.6189 27.0098C17.6189 25.7452 17.6308 24.4806 17.6295 23.2159C17.6329 22.9506 17.6128 22.6856 17.5696 22.4238C17.4325 21.6664 17.3419 21.484 16.7228 20.6334Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on GitHub</span>
+                    </a>
+                
+
+                
+                    <a href="https://ncbiinsights.ncbi.nlm.nih.gov/"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="26"
+                             height="26"
+                             viewBox="0 0 27 27"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M23.7778 26.4574C23.1354 26.3913 22.0856 26.8024 21.636 26.3087C21.212 25.8444 21.4359 24.8111 21.324 24.0347C19.9933 14.8323 14.8727 8.80132 6.09057 5.85008C4.37689 5.28406 2.58381 4.99533 0.779072 4.99481C0.202773 4.99481 -0.0229751 4.83146 0.00455514 4.21479C0.0660406 3.08627 0.0660406 1.95525 0.00455514 0.826734C-0.0413285 0.0815827 0.259669 -0.0193618 0.896534 0.00266238C6.96236 0.222904 12.3693 2.24179 16.9889 6.16209C22.9794 11.2478 26.1271 17.7688 26.4372 25.648C26.4629 26.294 26.3179 26.5271 25.6609 26.4684C25.0827 26.417 24.4991 26.4574 23.7778 26.4574Z">
+                            </path>
+                            <path d="M14.8265 26.441C14.0924 26.441 13.2371 26.6795 12.6626 26.3786C12.0092 26.0372 12.3781 25.0644 12.246 24.378C11.1154 18.5324 6.6849 14.5497 0.74755 14.1001C0.217135 14.0615 -0.0104482 13.9422 0.0134113 13.3659C0.0519536 12.1454 0.0482829 10.9213 0.0134113 9.69524C-0.00127145 9.14464 0.196946 9.03268 0.703502 9.04736C9.21217 9.27128 16.5994 16.2511 17.2804 24.7231C17.418 26.4446 17.418 26.4446 15.6579 26.4446H14.832L14.8265 26.441Z">
+                            </path>
+                            <path d="M3.58928 26.4555C2.64447 26.4618 1.73584 26.0925 1.06329 25.4289C0.39073 24.7653 0.00933763 23.8617 0.0030097 22.9169C-0.00331824 21.9721 0.365937 21.0635 1.02954 20.3909C1.69315 19.7184 2.59675 19.337 3.54156 19.3306C4.48637 19.3243 5.39499 19.6936 6.06755 20.3572C6.7401 21.0208 7.1215 21.9244 7.12782 22.8692C7.13415 23.814 6.7649 24.7226 6.10129 25.3952C5.43768 26.0677 4.53409 26.4491 3.58928 26.4555Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI RSS feed</span>
+                    </a>
+                
+            </div>
+        </div>
+    
+
+    <div data-testid="gridContainer"
+         class="grid-container ncbi-footer__container">
+        <div class="grid-row ncbi-footer__main-content-container"
+             data-testid="grid">
+            
+                <div class="ncbi-footer__column">
+                    
+                        <p class="ncbi-footer__circled-icons-heading">
+                            Connect with NLM
+                        </p>
+                    
+
+                    <div class="ncbi-footer__circled-icons-list">
+                        
+                            <a href=https://twitter.com/nlm_nih class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="32"
+                                     height="32"
+                                     viewBox="0 0 40 40"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on X (formerly known as Twitter)</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.facebook.com/nationallibraryofmedicine class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="13"
+                                     height="24"
+                                     viewBox="0 0 13 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M4.11371 23.1369C4.11371 23.082 4.11371 23.0294 4.11371 22.9745V12.9411H0.817305C0.6709 12.9411 0.670898 12.9411 0.670898 12.8016C0.670898 11.564 0.670898 10.3287 0.670898 9.09341C0.670898 8.97903 0.705213 8.95158 0.815017 8.95158C1.8673 8.95158 2.91959 8.95158 3.97417 8.95158H4.12057V8.83263C4.12057 7.8055 4.12057 6.7738 4.12057 5.74897C4.1264 4.92595 4.31387 4.11437 4.66959 3.37217C5.12916 2.38246 5.94651 1.60353 6.95717 1.1921C7.64827 0.905008 8.3913 0.764035 9.13953 0.778051C10.0019 0.791777 10.8644 0.830666 11.7268 0.860404C11.8869 0.860404 12.047 0.894717 12.2072 0.90158C12.2964 0.90158 12.3261 0.940469 12.3261 1.02968C12.3261 1.5421 12.3261 2.05452 12.3261 2.56465C12.3261 3.16857 12.3261 3.7725 12.3261 4.37642C12.3261 4.48165 12.2964 4.51367 12.1912 4.51138C11.5369 4.51138 10.8804 4.51138 10.2261 4.51138C9.92772 4.51814 9.63058 4.5526 9.33855 4.61433C9.08125 4.6617 8.84537 4.78881 8.66431 4.97766C8.48326 5.16652 8.3662 5.40755 8.32972 5.66661C8.28476 5.89271 8.26027 6.1224 8.25652 6.35289C8.25652 7.19014 8.25652 8.02969 8.25652 8.86923C8.25652 8.89439 8.25652 8.91955 8.25652 8.95615H12.0219C12.1797 8.95615 12.182 8.95616 12.1614 9.10714C12.0768 9.76596 11.9876 10.4248 11.9029 11.0813C11.8312 11.6319 11.7626 12.1824 11.697 12.733C11.6719 12.9434 11.6787 12.9434 11.4683 12.9434H8.26338V22.899C8.26338 22.979 8.26338 23.0591 8.26338 23.1392L4.11371 23.1369Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on Facebook</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.youtube.com/user/NLMNIH class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="21"
+                                     height="15"
+                                     viewBox="0 0 21 15"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M19.2561 1.47914C18.9016 1.15888 18.5699 0.957569 17.2271 0.834039C15.5503 0.678484 13.2787 0.655608 11.563 0.65332H9.43556C7.71987 0.65332 5.4483 0.678484 3.77151 0.834039C2.43098 0.957569 2.097 1.15888 1.74242 1.47914C0.813665 2.32097 0.619221 4.62685 0.598633 6.89384C0.598633 7.31781 0.598633 7.74101 0.598633 8.16345C0.626084 10.4121 0.827391 12.686 1.74242 13.521C2.097 13.8412 2.4287 14.0425 3.77151 14.1661C5.4483 14.3216 7.71987 14.3445 9.43556 14.3468H11.563C13.2787 14.3468 15.5503 14.3216 17.2271 14.1661C18.5676 14.0425 18.9016 13.8412 19.2561 13.521C20.1712 12.6929 20.3725 10.451 20.3999 8.22064C20.3999 7.74025 20.3999 7.25986 20.3999 6.77946C20.3725 4.54907 20.1689 2.30724 19.2561 1.47914ZM8.55942 10.5311V4.65201L13.5601 7.50005L8.55942 10.5311Z"
+                                          fill="white" />
+                                </svg>
+                                <span class="usa-sr-only">NLM on YouTube</span>
+                            </a>
+                        
+                    </div>
+                </div>
+            
+
+            
+                <address class="ncbi-footer__address ncbi-footer__column">
+                    
+        <p>
+            <a class="usa-link usa-link--external"
+            href="https://www.google.com/maps/place/8600+Rockville+Pike,+Bethesda,+MD+20894/%4038.9959508,
+            -77.101021,17z/data%3D!3m1!4b1!4m5!3m4!1s0x89b7c95e25765ddb%3A0x19156f88b27635b8!8m2!3d38.9959508!
+            4d-77.0988323"
+            rel="noopener noreferrer" target="_blank">National Library of Medicine
+            <br/> 8600 Rockville Pike<br/> Bethesda, MD 20894</a>
+        </p>
+    
+                </address>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/web_policies.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Web Policies
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/institutes-nih/nih-office-director/office-communications-public-liaison/freedom-information-act-office" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            FOIA
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/vulnerability-disclosure-policy/index.html" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS Vulnerability Disclosure
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://support.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Help
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/accessibility.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Accessibility
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/careers/careers.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Careers
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+        </div>
+
+        
+            <div class="grid-row grid-col-12" data-testid="grid">
+                <ul class="ncbi-footer__bottom-links-list">
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NLM
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NIH
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.usa.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            USA.gov
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+    </div>
+</footer>
+
+    
+
+
+        
+        
+    
+  <script  type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/pinger/pinger.js"> </script>
+
+
+    
+        
+
+<button class="back-to-top" data-ga-category="pagination" data-ga-action="back_to_top">
+    <label>Back to Top</label>
+    <svg class="usa-icon order-0" aria-hidden="true" focusable="false" role="img">
+        <use xlink:href="/static/img/sprite.svg#arrow_upward"></use>
+    </svg>
+</button>
+    
+
+
+        
+    
+    
+    
+        
+    <script type="application/javascript">
+    window.ncbi = window.ncbi || {};
+    window.ncbi.pmc = window.ncbi.pmc || {};
+    window.ncbi.pmc.options = {
+        logLevel: 'INFO',
+        
+        staticEndpoint: '/static/',
+        
+        citeCookieName: 'pmc-cf',
+    };
+</script>
+    <script type="module" crossorigin="" src="/static/assets/base-133c6271.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/jquery/jquery-3.6.0.min.js">&#xA0;</script>
+    <script type="text/javascript">
+        jQuery.getScript("https://cdn.ncbi.nlm.nih.gov/core/alerts/alerts.js", function () {
+            galert(['div.nav_and_browser', 'div.header', '#universal_header', '.usa-banner', 'body > *:nth-child(1)'])
+        });
+    </script>
+
+
+    <script type="text/javascript">var exports = {};</script>
+     <script src="/static/CACHE/js/output.13b077bc3ffd.js"></script>
+
+    <script type="module" crossorigin="" src="/static/assets/article-44d04358.js"></script>
+    
+    
+
+    </body>
+</html>

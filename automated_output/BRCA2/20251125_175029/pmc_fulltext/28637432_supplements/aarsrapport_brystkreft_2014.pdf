@@ -1,0 +1,3064 @@
+
+
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+    <title>Kreft og Kreftregisteret - FHI</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--- Standard favicon formats for modern and legacy browser support --->
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+<!--- Apple iOS support --->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="FHI.no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+<!-- Chromium/legacy Android hint -->
+<meta name="mobile-web-app-capable" content="yes" />
+
+<!--- Web app manifest --->
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#393c61" />
+    <!-- Google Consent Mode -->
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'analytics_storage': 'denied',
+            'wait_for_update': 500
+        });
+        gtag('set', 'ads_data_redaction', true);
+</script>
+<!-- /End Google Consent Mode -->
+<script id="CookieConsent" src="https://policy.app.cookieinformation.com/uc.js" data-culture="NO" type="text/javascript" data-gcm-version="2.0"></script>
+<script nonce="b8b22085-e383-4d46-b283-e4670a5cb41b">
+!function(T,l,y){var S=T.location,k="script",D="instrumentationKey",C="ingestionendpoint",I="disableExceptionTracking",E="ai.device.",b="toLowerCase",w="crossOrigin",N="POST",e="appInsightsSDK",t=y.name||"appInsights";(y.name||T[e])&&(T[e]=t);var n=T[t]||function(d){var g=!1,f=!1,m={initialize:!0,queue:[],sv:"5",version:2,config:d};function v(e,t){var n={},a="Browser";return n[E+"id"]=a[b](),n[E+"type"]=a,n["ai.operation.name"]=S&&S.pathname||"_unknown_",n["ai.internal.sdkVersion"]="javascript:snippet_"+(m.sv||m.version),{time:function(){var e=new Date;function t(e){var t=""+e;return 1===t.length&&(t="0"+t),t}return e.getUTCFullYear()+"-"+t(1+e.getUTCMonth())+"-"+t(e.getUTCDate())+"T"+t(e.getUTCHours())+":"+t(e.getUTCMinutes())+":"+t(e.getUTCSeconds())+"."+((e.getUTCMilliseconds()/1e3).toFixed(3)+"").slice(2,5)+"Z"}(),iKey:e,name:"Microsoft.ApplicationInsights."+e.replace(/-/g,"")+"."+t,sampleRate:100,tags:n,data:{baseData:{ver:2}}}}var h=d.url||y.src;if(h){function a(e){var t,n,a,i,r,o,s,c,u,p,l;g=!0,m.queue=[],f||(f=!0,t=h,s=function(){var e={},t=d.connectionString;if(t)for(var n=t.split(";"),a=0;a<n.length;a++){var i=n[a].split("=");2===i.length&&(e[i[0][b]()]=i[1])}if(!e[C]){var r=e.endpointsuffix,o=r?e.location:null;e[C]="https://"+(o?o+".":"")+"dc."+(r||"services.visualstudio.com")}return e}(),c=s[D]||d[D]||"",u=s[C],p=u?u+"/v2/track":d.endpointUrl,(l=[]).push((n="SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details)",a=t,i=p,(o=(r=v(c,"Exception")).data).baseType="ExceptionData",o.baseData.exceptions=[{typeName:"SDKLoadFailed",message:n.replace(/\./g,"-"),hasFullStack:!1,stack:n+"\nSnippet failed to load ["+a+"] -- Telemetry is disabled\nHelp Link: https://go.microsoft.com/fwlink/?linkid=2128109\nHost: "+(S&&S.pathname||"_unknown_")+"\nEndpoint: "+i,parsedStack:[]}],r)),l.push(function(e,t,n,a){var i=v(c,"Message"),r=i.data;r.baseType="MessageData";var o=r.baseData;return o.message='AI (Internal): 99 message:"'+("SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details) ("+n+")").replace(/\"/g,"")+'"',o.properties={endpoint:a},i}(0,0,t,p)),function(e,t){if(JSON){var n=T.fetch;if(n&&!y.useXhr)n(t,{method:N,body:JSON.stringify(e),mode:"cors"});else if(XMLHttpRequest){var a=new XMLHttpRequest;a.open(N,t),a.setRequestHeader("Content-type","application/json"),a.send(JSON.stringify(e))}}}(l,p))}function i(e,t){f||setTimeout(function(){!t&&m.core||a()},500)}var e=function(){var n=l.createElement(k);n.src=h;var e=y[w];return!e&&""!==e||"undefined"==n[w]||(n[w]=e),n.onload=i,n.onerror=a,n.onreadystatechange=function(e,t){"loaded"!==n.readyState&&"complete"!==n.readyState||i(0,t)},n}();y.ld<0?l.getElementsByTagName("head")[0].appendChild(e):setTimeout(function(){l.getElementsByTagName(k)[0].parentNode.appendChild(e)},y.ld||0)}try{m.cookie=l.cookie}catch(p){}function t(e){for(;e.length;)!function(t){m[t]=function(){var e=arguments;g||m.queue.push(function(){m[t].apply(m,e)})}}(e.pop())}var n="track",r="TrackPage",o="TrackEvent";t([n+"Event",n+"PageView",n+"Exception",n+"Trace",n+"DependencyData",n+"Metric",n+"PageViewPerformance","start"+r,"stop"+r,"start"+o,"stop"+o,"addTelemetryInitializer","setAuthenticatedUserContext","clearAuthenticatedUserContext","flush"]),m.SeverityLevel={Verbose:0,Information:1,Warning:2,Error:3,Critical:4};var s=(d.extensionConfig||{}).ApplicationInsightsAnalytics||{};if(!0!==d[I]&&!0!==s[I]){var c="onerror";t(["_"+c]);var u=T[c];T[c]=function(e,t,n,a,i){var r=u&&u(e,t,n,a,i);return!0!==r&&m["_"+c]({message:e,url:t,lineNumber:n,columnNumber:a,error:i}),r},d.autoExceptionInstrumented=!0}return m}(y.cfg);function a(){y.onInit&&y.onInit(n)}(T[t]=n).queue&&0===n.queue.length?(n.queue.push(a),n.trackPageView({})):a()}(window,document,{src: "https://js.monitor.azure.com/scripts/b/ai.2.gbl.min.js", crossOrigin: "anonymous", cfg: { instrumentationKey:'73800f11-3bcd-4ccd-ae6b-58e6d1134cf3', disableCookiesUsage: false }});
+</script>
+
+    <link href="/assets/fhi/css/index.BupMOXzv.css" rel="preload" as="style" />
+
+    <link crossorigin="anonymous" href="/assets/fhi/js/index.CtQgW5mE.js" rel="preload" as="script" />
+
+    <link href="/assets/fhi/css/index.BupMOXzv.css" rel="stylesheet" />
+
+    
+        <script type="application/ld+json">
+            {
+            "@context" : "https://schema.org",
+            "@type" : "WebSite",
+            "name" : "FHI.no",
+            "alternateName" : "Folkehelseinstituttet",
+            "url" : "https://www.fhi.no"
+            }
+        </script>
+                <!-- Matomo cookieless-->
+                <script>
+                    var _paq = window._paq = window._paq || [];
+                    _paq.push(['forgetCookieConsentGiven']);
+                    _paq.push(['requireCookieConsent']);
+                    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+                    
+                    _paq.push(['trackPageView']);
+                    _paq.push(['enableLinkTracking']);
+                    (function () {
+                    var u = "https://folkehelse.matomo.cloud/";
+                    _paq.push(['setTrackerUrl', u + 'matomo.php']);
+                    _paq.push(['setSiteId', '1']);
+                    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+                    g.async = true; g.src = '//cdn.matomo.cloud/folkehelse.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g, s);
+                    })();
+                </script>
+                <!-- End Matomo Code -->
+    
+
+
+<meta property="og:title" content="Kreft og Kreftregisteret" />
+<meta property="og:description" content="Kreftregisteret.no ble en del av fhi.no i mai 2025. Her finner du blant annet informasjon om Kreftregisteret, kreftstatistikk, innrapportering av data, de ulike kvalitetsregistrene og screeningprogrammene (Mammografi-, Livmorhals- og Tarmscreeningprogrammet)." />
+<meta property="og:site_name" content="Folkehelseinstituttet" />
+<meta property="og:url" content='https://www.fhi.no/kreft/' />
+<meta property="og:image" content="https://www.fhi.no//contentassets/11bd593f9ba24e579e74c110852f79a0/kreftregisteret-vignett-liten.png?preset=mainbodywidth&maxwidth=970&width=970" />
+<meta property="og:updated_time" content="2025-05-06T07:51:15.0000000Z" />
+<meta property="fb:admins" content="598201156" />
+<meta name="description" content="Kreftregisteret.no ble en del av fhi.no i mai 2025. Her finner du blant annet informasjon om Kreftregisteret, kreftstatistikk, innrapportering av data, de ulike kvalitetsregistrene og screeningprogrammene (Mammografi-, Livmorhals- og Tarmscreeningprogrammet)." />
+<meta name="pageID" content="310712" />
+
+    <meta name="last edited" content="2025-05-06" />
+
+
+    <link href="https://www.fhi.no/kreft/" rel="canonical" />
+</head>
+
+<body id="go-to-top">
+<nav class="skip-to-main-content" role="navigation" aria-labelledby="skip-to-main">
+    <a id="skip-to-main" href="#main" data-skip-focus="true">
+        Hopp til hovedinnhold
+    </a>
+</nav>
+<div id="app" v-cloak>
+    
+
+
+<fhi-header-main :is-front-page="false" :is-search-page="false"
+                 :menu-links='null'
+                 :menu-items='[
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Vaksiner til barn",
+        "url": "/va/barnevaksinasjonsprogrammet/",
+        "id": 45329
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Vaksiner til voksne",
+        "url": "/va/voksenvaksinasjon/",
+        "id": 88167
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kikhostevaksine til gravide",
+        "url": "/va/kikhostevaksine-til-gravide/",
+        "id": 201778
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Smittevernråd og vaksiner ved reise",
+        "url": "/sm/smittevernrad-ved-reiser/",
+        "id": 196635
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Dine vaksiner",
+        "url": "/va/mine-vaksiner/",
+        "id": 45332
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Bivirkninger av vaksine",
+        "url": "/va/bivirkninger/",
+        "id": 45323
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Innføring av nye vaksiner",
+        "url": "/va/innforing-av-nye-vaksiner/",
+        "id": 78809
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Vaksinebestilling for helsetjenesten",
+        "url": "/va/bestilling/",
+        "id": 45341
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Smittsomme sykdommer og vaksiner a-å",
+        "url": "/ss/sykdommer/",
+        "id": 142421
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Vaksinasjonshåndboka",
+        "url": "/va/vaksinasjonshandboka/",
+        "id": 47191
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Massevaksinasjonshåndboka",
+        "url": "/va/massevaksinasjonshandboka/",
+        "id": 86962
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Nasjonalt vaksinasjonsregister SYSVAK",
+        "url": "/va/sysvak/",
+        "id": 47269
+      },
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "MINI-Nor-studien",
+            "url": "/va/studier/mininor/",
+            "id": 86795
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Nasjonal oppfølging av HPV-vaksinasjonsprogrammet",
+            "url": "/va/studier/hpv-oppfolging/",
+            "id": 47280
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Oversikt over studier innen vaksiner og vaksinasjon",
+        "url": "/va/studier/",
+        "id": 142425
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Vaksiner og vaksinasjon",
+    "url": "/va/",
+    "id": 142349
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Smittevern i helsetjenesten",
+        "url": "/sm/smittevern-i-helsetjenesten/",
+        "id": 45558
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Håndhygiene i helsetjenesten",
+        "url": "/sm/handhygiene/",
+        "id": 45561
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Smittevern i barnehage og skole",
+        "url": "/sm/barnehage/",
+        "id": 45404
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Luftveisinfeksjoner",
+        "url": "/sm/luftveisinfeksjoner/",
+        "id": 159681
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Flyktninger og asylsøkeres helse",
+        "url": "/sm/asylsokeres-helse/",
+        "id": 45314
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Smittevern ved reiser",
+        "url": "/sm/smittevernrad-ved-reiser/",
+        "id": 45293
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Antimikrobiell resistens",
+        "url": "/sm/antibiotikaresistens/",
+        "id": 45311
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Smitte fra mat, vann og dyr",
+        "url": "/sm/smitte-fra-mat-vann-dyr/",
+        "id": 45305
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Drikkevann",
+        "url": "/sm/drikkevann/",
+        "id": 45431
+      },
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "NOIS",
+            "url": "/sm/overvaking/nois/",
+            "id": 47260
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Norsk overvåkingssystem for antibiotikaresistens hos mikrober (NORM)",
+            "url": "/sm/overvaking/norm/",
+            "id": 49038
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Overvåking av smittsomme sykdommer i avløpsvann",
+            "url": "/sm/overvaking/overvaking-smittsomme-sykdommer-i-avlopsvann/",
+            "id": 112014
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Register for resistensovervåking av virus i Norge (RAVN)",
+            "url": "/sm/overvaking/ravn/",
+            "id": 47263
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "NORSURV",
+            "url": "/sm/overvaking/norsurv/",
+            "id": 259860
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Overvåking",
+        "url": "/sm/overvaking/",
+        "id": 142430
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Smittevernvakta",
+        "url": "/ut/melding-og-varsling/varsling/smittevernvakta/",
+        "id": 142434
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Smittevernhåndboka",
+        "url": "/sm/smittevernhandboka/",
+        "id": 46801
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Håndbøker/veiledere",
+        "url": "/sm/veiledere/",
+        "id": 142528
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Senter for antimikrobiell resistens  (AMR)",
+        "url": "/sm/amr/",
+        "id": 73805
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Luftrenserstudien",
+        "url": "/sm/luftrenserstudien/",
+        "id": 114489
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Smittevern",
+    "url": "/sm/",
+    "id": 142353
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Folkehelserapporten",
+            "url": "/he/fr/folkehelserapporten/",
+            "id": 46807
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Folkehelserapportens temautgave 2025: Barn og unges psykiske helse",
+            "url": "/he/fr/barn-og-unges-psykiske-helse/",
+            "id": 320123
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Temautgave 2022: Framtidens utfordringer for folkehelsen",
+            "url": "/he/fr/fremtidens-utfordringer-for-folkehelsen/",
+            "id": 112574
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Temautgave 2021: Folkehelsen etter covid-19",
+            "url": "/he/fr/folkehelserapporten-temautgave-2021/",
+            "id": 105894
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Folkehelserapporten og temautgaver",
+        "url": "/he/fr/",
+        "id": 320120
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Sosial ulikhet i helse",
+        "url": "/he/ulikhet/",
+        "id": 45537
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Migrasjonshelse",
+        "url": "/he/migrasjonshelse/",
+        "id": 73426
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Legemiddelbruk",
+        "url": "/he/legemiddelbruk/",
+        "id": 45511
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Legemiddelregisteret",
+        "url": "/he/legemiddelregisteret/",
+        "id": 113633
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Norsk pasientregister (NPR)",
+        "url": "/he/npr/",
+        "id": 162198
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kommunalt pasient- og brukerregister (KPR)",
+        "url": "/he/kpr/",
+        "id": 162203
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "IPLOS-registeret",
+        "url": "/he/iplos-registeret/",
+        "id": 191955
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Senter for evaluering av folkehelsetiltak",
+        "url": "/he/senter-for-evaluering-av-folkehelsetiltak/",
+        "id": 80434
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Senter for sykdomsbyrde",
+        "url": "/he/senter-sykdomsbyrde/",
+        "id": 67767
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Helse i Norge",
+    "url": "/he/",
+    "id": 142357
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Koronavirus",
+            "url": "/ss/korona/koronavirus/",
+            "id": 45271
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Aktuelle veiledere og rapporter",
+            "url": "/ss/korona/aktuelle-veiledere-og-rapporter/",
+            "id": 142532
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Beslutningsgrunnlag for smitteverntiltak knyttet til koronavirus",
+            "url": "/publ/2020/covid-19-faglige-notater-som-grunnlag-for-nasjonale-beslutninger/",
+            "id": 142442
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Nasjonalt kunnskapsprogram for covid-19 (avsluttet)",
+            "url": "/ss/korona/kunnskapsprogrammet-for-covid-19/",
+            "id": 95064
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Symptometer (avsluttet)",
+            "url": "/ss/korona/symptometer/",
+            "id": 94790
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": true,
+            "name": "Studier",
+            "url": "/ss/korona/studier/",
+            "id": 142446
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Korona",
+        "url": "/ss/korona/",
+        "id": 142438
+      },
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Sesonginfluensa",
+            "url": "/ss/influensa/sesonginfluensa/",
+            "id": 48287
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Fugleinfluensa",
+            "url": "/ss/influensa/fugleinfluensa/",
+            "id": 49296
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Influensapandemier og beredskap",
+            "url": "/ss/influensa/influensapandemier/",
+            "id": 46714
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Influensa",
+        "url": "/ss/influensa/",
+        "id": 142450
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "M-kopper",
+        "url": "/ss/m-kopper/",
+        "id": 112181
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Flått og flåttbårne sykdommer",
+        "url": "/sk/flatt/",
+        "id": 142458
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Blod- og seksuelt overførbare infeksjoner",
+        "url": "/ss/blod-seksuelt-overforbare-infeksjoner/",
+        "id": 45296
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Tuberkulose",
+        "url": "/ss/tuberkulose/",
+        "id": 45277
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Smittsom hjernehinnebetennelse",
+        "url": "/ss/hjernehinnebetennelse/",
+        "id": 45283
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Virale hemoragiske febersykdommer",
+        "url": "/ss/virale-hemoragiske-febre/",
+        "id": 181308
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Smittsomme sykdommer og vaksiner A-Å",
+        "url": "/ss/sykdommer/",
+        "id": 45604
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Meldingssystem for smittsomme sykdommer (MSIS)",
+        "url": "/ut/msis/",
+        "id": 142462
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Håndbøker/veiledere",
+        "url": "/ss/veiledere/",
+        "id": 142535
+      },
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "BorrSci",
+            "url": "/ss/studier/borrsci/",
+            "id": 86817
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Luftveisinfeksjoner hos barn og unge i Norge",
+            "url": "/ss/studier/luftveisinfeksjoner-hos-barn-og-unge-i-norge/",
+            "id": 67025
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Munnbindstudien",
+            "url": "/ss/studier/munnbindstudien/",
+            "id": 115656
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "NorFlu-studien",
+            "url": "/ss/studier/norflu/",
+            "id": 47283
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "NUSS-studien",
+            "url": "/ss/studier/nuss-studien/",
+            "id": 76986
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Oversikt over studier innen smittsomme sykdommer",
+        "url": "/ss/studier/",
+        "id": 142466
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Smittsomme sykdommer",
+    "url": "/ss/",
+    "id": 142361
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kreft og Kreftregisteret",
+        "url": "/kreft/",
+        "id": 45389
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Hjerte- og karsykdommer",
+        "url": "/is/hjertekar/",
+        "id": 45353
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Demens",
+        "url": "/is/demens/",
+        "id": 63879
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Diabetes",
+        "url": "/is/diabetes/",
+        "id": 45395
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Beinskjørhet og brudd",
+        "url": "/is/beinskjorhet/",
+        "id": 45383
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Astma og allergi",
+        "url": "/is/astma-og-allergi/",
+        "id": 45398
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Skader og ulykker",
+        "url": "/is/skader/",
+        "id": 45552
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Smerte",
+        "url": "/is/smerte/",
+        "id": 45392
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Indikatorer for ikke-smittsomme sykdommer NCD",
+        "url": "/is/ncd/",
+        "id": 71517
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Globale ikke-smittsomme sykdommer",
+        "url": "/in/globale-NCD-er/",
+        "id": 142470
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Hjerte- og karregisteret",
+        "url": "/is/hjertekar2/",
+        "id": 47251
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Senter for sykdomsbyrde",
+        "url": "/he/senter-sykdomsbyrde/",
+        "id": 142474
+      },
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Måling av risikofaktorer for ikke-smittsomme sykdommer i primærhelsetjenesten",
+            "url": "/is/studier/maaling-risikofaktorer-ncd-primarhelsetjenesten/",
+            "id": 331836
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "NCDNOR - Ikke-smittsomme sykdommer (NCD) i Norge",
+            "url": "/is/studier/ncdnor/",
+            "id": 248908
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "PainFACT",
+            "url": "/is/studier/painfact/",
+            "id": 90846
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "PAGE-studien om cøliaki og type 1 diabetes",
+            "url": "/is/studier/page/",
+            "id": 47284
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Oversikt over studier innen ikke-smittsomme sykdommer og skader",
+        "url": "/is/studier/",
+        "id": 248898
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Ikke-smittsomme sykdommer og skader",
+    "url": "/is/",
+    "id": 142365
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Livmorhalsprogrammet",
+            "url": "/kreft/kreftscreening/livmorhalsprogrammet/",
+            "id": 310732
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Mammografiprogrammet",
+            "url": "/kreft/kreftscreening/mammografiprogrammet/",
+            "id": 310784
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Tarmscreeningprogrammet",
+            "url": "/kreft/kreftscreening/tarmscreening/",
+            "id": 310831
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Kreftscreening",
+        "url": "/kreft/kreftscreening/",
+        "id": 310729
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Innrapportering av krefttall",
+        "url": "/kreft/innrapportering/",
+        "id": 310892
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kreftstatistikk og datautlevering fra Kreftregisteret",
+        "url": "/kreft/statistikk/",
+        "id": 310902
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Nøkkeltall for kreft",
+        "url": "/kreft/nokkeltall/",
+        "id": 310913
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kreftforskning",
+        "url": "/kreft/kreftforskning/",
+        "id": 310937
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Janus serumbank",
+        "url": "/kreft/janus-serumbank/",
+        "id": 310965
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Befolkningsundersøkelser om helse og livskvalitet",
+        "url": "/kreft/livskvalitet/",
+        "id": 310977
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kvalitetsregistrene på kreftområdet",
+        "url": "/kreft/kvalitetsregistrene/",
+        "id": 310993
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Cancer in Norway",
+        "url": "/kreft/kreftregisteret/Cancer-in-Norway/",
+        "id": 317279
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Forebygging og risikofaktorer",
+        "url": "/kreft/forebygging-av-kreft/",
+        "id": 311139
+      },
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "LTFU-studiene",
+            "url": "/kreft/studier/ltfu/",
+            "id": 311147
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Kreft blant offshorearbeidere",
+            "url": "/kreft/studier/kreft-blant-offshorearbeidere/",
+            "id": 311153
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Studier om kreft",
+        "url": "/kreft/studier/",
+        "id": 311144
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kreftregisteret",
+        "url": "/kreft/kreftregisteret/",
+        "id": 311071
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Kreft og Kreftregisteret",
+    "url": "/kreft/",
+    "id": 310712
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Psykiske plager og lidelser",
+        "url": "/ps/psykiskelidelser/",
+        "id": 45371
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Psykisk helse hos barn og unge",
+        "url": "/ps/psykisk-helse-barn-unge/",
+        "id": 47667
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Livskvalitet og trivsel",
+        "url": "/ps/livskvalitet-og-trivsel/",
+        "id": 81948
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Selvmord og selvmordsforebygging",
+        "url": "/ps/selvmord/",
+        "id": 45368
+      },
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "ADHD-studien",
+            "url": "/ps/studier/adhd/",
+            "id": 47180
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Autismestudien",
+            "url": "/ps/studier/autismestudien/",
+            "id": 47155
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Barneepilepsistudien",
+            "url": "/ps/studier/barneepilepsistudien/",
+            "id": 47274
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Helse- og livskvalitetsstudien",
+            "url": "/ps/studier/helseoglivskvalitet/",
+            "id": 85373
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Hverdagsgledestudien",
+            "url": "/ps/studier/hverdagsgledestudien/",
+            "id": 93544
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Peiling på ungdomshelse (PULS)",
+            "url": "/ps/studier/puls-undersokelsen/",
+            "id": 220824
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Sosiale forhold og helse: En tvillingstudie",
+            "url": "/ps/studier/sosiale-forhold-og-helse-en-tvillingstudie/",
+            "id": 103509
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Studentenes helse- og trivselsundersøkelse (SHoT)",
+            "url": "/ps/studier/shot-undersokelsen-2022/",
+            "id": 109898
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Ung Arena-studien",
+            "url": "/ps/studier/ung-arena-studien/",
+            "id": 331866
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Oversikt over studier innen psykisk helse og livskvalitet",
+        "url": "/ps/studier/",
+        "id": 142482
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Senter for genetisk epidemiologi og psykisk helse (PsychGen)",
+        "url": "/ps/psychgen/",
+        "id": 112700
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Psykisk helse og livskvalitet",
+    "url": "/ps/",
+    "id": 142369
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kosthold og ernæring",
+        "url": "/le/kosthold/",
+        "id": 45437
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Overvekt og fedme",
+        "url": "/le/overvekt/",
+        "id": 45347
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Fysisk aktivitet",
+        "url": "/le/aktivitet/",
+        "id": 45428
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Søvn og søvnvansker",
+        "url": "/le/sovn/",
+        "id": 45380
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Alkohol",
+        "url": "/le/alkohol/",
+        "id": 45469
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Tobakk, røyk og snus",
+        "url": "/le/royking/",
+        "id": 45443
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Rusmidler, doping og avhengighet",
+        "url": "/le/rusmidler-og-avhengighet/",
+        "id": 45525
+      },
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "ATHLETE Ung og Miljø",
+            "url": "/le/studier/athlete-ung-og-miljo/",
+            "id": 106454
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Cann2025-undersøkelsen",
+            "url": "/le/studier/cann2025/",
+            "id": 100430
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "HUMIS - Den norske morsmelkstudien",
+            "url": "/le/studier/humis/",
+            "id": 67721
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Internasjonale ringtester for persistente organiske miljøgifter",
+            "url": "/le/studier/internasjonale-ringtester-pops/",
+            "id": 48727
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "MITT LIV-undersøkelsen",
+            "url": "/le/studier/mittliv/",
+            "id": 46103
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "NANT – Nasjonal undersøkelse om alkohol, narkotika og tobakk (pilot)",
+            "url": "/le/studier/nant/",
+            "id": 102493
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Nasjonale kostholdsundersøkelser",
+            "url": "/le/studier/nasjonale-kostholdsundersokelser/",
+            "id": 63665
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Oversikt over studier innen levevaner, kosthold og ernæring",
+        "url": "/le/studier/",
+        "id": 142486
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Senter for bærekraftig kosthold",
+        "url": "/le/senter-for-barekraftig-kosthold/",
+        "id": 114252
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Levevaner, kosthold og ernæring",
+    "url": "/le/",
+    "id": 142373
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Svangerskap og fødsel",
+        "url": "/op/gravide-og-fodende-kvinners-helse/",
+        "id": 47674
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Oppvekst",
+        "url": "/op/oppvekst/",
+        "id": 46735
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Eldres helse",
+        "url": "/op/eldre/",
+        "id": 45540
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Dødsårsaker og levealder",
+        "url": "/op/dod/",
+        "id": 45520
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Medisinsk fødselsregister",
+        "url": "/op/mfr/",
+        "id": 47254
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Abortregisteret",
+        "url": "/op/abortregisteret/",
+        "id": 47245
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Dødsårsaksregisteret",
+        "url": "/op/dodsarsaksregisteret/",
+        "id": 47248
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Senter for fruktbarhet og helse",
+        "url": "/op/senter-for-fruktbarhet-og-helse/",
+        "id": 66750
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Egg- og sæddonorregisteret",
+        "url": "/op/egg--og-saddonorregisteret/",
+        "id": 162208
+      },
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Barnevekststudien",
+            "url": "/op/studier/barnevekststudien/",
+            "id": 47275
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Den norske mor, far og barn-undersøkelsen (MoBa)",
+            "url": "/op/studier/moba/",
+            "id": 45258
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "FamilieForSK-studien",
+            "url": "/op/studier/familieforsk/",
+            "id": 47277
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "ICDP-studien",
+            "url": "/op/studier/icdp/",
+            "id": 72130
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "NoMIC-studien",
+            "url": "/op/studier/nomic/",
+            "id": 47282
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "NORSE-studien",
+            "url": "/op/studier/norse-studien/",
+            "id": 54442
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Språk 8-studien",
+            "url": "/op/studier/sprak8/",
+            "id": 47950
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Språk- og læringsstudien (SOL)",
+            "url": "/op/studier/sol/",
+            "id": 47285
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "UngKul – Ungdom, kultur og mestring",
+            "url": "/op/studier/ungkul/",
+            "id": 47163
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "UngVekst-studien",
+            "url": "/op/studier/ungvekst/",
+            "id": 66045
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Studier om oppvekst og livsløp",
+        "url": "/op/studier/",
+        "id": 142490
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Oppvekst og livsløp",
+    "url": "/op/",
+    "id": 142377
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Giftinformasjonen",
+        "url": "/kl/giftinformasjon/",
+        "id": 45576
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Luftkvalitet og luftforurensning",
+        "url": "/kl/luftforurensninger/",
+        "id": 45496
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Klimaendringer og helse",
+        "url": "/kl/klimaendringer-og-helse/",
+        "id": 113125
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kosmetikkbivirkninger",
+        "url": "/kl/kosmetikk/",
+        "id": 45440
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Avfall og søppel",
+        "url": "/kl/avfall-og-soppel/",
+        "id": 77509
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Miljøgifter og kjemikalier",
+        "url": "/kl/miljogifter/",
+        "id": 45502
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Drikkevann",
+        "url": "/sm/drikkevann/",
+        "id": 151200
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Stråling",
+        "url": "/kl/straling/",
+        "id": 45505
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Støy og hørsel",
+        "url": "/kl/stoy/",
+        "id": 45386
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Veiledere",
+        "url": "/kl/veiledere/",
+        "id": 142541
+      },
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "EuroMix",
+            "url": "/kl/studier/euromix/",
+            "id": 63311
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "HELIX – The Human Early Life Exposome",
+            "url": "/kl/studier/helix/",
+            "id": 47273
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Kunstgress-studien",
+            "url": "/kl/studier/kunstgress-studien/",
+            "id": 112536
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "MIDIA",
+            "url": "/kl/studier/midia/",
+            "id": 47281
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Miljøbiobanken",
+            "url": "/kl/studier/miljobiobanken/",
+            "id": 49278
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "MoBaTann biobank for melketenner",
+            "url": "/kl/studier/mobatann/",
+            "id": 107171
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "NeuroTox-studien",
+            "url": "/kl/studier/neurotox/",
+            "id": 71893
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "NewTools",
+            "url": "/kl/studier/newtools/",
+            "id": 107947
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "PARC (Europeisk partnerskap for vurdering av risiko fra kjemikalier)",
+            "url": "/kl/studier/parc/",
+            "id": 156080
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Transportstøy, helse og livskvalitet (TRAHL)",
+            "url": "/kl/studier/stoy-og-trafikk/",
+            "id": 148741
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "ULTRHAS",
+            "url": "/kl/studier/ultrhas/",
+            "id": 107304
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Studier om klima og miljø",
+        "url": "/kl/studier/",
+        "id": 142494
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Klima og miljø",
+    "url": "/kl/",
+    "id": 142381
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Flått og flåttbårne sykdommer",
+        "url": "/sk/flatt/",
+        "id": 45478
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Skadedyrbekjempelse",
+        "url": "/sk/skadedyrbekjempelse/",
+        "id": 45484
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kurs for skadedyrbekjempere og tilsynsmyndighet",
+        "url": "/sk/kurs/",
+        "id": 47196
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Skadedyrhåndboka",
+        "url": "/sk/skadedyrhandboka/",
+        "id": 47350
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Insekter, gnagere og andre skadedyr",
+    "url": "/sk/",
+    "id": 142385
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Statistikkalender og tilgang til statistikk",
+        "url": "/ta/statistikkalender_og_statistikk/",
+        "id": 45534
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Helseregistre og andre registre",
+        "url": "/oversikter/helseregistre-og-andre-registre/",
+        "id": 199468
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Stat19",
+        "url": "/ta/stat19/",
+        "id": 327491
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Registre og statistikk",
+    "url": "/ta/",
+    "id": 142401
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Melding og varsling om smittsom sykdom",
+        "url": "/ut/melding-og-varsling/",
+        "id": 46758
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Varsling og oppklaring av utbrudd",
+        "url": "/ut/utbrudd/",
+        "id": 45299
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Meldingssystem for smittsomme sykdommer (MSIS)",
+        "url": "/ut/msis/",
+        "id": 47257
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Utbruddshåndboka",
+        "url": "/ut/utbruddshandboka/",
+        "id": 47202
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Utbrudd og varsling",
+    "url": "/ut/",
+    "id": 142389
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Biblioteket",
+        "url": "/ku/bibliotek/",
+        "id": 45579
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Brukererfaringer i helse- og omsorgstjenesten",
+        "url": "/ku/brukererfaringer/",
+        "id": 54562
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Helsebiblioteket.no",
+        "url": "/ku/helsebiblioteket/",
+        "id": 54574
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kunnskaps- og beslutningsstøtte",
+        "url": "/ku/kunnskaps-og-beslutningsstotte/",
+        "id": 45567
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Nasjonalt kunnskapsprogram for covid-19",
+        "url": "/ss/korona/kunnskapsprogrammet-for-covid-19/",
+        "id": 142506
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "CEIR – Senter for forskning på epidemitiltak",
+        "url": "/ku/ceir/",
+        "id": 105072
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Nasjonalt kompetansemiljø for helsestasjons- og skolehelsetjenesten (NASKO)",
+        "url": "/ku/nasjonalt-kompetansemiljo-for-helsestasjons--og-skolehelsetjenesten/",
+        "id": 158211
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Veiledere og håndbøker",
+        "url": "/redirects/nettpublikasjoner/",
+        "id": 142510
+      },
+      {
+        "childItems": [
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Pasienterfaringer med fastlegen og fastlegekontoret",
+            "url": "/ku/studier/pasienterfaringer-med-fastlegen-2023/",
+            "id": 153213
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "En ny generasjon pasientrapporterte kvalitetsmålinger i psykisk helsevern og tverrfaglig spesialisert rusbehandling (PRQMs-MAS)",
+            "url": "/ku/studier/en-ny-generasjon-pasientrapporterte-kvalitetsmalinger-i-phv-og-tsb/",
+            "id": 118493
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Styrking av pasientstemmen i helsetjenesteevaluering",
+            "url": "/ku/studier/styrking-av-pasientstemmen-i-helsetjenesteevaluering/",
+            "id": 156663
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "FHI-panelet",
+            "url": "/ku/studier/fhi-panelet/",
+            "id": 237451
+          },
+          {
+            "isSelected": false,
+            "isTransportPage": false,
+            "name": "Korstudien",
+            "url": "/ku/studier/korstudien/",
+            "id": 334086
+          }
+        ],
+        "isSelected": false,
+        "isTransportPage": true,
+        "name": "Oversikt over studier inne kunnskap kvalitet og læring",
+        "url": "/ku/studier/",
+        "id": 155948
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Kunnskap, kvalitet og læring",
+    "url": "/ku/",
+    "id": 142393
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Biobanken ved Folkehelseinstituttet",
+        "url": "/hd/biobank/",
+        "id": 45508
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Datatilgang",
+        "url": "/hd/datatilgang/",
+        "id": 45588
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Laboratorieanalyser",
+        "url": "/hd/laboratorie-analyser/",
+        "id": 45308
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Statistikk fra FHI",
+        "url": "/ta/statistikkalender_og_statistikk/statistikkalenderen-2025/",
+        "id": 289560
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Personvern og helsedata",
+        "url": "/hd/personvern/",
+        "id": 45573
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Biobankregisteret",
+        "url": "/hd/biobankregisteret/",
+        "id": 52938
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Massecytometri-plattformen (CyTOF®)",
+        "url": "/hd/massecytometri-plattformen-ved-fhi-cytof/",
+        "id": 94724
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Register for biologisk forskningsreservasjon",
+        "url": "/hd/personvern/om-personvern/biologisk-forskningsreservasjon/",
+        "id": 118235
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Digital samhandling med Helseregistrene",
+        "url": "/hd/digital-samhandling-med-helseregistrene/",
+        "id": 332274
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kommunens sykdomsoversikt – KoSy",
+        "url": "/hd/kommunens-sykdomsoversikt--kosy/",
+        "id": 332294
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Helsedata, datatilgang og tjenester",
+    "url": "/hd/",
+    "id": 142397
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Folkehelseundersøkelsene i fylkene",
+        "url": "/hs/folkehelseundersokelsene-i-fylkene/",
+        "id": 86538
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Landsomfattende helseundersøkelser",
+        "url": "/hs/landsomfattende-helseundersokelser-lhu/",
+        "id": 86279
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Vekstkohorten",
+        "url": "/hs/vekstkohorten/",
+        "id": 85293
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Den nasjonale folkehelseundersøkelsen",
+        "url": "/hs/nhus/",
+        "id": 95263
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Cohort of Norway (CONOR)",
+        "url": "/hs/cohort-of-norway/",
+        "id": 47272
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Den norske mor, far og barnundersøkelsen",
+        "url": "/op/studier/moba/",
+        "id": 162098
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Nasjonalt tvillingregister",
+        "url": "/hs/tvilling/",
+        "id": 47171
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Helseundersøkelser",
+    "url": "/hs/",
+    "id": 142405
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Digitale helseintervensjoner for mødre- og barnehelse",
+        "url": "/in/eregistries/",
+        "id": 47561
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Internasjonalt samarbeid",
+        "url": "/in/global-helse/",
+        "id": 47622
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Global helseberedskap",
+        "url": "/in/global-helseberedskap/",
+        "id": 71678
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Globale ikke-smittsomme sykdommer",
+        "url": "/in/globale-NCD-er/",
+        "id": 95563
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Fra kunnskap til beslutning",
+        "url": "/in/fra-kunnskap-til-beslutning/",
+        "id": 96143
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Global helse",
+    "url": "/in/",
+    "id": 142409
+  },
+  {
+    "childItems": [
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Om Folkehelseinstituttet",
+        "url": "/om/fhi/",
+        "id": 45705
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Områder, avdelinger og enheter",
+        "url": "/om/organisasjon/",
+        "id": 45702
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Forskningssentre",
+        "url": "/om/forskningssentre/",
+        "id": 142515
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Strategi 2024-2027",
+        "url": "/om/folkehelseinstituttets-strategi/",
+        "id": 87875
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Kurs og arrangementer",
+        "url": "/om/kurs-og-konferanser/",
+        "id": 73436
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Studier og prosjekter",
+        "url": "/om/studier-og-prosjekter/",
+        "id": 194083
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Beslutningsgrunnlag for smitteverntiltak rundt koronavirus",
+        "url": "/publ/2020/covid-19-faglige-notater-som-grunnlag-for-nasjonale-beslutninger/",
+        "id": 95397
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "For pressen",
+        "url": "/om/for-pressen/",
+        "id": 45711
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Om fhi.no",
+        "url": "/om/om-nettstedet/",
+        "id": 45714
+      },
+      {
+        "childItems": [],
+        "isSelected": false,
+        "isTransportPage": false,
+        "name": "Evalmedhelse 2023-2024",
+        "url": "/om/evalmedhelse/",
+        "id": 192940
+      }
+    ],
+    "isSelected": false,
+    "isTransportPage": true,
+    "name": "Om FHI",
+    "url": "/om/",
+    "id": 142413
+  }
+]'
+                 :translations='{
+  "startPage": "English homepage",
+  "switchLanguage": "Read in English",
+  "notAvailable": "Not available in English",
+  "changeLanguage": "Change language",
+  "changeLanguageNo": "",
+  "english": "English",
+  "norwegian": "Norsk",
+  "searchButton": "\n          Søkeknapp\n        ",
+  "menuButton": "Meny",
+  "searchText": "Søk i Folkehelseinstituttet",
+  "searchLabel": "Søk i Folkehelseinstituttet",
+  "searchTextCondensed": "Søk"
+}'
+                 :language-model='{
+  "isEnglish": false,
+  "isMasterLanguage": true,
+  "otherLanguage": "en",
+  "englishAvailable": true,
+  "norwegianAvailable": true,
+  "currentPageUrl": "/en/cancer/",
+  "startPageUrl": "/en/"
+}'
+>
+    <template #site-warning>
+        <p>Svindlere sender ut epost om helseunders&oslash;kelse. Denne kommer IKKE fra Folkehelseinstituttet og skal ikke besvares, se nyhetssak: <u><a href="/link/9883b329bc6f4851934544e4f42a0a41.aspx">Varsel om svindel</a></u></p>
+    </template>
+</fhi-header-main>
+    <main id="main" tabindex="-1" class='container'>
+        
+
+
+<!-- Breadcrumbs -->
+
+
+
+    <nav aria-label="Br&#xF8;dsmulesti" class="fhi-breadcrumbs -mt-7 print:hidden">
+        <ol class="flex items-center space-x-2 list-none p-0 m-0">
+            <li>
+                <a href="/"
+                   title="Tilbake til Folkehelseinstituttet"
+                   class="p-3 -mt-3 -ml-2 rounded-3xl z-[29] text-blue-200 hover:underline underline-offset-2 focus-visible-outline -outline-offset-[4px]"
+                   aria-label="Tilbake til Folkehelseinstituttet">
+                    <i class="fa-light fa-arrow-left mr-2"></i>
+                    <span>Folkehelseinstituttet</span>
+                </a>
+            </li>
+        </ol>
+    </nav>
+
+
+<!-- TransportationPage (Område) -->
+
+<article class="mb-16 mt-6">
+    <!-- Title -->
+    <h1 class="mb-6 text-xl md:text-2xl font-medium transition-all">
+        Kreft og Kreftregisteret
+    </h1>
+
+    <!-- Intro -->
+    <p class="font-normal text-md md:text-ingress">
+        Kreftregisteret.no ble en del av fhi.no i mai 2025. Her finner du blant annet informasjon om Kreftregisteret, kreftstatistikk, innrapportering av data, de ulike kvalitetsregistrene og screeningprogrammene (Mammografi-, Livmorhals- og Tarmscreeningprogrammet).
+    </p>
+    
+    
+
+
+
+        <div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-16">
+                <a href="/kreft/kreftscreening/"
+                   class="bg-white hover:bg-blue-625 border-grayblue-125  px-4 py-6 group border rounded-2xl flex items-center focus-visible-outline outline-offset-0 focus-visible:border-transparent">
+                    <i class="group-hover:text-white text-icon fa-light fa-2x min-w-[40px] fa-fw fa-folder-tree"></i>
+                    <span class="group-hover:text-white ml-2 group-hover:underline text-md hyphens-auto overflow-hidden">
+                        Kreftscreening
+                    </span>
+                </a>
+                <a href="/kreft/innrapportering/"
+                   class="bg-white hover:bg-blue-625 border-grayblue-125  px-4 py-6 group border rounded-2xl flex items-center focus-visible-outline outline-offset-0 focus-visible:border-transparent">
+                    <i class="group-hover:text-white text-icon fa-light fa-2x min-w-[40px] fa-fw fa-file-import"></i>
+                    <span class="group-hover:text-white ml-2 group-hover:underline text-md hyphens-auto overflow-hidden">
+                        Innrapportering av krefttall
+                    </span>
+                </a>
+                <a href="/kreft/statistikk/"
+                   class="bg-white hover:bg-blue-625 border-grayblue-125  px-4 py-6 group border rounded-2xl flex items-center focus-visible-outline outline-offset-0 focus-visible:border-transparent">
+                    <i class="group-hover:text-white text-icon fa-light fa-2x min-w-[40px] fa-fw fa-chart-column"></i>
+                    <span class="group-hover:text-white ml-2 group-hover:underline text-md hyphens-auto overflow-hidden">
+                        Kreftstatistikk og datautlevering
+                    </span>
+                </a>
+                <a href="/kreft/nokkeltall/"
+                   class="bg-white hover:bg-blue-625 border-grayblue-125  px-4 py-6 group border rounded-2xl flex items-center focus-visible-outline outline-offset-0 focus-visible:border-transparent">
+                    <i class="group-hover:text-white text-icon fa-light fa-2x min-w-[40px] fa-fw fa-chart-column"></i>
+                    <span class="group-hover:text-white ml-2 group-hover:underline text-md hyphens-auto overflow-hidden">
+                        N&#xF8;kkeltall for kreft
+                    </span>
+                </a>
+                <a href="/kreft/kreftforskning/"
+                   class="bg-white hover:bg-blue-625 border-grayblue-125  px-4 py-6 group border rounded-2xl flex items-center focus-visible-outline outline-offset-0 focus-visible:border-transparent">
+                    <i class="group-hover:text-white text-icon fa-light fa-2x min-w-[40px] fa-fw fa-microscope"></i>
+                    <span class="group-hover:text-white ml-2 group-hover:underline text-md hyphens-auto overflow-hidden">
+                        Kreftforskning
+                    </span>
+                </a>
+                <a href="/kreft/janus-serumbank/"
+                   class="bg-white hover:bg-blue-625 border-grayblue-125  px-4 py-6 group border rounded-2xl flex items-center focus-visible-outline outline-offset-0 focus-visible:border-transparent">
+                    <i class="group-hover:text-white text-icon fa-light fa-2x min-w-[40px] fa-fw fa-droplet"></i>
+                    <span class="group-hover:text-white ml-2 group-hover:underline text-md hyphens-auto overflow-hidden">
+                        Janus serumbank
+                    </span>
+                </a>
+                <a href="/kreft/livskvalitet/"
+                   class="bg-white hover:bg-blue-625 border-grayblue-125  px-4 py-6 group border rounded-2xl flex items-center focus-visible-outline outline-offset-0 focus-visible:border-transparent">
+                    <i class="group-hover:text-white text-icon fa-light fa-2x min-w-[40px] fa-fw fa-heart"></i>
+                    <span class="group-hover:text-white ml-2 group-hover:underline text-md hyphens-auto overflow-hidden">
+                        Kreft og livskvalitet
+                    </span>
+                </a>
+                <a href="/kreft/kvalitetsregistrene/"
+                   class="bg-white hover:bg-blue-625 border-grayblue-125  px-4 py-6 group border rounded-2xl flex items-center focus-visible-outline outline-offset-0 focus-visible:border-transparent">
+                    <i class="group-hover:text-white text-icon fa-light fa-2x min-w-[40px] fa-fw fa-disease"></i>
+                    <span class="group-hover:text-white ml-2 group-hover:underline text-md hyphens-auto overflow-hidden">
+                        Kvalitetsregistrene p&#xE5; kreftomr&#xE5;det
+                    </span>
+                </a>
+                <a href="/kreft/kreftregisteret/Cancer-in-Norway/"
+                   class="bg-white hover:bg-blue-625 border-grayblue-125  px-4 py-6 group border rounded-2xl flex items-center focus-visible-outline outline-offset-0 focus-visible:border-transparent">
+                    <i class="group-hover:text-white text-icon fa-light fa-2x min-w-[40px] fa-fw fa-book"></i>
+                    <span class="group-hover:text-white ml-2 group-hover:underline text-md hyphens-auto overflow-hidden">
+                        Cancer in Norway
+                    </span>
+                </a>
+                <a href="/kreft/forebygging-av-kreft/"
+                   class="bg-white hover:bg-blue-625 border-grayblue-125  px-4 py-6 group border rounded-2xl flex items-center focus-visible-outline outline-offset-0 focus-visible:border-transparent">
+                    <i class="group-hover:text-white text-icon fa-light fa-2x min-w-[40px] fa-fw fa-umbrella-beach"></i>
+                    <span class="group-hover:text-white ml-2 group-hover:underline text-md hyphens-auto overflow-hidden">
+                        Forebygging og risikofaktorer
+                    </span>
+                </a>
+                <a href="/kreft/studier/"
+                   class="bg-white hover:bg-blue-625 border-grayblue-125  px-4 py-6 group border rounded-2xl flex items-center focus-visible-outline outline-offset-0 focus-visible:border-transparent">
+                    <i class="group-hover:text-white text-icon fa-light fa-2x min-w-[40px] fa-fw fa-folder-tree"></i>
+                    <span class="group-hover:text-white ml-2 group-hover:underline text-md hyphens-auto overflow-hidden">
+                        Studier om kreft
+                    </span>
+                </a>
+                <a href="/kreft/kreftregisteret/"
+                   class="bg-white hover:bg-blue-625 border-grayblue-125  px-4 py-6 group border rounded-2xl flex items-center focus-visible-outline outline-offset-0 focus-visible:border-transparent">
+                    <i class="group-hover:text-white text-icon fa-light fa-2x min-w-[40px] fa-fw fa-cabinet-filing"></i>
+                    <span class="group-hover:text-white ml-2 group-hover:underline text-md hyphens-auto overflow-hidden">
+                        Kreftregisteret
+                    </span>
+                </a>
+        </div>
+    
+    <!-- Block area -->
+    
+<div><div class="fhi-contentarea is-large">
+
+<!-- LastUpdatedListBlock -->
+
+
+<fhi-block-last-updated :model='{
+  "page": {
+    "url": "/kreft/",
+    "title": "Kreft og Kreftregisteret",
+    "id": 310712,
+    "type": "TransportationPage",
+    "language": "no"
+  },
+  "baseUrl": "/sys/nytt/",
+  "queryString": "?blockId=311167\u0026ownerPage=310712\u0026language=no",
+  "isFrontpage": false,
+  "maxItems": 5,
+  "eventListPageUrl": "/om/kurs-og-konferanser/",
+  "statisticsCalendarPageUrl": "/ta/statistikkalender_og_statistikk/statistikkalenderen-2025/",
+  "results": [
+    {
+      "id": 330249,
+      "title": "Webinar om HPV hjemmetest via fastleger",
+      "shortTitle": "Webinar om HPV hjemmetest via fastleger",
+      "url": "/om/kurs-og-konferanser/webinar-om-hpv-hjemmetest-via-fastleger8/",
+      "typeId": 79,
+      "type": "Arrangement",
+      "searchFilter": "con-79",
+      "chips": [
+        "Arrangement",
+        "Webinar",
+        "27. november",
+        "Teams"
+      ],
+      "dateChanged": "2025-08-12T20:18:26+02:00",
+      "dateCreated": "2025-08-12T20:14:44+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "event": {
+        "startDate": "2025-11-27T12:00:00+01:00",
+        "endDate": "2025-11-27T12:30:00+01:00",
+        "location": "Teams",
+        "type": "Webinar",
+        "speaker": "Ameli Tropé, leder for Livmorhalsprogrammet",
+        "upcoming": false
+      },
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": true,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 337144,
+      "title": "Hvordan står det til med folkehelsen? Åpent NCD-møte 2025",
+      "shortTitle": "Hvordan står det til med folkehelsen? Åpent NCD-møte 2025",
+      "url": "/om/kurs-og-konferanser/hvordan-star-det-til-med-folkehelsen-apent-ncd-mote-2025/",
+      "typeId": 79,
+      "type": "Arrangement",
+      "searchFilter": "con-79",
+      "chips": [
+        "Arrangement",
+        "Møte",
+        "04. desember",
+        "Litteraturhuset i Oslo"
+      ],
+      "dateChanged": "2025-11-03T12:44:45+01:00",
+      "dateCreated": "2025-10-29T10:01:58+01:00",
+      "hideDate": false,
+      "isArchived": false,
+      "event": {
+        "startDate": "2025-12-04T11:00:00+01:00",
+        "endDate": "2025-12-04T14:00:00+01:00",
+        "location": "Litteraturhuset i Oslo",
+        "type": "Møte",
+        "upcoming": false
+      },
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": true,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 342140,
+      "title": "Webinar om HPV hjemmetest via fastleger",
+      "shortTitle": "Webinar om HPV hjemmetest via fastleger",
+      "url": "/om/kurs-og-konferanser/webinar-om-hpv-hjemmetest-via-fastleger10/",
+      "typeId": 79,
+      "type": "Arrangement",
+      "searchFilter": "con-79",
+      "chips": [
+        "Arrangement",
+        "Webinar",
+        "17. desember",
+        "Teams"
+      ],
+      "dateChanged": "2025-11-17T13:43:30+01:00",
+      "dateCreated": "2025-11-17T13:20:37+01:00",
+      "hideDate": false,
+      "isArchived": false,
+      "event": {
+        "startDate": "2025-12-17T11:30:00+01:00",
+        "endDate": "2025-12-17T12:00:00+01:00",
+        "location": "Teams",
+        "type": "Webinar",
+        "speaker": "Elin Englund Ørum, prosjektleder HPV hjemmetest, Livmorhalsprogrammet",
+        "upcoming": false
+      },
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": true,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 336887,
+      "title": "Ulik bruk av viktig brystkreftbehandling hos eldre og personer med flere sykdommer",
+      "shortTitle": "Ulik bruk av viktig brystkreftbehandling hos eldre og personer med flere sykdommer",
+      "url": "/nyheter/2025/Ulik-bruk-av-viktig-brystkreftbehandling-hos-eldre-og-personer-med-flere-sykdommer/",
+      "typeId": 13,
+      "type": "Forskningsfunn",
+      "searchFilter": "tra-newsnotifications/cat-741",
+      "chips": [
+        "Forskningsfunn"
+      ],
+      "dateChanged": "2025-10-24T08:47:01+02:00",
+      "dateCreated": "2025-10-17T13:14:36+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 334162,
+      "title": "Geografiske forskjeller i behandling av alvorlig hjernesvulst",
+      "shortTitle": "Geografiske forskjeller i behandling av alvorlig hjernesvulst",
+      "url": "/nyheter/2025/geografiske-forskjeller-i-behandling-av-alvorlig-hjernesvulst/",
+      "typeId": 13,
+      "type": "Forskningsfunn",
+      "searchFilter": "tra-newsnotifications/cat-741",
+      "chips": [
+        "Forskningsfunn"
+      ],
+      "dateChanged": "2025-10-02T15:59:23+02:00",
+      "dateCreated": "2025-10-01T08:39:34+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 333932,
+      "title": "Nytt EU-prosjekt skal bidra til bedre innsikt om kreft i Europa",
+      "shortTitle": "Nytt EU-prosjekt skal bidra til bedre innsikt om kreft i Europa",
+      "url": "/nyheter/2025/skal-bidra-til-bedre-innsikt-om-kreft-i-europa/",
+      "typeId": 13,
+      "type": "Nyhet",
+      "searchFilter": "tra-newsnotifications/cat-739",
+      "chips": [
+        "Nyhet"
+      ],
+      "dateChanged": "2025-09-23T09:51:28+02:00",
+      "dateCreated": "2025-09-19T14:59:50+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 332077,
+      "title": "Prostatakreftstudie banet vei for faste befolkningsundersøkelser blant kreftpasienter ",
+      "shortTitle": "Prostatakreftstudie banet vei for faste befolkningsundersøkelser blant kreftpasienter",
+      "url": "/nyheter/2025/prostatakreftstudie-banet-vei-for-faste-befolkningsundersokelser-blant-kreftpasienter/",
+      "typeId": 13,
+      "type": "Forskningsfunn",
+      "searchFilter": "tra-newsnotifications/cat-741",
+      "chips": [
+        "Forskningsfunn"
+      ],
+      "dateChanged": "2025-09-10T08:57:39+02:00",
+      "dateCreated": "2025-08-29T14:00:38+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 331842,
+      "title": "Robotassistert kirurgi på vei inn i behandlingen av lungekreft",
+      "shortTitle": "Robotassistert kirurgi på vei inn i behandlingen av lungekreft",
+      "url": "/nyheter/2025/robotassistert-kirurgi-pa-vei-inn-i-behandlingen-av-lungekreft/",
+      "typeId": 13,
+      "type": "Nyhet",
+      "searchFilter": "tra-newsnotifications/cat-739",
+      "chips": [
+        "Nyhet"
+      ],
+      "dateChanged": "2025-09-04T13:38:54+02:00",
+      "dateCreated": "2025-08-21T10:13:55+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 206126,
+      "title": "Kunstig intelligens i Mammografiprogrammet - en randomisert kontrollert studie",
+      "shortTitle": "Kunstig intelligens i Mammografiprogrammet - en randomisert kontrollert studie",
+      "url": "/nva-prosjekter/aktiv/kunstig-intelligens-i-mammografiprogrammet---en-randomisert-kontrollert-studie/",
+      "typeId": 15,
+      "type": "Prosjekt",
+      "searchFilter": "tra-studiesprojects",
+      "chips": [
+        "Prosjekt"
+      ],
+      "dateChanged": "2025-11-07T13:01:24+01:00",
+      "dateCreated": "2024-05-07T13:59:49+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 206100,
+      "title": "Effekter av HPV-vaksinering i Norge",
+      "shortTitle": "Effekter av HPV-vaksinering i Norge",
+      "url": "/nva-prosjekter/aktiv/effekter-av-hpv-vaksinering-i-norge/",
+      "typeId": 15,
+      "type": "Prosjekt",
+      "searchFilter": "tra-studiesprojects",
+      "chips": [
+        "Prosjekt"
+      ],
+      "dateChanged": "2025-11-04T13:01:01+01:00",
+      "dateCreated": "2024-05-07T13:59:39+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 206150,
+      "title": "Effekten av HPV-vaksinen Gardasil mot Laryngeal papillomatosis",
+      "shortTitle": "Effekten av HPV-vaksinen Gardasil mot Laryngeal papillomatosis",
+      "url": "/nva-prosjekter/aktiv/effekten-av-hpv-vaksinen-gardasil-mot-laryngeal-papillomatosis/",
+      "typeId": 15,
+      "type": "Prosjekt",
+      "searchFilter": "tra-studiesprojects",
+      "chips": [
+        "Prosjekt"
+      ],
+      "dateChanged": "2025-10-28T17:11:12+01:00",
+      "dateCreated": "2024-05-07T13:59:55+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 206200,
+      "title": "Eksponeringskarakterisering og forebygging av død, sykdom og skader blant offshore petroleumsarbeidere",
+      "shortTitle": "Eksponeringskarakterisering og forebygging av død, sykdom og skader blant offshore petroleumsarbeidere",
+      "url": "/nva-prosjekter/aktiv/eksponeringskarakterisering-og-forebygging-av-dod-sykdom-og-skader-blant-offshore-petroleumsarbeidere/",
+      "typeId": 15,
+      "type": "Prosjekt",
+      "searchFilter": "tra-studiesprojects",
+      "chips": [
+        "Prosjekt"
+      ],
+      "dateChanged": "2025-10-28T14:00:07+01:00",
+      "dateCreated": "2024-05-07T14:00:13+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 206090,
+      "title": "Estimering av utviklingen av brystkreft",
+      "shortTitle": "Estimering av utviklingen av brystkreft",
+      "url": "/nva-prosjekter/aktiv/estimering-av-utviklingen-av-brystkreft/",
+      "typeId": 15,
+      "type": "Prosjekt",
+      "searchFilter": "tra-studiesprojects",
+      "chips": [
+        "Prosjekt"
+      ],
+      "dateChanged": "2025-10-28T13:25:14+01:00",
+      "dateCreated": "2024-05-07T13:59:36+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 339553,
+      "title": "Rapport for kreft i spiserør og magesekk 2024",
+      "shortTitle": "Rapport for kreft i spiserør og magesekk 2024",
+      "url": "/publ/2025/rapport-kreft-i-spiseror-og-magesekk-2024/",
+      "typeId": 32,
+      "type": "Rapport",
+      "searchFilter": "con-32/cat-",
+      "chips": [
+        "Rapport"
+      ],
+      "dateChanged": "2025-11-18T13:13:53+01:00",
+      "dateCreated": "2025-11-11T10:49:58+01:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 315583,
+      "title": "Nasjonalt kvalitetsregister for blære- og urotelkreft: Årsrapport 2024",
+      "shortTitle": "Nasjonalt kvalitetsregister for blære- og urotelkreft: Årsrapport 2024",
+      "url": "/publ/2025/nasjonalt-kvalitetsregister-for-blare-og-urotelkreft-2024/",
+      "typeId": 32,
+      "type": "Rapport",
+      "searchFilter": "con-32/cat-750",
+      "chips": [
+        "Rapport"
+      ],
+      "dateChanged": "2025-06-25T14:20:44+02:00",
+      "dateCreated": "2025-05-09T14:53:17+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 313969,
+      "title": "Mammografiprogrammet 25 år",
+      "shortTitle": "Mammografiprogrammet 25 år",
+      "url": "/publ/kreftregisteret/25-arsrapport-mammografiprogrammet/",
+      "typeId": 32,
+      "type": "Rapport",
+      "searchFilter": "con-32/cat-750",
+      "chips": [
+        "Rapport"
+      ],
+      "dateChanged": "2025-05-19T15:41:58+02:00",
+      "dateCreated": "2022-06-03T14:43:21+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 313968,
+      "title": "Mammografiprogrammet 20 år",
+      "shortTitle": "Mammografiprogrammet 20 år",
+      "url": "/publ/kreftregisteret/mammografiprogrammet-20-ar/",
+      "typeId": 32,
+      "type": "Rapport",
+      "searchFilter": "con-32/cat-750",
+      "chips": [
+        "Rapport"
+      ],
+      "dateChanged": "2025-05-19T15:40:23+02:00",
+      "dateCreated": "2017-10-15T20:10:29+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 313967,
+      "title": "Kvalitetsmanual i Mammografiprogrammet",
+      "shortTitle": "Kvalitetsmanual i Mammografiprogrammet",
+      "url": "/publ/kreftregisteret/Kvalitet/",
+      "typeId": 32,
+      "type": "Veileder",
+      "searchFilter": "con-32/cat-752",
+      "chips": [
+        "Veileder"
+      ],
+      "dateChanged": "2025-05-19T15:37:36+02:00",
+      "dateCreated": "2012-06-22T08:05:00+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 325331,
+      "title": "12 råd som forebygger kreft",
+      "shortTitle": "12 råd som forebygger kreft",
+      "url": "/publ/plakat/12-rad-som-forebygger-kreft2/",
+      "typeId": 31,
+      "type": "Plakat",
+      "searchFilter": "con-31/cat-748",
+      "chips": [
+        "Plakat"
+      ],
+      "dateChanged": "2025-06-10T14:20:24+02:00",
+      "dateCreated": "2025-06-10T13:51:19+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    },
+    {
+      "id": 16556,
+      "title": "Krav om innsyn i helseregistre (skjema)",
+      "shortTitle": "Krav om innsyn i helseregistre (skjema)",
+      "url": "/publ/skjema/skjema-krav-om-innsyn-i-helseregist/",
+      "typeId": 31,
+      "type": "Skjema",
+      "searchFilter": "con-31/cat-749",
+      "chips": [
+        "Skjema"
+      ],
+      "dateChanged": "2025-05-14T19:09:13+02:00",
+      "dateCreated": "2016-04-12T14:44:02+02:00",
+      "hideDate": false,
+      "isArchived": false,
+      "imageDescription": "",
+      "imageUrl": "",
+      "imageAlternativeText": "",
+      "isEventPage": false,
+      "isStatistic": false,
+      "isPersonPage": false,
+      "isProjectPage": false
+    }
+  ],
+  "pageTabs": [
+    {
+      "id": 13,
+      "name": "Nyhet",
+      "pluralName": "Nyheter",
+      "show": true,
+      "typeUrlParameter": "tra-newsnotifications/cat-739,tra-newsnotifications/cat-741,tra-newsnotifications/con-22",
+      "isStatistics": false,
+      "isEvents": false
+    },
+    {
+      "id": 79,
+      "name": "Arrangement",
+      "pluralName": "Arrangementer",
+      "show": true,
+      "typeUrlParameter": "con-79",
+      "isStatistics": false,
+      "isEvents": true
+    },
+    {
+      "id": 32,
+      "name": "Rapport",
+      "pluralName": "Rapporter",
+      "show": true,
+      "typeUrlParameter": "con-32",
+      "isStatistics": false,
+      "isEvents": false
+    },
+    {
+      "id": 31,
+      "name": "Trykksak",
+      "pluralName": "Informasjonsmateriell",
+      "show": true,
+      "typeUrlParameter": "con-31",
+      "isStatistics": false,
+      "isEvents": false
+    },
+    {
+      "id": 15,
+      "name": "Prosjekt",
+      "pluralName": "Prosjekter",
+      "show": true,
+      "typeUrlParameter": "tra-studiesprojects",
+      "isStatistics": false,
+      "isEvents": false
+    },
+    {
+      "id": 999,
+      "name": "Eksterne lenker",
+      "pluralName": "Eksterne lenker",
+      "show": false,
+      "typeUrlParameter": "",
+      "isStatistics": false,
+      "isEvents": false
+    }
+  ],
+  "translations": {
+    "showMore": "Se alle",
+    "getNotification": "Få siste nytt",
+    "getNotificationDetails": "Få varsel om siste nytt",
+    "noResults": "Ingen resultater",
+    "externalLink": "Ekstern lenke",
+    "search": "Søk",
+    "searchLabel": "Søk på valgt sidetype i tema / område",
+    "textHeading": "Få varsel ved oppdateringer av",
+    "textTopics": "Ønsker du også varsler om",
+    "textEmail": "E-postadresse",
+    "textEmailPlaceholder": "Din e-postadresse",
+    "textEmailInfo": "E-postadressen du registrerer her vil kun bli brukt til å sende ut nyhetsvarsler du har bedt om. Du kan når som helst avslutte dine varsler og slette din e-post adresse ved å følge lenken i varslene du mottar.",
+    "textReadMoreLink": "Les mer om personvern på fhi.no",
+    "textSubmitButton": "Meld meg på!",
+    "textClose": "Lukk",
+    "textSubmitting": "Melder deg på...",
+    "textFrequency": "Hvor ofte ønsker du å motta varsler fra fhi.no? (Gjelder alle dine varsler)",
+    "textFrequencyImmediately": "Når siden blir oppdatert",
+    "textFrequencyDaily": "Hver dag",
+    "textFrequencyWeekly": "Hver uke",
+    "textFrequencyInfo": "Varselet sendes bare ut dersom det er publisert nytt innhold siden forrige varsel ble sendt ut.",
+    "textSubmitConfirmation": "Du er snart i mål...",
+    "textSendToPart1": "I løpet av noen minutter mottar du en epost til",
+    "textSendToPart2": "med lenke for å bekrefte varselet.",
+    "textErrorHeading": "Oops, noe gikk galt...",
+    "textErrorNoResponse": "... last inn siden på nytt og prøv igjen",
+    "textErrorMsg": ", eller ta kontakt med nettredaksjon@fhi.no.",
+    "textErrorSummaryHeading": "Vennligst rett opp følgende",
+    "textEmailRequired": "Skriv inn e-postadressen din",
+    "textEmailInvalid": "Skriv en gyldig e-postadresse (f.eks. navn@eksempel.no)",
+    "textFrequencyRequired": "Velg hvor ofte du vil motta oppdateringer",
+    "textOptional": "Valgfritt",
+    "textTopicsHelp": "Valgfritt: Velg relaterte temaer",
+    "textNoneSelected": "Ingen temaer valgt",
+    "textSelected": "algt",
+    "textJumpToTopics": "Gå til temaer",
+    "textSelectAll": "Velg alle",
+    "textClearAll": "Fjern valg",
+    "textRequired": "Påkrevd"
+  },
+  "privacyUrl": "/om/fhi/personvernerklaring/",
+  "showNewsalert": false
+}'>
+    <template #title>
+Siste om kreft og Kreftregisteret    </template>
+</fhi-block-last-updated></div></div>
+    
+</article>
+
+<component :is="'style'" class="hidden">
+    body {
+    background-color: #fbfbfb;
+    }
+</component>
+    </main>
+    
+
+<footer class="main-footer relative bg-blue-625 text-white mt-12 pt-16 pb-16 print:hidden">
+    <div class="absolute right-0 top-3 mr-5">
+        <a href="#go-to-top" class="focus-visible-outline -outline-offset-[4px] rounded-full group">
+            <i class="text-lg fa-light fa-arrow-up min-w-[56px] text-center rounded-full p-3 text-white border-2 border-white hover:bg-white/25 group-focus:bg-white/25 transition-bg duration-75 ease-in-out"></i>
+            <span class="sr-only">Gå til toppen</span>
+        </a>
+    </div>
+
+    <div class="container">
+        <div class="grid gap-x-6 gap-y-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full">
+
+            <section aria-labelledby="footer-heading-contact">
+                <h2 id="footer-heading-contact"
+                    class="header font-medium">Adresse/kontakt</h2>
+                <address class="not-italic">
+                    
+<ul>
+<li><a href="/om/fhi/apningstider-ansattoversikt-adresser-til-folkehelseinstituttet/">Kontakt oss</a></li>
+<li><a title="Beredskapstelefoner" href="/om/fhi/radgivnings-og-vakttelefoner/">Beredskapstelefoner</a></li>
+<li>Tlf.: <a href="tel:+4721077000">21 07 70 00</a></li>
+<li>Org.nr: 983&nbsp;744&nbsp;516</li>
+</ul>
+                </address>
+            </section>
+
+                <nav aria-labelledby="footer-heading-news">
+                    <h2 id="footer-heading-news"
+                        class="header font-medium">Aktuelt</h2>
+                    <ul>
+                            <li>
+                                <a href="/om/kurs-og-konferanser/">Kurs og arrangementer</a>
+                            </li>
+                            <li>
+                                <a href="/ta/statistikkalender_og_statistikk/">Statistikkalender og tilgang til statistikk</a>
+                            </li>
+                            <li>
+                                <a href="/om/fhi/sok-jobb-hos-folkehelseinstituttet/">Slik er det &#xE5; jobbe i Folkehelseinstituttet</a>
+                            </li>
+                            <li>
+                                <a href="/om/organisasjon/">Omr&#xE5;der, avdelinger og enheter</a>
+                            </li>
+                            <li>
+                                <a href="/om/for-pressen/">For pressen</a>
+                            </li>
+                    </ul>
+                </nav>
+                <nav aria-labelledby="footer-heading-allour">
+                    <h2 id="footer-heading-allour"
+                        class="header font-medium">Alle våre</h2>
+                    <ul>
+                            <li>
+                                <a href="/om/studier-og-prosjekter/">Studier og prosjekter</a>
+                            </li>
+                            <li>
+                                <a href="/oversikter/rapporter/">Veiledere, h&#xE5;ndb&#xF8;ker, rapporter og informasjonsmateriell</a>
+                            </li>
+                            <li>
+                                <a href="/oversikter/helseregistre-og-andre-registre/">Helseregistre og andre registre</a>
+                            </li>
+                            <li>
+                                <a href="/hs/">Helseunders&#xF8;kelser</a>
+                            </li>
+                            <li>
+                                <a href="/sys/innhold-a-til-a/">Innhold A til &#xC5;</a>
+                            </li>
+                    </ul>
+                </nav>
+                <nav class="fhi-socials" aria-labelledby="footer-heading-updates">
+                    <h2 id="footer-heading-updates" class="header font-medium">
+                        Hold deg oppdatert
+                    </h2>
+
+                    <ul>
+                            <li>
+                                <a href="https://www.facebook.com/folkehelseinstituttet.no/" target="_blank" rel="noopener">
+                                    <span class="icon"><i class="fa-xl fa-brands fa-facebook-square fa-fw"></i></span>
+                                    <span class="label">Folkehelseinstituttet</span>
+                                    <span class="sr-only"> (Facebook)</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/folkehelseinstituttet/" target="_blank" rel="noopener">
+                                    <span class="icon"><i class="fa-brands fa-instagram fa-fw"></i></span>
+                                    <span class="label">Folkehelseinstituttet</span>
+                                    <span class="sr-only"> (Instagram)</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/folkehelse_ung/" target="_blank" rel="noopener">
+                                    <span class="icon"><i class="fa-brands fa-instagram fa-fw"></i></span>
+                                    <span class="label">Folkehelse Ung</span>
+                                    <span class="sr-only"> (Instagram)</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.youtube.com/c/folkehelseinstituttet" target="_blank" rel="noopener">
+                                    <span class="icon"><i class="fa-brands fa-youtube fa-fw"></i></span>
+                                    <span class="label">Folkehelseinstituttet</span>
+                                    <span class="sr-only"> (YouTube)</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://no.linkedin.com/company/norwegian-institute-of-public-health" target="_blank" rel="noopener">
+                                    <span class="icon"><i class="fa-brands fa-linkedin fa-fw"></i></span>
+                                    <span class="label">Folkehelseinstituttet</span>
+                                    <span class="sr-only"> (LinkedIn)</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://feed.pippa.io/public/shows/folkehelsepodden" target="_blank" rel="noopener">
+                                    <span class="icon"><i class="fa-light fa-podcast fa-fw"></i></span>
+                                    <span class="label">Folkehelsepodden</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.fhi.no/rss/nyheter/" target="_blank" rel="noopener">
+                                    <span class="icon"><i class="fa-light fa-rss fa-fw"></i></span>
+                                    <span class="label">RSS</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.fhi.no/sys/subscriptions/">
+                                    <span class="icon"><i class="fa-light fa-envelope fa-fw"></i></span>
+                                    <span class="label">Nyhetsvarsel</span>
+                                </a>
+                            </li>
+                    </ul>
+                </nav>
+        </div>
+    </div>
+
+        <div class="container">
+            <hr class="opacity-45 my-12"/>
+            <ul class="gap-y-5 md:gap-y-6 lg:gap-x-6 lg:flex-row lg:items-center w-full">
+                <li><img src="/assets/fhi/images/logo_large_norwegian_white.png" alt="Folkehelseinstituttet (FHI) logo" class="max-w-[200px]"/></li>
+                    <li><a href="/om/om-nettstedet/">Om fhi.no</a></li>
+                    <li><a href="/om/om-nettstedet/tilgjengelighetserklaring-for-fhi.no">Tilgjengelighetserkl&#xE6;ring</a></li>
+                    <li><a href="/om/fhi/personvernerklaring/">Personvernerkl&#xE6;ring</a></li>
+            </ul>
+        </div>
+</footer>
+
+    
+
+
+
+</div>
+<script type="module" src="/assets/fhi/js/index.CtQgW5mE.js"></script>
+
+
+</body>
+
+</html>

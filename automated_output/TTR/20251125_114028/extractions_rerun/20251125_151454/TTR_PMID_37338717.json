@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "37338717",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses cardiac amyloidosis, focusing on AL amyloidosis and its diagnostic challenges. It mentions transthyretin amyloidosis (ATTR) but does not provide specific genetic variant information for the TTR gene."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant information for the TTR gene."
+    ],
+    "notes": "The paper primarily focuses on AL amyloidosis and diagnostic pitfalls, with no specific TTR variants mentioned."
+  }
+}

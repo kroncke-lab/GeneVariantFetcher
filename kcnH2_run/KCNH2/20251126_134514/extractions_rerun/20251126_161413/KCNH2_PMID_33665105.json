@@ -1,0 +1,81 @@
+{
+  "paper_metadata": {
+    "pmid": "33665105",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper reports a pathogenic variant in the KCNH2 gene associated with long QT syndrome, including details on penetrance and individual cases."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1838C>T",
+      "protein_notation": "p.Thr613Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "1 female proband (newborn), 1 mother (30 years old), 1 sibling (newborn)",
+        "phenotype": "Long QT syndrome (LQTS) with episodes of ventricular tachycardia"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 2,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Proband",
+          "age_at_evaluation": 0,
+          "age_at_onset": null,
+          "age_at_diagnosis": 0,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Significant QTc prolongation, ventricular tachycardia",
+          "evidence_sentence": "Postnatal telemetry monitoring identified 3 brief episodes of ventricular tachycardia."
+        },
+        {
+          "individual_id": "Mother",
+          "age_at_evaluation": 30,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Benign clinical history, longest QTc measured at 456 ms",
+          "evidence_sentence": "The mother\u2019s initial clinical history and ECG were benign, with the longest QTc measured at 456 ms."
+        },
+        {
+          "individual_id": "Sibling",
+          "age_at_evaluation": 0,
+          "age_at_onset": null,
+          "age_at_diagnosis": 0,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "QTc significantly prolonged at 634 ms, intermittent 2:1 AV block",
+          "evidence_sentence": "Following delivery, telemetry revealed intermittent 2:1 AV block alternating with 1:1 AV conduction."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant alters an amino acid that localizes to the pore helix of the HERG channel, critical for ion permeation.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the proband and sibling.",
+      "population_frequency": "Absent from the gnomAD database.",
+      "evidence_level": "Strong evidence based on clinical presentation and literature.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mother showed signs of possible mosaicism with a lower than expected read ratio for the variant.",
+      "key_quotes": [
+        "This variant alters an amino acid that localizes to the pore helix of the HERG channel, a region critical for ion permeation.",
+        "The mosaic nature of the mother is apparent by the low number of mutant nucleotides at this site."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

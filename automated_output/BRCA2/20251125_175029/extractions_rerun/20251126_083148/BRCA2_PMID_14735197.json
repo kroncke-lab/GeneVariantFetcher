@@ -1,0 +1,80 @@
+{
+  "paper_metadata": {
+    "pmid": "14735197",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper describes a BRCA2 variant (542G>T, L105X) found in a kindred with breast and colorectal cancer, detailing penetrance data and individual patient information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.542G>T",
+      "protein_notation": "p.L105X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Female, ages 32 and 34",
+        "phenotype": "Breast cancer, endometrial cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "III: 22",
+          "age_at_evaluation": 34,
+          "age_at_onset": null,
+          "age_at_diagnosis": 34,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Multicentric infiltrating lobular carcinoma",
+          "evidence_sentence": "III: 22 developed a multicentric infiltrating lobular carcinoma."
+        },
+        {
+          "individual_id": "III: 25",
+          "age_at_evaluation": 32,
+          "age_at_onset": null,
+          "age_at_diagnosis": 32,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "LCIS with infiltrating lobular carcinoma and endometrial cancer",
+          "evidence_sentence": "Her sister (III: 25) had BC and endometrial cancer and carries the same mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to a truncated protein, indicating a loss of function.",
+        "assays": [
+          "Protein truncation test",
+          "cDNA sequencing"
+        ]
+      },
+      "segregation_data": "The BRCA2 mutation segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study suggests no increased susceptibility to colorectal tumors in BRCA2 mutation carriers.",
+      "key_quotes": [
+        "In this large BC/CRC kindred, MON1080, disease-causing truncating mutations are present in both MSH2 and BRCA2.",
+        "Her sister (III: 25) had BC and endometrial cancer and carries the same mutation."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Mutation and haplotype results in family MON1080",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the BRCA2 variant was successfully extracted."
+  }
+}

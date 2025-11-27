@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "37760409",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2477G>A",
+      "protein_notation": "p.Gly826*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "47-year-old female",
+        "phenotype": "cervix squamous cell carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 47,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "cervix squamous cell carcinoma",
+          "evidence_sentence": "The E900* mutation was detected in a 47-year-old female with cervix squamous cell carcinoma."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to complete inactivation of the protein product.",
+        "assays": []
+      },
+      "segregation_data": "Homozygous-truncating mutation.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation deletes the RAD51-binding domains, the DNA-binding domains, and the nuclear localization sequences.",
+      "key_quotes": [
+        "The BRCA2-truncating mutation is in the N-terminus and deletes the RAD51-binding domains, the DNA-binding domains, and the nuclear localization sequences, in essence leading to complete inactivation of the protein product."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was reported in the paper."
+  }
+}

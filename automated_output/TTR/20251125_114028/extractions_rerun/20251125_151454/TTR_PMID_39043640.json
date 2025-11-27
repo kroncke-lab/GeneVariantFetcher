@@ -1,0 +1,65 @@
+{
+  "paper_metadata": {
+    "pmid": "39043640",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the V142I variant in the TTR gene, its association with transthyretin levels, and the implications for heart failure and mortality."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.424G>A",
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 39,
+        "demographics": "Mean age 51 years, 59% female",
+        "phenotype": "Lower transthyretin levels compared to non-carriers"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 39,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Carriers of the V142I variant have lower TTR levels, which are associated with increased risk of heart failure and mortality.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study emphasizes the clinical significance of the V142I variant in relation to TTR levels and cardiovascular outcomes.",
+      "key_quotes": [
+        "V142I carriers [n\u2009=\u200939, mean: \u22120.5 (0.3)] had lower adjusted TTR levels compared with the non-carriers [n\u2009=\u200935,167, mean: \u22120.1 (0.3)] (p\u2009<\u20090.001)."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Baseline characteristics stratified by V142I TTR variant carrier status",
+      "variants_extracted": 1
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Association of clinical correlates with transthyretin levels",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 3",
+      "table_caption": "Association of study outcomes with transthyretin levels",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on the V142I variant in the TTR gene."
+  }
+}

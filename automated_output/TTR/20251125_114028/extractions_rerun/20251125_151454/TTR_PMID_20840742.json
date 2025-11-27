@@ -1,0 +1,214 @@
+{
+  "paper_metadata": {
+    "pmid": "20840742",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses variants in the TTR gene, particularly focusing on the V30M mutation and its associated penetrance in Swedish carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.148G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 130,
+        "demographics": "Swedish V30M carriers, including 32 early onset, 30 late onset, and 68 asymptomatic carriers",
+        "phenotype": "Familial amyloidosis with polyneuropathy (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 130,
+        "affected_count": 32,
+        "unaffected_count": 68,
+        "uncertain_count": 30,
+        "penetrance_percentage": 24.6,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "0-40 years",
+            "penetrance_percentage": 5.0,
+            "carriers_in_range": 63,
+            "affected_in_range": 3
+          },
+          {
+            "age_range": "40-50 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          },
+          {
+            "age_range": "50-60 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          },
+          {
+            "age_range": "60+ years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 60,
+          "age_at_onset": 32,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "early onset FAP",
+          "evidence_sentence": "In the early onset group (before age 40, n = 32), the mean age at onset was 32.0 \u00b1 5.0 years."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 60,
+          "age_at_onset": 78,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "late onset FAP",
+          "evidence_sentence": "the late-onset group (after age 50, n = 30) presented an average onset of 78.6 \u00b1 6.1 years."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 60,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic carrier",
+          "evidence_sentence": "68 asymptomatic carriers were included."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study identified SNPs that may influence the phenotype of the disease.",
+        "assays": [
+          "genotyping with mutation specific MGB probes",
+          "PCR and endpoint analysis"
+        ]
+      },
+      "segregation_data": "No difference in disease penetrance has been noted between homozygous and heterozygous V30M carriers.",
+      "population_frequency": "1.5% in northern Sweden",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the low penetrance and high age at onset of the disease in Swedish V30M carriers.",
+      "key_quotes": [
+        "Swedish V30M carriers display later age at onset and lower penetrance compared to other populations.",
+        "No difference in disease penetrance has been noted between homozygous and heterozygous V30M carriers."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.-136-1097_-1096delCA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 130,
+        "demographics": "Swedish V30M carriers",
+        "phenotype": "Familial amyloidosis with polyneuropathy (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Associated with V30M mutation.",
+        "assays": []
+      },
+      "segregation_data": "Confirmed presence in all heterozygous V30M carriers.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Significant association with V30M.",
+      "key_quotes": [
+        "The CA10 allele was present on at least one chromosome in all heterozygous V30M carriers."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.-136-607A>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 130,
+        "demographics": "Swedish V30M carriers",
+        "phenotype": "Familial amyloidosis with polyneuropathy (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Associated with V30M mutation.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Significant association with V30M.",
+      "key_quotes": [
+        "In addition, Swedish V30M carriers showed a higher allele frequency of the A allele compared to the controls."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.*261C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 130,
+        "demographics": "Swedish V30M carriers",
+        "phenotype": "Familial amyloidosis with polyneuropathy (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Potential miRNA binding site.",
+        "assays": []
+      },
+      "segregation_data": "Confirmed presence in all Swedish V30M carriers.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Significant association with V30M.",
+      "key_quotes": [
+        "The T allele of rs62093482 can be assigned to the V30M haplotype."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "SNPs in the TTR gene and the surrounding regions with polymorphisms present in the analysed Swedish samples.",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding TTR variants and penetrance were extracted."
+  }
+}

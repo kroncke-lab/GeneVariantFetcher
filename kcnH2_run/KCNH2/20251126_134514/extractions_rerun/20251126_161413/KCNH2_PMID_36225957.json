@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "36225957",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant c.361del associated with Long QT Syndrome type 2."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.361del",
+      "protein_notation": null,
+      "genomic_position": "7q36",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Long QT Syndrome type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "orgasm induced torsades de pointes",
+          "evidence_sentence": "Despite the low occurrence of sex-related arrhythmias or sudden cardiac death in patients with LQTS, orgasm induced torsades de pointes has been reported in a Long QT Syndrome type 2 (LQT2) patient with a mutation (c.361del) in the KCNH2 gene (chromosome 7q36)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with increased risk of torsades de pointes during sexual activity.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is linked to a specific clinical presentation of LQT2.",
+      "key_quotes": [
+        "Despite the low occurrence of sex-related arrhythmias or sudden cardiac death in patients with LQTS, orgasm induced torsades de pointes has been reported in a Long QT Syndrome type 2 (LQT2) patient with a mutation (c.361del) in the KCNH2 gene (chromosome 7q36)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in KCNH2 was reported in the paper."
+  }
+}

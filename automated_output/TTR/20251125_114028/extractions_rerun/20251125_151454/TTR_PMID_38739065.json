@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "38739065",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses variants in the TTR gene, specifically focusing on the p.(V142I) variant, its clinical significance, and penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.(V142I)",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 292,
+        "demographics": "Mean age 76.5 \u00b1 8.4 years, 88.0% male, 13.6% p.(V142I) hATTR-CA",
+        "phenotype": "Transthyretin cardiac amyloidosis (ATTR-CA)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 292,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The p.(V142I) variant is associated with hereditary transthyretin cardiac amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study population included a significant number of patients with the p.(V142I) variant.",
+      "key_quotes": [
+        "292 (13.6%) had p.(V142I) hATTR-CA."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper primarily focused on the TTR gene and its variants."
+  }
+}

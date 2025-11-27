@@ -1,0 +1,85 @@
+{
+  "paper_metadata": {
+    "pmid": "37993462",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "Aged 51-56, 2 males and 1 female",
+        "phenotype": "Severe cardiomyopathy, carpal tunnel syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 3,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient 1",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": 56,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Diagnosed with acute heart failure, no additional symptoms noticed.",
+          "evidence_sentence": "The first patient (TTR V20I) is a man who was diagnosed at the age of 56."
+        },
+        {
+          "individual_id": "Patient 2",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": 56,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Suffered from carpal tunnel syndrome and severe cardiomyopathy.",
+          "evidence_sentence": "The second patient is a woman (TTR G47E) who was diagnosed at the age of 56 years."
+        },
+        {
+          "individual_id": "Patient 3",
+          "age_at_evaluation": 51,
+          "age_at_onset": null,
+          "age_at_diagnosis": 51,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Showed carpal tunnel syndrome and received a heart transplantation.",
+          "evidence_sentence": "The third patient is a man (TTR V122I) who was diagnosed at the age of 51 years."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutations do not necessarily lead to different fibril morphologies.",
+        "assays": [
+          "Cryo-electron microscopy",
+          "TEM analysis",
+          "Denaturing protein gel electrophoresis"
+        ]
+      },
+      "segregation_data": "The mutations segregate with disease in the affected patients.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All patients expressed both mutant and wild type TTR.",
+      "key_quotes": [
+        "The patients varied also in the exact clinical and pathological disease manifestations, although all patients showed severe cardiomyopathy.",
+        "None of the patients received anti-amyloid medication until heart transplantation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "paper_metadata": {
+    "pmid": "31020184",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR V122I variant, including penetrance data from a brother-sister pair."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Brother: 61 years old, male, African-American; Sister: 65 years old, female, African-American",
+        "phenotype": "Brother: cardiac amyloidosis leading to heart failure; Sister: symptomatic palpitations, elevated troponin, cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1 (Brother)",
+          "age_at_evaluation": 61,
+          "age_at_onset": 58,
+          "age_at_diagnosis": 60,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac amyloidosis, heart failure, multi-organ failure.",
+          "evidence_sentence": "The brother... was found to be heterozygous for the transthyretin V122I genotype."
+        },
+        {
+          "individual_id": "P2 (Sister)",
+          "age_at_evaluation": 65,
+          "age_at_onset": null,
+          "age_at_diagnosis": 65,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Symptomatic palpitations, elevated troponin, cardiac MRI suggestive of cardiac amyloidosis.",
+          "evidence_sentence": "Genetic tests reveal homozygous V122I TTR genotype."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I variant leads to misfolding of the TTR protein, contributing to amyloid cardiomyopathy.",
+        "assays": [
+          "Cardiac MRI",
+          "Endomyocardial biopsy",
+          "Mass spectroscopy"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the family, as the brother is affected and the sister is homozygous but has less severe symptoms.",
+      "population_frequency": "Approximately 4% of the African-American population carry the V122I variant.",
+      "evidence_level": "High",
+      "source_location": "Main Text, Case Summary and Patient Descriptions",
+      "additional_notes": "The brother had a more severe clinical course compared to the sister despite both carrying the V122I variant.",
+      "key_quotes": [
+        "The sister in question was found to be homozygous for the transthyretin (TTR) V122I mutation.",
+        "Genotyping studies reveal heterozygous V122I genotype in the brother."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR V122I variant was extracted from the main text."
+  }
+}

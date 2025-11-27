@@ -1,0 +1,110 @@
+{
+  "paper_metadata": {
+    "pmid": "31631483",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data from affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7008-2A>C",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "somatic mutation",
+      "patients": {
+        "count": 1,
+        "demographics": "81-year-old male",
+        "phenotype": "metastatic adenocarcinoma of the prostate with neuroendocrine differentiation"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 81,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "metastatic adenocarcinoma of the prostate with neuroendocrine differentiation",
+          "evidence_sentence": "An 81\u2010year\u2010old male presented with prostatic adenocarcinoma with neuroendocrine differentiation accompanied by metastatic lung nodule and brain metastases."
+        }
+      ],
+      "functional_data": {
+        "summary": "The somatic mutation is associated with aggressive forms of prostate cancer.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "unknown",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is a somatic mutation identified in the patient's tumor.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.E2877*",
+      "genomic_position": "chr13:g.32945234G>T",
+      "clinical_significance": "germline mutation",
+      "patients": {
+        "count": 2,
+        "demographics": "81-year-old male and his 51-year-old son",
+        "phenotype": "prostate cancer in the father and breast cancer in the son"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 81,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "metastatic adenocarcinoma of the prostate with neuroendocrine differentiation",
+          "evidence_sentence": "An 81\u2010year\u2010old male presented with prostatic adenocarcinoma with neuroendocrine differentiation accompanied by metastatic lung nodule and brain metastases."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 51,
+          "age_at_onset": 49,
+          "age_at_diagnosis": 49,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The patient's son had been diagnosed with breast cancer 2.5 years ago and was found to have the same germline BRCA2 mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The germline mutation is associated with increased cancer risk.",
+        "assays": []
+      },
+      "segregation_data": "The germline mutation segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "unknown",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation was observed in the ClinVar allele ID 67304.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

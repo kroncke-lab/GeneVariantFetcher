@@ -1,0 +1,90 @@
+{
+  "paper_metadata": {
+    "pmid": "31821430",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR V122I variant, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 9694,
+        "demographics": "Individuals of African or Hispanic/Latino ancestry",
+        "phenotype": "Heart failure"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Heart failure",
+          "evidence_sentence": "There was a significant association of the transthyretin V122I genetic variant with heart failure."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Heart failure",
+          "evidence_sentence": "There was a significant association of the transthyretin V122I genetic variant with heart failure."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No heart failure symptoms",
+          "evidence_sentence": "There was a significant association of the transthyretin V122I genetic variant with heart failure."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No heart failure symptoms",
+          "evidence_sentence": "There was a significant association of the transthyretin V122I genetic variant with heart failure."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I variant is associated with increased risk of heart failure.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Allele frequency not specified.",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included a large cohort of individuals from diverse ancestries.",
+      "key_quotes": [
+        "There was a significant association of the transthyretin V122I genetic variant with heart failure."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data was primarily from the main text, with no additional tables providing variant information."
+  }
+}

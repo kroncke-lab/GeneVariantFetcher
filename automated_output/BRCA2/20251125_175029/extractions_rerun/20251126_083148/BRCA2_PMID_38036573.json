@@ -1,0 +1,95 @@
+{
+  "paper_metadata": {
+    "pmid": "38036573",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant 999del5, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.771_775delTCAAA",
+      "protein_notation": "p.Asn257LysfsTer17",
+      "genomic_position": "rs80359671",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 160,
+        "demographics": "Women diagnosed with breast cancer in Iceland from 1980-2004",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 160,
+        "affected_count": 72,
+        "unaffected_count": 88,
+        "uncertain_count": null,
+        "penetrance_percentage": 45.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "\u226440 years",
+            "penetrance_percentage": 55.2,
+            "carriers_in_range": 33,
+            "affected_in_range": 18
+          },
+          {
+            "age_range": ">40 years",
+            "penetrance_percentage": 27.0,
+            "carriers_in_range": 127,
+            "affected_in_range": 54
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 47,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Deaths, no. (% of all cases) 114 (71.3) among BRCA2 carriers."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 36,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Breast cancer, diagnosed at a young age",
+          "evidence_sentence": "Young cases had the lowest proportion of ER+ tumors (60.7%) but the highest proportion of HER2-positive tumors (27.9%)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The BRCA2 999del5 variant is associated with increased risk of breast cancer.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families, as indicated by the higher prevalence among breast cancer patients.",
+      "population_frequency": "0.8% in the general population, 7-8% among breast cancer patients in Iceland.",
+      "evidence_level": "Strong evidence based on population studies and clinical outcomes.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is a founder mutation in the Icelandic population.",
+      "key_quotes": [
+        "The prevalence of the BRCA2 mutation among tested patients <=40 years of age was 21.0%, but it was 5.4% among women diagnosed >40 years of age.",
+        "For ER+ cancer, breast cancer-specific 15-year survival was 49.7% among BRCA2-carriers."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical characteristics and treatment of patients.",
+      "variants_extracted": 1
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "BRCA2 carriers and young non-carrier patients compared with older non-carrier patients stratified by ER status.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from both the main text and tables."
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "paper_metadata": {
+    "pmid": "39100516",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Leu111Glu, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu131Gln",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "32-year-old Japanese male",
+        "phenotype": "Hereditary transthyretin amyloidosis with hydrocephalus"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 32,
+          "age_at_onset": 27,
+          "age_at_diagnosis": 32,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Hydrocephalus and cardiac amyloidosis",
+          "evidence_sentence": "We diagnosed the patient with hereditary transthyretin amyloidosis."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Hydrocephalus",
+          "evidence_sentence": "The patient's sibling was diagnosed with ATTRv amyloidosis owing to vitreous opacity and died from hydrocephalus in his 30s."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Leu131Gln variant is suggested to be amyloidogenic based on the spectral count ratio.",
+        "assays": [
+          "Laser microdissection",
+          "Liquid chromatography-tandem mass spectrometry"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": "Not reported in variant databases to date.",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the first case report of the transthyretin Leu111Glu variant.",
+      "key_quotes": [
+        "This mutation may result in a predominantly hydrocephalus phenotype.",
+        "Genetic analysis confirmed a novel missense variant, Leu111Glu, on the transthyretin gene."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

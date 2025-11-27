@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "38911588",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the p.Ile88Leu variant in the TTR gene, focusing on its clinical significance, patient demographics, and treatment outcomes."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ile88Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 22,
+        "demographics": "Median age 73 years (IQR: 9), age at diagnosis 72 years (IQR: 10)",
+        "phenotype": "Hereditary transthyretin amyloidosis with polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 22,
+        "affected_count": 22,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 73,
+          "age_at_onset": null,
+          "age_at_diagnosis": 72,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Polyneuropathy FAP stage 1 or 2",
+          "evidence_sentence": "A total of 22 patients were included in the study; the median age was 73 years (IQR: 9), the age at diagnosis was 72 years (IQR: 10), and the disease duration was 1.6 years (IQR: 2.3)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The p.Ile88Leu variant is associated with a high mortality rate and significant neurological symptoms.",
+        "assays": []
+      },
+      "segregation_data": "The variant is associated with hereditary transthyretin amyloidosis.",
+      "population_frequency": "Not specified",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The study provides real-world evidence on the effectiveness of patisiran in patients with this variant.",
+      "key_quotes": [
+        "The most common variant in patients and asymptomatic carriers is p.Ile88Leu.",
+        "We observed stability of all considered neurological and cardiological parameters at 9\u201312 months after the beginning of patisiran treatment."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on a specific variant in the TTR gene."
+  }
+}

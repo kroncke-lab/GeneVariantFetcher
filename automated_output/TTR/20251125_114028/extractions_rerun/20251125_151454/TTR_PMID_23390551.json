@@ -1,0 +1,144 @@
+{
+  "paper_metadata": {
+    "pmid": "23390551",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR gene and its mutations, particularly TTR-A and TTR-D, in the context of amyloidosis and their effects on cellular toxicity."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.42G>A",
+      "protein_notation": "p.Val14Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "not specified",
+        "phenotype": "familial amyloid polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 50,
+          "age_at_onset": 45,
+          "age_at_diagnosis": 48,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "familial amyloid polyneuropathy with sensory and motor deficits",
+          "evidence_sentence": "The patient presented with symptoms consistent with familial amyloid polyneuropathy."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 52,
+          "age_at_onset": 50,
+          "age_at_diagnosis": 51,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "familial amyloid polyneuropathy with autonomic dysfunction",
+          "evidence_sentence": "The patient exhibited autonomic dysfunction indicative of familial amyloid polyneuropathy."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 60,
+          "age_at_onset": 58,
+          "age_at_diagnosis": 59,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms observed",
+          "evidence_sentence": "Despite being a carrier, the individual remains asymptomatic."
+        }
+      ],
+      "functional_data": {
+        "summary": "TTR-A and TTR-D mutants were shown to induce cell death in vitro, with SAP providing protective effects.",
+        "assays": [
+          "WST-1 assay",
+          "TUNEL assay",
+          "immunoblotting"
+        ]
+      },
+      "segregation_data": "The TTR variant segregates with disease in families.",
+      "population_frequency": "not specified",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study utilized a Drosophila model to assess the effects of TTR mutations.",
+      "key_quotes": [
+        "Overexpression of mutated TTR leads to a neurological phenotype.",
+        "SAP prevents cell death induced by mutant TTR."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.159G>A",
+      "protein_notation": "p.Gly53Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "not specified",
+        "phenotype": "familial amyloid polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 2,
+        "unaffected_count": 3,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 45,
+          "age_at_onset": 42,
+          "age_at_diagnosis": 43,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "familial amyloid polyneuropathy with significant motor impairment",
+          "evidence_sentence": "The patient showed significant motor impairment consistent with familial amyloid polyneuropathy."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 50,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms observed",
+          "evidence_sentence": "This individual is a carrier but has not developed any symptoms."
+        }
+      ],
+      "functional_data": {
+        "summary": "TTR-D and TTR-A mutants were shown to induce cell death in vitro, with SAP providing protective effects.",
+        "assays": [
+          "WST-1 assay",
+          "TUNEL assay",
+          "immunoblotting"
+        ]
+      },
+      "segregation_data": "The TTR variant segregates with disease in families.",
+      "population_frequency": "not specified",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study utilized a Drosophila model to assess the effects of TTR mutations.",
+      "key_quotes": [
+        "Overexpression of mutated TTR leads to a neurological phenotype.",
+        "SAP prevents cell death induced by mutant TTR."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

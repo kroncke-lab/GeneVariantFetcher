@@ -1,0 +1,117 @@
+{
+  "paper_metadata": {
+    "pmid": "32099950",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene with detailed penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.[7579delG:p.Val2527*]",
+      "protein_notation": "p.Val2527*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Ethiopian, female",
+        "phenotype": "primary amenorrhea, pubertal delay, short stature, caf\u00e9 au lait spots, microcephaly"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Sister 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "primary amenorrhea, pubertal delay, short stature, caf\u00e9 au lait spots, microcephaly",
+          "evidence_sentence": "Two sisters born to nonconsanguineous Ethiopian parents were diagnosed with POI, presenting primary amenorrhea, pubertal delay, short stature, caf\u00e9 au lait spots, microcephaly."
+        },
+        {
+          "individual_id": "Sister 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "primary amenorrhea, pubertal delay, short stature, caf\u00e9 au lait spots, microcephaly",
+          "evidence_sentence": "Two sisters born to nonconsanguineous Ethiopian parents were diagnosed with POI, presenting primary amenorrhea, pubertal delay, short stature, caf\u00e9 au lait spots, microcephaly."
+        }
+      ],
+      "functional_data": {
+        "summary": "Impaired response to DNA damage demonstrated by chromosomal breakage in peripheral lymphocytes.",
+        "assays": [
+          "chromosomal breakage analysis",
+          "RAD51 recruitment assays"
+        ]
+      },
+      "segregation_data": "The mother carried a monoallelic BRCA2 mutation (c.7579delG) and was diagnosed with ovarian cancer stage III.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The sisters exhibited a range of clinical features associated with BRCA2 mutations.",
+      "key_quotes": [
+        "Two sisters born to nonconsanguineous Ethiopian parents were diagnosed with POI, presenting primary amenorrhea, pubertal delay, short stature, caf\u00e9 au lait spots, microcephaly."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.[68-1G>C];[4440T>G:p.Tyr1480*]",
+      "protein_notation": "p.Tyr1480*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Chinese, female",
+        "phenotype": "primary amenorrhea"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "primary amenorrhea",
+          "evidence_sentence": "One with familial and one with sporadic POI, were reported to harbor compound heterozygous variants in BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "No hematologic abnormalities or tumors were identified in this case.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 5",
+      "additional_notes": "The patient presented primary amenorrhea without hematologic abnormalities.",
+      "key_quotes": [
+        "One with familial and one with sporadic POI, were reported to harbor compound heterozygous variants in BRCA2."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding BRCA2 variants were extracted successfully."
+  }
+}

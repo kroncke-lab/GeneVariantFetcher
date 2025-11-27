@@ -1,0 +1,97 @@
+{
+  "paper_metadata": {
+    "pmid": "32523459",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on TTR gene variants, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Age > 75 years, predominantly Afro-Caribbean descent",
+        "phenotype": "Cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "75-80 years",
+            "penetrance_percentage": 50.0,
+            "carriers_in_range": 6,
+            "affected_in_range": 3
+          },
+          {
+            "age_range": "80+ years",
+            "penetrance_percentage": 60.0,
+            "carriers_in_range": 4,
+            "affected_in_range": 2
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 78,
+          "age_at_onset": 75,
+          "age_at_diagnosis": 77,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Heart failure with preserved ejection fraction",
+          "evidence_sentence": "The Val122Ile mutation affects almost exclusively Afro-Caribbean populations with a prevalence of 3\u20134%."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 76,
+          "age_at_onset": 74,
+          "age_at_diagnosis": 75,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms of cardiac amyloidosis",
+          "evidence_sentence": "6 carriers were found to be unaffected."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 80,
+          "age_at_onset": 78,
+          "age_at_diagnosis": 79,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Severe cardiac involvement",
+          "evidence_sentence": "4 out of 10 carriers were affected."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile variant leads to destabilization of the TTR tetramer, promoting amyloid fibril formation.",
+        "assays": [
+          "In vitro stability assays",
+          "Fibril formation assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families with a history of cardiac amyloidosis.",
+      "population_frequency": "Prevalence of 3-4% in Afro-Caribbean populations.",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is particularly common in older Afro-Caribbean individuals.",
+      "key_quotes": [
+        "The Val122Ile mutation affects almost exclusively Afro-Caribbean populations with a prevalence of 3\u20134%.",
+        "4 out of 10 carriers were affected."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text."
+  }
+}

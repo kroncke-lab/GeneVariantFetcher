@@ -1,0 +1,164 @@
+{
+  "paper_metadata": {
+    "pmid": "23451180",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.475+1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Caused the loss of exon 5.",
+        "assays": [
+          "RT-PCR",
+          "gel electrophoresis",
+          "sequencing"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was characterized for its effect on splicing.",
+      "key_quotes": [
+        "BRCA2 c.475+1G>A resulted in the loss of exon 5."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7008\u22122A>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Gave rise to 3 aberrant transcripts, including one lacking the whole exon 14.",
+        "assays": [
+          "RT-PCR",
+          "gel electrophoresis",
+          "sequencing"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was characterized for its effect on splicing.",
+      "key_quotes": [
+        "The BRCA2 c.7008\u22122A>T variant was observed to give rise to 3 aberrant transcripts, including one lacking the whole exon 14."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8755\u22121G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Led to the activation of a cryptic splice site in exon 23.",
+        "assays": [
+          "RT-PCR",
+          "gel electrophoresis",
+          "sequencing"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was characterized for its effect on splicing.",
+      "key_quotes": [
+        "BRCA2 c.8755\u22121G>A led to the activation of the same cryptic splice site in exon 23."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8954\u22121_8955delGTTinsAA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Led to the activation of a cryptic splice site in exon 23.",
+        "assays": [
+          "RT-PCR",
+          "gel electrophoresis",
+          "sequencing"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was characterized for its effect on splicing.",
+      "key_quotes": [
+        "BRCA2 c.8954\u22121_8955delGTTinsAA led to the activation of the same cryptic splice site in exon 23."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "paper_metadata": {
+    "pmid": "37381065",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a case of peripheral neuropathy due to amyloidosis linked to a TTR variant from a liver transplant donor."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349T>C",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "74 years old, male, White British",
+        "phenotype": "Peripheral neuropathy due to ATTR amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 74,
+          "age_at_onset": 74,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Developed neuropathic symptoms including numbness and paraesthesia in feet, progressing to sensory and motor involvement.",
+          "evidence_sentence": "He first noticed neuropathic symptoms 8 years post-transplant (at age 74), alongside some weight loss."
+        }
+      ],
+      "functional_data": {
+        "summary": "Presence of ATTR amyloid deposits confirmed by fat aspirate.",
+        "assays": [
+          "fat aspirate biopsy",
+          "N-terminal pro-Brain Natriuretic Peptide (NT-proBNP) testing",
+          "nerve conduction studies"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Case presentation, paragraph 2",
+      "additional_notes": "The variant is the most common form associated with familial amyloidosis.",
+      "key_quotes": [
+        "The donor of the liver had the most common form of the TTR mutation (Val30Met).",
+        "The presence of proven ATTR amyloid deposition elsewhere in the recipient is consistent with the most likely explanation of the presentation\u2014as ATTR amyloid neuropathy."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information regarding the TTR variant."
+  }
+}

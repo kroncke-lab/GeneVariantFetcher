@@ -1,0 +1,110 @@
+{
+  "paper_metadata": {
+    "pmid": "35747521",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 6,
+        "demographics": "Mean age 61.9 years; 5 males, 1 female",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTRv)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 6,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 61.9,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin amyloidosis",
+          "evidence_sentence": "Among the 6 ATTRv patients, the TTR gene mutations were Val122Ile in 3 patients, Ser77Phe in 1, Ser77Tyr in 1, and Glu89Lys in 1."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 61.9,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin amyloidosis",
+          "evidence_sentence": "Among the 6 ATTRv patients, the TTR gene mutations were Val122Ile in 3 patients, Ser77Phe in 1, Ser77Tyr in 1, and Glu89Lys in 1."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 61.9,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin amyloidosis",
+          "evidence_sentence": "Among the 6 ATTRv patients, the TTR gene mutations were Val122Ile in 3 patients, Ser77Phe in 1, Ser77Tyr in 1, and Glu89Lys in 1."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 61.9,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin amyloidosis",
+          "evidence_sentence": "Among the 6 ATTRv patients, the TTR gene mutations were Val122Ile in 3 patients, Ser77Phe in 1, Ser77Tyr in 1, and Glu89Lys in 1."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 61.9,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin amyloidosis",
+          "evidence_sentence": "Among the 6 ATTRv patients, the TTR gene mutations were Val122Ile in 3 patients, Ser77Phe in 1, Ser77Tyr in 1, and Glu89Lys in 1."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 61.9,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin amyloidosis",
+          "evidence_sentence": "Among the 6 ATTRv patients, the TTR gene mutations were Val122Ile in 3 patients, Ser77Phe in 1, Ser77Tyr in 1, and Glu89Lys in 1."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR gene mutations are associated with hereditary transthyretin amyloidosis, leading to misfolding and aggregation of the TTR protein.",
+        "assays": []
+      },
+      "segregation_data": "The variants segregate with disease in families, as they are associated with hereditary conditions.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study indicates that all 6 patients with ATTRv had heart-liver transplants.",
+      "key_quotes": [
+        "Among the 6 ATTRv patients, the TTR gene mutations were Val122Ile in 3 patients, Ser77Phe in 1, Ser77Tyr in 1, and Glu89Lys in 1."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the TTR gene variants were extracted successfully."
+  }
+}

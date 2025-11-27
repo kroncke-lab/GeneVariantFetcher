@@ -1,0 +1,75 @@
+{
+  "paper_metadata": {
+    "pmid": "32392813",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant p.L552S, including penetrance data for asymptomatic and symptomatic carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1655T>C",
+      "protein_notation": "p.L552S",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "1 asymptomatic 19-year-old male, 1 symptomatic 44-year-old female",
+        "phenotype": "LQT2 syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 19,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic carrier",
+          "evidence_sentence": "One of the mutation carriers (1) is an asymptomatic 19-year-old male."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 44,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic carrier",
+          "evidence_sentence": "The other mutation carrier (2) is a symptomatic 44-year-old female."
+        }
+      ],
+      "functional_data": {
+        "summary": "The p.L552S mutation was studied in hiPSC-CMs, showing differences in calcium dynamics and arrhythmia susceptibility.",
+        "assays": [
+          "Ca2+ imaging",
+          "voltage clamp",
+          "microelectrode array (MEA) experiments"
+        ]
+      },
+      "segregation_data": "The p.L552S mutation segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the functional differences between asymptomatic and symptomatic carriers of the p.L552S mutation.",
+      "key_quotes": [
+        "Our results highlighted that hiPSC-CM models can reveal phenotypical differences of mutation carriers with different clinical findings.",
+        "The p.L552S mutation from our study was a missense mutation located on the transmembrane \u03b1-helix of segment S5 forming the pore of the \u03b1-subunits of the HERG channel."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant p.L552S was successfully extracted."
+  }
+}

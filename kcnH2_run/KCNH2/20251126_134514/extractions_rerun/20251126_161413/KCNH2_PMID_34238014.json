@@ -1,0 +1,28 @@
+{
+  "paper_metadata": {
+    "pmid": "34238014",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses risk prediction in women with congenital long QT syndrome, focusing on the KCNH2 gene. However, no specific genetic variants in KCNH2 are detailed in the text or tables."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical Characteristic of the Study Population by Genotype and Mutation Location",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Female-Specific Information Related to Sex Hormones",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific KCNH2 variant data."
+    ],
+    "notes": "The paper discusses the KCNH2 gene in the context of LQT2 but does not specify individual variants or penetrance data."
+  }
+}

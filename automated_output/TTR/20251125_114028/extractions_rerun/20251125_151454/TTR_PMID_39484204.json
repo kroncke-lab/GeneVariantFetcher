@@ -1,0 +1,90 @@
+{
+  "paper_metadata": {
+    "pmid": "39484204",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.368G>A",
+      "protein_notation": "p.Arg123His",
+      "genomic_position": "Chr18: 29178562, rs148538950",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "Age: 63 years, Sex: Female",
+        "phenotype": "hereditary TTR amyloidosis (hATTR)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 1,
+        "unaffected_count": 3,
+        "uncertain_count": null,
+        "penetrance_percentage": 25.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 63,
+          "age_at_onset": 58,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "progressive weakness in the distal parts of lower extremities, axonal sensorimotor polyneuropathy",
+          "evidence_sentence": "Genetic testing of the patient, her older sister, son and daughter confirmed a pathogenic variant Chr18: 29178562, rs148538950, NM_000371.3:c.G368A:p. Arg123His in exon 4 of the transthyretin gene in a heterozygous state, consistent with hereditary TTR amyloidosis (hATTR)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "Family members with an identified mutation are shown in red."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "Family members with an identified mutation are shown in red."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "Family members with an identified mutation are shown in red."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with hereditary TTR amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Clinical Examples section",
+      "additional_notes": "The variant was confirmed through genetic testing in multiple family members.",
+      "key_quotes": [
+        "Genetic testing of the patient, her older sister, son and daughter confirmed a pathogenic variant Chr18: 29178562, rs148538950, NM_000371.3:c.G368A:p. Arg123His in exon 4 of the transthyretin gene in a heterozygous state, consistent with hereditary TTR amyloidosis (hATTR)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the TTR gene was extracted successfully."
+  }
+}

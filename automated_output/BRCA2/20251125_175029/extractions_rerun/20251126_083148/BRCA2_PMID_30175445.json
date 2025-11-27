@@ -1,0 +1,50 @@
+{
+  "paper_metadata": {
+    "pmid": "30175445",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from a study on breast cancer patients."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 42,
+        "demographics": "Unselected breast cancer patients, age range 25.1\u201379.9 years",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 42,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Among the 42 BRCA2 carriers, there were 33 unique BRCA2 pathogenic variants (18 frameshift deletions, 3 frameshift insertions, 9 truncating and 3 splice sites).",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "More than half of all BRCA2 carriers (24/42, 57.1%) had a pathogenic variant on exon 11.",
+      "key_quotes": [
+        "Among the 42 BRCA2 carriers, there were 33 unique BRCA2 pathogenic variants (18 frameshift deletions, 3 frameshift insertions, 9 truncating and 3 splice sites).",
+        "Over half of all BRCA2 carriers (24/42, 57.1%) had a pathogenic variant on exon 11."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only BRCA2 variants were extracted as per instructions."
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "paper_metadata": {
+    "pmid": "35237660",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Portuguese population, age not specified",
+        "phenotype": "Familial Amyloid Polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Familial Amyloid Polyneuropathy",
+          "evidence_sentence": "In 1978 the Portuguese group led by Pedro Costa demonstrated that Familial Amyloid Polyneuropathy was caused by the protein transthyretin through a classical mechanism of autosomal dominant transmission."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V30M mutation is known to destabilize the TTR tetramer, leading to amyloid formation.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on familial segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The V30M mutation is one of the most studied variants in TTR amyloidosis.",
+      "key_quotes": [
+        "In 1978 the Portuguese group led by Pedro Costa demonstrated that Familial Amyloid Polyneuropathy was caused by the protein transthyretin."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.356C>T",
+      "protein_notation": "p.Tyr119Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Portuguese population, age not specified",
+        "phenotype": "Protective against amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms of amyloidosis despite carrying the V30M mutation.",
+          "evidence_sentence": "Demonstration that the presence of protomers with T119M has a stabilizing effect on the tetramer is a strong evidence in favor of the hypothesis that misfolding is at the basis of the disease."
+        }
+      ],
+      "functional_data": {
+        "summary": "The T119M mutation stabilizes the TTR tetramer, providing protection against amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on protective effect observed.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The T119M mutation is known to provide a protective effect against the amyloidogenic V30M mutation.",
+      "key_quotes": [
+        "Demonstration that the presence of protomers with T119M has a stabilizing effect on the tetramer is a strong evidence in favor of the hypothesis that misfolding is at the basis of the disease."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for TTR variants were extracted successfully."
+  }
+}

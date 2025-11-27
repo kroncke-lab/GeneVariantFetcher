@@ -1,0 +1,28 @@
+{
+  "paper_metadata": {
+    "pmid": "29492181",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the frequency of BRCA1 and BRCA2 founder variants in ovarian cancer patients in South-East Poland. No BRCA2 variants were observed in the study cohort."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "The frequency of causative founder variants in unselected series of ovarian cancer patients",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Prevalence of BRCA1 causative variants in ovarian cancer by age of onset and family history",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No BRCA2 variants were reported in the study cohort."
+    ],
+    "notes": "The study focused on BRCA1 variants, and no BRCA2 variants were detected in the patient cohort."
+  }
+}

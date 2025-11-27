@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "36496073",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No specific genetic variants in the KCNH2 gene were mentioned in the paper."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention any specific genetic variants in the KCNH2 gene."
+    ],
+    "notes": "The paper focused on the functional aspects of hERG1 channel subunits and their response to extracellular acidosis, without discussing specific genetic variants."
+  }
+}

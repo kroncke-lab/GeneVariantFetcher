@@ -1,0 +1,52 @@
+{
+  "paper_metadata": {
+    "pmid": "37456942",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant A97S, including penetrance data and patient demographics."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.290G>A",
+      "protein_notation": "p.Ala97Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 20,
+        "demographics": "Mean age 63.0 \u00b1 5.8 years, 75% men",
+        "phenotype": "Hereditary transthyretin amyloid cardiomyopathy (ATTR-CM)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Patients showed improvement in NT-proBNP levels after treatment with tafamidis.",
+        "assays": [
+          "NT-proBNP measurement",
+          "echocardiography"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study focused on the efficacy of tafamidis in patients with the A97S variant.",
+      "key_quotes": [
+        "The patients with hereditary A97S ATTR-CM in this study had decreased levels of NT-proBNP after 6 months of tafamidis treatment."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in the TTR gene was reported in the paper."
+  }
+}

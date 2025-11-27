@@ -1,0 +1,58 @@
+{
+  "paper_metadata": {
+    "pmid": "39805914",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses genetic variants in BRCA1, BRCA2, and NOD2 in relation to pancreatitis and pancreatic cancer. No specific BRCA2 variants were found in the study population, but other non-pathogenic variants were identified in patients with pancreatic diseases."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "nonpathogenic",
+      "patients": {
+        "count": 13,
+        "demographics": "Patients with pancreatic disease",
+        "phenotype": "Mostly acute pancreatitis, one with pancreatic cancer, one with another pancreatic disease"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "No specific functional assays were mentioned for these variants.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variants identified in BRCA2 were not the primary focus of the study and were found incidentally.",
+      "key_quotes": [
+        "In the case of BRCA1 and BRCA2, we did not identify the studied single nucleotide polymorphisms in any sample.",
+        "Within these polymorphisms, 4 different ones have been identified for BRCA2 (rs80358475, rs28897710, rs56328701, rs2137474144)."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "The allele frequency in study group and global and European population according to NCBI database.",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not report any pathogenic BRCA2 variants, only nonpathogenic ones were found incidentally."
+    ],
+    "notes": "The extraction focused on BRCA2 variants, and no pathogenic variants were reported in the study population."
+  }
+}

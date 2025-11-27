@@ -1,0 +1,70 @@
+{
+  "paper_metadata": {
+    "pmid": "30704477",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant c.2738C>T (p.Ala913Val) found in a familial case of cutis laxa."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2738C>T",
+      "protein_notation": "p.Ala913Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "33-year-old female proband and her 11-year-old son",
+        "phenotype": "cutis laxa"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 33,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "dry, thin and wrinkled skin that appeared prematurely aged",
+          "evidence_sentence": "Both patients have dry, wrinkled skin and look older than their age."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 11,
+          "age_at_onset": 1,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "dry, wrinkled skin and skin laxity first noticed at the age of 1 year",
+          "evidence_sentence": "Skin laxity was first noticed at the age of 1 year."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is considered pathogenic according to ACMG recommendations.",
+        "assays": []
+      },
+      "segregation_data": "The variant was found in both the proband and her son, indicating segregation with the disease.",
+      "population_frequency": "Not reported in literature or databases.",
+      "evidence_level": "Strong evidence based on ACMG classification.",
+      "source_location": "Discussion and conclusions, paragraph 2",
+      "additional_notes": "The variant was described in the context of a digenic form of congenital long-QT syndrome.",
+      "key_quotes": [
+        "We also found that the proband and his son have two missense mutations: the c.2738C>T (p.Ala913Val) in the KCNH2 gene."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in KCNH2 was reported in the paper."
+  }
+}

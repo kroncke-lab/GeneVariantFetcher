@@ -1,0 +1,23 @@
+{
+  "paper_metadata": {
+    "pmid": "25886519",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the development and validation of a 25-gene NGS panel for hereditary cancer risk assessment, including BRCA2, but does not provide specific BRCA2 variant data."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Genes included in the 25-gene NGS panel",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific BRCA2 variant data."
+    ],
+    "notes": "The paper focused on the validation of the NGS panel and did not include specific BRCA2 variant information or penetrance data."
+  }
+}

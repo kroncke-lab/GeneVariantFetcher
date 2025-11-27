@@ -1,0 +1,52 @@
+{
+  "paper_metadata": {
+    "pmid": "16472284",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 K897T polymorphism, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2690A>C",
+      "protein_notation": "p.Lys897Thr",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": 228,
+        "demographics": "healthy middle-aged subjects (121 women and 107 men)",
+        "phenotype": "cardiac repolarization assessed by T-wave morphology"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 228,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The KCNH2 K897T polymorphism was associated with TCRT values reflecting cardiac repolarization.",
+        "assays": [
+          "T-wave morphology analysis",
+          "Principal component analysis (PCA)"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Allele frequencies: 0.86 (K) and 0.14 (T)",
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study suggests functional significance of the K897T polymorphism for cardiac electrical properties.",
+      "key_quotes": [
+        "Subjects with a less common genotype, KT or TT, have smaller TCRT, which reflects dyssynchrony between depolarization and repolarization and is associated with an increased risk of cardiac mortality."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 gene was successfully extracted."
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "39057193",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses various mutations in the TTR gene, particularly focusing on their effects on protein stability and amyloidosis. Variants L55P, V30M, F87A, and T119M are highlighted, with insights into their functional data and implications for disease."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu55Pro",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "increased aggregation leading to amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "L55P mutation linked to increased aggregation and amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "L55P is presumed to be a disease state that accelerates amyloidosis.",
+      "key_quotes": [
+        "The L55P mutation has been linked to increased aggregation of TTR, and hTTR tetramers with L55P subunits are presumed to be disease states that accelerate amyloidosis."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "amyloidogenic"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "V30M mutation linked to amyloidogenic properties.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "V30M homotetramers are more stable than wt-TTR.",
+      "key_quotes": [
+        "The V30M mutation has also been reported to be amyloidogenic."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Phe87Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "reduced stability, does not aggregate readily"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "F87A mutation reduces stability of the tetramer.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 5",
+      "additional_notes": "F87A does not aggregate as readily due to reduced stability.",
+      "key_quotes": [
+        "The F87A mutation reduces the stability of the tetramer compared to wt-TTR."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Thr119Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "stabilizes TTR tetramers"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "T119M mutation stabilizes TTR tetramers.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 6",
+      "additional_notes": "T119M prevents formation of hTTR tetramers.",
+      "key_quotes": [
+        "The T119M mutation has been reported to stabilize TTR tetramers."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted successfully."
+  }
+}

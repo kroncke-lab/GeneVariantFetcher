@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "33127389",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3848_3849del",
+      "protein_notation": "p.Val1283fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "resectable PDAC"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 6,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "resectable PDAC with elevated CA199",
+          "evidence_sentence": "The first patient had two BRCA2 mutations, one classified as pathogenic (V1283fs \u00d7 2) and one classified as VUS (D820E), and was treated with off-label PARP inhibitor."
+        }
+      ],
+      "functional_data": {
+        "summary": "The pathogenic mutation is associated with sensitivity to platinum-based chemotherapy and PARP inhibitors.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient was treated with a PARP inhibitor and had a significant response.",
+      "key_quotes": [
+        "The first patient had two BRCA2 mutations, one classified as pathogenic (V1283fs \u00d7 2) and one classified as VUS (D820E), and was treated with off-label PARP inhibitor."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6485_6486del",
+      "protein_notation": "p.Lys2162fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "metastatic disease"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 6,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "metastatic disease with a liver lesion",
+          "evidence_sentence": "The second patient with a BRCA2 mutation was diagnosed with metastatic disease with a liver lesion found during surgical exploration."
+        }
+      ],
+      "functional_data": {
+        "summary": "The pathogenic mutation is associated with sensitivity to platinum-based chemotherapy and PARP inhibitors.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient was enrolled in a clinical trial with a PARP inhibitor plus FOLFOX.",
+      "key_quotes": [
+        "The second patient with a BRCA2 mutation was diagnosed with metastatic disease with a liver lesion found during surgical exploration."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4697del",
+      "protein_notation": "p.Tyr1566fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "recurrent disease"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 6,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "recurrent disease after surgery",
+          "evidence_sentence": "The primary tumor was then sequenced, and a pathogenic BRCA2 mutation (T1566fs \u00d7 9) was reported."
+        }
+      ],
+      "functional_data": {
+        "summary": "The pathogenic mutation is associated with sensitivity to platinum-based chemotherapy and PARP inhibitors.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient received a PARP inhibitor in a clinical trial but unfortunately progressed after only one cycle.",
+      "key_quotes": [
+        "The primary tumor was then sequenced, and a pathogenic BRCA2 mutation (T1566fs \u00d7 9) was reported."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 5",
+      "table_caption": "Pathogenic and VUS mutations in HRD genes",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

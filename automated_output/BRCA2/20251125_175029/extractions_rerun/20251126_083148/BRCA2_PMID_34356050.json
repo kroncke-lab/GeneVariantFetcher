@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "34356050",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the function of BRCA2 as a tumor suppressor and its role in DNA damage responses. However, no specific BRCA2 genetic variants are mentioned in the text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific BRCA2 variants or penetrance data."
+    ],
+    "notes": "The paper focused on the functional aspects of BRCA2 and its domains but did not include specific genetic variant data."
+  }
+}

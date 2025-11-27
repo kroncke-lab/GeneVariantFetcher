@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "34755423",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 variant p.307_308del, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.921_923del",
+      "protein_notation": "p.307_308del",
+      "genomic_position": "NM_001204798",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "18-year-old female",
+        "phenotype": "Long QT syndrome and sinoatrial node dysfunction"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "II-1",
+          "age_at_evaluation": 18,
+          "age_at_onset": 5,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "suffered from LQTS since five years old, experienced repeated convulsions and occasional syncope",
+          "evidence_sentence": "The proband (II: 1) was diagnosed with LQTS and thus selected to conduct WES in this family."
+        }
+      ],
+      "functional_data": {
+        "summary": "KCNH2 p.307_308del affects the single-stranded RNA folding, resulting in a false regional double helix and reduced structural stability.",
+        "assays": [
+          "RNA secondary structure prediction",
+          "Functional assays on protein properties"
+        ]
+      },
+      "segregation_data": "KCNH2 p.307_308del was found as a de novo mutation in II: 1; other family members did not carry the mutation.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on functional impact and segregation analysis",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation was validated as positive by Sanger sequencing.",
+      "key_quotes": [
+        "KCNH2 p.307_308del was considered as de novo mutation in II: 1.",
+        "The heterozygous SCN5A p.R1865H was carried by I: 1 and II: 2, but not carried by I: 2."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

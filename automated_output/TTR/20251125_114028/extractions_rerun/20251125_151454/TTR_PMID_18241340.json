@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "18241340",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Threonine60Alanine, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.179C>T",
+      "protein_notation": "p.Thr60Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "61 year old male of Irish ancestry",
+        "phenotype": "Familial Amyloidotic Polyneuropathy with post-transplant restrictive cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 61,
+          "age_at_onset": 51,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Progressive restrictive cardiomyopathy following liver transplantation",
+          "evidence_sentence": "Subsequently, it was learned that the patient's mutation was on the transthyretin (TTR) gene, Threonine60Alanine."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with amyloid deposition leading to cardiac dysfunction.",
+        "assays": []
+      },
+      "segregation_data": "Not provided",
+      "population_frequency": "Not provided",
+      "evidence_level": "Moderate",
+      "source_location": "Case presentation, paragraph 3",
+      "additional_notes": "The patient had no prior cardiac symptoms before liver transplantation.",
+      "key_quotes": [
+        "He was subsequently diagnosed with an accelerating post-transplant restrictive cardiomyopathy due to amyloid infiltration.",
+        "Subsequently, it was learned that the patient's mutation was on the transthyretin (TTR) gene, Threonine60Alanine."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variant."
+  }
+}

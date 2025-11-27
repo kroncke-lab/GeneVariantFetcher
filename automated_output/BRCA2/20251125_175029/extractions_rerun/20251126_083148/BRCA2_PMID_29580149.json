@@ -1,0 +1,107 @@
+{
+  "paper_metadata": {
+    "pmid": "29580149",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper reports a novel pathogenic BRCA2 mutation (c.4211C>G, p.Ser1404Ter) in a patient with prostate cancer, along with additional benign polymorphisms."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4211C>G",
+      "protein_notation": "p.Ser1404Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "46-year-old Chinese male",
+        "phenotype": "prostate cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 46,
+          "age_at_onset": null,
+          "age_at_diagnosis": 46,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "prostate adenocarcinoma (Gleason score 5+4)",
+          "evidence_sentence": "In May 2011, a 46-year-old Chinese man with dysuria lasting for 6 months was referred to Daping Hospital of the Third Military Medical University."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation results in a truncated protein, leading to loss of function.",
+        "assays": [
+          "immunohistochemistry",
+          "western blot"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the first report of this specific BRCA2 mutation in a patient with prostate cancer.",
+      "key_quotes": [
+        "To our knowledge, we are the first to report the germline BRCA2 mutation c.4211C>G (p.Ser1404Ter) in prostate cancer."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7397T>C",
+      "protein_notation": "p.Val2466Ala",
+      "genomic_position": null,
+      "clinical_significance": "benign",
+      "patients": {
+        "count": 1,
+        "demographics": "46-year-old Chinese male",
+        "phenotype": "prostate cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 46,
+          "age_at_onset": null,
+          "age_at_diagnosis": 46,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "benign polymorphism",
+          "evidence_sentence": "Analysis of peripheral blood also identified benign polymorphisms in BRCA2 (c.7397T>C, p.Val2466Ala)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Identified as a benign polymorphism with no significant impact on protein function.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is considered benign and does not contribute to disease risk.",
+      "key_quotes": [
+        "Analysis of peripheral blood also identified benign polymorphisms in BRCA2 (c.7397T>C, p.Val2466Ala)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted from the main text."
+  }
+}

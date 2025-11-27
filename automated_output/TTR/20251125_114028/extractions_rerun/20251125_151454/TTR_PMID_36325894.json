@@ -1,0 +1,142 @@
+{
+  "paper_metadata": {
+    "pmid": "36325894",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.(T80A)",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 212,
+        "demographics": "mean age 66.30\u00b16.48 years; male 71.2%",
+        "phenotype": "hereditary ATTR-CA"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 212,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No specific penetrance data provided for this variant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.(V142I)",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 433,
+        "demographics": "mean age 75.52\u00b17.19 years; male 72.3%",
+        "phenotype": "hereditary ATTR-CA"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 433,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No specific penetrance data provided for this variant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.(Ser43Asn)",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": null,
+        "phenotype": "hereditary ATTR-CA"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No specific penetrance data provided for this variant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.(Ser70Arg)",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": "hereditary ATTR-CA"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No specific penetrance data provided for this variant.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "medium",
+    "challenges": [
+      "Limited penetrance data provided in the paper."
+    ],
+    "notes": "No individual-level penetrance data was available."
+  }
+}

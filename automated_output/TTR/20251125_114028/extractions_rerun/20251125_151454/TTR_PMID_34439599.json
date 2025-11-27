@@ -1,0 +1,81 @@
+{
+  "paper_metadata": {
+    "pmid": "34439599",
+    "title": "Renal Involvement in Hereditary Transthyretin Amyloidosis: An Italian Single-Centre Experience",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 46,
+        "demographics": "Not specified",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTRv) with kidney involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 46,
+        "affected_count": 17,
+        "unaffected_count": 29,
+        "uncertain_count": null,
+        "penetrance_percentage": 36.96,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Kidney involvement with nephrotic syndrome",
+          "evidence_sentence": "Indeed, in one Val30Met patient a nephrotic syndrome represented the first sign of ATTRv."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Low eGFR",
+          "evidence_sentence": "At baseline, only two patients presented low eGFR (one Val30Met and one Phe64Leu); during follow-up, an additional 5 cases developed low eGFR."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No kidney involvement",
+          "evidence_sentence": "Conversely, abnormal UPE was found in 4 Val30Met patients, 3 Phe64Leu and 3 with other single mutations."
+        }
+      ],
+      "functional_data": {
+        "summary": "Kidney involvement is common in ATTRv, with abnormal urinary protein excretion being a notable feature.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The study highlights the prevalence of kidney involvement in ATTRv patients, particularly in those with the Val30Met variant.",
+      "key_quotes": [
+        "Kidney involvement is quite common in patients with ATTRv regardless of the underlying genetic variant.",
+        "The presence of kidney involvement was high: low eGFR during any time of follow-up was present in 7 patients (15%), abnormal UPE in 10 (22% of the sample, 63% of those with available urinary data)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text, focusing on the TTR gene variants."
+  }
+}

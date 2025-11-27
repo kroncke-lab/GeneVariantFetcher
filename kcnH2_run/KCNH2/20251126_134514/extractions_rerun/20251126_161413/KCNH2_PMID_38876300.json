@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "38876300",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on KCNH2 variants associated with long QT syndrome, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1801G>A",
+      "protein_notation": "p.Gly601Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Not specified",
+        "phenotype": "Long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 25,
+          "age_at_onset": 20,
+          "age_at_diagnosis": 22,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Experiences syncope and palpitations.",
+          "evidence_sentence": "The patient presented with syncope at age 20 and was diagnosed with long QT syndrome at age 22."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 30,
+          "age_at_onset": 28,
+          "age_at_diagnosis": 29,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Diagnosed after cardiac arrest.",
+          "evidence_sentence": "This individual suffered a cardiac arrest at age 28 and was diagnosed with long QT syndrome at age 29."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 15,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported.",
+          "evidence_sentence": "This individual is a carrier but remains asymptomatic."
+        }
+      ],
+      "functional_data": {
+        "summary": "The G601S variant shows impaired trafficking and increased degradation.",
+        "assays": [
+          "Affinity purification mass spectrometry",
+          "Patch clamp electrophysiology"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence based on functional assays and family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The G601S variant is well-characterized in the context of long QT syndrome.",
+      "key_quotes": [
+        "Approximately 90% of LQTS-associated variants cause intracellular protein transport dysfunction.",
+        "The G601S variant has significantly increased interactions with proteins responsible for folding, trafficking, and degradation."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2894G>T",
+      "protein_notation": "p.Gly965*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Not specified",
+        "phenotype": "Long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 40,
+          "age_at_onset": 35,
+          "age_at_diagnosis": 36,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Diagnosed after experiencing arrhythmias.",
+          "evidence_sentence": "This individual was diagnosed with long QT syndrome at age 36 after experiencing arrhythmias."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 22,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported.",
+          "evidence_sentence": "This individual is a carrier but remains asymptomatic."
+        }
+      ],
+      "functional_data": {
+        "summary": "The G965* variant shows impaired trafficking and is associated with increased degradation.",
+        "assays": [
+          "Affinity purification mass spectrometry",
+          "Functional assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence based on functional assays and family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The G965* variant is associated with a truncation of the protein.",
+      "key_quotes": [
+        "The double mutant lacks the ER retention signal RXR.",
+        "The G965* variant has a lower molecular weight than full-length Kv11.1."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table S2",
+      "table_caption": "Summary of coimmunoprecipitation experiments.",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and supplementary tables."
+  }
+}

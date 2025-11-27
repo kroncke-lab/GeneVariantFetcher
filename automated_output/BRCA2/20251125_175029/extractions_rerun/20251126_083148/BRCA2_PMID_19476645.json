@@ -1,0 +1,104 @@
+{
+  "paper_metadata": {
+    "pmid": "19476645",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses BRCA2 variants in high-risk prostate cancer pedigrees, identifying one variant of uncertain significance and one intronic variant, with no known deleterious mutations observed."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5972C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "unaffected male, age 72",
+        "phenotype": "cancer-free"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 12,
+        "affected_count": 10,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 83.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 72,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "last known age to be cancer free",
+          "evidence_sentence": "The variant of unknown significance (5972C\u2192T) was detected in an unaffected male 1st cousin (last known age to be cancer free: 72 years) but was not carried by the sampled prostate cancer case in the pedigree (diagnosis age: 54 years)."
+        }
+      ],
+      "functional_data": {
+        "summary": "No functional data provided.",
+        "assays": []
+      },
+      "segregation_data": "Not segregating with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was not carried by the sampled prostate cancer case.",
+      "key_quotes": [
+        "We observed one BRCA2 variant of unknown significance as defined by the Breast Cancer Information Core (BIC) database."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "IVS14-62A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "unknown",
+      "patients": {
+        "count": 1,
+        "demographics": "prostate cancer case",
+        "phenotype": "prostate cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 12,
+        "affected_count": 10,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 83.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "single prostate cancer case",
+          "evidence_sentence": "The intronic variant not previously reported in the BIC database (IVS14 -62A\u2192G) was observed in a single prostate cancer case."
+        }
+      ],
+      "functional_data": {
+        "summary": "No functional data provided.",
+        "assays": []
+      },
+      "segregation_data": "Not segregating with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was not detected in the other haplotype carrier tested in the pedigree.",
+      "key_quotes": [
+        "The intronic variant not previously reported in the BIC database (IVS14 -62A\u2192G) was observed in a single prostate cancer case."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted from the text."
+  }
+}

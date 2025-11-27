@@ -1,0 +1,180 @@
+{
+  "paper_metadata": {
+    "pmid": "34380564",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.424G>A",
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "Late-onset cardiomyopathy, more commonly in men"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Late-onset cardiomyopathy",
+          "evidence_sentence": "This variant is most often detected in individuals of African descent, with approximately 3% of African-Americans carrying at least one copy of the gene."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Late-onset cardiomyopathy",
+          "evidence_sentence": "This variant is most often detected in individuals of African descent, with approximately 3% of African-Americans carrying at least one copy of the gene."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is known to negatively impact the function of the TTR protein, resulting in amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Yes, it segregates with disease in families.",
+      "population_frequency": "0.001",
+      "evidence_level": "Strong evidence for pathogenicity.",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "Commonly associated with late-onset cardiomyopathy.",
+      "key_quotes": [
+        "The most common variant associated with amyloidosis was p.Val142Ile (allele frequency 0.001).",
+        "This variant is most often detected in individuals of African descent."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.238A>G",
+      "protein_notation": "p.Thr80Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Cardiac amyloidosis and autonomic and peripheral neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac amyloidosis and autonomic and peripheral neuropathy",
+          "evidence_sentence": "This variant is associated with cardiac amyloidosis as well as autonomic and peripheral neuropathy."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is known to negatively impact the function of the TTR protein, resulting in amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Yes, it segregates with disease in families.",
+      "population_frequency": "0.00004",
+      "evidence_level": "Strong evidence for pathogenicity.",
+      "source_location": "Table 2, Row 2",
+      "additional_notes": "Age of onset in seventh decade of life.",
+      "key_quotes": [
+        "This variant is associated with cardiac amyloidosis as well as autonomic and peripheral neuropathy."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.239C>T",
+      "protein_notation": "p.Thr80Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "Our study also identified two individuals with another known amyloidogenic variant, c.239C>T(p.Thr80Ile), with an allele frequency of 0.00007."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "Our study also identified two individuals with another known amyloidogenic variant, c.239C>T(p.Thr80Ile), with an allele frequency of 0.00007."
+        }
+      ],
+      "functional_data": {
+        "summary": "Qualifies as a dense hot-spot and pathogenic mutation by Varsome.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": "0.00007",
+      "evidence_level": "Moderate evidence for pathogenicity.",
+      "source_location": "Table 2, Row 3",
+      "additional_notes": "Phenotype associated with this variant has not been previously reported.",
+      "key_quotes": [
+        "It qualifies as a dense hot-spot and pathogenic mutation by Varsome, but there are no reports of the clinical manifestation."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Identified missense TTR variants",
+      "variants_extracted": 12
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Phenotypes of known amyloidogenic TTR variants with alleles identified in the Saudi population",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text and tables."
+  }
+}

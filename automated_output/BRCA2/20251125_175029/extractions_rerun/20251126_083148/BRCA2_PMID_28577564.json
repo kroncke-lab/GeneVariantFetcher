@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "28577564",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant c.1310_1313delAAGA, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1310_1313delAAGA",
+      "protein_notation": "p.Lys437IlefsX22",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 14,
+        "demographics": "74 female patients with suggestive inherited predisposition to breast and ovarian cancers",
+        "phenotype": "breast cancer diagnosed at age 50 or younger and/or positive family history"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 14,
+        "affected_count": 14,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In total, the c.1310_1313delAAGA frameshift was found in 14 patients among 123 screened for this pathogenic variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.1310_1313delAAGA mutation is recurrent with high frequency in patients from the North-East region of Morocco.",
+        "assays": [
+          "Sanger sequencing",
+          "Next generation sequencing"
+        ]
+      },
+      "segregation_data": "All carriers shared the same geographic origin in the North-East of Morocco.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is already listed and reported deleterious in multiple databases.",
+      "key_quotes": [
+        "The c.1310_1313delAAGA mutation of BRCA2 gene is recurrent with high frequency in patients from the North-East region of Morocco."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

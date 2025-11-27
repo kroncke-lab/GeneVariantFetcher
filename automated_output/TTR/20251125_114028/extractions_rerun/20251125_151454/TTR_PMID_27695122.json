@@ -1,0 +1,112 @@
+{
+  "paper_metadata": {
+    "pmid": "27695122",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses variants in the TTR gene, specifically focusing on the V30M mutation and its implications in familial amyloid polyneuropathy (FAP)."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 16,
+        "demographics": "16 non-LT FAP ATTR V30M patients",
+        "phenotype": "Familial amyloid polyneuropathy (FAP) with symptoms including polyneuropathy, thermal hyperalgesia, dysesthesia, gastrointestinal symptoms, orthostatic hypotension, and numbness in the hands and feet."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 16,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The V30M mutation leads to the formation of TTR-derived amyloid fibrils, contributing to the pathogenesis of FAP.",
+        "assays": []
+      },
+      "segregation_data": "The V30M variant is known to segregate with disease in families affected by FAP.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Introduction, paragraph 2",
+      "additional_notes": "The V30M mutation is the most common mutation associated with FAP worldwide.",
+      "key_quotes": [
+        "Familial amyloid polyneuropathy (FAP) is a neurodegenerative disease caused by deposition of mutated transthyretin (TTR)-derived amyloid fibrils in several organs.",
+        "Amyloidogenic TTR (ATTR) V30M was first identified, and is the most common mutation worldwide."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.341C>T",
+      "protein_notation": "p.Tyr114Cys",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 non-LT ATTR FAP patient, sex not specified",
+        "phenotype": "Familial amyloid polyneuropathy (FAP) with symptoms similar to those of V30M patients."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The functional impact of the Y114C variant on TTR stability and amyloid formation is not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Materials and Methods, paragraph 2",
+      "additional_notes": "The Y114C variant is less common than V30M and its clinical significance is still being evaluated.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.320G>A",
+      "protein_notation": "p.Ile107Val",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 non-LT ATTR FAP patient, sex not specified",
+        "phenotype": "Familial amyloid polyneuropathy (FAP) with symptoms similar to those of V30M patients."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The functional impact of the I107V variant on TTR stability and amyloid formation is not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Materials and Methods, paragraph 2",
+      "additional_notes": "The I107V variant is less common than V30M and its clinical significance is still being evaluated.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted successfully."
+  }
+}

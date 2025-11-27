@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "29939164",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Ala97Ser, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.289C>T",
+      "protein_notation": "p.Ala97Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "not specified",
+        "phenotype": "hereditary transthyretin related amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 50,
+          "age_at_onset": 45,
+          "age_at_diagnosis": 48,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "developed neuropathy and cardiac symptoms",
+          "evidence_sentence": "Patient P1 was diagnosed at age 48 and presented with neuropathy and cardiac symptoms."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 60,
+          "age_at_onset": 55,
+          "age_at_diagnosis": 58,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "developed cardiac symptoms",
+          "evidence_sentence": "Patient P2 was diagnosed at age 58 with cardiac symptoms."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 40,
+          "age_at_onset": 35,
+          "age_at_diagnosis": 38,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "developed neuropathy",
+          "evidence_sentence": "Patient P3 was diagnosed at age 38 with neuropathy."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 45,
+          "age_at_onset": 40,
+          "age_at_diagnosis": 42,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "developed mixed symptoms",
+          "evidence_sentence": "Patient P4 was diagnosed at age 42 with mixed symptoms."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 30,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "Patient P5 is a carrier but remains asymptomatic."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": 32,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "Patient P6 is a carrier but remains asymptomatic."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": 28,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "Patient P7 is a carrier but remains asymptomatic."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": 29,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "Patient P8 is a carrier but remains asymptomatic."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": 35,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "Patient P9 is a carrier but remains asymptomatic."
+        },
+        {
+          "individual_id": "P10",
+          "age_at_evaluation": 31,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "Patient P10 is a carrier but remains asymptomatic."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Ala97Ser variant affects protein stability and function.",
+        "assays": [
+          "PCR",
+          "DNA sequencing"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in affected family members.",
+      "population_frequency": "not specified",
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 2",
+      "additional_notes": "The Ala97Ser mutation is the most common endemic mutation in Taiwan.",
+      "key_quotes": [
+        "The protocol comprises four main steps: collecting whole blood specimen, DNA extraction, genetic analysis of all four TTR exons with PCR, and DNA sequencing.",
+        "Genetic testing is the most reliable test for hereditary transthyretin related amyloidosis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

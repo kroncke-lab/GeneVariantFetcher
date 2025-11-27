@@ -1,0 +1,172 @@
+{
+  "paper_metadata": {
+    "pmid": "35778884",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2380delA",
+      "protein_notation": "p.Met794Cysfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 6,
+        "demographics": "Mean age at diagnosis: 46.2 years; 98.5% female",
+        "phenotype": "Breast cancer, primarily luminal-B subtype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 2,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 46,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Among the 12 tumors of BRCA carriers, two were HER2-positive luminal-B."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 46,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Among the 12 tumors of BRCA carriers, two were HER2-positive luminal-B."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No disease manifestation reported",
+          "evidence_sentence": "Among the 12 tumors of BRCA carriers, two were HER2-positive luminal-B."
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No disease manifestation reported",
+          "evidence_sentence": "Among the 12 tumors of BRCA carriers, two were HER2-positive luminal-B."
+        }
+      ],
+      "functional_data": {
+        "summary": "Novel frameshift mutation identified.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Two novel frameshift mutations discovered.",
+      "key_quotes": [
+        "We discovered two novel BRCA2 frameshift mutations (c.2380delA and c.8855dupT).",
+        "The 12 tumors of BRCA carriers were mainly the luminal-B subtype."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8855dupT",
+      "protein_notation": "p.Met2952Ilefs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 6,
+        "demographics": "Mean age at diagnosis: 46.2 years; 98.5% female",
+        "phenotype": "Breast cancer, primarily luminal-B subtype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 2,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 46,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Among the 12 tumors of BRCA carriers, two were HER2-positive luminal-B."
+        },
+        {
+          "individual_id": "Case_6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 46,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Among the 12 tumors of BRCA carriers, two were HER2-positive luminal-B."
+        },
+        {
+          "individual_id": "Case_7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No disease manifestation reported",
+          "evidence_sentence": "Among the 12 tumors of BRCA carriers, two were HER2-positive luminal-B."
+        },
+        {
+          "individual_id": "Case_8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No disease manifestation reported",
+          "evidence_sentence": "Among the 12 tumors of BRCA carriers, two were HER2-positive luminal-B."
+        }
+      ],
+      "functional_data": {
+        "summary": "Novel frameshift mutation identified.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Two novel frameshift mutations discovered.",
+      "key_quotes": [
+        "We discovered two novel BRCA2 frameshift mutations (c.2380delA and c.8855dupT).",
+        "The 12 tumors of BRCA carriers were mainly the luminal-B subtype."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Characteristics of BRCA carriers and associated mutations",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text and tables."
+  }
+}

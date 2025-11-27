@@ -1,0 +1,165 @@
+{
+  "paper_metadata": {
+    "pmid": "23300672",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 variant T618I, including clinical significance, penetrance data, and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1853C>T",
+      "protein_notation": "p.Thr618Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 11,
+        "demographics": "Chinese family with a history of nocturnal sudden death",
+        "phenotype": "shortened rate-corrected QT intervals (mean QTc interval of 316 ms)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": 4,
+        "unaffected_count": 7,
+        "uncertain_count": null,
+        "penetrance_percentage": 36.36,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "shortened QT interval",
+          "evidence_sentence": "Four of eleven family members evaluated exhibited shortened rate-corrected QT intervals (with a mean QTc interval of 316 ms)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "shortened QT interval",
+          "evidence_sentence": "Four of eleven family members evaluated exhibited shortened rate-corrected QT intervals (with a mean QTc interval of 316 ms)."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "shortened QT interval",
+          "evidence_sentence": "Four of eleven family members evaluated exhibited shortened rate-corrected QT intervals (with a mean QTc interval of 316 ms)."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "Four of eleven family members evaluated exhibited shortened rate-corrected QT intervals (with a mean QTc interval of 316 ms)."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "Four of eleven family members evaluated exhibited shortened rate-corrected QT intervals (with a mean QTc interval of 316 ms)."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "Four of eleven family members evaluated exhibited shortened rate-corrected QT intervals (with a mean QTc interval of 316 ms)."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "Four of eleven family members evaluated exhibited shortened rate-corrected QT intervals (with a mean QTc interval of 316 ms)."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "Four of eleven family members evaluated exhibited shortened rate-corrected QT intervals (with a mean QTc interval of 316 ms)."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "Four of eleven family members evaluated exhibited shortened rate-corrected QT intervals (with a mean QTc interval of 316 ms)."
+        },
+        {
+          "individual_id": "P10",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "Four of eleven family members evaluated exhibited shortened rate-corrected QT intervals (with a mean QTc interval of 316 ms)."
+        },
+        {
+          "individual_id": "P11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "Four of eleven family members evaluated exhibited shortened rate-corrected QT intervals (with a mean QTc interval of 316 ms)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The T618I mutation produces a more modest effect on repolarising IhERG than reported previously for the N588K-hERG variant 1 SQTS mutation.",
+        "assays": [
+          "Electrophysiological recordings of IhERG",
+          "Whole-cell patch clamp recording",
+          "Pharmacological experiments with antiarrhythmic drugs"
+        ]
+      },
+      "segregation_data": "The T618I variant was absent in 200 ethnically matched controls, suggesting segregation with disease.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study involved a family with a history of sudden death, indicating potential clinical relevance.",
+      "key_quotes": [
+        "Four of eleven family members evaluated exhibited shortened rate-corrected QT intervals (with a mean QTc interval of 316 ms).",
+        "Genotyping of the proband identified a base transition (C1853T) that led to a threonine to isoleucine substitution at position 618."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

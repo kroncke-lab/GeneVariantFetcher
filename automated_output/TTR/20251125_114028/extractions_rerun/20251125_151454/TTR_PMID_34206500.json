@@ -1,0 +1,133 @@
+{
+  "paper_metadata": {
+    "pmid": "34206500",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.30G>A",
+      "protein_notation": "p.Val10Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 513,
+        "demographics": "Japanese patients, age not specified",
+        "phenotype": "ATTR Val30Met amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 513,
+        "affected_count": 477,
+        "unaffected_count": 36,
+        "uncertain_count": null,
+        "penetrance_percentage": 92.9,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No ocular involvement",
+          "evidence_sentence": "None of the subjects in the carrier group showed ocular involvement."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met mutation is associated with high prevalence in endemic areas.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "1 in 100,000 in the US, 1.5% in Sweden.",
+      "evidence_level": "high",
+      "source_location": "Main Text, Section 2",
+      "additional_notes": "The mutation is responsible for the high prevalence of the disease in endemic areas.",
+      "key_quotes": [
+        "The most frequently observed mutation in Afro-American, West African and Hispanic subjects is Val122Ile.",
+        "In the Swedish population, the frequency of heterozygosity is approximately 1.5%, with very low penetrance."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.341C>T",
+      "protein_notation": "p.Arg114Cys",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "associated with ocular involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Associated with vitreous opacities.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Main Text, Section 2",
+      "additional_notes": "Vitreous opacities are common in carriers of this mutation.",
+      "key_quotes": [
+        "Vitreous involvement is fairly common and manifests earlier in patients with Arg34Gly, Tyr114Cys (100%), Thr49Ala and Glu54Lys mutations."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.122G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "associated with ocular involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Commonly associated with ocular manifestations.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Main Text, Section 2",
+      "additional_notes": "Vitreous opacities are common in carriers of this mutation.",
+      "key_quotes": [
+        "Some TTR mutations have been clearly associated with eye involvement."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Mutations associated with ocular involvement.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for TTR variants were extracted successfully."
+  }
+}

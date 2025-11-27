@@ -1,0 +1,139 @@
+{
+  "paper_metadata": {
+    "pmid": "35514073",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the TTR gene, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "3.5% of African-Americans",
+        "phenotype": "heart failure with advanced age"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 2,
+        "unaffected_count": 8,
+        "uncertain_count": null,
+        "penetrance_percentage": 20.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "60-70 years",
+            "penetrance_percentage": 30.0,
+            "carriers_in_range": 5,
+            "affected_in_range": 2
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 70,
+          "age_at_onset": 65,
+          "age_at_diagnosis": 68,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "heart failure",
+          "evidence_sentence": "The Val122Ile mutation is one of the more common pro-amyloidogenic mutations, being present in 3.5% of African-Americans."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 72,
+          "age_at_onset": 70,
+          "age_at_diagnosis": 71,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "Based on echocardiographic wall-thickness measurements, it was suggested that this mutation had a relatively low penetrance of 10\u201320%."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile mutation is associated with amyloid deposition leading to cardiac dysfunction.",
+        "assays": [
+          "echocardiography",
+          "bone scintigraphy"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "3.5% in African-Americans",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The penetrance may be higher than previously reported based on clinical evaluations.",
+      "key_quotes": [
+        "Based on echocardiographic wall-thickness measurements, it was suggested that this mutation had a relatively low penetrance of 10\u201320%.",
+        "However, clinical evaluations have linked this mutation with heart failure with advanced age, suggesting the true penetrance may be much higher."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.191T>C",
+      "protein_notation": "p.Phe64Leu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 20,
+        "demographics": "Italian cohorts",
+        "phenotype": "cardiac involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": 9,
+        "unaffected_count": 11,
+        "uncertain_count": null,
+        "penetrance_percentage": 45.0,
+        "age_dependent_penetrance": null
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 65,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "cardiac amyloidosis",
+          "evidence_sentence": "For the Phe64Leu form of hATTR, it was recently reported that the penetrance for definitive cardiac involvement based on echocardiography in Italian cohorts was around 47%."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 70,
+          "age_at_onset": 68,
+          "age_at_diagnosis": 69,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "In that study, bone scintigraphy had a sensitivity for detecting cardiac amyloid of only around 10%."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Phe64Leu mutation is associated with significant cardiac involvement.",
+        "assays": [
+          "echocardiography",
+          "bone scintigraphy"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 5",
+      "additional_notes": "The penetrance may vary based on age and clinical evaluation methods.",
+      "key_quotes": [
+        "For the Phe64Leu form of hATTR, it was recently reported that the penetrance for definitive cardiac involvement based on echocardiography in Italian cohorts was around 47%.",
+        "Bone scintigraphy had a sensitivity for detecting cardiac amyloid of only around 10%."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "31932463",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Phe33Leu, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.98C>T",
+      "protein_notation": "p.Phe33Leu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "46-year-old male",
+        "phenotype": "hypertrophic cardiomyopathy, neuropathy, nephropathy, severe heart failure"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 46,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "presented with dyspnoea on exertion, diagnosed with hypertrophic cardiomyopathy, later developed neuropathy and nephropathy",
+          "evidence_sentence": "We describe a physically active 46-year-old man who presented with dyspnoea on exertion."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Phe33Leu mutation is associated with hereditary transthyretin amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "case report evidence",
+      "source_location": "Main Text, Abstract",
+      "additional_notes": "The variant has been previously described in only five case reports.",
+      "key_quotes": [
+        "Hereditary transthyretin amyloidosis caused by the rare mutation ATTR Phe33Leu, previously described in only five case reports."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted from the main text, with no tables present."
+  }
+}

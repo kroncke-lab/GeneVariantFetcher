@@ -1,0 +1,50 @@
+{
+  "paper_metadata": {
+    "pmid": "38396973",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val30Met, including penetrance data and patient details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3000,
+        "demographics": "not specified",
+        "phenotype": "ATTR-FAP with autonomic dysfunction"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3000,
+        "affected_count": 1760,
+        "unaffected_count": 1240,
+        "uncertain_count": null,
+        "penetrance_percentage": 58.7,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Autonomic dysfunction is prominent and disabling in patients with ATTR-FAP.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Val30Met is the most common mutation in the TTR protein in Western countries and Japan.",
+      "key_quotes": [
+        "Autonomic dysfunction has been reported as an initial symptom in more than 40% of Japanese ATTR-FAP Val30Met patients.",
+        "In a study involving more than 3000 subjects enrolled in a multinational, longitudinal, observational Transthyretin Amyloidosis Outcomes Survey (THAOS), 58.7% had symptomatic orthostatic hypotension."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data focused solely on the TTR gene variant Val30Met."
+  }
+}

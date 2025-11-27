@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "27690226",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No variants in the KCNH2 gene were mentioned in the paper."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focused on the KCNQ1 and KCNE1 genes, not KCNH2."
+    ],
+    "notes": "The paper did not mention any variants in the KCNH2 gene, which was the target gene for extraction."
+  }
+}

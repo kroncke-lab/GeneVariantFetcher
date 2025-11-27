@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "35457333",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the accessibility of occupational therapy services for patients with hereditary transthyretin amyloidosis (ATTRv) in Spain. It mentions the TTR gene and the Val50Met variant but does not provide detailed genetic variant information or penetrance data."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focuses on occupational therapy services and does not provide detailed genetic variant information or penetrance data for the TTR gene."
+    ],
+    "notes": "The paper mentions the TTR gene and the Val50Met variant but does not provide specific genetic variant data or penetrance information required for extraction."
+  }
+}

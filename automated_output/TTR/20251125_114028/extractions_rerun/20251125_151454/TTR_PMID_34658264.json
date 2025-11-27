@@ -1,0 +1,136 @@
+{
+  "paper_metadata": {
+    "pmid": "34658264",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.148G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 55,
+        "demographics": "Not specified",
+        "phenotype": "Hereditary transthyretin-related amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 55,
+        "affected_count": 42,
+        "unaffected_count": 13,
+        "uncertain_count": null,
+        "penetrance_percentage": 76.36,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "under 40 years",
+            "penetrance_percentage": 100,
+            "carriers_in_range": 4,
+            "affected_in_range": 4
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": 31,
+          "age_at_diagnosis": null,
+          "sex": "Not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin-related amyloidosis",
+          "evidence_sentence": "Four TTR-positive patients had disease onset before 40 years: 15 and 31 years with c.148G>A (p.Val50Met)."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": 15,
+          "age_at_diagnosis": null,
+          "sex": "Not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin-related amyloidosis",
+          "evidence_sentence": "Four TTR-positive patients had disease onset before 40 years: 15 and 31 years with c.148G>A (p.Val50Met)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with hereditary transthyretin-related amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical correlation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is one of the most frequent in the study.",
+      "key_quotes": [
+        "The most prevalent variant associated with amyloid PNP is NM_000371.3:c.148G>A (p.Val50Met).",
+        "Four TTR-positive patients had disease onset before 40 years: 15 and 31 years with c.148G>A (p.Val50Met)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.424G>A",
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 55,
+        "demographics": "Not specified",
+        "phenotype": "Hereditary transthyretin-related amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 55,
+        "affected_count": 42,
+        "unaffected_count": 13,
+        "uncertain_count": null,
+        "penetrance_percentage": 76.36,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "under 40 years",
+            "penetrance_percentage": 100,
+            "carriers_in_range": 1,
+            "affected_in_range": 1
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": 30,
+          "age_at_diagnosis": null,
+          "sex": "Not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Hereditary transthyretin-related amyloidosis",
+          "evidence_sentence": "Four TTR-positive patients had disease onset before 40 years: 30 years with c.424G>A (p.Val142Ile)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with hereditary transthyretin-related amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical correlation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is one of the most frequent in the study.",
+      "key_quotes": [
+        "The most common variant involved in the cardiac form of hATTR is NM_000371.3:c.424G>A (p.Val142Ile).",
+        "Four TTR-positive patients had disease onset before 40 years: 30 years with c.424G>A (p.Val142Ile)."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "TTR heterozygous variants in patients with PNP and/or CM.",
+      "variants_extracted": 21
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

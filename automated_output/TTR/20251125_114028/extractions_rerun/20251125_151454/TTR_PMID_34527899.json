@@ -1,0 +1,86 @@
+{
+  "paper_metadata": {
+    "pmid": null,
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information related to the TTR gene, including penetrance data for carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.Gly47Glu",
+      "protein_notation": "p.Gly16Glu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 71,
+        "demographics": "60 asymptomatic carriers and 11 symptomatic patients",
+        "phenotype": "symptomatic and asymptomatic carriers of TTR mutations"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 71,
+        "affected_count": 11,
+        "unaffected_count": 60,
+        "uncertain_count": null,
+        "penetrance_percentage": 15.49,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "20-25 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          },
+          {
+            "age_range": "25-30 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          },
+          {
+            "age_range": "30-40 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          },
+          {
+            "age_range": "40-45 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          },
+          {
+            "age_range": "45-50 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          },
+          {
+            "age_range": "above 50 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Gly47Glu mutation is associated with earlier onset of disease symptoms.",
+        "assays": []
+      },
+      "segregation_data": "Yes, it segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Bulgarian CoE follows up more than 100 asymptomatic genetic carriers.",
+      "key_quotes": [
+        "This approach led to identifying 11 new symptomatic patients and 60 asymptomatic genetic carriers in Bulgaria."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in the TTR gene was reported in the paper."
+  }
+}

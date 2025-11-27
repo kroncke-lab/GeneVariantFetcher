@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "38241252",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for TTR gene variants F64L, I68L, I107V, and S77Y, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.250T>C",
+      "protein_notation": "p.F84L",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 62,
+        "demographics": "Median age 67.6 years, 67.4% male",
+        "phenotype": "Predominantly neurologic phenotype in 73.9% of symptomatic patients"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 62,
+        "affected_count": 46,
+        "unaffected_count": 16,
+        "uncertain_count": null,
+        "penetrance_percentage": 74.2,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Predominantly neurologic phenotype associated with high male/female ratio and carpal tunnel syndrome.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "None",
+      "key_quotes": [
+        "Most symptomatic patients (73.9%) had a predominantly neurologic phenotype."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.262A>T",
+      "protein_notation": "p.I88L",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 77,
+        "demographics": "Median age 69.3 years, 68.8% male",
+        "phenotype": "Predominantly cardiac phenotype in symptomatic patients"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 77,
+        "affected_count": 45,
+        "unaffected_count": 32,
+        "uncertain_count": null,
+        "penetrance_percentage": 58.4,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Predominantly cardiac phenotype with significant conduction abnormalities.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 2",
+      "additional_notes": "None",
+      "key_quotes": [
+        "Predominantly cardiac was the most common phenotype."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.379A>G",
+      "protein_notation": "p.I127V",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 33,
+        "demographics": "Median age 63.7 years, 66.7% male",
+        "phenotype": "Predominantly neurologic phenotype in 42.9% of symptomatic patients"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 33,
+        "affected_count": 21,
+        "unaffected_count": 12,
+        "uncertain_count": null,
+        "penetrance_percentage": 63.6,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Clinical presentations include CTS, polyneuropathy, and late-onset cardiomyopathy.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "None",
+      "key_quotes": [
+        "Predominantly neurologic was the most common phenotype."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.290C>A",
+      "protein_notation": "p.S97Y",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 58,
+        "demographics": "Median age 57.8 years, 67.2% male",
+        "phenotype": "Predominantly neurologic phenotype in 55.2% of symptomatic patients"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 58,
+        "affected_count": 29,
+        "unaffected_count": 29,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Clinical presentations include neuropathic pain/paresthesia.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "None",
+      "key_quotes": [
+        "The most common phenotype was predominantly neurologic."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

@@ -1,0 +1,2537 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+    <head >
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        
+        
+
+        
+        
+  <link rel="stylesheet" href="/static/assets/style-8258669d.css" />
+<script type="module" crossorigin="" src="/static/assets/base_style-f4a99799.js"></script>
+
+  <link rel="stylesheet" href="/static/assets/style-ef962842.css" />
+<link rel="stylesheet" href="/static/assets/style-3ade8b5c.css" />
+<script type="module" crossorigin="" src="/static/assets/article_style-d757a0dd.js"></script>
+
+  
+  
+    <style>
+  
+  
+  @media screen and (min-width: 64em) {
+    div.pmc-wm {
+      background: repeat-y;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='350' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cfilter x='-.02' y='0' width='1.05' height='1' id='c'%3E%3CfeFlood flood-color='%23FFF'/%3E%3CfeComposite in='SourceGraphic'/%3E%3C/filter%3E%3Ctext id='b' font-family='Helvetica' font-size='11pt' style='opacity:1;fill:%23005ea2;stroke:none;text-anchor:middle' x='175' y='14'%3E%3C/text%3E%3Cpath id='a' style='fill:%23005ea2' d='M0 8h350v3H0z'/%3E%3C/defs%3E%3Cuse xlink:href='%23a' transform='rotate(90 10 10)'/%3E%3Cuse xlink:href='%23b' transform='rotate(90 10 10)' filter='url(%23c)'/%3E%3C/svg%3E");
+      padding-left: 3rem;
+    }
+  }
+</style>
+
+  
+
+
+
+        
+            <link rel="apple-touch-icon"
+                  sizes="180x180"
+                  href="/static/img/favicons/apple-touch-icon.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="48x48"
+                  href="/static/img/favicons/favicon-48x48.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="32x32"
+                  href="/static/img/favicons/favicon-32x32.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="16x16"
+                  href="/static/img/favicons/favicon-16x16.png" />
+            <link rel="manifest" href="/static/img/favicons/site.webmanifest" />
+            <link rel="mask-icon"
+                  href="/static/img/favicons/safari-pinned-tab.svg"
+                  color="#0071bc" />
+            <meta name="msapplication-config"
+                  content="/static/img/favicons/browserconfig.xml" />
+            <meta name="theme-color" content="#ffffff" />
+        
+
+        <title>
+            Establishment of a Molecular Tumor Board (MTB) and Uptake of Recommendations in a Community Setting - PMC
+        </title>
+
+        
+        
+  
+  <!-- Logging params: Pinger defaults -->
+<meta name="ncbi_app" content="cloudpmc-viewer" />
+<meta name="ncbi_db" content="pmc" />
+<meta name="ncbi_phid" content="DB2B3B049264E4933C3B04001FEDE6B8.m_1" />
+<meta name="ncbi_pinger_stat_url" content="https://pmc.ncbi.nlm.nih.gov/stat" />
+<!-- Logging params: Pinger custom -->
+<meta name="ncbi_pdid" content="article" />
+  
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
+    
+        <link rel="preconnect" href="https://cdn.ncbi.nlm.nih.gov" />
+    
+
+    <!-- Include USWDS Init Script -->
+    <script src="/static/assets/uswds-init.js"></script>
+
+
+    <meta name="ncbi_domain" content="jpersmed">
+<meta name="ncbi_type" content="fulltext">
+<meta name="ncbi_pcid" content="journal">
+<meta name="ncbi_feature" content="associated_data">
+<link rel="canonical" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7711773/">
+<meta name="robots" content="INDEX,NOFOLLOW,NOARCHIVE">
+<meta name="citation_journal_title" content="Journal of Personalized Medicine">
+<meta name="citation_title" content="Establishment of a Molecular Tumor Board (MTB) and Uptake of Recommendations in a Community Setting">
+<meta name="citation_author" content="Ari VanderWalde">
+<meta name="citation_author_institution" content="West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)">
+<meta name="citation_author" content="Axel Grothey">
+<meta name="citation_author_institution" content="West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)">
+<meta name="citation_author" content="Daniel Vaena">
+<meta name="citation_author_institution" content="West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)">
+<meta name="citation_author" content="Gregory Vidal">
+<meta name="citation_author_institution" content="West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)">
+<meta name="citation_author" content="Adam ElNaggar">
+<meta name="citation_author_institution" content="West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)">
+<meta name="citation_author" content="Gabriella Bufalino">
+<meta name="citation_author_institution" content="West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)">
+<meta name="citation_author" content="Lee Schwartzberg">
+<meta name="citation_author_institution" content="West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)">
+<meta name="citation_publication_date" content="2020 Nov 27">
+<meta name="citation_volume" content="10">
+<meta name="citation_issue" content="4">
+<meta name="citation_firstpage" content="252">
+<meta name="citation_doi" content="10.3390/jpm10040252">
+<meta name="citation_pmid" content="33260805">
+<meta name="citation_abstract_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC7711773/">
+<meta name="citation_fulltext_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC7711773/">
+<meta name="citation_pdf_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC7711773/pdf/jpm-10-00252.pdf">
+<meta name="description" content="In the precision medicine era, molecular testing in advanced cancer is foundational to patient management. Molecular tumor boards (MTBs) can be effective in processing comprehensive genomic profiling (CGP) results and providing expert ...">
+<meta name="og:title" content="Establishment of a Molecular Tumor Board (MTB) and Uptake of Recommendations in a Community Setting">
+<meta name="og:type" content="article">
+<meta name="og:site_name" content="PubMed Central (PMC)">
+<meta name="og:description" content="In the precision medicine era, molecular testing in advanced cancer is foundational to patient management. Molecular tumor boards (MTBs) can be effective in processing comprehensive genomic profiling (CGP) results and providing expert ...">
+<meta name="og:url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC7711773/">
+<meta name="og:image" content="https://cdn.ncbi.nlm.nih.gov/pmc/cms/images/pmc-card-share.jpg?_=0">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ncbi">
+    
+    
+
+    </head>
+    <body >
+        
+    <a class="usa-skipnav " href="#main-content">
+      Skip to main content
+    </a>
+
+
+        
+            
+
+<section class="usa-banner " aria-label="Official website of the United States government" >
+    <div class="usa-accordion">
+        <header class="usa-banner__header">
+            <div class="usa-banner__inner">
+                <div class="grid-col-auto">
+                    <img aria-hidden="true"
+                         class="usa-banner__header-flag"
+                         src="/static/img/us_flag.svg"
+                         alt="" />
+                </div>
+
+                <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                    <p class="usa-banner__header-text">
+                        An official website of the United States government
+                    </p>
+                    <span class="usa-banner__header-action">Here's how you know</span>
+                </div>
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-accordion__button usa-banner__button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    aria-expanded="false"
+    aria-controls="gov-banner-default"
+    
+    data-testid="storybook-django-banner"
+    
+    >
+    
+        
+
+        
+                    <span class="usa-banner__button-text">Here's how you know</span>
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </div>
+        </header>
+
+        <div class="usa-banner__content usa-accordion__content"
+             id="gov-banner-default"
+             hidden>
+            <div class="grid-row grid-gap-lg">
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-dot-gov.svg"
+                         alt=""
+                         aria-hidden="true" />
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Official websites use .gov</strong>
+                            <br />
+                            A
+                            <strong>.gov</strong> website belongs to an official
+                            government organization in the United States.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-https.svg"
+                         alt=""
+                         aria-hidden="true" />
+
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Secure .gov websites use HTTPS</strong>
+                            <br />
+                            A <strong>lock</strong> (
+                            <span class="icon-lock">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="52"
+                                     height="64"
+                                     viewBox="0 0 52 64"
+                                     class="usa-banner__lock-image"
+                                     role="graphics-symbol"
+                                     aria-labelledby="banner-lock-description"
+                                     focusable="false">
+                                    <title id="banner-lock-title">Lock</title>
+                                    <desc id="banner-lock-description">
+                                    Locked padlock icon
+                                    </desc>
+                                    <path fill="#000000"
+                                          fill-rule="evenodd"
+                                          d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z" />
+                                </svg>
+</span>) or <strong>https://</strong> means you've safely
+                                connected to the .gov website. Share sensitive
+                                information only on official, secure websites.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        
+
+        
+    
+    
+    
+
+<div class="usa-overlay">
+</div>
+
+
+
+<header class="usa-header usa-header--extended usa-header--wide" data-header data-testid="header"    >
+    <div class="ncbi-header">
+        <div class="ncbi-header__container">
+            <a class="ncbi-header__logo-container"
+               href="https://www.ncbi.nlm.nih.gov/">
+                <img alt="NCBI home page"
+                     class="ncbi-header__logo-image"
+                     src="/static/img/ncbi-logos/nih-nlm-ncbi--white.svg"
+                     width="410"
+                     height="100" />
+            </a>
+
+            <!-- Mobile menu hamburger button -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-menu-btn ncbi-header__hamburger-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Show menu"
+    data-testid="navMenuButton"
+    
+    >
+    
+        
+
+        
+                <svg aria-hidden="true"
+                     class="ncbi-hamburger-icon"
+                     fill="none"
+                     focusable="false"
+                     height="21"
+                     viewBox="0 0 31 21"
+                     width="31"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M0.125 20.75H30.875V17.3333H0.125V20.75ZM0.125 12.2083H30.875V8.79167H0.125V12.2083ZM0.125 0.25V3.66667H30.875V0.25H0.125Z"
+                          fill="#F1F1F1"
+                          fill-rule="evenodd" />
+                </svg>
+            
+
+        
+    
+        
+            </button>
+        
+
+
+
+            
+                <!-- Desktop buttons-->
+                <div class="ncbi-header__desktop-buttons">
+                    
+                        <!-- Desktop search button -->
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button
+           "
+    aria-expanded="false"
+    aria-controls="search-field-desktop-navigation"
+    aria-label="Show search overlay"
+    data-testid="toggleSearchPanelButton"
+    data-toggle-search-panel-button
+    >
+    
+        
+
+        
+                            
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#search" />
+    </svg>
+
+
+                            Search
+                        
+
+        
+    
+        
+            </button>
+        
+
+
+                    
+
+                    <!-- Desktop login dropdown -->
+                    
+                        <div class="ncbi-header__login-dropdown">
+                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button ncbi-header__login-dropdown-button
+           "
+    aria-expanded="false"
+    aria-controls="login-dropdown-menu"
+    aria-label="Show login menu"
+    data-testid="toggleLoginMenuDropdown"
+    data-desktop-login-button
+    >
+    
+        
+
+        
+                                
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#person" />
+    </svg>
+
+
+
+                                <span data-login-dropdown-text>Log in</span>
+
+                                <!-- Dropdown icon pointing up -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-less ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-up-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_less" />
+    </svg>
+
+
+
+                                <!-- Dropdown icon pointing down -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-more ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-down-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_more" />
+    </svg>
+
+
+                            
+
+        
+    
+        
+            </button>
+        
+
+
+
+                            <!-- Login dropdown menu -->
+                            <ul class="usa-nav__submenu ncbi-header__login-dropdown-menu"
+                                id="login-dropdown-menu"
+                                data-desktop-login-menu-dropdown
+                                hidden>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                <li class="usa-nav__submenu-item">
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--outline ncbi-header__login-dropdown-logout-button
+           "
+    
+    
+    
+    data-testid="desktopLogoutButton"
+    data-desktop-logout-button
+    >
+    
+        
+
+        Log out
+
+        
+    
+        
+            </button>
+        
+
+
+                                </li>
+                            </ul>
+                        </div>
+                    
+                </div>
+            
+        </div>
+    </div>
+
+    <!-- Search panel -->
+    
+        <div class="ncbi-search-panel ncbi--show-only-at-desktop"
+             data-header-search-panel
+             hidden>
+            <div class="ncbi-search-panel__container">
+                <form action="https://www.ncbi.nlm.nih.gov/search/all/"
+                      
+                      autocomplete="off"
+                      class="usa-search usa-search--big ncbi-search-panel__form"
+                      data-testid="desktop-navigation-search-form"
+                      method="GET"
+                      role="search">
+                    <label class="usa-sr-only" for="search-field-desktop-navigation">
+                        Search…
+                    </label>
+                    <input class="usa-input"
+                           id="search-field-desktop-navigation"
+                           name="term"
+                           
+                               placeholder="Search NCBI"
+                           
+                           type="search"
+                           value="" />
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                        <span class="usa-search__submit-text">
+                            Search NCBI
+                        </span>
+                    
+
+        
+    
+        
+            </button>
+        
+
+
+                </form>
+
+                
+            </div>
+        </div>
+    
+
+    <nav aria-label="Primary navigation" class="usa-nav">
+        <p class="usa-sr-only" id="primary-navigation-sr-only-title">
+            Primary site navigation
+        </p>
+
+        <!-- Mobile menu close button -->
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-nav__close ncbi-nav__close-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Close navigation menu"
+    data-testid="navCloseButton"
+    
+    >
+    
+        
+
+        
+            <img src="/static/img/usa-icons/close.svg" alt="Close" />
+        
+
+        
+    
+        
+            </button>
+        
+
+
+
+        
+            <!-- Mobile search component -->
+            <form class="usa-search usa-search--small ncbi--hide-at-desktop margin-top-6"
+                  action="https://www.ncbi.nlm.nih.gov/search/all/"
+                  
+                  autocomplete="off"
+                  data-testid="mobile-navigation-search-form"
+                  method="GET"
+                  role="search">
+                <label class="usa-sr-only" for="search-field-mobile-navigation">
+                    Search
+                </label>
+
+                <input class="usa-input"
+                       id="search-field-mobile-navigation"
+                       type="search"
+                       
+                           placeholder="Search NCBI"
+                       
+                       name="term" />
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                    <!-- This SVG should be kept inline and not replaced with a link to the icon as otherwise it will render in the wrong color -->
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0E2LjQ3MSA2LjQ3MSAwIDAgMCAxNiA5LjUgNi41IDYuNSAwIDEgMCA5LjUgMTZjMS42MSAwIDMuMDktLjU5IDQuMjMtMS41N2wuMjcuMjh2Ljc5bDUgNC45OUwyMC40OSAxOWwtNC45OS01em0tNiAwQzcuMDEgMTQgNSAxMS45OSA1IDkuNVM3LjAxIDUgOS41IDUgMTQgNy4wMSAxNCA5LjUgMTEuOTkgMTQgOS41IDE0eiIvPjwvc3ZnPg=="
+                         class="usa-search__submit-icon"
+                         alt="Search" />
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </form>
+
+            
+        
+
+        <!-- Primary navigation menu items -->
+        <!-- This usa-nav__inner wrapper is required to correctly style the navigation items on Desktop -->
+        
+
+        
+            <div class="ncbi-nav__mobile-login-menu ncbi--hide-at-desktop"
+                 data-mobile-login-menu
+                 hidden>
+                <p class="ncbi-nav__mobile-login-menu-status">
+                    Logged in as:
+                    <strong class="ncbi-nav__mobile-login-menu-email"
+                            data-mobile-login-email-text></strong>
+                </p>
+                <ul class="usa-nav__primary usa-accordion">
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           ncbi-nav__mobile-login-button ncbi--hide-at-desktop
+           "
+    
+    
+    
+    data-testid="mobileLoginButton"
+    data-mobile-login-button
+    >
+    
+        
+
+        Log in
+
+        
+    
+        
+            </button>
+        
+
+
+    </nav>
+</header>
+
+    
+    
+        
+
+<section class="pmc-header pmc-header--basic" aria-label="PMC Header with search box">
+    <div class="pmc-nav-container">
+        <div class="pmc-header__bar">
+           <div class="pmc-header__logo">
+               <a href="/" title="Home" aria-label="PMC Home"></a>
+           </div>
+            <button
+                    type="button"
+                    class="usa-button usa-button--unstyled pmc-header__search__button"
+                    aria-label="Open search"
+                    data-ga-category="search"
+                    data-ga-action="PMC"
+                    data-ga-label="pmc_search_panel_mobile"
+            >
+                <svg class="usa-icon width-4 height-4 pmc-icon__open" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#search"></use>
+                </svg>
+                <svg class="usa-icon width-4 height-4 pmc-icon__close" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="pmc-header__search">
+            
+
+
+<form class="usa-search usa-search--extra usa-search--article-right-column  pmc-header__search__form" id="pmc-search-form" autocomplete="off" role="search">
+<label class="usa-sr-only" for="pmc-search">Search PMC Full-Text Archive</label>
+<span class="autoComplete_wrapper flex-1">
+<input class="usa-input width-full maxw-none" required="required" placeholder="Search PMC Full-Text Archive" id="pmc-search"  type="search" name="term" data-autocomplete-url="https://pmc.ncbi.nlm.nih.gov/autocomp/search/autocomp/"/>
+</span>
+<button
+class="usa-button"
+type="submit"
+formaction="https://pmc.ncbi.nlm.nih.gov/search/"
+data-ga-category="search"
+data-ga-action="PMC"
+data-ga-label="PMC_search_button"
+>
+<span class="usa-search__submit-text">Search in PMC</span>
+<img
+src="/static/img/usa-icons-bg/search--white.svg"
+class="usa-search__submit-icon"
+alt="Search"
+/>
+</button>
+</form>
+            <div class="display-flex flex-column tablet:flex-row tablet:flex-justify flex-justify-center flex-align-center width-full desktop:maxw-44">
+                <ul class="pmc-header__search__menu">
+                    <li>
+                        
+                            <a class="usa-link" href="/journals/" data-ga-action="featured_link" data-ga-label="journal list">
+                                Journal List
+                            </a>
+                        
+                    </li>
+                    <li>
+                        
+                            <a class="usa-link" href="/about/userguide/" data-ga-action="featured_link"
+                            data-ga-label="user guide">
+                                User Guide
+                            </a>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+    
+
+
+        
+        
+
+       
+  <div class="usa-section padding-top-0 desktop:padding-top-6 pmc-article-section" data-article-db="pmc" data-article-id="7711773">
+
+    
+
+   
+
+
+
+<div class="grid-container pmc-actions-bar" aria-label="Actions bar" role="complementary">
+    <div class="grid-row">
+        <div class="grid-col-fill display-flex">
+             <div class="display-flex">
+                <ul class="usa-list usa-list--unstyled usa-list--horizontal">
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <button
+                                type="button"
+                                class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                                aria-label="Open resources"
+                                data-extra-class="is-visible-resources"
+                                data-ga-category="resources_accordion"
+                                data-ga-action="click"
+                                data-ga-label="mobile_icon"
+                        >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#more_vert"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <a
+                                href="https://doi.org/10.3390/jpm10040252"
+                                class="usa-link display-flex usa-tooltip"
+                                role="button"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                title="View on publisher site"
+                                data-position="bottom"
+                                aria-label="View on publisher site"
+                                data-ga-category="actions"
+                                data-ga-action="click"
+                                data-ga-label="publisher_link_mobile"
+                        >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#launch"></use>
+                                </svg>
+                        </a>
+                    </li>
+                    
+                    
+                        <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                             <a
+                                     href="pdf/jpm-10-00252.pdf"
+                                     class="usa-link display-flex usa-tooltip"
+                                     role="button"
+                                     title="Download PDF"
+                                     data-position="bottom"
+                                     aria-label="Download PDF"
+                                     data-ga-category="actions"
+                                     data-ga-action="click"
+                                     data-ga-label="pdf_download_mobile"
+                             >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                                </svg>
+                            </a>
+                        </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button
+                            class="usa-button usa-button--unstyled  usa-tooltip collections-dialog-trigger collections-button display-flex collections-button-empty"
+                            title="Add to Collections"
+                            data-position="bottom"
+                            aria-label="Save article in MyNCBI collections."
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="collections_button_mobile"
+                            data-collections-open-dialog-enabled="false"
+                            data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC7711773%2F%23open-collections-dialog"
+                            data-in-collections="false"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button role="button" class="usa-button usa-button--unstyled usa-tooltip citation-dialog-trigger display-flex"
+                            aria-label="Open dialog with citation text in different styles"
+                            title="Cite"
+                            data-position="bottom"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="cite_mobile"
+                            data-all-citations-url="/resources/citations/7711773/"
+                            data-citation-style="nlm"
+                            data-download-format-link="/resources/citations/7711773/export/"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="pmc-permalink display-flex" >
+                         <button
+                                 type="button"
+                                 title="Permalink"
+                                 data-position="bottom"
+                                 class="usa-button usa-button--unstyled display-flex usa-tooltip"
+                                 aria-label="Show article permalink"
+                                 aria-expanded="false"
+                                 aria-haspopup="true"
+                                 data-ga-category="actions"
+                                 data-ga-action="open"
+                                 data-ga-label="permalink_mobile"
+                         >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#share"></use>
+                            </svg>
+                        </button>
+                        
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC7711773/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+                    </li>
+                </ul>
+            </div>
+            <button
+                    type="button"
+                    class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                    aria-label="Open article navigation"
+                    data-extra-class="is-visible-in-page"
+                    data-ga-category="actions"
+                    data-ga-action="open"
+                    data-ga-label="article_nav_mobile"
+            >
+                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#list"></use>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+    <div class="grid-container desktop:padding-left-6">
+      <div id="article-container" class="grid-row grid-gap">
+        <div class="grid-col-12 desktop:grid-col-8 order-2 pmc-layout__content">
+            <div class="grid-container padding-left-0 padding-right-0">
+                <div class="grid-row desktop:margin-left-neg-6">
+                    <div class="grid-col-12">
+                        <div class="pmc-layout__disclaimer" role="complementary" aria-label="Disclaimer note">
+    As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+    the contents by NLM or the National Institutes of Health.<br/>
+    Learn more:
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="Disclaimer" data-ga-label="New disclaimer box" href="/about/disclaimer/">PMC Disclaimer</a>
+    |
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="PMC Copyright Notice" data-ga-label="New disclaimer box" href="/about/copyright/">
+        PMC Copyright Notice
+    </a>
+</div>
+                    </div>
+                </div>
+                <div class="grid-row pmc-wm desktop:margin-left-neg-6">
+                    <!-- Main content -->
+                    <main
+                      id="main-content"
+                      class="usa-layout-docs__main usa-layout-docs grid-col-12 pmc-layout pmc-prose padding-0"
+                    >
+
+                      
+                        <section class="pmc-journal-banner text-center line-height-none" aria-label="Journal banner"><img src="https://cdn.ncbi.nlm.nih.gov/pmc/banners/logo-jpersmed.png" alt="Journal of Personalized Medicine logo" usemap="#pmc-banner-imagemap" width="500" height="75"><map name="pmc-banner-imagemap"><area alt="Link to Journal of Personalized Medicine" title="Link to Journal of Personalized Medicine" shape="default" href="http://www.mdpi.com/journal/jpm" target="_blank" rel="noopener noreferrer"></map></section><article lang="en"><section aria-label="Article citation and metadata"><section class="pmc-layout__citation font-secondary font-xs"><div>
+<div class="display-inline-block"><button type="button" class="cursor-pointer text-no-underline bg-transparent border-0 padding-0 text-left margin-0 text-normal text-primary" aria-controls="journal_context_menu">J Pers Med</button></div>. 2020 Nov 27;10(4):252. doi: <a href="https://doi.org/10.3390/jpm10040252" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">10.3390/jpm10040252</a>
+</div>
+<nav id="journal_context_menu" hidden="hidden"><ul class="menu-list font-family-ui" role="menu">
+<li role="presentation"><a href="https://pmc.ncbi.nlm.nih.gov/search/?term=%22J%20Pers%20Med%22%5Bjour%5D" class="usa-link" role="menuitem">Search in PMC</a></li>
+<li role="presentation"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22J%20Pers%20Med%22%5Bjour%5D" lang="en" class="usa-link" role="menuitem">Search in PubMed</a></li>
+<li role="presentation"><a href="https://www.ncbi.nlm.nih.gov/nlmcatalog?term=%22J%20Pers%20Med%22%5BTitle%20Abbreviation%5D" class="usa-link" role="menuitem">View in NLM Catalog</a></li>
+<li role="presentation"><a href="?term=%22J%20Pers%20Med%22%5Bjour%5D" class="usa-link" role="menuitem" data-add-to-search="true">Add to search</a></li>
+</ul></nav></section><section class="front-matter"><div class="ameta p font-secondary font-xs">
+<hgroup><h1>Establishment of a Molecular Tumor Board (MTB) and Uptake of Recommendations in a Community Setting</h1></hgroup><div class="cg p">
+<a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22VanderWalde%20A%22%5BAuthor%5D" class="usa-link" aria-describedby="id1"><span class="name western">Ari VanderWalde</span></a><div hidden="hidden" id="id1">
+<h3><span class="name western">Ari VanderWalde</span></h3>
+<div class="p">
+<sup>1</sup>West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22VanderWalde%20A%22%5BAuthor%5D" class="usa-link"><span class="name western">Ari VanderWalde</span></a>
+</div>
+</div>
+<sup>1,</sup><sup>*</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Grothey%20A%22%5BAuthor%5D" class="usa-link" aria-describedby="id2"><span class="name western">Axel Grothey</span></a><div hidden="hidden" id="id2">
+<h3><span class="name western">Axel Grothey</span></h3>
+<div class="p">
+<sup>1</sup>West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Grothey%20A%22%5BAuthor%5D" class="usa-link"><span class="name western">Axel Grothey</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Vaena%20D%22%5BAuthor%5D" class="usa-link" aria-describedby="id3"><span class="name western">Daniel Vaena</span></a><div hidden="hidden" id="id3">
+<h3><span class="name western">Daniel Vaena</span></h3>
+<div class="p">
+<sup>1</sup>West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Vaena%20D%22%5BAuthor%5D" class="usa-link"><span class="name western">Daniel Vaena</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Vidal%20G%22%5BAuthor%5D" class="usa-link" aria-describedby="id4"><span class="name western">Gregory Vidal</span></a><div hidden="hidden" id="id4">
+<h3><span class="name western">Gregory Vidal</span></h3>
+<div class="p">
+<sup>1</sup>West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Vidal%20G%22%5BAuthor%5D" class="usa-link"><span class="name western">Gregory Vidal</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22ElNaggar%20A%22%5BAuthor%5D" class="usa-link" aria-describedby="id5"><span class="name western">Adam ElNaggar</span></a><div hidden="hidden" id="id5">
+<h3><span class="name western">Adam ElNaggar</span></h3>
+<div class="p">
+<sup>1</sup>West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22ElNaggar%20A%22%5BAuthor%5D" class="usa-link"><span class="name western">Adam ElNaggar</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Bufalino%20G%22%5BAuthor%5D" class="usa-link" aria-describedby="id6"><span class="name western">Gabriella Bufalino</span></a><div hidden="hidden" id="id6">
+<h3><span class="name western">Gabriella Bufalino</span></h3>
+<div class="p">
+<sup>1</sup>West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Bufalino%20G%22%5BAuthor%5D" class="usa-link"><span class="name western">Gabriella Bufalino</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Schwartzberg%20L%22%5BAuthor%5D" class="usa-link" aria-describedby="id7"><span class="name western">Lee Schwartzberg</span></a><div hidden="hidden" id="id7">
+<h3><span class="name western">Lee Schwartzberg</span></h3>
+<div class="p">
+<sup>1</sup>West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Schwartzberg%20L%22%5BAuthor%5D" class="usa-link"><span class="name western">Lee Schwartzberg</span></a>
+</div>
+</div>
+<sup>1</sup>
+</div>
+<ul class="d-buttons inline-list">
+<li><button class="d-button" aria-controls="aip_a" aria-expanded="false">Author information</button></li>
+<li><button class="d-button" aria-controls="anp_a" aria-expanded="false">Article notes</button></li>
+<li><button class="d-button" aria-controls="clp_a" aria-expanded="false">Copyright and License information</button></li>
+</ul>
+<div class="d-panels font-secondary-light">
+<div id="aip_a" class="d-panel p" style="display: none">
+<div class="p" id="af1-jpm-10-00252">
+<sup>1</sup>West Cancer Center and Research Institute, Memphis, TN 38138, USA; agrothey@WESTCLINIC.com (A.G.); DVaena@WESTCLINIC.com (D.V.); gvidal@WESTCLINIC.com (G.V.); AElNaggar@WESTCLINIC.com (A.E.); GBufalino@WESTCLINIC.com (G.B.); lschwartzberg@WESTCLINIC.com (L.S.)</div>
+<div class="author-notes p"><div class="fn" id="c1-jpm-10-00252">
+<sup>*</sup><p class="display-inline">Correspondence: <span>avanderw@westclinic.com</span>; Tel.: +1-901-683-0055 (ext. 63015)</p>
+</div></div>
+</div>
+<div id="anp_a" class="d-panel p" style="display: none"><div class="notes p"><section id="historyarticle-meta1" class="history"><p>Received 2020 Oct 13; Accepted 2020 Nov 23; Collection date 2020 Dec.</p></section></div></div>
+<div id="clp_a" class="d-panel p" style="display: none">
+<div>© 2020 by the authors.</div>
+<p>Licensee MDPI, Basel, Switzerland. This article is an open access article distributed under the terms and conditions of the Creative Commons Attribution (CC BY) license (<a href="http://creativecommons.org/licenses/by/4.0/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://creativecommons.org/licenses/by/4.0/</a>).</p>
+<div class="p"><a href="/about/copyright/" class="usa-link">PMC Copyright notice</a></div>
+</div>
+</div>
+<div>PMCID: PMC7711773  PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/33260805/" class="usa-link">33260805</a>
+</div>
+</div></section></section><section aria-label="Article content"><section class="body main-article-body"><section class="abstract" id="abstract1"><h2>Abstract</h2>
+<p>In the precision medicine era, molecular testing in advanced cancer is foundational to patient management. Molecular tumor boards (MTBs) can be effective in processing comprehensive genomic profiling (CGP) results and providing expert recommendations. We assessed an MTB and its role in a community setting. This retrospective analysis included patients with MTB recommendations at a community-based oncology practice January 2015 to December 2018; exclusions were death within 60 days of the MTB and/or no metastatic disease. Potentially actionable genomic alterations from CGP (immunohistochemistry, in-situ hybridization, next-generation sequencing) were reviewed bi-weekly by MTB practice experts, pathologists, genetic counselors, and other support staff, and clinical care recommendations were provided. Subsequent chart reviews determined implementation rates of recommendations. In 613 patients, the most common cancers were lung (23%), breast (19%), and colorectal (17%); others included ovarian, endometrial, bladder, and melanoma. Patients received 837 actionable recommendations: standard therapy (37%), clinical trial (31%), germline testing and genetic counseling (17%), off-label therapy (10%), subspecialty multidisciplinary tumor board review (2%), and advice for classifying tumor of unknown origin (2%). Of these recommendations, 36% to 78% were followed by the treating physician. For clinical trial recommendations (<em>n</em> = 262), 13% of patients enrolled in a clinical trial. The median time between CPG result availability and MTB presentation was 12 days. A community oncology-based comprehensive and high-throughput MTB provided useful clinical guidance in various treatment domains within an acceptable timeframe for patients with cancer in a large community setting.</p>
+<section id="kwd-group1" class="kwd-group"><p><strong>Keywords:</strong> MTB, precision medicine, cancer, oncology practice, community setting, CGP</p></section></section><section id="sec1-jpm-10-00252"><h2 class="pmc_sec_title">1. Introduction</h2>
+<p>Tumor biology is commonly driven by genomic alterations of oncogenic pathways that regulate processes such as cell differentiation, proliferation, apoptosis, and tumor metabolism [<a href="#B1-jpm-10-00252" class="usa-link" aria-describedby="B1-jpm-10-00252">1</a>]. Over the last 20 years, the development of targeted treatments against ‘actionable’ genomic changes has led to a paradigm shift towards precision medicine across several tumor types [<a href="#B1-jpm-10-00252" class="usa-link" aria-describedby="B1-jpm-10-00252">1</a>,<a href="#B2-jpm-10-00252" class="usa-link" aria-describedby="B2-jpm-10-00252">2</a>]. Molecular testing therefore allows for tailoring of treatment decisions based on the genomic makeup of a patient’s tumor. </p>
+<p>Expert consensus clinical practice guidelines have defined requirements for routine molecular testing in many malignancies, including advanced non-small cell lung cancer (NSCLC) [<a href="#B3-jpm-10-00252" class="usa-link" aria-describedby="B3-jpm-10-00252">3</a>,<a href="#B4-jpm-10-00252" class="usa-link" aria-describedby="B4-jpm-10-00252">4</a>], breast [<a href="#B5-jpm-10-00252" class="usa-link" aria-describedby="B5-jpm-10-00252">5</a>], ovarian [<a href="#B6-jpm-10-00252" class="usa-link" aria-describedby="B6-jpm-10-00252">6</a>,<a href="#B7-jpm-10-00252" class="usa-link" aria-describedby="B7-jpm-10-00252">7</a>], and colorectal cancers [<a href="#B8-jpm-10-00252" class="usa-link" aria-describedby="B8-jpm-10-00252">8</a>]. Given the number of different pathogenic mutations, comprehensive genomic profiling (CGP) can identify genomic drivers that are predictive of therapeutic response, and facilitate the timely implementation of treatment guidelines [<a href="#B9-jpm-10-00252" class="usa-link" aria-describedby="B9-jpm-10-00252">9</a>,<a href="#B10-jpm-10-00252" class="usa-link" aria-describedby="B10-jpm-10-00252">10</a>]. Furthermore, in some cancers, such as NSCLC, guidelines recommend use of CGP over multiple single-gene tests, and the FDA has approved the use of next-generation sequencing (NGS) testing panels [<a href="#B4-jpm-10-00252" class="usa-link" aria-describedby="B4-jpm-10-00252">4</a>,<a href="#B11-jpm-10-00252" class="usa-link" aria-describedby="B11-jpm-10-00252">11</a>]. However, cancer centers still have a number of clinical and operational considerations including choice of assay, laboratory, and analysis. Furthermore, the extensive tumor-specific molecular data produced from CGP can lead to uncertain clinical interpretation and utility. </p>
+<p>The sheer volume of diverse and continuously evolving data generated by CGP mean effective interpretation and application can be challenging for single-disease focused academic physicians or community oncologists (who are often generalists) [<a href="#B12-jpm-10-00252" class="usa-link" aria-describedby="B12-jpm-10-00252">12</a>]. However, molecular tumor boards (MTBs) with multidisciplinary input can provide an effective workflow and expert review process in order to generate precision medicine recommendations for oncology patients. However, implementation of an MTB within the community setting raises additional challenges: limited availability of genetics and genomics expertise, a lack of institutional imperative for an MTB, logistical barriers such as limited staff or meeting timings to ensure all specialties are attending, lack of dedicated expert physicians to screen cases and manage the MTB, and the need for timely submission of cases [<a href="#B13-jpm-10-00252" class="usa-link" aria-describedby="B13-jpm-10-00252">13</a>].</p>
+<p>This report reviews the clinical utility of CGP and the role of an MTB in a large community oncology clinic on patient treatment decisions and outcomes. We also report the structure, organization, and management of the MTB, including best practices and lessons learned, analysis of patient management decisions based on CGP, and adherence to the MTB decisions.</p></section><section id="sec2-jpm-10-00252"><h2 class="pmc_sec_title">2. Methods</h2>
+<section id="sec2dot1-jpm-10-00252"><h3 class="pmc_sec_title">2.1. Patients and Setting</h3>
+<p>A systematic program of CGP was initiated in December 2014 at the West Cancer Center, Memphis, TN, USA, a large community-based oncology practice. West Cancer Center physicians were encouraged to offer genomic testing to all patients with newly diagnosed metastatic melanoma, lung, colorectal, breast, and pancreatic cancer to a preferred third-party national testing laboratory. Other types of metastatic or recurrent malignancies were tested at the discretion of the treating provider.</p></section><section id="sec2dot2-jpm-10-00252"><h3 class="pmc_sec_title">2.2. CGP</h3>
+<p>Genomic profiling was largely conducted using the Caris MI<sup>®</sup> Profile test (Caris Life Sciences, Phoenix, AZ, USA), which included multi-platform testing with chromogenic in-situ hybridization (CISH), NGS, and immunohistochemistry (IHC), provided commercially by Caris Life Sciences as part of standard of care testing. The NGS panel included 42 genes through 2015, after which a 592-gene panel was adopted for all samples (<a href="#app1-jpm-10-00252" class="usa-link">Supplementary Table S1</a>). Additional relevant IHC testing was conducted on a tumor-lineage specific basis and could include PD-L1, estrogen receptor, progesterone receptor, androgen receptor, HER2, and others. Fusions were routinely detected using RNA-sequencing for ALK and ROS1, and CISH was used in breast and gastric cancer samples to measure HER2 overexpression.</p>
+<p>Mutations were designated as pathogenic, presumed pathogenic, presumed benign, benign, or variant of unknown significance based on the interpretation of available genomic databases. Only pathogenic and presumed pathogenic mutations were reported unless otherwise noted. The criteria used for clinically actionable mutations are described in the <a href="#app1-jpm-10-00252" class="usa-link">Supplementary Material</a>.</p></section><section id="sec2dot3-jpm-10-00252"><h3 class="pmc_sec_title">2.3. MTB</h3>
+<p>A bi-weekly, one-hour MTB meeting to review patient cases was set up (<a href="#jpm-10-00252-f001" class="usa-link">Figure 1</a>). The MTB was designed to be comprehensive and high-throughput, with review of at least 50 cases bi-weekly prior to the meeting, and then full MTB review of 10 to 20 cases. All CGP reports were pre-screened for relevant genomic alterations by a MTB member through a testing laboratory-supported, online portal. While the policy was to obtain testing only for patients with newly diagnosed metastatic disease, reports were screened regardless of the timing of testing. Likewise, data from other genomic laboratories testing tissue or liquid biopsy samples were also screened if made available to the screening provider. Cases with genomic alterations that were potentially ‘actionable’, complicated, or associated with novel treatment decisions not fully incorporated into clinical practice were brought to the MTB for review. Cases could also be referred to the MTB if the treating physician specifically requested clarification of the case or if it was relevant to highlight new data regarding approvals and/or recommendations to the treating physician. Any other cases were omitted from the MTB.</p>
+<figure class="fig xbox font-sm" id="jpm-10-00252-f001"><h4 class="obj_head">Figure 1.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=7711773_jpm-10-00252-g001.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/59c4/7711773/d38e07deb9db/jpm-10-00252-g001.jpg" loading="lazy" height="488" width="748" alt="Figure 1"></a></p>
+<div class="p text-right font-secondary"><a href="figure/jpm-10-00252-f001/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Molecular tumor boards (MTB) workflow and review process. * Data relevant to approvals and/or recommendations for the targeted therapy to be administered. CGP, comprehensive genomic profiling; MTB, molecular tumor board.</p></figcaption></figure><p>MTB meetings were multi-specialty, multi-disciplinary, and open to any interested member of the center. Routine attendance consisted of medical and surgical oncologists with expertise in melanoma, breast, lung, head and neck, gastrointestinal, and genitourinary cancers, gynecologic malignancies, and surgical oncology. Other important members included anatomic and molecular pathologists and genetic counselors. Both the molecular data report and the clinical record from the electronic medical record (EMR) were reviewed and correlated at this live meeting, and the MTB provided recommendations for clinical care within the following six categories: (1) clinical trial; (2) standard therapy; (3) off-label therapy; (4) germline testing and genetic counseling; (5) subspecialty multidisciplinary tumor board review; and (6) advice for classifying tumor of unknown origin.</p>
+<p>Recommendations were generally by consensus; any substantial disagreement among the MTB members was reflected in the recommendation summary. Minutes from the MTB were transcribed, input into the patient’s EMR, and an email with a summary and recommendations sent to the treating physician.</p></section><section id="sec2dot4-jpm-10-00252"><h3 class="pmc_sec_title">2.4. Analysis</h3>
+<p>MTB recommendations by category (<a href="#jpm-10-00252-f001" class="usa-link">Figure 1</a>) and number of recommendations followed by the treating physician were collated and analyzed for all cases presented at the MTB from January 2015 through December 2018. Patients were excluded from the analysis if molecular testing did not meet clinical criteria or if the patient died within 60 days of the MTB, did not have metastatic disease, or was not given recommendations by the MTB.</p></section></section><section id="sec3-jpm-10-00252"><h2 class="pmc_sec_title">3. Results</h2>
+<section id="sec3dot1-jpm-10-00252"><h3 class="pmc_sec_title">3.1. Patients and MTBs</h3>
+<p>Over the observation period, the MTB convened 92 times, of which 22, 21, 25, and 24 MTBs occurred in 2015, 2016, 2017, and 2018, respectively. As data were unavailable for four MTBs in 2015 and one MTB in 2018, the data reported include recommendations and follow-up from 87 MTBs. Of an estimated 4438 reported molecular test results, reports and clinical information from 837 patients were selected as potentially benefiting from additional clinical review at the MTB. Of these, 131 patients did not have a follow-up appointment and/or died within 60 days of the MTB, 54 patients did not have metastatic disease, 35 patients did not receive formal recommendations at the MTB, and 4 patients could not be found in the EMR database. As such, 613/4438 patients with recommendations were evaluated (14% of test reports) and received a total of 837 actionable recommendations. </p>
+<p>Of the 613 patients analyzed, 58% (<em>n</em> = 355) were female, African Americans comprised 30% (<em>n</em> = 181), with 68% <em>(n</em> = 417) Caucasian, and 2% (<em>n</em> = 15) other ethnicities. The most common cancers were lung (23%), breast (19%), and colorectal (17%). Other malignancies representing more than 20 cases each included ovarian, endometrial, and bladder cancers, and melanoma.</p>
+<p>The median time between CGP results becoming available and presentation at the MTB was 12 days (interquartile range, 6 to 18 days). Median time from MTB presentation to last follow-up or date of death was 13.3 months. Among the 508 patients for whom extensive retrospective records were available, the median time from test ordering to result reporting (including time from order to biopsy, biopsy to pathology, pathology shipped to central test, processing, and resulting of the test) was 20 days.</p></section><section id="sec3dot2-jpm-10-00252"><h3 class="pmc_sec_title">3.2. MTB Recommendations and Adherence to Recommendations</h3>
+<p>The majority of recommendations from the MTB were for standard therapy (51% of patients), and clinical trials (43% of patients; <a href="#jpm-10-00252-t001" class="usa-link">Table 1</a>). Overall, recommendations followed by the treating physician ranged from 36% to 78%, depending on the category, with the highest compliance for following standard therapy (<a href="#jpm-10-00252-f002" class="usa-link">Figure 2</a>).</p>
+<section class="tw xbox font-sm" id="jpm-10-00252-t001"><h4 class="obj_head">Table 1.</h4>
+<div class="caption p"><p>Recommendations by category from the MTB for all patients analyzed (<em>n</em> = 613).</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
+<thead><tr>
+<th align="center" valign="middle" style="border-top:solid thin;border-bottom:solid thin" rowspan="1" colspan="1">Recommendation Category</th>
+<th align="center" valign="middle" style="border-top:solid thin;border-bottom:solid thin" rowspan="1" colspan="1">Number of Recommendations</th>
+<th align="center" valign="middle" style="border-top:solid thin;border-bottom:solid thin" rowspan="1" colspan="1">Proportion of Patients Receiving Recommendations <sup>1</sup> (%)</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center" valign="middle" rowspan="1" colspan="1">Clinical trial</td>
+<td align="center" valign="middle" rowspan="1" colspan="1">262</td>
+<td align="center" valign="middle" rowspan="1" colspan="1">43</td>
+</tr>
+<tr>
+<td align="center" valign="middle" rowspan="1" colspan="1">Standard therapy</td>
+<td align="center" valign="middle" rowspan="1" colspan="1">311</td>
+<td align="center" valign="middle" rowspan="1" colspan="1">51</td>
+</tr>
+<tr>
+<td align="center" valign="middle" rowspan="1" colspan="1">Off-label therapy</td>
+<td align="center" valign="middle" rowspan="1" colspan="1">84</td>
+<td align="center" valign="middle" rowspan="1" colspan="1">14</td>
+</tr>
+<tr>
+<td align="center" valign="middle" rowspan="1" colspan="1">Germline testing and genetic counseling</td>
+<td align="center" valign="middle" rowspan="1" colspan="1">143</td>
+<td align="center" valign="middle" rowspan="1" colspan="1">23</td>
+</tr>
+<tr>
+<td align="center" valign="middle" rowspan="1" colspan="1">Subspecialty multidisciplinary tumor board review</td>
+<td align="center" valign="middle" rowspan="1" colspan="1">18</td>
+<td align="center" valign="middle" rowspan="1" colspan="1">3</td>
+</tr>
+<tr>
+<td align="center" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">Advice for classifying tumor of unknown origin</td>
+<td align="center" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">13</td>
+<td align="center" valign="middle" style="border-bottom:solid thin" rowspan="1" colspan="1">2</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/jpm-10-00252-t001/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<div class="tw-foot p"><div class="fn" id="fn2"><p><sup>1</sup> Patients could have more than one recommendation. Abbreviations: MTB, molecular tumor board.</p></div></div></section><figure class="fig xbox font-sm" id="jpm-10-00252-f002"><h4 class="obj_head">Figure 2.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=7711773_jpm-10-00252-g002.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/59c4/7711773/be153b819ce8/jpm-10-00252-g002.jpg" loading="lazy" height="410" width="737" alt="Figure 2"></a></p>
+<div class="p text-right font-secondary"><a href="figure/jpm-10-00252-f002/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Proportion of MTB recommendations followed by the treating physician for all patients. MTB, molecular tumor board.</p></figcaption></figure><p>MTB recommendations for clinical trial enrollment (<em>n</em> = 262) were followed by the treating physician for 150 (57%) patients, with 35 (13%) patients ultimately enrolling in a clinical trial. Of these clinical trial recommendations, the MTB recommended 167 (64%) patients to enroll immediately, of which 93 (56%) recommendations were followed by the treating physician and 20 (12%) patients enrolled in a trial (<a href="#app1-jpm-10-00252" class="usa-link">Supplementary Figure S1</a>). The remaining MTB recommendations for clinical trial enrollment (<em>n</em> = 95; 36%) were for patients to enroll in future clinical trials upon progression, after standard of care therapy. Of these, 57 (60%) recommendations were followed and 15 (16%) patients enrolled in a clinical trial (<a href="#app1-jpm-10-00252" class="usa-link">Supplementary Figure S1</a>). Among the 115 patients who did not follow the recommendation, the most common reasons for not enrolling included failed screening or ineligibility (34%), declined participation (18%), and lack of follow-up after a preliminary discussion (20%).</p>
+<p>MTB recommendations for standard therapy and off-label therapy were followed by the treating physician in 78% (<em>n</em> = 244) and 37% (<em>n</em> = 31) of cases, respectively. Germline testing and genetic counseling recommendations were followed in 36% (<em>n</em> = 52) of cases; of these, 9 (17%) patients declined testing, did not follow-up, or were still deciding, 28 (54%) patients were negative, and 15 (29%) patients were positive for a germline mutation (ATM, <em>n</em> = 1; BRCA1, <em>n</em> = 2; BRCA2, <em>n</em> = 6; CHEK2, <em>n</em> = 2; Lynch syndrome, <em>n</em> = 2; homozygous MUTYH, <em>n</em> = 2). </p>
+<p>The type of recommendation given did not vary by race, with 31% of African American patients and 32% of Caucasian patients receiving the clinical trial recommendation; 40% and 36% were recommended standard therapy, 12% and 10% were recommended off-label therapy, and 15% and 18% were recommended germline testing, respectively. However, there appeared to be minor differences in the following of the recommendations, particularly in germline testing. Recommended germline testing was performed in 27% of African American patients compared with 38% of Caucasian patients. Similar numbers of African American and Caucasian patients followed recommendations for standard therapy (75% vs. 80%), off-label recommendations (32% vs. 39%) and clinical trials (52% vs. 60%); however, these did indicate slightly higher utilization of recommendations by Caucasian patients. </p></section><section id="sec3dot3-jpm-10-00252"><h3 class="pmc_sec_title">3.3. The Value of MTBs beyond Standard Reporting</h3>
+<p>The following two cases illustrate how the MTB added value to therapeutic decisions, using combined knowledge of the tumor biology and clinical aspects of cases to guide treatment decisions; treatment suggestions based on molecular alterations would not be adequate in these cases.</p>
+<p>In the first case, a 67-year-old woman with a BRCA2 germline mutation (exon 10 I605fs) had surgery for serous carcinoma of the fallopian tube and received adjuvant chemotherapy. She developed liver metastases and subsequently progressed on multiple therapies including endocrine therapy, poly ADP-ribose polymerase (PARP) inhibitors, immunotherapy, and chemotherapy. Following this, molecular analysis revealed new mutations. While circulating free DNA (cfDNA) testing revealed the known germline BRCA2 mutation, it also revealed BRCA2 G602fs (0.2%), BRCA2 c.794-16_797del (0.5%), and BRCA2 c.794-10_794-1del (0.8%). The latter two were described as splice-site indels and felt to represent ‘reversal’ mutations. Tumor molecular testing revealed the known exon 10 germline mutation but also an additional exon 10 mutation at p.G602E (16% variant frequency), which was described as a variant of uncertain significance and had not been previously present two years prior. Based on the combined data, the patient was referred to a clinical trial with a novel cell cycle regulating agent, to which she began responding. </p>
+<p>In the second case, a 49-year-old woman never-smoker was diagnosed with epidermal growth factor receptor (EGFR)-mutated (exon 19 p.E746_A750del) metastatic lung cancer four years prior to MTB presentation. After two years of treatment with EGFR-tyrosine kinase inhibitor (TKI), her tumor developed an EGFR T790M (exon 20) mutation, and she initiated osimertinib treatment. She responded for two years, but ultimately progressed. Repeat tissue molecular profiling showed the presence of a tertiary EGFR mutation (C797S, exon 20) which was notably not seen on liquid biopsy at the time and is associated with acquired resistance to osimertinib. MTB review indicated that similar combinations of mutations also conferred resistance to putative exon 20 inhibitors, but that combining osimertinib with a first-generation EGFR-TKI could possibly be an effective treatment option. However, the patient’s health declined as a result of disease progression, and she was unable to receive the recommended combination therapy.</p></section></section><section id="sec4-jpm-10-00252"><h2 class="pmc_sec_title">4. Discussion</h2>
+<p>West Cancer Center was an early adopter of recommending routine CGP for advanced cancers and integrating an MTB to review the results in a timely fashion in a large clinical practice. Here we present four years of data in a pre-planned MTB in a large community setting, reflecting both a large sample size and a broad time-frame (&gt;4400 reviewed reports and &gt;800 patients reviewed in full MTBs). These results show that routine CGP with universal pre-screen review, selection of cases, and presentation at our high-throughput, bi-weekly MTB is feasible as a means of providing clinical guidance to a substantial proportion of cancer patients. </p>
+<p>Between 2015 and 2018, MTB recommendations followed by the treating physician ranged from 36% to 78% depending on the recommendation category, with the lowest rate of adherence to recommendations for genetic counseling and germline testing, and highest for standard therapy, similar to acceptance rates reported by other MTBs (27% to 70%) [<a href="#B14-jpm-10-00252" class="usa-link" aria-describedby="B14-jpm-10-00252">14</a>,<a href="#B15-jpm-10-00252" class="usa-link" aria-describedby="B15-jpm-10-00252">15</a>]. The low rate of germline testing is consistent with that seen in other centers and was likely multifactorial in etiology (patient refusal, provider non-prioritization, poor communication, etc.), although reasons for non-acceptance were not measured in our cohort [<a href="#B16-jpm-10-00252" class="usa-link" aria-describedby="B16-jpm-10-00252">16</a>].</p>
+<p>The MTB was implemented to provide recommendations on clinical care, increase clinical trial participation, and improve awareness of standard or potential targeted therapies. We found MTB recommendations to be particularly useful in identifying clinical trial eligibility (recommended in 262 cases; 35 patients (13%) ultimately enrolled). This was slightly higher than the 7% rate reported in a community setting in Michigan [<a href="#B17-jpm-10-00252" class="usa-link" aria-describedby="B17-jpm-10-00252">17</a>], and similar to that reported by the Institut Curie Molecular Tumor Board, an academic medical center in a more centralized health care system where, among the 442 patients who underwent CGP, 10% were ultimately enrolled in a clinical trial [<a href="#B18-jpm-10-00252" class="usa-link" aria-describedby="B18-jpm-10-00252">18</a>]. Clinical trial enrollment in the present study was restricted by failed clinical trial screening, lack of follow-up after initial discussion regarding clinical trial enrollment, and patients declining participation. </p>
+<p>Our experience showed that turnaround times for molecular analysis and the delivery of recommendations were favorable in this community-based MTB compared with that reported in academic models. The median time from molecular diagnostic results being received and MTB patient presentation was 12 days. Moreover, overall turnaround time from time of request of molecular tests through to the provision of MTB recommendations was comparable with previous studies (median, 33 days) [<a href="#B19-jpm-10-00252" class="usa-link" aria-describedby="B19-jpm-10-00252">19</a>,<a href="#B20-jpm-10-00252" class="usa-link" aria-describedby="B20-jpm-10-00252">20</a>]. </p>
+<p>Rather than performing a ‘gate-keeper’ role [<a href="#B20-jpm-10-00252" class="usa-link" aria-describedby="B20-jpm-10-00252">20</a>], West Cancer Center MTB reviewed each case for appropriateness and the availability of tumor tissue prior to testing to avoid unnecessary testing and associated costs. In our institution, a clinic-wide policy dictated which cases should be sent for tissue-based CGP, namely common malignancies at first diagnosis of metastatic disease. Due to the timing of this approach, recommendations could be made for virtually all lines of therapy with the highest chance of identifying clinical trial opportunities while minimizing disruption to patients, as biopsies are performed at this time point for other clinical purposes. However, this approach can be problematic as molecular results may need to be recalled by the treating physician if the patient qualifies for a clinical trial as they progress through therapy. An additional challenge is that ‘upfront’ testing underestimates the future development of heterogeneous disease or acquired resistance mutations.</p>
+<p>West Cancer Center MTB was innovative by adding a pre-screening step following the CGP report, allowing the MTB to focus only on those cases for which recommendations were of ultimate benefit to the patient. This is in contrast to other MTBs where physicians choose when and whether to present the case. Our methodology, therefore, created a high-throughput model where cases were not missed and maximum utility was maintained. Additionally, it led to cases being presented early in the clinical course, so that recommendations could take into account standard therapies for each disease and targeted actions after standard therapies failed.</p>
+<p>There are several noteworthy limitations to our study. The number of ‘actionable’ molecular alterations reported may be conservative due to changes in actionability and the development of new targeted therapies over the period of the study (2015 to 2018), in addition to the evolution in genomic sequencing. Pre-screening of cases prior to presentation in the MTB was completed by a single physician and relied on their assessment of current clinic practices and baseline knowledge of individual physician practices, therefore the choice of which cases were ‘actionable’ was somewhat subjective and changed over time with the integration of new molecular-guided therapies into practice. This could have led to changes in what the screening physician decided could be considered of benefit to the treating physicians. We also acknowledge the financial implications involved in broad testing of patients; however, our study was designed to assess the role and feasibility of implementing an MTB in a community setting, and cost was not a key focus. </p>
+<p>As personalized/precision medicine becomes integrated into standard clinical practice, MTBs are playing an increasingly important role in supporting decision making by the treating physician. Robust, reproducible, and comprehensive bioinformatics analyses and close interactions between physicians and bioinformaticians are critical to the success of targeted therapy [<a href="#B21-jpm-10-00252" class="usa-link" aria-describedby="B21-jpm-10-00252">21</a>,<a href="#B22-jpm-10-00252" class="usa-link" aria-describedby="B22-jpm-10-00252">22</a>]. Our MTB was designed to be multi-omic, multi-specialty, and multi-disciplinary; we found that implementation of this comprehensive, collaborative approach led to increased clinical trial participation and more focused use of off-label targeted therapy within our institution. Moreover, the MTB meetings provided an educational opportunity and facilitated increased awareness among physicians of targeted therapies to match genomic alterations. </p>
+<p>In conclusion, our comprehensive and high-throughput bi-weekly MTB was feasible as a means to providing clinical guidance within an acceptable timeframe for patients with cancer in a large community setting. It may therefore be useful to adopt similar models in other cancer centers.</p></section><section id="ack1" class="ack"><h2 class="pmc_sec_title">Acknowledgments</h2>
+<p>The authors would like to acknowledge Natasha Cary, BSc, of iMed Comms, Macclesfield, UK, an Ashfield Company, part of UDG Healthcare plc for medical writing support, under the direction of the authors that was funded by AstraZeneca in accordance with Good Publications Practice (GPP3) guidelines (<a href="http://www.ismpp.org/gpp3" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://www.ismpp.org/gpp3</a>). No research funding was provided.</p></section><section id="app1-jpm-10-00252" class="app"><h2 class="pmc_sec_title">Supplementary Materials</h2>
+<p>The following are available online at <a href="https://www.mdpi.com/2075-4426/10/4/252/s1" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.mdpi.com/2075-4426/10/4/252/s1</a>, Figure S1: MTB recommendations for clinical trial enrollment and resulting patient management, Table S1: Caris MI<sup>®</sup> gene panel. </p>
+<section class="sm xbox font-sm" id="jpm-10-00252-s001"><div class="media p"><div class="caption">
+<a href="/articles/instance/7711773/bin/jpm-10-00252-s001.pdf" data-ga-action="click_feat_suppl" class="usa-link">Click here for additional data file.</a><sup> (224.4KB, pdf) </sup>
+</div></div></section></section><section id="notes1"><h2 class="pmc_sec_title">Author Contributions</h2>
+<p>Concept and design, A.V., L.S., D.V., and A.G.; data acquisition and analysis, A.V. and G.B.; data interpretation, A.V., L.S., G.V., D.V., A.G., A.E., and G.B.; manuscript preparation, all. All authors have read and agreed to the published version of the manuscript.</p></section><section id="notes2"><h2 class="pmc_sec_title">Funding</h2>
+<p>This research received no external funding.</p></section><section id="notes3"><h2 class="pmc_sec_title">Conflicts of Interest</h2>
+<p>A.V. has received honoraria from Caris Life Sciences and Elsevier; served as a consultant or participated on advisory boards for Bristol-Myers Squibb, AstraZeneca, Medimmune, Compugen, and ConcertoHealthAl. He has also received research funding from Amgen, Genentec, Merck, Bristol-Myers Squibb, AstraZeneca, EliLilly, and Replimune. A.G. has received honoraria from Aptitude Health, Elsevier, and IMEDEX; served as a consultant or participated on advisory boards for Amgen, Array BioPharma, Bayer, Boston Biomedical, Bristol-Myers Squibb, Daiichi Sankyo, Genentech/Roche, and Lilly. He has received research funding from Array BioPharma, Bayer, Boston Biomedical, Daiichi, Sankyo, Eisai, Genentech/Roche, Lilly, and Pfizer; travel and accommodations expenses from Amgen, Array BioPharma, Bayer, Boston Biomedical, Bristol-Myers Squibb, and Genentech/Roche. D.V. has received research funding from Aeglea Biotherapeutics, Amgen, AstraZeneca, BioClin Therapeutics, Bristol-Myers Squibb, Calithera Biosciences, Compugen, Merck, Nektar, Novartis, OBI Pharma, Peloton Therapeutics, T.G. Therapeutics, and Tizona Therapeutics, Inc. He has also served as a consultant or participated on advisory boards for Bayer, Bristol-Myers Squibb, Genomic Health, and received travel and accommodations expenses from Caris Centers of Excellence and Genomic Health. D.V. reports ownership interest with Oncodisc, he has served as a consultant or participated on advisory boards for Eli Lilly, Novartis, Genetech, Puma, Immunomedics, Pfizer, and AstraZeneca; speakers’ bureau for Eli Lilly, Pfizer, Puma, and Novartis. He has also received research funding from Merck, Genetech, Roche, BMS, Celcuity, Puma, Eli Lilly, Pfizer, Immunomedics, and Novartis; travel and accommodations expenses from Eli Lilly. A.E. has received reimbursement/research support from Caris Life Sciences. He has served as a consultant or participated on advisory boards for AstraZeneca, Clovis Oncology, Leap Therapeutics, GSK/Tesaro, and AbbVie Pharmaceuticals. He has served as an investigator for studies sponsored by AstraZeneca, Merck, GSK/Tesaro, and Leap Therapeutics. G.B. has no conflict of interest to declare. LS has served as a consultant or participated on advisory boards for Amgen, Pfizer, Helsinn, Genentech, Genomich Health, BMS, Myriad, AstraZeneca, Bayer, Spectrum, and Napo. </p></section><section id="fn-group1" class="fn-group"><h2 class="pmc_sec_title">Footnotes</h2>
+<div class="fn-group p font-secondary-light font-sm"><div class="fn p" id="fn1"><p><strong>Publisher’s Note:</strong> MDPI stays neutral with regard to jurisdictional claims in published maps and institutional affiliations.</p></div></div></section><section id="ref-list1" class="ref-list"><h2 class="pmc_sec_title">References</h2>
+<section id="ref-list1_sec2"><ul class="ref-list font-sm" style="list-style-type:none">
+<li id="B1-jpm-10-00252">
+<span class="label">1.</span><cite>Garraway L.A. Genomics-driven oncology: Framework for an emerging paradigm. J. Clin. Oncol. 2013;31:1806–1814. doi: 10.1200/JCO.2012.46.8934.</cite> [<a href="https://doi.org/10.1200/JCO.2012.46.8934" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/23589557/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Clin.%20Oncol.&amp;title=Genomics-driven%20oncology:%20Framework%20for%20an%20emerging%20paradigm&amp;author=L.A.%20Garraway&amp;volume=31&amp;publication_year=2013&amp;pages=1806-1814&amp;pmid=23589557&amp;doi=10.1200/JCO.2012.46.8934&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B2-jpm-10-00252">
+<span class="label">2.</span><cite>Sholl L.M., Do K., Shivdasani P., Cerami E., Dubuc A.M., Kuo F.C., Garcia E.P., Jia Y., Davineni P., Abo R.P., et al.  Institutional implementation of clinical tumor profiling on an unselected cancer population. JCI Insight. 2016;1:e87062. doi: 10.1172/jci.insight.87062.</cite> [<a href="https://doi.org/10.1172/jci.insight.87062" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5111542/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27882345/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=JCI%20Insight.&amp;title=Institutional%20implementation%20of%20clinical%20tumor%20profiling%20on%20an%20unselected%20cancer%20population&amp;author=L.M.%20Sholl&amp;author=K.%20Do&amp;author=P.%20Shivdasani&amp;author=E.%20Cerami&amp;author=A.M.%20Dubuc&amp;volume=1&amp;publication_year=2016&amp;pages=e87062&amp;pmid=27882345&amp;doi=10.1172/jci.insight.87062&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B3-jpm-10-00252">
+<span class="label">3.</span><cite>Planchard D., Popat S., Kerr K., Novello S., Smit E.F., Faivre-Finn C., Mok T.S., Reck M., Van Schil P.E., Hellmann M.D., et al.  Metastatic non-small cell lung cancer: ESMO Clinical Practice Guidelines for diagnosis, treatment and follow-up. Ann. Oncol. 2019;30:863–870. doi: 10.1093/annonc/mdy474.</cite> [<a href="https://doi.org/10.1093/annonc/mdy474" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31987360/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Ann.%20Oncol.&amp;title=Metastatic%20non-small%20cell%20lung%20cancer:%20ESMO%20Clinical%20Practice%20Guidelines%20for%20diagnosis,%20treatment%20and%20follow-up&amp;author=D.%20Planchard&amp;author=S.%20Popat&amp;author=K.%20Kerr&amp;author=S.%20Novello&amp;author=E.F.%20Smit&amp;volume=30&amp;publication_year=2019&amp;pages=863-870&amp;pmid=31987360&amp;doi=10.1093/annonc/mdy474&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B4-jpm-10-00252">
+<span class="label">4.</span><cite>Lindeman N.I., Cagle P.T., Aisner D.L., Arcila M.E., Beasley M.B., Bernicker E., Colasacco C., Dacic S., Hirsch F.R., Kerr K., et al.  Updated molecular testing guideline for the selection of lung cancer patients for treatment with targeted tyrosine kinase inhibitors: Guideline from the College of American Pathologists, the International Association for the Study of Lung Cancer, and the Association for Molecular Pathology. Arch. Pathol. Lab. Med. 2018;142:321–346. doi: 10.5858/arpa.2017-0388-CP.</cite> [<a href="https://doi.org/10.5858/arpa.2017-0388-CP" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29355391/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Arch.%20Pathol.%20Lab.%20Med.&amp;title=Updated%20molecular%20testing%20guideline%20for%20the%20selection%20of%20lung%20cancer%20patients%20for%20treatment%20with%20targeted%20tyrosine%20kinase%20inhibitors:%20Guideline%20from%20the%20College%20of%20American%20Pathologists,%20the%20International%20Association%20for%20the%20Study%20of%20Lung%20Cancer,%20and%20the%20Association%20for%20Molecular%20Pathology&amp;author=N.I.%20Lindeman&amp;author=P.T.%20Cagle&amp;author=D.L.%20Aisner&amp;author=M.E.%20Arcila&amp;author=M.B.%20Beasley&amp;volume=142&amp;publication_year=2018&amp;pages=321-346&amp;pmid=29355391&amp;doi=10.5858/arpa.2017-0388-CP&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B5-jpm-10-00252">
+<span class="label">5.</span><cite>Manahan E.R., Kuerer H.M., Sebastian M., Hughes K.S., Boughey J.C., Euhus D.M., Boolbol S.K., Taylor W.A. Consensus guidelines on genetic testing for hereditary breast cancer from the American Society of Breast Surgeons. Ann. Surg Oncol. 2019;26:3025–3031. doi: 10.1245/s10434-019-07549-8.</cite> [<a href="https://doi.org/10.1245/s10434-019-07549-8" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6733830/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31342359/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Ann.%20Surg%20Oncol.&amp;title=Consensus%20guidelines%20on%20genetic%20testing%20for%20hereditary%20breast%20cancer%20from%20the%20American%20Society%20of%20Breast%20Surgeons&amp;author=E.R.%20Manahan&amp;author=H.M.%20Kuerer&amp;author=M.%20Sebastian&amp;author=K.S.%20Hughes&amp;author=J.C.%20Boughey&amp;volume=26&amp;publication_year=2019&amp;pages=3025-3031&amp;pmid=31342359&amp;doi=10.1245/s10434-019-07549-8&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B6-jpm-10-00252">
+<span class="label">6.</span><cite>Food and Drug Administration (FDA)  ZEJULA® (niraparib) Prescribing Information.  [(accessed on 22 November 2020)];2017  Available online:  <a href="https://www.mdpi.com/journal/jpm/special_issues/personalized_oncology" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.mdpi.com/journal/jpm/special_issues/personalized_oncology</a>.</cite>
+</li>
+<li id="B7-jpm-10-00252">
+<span class="label">7.</span><cite>Moore K.N., Secord A.A., Geller M.A., Miller D.S., Cloven N., Fleming G.F., Hendrickson A.E.W., Azodi M., DiSilvestro P., Oza A.M., et al.  Niraparib monotherapy for late-line treatment of ovarian cancer (QUADRA): A multicentre, open-label, single-arm, phase 2 trial. Lancet Oncol. 2019;20:636–648. doi: 10.1016/S1470-2045(19)30029-4.</cite> [<a href="https://doi.org/10.1016/S1470-2045(19)30029-4" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30948273/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Lancet%20Oncol.&amp;title=Niraparib%20monotherapy%20for%20late-line%20treatment%20of%20ovarian%20cancer%20(QUADRA):%20A%20multicentre,%20open-label,%20single-arm,%20phase%202%20trial&amp;author=K.N.%20Moore&amp;author=A.A.%20Secord&amp;author=M.A.%20Geller&amp;author=D.S.%20Miller&amp;author=N.%20Cloven&amp;volume=20&amp;publication_year=2019&amp;pages=636-648&amp;pmid=30948273&amp;doi=10.1016/S1470-2045(19)30029-4&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B8-jpm-10-00252">
+<span class="label">8.</span><cite>Sepulveda A.R., Hamilton S.R., Allegra C.J., Grody W., Cushman-Vokoun A.M., Funkhouser W.K., Kopetz S.E., Lieu C., Lindor N.M., Minsky B.D., et al.  Molecular biomarkers for the evaluation of colorectal cancer: Guideline from the American Society for Clinical Pathology, College of American Pathologists, Association for Molecular Pathology, and American Society of Clinical Oncology. J. Mol. Diagn. 2017;19:187–225. doi: 10.1016/j.jmoldx.2016.11.001.</cite> [<a href="https://doi.org/10.1016/j.jmoldx.2016.11.001" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5971222/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28185757/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Mol.%20Diagn.&amp;title=Molecular%20biomarkers%20for%20the%20evaluation%20of%20colorectal%20cancer:%20Guideline%20from%20the%20American%20Society%20for%20Clinical%20Pathology,%20College%20of%20American%20Pathologists,%20Association%20for%20Molecular%20Pathology,%20and%20American%20Society%20of%20Clinical%20Oncology&amp;author=A.R.%20Sepulveda&amp;author=S.R.%20Hamilton&amp;author=C.J.%20Allegra&amp;author=W.%20Grody&amp;author=A.M.%20Cushman-Vokoun&amp;volume=19&amp;publication_year=2017&amp;pages=187-225&amp;pmid=28185757&amp;doi=10.1016/j.jmoldx.2016.11.001&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B9-jpm-10-00252">
+<span class="label">9.</span><cite>Suh J.H., Johnson A., Albacker L., Wang K., Chmielecki J., Frampton G., Gay L., Elvin J.A., Vergilio J.A., Ali S., et al.  Comprehensive genomic profiling facilitates implementation of the National Comprehensive Cancer Network Guidelines for lung cancer biomarker testing and identifies patients who may benefit from enrollment in mechanism-driven clinical trials. Oncologist. 2016;21:684–691. doi: 10.1634/theoncologist.2016-0030.</cite> [<a href="https://doi.org/10.1634/theoncologist.2016-0030" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4912374/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27151654/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Oncologist&amp;title=Comprehensive%20genomic%20profiling%20facilitates%20implementation%20of%20the%20National%20Comprehensive%20Cancer%20Network%20Guidelines%20for%20lung%20cancer%20biomarker%20testing%20and%20identifies%20patients%20who%20may%20benefit%20from%20enrollment%20in%20mechanism-driven%20clinical%20trials&amp;author=J.H.%20Suh&amp;author=A.%20Johnson&amp;author=L.%20Albacker&amp;author=K.%20Wang&amp;author=J.%20Chmielecki&amp;volume=21&amp;publication_year=2016&amp;pages=684-691&amp;pmid=27151654&amp;doi=10.1634/theoncologist.2016-0030&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B10-jpm-10-00252">
+<span class="label">10.</span><cite>Vakiani E. Molecular testing of colorectal cancer in the modern era: What are we doing and why? Surg. Pathol. Clin. 2017;10:1009–1020. doi: 10.1016/j.path.2017.07.013.</cite> [<a href="https://doi.org/10.1016/j.path.2017.07.013" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29103530/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Surg.%20Pathol.%20Clin.&amp;title=Molecular%20testing%20of%20colorectal%20cancer%20in%20the%20modern%20era:%20What%20are%20we%20doing%20and%20why?&amp;author=E.%20Vakiani&amp;volume=10&amp;publication_year=2017&amp;pages=1009-1020&amp;pmid=29103530&amp;doi=10.1016/j.path.2017.07.013&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B11-jpm-10-00252">
+<span class="label">11.</span><cite>Food and Drug Administration (FDA)  FDA Fact Sheet: CDRH’S Approach to Tumor Profiling Next Generation Sequencing Tests, 2017.  [(accessed on 22 November 2020)]; Available online:  <a href="https://www.fda.gov/media/109050/download" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.fda.gov/media/109050/download</a>.</cite>
+</li>
+<li id="B12-jpm-10-00252">
+<span class="label">12.</span><cite>Gray S.W., Hicks-Courant K., Cronin A., Rollins B.J., Weeks J.C. Physicians’ attitudes about multiplex tumor genomic testing. J. Clin. Oncol. 2014;32:1317–1323. doi: 10.1200/JCO.2013.52.4298.</cite> [<a href="https://doi.org/10.1200/JCO.2013.52.4298" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3992721/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/24663044/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Clin.%20Oncol.&amp;title=Physicians%E2%80%99%20attitudes%20about%20multiplex%20tumor%20genomic%20testing&amp;author=S.W.%20Gray&amp;author=K.%20Hicks-Courant&amp;author=A.%20Cronin&amp;author=B.J.%20Rollins&amp;author=J.C.%20Weeks&amp;volume=32&amp;publication_year=2014&amp;pages=1317-1323&amp;pmid=24663044&amp;doi=10.1200/JCO.2013.52.4298&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B13-jpm-10-00252">
+<span class="label">13.</span><cite>van der Velden D.L., van Herpen C.M.L., van Laarhoven H.W.M., Smit E.F., Groen H.J.M., Willems S.M., Nederlof P.M., Langenberg M.H.G., Cuppen E., Sleijfer S., et al.  Molecular tumor boards: Current practice and future needs. Ann. Oncol. 2017;28:3070–3075. doi: 10.1093/annonc/mdx528.</cite> [<a href="https://doi.org/10.1093/annonc/mdx528" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29045504/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Ann.%20Oncol.&amp;title=Molecular%20tumor%20boards:%20Current%20practice%20and%20future%20needs&amp;author=D.L.%20van%20der%20Velden&amp;author=C.M.L.%20van%20Herpen&amp;author=H.W.M.%20van%20Laarhoven&amp;author=E.F.%20Smit&amp;author=H.J.M.%20Groen&amp;volume=28&amp;publication_year=2017&amp;pages=3070-3075&amp;pmid=29045504&amp;doi=10.1093/annonc/mdx528&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B14-jpm-10-00252">
+<span class="label">14.</span><cite>Tafe L.J., Gorlov I.P., de Abreu F.B., Lefferts J.A., Liu X., Pettus J.R., Marotti J.D., Bloch K.J., Memoli V.A., Suriawinata A.A., et al.  Implementation of a molecular tumor board: The impact on treatment decisions for 35 patients evaluated at Dartmouth-Hitchcock Medical Center. Oncologist. 2015;20:1011–1018. doi: 10.1634/theoncologist.2015-0097.</cite> [<a href="https://doi.org/10.1634/theoncologist.2015-0097" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4571816/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/26205736/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Oncologist&amp;title=Implementation%20of%20a%20molecular%20tumor%20board:%20The%20impact%20on%20treatment%20decisions%20for%2035%20patients%20evaluated%20at%20Dartmouth-Hitchcock%20Medical%20Center&amp;author=L.J.%20Tafe&amp;author=I.P.%20Gorlov&amp;author=F.B.%20de%20Abreu&amp;author=J.A.%20Lefferts&amp;author=X.%20Liu&amp;volume=20&amp;publication_year=2015&amp;pages=1011-1018&amp;pmid=26205736&amp;doi=10.1634/theoncologist.2015-0097&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B15-jpm-10-00252">
+<span class="label">15.</span><cite>Farhangfar C.J., Morgan O., Concepcion C., Hwang J.J., Mileham K.F., Carrizosa D.R., Dellinger B., Farhangfar F., Kim E.S. Utilization of consultative molecular tumor board in community setting. J. Clin. Oncol. 2017;35:6508. doi: 10.1200/JCO.2017.35.15_suppl.6508.</cite> [<a href="https://doi.org/10.1200/JCO.2017.35.15_suppl.6508" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Clin.%20Oncol.&amp;title=Utilization%20of%20consultative%20molecular%20tumor%20board%20in%20community%20setting&amp;author=C.J.%20Farhangfar&amp;author=O.%20Morgan&amp;author=C.%20Concepcion&amp;author=J.J.%20Hwang&amp;author=K.F.%20Mileham&amp;volume=35&amp;publication_year=2017&amp;pages=6508&amp;doi=10.1200/JCO.2017.35.15_suppl.6508&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B16-jpm-10-00252">
+<span class="label">16.</span><cite>Clark D.F., Maxwell K.N., Powers J., Lieberman D.B., Ebrahimzadeh J., Long J.M., McKenna D., Shah P., Bradbury A., Morrissette J.J.D., et al.  Identification and confirmation of potentially actionable germline mutations in tumor-only genomic sequencing. JCO Prec. Oncol. 2019;3:1–11. doi: 10.1200/PO.19.00076.</cite> [<a href="https://doi.org/10.1200/PO.19.00076" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6738953/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31511844/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=JCO%20Prec.%20Oncol.&amp;title=Identification%20and%20confirmation%20of%20potentially%20actionable%20germline%20mutations%20in%20tumor-only%20genomic%20sequencing&amp;author=D.F.%20Clark&amp;author=K.N.%20Maxwell&amp;author=J.%20Powers&amp;author=D.B.%20Lieberman&amp;author=J.%20Ebrahimzadeh&amp;volume=3&amp;publication_year=2019&amp;pages=1-11&amp;pmid=31511844&amp;doi=10.1200/PO.19.00076&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B17-jpm-10-00252">
+<span class="label">17.</span><cite>Reitsma M., Fox J., Borre P.V., Cavanaugh M., Chudnovsky Y., Erlich R.L., Gribbin T.E., Anhorn R. Effect of a collaboration between a health plan, oncology practice, and comprehensive genomic profiling company from the payer perspective. J. Manag. Care Spec. Pharm. 2019;25:601–611. doi: 10.18553/jmcp.2019.18309.</cite> [<a href="https://doi.org/10.18553/jmcp.2019.18309" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC10398083/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30632889/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J.%20Manag.%20Care%20Spec.%20Pharm.&amp;title=Effect%20of%20a%20collaboration%20between%20a%20health%20plan,%20oncology%20practice,%20and%20comprehensive%20genomic%20profiling%20company%20from%20the%20payer%20perspective&amp;author=M.%20Reitsma&amp;author=J.%20Fox&amp;author=P.V.%20Borre&amp;author=M.%20Cavanaugh&amp;author=Y.%20Chudnovsky&amp;volume=25&amp;publication_year=2019&amp;pages=601-611&amp;pmid=30632889&amp;doi=10.18553/jmcp.2019.18309&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B18-jpm-10-00252">
+<span class="label">18.</span><cite>Basse C., Morel C., Alt M., Sablin M.P., Franck C., Pierron G., Callens C., Melaabi S., Masliah-Planchon J., Bataillon G., et al.  Relevance of a molecular tumour board (MTB) for patients’ enrolment in clinical trials: Experience of the Institut Curie. ESMO Open. 2018;3:e000339. doi: 10.1136/esmoopen-2018-000339.</cite> [<a href="https://doi.org/10.1136/esmoopen-2018-000339" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5890857/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29636991/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=ESMO%20Open&amp;title=Relevance%20of%20a%20molecular%20tumour%20board%20(MTB)%20for%20patients%E2%80%99%20enrolment%20in%20clinical%20trials:%20Experience%20of%20the%20Institut%20Curie&amp;author=C.%20Basse&amp;author=C.%20Morel&amp;author=M.%20Alt&amp;author=M.P.%20Sablin&amp;author=C.%20Franck&amp;volume=3&amp;publication_year=2018&amp;pages=e000339&amp;pmid=29636991&amp;doi=10.1136/esmoopen-2018-000339&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B19-jpm-10-00252">
+<span class="label">19.</span><cite>Schwaederle M., Parker B.A., Schwab R.B., Fanta P.T., Boles S.G., Daniels G.A., Bazhenova L.A., Subramanian R., Coutinho A.C., Ojeda-Fournier H., et al.  Molecular tumor board: The University of California-San Diego Moores Cancer Center experience. Oncologist. 2014;19:631–636. doi: 10.1634/theoncologist.2013-0405.</cite> [<a href="https://doi.org/10.1634/theoncologist.2013-0405" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4041669/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/24797821/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Oncologist&amp;title=Molecular%20tumor%20board:%20The%20University%20of%20California-San%20Diego%20Moores%20Cancer%20Center%20experience&amp;author=M.%20Schwaederle&amp;author=B.A.%20Parker&amp;author=R.B.%20Schwab&amp;author=P.T.%20Fanta&amp;author=S.G.%20Boles&amp;volume=19&amp;publication_year=2014&amp;pages=631-636&amp;pmid=24797821&amp;doi=10.1634/theoncologist.2013-0405&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B20-jpm-10-00252">
+<span class="label">20.</span><cite>Harada S., Arend R., Dai Q., Levesque J.A., Winokur T.S., Guo R., Heslin M.J., Nabell L., Nabors L.B., Limdi N.A., et al.  Implementation and utilization of the molecular tumor board to guide precision medicine. Oncotarget. 2017;8:57845. doi: 10.18632/oncotarget.18471.</cite> [<a href="https://doi.org/10.18632/oncotarget.18471" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5593688/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28915716/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Oncotarget&amp;title=Implementation%20and%20utilization%20of%20the%20molecular%20tumor%20board%20to%20guide%20precision%20medicine&amp;author=S.%20Harada&amp;author=R.%20Arend&amp;author=Q.%20Dai&amp;author=J.A.%20Levesque&amp;author=T.S.%20Winokur&amp;volume=8&amp;publication_year=2017&amp;pages=57845&amp;pmid=28915716&amp;doi=10.18632/oncotarget.18471&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B21-jpm-10-00252">
+<span class="label">21.</span><cite>Bryce A.H., Egan J.B., Borad M.J., Stewart A.K., Nowakowski G.S., Chanan-Khan A., Patnaik M.M., Ansell S.M., Banck M.S., Robinson S.I., et al.  Experience with precision genomics and tumor board, indicates frequent target identification, but barriers to delivery. Oncotarget. 2017;8:27145. doi: 10.18632/oncotarget.16057.</cite> [<a href="https://doi.org/10.18632/oncotarget.16057" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5432324/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28423702/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Oncotarget&amp;title=Experience%20with%20precision%20genomics%20and%20tumor%20board,%20indicates%20frequent%20target%20identification,%20but%20barriers%20to%20delivery&amp;author=A.H.%20Bryce&amp;author=J.B.%20Egan&amp;author=M.J.%20Borad&amp;author=A.K.%20Stewart&amp;author=G.S.%20Nowakowski&amp;volume=8&amp;publication_year=2017&amp;pages=27145&amp;pmid=28423702&amp;doi=10.18632/oncotarget.16057&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B22-jpm-10-00252">
+<span class="label">22.</span><cite>Singer J., Irmisch A., Ruscheweyh H.J., Singer F., Toussaint N.C., Levesque M.P., Stekhoven D.J., Beerenwinkel N. Bioinformatics for precision oncology. Briefings Bioinforma. 2019;20:778–788. doi: 10.1093/bib/bbx143.</cite> [<a href="https://doi.org/10.1093/bib/bbx143" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6585151/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29272324/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Briefings%20Bioinforma.&amp;title=Bioinformatics%20for%20precision%20oncology&amp;author=J.%20Singer&amp;author=A.%20Irmisch&amp;author=H.J.%20Ruscheweyh&amp;author=F.%20Singer&amp;author=N.C.%20Toussaint&amp;volume=20&amp;publication_year=2019&amp;pages=778-788&amp;pmid=29272324&amp;doi=10.1093/bib/bbx143&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+</ul></section></section><section id="_ad93_" lang="en" class="associated-data"><h2 class="pmc_sec_title">Associated Data</h2>
+<p class="font-secondary"><em>This section collects any data citations, data availability statements, or supplementary materials included in this article.</em></p>
+<section id="_adsm93_" lang="en" class="supplementary-materials"><h3 class="pmc_sec_title">Supplementary Materials</h3>
+<section class="sm xbox font-sm" id="db_ds_supplementary-material1_reqid_"><div class="media p"><div class="caption">
+<a href="/articles/instance/7711773/bin/jpm-10-00252-s001.pdf" data-ga-action="click_feat_suppl" class="usa-link">Click here for additional data file.</a><sup> (224.4KB, pdf) </sup>
+</div></div></section></section></section></section><footer class="p courtesy-note font-secondary font-sm text-center"><hr class="headless">
+<p>Articles from Journal of Personalized Medicine are provided here courtesy of <strong>Multidisciplinary Digital Publishing Institute  (MDPI)</strong></p></footer></section></article>
+
+                      
+
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+<!-- Secondary navigation placeholder -->
+<div class="pmc-sidenav desktop:grid-col-4 display-flex">
+    <section class="pmc-sidenav__container" aria-label="Article resources and navigation">
+        <button type="button" class="usa-button pmc-sidenav__container__close usa-button--unstyled">
+            <img src="/static/img/usa-icons/close.svg" role="img" alt="Close" />
+        </button>
+    <div class="display-none desktop:display-block">
+       <section class="margin-top-4 desktop:margin-top-0">
+              <h2 class="margin-top-0">ACTIONS</h2>
+           <ul class="usa-list usa-list--unstyled usa-list--actions">
+               
+               <li>
+                     <a
+                             href="https://doi.org/10.3390/jpm10040252"
+                             class="usa-button usa-button--outline width-24 font-xs display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                             target="_blank"
+                             rel="noreferrer noopener"
+                             data-ga-category="actions"
+                             data-ga-action="click"
+                             data-ga-label="publisher_link_desktop"
+                     >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#launch"></use>
+                         </svg>
+                         <span class="display-inline-flex flex-justify-center flex-1 padding-right-2">View on publisher site</span>
+                     </a>
+               </li>
+               
+               
+               <li>
+                    <a
+                            href="pdf/jpm-10-00252.pdf"
+                            class="usa-button usa-button--outline width-24 display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="pdf_download_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1">PDF (814.9 KB)</span>
+                    </a>
+               </li>
+               
+                
+               <li>
+                   <button role="button" class="usa-button width-24 citation-dialog-trigger display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                        aria-label="Open dialog with citation text in different styles"
+                        data-ga-category="actions"
+                        data-ga-action="open"
+                        data-ga-label="cite_desktop"
+                        data-all-citations-url="/resources/citations/7711773/"
+                        data-citation-style="nlm"
+                        data-download-format-link="/resources/citations/7711773/export/"
+                    >
+                        <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                        </svg>
+                       <span class="display-inline-flex flex-justify-center flex-1 button-label">Cite</span>
+                    </button>
+               </li>
+                
+               <li>
+
+                        <button class="usa-button width-24 collections-dialog-trigger collections-button display-inline-flex flex-align-center flex-justify-start padding-left-1 collections-button-empty"
+                              aria-label="Save article in MyNCBI collections."
+                              data-ga-category="actions"
+                              data-ga-action="click"
+                              data-ga-label="collections_button_desktop"
+                              data-collections-open-dialog-enabled="false"
+                              data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC7711773%2F%23open-collections-dialog"
+                              data-in-collections="false">
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                            <span class="display-inline-flex flex-justify-center flex-1">Collections</span>
+                       </button>
+               </li>
+               <li class="pmc-permalink">
+                    <button
+                            type="button"
+                            class="usa-button width-24 display-inline-flex flex-align-center flex-justify padding-left-1 shadow-none"
+                            aria-label="Show article permalink"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="permalink_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#share"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1 button-label">Permalink</span>
+                    </button>
+                   
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC7711773/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+               </li>
+           </ul>
+       </section>
+     </div>
+
+        <section class="pmc-resources margin-top-6 desktop:margin-top-4" data-page-path="/articles/PMC7711773/">
+            <h2 class="margin-top-0">RESOURCES</h2>
+            
+                <div class="usa-accordion usa-accordion--multiselectable" data-allow-multiple>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-similar-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_similar_articles"
+                        data-ga-label="/articles/PMC7711773/"
+                        data-action-open="open_similar_articles"
+                        data-action-close="close_similar_articles"
+                        >
+                            Similar articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-similar-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/similar-article-links/33260805/"
+                            
+                    >
+                        
+                    </div>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-cited-by-other-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_cited_by"
+                        data-ga-label="/articles/PMC7711773/"
+                        data-action-open="open_cited_by"
+                        data-action-close="close_cited_by"
+                        >
+                             Cited by other articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-cited-by-other-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/cited-by-links/33260805/"
+                            
+                    >
+                          
+                    </div>
+                    
+                        <h3 class="usa-accordion__heading">
+                            <button
+                            type="button"
+                            class="usa-accordion__button"
+                            aria-expanded="false"
+                            aria-controls="resources-links-to-ncbi-databases"
+                            data-ga-category="resources_accordion"
+                            data-ga-action="open_NCBI_links"
+                            data-ga-label="/articles/PMC7711773/"
+                            data-action-open="open_NCBI_links"
+                            data-action-close="close_NCBI_link"
+                            >
+                                 Links to NCBI Databases
+                            </button>
+                        </h3>
+                        <div
+                                id="resources-links-to-ncbi-databases"
+                                class="usa-accordion__content usa-prose"
+                                data-source-url="/resources/db-links/7711773/"
+                        >
+                        </div>
+                    
+                    
+                </div>
+            
+        </section>
+
+
+        <section
+        class="usa-in-page-nav usa-in-page-nav--wide margin-top-6 desktop:margin-top-4"
+        data-title-text="On this page"
+        data-title-heading-level="h2"
+        data-scroll-offset="0"
+        data-root-margin="-10% 0px -80% 0px"
+        data-main-content-selector="main"
+        data-threshold="1"
+        hidden
+        ></section>
+    </section>
+</div>
+
+
+        
+
+<div class="overlay" role="dialog" aria-label="Citation Dialog" hidden>
+    <div class="dialog citation-dialog" aria-hidden="true">
+        <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+            <h2 class="usa-modal__heading margin-0">Cite</h2>
+             <button type="button" class="usa-button usa-button--unstyled close-overlay text-black width-auto"  tabindex="1">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+             </button>
+        </div>
+
+        
+
+<div class="citation-text-block">
+  <div class="citation-text margin-bottom-2"></div>
+  <ul class="usa-list usa-list--unstyled display-inline-flex flex-justify width-full flex-align-center">
+      <li>
+        <button
+          class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center copy-button dialog-focus"
+          data-ga-category="save_share"
+          data-ga-action="cite"
+          data-ga-label="copy"
+          tabindex="2">
+            <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+            </svg>
+            <span>Copy</span>
+        </button>
+      </li>
+      <li>
+          <a
+              href="#"
+              role="button"
+              class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center export-button"
+              data-ga-category="save_share"
+              data-ga-action="cite"
+              data-ga-label="download"
+              title="Download a file for external citation management software"
+              tabindex="3">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                </svg>
+                <span class="display-none mobile-lg:display-inline">Download .nbib</span>
+                <span class="display-inline mobile-lg:display-none">.nbib</span>
+            </a>
+      </li>
+      <li>
+          
+
+<div class="display-inline-flex flex-align-center">
+  <label class="usa-label margin-top-0">Format:</label>
+  <select aria-label="Format" class="usa-select citation-style-selector padding-1 margin-top-0 border-0 padding-right-4" tabindex="4" >
+    
+      <option data-style-url-name="ama"
+              value="AMA"
+              >
+        AMA
+      </option>
+    
+      <option data-style-url-name="apa"
+              value="APA"
+              >
+        APA
+      </option>
+    
+      <option data-style-url-name="mla"
+              value="MLA"
+              >
+        MLA
+      </option>
+    
+      <option data-style-url-name="nlm"
+              value="NLM"
+              selected="selected">
+        NLM
+      </option>
+    
+  </select>
+</div>
+      </li>
+  </ul>
+</div>
+    </div>
+</div>
+
+        <div class="overlay" role="dialog" hidden>
+  <div id="collections-action-dialog" class="dialog collections-dialog" aria-hidden="true">
+   <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+        <h2 class="usa-modal__heading margin-0">Add to Collections</h2>
+    </div>
+    <div class="collections-action-panel action-panel">
+      
+
+
+<form id="collections-action-dialog-form"
+      class="usa-form maxw-full collections-action-panel-form action-panel-content action-form action-panel-smaller-selectors"
+      data-existing-collections-url="/list-existing-collections/"
+      data-add-to-existing-collection-url="/add-to-existing-collection/"
+      data-create-and-add-to-new-collection-url="/create-and-add-to-new-collection/"
+      data-myncbi-max-collection-name-length="100"
+      data-collections-root-url="https://www.ncbi.nlm.nih.gov/myncbi/collections/">
+
+    <input type="hidden" name="csrfmiddlewaretoken" value="8U8ZQYFuOa96n6ISr8oAvvPH4tx848VpK4ycCQ825SDqycdTH7Ma2DInblWl7TqU">
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-new"
+            class="usa-radio__input usa-radio__input--tile collections-new  margin-top-0"
+            name="collections"
+            value="new"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_new" />
+            <label class="usa-radio__label" for="collections-action-dialog-new">Create a new collection</label>
+        </div>
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-existing"
+            class="usa-radio__input usa-radio__input--tile collections-existing"
+            name="collections"
+            value="existing"
+            checked="true"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_existing" />
+            <label class="usa-radio__label" for="collections-action-dialog-existing">Add to an existing collection</label>
+        </div>
+    </fieldset>
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="action-panel-control-wrap new-collections-controls">
+           <label for="collections-action-dialog-add-to-new" class="usa-label margin-top-0">
+                Name your collection
+               <abbr title="required" class="usa-hint usa-hint--required text-no-underline">*</abbr>
+          </label>
+          <input
+            type="text"
+            name="add-to-new-collection"
+            id="collections-action-dialog-add-to-new"
+            class="usa-input collections-action-add-to-new"
+            pattern="[^&quot;&amp;=&lt;&gt;/]*" title="The following characters are not allowed in the Name field: &quot;&amp;=&lt;&gt;/"
+            maxlength=""
+            data-ga-category="collections_button"
+            data-ga-action="create_collection"
+            data-ga-label="non_favorties_collection"
+            required
+          />
+        </div>
+        <div class="action-panel-control-wrap existing-collections-controls">
+             <label for="collections-action-dialog-add-to-existing" class="usa-label margin-top-0">
+                Choose a collection
+              </label>
+              <select id="collections-action-dialog-add-to-existing"
+                      class="usa-select collections-action-add-to-existing"
+                      data-ga-category="collections_button"
+                      data-ga-action="select_collection"
+                      data-ga-label="($('.collections-action-add-to-existing').val() === 'Favorites') ? 'Favorites' : 'non_favorites_collection'">
+              </select>
+              <div class="collections-retry-load-on-error usa-input-error-message selection-validation-message">
+                Unable to load your collection due to an error<br>
+                <a href="#">Please try again</a>
+              </div>
+        </div>
+    </fieldset>
+
+    <div class="display-inline-flex">
+        <button class="usa-button margin-top-0 action-panel-submit"
+            type="submit"
+            data-loading-label="Adding..."
+            data-pinger-ignore
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="add">
+          Add
+        </button>
+        <button class="usa-button usa-button--outline margin-top-0 action-panel-cancel"
+                aria-label="Close 'Add to Collections' panel"
+                ref="linksrc=close_collections_panel"
+                data-ga-category="collections_button"
+                data-ga-action="click"
+                data-ga-label="cancel">
+          Cancel
+        </button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>
+
+        
+
+      </div>
+    </div>
+  </div>
+
+
+
+        
+    
+    
+
+<footer class="ncbi-footer ncbi-dark-background " >
+    
+        <div class="ncbi-footer__icon-section">
+            <div class="ncbi-footer__social-header">
+                Follow NCBI
+            </div>
+
+            <div class="grid-container ncbi-footer__ncbi-social-icons-container">
+                
+                    <a href="https://twitter.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="40"
+                             height="40"
+                             viewBox="0 0 40 40"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on X (formerly known as Twitter)</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.facebook.com/ncbi.nlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="16"
+                             height="29"
+                             focusable="false"
+                             aria-hidden="true"
+                             viewBox="0 0 16 29"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.8809 21.4002C3.8809 19.0932 3.8809 16.7876 3.8809 14.478C3.8809 14.2117 3.80103 14.1452 3.54278 14.1492C2.53372 14.1638 1.52334 14.1492 0.514288 14.1598C0.302626 14.1598 0.248047 14.0972 0.248047 13.8936C0.256034 12.4585 0.256034 11.0239 0.248047 9.58978C0.248047 9.37013 0.302626 9.30224 0.528931 9.3049C1.53798 9.31688 2.54837 9.3049 3.55742 9.31555C3.80103 9.31555 3.8809 9.26097 3.87957 9.00272C3.87158 8.00565 3.85428 7.00592 3.90753 6.00884C3.97142 4.83339 4.31487 3.73115 5.04437 2.78467C5.93095 1.63318 7.15699 1.09005 8.56141 0.967577C10.5582 0.79319 12.555 0.982221 14.5518 0.927641C14.7102 0.927641 14.7462 0.99287 14.7449 1.13664C14.7449 2.581 14.7449 4.02668 14.7449 5.47104C14.7449 5.67604 14.6517 5.68669 14.4946 5.68669C13.4523 5.68669 12.4113 5.68669 11.3703 5.68669C10.3506 5.68669 9.92057 6.10868 9.90593 7.13904C9.89661 7.7647 9.91525 8.39303 9.89794 9.01869C9.88995 9.26364 9.96583 9.31822 10.2015 9.31688C11.7204 9.30623 13.2393 9.31688 14.7595 9.3049C15.0257 9.3049 15.0723 9.3728 15.0444 9.62439C14.89 10.9849 14.7515 12.3467 14.6144 13.7085C14.5691 14.1571 14.5785 14.1585 14.1458 14.1585C12.8386 14.1585 11.5313 14.1665 10.2254 14.1518C9.95119 14.1518 9.89794 14.2317 9.89794 14.4899C9.90593 19.0799 9.89794 23.6752 9.91125 28.2612C9.91125 28.5674 9.8407 28.646 9.53186 28.6433C7.77866 28.6273 6.02414 28.6366 4.27094 28.634C3.82499 28.634 3.87158 28.6992 3.87158 28.22C3.87602 25.9472 3.87913 23.6739 3.8809 21.4002Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on Facebook</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.linkedin.com/company/ncbinlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="25"
+                             height="23"
+                             viewBox="0 0 26 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M14.6983 9.98423C15.6302 9.24808 16.5926 8.74754 17.6762 8.51991C19.673 8.09126 21.554 8.30824 23.1262 9.7526C24.2351 10.7723 24.7529 12.1115 25.0165 13.5612C25.1486 14.3363 25.2105 15.1218 25.2015 15.9081C25.2015 18.3043 25.2015 20.6898 25.2082 23.0806C25.2082 23.3468 25.1549 23.444 24.8621 23.4414C23.1297 23.4272 21.3992 23.4272 19.6704 23.4414C19.4041 23.4414 19.3429 23.3588 19.3442 23.1019C19.3535 20.5194 19.3442 17.9368 19.3442 15.3543C19.3442 14.0005 18.3258 12.9448 17.0266 12.9488C15.7273 12.9528 14.6983 14.0071 14.6983 15.361C14.6983 17.9328 14.6917 20.5047 14.6983 23.0753C14.6983 23.3708 14.6198 23.444 14.3296 23.4427C12.6185 23.4294 10.9079 23.4294 9.19779 23.4427C8.93155 23.4427 8.86099 23.3735 8.86232 23.1086C8.8783 19.7619 8.88628 16.4144 8.88628 13.066C8.88628 11.5688 8.87874 10.0708 8.86365 8.57182C8.86365 8.3575 8.90758 8.27896 9.14054 8.28029C10.9048 8.29094 12.6687 8.29094 14.4321 8.28029C14.6464 8.28029 14.6983 8.34818 14.6983 8.54653C14.6903 9.00047 14.6983 9.45441 14.6983 9.98423Z">
+                            </path>
+                            <path d="M6.55316 15.8443C6.55316 18.2564 6.55316 20.6699 6.55316 23.082C6.55316 23.3629 6.48127 23.4388 6.19906 23.4374C4.47737 23.4241 2.75568 23.4241 1.03399 23.4374C0.767751 23.4374 0.69986 23.3629 0.701191 23.1006C0.709178 18.2648 0.709178 13.4281 0.701191 8.59053C0.701191 8.34026 0.765089 8.27237 1.01669 8.2737C2.74991 8.28435 4.48048 8.28435 6.20838 8.2737C6.47462 8.2737 6.5465 8.33627 6.54517 8.6065C6.54783 11.0186 6.55316 13.4308 6.55316 15.8443Z">
+                            </path>
+                            <path d="M3.65878 0.243898C5.36804 0.243898 6.58743 1.45529 6.58743 3.1406C6.58743 4.75801 5.32145 5.95742 3.60819 5.96807C3.22177 5.97614 2.83768 5.90639 2.47877 5.76299C2.11985 5.61959 1.79344 5.40546 1.51897 5.13334C1.24449 4.86123 1.02755 4.53668 0.881058 4.17902C0.734563 3.82136 0.661505 3.43788 0.666231 3.05141C0.67555 1.42601 1.9362 0.242566 3.65878 0.243898Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on LinkedIn</span>
+                    </a>
+                
+
+                
+                    <a href="https://github.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="28"
+                             height="27"
+                             viewBox="0 0 28 28"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M16.7228 20.6334C17.5057 20.5527 18.2786 20.3944 19.0301 20.1608C21.3108 19.4193 22.5822 17.8259 22.963 15.4909C23.1228 14.5112 23.1814 13.5287 22.9883 12.5437C22.8106 11.6423 22.4013 10.8028 21.8007 10.1076C21.7526 10.0605 21.7197 10 21.7064 9.934C21.6931 9.86799 21.7 9.79952 21.7262 9.73748C22.0856 8.6206 21.9711 7.51969 21.601 6.42677C21.582 6.3497 21.5345 6.2827 21.468 6.23923C21.4016 6.19577 21.3211 6.17906 21.2429 6.19248C20.7329 6.21649 20.2313 6.33051 19.7611 6.52928C19.1103 6.7908 18.4899 7.12198 17.9104 7.51703C17.84 7.56996 17.7581 7.60551 17.6713 7.62078C17.5846 7.63605 17.4954 7.6306 17.4112 7.60489C15.2596 7.05882 13.0054 7.06203 10.8554 7.61421C10.7806 7.63586 10.7018 7.63967 10.6253 7.62534C10.5487 7.611 10.4766 7.57892 10.4148 7.53167C9.64788 7.03247 8.85171 6.58918 7.96368 6.33359C7.65781 6.24338 7.34123 6.19458 7.02239 6.18849C6.94879 6.17986 6.87462 6.19893 6.81432 6.242C6.75402 6.28507 6.71191 6.34904 6.69621 6.42145C6.32342 7.51437 6.2209 8.61527 6.56307 9.73348C6.59635 9.84264 6.64694 9.93316 6.54177 10.0516C5.47666 11.2604 5.09988 12.6834 5.19574 14.2676C5.2663 15.4244 5.46201 16.5466 6.01454 17.5769C6.84399 19.1171 8.21664 19.9119 9.85158 20.3352C10.3938 20.4706 10.9444 20.5698 11.4998 20.632C11.5384 20.7492 11.4506 20.7798 11.408 20.8291C11.1734 21.1179 10.9894 21.4441 10.8634 21.7942C10.7622 22.0458 10.8315 22.4039 10.6065 22.5516C10.263 22.7766 9.83827 22.8485 9.42421 22.8871C8.17936 23.0056 7.26471 22.4877 6.6283 21.4348C6.25552 20.8184 5.76956 20.3325 5.08523 20.0663C4.76981 19.9325 4.42139 19.8967 4.08537 19.9638C3.7898 20.029 3.73788 20.1901 3.93891 20.4111C4.03639 20.5234 4.14989 20.6207 4.27575 20.6999C4.9796 21.1318 5.51717 21.7884 5.80152 22.5636C6.37002 23.9973 7.48039 24.5697 8.93825 24.6323C9.43741 24.6575 9.93768 24.615 10.4254 24.5058C10.5892 24.4672 10.6531 24.4872 10.6517 24.6762C10.6451 25.4936 10.6637 26.3123 10.6517 27.131C10.6517 27.6635 10.1684 27.9297 9.58663 27.7393C8.17396 27.2671 6.84977 26.5631 5.66838 25.656C2.59555 23.2891 0.720966 20.1861 0.217704 16.3376C-0.357453 11.9127 0.911353 8.00824 3.98551 4.73881C6.11909 2.42656 8.99932 0.939975 12.1203 0.540191C16.5351 -0.0601815 20.4347 1.14323 23.7232 4.16373C26.2449 6.47869 27.724 9.37672 28.1048 12.7726C28.5828 17.0325 27.3686 20.7945 24.4768 23.9827C22.9762 25.6323 21.0956 26.8908 18.9982 27.6488C18.8783 27.6927 18.7585 27.738 18.636 27.7726C18.0356 27.9404 17.6189 27.6395 17.6189 27.0098C17.6189 25.7452 17.6308 24.4806 17.6295 23.2159C17.6329 22.9506 17.6128 22.6856 17.5696 22.4238C17.4325 21.6664 17.3419 21.484 16.7228 20.6334Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on GitHub</span>
+                    </a>
+                
+
+                
+                    <a href="https://ncbiinsights.ncbi.nlm.nih.gov/"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="26"
+                             height="26"
+                             viewBox="0 0 27 27"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M23.7778 26.4574C23.1354 26.3913 22.0856 26.8024 21.636 26.3087C21.212 25.8444 21.4359 24.8111 21.324 24.0347C19.9933 14.8323 14.8727 8.80132 6.09057 5.85008C4.37689 5.28406 2.58381 4.99533 0.779072 4.99481C0.202773 4.99481 -0.0229751 4.83146 0.00455514 4.21479C0.0660406 3.08627 0.0660406 1.95525 0.00455514 0.826734C-0.0413285 0.0815827 0.259669 -0.0193618 0.896534 0.00266238C6.96236 0.222904 12.3693 2.24179 16.9889 6.16209C22.9794 11.2478 26.1271 17.7688 26.4372 25.648C26.4629 26.294 26.3179 26.5271 25.6609 26.4684C25.0827 26.417 24.4991 26.4574 23.7778 26.4574Z">
+                            </path>
+                            <path d="M14.8265 26.441C14.0924 26.441 13.2371 26.6795 12.6626 26.3786C12.0092 26.0372 12.3781 25.0644 12.246 24.378C11.1154 18.5324 6.6849 14.5497 0.74755 14.1001C0.217135 14.0615 -0.0104482 13.9422 0.0134113 13.3659C0.0519536 12.1454 0.0482829 10.9213 0.0134113 9.69524C-0.00127145 9.14464 0.196946 9.03268 0.703502 9.04736C9.21217 9.27128 16.5994 16.2511 17.2804 24.7231C17.418 26.4446 17.418 26.4446 15.6579 26.4446H14.832L14.8265 26.441Z">
+                            </path>
+                            <path d="M3.58928 26.4555C2.64447 26.4618 1.73584 26.0925 1.06329 25.4289C0.39073 24.7653 0.00933763 23.8617 0.0030097 22.9169C-0.00331824 21.9721 0.365937 21.0635 1.02954 20.3909C1.69315 19.7184 2.59675 19.337 3.54156 19.3306C4.48637 19.3243 5.39499 19.6936 6.06755 20.3572C6.7401 21.0208 7.1215 21.9244 7.12782 22.8692C7.13415 23.814 6.7649 24.7226 6.10129 25.3952C5.43768 26.0677 4.53409 26.4491 3.58928 26.4555Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI RSS feed</span>
+                    </a>
+                
+            </div>
+        </div>
+    
+
+    <div data-testid="gridContainer"
+         class="grid-container ncbi-footer__container">
+        <div class="grid-row ncbi-footer__main-content-container"
+             data-testid="grid">
+            
+                <div class="ncbi-footer__column">
+                    
+                        <p class="ncbi-footer__circled-icons-heading">
+                            Connect with NLM
+                        </p>
+                    
+
+                    <div class="ncbi-footer__circled-icons-list">
+                        
+                            <a href=https://twitter.com/nlm_nih class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="32"
+                                     height="32"
+                                     viewBox="0 0 40 40"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on X (formerly known as Twitter)</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.facebook.com/nationallibraryofmedicine class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="13"
+                                     height="24"
+                                     viewBox="0 0 13 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M4.11371 23.1369C4.11371 23.082 4.11371 23.0294 4.11371 22.9745V12.9411H0.817305C0.6709 12.9411 0.670898 12.9411 0.670898 12.8016C0.670898 11.564 0.670898 10.3287 0.670898 9.09341C0.670898 8.97903 0.705213 8.95158 0.815017 8.95158C1.8673 8.95158 2.91959 8.95158 3.97417 8.95158H4.12057V8.83263C4.12057 7.8055 4.12057 6.7738 4.12057 5.74897C4.1264 4.92595 4.31387 4.11437 4.66959 3.37217C5.12916 2.38246 5.94651 1.60353 6.95717 1.1921C7.64827 0.905008 8.3913 0.764035 9.13953 0.778051C10.0019 0.791777 10.8644 0.830666 11.7268 0.860404C11.8869 0.860404 12.047 0.894717 12.2072 0.90158C12.2964 0.90158 12.3261 0.940469 12.3261 1.02968C12.3261 1.5421 12.3261 2.05452 12.3261 2.56465C12.3261 3.16857 12.3261 3.7725 12.3261 4.37642C12.3261 4.48165 12.2964 4.51367 12.1912 4.51138C11.5369 4.51138 10.8804 4.51138 10.2261 4.51138C9.92772 4.51814 9.63058 4.5526 9.33855 4.61433C9.08125 4.6617 8.84537 4.78881 8.66431 4.97766C8.48326 5.16652 8.3662 5.40755 8.32972 5.66661C8.28476 5.89271 8.26027 6.1224 8.25652 6.35289C8.25652 7.19014 8.25652 8.02969 8.25652 8.86923C8.25652 8.89439 8.25652 8.91955 8.25652 8.95615H12.0219C12.1797 8.95615 12.182 8.95616 12.1614 9.10714C12.0768 9.76596 11.9876 10.4248 11.9029 11.0813C11.8312 11.6319 11.7626 12.1824 11.697 12.733C11.6719 12.9434 11.6787 12.9434 11.4683 12.9434H8.26338V22.899C8.26338 22.979 8.26338 23.0591 8.26338 23.1392L4.11371 23.1369Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on Facebook</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.youtube.com/user/NLMNIH class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="21"
+                                     height="15"
+                                     viewBox="0 0 21 15"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M19.2561 1.47914C18.9016 1.15888 18.5699 0.957569 17.2271 0.834039C15.5503 0.678484 13.2787 0.655608 11.563 0.65332H9.43556C7.71987 0.65332 5.4483 0.678484 3.77151 0.834039C2.43098 0.957569 2.097 1.15888 1.74242 1.47914C0.813665 2.32097 0.619221 4.62685 0.598633 6.89384C0.598633 7.31781 0.598633 7.74101 0.598633 8.16345C0.626084 10.4121 0.827391 12.686 1.74242 13.521C2.097 13.8412 2.4287 14.0425 3.77151 14.1661C5.4483 14.3216 7.71987 14.3445 9.43556 14.3468H11.563C13.2787 14.3468 15.5503 14.3216 17.2271 14.1661C18.5676 14.0425 18.9016 13.8412 19.2561 13.521C20.1712 12.6929 20.3725 10.451 20.3999 8.22064C20.3999 7.74025 20.3999 7.25986 20.3999 6.77946C20.3725 4.54907 20.1689 2.30724 19.2561 1.47914ZM8.55942 10.5311V4.65201L13.5601 7.50005L8.55942 10.5311Z"
+                                          fill="white" />
+                                </svg>
+                                <span class="usa-sr-only">NLM on YouTube</span>
+                            </a>
+                        
+                    </div>
+                </div>
+            
+
+            
+                <address class="ncbi-footer__address ncbi-footer__column">
+                    
+        <p>
+            <a class="usa-link usa-link--external"
+            href="https://www.google.com/maps/place/8600+Rockville+Pike,+Bethesda,+MD+20894/%4038.9959508,
+            -77.101021,17z/data%3D!3m1!4b1!4m5!3m4!1s0x89b7c95e25765ddb%3A0x19156f88b27635b8!8m2!3d38.9959508!
+            4d-77.0988323"
+            rel="noopener noreferrer" target="_blank">National Library of Medicine
+            <br/> 8600 Rockville Pike<br/> Bethesda, MD 20894</a>
+        </p>
+    
+                </address>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/web_policies.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Web Policies
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/institutes-nih/nih-office-director/office-communications-public-liaison/freedom-information-act-office" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            FOIA
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/vulnerability-disclosure-policy/index.html" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS Vulnerability Disclosure
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://support.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Help
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/accessibility.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Accessibility
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/careers/careers.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Careers
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+        </div>
+
+        
+            <div class="grid-row grid-col-12" data-testid="grid">
+                <ul class="ncbi-footer__bottom-links-list">
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NLM
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NIH
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.usa.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            USA.gov
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+    </div>
+</footer>
+
+    
+
+
+        
+        
+    
+  <script  type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/pinger/pinger.js"> </script>
+
+
+    
+        
+
+<button class="back-to-top" data-ga-category="pagination" data-ga-action="back_to_top">
+    <label>Back to Top</label>
+    <svg class="usa-icon order-0" aria-hidden="true" focusable="false" role="img">
+        <use xlink:href="/static/img/sprite.svg#arrow_upward"></use>
+    </svg>
+</button>
+    
+
+
+        
+    
+    
+    
+        
+    <script type="application/javascript">
+    window.ncbi = window.ncbi || {};
+    window.ncbi.pmc = window.ncbi.pmc || {};
+    window.ncbi.pmc.options = {
+        logLevel: 'INFO',
+        
+        staticEndpoint: '/static/',
+        
+        citeCookieName: 'pmc-cf',
+    };
+</script>
+    <script type="module" crossorigin="" src="/static/assets/base-133c6271.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/jquery/jquery-3.6.0.min.js">&#xA0;</script>
+    <script type="text/javascript">
+        jQuery.getScript("https://cdn.ncbi.nlm.nih.gov/core/alerts/alerts.js", function () {
+            galert(['div.nav_and_browser', 'div.header', '#universal_header', '.usa-banner', 'body > *:nth-child(1)'])
+        });
+    </script>
+
+
+    <script type="text/javascript">var exports = {};</script>
+     <script src="/static/CACHE/js/output.13b077bc3ffd.js"></script>
+
+    <script type="module" crossorigin="" src="/static/assets/article-44d04358.js"></script>
+    
+    
+
+    </body>
+</html>

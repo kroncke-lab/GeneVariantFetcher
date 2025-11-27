@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "31083399",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses various pathways in heart failure, including transthyretin amyloidosis, but does not provide specific genetic variant information for the TTR gene."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant information for the TTR gene."
+    ],
+    "notes": "The paper discusses transthyretin amyloidosis but does not mention specific TTR gene variants."
+  }
+}

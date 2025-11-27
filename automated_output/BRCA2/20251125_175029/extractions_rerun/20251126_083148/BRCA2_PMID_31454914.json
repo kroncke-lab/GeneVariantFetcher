@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "31454914",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information including penetrance data from a study on Mexican-Mestizo breast cancer families."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1813delA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 13,
+        "demographics": "252 unrelated sporadic breast cancer patients, mean age 40, Mexican-mestizo population",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The most common BRCA2 mutation was c.1813delA, present in two samples.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study identified 12 pathogenic mutations in BRCA2.",
+      "key_quotes": [
+        "A total of 38 patients were positive for a pathogenic mutation representing 15% of our Mexican women cohort with breast cancer: 25 for BRCA1 and 13 for BRCA2."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was reported in the paper."
+  }
+}

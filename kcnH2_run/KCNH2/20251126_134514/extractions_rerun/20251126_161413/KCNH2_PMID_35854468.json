@@ -1,0 +1,74 @@
+{
+  "paper_metadata": {
+    "pmid": "35854468",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the KCNH2 gene and reports on the variant p.T1019PfsX38, including its clinical significance, penetrance data, and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.3054delC",
+      "protein_notation": "p.T1019PfsX38",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "5 years old, female, Omani",
+        "phenotype": "prolonged corrected QT (QTc) interval (>570 ms)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 5,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "prolonged corrected QT (QTc) interval (>570 ms)",
+          "evidence_sentence": "This mutation caused a prolonged corrected QT (QTc) interval (>570 ms) in a 5 years old girl who was homozygote for this mutation."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "borderline QTc intervals",
+          "evidence_sentence": "Heterozygote individuals had borderline QTc intervals."
+        }
+      ],
+      "functional_data": {
+        "summary": "The T1019PfsX38 variant modifies the long C-tail of hERG, affecting channel gating dynamics and contributing to the pathology seen in affected LQT2 patients.",
+        "assays": [
+          "patch-clamp technique",
+          "voltage-clamp protocol"
+        ]
+      },
+      "segregation_data": "The variant was identified in an extended family of LQT2 from Oman.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was functionally characterized, showing significant effects on channel activity.",
+      "key_quotes": [
+        "This mutation caused a prolonged corrected QT (QTc) interval (>570 ms) in a 5 years old girl who was homozygote for this mutation.",
+        "Heterozygote individuals had borderline QTc intervals."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant was successfully extracted."
+  }
+}

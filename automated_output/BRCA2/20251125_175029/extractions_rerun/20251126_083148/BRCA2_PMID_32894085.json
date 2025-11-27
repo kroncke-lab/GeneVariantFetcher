@@ -1,0 +1,159 @@
+{
+  "paper_metadata": {
+    "pmid": "32894085",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.289G>T",
+      "protein_notation": "p.Glu97Ter",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "28-35 years, female",
+        "phenotype": "Unilateral breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 20.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Unilateral breast cancer",
+          "evidence_sentence": "The mutation BRCA2: c.289G\u2009>\u2009T (p.Glu97Ter) is a G-base substitution by T leading to a premature STOP codon at exon 3 of the BRCA2 gene."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to a premature STOP codon, likely resulting in a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant has been reported in the literature.",
+      "key_quotes": [
+        "The mutation BRCA2: c.289G\u2009>\u2009T (p.Glu97Ter) is a G-base substitution by T leading to a premature STOP codon at exon 3 of the BRCA2 gene."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5116_5119delAATA",
+      "protein_notation": "p.Asn1706Leufs",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "36-40 years, female",
+        "phenotype": "Unilateral breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 20.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Unilateral breast cancer",
+          "evidence_sentence": "The mutation BRCA2: c.5116_5119delAATA (p.Asn1706Leufs) is a deletion of AATA that produces alteration in the reading frame and leads to a STOP codon in exon 11 of BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to a frameshift and likely results in a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation has a founder effect in North Africa.",
+      "key_quotes": [
+        "The mutation BRCA2: c.5116_5119delAATA (p.Asn1706Leufs) is a deletion of AATA that produces alteration in the reading frame and leads to a STOP codon in exon 11 of BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4090A>G",
+      "protein_notation": "p.Ile1364Val",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "28-35 years, female",
+        "phenotype": "Unilateral breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 1,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "uncertain",
+          "phenotype_details": "Unilateral breast cancer",
+          "evidence_sentence": "In addition to these mutations, one BRCA2 VUS was found BRCA2: c.4090A\u2009>\u2009G (p.Ile1364Val) and co-occurred with a likely pathogenic mutation BRCA1: c.116G\u2009>\u2009A (p.Cys39Tyr)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is classified as a variant of unknown significance.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "Limited evidence due to VUS classification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant has been reported in the Moroccan population.",
+      "key_quotes": [
+        "In addition to these mutations, one BRCA2 VUS was found BRCA2: c.4090A\u2009>\u2009G (p.Ile1364Val) and co-occurred with a likely pathogenic mutation BRCA1: c.116G\u2009>\u2009A (p.Cys39Tyr)."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "BRCA1 and BRCA2 mutations and unclassified variants",
+      "variants_extracted": 3
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Clinico-pathologic characteristics of BRCA mutation carriers",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted with detailed penetrance data."
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "paper_metadata": {
+    "pmid": "35844663",
+    "title": "Monitoring the Patient with Retinal Angiopathy Associated with Hereditary Transthyretin Amyloidosis: Current Perspectives",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.30G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 477,
+        "demographics": "not specified",
+        "phenotype": "retinal angiopathy associated with hereditary transthyretin amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 477,
+        "affected_count": 4,
+        "unaffected_count": 473,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.84,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "retinal angiopathy",
+          "evidence_sentence": "The prevalence of retinal angiopathy in ATTRv patients is lower than other ocular manifestations of the disease but it increases with time."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "retinal angiopathy",
+          "evidence_sentence": "The prevalence of retinal angiopathy in ATTRv patients is lower than other ocular manifestations of the disease but it increases with time."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "retinal angiopathy",
+          "evidence_sentence": "The prevalence of retinal angiopathy in ATTRv patients is lower than other ocular manifestations of the disease but it increases with time."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "retinal angiopathy",
+          "evidence_sentence": "The prevalence of retinal angiopathy in ATTRv patients is lower than other ocular manifestations of the disease but it increases with time."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met mutation is associated with retinal angiopathy.",
+        "assays": []
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": "not specified",
+      "evidence_level": "high",
+      "source_location": "Table 1, Row 8",
+      "additional_notes": "The study indicates that the Val30Met mutation is the most frequent mutation worldwide.",
+      "key_quotes": [
+        "The prevalence of retinal angiopathy in ATTRv patients is lower than other ocular manifestations of the disease but it increases with time."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.114C>T",
+      "protein_notation": "p.Tyr38Cys",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "retinal angiopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "retinal angiopathy",
+          "evidence_sentence": "The patient presented with retinal angiopathy."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Tyr38Cys mutation is associated with retinal angiopathy.",
+        "assays": []
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": "not specified",
+      "evidence_level": "high",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "This mutation has been reported in a single case with retinal angiopathy.",
+      "key_quotes": [
+        "The patient presented with retinal angiopathy."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Studies Included of Analysis Regarding Retinal Angiopathy Associated with Hereditary Transthyretin Amyloidosis",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant TTR variants were extracted successfully."
+  }
+}

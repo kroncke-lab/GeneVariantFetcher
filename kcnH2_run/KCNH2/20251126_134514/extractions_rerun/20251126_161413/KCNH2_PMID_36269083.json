@@ -1,0 +1,134 @@
+{
+  "paper_metadata": {
+    "pmid": "36269083",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the KCNH2:c.2717C>T:p.(Ser906Leu) variant, its clinical significance, penetrance data, and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2717C>T",
+      "protein_notation": "p.(Ser906Leu)",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 8,
+        "demographics": "5 males and 3 females, ages 8 to 73 years",
+        "phenotype": "ranged from asymptomatic to life-threatening arrhythmic events"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": 8,
+        "unaffected_count": 5,
+        "uncertain_count": 7,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 21,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "died due to sudden cardiac death (SCD)",
+          "evidence_sentence": "One of the patients later died at age 21 due to SCD."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 8,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic",
+          "evidence_sentence": "The phenotype of carriers of KCNH2:p.(Ser906Leu) ranged from asymptomatic to life-threatening arrhythmic events."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 73,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The phenotype of carriers of KCNH2:p.(Ser906Leu) ranged from asymptomatic to life-threatening arrhythmic events."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The phenotype of carriers of KCNH2:p.(Ser906Leu) ranged from asymptomatic to life-threatening arrhythmic events."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The phenotype of carriers of KCNH2:p.(Ser906Leu) ranged from asymptomatic to life-threatening arrhythmic events."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The phenotype of carriers of KCNH2:p.(Ser906Leu) ranged from asymptomatic to life-threatening arrhythmic events."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The phenotype of carriers of KCNH2:p.(Ser906Leu) ranged from asymptomatic to life-threatening arrhythmic events."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The phenotype of carriers of KCNH2:p.(Ser906Leu) ranged from asymptomatic to life-threatening arrhythmic events."
+        }
+      ],
+      "functional_data": {
+        "summary": "The KCNH2:p.(Ser906Leu) variant shows reduced current density and moderate loss-of-function.",
+        "assays": [
+          "manual patch clamp",
+          "automated calibrated patch clamp"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families, with all patients diagnosed with (probable/hidden) LQTS2 carrying the variant.",
+      "population_frequency": "MAF of 0.00004 in gnomAD v3.1.2",
+      "evidence_level": "The evidence for pathogenicity is moderate, with functional assays indicating reduced current density.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is likely a founder mutation in the Dutch population.",
+      "key_quotes": [
+        "In summary, the variant KCNH2:c.2717C>T:p.(Ser906Leu), was identified in all eight index patients.",
+        "However, five currently unaffected individuals were carrying the variant."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

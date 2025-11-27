@@ -1,0 +1,70 @@
+{
+  "paper_metadata": {
+    "pmid": "32494459",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1682A>G",
+      "protein_notation": "p.Ala561Val",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "pediatric patients",
+        "phenotype": "associated with isolated ventricular non-compaction and long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "long QT syndrome with ventricular non-compaction",
+          "evidence_sentence": "Ogawa et al. described one pediatric patient with an A561V mutation in the pore region."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "long QT syndrome with ventricular non-compaction",
+          "evidence_sentence": "Ogawa et al. described another with a D501N mutation in the non-pore region."
+        }
+      ],
+      "functional_data": {
+        "summary": "The A561V mutation is located in the pore region of the KCNH2 gene, which is critical for potassium ion conduction.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Moderate evidence based on case reports.",
+      "source_location": "Main Text, Pathophysiology section",
+      "additional_notes": "Both mutations are linked to long QT syndrome and isolated ventricular non-compaction.",
+      "key_quotes": [
+        "LVNC has also been observed in conjunction with inherited long QT syndrome secondary to KCNH2 mutations."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted successfully."
+  }
+}

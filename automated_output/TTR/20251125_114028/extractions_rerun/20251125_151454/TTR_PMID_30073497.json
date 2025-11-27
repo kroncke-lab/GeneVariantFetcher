@@ -1,0 +1,77 @@
+{
+  "paper_metadata": {
+    "pmid": "30073497",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 60,
+        "demographics": "Mean age 58.4 years, predominantly male",
+        "phenotype": "ATTR-PN and/or ATTR-CM"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 60,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 61,
+          "age_at_onset": 56,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Progressive sensorimotor and autonomic neuropathy",
+          "evidence_sentence": "In ATTR-PN, symptoms can present as early as the third decade of life."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 49,
+          "age_at_onset": 41,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac symptoms typical of heart failure",
+          "evidence_sentence": "ATTR-CM is generally a late-onset disease, with the first cardiac symptoms typically reported by patients over 60 years of age."
+        }
+      ],
+      "functional_data": {
+        "summary": "The amino acid substitution of valine to methionine at position 30 (Val30Met) in the TTR protein chain is the most common disease-causing TTR variant.",
+        "assays": []
+      },
+      "segregation_data": "The Val30Met mutation is known to segregate with disease in families.",
+      "population_frequency": "The Val30Met variant is prevalent in endemic regions.",
+      "evidence_level": "Strong evidence based on clinical presentation and family history.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the burden of ATTR amyloidosis on patients and caregivers.",
+      "key_quotes": [
+        "Approximately 100 pathogenic TTR genotypes have been identified.",
+        "The amino acid substitution of valine to methionine at position 30 (Val30Met) in the TTR protein chain is the most common disease-causing TTR variant."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Patient demographics and disease characteristics by country",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data focused solely on the TTR gene as specified."
+  }
+}

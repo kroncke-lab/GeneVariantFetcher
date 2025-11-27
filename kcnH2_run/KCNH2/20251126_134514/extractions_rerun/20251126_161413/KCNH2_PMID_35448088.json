@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "35448088",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant N588K, including clinical significance, patient demographics, penetrance data, and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1764C>G",
+      "protein_notation": "p.Asn588Lys",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "29-year-old male",
+        "phenotype": "Short QT syndrome (SQTS1)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 3,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 29,
+          "age_at_onset": 0,
+          "age_at_diagnosis": 0,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Short QT interval (270\u2013300 ms) at ECG",
+          "evidence_sentence": "The SQTS was diagnosed in 2003. There is a strong family history of SCD in his family. Three members of the family including this patient presented a short QT interval (270\u2013300 ms) corrected with Bazett\u2019s formula (QTc) at ECG."
+        }
+      ],
+      "functional_data": {
+        "summary": "The N588K mutation in KCNH2 leads to a gain-of-function in the hERG channel, impairing inactivation and affecting drug sensitivity.",
+        "assays": [
+          "Patch clamp",
+          "Calcium imaging"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Introduction, paragraph 2",
+      "additional_notes": "The variant is associated with familial SQTS1.",
+      "key_quotes": [
+        "The first gene mutation of N588K in the KCNH2 gene was detected in 2004.",
+        "The patient was a 29-year-old male patient when the skin biopsy was performed in 2016."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant N588K was successfully extracted."
+  }
+}

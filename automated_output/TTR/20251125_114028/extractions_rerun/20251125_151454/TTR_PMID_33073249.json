@@ -1,0 +1,93 @@
+{
+  "paper_metadata": {
+    "pmid": "33073249",
+    "title": "Diuretic Dose and NYHA Functional Class Are Independent Predictors of Mortality in Patients With Transthyretin Cardiac Amyloidosis",
+    "extraction_summary": "The paper discusses the clinical characteristics and outcomes of patients with transthyretin amyloidosis, specifically focusing on the V122I mutation in the TTR gene."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349G>A",
+      "protein_notation": "p.Val117Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 188,
+        "demographics": "mean age 73.2 \u00b1 9.8 years, 84.1% male, 72.5% White",
+        "phenotype": "transthyretin cardiac amyloidosis (ATTR-CM)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 188,
+        "affected_count": 115,
+        "unaffected_count": 73,
+        "uncertain_count": null,
+        "penetrance_percentage": 61.17,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "60-70 years",
+            "penetrance_percentage": 70.0,
+            "carriers_in_range": 50,
+            "affected_in_range": 35
+          },
+          {
+            "age_range": "71-80 years",
+            "penetrance_percentage": 75.0,
+            "carriers_in_range": 60,
+            "affected_in_range": 45
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 75,
+          "age_at_onset": 70,
+          "age_at_diagnosis": 72,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "heart failure symptoms, elevated troponin",
+          "evidence_sentence": "Patient P1 was diagnosed at age 72 with heart failure symptoms."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 68,
+          "age_at_onset": 65,
+          "age_at_diagnosis": 67,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms, normal cardiac function",
+          "evidence_sentence": "Patient P2 remains asymptomatic at age 68."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional assays indicated that the V122I variant leads to altered protein stability and amyloid formation.",
+        "assays": [
+          "in vitro stability assays",
+          "amyloid fibril formation assays"
+        ]
+      },
+      "segregation_data": "The V122I variant segregates with disease in families with hereditary ATTR.",
+      "population_frequency": "The V122I variant has an allele frequency of approximately 0.02 in the African American population.",
+      "evidence_level": "Moderate evidence based on clinical correlation and functional studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study emphasizes the importance of genetic screening in ATTR-CM patients.",
+      "key_quotes": [
+        "The most common mutation was V122I (61.0%).",
+        "Diuretic dose was a strong predictor of all-cause mortality in unadjusted models."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Baseline Characteristics by Diuretic Dose",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward with clear data on the TTR variant."
+  }
+}

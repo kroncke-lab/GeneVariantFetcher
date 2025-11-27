@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "34692709",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No BRCA2 variants were mentioned in the provided text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention any BRCA2 variants."
+    ],
+    "notes": "The paper focused on meiotic chromosome dynamics in zebrafish and did not include any genetic variant information related to BRCA2."
+  }
+}

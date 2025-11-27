@@ -1,0 +1,180 @@
+{
+  "paper_metadata": {
+    "pmid": "30254663",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7975A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 2,
+        "demographics": "Two sisters, one proband aged 60",
+        "phenotype": "Breast cancer and ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 60,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "The sister was found to carry the variant as well."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 60,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No breast cancer",
+          "evidence_sentence": "She tested negative for the variant, which provides additional support to the hypothesis of pathogenicity."
+        }
+      ],
+      "functional_data": {
+        "summary": "In silico evaluations supported a pathogenic effect.",
+        "assays": [
+          "In silico predictions"
+        ]
+      },
+      "segregation_data": "Cosegregation ratio in this family was \u22652 (2\u20132.63) with all the methods adopted.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is located in a consensus splice site.",
+      "key_quotes": [
+        "the nucleotide c.7975 is located in a consensus splice site and bioinformatic tool predicted splice site alteration."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5386G>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 2,
+        "demographics": "Proband aged under 35, mother tested",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 0,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": 35,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Hormone-responsive breast cancer",
+          "evidence_sentence": "The mother was found to carry both the variants, thus excluding a role for them in breast cancer clustering."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No breast cancer",
+          "evidence_sentence": "The mother was found to carry both the variants, thus excluding a role for them in breast cancer clustering."
+        }
+      ],
+      "functional_data": {
+        "summary": "Cosegregation analysis supports the neutrality of both the variants.",
+        "assays": []
+      },
+      "segregation_data": "Cosegregation analysis supports the neutrality of both the variants.",
+      "population_frequency": null,
+      "evidence_level": "Low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No functional data were available for this variant.",
+      "key_quotes": [
+        "Cosegregation analysis supports the neutrality of both the variants."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6290C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 2,
+        "demographics": "Proband aged in her 30s, father tested",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": 30,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Triple-negative breast cancer",
+          "evidence_sentence": "Genetic testing revealed the BRCA2 variant c.6290C>T."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No breast cancer",
+          "evidence_sentence": "However, this finding fails to add relevant evidence on the significance of the variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "Cosegregation analysis supports the neutrality of both the variants.",
+        "assays": []
+      },
+      "segregation_data": "Cosegregation analysis supports the neutrality of both the variants.",
+      "population_frequency": null,
+      "evidence_level": "Low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No functional data were available for this variant.",
+      "key_quotes": [
+        "Cosegregation analysis supports the neutrality of both the variants."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants and penetrance data were successfully extracted."
+  }
+}

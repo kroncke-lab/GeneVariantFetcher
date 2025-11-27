@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "33747156",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant p.Q548Q, including clinical significance, patient demographics, penetrance data, and functional information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.Q548Q",
+      "genomic_position": null,
+      "clinical_significance": "LEVEL_2B",
+      "patients": {
+        "count": 1,
+        "demographics": "Patient 14, age 50, sex not specified",
+        "phenotype": "Pancreatic neuroendocrine tumor (PNET)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P14",
+          "age_at_evaluation": 50,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "Pancreatic neuroendocrine tumor",
+          "evidence_sentence": "Altogether, two potentially actionable genomic alterations in BRCA2 (p.Q548Q) and neurofibromin 1 (NF1; p.Q1188X) were detected in patient nos. 14 and 8, respectively."
+        }
+      ],
+      "functional_data": {
+        "summary": "The evidence level for BRCA2 (p.Q548Q) for patients with PNET was LEVEL_2B, which was defined by OncoKB as a standard care biomarker recommended by the National Comprehensive Cancer Network (NCCN) or other expert panels as predictive of a response to a Food and Drug Administration-approved drug.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "LEVEL_2B",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is associated with actionable treatment options including niraparib, olaparib, rucaparib, and talazoparib.",
+      "key_quotes": [
+        "The evidence level for BRCA2 (p.Q548Q) for patients with PNET was LEVEL_2B, which was defined by OncoKB as a standard care biomarker recommended by the National Comprehensive Cancer Network (NCCN, https://education.nccn.org/) or other expert panels as predictive of a response to a Food and Drug Administration-approved drug."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the BRCA2 variant."
+  }
+}

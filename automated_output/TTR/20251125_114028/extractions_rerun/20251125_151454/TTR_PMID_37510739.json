@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "37510739",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the incidence and predictors of ventricular arrhythmias in transthyretin amyloid cardiomyopathy, specifically focusing on wild-type ATTR-CM. No specific genetic variants in the TTR gene are mentioned in the text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention any specific genetic variants in the TTR gene."
+    ],
+    "notes": "The paper focused on clinical aspects and predictors of ventricular arrhythmias in wtATTR-CM, without discussing specific genetic variants in the TTR gene."
+  }
+}

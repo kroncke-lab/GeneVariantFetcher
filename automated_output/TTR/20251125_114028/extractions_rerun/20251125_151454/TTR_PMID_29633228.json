@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "29633228",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.118A>G",
+      "protein_notation": "p.Val40Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 252,
+        "demographics": "Mean age 40.4 years, predominantly from Portugal",
+        "phenotype": "Transthyretin familial amyloid polyneuropathy (TTR-FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 252,
+        "affected_count": 252,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 40,
+          "age_at_onset": 32,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Debilitating sensorimotor and autonomic polyneuropathy",
+          "evidence_sentence": "The matched, treated sample consisted predominantly of subjects with the Val30Met genotype (92.5%), from Portugal, and with a mean age of 40.4 years."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met variant is associated with severe disease progression.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study primarily focused on the Val30Met variant.",
+      "key_quotes": [
+        "Of the more than 100 TTR genotypes identified, the most common is Val30Met.",
+        "Survival time from disease onset to death is approximately 10 years on average."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on the TTR gene and its variants."
+  }
+}

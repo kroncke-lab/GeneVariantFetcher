@@ -1,0 +1,164 @@
+{
+  "paper_metadata": {
+    "pmid": "37852034",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4935del",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Female, age not specified",
+        "phenotype": "Colon Adenocarcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 67,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Adenocarcinoma of the colon",
+          "evidence_sentence": "The patient had an impressive oncological history: diagnosed at the age of 67 years with a pT3N0M0 adenocarcinoma of the colon."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a complete response to olaparib treatment.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 727",
+      "additional_notes": "This patient had a history of multiple cancers.",
+      "key_quotes": [
+        "The patient had an impressive oncological history: diagnosed at the age of 67 years with a pT3N0M0 adenocarcinoma of the colon."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3751dup",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Male, age not specified",
+        "phenotype": "Parathyroid Carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 32,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Parathyroid carcinoma",
+          "evidence_sentence": "The patient was a 32-year-old, healthy Caucasian male who had undergone multiple surgeries and radiotherapy."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a partial response to olaparib treatment.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 112",
+      "additional_notes": "The patient had undergone multiple surgeries and radiotherapy.",
+      "key_quotes": [
+        "The patient was a 32-year-old, healthy Caucasian male who had undergone multiple surgeries and radiotherapy."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.516+1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Male, age not specified",
+        "phenotype": "Pancreas Adenocarcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Adenocarcinoma of the pancreas",
+          "evidence_sentence": "The patient had metastases in the right lung and the subcarinal lymph nodes."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Adenocarcinoma of the pancreas",
+          "evidence_sentence": "The patient had metastases in the right lung and the subcarinal lymph nodes."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a partial response to olaparib treatment.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 601",
+      "additional_notes": "Both patients had adenocarcinoma of the pancreas.",
+      "key_quotes": [
+        "The patient had metastases in the right lung and the subcarinal lymph nodes."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Clinical characteristics of patients in the BRCA2 cohort",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 variants were extracted successfully."
+  }
+}

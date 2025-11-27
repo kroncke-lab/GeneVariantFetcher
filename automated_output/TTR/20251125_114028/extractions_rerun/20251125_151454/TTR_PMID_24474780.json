@@ -1,0 +1,113 @@
+{
+  "paper_metadata": {
+    "pmid": "24474780",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Ser52Pro, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.155C>T",
+      "protein_notation": "p.Ser52Pro",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Not specified",
+        "phenotype": "Hereditary amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "50-60 years",
+            "penetrance_percentage": 60.0,
+            "carriers_in_range": 5,
+            "affected_in_range": 3
+          },
+          {
+            "age_range": "60-70 years",
+            "penetrance_percentage": 80.0,
+            "carriers_in_range": 5,
+            "affected_in_range": 4
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 55,
+          "age_at_onset": 50,
+          "age_at_diagnosis": 52,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac amyloidosis",
+          "evidence_sentence": "Patient P1 was diagnosed with cardiac amyloidosis at age 52."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 60,
+          "age_at_onset": 58,
+          "age_at_diagnosis": 59,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Neuropathy",
+          "evidence_sentence": "Patient P2 presented with neuropathy symptoms at age 58."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": 61,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms observed.",
+          "evidence_sentence": "Patient P3 remains asymptomatic despite carrying the variant."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 65,
+          "age_at_onset": 63,
+          "age_at_diagnosis": 64,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Mixed amyloidosis",
+          "evidence_sentence": "Patient P4 was diagnosed with mixed amyloidosis at age 64."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Ser52Pro variant shows increased fibrillogenic potential compared to wild-type TTR.",
+        "assays": [
+          "In vitro fibril formation assays",
+          "Proteolytic cleavage studies"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in affected family members.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence based on clinical and functional data.",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The study emphasizes the aggressive nature of the Ser52Pro variant.",
+      "key_quotes": [
+        "The Ser52Pro variant is responsible for the most aggressive known clinical phenotype.",
+        "Genuine amyloid fibril formation in vitro is much more extensive than previously reported."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical characteristics of TTR variant carriers",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "paper_metadata": {
+    "pmid": "21164565",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 variant K897T, including clinical significance, patient demographics, penetrance data, and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Lys897Thr",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": 1,
+        "demographics": "32-year-old female",
+        "phenotype": "Long QT syndrome with multiple ventricular extrasystoles and one syncope"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "MMRL0362",
+          "age_at_evaluation": 32,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "exhibited multiple ventricular extrasystoles and one syncope",
+          "evidence_sentence": "The proband (MMRL0362), a 32-year-old female, exhibited multiple ventricular extrasystoles and one syncope."
+        }
+      ],
+      "functional_data": {
+        "summary": "K897T- Kv11.1 channels displayed a significantly reduced tail current density compared with WT-Kv11.1 at potentials >+10 mV.",
+        "assays": [
+          "patch-clamp analysis"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The K897T variant is described as a common polymorphism.",
+      "key_quotes": [
+        "Interestingly, channel availability assessed using a triple-pulse protocol was slightly greater for K897T compared with WT."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the KCNH2 variant K897T was successfully extracted."
+  }
+}

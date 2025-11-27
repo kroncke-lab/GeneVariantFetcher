@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "39684857",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses gene therapy in cardiomyopathies, with a focus on various genetic conditions, including transthyretin amyloidosis (ATTR). However, no specific genetic variants in the TTR gene are mentioned in the text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific TTR variants or penetrance data."
+    ],
+    "notes": "The paper discusses gene therapy approaches for ATTR but does not specify any TTR gene variants."
+  }
+}

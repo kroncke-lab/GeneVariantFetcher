@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "28694632",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val30Met, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "70-year-old male",
+        "phenotype": "Late-onset Familial Amyloidotic Polyneuropathy with Bence Jones Proteinuria and Cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 70,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "hypesthesia in the hands and feet, difficulty walking, cardiac symptoms, diarrhea",
+          "evidence_sentence": "The patient was a 70-year-old male examined due to hypesthesia in the hands and feet, plus difficulty walking."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with familial amyloidotic polyneuropathy.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Case report evidence",
+      "source_location": "Abstract",
+      "additional_notes": "No population frequency or segregation data provided.",
+      "key_quotes": [
+        "The genetic study was compatible with a heterozygous Val30Met-transthyretin mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data is based on the information provided in the main text."
+  }
+}

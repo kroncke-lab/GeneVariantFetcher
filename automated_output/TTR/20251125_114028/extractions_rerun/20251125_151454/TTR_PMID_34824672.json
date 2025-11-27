@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "34824672",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val122Ile, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "59-year-old Black male",
+        "phenotype": "concomitant cardiac amyloidosis and acute coronary embolism"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 59,
+          "age_at_onset": null,
+          "age_at_diagnosis": 59,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "concomitant cardiac amyloidosis and acute coronary embolism",
+          "evidence_sentence": "Endomyocardial biopsy confirmed transthyretin CA (ATTR-CA; Figure 3F), and genetic testing uncovered a Val122Ile mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile mutation is associated with hereditary ATTR amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Identified as the most common variant in 3% to 4% of African Americans.",
+      "evidence_level": "Strong evidence based on clinical presentation and genetic testing.",
+      "source_location": "Discussion, paragraph 2",
+      "additional_notes": "The patient had no family history of amyloidosis.",
+      "key_quotes": [
+        "Hereditary ATTR amyloidosis (hATTR) has been considered rare, its true prevalence is difficult to establish due to under-recognition and variable geographical distribution of causal mutations.",
+        "An epidemiological study identified the Val122Ile mutation as the most common variant in 3% to 4% of African Americans, with cardiomyopathy as the predominant manifestation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly mentioned in the context of the patient's case."
+  }
+}

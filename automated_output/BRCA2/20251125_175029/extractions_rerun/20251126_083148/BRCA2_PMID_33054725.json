@@ -1,0 +1,127 @@
+{
+  "paper_metadata": {
+    "pmid": "33054725",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene along with penetrance data from the study on BRCA-associated tumors in males."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "deleterious or likely deleterious",
+      "patients": {
+        "count": 311,
+        "demographics": "Male patients with BRCA2 mutations",
+        "phenotype": "BRCA-associated tumors"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 311,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Frequent deleterious variants were identified in various tumors.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The majority of BRCA2 mutations were somatic.",
+      "key_quotes": [
+        "A total of 127 BRCA1 and 311 BRCA2 mutations were identified, of which 21.8 and 28.6% were deleterious, respectively.",
+        "Frequent deleterious variants were identified in carcinomas of the breast (100.0%), colorectum (62.2%), prostate (43.3%), and stomach (42.9%)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1784Kfs*3",
+      "protein_notation": "p.N1784Kfs*3",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 33,
+        "demographics": "Male patients with BRCA2 mutations",
+        "phenotype": "BRCA-associated tumors"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 33,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Frameshift mutations in BRCA2 at N1784 were frequently observed.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was frequently observed in both male and female patients.",
+      "key_quotes": [
+        "Frameshift mutations in BRCA2 at N1784 (N1784Kfs*3, N1784Tfs*3) were frequently observed in both male and female patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "Male patients with both germline and somatic BRCA2 mutations",
+        "phenotype": "BRCA-associated tumors"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Patients displayed both germline and somatic mutations.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "These patients had a combination of mutations.",
+      "key_quotes": [
+        "In addition, 13.5% (7/52) of the patients showed a microsatellite instability-high (MSI-H) phenotype, while 30.7% showed moderate to high TMB (\u226510 mutations/Mb)."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Characteristics of male BRCAm carriers with a diagnosis of tumor in SYSUCC cohort",
+      "variants_extracted": 1
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Characteristics of BRCAm carriers with a diagnosis of tumor in TCGA cohort",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

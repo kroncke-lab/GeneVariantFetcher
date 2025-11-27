@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "29750258",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.518G>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "Only one variant (c.518G>T in BRCA2) had contradictory reported and the reasons for this discordance remain unknown."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant has been reported with contradictory outcomes.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "uncertain",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant c.518G>T in BRCA2 is noted for its contradictory reports.",
+      "key_quotes": [
+        "Only one variant (c.518G>T in BRCA2) had contradictory reported and the reasons for this discordance remain unknown."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was reported in the paper."
+  }
+}

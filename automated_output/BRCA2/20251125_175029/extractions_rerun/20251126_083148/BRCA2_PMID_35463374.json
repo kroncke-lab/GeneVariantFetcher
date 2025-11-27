@@ -1,0 +1,104 @@
+{
+  "paper_metadata": {
+    "pmid": "35463374",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from the study."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1813delA",
+      "protein_notation": "p.(Leu605fs)",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, age 53",
+        "phenotype": "ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 19,
+        "affected_count": 15,
+        "unaffected_count": 0,
+        "uncertain_count": 4,
+        "penetrance_percentage": 78.95,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 53,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ovarian cancer",
+          "evidence_sentence": "In one of the two OC patients with discordant results, the c.1813delA PV, located at a homopolymeric region of BRCA2, was not detected by the Oncomine variant calling software."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a deletion that leads to a frameshift and is associated with ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was confirmed through manual curation analysis.",
+      "key_quotes": [
+        "In one of the two OC patients with discordant results, the c.1813delA PV, located at a homopolymeric region of BRCA2, was not detected by the Oncomine variant calling software."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4284dupT",
+      "protein_notation": "p.(Gln1429Serfs*9)",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, age 64",
+        "phenotype": "ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 19,
+        "affected_count": 15,
+        "unaffected_count": 0,
+        "uncertain_count": 4,
+        "penetrance_percentage": 78.95,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 64,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ovarian cancer",
+          "evidence_sentence": "In the other patient, bearing the germline BRCA2 c.4284dupT p.(Gln1429Serfs*9) variant, tumour testing on relapsing OC tissue showed the large BRCA2 deletion p.(Leu1334_Asn1742del) encompassing the germline variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a duplication that leads to a frameshift and is associated with ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was associated with clinical progression upon treatment.",
+      "key_quotes": [
+        "In the other patient, bearing the germline BRCA2 c.4284dupT p.(Gln1429Serfs*9) variant, tumour testing on relapsing OC tissue showed the large BRCA2 deletion p.(Leu1334_Asn1742del) encompassing the germline variant."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

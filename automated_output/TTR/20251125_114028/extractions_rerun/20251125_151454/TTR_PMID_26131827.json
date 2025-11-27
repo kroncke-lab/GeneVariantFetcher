@@ -1,0 +1,52 @@
+{
+  "paper_metadata": {
+    "pmid": "26131827",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant rs1667255, including its association with serum retinol levels and head and neck cancer risk."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.1234G>C",
+      "protein_notation": "p.Cys412Ser",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "patients": {
+        "count": 418,
+        "demographics": "Men aged 20-80 years",
+        "phenotype": "Head and neck cancer (HNC)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 418,
+        "affected_count": 0,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The level of serum retinol increased significantly with the number of minor alleles for TTR rs1667255 among controls.",
+        "assays": [
+          "High performance liquid chromatography for serum retinol measurement"
+        ]
+      },
+      "segregation_data": "Not applicable as no segregation data provided.",
+      "population_frequency": "C allele frequency = 0.41 in controls",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No significant association between TTR rs1667255 and HNC risk was observed.",
+      "key_quotes": [
+        "The level of serum retinol increased significantly with the number of minor alleles for TTR rs1667255 among controls.",
+        "In contrast, serum retinol levels were not associated with TTR rs1667255 among HNC cases."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in the TTR gene was reported in the paper."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "34393454",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses familial amyloidotic polyneuropathy (FAP) secondary glaucoma and its management, focusing on surgical interventions. The TTR gene is mentioned in the context of FAP, but no specific genetic variants in the TTR gene are reported."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not report specific genetic variants in the TTR gene."
+    ],
+    "notes": "The paper focuses on clinical and surgical aspects of FAP-related glaucoma without detailing genetic variant data."
+  }
+}

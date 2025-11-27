@@ -1,0 +1,104 @@
+{
+  "paper_metadata": {
+    "pmid": "37816281",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted two BRCA2 variants with associated patient and penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8167G>C",
+      "protein_notation": "p.Asp2723His",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "breast cancer patients, heterozygous carriers",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Two specific BRCA2 variants, c.8167G>C (p.Asp2723His) and c.1583del (p.Asn528fs), have been identified from individuals with a family history of breast cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "iPSC lines exhibit pluripotency and capability to differentiate into three germ layers.",
+        "assays": []
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Main Text, Abstract",
+      "additional_notes": "Variant associated with family history of breast cancer.",
+      "key_quotes": [
+        "Germline pathogenic variants in the BRCA2 gene are strongly correlated with an elevated risk of developing breast cancer."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1583del",
+      "protein_notation": "p.Asn528fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "breast cancer patients, heterozygous carriers",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Two specific BRCA2 variants, c.8167G>C (p.Asp2723His) and c.1583del (p.Asn528fs), have been identified from individuals with a family history of breast cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "iPSC lines exhibit pluripotency and capability to differentiate into three germ layers.",
+        "assays": []
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Main Text, Abstract",
+      "additional_notes": "Variant associated with family history of breast cancer.",
+      "key_quotes": [
+        "Germline pathogenic variants in the BRCA2 gene are strongly correlated with an elevated risk of developing breast cancer."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

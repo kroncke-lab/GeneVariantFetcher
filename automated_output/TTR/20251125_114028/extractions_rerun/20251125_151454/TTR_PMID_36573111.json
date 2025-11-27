@@ -1,0 +1,91 @@
+{
+  "paper_metadata": {
+    "pmid": "36573111",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.ATTRVal50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "not specified",
+        "phenotype": "ATTRv-PN, progressive peripheral neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "progressive peripheral neuropathy",
+          "evidence_sentence": "In endemic regions, this can reach 100%, but outside these regions, incomplete penetrance is more common."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "progressive peripheral neuropathy",
+          "evidence_sentence": "In endemic regions, this can reach 100%, but outside these regions, incomplete penetrance is more common."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "In endemic regions, this can reach 100%, but outside these regions, incomplete penetrance is more common."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "In endemic regions, this can reach 100%, but outside these regions, incomplete penetrance is more common."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met mutation is known to destabilize the TTR tetramer, leading to amyloid fibril formation.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregates with disease in families.",
+      "population_frequency": "not specified",
+      "evidence_level": "high",
+      "source_location": "Introduction, paragraph 3",
+      "additional_notes": "The penetrance of mutations in the TTR gene is highly variable.",
+      "key_quotes": [
+        "The penetrance of mutations in the TTR gene is highly variable.",
+        "In endemic regions, this can reach 100%, but outside these regions, incomplete penetrance is more common."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data was primarily from the main text, with no tables containing variant information."
+  }
+}

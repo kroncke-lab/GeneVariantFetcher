@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "33324554",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants and penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2576T>C",
+      "protein_notation": "p.Val859Ser*22",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "tumor development"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation generates an early stop codon at position 881 of the BRCA2 protein and truncates proteins with deleterious activity.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Distribution of BRCA1/2 and Response to PARPi section",
+      "additional_notes": "The mutation is associated with tumor development.",
+      "key_quotes": [
+        "The p.Val859Ser*22 mutation of BRCA2, is likely pathogenic and the cause of tumor development, as it generates an early stop codon at position 881 of the BRCA2 protein and truncates proteins with deleterious activity."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was found in the text."
+  }
+}

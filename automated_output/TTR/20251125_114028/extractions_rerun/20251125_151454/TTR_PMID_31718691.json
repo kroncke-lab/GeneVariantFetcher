@@ -1,0 +1,287 @@
+{
+  "paper_metadata": {
+    "pmid": "31718691",
+    "title": "Clinical characteristics and prognosis of Chinese patients with hereditary transthyretin amyloid cardiomyopathy",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 23,
+        "demographics": "23 patients, 16 males and 7 females, median age at onset 45 years",
+        "phenotype": "hereditary transthyretin amyloid cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 23,
+        "affected_count": 23,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 34,
+          "age_at_onset": 33,
+          "age_at_diagnosis": 34,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, cardiac amyloidosis, heart failure",
+          "evidence_sentence": "Patient No. 1: M 33 34 Gly47Arg Paresthesia CA, HF, A Mixed G H AF PN"
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 50,
+          "age_at_onset": 49,
+          "age_at_diagnosis": 50,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Orthostatic hypotension, cardiac amyloidosis, heart failure",
+          "evidence_sentence": "Patient No. 2: M 49 50 Gly47Glu Orthostatic hypotension CA, HF, A Mixed PN"
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 45,
+          "age_at_onset": 42,
+          "age_at_diagnosis": 45,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 3: F 42 45 Val30Ala Paresthesia CA, A Mixed T AF PN"
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 64,
+          "age_at_onset": 62,
+          "age_at_diagnosis": 64,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Dyspnea, cardiac amyloidosis, heart failure",
+          "evidence_sentence": "Patient No. 4: F 62 64 His88Arg Dyspnea CA, HF, A cardiac G H PN"
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 30,
+          "age_at_onset": 27,
+          "age_at_diagnosis": 30,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 5: M 27 30 Val30Ala Paresthesia CA, A Mixed AF PN"
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": 39,
+          "age_at_onset": 34,
+          "age_at_diagnosis": 39,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Impaired consciousness, paresthesia, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 6: F 34 39 Gly53Glu Impaired consciousness, paresthesia CA, A Mixed AF PN B"
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": 34,
+          "age_at_onset": 30,
+          "age_at_diagnosis": 34,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Orthostatic hypotension, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 7: M 30 34 Gly47Arg Orthostatic hypotension CA, A Mixed G AF PN"
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": 65,
+          "age_at_onset": 61,
+          "age_at_diagnosis": 65,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Impaired consciousness, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 8: M 61 65 Tyr69His Impaired consciousness CA Mixed B"
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": 39,
+          "age_at_onset": 37,
+          "age_at_diagnosis": 39,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, diarrhea, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 9: M 37 39 Glu54Gln Paresthesia, diarrhea CA, Mixed PN"
+        },
+        {
+          "individual_id": "P10",
+          "age_at_evaluation": 19,
+          "age_at_onset": 17,
+          "age_at_diagnosis": 19,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Impaired consciousness, paresthesia, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 10: M 17 19 Glu47Arg Impaired consciousness, paresthesia CA, A Mixed AF PN"
+        },
+        {
+          "individual_id": "P11",
+          "age_at_evaluation": 27,
+          "age_at_onset": 25,
+          "age_at_diagnosis": 27,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Orthostatic hypotension, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 11: F 25 27 Glu47Arg Orthostatic hypotension CA, A Mixed PN"
+        },
+        {
+          "individual_id": "P12",
+          "age_at_evaluation": 57,
+          "age_at_onset": 53,
+          "age_at_diagnosis": 57,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 12: M 53 57 Val30Met Paresthesia CA, A Mixed PN"
+        },
+        {
+          "individual_id": "P13",
+          "age_at_evaluation": 61,
+          "age_at_onset": 55,
+          "age_at_diagnosis": 61,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 13: M 55 61 Glu47Arg Paresthesia CA, A Mixed G H AF PN"
+        },
+        {
+          "individual_id": "P14",
+          "age_at_evaluation": 47,
+          "age_at_onset": 45,
+          "age_at_diagnosis": 47,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, diarrhea, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 14: M 45 47 Glu54Gln Paresthesia, diarrhea CA, A Mixed PN"
+        },
+        {
+          "individual_id": "P15",
+          "age_at_evaluation": 68,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 68,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, diarrhea, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 15: M 60 68 Glu61Lys Paresthesia, diarrhea CA, A Mixed G H AF PN"
+        },
+        {
+          "individual_id": "P16",
+          "age_at_evaluation": 32,
+          "age_at_onset": 30,
+          "age_at_diagnosis": 32,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 16: M 30 32 Gly47Arg Paresthesia CA, A Mixed G"
+        },
+        {
+          "individual_id": "P17",
+          "age_at_evaluation": 38,
+          "age_at_onset": 35,
+          "age_at_diagnosis": 38,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 17: F 35 38 Gly47Arg Paresthesia CA, A Mixed G AF PN TH"
+        },
+        {
+          "individual_id": "P18",
+          "age_at_evaluation": 52,
+          "age_at_onset": 49,
+          "age_at_diagnosis": 52,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Orthostatic hypotension, cardiac amyloidosis, heart failure",
+          "evidence_sentence": "Patient No. 18: M 49 52 Asp38Val Orthostatic hypotension CA, HF, A Mixed H AF PN"
+        },
+        {
+          "individual_id": "P19",
+          "age_at_evaluation": 52,
+          "age_at_onset": 50,
+          "age_at_diagnosis": 52,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, cardiac amyloidosis, heart failure",
+          "evidence_sentence": "Patient No. 19: M 50 52 Phe33Leu Paresthesia CA, HF, A Mixed PN"
+        },
+        {
+          "individual_id": "P20",
+          "age_at_evaluation": 50,
+          "age_at_onset": 48,
+          "age_at_diagnosis": 50,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Diarrhea, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 20: F 48 50 Lys35Asn Diarrhea CA, A Mixed PN"
+        },
+        {
+          "individual_id": "P21",
+          "age_at_evaluation": 31,
+          "age_at_onset": 29,
+          "age_at_diagnosis": 31,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Paresthesia, vomiting, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 21: M 29 31 Tyr114Cys Paresthesia, vomit CA, A Mixed G"
+        },
+        {
+          "individual_id": "P22",
+          "age_at_evaluation": 60,
+          "age_at_onset": 58,
+          "age_at_diagnosis": 60,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Orthostatic hypotension, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 22: F 58 60 Val30Ala Orthostatic hypotension CA, A Mixed G AF PN"
+        },
+        {
+          "individual_id": "P23",
+          "age_at_evaluation": 60,
+          "age_at_onset": 56,
+          "age_at_diagnosis": 60,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Diarrhea, cardiac amyloidosis",
+          "evidence_sentence": "Patient No. 23: M 56 60 Ser77Tyr Diarrhea CA, A Mixed G AF PN"
+        }
+      ],
+      "functional_data": {
+        "summary": "All patients had positive biopsies showing amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "All patients were heterozygous for previously reported mutations.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All patients had a confirmed diagnosis of hereditary ATTR-CM.",
+      "key_quotes": [
+        "A total of 15 kinds of TTR mutations were identified, and the most common mutations were Gly47Arg (7 patients [30.4%]) and Val30Ala (3 patients [13%]).",
+        "Congo red staining of biopsies was performed in all patients."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Summary of Chinese patients with hereditary transthyretin cardiac amyloidosis",
+      "variants_extracted": 15
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 15,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

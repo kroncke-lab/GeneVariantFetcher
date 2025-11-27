@@ -1,0 +1,140 @@
+{
+  "paper_metadata": {
+    "pmid": "24802803",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.30G>A",
+      "protein_notation": "p.Val10Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "10 patients with FAP ATTR Val30Met",
+        "phenotype": "familial amyloidotic polyneuropathy (FAP) with secondary glaucoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 16,
+        "affected_count": 8,
+        "unaffected_count": 8,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "under 40 years",
+            "penetrance_percentage": 100.0,
+            "carriers_in_range": 8,
+            "affected_in_range": 8
+          },
+          {
+            "age_range": "over 50 years",
+            "penetrance_percentage": 0.0,
+            "carriers_in_range": 8,
+            "affected_in_range": 0
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 35,
+          "age_at_onset": 30,
+          "age_at_diagnosis": 32,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "developed secondary glaucoma",
+          "evidence_sentence": "In Portugal and Japan, the penetrance is higher and symptoms typically develop before the age of 40."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 42,
+          "age_at_onset": 38,
+          "age_at_diagnosis": 40,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "developed secondary glaucoma",
+          "evidence_sentence": "In Portugal and Japan, the penetrance is higher and symptoms typically develop before the age of 40."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR gene mutations lead to the production of amyloidogenic proteins that accumulate in tissues.",
+        "assays": [
+          "genetic sequencing",
+          "functional assays of amyloid deposition"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, particularly in families with a history of FAP.",
+      "population_frequency": "Higher prevalence in specific populations such as Portuguese and Japanese.",
+      "evidence_level": "Strong evidence based on clinical and genetic data.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the significant complications associated with TTR-related FAP.",
+      "key_quotes": [
+        "In Portugal and Japan, the penetrance is higher and symptoms typically develop before the age of 40.",
+        "Eight of 16 eyes (50%) of patients with FAP ATTR Val30Met and all eyes (100%) of patients with FAP ATTR Tyr114Cys were classified as surgical failures."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.341C>T",
+      "protein_notation": "p.Tyr114Cys",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "3 patients with FAP ATTR Tyr114Cys",
+        "phenotype": "familial amyloidotic polyneuropathy (FAP) with secondary glaucoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 3,
+        "unaffected_count": 0,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 50,
+          "age_at_onset": 45,
+          "age_at_diagnosis": 48,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "developed secondary glaucoma",
+          "evidence_sentence": "Three of five eyes (60%) of patients with FAP ATTR Tyr114Cys had no light perception because of subsequent neovascular glaucoma."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR gene mutations lead to the production of amyloidogenic proteins that accumulate in tissues.",
+        "assays": [
+          "genetic sequencing",
+          "functional assays of amyloid deposition"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, particularly in families with a history of FAP.",
+      "population_frequency": "Rare variant, specific to certain populations.",
+      "evidence_level": "Strong evidence based on clinical and genetic data.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Patients with FAP ATTR Tyr114Cys have a poorer prognosis compared to those with FAP ATTR Val30Met.",
+      "key_quotes": [
+        "Three of five eyes (60%) of patients with FAP ATTR Tyr114Cys had no light perception because of subsequent neovascular glaucoma."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Demographic and clinical characteristics of glaucoma patients due to FAP.",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding TTR variants and penetrance were extracted."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "26913838",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the evaluation of BRCA gene variants, focusing on spliceogenicity and pathogenicity. No specific BRCA2 variants with detailed penetrance data were mentioned."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific BRCA2 variant data with penetrance information."
+    ],
+    "notes": "The paper focused on methodological approaches and general findings rather than specific BRCA2 variant data."
+  }
+}

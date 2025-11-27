@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "39192044",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the role of TTR in Alzheimer's disease, focusing on its neuroprotective functions and potential therapeutic strategies. No specific genetic variants in the TTR gene are mentioned."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention any specific TTR genetic variants."
+    ],
+    "notes": "The paper focused on the physiological and therapeutic aspects of TTR in Alzheimer's disease without discussing specific genetic variants."
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "35932045",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.R823W",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The variants KCNH2:p.R823W, SCN5A:p.V2016M and CACNA1C:p.R858H were present in 1 individual each."
+        }
+      ],
+      "functional_data": {
+        "summary": "not specified",
+        "assays": []
+      },
+      "segregation_data": "not specified",
+      "population_frequency": "not specified",
+      "evidence_level": "not specified",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was independently validated by Sanger capillary sequencing.",
+      "key_quotes": [
+        "The variants KCNH2:p.R823W, SCN5A:p.V2016M and CACNA1C:p.R858H were present in 1 individual each."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in KCNH2 was reported in the paper."
+  }
+}

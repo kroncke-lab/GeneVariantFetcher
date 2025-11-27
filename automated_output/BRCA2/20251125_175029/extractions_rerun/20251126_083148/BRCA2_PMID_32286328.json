@@ -1,0 +1,88 @@
+{
+  "paper_metadata": {
+    "pmid": "32286328",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses BRCA2 variants S206C and T207A, their effects on phosphorylation by PLK1, and their implications in breast cancer."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.S206C",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The S206C variant impairs phosphorylation of BRCA2 by PLK1, affecting its function in mitosis.",
+        "assays": [
+          "in vitro kinase assay",
+          "NMR spectroscopy"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is associated with reduced binding to PLK1.",
+      "key_quotes": [
+        "Interestingly, variants T207A and S206C also led to a 2-fold decrease in PLK1 phosphorylation of BRCA21\u2013250."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.T207A",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The T207A variant significantly reduces the phosphorylation of BRCA2 by PLK1, leading to impaired function.",
+        "assays": [
+          "in vitro kinase assay",
+          "NMR spectroscopy"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is associated with reduced binding to PLK1.",
+      "key_quotes": [
+        "The reduction of BRCA2 phosphorylation in BRCA21-250 containing T207A and S206C variants suggested that these residues could be targets for PLK1 phosphorylation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

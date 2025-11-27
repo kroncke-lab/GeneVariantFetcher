@@ -1,0 +1,101 @@
+{
+  "paper_metadata": {
+    "pmid": "24015048",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a single nucleotide deletion mutation in the KCNH2 gene associated with long QT syndrome in a Korean family."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.delC453",
+      "protein_notation": "p.151Pfs+15X",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "Korean family members",
+        "phenotype": "Long QT syndrome (LQTS)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 5,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "I2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Prolonged QTc interval",
+          "evidence_sentence": "Thus, I2, II2, II4, II7 (proband), and III1 were all heterozygotes for delC453fs (151Pfs+15X)."
+        },
+        {
+          "individual_id": "II2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Prolonged QTc interval",
+          "evidence_sentence": "Thus, I2, II2, II4, II7 (proband), and III1 were all heterozygotes for delC453fs (151Pfs+15X)."
+        },
+        {
+          "individual_id": "II4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Prolonged QTc interval with non-specific T-wave abnormality",
+          "evidence_sentence": "Subject II4 was diagnosed as LQTS based on the non-specific T-wave abnormality despite of shorter QTc interval than normal one."
+        },
+        {
+          "individual_id": "II7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Prolonged QTc interval",
+          "evidence_sentence": "Thus, I2, II2, II4, II7 (proband), and III1 were all heterozygotes for delC453fs (151Pfs+15X)."
+        },
+        {
+          "individual_id": "III1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Prolonged QTc interval",
+          "evidence_sentence": "Thus, I2, II2, II4, II7 (proband), and III1 were all heterozygotes for delC453fs (151Pfs+15X)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The delC453 mutation presumably leads to deficiency in the rapid delayed rectifier potassium channel, resulting in prolonged open state and reduced repolarizing current.",
+        "assays": []
+      },
+      "segregation_data": "This mutation co-segregated with LQTS in this family.",
+      "population_frequency": "This mutation was not detected in 100 chromosomes in the general Korean population.",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The penetrance of LQTS in this family was assumed to be 100%.",
+      "key_quotes": [
+        "This mutation co-segregated with LQTS in this family.",
+        "The penetrance of LQTS in this family was assumed to be 100%."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

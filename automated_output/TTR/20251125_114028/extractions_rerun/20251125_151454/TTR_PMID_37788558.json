@@ -1,0 +1,74 @@
+{
+  "paper_metadata": {
+    "pmid": "37788558",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant p.Val30Met, including penetrance data and patient demographics."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.148G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "65 year-old Caucasian male, 63 year-old Caucasian male",
+        "phenotype": "Transthyretin Cardiac Amyloidosis (ATTR-CM)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 65,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with transthyretin cardiac amyloidosis",
+          "evidence_sentence": "Here, we described the generation of two iPSC lines derived from a 65 year-old Caucasian male patient (SCVIi066-A) diagnosed with transthyretin cardiac amyloidosis due to a heterozygous mutation in the TTR gene (c.148G>A encoding p.Val30Met; pathogenic variant)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 63,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with transthyretin cardiac amyloidosis",
+          "evidence_sentence": "Here, we described the generation of two iPSC lines derived from a 63 year-old Caucasian male patient (SCVIi067-A) diagnosed with transthyretin cardiac amyloidosis due to a heterozygous mutation in the TTR gene (c.148G>A encoding p.Val30Met; pathogenic variant)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The iPSC lines showed expression of high levels of pluripotency markers and normal karyotype.",
+        "assays": [
+          "Sanger sequencing",
+          "RT-qPCR",
+          "immunofluorescence staining"
+        ]
+      },
+      "segregation_data": "The mutation segregates with disease in the two patients described.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Main Text, Abstract and Resource details",
+      "additional_notes": "The Val30Met mutation is one of the most common mutations in the TTR gene.",
+      "key_quotes": [
+        "The mutation Val30Met (also known as V50M) is one of the most common mutations in the TTR gene and is endemic in some countries (e.g., Portugal and Sweden)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

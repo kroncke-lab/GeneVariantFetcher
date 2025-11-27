@@ -1,0 +1,76 @@
+{
+  "paper_metadata": {
+    "pmid": "33739616",
+    "title": "Hereditary transthyretin amyloidosis in mainland China: a unicentric retrospective study",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 54,
+        "demographics": "42 male, 12 female; average age at onset 47.8 \u00b1 13.0 years",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTR) with symptoms including sensory-motor neuropathy, autonomic dysfunction, and cardiomyopathy."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 54,
+        "affected_count": 54,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": 47,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Sensory-motor neuropathy, autonomic dysfunction.",
+          "evidence_sentence": "The average age of patients at the onset of the disease was 47.8 \u00b1 13.0 years."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study identified 22 different mutations in the TTR gene.",
+        "assays": [
+          "Sural nerve biopsies",
+          "Electrophysiological studies",
+          "Genetic sequencing"
+        ]
+      },
+      "segregation_data": "The Val30Met mutation was found in 10 families, with 90% of probands being late-onset.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the heterogeneity of TTR mutations in the Chinese population.",
+      "key_quotes": [
+        "A total of 22 different TTR mutations were identified.",
+        "Val30Met remains the most common mutation type in mainland China."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Demographic and clinical characteristics of ATTR cases with Val30Met and Ala97Ser mutations.",
+      "variants_extracted": 2
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Demographic and clinical characteristics of ATTR cases with other mutations of study cohort.",
+      "variants_extracted": 20
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 22,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for TTR variants were extracted from the main text and tables."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "paper_metadata": {
+    "pmid": "30086788",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No BRCA2 variants were reported in the paper."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Detected pathogenic and likely pathogenic single-nucleotide variants, small indels, and copy number alterations",
+      "variants_extracted": 0
+    },
+    {
+      "table_name": "Table 3",
+      "table_caption": "Clinical information and summary of personal and family histories of mutation carriers",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No BRCA2 variants were mentioned in the paper."
+    ],
+    "notes": "The paper focused on other genes and did not report any BRCA2 variants."
+  }
+}

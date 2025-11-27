@@ -1,0 +1,206 @@
+{
+  "paper_metadata": {
+    "pmid": "36101541",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 19,
+        "demographics": "11 female patients, 8 male patients",
+        "phenotype": "predominant polyneuropathy of early adult onset"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 21,
+        "affected_count": 19,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.48,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": 30,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "progressive sensorimotor disturbances, involving mainly the lower extremities",
+          "evidence_sentence": "Specifically, patients affected by the p.Val50Met TTR variant experienced progressive sensorimotor disturbances, involving mainly the lower extremities."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": 30,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "progressive sensorimotor disturbances, involving mainly the lower extremities",
+          "evidence_sentence": "Specifically, patients affected by the p.Val50Met TTR variant experienced progressive sensorimotor disturbances, involving mainly the lower extremities."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": 30,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "progressive sensorimotor disturbances, involving mainly the lower extremities",
+          "evidence_sentence": "Specifically, patients affected by the p.Val50Met TTR variant experienced progressive sensorimotor disturbances, involving mainly the lower extremities."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": 30,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "progressive sensorimotor disturbances, involving mainly the lower extremities",
+          "evidence_sentence": "Specifically, patients affected by the p.Val50Met TTR variant experienced progressive sensorimotor disturbances, involving mainly the lower extremities."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": 30,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "progressive sensorimotor disturbances, involving mainly the lower extremities",
+          "evidence_sentence": "Specifically, patients affected by the p.Val50Met TTR variant experienced progressive sensorimotor disturbances, involving mainly the lower extremities."
+        }
+      ],
+      "functional_data": {
+        "summary": "The p.Val50Met variant is associated with a consistent phenotype characterized by predominant polyneuropathy.",
+        "assays": []
+      },
+      "segregation_data": "The p.Val50Met variant segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was found in 6 unrelated families.",
+      "key_quotes": [
+        "The most prevalent TTR variant detected was p.Val50Met, affecting 19 patients.",
+        "All patients had a positive family history of polyneuropathy."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val114Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "4 female patients, 6 male patients",
+        "phenotype": "predominantly cardiomyopathic phenotype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": 10,
+        "unaffected_count": 3,
+        "uncertain_count": null,
+        "penetrance_percentage": 76.92,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": 70,
+          "age_at_onset": 70,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "congestive heart failure and associated with peripheral neuropathy",
+          "evidence_sentence": "The second most frequent TTR variant was p.Val114Ala, found in 10 patients (4 female patients, 6 male patients) who were affected at an older age."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": 70,
+          "age_at_onset": 70,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "congestive heart failure and associated with peripheral neuropathy",
+          "evidence_sentence": "The second most frequent TTR variant was p.Val114Ala, found in 10 patients (4 female patients, 6 male patients) who were affected at an older age."
+        }
+      ],
+      "functional_data": {
+        "summary": "The p.Val114Ala variant is associated with a predominantly cardiomyopathic phenotype.",
+        "assays": []
+      },
+      "segregation_data": "The p.Val114Ala variant segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was found in 5 different families.",
+      "key_quotes": [
+        "The second most frequent TTR variant was p.Val114Ala, found in 10 patients.",
+        "This variant caused a predominantly cardiomyopathic phenotype."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Arg54Gly",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 male patient, age 50",
+        "phenotype": "ophthalmopathy due to vitreous opacities"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": 50,
+          "age_at_onset": 50,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "ocular amyloidosis with vitreous opacities",
+          "evidence_sentence": "The third TTR variant (p.Arg54Gly) was found in a 50-year-old male patient with ophthalmopathy due to vitreous opacities."
+        }
+      ],
+      "functional_data": {
+        "summary": "The p.Arg54Gly variant is associated with ocular amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "The p.Arg54Gly variant does not have segregation data available.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient had a positive family history for visual loss.",
+      "key_quotes": [
+        "The third TTR variant (p.Arg54Gly) was found in a 50-year-old male patient with ophthalmopathy due to vitreous opacities."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Comparison of Patients Carrying the p.Val50Met, the p.Val114Ala, and the p.Arg54Gly TTR Variants, Respectively",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

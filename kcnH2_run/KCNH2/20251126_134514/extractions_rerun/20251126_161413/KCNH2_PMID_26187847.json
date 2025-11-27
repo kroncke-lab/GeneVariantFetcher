@@ -1,0 +1,66 @@
+{
+  "paper_metadata": {
+    "pmid": "26187847",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the KCNH2 gene, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1750G>A",
+      "protein_notation": "p.Gly584Ser",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Long QT, Short QT"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Long QT, Short QT",
+          "evidence_sentence": "KCNH2 Long QT, Short QTc.1750G>A p.Gly584Ser Heterozygous"
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with Long QT syndrome.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "likely pathogenic based on clinical presentation",
+      "source_location": "Table 3, Row 4",
+      "additional_notes": "The variant was identified in a patient with a history of SCA/D.",
+      "key_quotes": [
+        "KCNH2 Long QT, Short QTc.1750G>A p.Gly584Ser Heterozygous"
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 3",
+      "table_caption": "Pathogenic or likely pathogenic variants identified on ES in samples without prior known molecular diagnosis",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the KCNH2 variant was successfully extracted."
+  }
+}

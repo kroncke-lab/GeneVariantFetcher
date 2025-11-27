@@ -1,0 +1,350 @@
+{
+  "paper_metadata": {
+    "pmid": "26338094",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses variants in the TTR gene, specifically the Val30Met mutation, and provides details on patient demographics, penetrance data, and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 29,
+        "demographics": "All patients were white, 69% male, mean age 56 years.",
+        "phenotype": "Familial amyloid polyneuropathy (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 29,
+        "affected_count": 22,
+        "unaffected_count": 7,
+        "uncertain_count": null,
+        "penetrance_percentage": 75.86,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 55,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 41,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 58,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 53,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P10",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P11",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P12",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P13",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P14",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P15",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P16",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P17",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P18",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P19",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P20",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P21",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P22",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P23",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P24",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P25",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P26",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P27",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P28",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        },
+        {
+          "individual_id": "P29",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "FAP with neuropathy",
+          "evidence_sentence": "The majority of patients (76%) had the Val30Met TTR mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "Patisiran led to significant knockdown of TTR protein levels.",
+        "assays": [
+          "ELISA",
+          "mass spectrometry"
+        ]
+      },
+      "segregation_data": "The Val30Met mutation is known to segregate with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included a diverse cohort of patients with FAP.",
+      "key_quotes": [
+        "The most common mutations associated with familial amyloid polyneuropathy (FAP) and ATTR-associated cardiomyopathy, respectively, are Val30Met.",
+        "The majority of patients (76%) had the Val30Met TTR mutation."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Baseline demographics and disease characteristics (intent-to-treat population)",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

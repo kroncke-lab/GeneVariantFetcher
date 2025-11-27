@@ -1,0 +1,150 @@
+{
+  "paper_metadata": {
+    "pmid": "34034685",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6039del",
+      "protein_notation": "p.(Val2014TyrfsTer26)",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Male, age 63",
+        "phenotype": "Pancreatic cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 63,
+          "age_at_onset": null,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Pancreatic cancer",
+          "evidence_sentence": "In the second case, the patient was diagnosed with PC at the age of 63, and had no previous personal history of cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a deletion leading to a frameshift.",
+        "assays": []
+      },
+      "segregation_data": "The patient's daughter, carrying the same BRCA2 mutation, was diagnosed with TNBC when she was 41.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and family history.",
+      "source_location": "Table 2, Row 2",
+      "additional_notes": "This variant was found in a patient with no previous personal history of cancer.",
+      "key_quotes": [
+        "his daughter, carrying the same BRCA2 mutation, was diagnosed with TNBC when she was 41."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8364G>A",
+      "protein_notation": "c.8364G>A ASN",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Male, age 72",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 72,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "Among the PVs and LPVs, 3 were found in BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is a missense mutation.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on clinical classification.",
+      "source_location": "Table 2, Row 3",
+      "additional_notes": "No personal or familial cancer history reported.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1532_133insT",
+      "protein_notation": "p.(Pro512ThrfsTer2)",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Male, age 61",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 61,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "Among the PVs and LPVs, 3 were found in BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is an insertion leading to a frameshift.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on clinical classification.",
+      "source_location": "Table 2, Row 4",
+      "additional_notes": "No personal or familial cancer history reported.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "List of pathogenic and likely pathogenic variants identified",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

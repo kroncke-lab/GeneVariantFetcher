@@ -1,0 +1,84 @@
+{
+  "paper_metadata": {
+    "pmid": "35686104",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data from affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2808_2811delACAA",
+      "protein_notation": "p.Ala938ProfsTer21",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "63-year-old male",
+        "phenotype": "Lobular breast carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 1,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "III.4",
+          "age_at_evaluation": 63,
+          "age_at_onset": null,
+          "age_at_diagnosis": 63,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Lobular breast carcinoma",
+          "evidence_sentence": "The genetic analysis of BRCA1 and BRCA2 genes in this patient revealed the germline pathogenic variant c.2808_2811delACAA p.(Ala938ProfsTer21) in heterozygosity."
+        },
+        {
+          "individual_id": "IV.8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No disease manifestation reported",
+          "evidence_sentence": "The BRCA2 pathogenic variant was also investigated in the patient\u2019s two sons (IV.8, IV.9), who inherited the same BRCA2 pathogenic variant."
+        },
+        {
+          "individual_id": "IV.9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No disease manifestation reported",
+          "evidence_sentence": "The BRCA2 pathogenic variant was also investigated in the patient\u2019s two sons (IV.8, IV.9), who inherited the same BRCA2 pathogenic variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "The pathogenic variant results in a premature termination codon predicted to cause a truncated or absent BRCA2 protein due to nonsense-mediated decay.",
+        "assays": [
+          "NGS",
+          "Sanger sequencing"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": "0.0018% in the general European population",
+      "evidence_level": "Strong evidence based on familial segregation and population frequency.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is known to be one of the most common pathogenic variants in non-Ashkenazi Caucasians.",
+      "key_quotes": [
+        "The genetic analysis of BRCA1 and BRCA2 genes in this patient revealed the germline pathogenic variant c.2808_2811delACAA p.(Ala938ProfsTer21) in heterozygosity.",
+        "This variant is known to be one of the most common pathogenic variants in non-Ashkenazi Caucasians."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding BRCA2 variants and penetrance were successfully extracted."
+  }
+}

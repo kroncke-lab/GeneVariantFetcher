@@ -1,0 +1,120 @@
+{
+  "paper_metadata": {
+    "pmid": "31217996",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 17,
+        "demographics": "Mean age 68\u00b111 years, 74% male",
+        "phenotype": "Transthyretin amyloidosis (TTR)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 7,
+        "affected_count": 7,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "TTR gene mutation V30M",
+          "evidence_sentence": "Among the 17 patients with TTR amyloidosis, 7 (41%) had TTR gene mutation (3 V30M, 2 V122I, 1 G26S and 1 S77T)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "TTR gene mutation V30M",
+          "evidence_sentence": "Among the 17 patients with TTR amyloidosis, 7 (41%) had TTR gene mutation (3 V30M, 2 V122I, 1 G26S and 1 S77T)."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "TTR gene mutation V30M",
+          "evidence_sentence": "Among the 17 patients with TTR amyloidosis, 7 (41%) had TTR gene mutation (3 V30M, 2 V122I, 1 G26S and 1 S77T)."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "TTR gene mutation V122I",
+          "evidence_sentence": "Among the 17 patients with TTR amyloidosis, 7 (41%) had TTR gene mutation (3 V30M, 2 V122I, 1 G26S and 1 S77T)."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "TTR gene mutation V122I",
+          "evidence_sentence": "Among the 17 patients with TTR amyloidosis, 7 (41%) had TTR gene mutation (3 V30M, 2 V122I, 1 G26S and 1 S77T)."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "TTR gene mutation G26S",
+          "evidence_sentence": "Among the 17 patients with TTR amyloidosis, 7 (41%) had TTR gene mutation (3 V30M, 2 V122I, 1 G26S and 1 S77T)."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "TTR gene mutation S77T",
+          "evidence_sentence": "Among the 17 patients with TTR amyloidosis, 7 (41%) had TTR gene mutation (3 V30M, 2 V122I, 1 G26S and 1 S77T)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Pathogenic mutations in TTR gene lead to transthyretin amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "All 7 carriers were affected.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No specific functional assays or population frequency data provided.",
+      "key_quotes": [
+        "Among the 17 patients with TTR amyloidosis, 7 (41%) had TTR gene mutation (3 V30M, 2 V122I, 1 G26S and 1 S77T)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

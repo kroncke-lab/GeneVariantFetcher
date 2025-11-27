@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "36927983",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No variants in the KCNH2 gene were mentioned in the provided text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focused on BRCA1 variants, specifically c.5207T > C; p.Val1736Ala, with no mention of KCNH2 variants."
+    ],
+    "notes": "The extraction was straightforward as the paper did not discuss the KCNH2 gene."
+  }
+}

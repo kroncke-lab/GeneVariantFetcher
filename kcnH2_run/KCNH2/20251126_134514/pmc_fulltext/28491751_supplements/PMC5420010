@@ -1,0 +1,2636 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+    <head >
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        
+        
+
+        
+        
+  <link rel="stylesheet" href="/static/assets/style-8258669d.css" />
+<script type="module" crossorigin="" src="/static/assets/base_style-f4a99799.js"></script>
+
+  <link rel="stylesheet" href="/static/assets/style-ef962842.css" />
+<link rel="stylesheet" href="/static/assets/style-3ade8b5c.css" />
+<script type="module" crossorigin="" src="/static/assets/article_style-d757a0dd.js"></script>
+
+  
+  
+    <style>
+  
+  
+  @media screen and (min-width: 64em) {
+    div.pmc-wm {
+      background: repeat-y;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='350' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cfilter x='-.02' y='0' width='1.05' height='1' id='c'%3E%3CfeFlood flood-color='%23FFF'/%3E%3CfeComposite in='SourceGraphic'/%3E%3C/filter%3E%3Ctext id='b' font-family='Helvetica' font-size='11pt' style='opacity:1;fill:%23005ea2;stroke:none;text-anchor:middle' x='175' y='14'%3E%3C/text%3E%3Cpath id='a' style='fill:%23005ea2' d='M0 8h350v3H0z'/%3E%3C/defs%3E%3Cuse xlink:href='%23a' transform='rotate(90 10 10)'/%3E%3Cuse xlink:href='%23b' transform='rotate(90 10 10)' filter='url(%23c)'/%3E%3C/svg%3E");
+      padding-left: 3rem;
+    }
+  }
+</style>
+
+  
+
+
+
+        
+            <link rel="apple-touch-icon"
+                  sizes="180x180"
+                  href="/static/img/favicons/apple-touch-icon.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="48x48"
+                  href="/static/img/favicons/favicon-48x48.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="32x32"
+                  href="/static/img/favicons/favicon-32x32.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="16x16"
+                  href="/static/img/favicons/favicon-16x16.png" />
+            <link rel="manifest" href="/static/img/favicons/site.webmanifest" />
+            <link rel="mask-icon"
+                  href="/static/img/favicons/safari-pinned-tab.svg"
+                  color="#0071bc" />
+            <meta name="msapplication-config"
+                  content="/static/img/favicons/browserconfig.xml" />
+            <meta name="theme-color" content="#ffffff" />
+        
+
+        <title>
+            Structural interplay of KV7.1 and KCNE1 is essential for normal repolarization and is compromised in short QT syndrome 2 (KV7.1-A287T) - PMC
+        </title>
+
+        
+        
+  
+  <!-- Logging params: Pinger defaults -->
+<meta name="ncbi_app" content="cloudpmc-viewer" />
+<meta name="ncbi_db" content="pmc" />
+<meta name="ncbi_phid" content="8E597D5792751D133B7D570045C6B0ED.m_1" />
+<meta name="ncbi_pinger_stat_url" content="https://pmc.ncbi.nlm.nih.gov/stat" />
+<!-- Logging params: Pinger custom -->
+<meta name="ncbi_pdid" content="article" />
+  
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
+    
+        <link rel="preconnect" href="https://cdn.ncbi.nlm.nih.gov" />
+    
+
+    <!-- Include USWDS Init Script -->
+    <script src="/static/assets/uswds-init.js"></script>
+
+
+    <meta name="ncbi_domain" content="hrcr">
+<meta name="ncbi_type" content="fulltext">
+<meta name="ncbi_pcid" content="journal">
+<meta name="ncbi_feature" content="associated_data">
+<link rel="canonical" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5420010/">
+<meta name="robots" content="INDEX,NOFOLLOW,NOARCHIVE">
+<meta name="citation_journal_title" content="HeartRhythm Case Reports">
+<meta name="citation_title" content="Structural interplay of KV7.1 and KCNE1 is essential for normal repolarization and is compromised in short QT syndrome 2 (KV7.1-A287T)">
+<meta name="citation_author" content="Ina Rothenberg">
+<meta name="citation_author_institution" content="Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany">
+<meta name="citation_author" content="Ilaria Piccini">
+<meta name="citation_author_institution" content="Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany">
+<meta name="citation_author" content="Eva Wrobel">
+<meta name="citation_author_institution" content="Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany">
+<meta name="citation_author" content="Birgit Stallmeyer">
+<meta name="citation_author_institution" content="Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany">
+<meta name="citation_author" content="Jovanca Müller">
+<meta name="citation_author_institution" content="Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany">
+<meta name="citation_author" content="Boris Greber">
+<meta name="citation_author_institution" content="Human Stem Cell Pluripotency Laboratory, Max Planck Institute for Molecular Biomedicine, Münster, Germany">
+<meta name="citation_author_institution" content="Chemical Genomics Centre of the Max Planck Society, Dortmund, Germany">
+<meta name="citation_author" content="Nathalie Strutz-Seebohm">
+<meta name="citation_author_institution" content="Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany">
+<meta name="citation_author" content="Eric Schulze-Bahr">
+<meta name="citation_author_institution" content="Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany">
+<meta name="citation_author_institution" content="Interdisziplinäres Zentrum für Klinische Forschung Münster (IZKF Münster) and Innovative Medizinische Forschung (IMF Münster), Faculty of Medicine, University of Münster, Münster, Germany">
+<meta name="citation_author" content="Nicole Schmitt">
+<meta name="citation_author_institution" content="Danish National Research Foundation Centre for Cardiac Arrhythmia, Department of Biomedical Sciences, University of Copenhagen, Copenhagen, Denmark">
+<meta name="citation_author" content="Guiscard Seebohm">
+<meta name="citation_author_institution" content="Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany">
+<meta name="citation_author_institution" content="Interdisziplinäres Zentrum für Klinische Forschung Münster (IZKF Münster) and Innovative Medizinische Forschung (IMF Münster), Faculty of Medicine, University of Münster, Münster, Germany">
+<meta name="citation_publication_date" content="2016 Sep 12">
+<meta name="citation_volume" content="2">
+<meta name="citation_issue" content="6">
+<meta name="citation_firstpage" content="521">
+<meta name="citation_doi" content="10.1016/j.hrcr.2016.08.015">
+<meta name="citation_pmid" content="28491751">
+<meta name="citation_fulltext_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC5420010/">
+<meta name="citation_pdf_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC5420010/pdf/main.pdf">
+<meta name="og:title" content="Structural interplay of KV7.1 and KCNE1 is essential for normal repolarization and is compromised in short QT syndrome 2 (KV7.1-A287T)">
+<meta name="og:type" content="article">
+<meta name="og:site_name" content="PubMed Central (PMC)">
+<meta name="og:url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC5420010/">
+<meta name="og:image" content="https://cdn.ncbi.nlm.nih.gov/pmc/cms/images/pmc-card-share.jpg?_=0">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ncbi">
+    
+    
+
+    </head>
+    <body >
+        
+    <a class="usa-skipnav " href="#main-content">
+      Skip to main content
+    </a>
+
+
+        
+            
+
+<section class="usa-banner " aria-label="Official website of the United States government" >
+    <div class="usa-accordion">
+        <header class="usa-banner__header">
+            <div class="usa-banner__inner">
+                <div class="grid-col-auto">
+                    <img aria-hidden="true"
+                         class="usa-banner__header-flag"
+                         src="/static/img/us_flag.svg"
+                         alt="" />
+                </div>
+
+                <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                    <p class="usa-banner__header-text">
+                        An official website of the United States government
+                    </p>
+                    <span class="usa-banner__header-action">Here's how you know</span>
+                </div>
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-accordion__button usa-banner__button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    aria-expanded="false"
+    aria-controls="gov-banner-default"
+    
+    data-testid="storybook-django-banner"
+    
+    >
+    
+        
+
+        
+                    <span class="usa-banner__button-text">Here's how you know</span>
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </div>
+        </header>
+
+        <div class="usa-banner__content usa-accordion__content"
+             id="gov-banner-default"
+             hidden>
+            <div class="grid-row grid-gap-lg">
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-dot-gov.svg"
+                         alt=""
+                         aria-hidden="true" />
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Official websites use .gov</strong>
+                            <br />
+                            A
+                            <strong>.gov</strong> website belongs to an official
+                            government organization in the United States.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-https.svg"
+                         alt=""
+                         aria-hidden="true" />
+
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Secure .gov websites use HTTPS</strong>
+                            <br />
+                            A <strong>lock</strong> (
+                            <span class="icon-lock">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="52"
+                                     height="64"
+                                     viewBox="0 0 52 64"
+                                     class="usa-banner__lock-image"
+                                     role="graphics-symbol"
+                                     aria-labelledby="banner-lock-description"
+                                     focusable="false">
+                                    <title id="banner-lock-title">Lock</title>
+                                    <desc id="banner-lock-description">
+                                    Locked padlock icon
+                                    </desc>
+                                    <path fill="#000000"
+                                          fill-rule="evenodd"
+                                          d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z" />
+                                </svg>
+</span>) or <strong>https://</strong> means you've safely
+                                connected to the .gov website. Share sensitive
+                                information only on official, secure websites.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        
+
+        
+    
+    
+    
+
+<div class="usa-overlay">
+</div>
+
+
+
+<header class="usa-header usa-header--extended usa-header--wide" data-header data-testid="header"    >
+    <div class="ncbi-header">
+        <div class="ncbi-header__container">
+            <a class="ncbi-header__logo-container"
+               href="https://www.ncbi.nlm.nih.gov/">
+                <img alt="NCBI home page"
+                     class="ncbi-header__logo-image"
+                     src="/static/img/ncbi-logos/nih-nlm-ncbi--white.svg"
+                     width="410"
+                     height="100" />
+            </a>
+
+            <!-- Mobile menu hamburger button -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-menu-btn ncbi-header__hamburger-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Show menu"
+    data-testid="navMenuButton"
+    
+    >
+    
+        
+
+        
+                <svg aria-hidden="true"
+                     class="ncbi-hamburger-icon"
+                     fill="none"
+                     focusable="false"
+                     height="21"
+                     viewBox="0 0 31 21"
+                     width="31"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M0.125 20.75H30.875V17.3333H0.125V20.75ZM0.125 12.2083H30.875V8.79167H0.125V12.2083ZM0.125 0.25V3.66667H30.875V0.25H0.125Z"
+                          fill="#F1F1F1"
+                          fill-rule="evenodd" />
+                </svg>
+            
+
+        
+    
+        
+            </button>
+        
+
+
+
+            
+                <!-- Desktop buttons-->
+                <div class="ncbi-header__desktop-buttons">
+                    
+                        <!-- Desktop search button -->
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button
+           "
+    aria-expanded="false"
+    aria-controls="search-field-desktop-navigation"
+    aria-label="Show search overlay"
+    data-testid="toggleSearchPanelButton"
+    data-toggle-search-panel-button
+    >
+    
+        
+
+        
+                            
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#search" />
+    </svg>
+
+
+                            Search
+                        
+
+        
+    
+        
+            </button>
+        
+
+
+                    
+
+                    <!-- Desktop login dropdown -->
+                    
+                        <div class="ncbi-header__login-dropdown">
+                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button ncbi-header__login-dropdown-button
+           "
+    aria-expanded="false"
+    aria-controls="login-dropdown-menu"
+    aria-label="Show login menu"
+    data-testid="toggleLoginMenuDropdown"
+    data-desktop-login-button
+    >
+    
+        
+
+        
+                                
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#person" />
+    </svg>
+
+
+
+                                <span data-login-dropdown-text>Log in</span>
+
+                                <!-- Dropdown icon pointing up -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-less ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-up-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_less" />
+    </svg>
+
+
+
+                                <!-- Dropdown icon pointing down -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-more ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-down-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_more" />
+    </svg>
+
+
+                            
+
+        
+    
+        
+            </button>
+        
+
+
+
+                            <!-- Login dropdown menu -->
+                            <ul class="usa-nav__submenu ncbi-header__login-dropdown-menu"
+                                id="login-dropdown-menu"
+                                data-desktop-login-menu-dropdown
+                                hidden>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                <li class="usa-nav__submenu-item">
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--outline ncbi-header__login-dropdown-logout-button
+           "
+    
+    
+    
+    data-testid="desktopLogoutButton"
+    data-desktop-logout-button
+    >
+    
+        
+
+        Log out
+
+        
+    
+        
+            </button>
+        
+
+
+                                </li>
+                            </ul>
+                        </div>
+                    
+                </div>
+            
+        </div>
+    </div>
+
+    <!-- Search panel -->
+    
+        <div class="ncbi-search-panel ncbi--show-only-at-desktop"
+             data-header-search-panel
+             hidden>
+            <div class="ncbi-search-panel__container">
+                <form action="https://www.ncbi.nlm.nih.gov/search/all/"
+                      
+                      autocomplete="off"
+                      class="usa-search usa-search--big ncbi-search-panel__form"
+                      data-testid="desktop-navigation-search-form"
+                      method="GET"
+                      role="search">
+                    <label class="usa-sr-only" for="search-field-desktop-navigation">
+                        Search…
+                    </label>
+                    <input class="usa-input"
+                           id="search-field-desktop-navigation"
+                           name="term"
+                           
+                               placeholder="Search NCBI"
+                           
+                           type="search"
+                           value="" />
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                        <span class="usa-search__submit-text">
+                            Search NCBI
+                        </span>
+                    
+
+        
+    
+        
+            </button>
+        
+
+
+                </form>
+
+                
+            </div>
+        </div>
+    
+
+    <nav aria-label="Primary navigation" class="usa-nav">
+        <p class="usa-sr-only" id="primary-navigation-sr-only-title">
+            Primary site navigation
+        </p>
+
+        <!-- Mobile menu close button -->
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-nav__close ncbi-nav__close-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Close navigation menu"
+    data-testid="navCloseButton"
+    
+    >
+    
+        
+
+        
+            <img src="/static/img/usa-icons/close.svg" alt="Close" />
+        
+
+        
+    
+        
+            </button>
+        
+
+
+
+        
+            <!-- Mobile search component -->
+            <form class="usa-search usa-search--small ncbi--hide-at-desktop margin-top-6"
+                  action="https://www.ncbi.nlm.nih.gov/search/all/"
+                  
+                  autocomplete="off"
+                  data-testid="mobile-navigation-search-form"
+                  method="GET"
+                  role="search">
+                <label class="usa-sr-only" for="search-field-mobile-navigation">
+                    Search
+                </label>
+
+                <input class="usa-input"
+                       id="search-field-mobile-navigation"
+                       type="search"
+                       
+                           placeholder="Search NCBI"
+                       
+                       name="term" />
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                    <!-- This SVG should be kept inline and not replaced with a link to the icon as otherwise it will render in the wrong color -->
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0E2LjQ3MSA2LjQ3MSAwIDAgMCAxNiA5LjUgNi41IDYuNSAwIDEgMCA5LjUgMTZjMS42MSAwIDMuMDktLjU5IDQuMjMtMS41N2wuMjcuMjh2Ljc5bDUgNC45OUwyMC40OSAxOWwtNC45OS01em0tNiAwQzcuMDEgMTQgNSAxMS45OSA1IDkuNVM3LjAxIDUgOS41IDUgMTQgNy4wMSAxNCA5LjUgMTEuOTkgMTQgOS41IDE0eiIvPjwvc3ZnPg=="
+                         class="usa-search__submit-icon"
+                         alt="Search" />
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </form>
+
+            
+        
+
+        <!-- Primary navigation menu items -->
+        <!-- This usa-nav__inner wrapper is required to correctly style the navigation items on Desktop -->
+        
+
+        
+            <div class="ncbi-nav__mobile-login-menu ncbi--hide-at-desktop"
+                 data-mobile-login-menu
+                 hidden>
+                <p class="ncbi-nav__mobile-login-menu-status">
+                    Logged in as:
+                    <strong class="ncbi-nav__mobile-login-menu-email"
+                            data-mobile-login-email-text></strong>
+                </p>
+                <ul class="usa-nav__primary usa-accordion">
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           ncbi-nav__mobile-login-button ncbi--hide-at-desktop
+           "
+    
+    
+    
+    data-testid="mobileLoginButton"
+    data-mobile-login-button
+    >
+    
+        
+
+        Log in
+
+        
+    
+        
+            </button>
+        
+
+
+    </nav>
+</header>
+
+    
+    
+        
+
+<section class="pmc-header pmc-header--basic" aria-label="PMC Header with search box">
+    <div class="pmc-nav-container">
+        <div class="pmc-header__bar">
+           <div class="pmc-header__logo">
+               <a href="/" title="Home" aria-label="PMC Home"></a>
+           </div>
+            <button
+                    type="button"
+                    class="usa-button usa-button--unstyled pmc-header__search__button"
+                    aria-label="Open search"
+                    data-ga-category="search"
+                    data-ga-action="PMC"
+                    data-ga-label="pmc_search_panel_mobile"
+            >
+                <svg class="usa-icon width-4 height-4 pmc-icon__open" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#search"></use>
+                </svg>
+                <svg class="usa-icon width-4 height-4 pmc-icon__close" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="pmc-header__search">
+            
+
+
+<form class="usa-search usa-search--extra usa-search--article-right-column  pmc-header__search__form" id="pmc-search-form" autocomplete="off" role="search">
+<label class="usa-sr-only" for="pmc-search">Search PMC Full-Text Archive</label>
+<span class="autoComplete_wrapper flex-1">
+<input class="usa-input width-full maxw-none" required="required" placeholder="Search PMC Full-Text Archive" id="pmc-search"  type="search" name="term" data-autocomplete-url="https://pmc.ncbi.nlm.nih.gov/autocomp/search/autocomp/"/>
+</span>
+<button
+class="usa-button"
+type="submit"
+formaction="https://pmc.ncbi.nlm.nih.gov/search/"
+data-ga-category="search"
+data-ga-action="PMC"
+data-ga-label="PMC_search_button"
+>
+<span class="usa-search__submit-text">Search in PMC</span>
+<img
+src="/static/img/usa-icons-bg/search--white.svg"
+class="usa-search__submit-icon"
+alt="Search"
+/>
+</button>
+</form>
+            <div class="display-flex flex-column tablet:flex-row tablet:flex-justify flex-justify-center flex-align-center width-full desktop:maxw-44">
+                <ul class="pmc-header__search__menu">
+                    <li>
+                        
+                            <a class="usa-link" href="/journals/" data-ga-action="featured_link" data-ga-label="journal list">
+                                Journal List
+                            </a>
+                        
+                    </li>
+                    <li>
+                        
+                            <a class="usa-link" href="/about/userguide/" data-ga-action="featured_link"
+                            data-ga-label="user guide">
+                                User Guide
+                            </a>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+    
+
+
+        
+        
+
+       
+  <div class="usa-section padding-top-0 desktop:padding-top-6 pmc-article-section" data-article-db="pmc" data-article-id="5420010">
+
+    
+
+   
+
+
+
+<div class="grid-container pmc-actions-bar" aria-label="Actions bar" role="complementary">
+    <div class="grid-row">
+        <div class="grid-col-fill display-flex">
+             <div class="display-flex">
+                <ul class="usa-list usa-list--unstyled usa-list--horizontal">
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <button
+                                type="button"
+                                class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                                aria-label="Open resources"
+                                data-extra-class="is-visible-resources"
+                                data-ga-category="resources_accordion"
+                                data-ga-action="click"
+                                data-ga-label="mobile_icon"
+                        >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#more_vert"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <a
+                                href="https://doi.org/10.1016/j.hrcr.2016.08.015"
+                                class="usa-link display-flex usa-tooltip"
+                                role="button"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                title="View on publisher site"
+                                data-position="bottom"
+                                aria-label="View on publisher site"
+                                data-ga-category="actions"
+                                data-ga-action="click"
+                                data-ga-label="publisher_link_mobile"
+                        >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#launch"></use>
+                                </svg>
+                        </a>
+                    </li>
+                    
+                    
+                        <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                             <a
+                                     href="pdf/main.pdf"
+                                     class="usa-link display-flex usa-tooltip"
+                                     role="button"
+                                     title="Download PDF"
+                                     data-position="bottom"
+                                     aria-label="Download PDF"
+                                     data-ga-category="actions"
+                                     data-ga-action="click"
+                                     data-ga-label="pdf_download_mobile"
+                             >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                                </svg>
+                            </a>
+                        </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button
+                            class="usa-button usa-button--unstyled  usa-tooltip collections-dialog-trigger collections-button display-flex collections-button-empty"
+                            title="Add to Collections"
+                            data-position="bottom"
+                            aria-label="Save article in MyNCBI collections."
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="collections_button_mobile"
+                            data-collections-open-dialog-enabled="false"
+                            data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC5420010%2F%23open-collections-dialog"
+                            data-in-collections="false"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button role="button" class="usa-button usa-button--unstyled usa-tooltip citation-dialog-trigger display-flex"
+                            aria-label="Open dialog with citation text in different styles"
+                            title="Cite"
+                            data-position="bottom"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="cite_mobile"
+                            data-all-citations-url="/resources/citations/5420010/"
+                            data-citation-style="nlm"
+                            data-download-format-link="/resources/citations/5420010/export/"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="pmc-permalink display-flex" >
+                         <button
+                                 type="button"
+                                 title="Permalink"
+                                 data-position="bottom"
+                                 class="usa-button usa-button--unstyled display-flex usa-tooltip"
+                                 aria-label="Show article permalink"
+                                 aria-expanded="false"
+                                 aria-haspopup="true"
+                                 data-ga-category="actions"
+                                 data-ga-action="open"
+                                 data-ga-label="permalink_mobile"
+                         >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#share"></use>
+                            </svg>
+                        </button>
+                        
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC5420010/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+                    </li>
+                </ul>
+            </div>
+            <button
+                    type="button"
+                    class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                    aria-label="Open article navigation"
+                    data-extra-class="is-visible-in-page"
+                    data-ga-category="actions"
+                    data-ga-action="open"
+                    data-ga-label="article_nav_mobile"
+            >
+                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#list"></use>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+    <div class="grid-container desktop:padding-left-6">
+      <div id="article-container" class="grid-row grid-gap">
+        <div class="grid-col-12 desktop:grid-col-8 order-2 pmc-layout__content">
+            <div class="grid-container padding-left-0 padding-right-0">
+                <div class="grid-row desktop:margin-left-neg-6">
+                    <div class="grid-col-12">
+                        <div class="pmc-layout__disclaimer" role="complementary" aria-label="Disclaimer note">
+    As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+    the contents by NLM or the National Institutes of Health.<br/>
+    Learn more:
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="Disclaimer" data-ga-label="New disclaimer box" href="/about/disclaimer/">PMC Disclaimer</a>
+    |
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="PMC Copyright Notice" data-ga-label="New disclaimer box" href="/about/copyright/">
+        PMC Copyright Notice
+    </a>
+</div>
+                    </div>
+                </div>
+                <div class="grid-row pmc-wm desktop:margin-left-neg-6">
+                    <!-- Main content -->
+                    <main
+                      id="main-content"
+                      class="usa-layout-docs__main usa-layout-docs grid-col-12 pmc-layout pmc-prose padding-0"
+                    >
+
+                      
+                        <section class="pmc-journal-banner text-center line-height-none" aria-label="Journal banner"><img src="https://cdn.ncbi.nlm.nih.gov/pmc/banners/logo-hrcr.gif" alt="HeartRhythm Case Reports logo" usemap="#pmc-banner-imagemap" width="500" height="75"><map name="pmc-banner-imagemap"><area alt="Link to HeartRhythm Case Reports" title="Link to HeartRhythm Case Reports" shape="default" href="http://www.journals.elsevier.com/heartrhythm-case-reports" target="_blank" rel="noopener noreferrer"></map></section><article lang="en"><section aria-label="Article citation and metadata"><section class="pmc-layout__citation font-secondary font-xs"><div>
+<div class="display-inline-block"><button type="button" class="cursor-pointer text-no-underline bg-transparent border-0 padding-0 text-left margin-0 text-normal text-primary" aria-controls="journal_context_menu">HeartRhythm Case Rep</button></div>. 2016 Sep 12;2(6):521–529. doi: <a href="https://doi.org/10.1016/j.hrcr.2016.08.015" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">10.1016/j.hrcr.2016.08.015</a>
+</div>
+<nav id="journal_context_menu" hidden="hidden"><ul class="menu-list font-family-ui" role="menu">
+<li role="presentation"><a href="https://pmc.ncbi.nlm.nih.gov/search/?term=%22HeartRhythm%20Case%20Rep%22%5Bjour%5D" class="usa-link" role="menuitem">Search in PMC</a></li>
+<li role="presentation"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22HeartRhythm%20Case%20Rep%22%5Bjour%5D" lang="en" class="usa-link" role="menuitem">Search in PubMed</a></li>
+<li role="presentation"><a href="https://www.ncbi.nlm.nih.gov/nlmcatalog?term=%22HeartRhythm%20Case%20Rep%22%5BTitle%20Abbreviation%5D" class="usa-link" role="menuitem">View in NLM Catalog</a></li>
+<li role="presentation"><a href="?term=%22HeartRhythm%20Case%20Rep%22%5Bjour%5D" class="usa-link" role="menuitem" data-add-to-search="true">Add to search</a></li>
+</ul></nav></section><section class="front-matter"><div class="ameta p font-secondary font-xs">
+<hgroup><h1>Structural interplay of K<sub>V</sub>7.1 and KCNE1 is essential for normal repolarization and is compromised in short QT syndrome 2 (K<sub>V</sub>7.1-A287T)</h1></hgroup><div class="cg p">
+<a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Rothenberg%20I%22%5BAuthor%5D" class="usa-link" aria-describedby="id1"><span class="name western">Ina Rothenberg</span></a><div hidden="hidden" id="id1">
+<h3>
+<span class="name western">Ina Rothenberg</span>, <span class="degrees">PhD</span>
+</h3>
+<div class="p">
+<sup>*</sup>Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Rothenberg%20I%22%5BAuthor%5D" class="usa-link"><span class="name western">Ina Rothenberg</span></a>
+</div>
+</div>
+<sup>*</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Piccini%20I%22%5BAuthor%5D" class="usa-link" aria-describedby="id2"><span class="name western">Ilaria Piccini</span></a><div hidden="hidden" id="id2">
+<h3>
+<span class="name western">Ilaria Piccini</span>, <span class="degrees">PhD</span>
+</h3>
+<div class="p">
+<sup>*</sup>Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Piccini%20I%22%5BAuthor%5D" class="usa-link"><span class="name western">Ilaria Piccini</span></a>
+</div>
+</div>
+<sup>*</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Wrobel%20E%22%5BAuthor%5D" class="usa-link" aria-describedby="id3"><span class="name western">Eva Wrobel</span></a><div hidden="hidden" id="id3">
+<h3>
+<span class="name western">Eva Wrobel</span>, <span class="degrees">PhD</span>
+</h3>
+<div class="p">
+<sup>*</sup>Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Wrobel%20E%22%5BAuthor%5D" class="usa-link"><span class="name western">Eva Wrobel</span></a>
+</div>
+</div>
+<sup>*</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Stallmeyer%20B%22%5BAuthor%5D" class="usa-link" aria-describedby="id4"><span class="name western">Birgit Stallmeyer</span></a><div hidden="hidden" id="id4">
+<h3>
+<span class="name western">Birgit Stallmeyer</span>, <span class="degrees">PhD</span>
+</h3>
+<div class="p">
+<sup>*</sup>Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Stallmeyer%20B%22%5BAuthor%5D" class="usa-link"><span class="name western">Birgit Stallmeyer</span></a>
+</div>
+</div>
+<sup>*</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22M%C3%BCller%20J%22%5BAuthor%5D" class="usa-link" aria-describedby="id5"><span class="name western">Jovanca Müller</span></a><div hidden="hidden" id="id5">
+<h3>
+<span class="name western">Jovanca Müller</span>, <span class="degrees">MD</span>
+</h3>
+<div class="p">
+<sup>*</sup>Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22M%C3%BCller%20J%22%5BAuthor%5D" class="usa-link"><span class="name western">Jovanca Müller</span></a>
+</div>
+</div>
+<sup>*</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Greber%20B%22%5BAuthor%5D" class="usa-link" aria-describedby="id6"><span class="name western">Boris Greber</span></a><div hidden="hidden" id="id6">
+<h3>
+<span class="name western">Boris Greber</span>, <span class="degrees">PhD</span>
+</h3>
+<div class="p">
+<sup>†</sup>Human Stem Cell Pluripotency Laboratory, Max Planck Institute for Molecular Biomedicine, Münster, Germany</div>
+<div class="p">
+<sup>‡</sup>Chemical Genomics Centre of the Max Planck Society, Dortmund, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Greber%20B%22%5BAuthor%5D" class="usa-link"><span class="name western">Boris Greber</span></a>
+</div>
+</div>
+<sup>†,</sup><sup>‡</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Strutz-Seebohm%20N%22%5BAuthor%5D" class="usa-link" aria-describedby="id7"><span class="name western">Nathalie Strutz-Seebohm</span></a><div hidden="hidden" id="id7">
+<h3>
+<span class="name western">Nathalie Strutz-Seebohm</span>, <span class="degrees">PhD</span>
+</h3>
+<div class="p">
+<sup>*</sup>Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Strutz-Seebohm%20N%22%5BAuthor%5D" class="usa-link"><span class="name western">Nathalie Strutz-Seebohm</span></a>
+</div>
+</div>
+<sup>*</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Schulze-Bahr%20E%22%5BAuthor%5D" class="usa-link" aria-describedby="id8"><span class="name western">Eric Schulze-Bahr</span></a><div hidden="hidden" id="id8">
+<h3>
+<span class="name western">Eric Schulze-Bahr</span>, <span class="degrees">MD</span>
+</h3>
+<div class="p">
+<sup>*</sup>Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany</div>
+<div class="p">
+<sup><strong>§</strong></sup>Interdisziplinäres Zentrum für Klinische Forschung Münster (IZKF Münster) and Innovative Medizinische Forschung (IMF Münster), Faculty of Medicine, University of Münster, Münster, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Schulze-Bahr%20E%22%5BAuthor%5D" class="usa-link"><span class="name western">Eric Schulze-Bahr</span></a>
+</div>
+</div>
+<sup>*,</sup><sup>§</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Schmitt%20N%22%5BAuthor%5D" class="usa-link" aria-describedby="id9"><span class="name western">Nicole Schmitt</span></a><div hidden="hidden" id="id9">
+<h3>
+<span class="name western">Nicole Schmitt</span>, <span class="degrees">PhD</span>
+</h3>
+<div class="p">
+<sup>║</sup>Danish National Research Foundation Centre for Cardiac Arrhythmia, Department of Biomedical Sciences, University of Copenhagen, Copenhagen, Denmark</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Schmitt%20N%22%5BAuthor%5D" class="usa-link"><span class="name western">Nicole Schmitt</span></a>
+</div>
+</div>
+<sup>║</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Seebohm%20G%22%5BAuthor%5D" class="usa-link" aria-describedby="id10"><span class="name western">Guiscard Seebohm</span></a><div hidden="hidden" id="id10">
+<h3>
+<span class="name western">Guiscard Seebohm</span>, <span class="degrees">PhD</span>
+</h3>
+<div class="p">
+<sup>*</sup>Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany</div>
+<div class="p">
+<sup><strong>§</strong></sup>Interdisziplinäres Zentrum für Klinische Forschung Münster (IZKF Münster) and Innovative Medizinische Forschung (IMF Münster), Faculty of Medicine, University of Münster, Münster, Germany</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Seebohm%20G%22%5BAuthor%5D" class="usa-link"><span class="name western">Guiscard Seebohm</span></a>
+</div>
+</div>
+<sup>*,</sup><sup>§,</sup><sup>⁎</sup>
+</div>
+<ul class="d-buttons inline-list">
+<li><button class="d-button" aria-controls="aip_a" aria-expanded="false">Author information</button></li>
+<li><button class="d-button" aria-controls="anp_a" aria-expanded="false">Article notes</button></li>
+<li><button class="d-button" aria-controls="clp_a" aria-expanded="false">Copyright and License information</button></li>
+</ul>
+<div class="d-panels font-secondary-light">
+<div id="aip_a" class="d-panel p" style="display: none">
+<div class="p" id="aff0005">
+<sup>*</sup>Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, Münster, Germany</div>
+<div id="aff0010">
+<sup>†</sup>Human Stem Cell Pluripotency Laboratory, Max Planck Institute for Molecular Biomedicine, Münster, Germany</div>
+<div id="aff0015">
+<sup>‡</sup>Chemical Genomics Centre of the Max Planck Society, Dortmund, Germany</div>
+<div id="aff0020">
+<sup><strong>§</strong></sup>Interdisziplinäres Zentrum für Klinische Forschung Münster (IZKF Münster) and Innovative Medizinische Forschung (IMF Münster), Faculty of Medicine, University of Münster, Münster, Germany</div>
+<div id="aff0025">
+<sup>║</sup>Danish National Research Foundation Centre for Cardiac Arrhythmia, Department of Biomedical Sciences, University of Copenhagen, Copenhagen, Denmark</div>
+<div class="author-notes p"><div class="fn" id="cor1">
+<sup>⁎</sup><p class="display-inline"><strong>Address reprint requests and correspondence:</strong> Dr Guiscard Seebohm, Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, D48149 Münster, Germany.Institute for Genetics of Heart Diseases (IfGH), Department of Cardiovascular Medicine, University Hospital Münster, D48149MünsterGermany <span>guiscard.seebohm@ukmuenster.de</span></p>
+</div></div>
+</div>
+<div id="anp_a" class="d-panel p" style="display: none"><div class="notes p">
+<section id="historyarticle-meta1" class="history"><p>Collection date 2016 Nov.</p></section><section id="keys0005" class="kwd-group"><p><strong>Keywords:</strong> Long QT syndrome, Short QT syndrome, Channel, Structure, Molecular</p></section>
+</div></div>
+<div id="clp_a" class="d-panel p" style="display: none">
+<div>© 2016 Heart Rhythm Society. Published by Elsevier Inc.</div>
+<p>This is an open access article under the CC BY-NC-ND license (http://creativecommons.org/licenses/by-nc-nd/4.0/).</p>
+<div class="p"><a href="/about/copyright/" class="usa-link">PMC Copyright notice</a></div>
+</div>
+</div>
+<div>PMCID: PMC5420010  PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/28491751/" class="usa-link">28491751</a>
+</div>
+</div></section></section><section aria-label="Article content"><section class="body main-article-body"><section id="s0005"><h2 class="pmc_sec_title">Introduction</h2>
+<section class="tw xbox font-sm" id="t0005"><div class="caption p"><p>KEY TEACHING POINTS</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups"><tbody><tr><td colspan="1" rowspan="1"><ul class="list" style="list-style-type:none">
+<li id="u0005">
+<span class="label">•</span><p class="display-inline">Kv7.1 and KCNE1 form the cardiac I<sub>Ks</sub> channel complex. This channel current is a main component of atrial and ventricular repolarization.</p>
+</li>
+<li id="u0010">
+<span class="label">•</span><p class="display-inline">The Kv7.1–KCNE1 structural interplay can be altered by mutations in patients to result in abnormal cardiac repolarization.</p>
+</li>
+<li id="u0015">
+<span class="label">•</span><p class="display-inline">Aberrant function of I<sub>Ks</sub> can lead to long QT syndrome (I<sub>Ks</sub> loss of function) or, rarely, to short QT syndrome (I<sub>Ks</sub> gain of function).</p>
+</li>
+</ul></td></tr></tbody></table></div>
+<div class="p text-right font-secondary"><a href="table/t0005/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></section><p>Heteromeric K<sub>V</sub>7.1/KCNE1 channels conduct the cardiac repolarizing current I<sub>Ks</sub> that is crucial in the stress-mediated adaptation of the myocyte action potential duration in a rate-dependent way. Stress reactions via both β-adrenergic stimulations<a href="#bib1" class="usa-link" aria-describedby="bib1">1</a>, <a href="#bib2" class="usa-link" aria-describedby="bib2">2</a>, <a href="#bib3" class="usa-link" aria-describedby="bib3">3</a> and cortisol release along the hypothalamic–pituitary–adrenal axis<a href="#bib4" class="usa-link" aria-describedby="bib4">4</a>, <a href="#bib5" class="usa-link" aria-describedby="bib5">5</a>, <a href="#bib6" class="usa-link" aria-describedby="bib6">6</a> are known to activate I<sub>Ks</sub> channels. I<sub>Ks</sub> activation is important to increase repolarization forces at higher heart rates to counteract depolarizing cardiac calcium currents.<a href="#bib7" class="usa-link" aria-describedby="bib7"><sup>7</sup></a> Impaired I<sub>Ks</sub> function can result from gene mutations, from pharmacological intervention,<a href="#bib8" class="usa-link" aria-describedby="bib8"><sup>8</sup></a> and/or from myocardial infections with Coxsackie virus B3, as shown in a mouse model.<a href="#bib9" class="usa-link" aria-describedby="bib9"><sup>9</sup></a> Unbalanced ion fluxes during cardiac action potentials can thus lead to cardiac arrhythmias and potentially cause sudden cardiac death.<a href="#bib10" class="usa-link" aria-describedby="bib10">10</a>, <a href="#bib11" class="usa-link" aria-describedby="bib11">11</a>, <a href="#bib12" class="usa-link" aria-describedby="bib12">12</a>, <a href="#bib13" class="usa-link" aria-describedby="bib13">13</a>, <a href="#bib14" class="usa-link" aria-describedby="bib14">14</a>, <a href="#bib15" class="usa-link" aria-describedby="bib15">15</a></p>
+<p>K<sub>V</sub>7.1 α-subunits alone form tetrameric K<sub>V</sub> channels through an assembly domain in the intracellular C-terminus of the channel protein.<a href="#bib16" class="usa-link" aria-describedby="bib16">16</a>, <a href="#bib17" class="usa-link" aria-describedby="bib17">17</a> Furthermore, K<sub>V</sub>7.1 channels coassemble with KCNE1 (minK) and the two engage in dynamic interactions. The exact stoichiometry is under intense debate and, so far, it is largely unknown whether the K<sub>V</sub>7.1/KCNE1 stoichiometry is regionally variable in different tissues or subregions of the heart.<a href="#bib18" class="usa-link" aria-describedby="bib18"><sup>18</sup></a></p>
+<p>Mutations in the gene encoding either K<sub>V</sub>7.1 (<em>KCNQ1</em>) or KCNE1 (<em>KCNE1</em>) have been associated with many inherited forms of cardiac arrhythmia.<a href="#bib19" class="usa-link" aria-describedby="bib19"><sup>19</sup></a> In most of the cases, loss-of-function mutations in <em>KCNQ1</em> cause long QT syndrome (LQTS) and associated ventricular arrhythmias termed <em>torsades de pointes.</em><a href="#bib20" class="usa-link" aria-describedby="bib20"><sup>20</sup></a> In contrast, gain-of-function mutations in I<sub>Ks</sub> channels are relatively rare and lead to the opposite electrocardiogram (ECG) phenotype, short QT syndrome (SQTS), and in some cases atrial fibrillation.<a href="#bib21" class="usa-link" aria-describedby="bib21">21</a>, <a href="#bib22" class="usa-link" aria-describedby="bib22">22</a>, <a href="#bib23" class="usa-link" aria-describedby="bib23">23</a>, <a href="#bib24" class="usa-link" aria-describedby="bib24">24</a></p>
+<p>KCNE1 harbors one transmembrane segment, an extracellular N-terminus, and an intracellular C-terminus. Several interaction points between K<sub>V</sub>7.1 and KCNE1 have been identified on the extracellular side of the channel complex.<a href="#bib25" class="usa-link" aria-describedby="bib25"><sup>25</sup></a> Furthermore, a recent study of the positioning between the KCNE1 extracellular domain structure<a href="#bib26" class="usa-link" aria-describedby="bib26">26</a>, <a href="#bib27" class="usa-link" aria-describedby="bib27">27</a> and K<sub>V</sub>7.1<a href="#bib28" class="usa-link" aria-describedby="bib28"><sup>28</sup></a> predicted several interaction sites.</p>
+<p>In this study, we present a novel SQTS mutation, A287T, and elucidate its pathophysiological mechanism to provide novel insight into the α–β interaction.</p></section><section id="s0010"><h2 class="pmc_sec_title">Methods</h2>
+<section id="s0015"><h3 class="pmc_sec_title">Clinical characterization</h3>
+<p>All probands who participated in the study gave written informed consent in accordance with the last version of the Declaration of Helsinki (World Medical Association and R281) and with recommendations by the local ethics committee.</p>
+<p>We performed clinical and genetic investigations as previously described.<a href="#bib29" class="usa-link" aria-describedby="bib29"><sup>29</sup></a> Briefly, ECG analyses were performed using conventional 12-lead ECG recordings and standard lead positions (paper speed 50 mm/s), and heart rate–corrected QT intervals (QTc) were calculated by Bazett’s<a href="#bib30" class="usa-link" aria-describedby="bib30"><sup>30</sup></a> and by Fridericia’s formula.<a href="#bib31" class="usa-link" aria-describedby="bib31"><sup>31</sup></a> Genomic DNA was isolated from blood lymphocytes by standard semiautomatic procedures (QIAcube protocols; Qiagen, Venlo, Netherlands). A stepwise sequencing approach was initiated by investigating the major LQTS and SQTS genes, <em>KCNQ1</em> (LQT1 or SQT2, GenBank Accession No. <a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000218.2" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000218.2</a>; LRG_287) and <em>KCNH2</em> (LQT2 or SQT1, <a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000238.3" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000238.3</a>; LRG_288). Mutation nomenclature was done with the use of the Alamut annotation software (Interactive Biosoftware, Rouen, France) and annotation was in accordance with the recommendations of the Human Genome Variation Society (<a href="http://www.hgvs.org/mutnomen/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://www.hgvs.org/mutnomen/</a>). The control group consisted of an in-house sample (n = 380 healthy, unrelated controls). Furthermore, variants were investigated for presence in the Exome Sequencing Project population of the National Heart, Lung, and Blood Institute (<a href="http://evs.gs.washington.edu/EVS/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://evs.gs.washington.edu/EVS/</a>) and in ExAC (<a href="http://exac.broadinstitute.org/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://exac.broadinstitute.org/</a>).</p></section><section id="s0020"><h3 class="pmc_sec_title">
+<em>In silico</em> analysis and nucleotide variant classification</h3>
+<p>Potential pathogenic impact of missense variants was determined as described before.<a href="#bib29" class="usa-link" aria-describedby="bib29"><sup>29</sup></a> We used six different pathogenicity prediction tools, namely KvSNP (<a href="http://www.bioinformatics.leeds.ac.uk/KvDB/htdocs/php/KvSNP.php" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://www.bioinformatics.leeds.ac.uk/KvDB/htdocs/php/KvSNP.php</a>), PolyPhen2 (<a href="http://genetics.bwh.harvard.edu/pph2/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://genetics.bwh.harvard.edu/pph2/</a>), SIFT (<a href="http://sift.jcvi.org/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://sift.jcvi.org/</a>), Mutation taster (<a href="http://www.mutationtaster.org/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://www.mutationtaster.org/</a>), MutPred (<a href="http://mutpred.mutdb.org/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://mutpred.mutdb.org/</a>), and SNPs&amp;GO (<a href="http://snps-and-go.biocomp.unibo.it/snps-and-go/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://snps-and-go.biocomp.unibo.it/snps-and-go/</a>). To determine the evolutionary protein conservation of mutated residue sites, an orthologous alignment was performed using ClustalW.</p></section><section id="s0025"><h3 class="pmc_sec_title">Molecular biology</h3>
+<p>Oocyte expression plasmid constructs hK<sub>V</sub>7.1 (GenBank Accession No. <a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000218" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000218</a>) in pXOOM and hKCNE1 (<a href="https://www.ncbi.nlm.nih.gov/nuccore/NM_000219" class="usa-link" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">NM_000219</a>) in pSP64 have been previously described.<a href="#bib25" class="usa-link" aria-describedby="bib25">25</a>, <a href="#bib32" class="usa-link" aria-describedby="bib32">32</a> Standard site-directed mutagenesis was performed to generate the mutants A287T, A287C, A287D, A287E, A287K, A287Q, A287S, T322A, and T322M. All constructs were verified by DNA sequencing (Macrogen Inc, Seoul, South Korea). The plasmids were linearized using <em>NheI</em> for hK<sub>V</sub>7.1 and <em>EcoRI</em> for hKCNE1. In vitro synthesis of cRNA was done using the <em>T7</em> or <em>SP6</em> mMessage mMachine kits (Ambion, Austin, TX) according to manufacturer’s instructions.</p></section><section id="s0030"><h3 class="pmc_sec_title">Western blot</h3>
+<p>Oocytes were injected with 12 ng of K<sub>V</sub>7.1 wild-type (K<sub>V</sub>7.1-WT) or mutant cRNA and 2.4 ng of KCNE1-WT cRNA corresponding to a 6:1 molar ratio. For Western blot analysis intact injected and uninjected/control oocytes (each with 10 oocytes per preparation) were homogenized with a P200 pipette in HbA buffer (in mM: 20 Tris-HCl, 5 MgCl<sub>2</sub>, 6H<sub>2</sub>O, 5 NaH<sub>2</sub>PO<sub>4</sub>, H<sub>2</sub>O, 1 EDTA, 80 sucrose, pH 7.4, supplemented with protease inhibitor cOmplete, Roche Lifescience, Mannheim, Germany). After centrifugation for 30 minutes at 16,000<em>g</em>, the supernatants were supplemented with 4 μL sodium dodecyl sulfate (SDS)-polyacrylamide gel electrophoresis loading buffer (0.8 M β-mercaptoethanol, 6% SDS, 20% glycerol, 25 mM Tris-HCl, 0.1% bromphenol blue, pH 6.8) per oocyte. Proteins from homogenized oocytes were separated by SDS gel electrophoresis and transferred to nitrocellulose membranes (Bio-Rad Laboratories, München, Germany). Blots were blocked in phosphate-buffered saline containing 1% Roti-Block (A151; Carl Roth, Karlsruhe, Germany) for at least 1 hour at room temperature. For the detection of K<sub>V</sub>7.1, membranes were incubated with primary rabbit polyclonal anti–potassium channel K<sub>V</sub>7.1 antibody (1:100; AB5932; Merck Millipore, Darmstadt, Germany), which detects a fragment of ~70 kDa. As a loading control, primary mouse monoclonal anti–beta 1 sodium potassium ATPase antibody (1:500; ab2873; Abcam, Cambridge, UK) was used that recognizes a fragment of ~35 kDa. Secondary antibodies were anti-rabbit IgG (NA934) and anti-mouse IgG (NXA931), both in 1:10,000 dilution (GE Healthcare Life Science, Freiburg, Germany). For verification of protein levels, Ponceau Red staining was performed. Labeled proteins were detected by an enhanced chemiluminescence reaction (Immuno Cruz, A1713; Santa Cruz Biotechnology, Dallas, TX).</p></section><section id="s0035"><h3 class="pmc_sec_title">Electrophysiology</h3>
+<p><em>Xenopus laevis</em> oocytes were obtained from EcoCyte Bioscience (Castrop-Rauxel, Germany). Oocytes were injected with 12 ng of K<sub>V</sub>7.1-WT or mutant cRNA and 2.4 ng of KCNE1-WT cRNA. In the case of variable stoichiometry the amounts of cRNA were 12 ng of K<sub>V</sub>7.1 plus 12 ng of KCNE1 (molar ratio of 1.3:1), plus 2.4 ng of KCNE1 (6:1), plus 1.2 ng of KCNE1 (13:1) or plus 0.12 ng of KCNE1 (130:1). The oocytes were incubated for 3–4 days at ~18°C in Barth’s solution containing (in mM): 88 NaCl, 1.0 KCl, 2.4 NaHCO<sub>3</sub>, 0.33 Ca(NO<sub>3</sub>)<sub>2</sub>, 0.4 CaCl<sub>2</sub>, 0.8 MgSO<sub>4</sub>, 5 Tris-HCl, pH 7.6, supplemented with penicillin-G (63 mg/L), gentamicin (100 mg/L), streptomycin sulfate (40 mg/L), and theophylline (80 mg/L). Standard 2-electrode voltage-clamp (TEVC) recordings were conducted at ~22°C using a Turbo Tec-10CD amplifier (NPI Electronics, Tamm, Germany), Digidata 1322A AD/DA-interface, and pCLAMP 9.0 software (Axon Instruments Inc/Molecular Devices, Sunnyvale, CA). The recorded data were analyzed with ClampFit 9.0 (Molecular Devices), Prism6 (GraphPad Software, La Jolla, CA), and OriginPro 9.0 (Additive, Friedrichsdorf, Germany). Recording pipettes were filled with 3 M KCl and had resistances of 0.5–1.0 MΩ. Recording solution ND96 (in mM: 96 NaCl, 4 KCl, 1.8 MgCl<sub>2</sub>, 1.0 CaCl<sub>2</sub>, 5 HEPES) was used to record standard currents. In the case of high K<sup>+</sup> or high Rb<sup>+</sup> solutions, 100 mM KCl or 100 mM RbCl were added to ND96 solution. The pH was equilibrated to 7.6 in all recording solutions.</p></section><section id="s0040"><h3 class="pmc_sec_title">Molecular dynamics simulations</h3>
+<p>We used the K<sub>V</sub>7.1/KCNE1 structural model from Xu et al<a href="#bib28" class="usa-link" aria-describedby="bib28"><sup>28</sup></a> and introduced the mutation A287T in all 4 K<sub>V</sub>7.1 subunits to obtain the mutant channel. Energy minimizations were performed on the WT K<sub>V</sub>7.1/KCNE1 model and the new K<sub>V</sub>7.1-A287T/KCNE1 model in parallel using the AMBER03 force field with the identical setting. The models were incorporated into membranes and 0.9 % NaCl and before all-atoms-mobile simulations were performed for 10ns to reach stable conformations using YASARA Structure version 10.1 (YASARA Biosciences GmbH, Vienna, Austria), as previously described.<a href="#bib33" class="usa-link" aria-describedby="bib33"><sup>33</sup></a> Structural analyses were performed using customized scripts based on YASARA scripts md-analyze, md-analyzeres, md-analyzestr, md-analyzemul, and Discovery Studio 4.0 (Accelrys, San Diego, CA). Mathematical and graphical analysis were performed using OriginPro <em>9.0</em> (Additive, Friedrichsdorf, Germany).</p></section></section><section id="s0045"><h2 class="pmc_sec_title">Results</h2>
+<section id="s0050"><h3 class="pmc_sec_title">Clinical and genetic characterization</h3>
+<p>We followed up on a 16-year-old female patient (family 10919-1) who survived cardiac arrest after ventricular fibrillation. Cardiopulmonary resuscitation after this first cardiovascular symptom was successful and she recovered without a neurologic deficit. There was no evidence for any medications, electrolyte imbalances, or other abnormalities.</p>
+<p>Electrocardiographic findings were shortened QTc (333 ns) intervals. The PQ value was 116 ms and the P-wave and T-wave morphology was normal (ECG, <a href="#f0005" class="usa-link">Figure 1A</a>). According to current criteria,<a href="#bib34" class="usa-link" aria-describedby="bib34"><sup>34</sup></a> an SQTS (owing to a QTc &lt;360 ms and cardiac symptoms) was diagnosed. An invasive electrophysiological study failed to induce ventricular tachyarrhythmia. Finally, an implantable cardioverter-defibrillator was implanted for secondary prophylaxis. During a follow-up of two years, one episode of a supraventricular tachycardia (143 beats per minute) was noticed despite long-term treatment with β-receptor blockers. However, after three years another episode of ventricular fibrillation occurred which was adequately terminated by implantable cardioverter-defibrillator shock. Two other female mutation carriers (mother, aunt) had a normal QT interval and did not show any clinical symptoms.</p>
+<figure class="fig xbox font-sm" id="f0005" title="Figure 1"><h4 class="obj_head">Figure 1.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=5420010_gr1.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f05f/5420010/bbe54fd14cba/gr1.jpg" loading="lazy" height="1134" width="706" alt="Figure 1"></a></p>
+<div class="p text-right font-secondary"><a href="figure/f0005/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Clinical characterization. <strong>A:</strong> Twelve-lead electrocardiogram (ECG) at 50 mm/s of index patient with SQT: Heart rate of 46/min, normal P-wave duration (82 ms) and QRS duration (96 ms), but PQ interval at the lower limit (116 ms, no pre-excitation) and QT interval of 380 ms, corresponding to a short QTc interval (Bazett’s correction: 333 ms; Fridericia’s correction: 348 ms). No isoelectric ST segment or early repolarization was observed. <strong>B:</strong> Membrane topology of the predicted K<sub>V</sub>7.1 protein structure and localization of the two identified mutations. <strong>C:</strong> Representative electropherogram of index patient with SQT bearing the mutation c.859G&gt;A (p.Ala287Thr) in <em>KCNQ1</em>. <strong>D:</strong> Multiple-sequence alignment of human Kv7.1 protein (aa 281–293) with corresponding regions of orthologous protein sequences. Identical amino acids are indicated by an asterisk, highly conserved amino acids are indicated by a colon, and semiconserved amino acids are indicated by a dot in the lower lane. The mutated amino acid residue 287 is highlighted in bold. <strong>E:</strong> Baseline and exercise ECG of index patient with a heterozygous LQT1 mutation (Thr322Met), showing a borderline QT interval at rest (440–450 ms) and paradoxical prolongation at higher heart rates (up to 480 ms).</p></figcaption></figure><p>Genetic testing in major SQTS genes (<em>KCNQ1</em>, <em>KCNH2</em>, <em>KCNJ2</em>) identified a novel heterozygous nucleotide exchange c.859 G&gt;A in exon 7 of the <em>KCNQ1</em> gene. This mutation predicted an amino acid substitution, p.Ala287Thr (<a href="#f0005" class="usa-link">Figure 1B</a> and <a href="#f0005" class="usa-link">C</a>). This nonsynonymous variation was absent in controls as well as in the mutation repository underlying the National Heart, Lung, and Blood Institute GO Exome Sequencing Project. Alanine at amino acid position 287 revealed a high degree of orthologous conservation (<a href="#f0005" class="usa-link">Figure 1D</a>). Several pathogenicity prediction programs (K<sub>V</sub>SNP, SNPs&amp;GO, Mutation taster SIFT, and PolyPhen2) judged this variation uniformly as being deleterious/pathogenic, while MutPred evaluated a lower probability for a deleterious mutation (0.381).</p></section><section id="s0055"><h3 class="pmc_sec_title">K<sub>V</sub>7.1-A287T shows a gain-of-function phenotype and affects K<sub>V</sub>7.1 ion conduction</h3>
+<p>To elucidate the underlying molecular mechanism, we performed TEVC experiments comparing WT and mutant channels (briefly: K<sub>V</sub>7.1-A287T) in <em>Xenopus laevis</em> oocytes. As illustrated in <a href="#f0010" class="usa-link">Figure 2A</a> and <a href="#f0010" class="usa-link">B</a>, K<sub>V</sub>7.1-A287T exhibited significantly increased peak current amplitudes compared with K<sub>V</sub>7.1-WT channels. This gain-of-function phenotype was even more pronounced when the channel was coexpressed with its β-subunit KCNE1.</p>
+<figure class="fig xbox font-sm" id="f0010" title="Figure 2"><h4 class="obj_head">Figure 2.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=5420010_gr2.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f05f/5420010/6f0eb97365eb/gr2.jpg" loading="lazy" height="717" width="714" alt="Figure 2"></a></p>
+<div class="p text-right font-secondary"><a href="figure/f0010/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Heterologous expression of K<sub>V</sub>7.1-WT and K<sub>V</sub>7.1-A287T channels in absence and presence of KCNE1 in <em>Xenopus laevis</em> oocytes suggests a gain-of-function of mutant channels associated with altered K<sup>+</sup> vs Rb<sup>+</sup> sensitivity. <strong>A:</strong> Representative current traces of K<sub>V</sub>7.1-WT and mutant K<sub>V</sub>7.1-A287T (A287T) in absence or presence of KCNE1. Oocytes were injected with 12 ng K<sub>V</sub>7.1-WT or mutant cRNA and 2.4 ng KCNE1-WT cRNA (molar ratio of 6:1). Currents were elicited with 7-second pulses to potentials of -100 to +60 mV in 10-mV increments from a holding potential of -80 mV. <strong>B:</strong> Current–voltage relationship of K<sub>V</sub>7.1 and mutant K<sub>V</sub>7.1-A287T in absence or presence of KCNE1 (n = 14–33, ± standard error of the mean). <strong>C:</strong> Representative current traces for K<sub>V</sub>7.1-WT and the mutant A287T channel elicited by a 7-second pulse to +40 mV pulse and a return to -120 mV. Currents were recorded in high K<sup>+</sup> (<em>black trace</em>) and in high Rb<sup>+</sup> solution (<em>red trace</em>). <strong>D:</strong> Tail current amplitudes at -120 mV after a +40 mV activating pulse in high extracellular concentrations of K<sup>+</sup> and Rb<sup>+</sup> were assessed for homomeric/heteromeric wild-type and mutant channels. G<sub>Rb+</sub>/G<sub>K+</sub> are shown (n = 10–14). <strong>E:</strong> Relations of G<sub>Rb+Kv7.1</sub>/G<sub>K+Kv7.1/KCNE1</sub> and G<sub>Rb+A287T</sub>/G<sub>K+A287T/KCNE1</sub> (simplified named here as “rel. G<sub>Rb+</sub>/G<sub>K+</sub> by KCNE1”; mean data from B were used).</p></figcaption></figure><p>Next, we addressed whether the gain-of-function phenotype may be a result of altered conductance through the selectivity filter (<a href="#f0010" class="usa-link">Figure 2C–E</a>). The selectivity filter of K<sub>V</sub>7.1 allows for increased Rb<sup>+</sup> conductance rates comparable to K<sup>+</sup> conductance rates, an effect strictly correlating with a fast flicker block event in the channel.<a href="#bib35" class="usa-link" aria-describedby="bib35"><sup>35</sup></a> This effect is reduced when K<sub>V</sub>7.1 is coexpressed with KCNE1, and the fast flicker block is a major determinant of maximal conduction through the channel complex.<a href="#bib35" class="usa-link" aria-describedby="bib35"><sup>35</sup></a> We utilized the Rb<sup>+</sup>/K<sup>+</sup> effects to assess whether the mutation A287T may affect the fast flicker block and its modulation by KCNE1. When exchanging extracellular K<sup>+</sup> by Rb<sup>+</sup>, the inward currents through the K<sub>V</sub>7.1 pore were increased by a factor of about 2 in WT but only by approximately 1.5 in K<sub>V</sub>7.1-A287T. On the contrary, Rb<sup>+</sup> inward currents compared with K<sup>+</sup> inward currents were slightly reduced in K<sub>V</sub>7.1-WT/KCNE1 and remained unaffected in K<sub>V</sub>7.1-A287T/KCNE1. Therefore, both A287T mutations of homomeric K<sub>V</sub>7.1 and heteromeric K<sub>V</sub>7.1/KCNE1 channels results in reduced Rb<sup>+</sup> vs K<sup>+</sup> selectivity. However, the degree of KCNE1 modulation in A287T is reduced.</p></section><section id="s0060"><h3 class="pmc_sec_title">The amino acid position A287 is a structurally relevant key amino acid</h3>
+<p>To better understand these findings, we generated an <em>in silico</em> homology model of the K<sub>V</sub>7.1 transmembrane domain (<a href="#f0015" class="usa-link">Figure 3</a>). The residue A287 was localized at a position that allowed the formation of a hydrogen bond between the hydroxyl group of T322 and the backbone of A287. This hydrogen bond potentially stabilizes the outer pore domain within one K<sub>V</sub>7.1 subunit (<a href="#f0015" class="usa-link">Figure 3A</a>). To analyze this possible interaction, we replaced the alanine at position 287 with threonine, cysteine, asparagine, lysine, glutamine, or serine and assessed the function of the resulting mutants by TEVC experiments. Furthermore, we exchanged threonine 322 with alanine and methionine. Several mutant channels at residue 287 (A287T/C/E/K/Q/S) exhibited typical gain-of-function effects as compared with WT channels (<a href="#f0015" class="usa-link">Figure 3B</a>). In contrast, mutants T322A, T322M, and also A287D expressed in oocytes exhibited largely reduced ion currents (<a href="#f0015" class="usa-link">Figure 3B</a>) and thus were consistent with a reduced repolarization force. Of note, T322M has been linked to LQT1<a href="#bib36" class="usa-link" aria-describedby="bib36"><sup>36</sup></a> and we had also identified this mutation in a small family with typical LQTS (4.1E). To address whether these differences were due to altered protein expression, we performed Western blot experiments using oocytes expressing the different mutant channels. We observed similar expression levels of the mutated K<sub>V</sub>7.1 proteins as compared with K<sub>V</sub>7.1-WT, which rules out that the impaired protein function is due to reduced expression levels (<a href="#f0015" class="usa-link">Figure 3C</a> and <a href="#f0015" class="usa-link">D</a>).</p>
+<figure class="fig xbox font-sm" id="f0015" title="Figure 3"><h4 class="obj_head">Figure 3.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=5420010_gr3.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f05f/5420010/1d6f95312fc9/gr3.jpg" loading="lazy" height="540" width="739" alt="Figure 3"></a></p>
+<div class="p text-right font-secondary"><a href="figure/f0015/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Analysis of homomeric and heteromeric K<sub>V</sub>7.1-WT and mutant channels (molar ratio 6:1) do not exert a clear correlation of functional effects with simple chemical side chain features. <strong>A:</strong> Three-dimensional model of segment S5 and S6 of K<sub>V</sub>7.1 channel suggesting an interaction of K<sub>V</sub>7.1-A287 with K<sub>V</sub>7.1-T322. <strong>B:</strong> Normalized current amplitudes of K<sub>V</sub>7.1-A287 and K<sub>V</sub>7.1-T322 compared with K<sub>V</sub>7.1-WT in absence or presence of KCNE1. Change in current measured at the end of a 7-second pulse to +40 mV (n = 10–34, ± standard error of the mean, unpaired <em>t</em> test, ****<em>P</em> &lt; .0001). <strong>C:</strong> Representative Western blot depicting K<sub>V</sub>7.1 surface membrane expression in <em>Xenopus laevis</em> oocytes in absence (-) and presence (+) of KCNE1. <strong>D:</strong> Representative current trace of +40 mV pulse in absence or presence of KCNE1. Currents were elicited with 7-second pulses to potentials of -100 to +60 mV in 10-mV increments from a holding potential of -80 mV. <strong>E, F:</strong> Activation curves of K<sub>V</sub>7.1-WT and mutant K<sub>V</sub>7.1 (A287T) in absence or presence of KCNE1. Curves were obtained by normalization of initial tail currents to the respective value at +60 mV.</p></figcaption></figure><p>Next, we sought to identify molecular properties of residue 287 by analyzing the effects of charge, volume, and hydrophobicity at this position on channel function. However, we did not observe a correlation of current amplitudes with any of these features (<a href="#s0090" class="usa-link">Supplementary Figure S1</a>, available online). The voltage dependence of activation V<sub>1/2</sub> was shifted to depolarized potentials by all mutants except A287T, whereas slope (<em>k</em>) was altered by all mutations (<a href="#s0090" class="usa-link">Supplementary Figure S2</a>, available online). When coexpressed with KCNE1, only mutant K<sub>V</sub>7.1-A287T showed a clear shift of the voltage dependence of channel activation toward more hyperpolarized potentials. However, owing to the nonsaturating character of K<sub>V</sub>7.1/KCNE1 channel currents no clean Boltzmann fit was possible.</p></section><section id="s0065"><h3 class="pmc_sec_title">Molecular simulation suggests that side chain at position 287 is a key residue for K<sub>V</sub>7.1–KCNE1 interaction</h3>
+<p>Lastly, we performed molecular dynamics simulations (<a href="#s0090" class="usa-link">Supplementary Figure S3</a>, available online) using a recently published model of the K<sub>V</sub>7.1/KCNE1 complex.<a href="#bib28" class="usa-link" aria-describedby="bib28"><sup>28</sup></a> A287T was inserted into the model and energy minimization was performed on both mutant and WT models. Molecular modeling simulations were then carried out on both models in parallel. The channels were incorporated into membranes and simulated in 0.9% NaCl for 10 nanoseconds, with all atoms being mobile. Both models reached stable conformations within this time frame, as indicated by an acquired steady state (root mean square deviation value approaching plateau, <a href="#s0090" class="usa-link">Supplementary Figure S3D</a>). In average structures overlaid in <a href="#s0090" class="usa-link">Supplementary Figure S3A</a>, we observed that the selectivity filter was slightly rearranged in the K<sub>V</sub>7.1-A287T model. Furthermore, the outer domain of both KCNE1 subunits (colored in red) was largely repositioned, whereas those of WT-channel complexes stayed in position (yellow). Magnification of the area of interest (<a href="#s0090" class="usa-link">Supplementary Figure S3B</a>) shows a stable interaction between A287 and T322 of the same K<sub>V</sub>7.1 subunit and with Q23 of the adjacent KCNE1 β-subunit. On the contrary, K<sub>V</sub>7.1-A287T causes some local rearrangements that affect the outer KCNE1 structure (<a href="#s0090" class="usa-link">Supplementary Figure S3</a> and <a href="#s0090" class="usa-link">Supplementary Table S1</a>, available online). Although K<sub>V</sub>7.1-A287 still interacts with K<sub>V</sub>7.1-T322 and KCNE1-Q23, additional stable interactions with K<sub>V</sub>7.1-Q323 and KCNE1-G40 could be observed <em>in silico</em> (<a href="#s0090" class="usa-link">Supplementary Figure S3C</a>). The rearrangement of the outer KCNE1 induced changes in the dynamics of the channel complex. In KCNE1 we detected changes in a measure of conformational freedom of a residue (root mean square fluctuations, RMSF) in the outer domain but not in the transmembrane segment (<a href="#s0090" class="usa-link">Supplementary Figure S3E</a>). Furthermore, differences in RMSF of residues in the S3–S4 linker, the outer S5–pore helix linker, and the outer vestibule close to the selectivity filter could be observed (<a href="#s0090" class="usa-link">Supplementary Figure S3F</a>). In addition, the outer domain structure in the region of residues 23–40 was markedly changed in both KCNE1 subunits of the K<sub>V</sub>7.1-A287T/KCNE1 channel complex (<a href="#s0090" class="usa-link">Supplementary Figure S3E</a>). The RMSF of K<sub>V</sub>7.1-A287T itself was reduced within both K<sub>V</sub>7.1-KCNE1 interaction regions compared with the simulation in the same subunit. This reduction may result from strengthened backbone interactions with K<sub>V</sub>7.1-T322 (by the proposed H-bond), as indicated by the reduced RMSD in the backbones (<a href="#s0090" class="usa-link">Supplementary Table S2</a>, available online). In sum, these simulations show that (1) residue K<sub>V</sub>7.1-A287 is forming a stable H-bond to allow for a correct selectivity filter structure and that (2) interaction with KCNE1-Q23 allows for correct KCNE1-K<sub>V</sub>7.1 interaction <em>in silico</em>. Thus, K<sub>V</sub>7.1-A287 is a key residue both for normal K<sub>V</sub>7.1 selectivity structure and normal KCNE1 interaction. This is impaired in disease-associated K<sub>V</sub>7.1-A287T/KCNE1 channels based on <em>in silico</em> simulations.</p></section></section><section id="s0070"><h2 class="pmc_sec_title">Discussion</h2>
+<p>Our clinical investigation indicates that the patient carrying K<sub>V</sub>7.1-A287T is presented with a prominent SQT2, implying an accelerated ventricular repolarization. This is consistent with other SQT2 mutations, which all cause a gain-of-function phenotype in heterologous expression systems.<a href="#bib37" class="usa-link" aria-describedby="bib37"><sup>37</sup></a> We thoroughly characterize K<sub>V</sub>7.1-A287, which associates in the short repolarization disorder (SQT2). Our data indicate a shift of the voltage-dependent activation of I<sub>KS</sub> channels toward hyperpolarization, meaning that more channels activate faster and generate a higher macroscopic current amplitude (<a href="#f0010" class="usa-link">Figure 2A</a> and <a href="#f0010" class="usa-link">B</a>). Thus, the characterized mutation A287T elicited a classic gain of function involving increased voltage dependence.</p>
+<p>We show that the alanine residue at position 287 in <em>KCNQ1</em> is crucial for normal channel function. Possibly, the gain-of-function phenotype could be a result of altered conductance through the selectivity filter substantiated by localization of A287 in the S5 segment of K<sub>V</sub>7.1 near the pore. Our results show that the conductance ratio of Rb<sup>+</sup>/K<sup>+</sup> is smaller in K<sub>V</sub>7.1-A287T compared with WT channels and K<sub>V</sub>7.1 conducts Rb<sup>+</sup> much better than K<sup>+</sup>, an effect that is inversed upon KCNE1 coassembly.<a href="#bib35" class="usa-link" aria-describedby="bib35">35</a>, <a href="#bib38" class="usa-link" aria-describedby="bib38">38</a>, <a href="#bib39" class="usa-link" aria-describedby="bib39">39</a> The clear inversion by coexpression with KCNE1 is much milder in the mutant channel complex. This shows that the KCNE1 effects on fast flicker block, a well-known KCNE1 effect on the selectivity filter, are reduced in K<sub>V</sub>7.1-A287T mutant channels (<a href="#f0010" class="usa-link">Figure 2C–E</a>). Thus, the influence of rate-limiting fast flicker block in Kv7.1/KCNE1 channels may be reduced in A287T channels, additionally contributing to the gain-of-function phenotype beside increased channel availability owing to increased voltage dependence.</p>
+<p>Our data substantiate the crucial role of alanine at position 287 for physiological channel function. We performed a wide-range amino acid substitution at position A287 and T322 in <em>KCNQ1</em>. Substitutions of amino acids at this location caused gain-of-function or loss-of-function phenotypes (<a href="#f0015" class="usa-link">Figure 3</a>). Our systematic mutational analysis indicates that alanine, with its short neutral side chain, is key for channel function in that amino acid substitutions in this position are not well tolerated. This finding is in agreement with the 3-dimensional model, in which the methyl group interacts with KCNE1 to allow for precise K<sub>V</sub>7.1/KCNE1 arrangement. Interestingly, there is no clear correlation between gain/loss of function and biochemical features due to amino acid exchange at K<sub>V</sub>7.1-287 (charge, volume, or hydrophobicity; <a href="#s0090" class="usa-link">Supplementary Figure 2A–F</a>).</p>
+<p>Based on homology modeling, K<sub>V</sub>7.1-A287 (backbone) is predicted to form an H-bond with T322 (<a href="#f0015" class="usa-link">Figure 3A</a>). Mutations K<sub>V</sub>7.1-T322A and K<sub>V</sub>7.1-T322M cause a severe loss of function, as shown here (<a href="#f0015" class="usa-link">Figure 3</a>), and were reported to be associated with LQT1.<a href="#bib36" class="usa-link" aria-describedby="bib36">36</a>, <a href="#bib40" class="usa-link" aria-describedby="bib40">40</a>, <a href="#bib41" class="usa-link" aria-describedby="bib41">41</a> Both mutations can be expected to disrupt the H-bond because the H-donor in the threonine side chain is eliminated by the mutation. Interestingly, both K<sub>V</sub>7.1-T322M and K<sub>V</sub>7.1-T322A do reach the plasma membrane and thus, the H-bond may rather be important for intrinsic protein function (<a href="#f0015" class="usa-link">Figure 3C</a>). This interaction may be important to stabilizing the arrangement of S5, S6, and the central pore domain/selectivity filter. Indeed, this arrangement was reported to affect the selectivity filter, conductance, and ion selectivity.<a href="#bib42" class="usa-link" aria-describedby="bib42"><sup>42</sup></a> Elimination of the proposed H-bond between K<sub>V</sub>7.1-A287 with K<sub>V</sub>7.1-T322 by LQT1 mutations K<sub>V</sub>7.1-T322A or K<sub>V</sub>7.1-T322M gives rise to nonfunctional channels that are plasma membrane associated. The lack of function of these channels must therefore result from mutational effects that are intrinsic to the channel protein structure rather than from trafficking defects (<a href="#f0015" class="usa-link">Figure 3B–D</a>). The simple distance analysis suggests that the K<sub>V</sub>7.1-A287 residue interacts with the KCNE1-Q23 residue <em>in silico</em> as well (<a href="#s0090" class="usa-link">Supplementary Figure S3</a>). Van der Waals interaction may stabilize the K<sub>V</sub>7.1-KCNE1 subunit arrangement at this site in the outer region. Mutant K<sub>V</sub>7.1 subunits (A287T) would change these local interactions, thereby structurally increasing rigidity at K<sub>V</sub>7.1-A287T (<a href="#s0090" class="usa-link">Supplementary Table 2</a>). Further, structural motifs in the outer KCNE1 domain (<a href="#s0090" class="usa-link">Supplementary Figure S3</a>) are impaired, as suggested by our molecular dynamics simulations. The simulations were performed using a 3-dimensional model<a href="#bib28" class="usa-link" aria-describedby="bib28"><sup>28</sup></a> that is based on modeling and cys-crosslinking experiments in the region under investigation in this present study. Thus, according to our <em>in silico</em> predictions, the triad of K<sub>V</sub>7.1-T322, K<sub>V</sub>7.1-A287, and KCNE1-Q23 is expected to be crucially important for K<sub>V</sub>7.1/KCNE1 channel complex function.</p>
+<p>This predicted functional triad is compromised by mutation K<sub>V</sub>7.1-A287 to cause:</p>
+<ul class="list" style="list-style-type:none">
+<li id="u0020">
+<span class="label">–</span><p class="display-inline">Extensive functional effects depending on the specific amino acid present at position 287;</p>
+</li>
+<li id="u0025">
+<span class="label">–</span><p class="display-inline">Atypical influences of KCNE1 on ion channel conductance;</p>
+</li>
+<li id="u0030">
+<span class="label">–</span><p class="display-inline">Modified K<sub>V</sub>7.1 ion selectivity. A287 mutations influence the structural arrangement of S5, S6, and the central pore domain/selectivity filter, which is of high relevance to ion selectivity and conductance.<a href="#bib42" class="usa-link" aria-describedby="bib42"><sup>42</sup></a></p>
+</li>
+</ul></section><section id="s0075"><h2 class="pmc_sec_title">Conclusion</h2>
+<p>We have identified a structural triad formed by two distinct residues in K<sub>V</sub>7.1 (T322 and A287, respectively) and one residue in KCNE1 (Q23) that is essential for regular K<sub>V</sub>7.1-KCNE1 subunit interaction. Structural disturbances at these residues, for example by human LQT gene mutations, exhibit opposite effects of I<sub>Ks</sub> channel function and may result in either a gain-of-function or a loss-of-function phenotype with clinically shortened (SQT) or prolonged (LQT) repolarization. These patients may suffer not only from fatal ventricular arrhythmias, but also at times from atrial arrhythmias.</p></section><section id="ack0005" class="ack"><h2 class="pmc_sec_title">Acknowledgments</h2>
+<p>We thank Gea Ny Tseng for helpful comments on the manuscript and provision of the K<sub>V</sub>7.1/KCNE1 3-dimensional models.</p></section><section id="fn-group1" class="fn-group"><h2 class="pmc_sec_title">Footnotes</h2>
+<div class="fn-group p font-secondary-light font-sm"><div class="fn p" id="s0085">
+<sup>Appendix</sup><p class="display-inline">Supplementary data associated with this article can be found in the online version at <a href="http://dx.doi.org/10.1016/j.hrcr.2016.08.015" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">doi:10.1016/j.hrcr.2016.08.015</a>.</p>
+</div></div></section><section id="s0090"><h2 class="pmc_sec_title">Appendix. Supplementary data</h2>
+<section class="sm xbox font-sm" id="ec0005"><div class="caption p"><p>Supplementary material</p></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/5420010/bin/mmc1.docx" data-ga-action="click_feat_suppl" class="usa-link">mmc1.docx</a><sup> (16KB, docx) </sup>
+</div></div></section><section class="sm xbox font-sm" id="ec0010"><div class="caption p"><p>Supplementary material</p></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/5420010/bin/mmc2.pdf" data-ga-action="click_feat_suppl" class="usa-link">mmc2.pdf</a><sup> (435.1KB, pdf) </sup>
+</div></div></section><section class="sm xbox font-sm" id="ec0015"><div class="caption p"><p>Supplementary material</p></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/5420010/bin/mmc3.pdf" data-ga-action="click_feat_suppl" class="usa-link">mmc3.pdf</a><sup> (417.4KB, pdf) </sup>
+</div></div></section><section class="sm xbox font-sm" id="ec0020"><div class="caption p"><p>Supplementary material</p></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/5420010/bin/mmc4.pdf" data-ga-action="click_feat_suppl" class="usa-link">mmc4.pdf</a><sup> (363.2KB, pdf) </sup>
+</div></div></section></section><section id="bibliog0005" class="ref-list"><h2 class="pmc_sec_title">References</h2>
+<section id="bibliog0005_sec2"><ul class="ref-list font-sm" style="list-style-type:none">
+<li id="bib1">
+<span class="label">1.</span><cite>Marx S.O., Kurokawa J., Reiken S., Motoike H., D׳Armiento J., Marks A.R., Kass R.S. Requirement of a macromolecular signaling complex for beta adrenergic receptor modulation of the KCNQ1-KCNE1 potassium channel. Science. 2002;295:496–499. doi: 10.1126/science.1066843.</cite> [<a href="https://doi.org/10.1126/science.1066843" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/11799244/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Science&amp;title=Requirement%20of%20a%20macromolecular%20signaling%20complex%20for%20beta%20adrenergic%20receptor%20modulation%20of%20the%20KCNQ1-KCNE1%20potassium%20channel&amp;author=S.O.%20Marx&amp;author=J.%20Kurokawa&amp;author=S.%20Reiken&amp;author=H.%20Motoike&amp;author=J.%20D%D7%B3Armiento&amp;volume=295&amp;publication_year=2002&amp;pages=496-499&amp;pmid=11799244&amp;doi=10.1126/science.1066843&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib2">
+<span class="label">2.</span><cite>Sanguinetti M.C., Jurkiewicz N.K., Scott A., Siegl P.K. Isoproterenol antagonizes prolongation of refractory period by the class III antiarrhythmic agent E-4031 in guinea pig myocytes. Mechanism of action. Circ Res. 1991;68:77–84. doi: 10.1161/01.res.68.1.77.</cite> [<a href="https://doi.org/10.1161/01.res.68.1.77" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/1984874/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circ%20Res&amp;title=Isoproterenol%20antagonizes%20prolongation%20of%20refractory%20period%20by%20the%20class%20III%20antiarrhythmic%20agent%20E-4031%20in%20guinea%20pig%20myocytes.%20Mechanism%20of%20action&amp;author=M.C.%20Sanguinetti&amp;author=N.K.%20Jurkiewicz&amp;author=A.%20Scott&amp;author=P.K.%20Siegl&amp;volume=68&amp;publication_year=1991&amp;pages=77-84&amp;pmid=1984874&amp;doi=10.1161/01.res.68.1.77&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib3">
+<span class="label">3.</span><cite>Walsh K.B., Kass R.S. Regulation of a heart potassium channel by protein kinase A and C. Science. 1988;242:67–69. doi: 10.1126/science.2845575.</cite> [<a href="https://doi.org/10.1126/science.2845575" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/2845575/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Science&amp;title=Regulation%20of%20a%20heart%20potassium%20channel%20by%20protein%20kinase%20A%20and%20C&amp;author=K.B.%20Walsh&amp;author=R.S.%20Kass&amp;volume=242&amp;publication_year=1988&amp;pages=67-69&amp;pmid=2845575&amp;doi=10.1126/science.2845575&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib4">
+<span class="label">4.</span><cite>Embark H.M., Bohmer C., Vallon V., Luft F., Lang F. Regulation of KCNE1-dependent K(+) current by the serum and glucocorticoid-inducible kinase (SGK) isoforms. Pflugers Arch. 2003;445:601–606. doi: 10.1007/s00424-002-0982-y.</cite> [<a href="https://doi.org/10.1007/s00424-002-0982-y" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/12634932/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Pflugers%20Arch&amp;title=Regulation%20of%20KCNE1-dependent%20K(+)%20current%20by%20the%20serum%20and%20glucocorticoid-inducible%20kinase%20(SGK)%20isoforms&amp;author=H.M.%20Embark&amp;author=C.%20Bohmer&amp;author=V.%20Vallon&amp;author=F.%20Luft&amp;author=F.%20Lang&amp;volume=445&amp;publication_year=2003&amp;pages=601-606&amp;pmid=12634932&amp;doi=10.1007/s00424-002-0982-y&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib5">
+<span class="label">5.</span><cite>Lang F., Henke G., Embark H.M., Waldegger S., Palmada M., Böhmer C., Vallon V. Regulation of channels by the serum and glucocorticoid-inducible kinase - implications for transport, excitability and cell proliferation. Cell Physiol Biochem. 2003;13:41–50. doi: 10.1159/000070248.</cite> [<a href="https://doi.org/10.1159/000070248" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/12649601/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Cell%20Physiol%20Biochem&amp;title=Regulation%20of%20channels%20by%20the%20serum%20and%20glucocorticoid-inducible%20kinase%20-%20implications%20for%20transport,%20excitability%20and%20cell%20proliferation&amp;author=F.%20Lang&amp;author=G.%20Henke&amp;author=H.M.%20Embark&amp;author=S.%20Waldegger&amp;author=M.%20Palmada&amp;volume=13&amp;publication_year=2003&amp;pages=41-50&amp;pmid=12649601&amp;doi=10.1159/000070248&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib6">
+<span class="label">6.</span><cite>Seebohm G., Strutz-Seebohm N., Birkin R. Regulation of endocytic recycling of KCNQ1/KCNE1 potassium channels. Circ Res. 2007;100:686–692. doi: 10.1161/01.RES.0000260250.83824.8f.</cite> [<a href="https://doi.org/10.1161/01.RES.0000260250.83824.8f" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/17293474/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Regulation%20of%20endocytic%20recycling%20of%20KCNQ1/KCNE1%20potassium%20channels.%20Circ%20Res&amp;author=G.%20Seebohm&amp;author=N.%20Strutz-Seebohm&amp;author=R.%20Birkin&amp;volume=100&amp;publication_year=2007&amp;pages=686-692&amp;pmid=17293474&amp;doi=10.1161/01.RES.0000260250.83824.8f&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib7">
+<span class="label">7.</span><cite>Sanguinetti M.C., Jurkiewicz N.K. Two components of cardiac delayed rectifier K+ current. Differential sensitivity to block by class III antiarrhythmic agents. J Gen Physiol. 1990;96:195–215. doi: 10.1085/jgp.96.1.195.</cite> [<a href="https://doi.org/10.1085/jgp.96.1.195" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC2228985/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/2170562/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Gen%20Physiol&amp;title=Two%20components%20of%20cardiac%20delayed%20rectifier%20K+%20current.%20Differential%20sensitivity%20to%20block%20by%20class%20III%20antiarrhythmic%20agents&amp;author=M.C.%20Sanguinetti&amp;author=N.K.%20Jurkiewicz&amp;volume=96&amp;publication_year=1990&amp;pages=195-215&amp;pmid=2170562&amp;doi=10.1085/jgp.96.1.195&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib8">
+<span class="label">8.</span><cite>Odening K.E., Hyder O., Chaves L., Schofield L., Brunner M., Kirk M., Zehender M., Peng X., Koren G. Pharmacogenomics of anesthetic drugs in transgenic LQT1 and LQT2 rabbits reveal genotype-specific differential effects on cardiac repolarization. Am J Physiol Heart Circ Physiol. 2008;295:H2264–2272. doi: 10.1152/ajpheart.00680.2008.</cite> [<a href="https://doi.org/10.1152/ajpheart.00680.2008" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC2614544/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/18835916/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Am%20J%20Physiol%20Heart%20Circ%20Physiol&amp;title=Pharmacogenomics%20of%20anesthetic%20drugs%20in%20transgenic%20LQT1%20and%20LQT2%20rabbits%20reveal%20genotype-specific%20differential%20effects%20on%20cardiac%20repolarization&amp;author=K.E.%20Odening&amp;author=O.%20Hyder&amp;author=L.%20Chaves&amp;author=L.%20Schofield&amp;author=M.%20Brunner&amp;volume=295&amp;publication_year=2008&amp;pages=H2264-2272&amp;pmid=18835916&amp;doi=10.1152/ajpheart.00680.2008&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib9">
+<span class="label">9.</span><cite>Wessely R., Klingel K., Santana L.F., Dalton N., Hongo M., Jonathan Lederer W., Kandolf R., Knowlton K.U. Transgenic expression of replication-restricted enteroviral genomes in heart muscle induces defective excitation-contraction coupling and dilated cardiomyopathy. J Clin Invest. 1998;102:1444–1453. doi: 10.1172/JCI1972.</cite> [<a href="https://doi.org/10.1172/JCI1972" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC508992/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/9769337/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Clin%20Invest&amp;title=Transgenic%20expression%20of%20replication-restricted%20enteroviral%20genomes%20in%20heart%20muscle%20induces%20defective%20excitation-contraction%20coupling%20and%20dilated%20cardiomyopathy&amp;author=R.%20Wessely&amp;author=K.%20Klingel&amp;author=L.F.%20Santana&amp;author=N.%20Dalton&amp;author=M.%20Hongo&amp;volume=102&amp;publication_year=1998&amp;pages=1444-1453&amp;pmid=9769337&amp;doi=10.1172/JCI1972&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib10">
+<span class="label">10.</span><cite>Gerlach U. Blockers of the slowly delayed rectifier potassium IKs channel: potential antiarrhythmic agents. Curr Med Chem Cardiovasc Hematol Agents. 2003;1:243–252. doi: 10.2174/1568016033477469.</cite> [<a href="https://doi.org/10.2174/1568016033477469" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/15326915/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Curr%20Med%20Chem%20Cardiovasc%20Hematol%20Agents&amp;title=Blockers%20of%20the%20slowly%20delayed%20rectifier%20potassium%20IKs%20channel:%20potential%20antiarrhythmic%20agents&amp;author=U.%20Gerlach&amp;volume=1&amp;publication_year=2003&amp;pages=243-252&amp;pmid=15326915&amp;doi=10.2174/1568016033477469&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib11">
+<span class="label">11.</span><cite>Hedley P.L., Jørgensen P., Schlamowitz S., Wangari R., Moolman-Smook J., Brink P.A., Kanters J.K., Corfield V.A., Christiansen M. The genetic basis of long QT and short QT syndromes: a mutation update. Hum Mutat. 2009;30:1486–1511. doi: 10.1002/humu.21106.</cite> [<a href="https://doi.org/10.1002/humu.21106" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/19862833/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Hum%20Mutat&amp;title=The%20genetic%20basis%20of%20long%20QT%20and%20short%20QT%20syndromes:%20a%20mutation%20update&amp;author=P.L.%20Hedley&amp;author=P.%20J%C3%B8rgensen&amp;author=S.%20Schlamowitz&amp;author=R.%20Wangari&amp;author=J.%20Moolman-Smook&amp;volume=30&amp;publication_year=2009&amp;pages=1486-1511&amp;pmid=19862833&amp;doi=10.1002/humu.21106&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib12">
+<span class="label">12.</span><cite>Schulze-Bahr E., Wang Q., Wedekind H. KCNE1 mutations cause jervell and Lange-Nielsen syndrome. Nat Genet. 1997;17:267–268. doi: 10.1038/ng1197-267.</cite> [<a href="https://doi.org/10.1038/ng1197-267" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/9354783/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Nat%20Genet&amp;title=KCNE1%20mutations%20cause%20jervell%20and%20Lange-Nielsen%20syndrome&amp;author=E.%20Schulze-Bahr&amp;author=Q.%20Wang&amp;author=H.%20Wedekind&amp;volume=17&amp;publication_year=1997&amp;pages=267-268&amp;pmid=9354783&amp;doi=10.1038/ng1197-267&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib13">
+<span class="label">13.</span><cite>Seebohm G., Chen J., Strutz N., Culberson C., Lerche C., Sanguinetti M.C. Molecular determinants of KCNQ1 channel block by a benzodiazepine. Mol Pharmacol. 2003;64:70–77. doi: 10.1124/mol.64.1.70.</cite> [<a href="https://doi.org/10.1124/mol.64.1.70" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/12815162/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Mol%20Pharmacol&amp;title=Molecular%20determinants%20of%20KCNQ1%20channel%20block%20by%20a%20benzodiazepine&amp;author=G.%20Seebohm&amp;author=J.%20Chen&amp;author=N.%20Strutz&amp;author=C.%20Culberson&amp;author=C.%20Lerche&amp;volume=64&amp;publication_year=2003&amp;pages=70-77&amp;pmid=12815162&amp;doi=10.1124/mol.64.1.70&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib14">
+<span class="label">14.</span><cite>Steinke K., Sachse F., Ettischer N. Coxsackievirus B3 modulates cardiac ion channels. FASEB J. 2013;27:4108–4121. doi: 10.1096/fj.13-230193.</cite> [<a href="https://doi.org/10.1096/fj.13-230193" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/23825229/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=FASEB%20J&amp;title=Coxsackievirus%20B3%20modulates%20cardiac%20ion%20channels&amp;author=K.%20Steinke&amp;author=F.%20Sachse&amp;author=N.%20Ettischer&amp;volume=27&amp;publication_year=2013&amp;pages=4108-4121&amp;pmid=23825229&amp;doi=10.1096/fj.13-230193&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib15">
+<span class="label">15.</span><cite>Wang Q., Curran M.E., Splawski I. Positional cloning of a novel potassium channel gene: KVLQT1 mutations cause cardiac arrhythmias. Nat Genet. 1996;12:17–23. doi: 10.1038/ng0196-17.</cite> [<a href="https://doi.org/10.1038/ng0196-17" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/8528244/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Nat%20Genet&amp;title=Positional%20cloning%20of%20a%20novel%20potassium%20channel%20gene:%20KVLQT1%20mutations%20cause%20cardiac%20arrhythmias&amp;author=Q.%20Wang&amp;author=M.E.%20Curran&amp;author=I.%20Splawski&amp;volume=12&amp;publication_year=1996&amp;pages=17-23&amp;pmid=8528244&amp;doi=10.1038/ng0196-17&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib16">
+<span class="label">16.</span><cite>Schmitt N., Schwarz M., Peretz A., Abitbol I., Attali B., Pongs O. A recessive C-terminal Jervell and Lange-Nielsen mutation of the KCNQ1 channel impairs subunit assembly. EMBO J. 2000;19:332–340. doi: 10.1093/emboj/19.3.332.</cite> [<a href="https://doi.org/10.1093/emboj/19.3.332" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC305570/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/10654932/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=EMBO%20J&amp;title=A%20recessive%20C-terminal%20Jervell%20and%20Lange-Nielsen%20mutation%20of%20the%20KCNQ1%20channel%20impairs%20subunit%20assembly&amp;author=N.%20Schmitt&amp;author=M.%20Schwarz&amp;author=A.%20Peretz&amp;author=I.%20Abitbol&amp;author=B.%20Attali&amp;volume=19&amp;publication_year=2000&amp;pages=332-340&amp;pmid=10654932&amp;doi=10.1093/emboj/19.3.332&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib17">
+<span class="label">17.</span><cite>Schwake M., Jentsch T.J., Friedrich T. A carboxy-terminal domain determines the subunit specificity of KCNQ K+ channel assembly. EMBO Rep. 2003;4:76–81. doi: 10.1038/sj.embor.embor715.</cite> [<a href="https://doi.org/10.1038/sj.embor.embor715" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC1315815/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/12524525/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=EMBO%20Rep&amp;title=A%20carboxy-terminal%20domain%20determines%20the%20subunit%20specificity%20of%20KCNQ%20K+%20channel%20assembly&amp;author=M.%20Schwake&amp;author=T.J.%20Jentsch&amp;author=T.%20Friedrich&amp;volume=4&amp;publication_year=2003&amp;pages=76-81&amp;pmid=12524525&amp;doi=10.1038/sj.embor.embor715&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib18">
+<span class="label">18.</span><cite>Shamgar L., Ma L., Schmitt N., Haitin Y., Peretz A., Wiener R., Hirsch J., Pongs O., Attali B. Calmodulin is essential for cardiac IKS channel gating and assembly: impaired function in long-QT mutations. Circ Res. 2006;98:1055–1063. doi: 10.1161/01.RES.0000218979.40770.69.</cite> [<a href="https://doi.org/10.1161/01.RES.0000218979.40770.69" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/16556865/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circ%20Res&amp;title=Calmodulin%20is%20essential%20for%20cardiac%20IKS%20channel%20gating%20and%20assembly:%20impaired%20function%20in%20long-QT%20mutations&amp;author=L.%20Shamgar&amp;author=L.%20Ma&amp;author=N.%20Schmitt&amp;author=Y.%20Haitin&amp;author=A.%20Peretz&amp;volume=98&amp;publication_year=2006&amp;pages=1055-1063&amp;pmid=16556865&amp;doi=10.1161/01.RES.0000218979.40770.69&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib19">
+<span class="label">19.</span><cite>Schmitt N., Grunnet M., Olesen S.P. Cardiac potassium channel subtypes: new roles in repolarization and arrhythmia. Physiol Rev. 2014;94:609–653. doi: 10.1152/physrev.00022.2013.</cite> [<a href="https://doi.org/10.1152/physrev.00022.2013" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/24692356/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Physiol%20Rev&amp;title=Cardiac%20potassium%20channel%20subtypes:%20new%20roles%20in%20repolarization%20and%20arrhythmia&amp;author=N.%20Schmitt&amp;author=M.%20Grunnet&amp;author=S.P.%20Olesen&amp;volume=94&amp;publication_year=2014&amp;pages=609-653&amp;pmid=24692356&amp;doi=10.1152/physrev.00022.2013&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib20">
+<span class="label">20.</span><cite>Koo S.H., Teo W.S., Ching C.K., Chan S.H., Lee E.J. Mutation screening in KCNQ1, HERG, KCNE1, KCNE2 and SCN5A genes in a long QT syndrome family. Ann Acad Med Singapore. 2007;36:394–398.</cite> [<a href="https://pubmed.ncbi.nlm.nih.gov/17597962/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Ann%20Acad%20Med%20Singapore&amp;title=Mutation%20screening%20in%20KCNQ1,%20HERG,%20KCNE1,%20KCNE2%20and%20SCN5A%20genes%20in%20a%20long%20QT%20syndrome%20family&amp;author=S.H.%20Koo&amp;author=W.S.%20Teo&amp;author=C.K.%20Ching&amp;author=S.H.%20Chan&amp;author=E.J.%20Lee&amp;volume=36&amp;publication_year=2007&amp;pages=394-398&amp;pmid=17597962&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib21">
+<span class="label">21.</span><cite>Campbell C.M., Campbell J.D., Thompson C.H., Galimberti E.S., Darbar D., Vanoye C.G., George A.L., Jr Selective targeting of gain-of-function KCNQ1 mutations predisposing to atrial fibrillation. Circ Arrhythm Electrophysiol. 2013;6:960–966. doi: 10.1161/CIRCEP.113.000439.</cite> [<a href="https://doi.org/10.1161/CIRCEP.113.000439" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3892565/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/24006450/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circ%20Arrhythm%20Electrophysiol&amp;title=Selective%20targeting%20of%20gain-of-function%20KCNQ1%20mutations%20predisposing%20to%20atrial%20fibrillation&amp;author=C.M.%20Campbell&amp;author=J.D.%20Campbell&amp;author=C.H.%20Thompson&amp;author=E.S.%20Galimberti&amp;author=D.%20Darbar&amp;volume=6&amp;publication_year=2013&amp;pages=960-966&amp;pmid=24006450&amp;doi=10.1161/CIRCEP.113.000439&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib22">
+<span class="label">22.</span><cite>Steffensen A.B., Refsgaard L., Andersen M.N., Vallet C., Mujezinovic A., Haunsø S., Svendsen J.H., Olesen S.P., Olesen M.S., Schmitt N.I. Gain- and loss-of-function in early-onset lone atrial fibrillation. J Cardiovasc Electrophysiol. 2015 Jul;7:715–723. doi: 10.1111/jce.12666.  <a href="http://dx.doi.org/10.1111/jce.12666" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">http://dx.doi.org/10.1111/jce.12666</a>.</cite> [<a href="https://doi.org/10.1111/jce.12666" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/25786344/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Cardiovasc%20Electrophysiol&amp;title=Gain-%20and%20loss-of-function%20in%20early-onset%20lone%20atrial%20fibrillation&amp;author=A.B.%20Steffensen&amp;author=L.%20Refsgaard&amp;author=M.N.%20Andersen&amp;author=C.%20Vallet&amp;author=A.%20Mujezinovic&amp;volume=7&amp;publication_year=2015%20Jul&amp;pages=715-723&amp;pmid=25786344&amp;doi=10.1111/jce.12666&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib23">
+<span class="label">23.</span><cite>Olesen M.S., Bentzen B.H., Nielsen J.B., Steffensen A.B., David J.P., Jabbari J., Jensen H.K., Haunsø S., Svendsen J.H., Schmitt N. Mutations in the potassium channel subunit KCNE1 are associated with early-onset familial atrial fibrillation. BMC Med Genet. 2012;13:24. doi: 10.1186/1471-2350-13-24.</cite> [<a href="https://doi.org/10.1186/1471-2350-13-24" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3359244/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/22471742/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=BMC%20Med%20Genet&amp;title=Mutations%20in%20the%20potassium%20channel%20subunit%20KCNE1%20are%20associated%20with%20early-onset%20familial%20atrial%20fibrillation&amp;author=M.S.%20Olesen&amp;author=B.H.%20Bentzen&amp;author=J.B.%20Nielsen&amp;author=A.B.%20Steffensen&amp;author=J.P.%20David&amp;volume=13&amp;publication_year=2012&amp;pages=24&amp;pmid=22471742&amp;doi=10.1186/1471-2350-13-24&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib24">
+<span class="label">24.</span><cite>Lundby A., Ravn L.S., Svendsen J.H., Olesen S.P., Schmitt N. KCNQ1 mutation Q147R is associated with atrial fibrillation and prolonged QT interval. Heart Rhythm. 2007;4:1532–1541. doi: 10.1016/j.hrthm.2007.07.022.</cite> [<a href="https://doi.org/10.1016/j.hrthm.2007.07.022" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/17997361/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Heart%20Rhythm&amp;title=KCNQ1%20mutation%20Q147R%20is%20associated%20with%20atrial%20fibrillation%20and%20prolonged%20QT%20interval&amp;author=A.%20Lundby&amp;author=L.S.%20Ravn&amp;author=J.H.%20Svendsen&amp;author=S.P.%20Olesen&amp;author=N.%20Schmitt&amp;volume=4&amp;publication_year=2007&amp;pages=1532-1541&amp;pmid=17997361&amp;doi=10.1016/j.hrthm.2007.07.022&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib25">
+<span class="label">25.</span><cite>Eckey K., Wrobel E., Strutz-Seebohm N., Pott L., Schmitt N., Seebohm G. Novel Kv7.1-phosphatidylinositol 4,5-bisphosphate interaction sites uncovered by charge neutralization scanning. J Biol Chem. 2014;289:22749–22758. doi: 10.1074/jbc.M114.589796.</cite> [<a href="https://doi.org/10.1074/jbc.M114.589796" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4132781/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/24947509/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Biol%20Chem&amp;title=Novel%20Kv7.1-phosphatidylinositol%204,5-bisphosphate%20interaction%20sites%20uncovered%20by%20charge%20neutralization%20scanning&amp;author=K.%20Eckey&amp;author=E.%20Wrobel&amp;author=N.%20Strutz-Seebohm&amp;author=L.%20Pott&amp;author=N.%20Schmitt&amp;volume=289&amp;publication_year=2014&amp;pages=22749-22758&amp;pmid=24947509&amp;doi=10.1074/jbc.M114.589796&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib26">
+<span class="label">26.</span><cite>Kang C., Tian C., Sönnichsen F.D., Smith J.A., Meiler J., George A.L., Jr, Vanoye C.G., Kim H.J., Sanders C.R. Structure of KCNE1 and implications for how it modulates the KCNQ1 potassium channel. Biochemistry. 2008;47:7999–8006. doi: 10.1021/bi800875q.</cite> [<a href="https://doi.org/10.1021/bi800875q" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC2580054/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/18611041/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Biochemistry&amp;title=Structure%20of%20KCNE1%20and%20implications%20for%20how%20it%20modulates%20the%20KCNQ1%20potassium%20channel&amp;author=C.%20Kang&amp;author=C.%20Tian&amp;author=F.D.%20S%C3%B6nnichsen&amp;author=J.A.%20Smith&amp;author=J.%20Meiler&amp;volume=47&amp;publication_year=2008&amp;pages=7999-8006&amp;pmid=18611041&amp;doi=10.1021/bi800875q&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib27">
+<span class="label">27.</span><cite>Tian C., Vanoye C.G., Kang C., Welch R.C., Kim H.J., George A.L., Jr, Sanders C.R. Preparation, functional characterization, and NMR studies of human KCNE1, a voltage-gated potassium channel accessory subunit associated with deafness and long QT syndrome. Biochemistry. 2007;46:11459–11472. doi: 10.1021/bi700705j.</cite> [<a href="https://doi.org/10.1021/bi700705j" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC2565491/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/17892302/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Biochemistry&amp;title=Preparation,%20functional%20characterization,%20and%20NMR%20studies%20of%20human%20KCNE1,%20a%20voltage-gated%20potassium%20channel%20accessory%20subunit%20associated%20with%20deafness%20and%20long%20QT%20syndrome&amp;author=C.%20Tian&amp;author=C.G.%20Vanoye&amp;author=C.%20Kang&amp;author=R.C.%20Welch&amp;author=H.J.%20Kim&amp;volume=46&amp;publication_year=2007&amp;pages=11459-11472&amp;pmid=17892302&amp;doi=10.1021/bi700705j&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib28">
+<span class="label">28.</span><cite>Xu Y., Wang Y., Meng X.Y., Zhang M., Jiang M., Cui M., Tseng G.N. Building KCNQ1/KCNE1 channel models and probing their interactions by molecular-dynamics simulations. Biophys J. 2013;105:2461–2473. doi: 10.1016/j.bpj.2013.09.058.</cite> [<a href="https://doi.org/10.1016/j.bpj.2013.09.058" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3854563/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/24314077/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Biophys%20J&amp;title=Building%20KCNQ1/KCNE1%20channel%20models%20and%20probing%20their%20interactions%20by%20molecular-dynamics%20simulations&amp;author=Y.%20Xu&amp;author=Y.%20Wang&amp;author=X.Y.%20Meng&amp;author=M.%20Zhang&amp;author=M.%20Jiang&amp;volume=105&amp;publication_year=2013&amp;pages=2461-2473&amp;pmid=24314077&amp;doi=10.1016/j.bpj.2013.09.058&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib29">
+<span class="label">29.</span><cite>Wemhöner K., Friedrich C., Stallmeyer B., Coffey A.J., Grace A., Zumhagen S., Seebohm G., Ortiz-Bonnin B., Rinné S., Sachse F.B., Schulze-Bahr E., Decher N. Gain-of-function mutations in the calcium channel CACNA1C (Cav1.2) cause non-syndromic long-QT but not Timothy syndrome. J Mol Cell Cardiol. 2015;80:186–195. doi: 10.1016/j.yjmcc.2015.01.002.</cite> [<a href="https://doi.org/10.1016/j.yjmcc.2015.01.002" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/25633834/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Mol%20Cell%20Cardiol&amp;title=Gain-of-function%20mutations%20in%20the%20calcium%20channel%20CACNA1C%20(Cav1.2)%20cause%20non-syndromic%20long-QT%20but%20not%20Timothy%20syndrome&amp;author=K.%20Wemh%C3%B6ner&amp;author=C.%20Friedrich&amp;author=B.%20Stallmeyer&amp;author=A.J.%20Coffey&amp;author=A.%20Grace&amp;volume=80&amp;publication_year=2015&amp;pages=186-195&amp;pmid=25633834&amp;doi=10.1016/j.yjmcc.2015.01.002&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib30">
+<span class="label">30.</span><cite>Bazett H.C. An analysis of the time-relations of electrocardiograms. Heart. 1920;7:353–370.</cite> [<a href="https://scholar.google.com/scholar_lookup?journal=Heart&amp;title=An%20analysis%20of%20the%20time-relations%20of%20electrocardiograms&amp;author=H.C.%20Bazett&amp;volume=7&amp;publication_year=1920&amp;pages=353-370&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib31">
+<span class="label">31.</span><cite>Fridericia L.S. Die Systolendauer im Elektrokardiogramm bei normalen Menschen und bei Herzkranken. Acta Med Scand. 1920;53:469–486.</cite> [<a href="https://scholar.google.com/scholar_lookup?journal=Acta%20Med%20Scand&amp;title=Die%20Systolendauer%20im%20Elektrokardiogramm%20bei%20normalen%20Menschen%20und%20bei%20Herzkranken&amp;author=L.S.%20Fridericia&amp;volume=53&amp;publication_year=1920&amp;pages=469-486&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib32">
+<span class="label">32.</span><cite>Jespersen T., Grunnet M., Angelo K., Klaerke D.A., Olesen S.P. Dual-function vector for protein expression in both mammalian cells and Xenopus laevis oocytes. Biotechniques. 2002;32:536–538. doi: 10.2144/02323st05. 540.</cite> [<a href="https://doi.org/10.2144/02323st05" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/11911656/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Biotechniques&amp;title=Dual-function%20vector%20for%20protein%20expression%20in%20both%20mammalian%20cells%20and%20Xenopus%20laevis%20oocytes&amp;author=T.%20Jespersen&amp;author=M.%20Grunnet&amp;author=K.%20Angelo&amp;author=D.A.%20Klaerke&amp;author=S.P.%20Olesen&amp;volume=32&amp;publication_year=2002&amp;pages=536-538&amp;pmid=11911656&amp;doi=10.2144/02323st05&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib33">
+<span class="label">33.</span><cite>Strutz-Seebohm N., Pusch M., Wolf S., Stoll R., Tapken D., Gerwert K., Attali B., Seebohm G. Structural basis of slow activation gating in the cardiac I Ks channel complex. Cell Physiol Biochem. 2011;27:443–452. doi: 10.1159/000329965.</cite> [<a href="https://doi.org/10.1159/000329965" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/21691061/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Cell%20Physiol%20Biochem&amp;title=Structural%20basis%20of%20slow%20activation%20gating%20in%20the%20cardiac%20I%20Ks%20channel%20complex&amp;author=N.%20Strutz-Seebohm&amp;author=M.%20Pusch&amp;author=S.%20Wolf&amp;author=R.%20Stoll&amp;author=D.%20Tapken&amp;volume=27&amp;publication_year=2011&amp;pages=443-452&amp;pmid=21691061&amp;doi=10.1159/000329965&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib34">
+<span class="label">34.</span><cite>Priori S.G., Wilde A.A., Horie M. Executive summary: HRS/EHRA/APHRS expert consensus statement on the diagnosis and management of patients with inherited primary arrhythmia syndromes. Europace. 2013;15:1389–1406. doi: 10.1093/europace/eut272.</cite> [<a href="https://doi.org/10.1093/europace/eut272" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/23994779/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Europace&amp;title=Executive%20summary:%20HRS/EHRA/APHRS%20expert%20consensus%20statement%20on%20the%20diagnosis%20and%20management%20of%20patients%20with%20inherited%20primary%20arrhythmia%20syndromes&amp;author=S.G.%20Priori&amp;author=A.A.%20Wilde&amp;author=M.%20Horie&amp;volume=15&amp;publication_year=2013&amp;pages=1389-1406&amp;pmid=23994779&amp;doi=10.1093/europace/eut272&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib35">
+<span class="label">35.</span><cite>Seebohm G., Sanguinetti M.C., Pusch M. Tight coupling of rubidium conductance and inactivation in human KCNQ1 potassium channels. J Physiol. 2003;552:369–378. doi: 10.1113/jphysiol.2003.046490.</cite> [<a href="https://doi.org/10.1113/jphysiol.2003.046490" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC2343369/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/14561821/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Physiol&amp;title=Tight%20coupling%20of%20rubidium%20conductance%20and%20inactivation%20in%20human%20KCNQ1%20potassium%20channels&amp;author=G.%20Seebohm&amp;author=M.C.%20Sanguinetti&amp;author=M.%20Pusch&amp;volume=552&amp;publication_year=2003&amp;pages=369-378&amp;pmid=14561821&amp;doi=10.1113/jphysiol.2003.046490&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib36">
+<span class="label">36.</span><cite>Priori S.G., Napolitano C., Schwartz P.J., Grillo M., Bloise R., Ronchetti E., Moncalvo C., Tulipani C., Veia A., Bottelli G., Nastoli J. Genetic testing in the long QT syndrome: development and validation of an efficient approach to genotyping in clinical practice. JAMA. 2005;294:2975–2980. doi: 10.1001/jama.294.23.2975.</cite> [<a href="https://doi.org/10.1001/jama.294.23.2975" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/16414944/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=JAMA&amp;title=Genetic%20testing%20in%20the%20long%20QT%20syndrome:%20development%20and%20validation%20of%20an%20efficient%20approach%20to%20genotyping%20in%20clinical%20practice&amp;author=S.G.%20Priori&amp;author=C.%20Napolitano&amp;author=P.J.%20Schwartz&amp;author=M.%20Grillo&amp;author=R.%20Bloise&amp;volume=294&amp;publication_year=2005&amp;pages=2975-2980&amp;pmid=16414944&amp;doi=10.1001/jama.294.23.2975&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib37">
+<span class="label">37.</span><cite>Zhang H., Kharche S., Holden A.V., Hancox J.C. Repolarisation and vulnerability to re-entry in the human heart with short QT syndrome arising from KCNQ1 mutation--a simulation study. Prog Biophys Mol Biol. 2008;96:112–131. doi: 10.1016/j.pbiomolbio.2007.07.020.</cite> [<a href="https://doi.org/10.1016/j.pbiomolbio.2007.07.020" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/17905416/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Prog%20Biophys%20Mol%20Biol&amp;title=Repolarisation%20and%20vulnerability%20to%20re-entry%20in%20the%20human%20heart%20with%20short%20QT%20syndrome%20arising%20from%20KCNQ1%20mutation--a%20simulation%20study&amp;author=H.%20Zhang&amp;author=S.%20Kharche&amp;author=A.V.%20Holden&amp;author=J.C.%20Hancox&amp;volume=96&amp;publication_year=2008&amp;pages=112-131&amp;pmid=17905416&amp;doi=10.1016/j.pbiomolbio.2007.07.020&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib38">
+<span class="label">38.</span><cite>Pusch M., Bertorello L., Conti F. Gating and flickery block differentially affected by rubidium in homomeric KCNQ1 and heteromeric KCNQ1/KCNE1 potassium channels. Biophys J. 2000;78:211–226. doi: 10.1016/S0006-3495(00)76586-6.</cite> [<a href="https://doi.org/10.1016/S0006-3495(00)76586-6" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC1300631/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/10620287/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Biophys%20J&amp;title=Gating%20and%20flickery%20block%20differentially%20affected%20by%20rubidium%20in%20homomeric%20KCNQ1%20and%20heteromeric%20KCNQ1/KCNE1%20potassium%20channels&amp;author=M.%20Pusch&amp;author=L.%20Bertorello&amp;author=F.%20Conti&amp;volume=78&amp;publication_year=2000&amp;pages=211-226&amp;pmid=10620287&amp;doi=10.1016/S0006-3495(00)76586-6&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib39">
+<span class="label">39.</span><cite>Hille B. Ion Channels of Excitable Membranes. Sinauer; Sunderland, MA: 2001.</cite>
+</li>
+<li id="bib40">
+<span class="label">40.</span><cite>Choi G., Kopplin L.J., Tester D.J., Will M.L., Haglund C.M., Ackerman M.J. Spectrum and frequency of cardiac channel defects in swimming-triggered arrhythmia syndromes. Circulation. 2004;110:2119–2124. doi: 10.1161/01.CIR.0000144471.98080.CA.</cite> [<a href="https://doi.org/10.1161/01.CIR.0000144471.98080.CA" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/15466642/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circulation&amp;title=Spectrum%20and%20frequency%20of%20cardiac%20channel%20defects%20in%20swimming-triggered%20arrhythmia%20syndromes&amp;author=G.%20Choi&amp;author=L.J.%20Kopplin&amp;author=D.J.%20Tester&amp;author=M.L.%20Will&amp;author=C.M.%20Haglund&amp;volume=110&amp;publication_year=2004&amp;pages=2119-2124&amp;pmid=15466642&amp;doi=10.1161/01.CIR.0000144471.98080.CA&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib41">
+<span class="label">41.</span><cite>Zhang S., Yin K., Ren X., Wang P., Zhang S., Cheng L., Yang J., Liu J.Y., Liu M., Wang Q.K. Identification of a novel KCNQ1 mutation associated with both Jervell and Lange-Nielsen and Romano-Ward forms of long QT syndrome in a Chinese family. BMC Med Genet. 2008;9:24. doi: 10.1186/1471-2350-9-24.</cite> [<a href="https://doi.org/10.1186/1471-2350-9-24" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC2322962/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/18400097/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=BMC%20Med%20Genet&amp;title=Identification%20of%20a%20novel%20KCNQ1%20mutation%20associated%20with%20both%20Jervell%20and%20Lange-Nielsen%20and%20Romano-Ward%20forms%20of%20long%20QT%20syndrome%20in%20a%20Chinese%20family&amp;author=S.%20Zhang&amp;author=K.%20Yin&amp;author=X.%20Ren&amp;author=P.%20Wang&amp;author=S.%20Zhang&amp;volume=9&amp;publication_year=2008&amp;pages=24&amp;pmid=18400097&amp;doi=10.1186/1471-2350-9-24&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="bib42">
+<span class="label">42.</span><cite>Seebohm G., Westenskow P., Lang F., Sanguinetti M.C. Mutation of colocalized residues of the pore helix and transmembrane segments S5 and S6 disrupt deactivation and modify inactivation of KCNQ1 K+ channels. J Physiol. 2005;563:359–368. doi: 10.1113/jphysiol.2004.080887.</cite> [<a href="https://doi.org/10.1113/jphysiol.2004.080887" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC1665586/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/15649981/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Physiol&amp;title=Mutation%20of%20colocalized%20residues%20of%20the%20pore%20helix%20and%20transmembrane%20segments%20S5%20and%20S6%20disrupt%20deactivation%20and%20modify%20inactivation%20of%20KCNQ1%20K+%20channels&amp;author=G.%20Seebohm&amp;author=P.%20Westenskow&amp;author=F.%20Lang&amp;author=M.C.%20Sanguinetti&amp;volume=563&amp;publication_year=2005&amp;pages=359-368&amp;pmid=15649981&amp;doi=10.1113/jphysiol.2004.080887&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+</ul></section></section><section id="_ad93_" lang="en" class="associated-data"><h2 class="pmc_sec_title">Associated Data</h2>
+<p class="font-secondary"><em>This section collects any data citations, data availability statements, or supplementary materials included in this article.</em></p>
+<section id="_adsm93_" lang="en" class="supplementary-materials"><h3 class="pmc_sec_title">Supplementary Materials</h3>
+<section class="sm xbox font-sm" id="db_ds_supplementary-material1_reqid_"><div class="caption p"><p>Supplementary material</p></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/5420010/bin/mmc1.docx" data-ga-action="click_feat_suppl" class="usa-link">mmc1.docx</a><sup> (16KB, docx) </sup>
+</div></div></section><section class="sm xbox font-sm" id="db_ds_supplementary-material2_reqid_"><div class="caption p"><p>Supplementary material</p></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/5420010/bin/mmc2.pdf" data-ga-action="click_feat_suppl" class="usa-link">mmc2.pdf</a><sup> (435.1KB, pdf) </sup>
+</div></div></section><section class="sm xbox font-sm" id="db_ds_supplementary-material3_reqid_"><div class="caption p"><p>Supplementary material</p></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/5420010/bin/mmc3.pdf" data-ga-action="click_feat_suppl" class="usa-link">mmc3.pdf</a><sup> (417.4KB, pdf) </sup>
+</div></div></section><section class="sm xbox font-sm" id="db_ds_supplementary-material4_reqid_"><div class="caption p"><p>Supplementary material</p></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/5420010/bin/mmc4.pdf" data-ga-action="click_feat_suppl" class="usa-link">mmc4.pdf</a><sup> (363.2KB, pdf) </sup>
+</div></div></section></section></section></section><footer class="p courtesy-note font-secondary font-sm text-center"><hr class="headless">
+<p>Articles from HeartRhythm Case Reports are provided here courtesy of <strong>Elsevier</strong></p></footer></section></article>
+
+                      
+
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+<!-- Secondary navigation placeholder -->
+<div class="pmc-sidenav desktop:grid-col-4 display-flex">
+    <section class="pmc-sidenav__container" aria-label="Article resources and navigation">
+        <button type="button" class="usa-button pmc-sidenav__container__close usa-button--unstyled">
+            <img src="/static/img/usa-icons/close.svg" role="img" alt="Close" />
+        </button>
+    <div class="display-none desktop:display-block">
+       <section class="margin-top-4 desktop:margin-top-0">
+              <h2 class="margin-top-0">ACTIONS</h2>
+           <ul class="usa-list usa-list--unstyled usa-list--actions">
+               
+               <li>
+                     <a
+                             href="https://doi.org/10.1016/j.hrcr.2016.08.015"
+                             class="usa-button usa-button--outline width-24 font-xs display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                             target="_blank"
+                             rel="noreferrer noopener"
+                             data-ga-category="actions"
+                             data-ga-action="click"
+                             data-ga-label="publisher_link_desktop"
+                     >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#launch"></use>
+                         </svg>
+                         <span class="display-inline-flex flex-justify-center flex-1 padding-right-2">View on publisher site</span>
+                     </a>
+               </li>
+               
+               
+               <li>
+                    <a
+                            href="pdf/main.pdf"
+                            class="usa-button usa-button--outline width-24 display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="pdf_download_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1">PDF (1.4 MB)</span>
+                    </a>
+               </li>
+               
+                
+               <li>
+                   <button role="button" class="usa-button width-24 citation-dialog-trigger display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                        aria-label="Open dialog with citation text in different styles"
+                        data-ga-category="actions"
+                        data-ga-action="open"
+                        data-ga-label="cite_desktop"
+                        data-all-citations-url="/resources/citations/5420010/"
+                        data-citation-style="nlm"
+                        data-download-format-link="/resources/citations/5420010/export/"
+                    >
+                        <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                        </svg>
+                       <span class="display-inline-flex flex-justify-center flex-1 button-label">Cite</span>
+                    </button>
+               </li>
+                
+               <li>
+
+                        <button class="usa-button width-24 collections-dialog-trigger collections-button display-inline-flex flex-align-center flex-justify-start padding-left-1 collections-button-empty"
+                              aria-label="Save article in MyNCBI collections."
+                              data-ga-category="actions"
+                              data-ga-action="click"
+                              data-ga-label="collections_button_desktop"
+                              data-collections-open-dialog-enabled="false"
+                              data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC5420010%2F%23open-collections-dialog"
+                              data-in-collections="false">
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                            <span class="display-inline-flex flex-justify-center flex-1">Collections</span>
+                       </button>
+               </li>
+               <li class="pmc-permalink">
+                    <button
+                            type="button"
+                            class="usa-button width-24 display-inline-flex flex-align-center flex-justify padding-left-1 shadow-none"
+                            aria-label="Show article permalink"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="permalink_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#share"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1 button-label">Permalink</span>
+                    </button>
+                   
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC5420010/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+               </li>
+           </ul>
+       </section>
+     </div>
+
+        <section class="pmc-resources margin-top-6 desktop:margin-top-4" data-page-path="/articles/PMC5420010/">
+            <h2 class="margin-top-0">RESOURCES</h2>
+            
+                <div class="usa-accordion usa-accordion--multiselectable" data-allow-multiple>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-similar-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_similar_articles"
+                        data-ga-label="/articles/PMC5420010/"
+                        data-action-open="open_similar_articles"
+                        data-action-close="close_similar_articles"
+                        >
+                            Similar articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-similar-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/similar-article-links/28491751/"
+                            
+                    >
+                        
+                    </div>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-cited-by-other-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_cited_by"
+                        data-ga-label="/articles/PMC5420010/"
+                        data-action-open="open_cited_by"
+                        data-action-close="close_cited_by"
+                        >
+                             Cited by other articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-cited-by-other-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/cited-by-links/28491751/"
+                            
+                    >
+                          
+                    </div>
+                    
+                        <h3 class="usa-accordion__heading">
+                            <button
+                            type="button"
+                            class="usa-accordion__button"
+                            aria-expanded="false"
+                            aria-controls="resources-links-to-ncbi-databases"
+                            data-ga-category="resources_accordion"
+                            data-ga-action="open_NCBI_links"
+                            data-ga-label="/articles/PMC5420010/"
+                            data-action-open="open_NCBI_links"
+                            data-action-close="close_NCBI_link"
+                            >
+                                 Links to NCBI Databases
+                            </button>
+                        </h3>
+                        <div
+                                id="resources-links-to-ncbi-databases"
+                                class="usa-accordion__content usa-prose"
+                                data-source-url="/resources/db-links/5420010/"
+                        >
+                        </div>
+                    
+                    
+                </div>
+            
+        </section>
+
+
+        <section
+        class="usa-in-page-nav usa-in-page-nav--wide margin-top-6 desktop:margin-top-4"
+        data-title-text="On this page"
+        data-title-heading-level="h2"
+        data-scroll-offset="0"
+        data-root-margin="-10% 0px -80% 0px"
+        data-main-content-selector="main"
+        data-threshold="1"
+        hidden
+        ></section>
+    </section>
+</div>
+
+
+        
+
+<div class="overlay" role="dialog" aria-label="Citation Dialog" hidden>
+    <div class="dialog citation-dialog" aria-hidden="true">
+        <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+            <h2 class="usa-modal__heading margin-0">Cite</h2>
+             <button type="button" class="usa-button usa-button--unstyled close-overlay text-black width-auto"  tabindex="1">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+             </button>
+        </div>
+
+        
+
+<div class="citation-text-block">
+  <div class="citation-text margin-bottom-2"></div>
+  <ul class="usa-list usa-list--unstyled display-inline-flex flex-justify width-full flex-align-center">
+      <li>
+        <button
+          class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center copy-button dialog-focus"
+          data-ga-category="save_share"
+          data-ga-action="cite"
+          data-ga-label="copy"
+          tabindex="2">
+            <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+            </svg>
+            <span>Copy</span>
+        </button>
+      </li>
+      <li>
+          <a
+              href="#"
+              role="button"
+              class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center export-button"
+              data-ga-category="save_share"
+              data-ga-action="cite"
+              data-ga-label="download"
+              title="Download a file for external citation management software"
+              tabindex="3">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                </svg>
+                <span class="display-none mobile-lg:display-inline">Download .nbib</span>
+                <span class="display-inline mobile-lg:display-none">.nbib</span>
+            </a>
+      </li>
+      <li>
+          
+
+<div class="display-inline-flex flex-align-center">
+  <label class="usa-label margin-top-0">Format:</label>
+  <select aria-label="Format" class="usa-select citation-style-selector padding-1 margin-top-0 border-0 padding-right-4" tabindex="4" >
+    
+      <option data-style-url-name="ama"
+              value="AMA"
+              >
+        AMA
+      </option>
+    
+      <option data-style-url-name="apa"
+              value="APA"
+              >
+        APA
+      </option>
+    
+      <option data-style-url-name="mla"
+              value="MLA"
+              >
+        MLA
+      </option>
+    
+      <option data-style-url-name="nlm"
+              value="NLM"
+              selected="selected">
+        NLM
+      </option>
+    
+  </select>
+</div>
+      </li>
+  </ul>
+</div>
+    </div>
+</div>
+
+        <div class="overlay" role="dialog" hidden>
+  <div id="collections-action-dialog" class="dialog collections-dialog" aria-hidden="true">
+   <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+        <h2 class="usa-modal__heading margin-0">Add to Collections</h2>
+    </div>
+    <div class="collections-action-panel action-panel">
+      
+
+
+<form id="collections-action-dialog-form"
+      class="usa-form maxw-full collections-action-panel-form action-panel-content action-form action-panel-smaller-selectors"
+      data-existing-collections-url="/list-existing-collections/"
+      data-add-to-existing-collection-url="/add-to-existing-collection/"
+      data-create-and-add-to-new-collection-url="/create-and-add-to-new-collection/"
+      data-myncbi-max-collection-name-length="100"
+      data-collections-root-url="https://www.ncbi.nlm.nih.gov/myncbi/collections/">
+
+    <input type="hidden" name="csrfmiddlewaretoken" value="gKEClZCMpdzO7hcqB4arfkV5cGxMVFV7bVcrzfLouAvCy6vlq9lM92eyMcCduOyJ">
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-new"
+            class="usa-radio__input usa-radio__input--tile collections-new  margin-top-0"
+            name="collections"
+            value="new"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_new" />
+            <label class="usa-radio__label" for="collections-action-dialog-new">Create a new collection</label>
+        </div>
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-existing"
+            class="usa-radio__input usa-radio__input--tile collections-existing"
+            name="collections"
+            value="existing"
+            checked="true"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_existing" />
+            <label class="usa-radio__label" for="collections-action-dialog-existing">Add to an existing collection</label>
+        </div>
+    </fieldset>
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="action-panel-control-wrap new-collections-controls">
+           <label for="collections-action-dialog-add-to-new" class="usa-label margin-top-0">
+                Name your collection
+               <abbr title="required" class="usa-hint usa-hint--required text-no-underline">*</abbr>
+          </label>
+          <input
+            type="text"
+            name="add-to-new-collection"
+            id="collections-action-dialog-add-to-new"
+            class="usa-input collections-action-add-to-new"
+            pattern="[^&quot;&amp;=&lt;&gt;/]*" title="The following characters are not allowed in the Name field: &quot;&amp;=&lt;&gt;/"
+            maxlength=""
+            data-ga-category="collections_button"
+            data-ga-action="create_collection"
+            data-ga-label="non_favorties_collection"
+            required
+          />
+        </div>
+        <div class="action-panel-control-wrap existing-collections-controls">
+             <label for="collections-action-dialog-add-to-existing" class="usa-label margin-top-0">
+                Choose a collection
+              </label>
+              <select id="collections-action-dialog-add-to-existing"
+                      class="usa-select collections-action-add-to-existing"
+                      data-ga-category="collections_button"
+                      data-ga-action="select_collection"
+                      data-ga-label="($('.collections-action-add-to-existing').val() === 'Favorites') ? 'Favorites' : 'non_favorites_collection'">
+              </select>
+              <div class="collections-retry-load-on-error usa-input-error-message selection-validation-message">
+                Unable to load your collection due to an error<br>
+                <a href="#">Please try again</a>
+              </div>
+        </div>
+    </fieldset>
+
+    <div class="display-inline-flex">
+        <button class="usa-button margin-top-0 action-panel-submit"
+            type="submit"
+            data-loading-label="Adding..."
+            data-pinger-ignore
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="add">
+          Add
+        </button>
+        <button class="usa-button usa-button--outline margin-top-0 action-panel-cancel"
+                aria-label="Close 'Add to Collections' panel"
+                ref="linksrc=close_collections_panel"
+                data-ga-category="collections_button"
+                data-ga-action="click"
+                data-ga-label="cancel">
+          Cancel
+        </button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>
+
+        
+
+      </div>
+    </div>
+  </div>
+
+
+
+        
+    
+    
+
+<footer class="ncbi-footer ncbi-dark-background " >
+    
+        <div class="ncbi-footer__icon-section">
+            <div class="ncbi-footer__social-header">
+                Follow NCBI
+            </div>
+
+            <div class="grid-container ncbi-footer__ncbi-social-icons-container">
+                
+                    <a href="https://twitter.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="40"
+                             height="40"
+                             viewBox="0 0 40 40"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on X (formerly known as Twitter)</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.facebook.com/ncbi.nlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="16"
+                             height="29"
+                             focusable="false"
+                             aria-hidden="true"
+                             viewBox="0 0 16 29"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.8809 21.4002C3.8809 19.0932 3.8809 16.7876 3.8809 14.478C3.8809 14.2117 3.80103 14.1452 3.54278 14.1492C2.53372 14.1638 1.52334 14.1492 0.514288 14.1598C0.302626 14.1598 0.248047 14.0972 0.248047 13.8936C0.256034 12.4585 0.256034 11.0239 0.248047 9.58978C0.248047 9.37013 0.302626 9.30224 0.528931 9.3049C1.53798 9.31688 2.54837 9.3049 3.55742 9.31555C3.80103 9.31555 3.8809 9.26097 3.87957 9.00272C3.87158 8.00565 3.85428 7.00592 3.90753 6.00884C3.97142 4.83339 4.31487 3.73115 5.04437 2.78467C5.93095 1.63318 7.15699 1.09005 8.56141 0.967577C10.5582 0.79319 12.555 0.982221 14.5518 0.927641C14.7102 0.927641 14.7462 0.99287 14.7449 1.13664C14.7449 2.581 14.7449 4.02668 14.7449 5.47104C14.7449 5.67604 14.6517 5.68669 14.4946 5.68669C13.4523 5.68669 12.4113 5.68669 11.3703 5.68669C10.3506 5.68669 9.92057 6.10868 9.90593 7.13904C9.89661 7.7647 9.91525 8.39303 9.89794 9.01869C9.88995 9.26364 9.96583 9.31822 10.2015 9.31688C11.7204 9.30623 13.2393 9.31688 14.7595 9.3049C15.0257 9.3049 15.0723 9.3728 15.0444 9.62439C14.89 10.9849 14.7515 12.3467 14.6144 13.7085C14.5691 14.1571 14.5785 14.1585 14.1458 14.1585C12.8386 14.1585 11.5313 14.1665 10.2254 14.1518C9.95119 14.1518 9.89794 14.2317 9.89794 14.4899C9.90593 19.0799 9.89794 23.6752 9.91125 28.2612C9.91125 28.5674 9.8407 28.646 9.53186 28.6433C7.77866 28.6273 6.02414 28.6366 4.27094 28.634C3.82499 28.634 3.87158 28.6992 3.87158 28.22C3.87602 25.9472 3.87913 23.6739 3.8809 21.4002Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on Facebook</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.linkedin.com/company/ncbinlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="25"
+                             height="23"
+                             viewBox="0 0 26 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M14.6983 9.98423C15.6302 9.24808 16.5926 8.74754 17.6762 8.51991C19.673 8.09126 21.554 8.30824 23.1262 9.7526C24.2351 10.7723 24.7529 12.1115 25.0165 13.5612C25.1486 14.3363 25.2105 15.1218 25.2015 15.9081C25.2015 18.3043 25.2015 20.6898 25.2082 23.0806C25.2082 23.3468 25.1549 23.444 24.8621 23.4414C23.1297 23.4272 21.3992 23.4272 19.6704 23.4414C19.4041 23.4414 19.3429 23.3588 19.3442 23.1019C19.3535 20.5194 19.3442 17.9368 19.3442 15.3543C19.3442 14.0005 18.3258 12.9448 17.0266 12.9488C15.7273 12.9528 14.6983 14.0071 14.6983 15.361C14.6983 17.9328 14.6917 20.5047 14.6983 23.0753C14.6983 23.3708 14.6198 23.444 14.3296 23.4427C12.6185 23.4294 10.9079 23.4294 9.19779 23.4427C8.93155 23.4427 8.86099 23.3735 8.86232 23.1086C8.8783 19.7619 8.88628 16.4144 8.88628 13.066C8.88628 11.5688 8.87874 10.0708 8.86365 8.57182C8.86365 8.3575 8.90758 8.27896 9.14054 8.28029C10.9048 8.29094 12.6687 8.29094 14.4321 8.28029C14.6464 8.28029 14.6983 8.34818 14.6983 8.54653C14.6903 9.00047 14.6983 9.45441 14.6983 9.98423Z">
+                            </path>
+                            <path d="M6.55316 15.8443C6.55316 18.2564 6.55316 20.6699 6.55316 23.082C6.55316 23.3629 6.48127 23.4388 6.19906 23.4374C4.47737 23.4241 2.75568 23.4241 1.03399 23.4374C0.767751 23.4374 0.69986 23.3629 0.701191 23.1006C0.709178 18.2648 0.709178 13.4281 0.701191 8.59053C0.701191 8.34026 0.765089 8.27237 1.01669 8.2737C2.74991 8.28435 4.48048 8.28435 6.20838 8.2737C6.47462 8.2737 6.5465 8.33627 6.54517 8.6065C6.54783 11.0186 6.55316 13.4308 6.55316 15.8443Z">
+                            </path>
+                            <path d="M3.65878 0.243898C5.36804 0.243898 6.58743 1.45529 6.58743 3.1406C6.58743 4.75801 5.32145 5.95742 3.60819 5.96807C3.22177 5.97614 2.83768 5.90639 2.47877 5.76299C2.11985 5.61959 1.79344 5.40546 1.51897 5.13334C1.24449 4.86123 1.02755 4.53668 0.881058 4.17902C0.734563 3.82136 0.661505 3.43788 0.666231 3.05141C0.67555 1.42601 1.9362 0.242566 3.65878 0.243898Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on LinkedIn</span>
+                    </a>
+                
+
+                
+                    <a href="https://github.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="28"
+                             height="27"
+                             viewBox="0 0 28 28"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M16.7228 20.6334C17.5057 20.5527 18.2786 20.3944 19.0301 20.1608C21.3108 19.4193 22.5822 17.8259 22.963 15.4909C23.1228 14.5112 23.1814 13.5287 22.9883 12.5437C22.8106 11.6423 22.4013 10.8028 21.8007 10.1076C21.7526 10.0605 21.7197 10 21.7064 9.934C21.6931 9.86799 21.7 9.79952 21.7262 9.73748C22.0856 8.6206 21.9711 7.51969 21.601 6.42677C21.582 6.3497 21.5345 6.2827 21.468 6.23923C21.4016 6.19577 21.3211 6.17906 21.2429 6.19248C20.7329 6.21649 20.2313 6.33051 19.7611 6.52928C19.1103 6.7908 18.4899 7.12198 17.9104 7.51703C17.84 7.56996 17.7581 7.60551 17.6713 7.62078C17.5846 7.63605 17.4954 7.6306 17.4112 7.60489C15.2596 7.05882 13.0054 7.06203 10.8554 7.61421C10.7806 7.63586 10.7018 7.63967 10.6253 7.62534C10.5487 7.611 10.4766 7.57892 10.4148 7.53167C9.64788 7.03247 8.85171 6.58918 7.96368 6.33359C7.65781 6.24338 7.34123 6.19458 7.02239 6.18849C6.94879 6.17986 6.87462 6.19893 6.81432 6.242C6.75402 6.28507 6.71191 6.34904 6.69621 6.42145C6.32342 7.51437 6.2209 8.61527 6.56307 9.73348C6.59635 9.84264 6.64694 9.93316 6.54177 10.0516C5.47666 11.2604 5.09988 12.6834 5.19574 14.2676C5.2663 15.4244 5.46201 16.5466 6.01454 17.5769C6.84399 19.1171 8.21664 19.9119 9.85158 20.3352C10.3938 20.4706 10.9444 20.5698 11.4998 20.632C11.5384 20.7492 11.4506 20.7798 11.408 20.8291C11.1734 21.1179 10.9894 21.4441 10.8634 21.7942C10.7622 22.0458 10.8315 22.4039 10.6065 22.5516C10.263 22.7766 9.83827 22.8485 9.42421 22.8871C8.17936 23.0056 7.26471 22.4877 6.6283 21.4348C6.25552 20.8184 5.76956 20.3325 5.08523 20.0663C4.76981 19.9325 4.42139 19.8967 4.08537 19.9638C3.7898 20.029 3.73788 20.1901 3.93891 20.4111C4.03639 20.5234 4.14989 20.6207 4.27575 20.6999C4.9796 21.1318 5.51717 21.7884 5.80152 22.5636C6.37002 23.9973 7.48039 24.5697 8.93825 24.6323C9.43741 24.6575 9.93768 24.615 10.4254 24.5058C10.5892 24.4672 10.6531 24.4872 10.6517 24.6762C10.6451 25.4936 10.6637 26.3123 10.6517 27.131C10.6517 27.6635 10.1684 27.9297 9.58663 27.7393C8.17396 27.2671 6.84977 26.5631 5.66838 25.656C2.59555 23.2891 0.720966 20.1861 0.217704 16.3376C-0.357453 11.9127 0.911353 8.00824 3.98551 4.73881C6.11909 2.42656 8.99932 0.939975 12.1203 0.540191C16.5351 -0.0601815 20.4347 1.14323 23.7232 4.16373C26.2449 6.47869 27.724 9.37672 28.1048 12.7726C28.5828 17.0325 27.3686 20.7945 24.4768 23.9827C22.9762 25.6323 21.0956 26.8908 18.9982 27.6488C18.8783 27.6927 18.7585 27.738 18.636 27.7726C18.0356 27.9404 17.6189 27.6395 17.6189 27.0098C17.6189 25.7452 17.6308 24.4806 17.6295 23.2159C17.6329 22.9506 17.6128 22.6856 17.5696 22.4238C17.4325 21.6664 17.3419 21.484 16.7228 20.6334Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on GitHub</span>
+                    </a>
+                
+
+                
+                    <a href="https://ncbiinsights.ncbi.nlm.nih.gov/"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="26"
+                             height="26"
+                             viewBox="0 0 27 27"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M23.7778 26.4574C23.1354 26.3913 22.0856 26.8024 21.636 26.3087C21.212 25.8444 21.4359 24.8111 21.324 24.0347C19.9933 14.8323 14.8727 8.80132 6.09057 5.85008C4.37689 5.28406 2.58381 4.99533 0.779072 4.99481C0.202773 4.99481 -0.0229751 4.83146 0.00455514 4.21479C0.0660406 3.08627 0.0660406 1.95525 0.00455514 0.826734C-0.0413285 0.0815827 0.259669 -0.0193618 0.896534 0.00266238C6.96236 0.222904 12.3693 2.24179 16.9889 6.16209C22.9794 11.2478 26.1271 17.7688 26.4372 25.648C26.4629 26.294 26.3179 26.5271 25.6609 26.4684C25.0827 26.417 24.4991 26.4574 23.7778 26.4574Z">
+                            </path>
+                            <path d="M14.8265 26.441C14.0924 26.441 13.2371 26.6795 12.6626 26.3786C12.0092 26.0372 12.3781 25.0644 12.246 24.378C11.1154 18.5324 6.6849 14.5497 0.74755 14.1001C0.217135 14.0615 -0.0104482 13.9422 0.0134113 13.3659C0.0519536 12.1454 0.0482829 10.9213 0.0134113 9.69524C-0.00127145 9.14464 0.196946 9.03268 0.703502 9.04736C9.21217 9.27128 16.5994 16.2511 17.2804 24.7231C17.418 26.4446 17.418 26.4446 15.6579 26.4446H14.832L14.8265 26.441Z">
+                            </path>
+                            <path d="M3.58928 26.4555C2.64447 26.4618 1.73584 26.0925 1.06329 25.4289C0.39073 24.7653 0.00933763 23.8617 0.0030097 22.9169C-0.00331824 21.9721 0.365937 21.0635 1.02954 20.3909C1.69315 19.7184 2.59675 19.337 3.54156 19.3306C4.48637 19.3243 5.39499 19.6936 6.06755 20.3572C6.7401 21.0208 7.1215 21.9244 7.12782 22.8692C7.13415 23.814 6.7649 24.7226 6.10129 25.3952C5.43768 26.0677 4.53409 26.4491 3.58928 26.4555Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI RSS feed</span>
+                    </a>
+                
+            </div>
+        </div>
+    
+
+    <div data-testid="gridContainer"
+         class="grid-container ncbi-footer__container">
+        <div class="grid-row ncbi-footer__main-content-container"
+             data-testid="grid">
+            
+                <div class="ncbi-footer__column">
+                    
+                        <p class="ncbi-footer__circled-icons-heading">
+                            Connect with NLM
+                        </p>
+                    
+
+                    <div class="ncbi-footer__circled-icons-list">
+                        
+                            <a href=https://twitter.com/nlm_nih class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="32"
+                                     height="32"
+                                     viewBox="0 0 40 40"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on X (formerly known as Twitter)</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.facebook.com/nationallibraryofmedicine class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="13"
+                                     height="24"
+                                     viewBox="0 0 13 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M4.11371 23.1369C4.11371 23.082 4.11371 23.0294 4.11371 22.9745V12.9411H0.817305C0.6709 12.9411 0.670898 12.9411 0.670898 12.8016C0.670898 11.564 0.670898 10.3287 0.670898 9.09341C0.670898 8.97903 0.705213 8.95158 0.815017 8.95158C1.8673 8.95158 2.91959 8.95158 3.97417 8.95158H4.12057V8.83263C4.12057 7.8055 4.12057 6.7738 4.12057 5.74897C4.1264 4.92595 4.31387 4.11437 4.66959 3.37217C5.12916 2.38246 5.94651 1.60353 6.95717 1.1921C7.64827 0.905008 8.3913 0.764035 9.13953 0.778051C10.0019 0.791777 10.8644 0.830666 11.7268 0.860404C11.8869 0.860404 12.047 0.894717 12.2072 0.90158C12.2964 0.90158 12.3261 0.940469 12.3261 1.02968C12.3261 1.5421 12.3261 2.05452 12.3261 2.56465C12.3261 3.16857 12.3261 3.7725 12.3261 4.37642C12.3261 4.48165 12.2964 4.51367 12.1912 4.51138C11.5369 4.51138 10.8804 4.51138 10.2261 4.51138C9.92772 4.51814 9.63058 4.5526 9.33855 4.61433C9.08125 4.6617 8.84537 4.78881 8.66431 4.97766C8.48326 5.16652 8.3662 5.40755 8.32972 5.66661C8.28476 5.89271 8.26027 6.1224 8.25652 6.35289C8.25652 7.19014 8.25652 8.02969 8.25652 8.86923C8.25652 8.89439 8.25652 8.91955 8.25652 8.95615H12.0219C12.1797 8.95615 12.182 8.95616 12.1614 9.10714C12.0768 9.76596 11.9876 10.4248 11.9029 11.0813C11.8312 11.6319 11.7626 12.1824 11.697 12.733C11.6719 12.9434 11.6787 12.9434 11.4683 12.9434H8.26338V22.899C8.26338 22.979 8.26338 23.0591 8.26338 23.1392L4.11371 23.1369Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on Facebook</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.youtube.com/user/NLMNIH class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="21"
+                                     height="15"
+                                     viewBox="0 0 21 15"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M19.2561 1.47914C18.9016 1.15888 18.5699 0.957569 17.2271 0.834039C15.5503 0.678484 13.2787 0.655608 11.563 0.65332H9.43556C7.71987 0.65332 5.4483 0.678484 3.77151 0.834039C2.43098 0.957569 2.097 1.15888 1.74242 1.47914C0.813665 2.32097 0.619221 4.62685 0.598633 6.89384C0.598633 7.31781 0.598633 7.74101 0.598633 8.16345C0.626084 10.4121 0.827391 12.686 1.74242 13.521C2.097 13.8412 2.4287 14.0425 3.77151 14.1661C5.4483 14.3216 7.71987 14.3445 9.43556 14.3468H11.563C13.2787 14.3468 15.5503 14.3216 17.2271 14.1661C18.5676 14.0425 18.9016 13.8412 19.2561 13.521C20.1712 12.6929 20.3725 10.451 20.3999 8.22064C20.3999 7.74025 20.3999 7.25986 20.3999 6.77946C20.3725 4.54907 20.1689 2.30724 19.2561 1.47914ZM8.55942 10.5311V4.65201L13.5601 7.50005L8.55942 10.5311Z"
+                                          fill="white" />
+                                </svg>
+                                <span class="usa-sr-only">NLM on YouTube</span>
+                            </a>
+                        
+                    </div>
+                </div>
+            
+
+            
+                <address class="ncbi-footer__address ncbi-footer__column">
+                    
+        <p>
+            <a class="usa-link usa-link--external"
+            href="https://www.google.com/maps/place/8600+Rockville+Pike,+Bethesda,+MD+20894/%4038.9959508,
+            -77.101021,17z/data%3D!3m1!4b1!4m5!3m4!1s0x89b7c95e25765ddb%3A0x19156f88b27635b8!8m2!3d38.9959508!
+            4d-77.0988323"
+            rel="noopener noreferrer" target="_blank">National Library of Medicine
+            <br/> 8600 Rockville Pike<br/> Bethesda, MD 20894</a>
+        </p>
+    
+                </address>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/web_policies.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Web Policies
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/institutes-nih/nih-office-director/office-communications-public-liaison/freedom-information-act-office" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            FOIA
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/vulnerability-disclosure-policy/index.html" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS Vulnerability Disclosure
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://support.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Help
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/accessibility.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Accessibility
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/careers/careers.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Careers
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+        </div>
+
+        
+            <div class="grid-row grid-col-12" data-testid="grid">
+                <ul class="ncbi-footer__bottom-links-list">
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NLM
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NIH
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.usa.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            USA.gov
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+    </div>
+</footer>
+
+    
+
+
+        
+        
+    
+  <script  type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/pinger/pinger.js"> </script>
+
+
+    
+        
+
+<button class="back-to-top" data-ga-category="pagination" data-ga-action="back_to_top">
+    <label>Back to Top</label>
+    <svg class="usa-icon order-0" aria-hidden="true" focusable="false" role="img">
+        <use xlink:href="/static/img/sprite.svg#arrow_upward"></use>
+    </svg>
+</button>
+    
+
+
+        
+    
+    
+    
+        
+    <script type="application/javascript">
+    window.ncbi = window.ncbi || {};
+    window.ncbi.pmc = window.ncbi.pmc || {};
+    window.ncbi.pmc.options = {
+        logLevel: 'INFO',
+        
+        staticEndpoint: '/static/',
+        
+        citeCookieName: 'pmc-cf',
+    };
+</script>
+    <script type="module" crossorigin="" src="/static/assets/base-133c6271.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/jquery/jquery-3.6.0.min.js">&#xA0;</script>
+    <script type="text/javascript">
+        jQuery.getScript("https://cdn.ncbi.nlm.nih.gov/core/alerts/alerts.js", function () {
+            galert(['div.nav_and_browser', 'div.header', '#universal_header', '.usa-banner', 'body > *:nth-child(1)'])
+        });
+    </script>
+
+
+    <script type="text/javascript">var exports = {};</script>
+     <script src="/static/CACHE/js/output.13b077bc3ffd.js"></script>
+
+    <script type="module" crossorigin="" src="/static/assets/article-44d04358.js"></script>
+    
+    
+
+    </body>
+</html>

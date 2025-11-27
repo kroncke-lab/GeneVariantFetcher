@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "33718101",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant R155* including clinical significance, patient demographics, penetrance data, and functional data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.Arg155*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "64-year-old male",
+        "phenotype": "left renal well-differentiated squamous cell carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 64,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "left renal well-differentiated squamous cell carcinoma",
+          "evidence_sentence": "Next generation sequencing showed... breast cancer 2 (BRCA2) R155*, 28.94%;"
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a high tumor mutational burden and defects in DNA damage repair.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the only BRCA2 variant mentioned in the paper.",
+      "key_quotes": [
+        "Next generation sequencing showed... breast cancer 2 (BRCA2) R155*, 28.94%;"
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as only one BRCA2 variant was reported."
+  }
+}

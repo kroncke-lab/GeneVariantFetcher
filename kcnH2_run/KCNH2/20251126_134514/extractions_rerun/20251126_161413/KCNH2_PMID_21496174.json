@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "21496174",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a novel KCNH2 mutation associated with congenital long QT syndrome."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.G238C",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, age not specified",
+        "phenotype": "syncope and persistently prolonged QTc interval"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "syncope and persistently prolonged QTc interval",
+          "evidence_sentence": "We report the case of a woman with syncope and persistently prolonged QTc interval."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation displayed a 2\u2010fold reduction in protein expression and current density due to a maturation/trafficking\u2010deficient mechanism.",
+        "assays": [
+          "electrophysiological characterization",
+          "biochemical characterization"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Main Text, Abstract",
+      "additional_notes": "The study emphasizes the importance of genetic analyses in congenital LQTS.",
+      "key_quotes": [
+        "This study illustrates the importance of performing genetic analyses and mutation characterization when there is a suspicion of congenital LQTS."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

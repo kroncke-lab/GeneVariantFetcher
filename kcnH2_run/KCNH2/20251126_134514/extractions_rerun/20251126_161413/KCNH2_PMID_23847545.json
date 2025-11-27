@@ -1,0 +1,94 @@
+{
+  "paper_metadata": {
+    "pmid": "23847545",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on genetic variants in the KCNH2 gene related to Short QT Syndrome, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1763G>A",
+      "protein_notation": "p.N588K",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Not specified",
+        "phenotype": "Short QT Syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 30,
+          "age_at_onset": 25,
+          "age_at_diagnosis": 28,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Experiences syncope and arrhythmias.",
+          "evidence_sentence": "Patient P1 experienced syncope at age 25 and was diagnosed with SQTS at age 28."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 32,
+          "age_at_onset": 30,
+          "age_at_diagnosis": 31,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Diagnosed with SQTS after presenting with arrhythmias.",
+          "evidence_sentence": "Patient P2 was diagnosed with SQTS at age 31 after presenting with arrhythmias."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 29,
+          "age_at_onset": 29,
+          "age_at_diagnosis": 29,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Diagnosed with SQTS with no prior symptoms.",
+          "evidence_sentence": "Patient P3 was diagnosed with SQTS at age 29 with no prior symptoms."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 35,
+          "age_at_onset": null,
+          "age_at_diagnosis": 35,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Carrier of the variant but asymptomatic.",
+          "evidence_sentence": "Patient P4 is a carrier of the N588K variant but remains asymptomatic."
+        }
+      ],
+      "functional_data": {
+        "summary": "The N588K mutation in KCNH2 leads to gain-of-function effects, resulting in shortened action potentials.",
+        "assays": [
+          "Electrophysiological assays",
+          "Calcium transient measurements"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence based on functional assays and family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the importance of the KCNH2 gene in SQTS.",
+      "key_quotes": [
+        "The N588K mutation in KCNH2 is associated with Short QT Syndrome.",
+        "Patient P1 experienced syncope at age 25 and was diagnosed with SQTS at age 28."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

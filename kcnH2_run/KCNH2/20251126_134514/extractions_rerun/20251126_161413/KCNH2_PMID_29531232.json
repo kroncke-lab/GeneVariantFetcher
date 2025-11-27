@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "29531232",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2275A>G",
+      "protein_notation": "p.K759E",
+      "genomic_position": "chr7:150647379",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Bonobo, male, age 38",
+        "phenotype": "Arrhythmogenic right ventricular cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 38,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Arrhythmogenic right ventricular cardiomyopathy",
+          "evidence_sentence": "In 2012, the alpha male bonobo of the Milwaukee County Zoo died suddenly at 38 years of age."
+        }
+      ],
+      "functional_data": {
+        "summary": "Variant of uncertain clinical significance.",
+        "assays": []
+      },
+      "segregation_data": "Not assessed in family members.",
+      "population_frequency": "N/A",
+      "evidence_level": "Low",
+      "source_location": "Table 1, Row 7",
+      "additional_notes": "No functional studies reported.",
+      "key_quotes": [
+        "Twenty-four variants of uncertain clinical significance (VUSs) but no pathogenic variants were found in the proband studied."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2186G>A",
+      "protein_notation": "p.C729Y",
+      "genomic_position": "chr7:150647468",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Bonobo, male, age 38",
+        "phenotype": "Arrhythmogenic right ventricular cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 38,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Arrhythmogenic right ventricular cardiomyopathy",
+          "evidence_sentence": "In 2012, the alpha male bonobo of the Milwaukee County Zoo died suddenly at 38 years of age."
+        }
+      ],
+      "functional_data": {
+        "summary": "Variant of uncertain clinical significance.",
+        "assays": []
+      },
+      "segregation_data": "Not assessed in family members.",
+      "population_frequency": "N/A",
+      "evidence_level": "Low",
+      "source_location": "Table 1, Row 8",
+      "additional_notes": "No functional studies reported.",
+      "key_quotes": [
+        "Twenty-four variants of uncertain clinical significance (VUSs) but no pathogenic variants were found in the proband studied."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2023A>G",
+      "protein_notation": "p.T675A",
+      "genomic_position": "chr7:150648131",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "Bonobo, male, age 38",
+        "phenotype": "Arrhythmogenic right ventricular cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 38,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Arrhythmogenic right ventricular cardiomyopathy",
+          "evidence_sentence": "In 2012, the alpha male bonobo of the Milwaukee County Zoo died suddenly at 38 years of age."
+        }
+      ],
+      "functional_data": {
+        "summary": "Variant of uncertain clinical significance.",
+        "assays": []
+      },
+      "segregation_data": "Not assessed in family members.",
+      "population_frequency": "N/A",
+      "evidence_level": "Low",
+      "source_location": "Table 1, Row 9",
+      "additional_notes": "No functional studies reported.",
+      "key_quotes": [
+        "Twenty-four variants of uncertain clinical significance (VUSs) but no pathogenic variants were found in the proband studied."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Variants of uncertain clinical significance found in Lody (affected subject) but not in Kitty (unaffected control) by Sanger and next generation sequencing methodologies.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were from the KCNH2 gene as specified."
+  }
+}

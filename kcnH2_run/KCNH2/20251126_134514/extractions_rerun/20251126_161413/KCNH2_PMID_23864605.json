@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "23864605",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.G601S",
+      "protein_notation": "p.Gly601Ser",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "type 2 long QT syndrome (LQT2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "LQT2",
+          "evidence_sentence": "Experiments with E-4031 and the protein synthesis inhibitor cycloheximide suggested that pharmacological correction promotes the trafficking of G601S stored in this compartment."
+        }
+      ],
+      "functional_data": {
+        "summary": "Pharmacological correction promotes the trafficking of G601S stored in the transitional ER.",
+        "assays": [
+          "confocal analyses",
+          "functional expression assays"
+        ]
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant G601S is associated with impaired trafficking of Kv11.1 channels.",
+      "key_quotes": [
+        "Loss-of-function KCNH2 mutations cause the type 2 long QT syndrome (LQT2).",
+        "Pharmacological correction promotes the trafficking of LQT2 channels stored in this compartment."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

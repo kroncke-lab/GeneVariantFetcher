@@ -1,0 +1,215 @@
+{
+  "paper_metadata": {
+    "pmid": "32674397",
+    "title": "Hereditary ATTR Amyloidosis in Austria: Prevalence and Epidemiological Hot Spots",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.323A>G",
+      "protein_notation": "p.His108Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 6,
+        "demographics": "12 males and 10 females, predominantly native Austrians",
+        "phenotype": "predominantly cardiac phenotype with considerable PNP development"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 6,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "initially presented with predominant cardiac phenotype, developed considerable PNP",
+          "evidence_sentence": "All six patients carrying the p.His108Arg mutation initially presented with a predominant cardiac phenotype but developed considerable PNP with disease progression."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is associated with a high penetrance of cardiac and peripheral neuropathy symptoms.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is noted as a mutational hotspot in Austria.",
+      "key_quotes": [
+        "the most common TTR mutation (p.His108Arg) in and around Vienna",
+        "All six patients carrying the p.His108Arg mutation initially presented with a predominant cardiac phenotype but developed considerable PNP with disease progression."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.337G>C",
+      "protein_notation": "p.Val113Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "12 males and 10 females, predominantly native Austrians",
+        "phenotype": "predominantly cardiac phenotype at disease onset"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 3,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "initially presented with predominant cardiac phenotype",
+          "evidence_sentence": "All three cases with the recurrent p.Val113Leu mutation presented with a predominant cardiac phenotype at disease onset."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is associated with a high penetrance of cardiac symptoms.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is noted as a mutational hotspot in Austria.",
+      "key_quotes": [
+        "the recurrent p.Val113Leu mutation presented with a predominant cardiac phenotype at disease onset."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.120G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "12 males and 10 females, predominantly native Austrians",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is associated with hereditary ATTR amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the common mutations associated with hATTR.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.206C>T",
+      "protein_notation": "p.Arg41Gln",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "12 males and 10 females, predominantly native Austrians",
+        "phenotype": "cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "cardiomyopathy",
+          "evidence_sentence": "the presence of cardiomyopathy in our patient, as well as its ultrarare occurrence in databases and its location within the gene beside clearly pathogenetic variants favor a possible disease-causing role of this variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is of uncertain significance but associated with cardiomyopathy.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "weak",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Requires further confirmation.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.206C>T",
+      "protein_notation": "p.Thr69Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "12 males and 10 females, predominantly native Austrians",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is associated with hereditary ATTR amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the common mutations associated with hATTR.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical and electrophysiological findings of the 22 index patients",
+      "variants_extracted": 10
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted successfully."
+  }
+}

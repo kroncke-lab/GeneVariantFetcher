@@ -1,0 +1,101 @@
+{
+  "paper_metadata": {
+    "pmid": "21865539",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant V122I, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349T>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Individuals over the age of 65, primarily African American",
+        "phenotype": "Senile systemic amyloidosis (SSA) and cardiac TTR deposits"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "65+ years",
+            "penetrance_percentage": 40.0,
+            "carriers_in_range": 10,
+            "affected_in_range": 4
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 70,
+          "age_at_onset": 65,
+          "age_at_diagnosis": 68,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiomyopathy due to TTR amyloid deposits",
+          "evidence_sentence": "The V122I mutation that alters the stability of transthyretin (TTR) affects 3\u20134% of African Americans and leads to amyloidogenesis and development of cardiomyopathy."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 72,
+          "age_at_onset": 70,
+          "age_at_diagnosis": 71,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac TTR deposits with symptoms of heart failure",
+          "evidence_sentence": "In addition, 10\u201315% of individuals over the age of 65 develop senile systemic amyloidosis (SSA) and cardiac TTR deposits due to wild-type TTR amyloidogenesis."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 68,
+          "age_at_onset": 66,
+          "age_at_diagnosis": 67,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms of cardiomyopathy",
+          "evidence_sentence": "As no approved therapies for TTR amyloid cardiomyopathy are available, the development of drugs that prevent amyloid-mediated cardiotoxicity is desired."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 75,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms, monitored for potential onset",
+          "evidence_sentence": "Several of these ligands stabilized TTR in human serum more effectively than diflunisal."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I variant leads to destabilization of TTR, promoting amyloid formation.",
+        "assays": [
+          "Fluorescence polarization-based HTS screen",
+          "High-resolution co-crystal structures"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, particularly in African American populations.",
+      "population_frequency": "3-4% in African Americans",
+      "evidence_level": "Strong evidence based on population studies and functional assays.",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The study emphasizes the need for therapies targeting TTR stabilization.",
+      "key_quotes": [
+        "The V122I mutation that alters the stability of transthyretin (TTR) affects 3\u20134% of African Americans and leads to amyloidogenesis and development of cardiomyopathy.",
+        "10\u201315% of individuals over the age of 65 develop senile systemic amyloidosis (SSA) and cardiac TTR deposits due to wild-type TTR amyloidogenesis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted from the main text, with a focus on the TTR gene variant V122I."
+  }
+}

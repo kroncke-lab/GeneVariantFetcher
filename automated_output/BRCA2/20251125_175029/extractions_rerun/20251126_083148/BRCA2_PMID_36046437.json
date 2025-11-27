@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "36046437",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a case of a patient with Lynch syndrome and mentions an intronic variant in the BRCA2 gene classified as a variant of uncertain significance (VUS)."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.793+46_793+48del",
+      "protein_notation": "p.(?)",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "74-year-old female",
+        "phenotype": "NSCLC with brain metastases"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 74,
+          "age_at_onset": null,
+          "age_at_diagnosis": 72,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "NSCLC with brain metastases",
+          "evidence_sentence": "the patient was treated with pembrolizumab and she did not benefit from this kind of treatment."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is classified as a variant of uncertain significance.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is intronic and classified as VUS, indicating uncertain clinical significance.",
+      "key_quotes": [
+        "an intronic variant in the BRCA2 gene [intron 9, c.793+46_793+48del, p.(?)] classified as variants of uncertain significance"
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in BRCA2 was reported in the paper."
+  }
+}

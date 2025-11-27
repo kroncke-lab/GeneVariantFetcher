@@ -1,0 +1,184 @@
+{
+  "paper_metadata": {
+    "pmid": "29568686",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.90G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 24,
+        "demographics": "Not specified",
+        "phenotype": "Transthyretin familial amyloid polyneuropathy (TTR-FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 24,
+        "affected_count": 13,
+        "unaffected_count": 11,
+        "uncertain_count": null,
+        "penetrance_percentage": 54.17,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Neuropathic pain",
+          "evidence_sentence": "In 51.4% (n = 13) of the cases, a positive family history was known."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Patients presented with PND-score stage I (25%, n = 6) and II (75%, n = 18); all of them could walk without assistance."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met variant is associated with TTR-FAP, leading to amyloid fibril accumulation.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and family history.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included a cohort of patients with TTR-FAP and compared them to other neuropathies.",
+      "key_quotes": [
+        "Patients with TTR\u2010FAP were assessed either at the initial visit after diagnosis or when the first symptoms occurred before the disease had been confirmed."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.265G>A",
+      "protein_notation": "p.Glu89Lys",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 24,
+        "demographics": "Not specified",
+        "phenotype": "Transthyretin familial amyloid polyneuropathy (TTR-FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 24,
+        "affected_count": 13,
+        "unaffected_count": 11,
+        "uncertain_count": null,
+        "penetrance_percentage": 54.17,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Neuropathic pain",
+          "evidence_sentence": "In 51.4% (n = 13) of the cases, a positive family history was known."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Patients presented with PND-score stage I (25%, n = 6) and II (75%, n = 18); all of them could walk without assistance."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Glu89Lys variant is associated with TTR-FAP, leading to amyloid fibril accumulation.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and family history.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included a cohort of patients with TTR-FAP and compared them to other neuropathies.",
+      "key_quotes": [
+        "Patients with TTR\u2010FAP were assessed either at the initial visit after diagnosis or when the first symptoms occurred before the disease had been confirmed."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.147C>T",
+      "protein_notation": "p.Thr49Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 24,
+        "demographics": "Not specified",
+        "phenotype": "Transthyretin familial amyloid polyneuropathy (TTR-FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 24,
+        "affected_count": 13,
+        "unaffected_count": 11,
+        "uncertain_count": null,
+        "penetrance_percentage": 54.17,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Neuropathic pain",
+          "evidence_sentence": "In 51.4% (n = 13) of the cases, a positive family history was known."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Patients presented with PND-score stage I (25%, n = 6) and II (75%, n = 18); all of them could walk without assistance."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Thr49Ala variant is associated with TTR-FAP, leading to amyloid fibril accumulation.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and family history.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included a cohort of patients with TTR-FAP and compared them to other neuropathies.",
+      "key_quotes": [
+        "Patients with TTR\u2010FAP were assessed either at the initial visit after diagnosis or when the first symptoms occurred before the disease had been confirmed."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Patient characteristics and descriptive statistics of the selected polyneuropathy cohorts (TTR\u2010FAP, dPNP, CIN, and CIDP)",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for TTR variants were extracted successfully."
+  }
+}

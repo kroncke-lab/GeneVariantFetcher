@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "30704121",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the amyloid fibril disrupting activities of extracts from Juglans plants on TTR amyloidosis, focusing on the V30M TTR variant. No new TTR variants are reported."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not report any new TTR variants, only discussed the V30M variant in the context of amyloid fibril disruption assays."
+    ],
+    "notes": "The paper primarily focuses on the biochemical assays and potential therapeutic compounds for TTR amyloidosis, specifically targeting the V30M variant for testing purposes."
+  }
+}

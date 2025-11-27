@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "28419251",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses genetic variants associated with breast cancer risk in high and moderate-penetrance genes, focusing on BRCA2 among others. However, no specific BRCA2 variants are detailed in the provided text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The full text and tables were not provided, limiting extraction to the abstract."
+    ],
+    "notes": "The abstract mentions BRCA2 but does not provide specific variant information. No supplementary tables or detailed sections were available for review."
+  }
+}

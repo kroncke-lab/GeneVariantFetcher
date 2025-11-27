@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "31541162",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No specific genetic variants in the TTR gene were mentioned in the paper."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention any specific genetic variants in the TTR gene."
+    ],
+    "notes": "The paper focused on the pharmacokinetics and biodistribution of TTR and its stabilizers, without discussing specific genetic variants."
+  }
+}

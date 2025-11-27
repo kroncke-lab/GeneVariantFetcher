@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "30959752",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant associated with hereditary transthyretin mediated amyloidosis (hATTR)."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "hereditary transthyretin mediated amyloidosis (hATTR)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "show a mutation in the TTR gene, which in the protein is translated by replacing Val for Met at position 30",
+          "evidence_sentence": "Individuals with hATTR show a mutation in the TTR gene, which in the protein is translated by replacing Val for Met at position 30."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to an altered TTR protein structure, causing more dissociation at the dimer-dimer interface than in the wild-type.",
+        "assays": []
+      },
+      "segregation_data": "Does segregate with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Main Text, paragraph 4",
+      "additional_notes": "The variant is specifically associated with hATTR.",
+      "key_quotes": [
+        "Individuals with hATTR show a mutation in the TTR gene, which in the protein is translated by replacing Val for Met at position 30."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in the TTR gene was identified in the text."
+  }
+}

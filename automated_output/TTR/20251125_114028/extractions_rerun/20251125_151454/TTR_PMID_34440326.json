@@ -1,0 +1,71 @@
+{
+  "paper_metadata": {
+    "pmid": "34440326",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 36,
+        "demographics": "Hungarian, age range not specified",
+        "phenotype": "ATTRv with various clinical presentations including cardiac and neurologic involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 36,
+        "affected_count": 24,
+        "unaffected_count": 12,
+        "uncertain_count": 0,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 65,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic with cardiac and neurologic involvement",
+          "evidence_sentence": "The median age of symptomatic patients at the time of clinical diagnosis was 65 years."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 29,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic carrier diagnosed during family screening",
+          "evidence_sentence": "Their median age was 29 years at the time of genetic testing."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The study identified multiple pathogenic mutations in the TTR gene.",
+      "key_quotes": [
+        "The two most common mutations were ATTRHis88Arg (nine families) and ATTRIle107Val (8 families).",
+        "Twelve individuals without clinical signs of HF or polyneuropathy were considered asymptomatic carriers."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

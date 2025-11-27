@@ -1,0 +1,206 @@
+{
+  "paper_metadata": {
+    "pmid": "37724995",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The extraction focused on variants in the TTR gene, detailing penetrance data, individual records, and clinical significance."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.30G>A",
+      "protein_notation": "p.Val10Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 61,
+        "demographics": "Italian ancestry, age range not specified",
+        "phenotype": "symptomatic ATTRv patients"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 61,
+        "affected_count": 61,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic ATTRv",
+          "evidence_sentence": "In all, 111 individuals harbouring a pathogenic TTR variant (61 symptomatic ATTRv patients and 50 presymptomatic carriers) were consecutively enrolled."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with increased serum NfL levels in symptomatic patients.",
+        "assays": [
+          "Serum NfL concentration measured using the Simple Plex\u2122 cartridge\u2010based assay on the Ella\u2122 platform"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families as it is pathogenic.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and functional assays.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included both symptomatic and presymptomatic carriers.",
+      "key_quotes": [
+        "Serum NfL levels were increased in ATTRv patients compared to both presymptomatic carriers and healthy controls."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.190C>T",
+      "protein_notation": "p.Phe64Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 61,
+        "demographics": "Italian ancestry, age range not specified",
+        "phenotype": "symptomatic ATTRv patients"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 61,
+        "affected_count": 61,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic ATTRv",
+          "evidence_sentence": "In all, 111 individuals harbouring a pathogenic TTR variant (61 symptomatic ATTRv patients and 50 presymptomatic carriers) were consecutively enrolled."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with increased serum NfL levels in symptomatic patients.",
+        "assays": [
+          "Serum NfL concentration measured using the Simple Plex\u2122 cartridge\u2010based assay on the Ella\u2122 platform"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families as it is pathogenic.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and functional assays.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included both symptomatic and presymptomatic carriers.",
+      "key_quotes": [
+        "Serum NfL levels were increased in ATTRv patients compared to both presymptomatic carriers and healthy controls."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.204T>C",
+      "protein_notation": "p.Ile68Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 61,
+        "demographics": "Italian ancestry, age range not specified",
+        "phenotype": "symptomatic ATTRv patients"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 61,
+        "affected_count": 61,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic ATTRv",
+          "evidence_sentence": "In all, 111 individuals harbouring a pathogenic TTR variant (61 symptomatic ATTRv patients and 50 presymptomatic carriers) were consecutively enrolled."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with increased serum NfL levels in symptomatic patients.",
+        "assays": [
+          "Serum NfL concentration measured using the Simple Plex\u2122 cartridge\u2010based assay on the Ella\u2122 platform"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families as it is pathogenic.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and functional assays.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included both symptomatic and presymptomatic carriers.",
+      "key_quotes": [
+        "Serum NfL levels were increased in ATTRv patients compared to both presymptomatic carriers and healthy controls."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.365A>G",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 61,
+        "demographics": "Italian ancestry, age range not specified",
+        "phenotype": "symptomatic ATTRv patients"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 61,
+        "affected_count": 61,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic ATTRv",
+          "evidence_sentence": "In all, 111 individuals harbouring a pathogenic TTR variant (61 symptomatic ATTRv patients and 50 presymptomatic carriers) were consecutively enrolled."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with increased serum NfL levels in symptomatic patients.",
+        "assays": [
+          "Serum NfL concentration measured using the Simple Plex\u2122 cartridge\u2010based assay on the Ella\u2122 platform"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families as it is pathogenic.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and functional assays.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study included both symptomatic and presymptomatic carriers.",
+      "key_quotes": [
+        "Serum NfL levels were increased in ATTRv patients compared to both presymptomatic carriers and healthy controls."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Main demographic and clinical characteristics of our study cohort.",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

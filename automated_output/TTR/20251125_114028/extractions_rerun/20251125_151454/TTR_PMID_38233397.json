@@ -1,0 +1,83 @@
+{
+  "paper_metadata": {
+    "pmid": "38233397",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR gene variant I84S in the context of ATTR amyloidosis, detailing its structural implications and clinical presentation."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.251A>T",
+      "protein_notation": "p.Ile84Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "same kindred, specific ages not mentioned",
+        "phenotype": "ATTRv-I84S amyloidosis characterized by carpal tunnel, ocular deposition, polyneuropathy, and cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 3,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "specific clinical presentation not detailed",
+          "evidence_sentence": "We collected cryo-EM images of cardiac fibrils extracted from the three ATTRv-I84S amyloidosis patients from the same kindred."
+        },
+        {
+          "individual_id": "Patient 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "specific clinical presentation not detailed",
+          "evidence_sentence": "We collected cryo-EM images of cardiac fibrils extracted from the three ATTRv-I84S amyloidosis patients from the same kindred."
+        },
+        {
+          "individual_id": "Patient 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "specific clinical presentation not detailed",
+          "evidence_sentence": "We collected cryo-EM images of cardiac fibrils extracted from the three ATTRv-I84S amyloidosis patients from the same kindred."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study utilized cryo-EM to analyze the structural variations of cardiac fibrils from patients with the I84S mutation.",
+        "assays": [
+          "cryo-electron microscopy",
+          "mass spectrometry"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the studied kindred.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All patients were heterozygous for the ATTRv-I84S mutation.",
+      "key_quotes": [
+        "ATTRv-I84S amyloidosis is characterized by a consistent clinical presentation that starts with carpal tunnel, ocular deposition, and polyneuropathy, and ends with cardiomyopathy that leads to death."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant I84S was extracted successfully."
+  }
+}

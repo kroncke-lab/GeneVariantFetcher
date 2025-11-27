@@ -1,0 +1,91 @@
+{
+  "paper_metadata": {
+    "pmid": "34317300",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant G648S, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1943G>A",
+      "protein_notation": "p.Gly648Ser",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "2 children (12-year-old male, 11-year-old female), 1 adult (42-year-old female)",
+        "phenotype": "Long QT syndrome (LQT2) with QTc >500 ms"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 3,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 42,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Multiple syncopal events, prolonged QTc >500 ms",
+          "evidence_sentence": "A 42-year-old female patient who presented with multiple past syncopal events related to polymorphic ventricular tachycardia (VT) and a corrected QT interval (QTc) that was consistently >500 ms."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 12,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Asymptomatic, QTc >500 ms",
+          "evidence_sentence": "Two of her 3 children, a 12-year-old male... were subsequently diagnosed with long QT syndrome (LQTS) following electrocardiographic cascade screening, which revealed a QTc >500 ms in both."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 11,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Asymptomatic, QTc >500 ms",
+          "evidence_sentence": "Two of her 3 children, an 11-year-old female... were subsequently diagnosed with long QT syndrome (LQTS) following electrocardiographic cascade screening, which revealed a QTc >500 ms in both."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 14,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "Genetically negative, normal QTc",
+          "evidence_sentence": "The third child, a 14-year-old female, was found to be genetically negative, with a normal QTc."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is absent from the control series in the Exome Aggregation Consortium, and the co-segregation with the phenotype in the family supports its pathogenicity.",
+        "assays": []
+      },
+      "segregation_data": "The variant co-segregates with the phenotype in the family.",
+      "population_frequency": "Absent from the control series in the Exome Aggregation Consortium.",
+      "evidence_level": "Strong evidence (American College of Medical Genetics criteria PP1, PP3, PP4, PM4)",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant has been previously reported in the setting of LQT2.",
+      "key_quotes": [
+        "The familial variant had been previously reported in the setting of LQT2 in a compendium publication.",
+        "The variant is absent from the control series in the Exome Aggregation Consortium, and the co-segregation with the phenotype in the family supports its pathogenicity."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

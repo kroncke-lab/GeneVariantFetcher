@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "34816083",
+    "title": "Genome silencer therapy leading to \u2018regression\u2019 of cardiac amyloid load on cardiovascular magnetic resonance: a case report",
+    "extraction_summary": "Extracted information on the TTR gene variant p.Gly67Ala, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.200G>C",
+      "protein_notation": "p.Gly67Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "53-year-old male",
+        "phenotype": "ATTRv amyloidosis with mixed phenotype (neuropathy and cardiomyopathy)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 53,
+          "age_at_onset": 45,
+          "age_at_diagnosis": 36,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "mixed amyloidosis phenotype with neuropathy and cardiomyopathy",
+          "evidence_sentence": "We report the case of a 53-year-old male with ATTRv amyloidosis. A heterozygote mutation in the transthyretin gene (p.Gly67Ala) was known in his family and also confirmed in his case 17 years before."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with hereditary ATTRv amyloidosis, leading to progressive neuropathy and cardiomyopathy.",
+        "assays": []
+      },
+      "segregation_data": "The variant is known in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Case presentation, paragraph 1",
+      "additional_notes": "The patient has a family history of the variant.",
+      "key_quotes": [
+        "A heterozygote mutation in the transthyretin gene (p.Gly67Ala) was known in his family and also confirmed in his case 17 years before."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variant."
+  }
+}

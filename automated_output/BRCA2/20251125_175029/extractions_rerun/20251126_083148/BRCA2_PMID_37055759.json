@@ -1,0 +1,172 @@
+{
+  "paper_metadata": {
+    "pmid": "37055759",
+    "title": "Increased prevalence of the founder BRCA1 c.5309G>T and recurrent BRCA2 c.1310_1313delAAGA mutations in breast cancer families from Northerstern region of Morocco: evidence of geographical specificity and high relevance for genetic counseling",
+    "extraction_summary": "The paper reports on the BRCA2 variant c.1310_1313delAAGA, detailing its prevalence, clinical significance, and penetrance data among breast cancer patients in Northeastern Morocco."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1310_1313delAAGA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 12,
+        "demographics": "female breast cancer patients from Northeastern Morocco",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 12,
+        "affected_count": 10,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 83.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 32,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "IDC/ILC, ductal invasive carcinoma",
+          "evidence_sentence": "The average of age at diagnosis in patients with c.1310_1313delAAGA mutation was 41 years."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 30,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, ductal invasive carcinoma",
+          "evidence_sentence": "The average of age at diagnosis in patients with c.1310_1313delAAGA mutation was 41 years."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 37,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ILC, lobular invasive carcinoma",
+          "evidence_sentence": "The average of age at diagnosis in patients with c.1310_1313delAAGA mutation was 41 years."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 45,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, ductal invasive carcinoma",
+          "evidence_sentence": "The average of age at diagnosis in patients with c.1310_1313delAAGA mutation was 41 years."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 30,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, ductal invasive carcinoma",
+          "evidence_sentence": "The average of age at diagnosis in patients with c.1310_1313delAAGA mutation was 41 years."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 28,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, ductal invasive carcinoma",
+          "evidence_sentence": "The average of age at diagnosis in patients with c.1310_1313delAAGA mutation was 41 years."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 47,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, ductal invasive carcinoma",
+          "evidence_sentence": "The average of age at diagnosis in patients with c.1310_1313delAAGA mutation was 41 years."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 36,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, ductal invasive carcinoma",
+          "evidence_sentence": "The average of age at diagnosis in patients with c.1310_1313delAAGA mutation was 41 years."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 54,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, ductal invasive carcinoma",
+          "evidence_sentence": "The average of age at diagnosis in patients with c.1310_1313delAAGA mutation was 41 years."
+        },
+        {
+          "individual_id": "P10",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 40,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "N/A",
+          "evidence_sentence": "The average of age at diagnosis in patients with c.1310_1313delAAGA mutation was 41 years."
+        },
+        {
+          "individual_id": "P11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 50,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "N/A",
+          "evidence_sentence": "The average of age at diagnosis in patients with c.1310_1313delAAGA mutation was 41 years."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.1310_1313delAAGA mutation is associated with breast cancer in the studied population.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation was also encountered in two patients among four BC males.",
+      "key_quotes": [
+        "The screening of BRCA1/2 genes by NGS sequencing confirmed that there are no additional mutations detected among the mutation carrier patients.",
+        "In total, we identified 12 females (7.35%) carrying BRCA2 c.1310_1313 DelAAGA mutation."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Comparison of clinicopathological features between familial and sporadic patients groups",
+      "variants_extracted": 1
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Clinical and pathological characteristics of BRCA1 c.5309G>T and BRCA2 c.1310_1313 DelAAGA mutation carriers in Moroccan population",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data extraction was straightforward with clear reporting of the BRCA2 variant."
+  }
+}

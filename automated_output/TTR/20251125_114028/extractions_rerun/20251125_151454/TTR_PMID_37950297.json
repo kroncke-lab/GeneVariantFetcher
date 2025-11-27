@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "37950297",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses occupational therapy in patients with hereditary transthyretin amyloidosis (ATTRv) but does not provide specific genetic variant information for the TTR gene."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not contain any specific genetic variant information for the TTR gene."
+    ],
+    "notes": "The paper focused on occupational therapy interventions and did not include genetic variant data for the TTR gene."
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "paper_metadata": {
+    "pmid": "30733681",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the role of TTR in oxidative stress and its implications as a biomarker. It mentions several TTR variants and their association with diseases but does not provide detailed penetrance data or individual-level records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.V30M",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "Familial Amyloid Polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The V30M variant is associated with amyloidogenic properties and oxidative stress.",
+        "assays": [
+          "S-nitrosylation studies"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "TTR Oligomers as Multiple Biomarkers",
+      "additional_notes": "The V30M variant is mentioned in the context of its amyloidogenic potential and its role in oxidative stress.",
+      "key_quotes": [
+        "In a previous study by Saito et al. (2005), it was established that Wt and V30M (amyloidogenic variant) undergoes S-nitrosylation and due to which the proteins become amyloidogenic."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.V122I",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "Senile Systemic Cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The V122I variant is associated with early onset of senile systemic cardiomyopathy.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Oligomers of Different TTR Variants Exhibit Different Magnitude of Oxidative Stress",
+      "additional_notes": "The V122I variant is noted for its early onset compared to wild-type TTR aggregation.",
+      "key_quotes": [
+        "On the other hand, the pathogenic symptoms due to oligomers of the mutant variant V122I appeared early in age and patients die generally 10 years before the onset of senile systemic cardiomyopathy caused by Wt aggregation."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.L55P",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "Familial Amyloid Polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The L55P variant is highly pathogenic and starts oligomerization at physiological pH.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Oligomers of Different TTR Variants Exhibit Different Magnitude of Oxidative Stress",
+      "additional_notes": "L55P is considered the most pathogenic variant of TTR.",
+      "key_quotes": [
+        "L55P is considered to be most pathogenic variant of TTR and starts oligomerization at the physiological pH in vitro (as compared to the other mutants) and patients die at a very young age."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "medium",
+    "challenges": [
+      "The paper did not provide detailed penetrance data or individual-level records."
+    ],
+    "notes": "The extraction focused on the main text as no tables with variant data were provided."
+  }
+}

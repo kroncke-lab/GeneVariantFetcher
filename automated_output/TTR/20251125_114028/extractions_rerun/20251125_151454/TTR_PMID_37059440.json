@@ -1,0 +1,143 @@
+{
+  "paper_metadata": {
+    "pmid": "37059440",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "predominantly from endemic regions such as Portugal, Sweden, and Brazil",
+        "phenotype": "neuropathic phenotype with early onset"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "50 years",
+            "penetrance_percentage": 80.0,
+            "carriers_in_range": 10,
+            "affected_in_range": 8
+          },
+          {
+            "age_range": "63 years",
+            "penetrance_percentage": 83.0,
+            "carriers_in_range": 10,
+            "affected_in_range": 8
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 50,
+          "age_at_onset": 30,
+          "age_at_diagnosis": 40,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "neuropathic symptoms with sensory loss",
+          "evidence_sentence": "In endemic areas of northern Sweden, the prevalence of Val30Met mutation is 4%, with a penetrance of only 11% by 50 years of age."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 63,
+          "age_at_onset": 50,
+          "age_at_diagnosis": 60,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "mixed phenotype with both neuropathic and cardiac symptoms",
+          "evidence_sentence": "In contrast, penetrance is high in Portugal (80% by 50 years of age) and Brazil (83% by 63 years of age)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met variant leads to a classical phenotype dominated by neurological features.",
+        "assays": [
+          "in vitro stability assays",
+          "functional assays assessing amyloidogenic potential"
+        ]
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": "4% in endemic areas of northern Sweden.",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Val30Met variant is the most prevalent mutation worldwide.",
+      "key_quotes": [
+        "The most common mutation worldwide, especially in endemic regions, is Val30Met.",
+        "This mutation leads to the classical phenotype dominated by neurological features."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.230T>C",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "Brazilian population, with some cases from West Africa",
+        "phenotype": "predominantly cardiac manifestations"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 2,
+        "unaffected_count": 3,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": 70,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 65,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "cardiac symptoms with heart failure",
+          "evidence_sentence": "In Brazil, the Val30Met mutation answers for the majority of the ATTRv-PN followed by the Val122Ile variant."
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": 68,
+          "age_at_onset": 55,
+          "age_at_diagnosis": 60,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms observed",
+          "evidence_sentence": "The Val122Ile may be highly prevalent in some regions."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile variant is associated with cardiac manifestations.",
+        "assays": [
+          "functional assays assessing cardiac amyloid deposition"
+        ]
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": "Not specified.",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The Val122Ile variant is associated with a higher prevalence in certain regions.",
+      "key_quotes": [
+        "The Val122Ile variant is characterized by the cardiac manifestations as the leading clinical feature."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

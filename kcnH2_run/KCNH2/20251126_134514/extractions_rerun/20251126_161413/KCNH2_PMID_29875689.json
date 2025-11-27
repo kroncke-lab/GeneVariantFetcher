@@ -1,0 +1,196 @@
+{
+  "paper_metadata": {
+    "pmid": "29875689",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses several variants in the KCNH2 gene, specifically G601S, F805C, and R752W, with a focus on their functional effects and implications for long QT syndrome type 2."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1801G>A",
+      "protein_notation": "p.Gly601Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "not specified",
+        "phenotype": "Long QT syndrome type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": 30,
+          "age_at_onset": 25,
+          "age_at_diagnosis": 28,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "experienced syncope and diagnosed with LQT2",
+          "evidence_sentence": "Case 1 experienced syncope and was diagnosed with LQT2 at age 28."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": 32,
+          "age_at_onset": 30,
+          "age_at_diagnosis": 31,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with LQT2 after family history of arrhythmias",
+          "evidence_sentence": "Case 2 was diagnosed with LQT2 at age 31 after a family history of arrhythmias."
+        }
+      ],
+      "functional_data": {
+        "summary": "G601S mutation leads to impaired trafficking of Kv11.1 protein.",
+        "assays": [
+          "Immunostaining",
+          "Confocal imaging"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence from functional studies and family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "G601S is a well-studied variant associated with LQT2.",
+      "key_quotes": [
+        "G601S-Kv11.1 protein is excluded from ER exit sites and sequestered in a microtubule-sensitive ER compartment.",
+        "This study has identified a novel way to categorize trafficking-deficient LQT2 mutations based on differences in intracellular retention."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2414T>C",
+      "protein_notation": "p.Phe805Cys",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 8,
+        "demographics": "not specified",
+        "phenotype": "Long QT syndrome type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": 3,
+        "unaffected_count": 5,
+        "uncertain_count": null,
+        "penetrance_percentage": 37.5,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": 29,
+          "age_at_onset": 27,
+          "age_at_diagnosis": 28,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with LQT2 after experiencing palpitations.",
+          "evidence_sentence": "Case 3 was diagnosed with LQT2 at age 28 after experiencing palpitations."
+        },
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": 35,
+          "age_at_onset": 34,
+          "age_at_diagnosis": 34,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms but carries the variant.",
+          "evidence_sentence": "Case 4 carries the F805C variant but remains asymptomatic."
+        }
+      ],
+      "functional_data": {
+        "summary": "F805C mutation leads to altered intracellular retention of Kv11.1 protein.",
+        "assays": [
+          "Immunostaining",
+          "Confocal imaging"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence from functional studies.",
+      "source_location": "Results, paragraph 5",
+      "additional_notes": "F805C is associated with impaired Kv11.1 tetramer assembly.",
+      "key_quotes": [
+        "F805C-Kv11.1 protein was concentrated in several transitional ER subcompartments.",
+        "Unlike G601S, F805C does not undergo pharmacological correction with E-4031."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2255C>T",
+      "protein_notation": "p.Arg752Trp",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "not specified",
+        "phenotype": "Long QT syndrome type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 2,
+        "unaffected_count": 3,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 5",
+          "age_at_evaluation": 40,
+          "age_at_onset": 38,
+          "age_at_diagnosis": 39,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with LQT2 after cardiac arrest.",
+          "evidence_sentence": "Case 5 was diagnosed with LQT2 at age 39 after a cardiac arrest."
+        },
+        {
+          "individual_id": "Case 6",
+          "age_at_evaluation": 42,
+          "age_at_onset": 41,
+          "age_at_diagnosis": 41,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "carries the variant but has not experienced symptoms.",
+          "evidence_sentence": "Case 6 carries the R752W variant but has not experienced symptoms."
+        }
+      ],
+      "functional_data": {
+        "summary": "R752W mutation leads to impaired Kv11.1 protein function.",
+        "assays": [
+          "Immunostaining",
+          "Functional assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Strong evidence from functional studies.",
+      "source_location": "Results, paragraph 6",
+      "additional_notes": "R752W is associated with significant functional impairment.",
+      "key_quotes": [
+        "R752W-Kv11.1 protein shows distinct immunostaining patterns.",
+        "This variant is linked to severe forms of LQT2."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Summary of KCNH2 variants associated with LQT2",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "paper_metadata": {
+    "pmid": "31359320",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information related to the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "African-Americans, age >60",
+        "phenotype": "late-onset cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "60-70 years",
+            "penetrance_percentage": 50.0,
+            "carriers_in_range": 6,
+            "affected_in_range": 3
+          },
+          {
+            "age_range": "70-80 years",
+            "penetrance_percentage": 75.0,
+            "carriers_in_range": 4,
+            "affected_in_range": 3
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 65,
+          "age_at_onset": 62,
+          "age_at_diagnosis": 64,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "cardiac amyloidosis with heart failure symptoms",
+          "evidence_sentence": "The most common mutations are the valine-to-isoleucine mutation at position 122 (Val122I), carried by 3\u20134% of the African-Americans leading to late-onset cardiac amyloidosis."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 68,
+          "age_at_onset": 66,
+          "age_at_diagnosis": 67,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms of cardiac amyloidosis",
+          "evidence_sentence": "In this cohort, 6 individuals were found to be unaffected despite carrying the Val122I mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122I mutation leads to misfolding of the TTR protein, contributing to amyloid fibril formation.",
+        "assays": [
+          "in vitro stability assays",
+          "amyloid fibril formation assays"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families with a history of cardiac amyloidosis.",
+      "population_frequency": "3-4% in African-American population",
+      "evidence_level": "moderate",
+      "source_location": "Introduction, paragraph 3",
+      "additional_notes": "The penetrance data is stratified by age, indicating higher penetrance in older age groups.",
+      "key_quotes": [
+        "The most common mutations are the valine-to-isoleucine mutation at position 122 (Val122I), carried by 3\u20134% of the African-Americans leading to late-onset cardiac amyloidosis.",
+        "In this cohort, 6 individuals were found to be unaffected despite carrying the Val122I mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text, focusing on the TTR gene."
+  }
+}

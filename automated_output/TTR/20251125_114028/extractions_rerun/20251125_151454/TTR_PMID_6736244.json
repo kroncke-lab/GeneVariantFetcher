@@ -1,0 +1,75 @@
+{
+  "paper_metadata": {
+    "pmid": "6736244",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a TTR variant associated with familial amyloidotic polyneuropathy, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89T>C",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Portuguese patients",
+        "phenotype": "familial amyloidotic polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "familial amyloidotic polyneuropathy",
+          "evidence_sentence": "Studies were conducted on amyloid fibril protein (AFp) isolated from tissues of two Portuguese patients who died with familial amyloidosis."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "familial amyloidotic polyneuropathy",
+          "evidence_sentence": "Studies were conducted on amyloid fibril protein (AFp) isolated from tissues of two Portuguese patients who died with familial amyloidosis."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant TTR was present in the TTR isolated from the pooled sera of amyloidoses patients, along with larger amounts of normal TTR.",
+        "assays": [
+          "comparative peptide mappings by reverse-phase high performance liquid chromatography (HPLC)",
+          "cyanogen bromide cleavage studies",
+          "amino acid microsequence analysis"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the studied patients.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on functional studies and clinical correlation.",
+      "source_location": "Main Text, paragraph 4",
+      "additional_notes": "The variant is associated with a specific biochemical cause of the disease.",
+      "key_quotes": [
+        "the purified amyloid fibril protein comprised a TTR variant with a methionine-for-valine substitution at position 30.",
+        "the variant TTR represents the specific biochemical cause of the disease."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "paper_metadata": {
+    "pmid": "33293522",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on 88 BRCA2 variants, including clinical significance, penetrance data, and functional assays."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 88,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Functional characterization of 88 BRCA2 variants using mouse embryonic stem cell-based assays.",
+        "assays": [
+          "HAT survival assay",
+          "Drug sensitivity assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Variants were selected based on their classification in ClinVar and other criteria.",
+      "key_quotes": [
+        "We selected 88 variants for analysis in this study, each based on one or more of the following criteria: (i) the variant was listed as 'uncertain' in ClinVar or class 3 in IARC classification."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Supplementary Table 1",
+      "table_caption": "List of BRCA2 variants evaluated in the study.",
+      "variants_extracted": 88
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 88,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were classified as VUS or had conflicting interpretations."
+  }
+}

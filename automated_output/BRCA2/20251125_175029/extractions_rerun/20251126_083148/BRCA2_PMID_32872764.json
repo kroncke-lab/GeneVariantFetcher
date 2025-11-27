@@ -1,0 +1,115 @@
+{
+  "paper_metadata": {
+    "pmid": "32872764",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6486_6489del",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "not specified",
+        "phenotype": "hereditary breast OC syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 13,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Most BRCA2 mutations were frameshift mutations except for a previously unreported nonsense mutation, c.19G>T, and one splice variant, c.631+1G>A.",
+        "assays": []
+      },
+      "segregation_data": "This mutation has been previously reported as a germline variant in hereditary breast OC syndrome and observed in multiple ethnicities.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The BRCA2 mutation c.6486_6489del was identified in 4 samples from unrelated patients, accounting for 31% of all BRCA2 mutations.",
+      "key_quotes": [
+        "The BRCA2 mutation c.6486_6489del was identified in 4 samples from unrelated patients, thereby accounting for 31% of all BRCA2 mutations."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.19G>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "This mutation was thought to result in abnormal mRNA splicing.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was previously unreported.",
+      "key_quotes": [
+        "Most BRCA2 mutations were frameshift mutations except for a previously unreported nonsense mutation, c.19G>T."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.631+1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Biochemical analysis revealed a similar mutation at this splice donor site that was found to be deleterious by Myriad Genetics laboratories.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was thought to result in abnormal mRNA splicing.",
+      "key_quotes": [
+        "Most BRCA2 mutations were frameshift mutations except for a previously unreported nonsense mutation, c.19G>T, and one splice variant, c.631+1G>A, which were thought to result in abnormal mRNA splicing."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted from the main text."
+  }
+}

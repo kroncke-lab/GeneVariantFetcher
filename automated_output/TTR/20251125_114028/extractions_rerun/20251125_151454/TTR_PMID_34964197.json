@@ -1,0 +1,230 @@
+{
+  "paper_metadata": {
+    "pmid": "34964197",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses various TTR gene mutations associated with transthyretin familial amyloid polyneuropathy (TTR-FAP) and provides details on penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 18,
+        "demographics": "14 males and 4 females, ages 29-64 years",
+        "phenotype": "transthyretin familial amyloid polyneuropathy (TTR-FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 18,
+        "affected_count": 17,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 94.4,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P10",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P12",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P13",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P14",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P15",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P16",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "sensorimotor polyneuropathy, autonomic neuropathy",
+          "evidence_sentence": "All patients presented with sensorimotor polyneuropathy, and 17 (94.4%) of them developed autonomic neuropathy."
+        },
+        {
+          "individual_id": "P17",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "The exclusion criteria of HCs were as follows: (1) skin numbness or paresthesia; (2) muscle atrophy or weakness; (3) other disorders of the peripheral nervous system; and (4) chronic diseases of other organs."
+        },
+        {
+          "individual_id": "P18",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms",
+          "evidence_sentence": "The exclusion criteria of HCs were as follows: (1) skin numbness or paresthesia; (2) muscle atrophy or weakness; (3) other disorders of the peripheral nervous system; and (4) chronic diseases of other organs."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study indicates that TTR mutations lead to autonomic dysfunction and sensorimotor polyneuropathy.",
+        "assays": []
+      },
+      "segregation_data": "The variants segregate with disease in families as indicated by the familial nature of TTR-FAP.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the high penetrance of TTR mutations in the affected population.",
+      "key_quotes": [
+        "Different TTR mutations were identified by gene testing, including Val30Leu mutation in 3 patients, Gly83Arg, Lys35Asn, Val30Met, Glu61Lys, and Ala97Ser mutation in 2 patients, respectively, and Val30Ala, Glu42Gly, Ala36Pro, Phe33Val and Asp38Val mutation in 1 patient, respectively."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

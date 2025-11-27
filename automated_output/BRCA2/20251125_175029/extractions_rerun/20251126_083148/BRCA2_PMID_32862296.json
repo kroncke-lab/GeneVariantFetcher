@@ -1,0 +1,159 @@
+{
+  "paper_metadata": {
+    "pmid": "32862296",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene along with penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5946delT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Ashkenazi Jews",
+        "phenotype": "breast and ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "98\u201399% of the PVs identified in Ashkenazi Jews are c.68_69delAG and c.5266dupC for BRCA1, and c.5946delT for BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a high risk of breast and ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "Yes, it segregates with disease in families.",
+      "population_frequency": "1 in 40 in Ashkenazi Jews",
+      "evidence_level": "high",
+      "source_location": "Table 1, Row 1",
+      "additional_notes": "This variant is a founder mutation in Ashkenazi Jews.",
+      "key_quotes": [
+        "98\u201399% of the PVs identified in Ashkenazi Jews are c.68_69delAG and c.5266dupC for BRCA1, and c.5946delT for BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3109C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Southern Chinese",
+        "phenotype": "breast and ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "c.3109C>T is reported as 23% of BRCA1/2 mutations in Southern Chinese."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a significant risk of breast and ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "Yes, it segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "This variant is prevalent in Southern Chinese populations.",
+      "key_quotes": [
+        "c.3109C>T is reported as 23% of BRCA1/2 mutations in Southern Chinese."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4037delC",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Filipinos",
+        "phenotype": "breast and ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "c.4037delC is reported as 13% of BRCA1/2 mutations in Filipinos."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a significant risk of breast and ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "Yes, it segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Table 2, Row 3",
+      "additional_notes": "This variant is prevalent in Filipino populations.",
+      "key_quotes": [
+        "c.4037delC is reported as 13% of BRCA1/2 mutations in Filipinos."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Reports of founder mutation (Caucasian)",
+      "variants_extracted": 1
+    },
+    {
+      "table_name": "Table 2",
+      "table_caption": "Reports of founder mutation (Asian)",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

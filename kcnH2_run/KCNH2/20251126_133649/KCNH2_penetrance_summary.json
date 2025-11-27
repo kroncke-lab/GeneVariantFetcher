@@ -1,0 +1,88 @@
+{
+  "gene_symbol": "KCNH2",
+  "aggregation_timestamp": "2025-11-26T13:43:45.024276",
+  "total_variants": 3,
+  "variants": [
+    {
+      "variant_key": "p.Ala490Thr",
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1468G>A",
+      "protein_notation": "p.Ala490Thr",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "aggregated_penetrance": {
+        "total_carriers": 10,
+        "affected": 4,
+        "unaffected": 6,
+        "uncertain": 0,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 10,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "p.Lys897Thr",
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2690A>C",
+      "protein_notation": "p.Lys897Thr",
+      "genomic_position": null,
+      "clinical_significance": "likely benign",
+      "aggregated_penetrance": {
+        "total_carriers": 10,
+        "affected": 4,
+        "unaffected": 6,
+        "uncertain": 0,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 10,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    },
+    {
+      "variant_key": "c.2020_2021insAG",
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2020_2021insAG",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "aggregated_penetrance": {
+        "total_carriers": 2,
+        "affected": 2,
+        "unaffected": 0,
+        "uncertain": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": [],
+        "individual_records_count": 2,
+        "cohort_studies_count": 2,
+        "sources": [
+          "FULL"
+        ]
+      },
+      "source_pmids": [
+        "FULL"
+      ],
+      "number_of_papers": 1
+    }
+  ],
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "error_count": 0,
+    "warning_count": 0
+  }
+}

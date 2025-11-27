@@ -1,0 +1,146 @@
+{
+  "paper_metadata": {
+    "pmid": "25266489",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": "15:06444394",
+      "clinical_significance": null,
+      "patients": {
+        "count": 100,
+        "demographics": "100 unrelated, healthy Tajiks (50 males and 50 females)",
+        "phenotype": "Healthy individuals, no specific disease presentation mentioned"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The KCNH2 gene encodes a potassium channel involved in cardiac repolarization.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "Allele frequency: A=40.5%, G=59.5%",
+      "evidence_level": "Not specified",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "No specific clinical significance or pathogenicity data provided.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": "15:06444428",
+      "clinical_significance": null,
+      "patients": {
+        "count": 100,
+        "demographics": "100 unrelated, healthy Tajiks (50 males and 50 females)",
+        "phenotype": "Healthy individuals, no specific disease presentation mentioned"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The KCNH2 gene encodes a potassium channel involved in cardiac repolarization.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "Allele frequency: G=99.0%, T=1.0%",
+      "evidence_level": "Not specified",
+      "source_location": "Table 1, Row 4",
+      "additional_notes": "No specific clinical significance or pathogenicity data provided.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": "15:064467304",
+      "clinical_significance": null,
+      "patients": {
+        "count": 100,
+        "demographics": "100 unrelated, healthy Tajiks (50 males and 50 females)",
+        "phenotype": "Healthy individuals, no specific disease presentation mentioned"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The KCNH2 gene encodes a potassium channel involved in cardiac repolarization.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "Allele frequency: C=100%",
+      "evidence_level": "Not specified",
+      "source_location": "Table 1, Row 5",
+      "additional_notes": "No specific clinical significance or pathogenicity data provided.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": "15:064467210",
+      "clinical_significance": null,
+      "patients": {
+        "count": 100,
+        "demographics": "100 unrelated, healthy Tajiks (50 males and 50 females)",
+        "phenotype": "Healthy individuals, no specific disease presentation mentioned"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The KCNH2 gene encodes a potassium channel involved in cardiac repolarization.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "Allele frequency: A=43.0%, G=57.0%",
+      "evidence_level": "Not specified",
+      "source_location": "Table 1, Row 6",
+      "additional_notes": "No specific clinical significance or pathogenicity data provided.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Basic characteristics of the selected variants",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were from the KCNH2 gene as specified."
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "19065606",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on TTR variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.356C>T",
+      "protein_notation": "p.Thr119Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "heterozygous individuals",
+        "phenotype": "protects carriers from disease"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "protected from disease",
+          "evidence_sentence": "In the reported heterozygous individuals, protects the carriers from disease."
+        }
+      ],
+      "functional_data": {
+        "summary": "T119M TTR was stably expressed and formed heterooligomers with amyloidogenic TTR variants.",
+        "assays": [
+          "immunoprecipitation",
+          "western blotting"
+        ]
+      },
+      "segregation_data": "Does not segregate with disease in families as it protects carriers.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "T119M variant stabilizes heterotetramers and may have therapeutic potential.",
+      "key_quotes": [
+        "T119M TTR was stably expressed in transduced HepG2 cells and was secreted as an oligomer.",
+        "The results obtained in the present study demonstrate the stabilization of heterotetramers by T119M TTR in human cells."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

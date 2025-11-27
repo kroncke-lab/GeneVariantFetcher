@@ -1,0 +1,298 @@
+{
+  "paper_metadata": {
+    "pmid": "30832263",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.476-3C>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "Analysis of patient\u2019s RNA showed that the variant leads to the increase of two naturally occurring isoforms with different out-of-frame deletions."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to the increase of two naturally occurring isoforms with different out-of-frame deletions.",
+        "assays": [
+          "qPCR"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 2",
+      "additional_notes": "The variant is reported with conflicting interpretations of pathogenicity in ClinVar.",
+      "key_quotes": [
+        "Analysis of patient\u2019s RNA showed that the variant leads to the increase of two naturally occurring isoforms with different out-of-frame deletions."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.68-5A>G",
+      "protein_notation": "p.Leu24Argfs*7",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The usage of this de novo splice site generates an isoform predicted to result in an early stop of translation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant reduces the strength of the canonical 3\u2032 splice site and generates an alternative acceptor splice site.",
+        "assays": [
+          "qPCR",
+          "minigene assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 2.2",
+      "additional_notes": "The variant is reported as VUS in ClinVar.",
+      "key_quotes": [
+        "The usage of this de novo splice site generates an isoform predicted to result in an early stop of translation."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7618-2A>G",
+      "protein_notation": "p.Leu2540Glnfs*11",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "By RT-PCR we demonstrated the skipping of 44 nt at the 5\u2032-end of exon 16 due to the activation of an exonic cryptic acceptor site."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is predicted to abolish the canonical 3\u2032 splice site.",
+        "assays": [
+          "RT-PCR",
+          "qPCR",
+          "minigene assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 2.3",
+      "additional_notes": "The variant is reported as pathogenic or likely pathogenic in ClinVar.",
+      "key_quotes": [
+        "By RT-PCR we demonstrated the skipping of 44 nt at the 5\u2032-end of exon 16 due to the activation of an exonic cryptic acceptor site."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7806-2A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The in vitro analysis confirmed a complex abnormal splicing pattern leading to the production of three different isoforms."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is strongly predicted to abolish the natural acceptor splice site.",
+        "assays": [
+          "in vitro analysis",
+          "qPCR"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 2.4",
+      "additional_notes": "The variant is reported as pathogenic or likely pathogenic in ClinVar.",
+      "key_quotes": [
+        "The in vitro analysis confirmed a complex abnormal splicing pattern leading to the production of three different isoforms."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8331+1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The in vitro characterization confirmed in both cases the same abnormal splicing pattern consisting in the skipping of the last 151 bp of exon 17 and of the whole exon 18."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is predicted to abolish the corresponding natural donor splice site.",
+        "assays": [
+          "in vitro characterization",
+          "qPCR"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 2.5",
+      "additional_notes": "The variant is reported as pathogenic or likely pathogenic in ClinVar.",
+      "key_quotes": [
+        "The in vitro characterization confirmed in both cases the same abnormal splicing pattern consisting in the skipping of the last 151 bp of exon 17 and of the whole exon 18."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8331+2T>C",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "The in vitro characterization confirmed in both cases the same abnormal splicing pattern consisting in the skipping of the last 151 bp of exon 17 and of the whole exon 18."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is predicted to abolish the corresponding natural donor splice site.",
+        "assays": [
+          "in vitro characterization",
+          "qPCR"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 2.5",
+      "additional_notes": "The variant is reported as pathogenic or likely pathogenic in ClinVar.",
+      "key_quotes": [
+        "The in vitro characterization confirmed in both cases the same abnormal splicing pattern consisting in the skipping of the last 151 bp of exon 17 and of the whole exon 18."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 6,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted with detailed penetrance data."
+  }
+}

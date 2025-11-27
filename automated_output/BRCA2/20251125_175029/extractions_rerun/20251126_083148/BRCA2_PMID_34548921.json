@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "34548921",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant c.2374T>C (p.Tyr792His) including patient demographics, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2374T>C",
+      "protein_notation": "p.Tyr792His",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "33-year-old woman",
+        "phenotype": "right breast cancer (cT2N1M0)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 33,
+          "age_at_onset": null,
+          "age_at_diagnosis": 33,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "right breast cancer (cT2N1M0)",
+          "evidence_sentence": "The second detected VUS was the c.2374T>C (p.Tyr792His) variant in the BRCA2 gene. This variant was reported in a 33-year-old woman who was diagnosed with right breast cancer (cT2N1M0)."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Main Text, paragraph 4",
+      "additional_notes": "Only one case reported for this variant.",
+      "key_quotes": [
+        "The second detected VUS was the c.2374T>C (p.Tyr792His) variant in the BRCA2 gene.",
+        "This variant was reported in a 33-year-old woman who was diagnosed with right breast cancer (cT2N1M0)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the BRCA2 variant was extracted from the main text."
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "paper_metadata": {
+    "pmid": "29755871",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.865A>C",
+      "protein_notation": "p.Asn289His",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 156,
+        "demographics": "Kazakhstan women, mean age 51.2 years",
+        "phenotype": "sporadic breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 156,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The functional impact of this variant is not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "10.1% in controls",
+      "evidence_level": "Moderate evidence based on frequency comparison",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was detected with higher frequency in cases compared to controls.",
+      "key_quotes": [
+        "In BRCA2, gene missense mutations c.865A>C (N289H) were detected with higher frequency in 15.2% of cases compared to controls (10.1%)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.10234A>G",
+      "protein_notation": "p.Ile3412Val",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 156,
+        "demographics": "Kazakhstan women, mean age 51.2 years",
+        "phenotype": "sporadic breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 156,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The functional impact of this variant is not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "18.7% in controls",
+      "evidence_level": "Moderate evidence based on frequency comparison",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was detected with higher frequency in cases compared to controls.",
+      "key_quotes": [
+        "In BRCA2, gene missense mutations c.10234A>G (I3412V) were detected with higher frequency in 30.8% of cases compared to controls (18.7%)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 variants were extracted successfully."
+  }
+}

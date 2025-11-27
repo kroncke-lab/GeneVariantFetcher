@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "31825134",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses wild-type transthyretin cardiac amyloidosis (ATTRwt) and its epidemiology, pathophysiology, diagnosis, and clinical features. No specific genetic variants in the TTR gene are mentioned."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention specific TTR gene variants."
+    ],
+    "notes": "The paper focused on the clinical and diagnostic aspects of ATTRwt without detailing specific genetic variants in the TTR gene."
+  }
+}

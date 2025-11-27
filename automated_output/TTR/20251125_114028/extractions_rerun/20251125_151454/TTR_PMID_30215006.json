@@ -1,0 +1,66 @@
+{
+  "paper_metadata": {
+    "pmid": "30215006",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val30Met, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "29 years old, female",
+        "phenotype": "TTR-FAP with early symptoms of neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 29,
+          "age_at_onset": 29,
+          "age_at_diagnosis": 29,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Mild paresthesias and hyperalgesia at the distal region of both lower limbs.",
+          "evidence_sentence": "A 29 years old woman recently diagnosed of TTR-FAP secondary to Val-30-Met mutation was derived in June 2012 to the Neurophysiology Department of our Institution for evaluation of polyneuropathy."
+        }
+      ],
+      "functional_data": {
+        "summary": "The patient showed full remission of neurological symptoms after transplantation.",
+        "assays": [
+          "Conventional electrodiagnostic tests",
+          "Quantitative sensory testing",
+          "Thermoalgesic contact heat evoked potentials (CHEPs)",
+          "Sympathetic skin responses (SSR)"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the family as the patient is a known carrier.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Case report section",
+      "additional_notes": "The patient was asymptomatic until the onset of mild symptoms at age 29.",
+      "key_quotes": [
+        "She had been known as an asymptomatic carrier since 2008.",
+        "In March 2012, she started to complain of mild paresthesias and hyperalgesia at the distal region of both lower limbs."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information on the TTR variant."
+  }
+}

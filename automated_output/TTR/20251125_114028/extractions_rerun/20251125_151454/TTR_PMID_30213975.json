@@ -1,0 +1,23 @@
+{
+  "paper_metadata": {
+    "pmid": "30213975",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the interaction of TTR with amyloid-\u03b2 in the presence of various metal ions, but does not report any specific genetic variants in the TTR gene."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Crystallization conditions and data collection statistics.",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention any specific genetic variants in the TTR gene."
+    ],
+    "notes": "The paper focused on the structural and functional aspects of TTR in the presence of metal ions, without discussing genetic variants."
+  }
+}

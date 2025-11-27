@@ -1,0 +1,104 @@
+{
+  "paper_metadata": {
+    "pmid": "34106429",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Portuguese, Swedish, and Japanese descent",
+        "phenotype": "familial amyloid polyneuropathy (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "familial amyloid polyneuropathy",
+          "evidence_sentence": "The most common mutation worldwide, which is associated with familial amyloid polyneuropathy (FAP), is the Val30Met variant found in patients of Portuguese, Swedish and Japanese decent."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met variant is known to cause systemic amyloidosis, mainly impacting the peripheral nervous system and the heart.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": "Not specified.",
+      "evidence_level": "Strong evidence based on clinical association.",
+      "source_location": "Introduction, paragraph 3",
+      "additional_notes": "This variant is one of the most studied in relation to hereditary amyloidosis.",
+      "key_quotes": [
+        "The most common mutation worldwide, which is associated with familial amyloid polyneuropathy (FAP), is the Val30Met variant found in patients of Portuguese, Swedish and Japanese decent."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "African American population",
+        "phenotype": "ATTR cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "ATTR cardiomyopathy",
+          "evidence_sentence": "The most common mutation in the USA, the Val122Ile variant, is associated with ATTR cardiomyopathy and is carried by 3\u20134% of the African American population with variable penetrance."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile variant is associated with increased risk of developing ATTR cardiomyopathy.",
+        "assays": []
+      },
+      "segregation_data": "Yes, segregates with disease in families.",
+      "population_frequency": "3-4% in the African American population.",
+      "evidence_level": "Strong evidence based on clinical association.",
+      "source_location": "Epidemiology, paragraph 2",
+      "additional_notes": "This variant shows variable penetrance.",
+      "key_quotes": [
+        "The most common mutation in the USA, the Val122Ile variant, is associated with ATTR cardiomyopathy and is carried by 3\u20134% of the African American population with variable penetrance."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for TTR variants were extracted successfully."
+  }
+}

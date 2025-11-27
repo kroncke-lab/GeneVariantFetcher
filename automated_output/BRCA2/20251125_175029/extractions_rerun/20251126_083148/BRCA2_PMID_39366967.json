@@ -1,0 +1,198 @@
+{
+  "paper_metadata": {
+    "pmid": "39366967",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene along with penetrance data from the study."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3190_3191del",
+      "protein_notation": "p.Ile1065fs",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "45-year-old female",
+        "phenotype": "Left breast cancer, underwent total mastectomy of left breast and risk-reducing mastectomy of right breast."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": 45,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Left breast cancer, underwent total mastectomy of left breast.",
+          "evidence_sentence": "Case 4 was a 45-year-old woman with a germline BRCA2 p.I1065fs variant, and case 5 was a 69-year-old woman with a germline BRCA1 c.5278-1\u2009G\u2009>\u2009A variant; both variants were reported as pathogenic."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided for this variant.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was associated with a significant clonal expansion in normal breast tissue.",
+      "key_quotes": [
+        "Case 4 was a 45-year-old woman with a germline BRCA2 p.I1065fs variant."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6946G>A",
+      "protein_notation": "p.Arg2318*",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "39-year-old female",
+        "phenotype": "Past left breast cancer, underwent contralateral risk-reducing mastectomy."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 17",
+          "age_at_evaluation": 39,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Past left breast cancer, underwent contralateral risk-reducing mastectomy.",
+          "evidence_sentence": "Case #17 had a germline BRCA2 p.Arg2318* variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided for this variant.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was associated with a significant clonal expansion in normal breast tissue.",
+      "key_quotes": [
+        "Case #17 had a germline BRCA2 p.Arg2318* variant."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1944_1945del",
+      "protein_notation": "p.Asn43fs",
+      "genomic_position": null,
+      "clinical_significance": "Pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "39-year-old female",
+        "phenotype": "Bilateral breast cancer."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 19",
+          "age_at_evaluation": 39,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Bilateral breast cancer.",
+          "evidence_sentence": "Case #19 had a germline BRCA2 p.Asn43fs variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided for this variant.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on pathogenic classification.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was associated with a significant clonal expansion in normal breast tissue.",
+      "key_quotes": [
+        "Case #19 had a germline BRCA2 p.Asn43fs variant."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8581_8582del",
+      "protein_notation": "p.Ala2864fs",
+      "genomic_position": null,
+      "clinical_significance": "Likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "39-year-old female",
+        "phenotype": "Left ductal carcinoma in situ."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 22",
+          "age_at_evaluation": 39,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Left ductal carcinoma in situ.",
+          "evidence_sentence": "Case #22 had a germline BRCA2 p.Ala2864fs variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided for this variant.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on likely pathogenic classification.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was associated with a significant clonal expansion in normal breast tissue.",
+      "key_quotes": [
+        "Case #22 had a germline BRCA2 p.Ala2864fs variant."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical information of 29 breast cancer cases",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted with detailed penetrance data."
+  }
+}

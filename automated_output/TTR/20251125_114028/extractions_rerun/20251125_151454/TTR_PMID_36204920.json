@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "36204920",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on TTR gene variants, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.165G>T",
+      "protein_notation": "p.Lys55Asn",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "45-year-old female",
+        "phenotype": "Familial amyloid polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 45,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Progressive painful symmetric peripheral neuropathy, complete heart block, and sensorineural hearing loss.",
+          "evidence_sentence": "A 45-year-old female presented with history of deafness for 5 years and progressively increasing burning pain and paresthesia in both lower limbs followed by the upper limbs for the past 1 year."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is associated with familial amyloid neuropathy.",
+        "assays": []
+      },
+      "segregation_data": "The patient has a positive family history; her brother had similar symptoms and died of cardiac arrest.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the first report of p.Lys55Asn mutation in TTR gene reported from India.",
+      "key_quotes": [
+        "This mutation has not been reported from India.",
+        "This is the first report of p. Lys55Asn mutation in TTR gene reported from India."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

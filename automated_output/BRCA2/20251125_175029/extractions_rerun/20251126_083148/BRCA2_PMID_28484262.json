@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "28484262",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from the study."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8023A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": null,
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 2,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "PMH1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": null,
+          "evidence_sentence": "Although all 6 mutations were detected in both approaches 2 and 3."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Table 1, Row 2",
+      "additional_notes": "Variant allele frequency was 19% in approach 2 and 49% in approach 3.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1261C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": null,
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 2,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "TWH1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": null,
+          "evidence_sentence": "Although all 6 mutations were detected in both approaches 2 and 3."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Table 1, Row 3",
+      "additional_notes": "Variant allele frequency was 50% in approach 2 and 74% in approach 3.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3109C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": null,
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 2,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "TWH2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": null,
+          "evidence_sentence": "Although all 6 mutations were detected in both approaches 2 and 3."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Table 1, Row 4",
+      "additional_notes": "Variant allele frequency was 51% in both approaches.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Variant allele frequency underestimation due to overlapping primer site.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants and penetrance data were extracted successfully."
+  }
+}

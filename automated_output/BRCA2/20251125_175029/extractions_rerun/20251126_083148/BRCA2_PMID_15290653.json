@@ -1,0 +1,115 @@
+{
+  "paper_metadata": {
+    "pmid": "15290653",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.Asp2723His",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Evidence strongly suggests that this variant is deleterious.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Main Text, paragraph 3",
+      "additional_notes": "No specific patient data or penetrance statistics provided.",
+      "key_quotes": [
+        "The evidence strongly suggests that... D2723H in BRCA2 is deleterious."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.Tyr42Cys",
+      "genomic_position": null,
+      "clinical_significance": "benign",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Evidence suggests that this variant is neutral.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "weak",
+      "source_location": "Main Text, paragraph 3",
+      "additional_notes": "No specific patient data or penetrance statistics provided.",
+      "key_quotes": [
+        "Evidence strongly suggests that... Y42C in BRCA2 is neutral."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.Pro655Arg",
+      "genomic_position": null,
+      "clinical_significance": "benign",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Evidence suggests that this variant is neutral.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "weak",
+      "source_location": "Main Text, paragraph 3",
+      "additional_notes": "No specific patient data or penetrance statistics provided.",
+      "key_quotes": [
+        "Evidence strongly suggests that... P655R in BRCA2 is neutral."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "No individual patient data or penetrance statistics were provided in the text."
+  }
+}

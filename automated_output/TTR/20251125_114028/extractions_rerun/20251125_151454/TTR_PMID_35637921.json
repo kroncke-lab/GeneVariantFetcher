@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "35637921",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant I127V, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.379A>G",
+      "protein_notation": "p.I127V",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "59-year-old male",
+        "phenotype": "sensorimotor polyneuropathy with atypical transthoracic echocardiogram findings"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 59,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "progressive symmetric bilateral hand numbness and weakness, later bilateral symmetric lower extremity numbness and weakness",
+          "evidence_sentence": "A 59-year-old male with no significant past medical history presented with progressive symmetric bilateral hand numbness and weakness."
+        }
+      ],
+      "functional_data": {
+        "summary": "The I127V mutation is associated with transthyretin amyloidosis, leading to misfolded protein aggregation.",
+        "assays": []
+      },
+      "segregation_data": "The variant is present in the patient with symptoms consistent with hATTR.",
+      "population_frequency": null,
+      "evidence_level": "case report",
+      "source_location": "Case presentation, paragraph 2",
+      "additional_notes": "The case highlights the atypical presentation of the I127V variant.",
+      "key_quotes": [
+        "This demonstrated the autosomal dominant heterozygous c.379 A> G p.I127V mutation in the TTR gene.",
+        "The rarity of our case is also seen in the upper extremity involvement preceding lower extremity involvement months later."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on a single variant in the TTR gene."
+  }
+}

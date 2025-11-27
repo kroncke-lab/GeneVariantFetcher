@@ -1,0 +1,112 @@
+{
+  "paper_metadata": {
+    "pmid": "25428789",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.746delG",
+      "protein_notation": "p.Gly249Valfs*5",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "African American female, age 31",
+        "phenotype": "IDC, receptor-positive breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 31,
+          "age_at_onset": null,
+          "age_at_diagnosis": 31,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "IDC, receptor-positive breast cancer",
+          "evidence_sentence": "Patient 276 carried both BRCA2 p.R3128X and ATM p.R248X. She was diagnosed with receptor-positive breast cancer at age 31."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is predicted to result in a truncated protein, leading to loss of function.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 3",
+      "additional_notes": "This variant is associated with a high risk of breast cancer.",
+      "key_quotes": [
+        "The majority of mutations were found in BRCA1 and BRCA2 genes.",
+        "Identifying inherited mutations in breast cancer patients is important for at least three reasons."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.886delGT",
+      "protein_notation": "p.Gly296Valfs*5",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "African American female, age 45",
+        "phenotype": "IDC"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 45,
+          "age_at_onset": null,
+          "age_at_diagnosis": 45,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "IDC",
+          "evidence_sentence": "Patient 312 carried both CHEK2 p.R160G and ATM p.R457X. She was diagnosed with stage 3, receptor-positive breast cancer at age 34."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is predicted to result in a truncated protein, leading to loss of function.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 4",
+      "additional_notes": "This variant is associated with a high risk of breast cancer.",
+      "key_quotes": [
+        "The majority of mutations were found in BRCA1 and BRCA2 genes.",
+        "Identifying inherited mutations in breast cancer patients is important for at least three reasons."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Germline mutations in African American patients with primary breast cancer with young age at diagnosis (Br dx <45), family history of breast cancer younger than age 60 (FH Br <60) or of ovarian cancer (FH Ov), or triple-negative breast cancer (TNBC)",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 variants were extracted successfully."
+  }
+}

@@ -1,0 +1,529 @@
+{
+  "paper_metadata": {
+    "pmid": "23683081",
+    "title": "Mutational analysis of BRCA1 and BRCA2 in hereditary breast and ovarian cancer families from Asturias (Northern Spain)",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4030_4035delinsC",
+      "protein_notation": "p.Asn1344Hisfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 11,
+        "demographics": "median age 48 for breast cancer (range 32\u201374), median age 52 for ovarian cancer (range 48\u201360)",
+        "phenotype": "10 breast cancers, 3 ovarian cancers, 1 squamous oesophagus cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": 10,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.91,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 48,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In the eleven carriers identified, a total of ten breast cancers, three ovarian cancers and one squamous oesophagus cancer have been diagnosed."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 52,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ovarian cancer",
+          "evidence_sentence": "In the eleven carriers identified, a total of ten breast cancers, three ovarian cancers and one squamous oesophagus cancer have been diagnosed."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 32,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In the eleven carriers identified, a total of ten breast cancers, three ovarian cancers and one squamous oesophagus cancer have been diagnosed."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 74,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In the eleven carriers identified, a total of ten breast cancers, three ovarian cancers and one squamous oesophagus cancer have been diagnosed."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 60,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ovarian cancer",
+          "evidence_sentence": "In the eleven carriers identified, a total of ten breast cancers, three ovarian cancers and one squamous oesophagus cancer have been diagnosed."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 48,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ovarian cancer",
+          "evidence_sentence": "In the eleven carriers identified, a total of ten breast cancers, three ovarian cancers and one squamous oesophagus cancer have been diagnosed."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 52,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ovarian cancer",
+          "evidence_sentence": "In the eleven carriers identified, a total of ten breast cancers, three ovarian cancers and one squamous oesophagus cancer have been diagnosed."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 60,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In the eleven carriers identified, a total of ten breast cancers, three ovarian cancers and one squamous oesophagus cancer have been diagnosed."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 74,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In the eleven carriers identified, a total of ten breast cancers, three ovarian cancers and one squamous oesophagus cancer have been diagnosed."
+        },
+        {
+          "individual_id": "P10",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 60,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In the eleven carriers identified, a total of ten breast cancers, three ovarian cancers and one squamous oesophagus cancer have been diagnosed."
+        },
+        {
+          "individual_id": "P11",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 52,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "squamous oesophagus cancer",
+          "evidence_sentence": "In the eleven carriers identified, a total of ten breast cancers, three ovarian cancers and one squamous oesophagus cancer have been diagnosed."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is a truncating mutation leading to a frameshift.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregated with disease in the families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on multiple affected individuals.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation is the most frequent BRCA2 mutation in the study.",
+      "key_quotes": [
+        "The novel truncating mutation c.4030_4035delinsC (p.Asn1344Hisfs), shared by 6 families, is BRCA2 most frequent mutation in our series and accounts for 30% of the BRCA2 mutations."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2095C>T",
+      "protein_notation": "p.Gln699*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is a truncating mutation leading to a stop codon.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregated with disease in the families.",
+      "population_frequency": null,
+      "evidence_level": "moderate evidence based on family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was identified in three Asturian families.",
+      "key_quotes": [
+        "The second most frequent novel mutation in BRCA2 was c.2095 C>T (p.Gln699*) identified in three Asturian families."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.262_263delCT",
+      "protein_notation": "p.Leu88Alafs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is a truncating mutation leading to a frameshift.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregated with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate evidence based on family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was found in one family.",
+      "key_quotes": [
+        "The following novel truncating mutations were found in one family each: c.262_263delCT (p.Leu88Alafs)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3263dupC",
+      "protein_notation": "p.Gln1089Serfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is a truncating mutation leading to a frameshift.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregated with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate evidence based on family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was found in one family.",
+      "key_quotes": [
+        "The following novel truncating mutations were found in one family each: c.3263dupC (p.Gln1089Serfs)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8042_8043delCA",
+      "protein_notation": "p.Thr2681Serfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is a truncating mutation leading to a frameshift.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregated with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate evidence based on family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was found in one family.",
+      "key_quotes": [
+        "The following novel truncating mutations were found in one family each: c.8042_8043delCA (p.Thr2681Serfs)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1813dupA",
+      "protein_notation": "p.Ile605Asnfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is a truncating mutation leading to a frameshift.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregated with disease in the families.",
+      "population_frequency": null,
+      "evidence_level": "moderate evidence based on family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation is very common in Western Europe.",
+      "key_quotes": [
+        "Two families carried the mutation c.1813dupA (p.Ile605Asnfs), which is very common in Western Europe."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5116_5119delAATA",
+      "protein_notation": "p.Asn1706Leufs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is a truncating mutation leading to a frameshift.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregated with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate evidence based on family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was found in one family.",
+      "key_quotes": [
+        "The other 6 known mutations were found in one family each. The c.5116_5119delAATA (p.Asn1706Leufs) mutation, recurrent in Castilla-Le\u00f3n, was found in two families originally from that area."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9310_9311delAA",
+      "protein_notation": "p.Lys3104Valfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is a truncating mutation leading to a frameshift.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregated with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate evidence based on family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was found in one family.",
+      "key_quotes": [
+        "The other 6 known mutations were found in one family each. The c.9310_9311delAA (p.Lys3104Valfs) mutation, recurrent in Castilla-Le\u00f3n, was found in two families originally from that area."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5576_5579delTTAA",
+      "protein_notation": "p.Ile1859Lysfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is a truncating mutation leading to a frameshift.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregated with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate evidence based on family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was found in one family.",
+      "key_quotes": [
+        "The pathogenic mutation c.5576_5579delTTAA (p.Ile1859Lysfs) was found in one family from the Pa\u00eds Vasco."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4631dupA",
+      "protein_notation": "p.Asn1544Lysfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is a truncating mutation leading to a frameshift.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregated with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate evidence based on family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was found in one family.",
+      "key_quotes": [
+        "The pathogenic mutation c.4631dupA (p.Asn1544Lysfs) has also been described in Western European populations."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9026_9030delATCAT",
+      "protein_notation": "p.Tyr3009Serfs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is a truncating mutation leading to a frameshift.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregated with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate evidence based on family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was found in one family.",
+      "key_quotes": [
+        "The frame-shift c.9026_9030delATCAT (p.Tyr3009Serfs), which is a founder mutation originating in the Northeast of Spain, was identified in one family from Cantabria."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2830A>T",
+      "protein_notation": "p.Lys944*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is a truncating mutation leading to a stop codon.",
+        "assays": []
+      },
+      "segregation_data": "The mutation segregated with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate evidence based on family segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation was found in one family.",
+      "key_quotes": [
+        "An African American woman with early onset bilateral breast cancer carried the nonsense mutation c.2830A>T (p.Lys944*)."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Germ line BRCA2 pathogenic mutations in breast and ovarian cancer families from Asturias",
+      "variants_extracted": 12
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 12,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants and penetrance data were successfully extracted."
+  }
+}

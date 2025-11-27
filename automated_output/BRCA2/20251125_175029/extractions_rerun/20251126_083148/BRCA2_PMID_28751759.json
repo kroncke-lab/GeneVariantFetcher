@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "28751759",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from the study."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7617+1G>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": null,
+          "evidence_sentence": "Laboratory 11 failed to identify two mutations; a 40 bp deletion in BRCA1 c.1175_1214del40, p.(Leu392Glnfs*5) and a splice-site mutation in BRCA2 c.7617+1G>T."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was missed by one laboratory due to bioinformatics analysis issues.",
+      "key_quotes": [
+        "Failure to identify these mutations is likely to be due to the specific bioinformatics analysis used in this centre."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.10G>T",
+      "protein_notation": "p.(Gly4*)",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": null,
+          "evidence_sentence": "Laboratory 16, using an HRM pre-screening strategy, failed to identify the BRCA2 nonsense mutation c.10G>T; p.(Gly4*) in one sample."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was missed due to similarity with a known polymorphic variant.",
+      "key_quotes": [
+        "Root cause analysis by the laboratory identified that the mutation was missed because the HRM profile was very similar to a known polymorphic variant within the amplicon containing the mutation."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6842-?_7007+?del",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": null,
+          "evidence_sentence": "One of the PCR primers for this amplicon overlaps the pathogenic BRCA2 deletion present in this sample (BRCA2 c.6842-?_7007+?del)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This deletion caused analytical interference preventing amplification.",
+      "key_quotes": [
+        "Consequently, the presence of the large deletion leads to analytical interference preventing amplification of one of the BRCA2 alleles."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

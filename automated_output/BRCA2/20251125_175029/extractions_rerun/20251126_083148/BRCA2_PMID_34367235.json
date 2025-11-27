@@ -1,0 +1,131 @@
+{
+  "paper_metadata": {
+    "pmid": "34367235",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on two BRCA2 variants associated with familial peripheral neuroblastic tumors in siblings."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2611C>A",
+      "protein_notation": "p.S871Ter",
+      "genomic_position": "chr13: 32911104C > A",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "30-month-old female (II-1), 36-month-old male (II-2)",
+        "phenotype": "neuroblastoma (NB) and ganglioneuroma (GN)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "II-1",
+          "age_at_evaluation": 30,
+          "age_at_onset": null,
+          "age_at_diagnosis": 30,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with high risk neuroblastoma at stage M",
+          "evidence_sentence": "A 30-month-old Chinese girl (the proband, elder sister, and II-1) was diagnosed with NB, which primary site was retroperitoneum."
+        },
+        {
+          "individual_id": "II-2",
+          "age_at_evaluation": 36,
+          "age_at_onset": null,
+          "age_at_diagnosis": 36,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with ganglioneuroma",
+          "evidence_sentence": "The second case was the proband\u2019s younger brother (II-2), who was 36 months old at the time of diagnosis with GN."
+        }
+      ],
+      "functional_data": {
+        "summary": "The BRCA2-S871Ter variant results in premature truncation of the BRCA2 protein.",
+        "assays": [
+          "Sanger sequencing",
+          "co-immunoprecipitation"
+        ]
+      },
+      "segregation_data": "The two children both inherited the two mutants from their parents.",
+      "population_frequency": "Not reported",
+      "evidence_level": "Strong evidence based on functional assays and familial segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is associated with hereditary breast and ovarian cancer syndrome.",
+      "key_quotes": [
+        "This novel compound heterozygous mutations of the BRCA2 gene associated with PNTs by disordering DNA damage and response (DDR) signal pathway.",
+        "The novel compound heterozygous mutation BRCA2 gene was locked as the cause of carcinogenesis."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1115A>C",
+      "protein_notation": "p.N372H",
+      "genomic_position": "chr13: 32906729A > C",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "30-month-old female (II-1), 36-month-old male (II-2)",
+        "phenotype": "neuroblastoma (NB) and ganglioneuroma (GN)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "II-1",
+          "age_at_evaluation": 30,
+          "age_at_onset": null,
+          "age_at_diagnosis": 30,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with high risk neuroblastoma at stage M",
+          "evidence_sentence": "A 30-month-old Chinese girl (the proband, elder sister, and II-1) was diagnosed with NB, which primary site was retroperitoneum."
+        },
+        {
+          "individual_id": "II-2",
+          "age_at_evaluation": 36,
+          "age_at_onset": null,
+          "age_at_diagnosis": 36,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with ganglioneuroma",
+          "evidence_sentence": "The second case was the proband\u2019s younger brother (II-2), who was 36 months old at the time of diagnosis with GN."
+        }
+      ],
+      "functional_data": {
+        "summary": "The BRCA2-N372H variant is located in the P/CAF binding domain and may affect the interaction with P/CAF.",
+        "assays": [
+          "Sanger sequencing",
+          "co-immunoprecipitation"
+        ]
+      },
+      "segregation_data": "The two children both inherited the two mutants from their parents.",
+      "population_frequency": "C = 0.279642 in gnomAD_exome.",
+      "evidence_level": "Moderate evidence based on functional assays and familial segregation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant has been associated with increased cancer susceptibility, particularly breast and ovarian cancers.",
+      "key_quotes": [
+        "Although it was identified as highly related to breast cancer, ovarian cancer, and other many kinds of cancers, there is no report on whether this missense mutant is associated with PNTs."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

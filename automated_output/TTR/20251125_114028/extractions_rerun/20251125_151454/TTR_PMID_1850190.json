@@ -1,0 +1,76 @@
+{
+  "paper_metadata": {
+    "pmid": "1850190",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR Asn 90 variant, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.90A>C",
+      "protein_notation": "p.Asn30His",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "2/4,000 German subjects, 4/1,200 Portuguese subjects",
+        "phenotype": "No indicators found for an association with traits characteristic for FAP."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 1,
+        "unaffected_count": 5,
+        "uncertain_count": null,
+        "penetrance_percentage": 16.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Carrier of the Met 30 substitution and the acidic variant.",
+          "evidence_sentence": "one case, from an FAP kindred, was simultaneously carrier of the Met 30 substitution and the acidic variant"
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Had only the acidic monomer.",
+          "evidence_sentence": "one individual, from the randomly selected Portuguese sample, had only the acidic monomer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The acidic variant was characterized by an abnormal tryptic peptide not present in normal TTR digests.",
+        "assays": [
+          "double one-dimensional (D1-D) electrophoresis",
+          "hybrid isoelectric focusing in immobilized pH gradient (HIEF)",
+          "comparative peptide mapping by HPLC",
+          "RFLP analyses of PCR-amplified material"
+        ]
+      },
+      "segregation_data": "The variant segregates with the Met 30 substitution in one family.",
+      "population_frequency": "2/4,000 in German subjects, 4/1,200 in Portuguese subjects",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 2",
+      "additional_notes": "No indicators found for an association with traits characteristic for FAP.",
+      "key_quotes": [
+        "This variant has a lower pI and was found by screening analyses in 2/4,000 German subjects and in 4/1,200 Portuguese.",
+        "In all carriers of the Asn 90 substitution, no indicators were found for an association with traits characteristic for FAP."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

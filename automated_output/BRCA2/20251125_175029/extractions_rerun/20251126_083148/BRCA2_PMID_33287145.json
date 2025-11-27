@@ -1,0 +1,230 @@
+{
+  "paper_metadata": {
+    "pmid": "33287145",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2830A>T",
+      "protein_notation": "p.Lys944Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "49-year-old female, Caucasian",
+        "phenotype": "bilateral breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 49,
+          "age_at_onset": null,
+          "age_at_diagnosis": 49,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "bilateral breast cancer",
+          "evidence_sentence": "The proband was a 49-year-old woman affected with bilateral BC."
+        }
+      ],
+      "functional_data": {
+        "summary": "Pathogenic variant leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.425+2T>C",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "36-year-old female, Caucasian",
+        "phenotype": "ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 36,
+          "age_at_onset": null,
+          "age_at_diagnosis": 36,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ovarian cancer",
+          "evidence_sentence": "The proband was a 36-year-old woman affected with OC."
+        }
+      ],
+      "functional_data": {
+        "summary": "Likely pathogenic variant that may disrupt splicing.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.631G>A",
+      "protein_notation": "p.Val211Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "46-year-old female, 77-year-old female, 62-year-old female, all Caucasian",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 3,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 46,
+          "age_at_onset": null,
+          "age_at_diagnosis": 45,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The proband was a 46-year-old woman affected with BC, diagnosed at 45 years."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 77,
+          "age_at_onset": null,
+          "age_at_diagnosis": 77,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The proband was a 77-year-old woman affected with BC who was diagnosed at 65 years."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": 62,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The proband was a 62-year-old woman affected with BC who was diagnosed at 60 years."
+        }
+      ],
+      "functional_data": {
+        "summary": "Pathogenic variant leading to a change in protein structure.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7008-2A>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "46-year-old female, 77-year-old female, 62-year-old female, all Caucasian",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 3,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 46,
+          "age_at_onset": null,
+          "age_at_diagnosis": 45,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The proband was a 46-year-old woman affected with BC, diagnosed at 45 years."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": 77,
+          "age_at_onset": null,
+          "age_at_diagnosis": 77,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The proband was a 77-year-old woman affected with BC who was diagnosed at 65 years."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": 62,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The proband was a 62-year-old woman affected with BC who was diagnosed at 60 years."
+        }
+      ],
+      "functional_data": {
+        "summary": "Pathogenic variant that may disrupt splicing.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Clinical characteristics of probands and corresponding pathogenic variants.",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants and penetrance data were successfully extracted."
+  }
+}

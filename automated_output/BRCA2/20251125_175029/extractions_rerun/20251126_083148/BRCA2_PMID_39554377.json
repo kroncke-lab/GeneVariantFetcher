@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "39554377",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a BRCA2 pathogenic variant found in a cohort of Somali women with ovarian cancer, along with penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1707_1708delGA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Age 65, Female, Somali ethnicity",
+        "phenotype": "Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": 65,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "High-Grade Serous Ovarian Cancer",
+          "evidence_sentence": "One patient carried a BRCA2 germline pathogenic variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "The specific functional impact of this variant is not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "unknown",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The paper does not provide detailed functional data or population frequency for the BRCA2 variant.",
+      "key_quotes": [
+        "One patient carried a BRCA2 germline pathogenic variant."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information regarding the BRCA2 variant."
+  }
+}

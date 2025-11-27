@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "2840822",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant associated with Indiana/Swiss hereditary amyloidosis, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.252T>G",
+      "protein_notation": "p.Ser84Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Indiana/Swiss hereditary amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "carpal tunnel syndrome, progressive peripheral neuropathy, vitreous deposits, and cardiomyopathy",
+          "evidence_sentence": "This disorder was originally described in a large Indiana family of Swiss descent and is also known as familial amyloidotic polyneuropathy (FAP) type II."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant creates an AluI recognition site, verified by Southern blot analysis.",
+        "assays": [
+          "Southern blot analysis"
+        ]
+      },
+      "segregation_data": "Yes, it segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Main Text, Abstract",
+      "additional_notes": "The variant is associated with a specific phenotype of hereditary amyloidosis.",
+      "key_quotes": [
+        "We predicted that the corresponding mutation in the prealbumin gene consisted of a T-to-G change in codon 84.",
+        "This verifies the protein findings at the DNA level and provides a direct, reliable DNA test for the Ser-84 prealbumin gene associated with Indiana/Swiss hereditary amyloidosis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

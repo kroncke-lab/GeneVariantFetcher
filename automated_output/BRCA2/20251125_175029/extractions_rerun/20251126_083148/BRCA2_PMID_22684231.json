@@ -1,0 +1,228 @@
+{
+  "paper_metadata": {
+    "pmid": "22684231",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1099G>A",
+      "protein_notation": "p.Asp367Asn",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "young breast cancer patient",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The rare BRCA2 UV c.5332G>A/p.Asp1778Asn was found here for the first time in co-occurrence in trans with the deleterious BRCA1 mutation c.798_799delTT/p.Ser267LysfsX19 in young breast cancer patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Identified as likely pathogenic based on damaging PSIC score from PolyPhen2.",
+        "assays": [
+          "PolyPhen2",
+          "SIFT"
+        ]
+      },
+      "segregation_data": "Segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Found in co-occurrence with a known deleterious BRCA1 mutation.",
+      "key_quotes": [
+        "The rare BRCA2 UV c.5332G>A/p.Asp1778Asn was found here for the first time in co-occurrence in trans with the deleterious BRCA1 mutation c.798_799delTT/p.Ser267LysfsX19 in young breast cancer patient."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2636C>A",
+      "protein_notation": "p.Ser879Tyr",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Showed a damaging PSIC score yielded by PolyPhen2 program.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified as a new missense UV.",
+      "key_quotes": [
+        "six BRCA2 (c.1099G>A/p.Asp367Asn, c.2636C>A/p.Ser879Tyr, c.3868T>A/p.Cys1290Ser, c.5428G>T/p.Val1810Phe, c.6346C>G/p.His2116Asp and c.9256G>A/p.Gly3086Arg) located respectively in exons 10, 11 and 24, show a damaging PSIC score yielded by PolyPhen2 program and could be pathogenic."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3868T>A",
+      "protein_notation": "p.Cys1290Ser",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Showed a damaging PSIC score yielded by PolyPhen2 program.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified as a new missense UV.",
+      "key_quotes": [
+        "six BRCA2 (c.1099G>A/p.Asp367Asn, c.2636C>A/p.Ser879Tyr, c.3868T>A/p.Cys1290Ser, c.5428G>T/p.Val1810Phe, c.6346C>G/p.His2116Asp and c.9256G>A/p.Gly3086Arg) located respectively in exons 10, 11 and 24, show a damaging PSIC score yielded by PolyPhen2 program and could be pathogenic."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5428G>T",
+      "protein_notation": "p.Val1810Phe",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Showed a damaging PSIC score yielded by PolyPhen2 program.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified as a new missense UV.",
+      "key_quotes": [
+        "six BRCA2 (c.1099G>A/p.Asp367Asn, c.2636C>A/p.Ser879Tyr, c.3868T>A/p.Cys1290Ser, c.5428G>T/p.Val1810Phe, c.6346C>G/p.His2116Asp and c.9256G>A/p.Gly3086Arg) located respectively in exons 10, 11 and 24, show a damaging PSIC score yielded by PolyPhen2 program and could be pathogenic."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6346C>G",
+      "protein_notation": "p.His2116Asp",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Showed a damaging PSIC score yielded by PolyPhen2 program.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified as a new missense UV.",
+      "key_quotes": [
+        "six BRCA2 (c.1099G>A/p.Asp367Asn, c.2636C>A/p.Ser879Tyr, c.3868T>A/p.Cys1290Ser, c.5428G>T/p.Val1810Phe, c.6346C>G/p.His2116Asp and c.9256G>A/p.Gly3086Arg) located respectively in exons 10, 11 and 24, show a damaging PSIC score yielded by PolyPhen2 program and could be pathogenic."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9256G>A",
+      "protein_notation": "p.Gly3086Arg",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Showed a damaging PSIC score yielded by PolyPhen2 program.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified as a new missense UV.",
+      "key_quotes": [
+        "six BRCA2 (c.1099G>A/p.Asp367Asn, c.2636C>A/p.Ser879Tyr, c.3868T>A/p.Cys1290Ser, c.5428G>T/p.Val1810Phe, c.6346C>G/p.His2116Asp and c.9256G>A/p.Gly3086Arg) located respectively in exons 10, 11 and 24, show a damaging PSIC score yielded by PolyPhen2 program and could be pathogenic."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 7,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "paper_metadata": {
+    "pmid": "35999650",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 35,
+        "demographics": "Median age 78 years, 82% \u226570 years, 16% female, 99% Caucasian",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTRv)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 35,
+        "affected_count": 13,
+        "unaffected_count": 22,
+        "uncertain_count": null,
+        "penetrance_percentage": 37.14,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "\u226570 years",
+            "penetrance_percentage": 5.3,
+            "carriers_in_range": 13,
+            "affected_in_range": 1
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 93,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Transthyretin amyloid cardiomyopathy",
+          "evidence_sentence": "The eldest ATTRv patient diagnosed was a 93-year-old Caucasian female with the Val142Ile variant."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val142Ile variant is associated with hereditary transthyretin amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families as indicated by genetic testing in relatives.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the importance of genetic testing in elderly patients with ATTR-CM.",
+      "key_quotes": [
+        "Diagnosis of ATTRv in elderly ATTR\u2010CM patients allowed initiation of transthyretin\u2010specific drug treatment in 5 individuals.",
+        "Identification of 9 ATTRv asymptomatic carriers."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 35,
+        "demographics": "Median age 78 years, 82% \u226570 years, 16% female, 99% Caucasian",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTRv)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 35,
+        "affected_count": 13,
+        "unaffected_count": 22,
+        "uncertain_count": null,
+        "penetrance_percentage": 37.14,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "\u226570 years",
+            "penetrance_percentage": 5.3,
+            "carriers_in_range": 13,
+            "affected_in_range": 1
+          }
+        ]
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val50Met variant is associated with hereditary transthyretin amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families as indicated by genetic testing in relatives.",
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the importance of genetic testing in elderly patients with ATTR-CM.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data is based on the information provided in the main text."
+  }
+}

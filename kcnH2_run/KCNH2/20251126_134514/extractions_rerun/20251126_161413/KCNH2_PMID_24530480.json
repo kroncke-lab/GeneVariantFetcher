@@ -1,0 +1,162 @@
+{
+  "paper_metadata": {
+    "pmid": "24530480",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the KCNH2 gene, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.3094_3095del",
+      "protein_notation": "p.Arg1032Glyfs*25",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Long QT Syndrome Type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Long QT Syndrome",
+          "evidence_sentence": "R1032Gfs*25 introduces a PTC in exon 14."
+        }
+      ],
+      "functional_data": {
+        "summary": "R1032Gfs*25 reduced the level of mutant mRNA compared to the wild-type minigene in an NMD-dependent manner.",
+        "assays": [
+          "minigene system",
+          "functional expression assays"
+        ]
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The deletion of intron 14 prevented degradation of R1032Gfs*25 mRNA.",
+      "key_quotes": [
+        "The present study defines the positional requirements for the susceptibility of LQT2 mutations to NMD."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.3100_3101del",
+      "protein_notation": "p.Asp1037Argfs*82",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Long QT Syndrome Type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "D1037Rfs*82 causes a PTC in the last exon (exon 15)."
+        }
+      ],
+      "functional_data": {
+        "summary": "D1037Rfs*82 did not reduce the level of mutant mRNA compared to the wild-type minigene.",
+        "assays": [
+          "minigene system",
+          "functional expression assays"
+        ]
+      },
+      "segregation_data": "does not segregate with disease",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Inhibition of downstream intron splicing rescued the functional expression of this mutation.",
+      "key_quotes": [
+        "D1037Rfs*82 did not reduce the level of mutant mRNA compared to the wild-type minigene."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.3229C>T",
+      "protein_notation": "p.Tyr1078*",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Long QT Syndrome Type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Long QT Syndrome",
+          "evidence_sentence": "Inhibition of downstream intron splicing by antisense morpholino oligonucleotides inhibited NMD and rescued the functional expression of a third LQT2 mutation, Y1078*."
+        }
+      ],
+      "functional_data": {
+        "summary": "Y1078* was rescued by inhibition of downstream intron splicing.",
+        "assays": [
+          "functional expression assays"
+        ]
+      },
+      "segregation_data": "segregates with disease in families",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation is a target of NMD.",
+      "key_quotes": [
+        "Inhibition of downstream intron splicing by antisense morpholino oligonucleotides inhibited NMD and rescued the functional expression of a third LQT2 mutation, Y1078*."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Summary of KCNH2 mutations and their effects",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text and tables."
+  }
+}

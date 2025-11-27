@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "29797793",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 N372H polymorphism found in drug-resistant recurrent ovarian cancer patients."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 10,
+        "demographics": "10 patients with drug-resistant recurrent ovarian cancer, age range 39-70 years (median 48 years)",
+        "phenotype": "drug-resistant recurrent ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": 0,
+        "uncertain_count": 6,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The BRCA2 N372H polymorphism was found in 40% of drug-resistant recurrent ovarian cancer patients.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was not detected in drug-sensitive recurrent ovarian cancer patients.",
+      "key_quotes": [
+        "BRCA2 N372H polymorphism was found in 40% (4/10) of drug-resistant recurrent ovarian cancer patients."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data is based solely on the BRCA2 variant mentioned in the text."
+  }
+}

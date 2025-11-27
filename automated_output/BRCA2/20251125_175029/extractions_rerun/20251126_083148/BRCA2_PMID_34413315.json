@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "34413315",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from a study on BRCA1/2-associated cancer in Latin America."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2808_2811del",
+      "protein_notation": "p.Ala938Profs",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 6,
+        "demographics": "3 in Brazil, 2 in Mexico, 1 in Colombia",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "Regarding BRCA2, only a Colombian founder variant was recurrent: c.2808_2811del (n=6: 3 in Brazil, 2 in Mexico and 1 in Colombia)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional impact not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": "Not available.",
+      "evidence_level": "Not specified.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was noted as recurrent among the population studied.",
+      "key_quotes": [
+        "Regarding BRCA2, only a Colombian founder variant was recurrent: c.2808_2811del (n=6: 3 in Brazil, 2 in Mexico and 1 in Colombia)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was reported in the paper."
+  }
+}

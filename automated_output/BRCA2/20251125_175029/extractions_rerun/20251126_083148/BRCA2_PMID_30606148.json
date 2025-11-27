@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "30606148",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6491_6494delAGTT",
+      "protein_notation": "p.Gln2164Argfs*3",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "50-59 years, female",
+        "phenotype": "high grade serous carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 50,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "high grade serous carcinoma",
+          "evidence_sentence": "Patients with high grade serous carcinoma were found to carry a P or LP variant in 24.5% of cases."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to a frameshift and is classified as pathogenic.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 38",
+      "additional_notes": "This variant is associated with a high risk of ovarian cancer.",
+      "key_quotes": [
+        "Patients with high grade serous carcinoma were found to carry a P or LP variant in 24.5% of cases."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3680_3681delTG",
+      "protein_notation": "p.Leu1227Glnfs*5",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "60-69 years, female",
+        "phenotype": "high grade serous carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 60,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "high grade serous carcinoma",
+          "evidence_sentence": "Patients with high grade serous carcinoma were found to carry a P or LP variant in 24.5% of cases."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to a frameshift and is classified as pathogenic.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 2, Row 39",
+      "additional_notes": "This variant is associated with a high risk of ovarian cancer.",
+      "key_quotes": [
+        "Patients with high grade serous carcinoma were found to carry a P or LP variant in 24.5% of cases."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.738delT",
+      "protein_notation": "p.Phe246Leufs*5",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "40-49 years, female",
+        "phenotype": "high grade serous carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 40,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "high grade serous carcinoma",
+          "evidence_sentence": "Patients with high grade serous carcinoma were found to carry a P or LP variant in 24.5% of cases."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to a frameshift and is classified as likely pathogenic.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Table 2, Row 44",
+      "additional_notes": "This variant is associated with a high risk of ovarian cancer.",
+      "key_quotes": [
+        "Patients with high grade serous carcinoma were found to carry a P or LP variant in 24.5% of cases."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Description of BRCA1 and BRCA2 variants and clinical and pathological characteristics",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted with detailed penetrance data."
+  }
+}

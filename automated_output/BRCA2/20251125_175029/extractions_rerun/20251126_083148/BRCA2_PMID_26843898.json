@@ -1,0 +1,233 @@
+{
+  "paper_metadata": {
+    "pmid": "26843898",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1310_1313delAAGA",
+      "protein_notation": "p.Lys437Ilefs*2",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "female, ages not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 37,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Two patients carried the BRCA2 mutation c.1310_1313delAAGA."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Two patients carried the BRCA2 mutation c.1310_1313delAAGA."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is predicted to result in a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the two identified patients.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation has not been previously reported in the Polish population.",
+      "key_quotes": [
+        "Two patients carried the BRCA2 mutation c.1310_1313delAAGA."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9027delT",
+      "protein_notation": "p.Y3009Yfs*19",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, age not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "One patient carried the BRCA2 mutation c.9027delT."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is predicted to result in a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the identified patient.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation has not been previously reported in the Polish population.",
+      "key_quotes": [
+        "One patient carried the BRCA2 mutation c.9027delT."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9371A>T",
+      "protein_notation": "p.N3124I",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "female, ages not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Two patients carried the likely pathogenic BRCA2 mutation c.9371A>T."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Two patients carried the likely pathogenic BRCA2 mutation c.9371A>T."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is predicted to adversely affect ssDNA interaction and the structural integrity of the C-terminal domain of the protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the identified patients.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant has previously been reported in 11 unrelated patients from Poland.",
+      "key_quotes": [
+        "Two patients carried the likely pathogenic BRCA2 mutation c.9371A>T."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9403delC",
+      "protein_notation": "p.L3135Ffs*28",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "female, ages not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Two patients carried the BRCA2 mutation c.9403delC."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Two patients carried the BRCA2 mutation c.9403delC."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is predicted to result in a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in the identified patients.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation has been previously reported in six unrelated patients from Poland.",
+      "key_quotes": [
+        "Two patients carried the BRCA2 mutation c.9403delC."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Molecular and clinical characteristics of mutation-positive patients",
+      "variants_extracted": 4
+    },
+    {
+      "table_name": "Table 3",
+      "table_caption": "Overview of mutations found in the BRCA2 gene in the Polish population",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

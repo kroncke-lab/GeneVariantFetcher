@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "23136156",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 variant T421M, including clinical significance, penetrance data, and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1261A>C",
+      "protein_notation": "p.Thr421Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Type 2 long QT syndrome (LQT2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "resuscitated patient with LQT2",
+          "evidence_sentence": "T421M, a S1 domain mutation in the Kv11.1 channel protein, was identified in a resuscitated patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "The T421M-Kv11.1 mutation caused a loss of IKv11.1 through interactions of abnormal protein trafficking and channel gating.",
+        "assays": [
+          "patch clamp",
+          "Western blot",
+          "confocal imaging"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The study focused on the functional consequences of the T421M variant in vitro.",
+      "key_quotes": [
+        "The T421M-Kv11.1 mutation caused a loss of IKv11.1 through interactions of abnormal protein trafficking and channel gating."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant T421M was successfully extracted."
+  }
+}

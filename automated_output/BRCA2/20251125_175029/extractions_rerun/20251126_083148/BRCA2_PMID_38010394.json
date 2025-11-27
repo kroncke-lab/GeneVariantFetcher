@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "38010394",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the pharmacodynamic effects of talazoparib in patients with BRCA1/2 mutations but does not provide specific BRCA2 variant data."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific BRCA2 variant data."
+    ],
+    "notes": "The paper focused on the effects of talazoparib in patients with BRCA1/2 mutations but did not specify individual BRCA2 variants or penetrance data."
+  }
+}

@@ -1,0 +1,212 @@
+{
+  "paper_metadata": {
+    "pmid": "33645214",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the TTR gene with details on clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Tyr78Phe",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "accelerates aggregation by destabilizing both the tetrameric and monomeric species"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The pathogenic mutations destabilize the monomer and increase its aggregation rate.",
+        "assays": [
+          "19F-NMR measurements"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on functional assays",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is part of a cluster of pathogenic mutations.",
+      "key_quotes": [
+        "The pathogenic Y78F mutation accelerates aggregation by destabilizing both the tetrameric and monomeric species."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ala81Thr",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "destabilizes the monomer and increases its aggregation rate"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Destabilizes the monomer and increases its aggregation rate by disrupting a Schellman helix C-capping motif.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on functional assays",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": null,
+      "key_quotes": [
+        "The pathogenic mutations A81T destabilize the monomer and increase its aggregation rate by disrupting a Schellman helix C-capping motif."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Gly83Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "destabilizes the monomer and increases its aggregation rate"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Destabilizes the monomer and increases its aggregation rate.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on functional assays",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": null,
+      "key_quotes": [
+        "The pathogenic mutations G83R destabilize the monomer and increase its aggregation rate."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Ile84Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "destabilizes the monomer and increases its aggregation rate"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Destabilizes the monomer and increases its aggregation rate.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on functional assays",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": null,
+      "key_quotes": [
+        "The pathogenic mutations I84S destabilize the monomer and increase its aggregation rate."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Lys80Asp",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "destabilizes the EF helix"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Destabilizes the EF helix and yields an equilibrium mixture of tetramer and monomer.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate evidence for pathogenicity based on functional assays",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": null,
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Lys80Glu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "destabilizes the EF helix"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Destabilizes the EF helix and yields an equilibrium mixture of tetramer and monomer.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate evidence for pathogenicity based on functional assays",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": null,
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 6,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were related to the TTR gene."
+  }
+}

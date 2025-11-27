@@ -1,0 +1,66 @@
+{
+  "paper_metadata": {
+    "pmid": "32686758",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1744C>T",
+      "protein_notation": "p.Arg582Cys",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 patient, age not specified, sex not specified, ethnicity not specified",
+        "phenotype": "Long QT syndrome (LQTS)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "No voltage criteria for LVH, normal contractility",
+          "evidence_sentence": "B3 is a 70-year-old asymptomatic woman. Study visit echocardiogram showed septum measurement at the upper limit of normal with normal left ventricular size and systolic function, no left ventricular outflow tract obstruction, no systolic anterior motion, normal atria and no voltage criteria for left ventricular hypertrophy (LVH) on ECG."
+        }
+      ],
+      "functional_data": {
+        "summary": "No specific functional data provided.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Not specified",
+      "source_location": "Table 1",
+      "additional_notes": "The variant was classified as likely pathogenic but the individual was clinically unaffected.",
+      "key_quotes": [
+        "B3 is a 70-year-old asymptomatic woman. Study visit echocardiogram showed septum measurement at the upper limit of normal with normal left ventricular size and systolic function, no left ventricular outflow tract obstruction, no systolic anterior motion, normal atria and no voltage criteria for left ventricular hypertrophy (LVH) on ECG."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Variants identified in genome sequence data: candidate gene variants considered \u2018highly likely\u2019 or \u2018likely\u2019 pathogenic.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the relevant data was clearly presented in the text and tables."
+  }
+}

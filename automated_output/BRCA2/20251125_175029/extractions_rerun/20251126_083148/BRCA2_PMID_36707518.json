@@ -1,0 +1,123 @@
+{
+  "paper_metadata": {
+    "pmid": "36707518",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses several variants in the BRCA2 gene, their functional implications, and penetrance data related to affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.945C>T",
+      "protein_notation": "p.C315S",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Impaired specifically the dsDNA binding activity of BRCA2 and cannot promote RAD51-mediated recombination.",
+        "assays": [
+          "EMSA",
+          "clonogenic survival assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant shows hypersensitivity to replication stress induced by hydroxyurea.",
+      "key_quotes": [
+        "ssDNA gaps form in cells expressing BRCA2-C315S despite a functional fork arrest and persist through mitosis."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.818C>T",
+      "protein_notation": "p.S273L",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Impaired both ssDNA and dsDNA binding in vitro.",
+        "assays": [
+          "EMSA",
+          "clonogenic survival assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "medium",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant shows hypersensitivity to replication stress induced by hydroxyurea.",
+      "key_quotes": [
+        "BRCA2 NTD variants S273L and C315S displayed similar sensitivity to HU as the BRCA2-deficient cells."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.915C>T",
+      "protein_notation": "p.R3052W",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Affects the ssDNA binding activity of the CTD and is therefore deficient in HR.",
+        "assays": [
+          "clonogenic survival assay"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant shows hypersensitivity to PARP inhibitors.",
+      "key_quotes": [
+        "R3052W, the CTD variant that impairs HR activity, showed hypersensitivity to the treatment."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted from the main text."
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "paper_metadata": {
+    "pmid": "33357097",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the BRCA2 N372 H i.a.1342A>C variant and its role in platinum resistance in ovarian cancer, providing functional data and some penetrance information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1342A>C",
+      "protein_notation": "p.Asn372His",
+      "genomic_position": "rs144848",
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "platinum-resistant ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "platinum-resistant ovarian cancer",
+          "evidence_sentence": "This study aimed to further investigate the mechanism of BRCA2 N372 H mutation in the development of platinum resistance in ovarian cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The BRCA2 N372 H i.a.1342A>C variant was synthesized and shown to increase BRCA2 protein expression and RAD51 binding, leading to increased cell viability and resistance to cisplatin.",
+        "assays": [
+          "qPCR for BRCA2 mRNA expression",
+          "Immunoblotting for BRCA2 protein levels",
+          "Immunofluorescence for RAD51 binding",
+          "CCK-8 assay for cell viability"
+        ]
+      },
+      "segregation_data": "The variant was specifically found in platinum-resistant patients.",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study suggests a potential mechanism for platinum resistance in ovarian cancer linked to this variant.",
+      "key_quotes": [
+        "BRCA2 N372 H i.a.1342A>C heterozygous variation presented in platinum-resistant patients.",
+        "Over expression of mRNA and protein of BRCA2 was detected in the cells with BRCA2 N372 H i.a.1342A>C mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on a single variant in BRCA2."
+  }
+}

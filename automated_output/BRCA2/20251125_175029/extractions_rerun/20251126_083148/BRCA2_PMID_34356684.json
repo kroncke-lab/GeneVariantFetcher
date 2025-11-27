@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "34356684",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the role of BRCA2 in DNA repair and the impact of its disordered regions. No specific BRCA2 genetic variants are mentioned in the text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific BRCA2 variant data."
+    ],
+    "notes": "The paper focuses on the functional aspects of BRCA2 and its interactions, without detailing specific genetic variants."
+  }
+}

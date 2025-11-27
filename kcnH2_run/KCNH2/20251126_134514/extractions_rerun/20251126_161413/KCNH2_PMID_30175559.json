@@ -1,0 +1,95 @@
+{
+  "paper_metadata": {
+    "pmid": "30175559",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant S631A, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1891A>C",
+      "protein_notation": "p.Ser631Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "1 female (6 years old), 1 male (father), 1 female (sister), 1 male (brother)",
+        "phenotype": "Short QT Syndrome (SQTS), abbreviated QTc intervals"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 3,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 75.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 6,
+          "age_at_onset": 16,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "experienced syncope and fitted with an implantable defibrillator (ICD)",
+          "evidence_sentence": "The index patient was asymptomatic until she experienced syncope a decade later and was fitted with an implantable defibrillator (ICD)."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "abbreviated QTc interval",
+          "evidence_sentence": "She, her father and sister were all reported to have abbreviated QTc intervals (of 340 msec or less, with the index patient <320 msec)."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "abbreviated QTc interval",
+          "evidence_sentence": "She, her father and sister were all reported to have abbreviated QTc intervals (of 340 msec or less, with the index patient <320 msec)."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic",
+          "evidence_sentence": "while an asymptomatic brother did not."
+        }
+      ],
+      "functional_data": {
+        "summary": "The S631A mutation leads to augmented I_hERG and affects repolarization dynamics.",
+        "assays": [
+          "patch clamp recording",
+          "voltage clamp experiments"
+        ]
+      },
+      "segregation_data": "The S631A mutation segregated with disease in the family, as 3 out of 4 carriers were affected.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The S631A mutation was found in a family with a history of sudden death.",
+      "key_quotes": [
+        "The index patient was asymptomatic until she experienced syncope a decade later and was fitted with an implantable defibrillator (ICD).",
+        "She, her father and sister were all reported to have abbreviated QTc intervals (of 340 msec or less, with the index patient <320 msec).",
+        "while an asymptomatic brother did not."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant S631A was successfully extracted."
+  }
+}

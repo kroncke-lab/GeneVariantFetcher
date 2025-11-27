@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "25884701",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from a study on ovarian cancer in French Canadian women."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8765delAG",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 34,
+        "demographics": "439 women with ovarian cancer, primarily French Canadian",
+        "phenotype": "ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 34,
+        "affected_count": 34,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is associated with a significant increase in risk for ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on recurrence in the population.",
+      "source_location": "Table 2, Row 4",
+      "additional_notes": "Identified in women with serous subtype tumours.",
+      "key_quotes": [
+        "Mutations were identified in women with serous, endometrioid, mixed cell, and undifferentiated adenocarcinomas."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3398del5",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 34,
+        "demographics": "439 women with ovarian cancer, primarily French Canadian",
+        "phenotype": "ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 34,
+        "affected_count": 34,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is associated with a significant increase in risk for ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on recurrence in the population.",
+      "source_location": "Table 2, Row 5",
+      "additional_notes": "Identified in women with serous subtype tumours.",
+      "key_quotes": [
+        "Mutations were identified in women with serous, endometrioid, mixed cell, and undifferentiated adenocarcinomas."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6085T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 34,
+        "demographics": "439 women with ovarian cancer, primarily French Canadian",
+        "phenotype": "ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 34,
+        "affected_count": 34,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is associated with a significant increase in risk for ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on recurrence in the population.",
+      "source_location": "Table 2, Row 6",
+      "additional_notes": "Identified in women with serous subtype tumours.",
+      "key_quotes": [
+        "Mutations were identified in women with serous, endometrioid, mixed cell, and undifferentiated adenocarcinomas."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3002K",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 34,
+        "demographics": "439 women with ovarian cancer, primarily French Canadian",
+        "phenotype": "ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 34,
+        "affected_count": 34,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is associated with a significant increase in risk for ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity based on recurrence in the population.",
+      "source_location": "Table 2, Row 7",
+      "additional_notes": "Identified in women with serous subtype tumours.",
+      "key_quotes": [
+        "Mutations were identified in women with serous, endometrioid, mixed cell, and undifferentiated adenocarcinomas."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Frequency of the most common BRCA1 and BRCA2 mutations among French Canadian women with ovarian cancer",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

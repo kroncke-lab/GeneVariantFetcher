@@ -1,0 +1,65 @@
+{
+  "paper_metadata": {
+    "pmid": "2349941",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a homozygous TTR variant associated with senile systemic amyloidosis, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.122G>A",
+      "protein_notation": "p.Ile122Val",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "senile systemic amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "senile systemic amyloidosis",
+          "evidence_sentence": "In the present case, the homozygous mutation TTR (122 Val----Ile) is associated with SSA."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to a predicted G-to-A transition, destroying an MaeIII restriction site.",
+        "assays": [
+          "Southern blotting",
+          "MaeIII digests",
+          "PCR amplification"
+        ]
+      },
+      "segregation_data": "The mutation was confirmed to be homozygous in the patient.",
+      "population_frequency": "None of the 24 controls or 6 other SSA patients contained the variant.",
+      "evidence_level": "Strong evidence based on homozygosity and absence in controls.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is consistent with autosomal recessive inheritance.",
+      "key_quotes": [
+        "The patient's DNA was entirely resistant to MaeIII cleavage; therefore, only the mutant sequence was present.",
+        "Quantitative Southern blotting demonstrated that the patient's DNA contained two copies of the TTR gene per genome."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

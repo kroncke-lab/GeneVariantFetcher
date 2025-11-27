@@ -1,0 +1,74 @@
+{
+  "paper_metadata": {
+    "pmid": "39044869",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.118G>A",
+      "protein_notation": "p.Val40Met",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 29,
+        "demographics": "adults aged 18-85 years",
+        "phenotype": "ATTRv amyloidosis with mild-to-moderate polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 29,
+        "affected_count": 26,
+        "unaffected_count": 3,
+        "uncertain_count": null,
+        "penetrance_percentage": 89.66,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "mild-to-moderate polyneuropathy",
+          "evidence_sentence": "Of the 29 patients enrolled, 26 completed the study."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms reported",
+          "evidence_sentence": "Of the 29 patients enrolled, 3 were unaffected."
+        }
+      ],
+      "functional_data": {
+        "summary": "Patisiran demonstrated significant knockdown rates of TTR levels.",
+        "assays": [
+          "mNIS+7 score",
+          "Norfolk Quality of Life-Diabetic Neuropathy questionnaire"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is associated with both neuropathy and cardiomyopathy.",
+      "key_quotes": [
+        "The most common point mutation associated with ATTR polyneuropathy is Val30Met.",
+        "Patisiran demonstrated suppression of both wild-type and mutated TTR in patients with the p.Val50Met mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data was consistent and clear from the text."
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "38298632",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5645C>A",
+      "protein_notation": "p.Ser1882*",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": 1,
+        "unaffected_count": 7,
+        "uncertain_count": null,
+        "penetrance_percentage": 12.5,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "BRCA2 germline mutation was found in 1 case of endometrioid carcinoma."
+        }
+      ],
+      "functional_data": {
+        "summary": "not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "likely pathogenic based on ACMG/AMP guidelines",
+      "source_location": "Table 2, Row 8",
+      "additional_notes": "This variant is classified as likely pathogenic.",
+      "key_quotes": [
+        "BRCA2 germline mutation was found in 1 case of endometrioid carcinoma."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.4415_4418del",
+      "protein_notation": "p.Lys1472ThrfsTer6",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": 1,
+        "unaffected_count": 7,
+        "uncertain_count": null,
+        "penetrance_percentage": 12.5,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 15",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "All BRCA1 mutations were P/LP and 2 cases of BRCA2 mutations were VUS."
+        }
+      ],
+      "functional_data": {
+        "summary": "not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "pathogenic based on ACMG/AMP guidelines",
+      "source_location": "Table 2, Row 15",
+      "additional_notes": "This variant is classified as pathogenic.",
+      "key_quotes": [
+        "All BRCA1 mutations were P/LP and 2 cases of BRCA2 mutations were VUS."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5789del",
+      "protein_notation": "p.Leu1930TyrfsTer33",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 8,
+        "affected_count": 1,
+        "unaffected_count": 7,
+        "uncertain_count": null,
+        "penetrance_percentage": 12.5,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 17",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "All BRCA1 mutations were P/LP and 2 cases of BRCA2 mutations were VUS."
+        }
+      ],
+      "functional_data": {
+        "summary": "not specified",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "pathogenic based on ACMG/AMP guidelines",
+      "source_location": "Table 2, Row 17",
+      "additional_notes": "This variant is classified as pathogenic.",
+      "key_quotes": [
+        "All BRCA1 mutations were P/LP and 2 cases of BRCA2 mutations were VUS."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Germline mutations of BRCA1/2 gene in ovarian cancer.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

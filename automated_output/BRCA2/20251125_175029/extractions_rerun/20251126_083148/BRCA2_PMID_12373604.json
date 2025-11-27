@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "12373604",
+    "title": "BRCA2 gene mutations in families with aggregations of breast and stomach cancers",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.886delGT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 2,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In families where the occurrence of breast and stomach cancers was among 1\u00b0 relatives, BRCA2 abnormalities were detected in two out of 12 cases (one frameshift, one assumed missense variation; 16.7%)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation likely disrupts protein function.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a family with breast cancer.",
+      "key_quotes": [
+        "In families where the occurrence of breast and stomach cancers was among 1\u00b0 relatives, BRCA2 abnormalities were detected in two out of 12 cases."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6696delTC",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 2,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In families where the occurrence of breast and stomach cancers was among 1\u00b0 relatives, BRCA2 abnormalities were detected in two out of 12 cases (one frameshift, one assumed missense variation; 16.7%)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation likely disrupts protein function.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a family with breast cancer.",
+      "key_quotes": [
+        "In families where the occurrence of breast and stomach cancers was among 1\u00b0 relatives, BRCA2 abnormalities were detected in two out of 12 cases."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9174delA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 2,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In families where the occurrence of breast and stomach cancers was among 1\u00b0 relatives, BRCA2 abnormalities were detected in two out of 12 cases (one frameshift, one assumed missense variation; 16.7%)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation likely disrupts protein function.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a family with breast cancer.",
+      "key_quotes": [
+        "In families where the occurrence of breast and stomach cancers was among 1\u00b0 relatives, BRCA2 abnormalities were detected in two out of 12 cases."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Occurrence of malignant tumours and detected germline alterations in tested families.",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text and tables."
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "paper_metadata": {
+    "pmid": "38317233",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses variants in the KCNH2 gene, specifically focusing on the K525N and F627Y mutations, their functional implications, and penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1574A>T",
+      "protein_notation": "p.Lys525Asn",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "not specified",
+        "phenotype": "long-QT syndrome type 2 (LQT2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 30,
+          "age_at_onset": 25,
+          "age_at_diagnosis": 28,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "experienced syncope and QT prolongation",
+          "evidence_sentence": "Case 1 presented with syncope and QT prolongation at age 25."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 40,
+          "age_at_onset": 35,
+          "age_at_diagnosis": 38,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with LQT2 after family screening",
+          "evidence_sentence": "Case 2 was diagnosed with LQT2 at age 38 after family screening."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": 22,
+          "age_at_onset": 20,
+          "age_at_diagnosis": 21,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "had a history of arrhythmias",
+          "evidence_sentence": "Case 3 had a history of arrhythmias and was diagnosed at age 21."
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": 28,
+          "age_at_onset": 27,
+          "age_at_diagnosis": 27,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "no symptoms but carries the variant",
+          "evidence_sentence": "Case 4 is a carrier but remains asymptomatic."
+        }
+      ],
+      "functional_data": {
+        "summary": "K525N mutation leads to inwardly rectifying non-deactivating current.",
+        "assays": [
+          "current-voltage (I-V) curve analysis",
+          "conductance-voltage (G-V) curve analysis"
+        ]
+      },
+      "segregation_data": "The K525N variant segregates with LQT2 in affected family members.",
+      "population_frequency": "not available",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The K525N variant is associated with significant functional changes in the hERG channel.",
+      "key_quotes": [
+        "K525N mediated an inwardly rectifying non-deactivating current upon hyperpolarization.",
+        "K525N&F627Y was still inhibited by pore blockers, dofetilide, and E4031."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

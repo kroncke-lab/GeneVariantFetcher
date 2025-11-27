@@ -1,0 +1,15 @@
+# MAIN TEXT
+
+## Hereditary transthyretin amyloidosis caused by the rare Phe33Leu mutation
+
+### Abstract
+
+Hereditary transthyretin amyloidosis is a rare progressive systemic disease. We describe a physically active 46-year-old man who presented with dyspnoea on exertion. An echocardiogram showed increased left ventricular wall thickness and diastolic dysfunction, but normal systolic function. The QRS voltage on ECG was normal. The patient was diagnosed with hypertrophic cardiomyopathy, and several years passed before establishment of the accurate diagnosis of hereditary transthyretin amyloidosis caused by the rare mutation ATTR Phe33Leu, previously described in only five case reports. Further investigation revealed neuropathy and nephropathy, and the patient developed severe heart failure. The patient is treated with tafamidis, has undergone heart transplantation and is currently planned for liver transplant. Hereditary transthyretin amyloidosis is likely underdiagnosed, especially in patients presenting with cardiomyopathy. A discrepancy between the left ventricular mass indicated by echocardiogram and that on ECG is an important indicator of amyloidosis, as is involvement of multiple organs.
+
+
+
+# SUPPLEMENTAL FILE 1: bcr-2019-232756.pdf
+
+# Preparing to download ...
+
+[HHS Vulnerability Disclosure](https://www.hhs.gov/vulnerability-disclosure-policy/index.html)

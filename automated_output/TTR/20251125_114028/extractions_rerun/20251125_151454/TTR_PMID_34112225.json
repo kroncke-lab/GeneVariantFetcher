@@ -1,0 +1,77 @@
+{
+  "paper_metadata": {
+    "pmid": "34112225",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the Val50Met variant in the TTR gene, focusing on its penetrance and psychosocial impact on carriers and affected individuals."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 61,
+        "demographics": "Not specified in detail, but includes both symptomatic patients and asymptomatic carriers.",
+        "phenotype": "Hereditary transthyretin amyloidosis (ATTRv), primarily neuropathic symptoms."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 61,
+        "affected_count": 34,
+        "unaffected_count": 27,
+        "uncertain_count": null,
+        "penetrance_percentage": 55.74,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Neuropathic symptoms, with some patients in stage I and others in stage II or higher.",
+          "evidence_sentence": "Overall, 85 people completed the survey. Of them, 34 (40.0%) were symptomatic patients, 22 (64.7%) with stage I of the disease and 12 (35.3%) with stage II or higher."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Asymptomatic carrier.",
+          "evidence_sentence": "The survey was also completed by 27 asymptomatic carriers (31.8%) and 24 relatives/caregivers."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with hereditary transthyretin amyloidosis, leading to amyloid fibril deposition.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in families, as indicated by the familial history of affected individuals.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the psychosocial burden associated with the Val50Met variant.",
+      "key_quotes": [
+        "The disease had a greater impact on all of the areas assessed in patients than in asymptomatic carriers (p < 0.05).",
+        "Most participants (32 of 50; 64%) indicated that they had access to genetic counselling, largely motivated by family history."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Descriptive characteristics of the sample",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on the TTR gene and its associated variant."
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "paper_metadata": {
+    "pmid": "24955979",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 32,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 32,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "The Gly6Ser variant was observed in 32 samples (6.4%)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR exhibited the most diversity with five posttranslationally modified variants and six SNP-derived variants.",
+        "assays": [
+          "mass spectrometric immunoassay"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "6.4% for Gly6Ser variant",
+      "evidence_level": "Moderate",
+      "source_location": "Results and Discussion, paragraph 4",
+      "additional_notes": "The Gly6Ser variant frequency aligns with previous studies.",
+      "key_quotes": [
+        "The Gly6Ser variant was observed in 32 samples (6.4%), which is in a very good agreement with the previous results that yielded frequencies of 7%."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data focused solely on the TTR gene as per instructions."
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "paper_metadata": {
+    "pmid": "29021858",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 variant c.1930 G>T p.V644F, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1930 G>T",
+      "protein_notation": "p.V644F",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "76-year-old male (proband), son, grandson, granddaughter (ages not specified)",
+        "phenotype": "long-QT syndrome type 2 (LQT2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 76,
+          "age_at_onset": 62,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "frequent syncopal attacks, QT prolongation >600 ms",
+          "evidence_sentence": "A 76-year-old man had syncopal attacks with remarkable QT interval prolongation (QT>600 ms) since he was 62 years old."
+        },
+        {
+          "individual_id": "Son",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with LQT on ECG, repetitive syncope due to TdP",
+          "evidence_sentence": "a mutation also present in his son, grandson, and granddaughter, all were diagnosed with LQT on ECG."
+        },
+        {
+          "individual_id": "Grandson",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with LQT on ECG, repetitive syncope due to TdP",
+          "evidence_sentence": "a mutation also present in his son, grandson, and granddaughter, all were diagnosed with LQT on ECG."
+        },
+        {
+          "individual_id": "Granddaughter",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with LQT on ECG, repetitive syncope due to TdP",
+          "evidence_sentence": "a mutation also present in his son, grandson, and granddaughter, all were diagnosed with LQT on ECG."
+        }
+      ],
+      "functional_data": {
+        "summary": "The KCNH2-V644F mutation is located in segment 6 (S6) of the KCNH2 (HERG) channel, indicating a higher risk of cardiac events.",
+        "assays": []
+      },
+      "segregation_data": "Yes, the variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The KCNH2-V644F mutation is associated with a significant family history of LQT2.",
+      "key_quotes": [
+        "This KCNH2-V644F mutation is located in segment 6 (S6) of the KCNH2 (HERG) channel, indicating a higher risk of cardiac events."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant was successfully extracted."
+  }
+}

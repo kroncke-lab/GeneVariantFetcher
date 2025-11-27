@@ -1,0 +1,62 @@
+{
+  "paper_metadata": {
+    "pmid": "19065297",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR V122I variant, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.349G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 12,
+        "demographics": "African-American carriers",
+        "phenotype": "lower serum TTR concentrations"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 12,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "lower serum TTR concentrations",
+          "evidence_sentence": "The TTR V122I carriers had significantly lower serum TTR concentrations than appropriate controls even though the majority of such individuals had not reached the age of clinical or anatomic risk, i.e. over 60."
+        }
+      ],
+      "functional_data": {
+        "summary": "Carriers of the TTR V122I variant have lower serum TTR levels.",
+        "assays": [
+          "ELISA"
+        ]
+      },
+      "segregation_data": "Does not segregate with disease in families as the majority are not yet symptomatic.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study indicates that serum TTR levels are lower in carriers despite the late onset of clinical disease.",
+      "key_quotes": [
+        "The TTR V122I carriers had significantly lower serum TTR concentrations than appropriate controls even though the majority of such individuals had not reached the age of clinical or anatomic risk."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data focused solely on the TTR gene as per instructions."
+  }
+}

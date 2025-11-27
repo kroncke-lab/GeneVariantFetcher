@@ -1,0 +1,158 @@
+{
+  "paper_metadata": {
+    "pmid": "29545312",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the effects of various mutations in the KCNH2 gene on the inhibition of the hERG channel by the compound Cavalli-2. Several mutations are analyzed for their impact on drug binding and channel function."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Ser620Thr",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "attenuated inactivation of hERG channel"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The S620T mutation largely abolishes hERG inactivation, significantly affecting Cavalli-2 action.",
+        "assays": [
+          "in vitro electrophysiological assays"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 5",
+      "additional_notes": "The mutation is associated with a significant reduction in drug block.",
+      "key_quotes": [
+        "The S620T largely abolishes IhERG inactivation."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Asn588Lys",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "attenuated inactivation of hERG channel"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The N588K mutation shifts the voltage dependence of inactivation gating, affecting Cavalli-2 action.",
+        "assays": [
+          "in vitro electrophysiological assays"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 5",
+      "additional_notes": "The mutation results in a significant reduction in drug block.",
+      "key_quotes": [
+        "The N588K mutation produces a +60- to +90-mV shift in voltage dependence of inactivation gating."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Tyr652Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "reduced drug binding affinity"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Y652A mutation significantly reduces the inhibitory effect of Cavalli-2.",
+        "assays": [
+          "in vitro electrophysiological assays"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 7",
+      "additional_notes": "The mutation eliminates voltage dependence of inhibition.",
+      "key_quotes": [
+        "Although this concentration produced a profound inhibition of the WT channel, it had only a modest inhibitory effect on Y652A IhERG."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Phe656Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": "reduced drug binding affinity"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The F656A mutation profoundly affects the inhibitory action of Cavalli-2.",
+        "assays": [
+          "in vitro electrophysiological assays"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 7",
+      "additional_notes": "The derived IC50 was 75-fold that of its WT control.",
+      "key_quotes": [
+        "This mutation had a profound effect on the inhibitory action of Cavalli-2."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No individual-level penetrance data was provided in the paper."
+    ],
+    "notes": "The paper focused on functional assays and did not provide detailed patient or penetrance data."
+  }
+}

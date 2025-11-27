@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "34622668",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses cardiovascular diseases including transthyretin (TTR) cardiac amyloidosis but does not provide specific genetic variant information for the TTR gene."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant information for the TTR gene."
+    ],
+    "notes": "The paper focused on the clinical aspects and treatment advances of cardiovascular diseases, including TTR cardiac amyloidosis, but did not include genetic variant data for TTR."
+  }
+}

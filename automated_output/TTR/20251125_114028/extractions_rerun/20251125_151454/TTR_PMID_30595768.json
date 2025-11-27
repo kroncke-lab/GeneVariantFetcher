@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "30595768",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a heterozygous TTR variant associated with cardiac amyloidosis in a patient."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.425T>C",
+      "protein_notation": "p.Val142Ala",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "63-year-old male, Hong Kong Chinese",
+        "phenotype": "TTR-related cardiac amyloidosis with exclusive cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 63,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "exclusive cardiomyopathy, severe global myocardial impairment, left ventricular ejection fraction of 35%",
+          "evidence_sentence": "He had no other systemic involvement and no significant family history."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with TTR-related cardiac amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "Not applicable, as only one patient is reported.",
+      "population_frequency": "Not available.",
+      "evidence_level": "Moderate, based on clinical presentation and variant type.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the first case of TTR-related cardiac amyloidosis caused by p.Val142Ala mutation reported in an Asian patient.",
+      "key_quotes": [
+        "This case highlights the importance to exclude transthyretin-related cardiac amyloidosis as a cause of extensive cardiomyopathy."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

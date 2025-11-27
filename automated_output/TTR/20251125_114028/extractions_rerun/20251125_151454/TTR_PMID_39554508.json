@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "39554508",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses variants in various genes associated with hypertrophic cardiomyopathy, including a specific mention of the TTR gene variant p.Val50Met, which is associated with transthyretin cardiac amyloidosis."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149T>C",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "transthyretin cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "transthyretin cardiac amyloidosis",
+          "evidence_sentence": "A second case with the disease-causing variant TTR: p.Val50Met has been reported with transthyretin cardiac amyloidosis."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with transthyretin cardiac amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Introduction, paragraph 3",
+      "additional_notes": "Only one case of the TTR variant was reported.",
+      "key_quotes": [
+        "A second case with the disease-causing variant TTR: p.Val50Met has been reported with transthyretin cardiac amyloidosis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper specifically mentioned the TTR variant."
+  }
+}

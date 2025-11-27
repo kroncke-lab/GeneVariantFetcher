@@ -1,0 +1,50 @@
+{
+  "paper_metadata": {
+    "pmid": "33791079",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 52,
+        "demographics": "Not specified",
+        "phenotype": "symptomatic ATTRv-CM"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 15,
+        "affected_count": 0,
+        "unaffected_count": 15,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The study indicates that various mutations in the TTR gene lead to symptomatic and asymptomatic presentations.",
+        "assays": []
+      },
+      "segregation_data": "The variants segregate with disease in families as indicated by familial history and genotyping.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study mentions multiple mutations in the TTR gene but does not provide specific cDNA or protein notations.",
+      "key_quotes": [
+        "The ATTRv-CM group consists of patients with mutations at Val30Met (n = 18), Val20Ile (n = 11), Ile107Val (n = 5), Leu58His (n = 6), Cys10Arg (n = 4), Val122Ile (n = 3), Ala45Thr (n = 1), Ile84Asn (n = 1), Ile107Phe (n = 1), Arg34Gly (n = 1), Thr126Arg (n = 1).",
+        "Furthermore, the asymptomatic mutation carriers were Val20Ile (n = 5), Val30Met (n = 6), Val122Ile (n = 1), Cys10Arg (n = 1), Ile107Val (n = 1), Ile84Thr (n = 1)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variants were clearly mentioned in the results."
+  }
+}

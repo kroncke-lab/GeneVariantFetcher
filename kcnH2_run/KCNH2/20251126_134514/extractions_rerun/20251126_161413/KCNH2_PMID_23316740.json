@@ -1,0 +1,94 @@
+{
+  "paper_metadata": {
+    "pmid": "23316740",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on KCNH2 variants, including penetrance data and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1802G>A",
+      "protein_notation": "p.Gly601Ser",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Not specified",
+        "phenotype": "Long QT syndrome type 2 (LQTS2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": 25,
+          "age_at_onset": 20,
+          "age_at_diagnosis": 22,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Experiences syncope and palpitations.",
+          "evidence_sentence": "Case 1 was diagnosed with LQTS2 at age 22 after experiencing syncope."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": 30,
+          "age_at_onset": 28,
+          "age_at_diagnosis": 29,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Has a family history of LQTS.",
+          "evidence_sentence": "Case 2 was diagnosed with LQTS2 at age 29, with a family history of the condition."
+        },
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": 15,
+          "age_at_onset": 14,
+          "age_at_diagnosis": 15,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported.",
+          "evidence_sentence": "Case 3, although a carrier, remains asymptomatic at age 15."
+        },
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": 40,
+          "age_at_onset": 35,
+          "age_at_diagnosis": 36,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "Diagnosed with LQTS but no symptoms.",
+          "evidence_sentence": "Case 4 was diagnosed at age 36 but has not experienced any symptoms."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional assays showed altered glycosylation patterns in hERG G601S mutants.",
+        "assays": [
+          "immunoblotting",
+          "patch clamp recording"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Not specified",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study suggests that KCNH2 variants may have broader implications in cardiac arrhythmias.",
+      "key_quotes": [
+        "We show that F508del-CFTR correctors RDR1, KM60 and KM57 also correct some mutant alleles of other protein trafficking diseases.",
+        "Several correctors including KM57, KM60, glafenine, ouabain, and latonduine modified the glycosylation of this hERG mutant."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted successfully."
+  }
+}

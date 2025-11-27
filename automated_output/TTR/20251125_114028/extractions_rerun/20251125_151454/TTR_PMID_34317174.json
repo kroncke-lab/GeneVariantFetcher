@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "34317174",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a case of transthyretin cardiac amyloidosis associated with the V122I mutation in the TTR gene."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "85-year-old female",
+        "phenotype": "transthyretin cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 85,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "generalized weakness, elevated liver function tests, and creatinine kinase consistent with rhabdomyolysis",
+          "evidence_sentence": "She had a history of coronary artery disease with prior revascularization, atrial flutter, a permanent pacemaker insertion for sick sinus syndrome, diet-controlled diabetes mellitus, and chronic kidney disease. She had had multiple hospitalizations for decompensated heart failure over a 12-month period, leading to a diagnosis of transthyretin amyloidosis (ATTR) cardiomyopathy due to the V122I mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I mutation is associated with transthyretin amyloidosis, leading to amyloid fibril deposition in the myocardium.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "found in 3.4% of individuals of African descent",
+      "evidence_level": "strong",
+      "source_location": "Discussion, paragraph 2",
+      "additional_notes": "The paper discusses the implications of the V122I mutation in the context of drug interactions and rhabdomyolysis.",
+      "key_quotes": [
+        "The most common mutation in the United States is valine-to-isoleucine at amino acid position 122 (V122I), found in 3.4% of individuals of African descent."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information regarding the TTR variant."
+  }
+}

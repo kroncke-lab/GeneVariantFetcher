@@ -1,0 +1,80 @@
+{
+  "paper_metadata": {
+    "pmid": "20683152",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variants and associated penetrance data from the study on Algerian breast/ovarian cancer families."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1310_1313delAAGA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No specific patient data or penetrance statistics provided for this variant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5722_5723delCT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": null
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No specific patient data or penetrance statistics provided for this variant.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "medium",
+    "challenges": [
+      "Lack of detailed patient and penetrance data for the extracted variants."
+    ],
+    "notes": "Only pathogenic variants were reported for BRCA2, but no individual or cohort penetrance data was provided."
+  }
+}

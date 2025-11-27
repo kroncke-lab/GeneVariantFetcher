@@ -1,0 +1,226 @@
+{
+  "paper_metadata": {
+    "pmid": "34456966",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted two pathogenic variants in the BRCA2 gene, including detailed penetrance data and individual records of carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.632-1G>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 9,
+        "demographics": "Tunisian families",
+        "phenotype": "Breast cancer, severe phenotype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 6,
+        "unaffected_count": 3,
+        "uncertain_count": null,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "null",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "BC17",
+          "age_at_evaluation": 36,
+          "age_at_onset": null,
+          "age_at_diagnosis": 36,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Bilateral breast cancer, infiltrating ductal carcinoma, SBRIII",
+          "evidence_sentence": "A 36 years old patient (BC17) consulted for a mass in the right breast."
+        },
+        {
+          "individual_id": "BC17-2",
+          "age_at_evaluation": 25,
+          "age_at_onset": null,
+          "age_at_diagnosis": 25,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Pregnancy associated breast cancer",
+          "evidence_sentence": "These mutations were also confirmed in a relative of the patient diagnosed with pregnancy associated breast cancer at 25 years old (BC17-2)."
+        },
+        {
+          "individual_id": "BC6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Carrier of both mutations",
+          "evidence_sentence": "Interestingly, 7 additional individuals belonging to 4 Tunisian families were identified as carriers of both mutations (BC6, BC39, BC95, and BC225)."
+        },
+        {
+          "individual_id": "BC39",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Carrier of both mutations",
+          "evidence_sentence": "Interestingly, 7 additional individuals belonging to 4 Tunisian families were identified as carriers of both mutations (BC6, BC39, BC95, and BC225)."
+        },
+        {
+          "individual_id": "BC95",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Carrier of both mutations",
+          "evidence_sentence": "Interestingly, 7 additional individuals belonging to 4 Tunisian families were identified as carriers of both mutations (BC6, BC39, BC95, and BC225)."
+        },
+        {
+          "individual_id": "BC225",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Carrier of both mutations",
+          "evidence_sentence": "Interestingly, 7 additional individuals belonging to 4 Tunisian families were identified as carriers of both mutations (BC6, BC39, BC95, and BC225)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.632-1G>A mutation is located at the splicing donor site of exon 8 of BRCA2.",
+        "assays": [
+          "Sanger sequencing",
+          "RT-PCR"
+        ]
+      },
+      "segregation_data": "Both mutations are found on the same allele.",
+      "population_frequency": null,
+      "evidence_level": "pathogenicity confirmed by ClinVar",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Cis double heterozygosity associated with severe phenotype and early age of onset.",
+      "key_quotes": [
+        "The identification of unusual BRCA genotypes in this Tunisian cohort highlights the importance of performing genetic studies in under-investigated populations.",
+        "The Cis DH BRCA2 genotype seems to be associated with a significant early age of onset (mean age = 35.33 years)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1310_1313DelAAGA",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 9,
+        "demographics": "Tunisian families",
+        "phenotype": "Breast cancer, severe phenotype"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 6,
+        "unaffected_count": 3,
+        "uncertain_count": null,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "null",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "BC17",
+          "age_at_evaluation": 36,
+          "age_at_onset": null,
+          "age_at_diagnosis": 36,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Bilateral breast cancer, infiltrating ductal carcinoma, SBRIII",
+          "evidence_sentence": "A 36 years old patient (BC17) consulted for a mass in the right breast."
+        },
+        {
+          "individual_id": "BC17-2",
+          "age_at_evaluation": 25,
+          "age_at_onset": null,
+          "age_at_diagnosis": 25,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Pregnancy associated breast cancer",
+          "evidence_sentence": "These mutations were also confirmed in a relative of the patient diagnosed with pregnancy associated breast cancer at 25 years old (BC17-2)."
+        },
+        {
+          "individual_id": "BC6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Carrier of both mutations",
+          "evidence_sentence": "Interestingly, 7 additional individuals belonging to 4 Tunisian families were identified as carriers of both mutations (BC6, BC39, BC95, and BC225)."
+        },
+        {
+          "individual_id": "BC39",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Carrier of both mutations",
+          "evidence_sentence": "Interestingly, 7 additional individuals belonging to 4 Tunisian families were identified as carriers of both mutations (BC6, BC39, BC95, and BC225)."
+        },
+        {
+          "individual_id": "BC95",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Carrier of both mutations",
+          "evidence_sentence": "Interestingly, 7 additional individuals belonging to 4 Tunisian families were identified as carriers of both mutations (BC6, BC39, BC95, and BC225)."
+        },
+        {
+          "individual_id": "BC225",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Carrier of both mutations",
+          "evidence_sentence": "Interestingly, 7 additional individuals belonging to 4 Tunisian families were identified as carriers of both mutations (BC6, BC39, BC95, and BC225)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.1310_1313DelAAGA mutation is a frameshift mutation in exon 10 of BRCA2.",
+        "assays": [
+          "Sanger sequencing",
+          "RT-PCR"
+        ]
+      },
+      "segregation_data": "Both mutations are found on the same allele.",
+      "population_frequency": null,
+      "evidence_level": "pathogenicity confirmed by ClinVar",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Cis double heterozygosity associated with severe phenotype and early age of onset.",
+      "key_quotes": [
+        "The identification of unusual BRCA genotypes in this Tunisian cohort highlights the importance of performing genetic studies in under-investigated populations.",
+        "The Cis DH BRCA2 genotype seems to be associated with a significant early age of onset (mean age = 35.33 years)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

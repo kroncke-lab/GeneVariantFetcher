@@ -1,0 +1,70 @@
+{
+  "paper_metadata": {
+    "pmid": "35641219",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2701delC",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "1 Afro-Colombian, 1 previously identified White/mestizo",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": 40,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The BRCA2_c.2701delC mutation was identified in an Afro-Colombian family affected by breast/OC, with the proband diagnosed with BC at the age of 40."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The BRCA2_c.2701delC mutation was identified in an Afro-Colombian family affected by breast/OC."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is associated with breast cancer.",
+        "assays": []
+      },
+      "segregation_data": "The 2 BRCA2_c.2701delC carriers shared the same haplotype, indicating a common ancestor.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation has a founder origin.",
+      "key_quotes": [
+        "The BRCA2_c.2701delC mutation was identified in an Afro-Colombian family affected by breast/OC."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the BRCA2 variant was extracted successfully."
+  }
+}

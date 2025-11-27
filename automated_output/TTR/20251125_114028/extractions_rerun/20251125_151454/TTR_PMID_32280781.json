@@ -1,0 +1,80 @@
+{
+  "paper_metadata": {
+    "pmid": "32280781",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a pathogenic variant in the TTR gene associated with hereditary transthyretin-related amyloidosis."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.164T>C",
+      "protein_notation": "p.Leu55Pro",
+      "genomic_position": "rs121918079; Chr/18: 31595143 T/C",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "20-year-old female, sibling",
+        "phenotype": "hereditary transthyretin-related amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 2,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 66.67,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 20,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "presented with blood\u2010admixed diarrhea, dysphagia, and features of amyloidosis",
+          "evidence_sentence": "Considering the characteristic biopsy findings of apple\u2010green birefringence in blood vessels after Congo red staining, evidence of peripheral nerve, and cardiac involvement and the family history of sibling with similar complaints, a diagnosis of hereditary familial amyloidosis due to TTR protein deposition was suspected."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "under evaluation for similar complaints",
+          "evidence_sentence": "However, her elder sibling (sister) had recently started having similar complaints and was under evaluation at a different tertiary care center but remained undiagnosed."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "did not demonstrate the pathogenic mutation",
+          "evidence_sentence": "However, gene analysis of her brother did not demonstrate the pathogenic mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation has been well characterized functionally and described in literature as related with early\u2010onset, aggressive, diffuse amyloidosis with cardiac and neurological involvement.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family; two of the three siblings tested showed the mutant allele.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on functional studies and family segregation",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is associated with early-onset, aggressive amyloidosis.",
+      "key_quotes": [
+        "The mutation noted in the index case has been well characterized functionally and described in literature as related with early\u2010onset, aggressive, diffuse amyloidosis with cardiac and neurological involvement."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

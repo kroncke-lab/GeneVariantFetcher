@@ -1,0 +1,94 @@
+{
+  "paper_metadata": {
+    "pmid": "36860515",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on KCNH2 variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2504G>C",
+      "protein_notation": "p.Arg835Pro",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "1 male, 3 female; ages not specified",
+        "phenotype": "Long QT syndrome (LQT2) with sudden cardiac arrest"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 2,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "II-2",
+          "age_at_evaluation": null,
+          "age_at_onset": 45,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "sudden cardiac arrest due to ventricular fibrillation",
+          "evidence_sentence": "The proband (arrow) presented a sudden cardiac arrest (SCA) due to ventricular fibrillation at 45 during an episode of hypokalemia requiring an implantable cardiac defibrillator (ICD)."
+        },
+        {
+          "individual_id": "III-1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "mild LQT2 phenotype",
+          "evidence_sentence": "Family members cascade screening detected the KCNH2 variation in her sister and two children III-1 and III-4; QTc interval values (in ms) are shown between parentheses."
+        },
+        {
+          "individual_id": "III-4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "mild LQT2 phenotype",
+          "evidence_sentence": "Family members cascade screening detected the KCNH2 variation in her sister and two children III-1 and III-4; QTc interval values (in ms) are shown between parentheses."
+        },
+        {
+          "individual_id": "III-7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "non-carrier",
+          "evidence_sentence": "ECG tracings in lead V5 of the proband (II-2), a non-carrier niece (III-7), a daughter (III-1) and a son (III-4) who are both carriers of the variant and showing mild LQT2 phenotype."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.2504G>C variant leads to hERG loss of function.",
+        "assays": [
+          "electrophysiological assays",
+          "trafficking assays"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on family segregation and functional studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is associated with a significant risk of LQT2 and sudden cardiac events.",
+      "key_quotes": [
+        "The proband (arrow) presented a sudden cardiac arrest (SCA) due to ventricular fibrillation at 45 during an episode of hypokalemia requiring an implantable cardiac defibrillator (ICD).",
+        "Family members cascade screening detected the KCNH2 variation in her sister and two children III-1 and III-4; QTc interval values (in ms) are shown between parentheses."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

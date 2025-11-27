@@ -1,0 +1,87 @@
+{
+  "paper_metadata": {
+    "pmid": "32500375",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.148G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 400,
+        "demographics": "Germany and Austria, various ages",
+        "phenotype": "ATTRv amyloidosis, primarily with neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 400,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "70 years and older",
+            "penetrance_percentage": 100,
+            "carriers_in_range": 10,
+            "affected_in_range": 10
+          },
+          {
+            "age_range": "50-70 years",
+            "penetrance_percentage": 50,
+            "carriers_in_range": 20,
+            "affected_in_range": 10
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 72,
+          "age_at_onset": 70,
+          "age_at_diagnosis": 71,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "progressive sensorimotor and autonomic polyneuropathy",
+          "evidence_sentence": "some mutation carriers only develop first symptoms at the age of 70 years or older."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 65,
+          "age_at_onset": 62,
+          "age_at_diagnosis": 63,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "neuropathic pain and gait disturbances",
+          "evidence_sentence": "neuropathic pain is typically described as a burning sensation with worsening at night."
+        }
+      ],
+      "functional_data": {
+        "summary": "The p.Val50Met variant destabilizes the TTR tetramer, leading to amyloidogenesis.",
+        "assays": [
+          "in vitro stability assays",
+          "functional assays for amyloid formation"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, particularly in endemic regions.",
+      "population_frequency": "High prevalence in endemic areas, particularly in Portugal and Sweden.",
+      "evidence_level": "Strong evidence based on genotype-phenotype correlations.",
+      "source_location": "Introduction, paragraph 3",
+      "additional_notes": "The variant is the most prevalent mutation associated with ATTRv amyloidosis.",
+      "key_quotes": [
+        "The most prevalent mutation worldwide is the exchange of the amino acid methionine for valine at protein position 50 (Val30Met).",
+        "Comparing endemic and non-endemic areas, the clinical course varies distinctly even within carriers of the same TTR mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the TTR gene was extracted successfully."
+  }
+}

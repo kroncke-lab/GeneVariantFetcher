@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "34145794",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val30Met, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "79-year-old female",
+        "phenotype": "hereditary ATTR cardiomyopathy with polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 79,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with hereditary ATTR cardiomyopathy by cardiac biopsy and genetic testing",
+          "evidence_sentence": "As genetic testing confirmed Val30Met mutation, she was diagnosed with late-onset hereditary ATTR with cardiomyopathy and polyneuropathy."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met mutation is associated with hereditary ATTR cardiomyopathy.",
+        "assays": []
+      },
+      "segregation_data": "The patient's younger brother was recently diagnosed with hereditary amyloid transthyretin (ATTR).",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is known to cause significant clinical manifestations in carriers.",
+      "key_quotes": [
+        "As genetic testing confirmed Val30Met mutation, she was diagnosed with late-onset hereditary ATTR with cardiomyopathy and polyneuropathy."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly mentioned in the text."
+  }
+}

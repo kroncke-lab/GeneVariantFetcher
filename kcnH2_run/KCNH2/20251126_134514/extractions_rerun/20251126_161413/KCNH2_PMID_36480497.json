@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "36480497",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on variants in the KCNH2 gene, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.202T>A",
+      "protein_notation": "p.F68I",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Japanese",
+        "phenotype": "Long QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Long QT syndrome",
+          "evidence_sentence": "We found one novel variant in KCNH2 (c.202T>A, p.F68I), which encodes one of the alpha-subunit of the potassium channel and regulates the final repolarization of the cardiac action potential."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is located at the Per-Arnt-Sim (PAS) domain of the N-terminus cytosolic region of KCNH2, and mutation on the PAS domain has been suggested to alter the channel activity.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is suggested to have a significant impact on the function of the KCNH2 channel.",
+      "key_quotes": [
+        "This variant is located at the Per-Arnt-Sim (PAS) domain of the N-terminus cytosolic region of KCNH2, and mutation on the PAS domain has been suggested to alter the channel activity."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the KCNH2 variant was extracted successfully."
+  }
+}

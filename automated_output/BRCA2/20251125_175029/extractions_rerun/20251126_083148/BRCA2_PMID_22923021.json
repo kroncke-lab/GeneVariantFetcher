@@ -1,0 +1,252 @@
+{
+  "paper_metadata": {
+    "pmid": "22923021",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5101C>T",
+      "protein_notation": "p.Gln1701*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "female, one diagnosed with breast cancer, one with ovarian cancer",
+        "phenotype": "breast cancer and ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "one of the two Slovene BRCA2 c.5101C>T families exhibits a high incidence of OC, besides BC."
+        },
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ovarian cancer",
+          "evidence_sentence": "one of the two Slovene BRCA2 c.5101C>T families exhibits a high incidence of OC, besides BC."
+        }
+      ],
+      "functional_data": {
+        "summary": "Nonsense mutation causing formation of a stop codon at position 1701, located in the ovarian cancer cluster region.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Located in the ovarian cancer cluster region.",
+      "key_quotes": [
+        "Mutation c.5101C>T (p.Gln1701*) is a nonsense mutation causing formation of a stop codon at position 1701 which is located in exon 11 in the ovarian cancer cluster region."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5433_5436delGGAA",
+      "protein_notation": "p.Glu1811Aspfs*3",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, breast cancer patient",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "All novel BRCA2 mutations were detected in female BC patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation resulting in translation termination at amino acid position 1813, which lies within the BRC repeat region.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Located within the BRC repeat region.",
+      "key_quotes": [
+        "Frameshift mutation c.5433_5436delGGAA (p.Glu1811Aspfs*3) results in translation termination at amino acid position 1813."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5213_5216delCTTA",
+      "protein_notation": "p.Thr1738Ilefs*2",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, breast cancer patient",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "This also applies to the Slovene c.5213_5216delCTTA family."
+        }
+      ],
+      "functional_data": {
+        "summary": "Causes formation of termination signal at codon 1739 located between BRC5 and BRC6 in the BRC repeat region.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Located in the BRC repeat region.",
+      "key_quotes": [
+        "Mutation c.5213_5216delCTTA (p.Thr1738Ilefs*2) in exon 11 has been already found in several HBOC families."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6641insC",
+      "protein_notation": "p.Thr2214Asnfs*10",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, breast cancer patient diagnosed at age 47",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 5",
+          "age_at_evaluation": 47,
+          "age_at_onset": null,
+          "age_at_diagnosis": 47,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Mutation c.6641insC was identified in Slovene BC patient diagnosed at age 47."
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation predicted to form a stop codon at position 2223 located at the 3\u2032 end of exon 11.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Located at the 3\u2032 end of exon 11.",
+      "key_quotes": [
+        "Mutation c.6641insC (p.Thr2214Asnfs*10) in exon 11 is a frameshift mutation reported only once in BIC database."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6814delA",
+      "protein_notation": "p.Arg2272Glufs*8",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "female, breast cancer patient diagnosed at age 32",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 6",
+          "age_at_evaluation": 32,
+          "age_at_onset": null,
+          "age_at_diagnosis": 32,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Mutation c.6814delA was detected in Slovene BC patient diagnosed at 32 years of age."
+        }
+      ],
+      "functional_data": {
+        "summary": "Predicted to form stop codon at position 2279 near the 3\u2032 end of exon 11.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Located near the 3\u2032 end of exon 11.",
+      "key_quotes": [
+        "Mutation c.6814delA (p.Arg2272Glufs*8) in exon 11 was detected in Slovene BC patient diagnosed at 32 years of age."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Summary of detected BRCA2 mutations",
+      "variants_extracted": 5
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants and penetrance data were successfully extracted."
+  }
+}

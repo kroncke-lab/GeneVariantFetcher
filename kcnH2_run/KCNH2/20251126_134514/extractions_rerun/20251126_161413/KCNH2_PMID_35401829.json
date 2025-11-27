@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "35401829",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant N588K, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1763A>T",
+      "protein_notation": "p.N588K",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "short QT syndrome"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "short QT syndrome with conduction abnormalities",
+          "evidence_sentence": "hiPSC-derived cardiac cell sheets (hiPSC-CCSs) were generated from a symptomatic SQTS patient carrying the N588K mutation in the KCNH2 gene."
+        }
+      ],
+      "functional_data": {
+        "summary": "The N588K variant was associated with conduction abnormalities and arrhythmogenesis.",
+        "assays": [
+          "optical mapping",
+          "phase-mapping analysis"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in the affected individual.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was specifically linked to short QT syndrome and demonstrated significant functional effects in vitro.",
+      "key_quotes": [
+        "hiPSC-derived cardiac cell sheets (hiPSC-CCSs) were generated from a symptomatic SQTS patient carrying the N588K mutation in the KCNH2 gene.",
+        "Optical mapping reported shortened APD, impaired APD-rate adaptation, abbreviated wavelength of excitation, and increased inducibility of sustained spiral waves."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly mentioned with sufficient details."
+  }
+}

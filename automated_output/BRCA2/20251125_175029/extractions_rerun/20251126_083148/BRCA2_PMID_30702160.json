@@ -1,0 +1,56 @@
+{
+  "paper_metadata": {
+    "pmid": "30702160",
+    "title": "Germline variation in BRCA1/2 is highly ethnic\u2010specific: Evidence from over 30,000 Chinese hereditary breast and ovarian cancer patients",
+    "extraction_summary": "Extracted BRCA2 variant information, including penetrance data and individual-level records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic or likely pathogenic",
+      "patients": {
+        "count": 1688,
+        "demographics": "Chinese ethnicity, primarily female",
+        "phenotype": "breast and/or ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1688,
+        "affected_count": 988,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 58.6,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "<40 years",
+            "penetrance_percentage": 52.3,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The majority of BRCA2 variants were detected in breast and/or ovarian cancer patients.",
+        "assays": []
+      },
+      "segregation_data": "Segregation data not explicitly mentioned.",
+      "population_frequency": "Only 97 of the 531 (18.2%) Chinese BRCA2 variants had matches in gnomAD.",
+      "evidence_level": "Moderate, based on clinical classification and population data.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study indicates that BRCA2 variants are prevalent in the Chinese population, with a significant number classified as pathogenic or likely pathogenic.",
+      "key_quotes": [
+        "A total of 3,791 BRCA mutation carriers were identified (12%, 2,123 BRCA1 and 1,688 BRCA2), of which 1,978 carriers (52.2%, 990 BRCA1 and 988 BRCA2) were within the clinically reported mutation categories of pathogenic or likely pathogenic."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data primarily from the results section and summary statistics."
+  }
+}

@@ -1,0 +1,286 @@
+{
+  "paper_metadata": {
+    "pmid": "32778078",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted pathogenic variants in the BRCA2 gene along with penetrance data from a study on Moroccan patients with hereditary breast and ovarian cancer syndrome."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1302_1305delAAGA",
+      "protein_notation": "p.Lys437fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 patient, female",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 5,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 83.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "From the 18 patients with pathogenic variants in BRAC1/2 genes in our study; twelve had breast cancer, five had ovarian cancer and one had both breast and ovarian cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to a frameshift and a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on classification as pathogenic.",
+      "source_location": "Table 3, Row 1",
+      "additional_notes": "This variant has been reported in both BIC and Clinvar.",
+      "key_quotes": [
+        "In BRCA2 gene we detected 6 different pathogenic variants as well."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7110delA",
+      "protein_notation": "p.Lys2370fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 patient, female",
+        "phenotype": "ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 5,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 83.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "ovarian cancer",
+          "evidence_sentence": "From the 18 patients with pathogenic variants in BRAC1/2 genes in our study; twelve had breast cancer, five had ovarian cancer and one had both breast and ovarian cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to a frameshift and a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on classification as pathogenic.",
+      "source_location": "Table 3, Row 2",
+      "additional_notes": "This variant has been reported in both BIC and Clinvar.",
+      "key_quotes": [
+        "In BRCA2 gene we detected 6 different pathogenic variants as well."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3847_3848delGT",
+      "protein_notation": "p.Val1283fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 patient, female",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 5,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 83.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "From the 18 patients with pathogenic variants in BRAC1/2 genes in our study; twelve had breast cancer, five had ovarian cancer and one had both breast and ovarian cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to a frameshift and a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on classification as pathogenic.",
+      "source_location": "Table 3, Row 3",
+      "additional_notes": "This variant has been reported in both BIC and Clinvar.",
+      "key_quotes": [
+        "In BRCA2 gene we detected 6 different pathogenic variants as well."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5576-5579delTTAA",
+      "protein_notation": "p.I1859fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 patient, female",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 5,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 83.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "From the 18 patients with pathogenic variants in BRAC1/2 genes in our study; twelve had breast cancer, five had ovarian cancer and one had both breast and ovarian cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to a frameshift and a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on classification as pathogenic.",
+      "source_location": "Table 3, Row 4",
+      "additional_notes": "This variant has been reported in both BIC and Clinvar.",
+      "key_quotes": [
+        "In BRCA2 gene we detected 6 different pathogenic variants as well."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7235_7236insG",
+      "protein_notation": "p.Lys2413fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 patient, female",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 5,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 83.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "From the 18 patients with pathogenic variants in BRAC1/2 genes in our study; twelve had breast cancer, five had ovarian cancer and one had both breast and ovarian cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to a frameshift and a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on classification as pathogenic.",
+      "source_location": "Table 3, Row 5",
+      "additional_notes": "This variant has been reported in both BIC and Clinvar.",
+      "key_quotes": [
+        "In BRCA2 gene we detected 6 different pathogenic variants as well."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3860delA",
+      "protein_notation": "p.Asn1287fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "1 patient, female",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 6,
+        "affected_count": 5,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 83.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "From the 18 patients with pathogenic variants in BRAC1/2 genes in our study; twelve had breast cancer, five had ovarian cancer and one had both breast and ovarian cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant leads to a frameshift and a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on classification as pathogenic.",
+      "source_location": "Table 3, Row 6",
+      "additional_notes": "This variant has been reported in both BIC and Clinvar.",
+      "key_quotes": [
+        "In BRCA2 gene we detected 6 different pathogenic variants as well."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 3",
+      "table_caption": "Detected BRCA1/2 pathogenic variants",
+      "variants_extracted": 6
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 6,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

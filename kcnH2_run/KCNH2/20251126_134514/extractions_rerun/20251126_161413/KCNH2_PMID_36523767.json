@@ -1,0 +1,65 @@
+{
+  "paper_metadata": {
+    "pmid": "36523767",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a novel KCNH2 variant associated with long QT syndrome and fetal heart block."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1868C>A",
+      "protein_notation": "p.T623N",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "neonate, sex not specified",
+        "phenotype": "long QT syndrome with high-degree atrioventricular block"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 0,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "long QT syndrome, high-degree AV block, transient ventricular tachycardia",
+          "evidence_sentence": "Following birth, the neonate was confirmed to have a significantly prolonged QTc interval with high-degree AVB (2:1 transduction)."
+        }
+      ],
+      "functional_data": {
+        "summary": "Functional validation experiments demonstrated prolonged duration of calcium transit both in depolarization and repolarization with the KCNH2 c.1868C>A variant.",
+        "assays": [
+          "Western Blotting",
+          "Immunofluorescence",
+          "Calcium transit recordings"
+        ]
+      },
+      "segregation_data": "The variant was de novo; neither parent carried the KCNH2 c.1868C>A variant.",
+      "population_frequency": "Not reported in 1000G and ExAC databases.",
+      "evidence_level": "Strong evidence based on functional assays and de novo occurrence.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the first report of the KCNH2 c.1868C>A variant.",
+      "key_quotes": [
+        "A novel KCNH2 variant related to LQTS and associated with high-degree fetal AVB.",
+        "The variant we identified, KCNH2 c.1868C>A, had not been reported in any population."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

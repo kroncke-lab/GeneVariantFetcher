@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "29649263",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No specific BRCA2 variants were mentioned in the provided text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The text did not provide specific BRCA2 variant data."
+    ],
+    "notes": "The paper discusses the validation of a multi-gene panel but does not specify individual BRCA2 variants or penetrance data."
+  }
+}

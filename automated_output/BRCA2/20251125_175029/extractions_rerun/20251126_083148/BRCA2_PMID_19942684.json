@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "19942684",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the role of RPA4 in DNA replication and repair, with a brief mention of a BRCA2 variant affecting its interaction with RPA. No detailed variant data or penetrance information for BRCA2 is provided."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper primarily focuses on RPA proteins and does not provide detailed information on BRCA2 variants."
+    ],
+    "notes": "The paper mentions a BRCA2 variant (Y42C) in the context of its interaction with RPA, but does not provide detailed genetic or clinical data on this or any other BRCA2 variants."
+  }
+}

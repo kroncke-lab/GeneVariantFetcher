@@ -1,0 +1,56 @@
+{
+  "paper_metadata": {
+    "pmid": "29593496",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the aggregation of transthyretin (TTR) in yeast models, focusing on the interaction with yeast prion proteins. It mentions a specific engineered TTR variant but does not provide detailed clinical or penetrance data for human cases."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Phe87Met, p.Leu110Met",
+      "genomic_position": null,
+      "clinical_significance": "Not specified",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The M-TTR-GFP variant (F87M/L110M) was engineered to study aggregation in yeast. It showed increased aggregation compared to WT-TTR-GFP, especially in the presence of the yeast prion [PSI+].",
+        "assays": [
+          "Yeast aggregation assay",
+          "Fluorescent microscopy",
+          "Immunoblotting"
+        ]
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Experimental evidence in yeast model",
+      "source_location": "Abstract, Results section",
+      "additional_notes": "The study focuses on the interaction of TTR with yeast prions, not on human clinical data.",
+      "key_quotes": [
+        "We established aggregation of an engineered double (F87M/L110M) mutant M-TTR-GFP in yeast.",
+        "Aggregation of M-TTR-GFP was significantly enhanced in presence of [PSI+], an endogenous prion form of Sup35."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [
+      "No human clinical or penetrance data provided for TTR variants."
+    ],
+    "notes": "The paper primarily focuses on experimental data in yeast models, with no human genetic or clinical data available."
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "paper_metadata": {
+    "pmid": "25927356",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2442delC",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 11,
+        "demographics": "Not specified",
+        "phenotype": "All patients with BRCA1/2 mutations met the criteria for HBOCS."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": 11,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The mutation is associated with hereditary breast cancer.",
+        "assays": []
+      },
+      "segregation_data": "All patients with BRCA1/2 mutations met the criteria for HBOCS.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on family history and clinical criteria.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Two recurrent mutations, including c.2442delC, were identified in two unrelated patients.",
+      "key_quotes": [
+        "Eighteen (18.2%) patients were found to carry BRCA1/2 germline mutations (7 in BRCA1 and 11 in BRCA2).",
+        "Based on their family history, all patients with BRCA1/2 mutations met the criteria for HBOCS."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Features of the mutations, family characteristics, segregation analysis and age of diagnosis for each of the patients carrying a mutation.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 variants were extracted from the main text and tables."
+  }
+}

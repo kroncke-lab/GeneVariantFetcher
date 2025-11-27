@@ -1,0 +1,55 @@
+{
+  "paper_metadata": {
+    "pmid": "34429635",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper mentions a single variant in the KCNH2 gene, but does not provide detailed penetrance or individual-level data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": "7150,948,446",
+      "clinical_significance": "unknown",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Table 1, Row 23",
+      "additional_notes": "",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Basic Characteristics of the Selected VIP Variants from the PharmGKB Database and Genotype Frequencies in Tibetan Population",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide detailed penetrance or individual-level data for the KCNH2 variant."
+    ],
+    "notes": "The extraction was straightforward as only one variant in the KCNH2 gene was mentioned, but detailed data was lacking."
+  }
+}

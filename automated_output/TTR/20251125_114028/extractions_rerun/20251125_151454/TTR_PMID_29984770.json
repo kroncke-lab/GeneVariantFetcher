@@ -1,0 +1,107 @@
+{
+  "paper_metadata": {
+    "pmid": "29984770",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "5 patients, 4 from Japan, 1 from Brazil",
+        "phenotype": "neuropathy, cardiomyopathy, oculoleptomeningeal involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 4,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 80.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Patient 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy",
+          "evidence_sentence": "The initial manifestation of amyloidosis consisted of numbness in the limbs in Patients 1 (Val94Gly)."
+        },
+        {
+          "individual_id": "Patient 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "neuropathy, could not maintain a standing position due to weakness in the lower limbs",
+          "evidence_sentence": "Another patient (Patient 2) did not complain of any orthostatic symptoms because this patient could not maintain a standing position due to weakness in the lower limbs."
+        },
+        {
+          "individual_id": "Patient 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathy",
+          "evidence_sentence": "The initial manifestation of amyloidosis consisted of numbness in the limbs in Patients 3 (Pro24Ser)."
+        },
+        {
+          "individual_id": "Patient 4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "cardiomyopathy",
+          "evidence_sentence": "Cardiomyopathy was predominant in Patient 4 (Thr60Ala)."
+        },
+        {
+          "individual_id": "Patient 5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "oculoleptomeningeal involvement",
+          "evidence_sentence": "The initial manifestation of vitreous opacities due to amyloidosis in Patient 5 (Tyr114Cys) appeared seven years before the autonomic tests."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study assessed cardiac and peripheral vasomotor autonomic functions in patients with TTR mutations.",
+        "assays": [
+          "CVR-R",
+          "Valsalva manoeuvre",
+          "head-up tilt test",
+          "noradrenaline infusion test",
+          "MIBG scintigraphy"
+        ]
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": "Not available.",
+      "evidence_level": "Moderate evidence based on clinical presentation and functional tests.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All patients exhibited some symptoms attributable to autonomic dysfunction.",
+      "key_quotes": [
+        "Cardiac and peripheral vasomotor autonomic dysfunctions were prevalent in non-Val30Met patients, irrespective of their phenotype.",
+        "All patients reported some symptoms that were attributable to autonomic dysfunctions at the time of the autonomic tests."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 5,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

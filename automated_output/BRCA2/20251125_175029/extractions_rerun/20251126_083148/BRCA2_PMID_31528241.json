@@ -1,0 +1,301 @@
+{
+  "paper_metadata": {
+    "pmid": "31528241",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from a study on Pakistani breast cancer patients."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.92G>A",
+      "protein_notation": "p.Trp31*",
+      "genomic_position": null,
+      "clinical_significance": "NS",
+      "patients": {
+        "count": 2,
+        "demographics": "Punjabi",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "ClinVar (4)",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Table 2, Row 1",
+      "additional_notes": "This variant is classified as a nonsense mutation.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.426-2A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "SP",
+      "patients": {
+        "count": 4,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "ClinVar (4)",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Table 2, Row 2",
+      "additional_notes": "This variant is classified as a splice site mutation.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.765_769delCACAA",
+      "protein_notation": "p.Asn255Lysfs*19",
+      "genomic_position": null,
+      "clinical_significance": "FS",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not available",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Table 2, Row 3",
+      "additional_notes": "This variant is classified as a frameshift mutation.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1300_1303delAAAA",
+      "protein_notation": "p.Lys434Glufs*25",
+      "genomic_position": null,
+      "clinical_significance": "FS",
+      "patients": {
+        "count": 2,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "ClinVar (2)",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Table 2, Row 4",
+      "additional_notes": "This variant is classified as a frameshift mutation.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2820delA",
+      "protein_notation": "p.Val941Cysfs*19",
+      "genomic_position": null,
+      "clinical_significance": "FS",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not available",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Table 2, Row 5",
+      "additional_notes": "This variant is classified as a frameshift mutation.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2835delA",
+      "protein_notation": "p.Asp946Ilefs*14",
+      "genomic_position": null,
+      "clinical_significance": "FS",
+      "patients": {
+        "count": 2,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "ClinVar (2)",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Table 2, Row 6",
+      "additional_notes": "This variant is classified as a frameshift mutation.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3860delA",
+      "protein_notation": "p.Asn1287Ilefs*6",
+      "genomic_position": null,
+      "clinical_significance": "FS",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not available",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Table 2, Row 7",
+      "additional_notes": "This variant is classified as a frameshift mutation.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5222_5225delGTAA",
+      "protein_notation": "p.Ser1741Thrfs*35",
+      "genomic_position": null,
+      "clinical_significance": "FS",
+      "patients": {
+        "count": 1,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "Not available",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Table 2, Row 8",
+      "additional_notes": "This variant is classified as a frameshift mutation.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5682C>A",
+      "protein_notation": "p.Tyr1894*",
+      "genomic_position": null,
+      "clinical_significance": "NS",
+      "patients": {
+        "count": 2,
+        "demographics": "Pathan",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Not specified in the paper.",
+        "assays": []
+      },
+      "segregation_data": "Not specified in the paper.",
+      "population_frequency": "ClinVar (1)",
+      "evidence_level": "Not specified in the paper.",
+      "source_location": "Table 2, Row 9",
+      "additional_notes": "This variant is classified as a nonsense mutation.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Deleterious BRCA1/2 germline mutations in Pakistani breast/ovarian cancer families",
+      "variants_extracted": 8
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 8,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted from the main text and tables."
+  }
+}

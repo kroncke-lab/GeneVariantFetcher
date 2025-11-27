@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "36799266",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the characteristics and outcomes of patients with grade 1 myocardial uptake on cardiac scintigraphy, including genetic testing for TTR mutations. One variant in the TTR gene was identified."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.424G>A",
+      "protein_notation": "p.Val142Ile",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "hypertrophic cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "hypertrophic cardiomyopathy based on clinical presentation and CMR findings",
+          "evidence_sentence": "This patient was diagnosed with hypertrophic cardiomyopathy based on his clinical presentation and CMR findings."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with hypertrophic cardiomyopathy.",
+        "assays": []
+      },
+      "segregation_data": "The variant was found in a single patient.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient also carried a homozygous pathogenic mutation in the TNNI3 gene and a variant of unknown significance in the MYBPC3 gene.",
+      "key_quotes": [
+        "This patient was diagnosed with hypertrophic cardiomyopathy based on his clinical presentation and CMR findings."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in the TTR gene was identified in the paper."
+  }
+}

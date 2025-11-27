@@ -1,0 +1,184 @@
+{
+  "paper_metadata": {
+    "pmid": "33013630",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the KCNH2 gene associated with SUDEP, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Arg744*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "SUDEP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SUDEP",
+          "evidence_sentence": "The LQTS pathogenic variants in KCNH2, p.Arg744*, and p.Gly924Ala, have each been identified in a SUDEP patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Pathogenic variant associated with SUDEP.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a SUDEP patient.",
+      "key_quotes": [
+        "The LQTS pathogenic variants in KCNH2, p.Arg744*, and p.Gly924Ala, have each been identified in a SUDEP patient."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Gly924Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "SUDEP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SUDEP",
+          "evidence_sentence": "The LQTS pathogenic variants in KCNH2, p.Arg744*, and p.Gly924Ala, have each been identified in a SUDEP patient."
+        }
+      ],
+      "functional_data": {
+        "summary": "Pathogenic variant associated with SUDEP.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in a SUDEP patient.",
+      "key_quotes": [
+        "The LQTS pathogenic variants in KCNH2, p.Arg744*, and p.Gly924Ala, have each been identified in a SUDEP patient."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Arg1047Leu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "not specified",
+        "phenotype": "SUDEP"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": 0,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SUDEP",
+          "evidence_sentence": "The common KCNH2 p.Arg1047Leu variant (found >3,000 times in gnomAD) has been observed in four patients that have suffered SUDEP."
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SUDEP",
+          "evidence_sentence": "The common KCNH2 p.Arg1047Leu variant (found >3,000 times in gnomAD) has been observed in four patients that have suffered SUDEP."
+        },
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SUDEP",
+          "evidence_sentence": "The common KCNH2 p.Arg1047Leu variant (found >3,000 times in gnomAD) has been observed in four patients that have suffered SUDEP."
+        },
+        {
+          "individual_id": "Case_6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "SUDEP",
+          "evidence_sentence": "The common KCNH2 p.Arg1047Leu variant (found >3,000 times in gnomAD) has been observed in four patients that have suffered SUDEP."
+        }
+      ],
+      "functional_data": {
+        "summary": "Common variant associated with mild loss of channel function.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "found >3,000 times in gnomAD",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in multiple SUDEP patients.",
+      "key_quotes": [
+        "The common KCNH2 p.Arg1047Leu variant (found >3,000 times in gnomAD) has been observed in four patients that have suffered SUDEP."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Nonsynonymous variants in cardiac arrhythmia genes that have been identified in sudden unexpected death in epilepsy (SUDEP).",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant KCNH2 variants were extracted with associated penetrance data."
+  }
+}

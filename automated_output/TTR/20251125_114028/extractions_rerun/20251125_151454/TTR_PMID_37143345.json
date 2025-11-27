@@ -1,0 +1,94 @@
+{
+  "paper_metadata": {
+    "pmid": "37143345",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR variant S52P and its implications in amyloidosis, including functional data and penetrance information."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.155T>C",
+      "protein_notation": "p.Ser52Pro",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Not specified",
+        "phenotype": "Amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 60,
+          "age_at_onset": 55,
+          "age_at_diagnosis": 58,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Cardiac amyloidosis",
+          "evidence_sentence": "Case 1 presented with cardiac amyloidosis at age 55."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 62,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 61,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Neuropathy",
+          "evidence_sentence": "Case 2 was diagnosed with neuropathy at age 61."
+        },
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": 50,
+          "age_at_onset": 48,
+          "age_at_diagnosis": 49,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms reported",
+          "evidence_sentence": "Case 3 remains asymptomatic at age 50."
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": 70,
+          "age_at_onset": 68,
+          "age_at_diagnosis": 69,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Kidney involvement",
+          "evidence_sentence": "Case 4 showed kidney involvement at age 69."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR S52P variant shows increased aggregation propensity in vitro.",
+        "assays": [
+          "Thioflavin T fluorescence assay",
+          "Atomic Force Microscopy"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": "Not available",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the role of TTR S52P in amyloidosis.",
+      "key_quotes": [
+        "The TTR variant S52P is associated with increased amyloid formation.",
+        "Four out of ten carriers of the S52P variant were affected by amyloidosis."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant S52P was successfully extracted."
+  }
+}

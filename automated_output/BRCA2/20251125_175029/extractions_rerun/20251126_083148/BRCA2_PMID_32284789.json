@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "32284789",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the role of VHL-HIF signaling in DNA repair and apoptosis in zebrafish, with a mention of BRCA2 mutants in the context of DNA repair defects. However, no specific BRCA2 genetic variants are detailed in the text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper does not provide specific BRCA2 variant data."
+    ],
+    "notes": "The paper mentions BRCA2 in the context of DNA repair but does not provide specific genetic variant information or penetrance data for BRCA2."
+  }
+}

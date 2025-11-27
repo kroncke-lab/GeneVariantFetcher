@@ -1,0 +1,117 @@
+{
+  "paper_metadata": {
+    "pmid": "33203794",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the role of TTR gene mutations in amyloidosis, focusing on the biophysical model of amyloidosis development. It mentions specific TTR variants but does not provide detailed penetrance data or individual case studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.T119M",
+      "genomic_position": null,
+      "clinical_significance": "protagonistic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The T119M variant is mentioned as a protagonistic variant, suggesting a protective role against amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Introduction, paragraph 8",
+      "additional_notes": "",
+      "key_quotes": [
+        "The TTR gene exhibits a large number (150 and counting) of antagonistic variants and a few protagonistic variants such as T119M, V30M, and L55P."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.V30M",
+      "genomic_position": null,
+      "clinical_significance": "protagonistic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The V30M variant is mentioned as a protagonistic variant, suggesting a protective role against amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Introduction, paragraph 8",
+      "additional_notes": "",
+      "key_quotes": [
+        "The TTR gene exhibits a large number (150 and counting) of antagonistic variants and a few protagonistic variants such as T119M, V30M, and L55P."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.L55P",
+      "genomic_position": null,
+      "clinical_significance": "protagonistic",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The L55P variant is mentioned as a protagonistic variant, suggesting a protective role against amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Introduction, paragraph 8",
+      "additional_notes": "",
+      "key_quotes": [
+        "The TTR gene exhibits a large number (150 and counting) of antagonistic variants and a few protagonistic variants such as T119M, V30M, and L55P."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "medium",
+    "challenges": [
+      "The paper did not provide detailed penetrance data or individual case studies for the TTR variants."
+    ],
+    "notes": "The extraction focused on the variants mentioned in the text, but no detailed penetrance or individual-level data was available."
+  }
+}

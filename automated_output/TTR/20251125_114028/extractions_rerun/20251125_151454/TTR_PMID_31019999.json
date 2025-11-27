@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "31019999",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the role of C1QA and C1QC genes in modifying age-at-onset in TTR-FAP Val30Met patients. No new TTR variants are reported."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focused on C1QA and C1QC genes, not TTR variants."
+    ],
+    "notes": "The paper did not report any new variants in the TTR gene. It focused on genetic modifiers of age-at-onset in TTR-FAP Val30Met patients."
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "paper_metadata": {
+    "pmid": "32514488",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a case of secondary glaucoma in a patient with Transthyretin Amyloidosis (ATTR) and mentions the Val30Met mutation in the TTR gene."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "56 year old Argentinian man",
+        "phenotype": "Transthyretin Amyloidosis with secondary glaucoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 56,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Transthyretin Amyloidosis with secondary glaucoma and cardiac involvement",
+          "evidence_sentence": "The patient is a 56 year old Argentinian man with a family history of ATTR diagnosed in 1995 which required liver transplantation that same year."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met mutation is known to cause structural instability in the TTR protein, leading to amyloid fibril formation.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Introduction, paragraph 2",
+      "additional_notes": "The Val30Met mutation is most prevalent in Portugal, Sweden, and Japan.",
+      "key_quotes": [
+        "The most frequent causative genetic mutation found worldwide of this type of amyloidosis is the substitution of valine for methionine at position 30 of the TTR gene (Val30Met) in chromosome 18q."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper primarily focuses on a case report and surgical technique, with limited genetic data."
+    ],
+    "notes": "The paper mentions the Val30Met mutation in the context of ATTR but does not provide detailed genetic data or additional variants."
+  }
+}

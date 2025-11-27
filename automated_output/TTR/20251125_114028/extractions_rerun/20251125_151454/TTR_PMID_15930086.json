@@ -1,0 +1,140 @@
+{
+  "paper_metadata": {
+    "pmid": "15930086",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val30Met, including penetrance data and individual patient details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.148G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 9,
+        "demographics": "8 families, specific demographics not detailed",
+        "phenotype": "fatal neuropathic amyloidosis (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 9,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathic amyloidosis",
+          "evidence_sentence": "In Sweden, nine homozygous patients from eight families carrying the ATTR mutation Val30Met... have been identified."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathic amyloidosis",
+          "evidence_sentence": "In Sweden, nine homozygous patients from eight families carrying the ATTR mutation Val30Met... have been identified."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathic amyloidosis",
+          "evidence_sentence": "In Sweden, nine homozygous patients from eight families carrying the ATTR mutation Val30Met... have been identified."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathic amyloidosis",
+          "evidence_sentence": "In Sweden, nine homozygous patients from eight families carrying the ATTR mutation Val30Met... have been identified."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathic amyloidosis",
+          "evidence_sentence": "In Sweden, nine homozygous patients from eight families carrying the ATTR mutation Val30Met... have been identified."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathic amyloidosis",
+          "evidence_sentence": "In Sweden, nine homozygous patients from eight families carrying the ATTR mutation Val30Met... have been identified."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathic amyloidosis",
+          "evidence_sentence": "In Sweden, nine homozygous patients from eight families carrying the ATTR mutation Val30Met... have been identified."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathic amyloidosis",
+          "evidence_sentence": "In Sweden, nine homozygous patients from eight families carrying the ATTR mutation Val30Met... have been identified."
+        },
+        {
+          "individual_id": "P9",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "neuropathic amyloidosis",
+          "evidence_sentence": "In Sweden, nine homozygous patients from eight families carrying the ATTR mutation Val30Met... have been identified."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation Val30Met is associated with amyloid formation leading to neuropathic symptoms.",
+        "assays": []
+      },
+      "segregation_data": "Yes, all patients are homozygous for the mutation.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Main Text, paragraph 1",
+      "additional_notes": "All identified patients were homozygous for the Val30Met mutation.",
+      "key_quotes": [
+        "Homozygosity for the mutation associated with FAP, ATTR Val30Met, does not implicate a more severe phenotype for Swedish patients."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

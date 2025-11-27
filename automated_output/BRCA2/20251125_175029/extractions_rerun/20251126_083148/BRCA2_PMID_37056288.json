@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "37056288",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the BRCA2 variant c.1813delA found in a patient with pancreatic adenocarcinoma."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1813delA",
+      "protein_notation": "p.I605fs*9",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "69-year-old female",
+        "phenotype": "pancreatic adenocarcinoma with liver metastases"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 69,
+          "age_at_onset": null,
+          "age_at_diagnosis": 69,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with pancreatic adenocarcinoma with liver metastases",
+          "evidence_sentence": "The BRCA2 mutation was found in samples from the right hepatic vein [(c.1813delA, p. (I605fs*9), variant allele frequency (VAF) 7.22% (coverage: 194 reads)]"
+        }
+      ],
+      "functional_data": {
+        "summary": "The presence of the BRCA2 mutation indicated treatment with platinum drugs and the PARP inhibitor Olaparib.",
+        "assays": []
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Strong evidence based on clinical presentation and treatment response",
+      "source_location": "Case 1",
+      "additional_notes": "The mutation was not detected in the peripheral sample.",
+      "key_quotes": [
+        "The BRCA2 mutation was found in samples from the right hepatic vein [(c.1813delA, p. (I605fs*9), variant allele frequency (VAF) 7.22% (coverage: 194 reads)]"
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was reported in the paper."
+  }
+}

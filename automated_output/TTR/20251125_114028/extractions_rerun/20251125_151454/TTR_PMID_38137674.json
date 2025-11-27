@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "38137674",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the use of cardiac scintigraphy with bone tracers in diagnosing transthyretin cardiac amyloidosis (ATTR-CA) but does not provide specific genetic variant information for the TTR gene."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not provide specific genetic variant information for the TTR gene."
+    ],
+    "notes": "The paper focused on diagnostic imaging techniques and did not include genetic variant data for the TTR gene."
+  }
+}

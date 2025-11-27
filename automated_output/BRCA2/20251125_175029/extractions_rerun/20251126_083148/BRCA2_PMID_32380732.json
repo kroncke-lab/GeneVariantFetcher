@@ -1,0 +1,184 @@
+{
+  "paper_metadata": {
+    "pmid": "32380732",
+    "title": "Hereditary Breast and Ovarian Cancer in Families from Southern Italy (Sicily)\u2014Prevalence and Geographic Distribution of Pathogenic Variants in BRCA1/2 Genes",
+    "extraction_summary": "Extracted genetic variant information specifically for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1238del",
+      "protein_notation": "p.Leu413fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 49,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer and ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 49,
+        "affected_count": 20,
+        "unaffected_count": 29,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.82,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Most of the Sicilian cancer patients harboring this PV had breast cancer (19 subjects) and one only ovarian cancer."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Ovarian cancer",
+          "evidence_sentence": "Most of the Sicilian cancer patients harboring this PV had breast cancer (19 subjects) and one only ovarian cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a frameshift leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on family segregation and clinical presentation.",
+      "source_location": "Results, paragraph 2",
+      "additional_notes": "This variant was found in 12 families.",
+      "key_quotes": [
+        "The second most frequent PV, found in 12 families and involving a total of 49 subjects (10.1%), including 20 cancer patients (12 probands and 8 family members), is named BRCA2-1466delT (HGVS nomenclature: c.1238del; p.Leu413fs)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.6082_6086del",
+      "protein_notation": "p.Glu2028fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 16,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer and ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 16,
+        "affected_count": 5,
+        "unaffected_count": 11,
+        "uncertain_count": null,
+        "penetrance_percentage": 31.25,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Among cancer patients harboring this PV, 3 subjects had breast cancer, 1 ovarian cancer and 1 both primary ovarian and breast cancer."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Ovarian cancer",
+          "evidence_sentence": "Among cancer patients harboring this PV, 3 subjects had breast cancer, 1 ovarian cancer and 1 both primary ovarian and breast cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a frameshift leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on family segregation and clinical presentation.",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "This variant was found in families from North-Western Sicily.",
+      "key_quotes": [
+        "A PV, mainly observed in some families from North-Western Sicily (16 individuals, 5 of which cancer patients) belonging to the geographical area that includes the city of Trapani and neighboring areas, is named BRCA2-6310del5 (HGVS nomenclature: c.6082_6086del; p.Glu2028fs)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5851_5854del",
+      "protein_notation": "p.Ser1951fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 17,
+        "demographics": "Not specified",
+        "phenotype": "Breast cancer and ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 17,
+        "affected_count": 8,
+        "unaffected_count": 9,
+        "uncertain_count": null,
+        "penetrance_percentage": 47.06,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Among cancer patients harboring this PV, 5 individuals had female breast cancer, 2 male breast cancer and one both primary ovarian and breast cancer."
+        },
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Ovarian cancer",
+          "evidence_sentence": "Among cancer patients harboring this PV, 5 individuals had female breast cancer, 2 male breast cancer and one both primary ovarian and breast cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with a frameshift leading to a truncated protein.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on family segregation and clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was found in families from North-western Sicily.",
+      "key_quotes": [
+        "Furthermore, another PV named BRCA2-6079del4 (HGVS nomenclature: c.5851_5854del; p.Ser1951fs) was also detected in some families from North-western Sicily (17 individuals, including 8 cancer patients) belonging to the geographical area that includes the cities of Palermo and Trapani and neighboring areas."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Clinical Features of Germline BRCA1/2 PV Carriers",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

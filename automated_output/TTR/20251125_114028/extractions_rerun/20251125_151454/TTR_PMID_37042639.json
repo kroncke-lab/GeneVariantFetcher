@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "37042639",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Ala97Ser, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.290C>T",
+      "protein_notation": "p.Ala97Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 175,
+        "demographics": "Mean age 62.75 years, predominantly male (77.7%)",
+        "phenotype": "ATTRv amyloidosis with polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 175,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 62,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "ATTRv amyloidosis with polyneuropathy",
+          "evidence_sentence": "In Taiwan, these patients exhibited male predominance with a mean age at validation of 62.75 years."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Ala97Ser variant is associated with the development of ATTRv amyloidosis.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": "0.04\u20131.14 per million in Taiwan",
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study highlights the high mortality associated with this variant.",
+      "key_quotes": [
+        "The annual prevalence rate of specific mutation (Ala97Ser)-dominant ATTRv amyloidosis with polyneuropathy in Taiwan is comparable to the mid- to high-prevalence country level."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data focused on the TTR gene variant Ala97Ser, with detailed penetrance information."
+  }
+}

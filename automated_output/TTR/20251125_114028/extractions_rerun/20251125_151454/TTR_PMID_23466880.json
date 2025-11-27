@@ -1,0 +1,50 @@
+{
+  "paper_metadata": {
+    "pmid": null,
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR gene and its variants, particularly focusing on the L55P variant, its effects, and the use of compounds to inhibit TTR aggregation."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu55Pro",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "associated with early onset of the disease with cardiac and neurologic pathologies"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "L55P is one of the most aggressive variants and is associated with early onset of the disease.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": "Not provided.",
+      "evidence_level": "Moderate evidence based on functional studies.",
+      "source_location": "Introduction, paragraph 3",
+      "additional_notes": "The paper emphasizes the need for alternative therapies for TTR-related disorders.",
+      "key_quotes": [
+        "the very aggressive TTR variant L55P was used as models.",
+        "L55P substitution is one of the most aggressive variants and is associated with early onset of the disease with cardiac and neurologic pathologies."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only the L55P variant was identified in the TTR gene."
+  }
+}

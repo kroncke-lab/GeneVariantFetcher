@@ -1,0 +1,56 @@
+{
+  "paper_metadata": {
+    "pmid": "38925327",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the A39D variant of the TTR gene, its structural and functional implications, and provides insights into its pathogenicity and penetrance."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.117C>A",
+      "protein_notation": "p.Ala39Asp",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "not specified",
+        "phenotype": "severe cardiac condition"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "A39D-TTR is a dimer and not a tetramer, showing decreased thermodynamic stability and increased amyloidogenicity.",
+        "assays": [
+          "size-exclusion chromatography (SEC)",
+          "dynamic light scattering (DLS)",
+          "fluorescence emission spectra",
+          "circular dichroism",
+          "tryptophan fluorescence emission"
+        ]
+      },
+      "segregation_data": "Not segregated with disease in families as it does not form hetero-tetramers or hetero-dimers.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on structural and functional studies",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant A39D-TTR was shown to be highly amyloidogenic and its aggregation was inhibited by diclofenac.",
+      "key_quotes": [
+        "A39D-TTR proved to be highly amyloidogenic, even at mildly acidic pH values where WT-TTR does not aggregate.",
+        "A39D-TTR is a dimer and not a tetramer in solution."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on a single variant in the TTR gene."
+  }
+}

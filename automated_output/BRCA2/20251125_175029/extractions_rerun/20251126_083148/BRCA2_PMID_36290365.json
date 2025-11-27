@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "36290365",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.-39-1_-39del",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 49,
+        "demographics": "800 breast cancer patients",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 49,
+        "affected_count": 49,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "In total, 18.4% (49/267) of P/LP variants affected the BRCA2 gene."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.-39-1_-39del variant is expected to disrupt an acceptor site in intron 1.",
+        "assays": []
+      },
+      "segregation_data": "Not assessed due to lack of segregation analysis.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on clinical significance classification.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is rarely included in commonly used targeted gene panels.",
+      "key_quotes": [
+        "Out of interesting findings, we can note a c.-39-1_-39del variant located outside the 5\u2032UTR region of BRCA2."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the BRCA2 variant was extracted from the main text."
+  }
+}

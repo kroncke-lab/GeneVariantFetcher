@@ -1,0 +1,75 @@
+{
+  "paper_metadata": {
+    "pmid": "24572009",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR gene variant Val30Met in the context of TTR-FAP, providing penetrance data and patient demographics."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 75,
+        "demographics": "Mean age 58.3 years, 50.7% male",
+        "phenotype": "TTR-FAP, with 52.3% asymptomatic carriers and 47.7% symptomatic patients"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 65,
+        "affected_count": 31,
+        "unaffected_count": 34,
+        "uncertain_count": null,
+        "penetrance_percentage": 47.7,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 49,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "symptomatic patient, stage 1",
+          "evidence_sentence": "At diagnosis (we have data for 65 subjects), there were 34 (52.3%) asymptomatic carriers and 31 (47.7%) symptomatic patients."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 49,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "asymptomatic carrier",
+          "evidence_sentence": "At diagnosis (we have data for 65 subjects), there were 34 (52.3%) asymptomatic carriers and 31 (47.7%) symptomatic patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met mutation is the most common variant associated with TTR-FAP.",
+        "assays": [
+          "TTR/DNA genetic test",
+          "electromyogram",
+          "biopsy for amyloid deposits"
+        ]
+      },
+      "segregation_data": "Yes, it segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on clinical presentation and family history.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "All subjects had the Val30Met mutation.",
+      "key_quotes": [
+        "The most typical presentation of TTR-FAP is a progressive nerve length-dependent, sensory-motor polyneuropathy.",
+        "Liver transplantation provides a useful and specific therapy for TTR-FAP by allowing for the suppression of the main source of the mutant TTR."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted from the main text, with a focus on the TTR gene and its associated variant."
+  }
+}

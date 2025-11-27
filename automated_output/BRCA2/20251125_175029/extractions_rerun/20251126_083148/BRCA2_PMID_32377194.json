@@ -1,0 +1,82 @@
+{
+  "paper_metadata": {
+    "pmid": "32377194",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from the study on mucinous colorectal carcinomas."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7480C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 30,
+        "demographics": "Not specified",
+        "phenotype": "Mucinous colorectal carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 30,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic mutation identified in the MC group.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 3.3",
+      "additional_notes": "Present only in the MC group.",
+      "key_quotes": [
+        "Additionally, two pathogenic mutations of BRCA2 were present only in the MC group (c.7480C>T and c.1670T>C)."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1670T>C",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 30,
+        "demographics": "Not specified",
+        "phenotype": "Mucinous colorectal carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 30,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic mutation identified in the MC group.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 3.3",
+      "additional_notes": "Present only in the MC group.",
+      "key_quotes": [
+        "Additionally, two pathogenic mutations of BRCA2 were present only in the MC group (c.7480C>T and c.1670T>C)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted from the text."
+  }
+}

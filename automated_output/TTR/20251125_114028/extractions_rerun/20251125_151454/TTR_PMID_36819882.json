@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "36819882",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant lle68Leu, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.203A>T",
+      "protein_notation": "p.Ile68Leu",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "39-year-old Caucasian male",
+        "phenotype": "carrier of the mutation, presented with cardiac symptoms"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 39,
+          "age_at_onset": null,
+          "age_at_diagnosis": 41,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "cardiac sarcoidosis with cardiac arrest",
+          "evidence_sentence": "Following his father\u2019s diagnosis of a variant cardiac amyloidosis, a 39-year-old Caucasian male was identified as a carrier of the mutation lle68Leu in the transthyretin (TTR) gene."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with cardiac amyloidosis, but the patient presented with cardiac sarcoidosis.",
+        "assays": []
+      },
+      "segregation_data": "The variant is present in the patient with a family history of cardiac amyloidosis.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The patient had a family history of cardiac amyloidosis, which may suggest a hereditary component.",
+      "key_quotes": [
+        "Following his father\u2019s diagnosis of a variant cardiac amyloidosis, a 39-year-old Caucasian male was identified as a carrier of the mutation lle68Leu in the transthyretin (TTR) gene."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly mentioned in the text."
+  }
+}

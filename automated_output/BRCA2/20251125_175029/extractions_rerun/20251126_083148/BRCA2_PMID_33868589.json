@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "33868589",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted variants in the BRCA2 gene, including clinical significance, penetrance data, and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": "p.I2285V",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 53,
+        "demographics": "Saudi patients, age not specified",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": 11,
+        "unaffected_count": 9,
+        "uncertain_count": null,
+        "penetrance_percentage": 55.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Mutation in BRCA2 resulted in a lower survival rate as well (55.6% vs 89.9%; p = 0.003)."
+        }
+      ],
+      "functional_data": {
+        "summary": "BRCA2 mutations are associated with reduced survival in breast cancer patients.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "BRCA2 mutations were found in 37.7% of the cohort.",
+      "key_quotes": [
+        "BRCA2 was demonstrated as an independent predictor of reduced survival using independent Cox proportional hazard models.",
+        "Mutation in BRCA2 resulted in a lower survival rate as well (55.6% vs 89.9%; p = 0.003)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in BRCA2 was reported in the paper."
+  }
+}

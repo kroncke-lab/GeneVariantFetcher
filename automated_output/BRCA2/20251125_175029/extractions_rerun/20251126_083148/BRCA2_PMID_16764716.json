@@ -1,0 +1,144 @@
+{
+  "paper_metadata": {
+    "pmid": "16764716",
+    "title": "Phenotypic features and genetic characterization of male breast cancer families: identification of two recurrent BRCA2 mutations in north-east of Italy",
+    "extraction_summary": "Extracted information on two pathogenic BRCA2 mutations, including penetrance data and individual records of affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9106C>T",
+      "protein_notation": "p.Gln2960Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "Mean age at diagnosis 54.5 years; 3/10 patients younger than 50 years.",
+        "phenotype": "Male breast cancer (MBC)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 2,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "40-50 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "BR22",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 49,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Male breast cancer",
+          "evidence_sentence": "The carriers of the 9106C>T mutation showed a median age of breast cancer onset of 49 years."
+        },
+        {
+          "individual_id": "BR175",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 54,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Male breast cancer",
+          "evidence_sentence": "The carriers of the 9106C>T mutation showed a median age of breast cancer onset of 49 years."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to a premature protein truncation.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on familial segregation and clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation is recurrent in MBC cases from North-East Italy.",
+      "key_quotes": [
+        "The 9106C>T and the IVS16-2A>G mutations constitute recurrent BRCA2 mutations in MBC cases from the North-East of Italy."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.IVS16-2A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "Mean age at diagnosis 54.5 years; 3/10 patients younger than 50 years.",
+        "phenotype": "Male breast cancer (MBC)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 2,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "40-50 years",
+            "penetrance_percentage": null,
+            "carriers_in_range": null,
+            "affected_in_range": null
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "BR195",
+          "age_at_evaluation": null,
+          "age_at_onset": 38,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Male breast cancer",
+          "evidence_sentence": "In one IVS16-2A>G positive family, a first-degree relative (the father of the BR195 proband) was affected by a MBC diagnosed at 38 years."
+        },
+        {
+          "individual_id": "BR243",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "Not specified",
+          "evidence_sentence": "The carriers of the IVS16-2A>G mutation showed a median age of breast cancer onset of 60 years."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation leads to a partial or total skipping of exon 17.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on familial segregation and clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation is recurrent in MBC cases from North-East Italy.",
+      "key_quotes": [
+        "The 9106C>T and the IVS16-2A>G mutations constitute recurrent BRCA2 mutations in MBC cases from the North-East of Italy."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Summary of BRCA2 mutations and associated clinical data.",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text and tables."
+  }
+}

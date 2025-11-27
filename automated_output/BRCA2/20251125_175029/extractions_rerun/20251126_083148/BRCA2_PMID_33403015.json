@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "33403015",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variants and penetrance data from a study on breast cancer patients."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1238del",
+      "protein_notation": "p.Leu413fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 15,
+        "demographics": "Sicilian population",
+        "phenotype": "Luminal B breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 15,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "This variant involves the deletion of one nucleotide containing a thymine (T) in the BRCA2 exon 10, causing a frameshift resulting in the change of a Leucine with a Histidine at codon 413, formation of a premature termination codon and loss of the normal protein function.",
+        "assays": []
+      },
+      "segregation_data": "Detected in a total of 15 PV carriers (eight probands and seven family members).",
+      "population_frequency": null,
+      "evidence_level": "strong evidence based on family segregation and functional impact.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No BRCA1 PV was observed in patients harboring Luminal A molecular subtypes.",
+      "key_quotes": [
+        "The most frequent PV identified in most of the analyzed BRCA1-positive TNBCs is named BRCA2-1466delT (HGVS nomenclature: c.1238del; p.Leu413fs), was observed in the BRCA2 gene of LB molecular subtypes and detected in a total of 15 PV carriers (eight probands and seven family members)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 variants were extracted successfully."
+  }
+}

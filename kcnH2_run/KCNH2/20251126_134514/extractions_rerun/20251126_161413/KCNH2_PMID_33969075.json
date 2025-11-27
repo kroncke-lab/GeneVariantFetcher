@@ -1,0 +1,71 @@
+{
+  "paper_metadata": {
+    "pmid": "33969075",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1370C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "30-year-old female (proband), father (age not specified)",
+        "phenotype": "Torsades de pointes episode, prolonged QTc interval"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1 (Proband)",
+          "age_at_evaluation": 30,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "experienced Torsades de pointes and prolonged QTc interval of 560 ms",
+          "evidence_sentence": "The genetic analysis identified that the patient and her father had heterozygous mutations in KCNH2 (c.1370C>T) and AKAP9 (c.7725A>C)."
+        },
+        {
+          "individual_id": "P2 (Father)",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "QTc interval of 490 ms, no arrhythmia reported",
+          "evidence_sentence": "The genetic inheritance analysis further verified that the patient and her father, with a QTc interval of 490 ms, had heterozygous mutations in the genes KCNH2 (c.1370C>T) and AKAP9 (c.7725A>C)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The KCNH2 mutation is associated with a decrease in IKr activity, contributing to prolonged QT intervals.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the proband and her father.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mother had no relevant genetic mutations detected.",
+      "key_quotes": [
+        "The genetic analysis identified that the patient and her father had heterozygous mutations in KCNH2 (c.1370C>T).",
+        "The genetic inheritance analysis further verified that the patient and her father, with a QTc interval of 490 ms, had heterozygous mutations in the genes KCNH2 (c.1370C>T)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the KCNH2 variant was extracted from the main text."
+  }
+}

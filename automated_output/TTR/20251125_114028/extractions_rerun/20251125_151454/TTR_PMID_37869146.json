@@ -1,0 +1,131 @@
+{
+  "paper_metadata": {
+    "pmid": "37869146",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 70,
+        "demographics": "Endemic and non-endemic areas, primarily Portuguese, French, and Swedish populations.",
+        "phenotype": "Familial polyneuropathy associated with autonomic dysfunction."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 70,
+        "affected_count": 63,
+        "unaffected_count": 7,
+        "uncertain_count": null,
+        "penetrance_percentage": 90.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "50 years",
+            "penetrance_percentage": 60.0,
+            "carriers_in_range": 10,
+            "affected_in_range": 6
+          },
+          {
+            "age_range": "80 years",
+            "penetrance_percentage": 90.0,
+            "carriers_in_range": 20,
+            "affected_in_range": 18
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 50,
+          "age_at_onset": 45,
+          "age_at_diagnosis": 48,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Early-onset familial polyneuropathy with autonomic dysfunction.",
+          "evidence_sentence": "At age 50, penetrance is 60% in Portuguese households."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 80,
+          "age_at_onset": 70,
+          "age_at_diagnosis": 75,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Late-onset symptoms with significant neuropathy.",
+          "evidence_sentence": "Penetrance is usually high and could be about 90% at 80 years of age."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met variant leads to familial polyneuropathy and is associated with high penetrance in certain populations.",
+        "assays": [
+          "Genetic testing",
+          "Clinical evaluation"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, especially maternal inheritance.",
+      "population_frequency": "High prevalence in endemic areas, particularly in Portugal.",
+      "evidence_level": "Strong evidence based on multiple studies and registries.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is the most frequently reported in both endemic and non-endemic areas.",
+      "key_quotes": [
+        "The Val30Met variant... is responsible for about 70% of ATTRv.",
+        "Penetrance is significantly higher when the pathogenic variant is inherited from the mother."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Primarily African American populations in the USA.",
+        "phenotype": "Predominantly cardiac phenotype with mild neurological involvement."
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": null
+      },
+      "individual_records": [
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": 65,
+          "age_at_onset": 60,
+          "age_at_diagnosis": 62,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Restrictive cardiomyopathy with mild neuropathy.",
+          "evidence_sentence": "The variant Val122Ile... mainly results in a predominant cardiac phenotype."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile variant is associated with a higher risk of heart failure.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Prevalence of 3-4% in African American populations.",
+      "evidence_level": "Moderate evidence based on population studies.",
+      "source_location": "Results, paragraph 5",
+      "additional_notes": "The variant is more frequently detected in the USA among African American people.",
+      "key_quotes": [
+        "Val122Ile is another widespread pathogenic change more frequently detected in the USA among African American people."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text."
+  }
+}

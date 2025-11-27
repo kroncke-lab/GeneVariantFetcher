@@ -1,0 +1,107 @@
+{
+  "paper_metadata": {
+    "pmid": "39112608",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses various TTR variants associated with hereditary transthyretin amyloidosis, including demographic and clinical data of affected individuals."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.30G>A",
+      "protein_notation": "p.Val10Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 16,
+        "demographics": "Median age 69.5 years, 81.3% male",
+        "phenotype": "ATTRv amyloidosis with confirmed polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 16,
+        "affected_count": 16,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "M #5",
+          "age_at_evaluation": 62,
+          "age_at_onset": 23,
+          "age_at_diagnosis": null,
+          "sex": "M",
+          "affected_status": "affected",
+          "phenotype_details": "FAP stage 3, mixed phenotype",
+          "evidence_sentence": "Subject #5 has a TTR variant V30M, age at onset 23."
+        },
+        {
+          "individual_id": "M #6",
+          "age_at_evaluation": 58,
+          "age_at_onset": 23,
+          "age_at_diagnosis": null,
+          "sex": "M",
+          "affected_status": "affected",
+          "phenotype_details": "FAP stage 3, mixed phenotype",
+          "evidence_sentence": "Subject #6 has a TTR variant V30M, age at onset 23."
+        },
+        {
+          "individual_id": "M #7",
+          "age_at_evaluation": 64,
+          "age_at_onset": 69,
+          "age_at_diagnosis": null,
+          "sex": "M",
+          "affected_status": "affected",
+          "phenotype_details": "FAP stage 2, mixed phenotype",
+          "evidence_sentence": "Subject #7 has a TTR variant V30M, age at onset 69."
+        },
+        {
+          "individual_id": "M #8",
+          "age_at_evaluation": 64,
+          "age_at_onset": 75,
+          "age_at_diagnosis": null,
+          "sex": "M",
+          "affected_status": "affected",
+          "phenotype_details": "FAP stage 2, mixed phenotype",
+          "evidence_sentence": "Subject #8 has a TTR variant V30M, age at onset 75."
+        },
+        {
+          "individual_id": "M #16",
+          "age_at_evaluation": 56,
+          "age_at_onset": 70,
+          "age_at_diagnosis": null,
+          "sex": "M",
+          "affected_status": "affected",
+          "phenotype_details": "FAP stage 2, mixed phenotype",
+          "evidence_sentence": "Subject #16 has a TTR variant V30M, age at onset 70."
+        }
+      ],
+      "functional_data": {
+        "summary": "The TTR V30M variant is associated with hereditary transthyretin amyloidosis, leading to amyloid fibril deposition.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Table 1, Row 5",
+      "additional_notes": "The study included patients with various TTR variants, but only V30M was detailed in the individual records.",
+      "key_quotes": [
+        "Hereditary transthyretin (ATTRv) amyloidosis is a rare, adult-onset, progressive, multisystemic condition caused by TTR pathogenic variants.",
+        "The clinical course is progressive and disabling and leads to death within 4\u201315 years from onset if left untreated."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Baseline demographic and clinical characteristics of the patients with hereditary transthyretin amyloidosis (n=16)",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding TTR variants were extracted successfully."
+  }
+}

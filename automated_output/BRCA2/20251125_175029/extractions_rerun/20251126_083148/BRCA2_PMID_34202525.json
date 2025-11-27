@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "34202525",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from a study comparing tumor and germline testing in patients with epithelial ovarian cancer."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8537_8538delAG",
+      "protein_notation": "p.(Glu2846fs)",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 11,
+        "demographics": "not specified",
+        "phenotype": "germline BRCA2 mutation"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 11,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "germline mutation detected only upon resequencing with newly extracted tumor DNA.",
+          "evidence_sentence": "In the third case with a BRCA2 frameshift mutation (c.8537_8538delAG p.(Glu2846fs)), only resequencing with newly extracted tumor DNA detected the germline mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation was not identified in the primary tumor sequencing but was detected upon resequencing.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was missed in initial tumor testing.",
+      "key_quotes": [
+        "In the third case with a BRCA2 frameshift mutation (c.8537_8538delAG p.(Glu2846fs)), only resequencing with newly extracted tumor DNA detected the germline mutation."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was reported in the paper."
+  }
+}

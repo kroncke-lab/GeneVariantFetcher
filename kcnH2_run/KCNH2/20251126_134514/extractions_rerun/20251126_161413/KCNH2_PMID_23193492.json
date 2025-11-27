@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": null,
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 variant Arg-176-Trp (R176W) including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": "p.Arg176Trp",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Long QT Syndrome (LQT2)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Cousin",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Long QT Syndrome",
+          "evidence_sentence": "Genetic testing of this cousin revealed two LQTS-associated mutations."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation is associated with Long QT Syndrome type 2 (LQT2).",
+        "assays": []
+      },
+      "segregation_data": "The KCNH2 mutation segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Case Report, paragraph 2",
+      "additional_notes": "The patient's mother was negative for the KCNH2 mutation.",
+      "key_quotes": [
+        "Genetic testing of this cousin revealed two LQTS-associated mutations.",
+        "Mutations in KCNH2 cause long QT syndrome type 2 (LQT2) and are the second most common cause of LQTS."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in KCNH2 was reported in the paper."
+  }
+}

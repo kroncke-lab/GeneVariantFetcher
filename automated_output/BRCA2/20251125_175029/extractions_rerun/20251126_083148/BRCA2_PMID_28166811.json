@@ -1,0 +1,301 @@
+{
+  "paper_metadata": {
+    "pmid": "28166811",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted pathogenic variants in the BRCA2 gene along with penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5946delT",
+      "protein_notation": "p.Ser1982Argfs*22",
+      "genomic_position": null,
+      "clinical_significance": "Founder",
+      "patients": {
+        "count": 320,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 320,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic variant leading to a frameshift and loss of function.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.027%",
+      "evidence_level": "Well characterized",
+      "source_location": "Table 1, Row 6",
+      "additional_notes": "Common founder mutation.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3847_3848delGT",
+      "protein_notation": "p.Val1283Lysfs*21",
+      "genomic_position": null,
+      "clinical_significance": "Recurrent",
+      "patients": {
+        "count": 110,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 110,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic variant leading to a frameshift and loss of function.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.011%",
+      "evidence_level": "Well characterized",
+      "source_location": "Table 1, Row 7",
+      "additional_notes": "Recurrent variant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.658_659delGT",
+      "protein_notation": "p.Val220Ilefs*46",
+      "genomic_position": null,
+      "clinical_significance": "Recurrent",
+      "patients": {
+        "count": 60,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 60,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic variant leading to a frameshift and loss of function.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.0061%",
+      "evidence_level": "Well characterized",
+      "source_location": "Table 1, Row 8",
+      "additional_notes": "Recurrent variant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7480C>T",
+      "protein_notation": "p.Arg2494*",
+      "genomic_position": null,
+      "clinical_significance": "Founder",
+      "patients": {
+        "count": 60,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 60,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic variant leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.0050%",
+      "evidence_level": "Well characterized",
+      "source_location": "Table 1, Row 9",
+      "additional_notes": "Common founder mutation.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3545_3546delTT",
+      "protein_notation": "p.Phe1182*",
+      "genomic_position": null,
+      "clinical_significance": "Recurrent",
+      "patients": {
+        "count": 40,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 40,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic variant leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.0033%",
+      "evidence_level": "Well characterized",
+      "source_location": "Table 1, Row 10",
+      "additional_notes": "Recurrent variant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3599_3600delGT",
+      "protein_notation": "p.Cys1200*",
+      "genomic_position": null,
+      "clinical_significance": "Recurrent",
+      "patients": {
+        "count": 40,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 40,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic variant leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.0033%",
+      "evidence_level": "Well characterized",
+      "source_location": "Table 1, Row 11",
+      "additional_notes": "Recurrent variant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5576_5579delTTAA",
+      "protein_notation": "p.Ile1859Lysfs*34",
+      "genomic_position": null,
+      "clinical_significance": "Recurrent",
+      "patients": {
+        "count": 40,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 40,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic variant leading to a frameshift and loss of function.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.0033%",
+      "evidence_level": "Well characterized",
+      "source_location": "Table 1, Row 12",
+      "additional_notes": "Recurrent variant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7069_7070delCT",
+      "protein_notation": "p.Leu2357Valfs*24",
+      "genomic_position": null,
+      "clinical_significance": "Recurrent",
+      "patients": {
+        "count": 40,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 40,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic variant leading to a frameshift and loss of function.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.0033%",
+      "evidence_level": "Well characterized",
+      "source_location": "Table 1, Row 13",
+      "additional_notes": "Recurrent variant.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9118-2A>G",
+      "protein_notation": "Splice acceptor",
+      "genomic_position": null,
+      "clinical_significance": "Recurrent",
+      "patients": {
+        "count": 40,
+        "demographics": "Not specified",
+        "phenotype": "Not specified"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 40,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Pathogenic variant affecting splicing.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "0.0033%",
+      "evidence_level": "Well characterized",
+      "source_location": "Table 1, Row 14",
+      "additional_notes": "Recurrent variant.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Most common pathogenic BRCA1 and BRCA2 variants in ExAC",
+      "variants_extracted": 8
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 8,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "paper_metadata": {
+    "pmid": "39598169",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1763A>G",
+      "protein_notation": "p.Asn588Ser",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Short QT-Syndrome (SQTS) type 1"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "affected",
+          "phenotype_details": "Increased expression of HERG channels and altered calcium homeostasis.",
+          "evidence_sentence": "El-Brattrawy and colleagues investigated the pathogenesis of patients with Short QT-Syndrome (SQTS) and generated human iPSC-CMs from the skin fibroblasts of a patient with SQTS type 1 carrying a mutation (N588K) in KCNH2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutation increased the expression of HERG channels and altered calcium homeostasis in the human iPSC-CMs.",
+        "assays": [
+          "calcium handling studies",
+          "electrophysiology studies"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was associated with a significant phenotype in the patient.",
+      "key_quotes": [
+        "The mutation increased the expression of HERG channels and altered calcium homeostasis in the human iPSC-CMs."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1763A>G",
+      "protein_notation": "p.Asn588Ser",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "LQT1"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "not specified",
+          "affected_status": "unaffected",
+          "phenotype_details": "not specified",
+          "evidence_sentence": "Human iPSCs have been derived from a patient with LQTS and confirmed to carry a novel variant of uncertain significance (VUS) in KCNH2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The electrophysiological abnormalities observed in the patient human iPSC-CMs were corrected upon correcting the VUS.",
+        "assays": [
+          "electrophysiology studies"
+        ]
+      },
+      "segregation_data": "not specified",
+      "population_frequency": "not specified",
+      "evidence_level": "low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was classified as a VUS due to lack of clear pathogenicity evidence.",
+      "key_quotes": [
+        "Human iPSCs have been derived from a patient with LQTS and confirmed to carry a novel variant of uncertain significance (VUS) in KCNH2."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for KCNH2 variants were extracted successfully."
+  }
+}

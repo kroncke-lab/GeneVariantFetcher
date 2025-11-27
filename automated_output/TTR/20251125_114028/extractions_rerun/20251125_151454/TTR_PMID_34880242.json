@@ -1,0 +1,62 @@
+{
+  "paper_metadata": {
+    "pmid": "34880242",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the TTR gene variant Val30Met and its association with ATTR amyloidosis, detailing penetrance data and individual cases."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Swedish carrier",
+        "phenotype": "polyneuropathy and cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "suffered from both polyneuropathy and cardiomyopathy",
+          "evidence_sentence": "Vitreous body material was collected by vitrectomy from the eye of a Swedish carrier of the ATTR Val30Met variant who suffered from both polyneuropathy and cardiomyopathy."
+        }
+      ],
+      "functional_data": {
+        "summary": "The study characterizes the structural basis for amyloid formation in the vitreous body related to the Val30Met variant.",
+        "assays": [
+          "cryo-EM analysis"
+        ]
+      },
+      "segregation_data": "The variant is associated with disease in the reported patient.",
+      "population_frequency": null,
+      "evidence_level": "high",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The study highlights the polymorphism of ATTR fibrils and their structural characteristics.",
+      "key_quotes": [
+        "Vitreous body material was collected by vitrectomy from the eye of a Swedish carrier of the ATTR Val30Met variant who suffered from both polyneuropathy and cardiomyopathy."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on the TTR gene variant Val30Met."
+  }
+}

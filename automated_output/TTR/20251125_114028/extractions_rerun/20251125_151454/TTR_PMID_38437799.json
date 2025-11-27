@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "38437799",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper reports a TTR gene variant G47V associated with hereditary cardiac amyloidosis, detailing its clinical significance, penetrance data, and functional studies."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.200G>T",
+      "protein_notation": "p.Gly67Val",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "52-year-old male",
+        "phenotype": "Hereditary cardiac amyloidosis (ATTR-CA)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 52,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Heart failure, hypertrophy cardiomyopathy, and history of cardiac hypertrophy and heart block.",
+          "evidence_sentence": "A 52-year-old male was referred to our hospital, complaining of exertional dyspnea and lower limb edema."
+        }
+      ],
+      "functional_data": {
+        "summary": "G47V-TTR exhibits significantly lower thermodynamic and kinetic stability compared to WT-TTR.",
+        "assays": [
+          "thermodynamic stability measured by urea denaturation curve using tryptophan intrinsic fluorescence",
+          "kinetic stability measured by tryptophan fluorescence in urea"
+        ]
+      },
+      "segregation_data": "The variant was not detected in the patient\u2019s first-degree relatives.",
+      "population_frequency": "Absent in known human genome databases including 1000 Genomes, GenomeAD, and ExAC.",
+      "evidence_level": "Moderate evidence based on biochemical characterization and clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The G47V variant was characterized for its biochemical properties for the first time in this study.",
+      "key_quotes": [
+        "This missense variant was not detected in the patient\u2019s first-degree relatives.",
+        "Thus, TTR c.200G>T was regarded as a possible causal variant in our ATTR-CA patient."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant G47V was successfully extracted."
+  }
+}

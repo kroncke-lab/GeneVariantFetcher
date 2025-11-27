@@ -1,0 +1,81 @@
+{
+  "paper_metadata": {
+    "pmid": "32356124",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1342A>C",
+      "protein_notation": "p.Asn448His",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "female, ages 40-50",
+        "phenotype": "bilateral ovarian serous adenocarcinoma grade III"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 2,
+        "unaffected_count": 1,
+        "uncertain_count": 1,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "II-1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": 40,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "bilateral ovarian serous adenocarcinoma grade III",
+          "evidence_sentence": "The proband (II5) in the family was diagnosed as bilateral ovarian serous adenocarcinoma grade III at the age of 40."
+        },
+        {
+          "individual_id": "II-3",
+          "age_at_evaluation": null,
+          "age_at_onset": 50,
+          "age_at_diagnosis": 50,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "bilateral ovarian serous adenocarcinoma grade III",
+          "evidence_sentence": "II3 was diagnosed with ovarian cancer at the age of 50."
+        },
+        {
+          "individual_id": "III-8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "uncertain",
+          "phenotype_details": "carried both BRCA1 (3326A>T) and BRCA2 (1342A>C) mutations",
+          "evidence_sentence": "The daughter of the proband (III8) carries both BRCA1 (3326A>T) and BRCA2 (1342A>C) mutations."
+        }
+      ],
+      "functional_data": {
+        "summary": "The heterozygous mutation of the BRCA2 (1342A>C) mutated the codon AAT at this position to CAT, resulting in the translation of the translated Asn (polar neutral amino acid) to His (positively charged basic amino acid), which ultimately caused a change in the stability of the molecular model.",
+        "assays": []
+      },
+      "segregation_data": "Detected in affected individuals II1 and II5, not found in unaffected II2.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is associated with breast cancer and ovarian cancer.",
+      "key_quotes": [
+        "The mutation coexisting in two ovarian cancer patients, II1 and II5, was 1342A>C.",
+        "We hypothesized that BRCA2 (1342A>C) mutations are associated with the development of ovarian cancer in this family."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 variants were successfully extracted."
+  }
+}

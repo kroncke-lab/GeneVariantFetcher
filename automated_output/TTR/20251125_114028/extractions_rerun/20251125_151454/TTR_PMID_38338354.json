@@ -1,0 +1,52 @@
+{
+  "paper_metadata": {
+    "pmid": "38338354",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the role of protein misfolding in pregnancy, particularly in preeclampsia, and mentions the presence of aggregated proteoforms of transthyretin (TTR) in the serum of women with preeclampsia."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": "women with preeclampsia",
+        "phenotype": "preeclampsia"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Aggregated proteoforms of TTR were detected in the serum of women with preeclampsia, suggesting a role in the pathogenesis of the condition.",
+        "assays": [
+          "mass-spectrometry-based approaches",
+          "Western Blot analysis"
+        ]
+      },
+      "segregation_data": "The presence of abnormal TTR aggregates is suggested to be causative of preeclampsia.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence supporting pathogenicity",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The study indicates that TTR aggregates may contribute to the pathophysiology of preeclampsia.",
+      "key_quotes": [
+        "Kalkunte et al. demonstrated the presence of aggregated proteoforms of transthyretin (TTR) in the serum of women with PE."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant related to TTR was mentioned, with no specific cDNA or protein notation provided."
+  }
+}

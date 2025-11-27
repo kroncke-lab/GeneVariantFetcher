@@ -1,0 +1,2798 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+    <head >
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        
+        
+
+        
+        
+  <link rel="stylesheet" href="/static/assets/style-8258669d.css" />
+<script type="module" crossorigin="" src="/static/assets/base_style-f4a99799.js"></script>
+
+  <link rel="stylesheet" href="/static/assets/style-ef962842.css" />
+<link rel="stylesheet" href="/static/assets/style-3ade8b5c.css" />
+<script type="module" crossorigin="" src="/static/assets/article_style-d757a0dd.js"></script>
+
+  
+  
+    <style>
+  
+  
+  @media screen and (min-width: 64em) {
+    div.pmc-wm {
+      background: repeat-y;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='350' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cfilter x='-.02' y='0' width='1.05' height='1' id='c'%3E%3CfeFlood flood-color='%23FFF'/%3E%3CfeComposite in='SourceGraphic'/%3E%3C/filter%3E%3Ctext id='b' font-family='Helvetica' font-size='11pt' style='opacity:1;fill:%23005ea2;stroke:none;text-anchor:middle' x='175' y='14'%3E%3C/text%3E%3Cpath id='a' style='fill:%23005ea2' d='M0 8h350v3H0z'/%3E%3C/defs%3E%3Cuse xlink:href='%23a' transform='rotate(90 10 10)'/%3E%3Cuse xlink:href='%23b' transform='rotate(90 10 10)' filter='url(%23c)'/%3E%3C/svg%3E");
+      padding-left: 3rem;
+    }
+  }
+</style>
+
+  
+
+
+
+        
+            <link rel="apple-touch-icon"
+                  sizes="180x180"
+                  href="/static/img/favicons/apple-touch-icon.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="48x48"
+                  href="/static/img/favicons/favicon-48x48.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="32x32"
+                  href="/static/img/favicons/favicon-32x32.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="16x16"
+                  href="/static/img/favicons/favicon-16x16.png" />
+            <link rel="manifest" href="/static/img/favicons/site.webmanifest" />
+            <link rel="mask-icon"
+                  href="/static/img/favicons/safari-pinned-tab.svg"
+                  color="#0071bc" />
+            <meta name="msapplication-config"
+                  content="/static/img/favicons/browserconfig.xml" />
+            <meta name="theme-color" content="#ffffff" />
+        
+
+        <title>
+            Analysis of Circulating Tumor DNA to Predict Neoadjuvant Therapy Effectiveness and Breast Cancer Recurrence - PMC
+        </title>
+
+        
+        
+  
+  <!-- Logging params: Pinger defaults -->
+<meta name="ncbi_app" content="cloudpmc-viewer" />
+<meta name="ncbi_db" content="pmc" />
+<meta name="ncbi_phid" content="8E59E36E9264FFF33AE36E000183288C.m_1" />
+<meta name="ncbi_pinger_stat_url" content="https://pmc.ncbi.nlm.nih.gov/stat" />
+<!-- Logging params: Pinger custom -->
+<meta name="ncbi_pdid" content="article" />
+  
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
+    
+        <link rel="preconnect" href="https://cdn.ncbi.nlm.nih.gov" />
+    
+
+    <!-- Include USWDS Init Script -->
+    <script src="/static/assets/uswds-init.js"></script>
+
+
+    <meta name="ncbi_domain" content="jbrcan">
+<meta name="ncbi_type" content="fulltext">
+<meta name="ncbi_pcid" content="journal">
+<meta name="ncbi_feature" content="associated_data">
+<link rel="canonical" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7462818/">
+<meta name="robots" content="INDEX,NOFOLLOW,NOARCHIVE">
+<meta name="citation_journal_title" content="Journal of Breast Cancer">
+<meta name="citation_title" content="Analysis of Circulating Tumor DNA to Predict Neoadjuvant Therapy Effectiveness and Breast Cancer Recurrence">
+<meta name="citation_author" content="Shuai Hao">
+<meta name="citation_author_institution" content="Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.">
+<meta name="citation_author" content="Wuguo Tian">
+<meta name="citation_author_institution" content="Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.">
+<meta name="citation_author" content="Jianjie Zhao">
+<meta name="citation_author_institution" content="Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.">
+<meta name="citation_author" content="Yi Chen">
+<meta name="citation_author_institution" content="Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.">
+<meta name="citation_author" content="Xiaohua Zhang">
+<meta name="citation_author_institution" content="Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.">
+<meta name="citation_author" content="Bo Gao">
+<meta name="citation_author_institution" content="Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.">
+<meta name="citation_author" content="Yujun He">
+<meta name="citation_author_institution" content="Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.">
+<meta name="citation_author" content="Donglin Luo">
+<meta name="citation_author_institution" content="Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.">
+<meta name="citation_publication_date" content="2020 Jul 10">
+<meta name="citation_volume" content="23">
+<meta name="citation_issue" content="4">
+<meta name="citation_firstpage" content="373">
+<meta name="citation_doi" content="10.4048/jbc.2020.23.e41">
+<meta name="citation_pmid" content="32908788">
+<meta name="citation_abstract_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC7462818/">
+<meta name="citation_fulltext_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC7462818/">
+<meta name="citation_pdf_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC7462818/pdf/jbc-23-373.pdf">
+<meta name="description" content="Real-time detection and intervention can be used as potential measures to markedly decrease breast cancer mortality. Assessment of circulating tumor DNA (ctDNA) may offer great benefits for the management of breast cancer over time. However, the use ...">
+<meta name="og:title" content="Analysis of Circulating Tumor DNA to Predict Neoadjuvant Therapy Effectiveness and Breast Cancer Recurrence">
+<meta name="og:type" content="article">
+<meta name="og:site_name" content="PubMed Central (PMC)">
+<meta name="og:description" content="Real-time detection and intervention can be used as potential measures to markedly decrease breast cancer mortality. Assessment of circulating tumor DNA (ctDNA) may offer great benefits for the management of breast cancer over time. However, the use ...">
+<meta name="og:url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC7462818/">
+<meta name="og:image" content="https://cdn.ncbi.nlm.nih.gov/pmc/cms/images/pmc-card-share.jpg?_=0">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ncbi">
+    
+    
+
+    </head>
+    <body >
+        
+    <a class="usa-skipnav " href="#main-content">
+      Skip to main content
+    </a>
+
+
+        
+            
+
+<section class="usa-banner " aria-label="Official website of the United States government" >
+    <div class="usa-accordion">
+        <header class="usa-banner__header">
+            <div class="usa-banner__inner">
+                <div class="grid-col-auto">
+                    <img aria-hidden="true"
+                         class="usa-banner__header-flag"
+                         src="/static/img/us_flag.svg"
+                         alt="" />
+                </div>
+
+                <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                    <p class="usa-banner__header-text">
+                        An official website of the United States government
+                    </p>
+                    <span class="usa-banner__header-action">Here's how you know</span>
+                </div>
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-accordion__button usa-banner__button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    aria-expanded="false"
+    aria-controls="gov-banner-default"
+    
+    data-testid="storybook-django-banner"
+    
+    >
+    
+        
+
+        
+                    <span class="usa-banner__button-text">Here's how you know</span>
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </div>
+        </header>
+
+        <div class="usa-banner__content usa-accordion__content"
+             id="gov-banner-default"
+             hidden>
+            <div class="grid-row grid-gap-lg">
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-dot-gov.svg"
+                         alt=""
+                         aria-hidden="true" />
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Official websites use .gov</strong>
+                            <br />
+                            A
+                            <strong>.gov</strong> website belongs to an official
+                            government organization in the United States.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-https.svg"
+                         alt=""
+                         aria-hidden="true" />
+
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Secure .gov websites use HTTPS</strong>
+                            <br />
+                            A <strong>lock</strong> (
+                            <span class="icon-lock">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="52"
+                                     height="64"
+                                     viewBox="0 0 52 64"
+                                     class="usa-banner__lock-image"
+                                     role="graphics-symbol"
+                                     aria-labelledby="banner-lock-description"
+                                     focusable="false">
+                                    <title id="banner-lock-title">Lock</title>
+                                    <desc id="banner-lock-description">
+                                    Locked padlock icon
+                                    </desc>
+                                    <path fill="#000000"
+                                          fill-rule="evenodd"
+                                          d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z" />
+                                </svg>
+</span>) or <strong>https://</strong> means you've safely
+                                connected to the .gov website. Share sensitive
+                                information only on official, secure websites.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        
+
+        
+    
+    
+    
+
+<div class="usa-overlay">
+</div>
+
+
+
+<header class="usa-header usa-header--extended usa-header--wide" data-header data-testid="header"    >
+    <div class="ncbi-header">
+        <div class="ncbi-header__container">
+            <a class="ncbi-header__logo-container"
+               href="https://www.ncbi.nlm.nih.gov/">
+                <img alt="NCBI home page"
+                     class="ncbi-header__logo-image"
+                     src="/static/img/ncbi-logos/nih-nlm-ncbi--white.svg"
+                     width="410"
+                     height="100" />
+            </a>
+
+            <!-- Mobile menu hamburger button -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-menu-btn ncbi-header__hamburger-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Show menu"
+    data-testid="navMenuButton"
+    
+    >
+    
+        
+
+        
+                <svg aria-hidden="true"
+                     class="ncbi-hamburger-icon"
+                     fill="none"
+                     focusable="false"
+                     height="21"
+                     viewBox="0 0 31 21"
+                     width="31"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M0.125 20.75H30.875V17.3333H0.125V20.75ZM0.125 12.2083H30.875V8.79167H0.125V12.2083ZM0.125 0.25V3.66667H30.875V0.25H0.125Z"
+                          fill="#F1F1F1"
+                          fill-rule="evenodd" />
+                </svg>
+            
+
+        
+    
+        
+            </button>
+        
+
+
+
+            
+                <!-- Desktop buttons-->
+                <div class="ncbi-header__desktop-buttons">
+                    
+                        <!-- Desktop search button -->
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button
+           "
+    aria-expanded="false"
+    aria-controls="search-field-desktop-navigation"
+    aria-label="Show search overlay"
+    data-testid="toggleSearchPanelButton"
+    data-toggle-search-panel-button
+    >
+    
+        
+
+        
+                            
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#search" />
+    </svg>
+
+
+                            Search
+                        
+
+        
+    
+        
+            </button>
+        
+
+
+                    
+
+                    <!-- Desktop login dropdown -->
+                    
+                        <div class="ncbi-header__login-dropdown">
+                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button ncbi-header__login-dropdown-button
+           "
+    aria-expanded="false"
+    aria-controls="login-dropdown-menu"
+    aria-label="Show login menu"
+    data-testid="toggleLoginMenuDropdown"
+    data-desktop-login-button
+    >
+    
+        
+
+        
+                                
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#person" />
+    </svg>
+
+
+
+                                <span data-login-dropdown-text>Log in</span>
+
+                                <!-- Dropdown icon pointing up -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-less ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-up-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_less" />
+    </svg>
+
+
+
+                                <!-- Dropdown icon pointing down -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-more ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-down-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_more" />
+    </svg>
+
+
+                            
+
+        
+    
+        
+            </button>
+        
+
+
+
+                            <!-- Login dropdown menu -->
+                            <ul class="usa-nav__submenu ncbi-header__login-dropdown-menu"
+                                id="login-dropdown-menu"
+                                data-desktop-login-menu-dropdown
+                                hidden>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                <li class="usa-nav__submenu-item">
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--outline ncbi-header__login-dropdown-logout-button
+           "
+    
+    
+    
+    data-testid="desktopLogoutButton"
+    data-desktop-logout-button
+    >
+    
+        
+
+        Log out
+
+        
+    
+        
+            </button>
+        
+
+
+                                </li>
+                            </ul>
+                        </div>
+                    
+                </div>
+            
+        </div>
+    </div>
+
+    <!-- Search panel -->
+    
+        <div class="ncbi-search-panel ncbi--show-only-at-desktop"
+             data-header-search-panel
+             hidden>
+            <div class="ncbi-search-panel__container">
+                <form action="https://www.ncbi.nlm.nih.gov/search/all/"
+                      
+                      autocomplete="off"
+                      class="usa-search usa-search--big ncbi-search-panel__form"
+                      data-testid="desktop-navigation-search-form"
+                      method="GET"
+                      role="search">
+                    <label class="usa-sr-only" for="search-field-desktop-navigation">
+                        Search…
+                    </label>
+                    <input class="usa-input"
+                           id="search-field-desktop-navigation"
+                           name="term"
+                           
+                               placeholder="Search NCBI"
+                           
+                           type="search"
+                           value="" />
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                        <span class="usa-search__submit-text">
+                            Search NCBI
+                        </span>
+                    
+
+        
+    
+        
+            </button>
+        
+
+
+                </form>
+
+                
+            </div>
+        </div>
+    
+
+    <nav aria-label="Primary navigation" class="usa-nav">
+        <p class="usa-sr-only" id="primary-navigation-sr-only-title">
+            Primary site navigation
+        </p>
+
+        <!-- Mobile menu close button -->
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-nav__close ncbi-nav__close-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Close navigation menu"
+    data-testid="navCloseButton"
+    
+    >
+    
+        
+
+        
+            <img src="/static/img/usa-icons/close.svg" alt="Close" />
+        
+
+        
+    
+        
+            </button>
+        
+
+
+
+        
+            <!-- Mobile search component -->
+            <form class="usa-search usa-search--small ncbi--hide-at-desktop margin-top-6"
+                  action="https://www.ncbi.nlm.nih.gov/search/all/"
+                  
+                  autocomplete="off"
+                  data-testid="mobile-navigation-search-form"
+                  method="GET"
+                  role="search">
+                <label class="usa-sr-only" for="search-field-mobile-navigation">
+                    Search
+                </label>
+
+                <input class="usa-input"
+                       id="search-field-mobile-navigation"
+                       type="search"
+                       
+                           placeholder="Search NCBI"
+                       
+                       name="term" />
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                    <!-- This SVG should be kept inline and not replaced with a link to the icon as otherwise it will render in the wrong color -->
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0E2LjQ3MSA2LjQ3MSAwIDAgMCAxNiA5LjUgNi41IDYuNSAwIDEgMCA5LjUgMTZjMS42MSAwIDMuMDktLjU5IDQuMjMtMS41N2wuMjcuMjh2Ljc5bDUgNC45OUwyMC40OSAxOWwtNC45OS01em0tNiAwQzcuMDEgMTQgNSAxMS45OSA1IDkuNVM3LjAxIDUgOS41IDUgMTQgNy4wMSAxNCA5LjUgMTEuOTkgMTQgOS41IDE0eiIvPjwvc3ZnPg=="
+                         class="usa-search__submit-icon"
+                         alt="Search" />
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </form>
+
+            
+        
+
+        <!-- Primary navigation menu items -->
+        <!-- This usa-nav__inner wrapper is required to correctly style the navigation items on Desktop -->
+        
+
+        
+            <div class="ncbi-nav__mobile-login-menu ncbi--hide-at-desktop"
+                 data-mobile-login-menu
+                 hidden>
+                <p class="ncbi-nav__mobile-login-menu-status">
+                    Logged in as:
+                    <strong class="ncbi-nav__mobile-login-menu-email"
+                            data-mobile-login-email-text></strong>
+                </p>
+                <ul class="usa-nav__primary usa-accordion">
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           ncbi-nav__mobile-login-button ncbi--hide-at-desktop
+           "
+    
+    
+    
+    data-testid="mobileLoginButton"
+    data-mobile-login-button
+    >
+    
+        
+
+        Log in
+
+        
+    
+        
+            </button>
+        
+
+
+    </nav>
+</header>
+
+    
+    
+        
+
+<section class="pmc-header pmc-header--basic" aria-label="PMC Header with search box">
+    <div class="pmc-nav-container">
+        <div class="pmc-header__bar">
+           <div class="pmc-header__logo">
+               <a href="/" title="Home" aria-label="PMC Home"></a>
+           </div>
+            <button
+                    type="button"
+                    class="usa-button usa-button--unstyled pmc-header__search__button"
+                    aria-label="Open search"
+                    data-ga-category="search"
+                    data-ga-action="PMC"
+                    data-ga-label="pmc_search_panel_mobile"
+            >
+                <svg class="usa-icon width-4 height-4 pmc-icon__open" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#search"></use>
+                </svg>
+                <svg class="usa-icon width-4 height-4 pmc-icon__close" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="pmc-header__search">
+            
+
+
+<form class="usa-search usa-search--extra usa-search--article-right-column  pmc-header__search__form" id="pmc-search-form" autocomplete="off" role="search">
+<label class="usa-sr-only" for="pmc-search">Search PMC Full-Text Archive</label>
+<span class="autoComplete_wrapper flex-1">
+<input class="usa-input width-full maxw-none" required="required" placeholder="Search PMC Full-Text Archive" id="pmc-search"  type="search" name="term" data-autocomplete-url="https://pmc.ncbi.nlm.nih.gov/autocomp/search/autocomp/"/>
+</span>
+<button
+class="usa-button"
+type="submit"
+formaction="https://pmc.ncbi.nlm.nih.gov/search/"
+data-ga-category="search"
+data-ga-action="PMC"
+data-ga-label="PMC_search_button"
+>
+<span class="usa-search__submit-text">Search in PMC</span>
+<img
+src="/static/img/usa-icons-bg/search--white.svg"
+class="usa-search__submit-icon"
+alt="Search"
+/>
+</button>
+</form>
+            <div class="display-flex flex-column tablet:flex-row tablet:flex-justify flex-justify-center flex-align-center width-full desktop:maxw-44">
+                <ul class="pmc-header__search__menu">
+                    <li>
+                        
+                            <a class="usa-link" href="/journals/" data-ga-action="featured_link" data-ga-label="journal list">
+                                Journal List
+                            </a>
+                        
+                    </li>
+                    <li>
+                        
+                            <a class="usa-link" href="/about/userguide/" data-ga-action="featured_link"
+                            data-ga-label="user guide">
+                                User Guide
+                            </a>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+    
+
+
+        
+        
+
+       
+  <div class="usa-section padding-top-0 desktop:padding-top-6 pmc-article-section" data-article-db="pmc" data-article-id="7462818">
+
+    
+
+   
+
+
+
+<div class="grid-container pmc-actions-bar" aria-label="Actions bar" role="complementary">
+    <div class="grid-row">
+        <div class="grid-col-fill display-flex">
+             <div class="display-flex">
+                <ul class="usa-list usa-list--unstyled usa-list--horizontal">
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <button
+                                type="button"
+                                class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                                aria-label="Open resources"
+                                data-extra-class="is-visible-resources"
+                                data-ga-category="resources_accordion"
+                                data-ga-action="click"
+                                data-ga-label="mobile_icon"
+                        >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#more_vert"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <a
+                                href="https://doi.org/10.4048/jbc.2020.23.e41"
+                                class="usa-link display-flex usa-tooltip"
+                                role="button"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                title="View on publisher site"
+                                data-position="bottom"
+                                aria-label="View on publisher site"
+                                data-ga-category="actions"
+                                data-ga-action="click"
+                                data-ga-label="publisher_link_mobile"
+                        >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#launch"></use>
+                                </svg>
+                        </a>
+                    </li>
+                    
+                    
+                        <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                             <a
+                                     href="pdf/jbc-23-373.pdf"
+                                     class="usa-link display-flex usa-tooltip"
+                                     role="button"
+                                     title="Download PDF"
+                                     data-position="bottom"
+                                     aria-label="Download PDF"
+                                     data-ga-category="actions"
+                                     data-ga-action="click"
+                                     data-ga-label="pdf_download_mobile"
+                             >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                                </svg>
+                            </a>
+                        </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button
+                            class="usa-button usa-button--unstyled  usa-tooltip collections-dialog-trigger collections-button display-flex collections-button-empty"
+                            title="Add to Collections"
+                            data-position="bottom"
+                            aria-label="Save article in MyNCBI collections."
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="collections_button_mobile"
+                            data-collections-open-dialog-enabled="false"
+                            data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC7462818%2F%23open-collections-dialog"
+                            data-in-collections="false"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button role="button" class="usa-button usa-button--unstyled usa-tooltip citation-dialog-trigger display-flex"
+                            aria-label="Open dialog with citation text in different styles"
+                            title="Cite"
+                            data-position="bottom"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="cite_mobile"
+                            data-all-citations-url="/resources/citations/7462818/"
+                            data-citation-style="nlm"
+                            data-download-format-link="/resources/citations/7462818/export/"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="pmc-permalink display-flex" >
+                         <button
+                                 type="button"
+                                 title="Permalink"
+                                 data-position="bottom"
+                                 class="usa-button usa-button--unstyled display-flex usa-tooltip"
+                                 aria-label="Show article permalink"
+                                 aria-expanded="false"
+                                 aria-haspopup="true"
+                                 data-ga-category="actions"
+                                 data-ga-action="open"
+                                 data-ga-label="permalink_mobile"
+                         >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#share"></use>
+                            </svg>
+                        </button>
+                        
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC7462818/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+                    </li>
+                </ul>
+            </div>
+            <button
+                    type="button"
+                    class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                    aria-label="Open article navigation"
+                    data-extra-class="is-visible-in-page"
+                    data-ga-category="actions"
+                    data-ga-action="open"
+                    data-ga-label="article_nav_mobile"
+            >
+                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#list"></use>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+    <div class="grid-container desktop:padding-left-6">
+      <div id="article-container" class="grid-row grid-gap">
+        <div class="grid-col-12 desktop:grid-col-8 order-2 pmc-layout__content">
+            <div class="grid-container padding-left-0 padding-right-0">
+                <div class="grid-row desktop:margin-left-neg-6">
+                    <div class="grid-col-12">
+                        <div class="pmc-layout__disclaimer" role="complementary" aria-label="Disclaimer note">
+    As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+    the contents by NLM or the National Institutes of Health.<br/>
+    Learn more:
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="Disclaimer" data-ga-label="New disclaimer box" href="/about/disclaimer/">PMC Disclaimer</a>
+    |
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="PMC Copyright Notice" data-ga-label="New disclaimer box" href="/about/copyright/">
+        PMC Copyright Notice
+    </a>
+</div>
+                    </div>
+                </div>
+                <div class="grid-row pmc-wm desktop:margin-left-neg-6">
+                    <!-- Main content -->
+                    <main
+                      id="main-content"
+                      class="usa-layout-docs__main usa-layout-docs grid-col-12 pmc-layout pmc-prose padding-0"
+                    >
+
+                      
+                        <section class="pmc-journal-banner text-center line-height-none" aria-label="Journal banner"><img src="https://cdn.ncbi.nlm.nih.gov/pmc/banners/logo-jbrcan.jpg" alt="Journal of Breast Cancer logo" usemap="#pmc-banner-imagemap" width="500" height="75"><map name="pmc-banner-imagemap"><area alt="Link to Journal of Breast Cancer" title="Link to Journal of Breast Cancer" shape="default" href="http://ejbc.kr/" target="_blank" rel="noopener noreferrer"></map></section><article lang="en"><section aria-label="Article citation and metadata"><section class="pmc-layout__citation font-secondary font-xs"><div>
+<div class="display-inline-block"><button type="button" class="cursor-pointer text-no-underline bg-transparent border-0 padding-0 text-left margin-0 text-normal text-primary" aria-controls="journal_context_menu">J Breast Cancer</button></div>. 2020 Jul 10;23(4):373–384. doi: <a href="https://doi.org/10.4048/jbc.2020.23.e41" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">10.4048/jbc.2020.23.e41</a>
+</div>
+<nav id="journal_context_menu" hidden="hidden"><ul class="menu-list font-family-ui" role="menu">
+<li role="presentation"><a href="https://pmc.ncbi.nlm.nih.gov/search/?term=%22J%20Breast%20Cancer%22%5Bjour%5D" class="usa-link" role="menuitem">Search in PMC</a></li>
+<li role="presentation"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22J%20Breast%20Cancer%22%5Bjour%5D" lang="en" class="usa-link" role="menuitem">Search in PubMed</a></li>
+<li role="presentation"><a href="https://www.ncbi.nlm.nih.gov/nlmcatalog?term=%22J%20Breast%20Cancer%22%5BTitle%20Abbreviation%5D" class="usa-link" role="menuitem">View in NLM Catalog</a></li>
+<li role="presentation"><a href="?term=%22J%20Breast%20Cancer%22%5Bjour%5D" class="usa-link" role="menuitem" data-add-to-search="true">Add to search</a></li>
+</ul></nav></section><section class="front-matter"><div class="ameta p font-secondary font-xs">
+<hgroup><h1>Analysis of Circulating Tumor DNA to Predict Neoadjuvant Therapy Effectiveness and Breast Cancer Recurrence</h1></hgroup><div class="cg p">
+<a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Hao%20S%22%5BAuthor%5D" class="usa-link" aria-describedby="id1"><span class="name western">Shuai Hao</span></a><div hidden="hidden" id="id1">
+<h3><span class="name western">Shuai Hao</span></h3>
+<div class="p">
+<sup>1</sup>Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Hao%20S%22%5BAuthor%5D" class="usa-link"><span class="name western">Shuai Hao</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Tian%20W%22%5BAuthor%5D" class="usa-link" aria-describedby="id2"><span class="name western">Wuguo Tian</span></a><div hidden="hidden" id="id2">
+<h3><span class="name western">Wuguo Tian</span></h3>
+<div class="p">
+<sup>1</sup>Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Tian%20W%22%5BAuthor%5D" class="usa-link"><span class="name western">Wuguo Tian</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Zhao%20J%22%5BAuthor%5D" class="usa-link" aria-describedby="id3"><span class="name western">Jianjie Zhao</span></a><div hidden="hidden" id="id3">
+<h3><span class="name western">Jianjie Zhao</span></h3>
+<div class="p">
+<sup>1</sup>Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Zhao%20J%22%5BAuthor%5D" class="usa-link"><span class="name western">Jianjie Zhao</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Chen%20Y%22%5BAuthor%5D" class="usa-link" aria-describedby="id4"><span class="name western">Yi Chen</span></a><div hidden="hidden" id="id4">
+<h3><span class="name western">Yi Chen</span></h3>
+<div class="p">
+<sup>1</sup>Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Chen%20Y%22%5BAuthor%5D" class="usa-link"><span class="name western">Yi Chen</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Zhang%20X%22%5BAuthor%5D" class="usa-link" aria-describedby="id5"><span class="name western">Xiaohua Zhang</span></a><div hidden="hidden" id="id5">
+<h3><span class="name western">Xiaohua Zhang</span></h3>
+<div class="p">
+<sup>1</sup>Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Zhang%20X%22%5BAuthor%5D" class="usa-link"><span class="name western">Xiaohua Zhang</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Gao%20B%22%5BAuthor%5D" class="usa-link" aria-describedby="id6"><span class="name western">Bo Gao</span></a><div hidden="hidden" id="id6">
+<h3><span class="name western">Bo Gao</span></h3>
+<div class="p">
+<sup>1</sup>Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Gao%20B%22%5BAuthor%5D" class="usa-link"><span class="name western">Bo Gao</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22He%20Y%22%5BAuthor%5D" class="usa-link" aria-describedby="id7"><span class="name western">Yujun He</span></a><div hidden="hidden" id="id7">
+<h3><span class="name western">Yujun He</span></h3>
+<div class="p">
+<sup>1</sup>Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22He%20Y%22%5BAuthor%5D" class="usa-link"><span class="name western">Yujun He</span></a>
+</div>
+</div>
+<sup>1</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Luo%20D%22%5BAuthor%5D" class="usa-link" aria-describedby="id8"><span class="name western">Donglin Luo</span></a><div hidden="hidden" id="id8">
+<h3><span class="name western">Donglin Luo</span></h3>
+<div class="p">
+<sup>1</sup>Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Luo%20D%22%5BAuthor%5D" class="usa-link"><span class="name western">Donglin Luo</span></a>
+</div>
+</div>
+<sup>1,</sup><sup>✉</sup>
+</div>
+<ul class="d-buttons inline-list">
+<li><button class="d-button" aria-controls="aip_a" aria-expanded="false">Author information</button></li>
+<li><button class="d-button" aria-controls="anp_a" aria-expanded="false">Article notes</button></li>
+<li><button class="d-button" aria-controls="clp_a" aria-expanded="false">Copyright and License information</button></li>
+</ul>
+<div class="d-panels font-secondary-light">
+<div id="aip_a" class="d-panel p" style="display: none">
+<div class="p" id="A1">
+<sup>1</sup>Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing, China.</div>
+<div class="author-notes p">
+<div class="fn" id="corresp1">
+<sup>✉</sup><p class="display-inline">Correspondence to Donglin Luo. Department of Breast, Thyroid Surgery, Daping Hospital, Army Medical University, Chongqing 400042, China. <span>luodonglin1967@163.com</span></p>
+</div>
+<div class="fn" id="_fncrsp93pmc__">
+<sup>✉</sup><p class="display-inline">Corresponding author.</p>
+</div>
+</div>
+</div>
+<div id="anp_a" class="d-panel p" style="display: none"><div class="notes p"><section id="historyarticle-meta1" class="history"><p>Received 2020 Feb 12; Accepted 2020 Jul 2; Collection date 2020 Aug.</p></section></div></div>
+<div id="clp_a" class="d-panel p" style="display: none">
+<div>© 2020 Korean Breast Cancer Society</div>
+<p>This is an Open Access article distributed under the terms of the Creative Commons Attribution Non-Commercial License (<a href="https://creativecommons.org/licenses/by-nc/4.0/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://creativecommons.org/licenses/by-nc/4.0/</a>) which permits unrestricted non-commercial use, distribution, and reproduction in any medium, provided the original work is properly cited.</p>
+<div class="p"><a href="/about/copyright/" class="usa-link">PMC Copyright notice</a></div>
+</div>
+</div>
+<div>PMCID: PMC7462818  PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/32908788/" class="usa-link">32908788</a>
+</div>
+</div></section></section><section aria-label="Article content"><section class="body main-article-body"><section class="abstract" id="abstract1"><h2>Abstract</h2>
+<section id="sec1"><h3 class="pmc_sec_title">Purpose</h3>
+<p>Real-time detection and intervention can be used as potential measures to markedly decrease breast cancer mortality. Assessment of circulating tumor DNA (ctDNA) may offer great benefits for the management of breast cancer over time. However, the use of ctDNA to predict the effectiveness of neoadjuvant treatment and recurrence of breast cancer has rarely been studied.</p></section><section id="sec2"><h3 class="pmc_sec_title">Methods</h3>
+<p>We prospectively recruited 31 breast cancer patients with 4 subtypes. Three time points were set in this study, including before any therapy (C1), during surgery (T), and six months after surgery (C2). We collected peripheral blood samples from all 31 patients at C1, tumor tissue from all 31 patients at T, and peripheral blood samples from 25 patients at C2. Targeted 727-gene panel sequencing was performed on ctDNA from all blood samples and tissue DNA from all tissue samples. Somatic mutations were detected and analyzed using a reference standard pipeline. Statistical analysis was performed to identify possible associations between ctDNA profiles and clinical outcomes.</p></section><section id="sec3"><h3 class="pmc_sec_title">Results</h3>
+<p>In total, we detected 159, 271, and 70 somatic mutations in 30 C1 samples, 31 T samples, and 12 C2 samples, respectively. We identified specific genes, such as <em>PIK3CA</em>, <em>TP53</em>, and <em>KMT2C</em>, which were highly mutated in the tissue samples. Furthermore, mutated <em>KMT2C</em> observed in ctDNA of the C2 samples may be an indicator of breast cancer recurrence.</p></section><section id="sec4"><h3 class="pmc_sec_title">Conclusion</h3>
+<p>Our study highlights the potential of ctDNA analysis at different timepoints for assessing tumor progression and treatment effectiveness, as well as prediction of breast cancer recurrence.</p></section><section id="kwd-group1" class="kwd-group"><p><strong>Keywords:</strong> Breast neoplasms, Circulating tumor DNA, Neoadjuvant therapy, Recurrence</p></section></section><section id="sec5"><h2 class="pmc_sec_title">INTRODUCTION</h2>
+<p>Breast cancer is the most common cancer in Chinese women, with 304,000 new cases and 70,000 mortalities annually [<a href="#B1" class="usa-link" aria-describedby="B1">1</a>]. Breast cancer can be classified into 4 subtypes based on estrogen receptor (ER+), human epidermal growth factor 2 (HER2+), and Ki-67 expression [<a href="#B2" class="usa-link" aria-describedby="B2">2</a>]. There are obvious differences in the treatment methods and prognosis for different breast cancer subtypes. For example, ER+ patients have better prognosis when treated with endocrine therapy or combination treatments. The treatment options for patients with HER2+ or triple-negative breast cancer (TNBC) are limited, resulting in poor prognosis [<a href="#B3" class="usa-link" aria-describedby="B3">3</a>]. Since 2015, neoadjuvant chemotherapy (NAC) has become the standard treatment for locally advanced breast cancer [<a href="#B4" class="usa-link" aria-describedby="B4">4</a>]. Previous studies have shown that most patients exhibit pathological complete response (pCR) after NAC, while few patients display stable disease (SD) or even progression. In particular, the pCR rates in HER2+ breast cancer and TNBC are better indicators of prognosis than that in hormone receptor-positive (HR+) patients [<a href="#B5" class="usa-link" aria-describedby="B5">5</a>].</p>
+<p>As a non-invasive detection method, circulating tumor DNA (ctDNA) sequencing has been widely used for early screening, diagnosis, treatment, and prognosis of breast cancer [<a href="#B6" class="usa-link" aria-describedby="B6">6</a>,<a href="#B7" class="usa-link" aria-describedby="B7">7</a>,<a href="#B8" class="usa-link" aria-describedby="B8">8</a>]. A potential advantage of ctDNA detection and analysis is the near-real-time monitoring of a patient's response to treatment, which facilitates rapid feedback on whether a given therapy works well, thereby allowing treatment options to be adjusted in a timely manner. However, to date, the value of ctDNA in the evaluation of breast cancer treatment with neoadjuvant chemotherapy remains unclear.</p>
+<p>To our knowledge, this study is the first to evaluate mutational characteristics in ctDNA from patients before and after NAC, as well as in tissues during surgery. Based on the mutations detected, we further evaluated the feasibility of using ctDNA as a new biomarker for NAC response prediction. At the same time, we explored whether ctDNA analysis six months after neoadjuvant treatment can predict breast cancer relapse.</p></section><section id="sec6"><h2 class="pmc_sec_title">METHODS</h2>
+<section id="sec7"><h3 class="pmc_sec_title">Sample preparation</h3>
+<p>In the present study, we prospectively recruited 31 breast cancer patients and collected peripheral blood samples before neoadjuvant therapy (C1) from 31 patients, tissue samples (T) during surgery from 31 patients, and peripheral blood samples 6 months after surgery (C2) from 25 patients. Ten milliliters of peripheral blood was drawn from each patient at C1 and C2 using a Cell-Free DNA BCT (Streck, Inc., La Vista, USA). Meanwhile, widely used clinical cancer biomarkers, such as carbohydrate antigen 15-3 (CA15-3), carbohydrate antigen 12-5 (CA12-5), and carcinoembryonic antigen (CEA), were detected at the same 3 time points. All patients provided informed consent, and the study was approved by the Institutional Review Board (IRB) of Daping Hospital, Army Medical University (IRB No. 2018(57)). The study protocol adhered to the principles of the Declaration of Helsinki. Normative follow-up within 2 years was also performed for all enrolled patients. Regarding the 10 mL of peripheral blood, plasma was separated from the blood sample within 72 hours. by centrifugation (1,600 ×<em>g</em> at 4°C for 15 minutes). The supernatants were further centrifuged at 16,000 ×<em>g</em> at 4°C for 15 minutes. Plasma samples and peripheral blood cells were used to extract cell-free DNA (cfDNA) and genomic DNA (gDNA) according to the respective operating instructions. Tumor DNA (tDNA) was also extracted from tissue samples based on the standard protocol.</p></section><section id="sec8"><h3 class="pmc_sec_title">Library construction, sequencing, and processing</h3>
+<p>In this study, a 727-gene panel covering a 2.8 megabase (Mb) region was designed to capture the target DNA fragments. The lower limit of the target panel detection was ≥ 0.50% for somatic single nucleotide variants (SNVs) and small insertions/deletions (InDels) and ≥ 3 copies for copy number variants (CNVs). The list of genes detected in this study is presented in <a href="#S1" class="usa-link">Supplementary Table 1</a>. All of the collected cfDNA from C1 and C2 and tDNA from tissue samples were subjected to DNA library preparation using a Kapa DNA library preparation kit (Kapa Biosystems, Wilmington, USA) while the gDNA library was prepared using an Illumina TruSeq DNA library preparation kit (Illumina, San Diego, USA). The DNA libraries were hybridized to our custom-designed 727-gene probes (Nanodigmbio, Nanjing, China). Then, DNA sequencing was conducted using a DNBSEQ-2000 sequencer (BGI, Shenzhen, China). The raw sequencing data was filtered according to the default parameters to retain high quality reads for subsequent analysis. The clean reads were aligned to human genome assembly (hg19) using the Burrows-Wheeler Aligner (BWA-0.7.17-r1188). Removal of duplicate reads, local realignments, and base-quality recalibrations were performed using the Genome Analysis Toolkit (GATK 4.0.12.0). The resulting binary alignment map (BAM) files were used for subsequent variant calling analysis.</p></section><section id="sec9"><h3 class="pmc_sec_title">Somatic mutation calling</h3>
+<p>SNVs/small InDels were detected using GATK (4.0.12.0) according to the reference standard pipeline [<a href="#B9" class="usa-link" aria-describedby="B9">9</a>]. Germline variants were detected using the HaplotypeCaller in GATK with the default parameters [<a href="#B10" class="usa-link" aria-describedby="B10">10</a>]. For all mutational analyses, matched gDNA for each sample was used as the matched control. In short, the peripheral blood sample before neoadjuvant therapy, tissue sample during surgery, and peripheral blood sample six months after surgery were compared to the matched normal samples to exclude germline variants. A Panel of Normal (PoN) was generated from the normal samples to improve the variant calling results. Unreliable somatic mutations found in the PoN, Single Nucleotide Polymorphism Database, or 1000 Genomes Project database were filtered out, resulting in high quality among the remaining detected SNVs and small InDels [<a href="#B11" class="usa-link" aria-describedby="B11">11</a>]. In order to verify the detected variants, manual inspection of the BAM files was conducted using the Integrative Genomics Viewer. Tumor mutational burden (TMB) was defined as the number of somatic mutations per Mb.</p></section><section id="sec10"><h3 class="pmc_sec_title">CNV calling</h3>
+<p>CNVs were estimated by paired samples with Varscan2 according to the default parameters [<a href="#B12" class="usa-link" aria-describedby="B12">12</a>] as follows: first, mpileup was performed on the BAM files of normal and tumor samples using samtools mpileup, and guanine-cytosine correction was performed on the mpileup results with CopyCaller software. Second, the regions with different copy numbers were cut with the circular binary segmentation algorithm. Finally, CNVs were obtained after combining the segments of candidate CNVs. As in somatic mutation calling, a CNV PoN from the normal samples was created to improve the results.</p></section><section id="sec11"><h3 class="pmc_sec_title">Statistical analysis</h3>
+<p>Univariate and multivariate Cox proportional hazard analyses were conducted to assess the correlation between clinical features and the treatment outcome (pCR) of neoadjuvant therapy. A Kaplan-Meier plot was also used to identify the correlation between ctDNA samples from the C2 time point and tumor recurrence. A χ<sup>2</sup> test was utilized to determine whether the level of ctDNA in the blood before neoadjuvant treatment was related to its therapeutic efficacy. Statistical significance was defined as a 2-sided <em>p</em>-value of &lt; 0.05. Statistical analyses were performed using SAS 9.4 software (SAS Institute, Cary, USA).</p></section></section><section id="sec12"><h2 class="pmc_sec_title">RESULTS</h2>
+<section id="sec13"><h3 class="pmc_sec_title">Sample cohort description</h3>
+<p>In total, 31 breast cancer patients (mean age: 48.2 <strong>±</strong> 7.0 years) were recruited in this study: 17 cases with the luminal subtype (54.83%), 7 cases with HER2 overexpression (22.58%), and 7 cases with TNBC (22.58%) (<a href="#T1" class="usa-link">Table 1</a> and <a href="#S2" class="usa-link">Supplementary Table 2</a>). It is worth noting that, for various reasons, 6 blood samples were not obtained at the 6-month postoperative time node (P6C2, P7C2, P17C2, P21C2, P24C2, and P30C2). Among all patients, 15 (48.39%) were diagnosed with left breast cancer while the remaining ones had right breast cancer. The body mass indexes (BMIs) of 17 patients (54.84%) were within normal range (18.5–24 kg/m<sup>2</sup>), and the remaining 14 patients were overweight (BMI &gt; 24 kg/m<sup>2</sup>). Twenty-three patients (74.19%) received taxotere, anthracycline, and cyclophosphamide (TAC) while the remaining eight (25.81%) received taxotere, carboplatin, and herceptin (TCH). Interestingly, the pathological subtype following needle biopsy in three patients (P2, P17, and P28) changed after breast resection. Specifically, patient P2 changed from HER2 overexpression to Luminal A. Patient P17 changed from Luminal B to Luminal A with a dramatic decrease in Ki-67 expression from 40.00% to 3.00%. Patient P28 changed from TNBC to Luminal B. These results suggest that the heterogeneity of multiple regions is common in breast cancer. Regarding the widely used clinical cancer biomarkers, 3 out of 31 patients (P5C1, P16C1, and P17C1) displayed abnormal results at time point C1, 1 (P5T1) at T, and another 1 (P5C2) at C2. In patient P5, the CA 15-3 level was 37.05 U/mL and the CEA level was 28.41 ng/mL at C1 (the normal ranges for CA15-3 and CEA are 0–28 U/mL and 0–5 ng/mL, respectively). Even after NAC and surgery, these conditions did not improve, and the patient relapsed 9 months after time point T (CA15-3: 44.27 U/mL and CEA: 15.11 ng/mL).</p>
+<section class="tw xbox font-sm" id="T1"><h4 class="obj_head">Table 1. Summarized table of clinical characteristics.</h4>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="rows">
+<col width="5.61%" span="1">
+<col width="50.47%" span="1">
+<col width="43.93%" span="1">
+<thead><tr>
+<th valign="top" align="left" rowspan="1" colspan="2" style="background-color:rgb(229,226,240)">Chracteristics</th>
+<th valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">Patients (n=31)</th>
+</tr></thead>
+<tbody>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="2">Age (yr)</td>
+<td valign="top" align="center" rowspan="1" colspan="1">48.2 ± 7.0</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="2" style="background-color:rgb(229,226,240)">TNM stage</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">IIB</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">10 (32.2)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">IIIA</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">18 (58.1)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">IIIB</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">2 (6.5)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">IIIC</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">1 (3.2)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="2">Molecular subtype</td>
+<td valign="top" align="center" rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">Luminal A</td>
+<td valign="top" align="center" rowspan="1" colspan="1">9 (29.0)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">Luminal B</td>
+<td valign="top" align="center" rowspan="1" colspan="1">8 (25.8)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">HER2+++</td>
+<td valign="top" align="center" rowspan="1" colspan="1">7 (22.6)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">TNBC</td>
+<td valign="top" align="center" rowspan="1" colspan="1">7 (22.6)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="2" style="background-color:rgb(229,226,240)">Lateral of breast cancer</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">Left</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">15 (48.4)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">Right</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">16 (51.6)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="2">NAC</td>
+<td valign="top" align="center" rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">TAC</td>
+<td valign="top" align="center" rowspan="1" colspan="1">23 (74.2)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">TCH</td>
+<td valign="top" align="center" rowspan="1" colspan="1">8 (25.8)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="2" style="background-color:rgb(229,226,240)">BMI (kg/m<sup>2</sup>)</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">&lt; 18.5</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">0 (0.0)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">≥ 18.5 and &lt; 24</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">17 (54.8)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">≥ 24</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">14 (45.2)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="2">RECIST</td>
+<td valign="top" align="center" rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">CR</td>
+<td valign="top" align="center" rowspan="1" colspan="1">1 (3.2)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">PR</td>
+<td valign="top" align="center" rowspan="1" colspan="1">19 (61.3)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">SD</td>
+<td valign="top" align="center" rowspan="1" colspan="1">11 (35.5)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="2" style="background-color:rgb(229,226,240)">LN</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">0</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">13 (41.9)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">1–3</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">9 (29.0)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">&gt; 3</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">9 (29.0)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="2">MP</td>
+<td valign="top" align="center" rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">1</td>
+<td valign="top" align="center" rowspan="1" colspan="1">3 (9.7)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">2</td>
+<td valign="top" align="center" rowspan="1" colspan="1">10 (32.3)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">3</td>
+<td valign="top" align="center" rowspan="1" colspan="1">13 (41.9)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">4</td>
+<td valign="top" align="center" rowspan="1" colspan="1">1 (3.2)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">5</td>
+<td valign="top" align="center" rowspan="1" colspan="1">4 (12.9)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="2" style="background-color:rgb(229,226,240)">Surgery</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">MRM</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">28 (90.3)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)"></td>
+<td valign="top" align="left" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">Mastectomy + SLNB</td>
+<td valign="top" align="center" rowspan="1" colspan="1" style="background-color:rgb(229,226,240)">3 (9.7)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="2">Cancer embolus</td>
+<td valign="top" align="center" rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">Yes</td>
+<td valign="top" align="center" rowspan="1" colspan="1">9 (29.0)</td>
+</tr>
+<tr>
+<td valign="top" align="left" rowspan="1" colspan="1"></td>
+<td valign="top" align="left" rowspan="1" colspan="1">No</td>
+<td valign="top" align="center" rowspan="1" colspan="1">22 (71.0)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/T1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<div class="tw-foot p"><div class="fn" id="_fn_p14">
+<p>Values are expressed as mean ± standard deviation or number (%).</p>
+<p>TNM = tumor, node, metastasis; HER2 = human epidermal growth factor 2; TNBC = triple-negative breast cancer; NAC = neoadjuvant chemotherapy; TAC = taxotere, anthracycline, and cyclophosphamide; TCH = taxotere, carboplatin, and herceptin; BMI = body mass index; RECIST = Response Evaluation Criteria in Solid Tumors; CR = complete response; PR = partial response; SD = stable disease; MP = Miller-Payner; MRM = modified radical mastectomy; SLNB = sentinel lymph node biopsy.</p>
+</div></div></section></section><section id="sec14"><h3 class="pmc_sec_title">Target-capture sequencing and genetic profiles</h3>
+<p>For each patient, we prospectively collected peripheral blood samples before administering any therapy (C1 as the baseline), tissue samples during breast dissection (T), and blood samples at six months after breast dissection (C2). A custom panel was applied to achieve target-capture sequencing for all samples (87 samples from 31 patients). For the raw sequencing data, the average sequencing capture efficiency for the C1, T, and C2 samples was 72.89% (64.20–78.72%), 74.98% (59.72%–80.62%), and 72.80% (67.53%–81.05%), respectively, and the effective target sequencing depth for the C1, T, and C2 samples was 1,010.19X (633.1X–1,650.01X), 1071.61X (474.41X–1,624.33X), and 925.15X (625.15X–1,383.41X), respectively (<a href="#S3" class="usa-link">Supplementary Table 3</a>). Overall, 159, 271, and 70 somatic mutations were identified in the C1, T, and C2 samples, respectively. Somatic mutations were detected in 30 out of 31 C1 samples and 12 out of 25 C2 samples (<a href="#S4" class="usa-link">Supplementary Table 4</a>). Compared to the T samples, for which a mean of 8.7 (2–23) mutations were detected per sample, the number of mutations per C1 sample was significantly lower (5.1 [<a href="#B1" class="usa-link" aria-describedby="B1">1</a>,<a href="#B2" class="usa-link" aria-describedby="B2">2</a>,<a href="#B3" class="usa-link" aria-describedby="B3">3</a>,<a href="#B4" class="usa-link" aria-describedby="B4">4</a>,<a href="#B5" class="usa-link" aria-describedby="B5">5</a>,<a href="#B6" class="usa-link" aria-describedby="B6">6</a>,<a href="#B7" class="usa-link" aria-describedby="B7">7</a>,<a href="#B8" class="usa-link" aria-describedby="B8">8</a>,<a href="#B9" class="usa-link" aria-describedby="B9">9</a>,<a href="#B10" class="usa-link" aria-describedby="B10">10</a>,<a href="#B11" class="usa-link" aria-describedby="B11">11</a>,<a href="#B12" class="usa-link" aria-describedby="B12">12</a>,<a href="#B13" class="usa-link" aria-describedby="B13">13</a>,<a href="#B14" class="usa-link" aria-describedby="B14">14</a>]). When comparing somatic mutations between the C1 and T samples, we found that 46.54% of these mutations at C1 were also identified in T samples. In addition, 10, 26, and 10 somatic hotspot mutations were identified in the C1, T, and C2 samples, respectively. Among them, somatic hotspot mutations were detected in 9 out of 31 (29.03%) C1 samples and 8 out of 25 (32.0%) C2 samples. When comparing somatic hotspot mutations between the C1 and T samples, we found that 80.0% of these mutations at C1 were also identified in T samples. Interestingly, these somatic hotspot mutations belong to one kind, namely <em>KMT2C</em> c.5053G&gt;T. These results revealed high heterogeneity between blood and tissue samples in the early and middle stages of our study [<a href="#B13" class="usa-link" aria-describedby="B13">13</a>].</p>
+<p>Among the tissue samples, the most common somatically mutated genes were <em>PIK3CA</em> (48.50%), <em>TP53</em> (41.90%), and <em>KMT2C</em> (9.70%). However, when considering all 87 samples, the most common mutated genes were <em>KMT2C</em> (20.69%), <em>PIK3CA</em> (18.39%), and <em>TP53</em> (18.39%) (<a href="#F1" class="usa-link">Figure 1</a>). These discrepancies clearly contributed to the heterogeneity of samples from different time points. In addition to somatic mutations, we also identified 6 germline mutations (19.35%) in the 31 breast cancer patients involving <em>BRCA2</em>, <em>CHEK2</em>, and <em>MUTYH</em>. They were <em>BRCA2</em> c.5645C&gt;A (P1), <em>BRCA2</em> c.987_988insA (P7), <em>MUTYH</em> c. 892-2A&gt;G (P15), <em>BRCA2</em> c.31del (P17), <em>CHEK2</em> c.1651dup (P29), and <em>BRCA2</em> c.3940_3941del (P31) (<a href="#S5" class="usa-link">Supplementary Table 5</a>). Through univariate and multivariate analyses, these mutations were identified to be statistically unrelated to pCR and recurrence. However, it was very interesting that five out of the six identified germline mutations occurred in the luminal subtype of breast cancer. No recurrent <em>BRCA1/2</em> mutations were found, indicating that no founder mutations were present in the Chinese population [<a href="#B14" class="usa-link" aria-describedby="B14">14</a>].</p>
+<figure class="fig xbox font-sm" id="F1"><h4 class="obj_head">Figure 1. Mutation landscape represented by top 20 frequently mutated genes (SNV + InDels) in 87 samplesfrom 31 patients. Annotations include different timepoints samples, age groups (age &lt; 50 and age ≥ 50), BMI (BMI &lt; 18, 18 ≤ BMI &lt; 24, and BMI ≥ 24), TNM overall staging, lateral of breast cancer (left and right), subtypes (Luminal A, Luminal B, HER2 overexpression, and TNBC), copy number variant (del, amp), and VAF.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=7462818_jbc-23-373-g001.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/3530/7462818/10846d0b44af/jbc-23-373-g001.jpg" loading="lazy" height="417" width="768" alt="Figure 1"></a></p>
+<div class="p text-right font-secondary"><a href="figure/F1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>SNV = single nucleotide variant; InDel = insertions/deletion; BMI = body mass index; TNM = tumor, node, metastasis; HER2 = human epidermal growth factor 2; TNBC = triple-negative breast cancer; VAF = variant allele frequency; CNV = copy number variant; AF = allele frequency.</p></figcaption></figure><p>Overall, 23 out of 87 (26.44%) samples were detected to have abnormal gene copy numbers; among them, 19 out of 23 (82.61%) were from tissue samples while the remaining 4 (17.29%) were from peripheral blood samples (<a href="#S6" class="usa-link">Supplementary Table 6</a>). A total of 131 CNVs were found with 107 detected in gene amplification and the remaining 24 in deletion. In the tissue samples, 35 genes had CNVs, and the most common ones were <em>HRAS</em> amplification (14 out of 119 [11.76%]), <em>CCND1</em> amplification (13 out of 119 [10.92%]), <em>AKT1</em> amplification (12 out of 119 [10.08%]), <em>NOTCH1</em> amplification (11 out of 119 [9.24%]), and <em>TSC2</em> amplification (9 out of 119 [7.56%]). Among the relapsed patients, no CNVs were found in C2 samples. Based on these results, CNVs may not be a good biomarker for early breast cancer recurrence monitoring.</p></section><section id="sec15"><h3 class="pmc_sec_title">ctDNA <em>KMT2C</em> c.5053G&gt;T association with breast cancer relapse</h3>
+<p>In clinical contexts, cancer embolus and number of lymph nodes serve as high risk indexes for breast cancer patients with poor prognosis. Univariate analysis found that patients with high lymph node count (≥ 4) and SD after NAC relapsed or progressed within a short period (<em>p</em> = 0.012 and <em>p</em> = 0.036, respectively) while cancer embolus did not correlate with the period of relapse (<em>p</em> &gt; 0.05). We thus concluded that lymph node status and pCR could be used as predictors of breast cancer recurrence.</p>
+<p>To investigate whether postoperative blood ctDNA could also be used as a predictor of recurrence after neoadjuvant therapy, we compared somatic mutations from the C1, T, and C2 samples. We detected <em>KMT2C</em> mutations in eight C1 samples, three T samples, and seven C2 samples. Then, we further analyzed the seven patients with relapsed breast cancer. Two patients failed to produce C2 samples (P6C2 and P24C2) so <em>KMT2C</em> mutation status was unknown, one patient (P10C2) was detected with no mutation, and four patients (P5C2, P16C2, P18C2, and P27C2) were all detected to have <em>KTM2C</em> c. 5053G&gt;T. Importantly, survival analysis (Kaplan-Meier plot) showed that ctDNA <em>KTM2C</em> c. 5053G&gt;T was significantly associated with postoperative breast cancer recurrence (<em>p</em> = 0.001<span class="text-strike">4</span>) (<a href="#F2" class="usa-link">Figure 2</a>). Although the allelic frequency of <em>KMT2C</em> c.5053G&gt;T dropped in P5 and P18, it was still relatively high (<a href="#F3" class="usa-link">Figure 3A-D</a>). These findings imply that ctDNA mutations could be used as a potential predictor of breast cancer recurrence after neoadjuvant therapy. As for the CA 15-3, CA 12-5, and CEA results, only one relapsed patient (P5) displayed abnormal levels while the remaining six were normal, suggesting that traditional tumor biomarkers could not meet the requirements for early tumor recurrence detection.</p>
+<figure class="fig xbox font-sm" id="F2"><h4 class="obj_head">Figure 2. Kaplan-Meier plot of <em>KMT2C</em> mutation and relapse time (month).</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=7462818_jbc-23-373-g002.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/3530/7462818/e86ad6798b9c/jbc-23-373-g002.jpg" loading="lazy" height="569" width="732" alt="Figure 2"></a></p>
+<div class="p text-right font-secondary"><a href="figure/F2/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>FPS = French prognostic score.</p></figcaption></figure><figure class="fig xbox font-sm" id="F3"><h4 class="obj_head">Figure 3. Mutated allele frequency of <em>KMT2C</em> c.5053G&gt;T in 7 patients at different timepoints. The patients P5, P4 and P31 were identified <em>KMT2C</em> mutation in tissue samples, while P16, P18, P27, P22 samples were undetectable in tissue samples.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=7462818_jbc-23-373-g003.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/3530/7462818/537313ded381/jbc-23-373-g003.jpg" loading="lazy" height="397" width="768" alt="Figure 3"></a></p>
+<div class="p text-right font-secondary"><a href="figure/F3/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></figure><p>Finally, we analyzed TMB and mutations derived from the C1 blood samples. Of the 8 <em>KMT2C</em> mutations identified in C1 samples, 4 patients displayed SD after neoadjuvant therapy while the remaining 4 had a pCR. The association between <em>KMT2C</em> and neoadjuvant therapy efficiency was insignificant (<em>p</em> &gt; 0.05) based on a χ<sup>2</sup> test. The effectiveness of TMB was also insignificant. However, we found that some of the SD patients with or without <em>KMT2C</em> mutations had relatively high TMB, including patients P6 (7 mutations), P15 (6 mutations), and P23 (7 mutations), which suggests that the effectiveness of neoadjuvant therapy may be predictable by <em>KMT2C</em> combined with high TMB in large cohorts.</p></section></section><section id="sec16"><h2 class="pmc_sec_title">DISCUSSION</h2>
+<p>Here, we performed custom-panel high-depth sequencing on baseline blood, tissue, and postoperative blood samples from 31 newly diagnosed breast cancer patients and detected 159 (30 out of 31 samples), 271 (31 out of 31 samples), and 70 (12 out of 25 samples) somatic mutations, respectively (<a href="#S4" class="usa-link">Supplementary Table 4</a>). Among them, 46.54% of mutations in the baseline blood samples were also detected in the tissue samples, suggesting that the heterogeneity of tissue and blood affects composition. Regarding the 6-month postoperative blood samples, 57.14% of observed mutations were also present in the baseline blood samples, suggesting that blood can better overcome the heterogeneity problem. Interestingly, mutations in the blood at 6 month post-operation were detected in only 31.42% of the tissue samples, meaning that changes in the postoperative blood ctDNA may be associated with treatment. The three most common somatically mutated genes were <em>PIK3CA</em>, <em>TP53</em>, and <em>KMT2C</em> (<a href="#F1" class="usa-link">Figure 1</a>). Previous studies have reported that the mutation rate of <em>PIK3CA</em> in HR+ breast cancer patients ranged from 40% to 70% and is related to tumor growth, resistance to endocrine therapy, and poor overall prognosis [<a href="#B15" class="usa-link" aria-describedby="B15">15</a>,<a href="#B16" class="usa-link" aria-describedby="B16">16</a>]. Similarly, in this study, the <em>PIK3CA</em> mutation rate was 48.5%. In 2019, the United States Food and Drug Administration approved alpelisib in combination with fulvestrant for treatment in postmenopausal women and men with HR+, HER2−, or <em>PIK3CA</em>− mutated advanced or metastatic breast cancer[<a href="#B17" class="usa-link" aria-describedby="B17">17</a>,<a href="#B18" class="usa-link" aria-describedby="B18">18</a>], suggesting that the <em>PIK3CA</em> mutation was of great significance in breast cancer patients, especially for the treatment of HR+ breast cancer after metastasis or progression. We also found that <em>TP53</em> mutations were mainly detected in tissue samples from the seven TNBC patients. This finding about the high mutation frequency of <em>TP53</em> in basal-like breast cancers was similar to a reported study for HGS-OvCa with <em>TP53</em> mutation patterns in almost 100% of samples [<a href="#B19" class="usa-link" aria-describedby="B19">19</a>]. <em>KMT2C</em>, which encodes an H3K4 histone methytransferase, was reported as a driver gene for metastatic breast cancer that expressed hormone receptors but not HER2 at high levels [<a href="#B20" class="usa-link" aria-describedby="B20">20</a>]. <em>KMT2C</em> has been previously reported with mutation rates of 6.45%, 8.16%, and 1.96% in The Cancer Genome Atlas, Molecular Taxonomy of Breast Cancer International Consortium, and French studies, respectively [<a href="#B21" class="usa-link" aria-describedby="B21">21</a>,<a href="#B22" class="usa-link" aria-describedby="B22">22</a>,<a href="#B23" class="usa-link" aria-describedby="B23">23</a>,<a href="#B24" class="usa-link" aria-describedby="B24">24</a>]. In this study, the mutation rate of <em>KMT2C</em> was 20.69% in all 87 samples and 9.67% (3 out of 31) in tissue samples. This result was consistent with that of a study from Singapore and Korea [<a href="#B25" class="usa-link" aria-describedby="B25">25</a>]. The 20 top mutated genes also included <em>RECQL4</em> (11.49%), <em>ERBB2</em> (10.34%), and <em>RAD51B</em> (9.21%). Interestingly, a recent study showed that the RecQ family is involved in DNA mismatch repair, indicating its role in cancer pathogenesis and development [<a href="#B26" class="usa-link" aria-describedby="B26">26</a>].</p>
+<p>In addition to somatic mutations, we also discovered 6 germline mutations involving <em>BRCA2</em>, <em>CHEK2</em>, and <em>MUTYH</em> in the 31 patients, but these mutations were statistically unrelated to pCR and recurrence. In reports by previous researchers, <em>CHEK2</em> was found to be an important moderate-penetrance breast cancer predisposition gene. This gene functions as a responder primarily to double-strand break DNA damage repair. In a breast cancer study involving 7,657 <em>BRCA1/2</em>-negative breast cancer patients, the mutation rate of <em>CHEK2</em> was 0.34% [<a href="#B27" class="usa-link" aria-describedby="B27">27</a>]. For the <em>MUTYH</em> gene, a large number of studies have reported its association with an increased risk of colorectal cancer, but its correlation with breast cancer remains unclear [<a href="#B28" class="usa-link" aria-describedby="B28">28</a>]. Through <em>MUTYH</em> c.892-2A&gt;G was reported in a Chinese population with a mutation rate of 5.8%, the rate in East Asian healthy individuals was 2.77%. These discrepancies between our results and those of previous research may be attributed to small sample sizes.</p>
+<p>Our study detected that four out of five relapsed breast cancer patients carried the <em>KMT2C</em> c.5053G&gt;T mutation. Kaplan-Meier survival and multivariate analyses found that <em>KMT2C</em>, like other clinical factors, was significantly associated with postoperative breast cancer recurrence. It is interesting that previous studies have identified <em>KMT2C</em> as a driving factor of HR+ breast cancer [<a href="#B20" class="usa-link" aria-describedby="B20">20</a>,<a href="#B21" class="usa-link" aria-describedby="B21">21</a>]. In this study, three out of the four relapsed patients had TNBC, and one had HER2+. A study from Thailand showed that <em>KMT2C</em> has a higher mutation rate in TNBC, which suggests that <em>KMT2C</em> mutations may be related to the occurrence and development of breast cancer in Asian patients [<a href="#B29" class="usa-link" aria-describedby="B29">29</a>]. For relapsed patient P10C2, no <em>KMT2C</em> mutation was detected in baseline blood, tissue, and 6-month postoperative blood samples. However, the patient carried the <em>TP53</em> mutation, and their TMB was high with SD present even after neoadjuvant therapy. We speculate that these factors may lead to recurrence in TNBC patients.</p>
+<p>We also identified that 3 patients (P4, P22, and P31) carried the <em>KMT2C</em> c.5053G&gt;T mutation without relapse at the time of follow-up (<a href="#F3" class="usa-link">Figure 3E and F</a>). Patient P4 was diagnosed with right HR+ breast cancer at 40 years old and treated with TAC. Following NAC, she displayed a pCR, which indicated a good prognosis. Patients P22 and P31 were also diagnosed with the HR+ subtype and were identified as SD and pCR after neoadjuvant therapy, respectively. Though they each carried the <em>KMT2C</em> mutation, it had a decreased mutated allele frequency. Furthermore, considering the short follow-up time, their future recurrent statuses remained undetermined. Thus, constant monitoring and follow-up for these patients are required.</p>
+<p>To our knowledge, this study is the first to explore the relationship between prognosis and ctDNA after neoadjuvant therapy in Chinese breast cancer patients. We found that the incidence of <em>KMT2C</em> mutations is higher in breast cancer patients, especially among TNBC patients. Kaplan-Meier survival and multivariate analyses indicated that ctDNA <em>KMT2C</em> c.5053G&gt;T could be a predictor of the relapse of breast cancer, while the association between <em>KMT2C</em> and efficiency of neoadjuvant therapy was insignificant (<em>p</em> &gt; 0.05). Unfortunately here, neither CNV nor TMB was a qualified indicator for neoadjuvant therapy and breast cancer recurrence. However, our study has considerable limitations. First, the follow-up period of 2 years was not enough to identify a clinically meaningful association between ctDNA mutations and clinical outcomes. Further studies are certainly necessary. Second, because the tissue samples were formalin-fixed, paraffin-embedded samples, the extracted gDNA may have been degraded, resulting in variant call discrepancies despite utilization of filtering and correction methods during the analysis. Finally, our sample size was limited. There may be biases that do not represent the true characteristics of breast cancer subtypes due to the small study cohort [<a href="#B30" class="usa-link" aria-describedby="B30">30</a>].</p></section><section id="ack1" class="ack"><h2 class="pmc_sec_title">ACKNOWLEDGMENTS</h2>
+<p>We thank all researchers for their contributions and all patients for their participation. We also thank Yujian Shi, Yangming Wu, Luhua Lin, Ang Li, Yue Yang, Qihuan Zhi, Qingqing He and Ting Ouyang from Top Gene Tech Co., Ltd. (Guangzhou, China) for next-generation sequencing technical support and scientific suggestions.</p></section><section id="fn-group1" class="fn-group"><h2 class="pmc_sec_title">Footnotes</h2>
+<div class="fn-group p font-secondary-light font-sm">
+<div class="fn p" id="fn1"><p><strong>Funding:</strong> This study was funded by the Chonqing Science and Technology Bureau (cstc2018jscx-msybX0064).</p></div>
+<div class="fn p" id="fn2"><p><strong>Conflict of Interest:</strong> The authors declare that they have no competing interests.</p></div>
+<div class="fn p" id="fn3"><div class="p">
+<strong>Author Contributions:</strong>
+<ul class="list" style="list-style-type:none">
+<li><div class="p">
+<strong>Conceptualization:</strong> Hao S, Tian W, Zhao J, Chen Y, Zhang X, Gao B, He Y, Luo D.</div></li>
+<li><div class="p">
+<strong>Data curation:</strong> Tian W, Zhao J, Chen Y, Zhang X, Gao B, He Y.</div></li>
+<li><div class="p">
+<strong>Funding acquisition:</strong> Luo D.</div></li>
+<li><div class="p">
+<strong>Writing - review &amp; editing:</strong> Hao S, Luo D.</div></li>
+</ul>
+</div></div>
+</div></section><section id="sec17"><h2 class="pmc_sec_title">SUPPLEMENNTARY MATERIALS</h2>
+<section class="sm xbox font-sm" id="S1"><div class="caption p">
+<span>Supplementary Table 1</span><p>The list of genes detected in this study</p>
+</div>
+<div class="media p" id="d38e2321"><div class="caption">
+<a href="/articles/instance/7462818/bin/jbc-23-373-s001.xls" data-ga-action="click_feat_suppl" class="usa-link">jbc-23-373-s001.xls</a><sup> (76KB, xls) </sup>
+</div></div></section><section class="sm xbox font-sm" id="S2"><div class="caption p">
+<span>Supplementary Table 2</span><p>Clinical characteristics of 31 breast cancer patients</p>
+</div>
+<div class="media p" id="d38e2328"><div class="caption">
+<a href="/articles/instance/7462818/bin/jbc-23-373-s002.xls" data-ga-action="click_feat_suppl" class="usa-link">jbc-23-373-s002.xls</a><sup> (38KB, xls) </sup>
+</div></div></section><section class="sm xbox font-sm" id="S3"><div class="caption p">
+<span>Supplementary Table 3</span><p>The results of the target-panel squencing quality control in this study</p>
+</div>
+<div class="media p" id="d38e2335"><div class="caption">
+<a href="/articles/instance/7462818/bin/jbc-23-373-s003.xls" data-ga-action="click_feat_suppl" class="usa-link">jbc-23-373-s003.xls</a><sup> (29.5KB, xls) </sup>
+</div></div></section><section class="sm xbox font-sm" id="S4"><div class="caption p">
+<span>Supplementary Table 4</span><p>Identified somatic mutations from 87 samples</p>
+</div>
+<div class="media p" id="d38e2342"><div class="caption">
+<a href="/articles/instance/7462818/bin/jbc-23-373-s004.xls" data-ga-action="click_feat_suppl" class="usa-link">jbc-23-373-s004.xls</a><sup> (172KB, xls) </sup>
+</div></div></section><section class="sm xbox font-sm" id="S5"><div class="caption p">
+<span>Supplementary Table 5</span><p>Pathogenic germline alterations identified in 31 breast cancer patients</p>
+</div>
+<div class="media p" id="d38e2349"><div class="caption">
+<a href="/articles/instance/7462818/bin/jbc-23-373-s005.xls" data-ga-action="click_feat_suppl" class="usa-link">jbc-23-373-s005.xls</a><sup> (27KB, xls) </sup>
+</div></div></section><section class="sm xbox font-sm" id="S6"><div class="caption p">
+<span>Supplementary Table 6</span><p>Identified copy number variants from 87 samples</p>
+</div>
+<div class="media p" id="d38e2356"><div class="caption">
+<a href="/articles/instance/7462818/bin/jbc-23-373-s006.xls" data-ga-action="click_feat_suppl" class="usa-link">jbc-23-373-s006.xls</a><sup> (38.5KB, xls) </sup>
+</div></div></section></section><section id="ref-list1" class="ref-list"><h2 class="pmc_sec_title">References</h2>
+<section id="ref-list1_sec2"><ul class="ref-list font-sm" style="list-style-type:none">
+<li id="B1">
+<span class="label">1.</span><cite>Zheng RS, Sun KX, Zhang SW, Zeng HM, Zou XN, Chen R, et al.  Report of cancer epidemiology in China, 2015. Zhonghua Zhong Liu Za Zhi. 2019;41:19–28. doi: 10.3760/cma.j.issn.0253-3766.2019.01.005.</cite> [<a href="https://doi.org/10.3760/cma.j.issn.0253-3766.2019.01.005" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30678413/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Zhonghua%20Zhong%20Liu%20Za%20Zhi&amp;title=Report%20of%20cancer%20epidemiology%20in%20China,%202015&amp;author=RS%20Zheng&amp;author=KX%20Sun&amp;author=SW%20Zhang&amp;author=HM%20Zeng&amp;author=XN%20Zou&amp;volume=41&amp;publication_year=2019&amp;pages=19-28&amp;pmid=30678413&amp;doi=10.3760/cma.j.issn.0253-3766.2019.01.005&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B2">
+<span class="label">2.</span><cite>Dai X, Li T, Bai Z, Yang Y, Liu X, Zhan J, et al.  Breast cancer intrinsic subtype classification, clinical use and future trends. Am J Cancer Res. 2015;5:2929–2943.</cite> [<a href="/articles/PMC4656721/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/26693050/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Am%20J%20Cancer%20Res&amp;title=Breast%20cancer%20intrinsic%20subtype%20classification,%20clinical%20use%20and%20future%20trends&amp;author=X%20Dai&amp;author=T%20Li&amp;author=Z%20Bai&amp;author=Y%20Yang&amp;author=X%20Liu&amp;volume=5&amp;publication_year=2015&amp;pages=2929-2943&amp;pmid=26693050&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B3">
+<span class="label">3.</span><cite>Prat A, Fan C, Fernández A, Hoadley KA, Martinello R, Vidal M, et al.  Response and survival of breast cancer intrinsic subtypes following multi-agent neoadjuvant chemotherapy. BMC Med. 2015;13:303. doi: 10.1186/s12916-015-0540-z.</cite> [<a href="https://doi.org/10.1186/s12916-015-0540-z" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4683815/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/26684470/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=BMC%20Med&amp;title=Response%20and%20survival%20of%20breast%20cancer%20intrinsic%20subtypes%20following%20multi-agent%20neoadjuvant%20chemotherapy&amp;author=A%20Prat&amp;author=C%20Fan&amp;author=A%20Fern%C3%A1ndez&amp;author=KA%20Hoadley&amp;author=R%20Martinello&amp;volume=13&amp;publication_year=2015&amp;pages=303&amp;pmid=26684470&amp;doi=10.1186/s12916-015-0540-z&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B4">
+<span class="label">4.</span><cite>Haddad TC, Goetz MP. Landscape of neoadjuvant therapy for breast cancer. Ann Surg Oncol. 2015;22:1408–1415. doi: 10.1245/s10434-015-4405-7.</cite> [<a href="https://doi.org/10.1245/s10434-015-4405-7" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4484769/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/25727557/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Ann%20Surg%20Oncol&amp;title=Landscape%20of%20neoadjuvant%20therapy%20for%20breast%20cancer&amp;author=TC%20Haddad&amp;author=MP%20Goetz&amp;volume=22&amp;publication_year=2015&amp;pages=1408-1415&amp;pmid=25727557&amp;doi=10.1245/s10434-015-4405-7&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B5">
+<span class="label">5.</span><cite>Esserman LJ, Berry DA, DeMichele A, Carey L, Davis SE, Buxton M, et al.  Pathologic complete response predicts recurrence-free survival more effectively by cancer subset: results from the I-SPY 1 TRIAL--CALGB 150007/150012, ACRIN 6657. J Clin Oncol. 2012;30:3242–3249. doi: 10.1200/JCO.2011.39.2779.</cite> [<a href="https://doi.org/10.1200/JCO.2011.39.2779" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3434983/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/22649152/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Clin%20Oncol&amp;title=Pathologic%20complete%20response%20predicts%20recurrence-free%20survival%20more%20effectively%20by%20cancer%20subset:%20results%20from%20the%20I-SPY%201%20TRIAL--CALGB%20150007/150012,%20ACRIN%206657&amp;author=LJ%20Esserman&amp;author=DA%20Berry&amp;author=A%20DeMichele&amp;author=L%20Carey&amp;author=SE%20Davis&amp;volume=30&amp;publication_year=2012&amp;pages=3242-3249&amp;pmid=22649152&amp;doi=10.1200/JCO.2011.39.2779&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B6">
+<span class="label">6.</span><cite>Buono G, Gerratana L, Bulfoni M, Provinciali N, Basile D, Giuliano M, et al.  Circulating tumor DNA analysis in breast cancer: is it ready for prime-time? Cancer Treat Rev. 2019;73:73–83. doi: 10.1016/j.ctrv.2019.01.004.</cite> [<a href="https://doi.org/10.1016/j.ctrv.2019.01.004" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30682661/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Cancer%20Treat%20Rev&amp;title=Circulating%20tumor%20DNA%20analysis%20in%20breast%20cancer:%20is%20it%20ready%20for%20prime-time?&amp;author=G%20Buono&amp;author=L%20Gerratana&amp;author=M%20Bulfoni&amp;author=N%20Provinciali&amp;author=D%20Basile&amp;volume=73&amp;publication_year=2019&amp;pages=73-83&amp;pmid=30682661&amp;doi=10.1016/j.ctrv.2019.01.004&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B7">
+<span class="label">7.</span><cite>Zhang X, Zhao W, Wei W, You Z, Ou X, Sun M, et al.  Parallel analyses of somatic mutations in plasma circulating tumor DNA (ctDNA) and matched tumor tissues in early-stage breast cancer. Clin Cancer Res. 2019;25:6546–6553. doi: 10.1158/1078-0432.CCR-18-4055.</cite> [<a href="https://doi.org/10.1158/1078-0432.CCR-18-4055" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31350313/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Clin%20Cancer%20Res&amp;title=Parallel%20analyses%20of%20somatic%20mutations%20in%20plasma%20circulating%20tumor%20DNA%20(ctDNA)%20and%20matched%20tumor%20tissues%20in%20early-stage%20breast%20cancer&amp;author=X%20Zhang&amp;author=W%20Zhao&amp;author=W%20Wei&amp;author=Z%20You&amp;author=X%20Ou&amp;volume=25&amp;publication_year=2019&amp;pages=6546-6553&amp;pmid=31350313&amp;doi=10.1158/1078-0432.CCR-18-4055&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B8">
+<span class="label">8.</span><cite>Coombes RC, Page K, Salari R, Hastings RK, Armstrong A, Ahmed S, et al.  Personalized detection of circulating tumor DNA antedates breast cancer metastatic recurrence. Clin Cancer Res. 2019;25:4255–4263. doi: 10.1158/1078-0432.CCR-18-3663.</cite> [<a href="https://doi.org/10.1158/1078-0432.CCR-18-3663" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30992300/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Clin%20Cancer%20Res&amp;title=Personalized%20detection%20of%20circulating%20tumor%20DNA%20antedates%20breast%20cancer%20metastatic%20recurrence&amp;author=RC%20Coombes&amp;author=K%20Page&amp;author=R%20Salari&amp;author=RK%20Hastings&amp;author=A%20Armstrong&amp;volume=25&amp;publication_year=2019&amp;pages=4255-4263&amp;pmid=30992300&amp;doi=10.1158/1078-0432.CCR-18-3663&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B9">
+<span class="label">9.</span><cite>do Valle ÍF, Giampieri E, Simonetti G, Padella A, Manfrini M, Ferrari A, et al.  Optimized pipeline of MuTect and GATK tools to improve the detection of somatic single nucleotide polymorphisms in whole-exome sequencing data. BMC Bioinformatics. 2016;17:341. doi: 10.1186/s12859-016-1190-7.</cite> [<a href="https://doi.org/10.1186/s12859-016-1190-7" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5123378/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28185561/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=BMC%20Bioinformatics&amp;title=Optimized%20pipeline%20of%20MuTect%20and%20GATK%20tools%20to%20improve%20the%20detection%20of%20somatic%20single%20nucleotide%20polymorphisms%20in%20whole-exome%20sequencing%20data&amp;author=%C3%8DF%20do%20Valle&amp;author=E%20Giampieri&amp;author=G%20Simonetti&amp;author=A%20Padella&amp;author=M%20Manfrini&amp;volume=17&amp;publication_year=2016&amp;pages=341&amp;pmid=28185561&amp;doi=10.1186/s12859-016-1190-7&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B10">
+<span class="label">10.</span><cite>Ren S, Bertels K, Al-Ars Z. Efficient acceleration of the pair-HMMs forward algorithm for GATK HaplotypeCaller on graphics processing units. Evol Bioinform Online. 2018;14:1176934318760543.  doi: 10.1177/1176934318760543.</cite> [<a href="https://doi.org/10.1177/1176934318760543" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5858735/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29568218/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Evol%20Bioinform%20Online&amp;title=Efficient%20acceleration%20of%20the%20pair-HMMs%20forward%20algorithm%20for%20GATK%20HaplotypeCaller%20on%20graphics%20processing%20units&amp;author=S%20Ren&amp;author=K%20Bertels&amp;author=Z%20Al-Ars&amp;volume=14&amp;publication_year=2018&amp;pages=1176934318760543&amp;pmid=29568218&amp;doi=10.1177/1176934318760543&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B11">
+<span class="label">11.</span><cite>Sun P, Zhong Z, Lu Q, Li M, Chao X, Chen D, et al.  Mucinous carcinoma with micropapillary features is morphologically, clinically and genetically distinct from pure mucinous carcinoma of breast. Mod Pathol.  doi: 10.1038/s41379-020-0554-8. Epub 2020 May 1.</cite> [<a href="https://doi.org/10.1038/s41379-020-0554-8" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/32358590/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Mod%20Pathol&amp;title=Mucinous%20carcinoma%20with%20micropapillary%20features%20is%20morphologically,%20clinically%20and%20genetically%20distinct%20from%20pure%20mucinous%20carcinoma%20of%20breast&amp;author=P%20Sun&amp;author=Z%20Zhong&amp;author=Q%20Lu&amp;author=M%20Li&amp;author=X%20Chao&amp;pmid=32358590&amp;doi=10.1038/s41379-020-0554-8&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B12">
+<span class="label">12.</span><cite>Koboldt DC, Zhang Q, Larson DE, Shen D, McLellan MD, Lin L, et al.  VarScan 2: somatic mutation and copy number alteration discovery in cancer by exome sequencing. Genome Res. 2012;22:568–576. doi: 10.1101/gr.129684.111.</cite> [<a href="https://doi.org/10.1101/gr.129684.111" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3290792/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/22300766/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Genome%20Res&amp;title=VarScan%202:%20somatic%20mutation%20and%20copy%20number%20alteration%20discovery%20in%20cancer%20by%20exome%20sequencing&amp;author=DC%20Koboldt&amp;author=Q%20Zhang&amp;author=DE%20Larson&amp;author=D%20Shen&amp;author=MD%20McLellan&amp;volume=22&amp;publication_year=2012&amp;pages=568-576&amp;pmid=22300766&amp;doi=10.1101/gr.129684.111&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B13">
+<span class="label">13.</span><cite>Shatsky R, Parker BA, Bui NQ, Helsten T, Schwab RB, Boles SG, et al.  Next-generation sequencing of tissue and circulating tumor DNA: the UC San Diego Moores Center for personalized cancer therapy experience with breast malignancies. Mol Cancer Ther. 2019;18:1001–1011. doi: 10.1158/1535-7163.MCT-17-1038.</cite> [<a href="https://doi.org/10.1158/1535-7163.MCT-17-1038" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30926636/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Mol%20Cancer%20Ther&amp;title=Next-generation%20sequencing%20of%20tissue%20and%20circulating%20tumor%20DNA:%20the%20UC%20San%20Diego%20Moores%20Center%20for%20personalized%20cancer%20therapy%20experience%20with%20breast%20malignancies&amp;author=R%20Shatsky&amp;author=BA%20Parker&amp;author=NQ%20Bui&amp;author=T%20Helsten&amp;author=RB%20Schwab&amp;volume=18&amp;publication_year=2019&amp;pages=1001-1011&amp;pmid=30926636&amp;doi=10.1158/1535-7163.MCT-17-1038&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B14">
+<span class="label">14.</span><cite>Bhaskaran SP, Chandratre K, Gupta H, Zhang L, Wang X, Cui J, et al.  Germline variation in BRCA1/2 is highly ethnic-specific: evidence from over 30,000 Chinese hereditary breast and ovarian cancer patients. Int J Cancer. 2019;145:962–973. doi: 10.1002/ijc.32176.</cite> [<a href="https://doi.org/10.1002/ijc.32176" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6617753/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30702160/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Int%20J%20Cancer&amp;title=Germline%20variation%20in%20BRCA1/2%20is%20highly%20ethnic-specific:%20evidence%20from%20over%2030,000%20Chinese%20hereditary%20breast%20and%20ovarian%20cancer%20patients&amp;author=SP%20Bhaskaran&amp;author=K%20Chandratre&amp;author=H%20Gupta&amp;author=L%20Zhang&amp;author=X%20Wang&amp;volume=145&amp;publication_year=2019&amp;pages=962-973&amp;pmid=30702160&amp;doi=10.1002/ijc.32176&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B15">
+<span class="label">15.</span><cite>Oshiro C, Kagara N, Naoi Y, Shimoda M, Shimomura A, Maruyama N, et al.  PIK3CA mutations in serum DNA are predictive of recurrence in primary breast cancer patients. Breast Cancer Res Treat. 2015;150:299–307. doi: 10.1007/s10549-015-3322-6.</cite> [<a href="https://doi.org/10.1007/s10549-015-3322-6" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/25736040/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Breast%20Cancer%20Res%20Treat&amp;title=PIK3CA%20mutations%20in%20serum%20DNA%20are%20predictive%20of%20recurrence%20in%20primary%20breast%20cancer%20patients&amp;author=C%20Oshiro&amp;author=N%20Kagara&amp;author=Y%20Naoi&amp;author=M%20Shimoda&amp;author=A%20Shimomura&amp;volume=150&amp;publication_year=2015&amp;pages=299-307&amp;pmid=25736040&amp;doi=10.1007/s10549-015-3322-6&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B16">
+<span class="label">16.</span><cite>Loibl S, von Minckwitz G, Schneeweiss A, Paepke S, Lehmann A, Rezai M, et al.  PIK3CA mutations are associated with lower rates of pathologic complete response to anti-human epidermal growth factor receptor 2 (HER2) therapy in primary HER2-overexpressing breast cancer. J Clin Oncol. 2014;32:3212–3220. doi: 10.1200/JCO.2014.55.7876.</cite> [<a href="https://doi.org/10.1200/JCO.2014.55.7876" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/25199759/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Clin%20Oncol&amp;title=PIK3CA%20mutations%20are%20associated%20with%20lower%20rates%20of%20pathologic%20complete%20response%20to%20anti-human%20epidermal%20growth%20factor%20receptor%202%20(HER2)%20therapy%20in%20primary%20HER2-overexpressing%20breast%20cancer&amp;author=S%20Loibl&amp;author=G%20von%20Minckwitz&amp;author=A%20Schneeweiss&amp;author=S%20Paepke&amp;author=A%20Lehmann&amp;volume=32&amp;publication_year=2014&amp;pages=3212-3220&amp;pmid=25199759&amp;doi=10.1200/JCO.2014.55.7876&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B17">
+<span class="label">17.</span><cite>Food and Drug Administration. FDA approves alpelisib for metastatic breast cancer.  [Accessed January 9th, 2020].   <a href="https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-alpelisib-metastatic-breast-cancer" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-alpelisib-metastatic-breast-cancer</a>.</cite>
+</li>
+<li id="B18">
+<span class="label">18.</span><cite>Copur MS, Jonglertham P. Alpelisib for PIK3CA-mutated advanced breast cancer. N Engl J Med. 2019;381:686–687. doi: 10.1056/NEJMc1907856.</cite> [<a href="https://doi.org/10.1056/NEJMc1907856" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31412192/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N%20Engl%20J%20Med&amp;title=Alpelisib%20for%20PIK3CA-mutated%20advanced%20breast%20cancer&amp;author=MS%20Copur&amp;author=P%20Jonglertham&amp;volume=381&amp;publication_year=2019&amp;pages=686-687&amp;pmid=31412192&amp;doi=10.1056/NEJMc1907856&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B19">
+<span class="label">19.</span><cite>Silwal-Pandit L, Langerød A, Børresen-Dale AL. TP53 mutations in breast and ovarian cancer. Cold Spring Harb Perspect Med. 2017;7:a026252.  doi: 10.1101/cshperspect.a026252.</cite> [<a href="https://doi.org/10.1101/cshperspect.a026252" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5204332/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27815305/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Cold%20Spring%20Harb%20Perspect%20Med&amp;title=TP53%20mutations%20in%20breast%20and%20ovarian%20cancer&amp;author=L%20Silwal-Pandit&amp;author=A%20Langer%C3%B8d&amp;author=AL%20B%C3%B8rresen-Dale&amp;volume=7&amp;publication_year=2017&amp;pages=a026252&amp;pmid=27815305&amp;doi=10.1101/cshperspect.a026252&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B20">
+<span class="label">20.</span><cite>Bertucci F, Ng CK, Patsouris A, Droin N, Piscuoglio S, Carbuccia N, et al.  Genomic characterization of metastatic breast cancers. Nature. 2019;569:560–564. doi: 10.1038/s41586-019-1056-z.</cite> [<a href="https://doi.org/10.1038/s41586-019-1056-z" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31118521/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Nature&amp;title=Genomic%20characterization%20of%20metastatic%20breast%20cancers&amp;author=F%20Bertucci&amp;author=CK%20Ng&amp;author=A%20Patsouris&amp;author=N%20Droin&amp;author=S%20Piscuoglio&amp;volume=569&amp;publication_year=2019&amp;pages=560-564&amp;pmid=31118521&amp;doi=10.1038/s41586-019-1056-z&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B21">
+<span class="label">21.</span><cite>Gala K, Li Q, Sinha A, Razavi P, Dorso M, Sanchez-Vega F, et al.  KMT2C mediates the estrogen dependence of breast cancer through regulation of ERα enhancer function. Oncogene. 2018;37:4692–4710. doi: 10.1038/s41388-018-0273-5.</cite> [<a href="https://doi.org/10.1038/s41388-018-0273-5" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6107480/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29755131/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Oncogene&amp;title=KMT2C%20mediates%20the%20estrogen%20dependence%20of%20breast%20cancer%20through%20regulation%20of%20ER%CE%B1%20enhancer%20function&amp;author=K%20Gala&amp;author=Q%20Li&amp;author=A%20Sinha&amp;author=P%20Razavi&amp;author=M%20Dorso&amp;volume=37&amp;publication_year=2018&amp;pages=4692-4710&amp;pmid=29755131&amp;doi=10.1038/s41388-018-0273-5&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B22">
+<span class="label">22.</span><cite>Kandoth C, McLellan MD, Vandin F, Ye K, Niu B, Lu C, et al.  Mutational landscape and significance across 12 major cancer types. Nature. 2013;502:333–339. doi: 10.1038/nature12634.</cite> [<a href="https://doi.org/10.1038/nature12634" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3927368/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/24132290/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Nature&amp;title=Mutational%20landscape%20and%20significance%20across%2012%20major%20cancer%20types&amp;author=C%20Kandoth&amp;author=MD%20McLellan&amp;author=F%20Vandin&amp;author=K%20Ye&amp;author=B%20Niu&amp;volume=502&amp;publication_year=2013&amp;pages=333-339&amp;pmid=24132290&amp;doi=10.1038/nature12634&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B23">
+<span class="label">23.</span><cite>Cancer Genome Atlas Network. Comprehensive molecular portraits of human breast tumours. Nature. 2012;490:61–70. doi: 10.1038/nature11412.</cite> [<a href="https://doi.org/10.1038/nature11412" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3465532/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/23000897/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Nature&amp;title=Comprehensive%20molecular%20portraits%20of%20human%20breast%20tumours&amp;volume=490&amp;publication_year=2012&amp;pages=61-70&amp;pmid=23000897&amp;doi=10.1038/nature11412&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B24">
+<span class="label">24.</span><cite>Pereira B, Chin SF, Rueda OM, Vollan HK, Provenzano E, Bardwell HA, et al.  The somatic mutation profiles of 2,433 breast cancers refines their genomic and transcriptomic landscapes. Nat Commun. 2016;7:11479. doi: 10.1038/ncomms11479.</cite> [<a href="https://doi.org/10.1038/ncomms11479" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4866047/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27161491/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Nat%20Commun&amp;title=The%20somatic%20mutation%20profiles%20of%202,433%20breast%20cancers%20refines%20their%20genomic%20and%20transcriptomic%20landscapes&amp;author=B%20Pereira&amp;author=SF%20Chin&amp;author=OM%20Rueda&amp;author=HK%20Vollan&amp;author=E%20Provenzano&amp;volume=7&amp;publication_year=2016&amp;pages=11479&amp;pmid=27161491&amp;doi=10.1038/ncomms11479&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B25">
+<span class="label">25.</span><cite>Yap YS, Singh AP, Lim JH, Ahn JH, Jung KH, Kim J, et al.  Elucidating therapeutic molecular targets in premenopausal Asian women with recurrent breast cancers. NPJ Breast Cancer. 2018;4:19. doi: 10.1038/s41523-018-0070-x.</cite> [<a href="https://doi.org/10.1038/s41523-018-0070-x" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6062514/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30062102/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=NPJ%20Breast%20Cancer&amp;title=Elucidating%20therapeutic%20molecular%20targets%20in%20premenopausal%20Asian%20women%20with%20recurrent%20breast%20cancers&amp;author=YS%20Yap&amp;author=AP%20Singh&amp;author=JH%20Lim&amp;author=JH%20Ahn&amp;author=KH%20Jung&amp;volume=4&amp;publication_year=2018&amp;pages=19&amp;pmid=30062102&amp;doi=10.1038/s41523-018-0070-x&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B26">
+<span class="label">26.</span><cite>Peng J, Tang L, Cai M, Chen H, Wong J, Zhang P. RECQL5 plays an essential role in maintaining genome stability and viability of triple-negative breast cancer cells. Cancer Med. 2019;8:4743–4752. doi: 10.1002/cam4.2349.</cite> [<a href="https://doi.org/10.1002/cam4.2349" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6712443/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31231988/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Cancer%20Med&amp;title=RECQL5%20plays%20an%20essential%20role%20in%20maintaining%20genome%20stability%20and%20viability%20of%20triple-negative%20breast%20cancer%20cells&amp;author=J%20Peng&amp;author=L%20Tang&amp;author=M%20Cai&amp;author=H%20Chen&amp;author=J%20Wong&amp;volume=8&amp;publication_year=2019&amp;pages=4743-4752&amp;pmid=31231988&amp;doi=10.1002/cam4.2349&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B27">
+<span class="label">27.</span><cite>Fan Z, Ouyang T, Li J, Wang T, Fan Z, Fan T, et al.  Identification and analysis of CHEK2 germline mutations in Chinese BRCA1/2-negative breast cancer patients. Breast Cancer Res Treat. 2018;169:59–67. doi: 10.1007/s10549-018-4673-6.</cite> [<a href="https://doi.org/10.1007/s10549-018-4673-6" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29356917/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Breast%20Cancer%20Res%20Treat&amp;title=Identification%20and%20analysis%20of%20CHEK2%20germline%20mutations%20in%20Chinese%20BRCA1/2-negative%20breast%20cancer%20patients&amp;author=Z%20Fan&amp;author=T%20Ouyang&amp;author=J%20Li&amp;author=T%20Wang&amp;author=Z%20Fan&amp;volume=169&amp;publication_year=2018&amp;pages=59-67&amp;pmid=29356917&amp;doi=10.1007/s10549-018-4673-6&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B28">
+<span class="label">28.</span><cite>Jian W, Shao K, Qin Q, Wang X, Song S, Wang X. Clinical and genetic characterization of hereditary breast cancer in a Chinese population. Hered Cancer Clin Pract. 2017;15:19. doi: 10.1186/s13053-017-0079-4.</cite> [<a href="https://doi.org/10.1186/s13053-017-0079-4" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5663067/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29093764/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Hered%20Cancer%20Clin%20Pract&amp;title=Clinical%20and%20genetic%20characterization%20of%20hereditary%20breast%20cancer%20in%20a%20Chinese%20population&amp;author=W%20Jian&amp;author=K%20Shao&amp;author=Q%20Qin&amp;author=X%20Wang&amp;author=S%20Song&amp;volume=15&amp;publication_year=2017&amp;pages=19&amp;pmid=29093764&amp;doi=10.1186/s13053-017-0079-4&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B29">
+<span class="label">29.</span><cite>Niyomnaitham S, Parinyanitikul N, Roothumnong E, Jinda W, Samarnthai N, Atikankul T, et al.  Tumor mutational profile of triple negative breast cancer patients in Thailand revealed distinctive genetic alteration in chromatin remodeling gene. PeerJ. 2019;7:e6501.  doi: 10.7717/peerj.6501.</cite> [<a href="https://doi.org/10.7717/peerj.6501" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6394341/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30828495/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=PeerJ&amp;title=Tumor%20mutational%20profile%20of%20triple%20negative%20breast%20cancer%20patients%20in%20Thailand%20revealed%20distinctive%20genetic%20alteration%20in%20chromatin%20remodeling%20gene&amp;author=S%20Niyomnaitham&amp;author=N%20Parinyanitikul&amp;author=E%20Roothumnong&amp;author=W%20Jinda&amp;author=N%20Samarnthai&amp;volume=7&amp;publication_year=2019&amp;pages=e6501&amp;pmid=30828495&amp;doi=10.7717/peerj.6501&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="B30">
+<span class="label">30.</span><cite>Weiss NS. Cohort studies of the efficacy of screening for cancer. Epidemiology. 2015;26:362–364. doi: 10.1097/EDE.0000000000000272.</cite> [<a href="https://doi.org/10.1097/EDE.0000000000000272" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4385450/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/25764250/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Epidemiology&amp;title=Cohort%20studies%20of%20the%20efficacy%20of%20screening%20for%20cancer&amp;author=NS%20Weiss&amp;volume=26&amp;publication_year=2015&amp;pages=362-364&amp;pmid=25764250&amp;doi=10.1097/EDE.0000000000000272&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+</ul></section></section><section id="_ad93_" lang="en" class="associated-data"><h2 class="pmc_sec_title">Associated Data</h2>
+<p class="font-secondary"><em>This section collects any data citations, data availability statements, or supplementary materials included in this article.</em></p>
+<section id="_adsm93_" lang="en" class="supplementary-materials"><h3 class="pmc_sec_title">Supplementary Materials</h3>
+<section class="sm xbox font-sm" id="db_ds_supplementary-material1_reqid_"><div class="caption p">
+<span>Supplementary Table 1</span><p>The list of genes detected in this study</p>
+</div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/7462818/bin/jbc-23-373-s001.xls" data-ga-action="click_feat_suppl" class="usa-link">jbc-23-373-s001.xls</a><sup> (76KB, xls) </sup>
+</div></div></section><section class="sm xbox font-sm" id="db_ds_supplementary-material2_reqid_"><div class="caption p">
+<span>Supplementary Table 2</span><p>Clinical characteristics of 31 breast cancer patients</p>
+</div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/7462818/bin/jbc-23-373-s002.xls" data-ga-action="click_feat_suppl" class="usa-link">jbc-23-373-s002.xls</a><sup> (38KB, xls) </sup>
+</div></div></section><section class="sm xbox font-sm" id="db_ds_supplementary-material3_reqid_"><div class="caption p">
+<span>Supplementary Table 3</span><p>The results of the target-panel squencing quality control in this study</p>
+</div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/7462818/bin/jbc-23-373-s003.xls" data-ga-action="click_feat_suppl" class="usa-link">jbc-23-373-s003.xls</a><sup> (29.5KB, xls) </sup>
+</div></div></section><section class="sm xbox font-sm" id="db_ds_supplementary-material4_reqid_"><div class="caption p">
+<span>Supplementary Table 4</span><p>Identified somatic mutations from 87 samples</p>
+</div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/7462818/bin/jbc-23-373-s004.xls" data-ga-action="click_feat_suppl" class="usa-link">jbc-23-373-s004.xls</a><sup> (172KB, xls) </sup>
+</div></div></section><section class="sm xbox font-sm" id="db_ds_supplementary-material5_reqid_"><div class="caption p">
+<span>Supplementary Table 5</span><p>Pathogenic germline alterations identified in 31 breast cancer patients</p>
+</div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/7462818/bin/jbc-23-373-s005.xls" data-ga-action="click_feat_suppl" class="usa-link">jbc-23-373-s005.xls</a><sup> (27KB, xls) </sup>
+</div></div></section><section class="sm xbox font-sm" id="db_ds_supplementary-material6_reqid_"><div class="caption p">
+<span>Supplementary Table 6</span><p>Identified copy number variants from 87 samples</p>
+</div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/7462818/bin/jbc-23-373-s006.xls" data-ga-action="click_feat_suppl" class="usa-link">jbc-23-373-s006.xls</a><sup> (38.5KB, xls) </sup>
+</div></div></section></section></section></section><footer class="p courtesy-note font-secondary font-sm text-center"><hr class="headless">
+<p>Articles from Journal of Breast Cancer are provided here courtesy of <strong>Korean Breast Cancer Society</strong></p></footer></section></article>
+
+                      
+
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+<!-- Secondary navigation placeholder -->
+<div class="pmc-sidenav desktop:grid-col-4 display-flex">
+    <section class="pmc-sidenav__container" aria-label="Article resources and navigation">
+        <button type="button" class="usa-button pmc-sidenav__container__close usa-button--unstyled">
+            <img src="/static/img/usa-icons/close.svg" role="img" alt="Close" />
+        </button>
+    <div class="display-none desktop:display-block">
+       <section class="margin-top-4 desktop:margin-top-0">
+              <h2 class="margin-top-0">ACTIONS</h2>
+           <ul class="usa-list usa-list--unstyled usa-list--actions">
+               
+               <li>
+                     <a
+                             href="https://doi.org/10.4048/jbc.2020.23.e41"
+                             class="usa-button usa-button--outline width-24 font-xs display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                             target="_blank"
+                             rel="noreferrer noopener"
+                             data-ga-category="actions"
+                             data-ga-action="click"
+                             data-ga-label="publisher_link_desktop"
+                     >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#launch"></use>
+                         </svg>
+                         <span class="display-inline-flex flex-justify-center flex-1 padding-right-2">View on publisher site</span>
+                     </a>
+               </li>
+               
+               
+               <li>
+                    <a
+                            href="pdf/jbc-23-373.pdf"
+                            class="usa-button usa-button--outline width-24 display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="pdf_download_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1">PDF (1.2 MB)</span>
+                    </a>
+               </li>
+               
+                
+               <li>
+                   <button role="button" class="usa-button width-24 citation-dialog-trigger display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                        aria-label="Open dialog with citation text in different styles"
+                        data-ga-category="actions"
+                        data-ga-action="open"
+                        data-ga-label="cite_desktop"
+                        data-all-citations-url="/resources/citations/7462818/"
+                        data-citation-style="nlm"
+                        data-download-format-link="/resources/citations/7462818/export/"
+                    >
+                        <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                        </svg>
+                       <span class="display-inline-flex flex-justify-center flex-1 button-label">Cite</span>
+                    </button>
+               </li>
+                
+               <li>
+
+                        <button class="usa-button width-24 collections-dialog-trigger collections-button display-inline-flex flex-align-center flex-justify-start padding-left-1 collections-button-empty"
+                              aria-label="Save article in MyNCBI collections."
+                              data-ga-category="actions"
+                              data-ga-action="click"
+                              data-ga-label="collections_button_desktop"
+                              data-collections-open-dialog-enabled="false"
+                              data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC7462818%2F%23open-collections-dialog"
+                              data-in-collections="false">
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                            <span class="display-inline-flex flex-justify-center flex-1">Collections</span>
+                       </button>
+               </li>
+               <li class="pmc-permalink">
+                    <button
+                            type="button"
+                            class="usa-button width-24 display-inline-flex flex-align-center flex-justify padding-left-1 shadow-none"
+                            aria-label="Show article permalink"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="permalink_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#share"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1 button-label">Permalink</span>
+                    </button>
+                   
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC7462818/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+               </li>
+           </ul>
+       </section>
+     </div>
+
+        <section class="pmc-resources margin-top-6 desktop:margin-top-4" data-page-path="/articles/PMC7462818/">
+            <h2 class="margin-top-0">RESOURCES</h2>
+            
+                <div class="usa-accordion usa-accordion--multiselectable" data-allow-multiple>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-similar-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_similar_articles"
+                        data-ga-label="/articles/PMC7462818/"
+                        data-action-open="open_similar_articles"
+                        data-action-close="close_similar_articles"
+                        >
+                            Similar articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-similar-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/similar-article-links/32908788/"
+                            
+                    >
+                        
+                    </div>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-cited-by-other-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_cited_by"
+                        data-ga-label="/articles/PMC7462818/"
+                        data-action-open="open_cited_by"
+                        data-action-close="close_cited_by"
+                        >
+                             Cited by other articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-cited-by-other-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/cited-by-links/32908788/"
+                            
+                    >
+                          
+                    </div>
+                    
+                        <h3 class="usa-accordion__heading">
+                            <button
+                            type="button"
+                            class="usa-accordion__button"
+                            aria-expanded="false"
+                            aria-controls="resources-links-to-ncbi-databases"
+                            data-ga-category="resources_accordion"
+                            data-ga-action="open_NCBI_links"
+                            data-ga-label="/articles/PMC7462818/"
+                            data-action-open="open_NCBI_links"
+                            data-action-close="close_NCBI_link"
+                            >
+                                 Links to NCBI Databases
+                            </button>
+                        </h3>
+                        <div
+                                id="resources-links-to-ncbi-databases"
+                                class="usa-accordion__content usa-prose"
+                                data-source-url="/resources/db-links/7462818/"
+                        >
+                        </div>
+                    
+                    
+                </div>
+            
+        </section>
+
+
+        <section
+        class="usa-in-page-nav usa-in-page-nav--wide margin-top-6 desktop:margin-top-4"
+        data-title-text="On this page"
+        data-title-heading-level="h2"
+        data-scroll-offset="0"
+        data-root-margin="-10% 0px -80% 0px"
+        data-main-content-selector="main"
+        data-threshold="1"
+        hidden
+        ></section>
+    </section>
+</div>
+
+
+        
+
+<div class="overlay" role="dialog" aria-label="Citation Dialog" hidden>
+    <div class="dialog citation-dialog" aria-hidden="true">
+        <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+            <h2 class="usa-modal__heading margin-0">Cite</h2>
+             <button type="button" class="usa-button usa-button--unstyled close-overlay text-black width-auto"  tabindex="1">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+             </button>
+        </div>
+
+        
+
+<div class="citation-text-block">
+  <div class="citation-text margin-bottom-2"></div>
+  <ul class="usa-list usa-list--unstyled display-inline-flex flex-justify width-full flex-align-center">
+      <li>
+        <button
+          class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center copy-button dialog-focus"
+          data-ga-category="save_share"
+          data-ga-action="cite"
+          data-ga-label="copy"
+          tabindex="2">
+            <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+            </svg>
+            <span>Copy</span>
+        </button>
+      </li>
+      <li>
+          <a
+              href="#"
+              role="button"
+              class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center export-button"
+              data-ga-category="save_share"
+              data-ga-action="cite"
+              data-ga-label="download"
+              title="Download a file for external citation management software"
+              tabindex="3">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                </svg>
+                <span class="display-none mobile-lg:display-inline">Download .nbib</span>
+                <span class="display-inline mobile-lg:display-none">.nbib</span>
+            </a>
+      </li>
+      <li>
+          
+
+<div class="display-inline-flex flex-align-center">
+  <label class="usa-label margin-top-0">Format:</label>
+  <select aria-label="Format" class="usa-select citation-style-selector padding-1 margin-top-0 border-0 padding-right-4" tabindex="4" >
+    
+      <option data-style-url-name="ama"
+              value="AMA"
+              >
+        AMA
+      </option>
+    
+      <option data-style-url-name="apa"
+              value="APA"
+              >
+        APA
+      </option>
+    
+      <option data-style-url-name="mla"
+              value="MLA"
+              >
+        MLA
+      </option>
+    
+      <option data-style-url-name="nlm"
+              value="NLM"
+              selected="selected">
+        NLM
+      </option>
+    
+  </select>
+</div>
+      </li>
+  </ul>
+</div>
+    </div>
+</div>
+
+        <div class="overlay" role="dialog" hidden>
+  <div id="collections-action-dialog" class="dialog collections-dialog" aria-hidden="true">
+   <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+        <h2 class="usa-modal__heading margin-0">Add to Collections</h2>
+    </div>
+    <div class="collections-action-panel action-panel">
+      
+
+
+<form id="collections-action-dialog-form"
+      class="usa-form maxw-full collections-action-panel-form action-panel-content action-form action-panel-smaller-selectors"
+      data-existing-collections-url="/list-existing-collections/"
+      data-add-to-existing-collection-url="/add-to-existing-collection/"
+      data-create-and-add-to-new-collection-url="/create-and-add-to-new-collection/"
+      data-myncbi-max-collection-name-length="100"
+      data-collections-root-url="https://www.ncbi.nlm.nih.gov/myncbi/collections/">
+
+    <input type="hidden" name="csrfmiddlewaretoken" value="yRuF5VoExBl5DhGwDEEMzPhIKAlalUBaa1USRNRcOjPpOnbxTD2m6XaoRsKnoF6F">
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-new"
+            class="usa-radio__input usa-radio__input--tile collections-new  margin-top-0"
+            name="collections"
+            value="new"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_new" />
+            <label class="usa-radio__label" for="collections-action-dialog-new">Create a new collection</label>
+        </div>
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-existing"
+            class="usa-radio__input usa-radio__input--tile collections-existing"
+            name="collections"
+            value="existing"
+            checked="true"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_existing" />
+            <label class="usa-radio__label" for="collections-action-dialog-existing">Add to an existing collection</label>
+        </div>
+    </fieldset>
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="action-panel-control-wrap new-collections-controls">
+           <label for="collections-action-dialog-add-to-new" class="usa-label margin-top-0">
+                Name your collection
+               <abbr title="required" class="usa-hint usa-hint--required text-no-underline">*</abbr>
+          </label>
+          <input
+            type="text"
+            name="add-to-new-collection"
+            id="collections-action-dialog-add-to-new"
+            class="usa-input collections-action-add-to-new"
+            pattern="[^&quot;&amp;=&lt;&gt;/]*" title="The following characters are not allowed in the Name field: &quot;&amp;=&lt;&gt;/"
+            maxlength=""
+            data-ga-category="collections_button"
+            data-ga-action="create_collection"
+            data-ga-label="non_favorties_collection"
+            required
+          />
+        </div>
+        <div class="action-panel-control-wrap existing-collections-controls">
+             <label for="collections-action-dialog-add-to-existing" class="usa-label margin-top-0">
+                Choose a collection
+              </label>
+              <select id="collections-action-dialog-add-to-existing"
+                      class="usa-select collections-action-add-to-existing"
+                      data-ga-category="collections_button"
+                      data-ga-action="select_collection"
+                      data-ga-label="($('.collections-action-add-to-existing').val() === 'Favorites') ? 'Favorites' : 'non_favorites_collection'">
+              </select>
+              <div class="collections-retry-load-on-error usa-input-error-message selection-validation-message">
+                Unable to load your collection due to an error<br>
+                <a href="#">Please try again</a>
+              </div>
+        </div>
+    </fieldset>
+
+    <div class="display-inline-flex">
+        <button class="usa-button margin-top-0 action-panel-submit"
+            type="submit"
+            data-loading-label="Adding..."
+            data-pinger-ignore
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="add">
+          Add
+        </button>
+        <button class="usa-button usa-button--outline margin-top-0 action-panel-cancel"
+                aria-label="Close 'Add to Collections' panel"
+                ref="linksrc=close_collections_panel"
+                data-ga-category="collections_button"
+                data-ga-action="click"
+                data-ga-label="cancel">
+          Cancel
+        </button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>
+
+        
+
+      </div>
+    </div>
+  </div>
+
+
+
+        
+    
+    
+
+<footer class="ncbi-footer ncbi-dark-background " >
+    
+        <div class="ncbi-footer__icon-section">
+            <div class="ncbi-footer__social-header">
+                Follow NCBI
+            </div>
+
+            <div class="grid-container ncbi-footer__ncbi-social-icons-container">
+                
+                    <a href="https://twitter.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="40"
+                             height="40"
+                             viewBox="0 0 40 40"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on X (formerly known as Twitter)</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.facebook.com/ncbi.nlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="16"
+                             height="29"
+                             focusable="false"
+                             aria-hidden="true"
+                             viewBox="0 0 16 29"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.8809 21.4002C3.8809 19.0932 3.8809 16.7876 3.8809 14.478C3.8809 14.2117 3.80103 14.1452 3.54278 14.1492C2.53372 14.1638 1.52334 14.1492 0.514288 14.1598C0.302626 14.1598 0.248047 14.0972 0.248047 13.8936C0.256034 12.4585 0.256034 11.0239 0.248047 9.58978C0.248047 9.37013 0.302626 9.30224 0.528931 9.3049C1.53798 9.31688 2.54837 9.3049 3.55742 9.31555C3.80103 9.31555 3.8809 9.26097 3.87957 9.00272C3.87158 8.00565 3.85428 7.00592 3.90753 6.00884C3.97142 4.83339 4.31487 3.73115 5.04437 2.78467C5.93095 1.63318 7.15699 1.09005 8.56141 0.967577C10.5582 0.79319 12.555 0.982221 14.5518 0.927641C14.7102 0.927641 14.7462 0.99287 14.7449 1.13664C14.7449 2.581 14.7449 4.02668 14.7449 5.47104C14.7449 5.67604 14.6517 5.68669 14.4946 5.68669C13.4523 5.68669 12.4113 5.68669 11.3703 5.68669C10.3506 5.68669 9.92057 6.10868 9.90593 7.13904C9.89661 7.7647 9.91525 8.39303 9.89794 9.01869C9.88995 9.26364 9.96583 9.31822 10.2015 9.31688C11.7204 9.30623 13.2393 9.31688 14.7595 9.3049C15.0257 9.3049 15.0723 9.3728 15.0444 9.62439C14.89 10.9849 14.7515 12.3467 14.6144 13.7085C14.5691 14.1571 14.5785 14.1585 14.1458 14.1585C12.8386 14.1585 11.5313 14.1665 10.2254 14.1518C9.95119 14.1518 9.89794 14.2317 9.89794 14.4899C9.90593 19.0799 9.89794 23.6752 9.91125 28.2612C9.91125 28.5674 9.8407 28.646 9.53186 28.6433C7.77866 28.6273 6.02414 28.6366 4.27094 28.634C3.82499 28.634 3.87158 28.6992 3.87158 28.22C3.87602 25.9472 3.87913 23.6739 3.8809 21.4002Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on Facebook</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.linkedin.com/company/ncbinlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="25"
+                             height="23"
+                             viewBox="0 0 26 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M14.6983 9.98423C15.6302 9.24808 16.5926 8.74754 17.6762 8.51991C19.673 8.09126 21.554 8.30824 23.1262 9.7526C24.2351 10.7723 24.7529 12.1115 25.0165 13.5612C25.1486 14.3363 25.2105 15.1218 25.2015 15.9081C25.2015 18.3043 25.2015 20.6898 25.2082 23.0806C25.2082 23.3468 25.1549 23.444 24.8621 23.4414C23.1297 23.4272 21.3992 23.4272 19.6704 23.4414C19.4041 23.4414 19.3429 23.3588 19.3442 23.1019C19.3535 20.5194 19.3442 17.9368 19.3442 15.3543C19.3442 14.0005 18.3258 12.9448 17.0266 12.9488C15.7273 12.9528 14.6983 14.0071 14.6983 15.361C14.6983 17.9328 14.6917 20.5047 14.6983 23.0753C14.6983 23.3708 14.6198 23.444 14.3296 23.4427C12.6185 23.4294 10.9079 23.4294 9.19779 23.4427C8.93155 23.4427 8.86099 23.3735 8.86232 23.1086C8.8783 19.7619 8.88628 16.4144 8.88628 13.066C8.88628 11.5688 8.87874 10.0708 8.86365 8.57182C8.86365 8.3575 8.90758 8.27896 9.14054 8.28029C10.9048 8.29094 12.6687 8.29094 14.4321 8.28029C14.6464 8.28029 14.6983 8.34818 14.6983 8.54653C14.6903 9.00047 14.6983 9.45441 14.6983 9.98423Z">
+                            </path>
+                            <path d="M6.55316 15.8443C6.55316 18.2564 6.55316 20.6699 6.55316 23.082C6.55316 23.3629 6.48127 23.4388 6.19906 23.4374C4.47737 23.4241 2.75568 23.4241 1.03399 23.4374C0.767751 23.4374 0.69986 23.3629 0.701191 23.1006C0.709178 18.2648 0.709178 13.4281 0.701191 8.59053C0.701191 8.34026 0.765089 8.27237 1.01669 8.2737C2.74991 8.28435 4.48048 8.28435 6.20838 8.2737C6.47462 8.2737 6.5465 8.33627 6.54517 8.6065C6.54783 11.0186 6.55316 13.4308 6.55316 15.8443Z">
+                            </path>
+                            <path d="M3.65878 0.243898C5.36804 0.243898 6.58743 1.45529 6.58743 3.1406C6.58743 4.75801 5.32145 5.95742 3.60819 5.96807C3.22177 5.97614 2.83768 5.90639 2.47877 5.76299C2.11985 5.61959 1.79344 5.40546 1.51897 5.13334C1.24449 4.86123 1.02755 4.53668 0.881058 4.17902C0.734563 3.82136 0.661505 3.43788 0.666231 3.05141C0.67555 1.42601 1.9362 0.242566 3.65878 0.243898Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on LinkedIn</span>
+                    </a>
+                
+
+                
+                    <a href="https://github.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="28"
+                             height="27"
+                             viewBox="0 0 28 28"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M16.7228 20.6334C17.5057 20.5527 18.2786 20.3944 19.0301 20.1608C21.3108 19.4193 22.5822 17.8259 22.963 15.4909C23.1228 14.5112 23.1814 13.5287 22.9883 12.5437C22.8106 11.6423 22.4013 10.8028 21.8007 10.1076C21.7526 10.0605 21.7197 10 21.7064 9.934C21.6931 9.86799 21.7 9.79952 21.7262 9.73748C22.0856 8.6206 21.9711 7.51969 21.601 6.42677C21.582 6.3497 21.5345 6.2827 21.468 6.23923C21.4016 6.19577 21.3211 6.17906 21.2429 6.19248C20.7329 6.21649 20.2313 6.33051 19.7611 6.52928C19.1103 6.7908 18.4899 7.12198 17.9104 7.51703C17.84 7.56996 17.7581 7.60551 17.6713 7.62078C17.5846 7.63605 17.4954 7.6306 17.4112 7.60489C15.2596 7.05882 13.0054 7.06203 10.8554 7.61421C10.7806 7.63586 10.7018 7.63967 10.6253 7.62534C10.5487 7.611 10.4766 7.57892 10.4148 7.53167C9.64788 7.03247 8.85171 6.58918 7.96368 6.33359C7.65781 6.24338 7.34123 6.19458 7.02239 6.18849C6.94879 6.17986 6.87462 6.19893 6.81432 6.242C6.75402 6.28507 6.71191 6.34904 6.69621 6.42145C6.32342 7.51437 6.2209 8.61527 6.56307 9.73348C6.59635 9.84264 6.64694 9.93316 6.54177 10.0516C5.47666 11.2604 5.09988 12.6834 5.19574 14.2676C5.2663 15.4244 5.46201 16.5466 6.01454 17.5769C6.84399 19.1171 8.21664 19.9119 9.85158 20.3352C10.3938 20.4706 10.9444 20.5698 11.4998 20.632C11.5384 20.7492 11.4506 20.7798 11.408 20.8291C11.1734 21.1179 10.9894 21.4441 10.8634 21.7942C10.7622 22.0458 10.8315 22.4039 10.6065 22.5516C10.263 22.7766 9.83827 22.8485 9.42421 22.8871C8.17936 23.0056 7.26471 22.4877 6.6283 21.4348C6.25552 20.8184 5.76956 20.3325 5.08523 20.0663C4.76981 19.9325 4.42139 19.8967 4.08537 19.9638C3.7898 20.029 3.73788 20.1901 3.93891 20.4111C4.03639 20.5234 4.14989 20.6207 4.27575 20.6999C4.9796 21.1318 5.51717 21.7884 5.80152 22.5636C6.37002 23.9973 7.48039 24.5697 8.93825 24.6323C9.43741 24.6575 9.93768 24.615 10.4254 24.5058C10.5892 24.4672 10.6531 24.4872 10.6517 24.6762C10.6451 25.4936 10.6637 26.3123 10.6517 27.131C10.6517 27.6635 10.1684 27.9297 9.58663 27.7393C8.17396 27.2671 6.84977 26.5631 5.66838 25.656C2.59555 23.2891 0.720966 20.1861 0.217704 16.3376C-0.357453 11.9127 0.911353 8.00824 3.98551 4.73881C6.11909 2.42656 8.99932 0.939975 12.1203 0.540191C16.5351 -0.0601815 20.4347 1.14323 23.7232 4.16373C26.2449 6.47869 27.724 9.37672 28.1048 12.7726C28.5828 17.0325 27.3686 20.7945 24.4768 23.9827C22.9762 25.6323 21.0956 26.8908 18.9982 27.6488C18.8783 27.6927 18.7585 27.738 18.636 27.7726C18.0356 27.9404 17.6189 27.6395 17.6189 27.0098C17.6189 25.7452 17.6308 24.4806 17.6295 23.2159C17.6329 22.9506 17.6128 22.6856 17.5696 22.4238C17.4325 21.6664 17.3419 21.484 16.7228 20.6334Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on GitHub</span>
+                    </a>
+                
+
+                
+                    <a href="https://ncbiinsights.ncbi.nlm.nih.gov/"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="26"
+                             height="26"
+                             viewBox="0 0 27 27"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M23.7778 26.4574C23.1354 26.3913 22.0856 26.8024 21.636 26.3087C21.212 25.8444 21.4359 24.8111 21.324 24.0347C19.9933 14.8323 14.8727 8.80132 6.09057 5.85008C4.37689 5.28406 2.58381 4.99533 0.779072 4.99481C0.202773 4.99481 -0.0229751 4.83146 0.00455514 4.21479C0.0660406 3.08627 0.0660406 1.95525 0.00455514 0.826734C-0.0413285 0.0815827 0.259669 -0.0193618 0.896534 0.00266238C6.96236 0.222904 12.3693 2.24179 16.9889 6.16209C22.9794 11.2478 26.1271 17.7688 26.4372 25.648C26.4629 26.294 26.3179 26.5271 25.6609 26.4684C25.0827 26.417 24.4991 26.4574 23.7778 26.4574Z">
+                            </path>
+                            <path d="M14.8265 26.441C14.0924 26.441 13.2371 26.6795 12.6626 26.3786C12.0092 26.0372 12.3781 25.0644 12.246 24.378C11.1154 18.5324 6.6849 14.5497 0.74755 14.1001C0.217135 14.0615 -0.0104482 13.9422 0.0134113 13.3659C0.0519536 12.1454 0.0482829 10.9213 0.0134113 9.69524C-0.00127145 9.14464 0.196946 9.03268 0.703502 9.04736C9.21217 9.27128 16.5994 16.2511 17.2804 24.7231C17.418 26.4446 17.418 26.4446 15.6579 26.4446H14.832L14.8265 26.441Z">
+                            </path>
+                            <path d="M3.58928 26.4555C2.64447 26.4618 1.73584 26.0925 1.06329 25.4289C0.39073 24.7653 0.00933763 23.8617 0.0030097 22.9169C-0.00331824 21.9721 0.365937 21.0635 1.02954 20.3909C1.69315 19.7184 2.59675 19.337 3.54156 19.3306C4.48637 19.3243 5.39499 19.6936 6.06755 20.3572C6.7401 21.0208 7.1215 21.9244 7.12782 22.8692C7.13415 23.814 6.7649 24.7226 6.10129 25.3952C5.43768 26.0677 4.53409 26.4491 3.58928 26.4555Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI RSS feed</span>
+                    </a>
+                
+            </div>
+        </div>
+    
+
+    <div data-testid="gridContainer"
+         class="grid-container ncbi-footer__container">
+        <div class="grid-row ncbi-footer__main-content-container"
+             data-testid="grid">
+            
+                <div class="ncbi-footer__column">
+                    
+                        <p class="ncbi-footer__circled-icons-heading">
+                            Connect with NLM
+                        </p>
+                    
+
+                    <div class="ncbi-footer__circled-icons-list">
+                        
+                            <a href=https://twitter.com/nlm_nih class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="32"
+                                     height="32"
+                                     viewBox="0 0 40 40"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on X (formerly known as Twitter)</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.facebook.com/nationallibraryofmedicine class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="13"
+                                     height="24"
+                                     viewBox="0 0 13 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M4.11371 23.1369C4.11371 23.082 4.11371 23.0294 4.11371 22.9745V12.9411H0.817305C0.6709 12.9411 0.670898 12.9411 0.670898 12.8016C0.670898 11.564 0.670898 10.3287 0.670898 9.09341C0.670898 8.97903 0.705213 8.95158 0.815017 8.95158C1.8673 8.95158 2.91959 8.95158 3.97417 8.95158H4.12057V8.83263C4.12057 7.8055 4.12057 6.7738 4.12057 5.74897C4.1264 4.92595 4.31387 4.11437 4.66959 3.37217C5.12916 2.38246 5.94651 1.60353 6.95717 1.1921C7.64827 0.905008 8.3913 0.764035 9.13953 0.778051C10.0019 0.791777 10.8644 0.830666 11.7268 0.860404C11.8869 0.860404 12.047 0.894717 12.2072 0.90158C12.2964 0.90158 12.3261 0.940469 12.3261 1.02968C12.3261 1.5421 12.3261 2.05452 12.3261 2.56465C12.3261 3.16857 12.3261 3.7725 12.3261 4.37642C12.3261 4.48165 12.2964 4.51367 12.1912 4.51138C11.5369 4.51138 10.8804 4.51138 10.2261 4.51138C9.92772 4.51814 9.63058 4.5526 9.33855 4.61433C9.08125 4.6617 8.84537 4.78881 8.66431 4.97766C8.48326 5.16652 8.3662 5.40755 8.32972 5.66661C8.28476 5.89271 8.26027 6.1224 8.25652 6.35289C8.25652 7.19014 8.25652 8.02969 8.25652 8.86923C8.25652 8.89439 8.25652 8.91955 8.25652 8.95615H12.0219C12.1797 8.95615 12.182 8.95616 12.1614 9.10714C12.0768 9.76596 11.9876 10.4248 11.9029 11.0813C11.8312 11.6319 11.7626 12.1824 11.697 12.733C11.6719 12.9434 11.6787 12.9434 11.4683 12.9434H8.26338V22.899C8.26338 22.979 8.26338 23.0591 8.26338 23.1392L4.11371 23.1369Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on Facebook</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.youtube.com/user/NLMNIH class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="21"
+                                     height="15"
+                                     viewBox="0 0 21 15"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M19.2561 1.47914C18.9016 1.15888 18.5699 0.957569 17.2271 0.834039C15.5503 0.678484 13.2787 0.655608 11.563 0.65332H9.43556C7.71987 0.65332 5.4483 0.678484 3.77151 0.834039C2.43098 0.957569 2.097 1.15888 1.74242 1.47914C0.813665 2.32097 0.619221 4.62685 0.598633 6.89384C0.598633 7.31781 0.598633 7.74101 0.598633 8.16345C0.626084 10.4121 0.827391 12.686 1.74242 13.521C2.097 13.8412 2.4287 14.0425 3.77151 14.1661C5.4483 14.3216 7.71987 14.3445 9.43556 14.3468H11.563C13.2787 14.3468 15.5503 14.3216 17.2271 14.1661C18.5676 14.0425 18.9016 13.8412 19.2561 13.521C20.1712 12.6929 20.3725 10.451 20.3999 8.22064C20.3999 7.74025 20.3999 7.25986 20.3999 6.77946C20.3725 4.54907 20.1689 2.30724 19.2561 1.47914ZM8.55942 10.5311V4.65201L13.5601 7.50005L8.55942 10.5311Z"
+                                          fill="white" />
+                                </svg>
+                                <span class="usa-sr-only">NLM on YouTube</span>
+                            </a>
+                        
+                    </div>
+                </div>
+            
+
+            
+                <address class="ncbi-footer__address ncbi-footer__column">
+                    
+        <p>
+            <a class="usa-link usa-link--external"
+            href="https://www.google.com/maps/place/8600+Rockville+Pike,+Bethesda,+MD+20894/%4038.9959508,
+            -77.101021,17z/data%3D!3m1!4b1!4m5!3m4!1s0x89b7c95e25765ddb%3A0x19156f88b27635b8!8m2!3d38.9959508!
+            4d-77.0988323"
+            rel="noopener noreferrer" target="_blank">National Library of Medicine
+            <br/> 8600 Rockville Pike<br/> Bethesda, MD 20894</a>
+        </p>
+    
+                </address>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/web_policies.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Web Policies
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/institutes-nih/nih-office-director/office-communications-public-liaison/freedom-information-act-office" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            FOIA
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/vulnerability-disclosure-policy/index.html" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS Vulnerability Disclosure
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://support.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Help
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/accessibility.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Accessibility
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/careers/careers.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Careers
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+        </div>
+
+        
+            <div class="grid-row grid-col-12" data-testid="grid">
+                <ul class="ncbi-footer__bottom-links-list">
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NLM
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NIH
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.usa.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            USA.gov
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+    </div>
+</footer>
+
+    
+
+
+        
+        
+    
+  <script  type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/pinger/pinger.js"> </script>
+
+
+    
+        
+
+<button class="back-to-top" data-ga-category="pagination" data-ga-action="back_to_top">
+    <label>Back to Top</label>
+    <svg class="usa-icon order-0" aria-hidden="true" focusable="false" role="img">
+        <use xlink:href="/static/img/sprite.svg#arrow_upward"></use>
+    </svg>
+</button>
+    
+
+
+        
+    
+    
+    
+        
+    <script type="application/javascript">
+    window.ncbi = window.ncbi || {};
+    window.ncbi.pmc = window.ncbi.pmc || {};
+    window.ncbi.pmc.options = {
+        logLevel: 'INFO',
+        
+        staticEndpoint: '/static/',
+        
+        citeCookieName: 'pmc-cf',
+    };
+</script>
+    <script type="module" crossorigin="" src="/static/assets/base-133c6271.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/jquery/jquery-3.6.0.min.js">&#xA0;</script>
+    <script type="text/javascript">
+        jQuery.getScript("https://cdn.ncbi.nlm.nih.gov/core/alerts/alerts.js", function () {
+            galert(['div.nav_and_browser', 'div.header', '#universal_header', '.usa-banner', 'body > *:nth-child(1)'])
+        });
+    </script>
+
+
+    <script type="text/javascript">var exports = {};</script>
+     <script src="/static/CACHE/js/output.13b077bc3ffd.js"></script>
+
+    <script type="module" crossorigin="" src="/static/assets/article-44d04358.js"></script>
+    
+    
+
+    </body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "paper_metadata": {
+    "pmid": "34984555",
+    "title": "MAIN TEXT",
+    "extraction_summary": "No BRCA2 variants were reported in the paper."
+  },
+  "variants": [],
+  "tables_processed": [
+    {
+      "table_name": "Table 3",
+      "table_caption": "Other genetic mutations detected by next-generation sequencing expected to be involved in this pathology.",
+      "variants_extracted": 0
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper primarily focused on PTEN mutations and did not provide detailed information on BRCA2 variants."
+    ],
+    "notes": "The paper mentioned a BRCA2 variant in Table 3, but no specific details or penetrance data were provided for BRCA2."
+  }
+}

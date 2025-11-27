@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "33133314",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val122Ile, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.Val122Ile",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "76-year-old Japanese male",
+        "phenotype": "cardiac amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 76,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "clinical signs and symptoms of heart failure, echocardiography showed a thick left ventricular wall",
+          "evidence_sentence": "The patient displayed clinical signs and symptoms of heart failure and echocardiography showed a thick left ventricular wall."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val122Ile mutation is associated with hereditary amyloidosis, causing severe cardiomyopathy.",
+        "assays": [
+          "cardiac magnetic resonance imaging",
+          "99mTc-pyrophosphate scintigraphy"
+        ]
+      },
+      "segregation_data": "No mutations were noted in the patient's son.",
+      "population_frequency": "3.9% in the African-American population; rare in Asian populations.",
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the second reported case of the ATTR Val122Ile variant in Japan.",
+      "key_quotes": [
+        "ATTR Val122Ile is one of the mutations in TTR that are associated with hereditary amyloidosis, causing severe cardiomyopathy.",
+        "This is the second reported case of the ATTR Val122Ile variant in Japan."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant Val122Ile was successfully extracted."
+  }
+}

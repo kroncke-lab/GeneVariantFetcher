@@ -1,0 +1,74 @@
+{
+  "paper_metadata": {
+    "pmid": "39698424",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a heterozygous mutation in the KCNH2 gene associated with Uhl's disease in siblings."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1747A>G",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 2,
+        "demographics": "1-month-old siblings",
+        "phenotype": "Uhl's disease"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 1,
+          "age_at_onset": 1,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Died suddenly of Uhl's disease.",
+          "evidence_sentence": "The case of a 1-month-old child who died suddenly of Uhl\u2019s disease."
+        },
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": 1,
+          "age_at_onset": 1,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Died at about 1 month of age from suspected Uhl\u2019s disease.",
+          "evidence_sentence": "A sister had died at the age of 1 month from suspected Uhl\u2019s disease."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is described in association with autosomal dominant long QT syndrome type 2.",
+        "assays": [
+          "NGS sequencing",
+          "Sanger sequencing"
+        ]
+      },
+      "segregation_data": "The mutation was found in both siblings, suggesting potential segregation with disease.",
+      "population_frequency": null,
+      "evidence_level": "Low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The mutation is generally related to long QT syndrome but could also play a role in Uhl's disease.",
+      "key_quotes": [
+        "This variant, present in dbSNP (rs199473427), is described in association with autosomal dominant long QT syndrome type 2.",
+        "It is possible that the observed mutation played a role in the onset of the disease process."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the KCNH2 variant was extracted from the main text."
+  }
+}

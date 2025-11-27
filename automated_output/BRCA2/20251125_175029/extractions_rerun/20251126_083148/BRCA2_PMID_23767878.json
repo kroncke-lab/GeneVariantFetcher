@@ -1,0 +1,168 @@
+{
+  "paper_metadata": {
+    "pmid": "23767878",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information including penetrance data from the study."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.658delGT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 5,
+        "demographics": "1 HBOC patient and 4 sporadic cancer patients",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 1,
+        "unaffected_count": 4,
+        "uncertain_count": null,
+        "penetrance_percentage": 20.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "HBOC patient",
+          "evidence_sentence": "One HBOC patient and four patients from sporadic cancer group were identified as carriers of the c.658delGT mutation."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "sporadic cancer patient",
+          "evidence_sentence": "One HBOC patient and four patients from sporadic cancer group were identified as carriers of the c.658delGT mutation."
+        },
+        {
+          "individual_id": "P3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "sporadic cancer patient",
+          "evidence_sentence": "One HBOC patient and four patients from sporadic cancer group were identified as carriers of the c.658delGT mutation."
+        },
+        {
+          "individual_id": "P4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "sporadic cancer patient",
+          "evidence_sentence": "One HBOC patient and four patients from sporadic cancer group were identified as carriers of the c.658delGT mutation."
+        },
+        {
+          "individual_id": "P5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "sporadic cancer patient",
+          "evidence_sentence": "One HBOC patient and four patients from sporadic cancer group were identified as carriers of the c.658delGT mutation."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.658delGT mutation is associated with breast cancer risk.",
+        "assays": [
+          "Real Time PCR/HRM"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "0.9% in Polish ovarian-stomach and ovarian cancer families; 1.9% in Portuguese breast cancer families; 0.09% in American breast cancer patients.",
+      "evidence_level": "Moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The c.646delG mutation was found in three non-HBOC patients.",
+      "key_quotes": [
+        "The frequency of the mutation c.658delGT in BRCA2 is 2% in the HBOC patient group and 0.51% in the consecutive breast cancer patient group."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.646delG",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 3,
+        "demographics": "non-HBOC patients",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": null,
+        "unaffected_count": 3,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P6",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "non-HBOC patient",
+          "evidence_sentence": "In three non-HBOC patients the c.646delG mutation was found."
+        },
+        {
+          "individual_id": "P7",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "non-HBOC patient",
+          "evidence_sentence": "In three non-HBOC patients the c.646delG mutation was found."
+        },
+        {
+          "individual_id": "P8",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "non-HBOC patient",
+          "evidence_sentence": "In three non-HBOC patients the c.646delG mutation was found."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.646delG mutation is associated with breast cancer risk.",
+        "assays": [
+          "Not specified"
+        ]
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "Not specified",
+      "evidence_level": "Low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The c.646delG mutation has not been reported as yet.",
+      "key_quotes": [
+        "The c.646delG mutation was found in three non-HBOC patients."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

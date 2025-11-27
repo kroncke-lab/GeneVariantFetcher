@@ -1,0 +1,136 @@
+{
+  "paper_metadata": {
+    "pmid": "34287479",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from a study on postmenopausal breast cancer patients."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.2T>G",
+      "protein_notation": "p.Met1Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 49,
+        "demographics": "postmenopausal women aged \u226555 years",
+        "phenotype": "invasive ductal breast carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 5,
+        "unaffected_count": 0,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "invasive ductal breast carcinoma",
+          "evidence_sentence": "Among 49 postmenopausal unrelated women, 5 (10.2%) were identified to harbor mutations of clinical significance, 3 in BRCA1 and 2 in BRCA2."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "invasive ductal breast carcinoma",
+          "evidence_sentence": "Among 49 postmenopausal unrelated women, 5 (10.2%) were identified to harbor mutations of clinical significance, 3 in BRCA1 and 2 in BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutations were identified through next-generation sequencing and Sanger sequencing.",
+        "assays": [
+          "Next-generation sequencing",
+          "Sanger sequencing"
+        ]
+      },
+      "segregation_data": "All five BRCA mutations were identified among 47 patients who reported a positive family history of breast, ovarian, prostate, and pancreatic cancers.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The presence of CHEK2 c.1100delC mutation was investigated in 47 out of the 49 patients; however, no mutations were detected.",
+      "key_quotes": [
+        "Among 49 postmenopausal unrelated women, 5 (10.2%) were identified to harbor mutations of clinical significance, 3 in BRCA1 and 2 in BRCA2."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.5645C>A",
+      "protein_notation": "p.Gln1882*",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 49,
+        "demographics": "postmenopausal women aged \u226555 years",
+        "phenotype": "invasive ductal breast carcinoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 5,
+        "affected_count": 5,
+        "unaffected_count": 0,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "invasive ductal breast carcinoma",
+          "evidence_sentence": "Among 49 postmenopausal unrelated women, 5 (10.2%) were identified to harbor mutations of clinical significance, 3 in BRCA1 and 2 in BRCA2."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "invasive ductal breast carcinoma",
+          "evidence_sentence": "Among 49 postmenopausal unrelated women, 5 (10.2%) were identified to harbor mutations of clinical significance, 3 in BRCA1 and 2 in BRCA2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The mutations were identified through next-generation sequencing and Sanger sequencing.",
+        "assays": [
+          "Next-generation sequencing",
+          "Sanger sequencing"
+        ]
+      },
+      "segregation_data": "All five BRCA mutations were identified among 47 patients who reported a positive family history of breast, ovarian, prostate, and pancreatic cancers.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The presence of CHEK2 c.1100delC mutation was investigated in 47 out of the 49 patients; however, no mutations were detected.",
+      "key_quotes": [
+        "Among 49 postmenopausal unrelated women, 5 (10.2%) were identified to harbor mutations of clinical significance, 3 in BRCA1 and 2 in BRCA2."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "BRCA1 and BRCA2 mutations identified in postmenopausal breast cancer patients.",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

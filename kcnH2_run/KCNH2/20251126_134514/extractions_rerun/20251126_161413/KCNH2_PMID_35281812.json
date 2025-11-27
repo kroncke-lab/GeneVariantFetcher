@@ -1,0 +1,64 @@
+{
+  "paper_metadata": {
+    "pmid": "35281812",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a de novo missense variant in the KCNH2 gene associated with a fetal case of biventricular noncompaction cardiomyopathy and long QT syndrome."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.1847A > G",
+      "protein_notation": "p.Tyr616Cys",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "26-year-old female primigravida",
+        "phenotype": "biventricular noncompaction cardiomyopathy with pulmonary stenosis and bradycardia"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Fetus_1",
+          "age_at_evaluation": 25,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "unknown",
+          "affected_status": "affected",
+          "phenotype_details": "biventricular noncompaction cardiomyopathy, pulmonary stenosis, second-degree 2:1 atrioventricular block, and sinus bradycardia",
+          "evidence_sentence": "We report the first prenatal case of KCNH2 mutation presenting with LVNC combined with bradycardia and second-degree 2:1 atrioventricular block."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Tyr616Cys variant generated minimal current, suggesting altered channel permeability as a mechanism that leads to prolonged QT interval.",
+        "assays": [
+          "in silico algorithms",
+          "functional studies"
+        ]
+      },
+      "segregation_data": "The variant was de novo in the fetus; no segregation data provided for parents.",
+      "population_frequency": "Not found in gnomAD or in-house control database.",
+      "evidence_level": "Strong evidence based on ACMG guidelines and previous reports.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant has been reported previously in several individuals with LQTS.",
+      "key_quotes": [
+        "This KCNH2 missense mutation was classified as pathogenic according to the American College of Medical Genetics and Genomics and the Association for Molecular Pathology variant interpretation guidelines.",
+        "The variant has been reported previously in several individuals with LQTS."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text."
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "paper_metadata": {
+    "pmid": "34981296",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper primarily discusses BRCA1 variants and their classification discrepancies across Norwegian hospitals. Only one BRCA2 variant is mentioned in the context of a misclassification incident."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.68\u20137T>A",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "uncertain",
+      "patients": {
+        "count": null,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "low",
+      "source_location": "Introduction, paragraph 5",
+      "additional_notes": "The variant was misclassified as pathogenic by one hospital, leading to unnecessary surgeries.",
+      "key_quotes": [
+        "Recently, an example of misinterpretation was unveiled in a hospital in Norway, where twenty-one female carriers had their breast and/or ovaries removed by prophylactic surgery without sufficient evidence that their variant, BRCA2 (NM_000059.3) c.68\u20137 T\u2009>\u2009A, was pathogenic."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper primarily focuses on BRCA1, with limited information on BRCA2 variants."
+    ],
+    "notes": "The extraction was straightforward as only one BRCA2 variant was mentioned in the context of a misclassification incident."
+  }
+}

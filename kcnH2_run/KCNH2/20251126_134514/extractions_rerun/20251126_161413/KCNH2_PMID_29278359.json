@@ -1,0 +1,49 @@
+{
+  "paper_metadata": {
+    "pmid": "29278359",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on genetic variants in the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.K897T",
+      "protein_notation": "p.K897T",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "LQT1 clinical severity modifier"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The p.K897T_KCNH2 polymorphism can act as a genetic modifier of LQTS clinical severity in the presence of other rare variants in the same gene.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": "MAF = 0.1871",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 3",
+      "additional_notes": "The variant is mentioned as a common polymorphism that may influence disease severity.",
+      "key_quotes": [
+        "In 2005, Crotti et al. demonstrated that the p.K897T_KCNH2 (MAF = 0.1871) polymorphism can act as a genetic modifier of LQTS clinical severity in the presence of other rare variants in the same gene."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in KCNH2 was found in the text."
+  }
+}

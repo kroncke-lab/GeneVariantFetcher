@@ -1,0 +1,65 @@
+{
+  "paper_metadata": {
+    "pmid": "30333406",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val30Met, including penetrance data and individual case details."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "84-year-old female",
+        "phenotype": "Familial amyloid polyneuropathy (FAP-ATTR Val30Met) with muscle weakness and sensory disturbances"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 84,
+          "age_at_onset": 50,
+          "age_at_diagnosis": 84,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Muscle weakness, sensory disturbances, orthostatic hypotension, vitreous opacity",
+          "evidence_sentence": "We finally diagnosed the patient with FAP-ATTR (Val30Met)"
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Met mutation leads to the production of mutant TTR, which is associated with amyloid deposits.",
+        "assays": [
+          "MALDI-TOF-MS",
+          "Congo Red staining",
+          "anti-TTR antibody staining"
+        ]
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Strong evidence based on clinical presentation and mutation identification",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The case represents a late-onset variant of FAP-ATTR.",
+      "key_quotes": [
+        "A TTR gene analysis isolated the Val30Met mutation.",
+        "Matrix-assisted laser desorption ionization time-of-flight mass spectrometry (MALDI-TOF-MS) revealed the peak of mutant TTR."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted data focused solely on the TTR gene variant as specified."
+  }
+}

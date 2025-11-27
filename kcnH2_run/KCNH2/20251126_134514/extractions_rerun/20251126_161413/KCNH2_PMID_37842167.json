@@ -1,0 +1,157 @@
+{
+  "paper_metadata": {
+    "pmid": "37842167",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for KCNH2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2105C>T",
+      "protein_notation": "p.Gln702Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "long-QT syndrome type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "long-QT syndrome type 2",
+          "evidence_sentence": "We focused our studies on three patient LQTS2 nonsense variants in the hERG C terminus: Q702TAG, R863TGA, and W1001TGA."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Q702X mutation leads to a truncated protein that does not exhibit potassium currents.",
+        "assays": [
+          "patch-clamp electrophysiology",
+          "flow cytometry"
+        ]
+      },
+      "segregation_data": "Segregates with disease in the patient.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is one of the most common mutations associated with LQTS2.",
+      "key_quotes": [
+        "Q702X mutants are expressed with mCherry fluorescence and are not fully translated, thus missing YFP fluorescence."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2588C>A",
+      "protein_notation": "p.Arg863Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "long-QT syndrome type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "long-QT syndrome type 2",
+          "evidence_sentence": "R863X mutant also shows an abolishment of YFP expression with a slight decrease in hERG trafficking."
+        }
+      ],
+      "functional_data": {
+        "summary": "The R863X mutation leads to a significant reduction in potassium currents.",
+        "assays": [
+          "patch-clamp electrophysiology",
+          "flow cytometry"
+        ]
+      },
+      "segregation_data": "Segregates with disease in the patient.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant is associated with a dominant-negative effect on hERG function.",
+      "key_quotes": [
+        "Co-expressing ArgUGA tRNA rescues YFP expression and hERG trafficking."
+      ]
+    },
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.3001G>A",
+      "protein_notation": "p.Trp1001Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "long-QT syndrome type 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "long-QT syndrome type 2",
+          "evidence_sentence": "W1001X mutant shows loss of YFP with similar hERG trafficking."
+        }
+      ],
+      "functional_data": {
+        "summary": "The W1001X mutation leads to a loss of function in hERG channels.",
+        "assays": [
+          "patch-clamp electrophysiology",
+          "flow cytometry"
+        ]
+      },
+      "segregation_data": "Segregates with disease in the patient.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant shows less efficient rescue compared to other tRNAs.",
+      "key_quotes": [
+        "Co-expressing TrpUGA with hERG[W1001X] yielded a relatively poor recovery of YFP fluorescence."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were from the KCNH2 gene."
+  }
+}

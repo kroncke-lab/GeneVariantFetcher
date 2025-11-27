@@ -1,0 +1,148 @@
+{
+  "paper_metadata": {
+    "pmid": "36056432",
+    "title": "Clinical phenotypes and genetic features of hereditary transthyretin amyloidosis patients in China",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data for affected and unaffected carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Gly83Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 25,
+        "demographics": "Chinese, 87 males (69.0%) in total cohort",
+        "phenotype": "neurological type, with peripheral or autonomic neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 25,
+        "affected_count": 0,
+        "unaffected_count": 25,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "No deaths were reported in patients with Gly83Arg mutation.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Patients with Gly83Arg mutation showed better survival.",
+      "key_quotes": [
+        "No deaths were reported in patients with Gly83Arg and Ala117Ser mutations."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 20,
+        "demographics": "Chinese, 87 males (69.0%) in total cohort",
+        "phenotype": "neurological type, with peripheral or autonomic neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 20,
+        "affected_count": 6,
+        "unaffected_count": 14,
+        "uncertain_count": 0,
+        "penetrance_percentage": 30.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Patients with Val30Met mutation had a significant presence of neurological symptoms.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Patients with Val30Met mutation had a worse prognosis.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Val30Ala",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10,
+        "demographics": "Chinese, 87 males (69.0%) in total cohort",
+        "phenotype": "neurological type, with peripheral or autonomic neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 10,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "All patients with Val30Ala mutation had neurological symptoms.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Patients with Val30Ala mutation had a significant presence of neurological symptoms.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.Leu55Arg",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 9,
+        "demographics": "Chinese, 87 males (69.0%) in total cohort",
+        "phenotype": "neurological type, with peripheral or autonomic neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 0,
+        "unaffected_count": 9,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Patients with Leu55Arg mutation had a better prognosis.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Patients with Leu55Arg mutation had the longest duration from onset to death.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Characteristics of 126 hATTR cases",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

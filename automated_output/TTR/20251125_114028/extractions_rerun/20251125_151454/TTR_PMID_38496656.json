@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "38496656",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the structural analysis of ATTRwt amyloid fibrils in the TTR gene using cryo-EM, focusing on structural homogeneity and its potential link to clinical presentation. No specific genetic variants in the TTR gene are mentioned."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not mention specific genetic variants in the TTR gene."
+    ],
+    "notes": "The paper focused on structural analysis of amyloid fibrils in ATTRwt amyloidosis without detailing specific genetic variants."
+  }
+}

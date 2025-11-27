@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "26228265",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant found in the study."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2003C>T",
+      "protein_notation": "p.Ser668Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "14 years old, male, adopted",
+        "phenotype": "Collapsed at school, unsuccessful resuscitation"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Collapsed at his desk in school, treated for ADHD",
+          "evidence_sentence": "A pathogenic sequence variant in the KCNH2 gene (Ser668Leu) was identified in a 14-year-old boy who died sitting at his desk in school."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is predicted to be pathogenic.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "predicted pathogenic based on bioinformatic tools",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "No genetic investigation of parents or siblings was possible due to adoption.",
+      "key_quotes": [
+        "A pathogenic sequence variant in the KCNH2 gene (Ser668Leu) was identified in a 14-year-old boy who died sitting at his desk in school."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one variant in the KCNH2 gene was reported in the paper."
+  }
+}

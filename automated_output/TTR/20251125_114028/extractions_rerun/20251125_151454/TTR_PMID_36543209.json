@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "36543209",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant A97D (p.A117D) including clinical significance, patient details, penetrance data, and functional data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.350 C>A",
+      "protein_notation": "p.A117D",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "68-year-old Japanese male",
+        "phenotype": "sporadic ATTRv amyloidosis with asymmetric neuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 68,
+          "age_at_onset": 65,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "asymmetric neuropathy, unintentional weight loss, mild autonomic failure, mild cardiomyopathy",
+          "evidence_sentence": "We herein report a 68-year-old Japanese man with sporadic variant transthyretin (ATTRv) amyloidosis harboring the novel variant A97D (p.A117D) in TTR."
+        }
+      ],
+      "functional_data": {
+        "summary": "In silico analyses predicted that TTR A97D (p.A117D) altered the structure and function of the TTR protein.",
+        "assays": [
+          "bioinformatics tools (PolyPhen-2, SIFT, Mutation Tester, CADD, M-CAP)"
+        ]
+      },
+      "segregation_data": "Not applicable as this is a sporadic case.",
+      "population_frequency": "Not reported in disease-causing variant databases or healthy individual databases.",
+      "evidence_level": "Strong evidence based on bioinformatics predictions and conservation across species.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The A97D (p.A117D) mutation has not been described in disease-causing variant databases.",
+      "key_quotes": [
+        "The A117 amino acid is highly conserved across various species.",
+        "We therefore investigated the gastric and duodenal mucosal biopsy specimens using laser microdissection and liquid-chromatography tandem mass spectrometry (LC-MS/MS) to analyze the composition rate of variant TTR (D117) and wild-type TTR (A117) in the amyloid fibrils."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data regarding the TTR variant A97D (p.A117D) was successfully extracted."
+  }
+}

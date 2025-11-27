@@ -1,0 +1,70 @@
+{
+  "paper_metadata": {
+    "pmid": "35534218",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1310_1313del",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Korean men with prostate cancer",
+        "phenotype": "male breast cancer and prostate cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "diagnosed with male breast cancer during hormonal treatment of prostate cancer",
+          "evidence_sentence": "One patient with regional prostate cancer who had the BRCA2 variant (c.1310_1313del) was diagnosed with male breast cancer during hormonal treatment of prostate cancer."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "localized prostate cancer with intermediate-risk",
+          "evidence_sentence": "Although genetic testing is not recommended for patients with intermediate-risk prostate cancer, the percentage of positive variants in patients with the intermediate-risk disease (5.9%, 2/34) was comparable to that in patients with high, very high, regional, or metastatic disease (6.6%, 5/76)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The BRCA2 variant is associated with an increased risk of prostate cancer and male breast cancer.",
+        "assays": []
+      },
+      "segregation_data": "Not explicitly mentioned.",
+      "population_frequency": null,
+      "evidence_level": "Moderate evidence based on ACMG/AMP guidelines.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This is the only BRCA2 variant reported in the study.",
+      "key_quotes": [
+        "One patient with regional prostate cancer who had the BRCA2 variant (c.1310_1313del) was diagnosed with male breast cancer during hormonal treatment of prostate cancer."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for BRCA2 was extracted successfully."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "33413079",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the interaction of the gating-modifier toxin APETx1 with the hERG channel, encoded by the KCNH2 gene. It focuses on the functional characterization of this interaction but does not provide specific genetic variant information for KCNH2."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper did not report any specific genetic variants in the KCNH2 gene."
+    ],
+    "notes": "The paper primarily focuses on the functional interaction between APETx1 and hERG, without detailing specific genetic variants in KCNH2."
+  }
+}

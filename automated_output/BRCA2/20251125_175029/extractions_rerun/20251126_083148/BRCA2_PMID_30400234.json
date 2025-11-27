@@ -1,0 +1,126 @@
+{
+  "paper_metadata": {
+    "pmid": "30400234",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data and individual records of carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3922G>T",
+      "protein_notation": "p.Glu1308Ter",
+      "genomic_position": "rs80358638",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 8,
+        "demographics": "Unspecified, but all are from Puerto Rico",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 9,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "0-50 years",
+            "penetrance_percentage": 100.0,
+            "carriers_in_range": 9,
+            "affected_in_range": 9
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "UPR1024",
+          "age_at_evaluation": 52,
+          "age_at_onset": null,
+          "age_at_diagnosis": 52,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer, no family history of cancer reported.",
+          "evidence_sentence": "The patient UPR1024, BRCA2 c.1794_1798del5 carrier, was diagnosed at 52 years of age and did not report any family history of cancer."
+        },
+        {
+          "individual_id": "PRI739",
+          "age_at_evaluation": 53,
+          "age_at_onset": null,
+          "age_at_diagnosis": 53,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer, with family history of prostate cancer.",
+          "evidence_sentence": "PRI739, a BRCA2 E1308X carrier, was diagnosed at 53 and two first-degree relatives with a history of prostate cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The E1308X mutation is a recurrent founder mutation in the Puerto Rican population.",
+        "assays": []
+      },
+      "segregation_data": "The E1308X mutation was found in eight unrelated individuals, indicating a founder effect.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "High, due to recurrence in multiple unrelated cases.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The E1308X mutation accounts for 89% of the identified BRCA2 carriers in this study.",
+      "key_quotes": [
+        "Interestingly, BRCA2 mutations represented 100% of the mutation carriers.",
+        "The totality of the patients identified carried a pathogenic variant in BRCA2, with the BRCA2 E1308X truncating variant accounting for 89% of carriers."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1794_1798delATTTT",
+      "protein_notation": "p.Lys599fs",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Unspecified, but from Puerto Rico",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 9,
+        "affected_count": 9,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "UPR1024",
+          "age_at_evaluation": 52,
+          "age_at_onset": null,
+          "age_at_diagnosis": 52,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer, no family history of cancer reported.",
+          "evidence_sentence": "The patient UPR1024, BRCA2 c.1794_1798del5 carrier, was diagnosed at 52 years of age and did not report any family history of cancer."
+        }
+      ],
+      "functional_data": {
+        "summary": "The c.1794_1798delATTTT variant results in a frameshift and premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "The variant was found in one individual in this study.",
+      "population_frequency": "Not specified in the paper.",
+      "evidence_level": "High, due to its pathogenic classification.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was not recurrent in the study population.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Pathogenic variants identified in BRCA2",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data was extracted from the main text and tables."
+  }
+}

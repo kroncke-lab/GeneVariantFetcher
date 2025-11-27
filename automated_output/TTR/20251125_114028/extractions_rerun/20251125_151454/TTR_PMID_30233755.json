@@ -1,0 +1,71 @@
+{
+  "paper_metadata": {
+    "pmid": "30233755",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the TTR gene variant Val30Gly, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.149G>A",
+      "protein_notation": "p.Val50Gly",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "61-year-old male, European origin",
+        "phenotype": "familial oculoleptomeningeal amyloidosis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 61,
+          "age_at_onset": 49,
+          "age_at_diagnosis": 49,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "leptomeningeal amyloidosis with cognitive decline, seizures, and gait disturbance",
+          "evidence_sentence": "He has a strong familial history of familial oculoleptomeningeal amyloidosis on his father's side, with a known transthyretin val30gly missense mutation."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "leptomeningeal amyloidosis",
+          "evidence_sentence": "Genetic testing confirmed this mutation in both himself and his father."
+        }
+      ],
+      "functional_data": {
+        "summary": "The Val30Gly mutation in TTR is known to cause familial amyloidosis, leading to protein misfolding and amyloid deposition.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in the family.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Case presentation, paragraph 4",
+      "additional_notes": "The variant is associated with a high penetrance in this family.",
+      "key_quotes": [
+        "He has a strong familial history of familial oculoleptomeningeal amyloidosis on his father's side, with a known transthyretin val30gly missense mutation.",
+        "Genetic testing confirmed this mutation in both himself and his father."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extracted all relevant data regarding the TTR variant from the main text."
+  }
+}

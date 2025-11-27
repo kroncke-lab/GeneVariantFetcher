@@ -1,0 +1,111 @@
+{
+  "paper_metadata": {
+    "pmid": "34567246",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9382C>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 22,
+        "demographics": "patients with Madeira ancestry",
+        "phenotype": "Hereditary Breast/Ovarian Cancer (HBOC)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 22,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Identified as a pathogenic variant in patients.",
+        "assays": []
+      },
+      "segregation_data": "Segregated with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Most frequently diagnosed BRCA2 variant in Madeira patients.",
+      "key_quotes": [
+        "BRCA2 PV were more frequent in Madeira patients (68.4%: c.9382C>T (26.3%))"
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.658_659del",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 22,
+        "demographics": "patients with Madeira ancestry",
+        "phenotype": "Hereditary Breast/Ovarian Cancer (HBOC)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 22,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Identified as a pathogenic variant in patients.",
+        "assays": []
+      },
+      "segregation_data": "Segregated with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "One of the BRCA2 variants identified exclusively in Madeira patients.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.298A>T",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 22,
+        "demographics": "patients with Madeira ancestry",
+        "phenotype": "Hereditary Breast/Ovarian Cancer (HBOC)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 22,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Identified as a pathogenic variant in patients.",
+        "assays": []
+      },
+      "segregation_data": "Segregated with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong evidence for pathogenicity",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "One of the BRCA2 variants identified exclusively in Madeira patients.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All variants extracted were from the BRCA2 gene as specified."
+  }
+}

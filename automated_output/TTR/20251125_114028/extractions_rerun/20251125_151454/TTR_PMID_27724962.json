@@ -1,0 +1,61 @@
+{
+  "paper_metadata": {
+    "pmid": "27724962",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on a genetic variant in the TTR gene associated with cardiac amyloidosis."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.233T>A",
+      "protein_notation": "p.Lau78His",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "71 years old, male",
+        "phenotype": "systemic hereditary ATTR with cardiac involvement"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 71,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "systemic hereditary ATTR with cardiac involvement",
+          "evidence_sentence": "Genetic testing revealed a heterozygous status for mutation c.233T>A (p.Lau78His) in the TTR gene."
+        }
+      ],
+      "functional_data": {
+        "summary": "The patient was started on Tafamidis, and no disease progression has been observed since the beginning of treatment.",
+        "assays": []
+      },
+      "segregation_data": null,
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Case report section",
+      "additional_notes": "The patient had a positive biopsy for amyloidosis and was treated successfully.",
+      "key_quotes": [
+        "Genetic testing revealed a heterozygous status for mutation c.233T>A (p.Lau78His) in the TTR gene.",
+        "The patient was started on Tafamidis. Since the beginning of treatment (17 months so far), no disease progression has been observed."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the variant was clearly mentioned in the case report."
+  }
+}

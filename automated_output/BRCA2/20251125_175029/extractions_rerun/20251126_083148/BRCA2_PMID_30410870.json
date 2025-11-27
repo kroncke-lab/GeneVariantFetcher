@@ -1,0 +1,62 @@
+{
+  "paper_metadata": {
+    "pmid": "30410870",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses two missense variants in BRCA2, specifically BRCA2:c.91T>G (p.Trp31Gly), detailing their potential pathogenicity and functional effects."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.91T>G",
+      "protein_notation": "p.Trp31Gly",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "female, Italian",
+        "phenotype": "breast cancer at a young age"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "Both these probands developed breast cancer at a young age and reported a close relative affected with early onset breast cancer (\u2264 40 years)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The BRCA2:p.Trp31Gly variant was shown to prevent the BRCA2-PALB2 binding in functional assays.",
+        "assays": [
+          "GFP-reassembly in vitro assay"
+        ]
+      },
+      "segregation_data": "Not able to ascertain other family members to be genotyped in order to attempt co-segregation analyses.",
+      "population_frequency": "Not found in public databases such as GnomAD and 1000 genomes.",
+      "evidence_level": "Initial evidence in favor of pathogenicity based on functional studies.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant was annotated in ClinVar as a VUS.",
+      "key_quotes": [
+        "The BRCA2:p.Trp31Gly and the PALB2:p.Pro1088Ser variants were originally identified in two different Italian breast cancer probands born in Milano and Bergamo, respectively."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Extraction was straightforward as the relevant data was clearly presented in the text."
+  }
+}

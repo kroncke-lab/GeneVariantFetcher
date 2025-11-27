@@ -1,0 +1,122 @@
+{
+  "paper_metadata": {
+    "pmid": "34957240",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.V142I",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "3\u20134% of the Afro-Caribbean and African American population",
+        "phenotype": "hATTR-CM with low penetrance"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2000000,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "uncertain",
+          "phenotype_details": "may present with hypertensive or uraemic cardiomyopathy",
+          "evidence_sentence": "The disease penetrance associated with this mutation is thought to be low; however, the prevalence of hypertension and diabetes is high in this ethnic group such that misdiagnosis of hATTR-CM as hypertensive or uraemic cardiomyopathy is likely in a proportion."
+        }
+      ],
+      "functional_data": {
+        "summary": "The p.V142I variant is associated with low penetrance and may lead to misdiagnosis.",
+        "assays": []
+      },
+      "segregation_data": "Does not segregate clearly due to low penetrance.",
+      "population_frequency": "3\u20134% in Afro-Caribbean and African American populations",
+      "evidence_level": "moderate",
+      "source_location": "Introduction, paragraph 4",
+      "additional_notes": "The penetrance of the p.V142I variant is complicated by the presence of other health conditions in the population.",
+      "key_quotes": [
+        "The disease penetrance associated with this mutation is thought to be low; however, the prevalence of hypertension and diabetes is high in this ethnic group such that misdiagnosis of hATTR-CM as hypertensive or uraemic cardiomyopathy is likely in a proportion."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.V50M",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "typically presents at a younger age with a combination of neuropathy and cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The p.V50M variant is associated with early-onset symptoms.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Introduction, paragraph 4",
+      "additional_notes": "The variant is associated with a significant disease burden.",
+      "key_quotes": []
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": "p.T80A",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": null,
+        "demographics": null,
+        "phenotype": "typically presents at a younger age with a combination of neuropathy and cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The p.T80A variant is associated with a significant disease burden.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Introduction, paragraph 4",
+      "additional_notes": "The variant is associated with a significant disease burden.",
+      "key_quotes": []
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted successfully."
+  }
+}

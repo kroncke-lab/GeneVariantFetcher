@@ -1,0 +1,110 @@
+{
+  "paper_metadata": {
+    "pmid": "34242281",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted BRCA2 variant information and penetrance data from a study on Moroccan prostate cancer patients."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.7234_7235insG",
+      "protein_notation": "p.(Stop2413)",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "Median age 67.43 years (range 54\u201380), all male",
+        "phenotype": "High grade prostatic adenocarcinoma (grade IV), larger tumor size (\u2265 T2) and distant metastasis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 67,
+          "age_at_onset": null,
+          "age_at_diagnosis": 67,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "High grade prostatic adenocarcinoma",
+          "evidence_sentence": "The second mutation was a small insertion detected in exon 14 of BRCA2 gene (c.7234_7235insG (7463insG)) inducing a shift in the reading frame."
+        }
+      ],
+      "functional_data": {
+        "summary": "Induces a shift in the reading frame leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "All three pathogenic mutations were found in patients with a strong family history of PrCa.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on family history and mutation type.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation has been previously found in several breast/ovarian cancer families.",
+      "key_quotes": [
+        "The second mutation was a small insertion detected in exon 14 of BRCA2 gene (c.7234_7235insG (7463insG)) inducing a shift in the reading frame."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "BRCA2\u0394E12",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "Median age 67.43 years (range 54\u201380), all male",
+        "phenotype": "High grade prostatic adenocarcinoma (grade IV), larger tumor size (\u2265 T2) and distant metastasis"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 67,
+          "age_at_onset": null,
+          "age_at_diagnosis": 67,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "High grade prostatic adenocarcinoma",
+          "evidence_sentence": "Finally, a whole-exon 12 deletion (BRCA2\u0394E12) have been identified in BRCA2 gene."
+        }
+      ],
+      "functional_data": {
+        "summary": "Deletion of entire exon 12, potentially affecting protein function.",
+        "assays": []
+      },
+      "segregation_data": "Detected in two unrelated PrCa patients.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on family history and mutation type.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This mutation is an in-frame deletion that should result in the production of a 32 amino acid shortened protein.",
+      "key_quotes": [
+        "Finally, a whole-exon 12 deletion (BRCA2\u0394E12) have been identified in BRCA2 gene."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Pathogenic mutations detected in BRCA1 and BRCA2 genes.",
+      "variants_extracted": 2
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}

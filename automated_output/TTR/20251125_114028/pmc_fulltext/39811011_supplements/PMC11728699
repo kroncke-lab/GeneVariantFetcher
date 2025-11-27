@@ -1,0 +1,3157 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+    <head >
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        
+        
+
+        
+        
+  <link rel="stylesheet" href="/static/assets/style-8258669d.css" />
+<script type="module" crossorigin="" src="/static/assets/base_style-f4a99799.js"></script>
+
+  <link rel="stylesheet" href="/static/assets/style-ef962842.css" />
+<link rel="stylesheet" href="/static/assets/style-3ade8b5c.css" />
+<script type="module" crossorigin="" src="/static/assets/article_style-d757a0dd.js"></script>
+
+  
+  
+    <style>
+  
+  
+  @media screen and (min-width: 64em) {
+    div.pmc-wm {
+      background: repeat-y;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='350' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cfilter x='-.02' y='0' width='1.05' height='1' id='c'%3E%3CfeFlood flood-color='%23FFF'/%3E%3CfeComposite in='SourceGraphic'/%3E%3C/filter%3E%3Ctext id='b' font-family='Helvetica' font-size='11pt' style='opacity:1;fill:%23005ea2;stroke:none;text-anchor:middle' x='175' y='14'%3E%3C/text%3E%3Cpath id='a' style='fill:%23005ea2' d='M0 8h350v3H0z'/%3E%3C/defs%3E%3Cuse xlink:href='%23a' transform='rotate(90 10 10)'/%3E%3Cuse xlink:href='%23b' transform='rotate(90 10 10)' filter='url(%23c)'/%3E%3C/svg%3E");
+      padding-left: 3rem;
+    }
+  }
+</style>
+
+  
+
+
+
+        
+            <link rel="apple-touch-icon"
+                  sizes="180x180"
+                  href="/static/img/favicons/apple-touch-icon.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="48x48"
+                  href="/static/img/favicons/favicon-48x48.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="32x32"
+                  href="/static/img/favicons/favicon-32x32.png" />
+            <link rel="icon"
+                  type="image/png"
+                  sizes="16x16"
+                  href="/static/img/favicons/favicon-16x16.png" />
+            <link rel="manifest" href="/static/img/favicons/site.webmanifest" />
+            <link rel="mask-icon"
+                  href="/static/img/favicons/safari-pinned-tab.svg"
+                  color="#0071bc" />
+            <meta name="msapplication-config"
+                  content="/static/img/favicons/browserconfig.xml" />
+            <meta name="theme-color" content="#ffffff" />
+        
+
+        <title>
+            Deep learning model to diagnose cardiac amyloidosis from haematoxylin/eosin-stained myocardial tissue - PMC
+        </title>
+
+        
+        
+  
+  <!-- Logging params: Pinger defaults -->
+<meta name="ncbi_app" content="cloudpmc-viewer" />
+<meta name="ncbi_db" content="pmc" />
+<meta name="ncbi_phid" content="ABCB81DB9260B0433D81DB001A169844.m_1" />
+<meta name="ncbi_pinger_stat_url" content="https://pmc.ncbi.nlm.nih.gov/stat" />
+<!-- Logging params: Pinger custom -->
+<meta name="ncbi_pdid" content="article" />
+  
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+
+    
+        <link rel="preconnect" href="https://cdn.ncbi.nlm.nih.gov" />
+    
+
+    <!-- Include USWDS Init Script -->
+    <script src="/static/assets/uswds-init.js"></script>
+
+
+    <meta name="ncbi_domain" content="ehjimp">
+<meta name="ncbi_type" content="fulltext">
+<meta name="ncbi_pcid" content="journal">
+<meta name="ncbi_feature" content="associated_data">
+<link rel="canonical" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11728699/">
+<meta name="robots" content="INDEX,NOFOLLOW,NOARCHIVE">
+<meta name="citation_journal_title" content="European Heart Journal. Imaging Methods and Practice">
+<meta name="citation_title" content="Deep learning model to diagnose cardiac amyloidosis from haematoxylin/eosin-stained myocardial tissue">
+<meta name="citation_author" content="Takeshi Tohyama">
+<meta name="citation_author_institution" content="Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan">
+<meta name="citation_author_institution" content="Center for Advanced Medical Open Innovation, Kyushu University, Fukuoka, Japan">
+<meta name="citation_author_institution" content="Institute for Medical Engineering &amp; Science, Massachusetts Institute of Technology, Cambridge, MA, USA">
+<meta name="citation_author" content="Takeshi Iwasaki">
+<meta name="citation_author_institution" content="Department of Anatomic Pathology, Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan">
+<meta name="citation_author" content="Masataka Ikeda">
+<meta name="citation_author_institution" content="Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan">
+<meta name="citation_author" content="Masato Katsuki">
+<meta name="citation_author_institution" content="Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan">
+<meta name="citation_author_institution" content="Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University Beppu Hospital, Beppu, Japan">
+<meta name="citation_author" content="Tatsuya Watanabe">
+<meta name="citation_author_institution" content="Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan">
+<meta name="citation_author" content="Kayo Misumi">
+<meta name="citation_author_institution" content="Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan">
+<meta name="citation_author" content="Keisuke Shinohara">
+<meta name="citation_author_institution" content="Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan">
+<meta name="citation_author" content="Takeo Fujino">
+<meta name="citation_author_institution" content="Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan">
+<meta name="citation_author" content="Toru Hashimoto">
+<meta name="citation_author_institution" content="Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan">
+<meta name="citation_author" content="Shouji Matsushima">
+<meta name="citation_author_institution" content="Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan">
+<meta name="citation_author" content="Tomomi Ide">
+<meta name="citation_author_institution" content="Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan">
+<meta name="citation_author" content="Junji Kishimoto">
+<meta name="citation_author_institution" content="Centre for Clinical and Translational Research of Kyushu University Hospital, Fukuoka, Japan">
+<meta name="citation_author" content="Koji Todaka">
+<meta name="citation_author_institution" content="Center for Advanced Medical Open Innovation, Kyushu University, Fukuoka, Japan">
+<meta name="citation_author_institution" content="Centre for Clinical and Translational Research of Kyushu University Hospital, Fukuoka, Japan">
+<meta name="citation_author" content="Yoshinao Oda">
+<meta name="citation_author_institution" content="Department of Anatomic Pathology, Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan">
+<meta name="citation_author" content="Kohtaro Abe">
+<meta name="citation_author_institution" content="Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan">
+<meta name="citation_publication_date" content="2024 Dec 30">
+<meta name="citation_volume" content="3">
+<meta name="citation_issue" content="1">
+<meta name="citation_firstpage" content="qyae141">
+<meta name="citation_doi" content="10.1093/ehjimp/qyae141">
+<meta name="citation_pmid" content="39811011">
+<meta name="citation_abstract_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC11728699/">
+<meta name="citation_fulltext_html_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC11728699/">
+<meta name="citation_pdf_url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC11728699/pdf/qyae141.pdf">
+<meta name="description" content="Amyloid deposition in myocardial tissue is a definitive feature for diagnosing cardiac amyloidosis, though less invasive imaging modalities such as bone tracer cardiac scintigraphy and cardiac magnetic resonance imaging have been established as ...">
+<meta name="og:title" content="Deep learning model to diagnose cardiac amyloidosis from haematoxylin/eosin-stained myocardial tissue">
+<meta name="og:type" content="article">
+<meta name="og:site_name" content="PubMed Central (PMC)">
+<meta name="og:description" content="Amyloid deposition in myocardial tissue is a definitive feature for diagnosing cardiac amyloidosis, though less invasive imaging modalities such as bone tracer cardiac scintigraphy and cardiac magnetic resonance imaging have been established as ...">
+<meta name="og:url" content="https://pmc.ncbi.nlm.nih.gov/articles/PMC11728699/">
+<meta name="og:image" content="https://cdn.ncbi.nlm.nih.gov/pmc/cms/images/pmc-card-share.jpg?_=0">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ncbi">
+    
+    
+
+    </head>
+    <body >
+        
+    <a class="usa-skipnav " href="#main-content">
+      Skip to main content
+    </a>
+
+
+        
+            
+
+<section class="usa-banner " aria-label="Official website of the United States government" >
+    <div class="usa-accordion">
+        <header class="usa-banner__header">
+            <div class="usa-banner__inner">
+                <div class="grid-col-auto">
+                    <img aria-hidden="true"
+                         class="usa-banner__header-flag"
+                         src="/static/img/us_flag.svg"
+                         alt="" />
+                </div>
+
+                <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+                    <p class="usa-banner__header-text">
+                        An official website of the United States government
+                    </p>
+                    <span class="usa-banner__header-action">Here's how you know</span>
+                </div>
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-accordion__button usa-banner__button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    aria-expanded="false"
+    aria-controls="gov-banner-default"
+    
+    data-testid="storybook-django-banner"
+    
+    >
+    
+        
+
+        
+                    <span class="usa-banner__button-text">Here's how you know</span>
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </div>
+        </header>
+
+        <div class="usa-banner__content usa-accordion__content"
+             id="gov-banner-default"
+             hidden>
+            <div class="grid-row grid-gap-lg">
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-dot-gov.svg"
+                         alt=""
+                         aria-hidden="true" />
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Official websites use .gov</strong>
+                            <br />
+                            A
+                            <strong>.gov</strong> website belongs to an official
+                            government organization in the United States.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="usa-banner__guidance tablet:grid-col-6">
+                    <img class="usa-banner__icon usa-media-block__img"
+                         src="/static/img/icon-https.svg"
+                         alt=""
+                         aria-hidden="true" />
+
+                    <div class="usa-media-block__body">
+                        <p>
+                            <strong>Secure .gov websites use HTTPS</strong>
+                            <br />
+                            A <strong>lock</strong> (
+                            <span class="icon-lock">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="52"
+                                     height="64"
+                                     viewBox="0 0 52 64"
+                                     class="usa-banner__lock-image"
+                                     role="graphics-symbol"
+                                     aria-labelledby="banner-lock-description"
+                                     focusable="false">
+                                    <title id="banner-lock-title">Lock</title>
+                                    <desc id="banner-lock-description">
+                                    Locked padlock icon
+                                    </desc>
+                                    <path fill="#000000"
+                                          fill-rule="evenodd"
+                                          d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z" />
+                                </svg>
+</span>) or <strong>https://</strong> means you've safely
+                                connected to the .gov website. Share sensitive
+                                information only on official, secure websites.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        
+
+        
+    
+    
+    
+
+<div class="usa-overlay">
+</div>
+
+
+
+<header class="usa-header usa-header--extended usa-header--wide" data-header data-testid="header"    >
+    <div class="ncbi-header">
+        <div class="ncbi-header__container">
+            <a class="ncbi-header__logo-container"
+               href="https://www.ncbi.nlm.nih.gov/">
+                <img alt="NCBI home page"
+                     class="ncbi-header__logo-image"
+                     src="/static/img/ncbi-logos/nih-nlm-ncbi--white.svg"
+                     width="410"
+                     height="100" />
+            </a>
+
+            <!-- Mobile menu hamburger button -->
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-menu-btn ncbi-header__hamburger-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Show menu"
+    data-testid="navMenuButton"
+    
+    >
+    
+        
+
+        
+                <svg aria-hidden="true"
+                     class="ncbi-hamburger-icon"
+                     fill="none"
+                     focusable="false"
+                     height="21"
+                     viewBox="0 0 31 21"
+                     width="31"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M0.125 20.75H30.875V17.3333H0.125V20.75ZM0.125 12.2083H30.875V8.79167H0.125V12.2083ZM0.125 0.25V3.66667H30.875V0.25H0.125Z"
+                          fill="#F1F1F1"
+                          fill-rule="evenodd" />
+                </svg>
+            
+
+        
+    
+        
+            </button>
+        
+
+
+
+            
+                <!-- Desktop buttons-->
+                <div class="ncbi-header__desktop-buttons">
+                    
+                        <!-- Desktop search button -->
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button
+           "
+    aria-expanded="false"
+    aria-controls="search-field-desktop-navigation"
+    aria-label="Show search overlay"
+    data-testid="toggleSearchPanelButton"
+    data-toggle-search-panel-button
+    >
+    
+        
+
+        
+                            
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#search" />
+    </svg>
+
+
+                            Search
+                        
+
+        
+    
+        
+            </button>
+        
+
+
+                    
+
+                    <!-- Desktop login dropdown -->
+                    
+                        <div class="ncbi-header__login-dropdown">
+                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--unstyled ncbi-header__desktop-button ncbi-header__login-dropdown-button
+           "
+    aria-expanded="false"
+    aria-controls="login-dropdown-menu"
+    aria-label="Show login menu"
+    data-testid="toggleLoginMenuDropdown"
+    data-desktop-login-button
+    >
+    
+        
+
+        
+                                
+
+
+
+    <svg class="usa-icon " role="graphics-symbol" aria-hidden="true" >
+        
+        <use xlink:href="/static/img/sprite.svg#person" />
+    </svg>
+
+
+
+                                <span data-login-dropdown-text>Log in</span>
+
+                                <!-- Dropdown icon pointing up -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-less ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-up-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_less" />
+    </svg>
+
+
+
+                                <!-- Dropdown icon pointing down -->
+                                
+
+
+
+    <svg class="usa-icon ncbi-header__login-dropdown-icon ncbi-header__login-dropdown-icon--expand-more ncbi-header__login-dropdown-icon--hidden" role="graphics-symbol" aria-hidden="true" data-login-dropdown-down-arrow>
+        
+        <use xlink:href="/static/img/sprite.svg#expand_more" />
+    </svg>
+
+
+                            
+
+        
+    
+        
+            </button>
+        
+
+
+
+                            <!-- Login dropdown menu -->
+                            <ul class="usa-nav__submenu ncbi-header__login-dropdown-menu"
+                                id="login-dropdown-menu"
+                                data-desktop-login-menu-dropdown
+                                hidden>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                    <li class="usa-nav__submenu-item">
+                                        <!-- Uses custom style overrides to render external and document links. -->
+                                        
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                                    </li>
+                                
+                                <li class="usa-nav__submenu-item">
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           usa-button--outline ncbi-header__login-dropdown-logout-button
+           "
+    
+    
+    
+    data-testid="desktopLogoutButton"
+    data-desktop-logout-button
+    >
+    
+        
+
+        Log out
+
+        
+    
+        
+            </button>
+        
+
+
+                                </li>
+                            </ul>
+                        </div>
+                    
+                </div>
+            
+        </div>
+    </div>
+
+    <!-- Search panel -->
+    
+        <div class="ncbi-search-panel ncbi--show-only-at-desktop"
+             data-header-search-panel
+             hidden>
+            <div class="ncbi-search-panel__container">
+                <form action="https://www.ncbi.nlm.nih.gov/search/all/"
+                      
+                      autocomplete="off"
+                      class="usa-search usa-search--big ncbi-search-panel__form"
+                      data-testid="desktop-navigation-search-form"
+                      method="GET"
+                      role="search">
+                    <label class="usa-sr-only" for="search-field-desktop-navigation">
+                        Search…
+                    </label>
+                    <input class="usa-input"
+                           id="search-field-desktop-navigation"
+                           name="term"
+                           
+                               placeholder="Search NCBI"
+                           
+                           type="search"
+                           value="" />
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                        <span class="usa-search__submit-text">
+                            Search NCBI
+                        </span>
+                    
+
+        
+    
+        
+            </button>
+        
+
+
+                </form>
+
+                
+            </div>
+        </div>
+    
+
+    <nav aria-label="Primary navigation" class="usa-nav">
+        <p class="usa-sr-only" id="primary-navigation-sr-only-title">
+            Primary site navigation
+        </p>
+
+        <!-- Mobile menu close button -->
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-nav__close ncbi-nav__close-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    aria-label="Close navigation menu"
+    data-testid="navCloseButton"
+    
+    >
+    
+        
+
+        
+            <img src="/static/img/usa-icons/close.svg" alt="Close" />
+        
+
+        
+    
+        
+            </button>
+        
+
+
+
+        
+            <!-- Mobile search component -->
+            <form class="usa-search usa-search--small ncbi--hide-at-desktop margin-top-6"
+                  action="https://www.ncbi.nlm.nih.gov/search/all/"
+                  
+                  autocomplete="off"
+                  data-testid="mobile-navigation-search-form"
+                  method="GET"
+                  role="search">
+                <label class="usa-sr-only" for="search-field-mobile-navigation">
+                    Search
+                </label>
+
+                <input class="usa-input"
+                       id="search-field-mobile-navigation"
+                       type="search"
+                       
+                           placeholder="Search NCBI"
+                       
+                       name="term" />
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="submit"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           
+           "
+    
+    
+    
+    
+    
+    >
+    
+        
+
+        
+                    <!-- This SVG should be kept inline and not replaced with a link to the icon as otherwise it will render in the wrong color -->
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0E2LjQ3MSA2LjQ3MSAwIDAgMCAxNiA5LjUgNi41IDYuNSAwIDEgMCA5LjUgMTZjMS42MSAwIDMuMDktLjU5IDQuMjMtMS41N2wuMjcuMjh2Ljc5bDUgNC45OUwyMC40OSAxOWwtNC45OS01em0tNiAwQzcuMDEgMTQgNSAxMS45OSA1IDkuNVM3LjAxIDUgOS41IDUgMTQgNy4wMSAxNCA5LjUgMTEuOTkgMTQgOS41IDE0eiIvPjwvc3ZnPg=="
+                         class="usa-search__submit-icon"
+                         alt="Search" />
+                
+
+        
+    
+        
+            </button>
+        
+
+
+            </form>
+
+            
+        
+
+        <!-- Primary navigation menu items -->
+        <!-- This usa-nav__inner wrapper is required to correctly style the navigation items on Desktop -->
+        
+
+        
+            <div class="ncbi-nav__mobile-login-menu ncbi--hide-at-desktop"
+                 data-mobile-login-menu
+                 hidden>
+                <p class="ncbi-nav__mobile-login-menu-status">
+                    Logged in as:
+                    <strong class="ncbi-nav__mobile-login-menu-email"
+                            data-mobile-login-email-text></strong>
+                </p>
+                <ul class="usa-nav__primary usa-accordion">
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/" class="usa-link  "  >
+        
+
+        
+            Dashboard
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/collections/bibliography/" class="usa-link  "  >
+        
+
+        
+            Publications
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="usa-nav__primary-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" class="usa-link  "  >
+        
+
+        
+            Account settings
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        <button
+            type="button"
+        
+    
+    class="usa-button
+           
+
+           
+               
+               
+               
+               
+            
+
+           
+           
+           ncbi-nav__mobile-login-button ncbi--hide-at-desktop
+           "
+    
+    
+    
+    data-testid="mobileLoginButton"
+    data-mobile-login-button
+    >
+    
+        
+
+        Log in
+
+        
+    
+        
+            </button>
+        
+
+
+    </nav>
+</header>
+
+    
+    
+        
+
+<section class="pmc-header pmc-header--basic" aria-label="PMC Header with search box">
+    <div class="pmc-nav-container">
+        <div class="pmc-header__bar">
+           <div class="pmc-header__logo">
+               <a href="/" title="Home" aria-label="PMC Home"></a>
+           </div>
+            <button
+                    type="button"
+                    class="usa-button usa-button--unstyled pmc-header__search__button"
+                    aria-label="Open search"
+                    data-ga-category="search"
+                    data-ga-action="PMC"
+                    data-ga-label="pmc_search_panel_mobile"
+            >
+                <svg class="usa-icon width-4 height-4 pmc-icon__open" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#search"></use>
+                </svg>
+                <svg class="usa-icon width-4 height-4 pmc-icon__close" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="pmc-header__search">
+            
+
+
+<form class="usa-search usa-search--extra usa-search--article-right-column  pmc-header__search__form" id="pmc-search-form" autocomplete="off" role="search">
+<label class="usa-sr-only" for="pmc-search">Search PMC Full-Text Archive</label>
+<span class="autoComplete_wrapper flex-1">
+<input class="usa-input width-full maxw-none" required="required" placeholder="Search PMC Full-Text Archive" id="pmc-search"  type="search" name="term" data-autocomplete-url="https://pmc.ncbi.nlm.nih.gov/autocomp/search/autocomp/"/>
+</span>
+<button
+class="usa-button"
+type="submit"
+formaction="https://pmc.ncbi.nlm.nih.gov/search/"
+data-ga-category="search"
+data-ga-action="PMC"
+data-ga-label="PMC_search_button"
+>
+<span class="usa-search__submit-text">Search in PMC</span>
+<img
+src="/static/img/usa-icons-bg/search--white.svg"
+class="usa-search__submit-icon"
+alt="Search"
+/>
+</button>
+</form>
+            <div class="display-flex flex-column tablet:flex-row tablet:flex-justify flex-justify-center flex-align-center width-full desktop:maxw-44">
+                <ul class="pmc-header__search__menu">
+                    <li>
+                        
+                            <a class="usa-link" href="/journals/" data-ga-action="featured_link" data-ga-label="journal list">
+                                Journal List
+                            </a>
+                        
+                    </li>
+                    <li>
+                        
+                            <a class="usa-link" href="/about/userguide/" data-ga-action="featured_link"
+                            data-ga-label="user guide">
+                                User Guide
+                            </a>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+    
+
+
+        
+        
+
+       
+  <div class="usa-section padding-top-0 desktop:padding-top-6 pmc-article-section" data-article-db="pmc" data-article-id="11728699">
+
+    
+
+   
+
+
+
+<div class="grid-container pmc-actions-bar" aria-label="Actions bar" role="complementary">
+    <div class="grid-row">
+        <div class="grid-col-fill display-flex">
+             <div class="display-flex">
+                <ul class="usa-list usa-list--unstyled usa-list--horizontal">
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <button
+                                type="button"
+                                class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                                aria-label="Open resources"
+                                data-extra-class="is-visible-resources"
+                                data-ga-category="resources_accordion"
+                                data-ga-action="click"
+                                data-ga-label="mobile_icon"
+                        >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#more_vert"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex mob">
+                        <a
+                                href="https://doi.org/10.1093/ehjimp/qyae141"
+                                class="usa-link display-flex usa-tooltip"
+                                role="button"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                title="View on publisher site"
+                                data-position="bottom"
+                                aria-label="View on publisher site"
+                                data-ga-category="actions"
+                                data-ga-action="click"
+                                data-ga-label="publisher_link_mobile"
+                        >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#launch"></use>
+                                </svg>
+                        </a>
+                    </li>
+                    
+                    
+                        <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                             <a
+                                     href="pdf/qyae141.pdf"
+                                     class="usa-link display-flex usa-tooltip"
+                                     role="button"
+                                     title="Download PDF"
+                                     data-position="bottom"
+                                     aria-label="Download PDF"
+                                     data-ga-category="actions"
+                                     data-ga-action="click"
+                                     data-ga-label="pdf_download_mobile"
+                             >
+                                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                                </svg>
+                            </a>
+                        </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button
+                            class="usa-button usa-button--unstyled  usa-tooltip collections-dialog-trigger collections-button display-flex collections-button-empty"
+                            title="Add to Collections"
+                            data-position="bottom"
+                            aria-label="Save article in MyNCBI collections."
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="collections_button_mobile"
+                            data-collections-open-dialog-enabled="false"
+                            data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC11728699%2F%23open-collections-dialog"
+                            data-in-collections="false"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="margin-right-2 mobile-lg:margin-right-4 display-flex">
+                        <button role="button" class="usa-button usa-button--unstyled usa-tooltip citation-dialog-trigger display-flex"
+                            aria-label="Open dialog with citation text in different styles"
+                            title="Cite"
+                            data-position="bottom"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="cite_mobile"
+                            data-all-citations-url="/resources/citations/11728699/"
+                            data-citation-style="nlm"
+                            data-download-format-link="/resources/citations/11728699/export/"
+                        >
+                            <svg class="usa-icon width-4 height-4 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                            </svg>
+                        </button>
+                    </li>
+                    
+                    <li class="pmc-permalink display-flex" >
+                         <button
+                                 type="button"
+                                 title="Permalink"
+                                 data-position="bottom"
+                                 class="usa-button usa-button--unstyled display-flex usa-tooltip"
+                                 aria-label="Show article permalink"
+                                 aria-expanded="false"
+                                 aria-haspopup="true"
+                                 data-ga-category="actions"
+                                 data-ga-action="open"
+                                 data-ga-label="permalink_mobile"
+                         >
+                            <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                                <use xlink:href="/static/img/sprite.svg#share"></use>
+                            </svg>
+                        </button>
+                        
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC11728699/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+                    </li>
+                </ul>
+            </div>
+            <button
+                    type="button"
+                    class="usa-button pmc-sidenav__container__open usa-button--unstyled width-auto display-flex"
+                    aria-label="Open article navigation"
+                    data-extra-class="is-visible-in-page"
+                    data-ga-category="actions"
+                    data-ga-action="open"
+                    data-ga-label="article_nav_mobile"
+            >
+                <svg class="usa-icon width-4 height-4" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#list"></use>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+    <div class="grid-container desktop:padding-left-6">
+      <div id="article-container" class="grid-row grid-gap">
+        <div class="grid-col-12 desktop:grid-col-8 order-2 pmc-layout__content">
+            <div class="grid-container padding-left-0 padding-right-0">
+                <div class="grid-row desktop:margin-left-neg-6">
+                    <div class="grid-col-12">
+                        <div class="pmc-layout__disclaimer" role="complementary" aria-label="Disclaimer note">
+    As a library, NLM provides access to scientific literature. Inclusion in an NLM database does not imply endorsement of, or agreement with,
+    the contents by NLM or the National Institutes of Health.<br/>
+    Learn more:
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="Disclaimer" data-ga-label="New disclaimer box" href="/about/disclaimer/">PMC Disclaimer</a>
+    |
+    <a class="usa-link" data-ga-category="Link click" data-ga-action="PMC Copyright Notice" data-ga-label="New disclaimer box" href="/about/copyright/">
+        PMC Copyright Notice
+    </a>
+</div>
+                    </div>
+                </div>
+                <div class="grid-row pmc-wm desktop:margin-left-neg-6">
+                    <!-- Main content -->
+                    <main
+                      id="main-content"
+                      class="usa-layout-docs__main usa-layout-docs grid-col-12 pmc-layout pmc-prose padding-0"
+                    >
+
+                      
+                        <section class="pmc-journal-banner text-center line-height-none" aria-label="Journal banner"><img src="https://cdn.ncbi.nlm.nih.gov/pmc/banners/logo-ehjimp.png" alt="European Heart Journal. Imaging Methods and Practice logo" usemap="#pmc-banner-imagemap" width="500" height="75"><map name="pmc-banner-imagemap"><area alt="Link to European Heart Journal. Imaging Methods and Practice" title="Link to European Heart Journal. Imaging Methods and Practice" shape="default" href="https://doi.org/10.1093/ehjimp/qyae141" target="_blank" rel="noopener noreferrer"></map></section><article lang="en"><section aria-label="Article citation and metadata"><section class="pmc-layout__citation font-secondary font-xs"><div>
+<div class="display-inline-block"><button type="button" class="cursor-pointer text-no-underline bg-transparent border-0 padding-0 text-left margin-0 text-normal text-primary" aria-controls="journal_context_menu">Eur Heart J Imaging Methods Pract</button></div>. 2024 Dec 30;3(1):qyae141. doi: <a href="https://doi.org/10.1093/ehjimp/qyae141" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">10.1093/ehjimp/qyae141</a>
+</div>
+<nav id="journal_context_menu" hidden="hidden"><ul class="menu-list font-family-ui" role="menu">
+<li role="presentation"><a href="https://pmc.ncbi.nlm.nih.gov/search/?term=%22Eur%20Heart%20J%20Imaging%20Methods%20Pract%22%5Bjour%5D" class="usa-link" role="menuitem">Search in PMC</a></li>
+<li role="presentation"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Eur%20Heart%20J%20Imaging%20Methods%20Pract%22%5Bjour%5D" lang="en" class="usa-link" role="menuitem">Search in PubMed</a></li>
+<li role="presentation"><a href="https://www.ncbi.nlm.nih.gov/nlmcatalog?term=%22Eur%20Heart%20J%20Imaging%20Methods%20Pract%22%5BTitle%20Abbreviation%5D" class="usa-link" role="menuitem">View in NLM Catalog</a></li>
+<li role="presentation"><a href="?term=%22Eur%20Heart%20J%20Imaging%20Methods%20Pract%22%5Bjour%5D" class="usa-link" role="menuitem" data-add-to-search="true">Add to search</a></li>
+</ul></nav></section><section class="front-matter"><div class="ameta p font-secondary font-xs">
+<hgroup><h1>Deep learning model to diagnose cardiac amyloidosis from haematoxylin/eosin-stained myocardial tissue</h1></hgroup><div class="cg p">
+<a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Tohyama%20T%22%5BAuthor%5D" class="usa-link" aria-describedby="id1"><span class="name western">Takeshi Tohyama</span></a><div hidden="hidden" id="id1">
+<h3><span class="name western">Takeshi Tohyama</span></h3>
+<div class="p">
+<sup>1</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div class="p">
+<sup>2</sup>
+Center for Advanced Medical Open Innovation, Kyushu University, Fukuoka, Japan</div>
+<div class="p">
+<sup>3</sup>
+Institute for Medical Engineering &amp; Science, Massachusetts Institute of Technology, Cambridge, MA, USA</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Tohyama%20T%22%5BAuthor%5D" class="usa-link"><span class="name western">Takeshi Tohyama</span></a>
+</div>
+</div>
+<sup>1,</sup><sup>2,</sup><sup>3</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Iwasaki%20T%22%5BAuthor%5D" class="usa-link" aria-describedby="id2"><span class="name western">Takeshi Iwasaki</span></a><div hidden="hidden" id="id2">
+<h3><span class="name western">Takeshi Iwasaki</span></h3>
+<div class="p">
+<sup>4</sup>
+Department of Anatomic Pathology, Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Iwasaki%20T%22%5BAuthor%5D" class="usa-link"><span class="name western">Takeshi Iwasaki</span></a>
+</div>
+</div>
+<sup>4</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Ikeda%20M%22%5BAuthor%5D" class="usa-link" aria-describedby="id3"><span class="name western">Masataka Ikeda</span></a><div hidden="hidden" id="id3">
+<h3><span class="name western">Masataka Ikeda</span></h3>
+<div class="p">
+<sup>5</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Ikeda%20M%22%5BAuthor%5D" class="usa-link"><span class="name western">Masataka Ikeda</span></a>
+</div>
+</div>
+<sup>5,</sup><sup>✉</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Katsuki%20M%22%5BAuthor%5D" class="usa-link" aria-describedby="id4"><span class="name western">Masato Katsuki</span></a><div hidden="hidden" id="id4">
+<h3><span class="name western">Masato Katsuki</span></h3>
+<div class="p">
+<sup>6</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div class="p">
+<sup>7</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University Beppu Hospital, Beppu, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Katsuki%20M%22%5BAuthor%5D" class="usa-link"><span class="name western">Masato Katsuki</span></a>
+</div>
+</div>
+<sup>6,</sup><sup>7</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Watanabe%20T%22%5BAuthor%5D" class="usa-link" aria-describedby="id5"><span class="name western">Tatsuya Watanabe</span></a><div hidden="hidden" id="id5">
+<h3><span class="name western">Tatsuya Watanabe</span></h3>
+<div class="p">
+<sup>8</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Watanabe%20T%22%5BAuthor%5D" class="usa-link"><span class="name western">Tatsuya Watanabe</span></a>
+</div>
+</div>
+<sup>8</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Misumi%20K%22%5BAuthor%5D" class="usa-link" aria-describedby="id6"><span class="name western">Kayo Misumi</span></a><div hidden="hidden" id="id6">
+<h3><span class="name western">Kayo Misumi</span></h3>
+<div class="p">
+<sup>9</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Misumi%20K%22%5BAuthor%5D" class="usa-link"><span class="name western">Kayo Misumi</span></a>
+</div>
+</div>
+<sup>9</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Shinohara%20K%22%5BAuthor%5D" class="usa-link" aria-describedby="id7"><span class="name western">Keisuke Shinohara</span></a><div hidden="hidden" id="id7">
+<h3><span class="name western">Keisuke Shinohara</span></h3>
+<div class="p">
+<sup>10</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Shinohara%20K%22%5BAuthor%5D" class="usa-link"><span class="name western">Keisuke Shinohara</span></a>
+</div>
+</div>
+<sup>10</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Fujino%20T%22%5BAuthor%5D" class="usa-link" aria-describedby="id8"><span class="name western">Takeo Fujino</span></a><div hidden="hidden" id="id8">
+<h3><span class="name western">Takeo Fujino</span></h3>
+<div class="p">
+<sup>11</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Fujino%20T%22%5BAuthor%5D" class="usa-link"><span class="name western">Takeo Fujino</span></a>
+</div>
+</div>
+<sup>11</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Hashimoto%20T%22%5BAuthor%5D" class="usa-link" aria-describedby="id9"><span class="name western">Toru Hashimoto</span></a><div hidden="hidden" id="id9">
+<h3><span class="name western">Toru Hashimoto</span></h3>
+<div class="p">
+<sup>12</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Hashimoto%20T%22%5BAuthor%5D" class="usa-link"><span class="name western">Toru Hashimoto</span></a>
+</div>
+</div>
+<sup>12</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Matsushima%20S%22%5BAuthor%5D" class="usa-link" aria-describedby="id10"><span class="name western">Shouji Matsushima</span></a><div hidden="hidden" id="id10">
+<h3><span class="name western">Shouji Matsushima</span></h3>
+<div class="p">
+<sup>13</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Matsushima%20S%22%5BAuthor%5D" class="usa-link"><span class="name western">Shouji Matsushima</span></a>
+</div>
+</div>
+<sup>13</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Ide%20T%22%5BAuthor%5D" class="usa-link" aria-describedby="id11"><span class="name western">Tomomi Ide</span></a><div hidden="hidden" id="id11">
+<h3><span class="name western">Tomomi Ide</span></h3>
+<div class="p">
+<sup>14</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Ide%20T%22%5BAuthor%5D" class="usa-link"><span class="name western">Tomomi Ide</span></a>
+</div>
+</div>
+<sup>14,</sup><sup>2</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Kishimoto%20J%22%5BAuthor%5D" class="usa-link" aria-describedby="id12"><span class="name western">Junji Kishimoto</span></a><div hidden="hidden" id="id12">
+<h3><span class="name western">Junji Kishimoto</span></h3>
+<div class="p">
+<sup>15</sup>
+Centre for Clinical and Translational Research of Kyushu University Hospital, Fukuoka, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Kishimoto%20J%22%5BAuthor%5D" class="usa-link"><span class="name western">Junji Kishimoto</span></a>
+</div>
+</div>
+<sup>15</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Todaka%20K%22%5BAuthor%5D" class="usa-link" aria-describedby="id13"><span class="name western">Koji Todaka</span></a><div hidden="hidden" id="id13">
+<h3><span class="name western">Koji Todaka</span></h3>
+<div class="p">
+<sup>16</sup>
+Center for Advanced Medical Open Innovation, Kyushu University, Fukuoka, Japan</div>
+<div class="p">
+<sup>17</sup>
+Centre for Clinical and Translational Research of Kyushu University Hospital, Fukuoka, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Todaka%20K%22%5BAuthor%5D" class="usa-link"><span class="name western">Koji Todaka</span></a>
+</div>
+</div>
+<sup>16,</sup><sup>17</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Oda%20Y%22%5BAuthor%5D" class="usa-link" aria-describedby="id14"><span class="name western">Yoshinao Oda</span></a><div hidden="hidden" id="id14">
+<h3><span class="name western">Yoshinao Oda</span></h3>
+<div class="p">
+<sup>18</sup>
+Department of Anatomic Pathology, Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Oda%20Y%22%5BAuthor%5D" class="usa-link"><span class="name western">Yoshinao Oda</span></a>
+</div>
+</div>
+<sup>18</sup>, <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Abe%20K%22%5BAuthor%5D" class="usa-link" aria-describedby="id15"><span class="name western">Kohtaro Abe</span></a><div hidden="hidden" id="id15">
+<h3><span class="name western">Kohtaro Abe</span></h3>
+<div class="p">
+<sup>19</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div class="p">Find articles by <a href="https://pubmed.ncbi.nlm.nih.gov/?term=%22Abe%20K%22%5BAuthor%5D" class="usa-link"><span class="name western">Kohtaro Abe</span></a>
+</div>
+</div>
+<sup>19,</sup><sup>3</sup>
+</div>
+<ul class="d-buttons inline-list">
+<li><button class="d-button" aria-controls="aip_a" aria-expanded="false">Author information</button></li>
+<li><button class="d-button" aria-controls="anp_a" aria-expanded="false">Article notes</button></li>
+<li><button class="d-button" aria-controls="clp_a" aria-expanded="false">Copyright and License information</button></li>
+</ul>
+<div class="d-panels font-secondary-light">
+<div id="aip_a" class="d-panel p" style="display: none">
+<div class="p" id="aff1">
+<sup>1</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div id="aff2">
+<sup>2</sup>
+Center for Advanced Medical Open Innovation, Kyushu University, Fukuoka, Japan</div>
+<div id="aff3">
+<sup>3</sup>
+Institute for Medical Engineering &amp; Science, Massachusetts Institute of Technology, Cambridge, MA, USA</div>
+<div id="aff4">
+<sup>4</sup>
+Department of Anatomic Pathology, Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan</div>
+<div id="aff5">
+<sup>5</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div id="aff6">
+<sup>6</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div id="aff7">
+<sup>7</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University Beppu Hospital, Beppu, Japan</div>
+<div id="aff8">
+<sup>8</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div id="aff9">
+<sup>9</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div id="aff10">
+<sup>10</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div id="aff11">
+<sup>11</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div id="aff12">
+<sup>12</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div id="aff13">
+<sup>13</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div id="aff14">
+<sup>14</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div id="aff15">
+<sup>15</sup>
+Centre for Clinical and Translational Research of Kyushu University Hospital, Fukuoka, Japan</div>
+<div id="aff16">
+<sup>16</sup>
+Center for Advanced Medical Open Innovation, Kyushu University, Fukuoka, Japan</div>
+<div id="aff17">
+<sup>17</sup>
+Centre for Clinical and Translational Research of Kyushu University Hospital, Fukuoka, Japan</div>
+<div id="aff18">
+<sup>18</sup>
+Department of Anatomic Pathology, Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan</div>
+<div id="aff19">
+<sup>19</sup>
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan</div>
+<div class="author-notes p">
+<div class="fn" id="qyae141-cor1">
+<sup>✉</sup><p class="display-inline">Corresponding author. E-mail: <span>ikeda-m@cardiol.med.kyushu-u.ac.jp</span></p>
+</div>
+<div class="fn" id="FM1">
+<sup>2</sup><p class="display-inline">T.I. passed away on 17 May 2024.</p>
+</div>
+<div class="fn" id="FM2">
+<sup>3</sup><p class="display-inline">
+<strong>Conflict of interest:</strong> T.T. was affiliated with the collaborative research division of Mochida Pharmaceuticals (FY2024; 1 April 2023 to 31 March 2024). T.W. is an employee of Nihon Kohden Inc., Tokyo, Japan. T.I. received a research grant from Pfizer Japan Co., Ltd., and K.A. has taken over this grant following the demise of T.I. T.I., M.I., M.K., T.W., K.M., T.F., K.S., T.H., S.M., J.K., K.T., and Y.O. have no conflicts of interest to declare.</p>
+</div>
+</div>
+</div>
+<div id="anp_a" class="d-panel p" style="display: none"><div class="notes p"><section id="historyarticle-meta1" class="history"><p>Received 2024 Oct 21; Accepted 2024 Dec 13; Collection date 2025 Jan.</p></section></div></div>
+<div id="clp_a" class="d-panel p" style="display: none">
+<div>© The Author(s) 2024. Published by Oxford University Press on behalf of the European Society of Cardiology.</div>
+<p>This is an Open Access article distributed under the terms of the Creative Commons Attribution-NonCommercial License (<a href="https://creativecommons.org/licenses/by-nc/4.0/" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">https://creativecommons.org/licenses/by-nc/4.0/</a>), which permits non-commercial re-use, distribution, and reproduction in any medium, provided the original work is properly cited. For commercial re-use, please contact reprints@oup.com for reprints and translation rights for reprints. All other permissions can be obtained through our RightsLink service via the Permissions link on the article page on our site—for further information please contact journals.permissions@oup.com.</p>
+<div class="p"><a href="/about/copyright/" class="usa-link">PMC Copyright notice</a></div>
+</div>
+</div>
+<div>PMCID: PMC11728699  PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/39811011/" class="usa-link">39811011</a>
+</div>
+</div></section></section><section aria-label="Article content"><section class="body main-article-body"><section class="abstract" id="abstract1"><h2>Abstract</h2>
+<section id="s1"><h3 class="pmc_sec_title">Aims</h3>
+<p>Amyloid deposition in myocardial tissue is a definitive feature for diagnosing cardiac amyloidosis, though less invasive imaging modalities such as bone tracer cardiac scintigraphy and cardiac magnetic resonance imaging have been established as first steps for its diagnosis. This study aimed to develop a deep learning model to support the diagnosis of cardiac amyloidosis from haematoxylin/eosin (HE)-stained myocardial tissue.</p></section><section id="s2"><h3 class="pmc_sec_title">Methods and results</h3>
+<p>This single-centre retrospective observational study enrolled 166 patients who underwent myocardial biopsies between 2008 and 2022, including 76 patients diagnosed with cardiac amyloidosis and 90 with other diagnoses. A deep learning model was developed to output the probabilities of cardiac amyloidosis for all the small patches cutout from each myocardial specimen. The developed model highlighted the area in the stained images as highly suspicious, corresponding to where Dylon staining marked amyloid deposition, and discriminated the patches in the evaluation dataset with an area under the curve of 0.965. Provided that the diagnostic criterion for cardiac amyloidosis was defined as a median probability of cardiac amyloidosis &gt;50% in all patches, the model achieved perfect performance in discriminating patients with cardiac amyloidosis from those without it, with an area under the curve of 1.0.</p></section><section id="s3"><h3 class="pmc_sec_title">Conclusion</h3>
+<p>A deep learning model was developed to diagnose cardiac amyloidosis from HE-stained myocardial tissue accurately. Although further prospective validation of this model using HE-stained myocardial tissues from multiple centres is needed, it may help minimize the risk of missing cardiac amyloidosis and maximize the utility of histological diagnosis in clinical practice.</p></section><section id="kwd-group1" class="kwd-group"><p><strong>Keywords:</strong> myocardial biopsy, cardiac amyloidosis, deep learning, haematoxylin–eosin stain, computer-aided diagnosis</p></section></section><section class="abstract" id="abstract2"><h2>Graphical Abstract</h2>
+<figure class="fig xbox font-sm" id="qyae141_ga"><h3 class="obj_head">Graphical Abstract.</h3>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=11728699_qyae141_ga.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f772/11728699/5049f4b3ab35/qyae141_ga.jpg" loading="lazy" height="563" width="711" alt="Graphical Abstract"></a></p>
+<div class="p text-right font-secondary"><a href="figure/qyae141_ga/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div></figure></section><section id="qyae141-s1"><h2 class="pmc_sec_title">Introduction</h2>
+<p>The clinical importance of endomyocardial biopsy has been increasingly recognized, with the pathological classification of cardiomyopathies becoming more detailed.<sup><a href="#qyae141-B1" class="usa-link" aria-describedby="qyae141-B1">1</a></sup> Although it is clinically meaningful to extract as much diagnostic information as possible from biopsy specimens, routinely performing various special staining on all samples, which is expected to increase in the future, will become challenging in terms of both time- and cost-effectiveness, thus necessitating the technological innovations for differentiating specific cardiomyopathies through histological analysis.</p>
+<p>Cardiac amyloidosis (CA), in which amyloid deposits are observed in the myocardial tissue, is one of cardiomyopathies with a poor prognosis, resulting in refractory heart failure.<sup><a href="#qyae141-B2" class="usa-link" aria-describedby="qyae141-B2">2</a></sup> Recent reports suggest that it is more common in older patients with heart failure than previously thought.<sup><a href="#qyae141-B3" class="usa-link" aria-describedby="qyae141-B3">3</a>,<a href="#qyae141-B4" class="usa-link" aria-describedby="qyae141-B4">4</a></sup> Diagnostic advances in non-invasive modalities, such as echocardiography, bone tracer cardiac scintigraphy, and cardiac magnetic resonance imaging, have made screening for CA increasingly feasible.<sup><a href="#qyae141-B5" class="usa-link" aria-describedby="qyae141-B5">5</a>,<a href="#qyae141-B6" class="usa-link" aria-describedby="qyae141-B6">6</a></sup> However, these tests are not entirely reliable for excluding CA, and even in the absence of characteristic findings on echocardiography or scintigraphy, there is still a possibility of reaching a diagnosis of amyloidosis.<sup><a href="#qyae141-B7" class="usa-link" aria-describedby="qyae141-B7">7</a>,<a href="#qyae141-B8" class="usa-link" aria-describedby="qyae141-B8">8</a></sup> Therefore, once a myocardial biopsy is performed, it is clinically necessary to exclude amyloidosis as a part of the diagnostic process, given that CA is currently a treatable disease.<sup><a href="#qyae141-B9" class="usa-link" aria-describedby="qyae141-B9">9–13</a></sup></p>
+<p>Histologic diagnosis of CA by endomyocardial biopsy requires specific staining with Dylon or Congo Red to detect amyloid deposition. However, staining with Dylon or Congo Red is not routinely performed in all cases, possibly resulting in missed opportunities to diagnose CA when it is not suspected. This may occur particularly in atypical CA cases where dilated cardiomyopathy is suspected based on the cardiac morphology<sup><a href="#qyae141-B14" class="usa-link" aria-describedby="qyae141-B14">14</a>,<a href="#qyae141-B15" class="usa-link" aria-describedby="qyae141-B15">15</a></sup> or cases of patients with heart transplantation,<sup><a href="#qyae141-B16" class="usa-link" aria-describedby="qyae141-B16">16</a>,<a href="#qyae141-B17" class="usa-link" aria-describedby="qyae141-B17">17</a></sup> but amyloidosis is also present as a comorbidity. In contrast, haematoxylin/eosin (HE) staining is a basic procedure for histological analysis performed for most myocardial tissue biopsies. Therefore, it is beneficial to develop a new approach for the diagnosis of CA from HE-stained myocardial tissue.</p>
+<p>Artificial intelligence is an innovative solution to address a variety of challenging tasks across all fields. Currently, deep learning applications for medical images, such as computed tomography, skin images, and histological images, have been developed for computer-aided diagnosis.<sup><a href="#qyae141-B18" class="usa-link" aria-describedby="qyae141-B18">18–20</a></sup> Histological images are digitally available in high resolution as whole slide images; therefore, deep learning may be a good application for histological analysis.<sup><a href="#qyae141-B21" class="usa-link" aria-describedby="qyae141-B21">21</a></sup> Indeed, deep learning models have focused on histological diagnosis,<sup><a href="#qyae141-B22" class="usa-link" aria-describedby="qyae141-B22">22</a>,<a href="#qyae141-B23" class="usa-link" aria-describedby="qyae141-B23">23</a></sup> and image segmentation on specimens.<sup><a href="#qyae141-B24" class="usa-link" aria-describedby="qyae141-B24">24–26</a></sup> We thus hypothesized that a deep learning model could accurately diagnose CA from HE-stained specimens.</p>
+<p>This study aimed to develop a deep learning model to assess the likelihood of CA in HE-stained myocardial tissue to aid in diagnosis from individual histological images.</p></section><section id="qyae141-s2"><h2 class="pmc_sec_title">Materials and methods</h2>
+<section id="qyae141-s2.1"><h3 class="pmc_sec_title">Data source and participants</h3>
+<p>This retrospective observational study included patients who underwent endomyocardial biopsy from the septum of the right ventricular at the Kyushu University Hospital between January 2008 and July 2022. Seventy-six cases diagnosed with CA were included, and 90 patients with other diagnoses (non-CA) were randomly selected. The patients were allowed to opt-out. This study was approved by the Institutional Review Board of Kyushu University Hospital (approval numbers: 22175 and 23209) and was conducted in accordance with the Declaration of Helsinki. This study follows the Strengthening the Reporting of Observational Studies in Epidemiology (STROBE)<sup><a href="#qyae141-B27" class="usa-link" aria-describedby="qyae141-B27">27</a></sup> and the Transparent Reporting of a Multivariable Prediction Model for Individual Prognosis or Diagnosis + AI (TRIPOD + AI) statements.<sup><a href="#qyae141-B28" class="usa-link" aria-describedby="qyae141-B28">28</a></sup> The 166 patients were randomly assigned to two datasets: a dataset for model development (51 patients with CA and 60 without) and another dataset for model evaluation (25 with CA and 30 without) (<em><a href="#qyae141-F1" class="usa-link">Figure 1</a></em>).</p>
+<figure class="fig xbox font-sm" id="qyae141-F1"><h4 class="obj_head">Figure 1.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=11728699_qyae141f1.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f772/11728699/1f79755ef072/qyae141f1.jpg" loading="lazy" height="310" width="787" alt="Figure 1"></a></p>
+<div class="p text-right font-secondary"><a href="figure/qyae141-F1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Patient flowchart. Patients with and without cardiac amyloidosis were divided into 2:1 for the model development and evaluation.</p></figcaption></figure></section><section id="qyae141-s2.2"><h3 class="pmc_sec_title">Outcome</h3>
+<p>The proposed model was designed to calculate the probability of CA for patch images (224 × 224 px) cutout from each specimen. In addition, we diagnosed each specimen-based on the probabilities of all the patches. We then evaluated the performance of the model based on all patches and specimens respectively. More than two pathologists determined the ground truths of pathological diagnoses on each specimen. CA was diagnosed based on amyloid deposition detected by Dylon and/or Congo Red staining.</p></section><section id="qyae141-s2.3"><h3 class="pmc_sec_title">Preparation of cardiac specimens and images for digital analysis</h3>
+<p>The input images for the deep learning model were small patches cutout from whole slide images of HE-stained myocardial specimens. Originally, specimens were fixed in 10% buffered formalin and embedded in paraffin. Each block was sliced into 4-μm thick sections. All slides were digitally converted to whole slide images using a virtual slide scanner (Aperio GT450, Leica) at 40× magnification (0.23 µm/px).</p>
+<p>As shown in <em><a href="#qyae141-F2" class="usa-link">Figure 2A</a></em>, each whole slide image specimen was cropped into multiple small patches at a size of 224 × 224 px at level-1 resolution (OpenSlide Python ver. 1.3.1) while being shifted by half. During this process, patches without myocardial tissue were removed. All patches in each specimen with amyloid deposition were labelled CA, and those without were labelled non-CA. Therefore, the CA group included some patches with no apparent amyloid deposition.</p>
+<figure class="fig xbox font-sm" id="qyae141-F2"><h4 class="obj_head">Figure 2.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=11728699_qyae141f2.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f772/11728699/aa7226b9c558/qyae141f2.jpg" loading="lazy" height="446" width="767" alt="Figure 2"></a></p>
+<div class="p text-right font-secondary"><a href="figure/qyae141-F2/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>(<em>A</em>) Each whole slide image of the specimen was cropped into multiple small patches of 224 × 224 px size and shifted by half (a patch is an area bordered by a bold line). Patches without myocardial tissue were removed (the white area was used for analysis, and the gray area was excluded). (<em>B</em>) The architecture of the deep learning model is based on ConvMixer. The input image is a patch (224 × 224 px) cropped from the whole slide image of myocardial specimens. And the output is the probability of CA. To improve the flexibility of the model and mitigate overfitting, the Leaky ReLU was used as the activation function, and a dropout layer was inserted at the end of the model. The hyperparameters of this model were determined using GS as follows: Kernel size = 5 (GS: 3, 5, 7, 9), patch size = 4 (GS: 2, 4, 8), number of filters = 128 (GS: 32, 64, 128, 256). GS, grid search.</p></figcaption></figure><p>The patches were allocated to the model development and evaluation datasets at a 2:1 ratio on a specimen basis; 80% of the model development dataset was used to train the model, and the remaining 20% was used to determine the hyperparameters.</p></section><section id="qyae141-s2.4"><h3 class="pmc_sec_title">The architecture of the deep learning model</h3>
+<p>The architecture of the deep learning model was based on ConvMixer (<em><a href="#qyae141-F2" class="usa-link">Figure 2B</a></em>).<sup><a href="#qyae141-B29" class="usa-link" aria-describedby="qyae141-B29">29</a></sup> The hyperparameters of the model were determined using a grid search. To improve the flexibility of the model and mitigate overfitting, the Leaky ReLU was used as the activation function, and a dropout layer was inserted at the end of the model.<sup><a href="#qyae141-B30" class="usa-link" aria-describedby="qyae141-B30">30</a>,<a href="#qyae141-B31" class="usa-link" aria-describedby="qyae141-B31">31</a></sup> The model was trained directly on the training data, which was augmented by randomly flipping left/right and up/down, changing brightness, and using the cutout method.<sup><a href="#qyae141-B32" class="usa-link" aria-describedby="qyae141-B32">32</a></sup></p></section><section id="qyae141-s2.5"><h3 class="pmc_sec_title">Statistics</h3>
+<p>The discrimination performance of the developed model was evaluated using the receiver operating characteristic curve, area under the curve, and confusion matrix for all patches in the evaluation dataset. By setting the threshold with the median amyloid-positive probability on each specimen at 50%, the performance of the developed model was evaluated with specimen-based receiver operating characteristic curves, areas under the curves, and confusion matrices. The analysis was performed using Python 3.11.0 and TensorFlow 2.15.</p></section></section><section id="qyae141-s3"><h2 class="pmc_sec_title">Results</h2>
+<section id="qyae141-s3.1"><h3 class="pmc_sec_title">Patient characteristics</h3>
+<p>
+<em>
+<a href="#qyae141-F1" class="usa-link">Figure 1</a>
+</em> and <em><a href="#qyae141-T1" class="usa-link">Table 1</a></em> show the flow chart of the study population and the patient backgrounds in the overall and divided datasets, respectively. The CA group included 54 patients with transthyretin amyloidosis (ATTR) (71.1%), 10 with light chain amyloidosis (AL) (13.2%), 9 with amyloid A amyloidosis (AA) (11.8%), and 3 with ATTR and AL (3.9%), all diagnosed based on immunohistochemistry. The non-CA group included 13 patients with hypertrophic cardiomyopathy, 12 with dilated cardiomyopathy, 12 with hypertensive heart disease, 10 with valvular heart disease, 9 post-transplant patients, 8 with cardiac sarcoidosis, and the remainder with other cardiac diseases. In the CA group, 56 out of 76 cases (73.7%) had a suspicion of amyloidosis as the primary indication for endocardial biopsy, whereas only 3 out of 90 cases (3.3%) had this suspicion in the non-CA group. In the model evaluation dataset, the median age was higher in the CA group {78 years [interquartile range (IQR): 64–82]} than in the non-CA group [60 years (IQR: 45–72)]. The left ventricular ejection fractions were slightly better in the CA group [50% (IQR: 42–66)] than in the non-CA group [43% (IQR: 32–58)]. The interventricular septum (IVS) in the CA group [14 mm (IQR: 10–16)] was thicker than in the non-CA group [10 mm (IQR: 9–10)].</p>
+<section class="tw xbox font-sm" id="qyae141-T1"><h4 class="obj_head">Table 1.</h4>
+<div class="caption p"><p>Patient characteristics</p></div>
+<div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
+<colgroup span="1">
+<col align="left" span="1">
+<col align="center" span="1">
+<col align="center" span="1">
+<col align="center" span="1">
+<col align="center" span="1">
+<col align="center" span="1">
+</colgroup>
+<thead>
+<tr>
+<th align="left" rowspan="1" colspan="1"> </th>
+<th align="center" rowspan="1" colspan="1">Total</th>
+<th align="center" colspan="2" rowspan="1">Model development</th>
+<th align="center" colspan="2" rowspan="1">Model evaluation</th>
+</tr>
+<tr>
+<th align="left" rowspan="1" colspan="1"> </th>
+<th align="center" rowspan="1" colspan="1"> </th>
+<th align="center" rowspan="1" colspan="1">CA</th>
+<th align="center" rowspan="1" colspan="1">Non-CA</th>
+<th align="center" rowspan="1" colspan="1">CA</th>
+<th align="center" rowspan="1" colspan="1">Non-CA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td rowspan="1" colspan="1">Subject, <em>n</em>
+</td>
+<td rowspan="1" colspan="1">166</td>
+<td rowspan="1" colspan="1">51</td>
+<td rowspan="1" colspan="1">60</td>
+<td rowspan="1" colspan="1">25</td>
+<td rowspan="1" colspan="1">30</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Age, years</td>
+<td rowspan="1" colspan="1">70 [58–79]</td>
+<td rowspan="1" colspan="1">78 [71–82]</td>
+<td rowspan="1" colspan="1">63 [53–70]</td>
+<td rowspan="1" colspan="1">78 [64–82]</td>
+<td rowspan="1" colspan="1">60 [45–72]</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Female, <em>n</em> (%)</td>
+<td rowspan="1" colspan="1">48 (28.9)</td>
+<td rowspan="1" colspan="1">12 (24.0)</td>
+<td rowspan="1" colspan="1">20 (32.8)</td>
+<td rowspan="1" colspan="1">5 (19.2)</td>
+<td rowspan="1" colspan="1">11 (37.9)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Etiologies, <em>n</em> (%)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> Amyloidosis</td>
+<td rowspan="1" colspan="1">76 (45.8)</td>
+<td rowspan="1" colspan="1">50 (100.0)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">26 (100.0)</td>
+<td rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> HCM</td>
+<td rowspan="1" colspan="1">13 (7.8)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">10 (16.4)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">3 (10.3)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> DCM</td>
+<td rowspan="1" colspan="1">12 (7.2)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">8 (13.1)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">4 (13.8)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> HHD</td>
+<td rowspan="1" colspan="1">12 (7.2)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">4 (6.6)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">8 (27.6)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> VHD</td>
+<td rowspan="1" colspan="1">10 (6.0)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">5 (8.2)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">5 (17.2)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> Post-transplant</td>
+<td rowspan="1" colspan="1">9 (5.4)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">8 (13.1)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">1 (3.4)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> Cardiac sarcoidosis</td>
+<td rowspan="1" colspan="1">8 (4.8)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">6 (9.8)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">2 (6.9)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> Others, undiagnosed</td>
+<td rowspan="1" colspan="1">26 (15.7)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">20 (32.8)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">6 (20.7)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Amyloid classification, <em>n</em> (%)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> ATTR</td>
+<td rowspan="1" colspan="1">54 (71.1)</td>
+<td rowspan="1" colspan="1">34 (68.0)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">20 (76.9)</td>
+<td rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> AL</td>
+<td rowspan="1" colspan="1">10 (13.2)</td>
+<td rowspan="1" colspan="1">9 (18.0)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">1 (3.8)</td>
+<td rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> AA</td>
+<td rowspan="1" colspan="1">9 (11.8)</td>
+<td rowspan="1" colspan="1">6 (12.0)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">3 (11.5)</td>
+<td rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> ATTR and AL</td>
+<td rowspan="1" colspan="1">3 (3.9)</td>
+<td rowspan="1" colspan="1">1 (2.0)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1">2 (7.7)</td>
+<td rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Prior HF hospitalization, <em>n</em> (%)</td>
+<td rowspan="1" colspan="1">53 (31.9)</td>
+<td rowspan="1" colspan="1">17 (34.0)</td>
+<td rowspan="1" colspan="1">22 (36.1)</td>
+<td rowspan="1" colspan="1">8 (30.8)</td>
+<td rowspan="1" colspan="1">6 (20.7)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">PM, ICD, CRT, <em>n</em> (%)</td>
+<td rowspan="1" colspan="1">29 (17.5)</td>
+<td rowspan="1" colspan="1">4 (8.0)</td>
+<td rowspan="1" colspan="1">18 (29.5)</td>
+<td rowspan="1" colspan="1">4 (15.4)</td>
+<td rowspan="1" colspan="1">3 (10.3)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Moderate to severe AS, <em>n</em> (%)</td>
+<td rowspan="1" colspan="1">13 (7.8)</td>
+<td rowspan="1" colspan="1">3 (6.0)</td>
+<td rowspan="1" colspan="1">1 (1.6)</td>
+<td rowspan="1" colspan="1">3 (11.5)</td>
+<td rowspan="1" colspan="1">6 (20.7)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Rhythm, <em>n</em> (%)</td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1"></td>
+<td rowspan="1" colspan="1"></td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> Sinus</td>
+<td rowspan="1" colspan="1">116 (69.9)</td>
+<td rowspan="1" colspan="1">29 (58.0)</td>
+<td rowspan="1" colspan="1">47 (77.0)</td>
+<td rowspan="1" colspan="1">15 (57.7)</td>
+<td rowspan="1" colspan="1">25 (86.2)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> AF</td>
+<td rowspan="1" colspan="1">39 (23.5)</td>
+<td rowspan="1" colspan="1">18 (36.0)</td>
+<td rowspan="1" colspan="1">9 (14.8)</td>
+<td rowspan="1" colspan="1">8 (30.8)</td>
+<td rowspan="1" colspan="1">4 (13.8)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1"> PM</td>
+<td rowspan="1" colspan="1">9 (5.4)</td>
+<td rowspan="1" colspan="1">2 (4.0)</td>
+<td rowspan="1" colspan="1">5 (8.2)</td>
+<td rowspan="1" colspan="1">2 (7.7)</td>
+<td rowspan="1" colspan="1">0 (0.0)</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">SBP, mm Hg</td>
+<td rowspan="1" colspan="1">113 [102–129]</td>
+<td rowspan="1" colspan="1">110 [100–121]</td>
+<td rowspan="1" colspan="1">122 [103–137]</td>
+<td rowspan="1" colspan="1">114 [103–127]</td>
+<td rowspan="1" colspan="1">115 [103–127]</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">DBP, mm Hg</td>
+<td rowspan="1" colspan="1">70 [60–76]</td>
+<td rowspan="1" colspan="1">62 [58–71]</td>
+<td rowspan="1" colspan="1">70 [62–85]</td>
+<td rowspan="1" colspan="1">70 [60–74]</td>
+<td rowspan="1" colspan="1">72 [66–80]</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">Heart rate, bpm</td>
+<td rowspan="1" colspan="1">70 [61–80]</td>
+<td rowspan="1" colspan="1">67 [62–75]</td>
+<td rowspan="1" colspan="1">69 [60–82]</td>
+<td rowspan="1" colspan="1">73 [61–78]</td>
+<td rowspan="1" colspan="1">78 [66–86]</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">BNP, pg/mL</td>
+<td rowspan="1" colspan="1">216 [104–483]</td>
+<td rowspan="1" colspan="1">288 [154–532]</td>
+<td rowspan="1" colspan="1">159 [58–440]</td>
+<td rowspan="1" colspan="1">216 [138–333]</td>
+<td rowspan="1" colspan="1">225 [125–694]</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">LVEF (%)</td>
+<td rowspan="1" colspan="1">49 [38–63]</td>
+<td rowspan="1" colspan="1">48 [41–61]</td>
+<td rowspan="1" colspan="1">49 [36–65]</td>
+<td rowspan="1" colspan="1">50 [42–66]</td>
+<td rowspan="1" colspan="1">43 [32–58]</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">IVST (mm)</td>
+<td rowspan="1" colspan="1">11 [9–15]</td>
+<td rowspan="1" colspan="1">15 [12–16]</td>
+<td rowspan="1" colspan="1">10 [8–11]</td>
+<td rowspan="1" colspan="1">14 [10–16]</td>
+<td rowspan="1" colspan="1">10 [9–11]</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">LVPWT (mm)</td>
+<td rowspan="1" colspan="1">11 [9–14]</td>
+<td rowspan="1" colspan="1">14 [12–16]</td>
+<td rowspan="1" colspan="1">9 [9–11]</td>
+<td rowspan="1" colspan="1">14 [10–16]</td>
+<td rowspan="1" colspan="1">10 [9–11]</td>
+</tr>
+<tr>
+<td rowspan="1" colspan="1">LAD (mm)</td>
+<td rowspan="1" colspan="1">42 [36–48]</td>
+<td rowspan="1" colspan="1">44 [40–48]</td>
+<td rowspan="1" colspan="1">42 [35–46]</td>
+<td rowspan="1" colspan="1">43 [36–48]</td>
+<td rowspan="1" colspan="1">40 [34–48]</td>
+</tr>
+</tbody>
+</table></div>
+<div class="p text-right font-secondary"><a href="table/qyae141-T1/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<div class="tw-foot p">
+<div class="fn" id="tblfn1"><p>Data are presented as <em>n</em> (%) or median [Q1–Q3].</p></div>
+<div class="fn" id="tblfn2"><p>HCM, hypertrophic cardiomyopathy; DCM, dilated cardiomyopathy; HHD, hypertensive heart disease; VHD, valvular heart disease; PM, pacemaker; ICD, implantable cardioverter defibrillator; CRT, cardiac resynchronization therapy; AS, aortic valve stenosis; AF, atrial fibrillation; SBP, systolic blood pressure; DBP, diastolic blood pressure; BNP, brain natriuretic peptide; LVEF, left ventricular ejection fraction; IVST, interventricular septum thickness; LVPWT, left ventricular posterior wall thickness; LAD, left atrial dimension.</p></div>
+</div></section></section><section id="qyae141-s3.2"><h3 class="pmc_sec_title">Development of deep learning model</h3>
+<p>Each specimen image was cut into small patches, and the median number of patches per specimen was 816 (IQR: 573–1089) (<em><a href="#qyae141-F2" class="usa-link">Figure 2A</a></em>). The deep learning model was developed with the patches from 111 patients (CA: 44 944 patches; non-CA: 51 283 patches) based on ConvMixer (<em><a href="#qyae141-F2" class="usa-link">Figure 2B</a></em>).</p></section><section id="qyae141-s3.3"><h3 class="pmc_sec_title">Model performance on all patches</h3>
+<p>The developed deep learning model was evaluated using an evaluation dataset of 55 patients (CA: 23 589 patches; non-CA: 23 716 patches). <em><a href="#qyae141-F3" class="usa-link">Figure 3A</a></em> shows the receiver operating characteristic curve for the discrimination of all patches; the area under the curve for this model was 0.965. <em><a href="#qyae141-F3" class="usa-link">Figure 3B</a></em> shows the confusion matrix of the developed model, with an accuracy of 0.899, a sensitivity of 0.873, a specificity of 0.925, and a positive predictive value of 0.921.</p>
+<figure class="fig xbox font-sm" id="qyae141-F3"><h4 class="obj_head">Figure 3.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=11728699_qyae141f3.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f772/11728699/17a116196edf/qyae141f3.jpg" loading="lazy" height="344" width="738" alt="Figure 3"></a></p>
+<div class="p text-right font-secondary"><a href="figure/qyae141-F3/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>(<em>A</em>) The receiver operating characteristic curve of the developed deep learning model in all patches of the evaluation dataset. (<em>B</em>) Patch-based confusion matrix of the deep learning model.</p></figcaption></figure></section><section id="qyae141-s3.4"><h3 class="pmc_sec_title">Patch-based amyloid probabilities by the model in CA and non-CA specimens</h3>
+<p>
+<em>
+<a href="#qyae141-F4" class="usa-link">Figure 4</a>
+</em> shows the representative operations of the deep learning model in non-CA (A to C) and CA cases (D to F and G to I). In the HE-stained specimens of the non-CA case (<em><a href="#qyae141-F4" class="usa-link">Figure 4B</a></em>), the deep learning model scarcely detected amyloid-suspicious areas. Conversely, in the CA case with sparse amyloid deposition in the myocardial specimen (<em><a href="#qyae141-F4" class="usa-link">Figure 4E</a></em>), the model specifically detected the areas corresponding to Dylon-positive amyloid deposition. Not surprisingly, in the CA case with dense amyloid deposition (<em><a href="#qyae141-F4" class="usa-link">Figure 4H</a></em>), the model identified most patches as highly amyloid-suspicious areas. For the distribution of amyloid probability for all patches, in the non-CA case, most of the amyloid-positive probabilities were distributed close to 0% (<em><a href="#qyae141-F4" class="usa-link">Figure 4C</a></em>); in the CA case with sparse amyloid deposition, the amyloid-positive probabilities had a biphasic distribution with 0 and 100% (<em><a href="#qyae141-F4" class="usa-link">Figure 4F</a></em>). Understandably, in the CA case with dense amyloid deposition, most of the amyloid-positive probabilities were distributed close to 100% (<em><a href="#qyae141-F4" class="usa-link">Figure 4I</a></em>).</p>
+<figure class="fig xbox font-sm" id="qyae141-F4"><h4 class="obj_head">Figure 4.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=11728699_qyae141f4.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f772/11728699/236b13927ace/qyae141f4.jpg" loading="lazy" height="755" width="767" alt="Figure 4"></a></p>
+<div class="p text-right font-secondary"><a href="figure/qyae141-F4/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>Sets of dylon staining (<em>A, D, G</em>), HE staining overlayed with the amyloid-positive area calculated by the model (<em>B, E, H</em>), and the distributions of amyloid-positive probabilities on a specimen basis (<em>C, F, I</em>). The set of A, B, and C is a representative case of non-cardiac amyloid. The set of D, E, and F is the case of cardiac amyloid with sparse amyloid deposition. The set of G, H, and I is the case of cardiac amyloid with dense amyloid deposition. In HE-stained images, high-probability areas of amyloid are shown in translucent red, and low-probability areas are shown in translucent gray. Since the patches were cropped while being shifted by half, the probabilities of overlapping areas are given as the average probability. The distributions are described by histograms, and the median probabilities are described by dotted lines.</p></figcaption></figure></section><section id="qyae141-s3.5"><h3 class="pmc_sec_title">Specimen-based model performance</h3>
+<p>
+<em>
+<a href="#qyae141-F5" class="usa-link">Figure 5A</a>
+</em> shows the box plots of the CA probabilities per specimen. By setting the threshold with the median amyloid-positive probability on each specimen at 50%, the developed deep learning model perfectly discriminated between CA and non-CA cases. As shown in <em><a href="#qyae141-F5" class="usa-link">Figures 5B</a></em> and <em><a href="#qyae141-F5" class="usa-link">C</a></em>, the model performance using a deep learning approach achieved a sufficient area under the curve, accuracy, and sensitivity and a positive predictive value of 1.0.</p>
+<figure class="fig xbox font-sm" id="qyae141-F5"><h4 class="obj_head">Figure 5.</h4>
+<p class="img-box line-height-none margin-x-neg-2 tablet:margin-x-0 text-center"><a class="tileshop" target="_blank" href="https://www.ncbi.nlm.nih.gov/core/lw/2.0/html/tileshop_pmc/tileshop_pmc_inline.html?title=Click%20on%20image%20to%20zoom&amp;p=PMC3&amp;id=11728699_qyae141f5.jpg"><img class="graphic zoom-in" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f772/11728699/65ff84f83787/qyae141f5.jpg" loading="lazy" height="595" width="767" alt="Figure 5"></a></p>
+<div class="p text-right font-secondary"><a href="figure/qyae141-F5/" class="usa-link" target="_blank" rel="noopener noreferrer">Open in a new tab</a></div>
+<figcaption><p>(<em>A</em>) Box plots of amyloid-positive probabilities by specimens and the median probabilities are described by diamond symbols. (<em>B</em>) The specimen-based receiver operating characteristic curve evaluated with a threshold for the amyloid-positive probability of 50%. (<em>C</em>) Specimen-based confusion matrix of the deep learning model.</p></figcaption></figure></section></section><section id="qyae141-s4"><h2 class="pmc_sec_title">Discussion</h2>
+<p>CA, in which amyloid deposits are observed in the myocardial tissue, results in refractory heart failure with a poor prognosis.<sup><a href="#qyae141-B2" class="usa-link" aria-describedby="qyae141-B2">2</a></sup> In recent years, CA has become a treatable disease with new therapeutic agents such as transthyretin stabilizers, RNAi, and monoclonal antibodies against TTR (NI006) for CA.<sup><a href="#qyae141-B9" class="usa-link" aria-describedby="qyae141-B9">9–13</a></sup> Therefore, early and appropriate diagnosis is more important than ever. Although routine amyloid staining of endomyocardial biopsy specimens is commonly performed at our institution, particularly at high-volume centres, the anticipated increase in the number of cardiac specimens requiring differentiation among various cardiomyopathies presents a clinical challenge in efficiently screening all cases for CA. Here, we developed deep learning capable of accurately diagnosing CA from HE-stained specimens, which can help minimize the risk of missing amyloidosis in the analysis of valuable myocardial tissue.</p>
+<p>Advances in imaging with non-invasive modalities, such as bone tracer cardiac scintigraphy and cardiac magnetic resonance imaging, have made the diagnosis of CA less invasive in patients with suspicious symptoms.<sup><a href="#qyae141-B5" class="usa-link" aria-describedby="qyae141-B5">5</a>,<a href="#qyae141-B6" class="usa-link" aria-describedby="qyae141-B6">6</a></sup> However, histological evidence of amyloid deposition remains the definitive diagnostic feature.<sup><a href="#qyae141-B33" class="usa-link" aria-describedby="qyae141-B33">33</a></sup> In addition, immunohistochemistry or laser microdissection with mass spectrometry of biopsied myocardial tissues can also identify the types of amyloid, including ATTR, AL, and AA, highlighting the clear merit of histological analysis.<sup><a href="#qyae141-B34" class="usa-link" aria-describedby="qyae141-B34">34</a></sup> In this context, diagnosing CA is essential even in patients who do not show clinical suspicion but undergo endomyocardial biopsy, as CA is now a treatable disease.<sup><a href="#qyae141-B9" class="usa-link" aria-describedby="qyae141-B9">9–13</a></sup> Retrospective analysis in this study revealed that 9 of 76 cases in the CA group were not suspected of CA prior to endomyocardial biopsy (see <a href="#sup1" class="usa-link">Supplementary data online</a>, <em><a href="#sup1" class="usa-link">Table S1</a></em>). Thus, the routine system for diagnosing CA from HE-stained specimens may be an innovative approach, as HE is standard staining applied to all myocardial biopsies.</p>
+<p>In this study, we developed a deep learning model for diagnosing CA from HE-stained myocardial tissue. The developed model demonstrated remarkable accuracy in diagnosing CA using only HE-stained specimens. Previous deep learning models for histological analysis have focused on diagnosis for cancers,<sup><a href="#qyae141-B22" class="usa-link" aria-describedby="qyae141-B22">22</a>,<a href="#qyae141-B23" class="usa-link" aria-describedby="qyae141-B23">23</a></sup> image segmentation,<sup><a href="#qyae141-B24" class="usa-link" aria-describedby="qyae141-B24">24–26</a></sup> and image transformation.<sup><a href="#qyae141-B35" class="usa-link" aria-describedby="qyae141-B35">35</a></sup> To the best of our knowledge, this is the first study to diagnose CA from images of HE-stained specimens without Dylon or Congo Red staining, although a few deep learning models that can quantify amyloid deposition in corneal or ligamentum flavum specimens stained with Congo Red have been reported.<sup><a href="#qyae141-B24" class="usa-link" aria-describedby="qyae141-B24">24</a>,<a href="#qyae141-B26" class="usa-link" aria-describedby="qyae141-B26">26</a></sup> The present model can serve as the foundational basis for a system that routinely screens the possibility of CA from HE-stained specimens, thereby minimizing the risk of missing CA in CA-unsuspicious patients who are subject to endomyocardial biopsy.</p>
+<section id="qyae141-s4.1"><h3 class="pmc_sec_title">Patient background in this study</h3>
+<p>In this study, cases of CA and non-CA were randomly selected from patients who underwent myocardial biopsy between 2008 and 2022. A model was developed using these myocardial biopsy specimens. Among the 76 cases of CA, 56 had amyloidosis as the primary indication for endomyocardial biopsy, whereas 11 had amyloidosis included as part of the differential diagnosis. The remaining 9 cases had no suspicion of amyloidosis prior to biopsy (see <a href="#sup1" class="usa-link">Supplementary data online</a>, <em><a href="#sup1" class="usa-link">Table S1</a></em>), and it was diagnosed clinically for the first time through the biopsy evaluation. This may be because of the approval of Tafamidis for use in Japan in 2019, which has since increased the inclusion of amyloidosis in the differential diagnosis. Prior to its approval, amyloidosis was less actively considered. However, approximately 10% of cases in this study still had amyloidosis diagnosed incidentally through endomyocardial biopsy. These findings highlight the importance of routine amyloid staining and the utility of the developed model as an alternative histological screening tool for CA in clinical practice.</p>
+<p>In this study, genetic testing was performed on 40 of the 57 TTR cases, including 3 cases with TTR and AL. The results revealed that 38 cases had wild-type TTR with no genetic mutations, whereas 2 cases had genetic mutations. One of these had a Lys61Glu (E61 K) mutation, and the other case had a Val30Met (V30 M) mutation (see <a href="#sup1" class="usa-link">Supplementary data online</a>, <em><a href="#sup1" class="usa-link">Figure S1</a></em>). As the case with E61 K was included in the development dataset, the case with V30  M assigned into the evaluation dataset was analysed in detail (see <a href="#sup1" class="usa-link">Supplementary data online</a>, <em><a href="#sup1" class="usa-link">Figure S2 A</a></em><a href="#sup1" class="usa-link">–</a><em><a href="#sup1" class="usa-link">C</a></em>); for reference, images of Dylon and HE staining from the case with E61 K are also shown in <a href="#sup1" class="usa-link">Supplementary data online</a>, <em><a href="#sup1" class="usa-link">Figure S2 D</a></em> and <em><a href="#sup1" class="usa-link">E</a></em>. Although bone tracer scintigraphy has been reported to yield false negatives for certain variant TTRs, such as Phe84Leu (F84L) and Ser97Tyr (S97Y),<sup><a href="#qyae141-B36" class="usa-link" aria-describedby="qyae141-B36">36</a></sup> which require myocardial biopsy for an accurate diagnosis, the analysis with this model demonstrated that it could accurately diagnose ATTRv (the V30M case corresponding to CA07 shown in <em><a href="#qyae141-F5" class="usa-link">Figure 5A</a></em> and <a href="#sup1" class="usa-link">Supplementary data online</a>, <em><a href="#sup1" class="usa-link">Figure S2C</a></em>) and ATTRwt in the evaluation dataset (<em><a href="#qyae141-F5" class="usa-link">Figure 5A</a></em>). Nevertheless, the median probability for the V30M case was lower than that of ATTRwt. This may be because some cases of ATTRv exhibit amyloid deposition primarily in the nervous system before cardiac symptoms and endomyocardial biopsy are present. Indeed, the patient with the V30M mutation had been diagnosed with amyloid polyneuropathy several years prior to the endomyocardial biopsy and was hospitalized for atrial fibrillation and bradyarrhythmia, which ultimately led to the biopsy. Despite the onset of arrhythmia, echocardiography revealed no evidence of hypertrophy. These findings were consistent with the median probability output by the model and the degree of amyloid deposition observed in Dylon staining. This case illustrates that ATTRv may follow a different diagnostic course compared with ATTRwt and that amyloidosis in other organs can precede the diagnosis of CA through myocardial biopsy. Consequently, endomyocardial biopsy in ATTRv may need to be performed at an earlier stage of CA, potentially resulting in lower median probability or a higher likelihood of false negatives because of sampling errors compared with ATTRwt. These concerns arise from the inherent limitations of myocardial biopsy in CA and are not directly related to the model development in this study. However, it should be noted that this model was carefully applied to cases of ATTRv, and further investigation into its predictive accuracy for ATTRv may be warranted, as the number of ATTRv cases was limited, and the majority of cases in this study were ATTRwt.</p></section><section id="qyae141-s4.2"><h3 class="pmc_sec_title">Deep learning modelling to diagnose CA from HE-stained specimen</h3>
+<p>In this study, we first developed a deep learning model to assess the probability of CA in each small patch cutout of an overall image. Then, we investigated whether using amyloidosis-positive probabilities in all patches from each specimen could accurately diagnose CA on a specimen basis. <em><a href="#qyae141-F3" class="usa-link">Figure 3</a></em> shows the accuracy of all patches in the evaluation dataset. Although not all small patches uniformly exhibited amyloid deposition, and thus, some patch labels in the CA cases could contain false positives, the developed models achieved good discrimination with an area under the curve of 0.965 in the evaluation dataset. To assess accuracy on a per-specimen basis, we plotted individual probability distributions for each specimen (<em><a href="#qyae141-F5" class="usa-link">Figure 5A</a></em>) along with discrimination performance (<em><a href="#qyae141-F5" class="usa-link">Figures 5B</a></em> and <em><a href="#qyae141-F5" class="usa-link">C</a></em>). Most probabilities of patches in CA cases were mainly distributed close to 100%, and those in non-CA cases were distributed close to 0%. These distinct distributions did not require fine-tuning to set the threshold as the median value of the positive criterion, allowing us to discriminate effectively all specimens in the evaluation dataset by a crude threshold of 50% for median probability. This study mainly focused on developing a deep learning model to output the probability of cardiac amyloid based on individual small patches because available images were limited; however, with more data, the model could be extended to a more integrated end-to-end model for direct diagnosis from individual whole slide images using methods such as multiple instance learning.<sup><a href="#qyae141-B37" class="usa-link" aria-describedby="qyae141-B37">37</a></sup></p></section><section id="qyae141-s4.3"><h3 class="pmc_sec_title">Identification of amyloid deposition by present deep learning model</h3>
+<p>The developed model almost did not detect any suspicious areas in the non-CA case shown in <em><a href="#qyae141-F4" class="usa-link">Figure 4B</a></em>. In contrast, it marked the area in the digitally-stained images on HE-stained images as highly suspicious, corresponding to where Dylon staining showed amyloid deposition in the CA cases with sparsely and densely accumulated amyloid (<em><a href="#qyae141-F4" class="usa-link">Figures 4E</a></em> and <em><a href="#qyae141-F4" class="usa-link">H</a></em>). Due to the black-box nature of deep learning models, it is difficult to understand how the present deep learning model interprets images and exactly calculates the probability of CA. Since false positives were rare but present in the non-CA cases (<em><a href="#qyae141-F3" class="usa-link">Figure 3B</a></em>), this model recognizes not only amyloid deposition but also other histological features of CA. In this context, we should carefully utilize the present model in clinical practice, as is always the case when using AI technology. Nevertheless, this study has suggested the clinical feasibility of the deep learning model in aiding in the diagnosis of CA from HE staining because the model achieved remarkable performance in specimen-based diagnosis.</p></section><section id="qyae141-s4.4"><h3 class="pmc_sec_title">Clinical perspectives</h3>
+<p>The present model, which outputs the possibility of CA based on images of HE-stained specimens, can provide two significant clinical benefits. First, the model accurately discriminated CA from non-CA even in cases where characteristic features of CA (such as myocardial hypertrophy) were not evident on the echocardiogram (<em><a href="#qyae141-T1" class="usa-link">Table 1</a></em>). Retrospective analysis of cases in this study revealed that 9 of 76 cases in the CA group had no prior suspicion of CA before endomyocardial biopsy (see <a href="#sup1" class="usa-link">Supplementary data online</a>, <em><a href="#sup1" class="usa-link">Table S1</a></em>). This highlights the potential for underdiagnosis in cases of CA that could be missed without routine amyloid staining. The model can assess the possibility of CA in myocardial tissue that has not been stained with Dylon or Congo Red due to a lack of clinical suspicion of CA. Hence, this model could be used as a screening tool for cases not scheduled for specific CA staining as well as for re-evaluation of old specimens that were not specifically stained.</p>
+<p>Second, staining with Dylon or Congo Red can affect diagnosis due to over-staining or over-depigmentation. This model can calculate the amyloid probabilities separately from Dylon or Congo Red staining, which could comprehensively enhance the diagnostic accuracy of histological analysis.</p></section><section id="qyae141-s4.5"><h3 class="pmc_sec_title">Limitations</h3>
+<p>We acknowledge the following limitations. First, because the present model was developed based on single-centre data, it is unclear whether it can accurately diagnose CA when differences exist in the methods of HE staining or the quality of stained specimens, as these may vary by institution or pathologist. Further investigations using multi-centre data are needed to validate the accuracy and generalizability of the model for broader clinical use. Second, this model does not address the sampling error associated with endomyocardial biopsy. A biopsy samples only a small portion of the myocardium, and even in cases of CA, there is a risk that amyloid deposits may not be detected in the biopsied tissue. Therefore, it is important not to become overly reliant on pathological diagnosis alone. The diagnosis of CA should primarily follow the standard diagnostic algorithm, particularly for hypertrophic phenotypes, referencing T1/T2 mapping or late gadolinium enhancement on cardiac magnetic resonance imaging.<sup><a href="#qyae141-B38" class="usa-link" aria-describedby="qyae141-B38">38</a></sup> Myocardial biopsy should be considered as an additional step. It should be emphasized that the developed system is intended as a complementary screening tool within the broader diagnostic process.</p></section></section><section id="qyae141-s5"><h2 class="pmc_sec_title">Conclusion</h2>
+<p>A deep learning model was developed to accurately diagnose CA from the images of HE-stained specimens. The present model may be effective in minimizing the risk of missing CA and maximizing the utility of histological diagnosis in clinical practice.</p></section><section id="qyae141-s6"><h2 class="pmc_sec_title">Supplementary data</h2>
+<p>
+<a href="#sup1" class="usa-link">Supplementary data</a> are available at <em>European Heart Journal - Imaging Methods and Practice</em> online.</p></section><section id="sec25"><h2 class="pmc_sec_title">Supplementary Material</h2>
+<section class="sm xbox font-sm" id="sup1"><div class="caption p"><span>qyae141_Supplementary_Data</span></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/11728699/bin/qyae141_supplementary_data.pdf" data-ga-action="click_feat_suppl" class="usa-link">qyae141_supplementary_data.pdf</a><sup> (522KB, pdf) </sup>
+</div></div></section></section><section id="ack1" class="ack"><h2 class="pmc_sec_title">Acknowledgements</h2>
+<p>The authors thank Yukari Tanaka for her assistance.</p></section><section id="_ci93_" lang="en" class="contrib-info"><h2 class="pmc_sec_title">Contributor Information</h2>
+<p>Takeshi Tohyama, 
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan; 
+Center for Advanced Medical Open Innovation, Kyushu University, Fukuoka, Japan; 
+Institute for Medical Engineering &amp; Science, Massachusetts Institute of Technology, Cambridge, MA, USA.</p>
+<p>Takeshi Iwasaki, 
+Department of Anatomic Pathology, Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan.</p>
+<p>Masataka Ikeda, 
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan.</p>
+<p>Masato Katsuki, 
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan; 
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University Beppu Hospital, Beppu, Japan.</p>
+<p>Tatsuya Watanabe, 
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan.</p>
+<p>Kayo Misumi, 
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan.</p>
+<p>Keisuke Shinohara, 
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan.</p>
+<p>Takeo Fujino, 
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan.</p>
+<p>Toru Hashimoto, 
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan.</p>
+<p>Shouji Matsushima, 
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan.</p>
+<p>Tomomi Ide, 
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan.</p>
+<p>Junji Kishimoto, 
+Centre for Clinical and Translational Research of Kyushu University Hospital, Fukuoka, Japan.</p>
+<p>Koji Todaka, 
+Center for Advanced Medical Open Innovation, Kyushu University, Fukuoka, Japan; 
+Centre for Clinical and Translational Research of Kyushu University Hospital, Fukuoka, Japan.</p>
+<p>Yoshinao Oda, 
+Department of Anatomic Pathology, Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan.</p>
+<p>Kohtaro Abe, 
+Department of Cardiovascular Medicine, Faculty of Medical Sciences, Kyushu University, 3-1-1 Maidashi, Higashi-ku, Fukuoka 812-8582, Japan.</p></section><section id="qyae141-s7"><h2 class="pmc_sec_title">Data availability</h2>
+<p>The participants of this study did not give written consent for their data to be shared publicly, so due to the sensitive nature of the research supporting data are not available.</p></section><section id="qyae141-s8"><h2 class="pmc_sec_title">Funding</h2>
+<p>This work was supported by the Japan Foundation for Applied Enzymology (Cardiovascular Innovative Conference; CVIC) and Uehara Memorial Foundation Postdoctoral Fellowship (T.T.), JSPS KAKENHI (JP24K02449 and JP24K22274; M.I.), and a research grant from Pfizer (T.I. to K.A.). These funding agencies had no role in the design and conduct of the study; in the collection, management, analysis, and interpretation of the data; nor in the preparation, review, and submission of the manuscript for publication.</p></section><section id="qyae141-s9"><h2 class="pmc_sec_title">Lead author biography</h2>
+<p>
+<img class="graphic" src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f772/11728699/612e56679b45/qyae141il1.jpg" loading="lazy" alt="graphic file with name qyae141il1.jpg">
+</p>
+<p>Dr Takeshi Tohyama is a cardiologist and data scientist trained at Kyushu University. He is pursuing further advancements in AI within the medical field at Leo’s laboratory at the Massachusetts Institute of Technology, aiming for innovative breakthroughs.</p></section><section id="ref1" class="ref-list"><h2 class="pmc_sec_title">References</h2>
+<section id="ref1_sec2"><ul class="ref-list font-sm" style="list-style-type:none">
+<li id="qyae141-B1">
+<span class="label">1.</span><cite>
+
+Ammirati  E, Frigerio  M, Adler  ED, Basso  C, Birnie  DH, Brambatti  M  et al.   Management of acute myocarditis and chronic inflammatory cardiomyopathy: an expert consensus document. Circ Heart Fail  2020;13:e007405.
+</cite> [<a href="https://doi.org/10.1161/CIRCHEARTFAILURE.120.007405" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC7673642/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33176455/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circ%20Heart%20Fail&amp;title=Management%20of%20acute%20myocarditis%20and%20chronic%20inflammatory%20cardiomyopathy:%20an%20expert%20consensus%20document&amp;volume=13&amp;publication_year=2020&amp;pages=e007405&amp;pmid=33176455&amp;doi=10.1161/CIRCHEARTFAILURE.120.007405&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B2">
+<span class="label">2.</span><cite>
+
+Rapezzi  C, Merlini  G, Quarta  CC, Riva  L, Longhi  S, Leone  O  et al.   Systemic cardiac amyloidoses: disease profiles and clinical courses of the 3 main types. Circulation  2009;120:1203–12.
+</cite> [<a href="https://doi.org/10.1161/CIRCULATIONAHA.108.843334" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/19752327/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circulation&amp;title=Systemic%20cardiac%20amyloidoses:%20disease%20profiles%20and%20clinical%20courses%20of%20the%203%20main%20types&amp;volume=120&amp;publication_year=2009&amp;pages=1203-12&amp;pmid=19752327&amp;doi=10.1161/CIRCULATIONAHA.108.843334&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B3">
+<span class="label">3.</span><cite>
+
+AbouEzzeddine  OF, Davies  DR, Scott  CG, Fayyaz  AU, Askew  JW, McKie  PM  et al.   Prevalence of transthyretin amyloid cardiomyopathy in heart failure with preserved ejection fraction. JAMA Cardiol  2021;6:1267–74.
+</cite> [<a href="https://doi.org/10.1001/jamacardio.2021.3070" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8387947/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34431962/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=JAMA%20Cardiol&amp;title=Prevalence%20of%20transthyretin%20amyloid%20cardiomyopathy%20in%20heart%20failure%20with%20preserved%20ejection%20fraction&amp;volume=6&amp;publication_year=2021&amp;pages=1267-74&amp;pmid=34431962&amp;doi=10.1001/jamacardio.2021.3070&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B4">
+<span class="label">4.</span><cite>
+
+Castaño  A, Narotsky  DL, Hamid  N, Khalique  OK, Morgenstern  R, DeLuca  A  et al.   Unveiling transthyretin cardiac amyloidosis and its predictors among elderly patients with severe aortic stenosis undergoing transcatheter aortic valve replacement. Eur Heart J  2017;38:2879–87.
+</cite> [<a href="https://doi.org/10.1093/eurheartj/ehx350" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5837725/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29019612/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Eur%20Heart%20J&amp;title=Unveiling%20transthyretin%20cardiac%20amyloidosis%20and%20its%20predictors%20among%20elderly%20patients%20with%20severe%20aortic%20stenosis%20undergoing%20transcatheter%20aortic%20valve%20replacement&amp;volume=38&amp;publication_year=2017&amp;pages=2879-87&amp;pmid=29019612&amp;doi=10.1093/eurheartj/ehx350&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B5">
+<span class="label">5.</span><cite>
+
+Gillmore  JD, Maurer  MS, Falk  RH, Merlini  G, Damy  T, Dispenzieri  A  et al.   Nonbiopsy diagnosis of cardiac transthyretin amyloidosis. Circulation  2016;133:2404–12.
+</cite> [<a href="https://doi.org/10.1161/CIRCULATIONAHA.116.021612" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27143678/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circulation&amp;title=Nonbiopsy%20diagnosis%20of%20cardiac%20transthyretin%20amyloidosis&amp;volume=133&amp;publication_year=2016&amp;pages=2404-12&amp;pmid=27143678&amp;doi=10.1161/CIRCULATIONAHA.116.021612&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B6">
+<span class="label">6.</span><cite>
+
+Vogelsberg  H, Mahrholdt  H, Deluigi  CC, Yilmaz  A, Kispert  EM, Greulich  S  et al.   Cardiovascular magnetic resonance in clinically suspected cardiac amyloidosis: noninvasive imaging compared to endomyocardial biopsy. J Am Coll Cardiol  2008;51:1022–30.
+</cite> [<a href="https://doi.org/10.1016/j.jacc.2007.10.049" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/18325442/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Am%20Coll%20Cardiol&amp;title=Cardiovascular%20magnetic%20resonance%20in%20clinically%20suspected%20cardiac%20amyloidosis:%20noninvasive%20imaging%20compared%20to%20endomyocardial%20biopsy&amp;volume=51&amp;publication_year=2008&amp;pages=1022-30&amp;pmid=18325442&amp;doi=10.1016/j.jacc.2007.10.049&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B7">
+<span class="label">7.</span><cite>
+
+Maurer  MS, Elliott  P, Comenzo  R, Semigran  M, Rapezzi  C. Addressing common questions encountered in the diagnosis and management of cardiac amyloidosis. Circulation  2017;135:1357–77.
+</cite> [<a href="https://doi.org/10.1161/CIRCULATIONAHA.116.024438" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5392416/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28373528/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Circulation&amp;title=Addressing%20common%20questions%20encountered%20in%20the%20diagnosis%20and%20management%20of%20cardiac%20amyloidosis&amp;volume=135&amp;publication_year=2017&amp;pages=1357-77&amp;pmid=28373528&amp;doi=10.1161/CIRCULATIONAHA.116.024438&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B8">
+<span class="label">8.</span><cite>
+
+Brownrigg  J, Lorenzini  M, Lumley  M, Elliott  P. Diagnostic performance of imaging investigations in detecting and differentiating cardiac amyloidosis: a systematic review and meta-analysis. ESC Heart Fail  2019;6:1041–51.
+</cite> [<a href="https://doi.org/10.1002/ehf2.12511" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6816075/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/31487121/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=ESC%20Heart%20Fail&amp;title=Diagnostic%20performance%20of%20imaging%20investigations%20in%20detecting%20and%20differentiating%20cardiac%20amyloidosis:%20a%20systematic%20review%20and%20meta-analysis&amp;volume=6&amp;publication_year=2019&amp;pages=1041-51&amp;pmid=31487121&amp;doi=10.1002/ehf2.12511&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B9">
+<span class="label">9.</span><cite>
+
+Fontana  M, Berk  JL, Gillmore  JD, Witteles  RM, Grogan  M, Drachman  B  et al.   Vutrisiran in patients with transthyretin amyloidosis with cardiomyopathy. N Engl J Med  2024. Online ahead of print.</cite> [<a href="https://doi.org/10.1056/NEJMoa2409134" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/39213194/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N%20Engl%20J%20Med&amp;title=Vutrisiran%20in%20patients%20with%20transthyretin%20amyloidosis%20with%20cardiomyopathy&amp;publication_year=2024&amp;pmid=39213194&amp;doi=10.1056/NEJMoa2409134&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B10">
+<span class="label">10.</span><cite>
+
+Maurer  MS, Schwartz  JH, Gundapaneni  B, Elliott  PM, Merlini  G, Waddington-Cruz  M  et al.   Tafamidis treatment for patients with transthyretin amyloid cardiomyopathy. N Engl J Med  2018;379:1007–16.
+</cite> [<a href="https://doi.org/10.1056/NEJMoa1805689" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30145929/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N%20Engl%20J%20Med&amp;title=Tafamidis%20treatment%20for%20patients%20with%20transthyretin%20amyloid%20cardiomyopathy&amp;volume=379&amp;publication_year=2018&amp;pages=1007-16&amp;pmid=30145929&amp;doi=10.1056/NEJMoa1805689&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B11">
+<span class="label">11.</span><cite>
+
+Garcia-Pavia  P, aus dem Siepen  F, Donal  E, Lairez  O, van der Meer  P, Kristen  AV  et al.   Phase 1 trial of antibody NI006 for depletion of cardiac transthyretin amyloid. N Engl J Med  2023;389:239–50.
+</cite> [<a href="https://doi.org/10.1056/NEJMoa2303765" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/37212440/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N%20Engl%20J%20Med&amp;title=Phase%201%20trial%20of%20antibody%20NI006%20for%20depletion%20of%20cardiac%20transthyretin%20amyloid&amp;volume=389&amp;publication_year=2023&amp;pages=239-50&amp;pmid=37212440&amp;doi=10.1056/NEJMoa2303765&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B12">
+<span class="label">12.</span><cite>
+
+Maurer  MS, Kale  P, Fontana  M, Berk  JL, Grogan  M, Gustafsson  F  et al.   Patisiran treatment in patients with transthyretin cardiac amyloidosis. N Engl J Med  2023;389:1553–65.
+</cite> [<a href="https://doi.org/10.1056/NEJMoa2300757" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC10757426/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/37888916/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N%20Engl%20J%20Med&amp;title=Patisiran%20treatment%20in%20patients%20with%20transthyretin%20cardiac%20amyloidosis&amp;volume=389&amp;publication_year=2023&amp;pages=1553-65&amp;pmid=37888916&amp;doi=10.1056/NEJMoa2300757&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B13">
+<span class="label">13.</span><cite>
+
+Gillmore  JD, Judge  DP, Cappelli  F, Fontana  M, Garcia-Pavia  P, Gibbs  S  et al.   Efficacy and safety of acoramidis in transthyretin amyloid cardiomyopathy. N Engl J Med  2024;390:132–42.
+</cite> [<a href="https://doi.org/10.1056/NEJMoa2305434" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/38197816/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=N%20Engl%20J%20Med&amp;title=Efficacy%20and%20safety%20of%20acoramidis%20in%20transthyretin%20amyloid%20cardiomyopathy&amp;volume=390&amp;publication_year=2024&amp;pages=132-42&amp;pmid=38197816&amp;doi=10.1056/NEJMoa2305434&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B14">
+<span class="label">14.</span><cite>
+
+Shimada  S, Maekura  S, Ino  H, Matsuura  M, Masunaga  N, Matsumoto  T  et al.   Unusual case of cardiac amyloidosis preceded by a twenty-year history of dilated cardiomyopathy and heart failure. Intern Med  2016;55:1109–15.
+</cite> [<a href="https://doi.org/10.2169/internalmedicine.55.5835" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/27150863/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Intern%20Med&amp;title=Unusual%20case%20of%20cardiac%20amyloidosis%20preceded%20by%20a%20twenty-year%20history%20of%20dilated%20cardiomyopathy%20and%20heart%20failure&amp;volume=55&amp;publication_year=2016&amp;pages=1109-15&amp;pmid=27150863&amp;doi=10.2169/internalmedicine.55.5835&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B15">
+<span class="label">15.</span><cite>
+
+GHy  K, Ryu  DR, Song  PS, Song  YB, Hahn  JY, Choi  SH  et al.   A case of a senile systemic amyloidosis patient presenting with angina pectoris and dilated cardiomyopathy. Korean Circ J  2011;41:209–12.
+</cite> [<a href="https://doi.org/10.4070/kcj.2011.41.4.209" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3098414/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/21607172/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Korean%20Circ%20J&amp;title=A%20case%20of%20a%20senile%20systemic%20amyloidosis%20patient%20presenting%20with%20angina%20pectoris%20and%20dilated%20cardiomyopathy&amp;volume=41&amp;publication_year=2011&amp;pages=209-12&amp;pmid=21607172&amp;doi=10.4070/kcj.2011.41.4.209&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B16">
+<span class="label">16.</span><cite>
+
+Rushakoff  JA, Kransdorf  EP, Kittleson  MM, Neyer  JR, Luthringer  D, Patel  JK. Atypical cardiac amyloidosis phenotypes identified at transplant: a case series. Eur Heart J Case Rep  2023;7:ytad105.
+</cite> [<a href="https://doi.org/10.1093/ehjcr/ytad105" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC10010473/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/36923113/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Eur%20Heart%20J%20Case%20Rep&amp;title=Atypical%20cardiac%20amyloidosis%20phenotypes%20identified%20at%20transplant:%20a%20case%20series&amp;volume=7&amp;publication_year=2023&amp;pages=ytad105&amp;pmid=36923113&amp;doi=10.1093/ehjcr/ytad105&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B17">
+<span class="label">17.</span><cite>
+
+Kintsler  S, Jäkel  J, Brandenburg  V, Kersten  K, Knuechel  R, Röcken  C. Cardiac amyloidosis in a heart transplant patient—a case report and retrospective analysis of amyloidosis evolution. Intractable Rare Dis Res  2015;4:60–4.
+</cite> [<a href="https://doi.org/10.5582/irdr.2014.01036" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC4322597/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/25674390/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Intractable%20Rare%20Dis%20Res&amp;title=Cardiac%20amyloidosis%20in%20a%20heart%20transplant%20patient%E2%80%94a%20case%20report%20and%20retrospective%20analysis%20of%20amyloidosis%20evolution&amp;volume=4&amp;publication_year=2015&amp;pages=60-4&amp;pmid=25674390&amp;doi=10.5582/irdr.2014.01036&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B18">
+<span class="label">18.</span><cite>
+
+Zhao  W, Jiang  W, Qiu  X. Deep learning for COVID-19 detection based on CT images. Sci Rep  2021;11:14353.
+</cite> [<a href="https://doi.org/10.1038/s41598-021-93832-2" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8275612/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34253822/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Sci%20Rep&amp;title=Deep%20learning%20for%20COVID-19%20detection%20based%20on%20CT%20images&amp;volume=11&amp;publication_year=2021&amp;pages=14353&amp;pmid=34253822&amp;doi=10.1038/s41598-021-93832-2&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B19">
+<span class="label">19.</span><cite>
+
+Esteva  A, Kuprel  B, Novoa  RA, Ko  J, Swetter  SM, Blau  HM  et al.   Dermatologist-level classification of skin cancer with deep neural networks. Nature  2017;542:115–8.
+</cite> [<a href="https://doi.org/10.1038/nature21056" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8382232/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/28117445/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Nature&amp;title=Dermatologist-level%20classification%20of%20skin%20cancer%20with%20deep%20neural%20networks&amp;volume=542&amp;publication_year=2017&amp;pages=115-8&amp;pmid=28117445&amp;doi=10.1038/nature21056&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B20">
+<span class="label">20.</span><cite>
+
+Ehteshami Bejnordi  B, Veta  M, Johannes van Diest  P, van Ginneken  B, Karssemeijer  N, Litjens  G  et al.   Diagnostic assessment of deep learning algorithms for detection of lymph node metastases in women with breast cancer. JAMA  2017;318:2199–210.
+</cite> [<a href="https://doi.org/10.1001/jama.2017.14585" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC5820737/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/29234806/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=JAMA&amp;title=Diagnostic%20assessment%20of%20deep%20learning%20algorithms%20for%20detection%20of%20lymph%20node%20metastases%20in%20women%20with%20breast%20cancer&amp;volume=318&amp;publication_year=2017&amp;pages=2199-210&amp;pmid=29234806&amp;doi=10.1001/jama.2017.14585&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B21">
+<span class="label">21.</span><cite>
+
+Nam  S, Chong  Y, Jung  CK, Kwak  TY, Lee  JY, Park  J  et al.   Introduction to digital pathology and computer-aided pathology. J Pathol Transl Med  2020;54:125–34.
+</cite> [<a href="https://doi.org/10.4132/jptm.2019.12.31" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC7093286/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/32045965/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Pathol%20Transl%20Med&amp;title=Introduction%20to%20digital%20pathology%20and%20computer-aided%20pathology&amp;volume=54&amp;publication_year=2020&amp;pages=125-34&amp;pmid=32045965&amp;doi=10.4132/jptm.2019.12.31&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B22">
+<span class="label">22.</span><cite>
+
+Byeon  SJ, Park  J, Cho  YA, Cho  BJ. Automated histological classification for digital pathology images of colonoscopy specimen via deep learning. Sci Rep  2022;12:12804.
+</cite> [<a href="https://doi.org/10.1038/s41598-022-16885-x" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC9329279/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/35896791/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Sci%20Rep&amp;title=Automated%20histological%20classification%20for%20digital%20pathology%20images%20of%20colonoscopy%20specimen%20via%20deep%20learning&amp;volume=12&amp;publication_year=2022&amp;pages=12804&amp;pmid=35896791&amp;doi=10.1038/s41598-022-16885-x&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B23">
+<span class="label">23.</span><cite>
+
+Sukegawa  S, Ono  S, Tanaka  F, Inoue  Y, Hara  T, Yoshii  K  et al.   Effectiveness of deep learning classifiers in histopathological diagnosis of oral squamous cell carcinoma by pathologists. Sci Rep  2023;13:11676.
+</cite> [<a href="https://doi.org/10.1038/s41598-023-38343-y" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC10356919/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/37468501/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Sci%20Rep&amp;title=Effectiveness%20of%20deep%20learning%20classifiers%20in%20histopathological%20diagnosis%20of%20oral%20squamous%20cell%20carcinoma%20by%20pathologists&amp;volume=13&amp;publication_year=2023&amp;pages=11676&amp;pmid=37468501&amp;doi=10.1038/s41598-023-38343-y&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B24">
+<span class="label">24.</span><cite>
+
+Kessel  K, Mattila  J, Linder  N, Kivela  T, Lundin  J. Deep learning algorithms for corneal amyloid deposition quantitation in familial amyloidosis. Ocul Oncol Pathol  2020;6:58–65.
+</cite> [<a href="https://doi.org/10.1159/000500896" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC6984152/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/32002407/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Ocul%20Oncol%20Pathol&amp;title=Deep%20learning%20algorithms%20for%20corneal%20amyloid%20deposition%20quantitation%20in%20familial%20amyloidosis&amp;volume=6&amp;publication_year=2020&amp;pages=58-65&amp;pmid=32002407&amp;doi=10.1159/000500896&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B25">
+<span class="label">25.</span><cite>
+
+Kim  HS, Yoon  H, Thakur  N, Hwang  G, Lee  EJ, Kim  C  et al.   Deep learning-based histopathological segmentation for whole slide images of colorectal cancer in a compressed domain. Sci Rep  2021;11:22520.
+</cite> [<a href="https://doi.org/10.1038/s41598-021-01905-z" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8602325/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34795365/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Sci%20Rep&amp;title=Deep%20learning-based%20histopathological%20segmentation%20for%20whole%20slide%20images%20of%20colorectal%20cancer%20in%20a%20compressed%20domain&amp;volume=11&amp;publication_year=2021&amp;pages=22520&amp;pmid=34795365&amp;doi=10.1038/s41598-021-01905-z&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B26">
+<span class="label">26.</span><cite>
+
+Wang  AY, Sharma  V, Saini  H, Tingen  JN, Flores  A, Liu  D  et al.   Machine learning quantification of amyloid deposits in histological images of ligamentum Flavum. J Pathol Inform  2022;13:100013.
+</cite> [<a href="https://doi.org/10.1016/j.jpi.2022.100013" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8866880/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/35242449/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Pathol%20Inform&amp;title=Machine%20learning%20quantification%20of%20amyloid%20deposits%20in%20histological%20images%20of%20ligamentum%20Flavum&amp;volume=13&amp;publication_year=2022&amp;pages=100013&amp;pmid=35242449&amp;doi=10.1016/j.jpi.2022.100013&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B27">
+<span class="label">27.</span><cite>
+
+von Elm  E, Altman  DG, Egger  M, Pocock  SJ, Gøtzsche  PC, Vandenbroucke  JP  et al.   The strengthening the reporting of observational studies in epidemiology (STROBE) statement: guidelines for reporting observational studies. J Clin Epidemiol  2008;61:344–9.
+</cite> [<a href="https://doi.org/10.1016/j.jclinepi.2007.11.008" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/18313558/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Clin%20Epidemiol&amp;title=The%20strengthening%20the%20reporting%20of%20observational%20studies%20in%20epidemiology%20(STROBE)%20statement:%20guidelines%20for%20reporting%20observational%20studies&amp;volume=61&amp;publication_year=2008&amp;pages=344-9&amp;pmid=18313558&amp;doi=10.1016/j.jclinepi.2007.11.008&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B28">
+<span class="label">28.</span><cite>
+
+Collins  GS, Reitsma  JB, Altman  DG, Moons  KG. Transparent reporting of a multivariable prediction model for individual prognosis or diagnosis (TRIPOD). Ann Intern Med  2015;162:735–6.</cite> [<a href="https://doi.org/10.7326/L15-5093-2" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/25984857/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Ann%20Intern%20Med&amp;title=Transparent%20reporting%20of%20a%20multivariable%20prediction%20model%20for%20individual%20prognosis%20or%20diagnosis%20(TRIPOD)&amp;volume=162&amp;publication_year=2015&amp;pages=735-6&amp;pmid=25984857&amp;doi=10.7326/L15-5093-2&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B29">
+<span class="label">29.</span><cite>
+
+Trockman  A, Kolter  JZ. Patches are all you need? arXiv:2201.09792v1 [cs.CV], 10.48550/arXiv.2201.09792, 24 January 2022, preprint: not peer reviewed.</cite> [<a href="https://doi.org/10.48550/arXiv.2201.09792" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>]</li>
+<li id="qyae141-B30">
+<span class="label">30.</span><cite>
+
+Mass  AL, Hannun  AY, Ng  AY. Rectifier nonlinearities improves neural network acoustic models. Proc Int Conf Mach Learn  2013;30:3.</cite> [<a href="https://scholar.google.com/scholar_lookup?journal=Proc%20Int%20Conf%20Mach%20Learn&amp;title=Rectifier%20nonlinearities%20improves%20neural%20network%20acoustic%20models&amp;volume=30&amp;publication_year=2013&amp;pages=3&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B31">
+<span class="label">31.</span><cite>
+
+Srivastava  N, Hinton  G, Krizhevsky  A, Sutskever  I, Salakhutdinov  R. Dropout: a simple way to prevent neural networks from overfitting. J Mach Learn Res  2014;15:1929–58.</cite> [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Mach%20Learn%20Res&amp;title=Dropout:%20a%20simple%20way%20to%20prevent%20neural%20networks%20from%20overfitting&amp;volume=15&amp;publication_year=2014&amp;pages=1929-58&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B32">
+<span class="label">32.</span><cite>
+
+DeVries  T, Taylor  GW. Improved Regularization of Convolutional Neural Networks with Cutout. arXiv 1708.04552 [cs.CV], 10.48550/arXiv.1708.04552, 29 Nov 2017, preprint: not peer reviewed.</cite> [<a href="https://doi.org/10.48550/arXiv.1708.04552" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>]</li>
+<li id="qyae141-B33">
+<span class="label">33.</span><cite>
+
+Banypersad  SM, Moon  JC, Whelan  C, Hawkins  PN, Wechalekar  AD. Updates in cardiac amyloidosis: a review. J Am Heart Assoc  2012;1:e000364.
+</cite> [<a href="https://doi.org/10.1161/JAHA.111.000364" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC3487372/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/23130126/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Am%20Heart%20Assoc&amp;title=Updates%20in%20cardiac%20amyloidosis:%20a%20review&amp;volume=1&amp;publication_year=2012&amp;pages=e000364&amp;pmid=23130126&amp;doi=10.1161/JAHA.111.000364&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B34">
+<span class="label">34.</span><cite>
+
+Nativi-Nicolau  J, Maurer  MS. Amyloidosis cardiomyopathy: update in the diagnosis and treatment of the most common types. Curr Opin Cardiol  2018;33:571–9.
+</cite> [<a href="https://doi.org/10.1097/HCO.0000000000000547" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/30015648/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Curr%20Opin%20Cardiol&amp;title=Amyloidosis%20cardiomyopathy:%20update%20in%20the%20diagnosis%20and%20treatment%20of%20the%20most%20common%20types&amp;volume=33&amp;publication_year=2018&amp;pages=571-9&amp;pmid=30015648&amp;doi=10.1097/HCO.0000000000000547&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B35">
+<span class="label">35.</span><cite>
+
+Runz  M, Rusche  D, Schmidt  S, Weihrauch  MR, Hesser  J, Weis  CA. Normalization of HE-stained histological images using cycle consistent generative adversarial networks. Diagn Pathol  2021;16:71.
+</cite> [<a href="https://doi.org/10.1186/s13000-021-01126-y" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8349020/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/34362386/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Diagn%20Pathol&amp;title=Normalization%20of%20HE-stained%20histological%20images%20using%20cycle%20consistent%20generative%20adversarial%20networks&amp;volume=16&amp;publication_year=2021&amp;pages=71&amp;pmid=34362386&amp;doi=10.1186/s13000-021-01126-y&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B36">
+<span class="label">36.</span><cite>
+
+Garcia-Pavia  P, Rapezzi  C, Adler  Y, Arad  M, Basso  C, Brucato  A  et al.   Diagnosis and treatment of cardiac amyloidosis: a position statement of the ESC working group on myocardial and pericardial diseases. Eur Heart J  2021;42:1554–68.
+</cite> [<a href="https://doi.org/10.1093/eurheartj/ehab072" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC8060056/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/33825853/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=Eur%20Heart%20J&amp;title=Diagnosis%20and%20treatment%20of%20cardiac%20amyloidosis:%20a%20position%20statement%20of%20the%20ESC%20working%20group%20on%20myocardial%20and%20pericardial%20diseases&amp;volume=42&amp;publication_year=2021&amp;pages=1554-68&amp;pmid=33825853&amp;doi=10.1093/eurheartj/ehab072&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B37">
+<span class="label">37.</span><cite>
+
+Ilse  M, Tomczak  JM, Welling  M. Attention-based deep multiple instance learning. Proc 35th Int Conf Mach Learn  2018;80:2127–36.</cite> [<a href="https://scholar.google.com/scholar_lookup?journal=Proc%2035th%20Int%20Conf%20Mach%20Learn&amp;title=Attention-based%20deep%20multiple%20instance%20learning&amp;volume=80&amp;publication_year=2018&amp;pages=2127-36&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+<li id="qyae141-B38">
+<span class="label">38.</span><cite>
+
+Licordari  R, Trimarchi  G, Teresi  L, Restelli  D, Lofrumento  F, Perna  A  et al.   Cardiac magnetic resonance in HCM phenocopies: from diagnosis to risk stratification and therapeutic management. J Clin Med  2023;12:3481.
+</cite> [<a href="https://doi.org/10.3390/jcm12103481" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="/articles/PMC10218866/" class="usa-link">PMC free article</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/37240587/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Clin%20Med&amp;title=Cardiac%20magnetic%20resonance%20in%20HCM%20phenocopies:%20from%20diagnosis%20to%20risk%20stratification%20and%20therapeutic%20management&amp;volume=12&amp;publication_year=2023&amp;pages=3481&amp;pmid=37240587&amp;doi=10.3390/jcm12103481&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
+</ul></section></section><section id="_ad93_" lang="en" class="associated-data"><h2 class="pmc_sec_title">Associated Data</h2>
+<p class="font-secondary"><em>This section collects any data citations, data availability statements, or supplementary materials included in this article.</em></p>
+<section id="_adsm93_" lang="en" class="supplementary-materials"><h3 class="pmc_sec_title">Supplementary Materials</h3>
+<section class="sm xbox font-sm" id="db_ds_supplementary-material1_reqid_"><div class="caption p"><span>qyae141_Supplementary_Data</span></div>
+<div class="media p"><div class="caption">
+<a href="/articles/instance/11728699/bin/qyae141_supplementary_data.pdf" data-ga-action="click_feat_suppl" class="usa-link">qyae141_supplementary_data.pdf</a><sup> (522KB, pdf) </sup>
+</div></div></section></section><section id="_adda93_" lang="en" class="data-availability-statement"><h3 class="pmc_sec_title">Data Availability Statement</h3>
+<p>The participants of this study did not give written consent for their data to be shared publicly, so due to the sensitive nature of the research supporting data are not available.</p></section></section></section><footer class="p courtesy-note font-secondary font-sm text-center"><hr class="headless">
+<p>Articles from European Heart Journal. Imaging Methods and Practice are provided here courtesy of <strong>Oxford University Press on behalf of the European Society of Cardiology</strong></p></footer></section></article>
+
+                      
+
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+<!-- Secondary navigation placeholder -->
+<div class="pmc-sidenav desktop:grid-col-4 display-flex">
+    <section class="pmc-sidenav__container" aria-label="Article resources and navigation">
+        <button type="button" class="usa-button pmc-sidenav__container__close usa-button--unstyled">
+            <img src="/static/img/usa-icons/close.svg" role="img" alt="Close" />
+        </button>
+    <div class="display-none desktop:display-block">
+       <section class="margin-top-4 desktop:margin-top-0">
+              <h2 class="margin-top-0">ACTIONS</h2>
+           <ul class="usa-list usa-list--unstyled usa-list--actions">
+               
+               <li>
+                     <a
+                             href="https://doi.org/10.1093/ehjimp/qyae141"
+                             class="usa-button usa-button--outline width-24 font-xs display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                             target="_blank"
+                             rel="noreferrer noopener"
+                             data-ga-category="actions"
+                             data-ga-action="click"
+                             data-ga-label="publisher_link_desktop"
+                     >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#launch"></use>
+                         </svg>
+                         <span class="display-inline-flex flex-justify-center flex-1 padding-right-2">View on publisher site</span>
+                     </a>
+               </li>
+               
+               
+               <li>
+                    <a
+                            href="pdf/qyae141.pdf"
+                            class="usa-button usa-button--outline width-24 display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                            data-ga-category="actions"
+                            data-ga-action="click"
+                            data-ga-label="pdf_download_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1">PDF (585.3 KB)</span>
+                    </a>
+               </li>
+               
+                
+               <li>
+                   <button role="button" class="usa-button width-24 citation-dialog-trigger display-inline-flex flex-align-center flex-justify-start padding-left-1"
+                        aria-label="Open dialog with citation text in different styles"
+                        data-ga-category="actions"
+                        data-ga-action="open"
+                        data-ga-label="cite_desktop"
+                        data-all-citations-url="/resources/citations/11728699/"
+                        data-citation-style="nlm"
+                        data-download-format-link="/resources/citations/11728699/export/"
+                    >
+                        <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#format_quote"></use>
+                        </svg>
+                       <span class="display-inline-flex flex-justify-center flex-1 button-label">Cite</span>
+                    </button>
+               </li>
+                
+               <li>
+
+                        <button class="usa-button width-24 collections-dialog-trigger collections-button display-inline-flex flex-align-center flex-justify-start padding-left-1 collections-button-empty"
+                              aria-label="Save article in MyNCBI collections."
+                              data-ga-category="actions"
+                              data-ga-action="click"
+                              data-ga-label="collections_button_desktop"
+                              data-collections-open-dialog-enabled="false"
+                              data-collections-open-dialog-url="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fpmc.ncbi.nlm.nih.gov%2Farticles%2FPMC11728699%2F%23open-collections-dialog"
+                              data-in-collections="false">
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-full" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-full.svg#icon"></use>
+                            </svg>
+                            <svg class="usa-icon width-3 height-3 usa-icon--bookmark-empty" aria-hidden="true" focusable="false" role="img" hidden>
+                                <use xlink:href="/static/img/action-bookmark-empty.svg#icon"></use>
+                            </svg>
+                            <span class="display-inline-flex flex-justify-center flex-1">Collections</span>
+                       </button>
+               </li>
+               <li class="pmc-permalink">
+                    <button
+                            type="button"
+                            class="usa-button width-24 display-inline-flex flex-align-center flex-justify padding-left-1 shadow-none"
+                            aria-label="Show article permalink"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            data-ga-category="actions"
+                            data-ga-action="open"
+                            data-ga-label="permalink_desktop"
+                    >
+                         <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img" hidden>
+                            <use xlink:href="/static/img/sprite.svg#share"></use>
+                        </svg>
+                        <span class="display-inline-flex flex-justify-center flex-1 button-label">Permalink</span>
+                    </button>
+                   
+
+<div class="pmc-permalink__dropdown" hidden>
+    <div class="pmc-permalink__dropdown__container">
+          <h2 class="usa-modal__heading margin-top-0 margin-bottom-2 text-uppercase font-sans-xs">PERMALINK</h2>
+          <div class="pmc-permalink__dropdown__content">
+              <input type="text" class="usa-input" value="https://pmc.ncbi.nlm.nih.gov/articles/PMC11728699/" aria-label="Article permalink">
+              <button class="usa-button display-inline-flex pmc-permalink__dropdown__copy__btn margin-right-0" title="Copy article permalink" data-ga-category="save_share" data-ga-action="link" data-ga-label="copy_link">
+                  <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+                  </svg>
+                  <span class="margin-left-1">Copy</span>
+              </button>
+          </div>
+    </div>
+</div>
+               </li>
+           </ul>
+       </section>
+     </div>
+
+        <section class="pmc-resources margin-top-6 desktop:margin-top-4" data-page-path="/articles/PMC11728699/">
+            <h2 class="margin-top-0">RESOURCES</h2>
+            
+                <div class="usa-accordion usa-accordion--multiselectable" data-allow-multiple>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-similar-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_similar_articles"
+                        data-ga-label="/articles/PMC11728699/"
+                        data-action-open="open_similar_articles"
+                        data-action-close="close_similar_articles"
+                        >
+                            Similar articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-similar-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/similar-article-links/39811011/"
+                            
+                    >
+                        
+                    </div>
+                    <h3 class="usa-accordion__heading">
+                        <button
+                        type="button"
+                        class="usa-accordion__button"
+                        aria-expanded="false"
+                        aria-controls="resources-cited-by-other-articles"
+                        data-ga-category="resources_accordion"
+                        data-ga-action="open_cited_by"
+                        data-ga-label="/articles/PMC11728699/"
+                        data-action-open="open_cited_by"
+                        data-action-close="close_cited_by"
+                        >
+                             Cited by other articles
+                        </button>
+                    </h3>
+                    <div
+                            id="resources-cited-by-other-articles"
+                            class="usa-accordion__content usa-prose"
+                            
+                                data-source-url="/resources/cited-by-links/39811011/"
+                            
+                    >
+                          
+                    </div>
+                    
+                        <h3 class="usa-accordion__heading">
+                            <button
+                            type="button"
+                            class="usa-accordion__button"
+                            aria-expanded="false"
+                            aria-controls="resources-links-to-ncbi-databases"
+                            data-ga-category="resources_accordion"
+                            data-ga-action="open_NCBI_links"
+                            data-ga-label="/articles/PMC11728699/"
+                            data-action-open="open_NCBI_links"
+                            data-action-close="close_NCBI_link"
+                            >
+                                 Links to NCBI Databases
+                            </button>
+                        </h3>
+                        <div
+                                id="resources-links-to-ncbi-databases"
+                                class="usa-accordion__content usa-prose"
+                                data-source-url="/resources/db-links/11728699/"
+                        >
+                        </div>
+                    
+                    
+                </div>
+            
+        </section>
+
+
+        <section
+        class="usa-in-page-nav usa-in-page-nav--wide margin-top-6 desktop:margin-top-4"
+        data-title-text="On this page"
+        data-title-heading-level="h2"
+        data-scroll-offset="0"
+        data-root-margin="-10% 0px -80% 0px"
+        data-main-content-selector="main"
+        data-threshold="1"
+        hidden
+        ></section>
+    </section>
+</div>
+
+
+        
+
+<div class="overlay" role="dialog" aria-label="Citation Dialog" hidden>
+    <div class="dialog citation-dialog" aria-hidden="true">
+        <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+            <h2 class="usa-modal__heading margin-0">Cite</h2>
+             <button type="button" class="usa-button usa-button--unstyled close-overlay text-black width-auto"  tabindex="1">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#close"></use>
+                </svg>
+             </button>
+        </div>
+
+        
+
+<div class="citation-text-block">
+  <div class="citation-text margin-bottom-2"></div>
+  <ul class="usa-list usa-list--unstyled display-inline-flex flex-justify width-full flex-align-center">
+      <li>
+        <button
+          class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center copy-button dialog-focus"
+          data-ga-category="save_share"
+          data-ga-action="cite"
+          data-ga-label="copy"
+          tabindex="2">
+            <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                <use xlink:href="/static/img/sprite.svg#content_copy"></use>
+            </svg>
+            <span>Copy</span>
+        </button>
+      </li>
+      <li>
+          <a
+              href="#"
+              role="button"
+              class="usa-button usa-button--unstyled text-no-underline display-flex flex-align-center export-button"
+              data-ga-category="save_share"
+              data-ga-action="cite"
+              data-ga-label="download"
+              title="Download a file for external citation management software"
+              tabindex="3">
+                <svg class="usa-icon width-3 height-3" aria-hidden="true" focusable="false" role="img">
+                    <use xlink:href="/static/img/sprite.svg#file_download"></use>
+                </svg>
+                <span class="display-none mobile-lg:display-inline">Download .nbib</span>
+                <span class="display-inline mobile-lg:display-none">.nbib</span>
+            </a>
+      </li>
+      <li>
+          
+
+<div class="display-inline-flex flex-align-center">
+  <label class="usa-label margin-top-0">Format:</label>
+  <select aria-label="Format" class="usa-select citation-style-selector padding-1 margin-top-0 border-0 padding-right-4" tabindex="4" >
+    
+      <option data-style-url-name="ama"
+              value="AMA"
+              >
+        AMA
+      </option>
+    
+      <option data-style-url-name="apa"
+              value="APA"
+              >
+        APA
+      </option>
+    
+      <option data-style-url-name="mla"
+              value="MLA"
+              >
+        MLA
+      </option>
+    
+      <option data-style-url-name="nlm"
+              value="NLM"
+              selected="selected">
+        NLM
+      </option>
+    
+  </select>
+</div>
+      </li>
+  </ul>
+</div>
+    </div>
+</div>
+
+        <div class="overlay" role="dialog" hidden>
+  <div id="collections-action-dialog" class="dialog collections-dialog" aria-hidden="true">
+   <div class="display-inline-flex flex-align-center flex-justify width-full margin-bottom-2">
+        <h2 class="usa-modal__heading margin-0">Add to Collections</h2>
+    </div>
+    <div class="collections-action-panel action-panel">
+      
+
+
+<form id="collections-action-dialog-form"
+      class="usa-form maxw-full collections-action-panel-form action-panel-content action-form action-panel-smaller-selectors"
+      data-existing-collections-url="/list-existing-collections/"
+      data-add-to-existing-collection-url="/add-to-existing-collection/"
+      data-create-and-add-to-new-collection-url="/create-and-add-to-new-collection/"
+      data-myncbi-max-collection-name-length="100"
+      data-collections-root-url="https://www.ncbi.nlm.nih.gov/myncbi/collections/">
+
+    <input type="hidden" name="csrfmiddlewaretoken" value="zuG6NvKoAFYD2UEU5JQj1sSUROUZQaLJAdtNgg8Ax1d9mnXfjXVZP6kuCCaztKsn">
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-new"
+            class="usa-radio__input usa-radio__input--tile collections-new  margin-top-0"
+            name="collections"
+            value="new"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_new" />
+            <label class="usa-radio__label" for="collections-action-dialog-new">Create a new collection</label>
+        </div>
+        <div class="usa-radio">
+            <input type="radio"
+            id="collections-action-dialog-existing"
+            class="usa-radio__input usa-radio__input--tile collections-existing"
+            name="collections"
+            value="existing"
+            checked="true"
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="collections_radio_existing" />
+            <label class="usa-radio__label" for="collections-action-dialog-existing">Add to an existing collection</label>
+        </div>
+    </fieldset>
+
+    <fieldset class="usa-fieldset margin-bottom-2">
+        <div class="action-panel-control-wrap new-collections-controls">
+           <label for="collections-action-dialog-add-to-new" class="usa-label margin-top-0">
+                Name your collection
+               <abbr title="required" class="usa-hint usa-hint--required text-no-underline">*</abbr>
+          </label>
+          <input
+            type="text"
+            name="add-to-new-collection"
+            id="collections-action-dialog-add-to-new"
+            class="usa-input collections-action-add-to-new"
+            pattern="[^&quot;&amp;=&lt;&gt;/]*" title="The following characters are not allowed in the Name field: &quot;&amp;=&lt;&gt;/"
+            maxlength=""
+            data-ga-category="collections_button"
+            data-ga-action="create_collection"
+            data-ga-label="non_favorties_collection"
+            required
+          />
+        </div>
+        <div class="action-panel-control-wrap existing-collections-controls">
+             <label for="collections-action-dialog-add-to-existing" class="usa-label margin-top-0">
+                Choose a collection
+              </label>
+              <select id="collections-action-dialog-add-to-existing"
+                      class="usa-select collections-action-add-to-existing"
+                      data-ga-category="collections_button"
+                      data-ga-action="select_collection"
+                      data-ga-label="($('.collections-action-add-to-existing').val() === 'Favorites') ? 'Favorites' : 'non_favorites_collection'">
+              </select>
+              <div class="collections-retry-load-on-error usa-input-error-message selection-validation-message">
+                Unable to load your collection due to an error<br>
+                <a href="#">Please try again</a>
+              </div>
+        </div>
+    </fieldset>
+
+    <div class="display-inline-flex">
+        <button class="usa-button margin-top-0 action-panel-submit"
+            type="submit"
+            data-loading-label="Adding..."
+            data-pinger-ignore
+            data-ga-category="collections_button"
+            data-ga-action="click"
+            data-ga-label="add">
+          Add
+        </button>
+        <button class="usa-button usa-button--outline margin-top-0 action-panel-cancel"
+                aria-label="Close 'Add to Collections' panel"
+                ref="linksrc=close_collections_panel"
+                data-ga-category="collections_button"
+                data-ga-action="click"
+                data-ga-label="cancel">
+          Cancel
+        </button>
+    </div>
+</form>
+    </div>
+  </div>
+</div>
+
+        
+
+      </div>
+    </div>
+  </div>
+
+
+
+        
+    
+    
+
+<footer class="ncbi-footer ncbi-dark-background " >
+    
+        <div class="ncbi-footer__icon-section">
+            <div class="ncbi-footer__social-header">
+                Follow NCBI
+            </div>
+
+            <div class="grid-container ncbi-footer__ncbi-social-icons-container">
+                
+                    <a href="https://twitter.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="40"
+                             height="40"
+                             viewBox="0 0 40 40"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on X (formerly known as Twitter)</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.facebook.com/ncbi.nlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="16"
+                             height="29"
+                             focusable="false"
+                             aria-hidden="true"
+                             viewBox="0 0 16 29"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.8809 21.4002C3.8809 19.0932 3.8809 16.7876 3.8809 14.478C3.8809 14.2117 3.80103 14.1452 3.54278 14.1492C2.53372 14.1638 1.52334 14.1492 0.514288 14.1598C0.302626 14.1598 0.248047 14.0972 0.248047 13.8936C0.256034 12.4585 0.256034 11.0239 0.248047 9.58978C0.248047 9.37013 0.302626 9.30224 0.528931 9.3049C1.53798 9.31688 2.54837 9.3049 3.55742 9.31555C3.80103 9.31555 3.8809 9.26097 3.87957 9.00272C3.87158 8.00565 3.85428 7.00592 3.90753 6.00884C3.97142 4.83339 4.31487 3.73115 5.04437 2.78467C5.93095 1.63318 7.15699 1.09005 8.56141 0.967577C10.5582 0.79319 12.555 0.982221 14.5518 0.927641C14.7102 0.927641 14.7462 0.99287 14.7449 1.13664C14.7449 2.581 14.7449 4.02668 14.7449 5.47104C14.7449 5.67604 14.6517 5.68669 14.4946 5.68669C13.4523 5.68669 12.4113 5.68669 11.3703 5.68669C10.3506 5.68669 9.92057 6.10868 9.90593 7.13904C9.89661 7.7647 9.91525 8.39303 9.89794 9.01869C9.88995 9.26364 9.96583 9.31822 10.2015 9.31688C11.7204 9.30623 13.2393 9.31688 14.7595 9.3049C15.0257 9.3049 15.0723 9.3728 15.0444 9.62439C14.89 10.9849 14.7515 12.3467 14.6144 13.7085C14.5691 14.1571 14.5785 14.1585 14.1458 14.1585C12.8386 14.1585 11.5313 14.1665 10.2254 14.1518C9.95119 14.1518 9.89794 14.2317 9.89794 14.4899C9.90593 19.0799 9.89794 23.6752 9.91125 28.2612C9.91125 28.5674 9.8407 28.646 9.53186 28.6433C7.77866 28.6273 6.02414 28.6366 4.27094 28.634C3.82499 28.634 3.87158 28.6992 3.87158 28.22C3.87602 25.9472 3.87913 23.6739 3.8809 21.4002Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on Facebook</span>
+                    </a>
+                
+
+                
+                    <a href="https://www.linkedin.com/company/ncbinlm"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="25"
+                             height="23"
+                             viewBox="0 0 26 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M14.6983 9.98423C15.6302 9.24808 16.5926 8.74754 17.6762 8.51991C19.673 8.09126 21.554 8.30824 23.1262 9.7526C24.2351 10.7723 24.7529 12.1115 25.0165 13.5612C25.1486 14.3363 25.2105 15.1218 25.2015 15.9081C25.2015 18.3043 25.2015 20.6898 25.2082 23.0806C25.2082 23.3468 25.1549 23.444 24.8621 23.4414C23.1297 23.4272 21.3992 23.4272 19.6704 23.4414C19.4041 23.4414 19.3429 23.3588 19.3442 23.1019C19.3535 20.5194 19.3442 17.9368 19.3442 15.3543C19.3442 14.0005 18.3258 12.9448 17.0266 12.9488C15.7273 12.9528 14.6983 14.0071 14.6983 15.361C14.6983 17.9328 14.6917 20.5047 14.6983 23.0753C14.6983 23.3708 14.6198 23.444 14.3296 23.4427C12.6185 23.4294 10.9079 23.4294 9.19779 23.4427C8.93155 23.4427 8.86099 23.3735 8.86232 23.1086C8.8783 19.7619 8.88628 16.4144 8.88628 13.066C8.88628 11.5688 8.87874 10.0708 8.86365 8.57182C8.86365 8.3575 8.90758 8.27896 9.14054 8.28029C10.9048 8.29094 12.6687 8.29094 14.4321 8.28029C14.6464 8.28029 14.6983 8.34818 14.6983 8.54653C14.6903 9.00047 14.6983 9.45441 14.6983 9.98423Z">
+                            </path>
+                            <path d="M6.55316 15.8443C6.55316 18.2564 6.55316 20.6699 6.55316 23.082C6.55316 23.3629 6.48127 23.4388 6.19906 23.4374C4.47737 23.4241 2.75568 23.4241 1.03399 23.4374C0.767751 23.4374 0.69986 23.3629 0.701191 23.1006C0.709178 18.2648 0.709178 13.4281 0.701191 8.59053C0.701191 8.34026 0.765089 8.27237 1.01669 8.2737C2.74991 8.28435 4.48048 8.28435 6.20838 8.2737C6.47462 8.2737 6.5465 8.33627 6.54517 8.6065C6.54783 11.0186 6.55316 13.4308 6.55316 15.8443Z">
+                            </path>
+                            <path d="M3.65878 0.243898C5.36804 0.243898 6.58743 1.45529 6.58743 3.1406C6.58743 4.75801 5.32145 5.95742 3.60819 5.96807C3.22177 5.97614 2.83768 5.90639 2.47877 5.76299C2.11985 5.61959 1.79344 5.40546 1.51897 5.13334C1.24449 4.86123 1.02755 4.53668 0.881058 4.17902C0.734563 3.82136 0.661505 3.43788 0.666231 3.05141C0.67555 1.42601 1.9362 0.242566 3.65878 0.243898Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on LinkedIn</span>
+                    </a>
+                
+
+                
+                    <a href="https://github.com/ncbi"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="28"
+                             height="27"
+                             viewBox="0 0 28 28"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M16.7228 20.6334C17.5057 20.5527 18.2786 20.3944 19.0301 20.1608C21.3108 19.4193 22.5822 17.8259 22.963 15.4909C23.1228 14.5112 23.1814 13.5287 22.9883 12.5437C22.8106 11.6423 22.4013 10.8028 21.8007 10.1076C21.7526 10.0605 21.7197 10 21.7064 9.934C21.6931 9.86799 21.7 9.79952 21.7262 9.73748C22.0856 8.6206 21.9711 7.51969 21.601 6.42677C21.582 6.3497 21.5345 6.2827 21.468 6.23923C21.4016 6.19577 21.3211 6.17906 21.2429 6.19248C20.7329 6.21649 20.2313 6.33051 19.7611 6.52928C19.1103 6.7908 18.4899 7.12198 17.9104 7.51703C17.84 7.56996 17.7581 7.60551 17.6713 7.62078C17.5846 7.63605 17.4954 7.6306 17.4112 7.60489C15.2596 7.05882 13.0054 7.06203 10.8554 7.61421C10.7806 7.63586 10.7018 7.63967 10.6253 7.62534C10.5487 7.611 10.4766 7.57892 10.4148 7.53167C9.64788 7.03247 8.85171 6.58918 7.96368 6.33359C7.65781 6.24338 7.34123 6.19458 7.02239 6.18849C6.94879 6.17986 6.87462 6.19893 6.81432 6.242C6.75402 6.28507 6.71191 6.34904 6.69621 6.42145C6.32342 7.51437 6.2209 8.61527 6.56307 9.73348C6.59635 9.84264 6.64694 9.93316 6.54177 10.0516C5.47666 11.2604 5.09988 12.6834 5.19574 14.2676C5.2663 15.4244 5.46201 16.5466 6.01454 17.5769C6.84399 19.1171 8.21664 19.9119 9.85158 20.3352C10.3938 20.4706 10.9444 20.5698 11.4998 20.632C11.5384 20.7492 11.4506 20.7798 11.408 20.8291C11.1734 21.1179 10.9894 21.4441 10.8634 21.7942C10.7622 22.0458 10.8315 22.4039 10.6065 22.5516C10.263 22.7766 9.83827 22.8485 9.42421 22.8871C8.17936 23.0056 7.26471 22.4877 6.6283 21.4348C6.25552 20.8184 5.76956 20.3325 5.08523 20.0663C4.76981 19.9325 4.42139 19.8967 4.08537 19.9638C3.7898 20.029 3.73788 20.1901 3.93891 20.4111C4.03639 20.5234 4.14989 20.6207 4.27575 20.6999C4.9796 21.1318 5.51717 21.7884 5.80152 22.5636C6.37002 23.9973 7.48039 24.5697 8.93825 24.6323C9.43741 24.6575 9.93768 24.615 10.4254 24.5058C10.5892 24.4672 10.6531 24.4872 10.6517 24.6762C10.6451 25.4936 10.6637 26.3123 10.6517 27.131C10.6517 27.6635 10.1684 27.9297 9.58663 27.7393C8.17396 27.2671 6.84977 26.5631 5.66838 25.656C2.59555 23.2891 0.720966 20.1861 0.217704 16.3376C-0.357453 11.9127 0.911353 8.00824 3.98551 4.73881C6.11909 2.42656 8.99932 0.939975 12.1203 0.540191C16.5351 -0.0601815 20.4347 1.14323 23.7232 4.16373C26.2449 6.47869 27.724 9.37672 28.1048 12.7726C28.5828 17.0325 27.3686 20.7945 24.4768 23.9827C22.9762 25.6323 21.0956 26.8908 18.9982 27.6488C18.8783 27.6927 18.7585 27.738 18.636 27.7726C18.0356 27.9404 17.6189 27.6395 17.6189 27.0098C17.6189 25.7452 17.6308 24.4806 17.6295 23.2159C17.6329 22.9506 17.6128 22.6856 17.5696 22.4238C17.4325 21.6664 17.3419 21.484 16.7228 20.6334Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI on GitHub</span>
+                    </a>
+                
+
+                
+                    <a href="https://ncbiinsights.ncbi.nlm.nih.gov/"
+                       class="ncbi-footer__social-icon ncbi-footer__social-icon--gray"
+                       target="_blank"
+                       rel="noreferrer noopener">
+                        <svg width="26"
+                             height="26"
+                             viewBox="0 0 27 27"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             focusable="false"
+                             aria-hidden="true">
+                            <path d="M23.7778 26.4574C23.1354 26.3913 22.0856 26.8024 21.636 26.3087C21.212 25.8444 21.4359 24.8111 21.324 24.0347C19.9933 14.8323 14.8727 8.80132 6.09057 5.85008C4.37689 5.28406 2.58381 4.99533 0.779072 4.99481C0.202773 4.99481 -0.0229751 4.83146 0.00455514 4.21479C0.0660406 3.08627 0.0660406 1.95525 0.00455514 0.826734C-0.0413285 0.0815827 0.259669 -0.0193618 0.896534 0.00266238C6.96236 0.222904 12.3693 2.24179 16.9889 6.16209C22.9794 11.2478 26.1271 17.7688 26.4372 25.648C26.4629 26.294 26.3179 26.5271 25.6609 26.4684C25.0827 26.417 24.4991 26.4574 23.7778 26.4574Z">
+                            </path>
+                            <path d="M14.8265 26.441C14.0924 26.441 13.2371 26.6795 12.6626 26.3786C12.0092 26.0372 12.3781 25.0644 12.246 24.378C11.1154 18.5324 6.6849 14.5497 0.74755 14.1001C0.217135 14.0615 -0.0104482 13.9422 0.0134113 13.3659C0.0519536 12.1454 0.0482829 10.9213 0.0134113 9.69524C-0.00127145 9.14464 0.196946 9.03268 0.703502 9.04736C9.21217 9.27128 16.5994 16.2511 17.2804 24.7231C17.418 26.4446 17.418 26.4446 15.6579 26.4446H14.832L14.8265 26.441Z">
+                            </path>
+                            <path d="M3.58928 26.4555C2.64447 26.4618 1.73584 26.0925 1.06329 25.4289C0.39073 24.7653 0.00933763 23.8617 0.0030097 22.9169C-0.00331824 21.9721 0.365937 21.0635 1.02954 20.3909C1.69315 19.7184 2.59675 19.337 3.54156 19.3306C4.48637 19.3243 5.39499 19.6936 6.06755 20.3572C6.7401 21.0208 7.1215 21.9244 7.12782 22.8692C7.13415 23.814 6.7649 24.7226 6.10129 25.3952C5.43768 26.0677 4.53409 26.4491 3.58928 26.4555Z">
+                            </path>
+                        </svg>
+                        <span class="usa-sr-only">NCBI RSS feed</span>
+                    </a>
+                
+            </div>
+        </div>
+    
+
+    <div data-testid="gridContainer"
+         class="grid-container ncbi-footer__container">
+        <div class="grid-row ncbi-footer__main-content-container"
+             data-testid="grid">
+            
+                <div class="ncbi-footer__column">
+                    
+                        <p class="ncbi-footer__circled-icons-heading">
+                            Connect with NLM
+                        </p>
+                    
+
+                    <div class="ncbi-footer__circled-icons-list">
+                        
+                            <a href=https://twitter.com/nlm_nih class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="32"
+                                     height="32"
+                                     viewBox="0 0 40 40"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="m6.067 8 10.81 13.9L6 33.2h4.2l8.4-9.1 7.068 9.1H34L22.8 18.5 31.9 8h-3.5l-7.7 8.4L14.401 8H6.067Zm3.6 1.734h3.266l16.8 21.732H26.57L9.668 9.734Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on X (formerly known as Twitter)</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.facebook.com/nationallibraryofmedicine class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="13"
+                                     height="24"
+                                     viewBox="0 0 13 24"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M4.11371 23.1369C4.11371 23.082 4.11371 23.0294 4.11371 22.9745V12.9411H0.817305C0.6709 12.9411 0.670898 12.9411 0.670898 12.8016C0.670898 11.564 0.670898 10.3287 0.670898 9.09341C0.670898 8.97903 0.705213 8.95158 0.815017 8.95158C1.8673 8.95158 2.91959 8.95158 3.97417 8.95158H4.12057V8.83263C4.12057 7.8055 4.12057 6.7738 4.12057 5.74897C4.1264 4.92595 4.31387 4.11437 4.66959 3.37217C5.12916 2.38246 5.94651 1.60353 6.95717 1.1921C7.64827 0.905008 8.3913 0.764035 9.13953 0.778051C10.0019 0.791777 10.8644 0.830666 11.7268 0.860404C11.8869 0.860404 12.047 0.894717 12.2072 0.90158C12.2964 0.90158 12.3261 0.940469 12.3261 1.02968C12.3261 1.5421 12.3261 2.05452 12.3261 2.56465C12.3261 3.16857 12.3261 3.7725 12.3261 4.37642C12.3261 4.48165 12.2964 4.51367 12.1912 4.51138C11.5369 4.51138 10.8804 4.51138 10.2261 4.51138C9.92772 4.51814 9.63058 4.5526 9.33855 4.61433C9.08125 4.6617 8.84537 4.78881 8.66431 4.97766C8.48326 5.16652 8.3662 5.40755 8.32972 5.66661C8.28476 5.89271 8.26027 6.1224 8.25652 6.35289C8.25652 7.19014 8.25652 8.02969 8.25652 8.86923C8.25652 8.89439 8.25652 8.91955 8.25652 8.95615H12.0219C12.1797 8.95615 12.182 8.95616 12.1614 9.10714C12.0768 9.76596 11.9876 10.4248 11.9029 11.0813C11.8312 11.6319 11.7626 12.1824 11.697 12.733C11.6719 12.9434 11.6787 12.9434 11.4683 12.9434H8.26338V22.899C8.26338 22.979 8.26338 23.0591 8.26338 23.1392L4.11371 23.1369Z">
+                                    </path>
+                                </svg>
+                                <span class="usa-sr-only">NLM on Facebook</span>
+                            </a>
+                        
+
+                        
+                            <a href=https://www.youtube.com/user/NLMNIH class="ncbi-footer__social-icon ncbi-footer__social-icon--circled" target="_blank" rel="noreferrer noopener">
+                                <svg width="21"
+                                     height="15"
+                                     viewBox="0 0 21 15"
+                                     fill="none"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     focusable="false"
+                                     aria-hidden="true">
+                                    <path d="M19.2561 1.47914C18.9016 1.15888 18.5699 0.957569 17.2271 0.834039C15.5503 0.678484 13.2787 0.655608 11.563 0.65332H9.43556C7.71987 0.65332 5.4483 0.678484 3.77151 0.834039C2.43098 0.957569 2.097 1.15888 1.74242 1.47914C0.813665 2.32097 0.619221 4.62685 0.598633 6.89384C0.598633 7.31781 0.598633 7.74101 0.598633 8.16345C0.626084 10.4121 0.827391 12.686 1.74242 13.521C2.097 13.8412 2.4287 14.0425 3.77151 14.1661C5.4483 14.3216 7.71987 14.3445 9.43556 14.3468H11.563C13.2787 14.3468 15.5503 14.3216 17.2271 14.1661C18.5676 14.0425 18.9016 13.8412 19.2561 13.521C20.1712 12.6929 20.3725 10.451 20.3999 8.22064C20.3999 7.74025 20.3999 7.25986 20.3999 6.77946C20.3725 4.54907 20.1689 2.30724 19.2561 1.47914ZM8.55942 10.5311V4.65201L13.5601 7.50005L8.55942 10.5311Z"
+                                          fill="white" />
+                                </svg>
+                                <span class="usa-sr-only">NLM on YouTube</span>
+                            </a>
+                        
+                    </div>
+                </div>
+            
+
+            
+                <address class="ncbi-footer__address ncbi-footer__column">
+                    
+        <p>
+            <a class="usa-link usa-link--external"
+            href="https://www.google.com/maps/place/8600+Rockville+Pike,+Bethesda,+MD+20894/%4038.9959508,
+            -77.101021,17z/data%3D!3m1!4b1!4m5!3m4!1s0x89b7c95e25765ddb%3A0x19156f88b27635b8!8m2!3d38.9959508!
+            4d-77.0988323"
+            rel="noopener noreferrer" target="_blank">National Library of Medicine
+            <br/> 8600 Rockville Pike<br/> Bethesda, MD 20894</a>
+        </p>
+    
+                </address>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/web_policies.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Web Policies
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/institutes-nih/nih-office-director/office-communications-public-liaison/freedom-information-act-office" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            FOIA
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/vulnerability-disclosure-policy/index.html" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS Vulnerability Disclosure
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <ul class="usa-list usa-list--unstyled ncbi-footer__vertical-list ncbi-footer__column">
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://support.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Help
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/accessibility.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Accessibility
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__vertical-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/careers/careers.html" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            Careers
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            
+        </div>
+
+        
+            <div class="grid-row grid-col-12" data-testid="grid">
+                <ul class="ncbi-footer__bottom-links-list">
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nlm.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NLM
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.nih.gov/" class="usa-link  usa-link--alt ncbi-footer__link"  >
+        
+
+        
+            NIH
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.hhs.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            HHS
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                        <li class="ncbi-footer__bottom-list-item">
+                            
+
+
+
+
+
+
+
+
+
+    <a href="https://www.usa.gov/" class="usa-link usa-link--external usa-link--alt ncbi-footer__link" rel="noreferrer noopener" target='_blank' >
+        
+
+        
+            USA.gov
+        
+
+        
+    </a>
+
+
+                        </li>
+                    
+                </ul>
+            </div>
+        
+    </div>
+</footer>
+
+    
+
+
+        
+        
+    
+  <script  type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/pinger/pinger.js"> </script>
+
+
+    
+        
+
+<button class="back-to-top" data-ga-category="pagination" data-ga-action="back_to_top">
+    <label>Back to Top</label>
+    <svg class="usa-icon order-0" aria-hidden="true" focusable="false" role="img">
+        <use xlink:href="/static/img/sprite.svg#arrow_upward"></use>
+    </svg>
+</button>
+    
+
+
+        
+    
+    
+    
+        
+    <script type="application/javascript">
+    window.ncbi = window.ncbi || {};
+    window.ncbi.pmc = window.ncbi.pmc || {};
+    window.ncbi.pmc.options = {
+        logLevel: 'INFO',
+        
+        staticEndpoint: '/static/',
+        
+        citeCookieName: 'pmc-cf',
+    };
+</script>
+    <script type="module" crossorigin="" src="/static/assets/base-133c6271.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.ncbi.nlm.nih.gov/core/jquery/jquery-3.6.0.min.js">&#xA0;</script>
+    <script type="text/javascript">
+        jQuery.getScript("https://cdn.ncbi.nlm.nih.gov/core/alerts/alerts.js", function () {
+            galert(['div.nav_and_browser', 'div.header', '#universal_header', '.usa-banner', 'body > *:nth-child(1)'])
+        });
+    </script>
+
+
+    <script type="text/javascript">var exports = {};</script>
+     <script src="/static/CACHE/js/output.13b077bc3ffd.js"></script>
+
+    <script type="module" crossorigin="" src="/static/assets/article-44d04358.js"></script>
+    
+    
+
+    </body>
+</html>

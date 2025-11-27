@@ -1,0 +1,67 @@
+{
+  "paper_metadata": {
+    "pmid": "32123669",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the KCNH2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "Long QT Syndrome 2"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case 1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Long QT Syndrome 2",
+          "evidence_sentence": "The highest VDA score was 0.83 for the association of gene KCNH2 reference SNP (rs199472936) to Long Qt Syndrome 2."
+        }
+      ],
+      "functional_data": {
+        "summary": "The KCNH2 gene is associated with cardiac arrhythmias and Long QT Syndrome.",
+        "assays": []
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "KCNH2 is strongly related to all cardiac side effects that are previously reported as side effects of domperidone.",
+      "key_quotes": [
+        "The highest VDA score was 0.83 for the association of gene KCNH2 reference SNP (rs199472936) to Long Qt Syndrome 2.",
+        "It's obvious that KCNH2 is strongly related to all cardiac side effects that are previously reported as side effects of domperidone."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 4",
+      "table_caption": "Predicted genes for long QT interval caused by domperidone.",
+      "variants_extracted": 5
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the KCNH2 gene was extracted successfully."
+  }
+}

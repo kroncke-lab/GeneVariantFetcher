@@ -1,0 +1,17 @@
+{
+  "paper_metadata": {
+    "pmid": "32175521",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper primarily discusses BRCA1 promoter methylation in breast cancer and its impact on treatment outcomes. No specific BRCA2 variants are detailed in the text."
+  },
+  "variants": [],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 0,
+    "extraction_confidence": "high",
+    "challenges": [
+      "The paper focused on BRCA1 methylation and did not provide specific BRCA2 variant data."
+    ],
+    "notes": "The extraction was straightforward as the paper did not mention any BRCA2 variants."
+  }
+}

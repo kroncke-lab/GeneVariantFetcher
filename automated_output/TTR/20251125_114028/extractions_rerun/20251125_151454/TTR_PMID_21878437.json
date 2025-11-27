@@ -1,0 +1,56 @@
+{
+  "paper_metadata": {
+    "pmid": "21878437",
+    "title": "Genome-wide association study of circulating retinol levels",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": "1827441277",
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 5006,
+        "demographics": "Caucasian individuals from two cohorts (ATBC and PLCO)",
+        "phenotype": "Circulating retinol levels"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10,
+        "affected_count": 4,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 40.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The variant rs1667255 in the TTR gene is associated with serum retinol levels.",
+        "assays": []
+      },
+      "segregation_data": "The association with retinol levels suggests potential segregation with retinol concentration.",
+      "population_frequency": "Allele frequency not specified.",
+      "evidence_level": "Moderate evidence based on GWAS findings.",
+      "source_location": "Table 1, Row 2",
+      "additional_notes": "The variant did not reach statistical significance in replication studies.",
+      "key_quotes": [
+        "rs1667255 did not reach statistical significance in the replication data set (P =0.08, Table 1)",
+        "The combined meta-analysis yielded significance at the P =6.35\u00d7 10\u221214 level."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "SNPs associated with serum retinol at P< 5 \u00d7 10\u22127-GWAS and replication studies",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted from the main text and tables, focusing solely on the TTR gene."
+  }
+}

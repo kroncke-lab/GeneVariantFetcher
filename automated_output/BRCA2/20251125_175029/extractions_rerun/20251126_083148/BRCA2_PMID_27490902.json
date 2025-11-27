@@ -1,0 +1,54 @@
+{
+  "paper_metadata": {
+    "pmid": null,
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses the BRCA2 gene, specifically the G25R variant, and its implications for genomic integrity and tumor susceptibility."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.73G>A",
+      "protein_notation": "p.Gly25Arg",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 0,
+        "demographics": "",
+        "phenotype": ""
+      },
+      "penetrance_data": {
+        "total_carriers_observed": null,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The G25R mutation disrupts the interaction between BRCA2 and PALB2, leading to reduced fertility and increased tumor susceptibility in hemizygous mutant mice.",
+        "assays": [
+          "mouse embryonic stem cell functional assay",
+          "histological analysis",
+          "TUNEL staining"
+        ]
+      },
+      "segregation_data": "The G25R variant was studied in a mouse model, but specific human segregation data is not provided.",
+      "population_frequency": null,
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The G25R variant is associated with increased genomic instability and tumorigenesis in mouse models.",
+      "key_quotes": [
+        "The severity of the phenotype increased with a decrease in the interaction between BRCA2 and PALB2.",
+        "Brca2G25R homozygosity as well as hemizygosity with Palb2 and Trp53 heterozygosity to generate an array of genotypically and phenotypically distinct mouse models."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper focused on a specific variant in BRCA2."
+  }
+}

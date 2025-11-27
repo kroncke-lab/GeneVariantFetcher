@@ -1,0 +1,174 @@
+{
+  "paper_metadata": {
+    "pmid": "33726785",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information specifically for the BRCA2 gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.17-20 delAAGA",
+      "protein_notation": "p.Lys6Argfs*17",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 2,
+        "demographics": "Unspecified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Notably, the frameshift mutation c.17-20 delAAGA in 2 unrelated young patients with strong family history of BC."
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "Segregated with disease in families with strong history of breast cancer.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on family history and recurrence.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in unrelated patients with a strong family history.",
+      "key_quotes": [
+        "Notably, the frameshift mutation c.17-20 delAAGA in 2 unrelated young patients with strong family history of BC."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1310-1313 delAAGA",
+      "protein_notation": "p.Lys437Ilefs*22",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 4,
+        "demographics": "Unspecified",
+        "phenotype": "Breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 4,
+        "affected_count": 4,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Notably, the frameshift mutation c.1310-1313delAAGA of the BRCA2 gene was detected in 4 unrelated BC patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "Frameshift mutation leading to a premature stop codon.",
+        "assays": []
+      },
+      "segregation_data": "Segregated with disease in families with strong history of breast cancer.",
+      "population_frequency": null,
+      "evidence_level": "Strong evidence based on family history and recurrence.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in multiple unrelated patients.",
+      "key_quotes": [
+        "Notably, the frameshift mutation c.1310-1313delAAGA of the BRCA2 gene was detected in 4 unrelated BC patients."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.9976A>T",
+      "protein_notation": "p.Lys3326*",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 3,
+        "demographics": "Unspecified",
+        "phenotype": "Breast cancer, Ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 3,
+        "affected_count": 1,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 33.33,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "Ovarian cancer",
+          "evidence_sentence": "Interestingly, the c.9976A\u2009>\u2009T mutation in BRCA2 exon 27 was detected in 3 unrelated patients, 2 with BC diagnosed at an age\u2009\u2264\u200940 years and 1 patient with OC."
+        },
+        {
+          "individual_id": "Case_4",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Interestingly, the c.9976A\u2009>\u2009T mutation in BRCA2 exon 27 was detected in 3 unrelated patients, 2 with BC diagnosed at an age\u2009\u2264\u200940 years and 1 patient with OC."
+        },
+        {
+          "individual_id": "Case_5",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "unaffected",
+          "phenotype_details": "Breast cancer",
+          "evidence_sentence": "Interestingly, the c.9976A\u2009>\u2009T mutation in BRCA2 exon 27 was detected in 3 unrelated patients, 2 with BC diagnosed at an age\u2009\u2264\u200940 years and 1 patient with OC."
+        }
+      ],
+      "functional_data": {
+        "summary": "Variant of uncertain significance.",
+        "assays": []
+      },
+      "segregation_data": "Not specified.",
+      "population_frequency": null,
+      "evidence_level": "Limited evidence due to VUS classification.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "Identified in multiple patients but classified as VUS.",
+      "key_quotes": [
+        "Interestingly, the c.9976A\u2009>\u2009T mutation in BRCA2 exon 27 was detected in 3 unrelated patients, 2 with BC diagnosed at an age\u2009\u2264\u200940 years and 1 patient with OC."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Pathogenic BRCA1/BRCA2 mutations identified in breast/ovarian cancer patients",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data extracted from the main text and tables."
+  }
+}

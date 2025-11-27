@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "34336299",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses a case of a 19-year-old female with a variant of unknown significance in the KCNH2 gene, associated with long QT syndrome type 2."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.2407_2409del",
+      "protein_notation": "p.Asp803del",
+      "genomic_position": null,
+      "clinical_significance": "VUS",
+      "patients": {
+        "count": 1,
+        "demographics": "19-year-old female",
+        "phenotype": "Prolonged QTc leading to Torsades de Pointes and cardiac arrest"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 19,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "Documented prolonged QTc leading to Torsades de Pointes and cardiac arrest.",
+          "evidence_sentence": "The patient underwent genetic testing for long QT syndromes, which revealed a variant of unknown significance in KCNH2 (exon 10 c.2407_2409del (p.Asp803del))."
+        }
+      ],
+      "functional_data": {
+        "summary": "The specific variant seen in this patient has yet to be reported as associated with risk for LQTS.",
+        "assays": []
+      },
+      "segregation_data": "The variant has not been reported to segregate with disease in families.",
+      "population_frequency": null,
+      "evidence_level": "Low",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The variant is classified as of unknown significance and has not been previously associated with risk for long QT syndrome.",
+      "key_quotes": [
+        "Gene KCNH2 (also known as hERG) has been implicated in LQTS2; however, the specific variant seen in this patient has yet to be reported as associated with risk for LQTS."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "The extraction was straightforward as the paper provided clear information regarding the KCNH2 variant."
+  }
+}

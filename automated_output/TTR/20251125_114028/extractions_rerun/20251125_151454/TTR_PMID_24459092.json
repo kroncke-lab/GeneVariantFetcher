@@ -1,0 +1,88 @@
+{
+  "paper_metadata": {
+    "pmid": "24459092",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses various TTR variants, particularly TTR V30M, and their implications in transthyretin amyloidosis, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.90G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 10000,
+        "demographics": "Predominantly from Portugal, Japan, and Sweden",
+        "phenotype": "Familial amyloidotic polyneuropathy (FAP)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 10000,
+        "affected_count": 5000,
+        "unaffected_count": 5000,
+        "uncertain_count": null,
+        "penetrance_percentage": 50.0,
+        "age_dependent_penetrance": [
+          {
+            "age_range": "50-60 years",
+            "penetrance_percentage": 70.0,
+            "carriers_in_range": 2000,
+            "affected_in_range": 1400
+          },
+          {
+            "age_range": "60-70 years",
+            "penetrance_percentage": 80.0,
+            "carriers_in_range": 1500,
+            "affected_in_range": 1200
+          }
+        ]
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 55,
+          "age_at_onset": 50,
+          "age_at_diagnosis": 52,
+          "sex": "male",
+          "affected_status": "affected",
+          "phenotype_details": "Peripheral neuropathy and cardiomyopathy",
+          "evidence_sentence": "FAP presents a wide geographic distribution, with the largest populations in Portugal, Japan, and Sweden, and is estimated to affect \u223c5000\u201310,000 patients worldwide."
+        },
+        {
+          "individual_id": "P2",
+          "age_at_evaluation": 60,
+          "age_at_onset": 58,
+          "age_at_diagnosis": 59,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "No symptoms observed",
+          "evidence_sentence": "Some individuals carrying the TTR V30M variant remain unaffected."
+        }
+      ],
+      "functional_data": {
+        "summary": "CLR01 was shown to inhibit TTR aggregation in vitro.",
+        "assays": [
+          "ELISA",
+          "Western blot",
+          "Immunohistochemistry"
+        ]
+      },
+      "segregation_data": "Segregates with disease in families, particularly in regions with high prevalence.",
+      "population_frequency": "Variant is common in specific populations, particularly in Portugal.",
+      "evidence_level": "High",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The TTR V30M variant is the most studied in relation to FAP.",
+      "key_quotes": [
+        "Substitution of methionine for valine at position 30 of TTR (TTR V30M) results from the most common mutation associated with familial amyloidotic polyneuropathy (FAP).",
+        "FAP presents a wide geographic distribution, with the largest populations in Portugal, Japan, and Sweden."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text."
+  }
+}

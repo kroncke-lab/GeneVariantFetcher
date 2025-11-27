@@ -1,0 +1,30 @@
+{
+  "gene_symbol": "KCNH2",
+  "workflow_timestamp": "2025-11-26T13:43:45.073060",
+  "statistics": {
+    "pmids_discovered": 150,
+    "papers_downloaded": 27,
+    "papers_extracted": 27,
+    "total_variants_found": 32,
+    "variants_with_penetrance_data": 3,
+    "total_carriers_observed": 22,
+    "total_affected_carriers": 10,
+    "success_rate": "18.0%"
+  },
+  "output_locations": {
+    "pmid_list": "kcnH2_run/KCNH2/20251126_133649/KCNH2_pmids.txt",
+    "full_text_papers": "kcnH2_run/KCNH2/20251126_133649/pmc_fulltext",
+    "extractions": "kcnH2_run/KCNH2/20251126_133649/extractions",
+    "penetrance_summary": "kcnH2_run/KCNH2/20251126_133649/KCNH2_penetrance_summary.json",
+    "sqlite_database": "kcnH2_run/KCNH2/20251126_133649/KCNH2.db"
+  },
+  "database_migration": {
+    "successful": 2,
+    "failed": 0,
+    "total_files": 2
+  },
+  "penetrance_validation": {
+    "errors": 0,
+    "warnings": 0
+  }
+}

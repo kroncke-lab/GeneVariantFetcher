@@ -1,0 +1,63 @@
+{
+  "paper_metadata": {
+    "pmid": "27026928",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on the KCNH2 gene variant R176W, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "KCNH2",
+      "cdna_notation": "c.527G>A",
+      "protein_notation": "p.Arg176Trp",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "61-year-old male",
+        "phenotype": "asymptomatic LQT2 patient with occasional palpitations"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": 0,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "P1",
+          "age_at_evaluation": 61,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "male",
+          "affected_status": "unaffected",
+          "phenotype_details": "occasional palpitations, which although are not specific symptoms of LQTS",
+          "evidence_sentence": "In addition, skin biopsies were obtained from a 61-year old male asymptomatic LQT2 patient with the KCNH2 R176W mutation (QTc interval, 437 ms)."
+        }
+      ],
+      "functional_data": {
+        "summary": "The KCNH2 R176W mutation is associated with reduced potassium efflux, leading to long QT syndrome.",
+        "assays": [
+          "Reverse-transcription PCR",
+          "Immunofluorescence microscopy"
+        ]
+      },
+      "segregation_data": "Not mentioned",
+      "population_frequency": "Not mentioned",
+      "evidence_level": "Likely pathogenic based on functional studies and clinical presentation.",
+      "source_location": "Results, paragraph 1",
+      "additional_notes": "The patient is asymptomatic but carries the variant.",
+      "key_quotes": [
+        "In addition, skin biopsies were obtained from a 61-year old male asymptomatic LQT2 patient with the KCNH2 R176W mutation (QTc interval, 437 ms)."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Data was extracted thoroughly from the main text."
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "paper_metadata": {
+    "pmid": "26459562",
+    "title": "MAIN TEXT",
+    "extraction_summary": "The paper discusses various mutations in the TTR gene associated with transthyretin amyloidosis, including their effects on protein aggregation and clinical significance."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.164T>C",
+      "protein_notation": "p.V55P",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "familial amyloidotic polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "familial amyloidotic polyneuropathy",
+          "evidence_sentence": "Familial amyloidotic polyneuropathy is caused by a number of TTR mutations, including L55P and V30M, which we examine here."
+        }
+      ],
+      "functional_data": {
+        "summary": "The L55P mutation destabilizes the TTR tetramer, leading to increased aggregation.",
+        "assays": [
+          "aggregation assays",
+          "protein expression studies"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The L55P variant is one of the known mutations associated with familial amyloidotic polyneuropathy.",
+      "key_quotes": [
+        "Familial amyloidotic polyneuropathy is caused by a number of TTR mutations, including L55P and V30M."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.V30M",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "not specified",
+        "phenotype": "familial amyloidotic polyneuropathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "familial amyloidotic polyneuropathy",
+          "evidence_sentence": "Familial amyloidotic polyneuropathy is caused by a number of TTR mutations, including L55P and V30M, which we examine here."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V30M mutation destabilizes the TTR tetramer, leading to increased aggregation.",
+        "assays": [
+          "aggregation assays",
+          "protein expression studies"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": "not specified",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The V30M variant is one of the known mutations associated with familial amyloidotic polyneuropathy.",
+      "key_quotes": [
+        "Familial amyloidotic polyneuropathy is caused by a number of TTR mutations, including L55P and V30M."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.364G>A",
+      "protein_notation": "p.V122I",
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "3.9% of the African-American population",
+        "phenotype": "familial amyloidotic cardiomyopathy"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+        "uncertain_count": 0,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_3",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": null,
+          "affected_status": "affected",
+          "phenotype_details": "familial amyloidotic cardiomyopathy",
+          "evidence_sentence": "The most common familial amyloidotic cardiomyopathy mutation, V122I, is carried by 3.9% of the African-American population."
+        }
+      ],
+      "functional_data": {
+        "summary": "The V122I mutation destabilizes the TTR tetramer, leading to increased aggregation.",
+        "assays": [
+          "aggregation assays",
+          "protein expression studies"
+        ]
+      },
+      "segregation_data": "The variant segregates with disease in families.",
+      "population_frequency": "3.9% in the African-American population",
+      "evidence_level": "moderate",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "The V122I variant is one of the known mutations associated with familial amyloidotic cardiomyopathy.",
+      "key_quotes": [
+        "The most common familial amyloidotic cardiomyopathy mutation, V122I, is carried by 3.9% of the African-American population."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 1",
+      "table_caption": "Summary of TTR variants and their clinical significance",
+      "variants_extracted": 3
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 3,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted successfully."
+  }
+}

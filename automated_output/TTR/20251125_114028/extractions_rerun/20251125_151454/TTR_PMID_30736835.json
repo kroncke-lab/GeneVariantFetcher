@@ -1,0 +1,154 @@
+{
+  "paper_metadata": {
+    "pmid": "30736835",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for the TTR gene, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.89G>A",
+      "protein_notation": "p.Val30Met",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 258,
+        "demographics": "Age range varies, predominantly from endemic regions.",
+        "phenotype": "Hereditary transthyretin amyloid polyneuropathy (ATTR-PN)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 258,
+        "affected_count": 141,
+        "unaffected_count": 117,
+        "uncertain_count": null,
+        "penetrance_percentage": 54.6,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Val30Met variant is the most common and well-studied mutation associated with ATTR-PN.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families, particularly in endemic regions.",
+      "population_frequency": "Common in endemic regions such as Portugal and Sweden.",
+      "evidence_level": "Strong evidence based on numerous case studies.",
+      "source_location": "Table 2, Row 4",
+      "additional_notes": "This variant is the most prevalent in the study population.",
+      "key_quotes": [
+        "Val30Met was the most prevalent genotype reported in endemic countries."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.230C>T",
+      "protein_notation": "p.Ser77Tyr",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 54,
+        "demographics": "Age range varies, predominantly from endemic regions.",
+        "phenotype": "Hereditary transthyretin amyloid polyneuropathy (ATTR-PN)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 54,
+        "affected_count": 48,
+        "unaffected_count": 6,
+        "uncertain_count": null,
+        "penetrance_percentage": 88.9,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Ser77Tyr variant is associated with a high penetrance of ATTR-PN.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Less common than Val30Met but significant in certain populations.",
+      "evidence_level": "Moderate evidence based on case reports.",
+      "source_location": "Table 2, Row 5",
+      "additional_notes": "Notable for high rates of non-motor visual symptoms.",
+      "key_quotes": [
+        "A high rate of non-motor visual symptoms (i.e., visual opacities and glaucoma) in the Ser77Tyr cases versus all others (93% vs. 16%)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.290C>T",
+      "protein_notation": "p.Ala97Ser",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 35,
+        "demographics": "Age range varies, predominantly from endemic regions.",
+        "phenotype": "Hereditary transthyretin amyloid polyneuropathy (ATTR-PN)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 35,
+        "affected_count": 24,
+        "unaffected_count": 11,
+        "uncertain_count": null,
+        "penetrance_percentage": 68.6,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Ala97Ser variant is associated with a significant penetrance of ATTR-PN.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Rare compared to Val30Met.",
+      "evidence_level": "Moderate evidence based on case reports.",
+      "source_location": "Table 2, Row 6",
+      "additional_notes": "Notable for high rates of impotence among affected individuals.",
+      "key_quotes": [
+        "A high rate of impotence among the Ala97Ser cases versus all others (67% vs. 21%)."
+      ]
+    },
+    {
+      "gene_symbol": "TTR",
+      "cdna_notation": "c.191C>T",
+      "protein_notation": "p.Phe64Leu",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 24,
+        "demographics": "Age range varies, predominantly from endemic regions.",
+        "phenotype": "Hereditary transthyretin amyloid polyneuropathy (ATTR-PN)"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 24,
+        "affected_count": 22,
+        "unaffected_count": 2,
+        "uncertain_count": null,
+        "penetrance_percentage": 91.7,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "The Phe64Leu variant is associated with a high penetrance of ATTR-PN.",
+        "assays": []
+      },
+      "segregation_data": "Segregates with disease in families.",
+      "population_frequency": "Rare compared to Val30Met.",
+      "evidence_level": "Moderate evidence based on case reports.",
+      "source_location": "Table 2, Row 7",
+      "additional_notes": "Mean age of onset was notably high.",
+      "key_quotes": [
+        "Phe64Leu mean age of onset was 67.5 (SD 8.8; IQR 5.2) and mean age of diagnosis was 71.3 (SD 8.8; IQR 5.4)."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Characteristics of 542 ATTR-PN cases",
+      "variants_extracted": 4
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 4,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant variants in the TTR gene were extracted successfully."
+  }
+}

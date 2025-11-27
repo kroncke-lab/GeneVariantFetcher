@@ -1,0 +1,55 @@
+{
+  "paper_metadata": {
+    "pmid": "37002323",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted information on BRCA2 variants, including penetrance data and individual records."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": null,
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "likely pathogenic",
+      "patients": {
+        "count": 180,
+        "demographics": "not specified",
+        "phenotype": "Hereditary breast and ovarian cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 180,
+        "affected_count": null,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": null,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [],
+      "functional_data": {
+        "summary": "Variants in BRCA2 are associated with hereditary breast and ovarian cancer.",
+        "assays": []
+      },
+      "segregation_data": "Not specified",
+      "population_frequency": "0.25% in the studied population",
+      "evidence_level": "Moderate",
+      "source_location": "Table 2, Row 4",
+      "additional_notes": "No specific variant notation provided.",
+      "key_quotes": [
+        "The most frequently found variants were in BRCA1 and BRCA2 genes, present in 0.40% and 0.25% of the studied population, respectively."
+      ]
+    }
+  ],
+  "tables_processed": [
+    {
+      "table_name": "Table 2",
+      "table_caption": "Pathogenic and likely pathogenic variants in the Slovenian population in 17 gynecologic cancer genes.",
+      "variants_extracted": 1
+    }
+  ],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "Only one BRCA2 variant was mentioned with aggregate data."
+  }
+}

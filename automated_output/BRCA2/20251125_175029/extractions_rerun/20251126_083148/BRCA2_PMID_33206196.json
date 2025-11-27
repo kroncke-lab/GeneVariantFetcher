@@ -1,0 +1,60 @@
+{
+  "paper_metadata": {
+    "pmid": "33206196",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data for carriers."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.1800T>G",
+      "protein_notation": "p.Tyr600Ter",
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "20-year-old African American woman",
+        "phenotype": "significant family history of breast and ovarian cancer, diagnosed with fibroadenoma"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+        "uncertain_count": null,
+        "penetrance_percentage": 0.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": 20,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "unaffected",
+          "phenotype_details": "diagnosed with fibroadenoma",
+          "evidence_sentence": "One patient with a BRCA2 mutation [NM_000059.4(BRCA2):c.1800T>G (p.Tyr600Ter)] was a 20-year-old African American woman with a significant family history of breast and ovarian cancer who was diagnosed with fibroadenoma in 2018."
+        }
+      ],
+      "functional_data": {
+        "summary": "The functional impact of the variant is not detailed in the paper.",
+        "assays": []
+      },
+      "segregation_data": "The paper does not provide segregation data for this variant.",
+      "population_frequency": null,
+      "evidence_level": "The evidence for pathogenicity is based on family history and clinical presentation.",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was identified in a research setting.",
+      "key_quotes": [
+        "One patient with a BRCA2 mutation [NM_000059.4(BRCA2):c.1800T>G (p.Tyr600Ter)] was a 20-year-old African American woman with a significant family history of breast and ovarian cancer who was diagnosed with fibroadenoma in 2018."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 1,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant data for the BRCA2 variant was extracted successfully."
+  }
+}

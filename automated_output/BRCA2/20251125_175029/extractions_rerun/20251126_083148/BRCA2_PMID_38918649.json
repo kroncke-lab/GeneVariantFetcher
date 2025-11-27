@@ -1,0 +1,104 @@
+{
+  "paper_metadata": {
+    "pmid": "38918649",
+    "title": "MAIN TEXT",
+    "extraction_summary": "Extracted genetic variant information for BRCA2, including penetrance data."
+  },
+  "variants": [
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.3875_3878delGTCT",
+      "protein_notation": null,
+      "genomic_position": null,
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "Tuvans, young female",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_1",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "For Tuvans rare variant of the BRCA2 gene (c.3875_3878delGTCT) was found."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with breast cancer in Tuvan patients.",
+        "assays": []
+      },
+      "segregation_data": "The variant was found in a breast cancer patient.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was specifically noted in the context of Tuvan ethnic group.",
+      "key_quotes": [
+        "For Tuvans rare variant of the BRCA2 gene (c.3875_3878delGTCT) was found."
+      ]
+    },
+    {
+      "gene_symbol": "BRCA2",
+      "cdna_notation": "c.8208_8209insAG",
+      "protein_notation": "p.Leu2737Serfs*2",
+      "genomic_position": "rs483353122",
+      "clinical_significance": "pathogenic",
+      "patients": {
+        "count": 1,
+        "demographics": "young Tuvan female",
+        "phenotype": "breast cancer"
+      },
+      "penetrance_data": {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": null,
+        "uncertain_count": null,
+        "penetrance_percentage": 100.0,
+        "age_dependent_penetrance": []
+      },
+      "individual_records": [
+        {
+          "individual_id": "Case_2",
+          "age_at_evaluation": null,
+          "age_at_onset": null,
+          "age_at_diagnosis": null,
+          "sex": "female",
+          "affected_status": "affected",
+          "phenotype_details": "breast cancer",
+          "evidence_sentence": "The pathogenic variant of BRCA2 gene (c.8208_8209insAG, p.Leu2737Serfs*2, rs483353122) was observed in young Tuvan BC patients."
+        }
+      ],
+      "functional_data": {
+        "summary": "The variant is associated with breast cancer in young Tuvan patients.",
+        "assays": []
+      },
+      "segregation_data": "The variant was found in a breast cancer patient.",
+      "population_frequency": null,
+      "evidence_level": "strong",
+      "source_location": "Results, paragraph 4",
+      "additional_notes": "This variant was specifically noted in the context of Tuvan ethnic group.",
+      "key_quotes": [
+        "The pathogenic variant of BRCA2 gene (c.8208_8209insAG, p.Leu2737Serfs*2, rs483353122) was observed in young Tuvan BC patients."
+      ]
+    }
+  ],
+  "tables_processed": [],
+  "extraction_metadata": {
+    "total_variants_found": 2,
+    "extraction_confidence": "high",
+    "challenges": [],
+    "notes": "All relevant BRCA2 variants were extracted successfully."
+  }
+}
