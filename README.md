@@ -234,7 +234,7 @@ Filters papers to identify those with original clinical data (case reports, coho
 **Usage:**
 
 ```python
-from harvesting.filters import ClinicalDataTriageFilter
+from pipeline.filters import ClinicalDataTriageFilter
 
 triage = ClinicalDataTriageFilter()
 result = triage.triage(
@@ -544,7 +544,7 @@ GeneVariantFetcher/
 ├── clinical_data_triage.py      # Clinical data triage
 ├── pubmind_fetcher.py           # PubMind integration
 ├── filters.py                   # Filtering utilities
-├── sourcer.py                   # Paper sourcing utilities
+├── pipeline/sourcing.py         # Paper sourcing utilities
 ├── example_*.py                 # Example scripts
 └── README.md                    # This file
 ```

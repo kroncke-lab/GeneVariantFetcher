@@ -757,7 +757,6 @@ GeneVariantFetcher/
 │   │
 ├── 🔬 EXTRACTION & FILTERING
 │   ├── clinical_data_triage.py ....... Tier 1 & 2 filtering
-│   ├── sourcer.py .................... Discovery coordination
 │   │
 ├── 📊 DATA MODELS & CONFIGURATION
 │   ├── models.py ..................... Pydantic data models
