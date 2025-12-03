@@ -234,7 +234,7 @@ Filters papers to identify those with original clinical data (case reports, coho
 **Usage:**
 
 ```python
-from harvesting.filters import ClinicalDataTriageFilter
+from pipeline.filters import ClinicalDataTriageFilter
 
 triage = ClinicalDataTriageFilter()
 result = triage.triage(

@@ -16,11 +16,10 @@ from datetime import datetime
 import logging
 from pathlib import Path
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-)
-logger = logging.getLogger(__name__)
+# Configure logging using centralized utility
+from utils.logging_utils import setup_logging, get_logger
+setup_logging(level=logging.INFO)
+logger = get_logger(__name__)
 
 
 def parse_args():

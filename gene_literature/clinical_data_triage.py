@@ -28,12 +28,10 @@ from typing import List, Dict, Optional
 from pipeline.filters import ClinicalDataTriageFilter
 from models import Paper
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
+# Configure logging using centralized utility
+from utils.logging_utils import setup_logging, get_logger
+setup_logging(level=logging.INFO)
+logger = get_logger(__name__)
 
 
 def triage_single_paper(
