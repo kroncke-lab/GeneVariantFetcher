@@ -25,12 +25,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 # Load environment variables from .env file
 load_dotenv()
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
+# Configure logging using centralized utility
+from utils.logging_utils import setup_logging, get_logger
+setup_logging(level=logging.INFO)
+logger = get_logger(__name__)
 
 
 def automated_variant_extraction_workflow(
@@ -128,15 +126,10 @@ def automated_variant_extraction_workflow(
 
     def process_paper_file(md_file):
         """Process a single paper file (for parallel execution)"""
-        # Extract PMID from filename
-        # Supported formats:
-        #   - PMID_12345678_FULL_CONTEXT.md (newer runs)
-        #   - 12345678_FULL_CONTEXT.md      (current harvester output)
-        filename_parts = md_file.stem.split('_')
-        if len(filename_parts) > 1 and filename_parts[0] == "PMID":
-            pmid_match = filename_parts[1]
-        else:
-            pmid_match = filename_parts[0] if filename_parts else None
+        from utils.pmid_utils import extract_pmid_from_filename
+
+        # Extract PMID from filename using shared utility
+        pmid_match = extract_pmid_from_filename(md_file)
 
         if not pmid_match:
             logger.warning(f"Could not extract PMID from filename: {md_file.name}")
