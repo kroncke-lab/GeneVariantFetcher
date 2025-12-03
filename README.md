@@ -107,11 +107,12 @@ python example_automated_workflow.py BRCA1 --email your@email.com
 **Best for**: Custom PMID lists or detailed control
 
 **Step 1: Get PMIDs**
+
 ```python
-from pubmind_fetcher import fetch_pmids_for_gene
+from gene_literature.pubmind_fetcher import fetch_pmids_for_gene
 
 pmids = fetch_pmids_for_gene("SCN5A", email="your@email.com",
-                              output_file="scn5a_pmids.txt")
+                             output_file="scn5a_pmids.txt")
 ```
 
 **Step 2: Harvest full-text**
@@ -231,8 +232,9 @@ Filters papers to identify those with original clinical data (case reports, coho
 **Purpose**: Save time and money by processing only papers with extractable patient data.
 
 **Usage:**
+
 ```python
-from filters import ClinicalDataTriageFilter
+from harvesting.filters import ClinicalDataTriageFilter
 
 triage = ClinicalDataTriageFilter()
 result = triage.triage(
@@ -241,7 +243,7 @@ result = triage.triage(
     gene="BRCA1"
 )
 
-print(result['decision'])    # "KEEP" or "DROP"
+print(result['decision'])  # "KEEP" or "DROP"
 print(result['confidence'])  # 0.0-1.0
 ```
 
@@ -265,8 +267,9 @@ print(result['confidence'])  # 0.0-1.0
 Automatically discovers relevant papers using PubMind, a literature database of variant-disease associations.
 
 **Usage:**
+
 ```python
-from pubmind_fetcher import fetch_pmids_for_gene
+from gene_literature.pubmind_fetcher import fetch_pmids_for_gene
 
 # Fetch PMIDs for a gene
 pmids = fetch_pmids_for_gene(
@@ -487,7 +490,7 @@ python example_usage.py  # Edit script to process harvested papers
 ### Workflow 3: Large-Scale Processing
 
 ```python
-from pubmind_fetcher import fetch_pmids_for_gene
+from gene_literature.pubmind_fetcher import fetch_pmids_for_gene
 from harvesting import PMCHarvester
 from pipeline import BiomedicalExtractionPipeline
 
@@ -497,8 +500,8 @@ pmids = fetch_pmids_for_gene("TTR", email="your@email.com", max_results=500)
 # 2. Harvest in batches
 batch_size = 100
 for i in range(0, len(pmids), batch_size):
-    batch = pmids[i:i+batch_size]
-    harvester = PMCHarvester(output_dir=f"ttr_batch_{i//batch_size}")
+    batch = pmids[i:i + batch_size]
+    harvester = PMCHarvester(output_dir=f"ttr_batch_{i // batch_size}")
     harvester.harvest(batch, delay=2.0)
 
 # 3. Extract from harvested papers

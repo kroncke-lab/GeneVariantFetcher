@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 # Import PubMindFetcher if available
 try:
-    from pubmind_fetcher import PubMindFetcher
+    from gene_literature.pubmind_fetcher import PubMindFetcher
     PUBMIND_AVAILABLE = True
 except ImportError:
     PUBMIND_AVAILABLE = False

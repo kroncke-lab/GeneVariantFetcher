@@ -52,7 +52,7 @@ def automated_variant_extraction_workflow(
         output_dir: Directory to save all outputs
         tier_threshold: If the first model finds fewer variants than this, the next model is tried.
     """
-    from pubmind_fetcher import fetch_pmids_for_gene
+    from gene_literature.pubmind_fetcher import fetch_pmids_for_gene
     from harvesting import PMCHarvester
 
     output_path = Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
