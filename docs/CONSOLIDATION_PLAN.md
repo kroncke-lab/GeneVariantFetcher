@@ -149,7 +149,7 @@ This document identifies redundancies in the GeneVariantFetcher repository and p
 ### Step 1: Paper Sourcing Consolidation
 1. Search for all imports of `sourcer`:
    ```bash
-   grep -r "from sourcer import\|import sourcer" .
+   grep -rE 'from sourcer|import sourcer|sourcer\.' .
    ```
 2. Update all imports to use `pipeline.sourcing`
 3. Delete `sourcer.py`
