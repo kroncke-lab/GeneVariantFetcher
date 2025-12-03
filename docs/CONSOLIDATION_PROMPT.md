@@ -50,7 +50,7 @@ Execute the consolidation plan step-by-step, starting with HIGH PRIORITY items, 
 
 3. Search for any other imports of filter classes:
    ```bash
-   grep -r "from.*filters import\|from.*filters import" --include="*.py" .
+   grep -rE 'from.*filters import' --include="*.py" .
    ```
 
 4. Test filter functionality:
