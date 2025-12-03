@@ -473,7 +473,7 @@ CREATE TABLE variants (
 # After extraction completes
 logger.info("\n💾 STEP 5: Migrating to SQLite database...")
 
-from migrate_to_sqlite import create_database_schema, insert_extraction_data
+from harvesting.migrate_to_sqlite import create_database_schema, insert_extraction_data
 
 db_path = output_path / f"{gene_symbol}.db"
 conn = create_database_schema(str(db_path))

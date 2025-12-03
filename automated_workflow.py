@@ -229,7 +229,7 @@ def automated_variant_extraction_workflow(
     # ============================================================================
     logger.info("\n💾 STEP 5: Migrating data to SQLite database...")
 
-    from migrate_to_sqlite import create_database_schema, migrate_extraction_directory
+    from harvesting.migrate_to_sqlite import create_database_schema, migrate_extraction_directory
 
     # Create gene-specific database
     db_path = output_path / f"{gene_symbol}.db"

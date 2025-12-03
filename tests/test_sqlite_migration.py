@@ -9,7 +9,7 @@ import json
 import tempfile
 import shutil
 from pathlib import Path
-from migrate_to_sqlite import (
+from harvesting.migrate_to_sqlite import (
     create_database_schema,
     migrate_extraction_directory,
     cleanup_data_directory
