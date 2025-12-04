@@ -7,10 +7,10 @@ from various sources (filenames, text, etc.).
 
 import re
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 
-def extract_pmid_from_filename(filename: str | Path) -> Optional[str]:
+def extract_pmid_from_filename(filename: Union[str, Path]) -> Optional[str]:
     """
     Extract PMID from a markdown context file name.
 

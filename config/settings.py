@@ -2,7 +2,7 @@
 
 from functools import lru_cache
 from pathlib import Path
-from typing import ClassVar, List
+from typing import ClassVar, List, Optional, Union
 
 from pydantic import Field, model_validator, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -14,15 +14,15 @@ class Settings(BaseSettings):
     """Centralized application settings loaded from environment variables."""
 
     # API Keys
-    openai_api_key: str | None = Field(default=None, env="OPENAI_API_KEY")
-    anthropic_api_key: str | None = Field(default=None, env="ANTHROPIC_API_KEY")
-    ncbi_email: str | None = Field(default=None, env="NCBI_EMAIL")
-    ncbi_api_key: str | None = Field(default=None, env="NCBI_API_KEY")
+    openai_api_key: Optional[str] = Field(default=None, env="OPENAI_API_KEY")
+    anthropic_api_key: Optional[str] = Field(default=None, env="ANTHROPIC_API_KEY")
+    ncbi_email: Optional[str] = Field(default=None, env="NCBI_EMAIL")
+    ncbi_api_key: Optional[str] = Field(default=None, env="NCBI_API_KEY")
 
     # Model Configuration
-    tier1_model: str | None = Field(default=None, env="TIER1_MODEL", description="Optional LLM for Tier 1 (if using LLM-based Tier 1)")
+    tier1_model: Optional[str] = Field(default=None, env="TIER1_MODEL", description="Optional LLM for Tier 1 (if using LLM-based Tier 1)")
     tier2_model: str = Field(default="gpt-4o-mini", env="TIER2_MODEL", description="Model for Tier 2 classification (cheap)")
-    tier3_models: str | List[str] = Field(
+    tier3_models: Union[str, List[str]] = Field(
         default="gpt-4o-mini,gpt-4o",
         env="TIER3_MODELS",
         description="Comma-separated list of models for Tier 3 extraction (e.g., 'gpt-4o-mini,gpt-4o')"
@@ -74,7 +74,7 @@ class Settings(BaseSettings):
             return [item.strip() for item in v.split(",") if item.strip()]
         return v
 
-    _PLACEHOLDER_VALUES: ClassVar[set[str]] = {
+    _PLACEHOLDER_VALUES: ClassVar[set] = {
         "your_api_key",
         "your_email@example.com",
         "changeme",

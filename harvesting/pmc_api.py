@@ -13,6 +13,7 @@ import time
 from typing import List, Optional, Tuple
 import requests
 from Bio import Entrez
+import functools
 
 
 # Configure Entrez
@@ -26,6 +27,31 @@ Entrez.api_key = os.getenv("NCBI_API_KEY")  # Optional: get API key from https:/
 # and 0.11 seconds (9 req/sec) with key to stay safely under the limit
 RATE_LIMIT_DELAY = 0.11 if Entrez.api_key else 0.34
 _last_request_time = 0
+
+
+def retry_with_backoff(retries=3, backoff_in_seconds=1):
+    """
+    Decorator for retrying a function with exponential backoff.
+    """
+    def rwb(f):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            x = 0
+            while True:
+                try:
+                    return f(*args, **kwargs)
+                except Exception as e:
+                    if x >= retries:
+                        # Re-raise the last exception if all retries fail
+                        print(f"  All {retries} retries failed for {f.__name__}.")
+                        raise
+
+                    sleep_duration = backoff_in_seconds * (2 ** x)
+                    print(f"  Warning: {f.__name__} failed with {e}. Retrying in {sleep_duration:.2f} seconds...")
+                    time.sleep(sleep_duration)
+                    x += 1
+        return wrapper
+    return rwb
 
 
 class PMCAPIClient:
@@ -52,6 +78,7 @@ class PMCAPIClient:
 
         _last_request_time = time.time()
 
+    @retry_with_backoff(retries=3, backoff_in_seconds=2)
     def pmid_to_pmcid(self, pmid: str) -> Optional[str]:
         """
         Convert PMID to PMCID using NCBI E-utilities.
@@ -79,6 +106,7 @@ class PMCAPIClient:
             print(f"  Error converting PMID {pmid} to PMCID: {e}")
             return None
 
+    @retry_with_backoff(retries=3, backoff_in_seconds=2)
     def get_doi_from_pmid(self, pmid: str) -> Optional[str]:
         """
         Fetch the DOI for a given PMID.
@@ -115,6 +143,15 @@ class PMCAPIClient:
             print(f"  Error fetching DOI for PMID {pmid}: {e}")
             return None
 
+    @retry_with_backoff(retries=3, backoff_in_seconds=5)
+    def _fetch_xml_from_ncbi(self, numeric_pmcid: str) -> str:
+        """Helper to fetch XML from NCBI with retries."""
+        self._rate_limit()
+        handle = Entrez.efetch(db="pmc", id=numeric_pmcid, rettype="full", retmode="xml")
+        xml_content = handle.read()
+        handle.close()
+        return xml_content.decode('utf-8')
+
     def get_fulltext_xml(self, pmcid: str) -> Optional[str]:
         """
         Download full-text XML from NCBI using E-utilities, with fallback to Europe PMC.
@@ -129,20 +166,12 @@ class PMCAPIClient:
             print(f"  Invalid PMCID format: {pmcid}")
             return None
 
-        # E-utilities require the numeric part of the PMCID
         numeric_pmcid = pmcid[3:]
 
         # Try NCBI E-utilities first
         try:
-            self._rate_limit()
-            handle = Entrez.efetch(db="pmc", id=numeric_pmcid, rettype="full", retmode="xml")
-            xml_content = handle.read()
-            handle.close()
+            xml_string = self._fetch_xml_from_ncbi(numeric_pmcid)
 
-            # The response is bytes, so decode it to a string
-            xml_string = xml_content.decode('utf-8')
-
-            # Check for an empty or error response from NCBI
             if not xml_string or "<error>" in xml_string.lower():
                  print(f"  NCBI E-utilities returned empty or error for {pmcid}, trying Europe PMC...")
             else:
@@ -172,6 +201,7 @@ class PMCAPIClient:
             print(f"  Europe PMC fallback also failed for {pmcid}: {e}")
             return None
 
+    @retry_with_backoff(retries=3, backoff_in_seconds=2)
     def is_free_full_text(self, pmid: str) -> Tuple[bool, Optional[str]]:
         """
         Check if a PubMed article is marked as free full text via the publisher.
@@ -343,6 +373,7 @@ class PMCAPIClient:
             print(f"  Error checking free full text status for PMID {pmid}: {e}")
             return False, None
 
+    @retry_with_backoff(retries=3, backoff_in_seconds=2)
     def get_pubmed_linkout_urls(self, pmid: str) -> List[dict]:
         """
         Get all LinkOut URLs for a PubMed article.

@@ -8,7 +8,7 @@ log formatting and behavior across all pipeline components.
 import logging
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 
 # Standard log format used across the project
@@ -19,8 +19,8 @@ CLI_LOG_FORMAT = '%(levelname)s: %(message)s'
 
 
 def setup_logging(
-    level: int | str = logging.INFO,
-    log_file: Optional[str | Path] = None,
+    level: Union[int, str] = logging.INFO,
+    log_file: Optional[Union[str, Path]] = None,
     format_string: Optional[str] = None,
     use_cli_format: bool = False
 ) -> None:
