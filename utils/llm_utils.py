@@ -42,9 +42,9 @@ class BaseLLMCaller:
 
     def __init__(
         self,
-        model: parse_llm_json_response = "gpt-4o",
-        temperature: call_llm_text = 0.3,
-        max_tokens: call_llm_text = 4000
+        model: str = "gpt-4o",
+        temperature: float = 0.3,
+        max_tokens: int = 4000
     ):
         """
         Initialize the LLM caller with model parameters.
@@ -65,10 +65,10 @@ class BaseLLMCaller:
     @llm_retry
     def call_llm_json(
         self,
-        prompt: parse_llm_json_response,
-        system_message: Optional[parse_llm_json_response] = None,
-        response_format: Optional[Dict[parse_llm_json_response, Any]] = None
-    ) -> Dict[parse_llm_json_response, Any]:
+        prompt: str,
+        system_message: Optional[str] = None,
+        response_format: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """
         Call the LLM with a prompt and parse the JSON response.
 
@@ -137,9 +137,9 @@ class BaseLLMCaller:
 
     def call_llm_text(
         self,
-        prompt: parse_llm_json_response,
-        system_message: Optional[parse_llm_json_response] = None
-    ) -> parse_llm_json_response:
+        prompt: str,
+        system_message: Optional[str] = None
+    ) -> str:
         """
         Call the LLM and return the raw text response.
 
@@ -182,7 +182,7 @@ class BaseLLMCaller:
             raise
 
 
-def parse_llm_json_response(response_text: parse_llm_json_response) -> Dict[parse_llm_json_response, Any]:
+def parse_llm_json_response(response_text: str) -> Dict[str, Any]:
     """
     Parse a JSON response from an LLM.
 
@@ -226,11 +226,11 @@ def parse_llm_json_response(response_text: parse_llm_json_response) -> Dict[pars
 
 
 def create_structured_prompt(
-    task_description: parse_llm_json_response,
-    input_data: parse_llm_json_response,
-    output_format: Dict[parse_llm_json_response, parse_llm_json_response],
-    examples: Optional[List[Dict[parse_llm_json_response, Any]]] = None
-) -> parse_llm_json_response:
+    task_description: str,
+    input_data: str,
+    output_format: Dict[str, str],
+    examples: Optional[List[Dict[str, Any]]] = None
+) -> str:
     """
     Create a well-structured prompt for LLM calls.
 

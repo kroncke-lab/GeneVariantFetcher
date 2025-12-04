@@ -25,7 +25,7 @@ class FormatConverter:
         """Initialize format converter."""
         self.markitdown = MarkItDown() if MARKITDOWN_AVAILABLE else None
 
-    def xml_to_markdown(self, xml_content: excel_to_markdown) -> excel_to_markdown:
+    def xml_to_markdown(self, xml_content: str) -> str:
         """
         Convert PubMed Central XML to markdown.
 
@@ -66,10 +66,10 @@ class FormatConverter:
 
             return markdown
         except Exception as e:
-            p(f"  Error parsing XML: {e}")
+            print(f"  Error parsing XML: {e}")
             return "# MAIN TEXT\n\n[Error parsing XML content]\n\n"
 
-    def excel_to_markdown(self, file_path: Path) -> excel_to_markdown:
+    def excel_to_markdown(self, file_path: Path) -> str:
         """
         Convert Excel file to markdown tables.
 
@@ -105,7 +105,7 @@ class FormatConverter:
             print(f"    Error converting Excel {file_path}: {e}")
             return f"[Error converting Excel file: {e}]\n\n"
 
-    def docx_to_markdown(self, file_path: Path) -> excel_to_markdown:
+    def docx_to_markdown(self, file_path: Path) -> str:
         """
         Convert Word document to markdown.
 
@@ -117,14 +117,14 @@ class FormatConverter:
         """
         if self.markitdown:
             try:
-                result = self.markitdown.convert(excel_to_markdown(file_path))
+                result = self.markitdown.convert(str(file_path))
                 return result.text_content
             except Exception as e:
                 print(f"    Error converting DOCX with markitdown {file_path}: {e}")
                 return f"[Error converting DOCX file: {e}]\n\n"
         else:
             try:
-                from doc import Document
+                from docx import Document
                 doc = Document(file_path)
                 text = "\n\n".join([para.text for para in doc.paragraphs if para.text.strip()])
                 return text + "\n\n"
@@ -132,7 +132,7 @@ class FormatConverter:
                 print(f"    Error converting DOCX {file_path}: {e}")
                 return f"[Error converting DOCX file: {e}]\n\n"
 
-    def pdf_to_markdown(self, file_path: Path) -> excel_to_markdown:
+    def pdf_to_markdown(self, file_path: Path) -> str:
         """
         Convert PDF to markdown.
 
@@ -144,7 +144,7 @@ class FormatConverter:
         """
         if self.markitdown:
             try:
-                result = self.markitdown.convert(excel_to_markdown(file_path))
+                result = self.markitdown.convert(str(file_path))
                 return result.text_content
             except Exception as e:
                 print(f"    Error converting PDF with markitdown {file_path}: {e}")

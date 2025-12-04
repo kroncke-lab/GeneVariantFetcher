@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 class SupplementScraper:
     """Scrapes supplemental files from various publisher websites."""
 
-    def scrape_nature_supplements(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> List[Dict]:
+    def scrape_nature_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
         Scrape supplemental files from a Nature journal page.
 
@@ -49,7 +49,7 @@ class SupplementScraper:
                 if '/articles/' in href and '/figures/' not in href and 'author-information' not in href:
                     url = urljoin(base_url, href)
                     filename = Path(urlparse(url).path).name
-                    if filename and not a(f['name'] == filename for f in found_files):
+                    if filename and not any(f['name'] == filename for f in found_files):
                         found_files.append({'url': url, 'name': filename})
                         print(f"      Found potential supplement: {filename}")
 
@@ -59,7 +59,7 @@ class SupplementScraper:
 
         return found_files
 
-    def scrape_elsevier_supplements(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> List[Dict]:
+    def scrape_elsevier_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
         Scrape supplemental files from an Elsevier/GIM journal page.
         Uses a multi-step approach: JSON data, regex patterns, and HTML parsing.
@@ -90,7 +90,7 @@ class SupplementScraper:
                 for item in supp_data:
                     url = item.get('downloadUrl') or item.get('url') or item.get('href')
                     filename = item.get('title') or item.get('name') or item.get('filename')
-                    if url and filename and not a(f['name'] == filename for f in found_files):
+                    if url and filename and not any(f['name'] == filename for f in found_files):
                         found_files.append({'url': url, 'name': filename})
                         print(f"    Found supplement in JSON data: {filename}")
                 if found_files:
@@ -102,18 +102,18 @@ class SupplementScraper:
         supp_keywords = ['supplement', 'supporting', 'additional', 'appendix']
         for heading in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
             heading_text = heading.get_text().lower()
-            if a(keyword in heading_text for keyword in supp_keywords):
+            if any(keyword in heading_text for keyword in supp_keywords):
                 # Look for links in the section containing this heading
                 section = heading.find_next_sibling() or heading.parent
                 if section:
-                    for a in section.find_all('a', href=True):
-                        href = a['href']
-                        link_text = a.get_text().lower()
+                    for link in section.find_all('a', href=True):
+                        href = link['href']
+                        link_text = link.get_text().lower()
                         # Check if it's a file link
-                        if a(ext in href.lower() for ext in ['.pdf', '.docx', '.xlsx', '.zip', '.csv', '.txt', '.doc']):
+                        if any(ext in href.lower() for ext in ['.pdf', '.docx', '.xlsx', '.zip', '.csv', '.txt', '.doc']):
                             url = urljoin(base_url, href)
-                            filename = a.get_text().strip() or Path(urlparse(url).path).name
-                            if filename and not a(f['name'] == filename for f in found_files):
+                            filename = link.get_text().strip() or Path(urlparse(url).path).name
+                            if filename and not any(f['name'] == filename for f in found_files):
                                 found_files.append({'url': url, 'name': filename})
                                 print(f"    Found supplement in section: {filename}")
 
@@ -129,36 +129,36 @@ class SupplementScraper:
             for link in mmc_links:
                 url = urljoin(base_url, link)
                 filename = Path(urlparse(url).path).name
-                if filename and not a(f['name'] == filename for f in found_files):
+                if filename and not any(f['name'] == filename for f in found_files):
                     found_files.append({'url': url, 'name': filename})
                     print(f"    Found MMC link via regex: {filename}")
         if found_files:
             return found_files
 
         # 4. Look for links with "supplement" or "mmc" in the text or href
-        for a in soup.find_all('a', href=True):
-            link_text = a.get_text().lower()
-            href = a['href'].lower()
+        for link in soup.find_all('a', href=True):
+            link_text = link.get_text().lower()
+            href = link['href'].lower()
             is_supplement = (
-                a(keyword in link_text for keyword in ['supplement', 'supporting', 'additional', 'mmc']) or
+                any(keyword in link_text for keyword in ['supplement', 'supporting', 'additional', 'mmc']) or
                 'mmc' in href or
                 'supplement' in href or
                 'attachment' in href
             )
-            is_file = a(href.endswith(ext) for ext in ['.pdf', '.docx', '.xlsx', '.zip', '.csv', '.txt', '.doc'])
+            is_file = any(href.endswith(ext) for ext in ['.pdf', '.docx', '.xlsx', '.zip', '.csv', '.txt', '.doc'])
             if is_supplement and is_file:
-                url = urljoin(base_url, a['href'])
-                filename = a.get_text().strip() or Path(urlparse(url).path).name
-                if filename and not a(f['name'] == filename for f in found_files):
+                url = urljoin(base_url, link['href'])
+                filename = link.get_text().strip() or Path(urlparse(url).path).name
+                if filename and not any(f['name'] == filename for f in found_files):
                     found_files.append({'url': url, 'name': filename})
                     print(f"    Found supplement link: {filename}")
 
         # 5. Look for specific "Download file" links in ScienceDirect as a fallback
-        for a in soup.find_all('a', class_='S_C_9cf8451f', href=True):
-            if 'Download file' in a.get_text():
-                url = urljoin(base_url, a['href'])
-                filename = a.get_text().replace('Download file', '').strip()
-                if filename and not a(f['name'] == filename for f in found_files):
+        for link in soup.find_all('a', class_='S_C_9cf8451f', href=True):
+            if 'Download file' in link.get_text():
+                url = urljoin(base_url, link['href'])
+                filename = link.get_text().replace('Download file', '').strip()
+                if filename and not any(f['name'] == filename for f in found_files):
                     found_files.append({'url': url, 'name': filename})
                     print(f"    Found ScienceDirect download link: {filename}")
 
@@ -168,7 +168,7 @@ class SupplementScraper:
         print("    No specific Elsevier/GIM supplements found. Trying generic scan.")
         return self.scrape_generic_supplements(html, base_url)
 
-    def scrape_generic_supplements(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> List[Dict]:
+    def scrape_generic_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
         A best-effort generic scraper for supplemental files.
 
@@ -186,21 +186,21 @@ class SupplementScraper:
         keywords = ['supplement', 'supporting', 'appendix', 'additional file']
         file_extensions = ['.pdf', '.docx', '.xlsx', '.csv', '.zip', '.rar', '.gz', '.txt', '.doc']
 
-        for a in soup.find_all('a', href=True):
-            link_text = a.get_text().lower()
-            href = a['href'].lower()
+        for link in soup.find_all('a', href=True):
+            link_text = link.get_text().lower()
+            href = link['href'].lower()
 
             # Check if link text or href contain any of the keywords or file extensions
-            is_supplement_link = a(keyword in link_text for keyword in keywords)
-            is_file_link = a(href.endswith(ext) for ext in file_extensions)
+            is_supplement_link = any(keyword in link_text for keyword in keywords)
+            is_file_link = any(href.endswith(ext) for ext in file_extensions)
 
             if is_supplement_link or is_file_link:
                 try:
-                    url = urljoin(base_url, a['href'])
+                    url = urljoin(base_url, link['href'])
                     filename = Path(urlparse(url).path).name
 
                     # Basic filtering to avoid irrelevant links
-                    if filename and not a(f['name'] == filename for f in found_files):
+                    if filename and not any(f['name'] == filename for f in found_files):
                         found_files.append({'url': url, 'name': filename})
                         print(f"    Found potential supplement: {filename}")
                 except Exception:
@@ -214,7 +214,7 @@ class SupplementScraper:
     # without PMCIDs.
     # ==========================================================================
 
-    def extract_fulltext_nature(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext_nature(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
         """
         Extract full-text content from a Nature journal page.
 
@@ -225,7 +225,7 @@ class SupplementScraper:
         Returns:
             Tuple of (markdown_content, title)
         """
-        p("  Extracting full text from Nature article...")
+        print("  Extracting full text from Nature article...")
         soup = BeautifulSoup(html, 'html.parser')
         markdown = "# MAIN TEXT\n\n"
 
@@ -275,7 +275,7 @@ class SupplementScraper:
 
         return markdown if len(markdown) > 200 else None, title
 
-    def extract_fulltext_elsevier(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext_elsevier(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
         """
         Extract full-text content from an Elsevier/ScienceDirect page.
 
@@ -286,7 +286,7 @@ class SupplementScraper:
         Returns:
             Tuple of (markdown_content, title)
         """
-        p("  Extracting full text from Elsevier/ScienceDirect article...")
+        print("  Extracting full text from Elsevier/ScienceDirect article...")
         soup = BeautifulSoup(html, 'html.parser')
         markdown = "# MAIN TEXT\n\n"
 
@@ -311,7 +311,7 @@ class SupplementScraper:
                         if isinstance(abstract_data, dict):
                             abstract_text = abstract_data.get('content', '')
                         else:
-                            abstract_text = scrape_elsevier_supplements(abstract_data)
+                            abstract_text = str(abstract_data)
                         # Clean HTML tags from abstract
                         abstract_soup = BeautifulSoup(abstract_text, 'html.parser')
                         markdown += abstract_soup.get_text().strip() + "\n\n"
@@ -370,7 +370,7 @@ class SupplementScraper:
 
         return markdown if len(markdown) > 200 else None, title
 
-    def extract_fulltext_wiley(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext_wiley(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
         """
         Extract full-text content from a Wiley Online Library page.
 
@@ -381,7 +381,7 @@ class SupplementScraper:
         Returns:
             Tuple of (markdown_content, title)
         """
-        p("  Extracting full text from Wiley article...")
+        print("  Extracting full text from Wiley article...")
         soup = BeautifulSoup(html, 'html.parser')
         markdown = "# MAIN TEXT\n\n"
 
@@ -420,7 +420,7 @@ class SupplementScraper:
 
         return markdown if len(markdown) > 200 else None, title
 
-    def extract_fulltext_generic(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext_generic(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
         """
         Generic full-text extraction for any publisher page.
 
@@ -433,7 +433,7 @@ class SupplementScraper:
         Returns:
             Tuple of (markdown_content, title)
         """
-        p("  Extracting full text using generic scraper...")
+        print("  Extracting full text using generic scraper...")
         soup = BeautifulSoup(html, 'html.parser')
         markdown = "# MAIN TEXT\n\n"
 
@@ -490,7 +490,7 @@ class SupplementScraper:
 
         return markdown if len(markdown) > 200 else None, title
 
-    def extract_fulltext(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
         """
         Main entry point for full-text extraction.
         Routes to domain-specific extractors based on URL.
