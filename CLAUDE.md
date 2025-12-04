@@ -12,10 +12,11 @@
 
 ## Critical Rules
 
-1. **Entry point:** `python automated_workflow.py GENE --email EMAIL`
-2. **SQLite is canonical** - all data must be written to `{GENE}.db`
-3. **Supplements are essential** - 70-80% of variant data is in Excel/Word supplements
-4. **Classification matters** - every individual must be classified as Affected/Unaffected/Ambiguous
+1. **Entry point:** `python automated_workflow.py GENE --email EMAIL --output OUTPUT_DIR`
+2. **Output directory is required** - users must specify where to save manuscripts, supplements, and analyses (keep outside git repo)
+3. **SQLite is canonical** - all data must be written to `{GENE}.db`
+4. **Supplements are essential** - 70-80% of variant data is in Excel/Word supplements
+5. **Classification matters** - every individual must be classified as Affected/Unaffected/Ambiguous
 
 ---
 
@@ -54,8 +55,10 @@ Discovery → Download → Extract → Aggregate → SQLite
 
 ## Output Structure
 
+**Note:** Users must specify an output directory via `--output`. Keep this outside your git repository.
+
 ```
-automated_output/{GENE}/{TIMESTAMP}/
+{OUTPUT_DIR}/{GENE}/{TIMESTAMP}/
 ├── {GENE}_pmids.txt                # Discovered PMIDs
 ├── {GENE}_workflow_summary.json    # Execution statistics
 ├── {GENE}_penetrance_summary.json  # Aggregated penetrance data
@@ -89,11 +92,14 @@ automated_output/{GENE}/{TIMESTAMP}/
 ## CLI Reference
 
 ```bash
-# Run full pipeline
-python automated_workflow.py BRCA1 --email you@email.com
+# Run full pipeline (output directory is REQUIRED)
+python automated_workflow.py BRCA1 --email you@email.com --output /path/to/data
 
-# With limits
-python automated_workflow.py SCN5A --email you@email.com --max-pmids 200 --max-downloads 100
+# With custom output location and limits
+python automated_workflow.py SCN5A --email you@email.com --output ~/gene_data --max-pmids 200 --max-downloads 100
+
+# Quick test with local output directory
+python automated_workflow.py TP53 --email you@email.com --output ./output --max-pmids 10 --max-downloads 5
 ```
 
 ---

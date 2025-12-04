@@ -57,8 +57,10 @@ pip install tabulate  # For query_variants_db.py
 To migrate a data directory to SQLite:
 
 ```bash
-python migrate_to_sqlite.py --data-dir automated_output/TTR/20251125_114028
+python migrate_to_sqlite.py --data-dir /path/to/data/TTR/20251125_114028
 ```
+
+**Note:** Replace `/path/to/data` with the output directory you specified when running the workflow.
 
 This will:
 1. Create `variants.db` in the current directory
@@ -71,7 +73,7 @@ To migrate AND clean up the file system:
 
 ```bash
 python migrate_to_sqlite.py \
-    --data-dir automated_output/TTR/20251125_114028 \
+    --data-dir /path/to/data/TTR/20251125_114028 \
     --cleanup \
     --delete-pmc-after-archive
 ```
@@ -86,7 +88,7 @@ This will:
 
 ```bash
 python migrate_to_sqlite.py \
-    --data-dir automated_output/TTR/20251125_114028 \
+    --data-dir /path/to/data/TTR/20251125_114028 \
     --db ttr_variants.db
 ```
 
@@ -96,7 +98,7 @@ If your extraction files are in a different subdirectory (e.g., `extractions_rer
 
 ```bash
 python migrate_to_sqlite.py \
-    --data-dir automated_output/TTR/20251125_114028 \
+    --data-dir /path/to/data/TTR/20251125_114028 \
     --extractions-subdir extractions_rerun
 ```
 
@@ -106,7 +108,7 @@ To see what would happen without actually migrating:
 
 ```bash
 python migrate_to_sqlite.py \
-    --data-dir automated_output/TTR/20251125_114028 \
+    --data-dir /path/to/data/TTR/20251125_114028 \
     --cleanup \
     --dry-run
 ```
@@ -247,7 +249,7 @@ The migration script includes validation:
 
 Before migration:
 
-1. **Backup original data**: `cp -r automated_output automated_output.backup`
+1. **Backup original data**: `cp -r /path/to/data /path/to/data.backup`
 2. **Use dry-run first**: Test migration without changes
 3. **Archive before cleanup**: Ensure ZIP creation succeeds before deleting originals
 

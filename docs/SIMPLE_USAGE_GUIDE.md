@@ -5,8 +5,10 @@
 Running the entire pipeline from gene name to SQLite database is now **incredibly simple**:
 
 ```bash
-python automated_workflow.py BRCA1 --email your@email.com
+python automated_workflow.py BRCA1 --email your@email.com --output /path/to/data
 ```
+
+**Important:** The `--output` parameter is **required**. Specify a directory outside your git repository to store manuscripts, supplements, and analyses.
 
 That's it! This single command does **everything**:
 
@@ -16,7 +18,7 @@ That's it! This single command does **everything**:
 ```
 📚 Discovering relevant papers from PubMind...
 ✓ Found 152 PMIDs for BRCA1
-✓ Saved PMID list to: automated_output/BRCA1/20231126_143022/BRCA1_pmids.txt
+✓ Saved PMID list to: /path/to/data/BRCA1/20231126_143022/BRCA1_pmids.txt
 ```
 
 #### Step 2: Download Full-Text (PMC)
@@ -55,7 +57,7 @@ That's it! This single command does **everything**:
 ```
 💾 Migrating data to SQLite database...
 ✓ Migrated 45/45 extractions to SQLite
-✓ Database saved to: automated_output/BRCA1/20231126_143022/BRCA1.db
+✓ Database saved to: /path/to/data/BRCA1/20231126_143022/BRCA1.db
 ```
 - Normalizes JSON data into relational tables
 - Creates variant, penetrance, patient, and paper tables
@@ -78,10 +80,10 @@ Success rate: 29.6%
 
 💾 Database migrated: 45/45 extractions
 
-All outputs saved to: automated_output/BRCA1/20231126_143022
-Summary report: automated_output/BRCA1/20231126_143022/BRCA1_workflow_summary.json
-Penetrance summary: automated_output/BRCA1/20231126_143022/BRCA1_penetrance_summary.json
-SQLite database: automated_output/BRCA1/20231126_143022/BRCA1.db
+All outputs saved to: /path/to/data/BRCA1/20231126_143022
+Summary report: /path/to/data/BRCA1/20231126_143022/BRCA1_workflow_summary.json
+Penetrance summary: /path/to/data/BRCA1/20231126_143022/BRCA1_penetrance_summary.json
+SQLite database: /path/to/data/BRCA1/20231126_143022/BRCA1.db
 ================================================================================
 ```
 
@@ -89,10 +91,10 @@ SQLite database: automated_output/BRCA1/20231126_143022/BRCA1.db
 
 ## Output Structure
 
-After running, you'll have:
+After running, you'll have (in your specified `--output` directory):
 
 ```
-automated_output/BRCA1/20231126_143022/
+{OUTPUT_DIR}/BRCA1/20231126_143022/
 ├── BRCA1.db                           ← SQLite database (query this!)
 ├── BRCA1_pmids.txt                    ← List of PMIDs found
 ├── BRCA1_workflow_summary.json        ← Overall statistics
@@ -117,13 +119,13 @@ Once you have the SQLite database, query it:
 
 ```bash
 # Get overall statistics
-python query_variants_db.py automated_output/BRCA1/20231126_143022/BRCA1.db --stats
+python query_variants_db.py /path/to/data/BRCA1/20231126_143022/BRCA1.db --stats
 
 # Search for a specific variant
-python query_variants_db.py automated_output/BRCA1/20231126_143022/BRCA1.db --variant "c.1234G>A"
+python query_variants_db.py /path/to/data/BRCA1/20231126_143022/BRCA1.db --variant "c.1234G>A"
 
 # Get penetrance for a variant
-python query_variants_db.py automated_output/BRCA1/20231126_143022/BRCA1.db --penetrance "p.Arg412Gln"
+python query_variants_db.py /path/to/data/BRCA1/20231126_143022/BRCA1.db --penetrance "p.Arg412Gln"
 ```
 
 ---
@@ -133,24 +135,31 @@ python query_variants_db.py automated_output/BRCA1/20231126_143022/BRCA1.db --pe
 ### Limit Number of Papers
 ```bash
 # Only process first 10 PMIDs (for testing)
-python automated_workflow.py BRCA1 --email your@email.com --max-pmids 10 --max-downloads 5
+python automated_workflow.py BRCA1 --email your@email.com --output ./test_output --max-pmids 10 --max-downloads 5
 ```
 
 ### Different Gene
 ```bash
-python automated_workflow.py SCN5A --email your@email.com
-python automated_workflow.py TP53 --email your@email.com
-python automated_workflow.py KCNQ1 --email your@email.com
+python automated_workflow.py SCN5A --email your@email.com --output ~/gene_data
+python automated_workflow.py TP53 --email your@email.com --output ~/gene_data
+python automated_workflow.py KCNQ1 --email your@email.com --output ~/gene_data
 ```
 
-### Change Output Directory
+### Custom Output Location
 ```bash
-python automated_workflow.py BRCA1 --email your@email.com --output my_results
+# Local directory
+python automated_workflow.py BRCA1 --email your@email.com --output ./my_results
+
+# Home directory
+python automated_workflow.py BRCA1 --email your@email.com --output ~/Documents/gene_research
+
+# Absolute path
+python automated_workflow.py BRCA1 --email your@email.com --output /data/variants
 ```
 
 ### Verbose Logging
 ```bash
-python automated_workflow.py BRCA1 --email your@email.com --verbose
+python automated_workflow.py BRCA1 --email your@email.com --output /path/to/data --verbose
 ```
 
 ---
@@ -188,7 +197,7 @@ python migrate_to_sqlite.py --data-dir ... # Step 4 (manual migration)
 **After**: One command does everything
 ```bash
 # New way (automatic, simple):
-python automated_workflow.py BRCA1 --email your@email.com
+python automated_workflow.py BRCA1 --email your@email.com --output /path/to/data
 ```
 
 **Code cleanup**:
@@ -250,7 +259,7 @@ Estimated cost: $3.50
 If you already have full-text papers downloaded and just want to re-extract:
 
 ```bash
-python rerun_extraction.py automated_output/BRCA1/20231126_143022/pmc_fulltext
+python rerun_extraction.py /path/to/data/BRCA1/20231126_143022/pmc_fulltext
 ```
 
 This skips steps 1-2 and only runs extraction + aggregation + SQLite migration.

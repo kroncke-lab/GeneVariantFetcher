@@ -797,7 +797,8 @@ def extract_gene_from_path(data_dir: Path) -> Optional[str]:
     """
     Extract gene symbol from directory path.
 
-    Expected path structure: automated_output/{GENE}/timestamp/...
+    Expected path structure: {OUTPUT_DIR}/{GENE}/{TIMESTAMP}/...
+    where GENE is uppercase 2-10 characters and TIMESTAMP is a date pattern.
 
     Args:
         data_dir: Path to data directory
@@ -807,14 +808,23 @@ def extract_gene_from_path(data_dir: Path) -> Optional[str]:
     """
     parts = data_dir.parts
 
-    # Look for 'automated_output' in path and get next component
     try:
-        for i, part in enumerate(parts):
-            if part == 'automated_output' and i + 1 < len(parts):
-                gene = parts[i + 1]
-                # Validate it looks like a gene symbol (uppercase, reasonable length)
-                if gene.isupper() and 2 <= len(gene) <= 10:
-                    return gene
+        # Search backwards through path components for a gene-like pattern
+        # Gene symbols are typically followed by a timestamp directory
+        for i in range(len(parts) - 1, 0, -1):
+            part = parts[i]
+
+            # Check if this looks like a gene symbol (uppercase, 2-10 chars)
+            if part.isupper() and 2 <= len(part) <= 10:
+                # Verify next component (if exists) looks like a timestamp
+                if i + 1 < len(parts):
+                    next_part = parts[i + 1]
+                    # Timestamp pattern: YYYYMMDD_HHMMSS (8 digits _ 6 digits)
+                    if '_' in next_part and any(c.isdigit() for c in next_part):
+                        return part
+                # If this is the last component, it might still be the gene
+                elif i == len(parts) - 1:
+                    return part
     except Exception as e:
         logger.debug(f"Could not extract gene from path: {e}")
 

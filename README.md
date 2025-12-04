@@ -50,13 +50,14 @@ export NCBI_API_KEY="your-key"  # Optional, increases rate limits
 
 ```bash
 # Complete workflow: Discovery → Download → Extract → Aggregate → SQLite
-python automated_workflow.py BRCA1 --email your@email.com
+# NOTE: --output is REQUIRED (keep outside your git repository)
+python automated_workflow.py BRCA1 --email your@email.com --output /path/to/data
 
 # With limits
-python automated_workflow.py SCN5A --email your@email.com --max-pmids 200 --max-downloads 100
+python automated_workflow.py SCN5A --email your@email.com --output ~/gene_data --max-pmids 200 --max-downloads 100
 ```
 
-**Output:** `automated_output/{GENE}/{TIMESTAMP}/{GENE}.db` (SQLite database)
+**Output:** `{OUTPUT_DIR}/{GENE}/{TIMESTAMP}/{GENE}.db` (SQLite database)
 
 ---
 
@@ -78,8 +79,10 @@ Discovery → Download → Extract → Aggregate → SQLite
 
 ## Output Structure
 
+**Note:** Users must specify an output directory via `--output`. Keep this outside your git repository.
+
 ```
-automated_output/{GENE}/{TIMESTAMP}/
+{OUTPUT_DIR}/{GENE}/{TIMESTAMP}/
 ├── {GENE}_pmids.txt                # Discovered PMIDs
 ├── {GENE}_workflow_summary.json    # Execution statistics
 ├── {GENE}_penetrance_summary.json  # Aggregated penetrance data
@@ -132,11 +135,17 @@ TIER3_THRESHOLD=1                         # Minimum variants before cascade
 ### Command-Line Options
 
 ```bash
-python automated_workflow.py GENE --email EMAIL [OPTIONS]
+python automated_workflow.py GENE --email EMAIL --output OUTPUT_DIR [OPTIONS]
 
-Options:
-  --max-pmids N      Limit number of PMIDs to discover (default: no limit)
-  --max-downloads N  Limit number of papers to download (default: no limit)
+Required:
+  --email EMAIL         Your email for NCBI E-utilities
+  --output OUTPUT_DIR   Directory for manuscripts, extractions, and analysis
+
+Optional:
+  --max-pmids N         Limit number of PMIDs to discover (default: 100)
+  --max-downloads N     Limit number of papers to download (default: 50)
+  --tier-threshold N    Minimum variants before model cascade (default: 1)
+  --verbose            Enable verbose logging
 ```
 
 ---

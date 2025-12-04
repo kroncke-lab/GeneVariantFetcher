@@ -59,6 +59,11 @@ extractions/
 pmc_harvest/
 test_pmc_harvest/
 
+# User output directories
+# NOTE: Users must specify --output when running automated_workflow.py
+# If you store output locally (not recommended), add your output directory here
+# Example: my_gene_data/
+
 # Testing
 .pytest_cache/
 .coverage
