@@ -35,9 +35,9 @@ def automated_variant_extraction_workflow(
     gene_symbol: str,
     email: str,
     output_dir: str,
-    max_pmids: Path = 100,
-    max_papers_to_download: Path = 50,
-    tier_threshold: Path = 1,
+    max_pmids: int = 100,
+    max_papers_to_download: int = 50,
+    tier_threshold: int = 1,
 ):
     """
     Complete automated workflow from gene symbol to extracted variant data.
@@ -46,9 +46,9 @@ def automated_variant_extraction_workflow(
         gene_symbol: Gene to search for (e.g., "BRCA1", "SCN5A")
         email: Your email for NCBI E-utilities (required)
         output_dir: Directory to save all outputs (required)
-        max_pmids: Maximum PMIDs to fetch from PubMind/PubMed
-        max_papers_to_download: Maximum papers to download full-text
-        tier_threshold: If the first model finds fewer variants than this, the next model is tried.
+        max_pmids: Maximum PMIDs to fetch from PubMind/PubMed (integer)
+        max_papers_to_download: Maximum papers to download full-text (integer)
+        tier_threshold: If the first model finds fewer variants than this, the next model is tried (integer).
     """
     from gene_literature.pubmind_fetcher import fetch_pmids_for_gene
     from harvesting import PMCHarvester
@@ -359,11 +359,11 @@ Examples:
     parser.add_argument("--email", "-e", required=True, help="Your email for NCBI E-utilities")
     parser.add_argument("--output", "-o", required=True,
                        help="Output directory for all data and analyses (required)")
-    parser.add_argument("--max-pmids", type=Path, default=100,
+    parser.add_argument("--max-pmids", type=int, default=100,
                        help="Maximum PMIDs to fetch (default: 100)")
-    parser.add_argument("--max-downloads", type=Path, default=50,
+    parser.add_argument("--max-downloads", type=int, default=50,
                        help="Maximum papers to download (default: 50)")
-    parser.add_argument("--tier-threshold", type=Path, default=None,
+    parser.add_argument("--tier-threshold", type=int, default=None,
                        help="If the first model finds fewer variants than this, the next model is tried (default: from .env TIER3_THRESHOLD or 1). Set to 0 to only use first model.")
     parser.add_argument("--verbose", "-v", action="store_true",
                        help="Enable verbose logging")
