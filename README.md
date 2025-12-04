@@ -10,7 +10,7 @@ Extracts human genetic variant carriers from biomedical literature (including su
 # Install
 pip install -e .
 
-# Set environment variables
+# Set required environment variables
 export AI_INTEGRATIONS_OPENAI_API_KEY="your-key"
 export NCBI_EMAIL="your@email.com"
 
@@ -72,8 +72,8 @@ python rerun_extraction.py automated_output/GENE/{timestamp}/
 ## Environment Variables
 
 ```bash
-AI_INTEGRATIONS_OPENAI_API_KEY=your-key  # Required - OpenAI API key
-NCBI_EMAIL=your@email.com                 # Required - for PubMed API
+AI_INTEGRATIONS_OPENAI_API_KEY=your-key  # Required
+NCBI_EMAIL=your@email.com                 # Required
 NCBI_API_KEY=your-key                     # Optional - increases rate limits
 ```
 
@@ -81,7 +81,7 @@ NCBI_API_KEY=your-key                     # Optional - increases rate limits
 
 - Python 3.11+
 - OpenAI API key (for LLM extraction)
-- NCBI email (for PubMed API compliance)
+- Email address (for NCBI API compliance)
 
 ## Key Modules
 
