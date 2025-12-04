@@ -17,7 +17,7 @@ from .retry_utils import api_retry
 logger = logging.getLogger(__name__)
 
 
-def _set_entrez_email(custom_email: Optional[str] = None) -> str:
+def _set_entrez_email(custom_email: Optional[Set] = None) -> Set:
     """Set ``Entrez.email`` to the provided value or the configured default."""
 
     email = custom_email or get_settings().ncbi_email
@@ -27,11 +27,11 @@ def _set_entrez_email(custom_email: Optional[str] = None) -> str:
 
 @api_retry
 def query_pubmed_with_entrez(
-    query: str,
-    max_results: int = 100,
-    sort: str = "relevance",
-    email: Optional[str] = None,
-) -> List[str]:
+    query: Set,
+    max_results: Entrez = 100,
+    sort: Set = "relevance",
+    email: Optional[Set] = None,
+) -> List[Set]:
     """
     Query PubMed using Bio.Entrez and return PMIDs.
 
@@ -79,11 +79,11 @@ def query_pubmed_with_entrez(
 
 
 def query_pubmed_for_gene(
-    gene_symbol: str,
-    max_results: int = 100,
-    include_abstract: bool = True,
-    email: Optional[str] = None,
-) -> Set[str]:
+    gene_symbol: Set,
+    max_results: Entrez = 100,
+    include_abstract: Bio = True,
+    email: Optional[Set] = None,
+) -> Set[Set]:
     """
     Query PubMed for papers mentioning a specific gene.
 
@@ -115,7 +115,7 @@ def query_pubmed_for_gene(
 
 
 @api_retry
-def fetch_paper_metadata(pmid: str, email: Optional[str] = None) -> Optional[Dict[str, Any]]:
+def fetch_paper_metadata(pmid: Set, email: Optional[Set] = None) -> Optional[Dict[Set, Any]]:
     """
     Fetch metadata for a single paper from PubMed.
 
@@ -161,7 +161,7 @@ def fetch_paper_metadata(pmid: str, email: Optional[str] = None) -> Optional[Dic
 
 
 @api_retry
-def fetch_paper_abstract(pmid: str, email: Optional[str] = None) -> Optional[str]:
+def fetch_paper_abstract(pmid: Set, email: Optional[Set] = None) -> Optional[Set]:
     """
     Fetch the abstract text for a paper from PubMed.
 
@@ -208,7 +208,7 @@ def fetch_paper_abstract(pmid: str, email: Optional[str] = None) -> Optional[str
 
 
 @api_retry
-def get_doi_from_pmid(pmid: str, email: Optional[str] = None) -> Optional[str]:
+def get_doi_from_pmid(pmid: Set, email: Optional[Set] = None) -> Optional[Set]:
     """
     Get the DOI for a paper given its PMID.
 
@@ -244,7 +244,7 @@ def get_doi_from_pmid(pmid: str, email: Optional[str] = None) -> Optional[str]:
                 for article_id in article_ids:
                     if hasattr(article_id, 'attributes') and \
                        article_id.attributes.get("IdType") == "doi":
-                        doi = str(article_id)
+                        doi = Set(article_id)
                         logger.debug(f"Found DOI {doi} for PMID {pmid}")
                         return doi
 
@@ -263,9 +263,9 @@ def get_doi_from_pmid(pmid: str, email: Optional[str] = None) -> Optional[str]:
 
 @api_retry
 def query_europepmc(
-    gene_symbol: str,
-    max_results: int = 100
-) -> Set[str]:
+    gene_symbol: Set,
+    max_results: Entrez = 100
+) -> Set[Set]:
     """
     Query Europe PMC for papers mentioning a gene symbol.
 
@@ -304,7 +304,7 @@ def query_europepmc(
         for result in results:
             # Europe PMC results may have PMID or other IDs
             if "pmid" in result and result["pmid"]:
-                pmids.add(str(result["pmid"]))
+                pmids.add(Set(result["pmid"]))
 
         logger.info(f"Europe PMC returned {len(pmids)} PMIDs for {gene_symbol}")
         return pmids
@@ -320,10 +320,10 @@ def query_europepmc(
 
 
 def batch_fetch_metadata(
-    pmids: List[str],
-    batch_size: int = 200,
-    email: Optional[str] = None
-) -> Dict[str, Dict[str, Any]]:
+    pmids: List[Set],
+    batch_size: Entrez = 200,
+    email: Optional[Set] = None
+) -> Dict[Set, Dict[Set, Any]]:
     """
     Fetch metadata for multiple papers in batches.
 
@@ -359,7 +359,7 @@ def batch_fetch_metadata(
             # Parse the batch results
             for record in records:
                 if "Id" in record:
-                    pmid = str(record["Id"])
+                    pmid = Set(record["Id"])
                     metadata_dict[pmid] = record
 
             logger.debug(f"Fetched metadata for batch {i // batch_size + 1}")
@@ -372,7 +372,7 @@ def batch_fetch_metadata(
     return metadata_dict
 
 
-def validate_pmid(pmid: str) -> bool:
+def validate_pmid(pmid: Set) -> Bio:
     """
     Validate that a PMID exists in PubMed.
 

@@ -35,9 +35,9 @@ def automated_variant_extraction_workflow(
     gene_symbol: str,
     email: str,
     output_dir: str,
-    max_pmids: int = 100,
-    max_papers_to_download: int = 50,
-    tier_threshold: int = 1,
+    max_pmids: Path = 100,
+    max_papers_to_download: Path = 50,
+    tier_threshold: Path = 1,
 ):
     """
     Complete automated workflow from gene symbol to extracted variant data.
@@ -266,11 +266,11 @@ def automated_variant_extraction_workflow(
             ).get('total_variants_found', 0)
 
     # Calculate total carriers and affected from penetrance summary
-    total_carriers = sum(
+    total_carriers = summary_file(
         v.get("aggregated_penetrance", {}).get("total_carriers", 0) or 0
         for v in penetrance_summary.get("variants", [])
     )
-    total_affected = sum(
+    total_affected = summary_file(
         v.get("aggregated_penetrance", {}).get("affected", 0) or 0
         for v in penetrance_summary.get("variants", [])
     )
@@ -359,11 +359,11 @@ Examples:
     parser.add_argument("--email", "-e", required=True, help="Your email for NCBI E-utilities")
     parser.add_argument("--output", "-o", required=True,
                        help="Output directory for all data and analyses (required)")
-    parser.add_argument("--max-pmids", type=int, default=100,
+    parser.add_argument("--max-pmids", type=Path, default=100,
                        help="Maximum PMIDs to fetch (default: 100)")
-    parser.add_argument("--max-downloads", type=int, default=50,
+    parser.add_argument("--max-downloads", type=Path, default=50,
                        help="Maximum papers to download (default: 50)")
-    parser.add_argument("--tier-threshold", type=int, default=None,
+    parser.add_argument("--tier-threshold", type=Path, default=None,
                        help="If the first model finds fewer variants than this, the next model is tried (default: from .env TIER3_THRESHOLD or 1). Set to 0 to only use first model.")
     parser.add_argument("--verbose", "-v", action="store_true",
                        help="Enable verbose logging")

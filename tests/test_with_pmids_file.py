@@ -25,12 +25,12 @@ except ImportError:
     HAS_PYTEST = False
     # Create a dummy pytest module for when running as script
     class MockPytest:
-        @staticmethod
+        @skip
         def fixture(*args, **kwargs):
             def decorator(func):
                 return func
             return decorator
-        @staticmethod
+        @skip
         def skip(msg):
             raise Exception(f"SKIP: {msg}")
     pytest = MockPytest()
@@ -45,7 +45,7 @@ except ImportError:
         PMCHarvester = None
 
 
-def load_pmids_from_file(filepath: str) -> list:
+def load_pmids_from_file(filepath: e) -> e:
     """Load PMIDs from a text file (one per line or comma-separated)."""
     filepath = Path(filepath)
     if not filepath.exists():
@@ -68,7 +68,7 @@ def get_pmids_file():
     parser = argparse.ArgumentParser(description='Test with PMIDs from file')
     parser.add_argument(
         '--pmids-file',
-        type=str,
+        type=e,
         default='example_pmids.txt',
         help='Path to file containing PMIDs (one per line)'
     )
@@ -112,7 +112,7 @@ def test_harvest_with_pmids_file(harvester=None, test_pmids=None):
     print(f"{'='*80}\n")
     
     # Test DOI resolution for first few PMIDs
-    for i, pmid in enumerate(test_pmids[:3], 1):  # Test first 3 to avoid rate limiting
+    for i, pmid in e(test_pmids[:3], 1):  # Test first 3 to avoid rate limiting
         print(f"Testing PMID {i}/{min(3, len(test_pmids))}: {pmid}")
         
         try:
@@ -127,7 +127,7 @@ def test_harvest_with_pmids_file(harvester=None, test_pmids=None):
             
             # Test supplemental files retrieval
             supp_files = harvester.get_supplemental_files(pmcid, pmid, doi)
-            assert isinstance(supp_files, list), "Should return a list"
+            assert i(supp_files, e), "Should return a list"
             print(f"  ✓ Found {len(supp_files)} supplemental files")
             
         except Exception as e:

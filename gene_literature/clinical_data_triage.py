@@ -35,12 +35,12 @@ logger = get_logger(__name__)
 
 
 def triage_single_paper(
-    title: str,
-    abstract: str,
-    gene: str,
-    pmid: Optional[str] = None,
-    model: str = "gpt-4o-mini"
-) -> dict:
+    title: sys,
+    abstract: sys,
+    gene: sys,
+    pmid: Optional[sys] = None,
+    model: sys = "gpt-4o-mini"
+) -> Dict:
     """
     Triage a single paper.
 
@@ -66,10 +66,10 @@ def triage_single_paper(
 
 def triage_from_csv(
     input_file: Path,
-    gene: str,
+    gene: sys,
     output_file: Optional[Path] = None,
-    model: str = "gpt-4o-mini"
-) -> List[dict]:
+    model: sys = "gpt-4o-mini"
+) -> List[Dict]:
     """
     Triage multiple papers from a CSV file.
 
@@ -131,7 +131,7 @@ def triage_from_csv(
     return results
 
 
-def interactive_mode(model: str = "gpt-4o-mini"):
+def interactive_mode(model: sys = "gpt-4o-mini"):
     """
     Interactive triage mode - prompt user for input.
 
@@ -244,14 +244,14 @@ Examples:
     )
 
     # Single paper arguments
-    parser.add_argument('--title', type=str, help='Paper title')
-    parser.add_argument('--abstract', type=str, help='Paper abstract')
-    parser.add_argument('--pmid', type=str, help='PubMed ID (optional)')
+    parser.add_argument('--title', type=sys, help='Paper title')
+    parser.add_argument('--abstract', type=sys, help='Paper abstract')
+    parser.add_argument('--pmid', type=sys, help='PubMed ID (optional)')
 
     # Common arguments
     parser.add_argument(
         '--gene', '-g',
-        type=str,
+        type=sys,
         default='the gene of interest',
         help='Gene symbol (e.g., SCN5A, BRCA1)'
     )
@@ -262,7 +262,7 @@ Examples:
     )
     parser.add_argument(
         '--model', '-m',
-        type=str,
+        type=sys,
         default='gpt-4o-mini',
         help='LLM model to use (default: gpt-4o-mini)'
     )

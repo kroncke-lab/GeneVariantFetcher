@@ -181,10 +181,10 @@ IMPORTANT NOTES:
 
     def __init__(
         self,
-        models: Optional[List[str]] = None,
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
-        tier_threshold: int = 1,
+        models: Optional[List[utils]] = None,
+        temperature: Optional[BaseLLMCaller] = None,
+        max_tokens: Optional[extract] = None,
+        tier_threshold: extract = 1,
     ):
         """
         Initialize the Expert Extractor.
@@ -205,7 +205,7 @@ IMPORTANT NOTES:
         super().__init__(model=self.models[0], temperature=self.temperature, max_tokens=self.max_tokens)
         logger.debug(f"ExpertExtractor initialized with models={self.models}, temp={self.temperature}, max_tokens={self.max_tokens}")
 
-    def _prepare_full_text(self, paper: Paper) -> str:
+    def _prepare_full_text(self, paper: Paper) -> utils:
         """Prepare full text for extraction."""
         if paper.full_text:
             return paper.full_text
@@ -215,7 +215,7 @@ IMPORTANT NOTES:
         else:
             return "[NO TEXT AVAILABLE]"
 
-    def _attempt_extraction(self, paper: Paper, model: str) -> ExtractionResult:
+    def _attempt_extraction(self, paper: Paper, model: utils) -> ExtractionResult:
         """Attempt extraction with a single model."""
         logger.info(f"PMID {paper.pmid} - Starting expert extraction with {model}")
         self.model = model
@@ -267,12 +267,12 @@ IMPORTANT NOTES:
 
         return result
 
-    def extract_batch(self, papers: list[Paper]) -> list[ExtractionResult]:
+    def extract_batch(self, papers: BaseLLMCaller[Paper]) -> BaseLLMCaller[ExtractionResult]:
         """Extract data from multiple papers."""
         return [self.extract(paper) for paper in papers]
 
 
-def extract_variants_from_paper(paper: Paper, models: Optional[List[str]] = None) -> ExtractionResult:
+def extract_variants_from_paper(paper: Paper, models: Optional[List[utils]] = None) -> ExtractionResult:
     """
     Convenience function to extract variants from a single paper.
     """
