@@ -347,15 +347,25 @@ class PMCHarvester:
                 html_content = response.text
                 main_markdown, title = self.scraper.extract_fulltext(html_content, final_url)
 
-                if main_markdown:
+                # Validate that we actually got article content (not a database page or error)
+                # Article text should be reasonably long and contain typical article indicators
+                MIN_ARTICLE_LENGTH = 1000  # Minimum characters for a valid article
+                if main_markdown and len(main_markdown) >= MIN_ARTICLE_LENGTH:
                     print(f"  ✓ Extracted full text ({len(main_markdown)} characters)")
+                elif main_markdown:
+                    # Got some content but it's too short - likely not an article
+                    print(f"  ⚠ Extracted content too short ({len(main_markdown)} chars) - likely not full article text")
+                    print(f"  ❌ Skipping this URL as it doesn't contain valid article content")
+                    with open(self.paywalled_log, 'a', newline='') as f:
+                        writer = csv.writer(f)
+                        writer.writerow([pmid, 'Free URL content too short (not an article)', free_url])
+                    return False, "Free URL content invalid"
                 else:
                     print(f"  ❌ Could not extract full text from page")
 
-                # Get supplements from the page
-                from urllib.parse import urlparse
-                domain = urlparse(final_url).netloc
-                supp_files = self.doi_resolver._scrape_supplements_by_domain(domain, html_content, final_url, self.scraper)
+                # Get supplements from the page using generic scraper
+                print(f"  Scraping for supplemental files...")
+                supp_files = self.scraper.scrape_generic_supplements(html_content, final_url)
 
             except requests.exceptions.RequestException as e:
                 print(f"  ❌ Failed to fetch free full text from {free_url}: {e}")
