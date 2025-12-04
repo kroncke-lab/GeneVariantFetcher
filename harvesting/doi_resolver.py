@@ -166,7 +166,7 @@ class DOIResolver:
         # Handle Elsevier linkinghub redirects
         if "linkinghub.elsevier.com" in domain:
             try:
-                pii_match = requests.search(r'/pii/([^/?]+)', final_url)
+                pii_match = re.search(r'/pii/([^/?]+)', final_url)
                 if pii_match:
                     pii = pii_match.group(1)
                     sciencedirect_url = f"https://www.sciencedirect.com/science/article/pii/{pii}"

@@ -354,6 +354,24 @@ class PMCHarvester:
                 final_url = response.url
                 print(f"  ✓ Retrieved free full text page")
 
+                # Handle Elsevier linkinghub redirects
+                domain = urlparse(final_url).netloc
+                if "linkinghub.elsevier.com" in domain:
+                    try:
+                        import re
+                        pii_match = re.search(r'/pii/([^/?]+)', final_url)
+                        if pii_match:
+                            pii = pii_match.group(1)
+                            sciencedirect_url = f"https://www.sciencedirect.com/science/article/pii/{pii}"
+                            print(f"  → Attempting to access ScienceDirect page: {sciencedirect_url}")
+                            redirect_response = self.session.get(sciencedirect_url, allow_redirects=True, timeout=30)
+                            redirect_response.raise_for_status()
+                            final_url = redirect_response.url
+                            response = redirect_response
+                            domain = urlparse(final_url).netloc
+                    except Exception as e:
+                        print(f"  - Could not follow redirect from linkinghub: {e}")
+
                 # Extract full text and supplements from the page
                 html_content = response.text
                 main_markdown, title = self.scraper.extract_fulltext(html_content, final_url)
