@@ -21,7 +21,7 @@ this schema:
 import json
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from utils.pubmed_utils import batch_fetch_metadata, fetch_paper_abstract
 
@@ -76,10 +76,13 @@ def fetch_and_save_abstracts(
 
     saved_files: Dict[str, Path] = {}
 
-    for pmid in pmids:
-        logger.info("Fetching abstract and metadata for PMID %s", pmid)
+    all_metadata = batch_fetch_metadata(pmids, email=email)
+    logger.info("Fetched metadata for %d PMIDs.", len(all_metadata))
 
-        metadata = fetch_paper_metadata(pmid, email=email) or {}
+    for pmid in pmids:
+        logger.info("Processing PMID %s", pmid)
+
+        metadata = all_metadata.get(pmid, {})
         abstract = fetch_paper_abstract(pmid, email=email)
 
         record = {
