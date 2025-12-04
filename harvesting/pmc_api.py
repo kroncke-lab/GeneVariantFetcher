@@ -186,45 +186,50 @@ class PMCAPIClient:
 
             # Use elink to get LinkOut information for this PMID
             # cmd="llinks" returns external links including free full text sources
-            handle = Entrez.elink(
-                dbfrom="pubmed",
-                id=pmid,
-                cmd="llinks"
-            )
-            record = Entrez.read(handle)
-            handle.close()
+            free_indicators = [
+                "free full text",
+                "free article",
+                "free",
+                "publisher free",
+                "open access"
+            ]
 
-            # Look for free full text indicators in LinkOut results
+            # First try structured LinkOut helper (easier to monkeypatch in tests)
             free_text_url = None
             is_free = False
+            for linkout in self.get_pubmed_linkout_urls(pmid):
+                attributes = linkout.get("attributes", []) or []
+                attr_text = " ".join(str(a).lower() for a in attributes)
+                if any(indicator in attr_text for indicator in free_indicators):
+                    is_free = True
+                    free_text_url = linkout.get("url") or free_text_url
+                    break
 
-            if record and len(record) > 0:
-                # Check IdUrlList for LinkOut URLs
-                id_url_list = record[0].get("IdUrlList", {})
-                if id_url_list:
-                    id_url_set = id_url_list.get("IdUrlSet", [])
-                    if id_url_set and len(id_url_set) > 0:
-                        obj_urls = id_url_set[0].get("ObjUrl", [])
-                        for obj_url in obj_urls:
-                            # Check for free full text attributes
-                            attributes = obj_url.get("Attribute", [])
-                            url = obj_url.get("Url", "")
+            # Fallback to direct Entrez llinks parsing if helper didn't find anything
+            if not is_free:
+                handle = Entrez.elink(
+                    dbfrom="pubmed",
+                    id=pmid,
+                    cmd="llinks"
+                )
+                record = Entrez.read(handle)
+                handle.close()
 
-                            # PubMed uses these attributes to indicate free access
-                            free_indicators = [
-                                "free full text",
-                                "free article",
-                                "free",
-                                "full text",
-                                "publisher free",
-                                "open access"
-                            ]
+                if record and len(record) > 0:
+                    id_url_list = record[0].get("IdUrlList", {})
+                    if id_url_list:
+                        id_url_set = id_url_list.get("IdUrlSet", [])
+                        if id_url_set and len(id_url_set) > 0:
+                            obj_urls = id_url_set[0].get("ObjUrl", [])
+                            for obj_url in obj_urls:
+                                attributes = obj_url.get("Attribute", [])
+                                url = obj_url.get("Url", "")
 
-                            attr_text = " ".join(str(a).lower() for a in attributes)
-                            if any(indicator in attr_text for indicator in free_indicators):
-                                is_free = True
-                                if url and not free_text_url:
-                                    free_text_url = str(url)
+                                attr_text = " ".join(str(a).lower() for a in attributes)
+                                if any(indicator in attr_text for indicator in free_indicators):
+                                    is_free = True
+                                    if url and not free_text_url:
+                                        free_text_url = str(url)
 
             # If elink didn't find free text, check the PubMed record itself
             # Some records have the "Free" indicator in different locations

@@ -12,6 +12,7 @@ import time
 import csv
 from pathlib import Path
 from typing import List, Tuple
+from urllib.parse import urlparse
 import requests
 
 from .pmc_api import PMCAPIClient
@@ -22,6 +23,8 @@ from .format_converters import FormatConverter
 
 class PMCHarvester:
     """Harvests full-text and supplemental materials from PubMed Central."""
+
+    SUSPICIOUS_FREE_URL_DOMAINS = {"antibodies.cancer.gov"}
 
     def __init__(self, output_dir: str = "pmc_harvest"):
         """
@@ -336,9 +339,17 @@ class PMCHarvester:
             )
         elif free_url:
             # No DOI, but we have a direct URL to the free full text
+            parsed_url = urlparse(free_url)
+            if parsed_url.netloc in self.SUSPICIOUS_FREE_URL_DOMAINS:
+                print(f"  - Skipping suspicious free URL on {parsed_url.netloc} (likely non-article content)")
+                with open(self.paywalled_log, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([pmid, 'Suspicious free URL skipped', free_url])
+                return False, "Suspicious free URL"
+
             print(f"  - No DOI, attempting to fetch from free URL: {free_url}")
             try:
-                response = self.session.get(free_url, allow_redirects=True, timeout=30)
+                response = self.session.get(free_url, allow_redirects=True, timeout=10)
                 response.raise_for_status()
                 final_url = response.url
                 print(f"  ✓ Retrieved free full text page")
@@ -353,7 +364,6 @@ class PMCHarvester:
                     print(f"  ❌ Could not extract full text from page")
 
                 # Get supplements from the page
-                from urllib.parse import urlparse
                 domain = urlparse(final_url).netloc
                 supp_files = self.doi_resolver._scrape_supplements_by_domain(domain, html_content, final_url, self.scraper)
 
