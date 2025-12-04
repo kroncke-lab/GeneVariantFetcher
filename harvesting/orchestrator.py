@@ -376,7 +376,14 @@ class PMCHarvester:
 
                 # Get supplements from the page
                 domain = urlparse(final_url).netloc
-                supp_files = self.doi_resolver._scrape_supplements_by_domain(domain, html_content, final_url, self.scraper)
+                
+                # Route to domain-specific scraper
+                if "nature.com" in domain:
+                    supp_files = self.scraper.scrape_nature_supplements(html_content, final_url)
+                elif any(d in domain for d in ["gimjournal.org", "sciencedirect.com", "elsevier.com"]):
+                    supp_files = self.scraper.scrape_elsevier_supplements(html_content, final_url)
+                else:
+                    supp_files = self.scraper.scrape_generic_supplements(html_content, final_url)
 
             except requests.exceptions.RequestException as e:
                 print(f"  ❌ Failed to fetch free full text from {free_url}: {e}")
