@@ -227,15 +227,15 @@ class PMCAPIClient:
 
             # Use elink to get LinkOut information for this PMID
             # cmd="llinks" returns external links including free full text sources
-            handle = Entrez.elink(
-                dbfrom="pubmed",
-                id=pmid,
-                cmd="llinks"
-            )
-            record = Entrez.read(handle)
-            handle.close()
+            free_indicators = [
+                "free full text",
+                "free article",
+                "free",
+                "publisher free",
+                "open access"
+            ]
 
-            # Look for free full text indicators in LinkOut results
+            # First try structured LinkOut helper (easier to monkeypatch in tests)
             free_text_url = None
             prioritized_url = None  # For publisher domains
             is_free = False
