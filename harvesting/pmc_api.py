@@ -235,6 +235,15 @@ class PMCAPIClient:
                 "open access"
             ]
 
+            # Fetch LinkOut information via elink
+            handle = Entrez.elink(
+                dbfrom="pubmed",
+                id=pmid,
+                cmd="llinks"
+            )
+            records = Entrez.read(handle)
+            handle.close()
+
             # First try structured LinkOut helper (easier to monkeypatch in tests)
             free_text_url = None
             prioritized_url = None  # For publisher domains
@@ -266,7 +275,7 @@ class PMCAPIClient:
                             if any(indicator in attr_text for indicator in free_indicators):
                                 is_free = True
                                 if url:
-                                    url_str = _rate_limit(url)
+                                    url_str = str(url)
 
                                     # Skip irrelevant domains
                                     if any(domain in url_str.lower() for domain in IRRELEVANT_DOMAINS):
