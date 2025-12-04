@@ -118,7 +118,7 @@ def automated_variant_extraction_workflow(
     logger.info(f"Found {len(markdown_files)} markdown files to process")
 
     # Process papers in parallel (OPTIMIZED for 3-5x speedup!)
-    from models import Paper
+    from utils.models import Paper
     from pipeline.extraction import ExpertExtractor
 
     extractor = ExpertExtractor(tier_threshold=tier_threshold)

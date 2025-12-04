@@ -1,15 +1,22 @@
-"""Gene-focused literature collection utilities."""
+"""Gene-focused literature discovery utilities.
 
-from .collector import LiteratureCollector, build_gene_query
-from .pubmed_client import ArticleMetadata, PubMedClient
-from .synonym_finder import GeneSynonym, SynonymFinder, interactive_synonym_selection
+This package provides tools for discovering relevant papers about genes
+from PubMind and PubMed, plus clinical data triage filtering.
+
+Public API:
+    PubMindFetcher - Fetches PMIDs from PubMind for genes/variants
+    fetch_pmids_for_gene - Convenience function for gene-based discovery
+    fetch_pmids_for_variant - Convenience function for variant-based discovery
+"""
+
+from .pubmind_fetcher import (
+    PubMindFetcher,
+    fetch_pmids_for_gene,
+    fetch_pmids_for_variant,
+)
 
 __all__ = [
-    "ArticleMetadata",
-    "GeneSynonym",
-    "LiteratureCollector",
-    "PubMedClient",
-    "SynonymFinder",
-    "build_gene_query",
-    "interactive_synonym_selection",
+    "PubMindFetcher",
+    "fetch_pmids_for_gene",
+    "fetch_pmids_for_variant",
 ]

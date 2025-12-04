@@ -8,7 +8,7 @@ genetic variant data using advanced LLM prompting.
 import logging
 import json
 from typing import Optional, List
-from models import Paper, ExtractionResult
+from utils.models import Paper, ExtractionResult
 from utils.llm_utils import BaseLLMCaller
 from config.settings import get_settings
 
