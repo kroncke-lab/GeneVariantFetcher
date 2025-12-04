@@ -10,7 +10,7 @@ Handles interactions with NCBI PubMed Central APIs:
 
 import os
 import time
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 import requests
 from Bio import Entrez
 
