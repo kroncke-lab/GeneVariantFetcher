@@ -328,25 +328,56 @@ class PMCHarvester:
 
         print(f"  ✓ Article marked as free full text on PubMed")
 
-        # Need DOI to fetch from publisher
-        if not doi:
-            print(f"  ❌ No DOI available to fetch free full text from publisher")
+        # Try to fetch using DOI first, or fall back to direct URL
+        if doi:
+            # Try to fetch full text and supplements from publisher using DOI
+            main_markdown, final_url, supp_files = self.doi_resolver.resolve_and_fetch_fulltext(
+                doi, pmid, self.scraper
+            )
+        elif free_url:
+            # No DOI, but we have a direct URL to the free full text
+            print(f"  - No DOI, attempting to fetch from free URL: {free_url}")
+            try:
+                response = self.session.get(free_url, allow_redirects=True, timeout=30)
+                response.raise_for_status()
+                final_url = response.url
+                print(f"  ✓ Retrieved free full text page")
+
+                # Extract full text and supplements from the page
+                html_content = response.text
+                main_markdown, title = self.scraper.extract_fulltext(html_content, final_url)
+
+                if main_markdown:
+                    print(f"  ✓ Extracted full text ({len(main_markdown)} characters)")
+                else:
+                    print(f"  ❌ Could not extract full text from page")
+
+                # Get supplements from the page
+                from urllib.parse import urlparse
+                domain = urlparse(final_url).netloc
+                supp_files = self.doi_resolver._scrape_supplements_by_domain(domain, html_content, final_url, self.scraper)
+
+            except requests.exceptions.RequestException as e:
+                print(f"  ❌ Failed to fetch free full text from {free_url}: {e}")
+                with open(self.paywalled_log, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([pmid, f'Free full text fetch failed: {e}', free_url])
+                return False, "Free text fetch failed"
+        else:
+            # No DOI and no free URL
+            print(f"  ❌ No DOI or free URL available to fetch full text")
             pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
             with open(self.paywalled_log, 'a', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow([pmid, 'Free full text but no DOI available', pubmed_url])
-            return False, "No DOI for free text"
-
-        # Try to fetch full text and supplements from publisher
-        main_markdown, final_url, supp_files = self.doi_resolver.resolve_and_fetch_fulltext(
-            doi, pmid, self.scraper
-        )
+                writer.writerow([pmid, 'Free full text but no DOI or URL available', pubmed_url])
+            return False, "No DOI or URL for free text"
 
         if not main_markdown:
             print(f"  ❌ Could not retrieve full text from publisher")
+            fallback_url = final_url or (f"https://doi.org/{doi}" if doi else f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/")
             with open(self.paywalled_log, 'a', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow([pmid, 'Free full text extraction failed', final_url or f"https://doi.org/{doi}"])
+                writer.writerow([pmid, 'Free full text extraction failed', fallback_url])
             return False, "Free text extraction failed"
 
         print(f"  ✓ Full text retrieved from publisher ({len(main_markdown)} characters)")
