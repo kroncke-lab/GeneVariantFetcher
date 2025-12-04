@@ -5,11 +5,12 @@ Handles interactions with NCBI PubMed Central APIs:
 - PMID to PMCID conversion
 - Full-text XML retrieval from NCBI
 - DOI fetching from PubMed records
+- Free full-text status detection from PubMed
 """
 
 import os
 import time
-from typing import Optional
+from typing import Optional, Tuple
 import requests
 from Bio import Entrez
 
@@ -163,3 +164,155 @@ class PMCAPIClient:
         except Exception as e:
             print(f"  Europe PMC fallback also failed for {pmcid}: {e}")
             return None
+
+    def is_free_full_text(self, pmid: str) -> Tuple[bool, Optional[str]]:
+        """
+        Check if a PubMed article is marked as free full text via the publisher.
+
+        This detects articles that have "Free article" or "Free full text" indicators
+        on PubMed but do NOT have a PMCID (i.e., not in PMC). These articles provide
+        free access through the publisher's website.
+
+        Args:
+            pmid: PubMed ID
+
+        Returns:
+            Tuple of (is_free: bool, publisher_url: Optional[str])
+            - is_free: True if article is marked as free full text
+            - publisher_url: Direct URL to free full text if available
+        """
+        try:
+            self._rate_limit()
+
+            # Use elink to get LinkOut information for this PMID
+            # cmd="llinks" returns external links including free full text sources
+            handle = Entrez.elink(
+                dbfrom="pubmed",
+                id=pmid,
+                cmd="llinks"
+            )
+            record = Entrez.read(handle)
+            handle.close()
+
+            # Look for free full text indicators in LinkOut results
+            free_text_url = None
+            is_free = False
+
+            if record and len(record) > 0:
+                # Check IdUrlList for LinkOut URLs
+                id_url_list = record[0].get("IdUrlList", {})
+                if id_url_list:
+                    id_url_set = id_url_list.get("IdUrlSet", [])
+                    if id_url_set and len(id_url_set) > 0:
+                        obj_urls = id_url_set[0].get("ObjUrl", [])
+                        for obj_url in obj_urls:
+                            # Check for free full text attributes
+                            attributes = obj_url.get("Attribute", [])
+                            url = obj_url.get("Url", "")
+
+                            # PubMed uses these attributes to indicate free access
+                            free_indicators = [
+                                "free full text",
+                                "free article",
+                                "free",
+                                "full text",
+                                "publisher free",
+                                "open access"
+                            ]
+
+                            attr_text = " ".join(str(a).lower() for a in attributes)
+                            if any(indicator in attr_text for indicator in free_indicators):
+                                is_free = True
+                                if url and not free_text_url:
+                                    free_text_url = str(url)
+
+            # If elink didn't find free text, check the PubMed record itself
+            # Some records have the "Free" indicator in different locations
+            if not is_free:
+                try:
+                    self._rate_limit()
+                    handle = Entrez.efetch(db="pubmed", id=pmid, retmode="xml")
+                    records = Entrez.read(handle)
+                    handle.close()
+
+                    if records.get('PubmedArticle'):
+                        article = records['PubmedArticle'][0]
+                        pubmed_data = article.get('PubmedData', {})
+
+                        # Check ArticleIdList for free full text URL
+                        article_ids = pubmed_data.get('ArticleIdList', [])
+                        for aid in article_ids:
+                            id_type = aid.attributes.get('IdType', '')
+                            # Check for PMC free article status
+                            if id_type == 'pmc' and 'free' in str(aid).lower():
+                                is_free = True
+
+                        # Check PublicationStatus and other metadata
+                        # Some journals provide free access after embargo
+                        reference_list = pubmed_data.get('ReferenceList', [])
+
+                        # Check history for free access indicators
+                        history = pubmed_data.get('History', [])
+                        for status in history:
+                            pub_status = status.attributes.get('PubStatus', '')
+                            if 'free' in pub_status.lower():
+                                is_free = True
+
+                except Exception as e:
+                    print(f"    - Secondary free text check failed: {e}")
+
+            return is_free, free_text_url
+
+        except Exception as e:
+            print(f"  Error checking free full text status for PMID {pmid}: {e}")
+            return False, None
+
+    def get_pubmed_linkout_urls(self, pmid: str) -> list:
+        """
+        Get all LinkOut URLs for a PubMed article.
+
+        This retrieves external links to publisher websites, which can be used
+        to access free full text articles.
+
+        Args:
+            pmid: PubMed ID
+
+        Returns:
+            List of dictionaries with 'url', 'provider', and 'category' keys
+        """
+        try:
+            self._rate_limit()
+            handle = Entrez.elink(
+                dbfrom="pubmed",
+                id=pmid,
+                cmd="llinks"
+            )
+            record = Entrez.read(handle)
+            handle.close()
+
+            links = []
+            if record and len(record) > 0:
+                id_url_list = record[0].get("IdUrlList", {})
+                if id_url_list:
+                    id_url_set = id_url_list.get("IdUrlSet", [])
+                    if id_url_set and len(id_url_set) > 0:
+                        obj_urls = id_url_set[0].get("ObjUrl", [])
+                        for obj_url in obj_urls:
+                            url = obj_url.get("Url", "")
+                            provider = obj_url.get("Provider", {}).get("Name", "Unknown")
+                            category = obj_url.get("Category", ["Unknown"])[0] if obj_url.get("Category") else "Unknown"
+                            attributes = obj_url.get("Attribute", [])
+
+                            if url:
+                                links.append({
+                                    'url': str(url),
+                                    'provider': str(provider),
+                                    'category': str(category),
+                                    'attributes': [str(a) for a in attributes]
+                                })
+
+            return links
+
+        except Exception as e:
+            print(f"  Error getting LinkOut URLs for PMID {pmid}: {e}")
+            return []

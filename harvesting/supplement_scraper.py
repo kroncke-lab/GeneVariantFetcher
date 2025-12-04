@@ -1,13 +1,15 @@
 """
 Supplement Scraper Module
 
-Web scraping logic for extracting supplemental files from publisher websites.
+Web scraping logic for extracting supplemental files and full-text content
+from publisher websites.
 Includes domain-specific scrapers for Nature, Elsevier, and a generic fallback.
+Also includes full-text extraction for free articles without PMCIDs.
 """
 
 import re
 import json
-from typing import List, Dict
+from typing import List, Dict, Optional, Tuple
 from pathlib import Path
 from urllib.parse import urlparse, urljoin
 from bs4 import BeautifulSoup
@@ -205,3 +207,308 @@ class SupplementScraper:
                     continue  # Ignore malformed URLs
 
         return found_files
+
+    # ==========================================================================
+    # FULL-TEXT EXTRACTION METHODS
+    # These extract main article content from publisher pages for free articles
+    # without PMCIDs.
+    # ==========================================================================
+
+    def extract_fulltext_nature(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
+        """
+        Extract full-text content from a Nature journal page.
+
+        Args:
+            html: HTML content of the publisher page
+            base_url: Base URL of the article
+
+        Returns:
+            Tuple of (markdown_content, title)
+        """
+        print("  Extracting full text from Nature article...")
+        soup = BeautifulSoup(html, 'html.parser')
+        markdown = "# MAIN TEXT\n\n"
+
+        # Extract title
+        title = ""
+        title_elem = soup.find('h1', class_='c-article-title') or soup.find('h1')
+        if title_elem:
+            title = title_elem.get_text().strip()
+            markdown += f"## {title}\n\n"
+
+        # Extract abstract
+        abstract = soup.find('div', id='Abs1-content') or soup.find('section', {'data-title': 'Abstract'})
+        if abstract:
+            markdown += "### Abstract\n\n"
+            markdown += abstract.get_text().strip() + "\n\n"
+
+        # Extract main article content
+        article_body = soup.find('div', class_='c-article-body') or soup.find('main')
+        if article_body:
+            # Find all sections
+            sections = article_body.find_all(['section', 'div'], class_=re.compile(r'c-article-section'))
+            if not sections:
+                sections = article_body.find_all('section')
+
+            for section in sections:
+                # Get section title
+                section_title = section.find(['h2', 'h3', 'h4'])
+                if section_title:
+                    markdown += f"### {section_title.get_text().strip()}\n\n"
+
+                # Get paragraphs
+                for p in section.find_all('p', recursive=False):
+                    text = p.get_text().strip()
+                    if text:
+                        markdown += f"{text}\n\n"
+
+        # Fallback: just extract all paragraph text
+        if len(markdown) < 500:
+            markdown = "# MAIN TEXT\n\n"
+            if title:
+                markdown += f"## {title}\n\n"
+
+            for p in soup.find_all('p'):
+                text = p.get_text().strip()
+                if len(text) > 50:  # Skip very short paragraphs (likely nav elements)
+                    markdown += f"{text}\n\n"
+
+        return markdown if len(markdown) > 200 else None, title
+
+    def extract_fulltext_elsevier(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
+        """
+        Extract full-text content from an Elsevier/ScienceDirect page.
+
+        Args:
+            html: HTML content of the publisher page
+            base_url: Base URL of the article
+
+        Returns:
+            Tuple of (markdown_content, title)
+        """
+        print("  Extracting full text from Elsevier/ScienceDirect article...")
+        soup = BeautifulSoup(html, 'html.parser')
+        markdown = "# MAIN TEXT\n\n"
+
+        # Extract title
+        title = ""
+        title_elem = soup.find('span', class_='title-text') or soup.find('h1', class_='svTitle')
+        if title_elem:
+            title = title_elem.get_text().strip()
+            markdown += f"## {title}\n\n"
+
+        # Try to extract from JSON data embedded in page (ScienceDirect often has this)
+        for script in soup.find_all('script', type='application/json'):
+            try:
+                data = json.loads(script.string)
+                # Look for article content in various possible JSON paths
+                article_data = data.get('article', {})
+                if article_data:
+                    # Extract abstract
+                    abstract_data = article_data.get('abstract', {})
+                    if abstract_data:
+                        markdown += "### Abstract\n\n"
+                        if isinstance(abstract_data, dict):
+                            abstract_text = abstract_data.get('content', '')
+                        else:
+                            abstract_text = str(abstract_data)
+                        # Clean HTML tags from abstract
+                        abstract_soup = BeautifulSoup(abstract_text, 'html.parser')
+                        markdown += abstract_soup.get_text().strip() + "\n\n"
+
+                    # Extract body sections
+                    body_data = article_data.get('body', {})
+                    if body_data and isinstance(body_data, dict):
+                        content = body_data.get('content', [])
+                        if isinstance(content, list):
+                            for section in content:
+                                if isinstance(section, dict):
+                                    sec_title = section.get('label', '') or section.get('title', '')
+                                    if sec_title:
+                                        markdown += f"### {sec_title}\n\n"
+                                    sec_content = section.get('content', '')
+                                    if sec_content:
+                                        content_soup = BeautifulSoup(sec_content, 'html.parser')
+                                        markdown += content_soup.get_text().strip() + "\n\n"
+                if len(markdown) > 500:
+                    return markdown, title
+            except (json.JSONDecodeError, AttributeError, TypeError):
+                continue
+
+        # Fallback: HTML-based extraction
+        # Extract abstract
+        abstract = soup.find('div', class_='abstract') or soup.find('div', id='abstracts')
+        if abstract:
+            markdown += "### Abstract\n\n"
+            markdown += abstract.get_text().strip() + "\n\n"
+
+        # Extract main body content
+        body = soup.find('div', id='body') or soup.find('div', class_='Body')
+        if body:
+            for section in body.find_all(['section', 'div'], class_=re.compile(r'section')):
+                section_title = section.find(['h2', 'h3', 'h4'])
+                if section_title:
+                    markdown += f"### {section_title.get_text().strip()}\n\n"
+
+                for p in section.find_all('p'):
+                    text = p.get_text().strip()
+                    if text:
+                        markdown += f"{text}\n\n"
+
+        # Ultimate fallback: extract all paragraphs
+        if len(markdown) < 500:
+            markdown = "# MAIN TEXT\n\n"
+            if title:
+                markdown += f"## {title}\n\n"
+
+            content_divs = soup.find_all('div', class_=re.compile(r'(Body|content|article)', re.I))
+            for div in content_divs:
+                for p in div.find_all('p'):
+                    text = p.get_text().strip()
+                    if len(text) > 50:
+                        markdown += f"{text}\n\n"
+
+        return markdown if len(markdown) > 200 else None, title
+
+    def extract_fulltext_wiley(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
+        """
+        Extract full-text content from a Wiley Online Library page.
+
+        Args:
+            html: HTML content of the publisher page
+            base_url: Base URL of the article
+
+        Returns:
+            Tuple of (markdown_content, title)
+        """
+        print("  Extracting full text from Wiley article...")
+        soup = BeautifulSoup(html, 'html.parser')
+        markdown = "# MAIN TEXT\n\n"
+
+        # Extract title
+        title = ""
+        title_elem = soup.find('h1', class_='citation__title') or soup.find('h1')
+        if title_elem:
+            title = title_elem.get_text().strip()
+            markdown += f"## {title}\n\n"
+
+        # Extract abstract
+        abstract = soup.find('section', class_='article-section__abstract') or soup.find('div', class_='abstract')
+        if abstract:
+            markdown += "### Abstract\n\n"
+            markdown += abstract.get_text().strip() + "\n\n"
+
+        # Extract main body
+        body = soup.find('section', class_='article-section__content') or soup.find('div', class_='article__body')
+        if body:
+            for section in body.find_all(['section', 'div']):
+                section_title = section.find(['h2', 'h3', 'h4'])
+                if section_title:
+                    markdown += f"### {section_title.get_text().strip()}\n\n"
+
+                for p in section.find_all('p', recursive=False):
+                    text = p.get_text().strip()
+                    if text:
+                        markdown += f"{text}\n\n"
+
+        # Fallback
+        if len(markdown) < 500:
+            for p in soup.find_all('p'):
+                text = p.get_text().strip()
+                if len(text) > 50:
+                    markdown += f"{text}\n\n"
+
+        return markdown if len(markdown) > 200 else None, title
+
+    def extract_fulltext_generic(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
+        """
+        Generic full-text extraction for any publisher page.
+
+        Uses heuristics to find article content in HTML.
+
+        Args:
+            html: HTML content of the publisher page
+            base_url: Base URL of the article
+
+        Returns:
+            Tuple of (markdown_content, title)
+        """
+        print("  Extracting full text using generic scraper...")
+        soup = BeautifulSoup(html, 'html.parser')
+        markdown = "# MAIN TEXT\n\n"
+
+        # Remove script, style, nav, footer, header elements
+        for element in soup.find_all(['script', 'style', 'nav', 'footer', 'header', 'aside']):
+            element.decompose()
+
+        # Extract title
+        title = ""
+        title_elem = soup.find('h1') or soup.find('title')
+        if title_elem:
+            title = title_elem.get_text().strip()
+            # Clean up title (remove site name etc)
+            title = re.sub(r'\s*[-|].*$', '', title)
+            markdown += f"## {title}\n\n"
+
+        # Look for common article containers
+        article_containers = [
+            soup.find('article'),
+            soup.find('div', class_=re.compile(r'(article|content|body|main)', re.I)),
+            soup.find('main'),
+            soup.find('div', id=re.compile(r'(article|content|body|main)', re.I)),
+        ]
+
+        content_found = False
+        for container in article_containers:
+            if container:
+                # Extract sections
+                for section in container.find_all(['section', 'div'], recursive=False):
+                    section_title = section.find(['h2', 'h3', 'h4'])
+                    if section_title:
+                        markdown += f"### {section_title.get_text().strip()}\n\n"
+
+                    for p in section.find_all('p'):
+                        text = p.get_text().strip()
+                        if len(text) > 30:
+                            markdown += f"{text}\n\n"
+                            content_found = True
+
+                if content_found:
+                    break
+
+        # Ultimate fallback: extract all paragraphs
+        if not content_found or len(markdown) < 500:
+            markdown = "# MAIN TEXT\n\n"
+            if title:
+                markdown += f"## {title}\n\n"
+
+            for p in soup.find_all('p'):
+                text = p.get_text().strip()
+                # Filter out short paragraphs that are likely navigation or UI elements
+                if len(text) > 100:
+                    markdown += f"{text}\n\n"
+
+        return markdown if len(markdown) > 200 else None, title
+
+    def extract_fulltext(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
+        """
+        Main entry point for full-text extraction.
+        Routes to domain-specific extractors based on URL.
+
+        Args:
+            html: HTML content of the publisher page
+            base_url: Base URL of the article
+
+        Returns:
+            Tuple of (markdown_content, title)
+        """
+        domain = urlparse(base_url).netloc.lower()
+
+        if 'nature.com' in domain:
+            return self.extract_fulltext_nature(html, base_url)
+        elif any(d in domain for d in ['sciencedirect.com', 'elsevier.com', 'gimjournal.org']):
+            return self.extract_fulltext_elsevier(html, base_url)
+        elif 'wiley.com' in domain or 'onlinelibrary.wiley.com' in domain:
+            return self.extract_fulltext_wiley(html, base_url)
+        else:
+            return self.extract_fulltext_generic(html, base_url)
