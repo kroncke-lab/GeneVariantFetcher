@@ -230,4 +230,7 @@ class DOIResolver:
             return None, None
         except requests.exceptions.RequestException as e:
             print(f"  ❌ DOI resolution failed for {doi}: {e}")
+            with open(self.paywalled_log, 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
             return None, None
