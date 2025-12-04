@@ -34,9 +34,9 @@ logger = get_logger(__name__)
 def automated_variant_extraction_workflow(
     gene_symbol: str,
     email: str,
+    output_dir: str,
     max_pmids: int = 100,
     max_papers_to_download: int = 50,
-    output_dir: str = "automated_output",
     tier_threshold: int = 1,
 ):
     """
@@ -45,9 +45,9 @@ def automated_variant_extraction_workflow(
     Args:
         gene_symbol: Gene to search for (e.g., "BRCA1", "SCN5A")
         email: Your email for NCBI E-utilities (required)
+        output_dir: Directory to save all outputs (required)
         max_pmids: Maximum PMIDs to fetch from PubMind/PubMed
         max_papers_to_download: Maximum papers to download full-text
-        output_dir: Directory to save all outputs
         tier_threshold: If the first model finds fewer variants than this, the next model is tried.
     """
     from gene_literature.pubmind_fetcher import fetch_pmids_for_gene
@@ -327,24 +327,24 @@ def main():
         epilog="""
 Examples:
   # Extract all variant data for BRCA1
-  python automated_workflow.py BRCA1 --email your@email.com
+  python automated_workflow.py BRCA1 --email your@email.com --output /path/to/output
 
   # Extract data for SCN5A with custom limits
-  python automated_workflow.py SCN5A --email your@email.com --max-pmids 200 --max-downloads 100
+  python automated_workflow.py SCN5A --email your@email.com --output ./results --max-pmids 200 --max-downloads 100
 
   # Quick test with small dataset
-  python automated_workflow.py TP53 --email your@email.com --max-pmids 10 --max-downloads 5
+  python automated_workflow.py TP53 --email your@email.com --output ./test_output --max-pmids 10 --max-downloads 5
         """
     )
 
     parser.add_argument("gene", help="Gene symbol (e.g., BRCA1, SCN5A, TP53)")
     parser.add_argument("--email", "-e", required=True, help="Your email for NCBI E-utilities")
+    parser.add_argument("--output", "-o", required=True,
+                       help="Output directory for all data and analyses (required)")
     parser.add_argument("--max-pmids", type=int, default=100,
                        help="Maximum PMIDs to fetch (default: 100)")
     parser.add_argument("--max-downloads", type=int, default=50,
                        help="Maximum papers to download (default: 50)")
-    parser.add_argument("--output", "-o", default="automated_output",
-                       help="Output directory (default: automated_output)")
     parser.add_argument("--tier-threshold", type=int, default=None,
                        help="If the first model finds fewer variants than this, the next model is tried (default: from .env TIER3_THRESHOLD or 1). Set to 0 to only use first model.")
     parser.add_argument("--verbose", "-v", action="store_true",
@@ -374,9 +374,9 @@ Examples:
         automated_variant_extraction_workflow(
             gene_symbol=args.gene,
             email=args.email,
+            output_dir=args.output,
             max_pmids=args.max_pmids,
             max_papers_to_download=args.max_downloads,
-            output_dir=args.output,
             tier_threshold=tier_threshold,
         )
 

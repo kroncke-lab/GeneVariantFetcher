@@ -6,18 +6,18 @@ Migrates file-based extraction data to a normalized SQLite database.
 Includes cleanup and archival functions for the file system.
 
 The script automatically detects the gene symbol from the directory path
-(e.g., automated_output/TTR/...) or extraction JSON files and creates a
+(e.g., /output/TTR/...) or extraction JSON files and creates a
 gene-specific database (e.g., TTR.db).
 
 Usage:
     # Point to parent directory containing extractions/ subdirectory
     # This will create TTR.db automatically
-    python migrate_to_sqlite.py --data-dir automated_output/TTR/20251125_114028
+    python migrate_to_sqlite.py --data-dir /path/to/output/TTR/20251125_114028
 
     # Point directly to directory containing JSON files
     # Database name will be auto-detected (e.g., TTR.db)
-    python migrate_to_sqlite.py --data-dir automated_output/TTR/20251125_114028/extractions
-    python migrate_to_sqlite.py --data-dir automated_output/TTR/20251125_114028/extractions_rerun/20251125_151454
+    python migrate_to_sqlite.py --data-dir /path/to/output/TTR/20251125_114028/extractions
+    python migrate_to_sqlite.py --data-dir /path/to/output/TTR/20251125_114028/extractions_rerun/20251125_151454
 
     # Specify custom database path (overrides auto-detection)
     python migrate_to_sqlite.py --data-dir /path/to/your/data --db custom_name.db
@@ -797,7 +797,8 @@ def extract_gene_from_path(data_dir: Path) -> Optional[str]:
     """
     Extract gene symbol from directory path.
 
-    Expected path structure: automated_output/{GENE}/timestamp/...
+    Expected path structure: {OUTPUT_DIR}/{GENE}/timestamp/...
+    where GENE is an uppercase symbol like BRCA1, SCN5A, etc.
 
     Args:
         data_dir: Path to data directory
@@ -807,14 +808,18 @@ def extract_gene_from_path(data_dir: Path) -> Optional[str]:
     """
     parts = data_dir.parts
 
-    # Look for 'automated_output' in path and get next component
+    # Look for uppercase gene symbol pattern followed by timestamp
     try:
         for i, part in enumerate(parts):
-            if part == 'automated_output' and i + 1 < len(parts):
-                gene = parts[i + 1]
-                # Validate it looks like a gene symbol (uppercase, reasonable length)
-                if gene.isupper() and 2 <= len(gene) <= 10:
-                    return gene
+            # Check if this looks like a gene symbol (uppercase, reasonable length)
+            if part.isupper() and 2 <= len(part) <= 10:
+                # Check if next part looks like a timestamp (YYYYMMDD_HHMMSS)
+                if i + 1 < len(parts):
+                    next_part = parts[i + 1]
+                    if len(next_part) == 15 and '_' in next_part and next_part.replace('_', '').isdigit():
+                        return part
+                # If no timestamp but path looks reasonable, still accept it
+                return part
     except Exception as e:
         logger.debug(f"Could not extract gene from path: {e}")
 
