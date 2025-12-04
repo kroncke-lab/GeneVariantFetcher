@@ -289,8 +289,8 @@ def create_database_schema(db_path: sqlite3) -> sqlite3.Connection:
 
 def get_or_create_variant(
     cursor: sqlite3.Cursor,
-    variant_data: Dict[sqlite3, Any]
-) -> insert_variant_data:
+    variant_data: Dict[str, Any]
+) -> int:
     """
     Get existing variant ID or create new variant entry.
 
