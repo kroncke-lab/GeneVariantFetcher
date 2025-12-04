@@ -184,6 +184,56 @@ class PMCHarvester:
                 writer.writerow([pmid, f'Supplemental file download failed: {filename}', url])
             return False
 
+    def _process_supplements(self, pmid: str, pmcid: str, doi: str) -> Tuple[str, int]:
+        """
+        Download supplemental files and convert them to markdown.
+
+        Args:
+            pmid: PubMed ID
+            pmcid: PubMed Central ID
+            doi: Digital Object Identifier for fallback scraping
+
+        Returns:
+            Tuple containing the combined supplement markdown and number of downloaded files
+        """
+        supplements_dir = self.output_dir / f"{pmid}_supplements"
+        supplements_dir.mkdir(exist_ok=True)
+
+        supp_files = self.get_supplemental_files(pmcid, pmid, doi)
+        print(f"  Found {len(supp_files)} supplemental files")
+
+        supplement_markdown = ""
+        downloaded_count = 0
+
+        for idx, supp in enumerate(supp_files, 1):
+            url = supp.get('url', '')
+            filename = supp.get('name', f'supplement_{idx}')
+
+            if not url:
+                continue
+
+            file_path = supplements_dir / filename
+            print(f"    Downloading: {filename}")
+
+            if self.download_supplement(url, file_path, pmid, filename):
+                downloaded_count += 1
+
+                ext = file_path.suffix.lower()
+                supplement_markdown += f"\n\n# SUPPLEMENTAL FILE {idx}: {filename}\n\n"
+
+                if ext in ['.xlsx', '.xls']:
+                    supplement_markdown += self.converter.excel_to_markdown(file_path)
+                elif ext in ['.docx']:
+                    supplement_markdown += self.converter.docx_to_markdown(file_path)
+                elif ext == '.pdf':
+                    supplement_markdown += self.converter.pdf_to_markdown(file_path)
+                else:
+                    supplement_markdown += f"[File available at: {file_path}]\n\n"
+
+            time.sleep(0.5)
+
+        return supplement_markdown, downloaded_count
+
     def process_pmid(self, pmid: str) -> Tuple[bool, str]:
         """
         Process a single PMID: convert to PMCID, download content, create unified markdown.
@@ -232,46 +282,7 @@ class PMCHarvester:
         # Convert main text to markdown
         main_markdown = self.converter.xml_to_markdown(xml_content)
 
-        # Create supplements directory
-        supplements_dir = self.output_dir / f"{pmid}_supplements"
-        supplements_dir.mkdir(exist_ok=True)
-
-        # Get supplemental files
-        supp_files = self.get_supplemental_files(pmcid, pmid, doi)
-        print(f"  Found {len(supp_files)} supplemental files")
-
-        supplement_markdown = ""
-        downloaded_count = 0
-
-        # Download and convert each supplement
-        for idx, supp in enumerate(supp_files, 1):
-            url = supp.get('url', '')
-            filename = supp.get('name', f'supplement_{idx}')
-
-            if not url:
-                continue
-
-            file_path = supplements_dir / filename
-            print(f"    Downloading: {filename}")
-
-            if self.download_supplement(url, file_path, pmid, filename):
-                downloaded_count += 1
-
-                ext = file_path.suffix.lower()
-
-                supplement_markdown += f"\n\n# SUPPLEMENTAL FILE {idx}: {filename}\n\n"
-
-                # Convert supplement to markdown based on file type
-                if ext in ['.xlsx', '.xls']:
-                    supplement_markdown += self.converter.excel_to_markdown(file_path)
-                elif ext in ['.docx']:
-                    supplement_markdown += self.converter.docx_to_markdown(file_path)
-                elif ext == '.pdf':
-                    supplement_markdown += self.converter.pdf_to_markdown(file_path)
-                else:
-                    supplement_markdown += f"[File available at: {file_path}]\n\n"
-
-            time.sleep(0.5)
+        supplement_markdown, downloaded_count = self._process_supplements(pmid, pmcid, doi)
 
         # Create unified markdown file
         unified_content = main_markdown + supplement_markdown

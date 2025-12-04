@@ -9,7 +9,7 @@ Handles interactions with NCBI PubMed Central APIs:
 
 import os
 import time
-from typing import Optional
+from typing import List, Optional, Tuple
 import requests
 from Bio import Entrez
 
@@ -163,3 +163,76 @@ class PMCAPIClient:
         except Exception as e:
             print(f"  Europe PMC fallback also failed for {pmcid}: {e}")
             return None
+
+    def get_pubmed_linkout_urls(self, pmid: str) -> List[dict]:
+        """
+        Retrieve LinkOut URLs associated with a PubMed record.
+
+        Args:
+            pmid: PubMed ID
+
+        Returns:
+            List of dictionaries containing provider, url, and attributes metadata
+        """
+        try:
+            self._rate_limit()
+            handle = Entrez.elink(dbfrom="pubmed", id=pmid, cmd="llinks", retmode="xml")
+            records = Entrez.read(handle)
+            handle.close()
+
+            linkouts = []
+            for link_set in records:
+                for link_db in link_set.get("LinkSetDb", []):
+                    provider = link_db.get("LinkName", "")
+                    for link in link_db.get("Link", []):
+                        url = link.get("Url") or link.get("Id")
+                        attributes = link.get("Attr") if isinstance(link.get("Attr"), list) else link.get("Attr")
+                        attributes = attributes or []
+                        if url:
+                            linkouts.append({
+                                "provider": provider,
+                                "url": url,
+                                "attributes": attributes,
+                            })
+            return linkouts
+        except Exception as e:
+            print(f"  Error fetching LinkOut URLs for PMID {pmid}: {e}")
+            return []
+
+    def is_free_full_text(self, pmid: str) -> Tuple[bool, Optional[str]]:
+        """
+        Determine whether a PubMed article has free full text available.
+
+        Args:
+            pmid: PubMed ID
+
+        Returns:
+            Tuple of (is_free: bool, free_url: Optional[str])
+        """
+        # If a PMCID exists, the article is available in PMC and therefore free
+        pmcid = self.pmid_to_pmcid(pmid)
+        if pmcid:
+            return True, f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+
+        linkouts = self.get_pubmed_linkout_urls(pmid)
+
+        free_indicators = [
+            "free full text",
+            "free article",
+            "free",
+            "publisher free",
+            "open access"
+        ]
+
+        for link in linkouts:
+            provider = (link.get("provider") or "").lower()
+            attributes = [attr.lower() for attr in link.get("attributes", []) if isinstance(attr, str)]
+            url = link.get("url")
+
+            if any(indicator in provider for indicator in free_indicators):
+                return True, url
+
+            if any(indicator in attr for attr in attributes for indicator in free_indicators):
+                return True, url
+
+        return False, None
