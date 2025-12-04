@@ -23,7 +23,7 @@ import logging
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from utils.pubmed_utils import fetch_paper_metadata, fetch_paper_abstract
+from utils.pubmed_utils import batch_fetch_metadata, fetch_paper_abstract
 
 logger = logging.getLogger(__name__)
 
