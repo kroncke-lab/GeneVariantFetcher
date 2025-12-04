@@ -181,6 +181,47 @@ class PMCAPIClient:
             - is_free: True if article is marked as free full text
             - publisher_url: Direct URL to free full text if available
         """
+        # Domains to skip - these are typically databases, tools, or other non-article resources
+        IRRELEVANT_DOMAINS = [
+            'antibodies.cancer.gov',  # Antibody database
+            'www.antibodies-online.com',  # Antibody catalog
+            'www.uniprot.org',  # Protein database
+            'www.ncbi.nlm.nih.gov/protein',  # NCBI Protein database
+            'www.ncbi.nlm.nih.gov/gene',  # NCBI Gene database
+            'www.ncbi.nlm.nih.gov/nuccore',  # NCBI Nucleotide database
+            'www.ncbi.nlm.nih.gov/clinvar',  # ClinVar database
+            'www.omim.org',  # OMIM database
+            'www.genecards.org',  # GeneCards database
+            'www.proteinatlas.org',  # Human Protein Atlas
+        ]
+
+        # Known publisher domains - prioritize these
+        PUBLISHER_DOMAINS = [
+            'sciencedirect.com',
+            'nature.com',
+            'springer.com',
+            'wiley.com',
+            'onlinelibrary.wiley.com',
+            'academic.oup.com',
+            'journals.lww.com',
+            'tandfonline.com',
+            'karger.com',
+            'ahajournals.org',
+            'jamanetwork.com',
+            'nejm.org',
+            'thelancet.com',
+            'bmj.com',
+            'cell.com',
+            'science.org',
+            'pnas.org',
+            'frontiersin.org',
+            'mdpi.com',
+            'hindawi.com',
+            'plos.org',
+            'biomedcentral.com',
+            'gimjournal.org',
+        ]
+
         try:
             self._rate_limit()
 
@@ -196,6 +237,7 @@ class PMCAPIClient:
 
             # Look for free full text indicators in LinkOut results
             free_text_url = None
+            prioritized_url = None  # For publisher domains
             is_free = False
 
             if record and len(record) > 0:
@@ -223,8 +265,26 @@ class PMCAPIClient:
                             attr_text = " ".join(str(a).lower() for a in attributes)
                             if any(indicator in attr_text for indicator in free_indicators):
                                 is_free = True
-                                if url and not free_text_url:
-                                    free_text_url = str(url)
+                                if url:
+                                    url_str = str(url)
+
+                                    # Skip irrelevant domains
+                                    if any(domain in url_str.lower() for domain in IRRELEVANT_DOMAINS):
+                                        print(f"  - Skipping irrelevant LinkOut URL: {url_str}")
+                                        continue
+
+                                    # Prioritize known publisher domains
+                                    if any(domain in url_str.lower() for domain in PUBLISHER_DOMAINS):
+                                        if not prioritized_url:
+                                            prioritized_url = url_str
+                                            print(f"  ✓ Found publisher URL: {url_str}")
+                                    elif not free_text_url:
+                                        # Only use as fallback if no prioritized URL found yet
+                                        free_text_url = url_str
+                                        print(f"  ~ Found generic free URL: {url_str}")
+
+            # Prefer prioritized URL (from known publishers) over generic free URL
+            final_url = prioritized_url or free_text_url
 
             # If elink didn't find free text, check the PubMed record itself
             # Some records have the "Free" indicator in different locations
@@ -261,7 +321,7 @@ class PMCAPIClient:
                 except Exception as e:
                     print(f"    - Secondary free text check failed: {e}")
 
-            return is_free, free_text_url
+            return is_free, final_url
 
         except Exception as e:
             print(f"  Error checking free full text status for PMID {pmid}: {e}")
