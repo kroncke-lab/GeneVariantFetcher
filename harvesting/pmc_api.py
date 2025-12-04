@@ -94,15 +94,22 @@ class PMCAPIClient:
             handle = Entrez.efetch(db="pubmed", id=pmid, retmode="xml")
             records = Entrez.read(handle)
             handle.close()
-            article = records['PubmedArticle'][0]['MedlineCitation']['Article']
-            for item in article['ELocationID']:
-                if item.attributes['EIdType'] == 'doi':
+
+            pubmed_article = records['PubmedArticle'][0]
+            article = pubmed_article['MedlineCitation']['Article']
+
+            # Check ELocationID in Article (newer records)
+            for item in article.get('ELocationID', []):
+                if item.attributes.get('EIdType') == 'doi':
                     return str(item)
-            # Fallback for older records
-            if 'ArticleIdList' in article:
-                 for identifier in article['ArticleIdList']:
-                    if identifier.attributes.get('IdType') == 'doi':
-                        return str(identifier)
+
+            # Fallback: Check ArticleIdList in PubmedData (older records)
+            # Note: ArticleIdList is in PubmedData, not Article
+            pubmed_data = pubmed_article.get('PubmedData', {})
+            for identifier in pubmed_data.get('ArticleIdList', []):
+                if identifier.attributes.get('IdType') == 'doi':
+                    return str(identifier)
+
             return None
         except Exception as e:
             print(f"  Error fetching DOI for PMID {pmid}: {e}")
