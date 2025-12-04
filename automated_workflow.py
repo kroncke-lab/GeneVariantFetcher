@@ -3,7 +3,7 @@
 Automated Workflow Entrypoint: From Gene to Variant Data
 
 This script provides the production-ready, end-to-end automated workflow:
-1. Fetch relevant PMIDs from PubMind for a gene
+1. Fetch relevant PMIDs from PubMind and PubMed for a gene
 2. Download full-text articles from PubMed Central
 3. Extract individual-level variant and patient data
 4. Save structured results to JSON and aggregate penetrance metrics
@@ -50,7 +50,7 @@ def automated_variant_extraction_workflow(
         max_papers_to_download: Maximum papers to download full-text (integer)
         tier_threshold: If the first model finds fewer variants than this, the next model is tried (integer).
     """
-    from gene_literature.pubmind_fetcher import fetch_pmids_for_gene
+    from gene_literature.discovery import discover_pmids_for_gene
     from harvesting import PMCHarvester
 
     output_path = Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -61,20 +61,32 @@ def automated_variant_extraction_workflow(
     logger.info("="*80)
 
     # ============================================================================
-    # STEP 1: Fetch PMIDs from PubMind
+    # STEP 1: Fetch PMIDs from PubMind and PubMed
     # ============================================================================
-    logger.info("\n📚 STEP 1: Discovering relevant papers from PubMind...")
+    logger.info("\n📚 STEP 1: Discovering relevant papers from PubMind and PubMed...")
 
-    pmids_file = output_path / f"{gene_symbol}_pmids.txt"
-    pmids = fetch_pmids_for_gene(
+    pubmind_pmids_file = output_path / f"{gene_symbol}_pmids_pubmind.txt"
+    pubmed_pmids_file = output_path / f"{gene_symbol}_pmids_pubmed.txt"
+    combined_pmids_file = output_path / f"{gene_symbol}_pmids.txt"
+
+    pmid_discovery = discover_pmids_for_gene(
         gene_symbol=gene_symbol,
         email=email,
         max_results=max_pmids,
-        output_file=pmids_file
+        pubmind_output=pubmind_pmids_file,
+        pubmed_output=pubmed_pmids_file,
+        combined_output=combined_pmids_file,
+        api_key=os.getenv("NCBI_API_KEY"),
     )
+    pmids = pmid_discovery.combined_pmids
 
-    logger.info(f"✓ Found {len(pmids)} PMIDs for {gene_symbol}")
-    logger.info(f"✓ Saved PMID list to: {pmids_file}")
+    logger.info(
+        "✓ Found %d PubMind PMIDs and %d PubMed PMIDs",
+        len(pmid_discovery.pubmind_pmids),
+        len(pmid_discovery.pubmed_pmids),
+    )
+    logger.info("✓ Using %d unique PMIDs after merging sources", len(pmids))
+    logger.info(f"✓ Saved combined PMID list to: {combined_pmids_file}")
 
     if not pmids:
         logger.warning(f"No PMIDs found for {gene_symbol}. Workflow terminated.")
