@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import List, Dict, Optional
 
 from pipeline.filters import ClinicalDataTriageFilter
-from models import Paper
+from utils.models import Paper
 
 # Configure logging using centralized utility
 from utils.logging_utils import setup_logging, get_logger
