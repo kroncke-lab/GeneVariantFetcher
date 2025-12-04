@@ -8,8 +8,9 @@ Main PMCHarvester class that coordinates all harvesting operations:
 """
 
 import os
-import 1:23 PM
+import time
 import csv
+import re
 from pathlib import Path
 from typing import List, Tuple
 from urllib.parse import urlparse
@@ -358,7 +359,6 @@ class PMCHarvester:
                 domain = urlparse(final_url).netloc
                 if "linkinghub.elsevier.com" in domain:
                     try:
-                        import re
                         pii_match = re.search(r'/pii/([^/?]+)', final_url)
                         if pii_match:
                             pii = pii_match.group(1)
