@@ -42,7 +42,7 @@ class KeywordFilter:
         "carrier", "inheritance", "familial", "sporadic"
     ]
 
-    def __init__(self, keywords: Optional[List[filter]] = None, min_keyword_matches: Optional[filter] = None):
+    def __init__(self, keywords: Optional[List[str]] = None, min_keyword_matches: Optional[int] = None):
         """
         Initialize the keyword filter.
 
@@ -146,10 +146,10 @@ Respond with a JSON object:
 
     def __init__(
         self,
-        model: Optional[filter] = None,
-        temperature: Optional[filter] = None,
-        max_tokens: Optional[filter] = None,
-        confidence_threshold: Optional[filter] = None
+        model: Optional[str] = None,
+        temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None,
+        confidence_threshold: Optional[float] = None
     ):
         """
         Initialize the Intern filter.
@@ -206,7 +206,7 @@ Respond with a JSON object:
 
             decision_str = result_data.get("decision", "FAIL").upper()
             reason = result_data.get("reason", "No reason provided")
-            confidence = filter(result_data.get("confidence", 0.5))
+            confidence = float(result_data.get("confidence", 0.5))
 
             # Apply confidence threshold - if confidence is below threshold, fail the paper
             if decision_str == "PASS" and confidence < self.confidence_threshold:
@@ -239,10 +239,10 @@ Respond with a JSON object:
             return FilterResult(
                 decision=FilterDecision.FAIL,
                 tier=FilterTier.TIER_2_INTERN,
-                reason=f"LLM classification error: {filter(e)}",
+                reason=f"LLM classification error: {str(e)}",
                 pmid=paper.pmid,
                 confidence=0.0,
-                metadata={"error": filter(e)}
+                metadata={"error": str(e)}
             )
 
 
@@ -301,9 +301,9 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
 
     def __init__(
         self,
-        model: Optional[BaseLLMCaller] = None,
-        temperature: Optional[triage_paper] = None,
-        max_tokens: Optional[BaseLLMCaller] = None
+        model: Optional[str] = None,
+        temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None
     ):
         """
         Initialize the Clinical Data Triage filter.
@@ -325,11 +325,11 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
 
     def triage(
         self,
-        title: BaseLLMCaller,
-        abstract: BaseLLMCaller,
-        gene: BaseLLMCaller = "the gene of interest",
-        pmid: Optional[BaseLLMCaller] = None
-    ) -> BaseLLMCaller:
+        title: str,
+        abstract: str,
+        gene: str = "the gene of interest",
+        pmid: Optional[str] = None
+    ) -> dict:
         """
         Triage a paper based on title and abstract.
 
@@ -375,7 +375,7 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
                 decision = "DROP"
 
             reason = result_data.get("reason", "No reason provided")
-            confidence = triage_paper(result_data.get("confidence", 0.5))
+            confidence = float(result_data.get("confidence", 0.5))
             confidence = max(0.0, min(1.0, confidence))  # Clamp to [0, 1]
 
             result = {
@@ -398,13 +398,13 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
             # On error, drop the paper to be conservative
             return {
                 "decision": "DROP",
-                "reason": f"Triage error: {BaseLLMCaller(e)}",
+                "reason": f"Triage error: {str(e)}",
                 "confidence": 0.0,
                 "pmid": pmid,
-                "error": BaseLLMCaller(e)
+                "error": str(e)
             }
 
-    def triage_paper(self, paper: Paper, gene: Optional[BaseLLMCaller] = None) -> BaseLLMCaller:
+    def triage_paper(self, paper: Paper, gene: Optional[str] = None) -> dict:
         """
         Triage a Paper object.
 
