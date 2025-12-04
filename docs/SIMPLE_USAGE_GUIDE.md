@@ -5,7 +5,7 @@
 Running the entire pipeline from gene name to SQLite database is now **incredibly simple**:
 
 ```bash
-python automated_workflow.py BRCA1 --email your@email.com
+python automated_workflow.py BRCA1 --email your@email.com --output /path/to/output
 ```
 
 That's it! This single command does **everything**:
@@ -16,7 +16,7 @@ That's it! This single command does **everything**:
 ```
 📚 Discovering relevant papers from PubMind...
 ✓ Found 152 PMIDs for BRCA1
-✓ Saved PMID list to: automated_output/BRCA1/20231126_143022/BRCA1_pmids.txt
+✓ Saved PMID list to: /path/to/output/BRCA1/20231126_143022/BRCA1_pmids.txt
 ```
 
 #### Step 2: Download Full-Text (PMC)
@@ -55,7 +55,7 @@ That's it! This single command does **everything**:
 ```
 💾 Migrating data to SQLite database...
 ✓ Migrated 45/45 extractions to SQLite
-✓ Database saved to: automated_output/BRCA1/20231126_143022/BRCA1.db
+✓ Database saved to: /path/to/output/BRCA1/20231126_143022/BRCA1.db
 ```
 - Normalizes JSON data into relational tables
 - Creates variant, penetrance, patient, and paper tables
@@ -78,10 +78,10 @@ Success rate: 29.6%
 
 💾 Database migrated: 45/45 extractions
 
-All outputs saved to: automated_output/BRCA1/20231126_143022
-Summary report: automated_output/BRCA1/20231126_143022/BRCA1_workflow_summary.json
-Penetrance summary: automated_output/BRCA1/20231126_143022/BRCA1_penetrance_summary.json
-SQLite database: automated_output/BRCA1/20231126_143022/BRCA1.db
+All outputs saved to: /path/to/output/BRCA1/20231126_143022
+Summary report: /path/to/output/BRCA1/20231126_143022/BRCA1_workflow_summary.json
+Penetrance summary: /path/to/output/BRCA1/20231126_143022/BRCA1_penetrance_summary.json
+SQLite database: /path/to/output/BRCA1/20231126_143022/BRCA1.db
 ================================================================================
 ```
 
@@ -92,7 +92,7 @@ SQLite database: automated_output/BRCA1/20231126_143022/BRCA1.db
 After running, you'll have:
 
 ```
-automated_output/BRCA1/20231126_143022/
+/path/to/output/BRCA1/20231126_143022/
 ├── BRCA1.db                           ← SQLite database (query this!)
 ├── BRCA1_pmids.txt                    ← List of PMIDs found
 ├── BRCA1_workflow_summary.json        ← Overall statistics
@@ -117,13 +117,13 @@ Once you have the SQLite database, query it:
 
 ```bash
 # Get overall statistics
-python query_variants_db.py automated_output/BRCA1/20231126_143022/BRCA1.db --stats
+python query_variants_db.py /path/to/output/BRCA1/20231126_143022/BRCA1.db --stats
 
 # Search for a specific variant
-python query_variants_db.py automated_output/BRCA1/20231126_143022/BRCA1.db --variant "c.1234G>A"
+python query_variants_db.py /path/to/output/BRCA1/20231126_143022/BRCA1.db --variant "c.1234G>A"
 
 # Get penetrance for a variant
-python query_variants_db.py automated_output/BRCA1/20231126_143022/BRCA1.db --penetrance "p.Arg412Gln"
+python query_variants_db.py /path/to/output/BRCA1/20231126_143022/BRCA1.db --penetrance "p.Arg412Gln"
 ```
 
 ---
@@ -250,7 +250,7 @@ Estimated cost: $3.50
 If you already have full-text papers downloaded and just want to re-extract:
 
 ```bash
-python rerun_extraction.py automated_output/BRCA1/20231126_143022/pmc_fulltext
+python rerun_extraction.py /path/to/output/BRCA1/20231126_143022/pmc_fulltext
 ```
 
 This skips steps 1-2 and only runs extraction + aggregation + SQLite migration.

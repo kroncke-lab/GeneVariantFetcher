@@ -48,6 +48,7 @@ venv.bak/
 
 # Pipeline output
 output/
+automated_output/
 *.log
 pipeline.log
 

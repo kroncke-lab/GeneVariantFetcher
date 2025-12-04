@@ -12,10 +12,11 @@
 
 ## Critical Rules
 
-1. **Entry point:** `python automated_workflow.py GENE --email EMAIL`
-2. **SQLite is canonical** - all data must be written to `{GENE}.db`
-3. **Supplements are essential** - 70-80% of variant data is in Excel/Word supplements
-4. **Classification matters** - every individual must be classified as Affected/Unaffected/Ambiguous
+1. **Entry point:** `python automated_workflow.py GENE --email EMAIL --output OUTPUT_DIR`
+2. **Output directory is required** - users must specify where to save data (keeps git repo clean)
+3. **SQLite is canonical** - all data must be written to `{GENE}.db`
+4. **Supplements are essential** - 70-80% of variant data is in Excel/Word supplements
+5. **Classification matters** - every individual must be classified as Affected/Unaffected/Ambiguous
 
 ---
 
@@ -55,7 +56,7 @@ Discovery → Download → Extract → Aggregate → SQLite
 ## Output Structure
 
 ```
-automated_output/{GENE}/{TIMESTAMP}/
+{OUTPUT_DIR}/{GENE}/{TIMESTAMP}/
 ├── {GENE}_pmids.txt                # Discovered PMIDs
 ├── {GENE}_workflow_summary.json    # Execution statistics
 ├── {GENE}_penetrance_summary.json  # Aggregated penetrance data
@@ -67,6 +68,8 @@ automated_output/{GENE}/{TIMESTAMP}/
 │   └── {GENE}_PMID_{pmid}.json     # Per-paper extraction
 └── {GENE}.db                       # CANONICAL DATABASE
 ```
+
+**Note:** `{OUTPUT_DIR}` is user-specified via `--output` flag. This keeps the git repository clean.
 
 ---
 
@@ -90,10 +93,13 @@ automated_output/{GENE}/{TIMESTAMP}/
 
 ```bash
 # Run full pipeline
-python automated_workflow.py BRCA1 --email you@email.com
+python automated_workflow.py BRCA1 --email you@email.com --output /path/to/output
 
 # With limits
-python automated_workflow.py SCN5A --email you@email.com --max-pmids 200 --max-downloads 100
+python automated_workflow.py SCN5A --email you@email.com --output ./results --max-pmids 200 --max-downloads 100
+
+# Quick test
+python automated_workflow.py TP53 --email you@email.com --output ./test_results --max-pmids 10 --max-downloads 5
 ```
 
 ---
