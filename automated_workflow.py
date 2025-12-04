@@ -38,6 +38,7 @@ def automated_variant_extraction_workflow(
     max_pmids: int = 100,
     max_papers_to_download: int = 50,
     tier_threshold: int = 1,
+    use_clinical_triage: bool = False,
 ):
     """
     Complete automated workflow from gene symbol to extracted variant data.
@@ -49,12 +50,16 @@ def automated_variant_extraction_workflow(
         max_pmids: Maximum PMIDs to fetch from PubMind/PubMed (integer)
         max_papers_to_download: Maximum papers to download full-text (integer)
         tier_threshold: If the first model finds fewer variants than this, the next model is tried (integer).
+        use_clinical_triage: Use ClinicalDataTriageFilter for Tier 2 instead of InternFilter.
     """
     from gene_literature.pubmind_fetcher import fetch_pmids_for_gene
     from harvesting import PMCHarvester
+    from config.settings import get_settings
 
     output_path = Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
     output_path.mkdir(parents=True, exist_ok=True)
+
+    settings = get_settings()
 
     logger.info("="*80)
     logger.info(f"AUTOMATED WORKFLOW FOR GENE: {gene_symbol}")
@@ -98,6 +103,122 @@ def automated_variant_extraction_workflow(
         "✓ Saved abstracts for %d PMIDs to %s", len(abstract_records), abstract_dir
     )
 
+    # Filter abstracts before attempting full-text downloads
+    logger.info("\n🧹 STEP 1.6: Filtering papers by relevance before download...")
+
+    from pipeline.filters import KeywordFilter, InternFilter, ClinicalDataTriageFilter
+    from utils.models import Paper, FilterDecision, FilterResult, FilterTier
+
+    keyword_filter = KeywordFilter(min_keyword_matches=settings.tier1_min_keywords)
+    tier2_filter = (
+        ClinicalDataTriageFilter()
+        if use_clinical_triage
+        else InternFilter(confidence_threshold=settings.tier2_confidence_threshold)
+    )
+    tier2_filter_name = "ClinicalDataTriageFilter" if use_clinical_triage else "InternFilter"
+
+    filtered_pmids = []
+    dropped_pmids = []
+
+    for pmid in pmids:
+        record_path = abstract_records.get(pmid)
+
+        if not record_path:
+            logger.warning("PMID %s has no saved abstract JSON; dropping from download queue", pmid)
+            dropped_pmids.append((pmid, "Missing abstract JSON"))
+            continue
+
+        record_path = Path(record_path)
+
+        if not record_path.exists():
+            logger.warning("PMID %s has no saved abstract JSON; dropping from download queue", pmid)
+            dropped_pmids.append((pmid, "Missing abstract JSON"))
+            continue
+
+        try:
+            with record_path.open("r", encoding="utf-8") as f:
+                record = json.load(f)
+        except Exception as e:
+            logger.error("Failed to read abstract for PMID %s: %s", pmid, e)
+            dropped_pmids.append((pmid, "Abstract JSON read error"))
+            continue
+
+        metadata = record.get("metadata", {})
+        paper = Paper(
+            pmid=pmid,
+            title=metadata.get("title"),
+            abstract=record.get("abstract"),
+            authors=metadata.get("authors"),
+            journal=metadata.get("journal"),
+            publication_date=metadata.get("year"),
+            gene_symbol=gene_symbol,
+            source="PubMed",
+        )
+
+        if settings.enable_tier1:
+            tier1_result = keyword_filter.filter(paper)
+            if tier1_result.decision is not FilterDecision.PASS:
+                logger.info(
+                    "PMID %s dropped at Tier 1 (KeywordFilter): %s",
+                    pmid,
+                    tier1_result.reason,
+                )
+                dropped_pmids.append((pmid, tier1_result.reason))
+                continue
+
+        if settings.enable_tier2:
+            if use_clinical_triage:
+                triage_result = tier2_filter.triage_paper(paper, gene_symbol)
+                decision = FilterDecision.PASS if triage_result.get("decision") == "KEEP" else FilterDecision.FAIL
+                confidence = triage_result.get("confidence")
+                reason = triage_result.get("reason", "No reason provided")
+
+                if (
+                    decision is FilterDecision.PASS
+                    and confidence is not None
+                    and confidence < settings.tier2_confidence_threshold
+                ):
+                    decision = FilterDecision.FAIL
+                    reason = (
+                        f"Low confidence ({confidence:.2f} < {settings.tier2_confidence_threshold}): "
+                        f"{reason}"
+                    )
+
+                tier2_result = FilterResult(
+                    decision=decision,
+                    tier=FilterTier.TIER_2_INTERN,
+                    reason=reason,
+                    pmid=pmid,
+                    confidence=confidence,
+                    metadata={"model": getattr(tier2_filter, "model", None)},
+                )
+            else:
+                tier2_result = tier2_filter.filter(paper)
+
+            if tier2_result.decision is not FilterDecision.PASS:
+                logger.info(
+                    "PMID %s dropped at Tier 2 (%s): %s",
+                    pmid,
+                    tier2_filter_name,
+                    tier2_result.reason,
+                )
+                dropped_pmids.append((pmid, tier2_result.reason))
+                continue
+
+        filtered_pmids.append(pmid)
+
+    logger.info(
+        "Filtering complete: %d passed filters, %d dropped before download",
+        len(filtered_pmids),
+        len(dropped_pmids),
+    )
+
+    if dropped_pmids:
+        logger.debug(
+            "Dropped PMIDs and reasons: %s",
+            "; ".join([f"{pmid} ({reason})" for pmid, reason in dropped_pmids]),
+        )
+
     # ============================================================================
     # STEP 2: Download Full-Text Papers from PMC
     # ============================================================================
@@ -107,8 +228,10 @@ def automated_variant_extraction_workflow(
     harvester = PMCHarvester(output_dir=str(harvest_dir))
 
     # Limit downloads to avoid excessive processing time
-    pmids_to_download = pmids[:max_papers_to_download]
-    logger.info(f"Downloading up to {len(pmids_to_download)} papers (out of {len(pmids)} total PMIDs)")
+    pmids_to_download = filtered_pmids[:max_papers_to_download]
+    logger.info(
+        f"Downloading up to {len(pmids_to_download)} papers after filtering (out of {len(pmids)} total PMIDs)"
+    )
 
     harvester.harvest(pmids_to_download, delay=2.0)
 
@@ -365,6 +488,8 @@ Examples:
                        help="Maximum papers to download (default: 50)")
     parser.add_argument("--tier-threshold", type=int, default=None,
                        help="If the first model finds fewer variants than this, the next model is tried (default: from .env TIER3_THRESHOLD or 1). Set to 0 to only use first model.")
+    parser.add_argument("--clinical-triage", action="store_true",
+                       help="Use ClinicalDataTriageFilter for Tier 2 filtering instead of InternFilter")
     parser.add_argument("--verbose", "-v", action="store_true",
                        help="Enable verbose logging")
 
@@ -396,6 +521,7 @@ Examples:
             max_pmids=args.max_pmids,
             max_papers_to_download=args.max_downloads,
             tier_threshold=tier_threshold,
+            use_clinical_triage=args.clinical_triage,
         )
 
         # Exit with success code
