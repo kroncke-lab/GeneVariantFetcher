@@ -81,6 +81,24 @@ def automated_variant_extraction_workflow(
         return {"success": False, "error": "No PMIDs found"}
 
     # ============================================================================
+    # STEP 1.5: Fetch Abstracts and Metadata
+    # ============================================================================
+    logger.info("\n📝 STEP 1.5: Fetching abstracts and metadata for discovered PMIDs...")
+
+    from harvesting.abstracts import fetch_and_save_abstracts
+
+    abstract_dir = output_path / "abstract_json"
+    abstract_records = fetch_and_save_abstracts(
+        pmids=pmids,
+        output_dir=str(abstract_dir),
+        email=email,
+    )
+
+    logger.info(
+        "✓ Saved abstracts for %d PMIDs to %s", len(abstract_records), abstract_dir
+    )
+
+    # ============================================================================
     # STEP 2: Download Full-Text Papers from PMC
     # ============================================================================
     logger.info("\n📥 STEP 2: Downloading full-text papers from PubMed Central...")
