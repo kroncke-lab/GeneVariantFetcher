@@ -238,6 +238,9 @@ class PMCHarvester:
         """
         Process a single PMID: convert to PMCID, download content, create unified markdown.
 
+        For papers without PMCIDs but marked as "Free Full Text" on PubMed, this method
+        will attempt to fetch full text directly from the publisher's website.
+
         Args:
             pmid: PubMed ID to process
 
@@ -246,7 +249,7 @@ class PMCHarvester:
         """
         print(f"\nProcessing PMID: {pmid}")
 
-        # Get DOI first (needed for supplement fallback)
+        # Get DOI first (needed for supplement fallback and free text retrieval)
         doi = self.pmc_api.get_doi_from_pmid(pmid)
         if doi:
             print(f"  ✓ DOI: {doi}")
@@ -257,27 +260,24 @@ class PMCHarvester:
         pmcid = self.pmc_api.pmid_to_pmcid(pmid)
 
         if not pmcid:
-            print(f"  ❌ No PMCID found (likely paywalled)")
-            pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, 'No PMCID found', pubmed_url])
-            return False, "No PMCID"
+            # No PMCID - check if this is a free full text article via publisher
+            print(f"  - No PMCID found, checking for free full text via publisher...")
+            return self._process_free_text_pmid(pmid, doi)
 
         print(f"  ✓ PMCID: {pmcid}")
 
-        # Get full-text XML
+        # Get full-text XML from PMC
         xml_content = self.pmc_api.get_fulltext_xml(pmcid)
 
         if not xml_content:
-            print(f"  ❌ Full-text not available")
+            print(f"  ❌ Full-text not available from PMC")
             pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
             with open(self.paywalled_log, 'a', newline='') as f:
                 writer = csv.writer(f)
                 writer.writerow([pmid, 'Full-text not available', pmc_url])
             return False, "No full-text"
 
-        print(f"  ✓ Full-text XML retrieved")
+        print(f"  ✓ Full-text XML retrieved from PMC")
 
         # Convert main text to markdown
         main_markdown = self.converter.xml_to_markdown(xml_content)
@@ -297,6 +297,112 @@ class PMCHarvester:
         with open(self.success_log, 'a', newline='') as f:
             writer = csv.writer(f)
             writer.writerow([pmid, pmcid, downloaded_count])
+
+        return True, str(output_file)
+
+    def _process_free_text_pmid(self, pmid: str, doi: str) -> Tuple[bool, str]:
+        """
+        Process a PMID that has no PMCID but may have free full text via publisher.
+
+        This method checks if the article is marked as "Free Full Text" on PubMed
+        and attempts to fetch the content from the publisher's website.
+
+        Args:
+            pmid: PubMed ID to process
+            doi: DOI for the article (may be None)
+
+        Returns:
+            Tuple of (success: bool, result: str) where result is output file path or error message
+        """
+        # Check if article is marked as free full text
+        is_free, free_url = self.pmc_api.is_free_full_text(pmid)
+
+        if not is_free:
+            # Not a free article - log and skip
+            print(f"  ❌ No PMCID and not marked as free full text (likely paywalled)")
+            pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
+            with open(self.paywalled_log, 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([pmid, 'No PMCID found, not free full text', pubmed_url])
+            return False, "No PMCID"
+
+        print(f"  ✓ Article marked as free full text on PubMed")
+
+        # Need DOI to fetch from publisher
+        if not doi:
+            print(f"  ❌ No DOI available to fetch free full text from publisher")
+            pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
+            with open(self.paywalled_log, 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([pmid, 'Free full text but no DOI available', pubmed_url])
+            return False, "No DOI for free text"
+
+        # Try to fetch full text and supplements from publisher
+        main_markdown, final_url, supp_files = self.doi_resolver.resolve_and_fetch_fulltext(
+            doi, pmid, self.scraper
+        )
+
+        if not main_markdown:
+            print(f"  ❌ Could not retrieve full text from publisher")
+            with open(self.paywalled_log, 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([pmid, 'Free full text extraction failed', final_url or f"https://doi.org/{doi}"])
+            return False, "Free text extraction failed"
+
+        print(f"  ✓ Full text retrieved from publisher ({len(main_markdown)} characters)")
+
+        # Create supplements directory
+        supplements_dir = self.output_dir / f"{pmid}_supplements"
+        supplements_dir.mkdir(exist_ok=True)
+
+        print(f"  Found {len(supp_files)} supplemental files")
+
+        supplement_markdown = ""
+        downloaded_count = 0
+
+        # Download and convert each supplement
+        for idx, supp in enumerate(supp_files, 1):
+            url = supp.get('url', '')
+            filename = supp.get('name', f'supplement_{idx}')
+
+            if not url:
+                continue
+
+            file_path = supplements_dir / filename
+            print(f"    Downloading: {filename}")
+
+            if self.download_supplement(url, file_path, pmid, filename):
+                downloaded_count += 1
+
+                ext = file_path.suffix.lower()
+
+                supplement_markdown += f"\n\n# SUPPLEMENTAL FILE {idx}: {filename}\n\n"
+
+                # Convert supplement to markdown based on file type
+                if ext in ['.xlsx', '.xls']:
+                    supplement_markdown += self.converter.excel_to_markdown(file_path)
+                elif ext in ['.docx']:
+                    supplement_markdown += self.converter.docx_to_markdown(file_path)
+                elif ext == '.pdf':
+                    supplement_markdown += self.converter.pdf_to_markdown(file_path)
+                else:
+                    supplement_markdown += f"[File available at: {file_path}]\n\n"
+
+            time.sleep(0.5)
+
+        # Create unified markdown file
+        unified_content = main_markdown + supplement_markdown
+
+        output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(unified_content)
+
+        print(f"  ✅ Created: {output_file.name} ({downloaded_count} supplements) [from publisher]")
+
+        # Log success with special marker for publisher-sourced content
+        with open(self.success_log, 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow([pmid, 'PUBLISHER_FREE', downloaded_count])
 
         return True, str(output_file)
 
