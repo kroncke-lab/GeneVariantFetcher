@@ -28,7 +28,7 @@ from utils.pubmed_utils import batch_fetch_metadata, fetch_paper_abstract
 logger = logging.getLogger(__name__)
 
 
-def _normalize_authors(raw_authors) -> List[str]:
+def _normalize_authors(raw_authors: Optional[List[Any]]) -> List[str]:
     """Convert Entrez author list into plain strings."""
 
     authors: List[str] = []
