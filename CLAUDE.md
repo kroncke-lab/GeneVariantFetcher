@@ -2,127 +2,56 @@
 
 ## Mission
 
-**Goal:** Build a unified workflow that extracts all human carriers of genetic variants from biomedical literature (including full text and supplements).
+Extract human genetic variant carriers from biomedical literature (full text + supplements) into a normalized SQLite database. Each individual is classified as **Affected**, **Unaffected**, or **Ambiguous**.
 
-**Core Criteria:** Only humans with clinical phenotyping that allows classification as **Affected**, **Unaffected**, or **Ambiguous** based on known gene-disease associations.
+## Quick Reference
 
-**Output:** A single harmonized SQLite database of variant carriers.
-
----
-
-## Critical Rules
-
-1. **Entry point:** `python automated_workflow.py GENE --email EMAIL --output OUTPUT_DIR`
-2. **Output directory is required** - users must specify where to save data (keeps git repo clean)
-3. **SQLite is canonical** - all data must be written to `{GENE}.db`
-4. **Supplements are essential** - 70-80% of variant data is in Excel/Word supplements
-5. **Classification matters** - every individual must be classified as Affected/Unaffected/Ambiguous
-
----
-
-## Pipeline Architecture
-
-```
-Discovery → Download → Extract → Aggregate → SQLite
+```bash
+python automated_workflow.py GENE --email EMAIL --output OUTPUT_DIR
 ```
 
-| Stage | Module | Description |
-|-------|--------|-------------|
-| Discovery | `gene_literature/pubmind_fetcher.py` | Fetch PMIDs from PubMind (variant-specific literature) |
-| Download | `harvesting/orchestrator.py` | Full-text + supplements → `{PMID}_FULL_CONTEXT.md` |
-| Extract | `pipeline/extraction.py` | LLM extraction with model cascade (parallel processing) |
-| Aggregate | `pipeline/aggregation.py` | Penetrance validation and cross-paper statistics |
-| Storage | `harvesting/migrate_to_sqlite.py` | JSON → normalized SQLite database |
+## Pipeline (6 Steps)
 
----
+1. **Discovery** - Fetch PMIDs from PubMind (`gene_literature/pubmind_fetcher.py`)
+2. **Abstracts** - Fetch metadata for discovered PMIDs (`harvesting/abstracts.py`)
+3. **Download** - Full-text + supplements → `{PMID}_FULL_CONTEXT.md` (`harvesting/orchestrator.py`)
+4. **Extract** - LLM extraction with model cascade (`pipeline/extraction.py`)
+5. **Aggregate** - Penetrance validation (`pipeline/aggregation.py`)
+6. **SQLite** - JSON → normalized database (`harvesting/migrate_to_sqlite.py`)
 
-## Key Modules
+## Project Structure
 
-### Core Pipeline
-- `automated_workflow.py` - Main entry point, orchestrates all 6 stages
-- `harvesting/orchestrator.py` - PMCHarvester class for full-text + supplement downloads
-- `pipeline/extraction.py` - ExpertExtractor for structured variant extraction
-- `pipeline/aggregation.py` - DataAggregator for penetrance validation
-- `harvesting/migrate_to_sqlite.py` - JSON → SQLite migration
+```
+automated_workflow.py          # Entry point
+config/settings.py             # Pydantic configuration
+gene_literature/               # Paper discovery (PubMind)
+harvesting/                    # Download & SQLite migration
+pipeline/                      # Extraction & aggregation
+utils/                         # Shared utilities
+```
 
-### Supporting Modules
-- `gene_literature/pubmind_fetcher.py` - Paper discovery via PubMind
-- `gene_literature/clinical_data_triage.py` - Standalone paper filtering tool
-- `pipeline/filters.py` - Three-tier filtering (Keyword → LLM → Expert)
-- `config/settings.py` - Pydantic-based configuration management
-
----
-
-## Output Structure
+## Output
 
 ```
 {OUTPUT_DIR}/{GENE}/{TIMESTAMP}/
-├── {GENE}_pmids.txt                # Discovered PMIDs
-├── {GENE}_workflow_summary.json    # Execution statistics
-├── {GENE}_penetrance_summary.json  # Aggregated penetrance data
-├── pmc_fulltext/
-│   ├── {PMID}_FULL_CONTEXT.md      # Article + supplements (unified markdown)
-│   ├── successful_downloads.csv    # Download log
-│   └── paywalled_missing.csv       # Unavailable papers
-├── extractions/
-│   └── {GENE}_PMID_{pmid}.json     # Per-paper extraction
-└── {GENE}.db                       # CANONICAL DATABASE
+├── {GENE}_pmids.txt           # Discovered PMIDs
+├── abstract_json/             # Paper metadata
+├── pmc_fulltext/              # Full-text markdown + logs
+├── extractions/               # Per-paper JSON extractions
+├── {GENE}_penetrance_summary.json
+└── {GENE}.db                  # Canonical SQLite database
 ```
-
-**Note:** `{OUTPUT_DIR}` is user-specified via `--output` flag. This keeps the git repository clean.
-
----
-
-## Database Schema
-
-### Core Tables
-- **`papers`** - Paper metadata (pmid, title, journal, doi, pmc_id)
-- **`variants`** - Normalized variant info (gene_symbol, cdna_notation, protein_notation)
-- **`variant_papers`** - Many-to-many linking variants ↔ papers with source quotes
-
-### Data Tables
-- **`individual_records`** - Person-level data (patient_id, age, sex, **affected_status**, phenotype_details)
-- **`penetrance_data`** - Cohort statistics (affected_count, unaffected_count, uncertain_count, penetrance_percentage)
-- **`age_dependent_penetrance`** - Age-stratified penetrance data
-- **`functional_data`** - In vitro assay results
-- **`phenotypes`** - Detailed phenotype descriptions
-
----
-
-## CLI Reference
-
-```bash
-# Run full pipeline
-python automated_workflow.py BRCA1 --email you@email.com --output /path/to/output
-
-# With limits
-python automated_workflow.py SCN5A --email you@email.com --output ./results --max-pmids 200 --max-downloads 100
-
-# Quick test
-python automated_workflow.py TP53 --email you@email.com --output ./test_results --max-pmids 10 --max-downloads 5
-```
-
----
 
 ## Environment Variables
 
 ```bash
-# Required
-AI_INTEGRATIONS_OPENAI_API_KEY=your-key  # Or OPENAI_API_KEY
-NCBI_EMAIL=your@email.com
-
-# Optional
-NCBI_API_KEY=your-key                    # Increases rate limits
-
-# Model configuration (via config/settings.py)
-TIER3_MODELS=gpt-4o-mini,gpt-4o          # Cascades if too few variants found
-TIER3_THRESHOLD=1                         # Minimum variants before cascade
+AI_INTEGRATIONS_OPENAI_API_KEY=...  # Required (or OPENAI_API_KEY)
+NCBI_EMAIL=...                       # Required
+NCBI_API_KEY=...                     # Optional (higher rate limits)
 ```
-
----
 
 ## Code Style
 
-- Python 3.11+, PEP 8, type hints, Google-style docstrings
-- Logging via `logger = logging.getLogger(__name__)`
-- Imperative commit messages: "Add feature" not "Added feature"
+- Python 3.11+, PEP 8, type hints
+- Logging: `logger = logging.getLogger(__name__)`
+- Commits: imperative mood ("Add feature" not "Added feature")
