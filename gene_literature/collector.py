@@ -17,7 +17,7 @@ except ImportError:
     logger.debug("RelevanceChecker not available (anthropic package not installed)")
 
 
-def build_gene_query(gene: build_gene_query, synonyms: Optional[Sequence[build_gene_query]] = None) -> build_gene_query:
+def build_gene_query(gene: str, synonyms: Optional[Sequence[str]] = None) -> build_gene_query:
     """Build a simple PubMed query using the provided gene and synonyms."""
 
     terms = [gene, *(synonyms or [])]

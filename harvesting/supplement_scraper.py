@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 class SupplementScraper:
     """Scrapes supplemental files from various publisher websites."""
 
-    def scrape_nature_supplements(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> List[Dict]:
+    def scrape_nature_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
         Scrape supplemental files from a Nature journal page.
 
@@ -59,7 +59,7 @@ class SupplementScraper:
 
         return found_files
 
-    def scrape_elsevier_supplements(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> List[Dict]:
+    def scrape_elsevier_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
         Scrape supplemental files from an Elsevier/GIM journal page.
         Uses a multi-step approach: JSON data, regex patterns, and HTML parsing.
@@ -168,7 +168,7 @@ class SupplementScraper:
         print("    No specific Elsevier/GIM supplements found. Trying generic scan.")
         return self.scrape_generic_supplements(html, base_url)
 
-    def scrape_generic_supplements(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> List[Dict]:
+    def scrape_generic_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
         A best-effort generic scraper for supplemental files.
 
@@ -214,7 +214,7 @@ class SupplementScraper:
     # without PMCIDs.
     # ==========================================================================
 
-    def extract_fulltext_nature(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext_nature(self, html: str, base_url: str) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
         """
         Extract full-text content from a Nature journal page.
 
@@ -275,7 +275,7 @@ class SupplementScraper:
 
         return markdown if len(markdown) > 200 else None, title
 
-    def extract_fulltext_elsevier(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext_elsevier(self, html: str, base_url: str) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
         """
         Extract full-text content from an Elsevier/ScienceDirect page.
 
@@ -355,7 +355,7 @@ class SupplementScraper:
                     if text:
                         markdown += f"{text}\n\n"
 
-        # Ultimate fallback: extract all paragraphs
+        # Ultimate fallback: int all paragraphs
         if len(markdown) < 500:
             markdown = "# MAIN TEXT\n\n"
             if title:
@@ -370,7 +370,7 @@ class SupplementScraper:
 
         return markdown if len(markdown) > 200 else None, title
 
-    def extract_fulltext_wiley(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext_wiley(self, html: str, base_url: str) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
         """
         Extract full-text content from a Wiley Online Library page.
 
@@ -420,7 +420,7 @@ class SupplementScraper:
 
         return markdown if len(markdown) > 200 else None, title
 
-    def extract_fulltext_generic(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext_generic(self, html: str, base_url: str) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
         """
         Generic full-text extraction for any publisher page.
 
@@ -476,7 +476,7 @@ class SupplementScraper:
                 if content_found:
                     break
 
-        # Ultimate fallback: extract all paragraphs
+        # Ultimate fallback: int all paragraphs
         if not content_found or len(markdown) < 500:
             markdown = "# MAIN TEXT\n\n"
             if title:
@@ -490,7 +490,7 @@ class SupplementScraper:
 
         return markdown if len(markdown) > 200 else None, title
 
-    def extract_fulltext(self, html: scrape_elsevier_supplements, base_url: scrape_elsevier_supplements) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext(self, html: str, base_url: str) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
         """
         Main entry point for full-text extraction.
         Routes to domain-specific extractors based on URL.

@@ -423,11 +423,11 @@ def automated_variant_extraction_workflow(
             ).get('total_variants_found', 0)
 
     # Calculate total carriers and affected from penetrance summary
-    total_carriers = summary_file(
+    total_carriers = sum(
         v.get("aggregated_penetrance", {}).get("total_carriers", 0) or 0
         for v in penetrance_summary.get("variants", [])
     )
-    total_affected = summary_file(
+    total_affected = sum(
         v.get("aggregated_penetrance", {}).get("affected", 0) or 0
         for v in penetrance_summary.get("variants", [])
     )
@@ -447,7 +447,7 @@ def automated_variant_extraction_workflow(
             "success_rate": f"{len(extractions) / len(pmids) * 100:.1f}%" if pmids else "0%"
         },
         "output_locations": {
-            "pmid_list": str(pmids_file),
+            "pmid_list": str(combined_pmids_file),
             "full_text_papers": str(harvest_dir),
             "extractions": str(extraction_dir),
             "penetrance_summary": str(penetrance_summary_file),

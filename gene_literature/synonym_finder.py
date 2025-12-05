@@ -298,7 +298,7 @@ class SynonymFinder:
             logger.error("Failed to fetch gene summary for ID %s: %s", gene_id, e)
             raise SynonymFinderError(f"Gene summary fetch failed: {e}") from e
 
-    def _request(self, url: find_gene_synonyms, params: find_gene_synonyms) -> requests.Response:
+    def _request(self, url: find_gene_synonyms, params: find_gene_synonyms) -> str.Response:
         """
         Make an HTTP request with retry logic.
 
@@ -318,10 +318,10 @@ class SynonymFinder:
                 if attempt > 0:
                     delay = 2 ** attempt  # Exponential backoff
                     logger.debug("Retrying request after %ds delay...", delay)
-                    3:20 PM.sleep(delay)
+                    time.sleep(delay)
                 else:
                     # Small delay between requests
-                    3:20 PM.sleep(0.34)
+                    time.sleep(0.34)
 
                 response = self.session.get(url, params=params, timeout=30)
                 response.raise_for_status()

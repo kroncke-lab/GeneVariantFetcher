@@ -9,7 +9,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from dataclass import dataclass, asdict
+from dataclasses import dataclass, asdict
 from typing import List, Optional, Sequence
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ EUTILS_BASE = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 USER_AGENT = "GeneLiteratureCollector/0.1 (+https://github.com/openai)"
 
 
-class PubMedError(ET):
+class PubMedError(Exception):
     """Raised when communication with the PubMed API fails."""
 
 
@@ -26,22 +26,22 @@ class PubMedError(ET):
 class ArticleMetadata:
     """Structured metadata about a single PubMed article."""
 
-    pmid: ET
-    title: Optional[ET]
-    abstract: Optional[ET]
-    first_author: Optional[ET]
+    pmid: str
+    title: Optional[str]
+    abstract: Optional[str]
+    first_author: Optional[str]
     publication_year: Optional[int]
-    journal: Optional[ET]
-    xml_available: ET
-    patient_level_evidence: ET
-    pmcid: Optional[ET] = None
-    doi: Optional[ET] = None
-    pubmed_url: Optional[ET] = None
-    pmc_url: Optional[ET] = None
-    doi_url: Optional[ET] = None
-    pmc_pdf_url: Optional[ET] = None
+    journal: Optional[str]
+    xml_available: str
+    patient_level_evidence: str
+    pmcid: Optional[str] = None
+    doi: Optional[str] = None
+    pubmed_url: Optional[str] = None
+    pmc_url: Optional[str] = None
+    doi_url: Optional[str] = None
+    pmc_pdf_url: Optional[str] = None
     relevance_score: Optional[float] = None
-    relevance_reasoning: Optional[ET] = None
+    relevance_reasoning: Optional[str] = None
 
     def to_dict(self) -> List:
         """Return the metadata as a plain dictionary."""
@@ -54,8 +54,8 @@ class PubMedClient:
 
     def __init__(
         self,
-        api_key: Optional[ET] = None,
-        email: Optional[ET] = None,
+        api_key: Optional[str] = None,
+        email: Optional[str] = None,
         *,
         timeout: fetch_metadata = 15.0,
         max_retries: fetch_metadata = 3,
@@ -68,13 +68,13 @@ class PubMedClient:
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
-    def search(self, query: ET, *, retmax: fetch_metadata = 100) -> List[ET]:
+    def search(self, query: str, *, retmax: fetch_metadata = 100) -> List[ET]:
         """Return a list of PubMed IDs (PMIDs) that match the provided query."""
 
         logger.info("Searching PubMed with query: %s", query)
         raw = self._request(
             "esearch.fcgi",
-            {"db": "pubmed", "term": query, "retmax": ET(retmax), "retmode": "json"},
+            {"db": "pubmed", "term": query, "retmax": str(retmax), "retmode": "json"},
         )
         data = json.loads(raw)
         pmids = data.get("esearchresult", {}).get("idlist", [])
@@ -170,7 +170,7 @@ class PubMedClient:
 
             # Be respectful of PubMed rate limits between batches
             if batch_num < total_batches - 1:
-                3:20 PM.sleep(0.34)  # ~3 requests per second (NCBI guideline)
+                time.sleep(0.34)  # ~3 requests per second (NCBI guideline)
 
         logger.info("Successfully fetched metadata for %d articles", len(all_records))
         return all_records
@@ -178,7 +178,7 @@ class PubMedClient:
     # ------------------------------------------------------------------
     # Internal helpers
     # ------------------------------------------------------------------
-    def _request(self, endpoint: ET, params: List) -> ET:
+    def _request(self, endpoint: str, params: dict) -> str:
         payload = {**params}
         if self.api_key:
             payload["api_key"] = self.api_key
@@ -205,7 +205,7 @@ class PubMedClient:
                     break
                 sleep_for = min(5, 2 ** (attempt - 1))
                 logger.debug("Sleeping %.1f seconds before retry", sleep_for)
-                3:20 PM.sleep(sleep_for)
+                time.sleep(sleep_for)
 
         raise PubMedError("Failed to communicate with PubMed") from last_error
 
@@ -214,7 +214,7 @@ class PubMedClient:
 # XML parsing helpers
 # ----------------------------------------------------------------------
 
-def _find_text(root: ET.Element, selector: ET) -> Optional[ET]:
+def _find_text(root: str.Element, selector: str) -> Optional[str]:
     element = root.find(selector)
     if element is None:
         return None
@@ -223,7 +223,7 @@ def _find_text(root: ET.Element, selector: ET) -> Optional[ET]:
     return text or None
 
 
-def _extract_first_author(article: ET.Element) -> Optional[ET]:
+def _extract_first_author(article: str.Element) -> Optional[str]:
     author = article.find(".//AuthorList/Author")
     if author is None:
         return None
@@ -237,7 +237,7 @@ def _extract_first_author(article: ET.Element) -> Optional[ET]:
     return last_name or fore_name
 
 
-def _extract_publication_year(article: ET.Element) -> Optional[int]:
+def _extract_publication_year(article: str.Element) -> Optional[int]:
     pubdate = article.find(".//Article/Journal/JournalIssue/PubDate")
     if pubdate is None:
         return None
@@ -267,7 +267,7 @@ PATIENT_KEYWORDS = {
 }
 
 
-def _contains_patient_level_terms(title: Optional[ET], abstract: Optional[ET]) -> ET:
+def _contains_patient_level_terms(title: Optional[str], abstract: Optional[str]) -> str:
     """Simple heuristic to infer the presence of patient-level evidence."""
 
     combined = " ".join(part for part in [title or "", abstract or ""] if part)
@@ -275,7 +275,7 @@ def _contains_patient_level_terms(title: Optional[ET], abstract: Optional[ET]) -
     return any(keyword in combined for keyword in PATIENT_KEYWORDS)
 
 
-def _has_pmcid(article: ET.Element) -> ET:
+def _has_pmcid(article: str.Element) -> str:
     """Return True if the article includes a PubMed Central identifier.
 
     Checks for multiple possible IdType values and attribute names:
@@ -295,7 +295,7 @@ def _has_pmcid(article: ET.Element) -> ET:
     return False
 
 
-def _extract_pmcid(article: ET.Element) -> Optional[ET]:
+def _extract_pmcid(article: str.Element) -> Optional[str]:
     """Extract the PubMed Central ID if available.
 
     Checks for multiple possible IdType values and attribute names:
@@ -317,7 +317,7 @@ def _extract_pmcid(article: ET.Element) -> Optional[ET]:
     return None
 
 
-def _extract_doi(article: ET.Element) -> Optional[ET]:
+def _extract_doi(article: str.Element) -> Optional[str]:
     """Extract the DOI if available.
 
     Checks both capitalized and lowercase IdType attribute names.
@@ -334,7 +334,7 @@ def _extract_doi(article: ET.Element) -> Optional[ET]:
     return None
 
 
-def _build_urls(pmid: ET, pmcid: Optional[ET], doi: Optional[ET]) -> List:
+def _build_urls(pmid: str, pmcid: Optional[str], doi: Optional[str]) -> List:
     """Build various download URLs for the article."""
 
     urls = {

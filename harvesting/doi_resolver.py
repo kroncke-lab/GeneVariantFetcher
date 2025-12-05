@@ -34,8 +34,8 @@ class DOIResolver:
 
     def resolve_and_scrape_supplements(
         self,
-        doi: resolve_doi_url,
-        pmid: resolve_doi_url,
+        doi: str,
+        pmid: str,
         scraper
     ) -> List[Dict]:
         """
@@ -114,10 +114,10 @@ class DOIResolver:
 
     def resolve_and_fetch_fulltext(
         self,
-        doi: resolve_doi_url,
-        pmid: resolve_doi_url,
+        doi: str,
+        pmid: str,
         scraper
-    ) -> Tuple[Optional[resolve_doi_url], Optional[resolve_doi_url], List[Dict]]:
+    ) -> Tuple[Optional[str], Optional[str], List[Dict]]:
         """
         Resolves a DOI to its final URL and fetches full text + supplements.
 
@@ -201,7 +201,7 @@ class DOIResolver:
 
         return markdown_content, final_url, supplements
 
-    def resolve_doi_url(self, doi: resolve_doi_url, pmid: resolve_doi_url) -> Tuple[Optional[resolve_doi_url], Optional[resolve_doi_url]]:
+    def resolve_doi_url(self, doi: str, pmid: str) -> Tuple[Optional[str], Optional[str]]:
         """
         Resolve a DOI to its final URL without fetching full content.
 

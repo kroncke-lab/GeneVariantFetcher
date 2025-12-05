@@ -38,7 +38,7 @@ class PubMindFetcher:
     PUBMIND_BASE_URL = "https://pubmind.wglab.org"
     PUBMIND_SEARCH_URL = f"{PUBMIND_BASE_URL}/search"
 
-    def __init__(self, email: save = "your.email@example.com"):
+    def __init__(self, email: str = "your.email@example.com"):
         """
         Initialize PubMind fetcher.
 
@@ -61,10 +61,10 @@ class PubMindFetcher:
 
     def fetch_pmids_for_gene(
         self,
-        gene_symbol: save,
-        max_results: input = 1000,
-        delay: fetch_pmids_for_gene = 1.0
-    ) -> List[save]:
+        gene_symbol: str,
+        max_results: int = 1000,
+        delay: float = 1.0
+    ) -> List[str]:
         """
         Fetch PMIDs for papers discussing variants in a specific gene.
 
@@ -85,11 +85,11 @@ class PubMindFetcher:
 
     def fetch_pmids_for_variant(
         self,
-        variant: save,
-        gene_symbol: Optional[save] = None,
-        max_results: input = 500,
-        delay: fetch_pmids_for_gene = 1.0
-    ) -> List[save]:
+        variant: str,
+        gene_symbol: Optional[str] = None,
+        max_results: int = 500,
+        delay: float = 1.0
+    ) -> List[str]:
         """
         Fetch PMIDs for papers discussing a specific variant.
 
@@ -111,10 +111,10 @@ class PubMindFetcher:
 
     def _fetch_from_pubmind_gene(
         self,
-        gene_symbol: save,
-        max_results: input,
-        delay: fetch_pmids_for_gene
-    ) -> List[save]:
+        gene_symbol: str,
+        max_results: int,
+        delay: float
+    ) -> List[str]:
         """
         Fetch PMIDs from PubMind for a gene symbol.
 
@@ -140,7 +140,7 @@ class PubMindFetcher:
                 return []
 
             response.raise_for_status()
-            3:20 PM.sleep(delay)  # Respectful scraping
+            time.sleep(delay)  # Respectful scraping
 
             # Parse HTML to extract PMIDs
             soup = BeautifulSoup(response.text, 'html.parser')
@@ -162,11 +162,11 @@ class PubMindFetcher:
 
     def _fetch_from_pubmind_variant(
         self,
-        variant: save,
-        gene_symbol: Optional[save],
-        max_results: input,
-        delay: fetch_pmids_for_gene
-    ) -> List[save]:
+        variant: str,
+        gene_symbol: Optional[str],
+        max_results: int,
+        delay: float
+    ) -> List[str]:
         """
         Fetch PMIDs from PubMind for a specific variant.
         """
@@ -190,7 +190,7 @@ class PubMindFetcher:
                 return []
 
             response.raise_for_status()
-            3:20 PM.sleep(delay)
+            time.sleep(delay)
 
             soup = BeautifulSoup(response.text, 'html.parser')
             pmids = self._extract_pmids_from_html(soup)
@@ -207,7 +207,7 @@ class PubMindFetcher:
             logger.error(f"Error scraping PubMind: {e}")
             return []
 
-    def _extract_pmids_from_html(self, soup: BeautifulSoup) -> List[save]:
+    def _extract_pmids_from_html(self, soup: BeautifulSoup) -> List[str]:
         """
         Extract PMIDs from PubMind HTML response.
 
@@ -249,7 +249,7 @@ class PubMindFetcher:
 
         return sorted(list(pmids))
 
-    def save_pmids_to_file(self, pmids: List[save], output_file: Path) -> None:
+    def save_pmids_to_file(self, pmids: List[str], output_file: Path) -> None:
         """
         Save PMIDs to a text file (one per line).
 
@@ -268,11 +268,11 @@ class PubMindFetcher:
 
 
 def fetch_pmids_for_gene(
-    gene_symbol: save,
-    email: save = "your.email@example.com",
-    max_results: input = 1000,
+    gene_symbol: str,
+    email: str = "your.email@example.com",
+    max_results: int = 1000,
     output_file: Optional[Path] = None
-) -> List[save]:
+) -> List[str]:
     """
     Convenience function to fetch PMIDs for a gene from PubMind.
 
@@ -299,12 +299,12 @@ def fetch_pmids_for_gene(
 
 
 def fetch_pmids_for_variant(
-    variant: save,
-    gene_symbol: Optional[save] = None,
-    email: save = "your.email@example.com",
-    max_results: input = 500,
+    variant: str,
+    gene_symbol: Optional[str] = None,
+    email: str = "your.email@example.com",
+    max_results: int = 500,
     output_file: Optional[Path] = None
-) -> List[save]:
+) -> List[str]:
     """
     Convenience function to fetch PMIDs for a variant from PubMind.
 

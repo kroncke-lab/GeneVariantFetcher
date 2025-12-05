@@ -14,7 +14,7 @@ from .pubmed_client import ArticleMetadata
 logger = logging.getLogger(__name__)
 
 
-def write_metadata(records: Sequence[ArticleMetadata], destination: Path, fmt: sqlite3 = "json") -> None:
+def write_metadata(records: Sequence[ArticleMetadata], destination: Path, fmt: str = "json") -> None:
     """Persist article metadata to the desired destination in the requested format."""
 
     destination = destination.expanduser().resolve()
