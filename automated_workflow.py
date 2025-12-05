@@ -74,6 +74,23 @@ def automated_variant_extraction_workflow(
     pubmed_pmids_file = output_path / f"{gene_symbol}_pmids_pubmed.txt"
     combined_pmids_file = output_path / f"{gene_symbol}_pmids.txt"
 
+    use_pubmind = settings.use_pubmind
+    use_pubmed = settings.use_pubmed and not settings.pubmind_only
+
+    if settings.pubmind_only and not settings.use_pubmind:
+        logger.warning("PUBMIND_ONLY is set but USE_PUBMIND is false; enabling PubMind to avoid empty discovery.")
+        use_pubmind = True
+
+    if not use_pubmind and not use_pubmed:
+        logger.warning("No PMID sources enabled; defaulting to PubMind to proceed.")
+        use_pubmind = True
+
+    logger.info(
+        "PMID source selection -> PubMind: %s | PubMed keyword search: %s",
+        "on" if use_pubmind else "off",
+        "on" if use_pubmed else "off",
+    )
+
     pmid_discovery = discover_pmids_for_gene(
         gene_symbol=gene_symbol,
         email=email,
@@ -82,6 +99,8 @@ def automated_variant_extraction_workflow(
         pubmed_output=pubmed_pmids_file,
         combined_output=combined_pmids_file,
         api_key=os.getenv("NCBI_API_KEY"),
+        use_pubmind=use_pubmind,
+        use_pubmed=use_pubmed,
     )
     pmids = pmid_discovery.combined_pmids
 

@@ -53,34 +53,43 @@ def discover_pmids_for_gene(
     pubmed_output: Path | None = None,
     combined_output: Path | None = None,
     api_key: str | None = None,
+    use_pubmind: bool = True,
+    use_pubmed: bool = True,
 ) -> PMIDDiscoveryResult:
     """Fetch PMIDs from PubMind and PubMed, merge, and persist them."""
 
-    # PubMind discovery
-    pubmind_fetcher = PubMindFetcher(email=email)
-    pubmind_pmids = pubmind_fetcher.fetch_pmids_for_gene(
-        gene_symbol, max_results=max_results
-    )
-    if pubmind_output:
-        pubmind_fetcher.save_pmids_to_file(pubmind_pmids, pubmind_output)
+    pubmind_pmids: list[str] = []
+    if use_pubmind:
+        pubmind_fetcher = PubMindFetcher(email=email)
+        pubmind_pmids = pubmind_fetcher.fetch_pmids_for_gene(
+            gene_symbol, max_results=max_results
+        )
+        if pubmind_output:
+            pubmind_fetcher.save_pmids_to_file(pubmind_pmids, pubmind_output)
+    else:
+        logger.info("Skipping PubMind PMID discovery because USE_PUBMIND is false.")
 
     # PubMed discovery using keyword-focused queries
-    pubmed_client = PubMedClient(api_key=api_key, email=email)
-    pubmed_pmids: set[str] = set()
-    for query in build_gene_keyword_queries(gene_symbol):
-        try:
-            pubmed_pmids.update(
-                pubmed_client.search(query, retmax=max_results)
-            )
-        except PubMedError as exc:
-            logger.warning("PubMed query failed for '%s': %s", query, exc)
+    pubmed_pmids: list[str] = []
+    if use_pubmed:
+        pubmed_client = PubMedClient(api_key=api_key, email=email)
+        pubmed_pmids_set: set[str] = set()
+        for query in build_gene_keyword_queries(gene_symbol):
+            try:
+                pubmed_pmids_set.update(
+                    pubmed_client.search(query, retmax=max_results)
+                )
+            except PubMedError as exc:
+                logger.warning("PubMed query failed for '%s': %s", query, exc)
 
-    pubmed_pmids_list = sorted(pubmed_pmids)[:max_results]
-    if pubmed_output:
-        _save_pmids(pubmed_pmids_list, pubmed_output)
+        pubmed_pmids = sorted(pubmed_pmids_set)[:max_results]
+        if pubmed_output:
+            _save_pmids(pubmed_pmids, pubmed_output)
+    else:
+        logger.info("Skipping PubMed keyword discovery because USE_PUBMED is false or PUBMIND_ONLY is set.")
 
     # Merge and de-duplicate
-    combined_pmids = sorted(set(pubmind_pmids) | set(pubmed_pmids_list))
+    combined_pmids = sorted(set(pubmind_pmids) | set(pubmed_pmids))
     if len(combined_pmids) > max_results:
         combined_pmids = combined_pmids[:max_results]
 
@@ -89,7 +98,7 @@ def discover_pmids_for_gene(
 
     return PMIDDiscoveryResult(
         pubmind_pmids=pubmind_pmids,
-        pubmed_pmids=pubmed_pmids_list,
+        pubmed_pmids=pubmed_pmids,
         combined_pmids=combined_pmids,
     )
 
