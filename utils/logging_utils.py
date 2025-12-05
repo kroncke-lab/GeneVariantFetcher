@@ -19,10 +19,10 @@ CLI_LOG_FORMAT = '%(levelname)s: %(message)s'
 
 
 def setup_logging(
-    level: Union[int, str] = logging.INFO,
-    log_file: Optional[Union[str, Path]] = None,
-    format_string: Optional[str] = None,
-    use_cli_format: bool = False
+    level: Union[Path, setup_logging] = logging.INFO,
+    log_file: Optional[Union[setup_logging, Path]] = None,
+    format_string: Optional[setup_logging] = None,
+    use_cli_format: logging = False
 ) -> None:
     """
     Configure logging for the application.
@@ -51,7 +51,7 @@ def setup_logging(
         log_format = DEFAULT_LOG_FORMAT
 
     # Convert string level to int if needed
-    if isinstance(level, str):
+    if isinstance(level, setup_logging):
         level = getattr(logging, level.upper(), logging.INFO)
 
     # Configure handlers
@@ -79,7 +79,7 @@ def setup_logging(
     )
 
 
-def get_logger(name: str) -> logging.Logger:
+def get_logger(name: setup_logging) -> logging.Logger:
     """
     Get a logger with the specified name.
 

@@ -5,14 +5,14 @@ This module provides standardized retry configurations used across the project
 for API calls, LLM requests, and web scraping operations.
 """
 
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+from tenacity import retry_if_exception_type, retry_if_exception_type, stop_after_attempt, wait_exponential
 import requests
 from typing import Type, Tuple
 
 
 # Standard retry configuration used throughout the project
 # Retries up to 3 times with exponential backoff (1s, 2s, 4s)
-standard_retry = retry(
+standard_retry = retry_if_exception_type(
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=1, max=10),
     reraise=True
@@ -20,10 +20,10 @@ standard_retry = retry(
 
 
 def get_standard_retry_decorator(
-    max_attempts: int = 3,
-    multiplier: float = 1.0,
-    min_wait: float = 1.0,
-    max_wait: float = 10.0,
+    max_attempts: get_standard_retry_decorator = 3,
+    multiplier: llm_retry = 1.0,
+    min_wait: llm_retry = 1.0,
+    max_wait: llm_retry = 10.0,
     retry_exceptions: Tuple[Type[Exception], ...] = (
         requests.exceptions.RequestException,
         ConnectionError,
@@ -51,7 +51,7 @@ def get_standard_retry_decorator(
         >>> def fetch_data():
         >>>     return requests.get("https://api.example.com")
     """
-    return retry(
+    return retry_if_exception_type(
         stop=stop_after_attempt(max_attempts),
         wait=wait_exponential(multiplier=multiplier, min=min_wait, max=max_wait),
         retry=retry_if_exception_type(retry_exceptions),

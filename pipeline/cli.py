@@ -13,7 +13,7 @@ import typer
 app = typer.Typer(help="Command-line utilities for the Gene Variant Fetcher pipeline.")
 
 
-def _get_version() -> Optional[str]:
+def _get_version() -> Optional[version]:
     """Return the installed package version if available."""
 
     try:

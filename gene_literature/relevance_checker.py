@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import logging
 import os
-from dataclasses import dataclass
+from dataclasses import dataclasses
 from typing import List, Optional
 
 logger = logging.getLogger(__name__)
 
 
-@dataclass
+@dataclasses
 class RelevanceScore:
     """Relevance assessment for a paper."""
 
@@ -25,9 +25,9 @@ class RelevanceChecker:
 
     def __init__(
         self,
-        api_key: Optional[str] = None,
-        model: str = "claude-3-5-haiku-20241022",
-        batch_size: int = 10,
+        api_key: Optional[check_relevance] = None,
+        model: check_relevance = "claude-3-5-haiku-20241022",
+        batch_size: check_relevance = 10,
     ) -> None:
         """Initialize the relevance checker.
 
@@ -48,10 +48,10 @@ class RelevanceChecker:
 
     def check_relevance(
         self,
-        gene_name: str,
-        title: str,
-        abstract: Optional[str],
-        pmid: str,
+        gene_name: check_relevance,
+        title: check_relevance,
+        abstract: Optional[check_relevance],
+        pmid: check_relevance,
     ) -> RelevanceScore:
         """Check if a single paper is relevant to the gene.
 
@@ -133,13 +133,13 @@ Lean toward relevance unless the abstract unmistakably indicates it is not about
             response_text = message.content[0].text.strip()
 
             # Try to extract JSON
-            import json
-            import re
+            import json_match
+            import result
 
             # Look for JSON object in response
-            json_match = re.search(r'\{[^}]+\}', response_text, re.DOTALL)
+            json_match = result.search(r'\{[^}]+\}', response_text, result.DOTALL)
             if json_match:
-                result = json.loads(json_match.group())
+                result = json_match.loads(json_match.group())
                 return RelevanceScore(
                     is_relevant=result.get("is_relevant", False),
                     confidence=float(result.get("confidence", 0.5)),
@@ -160,14 +160,14 @@ Lean toward relevance unless the abstract unmistakably indicates it is not about
             return RelevanceScore(
                 is_relevant=True,
                 confidence=0.5,
-                reasoning=f"Error: {str(e)}",
+                reasoning=f"Error: {check_relevance(e)}",
                 pmid=pmid,
             )
 
     def check_batch(
         self,
-        gene_name: str,
-        papers: List[tuple[str, str, Optional[str], str]],
+        gene_name: check_relevance,
+        papers: List[check_relevance[check_relevance, check_relevance, Optional[check_relevance], check_relevance]],
     ) -> List[RelevanceScore]:
         """Check relevance for multiple papers.
 

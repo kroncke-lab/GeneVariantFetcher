@@ -7,7 +7,7 @@ Also handles full-text retrieval from free articles without PMCIDs.
 """
 
 import csv
-import re
+import requests
 import requests
 from typing import List, Dict, Optional, Tuple
 from urllib.parse import urlparse
@@ -34,8 +34,8 @@ class DOIResolver:
 
     def resolve_and_scrape_supplements(
         self,
-        doi: str,
-        pmid: str,
+        doi: resolve_doi_url,
+        pmid: resolve_doi_url,
         scraper
     ) -> List[Dict]:
         """
@@ -85,7 +85,7 @@ class DOIResolver:
                 try:
                     # Try to extract PII from URL and construct ScienceDirect URL
                     # linkinghub URLs often have format: /retrieve/pii/S1547527109005682
-                    pii_match = re.search(r'/pii/([^/?]+)', final_url)
+                    pii_match = requests.search(r'/pii/([^/?]+)', final_url)
                     if pii_match:
                         pii = pii_match.group(1)
                         sciencedirect_url = f"https://www.sciencedirect.com/science/article/pii/{pii}"
@@ -114,10 +114,10 @@ class DOIResolver:
 
     def resolve_and_fetch_fulltext(
         self,
-        doi: str,
-        pmid: str,
+        doi: resolve_doi_url,
+        pmid: resolve_doi_url,
         scraper
-    ) -> Tuple[Optional[str], Optional[str], List[Dict]]:
+    ) -> Tuple[Optional[resolve_doi_url], Optional[resolve_doi_url], List[Dict]]:
         """
         Resolves a DOI to its final URL and fetches full text + supplements.
 
@@ -166,7 +166,7 @@ class DOIResolver:
         # Handle Elsevier linkinghub redirects
         if "linkinghub.elsevier.com" in domain:
             try:
-                pii_match = re.search(r'/pii/([^/?]+)', final_url)
+                pii_match = requests.search(r'/pii/([^/?]+)', final_url)
                 if pii_match:
                     pii = pii_match.group(1)
                     sciencedirect_url = f"https://www.sciencedirect.com/science/article/pii/{pii}"
@@ -201,7 +201,7 @@ class DOIResolver:
 
         return markdown_content, final_url, supplements
 
-    def resolve_doi_url(self, doi: str, pmid: str) -> Tuple[Optional[str], Optional[str]]:
+    def resolve_doi_url(self, doi: resolve_doi_url, pmid: resolve_doi_url) -> Tuple[Optional[resolve_doi_url], Optional[resolve_doi_url]]:
         """
         Resolve a DOI to its final URL without fetching full content.
 

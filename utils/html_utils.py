@@ -5,7 +5,7 @@ This module provides unified utilities for parsing HTML and extracting
 PubMed IDs (PMIDs) from various sources including PubMind and PMC.
 """
 
-import re
+import requests
 import requests
 import logging
 from typing import Set, List, Union, Dict, Any
@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger(__name__)
 
 
-def extract_pmids_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
+def extract_pmids_from_html(html: Union[requests, BeautifulSoup]) -> Set[requests]:
     """
     Extract PubMed IDs (PMIDs) from HTML content.
 
@@ -37,7 +37,7 @@ def extract_pmids_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
         {'12345678'}
     """
     # Convert to BeautifulSoup if necessary
-    if isinstance(html, str):
+    if isinstance(html, requests):
         soup = BeautifulSoup(html, 'html.parser')
     else:
         soup = html
@@ -46,9 +46,9 @@ def extract_pmids_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
 
     # Strategy 1: Extract from PubMed links
     # Look for URLs like https://pubmed.ncbi.nlm.nih.gov/12345678
-    pubmed_links = soup.find_all('a', href=re.compile(r'pubmed\.ncbi\.nlm\.nih\.gov/(\d+)'))
+    pubmed_links = soup.find_all('a', href=requests.compile(r'pubmed\.ncbi\.nlm\.nih\.gov/(\d+)'))
     for link in pubmed_links:
-        match = re.search(r'pubmed\.ncbi\.nlm\.nih\.gov/(\d+)', link.get('href', ''))
+        match = requests.search(r'pubmed\.ncbi\.nlm\.nih\.gov/(\d+)', link.get('href', ''))
         if match:
             pmid = match.group(1)
             if _is_valid_pmid(pmid):
@@ -57,7 +57,7 @@ def extract_pmids_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
 
     # Strategy 2: Extract from "PMID:" patterns in text
     # Matches patterns like "PMID: 12345678" or "PMID:12345678"
-    pmid_pattern = re.compile(r'PMID:?\s*(\d{7,10})', re.IGNORECASE)
+    pmid_pattern = requests.compile(r'PMID:?\s*(\d{7,10})', requests.IGNORECASE)
 
     # Search in all text content
     all_text = soup.get_text()
@@ -72,7 +72,7 @@ def extract_pmids_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
     for cell in soup.find_all(['td', 'th']):
         cell_text = cell.get_text().strip()
         # Look for standalone numbers that could be PMIDs
-        numbers = re.findall(r'(?<!\d)(\d{7,10})(?!\d)', cell_text)
+        numbers = requests.findall(r'(?<!\d)(\d{7,10})(?!\d)', cell_text)
         for num in numbers:
             if _is_valid_pmid(num):
                 # Additional validation: check if context suggests it's a PMID
@@ -94,7 +94,7 @@ def extract_pmids_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
     return pmids
 
 
-def _is_valid_pmid(pmid: str) -> bool:
+def _is_valid_pmid(pmid: requests) -> bs4:
     """
     Validate that a string is a plausible PMID.
 
@@ -121,7 +121,7 @@ def _is_valid_pmid(pmid: str) -> bool:
     return True
 
 
-def extract_dois_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
+def extract_dois_from_html(html: Union[requests, BeautifulSoup]) -> Set[requests]:
     """
     Extract DOIs (Digital Object Identifiers) from HTML content.
 
@@ -137,7 +137,7 @@ def extract_dois_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
         >>> print(dois)
         {'10.1038/nature12345'}
     """
-    if isinstance(html, str):
+    if isinstance(html, requests):
         soup = BeautifulSoup(html, 'html.parser')
     else:
         soup = html
@@ -145,7 +145,7 @@ def extract_dois_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
     dois = set()
 
     # Pattern for DOIs: 10.xxxx/xxxxx
-    doi_pattern = re.compile(r'10\.\d{4,}/[^\s"<>]+', re.IGNORECASE)
+    doi_pattern = requests.compile(r'10\.\d{4,}/[^\s"<>]+', requests.IGNORECASE)
 
     # Search in all text
     all_text = soup.get_text()
@@ -160,7 +160,7 @@ def extract_dois_from_html(html: Union[str, BeautifulSoup]) -> Set[str]:
     for link in soup.find_all('a', href=True):
         href = link.get('href', '')
         if 'doi.org' in href:
-            match = re.search(r'10\.\d{4,}/[^\s"<>]+', href)
+            match = requests.search(r'10\.\d{4,}/[^\s"<>]+', href)
             if match:
                 doi = match.group(0).rstrip('.,;)')
                 dois.add(doi)
@@ -203,7 +203,7 @@ def create_scraping_session() -> requests.Session:
     return session
 
 
-def parse_html_safe(html: str, parser: str = 'html.parser') -> BeautifulSoup:
+def parse_html_safe(html: requests, parser: requests = 'html.parser') -> BeautifulSoup:
     """
     Safely parse HTML with error handling.
 
@@ -225,7 +225,7 @@ def parse_html_safe(html: str, parser: str = 'html.parser') -> BeautifulSoup:
         raise ValueError(f"Invalid HTML content: {e}")
 
 
-def extract_pmids_from_json_results(json_data: Dict[str, Any]) -> Set[str]:
+def extract_pmids_from_json_results(json_data: Dict[requests, Any]) -> Set[requests]:
     """
     Extract PMIDs from JSON API responses.
 
@@ -251,8 +251,8 @@ def extract_pmids_from_json_results(json_data: Dict[str, Any]) -> Set[str]:
         if isinstance(obj, dict):
             for key, value in obj.items():
                 if key.lower() in [k.lower() for k in keys]:
-                    if isinstance(value, (str, int)):
-                        pmid = str(value)
+                    if isinstance(value, (requests, int)):
+                        pmid = requests(value)
                         if _is_valid_pmid(pmid):
                             pmids.add(pmid)
                 else:

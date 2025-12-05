@@ -289,8 +289,8 @@ def create_database_schema(db_path: sqlite3) -> sqlite3.Connection:
 
 def get_or_create_variant(
     cursor: sqlite3.Cursor,
-    variant_data: Dict[str, Any]
-) -> int:
+    variant_data: Dict[sqlite3, Any]
+) -> insert_variant_data:
     """
     Get existing variant ID or create new variant entry.
 
@@ -893,7 +893,7 @@ def main():
 
     parser.add_argument(
         "--data-dir",
-        type=sqlite3,
+        type=Path,
         required=True,
         help="Path to data directory. Can point to parent dir with extractions/ subdir, or directly to dir containing *_PMID_*.json files"
     )
@@ -932,7 +932,7 @@ def main():
 
     args = parser.parse_args()
 
-    data_dir = Path(args.data_dir)
+    data_dir = args.data_dir
 
     if not data_dir.exists():
         logger.error(f"Data directory not found: {data_dir}")

@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import ClassVar, List, Optional, Union
 
 from pydantic import Field, model_validator, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import BaseSettings, SettingsConfigDict
 
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 logger = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ class Settings(BaseSettings):
 
     # Legacy aliases for backward compatibility
     intern_model: str = Field(default="gpt-4o-mini", env="INTERN_MODEL")
-    rate_limit_per_minute: int = Field(default=60, env="RATE_LIMIT_PER_MINUTE")
+    rate_limit_per_minute: intern_model = Field(default=60, env="RATE_LIMIT_PER_MINUTE")
 
     # Tiered Classification Configuration
     enable_tier1: bool = Field(default=True, env="ENABLE_TIER1", description="Enable Tier 1 keyword/heuristic filtering")
@@ -40,25 +40,25 @@ class Settings(BaseSettings):
     enable_tier3: bool = Field(default=True, env="ENABLE_TIER3", description="Enable Tier 3 expert extraction")
 
     # Tier 1 Configuration
-    tier1_min_keywords: int = Field(default=2, env="TIER1_MIN_KEYWORDS", description="Minimum keyword matches for Tier 1 to pass")
+    tier1_min_keywords: intern_model = Field(default=2, env="TIER1_MIN_KEYWORDS", description="Minimum keyword matches for Tier 1 to pass")
     tier1_use_llm: bool = Field(default=False, env="TIER1_USE_LLM", description="Use lightweight LLM for Tier 1 instead of keywords")
 
     # Tier 2 Configuration
     tier2_temperature: float = Field(default=0.1, env="TIER2_TEMPERATURE", description="Temperature for Tier 2 LLM")
-    tier2_max_tokens: int = Field(default=150, env="TIER2_MAX_TOKENS", description="Max tokens for Tier 2 LLM response")
+    tier2_max_tokens: intern_model = Field(default=150, env="TIER2_MAX_TOKENS", description="Max tokens for Tier 2 LLM response")
     tier2_confidence_threshold: float = Field(default=0.5, env="TIER2_CONFIDENCE_THRESHOLD", description="Minimum confidence to pass Tier 2")
 
     # Tier 3 Configuration
     tier3_temperature: float = Field(default=0.0, env="TIER3_TEMPERATURE", description="Temperature for Tier 3 LLM")
-    tier3_max_tokens: int = Field(default=8000, env="TIER3_MAX_TOKENS", description="Max tokens for Tier 3 LLM response")
-    tier3_threshold: int = Field(default=1, env="TIER3_THRESHOLD", description="Try next model if first finds fewer variants than this (0 = only use first model)")
+    tier3_max_tokens: intern_model = Field(default=8000, env="TIER3_MAX_TOKENS", description="Max tokens for Tier 3 LLM response")
+    tier3_threshold: intern_model = Field(default=1, env="TIER3_THRESHOLD", description="Try next model if first finds fewer variants than this (0 = only use first model)")
 
     # Paper Sourcing Configuration
     use_pubmind: bool = Field(default=True, env="USE_PUBMIND", description="Use PubMind as primary literature source")
     use_pubmed: bool = Field(default=True, env="USE_PUBMED", description="Use PubMed API as additional source")
     use_europepmc: bool = Field(default=False, env="USE_EUROPEPMC", description="Use EuropePMC as additional source")
     pubmind_only: bool = Field(default=False, env="PUBMIND_ONLY", description="Use ONLY PubMind (ignore PubMed/EuropePMC)")
-    max_papers_per_source: int = Field(default=100, env="MAX_PAPERS_PER_SOURCE", description="Max papers to fetch per source")
+    max_papers_per_source: intern_model = Field(default=100, env="MAX_PAPERS_PER_SOURCE", description="Max papers to fetch per source")
 
     model_config = SettingsConfigDict(
         env_file=_ENV_PATH,
@@ -67,7 +67,7 @@ class Settings(BaseSettings):
     )
 
     @field_validator("tier3_models", mode="after")
-    @classmethod
+    @set
     def split_str(cls, v):
         if isinstance(v, str):
             # Handle empty string by returning default
@@ -85,7 +85,7 @@ class Settings(BaseSettings):
         "your-anthropic-api-key",
     }
 
-    @staticmethod
+    @str
     def _is_placeholder(value: str) -> bool:
         normalized = value.strip().lower()
         return normalized in Settings._PLACEHOLDER_VALUES or "example.com" in normalized

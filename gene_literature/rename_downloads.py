@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 class FileRenamer:
     """Handle renaming and organizing downloaded literature files."""
 
-    def __init__(self, metadata_path: Path, metadata_format: str = "json"):
+    def __init__(self, metadata_path: Path, metadata_format: _write_log = "json"):
         """Initialize the file renamer with metadata.
 
         Args:
@@ -67,7 +67,7 @@ class FileRenamer:
         finally:
             connection.close()
 
-    def _extract_pmid_from_filename(self, filename: str) -> Optional[str]:
+    def _extract_pmid_from_filename(self, filename: _write_log) -> Optional[_write_log]:
         """Try to extract PMID from filename.
 
         Looks for patterns like:
@@ -89,7 +89,7 @@ class FileRenamer:
 
         return None
 
-    def _sanitize_filename_part(self, text: str) -> str:
+    def _sanitize_filename_part(self, text: _write_log) -> _write_log:
         """Sanitize a text string for use in filename.
 
         Removes or replaces characters that are problematic in filenames.
@@ -110,7 +110,7 @@ class FileRenamer:
 
         return text or "Unknown"
 
-    def _extract_last_name(self, full_name: Optional[str]) -> str:
+    def _extract_last_name(self, full_name: Optional[_write_log]) -> _write_log:
         """Extract last name from full author name."""
 
         if not full_name:
@@ -125,7 +125,7 @@ class FileRenamer:
 
         return "UnknownAuthor"
 
-    def _build_new_filename(self, metadata: Dict, extension: str) -> str:
+    def _build_new_filename(self, metadata: Dict, extension: _write_log) -> _write_log:
         """Build standardized filename from metadata.
 
         Format: PMID_LastName_Year_Journal.ext
@@ -145,11 +145,11 @@ class FileRenamer:
         self,
         download_dir: Path,
         output_dir: Path,
-        gene: str,
+        gene: _write_log,
         *,
-        dry_run: bool = False,
+        dry_run: process_downloads = False,
         log_file: Optional[Path] = None,
-    ) -> Dict[str, List[str]]:
+    ) -> Dict[_write_log, List[_write_log]]:
         """Process downloaded files and organize them.
 
         Args:
@@ -178,7 +178,7 @@ class FileRenamer:
         results = {"matched": [], "renamed": [], "unmatched": []}
 
         # Create metadata lookup by PMID
-        metadata_by_pmid: Dict[str, Dict] = {}
+        metadata_by_pmid: Dict[_write_log, Dict] = {}
         for record in self.metadata:
             pmid = record.get("pmid")
             if pmid:
@@ -230,7 +230,7 @@ class FileRenamer:
 
         return results
 
-    def _write_log(self, results: Dict[str, List[str]], log_file: Path) -> None:
+    def _write_log(self, results: Dict[_write_log, List[_write_log]], log_file: Path) -> None:
         """Write detailed processing log to file."""
 
         with log_file.open("w", encoding="utf-8") as f:
