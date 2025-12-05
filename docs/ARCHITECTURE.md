@@ -20,11 +20,11 @@ GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently
 │  │  Variant-focused literature with LLM-extracted data    │    │
 │  └────────────────────────────────────────────────────────┘    │
 │         │                                                        │
-│         │  (Optional fallback sources if PUBMIND_ONLY=false)   │
+│         │  (Additional sources when PUBMIND_ONLY=false, the default) │
 │         │                                                        │
 │  ┌──────────────┐  ┌──────────────┐                           │
 │  │   PubMed API │  │ Europe PMC   │                           │
-│  │  (disabled)  │  │  (disabled)  │                           │
+│  │  (enabled)   │  │  (enabled)   │                           │
 │  └──────────────┘  └──────────────┘                           │
 │         │                 │                                      │
 │         └─────────────────┘                                     │
@@ -98,21 +98,21 @@ GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently
 - **PubMind** (PRIMARY): Variant-specific literature database with LLM-extracted data
   - Provides highly relevant papers with genetic variant information
   - Reduces false positives compared to broad PubMed searches
-  - **Default configuration**: `PUBMIND_ONLY=true` (only source used)
-- **PubMed** (OPTIONAL): NCBI's primary biomedical literature database
-  - Disabled by default (`USE_PUBMED=false`)
-  - Can be enabled for broader coverage if needed
-- **Europe PMC** (OPTIONAL): European alternative with broader coverage
-  - Disabled by default (`USE_EUROPEPMC=false`)
-  - Can be enabled as additional source
+  - **Default configuration**: `PUBMIND_ONLY=false` (all sources active)
+- **PubMed** (ADDITIONAL): NCBI's primary biomedical literature database
+  - Enabled by default (`USE_PUBMED=true`)
+  - Disable with `USE_PUBMED=false` if you want PubMind-only runs
+- **Europe PMC** (ADDITIONAL): European alternative with broader coverage
+  - Enabled by default (`USE_EUROPEPMC=true`)
+  - Disable with `USE_EUROPEPMC=false` if you want to exclude it
 
 **Configuration-Driven Behavior:**
 The sourcing behavior is fully configurable via environment variables:
 ```python
 USE_PUBMIND=true          # Use PubMind (recommended)
-PUBMIND_ONLY=true         # Use ONLY PubMind (ignore other sources)
-USE_PUBMED=false          # Disable PubMed by default
-USE_EUROPEPMC=false       # Disable EuropePMC by default
+PUBMIND_ONLY=false        # Allow additional sources by default
+USE_PUBMED=true           # Enable PubMed by default
+USE_EUROPEPMC=true        # Enable EuropePMC by default
 MAX_PAPERS_PER_SOURCE=100 # Limit papers per source
 ```
 
@@ -361,9 +361,9 @@ All pipeline behavior is controlled via environment variables (loaded from `.env
 
 **Paper Sourcing (PubMind-First):**
 - `USE_PUBMIND=true`: Use PubMind as primary source (default: true)
-- `PUBMIND_ONLY=true`: Use ONLY PubMind, ignore other sources (default: true)
-- `USE_PUBMED=false`: Enable/disable PubMed API (default: false)
-- `USE_EUROPEPMC=false`: Enable/disable EuropePMC (default: false)
+- `PUBMIND_ONLY=false`: Use PubMind plus other sources unless disabled (default: false)
+- `USE_PUBMED=true`: Enable/disable PubMed API (default: true)
+- `USE_EUROPEPMC=true`: Enable/disable EuropePMC (default: true)
 - `MAX_PAPERS_PER_SOURCE=100`: Limit papers per source
 
 **Tiered Classification:**
@@ -413,9 +413,9 @@ class Settings(BaseSettings):
 
     # Paper Sourcing
     use_pubmind: bool = True
-    pubmind_only: bool = True
-    use_pubmed: bool = False
-    use_europepmc: bool = False
+    pubmind_only: bool = False
+    use_pubmed: bool = True
+    use_europepmc: bool = True
 ```
 
 **Usage:**

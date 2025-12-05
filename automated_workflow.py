@@ -3,7 +3,7 @@
 Automated Workflow Entrypoint: From Gene to Variant Data
 
 This script provides the production-ready, end-to-end automated workflow:
-1. Fetch relevant PMIDs from PubMind and PubMed for a gene
+1. Fetch relevant PMIDs from PubMind, PubMed, and Europe PMC for a gene
 2. Download full-text articles from PubMed Central
 3. Extract individual-level variant and patient data
 4. Save structured results to JSON and aggregate penetrance metrics
@@ -47,7 +47,7 @@ def automated_variant_extraction_workflow(
         gene_symbol: Gene to search for (e.g., "BRCA1", "SCN5A")
         email: Your email for NCBI E-utilities (required)
         output_dir: Directory to save all outputs (required)
-        max_pmids: Maximum PMIDs to fetch from PubMind/PubMed (integer)
+        max_pmids: Maximum PMIDs to fetch from active sources (integer)
         max_papers_to_download: Maximum papers to download full-text (integer)
         tier_threshold: If the first model finds fewer variants than this, the next model is tried (integer).
         use_clinical_triage: Use ClinicalDataTriageFilter for Tier 2 instead of InternFilter.
@@ -66,9 +66,11 @@ def automated_variant_extraction_workflow(
     logger.info("="*80)
 
     # ============================================================================
-    # STEP 1: Fetch PMIDs from PubMind and PubMed
+    # STEP 1: Fetch PMIDs from PubMind, PubMed, and Europe PMC
     # ============================================================================
-    logger.info("\n📚 STEP 1: Discovering relevant papers from PubMind and PubMed...")
+    logger.info(
+        "\n📚 STEP 1: Discovering relevant papers from PubMind, PubMed, and Europe PMC..."
+    )
 
     pubmind_pmids_file = output_path / f"{gene_symbol}_pmids_pubmind.txt"
     pubmed_pmids_file = output_path / f"{gene_symbol}_pmids_pubmed.txt"
@@ -105,9 +107,10 @@ def automated_variant_extraction_workflow(
     pmids = pmid_discovery.combined_pmids
 
     logger.info(
-        "✓ Found %d PubMind PMIDs and %d PubMed PMIDs",
+        "✓ Found %d PubMind PMIDs, %d PubMed PMIDs, and %d Europe PMC PMIDs",
         len(pmid_discovery.pubmind_pmids),
         len(pmid_discovery.pubmed_pmids),
+        len(pmid_discovery.europepmc_pmids),
     )
     logger.info("✓ Using %d unique PMIDs after merging sources", len(pmids))
     logger.info(f"✓ Saved combined PMID list to: {combined_pmids_file}")

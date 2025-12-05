@@ -1,5 +1,6 @@
 """Validated configuration for the Gene Variant Fetcher pipeline."""
 
+import logging
 from functools import lru_cache
 from pathlib import Path
 from typing import ClassVar, List, Optional, Union
@@ -8,6 +9,7 @@ from pydantic import Field, model_validator, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
+logger = logging.getLogger(__name__)
 
 
 class Settings(BaseSettings):
@@ -123,6 +125,35 @@ class Settings(BaseSettings):
 
         if error_parts:
             raise ValueError(" ".join(error_parts))
+
+        return self
+
+    @model_validator(mode="after")
+    def validate_source_configuration(self):
+        effective_pubmed = self.use_pubmed
+        effective_europepmc = self.use_europepmc
+
+        if self.pubmind_only:
+            effective_pubmed = False
+            effective_europepmc = False
+
+        sources_enabled = [
+            ("PubMind", self.use_pubmind),
+            ("PubMed", effective_pubmed),
+            ("EuropePMC", effective_europepmc),
+        ]
+        active_sources = [name for name, enabled in sources_enabled if enabled]
+
+        if not active_sources:
+            raise ValueError(
+                "No literature sources are enabled. By default PUBMIND_ONLY=false enables PubMind, PubMed, and EuropePMC. "
+                "Set PUBMIND_ONLY=true to restrict to PubMind only or toggle USE_PUBMED/USE_EUROPEPMC to disable specific sources."
+            )
+
+        logger.info(
+            "Literature sourcing enabled for %s. Set PUBMIND_ONLY=true or disable USE_PUBMED/USE_EUROPEPMC to limit discovery.",
+            ", ".join(active_sources),
+        )
 
         return self
 
