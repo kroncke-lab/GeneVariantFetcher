@@ -48,7 +48,7 @@ Options:
   --verbose           Enable verbose logging
 
 PMID sources:
-  • PubMind-only: set PUBMIND_ONLY=true (skips PubMed keyword search)
+  • PubMind-only: set PUBMIND_ONLY=true or USE_PUBMED=false (skips PubMed keyword search)
   • PubMind + PubMed (default): leave both unset, or set USE_PUBMED=true
 ```
 
