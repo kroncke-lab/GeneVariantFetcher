@@ -55,21 +55,9 @@ class Settings(BaseSettings):
 
     # Paper Sourcing Configuration
     use_pubmind: bool = Field(default=True, env="USE_PUBMIND", description="Use PubMind as primary literature source")
-    use_pubmed: bool = Field(
-        default=True,
-        env="USE_PUBMED",
-        description="Use PubMed API as additional source (enabled by default; disable with USE_PUBMED=false)",
-    )
-    use_europepmc: bool = Field(
-        default=True,
-        env="USE_EUROPEPMC",
-        description="Use EuropePMC as additional source (enabled by default; disable with USE_EUROPEPMC=false)",
-    )
-    pubmind_only: bool = Field(
-        default=False,
-        env="PUBMIND_ONLY",
-        description="Use ONLY PubMind (ignore PubMed/EuropePMC). Set to true to opt out of multi-source discovery.",
-    )
+    use_pubmed: bool = Field(default=True, env="USE_PUBMED", description="Use PubMed API as additional source")
+    use_europepmc: bool = Field(default=False, env="USE_EUROPEPMC", description="Use EuropePMC as additional source")
+    pubmind_only: bool = Field(default=False, env="PUBMIND_ONLY", description="Use ONLY PubMind (ignore PubMed/EuropePMC)")
     max_papers_per_source: int = Field(default=100, env="MAX_PAPERS_PER_SOURCE", description="Max papers to fetch per source")
 
     model_config = SettingsConfigDict(
