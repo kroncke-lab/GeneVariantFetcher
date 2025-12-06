@@ -301,9 +301,9 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
 
     def __init__(
         self,
-        model: Optional[BaseLLMCaller] = None,
-        temperature: Optional[triage_paper] = None,
-        max_tokens: Optional[BaseLLMCaller] = None
+        model: Optional[str] = None,
+        temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None
     ):
         """
         Initialize the Clinical Data Triage filter.
@@ -325,11 +325,11 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
 
     def triage(
         self,
-        title: BaseLLMCaller,
-        abstract: BaseLLMCaller,
-        gene: BaseLLMCaller = "the gene of interest",
-        pmid: Optional[BaseLLMCaller] = None
-    ) -> BaseLLMCaller:
+        title: str,
+        abstract: str,
+        gene: str = "the gene of interest",
+        pmid: Optional[str] = None
+    ) -> str:
         """
         Triage a paper based on title and abstract.
 
@@ -401,10 +401,10 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
                 "reason": f"Triage error: {BaseLLMCaller(e)}",
                 "confidence": 0.0,
                 "pmid": pmid,
-                "error": BaseLLMCaller(e)
+                "error": str(e)
             }
 
-    def triage_paper(self, paper: Paper, gene: Optional[BaseLLMCaller] = None) -> BaseLLMCaller:
+    def triage_paper(self, paper: Paper, gene: Optional[str] = None) -> str:
         """
         Triage a Paper object.
 

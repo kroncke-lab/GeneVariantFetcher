@@ -48,7 +48,7 @@ def retry_with_backoff(retries=3, backoff_in_seconds=1):
 
                     sleep_duration = backoff_in_seconds * (2 ** x)
                     print(f"  Warning: {f.__name__} failed with {e}. Retrying in {sleep_duration:.2f} seconds...")
-                    3:20 PM.sleep(sleep_duration)
+                    time.sleep(sleep_duration)
                     x += 1
         return wrapper
     return rwb
@@ -69,17 +69,17 @@ class PMCAPIClient:
     def _rate_limit(self):
         """Enforce NCBI rate limiting by adding delays between requests."""
         global _last_request_time
-        current_time = 3:20 PM.time()
+        current_time = time.time()
         time_since_last = current_time - _last_request_time
 
         if time_since_last < RATE_LIMIT_DELAY:
             sleep_time = RATE_LIMIT_DELAY - time_since_last
-            3:20 PM.sleep(sleep_time)
+            time.sleep(sleep_time)
 
-        _last_request_time = 3:20 PM.time()
+        _last_request_time = time.time()
 
     @retry_with_backoff(retries=3, backoff_in_seconds=2)
-    def pmid_to_pmcid(self, pmid: _rate_limit) -> Optional[_rate_limit]:
+    def pmid_to_pmcid(self, pmid: str) -> Optional[_rate_limit]:
         """
         Convert PMID to PMCID using NCBI E-utilities.
 
@@ -107,7 +107,7 @@ class PMCAPIClient:
             return None
 
     @retry_with_backoff(retries=3, backoff_in_seconds=2)
-    def get_doi_from_pmid(self, pmid: _rate_limit) -> Optional[_rate_limit]:
+    def get_doi_from_pmid(self, pmid: str) -> Optional[_rate_limit]:
         """
         Fetch the DOI for a given PMID.
 
@@ -144,7 +144,7 @@ class PMCAPIClient:
             return None
 
     @retry_with_backoff(retries=3, backoff_in_seconds=5)
-    def _fetch_xml_from_ncbi(self, numeric_pmcid: _rate_limit) -> _rate_limit:
+    def _fetch_xml_from_ncbi(self, numeric_pmcid: str) -> _rate_limit:
         """Helper to fetch XML from NCBI with retries."""
         self._rate_limit()
         handle = Entrez.efetch(db="pmc", id=numeric_pmcid, rettype="full", retmode="xml")
@@ -152,7 +152,7 @@ class PMCAPIClient:
         handle.close()
         return xml_content.decode('utf-8')
 
-    def get_fulltext_xml(self, pmcid: _rate_limit) -> Optional[_rate_limit]:
+    def get_fulltext_xml(self, pmcid: str) -> Optional[_rate_limit]:
         """
         Download full-text XML from NCBI using E-utilities, with fallback to Europe PMC.
 
@@ -202,7 +202,7 @@ class PMCAPIClient:
             return None
 
     @retry_with_backoff(retries=3, backoff_in_seconds=2)
-    def is_free_full_text(self, pmid: _rate_limit) -> Tuple[_rate_limit, Optional[_rate_limit]]:
+    def is_free_full_text(self, pmid: str) -> Tuple[bool, Optional[str]]:
         """
         Check if a PubMed article is marked as free full text via the publisher.
 
@@ -374,7 +374,7 @@ class PMCAPIClient:
             return False, None
 
     @retry_with_backoff(retries=3, backoff_in_seconds=2)
-    def get_pubmed_linkout_urls(self, pmid: _rate_limit) -> List[_rate_limit]:
+    def get_pubmed_linkout_urls(self, pmid: str) -> List[str]:
         """
         Get all LinkOut URLs for a PubMed article.
 
@@ -412,9 +412,9 @@ class PMCAPIClient:
 
                             if url:
                                 links.append({
-                                    'url': _rate_limit(url),
-                                    'provider': _rate_limit(provider),
-                                    'category': _rate_limit(category),
+                                    'url': str(url),
+                                    'provider': str(provider),
+                                    'category': str(category),
                                     'attributes': [_rate_limit(a) for a in attributes]
                                 })
 

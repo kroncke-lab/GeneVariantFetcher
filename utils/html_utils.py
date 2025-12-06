@@ -94,7 +94,7 @@ def extract_pmids_from_html(html: Union[requests, BeautifulSoup]) -> Set[request
     return pmids
 
 
-def _is_valid_pmid(pmid: requests) -> bs4:
+def _is_valid_pmid(pmid: str) -> bool:
     """
     Validate that a string is a plausible PMID.
 
@@ -203,7 +203,7 @@ def create_scraping_session() -> requests.Session:
     return session
 
 
-def parse_html_safe(html: requests, parser: requests = 'html.parser') -> BeautifulSoup:
+def parse_html_safe(html: str, parser: str = 'html.parser') -> BeautifulSoup:
     """
     Safely parse HTML with error handling.
 
@@ -225,7 +225,7 @@ def parse_html_safe(html: requests, parser: requests = 'html.parser') -> Beautif
         raise ValueError(f"Invalid HTML content: {e}")
 
 
-def extract_pmids_from_json_results(json_data: Dict[requests, Any]) -> Set[requests]:
+def extract_pmids_from_json_results(json_data: Dict[str, Any]) -> Set[requests]:
     """
     Extract PMIDs from JSON API responses.
 

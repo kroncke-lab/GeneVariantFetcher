@@ -25,7 +25,7 @@ class FormatConverter:
         """Initialize format converter."""
         self.markitdown = MarkItDown() if MARKITDOWN_AVAILABLE else None
 
-    def xml_to_markdown(self, xml_content: excel_to_markdown) -> excel_to_markdown:
+    def xml_to_markdown(self, xml_content: str) -> str:
         """
         Convert PubMed Central XML to markdown.
 
@@ -69,7 +69,7 @@ class FormatConverter:
             p(f"  Error parsing XML: {e}")
             return "# MAIN TEXT\n\n[Error parsing XML content]\n\n"
 
-    def excel_to_markdown(self, file_path: Path) -> excel_to_markdown:
+    def excel_to_markdown(self, file_path: Path) -> str:
         """
         Convert Excel file to markdown tables.
 
@@ -105,7 +105,7 @@ class FormatConverter:
             print(f"    Error converting Excel {file_path}: {e}")
             return f"[Error converting Excel file: {e}]\n\n"
 
-    def docx_to_markdown(self, file_path: Path) -> excel_to_markdown:
+    def docx_to_markdown(self, file_path: Path) -> str:
         """
         Convert Word document to markdown.
 
@@ -132,7 +132,7 @@ class FormatConverter:
                 print(f"    Error converting DOCX {file_path}: {e}")
                 return f"[Error converting DOCX file: {e}]\n\n"
 
-    def pdf_to_markdown(self, file_path: Path) -> excel_to_markdown:
+    def pdf_to_markdown(self, file_path: Path) -> str:
         """
         Convert PDF to markdown.
 

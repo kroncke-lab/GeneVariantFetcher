@@ -50,7 +50,7 @@ logger = get_logger(__name__)
 # DATABASE SCHEMA INITIALIZATION
 # ============================================================================
 
-def create_database_schema(db_path: sqlite3) -> sqlite3.Connection:
+def create_database_schema(db_path: str) -> str.Connection:
     """
     Create the SQLite database with a normalized schema.
 
@@ -289,8 +289,8 @@ def create_database_schema(db_path: sqlite3) -> sqlite3.Connection:
 
 def get_or_create_variant(
     cursor: sqlite3.Cursor,
-    variant_data: Dict[sqlite3, Any]
-) -> insert_variant_data:
+    variant_data: Dict[str, Any]
+) -> int:
     """
     Get existing variant ID or create new variant entry.
 
@@ -339,7 +339,7 @@ def get_or_create_variant(
 
 def insert_paper_metadata(
     cursor: sqlite3.Cursor,
-    extraction_data: Dict[sqlite3, Any]
+    extraction_data: Dict[str, Any]
 ) -> None:
     """
     Insert or update paper metadata.
@@ -370,9 +370,9 @@ def insert_paper_metadata(
 
 def insert_variant_data(
     cursor: sqlite3.Cursor,
-    pmid: sqlite3,
-    variant_data: Dict[sqlite3, Any]
-) -> insert_variant_data:
+    pmid: str,
+    variant_data: Dict[str, Any]
+) -> int:
     """
     Insert variant and all associated data.
 
@@ -572,7 +572,7 @@ def migrate_extraction_file(
 def migrate_extraction_directory(
     conn: sqlite3.Connection,
     extraction_dir: Path
-) -> Dict[sqlite3, Any]:
+) -> Dict[str, Any]:
     """
     Migrate all extraction JSON files from a directory.
 
@@ -735,7 +735,7 @@ def cleanup_data_directory(
     archive_pmc: os = True,
     delete_pmc_after_archive: os = False,
     dry_run: os = False
-) -> Dict[sqlite3, Any]:
+) -> Dict[str, Any]:
     """
     Comprehensive cleanup of data directory.
 
@@ -853,7 +853,7 @@ def extract_gene_from_json(json_file: Path) -> Optional[sqlite3]:
     return None
 
 
-def determine_database_name(data_dir: Path, extraction_dir: Optional[Path] = None) -> sqlite3:
+def determine_database_name(data_dir: Path, extraction_dir: Optional[Path] = None) -> str:
     """
     Determine the appropriate database name based on gene symbol.
 
