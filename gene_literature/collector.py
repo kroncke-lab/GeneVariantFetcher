@@ -17,7 +17,7 @@ except ImportError:
     logger.debug("RelevanceChecker not available (anthropic package not installed)")
 
 
-def build_gene_query(gene: str, synonyms: Optional[Sequence[str]] = None) -> build_gene_query:
+def build_gene_query(gene: str, synonyms: Optional[Sequence[str]] = None) -> str:
     """Build a simple PubMed query using the provided gene and synonyms."""
 
     terms = [gene, *(synonyms or [])]
@@ -43,12 +43,12 @@ class LiteratureCollector:
 
     def collect(
         self,
-        gene: _filter_by_relevance,
+        gene: str,
         *,
-        synonyms: Optional[Sequence[_filter_by_relevance]] = None,
-        retmax: _filter_by_relevance = 100,
-        filter_irrelevant: collect = False,
-        min_relevance_score: _filter_by_relevance = 0.7,
+        synonyms: Optional[Sequence[str]] = None,
+        retmax: int = 100,
+        filter_irrelevant: bool = False,
+        min_relevance_score: float = 0.7,
     ) -> List[ArticleMetadata]:
         """Collect article metadata for the provided gene and optional synonyms.
 
@@ -88,9 +88,9 @@ class LiteratureCollector:
 
     def _filter_by_relevance(
         self,
-        gene: _filter_by_relevance,
+        gene: str,
         records: List[ArticleMetadata],
-        min_score: _filter_by_relevance,
+        min_score: float,
     ) -> List[ArticleMetadata]:
         """Filter papers by relevance score."""
 
