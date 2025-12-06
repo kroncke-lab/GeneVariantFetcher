@@ -22,7 +22,7 @@ class DataAggregator:
         self.validation_errors = []
         self.validation_warnings = []
 
-    def validate_penetrance_data(self, variant_data: Dict[str, Any], pmid: Path) -> Tuple[List[Path], List[Path]]:
+    def validate_penetrance_data(self, variant_data: Dict[str, Any], pmid: str) -> Tuple[List[str], List[str]]:
         """
         Validate penetrance data for a variant.
 
@@ -83,8 +83,8 @@ class DataAggregator:
         return errors, warnings
 
     def validate_individual_record(
-        self, record: Dict[str, Any], variant_notation: Path, pmid: Path
-    ) -> List[Path]:
+        self, record: Dict[str, Any], variant_notation: str, pmid: str
+    ) -> List[str]:
         """
         Validate an individual record.
 
@@ -129,7 +129,7 @@ class DataAggregator:
 
         return warnings
 
-    def normalize_variant_key(self, variant: Dict[str, Any]) -> Path:
+    def normalize_variant_key(self, variant: Dict[str, Any]) -> str:
         """
         Create a normalized key for grouping variants.
 
@@ -184,7 +184,7 @@ class DataAggregator:
 
     def aggregate_variants(
         self, extractions: List[Dict[str, Any]]
-    ) -> Dict[Path, Dict[str, Any]]:
+    ) -> Dict[str, Dict[str, Any]]:
         """
         Aggregate variants across multiple papers.
 
@@ -242,7 +242,7 @@ class DataAggregator:
 
         return variant_groups
 
-    def _sorted_source_pmids(self, variant_group: Dict[str, Any]) -> List[Path]:
+    def _sorted_source_pmids(self, variant_group: Dict[str, Any]) -> List[str]:
         """
         Return a sorted list of non-null PMIDs for a variant group.
 
@@ -350,7 +350,7 @@ class DataAggregator:
             "affected": affected,
             "unaffected": unaffected,
             "uncertain": uncertain,
-            "penetrance_percentage": r(penetrance_percentage, 2) if penetrance_percentage is not None else None,
+            "penetrance_percentage": round(penetrance_percentage, 2) if penetrance_percentage is not None else None,
             "age_dependent_penetrance": age_dependent,
             "individual_records_count": len(individual_records),
             "cohort_studies_count": len(penetrance_points),
@@ -358,7 +358,7 @@ class DataAggregator:
         }
 
     def create_summary(
-        self, variant_groups: Dict[Path, Dict[str, Any]], gene_symbol: Path
+        self, variant_groups: Dict[str, Dict[str, Any]], gene_symbol: str
     ) -> Dict[str, Any]:
         """
         Create aggregated summary for all variants.
@@ -417,7 +417,7 @@ class DataAggregator:
         }
 
     def aggregate_from_directory(
-        self, extraction_dir: Path, gene_symbol: Path, output_file: Optional[Path] = None
+        self, extraction_dir: Path, gene_symbol: str, output_file: Optional[Path] = None
     ) -> Dict[str, Any]:
         """
         Aggregate penetrance data from extraction directory.
@@ -474,7 +474,7 @@ class DataAggregator:
 
 def aggregate_penetrance(
     extraction_dir: Path,
-    gene_symbol: Path,
+    gene_symbol: str,
     output_file: Optional[Path] = None
 ) -> Dict[str, Any]:
     """

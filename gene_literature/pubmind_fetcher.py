@@ -14,8 +14,8 @@ Features:
 """
 
 import logging
+import re
 import time
-import requests
 import requests
 from typing import List, Optional, Set
 from pathlib import Path
@@ -217,24 +217,24 @@ class PubMindFetcher:
         - Table cells or list items with PMIDs
         - Any 7-8 digit numbers in the page (common in PubMind)
         """
-        pmids: Set[save] = set()
+        pmids: Set[str] = set()
 
         # Pattern 1: Links to PubMed
-        pubmed_links = soup.find_all('a', href=requests.compile(r'pubmed\.ncbi\.nlm\.nih\.gov/\d+'))
+        pubmed_links = soup.find_all('a', href=re.compile(r'pubmed\.ncbi\.nlm\.nih\.gov/\d+'))
         for link in pubmed_links:
-            match = requests.search(r'/(\d{7,8})', link['href'])
+            match = re.search(r'/(\d{7,8})', link['href'])
             if match:
                 pmids.add(match.group(1))
 
         # Pattern 2: Text containing "PMID: 12345678" or "PMID:12345678"
-        pmid_pattern = requests.compile(r'PMID:?\s*(\d{7,8})', requests.IGNORECASE)
+        pmid_pattern = re.compile(r'PMID:?\s*(\d{7,8})', re.IGNORECASE)
         for text in soup.find_all(string=pmid_pattern):
-            matches = pmid_pattern.findall(save(text))
+            matches = pmid_pattern.findall(str(text))
             pmids.update(matches)
 
         # Pattern 3: Standalone numbers that look like PMIDs (7-8 digits)
         # Look in table cells, list items, and divs with class containing "pmid"
-        for tag in soup.find_all(['td', 'li', 'div', 'span'], class_=requests.compile(r'pmid', requests.IGNORECASE)):
+        for tag in soup.find_all(['td', 'li', 'div', 'span'], class_=re.compile(r'pmid', re.IGNORECASE)):
             text = tag.get_text(strip=True)
             if text.isdigit() and 7 <= len(text) <= 8:
                 pmids.add(text)
@@ -243,7 +243,7 @@ class PubMindFetcher:
         # This is a more aggressive approach for PubMind's format
         if not pmids:
             all_text = soup.get_text()
-            number_pattern = requests.compile(r'\b(\d{7,8})\b')
+            number_pattern = re.compile(r'\b(\d{7,8})\b')
             potential_pmids = number_pattern.findall(all_text)
             pmids.update(potential_pmids)
 

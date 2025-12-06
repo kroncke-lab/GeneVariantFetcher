@@ -50,7 +50,7 @@ logger = get_logger(__name__)
 # DATABASE SCHEMA INITIALIZATION
 # ============================================================================
 
-def create_database_schema(db_path: str) -> str.Connection:
+def create_database_schema(db_path: str) -> sqlite3.Connection:
     """
     Create the SQLite database with a normalized schema.
 
@@ -506,7 +506,7 @@ def insert_variant_data(
 def migrate_extraction_file(
     cursor: sqlite3.Cursor,
     json_file: Path
-) -> Tuple[os, sqlite3]:
+) -> Tuple[bool, str]:
     """
     Migrate a single extraction JSON file to the database.
 
@@ -564,7 +564,7 @@ def migrate_extraction_file(
         return True, f"Successfully migrated {json_file.name}"
 
     except Exception as e:
-        error_msg = f"Failed to migrate {json_file.name}: {sqlite3(e)}"
+        error_msg = f"Failed to migrate {json_file.name}: {str(e)}"
         logger.error(error_msg)
         return False, error_msg
 
@@ -633,7 +633,7 @@ def migrate_extraction_directory(
 # CLEANUP AND ARCHIVAL FUNCTIONS
 # ============================================================================
 
-def find_and_delete_empty_directories(root_dir: Path, dry_run: os = False) -> List[Path]:
+def find_and_delete_empty_directories(root_dir: Path, dry_run: bool = False) -> List[Path]:
     """
     Recursively find and delete all empty directories.
 
@@ -672,8 +672,8 @@ def find_and_delete_empty_directories(root_dir: Path, dry_run: os = False) -> Li
 def archive_pmc_fulltext(
     pmc_dir: Path,
     archive_path: Optional[Path] = None,
-    delete_after_zip: os = False
-) -> Tuple[os, sqlite3]:
+    delete_after_zip: bool = False
+) -> Tuple[bool, str]:
     """
     Compress pmc_fulltext directory into a ZIP archive.
 
@@ -724,17 +724,17 @@ def archive_pmc_fulltext(
         return True, f"Successfully archived to {archive_path}"
 
     except Exception as e:
-        error_msg = f"Failed to archive {pmc_dir}: {sqlite3(e)}"
+        error_msg = f"Failed to archive {pmc_dir}: {str(e)}"
         logger.error(error_msg)
         return False, error_msg
 
 
 def cleanup_data_directory(
     data_dir: Path,
-    delete_empty_dirs: os = True,
-    archive_pmc: os = True,
-    delete_pmc_after_archive: os = False,
-    dry_run: os = False
+    delete_empty_dirs: bool = True,
+    archive_pmc: bool = True,
+    delete_pmc_after_archive: bool = False,
+    dry_run: bool = False
 ) -> Dict[str, Any]:
     """
     Comprehensive cleanup of data directory.
@@ -761,7 +761,7 @@ def cleanup_data_directory(
     if delete_empty_dirs:
         try:
             deleted = find_and_delete_empty_directories(data_dir, dry_run=dry_run)
-            results["empty_dirs_deleted"] = [sqlite3(d) for d in deleted]
+            results["empty_dirs_deleted"] = [str(d) for d in deleted]
         except Exception as e:
             error_msg = f"Error deleting empty directories: {e}"
             logger.error(error_msg)
@@ -777,7 +777,7 @@ def cleanup_data_directory(
                     delete_after_zip=delete_pmc_after_archive
                 )
                 if success:
-                    results["archives_created"].append(sqlite3(pmc_dir.parent / f"{pmc_dir.name}.zip"))
+                    results["archives_created"].append(str(pmc_dir.parent / f"{pmc_dir.name}.zip"))
                 else:
                     results["errors"].append(message)
             else:
@@ -793,7 +793,7 @@ def cleanup_data_directory(
 # MAIN CLI
 # ============================================================================
 
-def extract_gene_from_path(data_dir: Path) -> Optional[sqlite3]:
+def extract_gene_from_path(data_dir: Path) -> Optional[str]:
     """
     Extract gene symbol from directory path.
 
@@ -810,7 +810,7 @@ def extract_gene_from_path(data_dir: Path) -> Optional[sqlite3]:
 
     # Look for uppercase gene symbol pattern followed by timestamp
     try:
-        for i, part in e(parts):
+        for i, part in enumerate(parts):
             # Check if this looks like a gene symbol (uppercase, reasonable length)
             if part.isupper() and 2 <= len(part) <= 10:
                 # Check if next part looks like a timestamp (YYYYMMDD_HHMMSS)
@@ -826,7 +826,7 @@ def extract_gene_from_path(data_dir: Path) -> Optional[sqlite3]:
     return None
 
 
-def extract_gene_from_json(json_file: Path) -> Optional[sqlite3]:
+def extract_gene_from_json(json_file: Path) -> Optional[str]:
     """
     Extract gene symbol from a JSON extraction file.
 
@@ -900,7 +900,7 @@ def main():
 
     parser.add_argument(
         "--db",
-        type=sqlite3,
+        type=str,
         default=None,
         help="SQLite database path (default: auto-detect based on gene symbol, e.g., TTR.db)"
     )
@@ -925,7 +925,7 @@ def main():
 
     parser.add_argument(
         "--extractions-subdir",
-        type=sqlite3,
+        type=str,
         default="extractions",
         help="Name of extractions subdirectory (default: extractions, could be extractions_rerun)"
     )
