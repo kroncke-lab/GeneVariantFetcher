@@ -336,6 +336,68 @@ class SynonymFinder:
         raise SynonymFinderError("Request failed")
 
 
+def automatic_synonym_selection(
+    gene: str,
+    synonyms: List[GeneSynonym],
+    include_official: bool = True,
+    include_aliases: bool = True,
+    include_other_designations: bool = False,
+    only_relevant: bool = True,
+    min_confidence: float = 0.7,
+) -> List[str]:
+    """
+    Automatically select synonyms for batch/non-interactive mode.
+
+    Args:
+        gene: Original gene name
+        synonyms: List of found synonyms
+        include_official: Include official gene symbols
+        include_aliases: Include gene aliases
+        include_other_designations: Include verbose other designations
+        only_relevant: Only include LLM-assessed relevant synonyms (if available)
+        min_confidence: Minimum confidence threshold for relevance
+
+    Returns:
+        List of selected synonym terms
+    """
+    if not synonyms:
+        logger.info("No synonyms found for '%s'", gene)
+        return []
+
+    selected: Set[str] = set()
+    has_relevance_info = any(s.is_relevant is not None for s in synonyms)
+
+    for syn in synonyms:
+        # Skip if relevance filtering is enabled and synonym is not relevant
+        if only_relevant and has_relevance_info:
+            if syn.is_relevant is False:
+                continue
+            if syn.relevance_confidence is not None and syn.relevance_confidence < min_confidence:
+                continue
+
+        # Filter by source type
+        if syn.source == "official_symbol" and include_official:
+            selected.add(syn.term)
+        elif syn.source == "alias" and include_aliases:
+            selected.add(syn.term)
+        elif syn.source == "other_designation" and include_other_designations:
+            selected.add(syn.term)
+
+    # Remove the primary gene if it's in the list (avoid duplication)
+    selected.discard(gene)
+    selected.discard(gene.upper())
+    selected.discard(gene.lower())
+
+    result = sorted(selected)
+    logger.info(
+        "Automatically selected %d synonyms for '%s': %s",
+        len(result),
+        gene,
+        ", ".join(result) if result else "(none)",
+    )
+    return result
+
+
 def interactive_synonym_selection(
     gene: str,
     synonyms: List[GeneSynonym],

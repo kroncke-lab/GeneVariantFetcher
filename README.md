@@ -45,12 +45,34 @@ Options:
   --max-pmids N       Limit PMIDs to discover (default: 100)
   --max-downloads N   Limit papers to download (default: 50)
   --tier-threshold N  Model cascade threshold (default: 1)
+  --auto-synonyms     Automatically discover gene synonyms from NCBI Gene database
+  --synonym SYN       Manually specify gene synonym (can be used multiple times)
   --verbose           Enable verbose logging
 
 PMID sources:
   • PubMind-only: set PUBMIND_ONLY=true or USE_PUBMED=false (skips PubMed keyword search)
   • PubMind + PubMed (default): leave both unset, or set USE_PUBMED=true
 ```
+
+## Gene Synonym Discovery
+
+The workflow can automatically discover gene synonyms from the NCBI Gene database to improve literature coverage:
+
+```bash
+# Automatic synonym discovery
+python automated_workflow.py TTR --email your@email.com --output ./results --auto-synonyms
+
+# Manual synonym specification
+python automated_workflow.py TTR --email your@email.com --output ./results --synonym PALB --synonym prealbumin
+
+# Combine both approaches
+python automated_workflow.py TTR --email your@email.com --output ./results --auto-synonyms --synonym "transthyretin amyloidosis"
+```
+
+When `--auto-synonyms` is enabled, the workflow:
+1. Queries NCBI Gene database for official gene symbols and aliases
+2. Automatically selects relevant synonyms (official symbols + aliases)
+3. Expands PubMed queries to include synonyms for better recall
 
 ## Output
 
