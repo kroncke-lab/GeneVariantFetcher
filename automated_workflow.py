@@ -39,6 +39,8 @@ def automated_variant_extraction_workflow(
     max_papers_to_download: int = 50,
     tier_threshold: int = 1,
     use_clinical_triage: bool = False,
+    auto_synonyms: bool = False,
+    synonyms: list[str] | None = None,
 ):
     """
     Complete automated workflow from gene symbol to extracted variant data.
@@ -51,6 +53,8 @@ def automated_variant_extraction_workflow(
         max_papers_to_download: Maximum papers to download full-text (integer)
         tier_threshold: If the first model finds fewer variants than this, the next model is tried (integer).
         use_clinical_triage: Use ClinicalDataTriageFilter for Tier 2 instead of InternFilter.
+        auto_synonyms: Automatically discover and use gene synonyms from NCBI Gene database.
+        synonyms: List of manually specified gene synonyms to include in searches.
     """
     from gene_literature.discovery import discover_pmids_for_gene
     from harvesting import PMCHarvester
@@ -64,6 +68,55 @@ def automated_variant_extraction_workflow(
     logger.info("="*80)
     logger.info(f"AUTOMATED WORKFLOW FOR GENE: {gene_symbol}")
     logger.info("="*80)
+
+    # ============================================================================
+    # STEP 0: Discover Gene Synonyms (if enabled)
+    # ============================================================================
+    all_synonyms: list[str] = list(synonyms) if synonyms else []
+
+    if auto_synonyms:
+        logger.info("\n🔍 STEP 0: Discovering gene synonyms from NCBI Gene database...")
+
+        from gene_literature.synonym_finder import SynonymFinder, automatic_synonym_selection
+
+        synonym_finder = SynonymFinder(
+            email=email,
+            api_key=os.getenv("NCBI_API_KEY"),
+        )
+
+        try:
+            found_synonyms = synonym_finder.find_gene_synonyms(
+                gene_symbol,
+                include_other_designations=False,  # Skip verbose designations
+            )
+
+            # Use automatic selection for batch mode
+            auto_selected = automatic_synonym_selection(
+                gene_symbol,
+                found_synonyms,
+                include_official=True,
+                include_aliases=True,
+                include_other_designations=False,
+                only_relevant=False,  # No LLM checking in automated mode
+            )
+
+            # Merge with manually provided synonyms (avoid duplicates)
+            existing_set = set(s.lower() for s in all_synonyms)
+            for syn in auto_selected:
+                if syn.lower() not in existing_set and syn.lower() != gene_symbol.lower():
+                    all_synonyms.append(syn)
+                    existing_set.add(syn.lower())
+
+            logger.info("✓ Discovered %d gene synonyms", len(auto_selected))
+            if all_synonyms:
+                logger.info("✓ Total synonyms to use: %s", ", ".join(all_synonyms))
+
+        except Exception as e:
+            logger.warning("Failed to discover synonyms: %s", e)
+            logger.warning("Continuing without synonym expansion")
+
+    elif all_synonyms:
+        logger.info("\n🔍 Using %d manually specified synonyms: %s", len(all_synonyms), ", ".join(all_synonyms))
 
     # ============================================================================
     # STEP 1: Fetch PMIDs from PubMind, PubMed, and Europe PMC
@@ -95,6 +148,7 @@ def automated_variant_extraction_workflow(
         combined_output=combined_pmids_file,
         api_key=os.getenv("NCBI_API_KEY"),
         settings=settings,
+        synonyms=all_synonyms if all_synonyms else None,
     )
     pmids = pmid_discovery.combined_pmids
 
@@ -516,6 +570,10 @@ Examples:
                        help="If the first model finds fewer variants than this, the next model is tried (default: from .env TIER3_THRESHOLD or 1). Set to 0 to only use first model.")
     parser.add_argument("--clinical-triage", action="store_true",
                        help="Use ClinicalDataTriageFilter for Tier 2 filtering instead of InternFilter")
+    parser.add_argument("--auto-synonyms", action="store_true",
+                       help="Automatically discover and use gene synonyms from NCBI Gene database")
+    parser.add_argument("--synonym", action="append", dest="synonyms", default=None,
+                       help="Manually specify gene synonym (can be used multiple times)")
     parser.add_argument("--verbose", "-v", action="store_true",
                        help="Enable verbose logging")
 
@@ -548,6 +606,8 @@ Examples:
             max_papers_to_download=args.max_downloads,
             tier_threshold=tier_threshold,
             use_clinical_triage=args.clinical_triage,
+            auto_synonyms=args.auto_synonyms,
+            synonyms=args.synonyms,
         )
 
         # Exit with success code
