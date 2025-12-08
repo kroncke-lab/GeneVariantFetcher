@@ -17,13 +17,18 @@ import logging
 import re
 import time
 import requests
-from typing import List, Optional, Set
+from typing import List, Optional, Set, Tuple
 from pathlib import Path
 
 from bs4 import BeautifulSoup
 from Bio import Entrez
 
 logger = logging.getLogger(__name__)
+
+# Retry configuration for transient errors
+MAX_RETRIES = 3
+INITIAL_BACKOFF_SECONDS = 2.0
+RETRYABLE_STATUS_CODES = {500, 502, 503, 504}  # Server errors that may be transient
 
 
 class PubMindFetcher:
@@ -58,6 +63,78 @@ class PubMindFetcher:
             'Accept-Encoding': 'gzip, deflate',
             'Connection': 'keep-alive',
         })
+
+    def _request_with_retry(
+        self,
+        url: str,
+        params: dict,
+        timeout: int = 30
+    ) -> Tuple[Optional[requests.Response], Optional[str]]:
+        """
+        Make a GET request with exponential backoff retry for transient errors.
+
+        Args:
+            url: URL to request
+            params: Query parameters
+            timeout: Request timeout in seconds
+
+        Returns:
+            Tuple of (response, error_message). If successful, error_message is None.
+            If failed, response is None and error_message describes the failure.
+        """
+        last_error = None
+
+        for attempt in range(MAX_RETRIES + 1):
+            try:
+                response = self.session.get(url, params=params, timeout=timeout)
+
+                # Check for permanent failures (don't retry)
+                if response.status_code == 403:
+                    return None, "Access denied (403). PubMind may require authentication or be blocking automated access."
+
+                if response.status_code == 404:
+                    return None, "Resource not found (404). The PubMind search endpoint may have changed."
+
+                # Check for retryable server errors
+                if response.status_code in RETRYABLE_STATUS_CODES:
+                    if attempt < MAX_RETRIES:
+                        backoff = INITIAL_BACKOFF_SECONDS * (2 ** attempt)
+                        logger.warning(
+                            f"PubMind returned {response.status_code}, retrying in {backoff:.1f}s "
+                            f"(attempt {attempt + 1}/{MAX_RETRIES + 1})"
+                        )
+                        time.sleep(backoff)
+                        continue
+                    else:
+                        return None, (
+                            f"PubMind server error ({response.status_code}) persisted after {MAX_RETRIES + 1} attempts. "
+                            "The service may be temporarily unavailable."
+                        )
+
+                # Success
+                response.raise_for_status()
+                return response, None
+
+            except requests.exceptions.Timeout:
+                last_error = "Request timed out"
+                if attempt < MAX_RETRIES:
+                    backoff = INITIAL_BACKOFF_SECONDS * (2 ** attempt)
+                    logger.warning(f"Request timed out, retrying in {backoff:.1f}s (attempt {attempt + 1}/{MAX_RETRIES + 1})")
+                    time.sleep(backoff)
+                    continue
+
+            except requests.exceptions.ConnectionError as e:
+                last_error = f"Connection error: {e}"
+                if attempt < MAX_RETRIES:
+                    backoff = INITIAL_BACKOFF_SECONDS * (2 ** attempt)
+                    logger.warning(f"Connection error, retrying in {backoff:.1f}s (attempt {attempt + 1}/{MAX_RETRIES + 1})")
+                    time.sleep(backoff)
+                    continue
+
+            except requests.exceptions.RequestException as e:
+                return None, f"Request failed: {e}"
+
+        return None, f"{last_error} after {MAX_RETRIES + 1} attempts"
 
     def fetch_pmids_for_gene(
         self,
@@ -120,26 +197,22 @@ class PubMindFetcher:
 
         This attempts to scrape the PubMind web interface. If the site structure
         changes or access is restricted, this will fail gracefully.
+
+        Includes retry logic with exponential backoff for transient server errors.
         """
+        search_params = {
+            'query': gene_symbol,
+            'field': 'gene',
+            'operator': 'OR'
+        }
+
+        response, error = self._request_with_retry(self.PUBMIND_SEARCH_URL, search_params)
+
+        if error:
+            logger.warning(f"Failed to access PubMind for gene {gene_symbol}: {error}")
+            return []
+
         try:
-            # Try to access the search page
-            search_params = {
-                'query': gene_symbol,
-                'field': 'gene',
-                'operator': 'OR'
-            }
-
-            response = self.session.get(
-                self.PUBMIND_SEARCH_URL,
-                params=search_params,
-                timeout=30
-            )
-
-            if response.status_code == 403:
-                logger.warning("PubMind access denied (403). Site may require authentication.")
-                return []
-
-            response.raise_for_status()
             time.sleep(delay)  # Respectful scraping
 
             # Parse HTML to extract PMIDs
@@ -153,11 +226,8 @@ class PubMindFetcher:
 
             return pmids
 
-        except requests.exceptions.RequestException as e:
-            logger.warning(f"Failed to access PubMind: {e}")
-            return []
         except Exception as e:
-            logger.error(f"Error scraping PubMind: {e}")
+            logger.error(f"Error parsing PubMind response: {e}")
             return []
 
     def _fetch_from_pubmind_variant(
@@ -169,27 +239,24 @@ class PubMindFetcher:
     ) -> List[str]:
         """
         Fetch PMIDs from PubMind for a specific variant.
+
+        Includes retry logic with exponential backoff for transient server errors.
         """
+        search_params = {
+            'query': variant,
+            'field': 'variant',
+            'operator': 'OR'
+        }
+        if gene_symbol:
+            search_params['query'] = f"{gene_symbol} {variant}"
+
+        response, error = self._request_with_retry(self.PUBMIND_SEARCH_URL, search_params)
+
+        if error:
+            logger.warning(f"Failed to access PubMind for variant {variant}: {error}")
+            return []
+
         try:
-            search_params = {
-                'query': variant,
-                'field': 'variant',
-                'operator': 'OR'
-            }
-            if gene_symbol:
-                search_params['query'] = f"{gene_symbol} {variant}"
-
-            response = self.session.get(
-                self.PUBMIND_SEARCH_URL,
-                params=search_params,
-                timeout=30
-            )
-
-            if response.status_code == 403:
-                logger.warning("PubMind access denied (403)")
-                return []
-
-            response.raise_for_status()
             time.sleep(delay)
 
             soup = BeautifulSoup(response.text, 'html.parser')
@@ -200,11 +267,8 @@ class PubMindFetcher:
 
             return pmids
 
-        except requests.exceptions.RequestException as e:
-            logger.warning(f"Failed to access PubMind: {e}")
-            return []
         except Exception as e:
-            logger.error(f"Error scraping PubMind: {e}")
+            logger.error(f"Error parsing PubMind response: {e}")
             return []
 
     def _extract_pmids_from_html(self, soup: BeautifulSoup) -> List[str]:
