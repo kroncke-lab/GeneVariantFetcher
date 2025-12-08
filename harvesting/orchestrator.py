@@ -175,9 +175,50 @@ class PMCHarvester:
             response = self.session.get(url, timeout=60, stream=True)
             response.raise_for_status()
 
+            # Collect content to validate before writing
+            content_chunks = []
+            for chunk in response.iter_content(chunk_size=8192):
+                content_chunks.append(chunk)
+
+            content = b''.join(content_chunks)
+
+            # Validate the downloaded content
+            ext = output_path.suffix.lower()
+
+            # Check for HTML error pages disguised as other file types
+            # HTML pages typically start with <!DOCTYPE, <html, or have these early in the content
+            content_start = content[:1024].lower() if len(content) >= 1024 else content.lower()
+            is_html_page = (
+                content_start.startswith(b'<!doctype') or
+                content_start.startswith(b'<html') or
+                b'<!doctype html' in content_start or
+                b'<html' in content_start[:500]
+            )
+
+            # PDF validation: PDFs should start with %PDF
+            if ext == '.pdf':
+                if not content.startswith(b'%PDF'):
+                    if is_html_page:
+                        print(f"    Warning: {filename} is an HTML page, not a PDF (likely access denied or error page)")
+                    else:
+                        print(f"    Warning: {filename} does not appear to be a valid PDF file")
+                    with open(self.paywalled_log, 'a', newline='') as f:
+                        writer = csv.writer(f)
+                        writer.writerow([pmid, f'Invalid PDF content (not a real PDF): {filename}', url])
+                    return False
+
+            # For other file types, check if we got an HTML error page
+            elif ext in ['.docx', '.xlsx', '.xls', '.doc', '.zip']:
+                if is_html_page:
+                    print(f"    Warning: {filename} appears to be an HTML page, not a {ext} file")
+                    with open(self.paywalled_log, 'a', newline='') as f:
+                        writer = csv.writer(f)
+                        writer.writerow([pmid, f'Invalid {ext} content (HTML error page): {filename}', url])
+                    return False
+
+            # Write the validated content
             with open(output_path, 'wb') as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
+                f.write(content)
 
             return True
         except Exception as e:

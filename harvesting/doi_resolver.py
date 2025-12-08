@@ -7,7 +7,7 @@ Also handles full-text retrieval from free articles without PMCIDs.
 """
 
 import csv
-import requests
+import re
 import requests
 from typing import List, Dict, Optional, Tuple
 from urllib.parse import urlparse
@@ -85,7 +85,7 @@ class DOIResolver:
                 try:
                     # Try to extract PII from URL and construct ScienceDirect URL
                     # linkinghub URLs often have format: /retrieve/pii/S1547527109005682
-                    pii_match = requests.search(r'/pii/([^/?]+)', final_url)
+                    pii_match = re.search(r'/pii/([^/?]+)', final_url)
                     if pii_match:
                         pii = pii_match.group(1)
                         sciencedirect_url = f"https://www.sciencedirect.com/science/article/pii/{pii}"
