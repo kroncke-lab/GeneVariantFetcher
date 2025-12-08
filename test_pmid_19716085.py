@@ -10,13 +10,15 @@ This script tests:
 import sys
 import os
 import json
+from pathlib import Path
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from harvesting import PMCHarvester
+from harvesting.pmc_supp_harvest import PMCSupplementClient
 from pipeline.filters import ClinicalDataTriageFilter
 from pipeline.extraction import ExpertExtractor
 from utils.models import Paper
-from pathlib import Path
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -83,6 +85,26 @@ def main():
     print("\n" + "=" * 60)
     print("STEP 1: HARVESTING FULL-TEXT AND SUPPLEMENTS")
     print("=" * 60)
+
+    supplement_client = PMCSupplementClient()
+    try:
+        pmcid = supplement_client.pmid_to_pmcid(pmid)
+        print(f"Resolved PMID {pmid} to PMCID {pmcid}")
+    except ValueError as exc:
+        print(f"\n✗ Failed to resolve PMCID for PMID {pmid}: {exc}")
+        return
+
+    supp_output_dir = output_dir / f"{pmid}_supplements_api"
+    print(f"\nAttempting BioC/JATS supplement harvest to: {supp_output_dir}")
+    supplements = supplement_client.get_all_supplement_text(pmcid, supp_output_dir)
+    extracted_count = sum(1 for s in supplements if s.text)
+    print(
+        f"✓ Retrieved {len(supplements)} supplements via API pipeline; "
+        f"{extracted_count} with extractable text"
+    )
+    for supp in supplements:
+        label = supp.label or f"Supplement {supp.index}"
+        print(f"  - {label}: {supp.filename or supp.href} (source={supp.source})")
 
     harvester = PMCHarvester(output_dir=str(output_dir))
     success, result = harvester.process_pmid(pmid)
