@@ -10,6 +10,7 @@ from typing import Optional
 import xml.etree.ElementTree as ET
 import pandas as pd
 from bs4 import BeautifulSoup
+import re
 
 try:
     from markitdown import MarkItDown
@@ -296,6 +297,25 @@ class FormatConverter:
             pass  # LibreOffice not installed
         except Exception as e:
             print(f"    Warning: LibreOffice fallback failed for {file_path.name}: {e}")
+
+        # Lightweight heuristic extraction directly from the binary when no
+        # conversion tools are available. Many legacy .doc files store
+        # human-readable text alongside formatting bytes; decoding and
+        # filtering printable ranges often recovers table contents well enough
+        # for downstream parsing.
+        try:
+            raw_bytes = file_path.read_bytes()
+            # Decode with a permissive codec, then drop non-printable noise
+            decoded = raw_bytes.decode("latin-1", errors="ignore")
+            cleaned = re.sub(r"[^\x09\x0A\x0D\x20-\x7E]", "\n", decoded)
+            # Collapse excessive whitespace/newlines while preserving row-ish
+            # structure so tables remain legible to the extractor.
+            normalized_lines = [line.strip() for line in cleaned.splitlines() if line.strip()]
+            merged = "\n".join(normalized_lines)
+            if len(merged) > 200:
+                return merged + "\n\n"
+        except Exception as e:
+            print(f"    Warning: heuristic .doc extraction failed for {file_path.name}: {e}")
 
         # Final fallback - indicate manual review needed
         return f"[Legacy .doc file available at: {file_path.name} - text extraction failed, manual review required]\n\n"
