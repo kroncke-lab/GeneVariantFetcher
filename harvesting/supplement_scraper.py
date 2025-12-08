@@ -233,8 +233,23 @@ class SupplementScraper:
                     url = self._normalize_pmc_url(url, base_url)
                     filename = Path(urlparse(url).path).name
 
+                    # Skip invalid filenames
+                    if not filename:
+                        continue
+
+                    # Skip entries that look like PMCIDs (e.g., "PMC3049907")
+                    if re.match(r'^PMC\d+$', filename, re.IGNORECASE):
+                        continue
+
+                    # Skip entries that don't have a file extension and aren't actual files
+                    has_extension = any(filename.lower().endswith(ext) for ext in file_extensions)
+                    if not has_extension and is_supplement_link:
+                        # Only skip non-extension links if they also look like IDs
+                        if re.match(r'^[A-Z]+\d+$', filename, re.IGNORECASE):
+                            continue
+
                     # Basic filtering to avoid irrelevant links
-                    if filename and not any(f['name'] == filename for f in found_files):
+                    if not any(f['name'] == filename for f in found_files):
                         found_files.append({'url': url, 'name': filename})
                         print(f"    Found potential supplement: {filename}")
                 except Exception:

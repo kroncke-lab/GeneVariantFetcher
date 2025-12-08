@@ -142,12 +142,61 @@ class FormatConverter:
         Returns:
             Markdown formatted text or placeholder
         """
+        # First verify the file is a valid PDF
+        try:
+            with open(file_path, 'rb') as f:
+                header = f.read(8)
+                if not header.startswith(b'%PDF'):
+                    print(f"    Warning: {file_path.name} is not a valid PDF file")
+                    return f"[Invalid PDF file: {file_path.name}]\n\n"
+        except Exception as e:
+            print(f"    Error reading PDF header {file_path}: {e}")
+            return f"[Error reading PDF file: {file_path.name}]\n\n"
+
+        # Try markitdown first
         if self.markitdown:
             try:
                 result = self.markitdown.convert(str(file_path))
-                return result.text_content
+                if result and result.text_content:
+                    return result.text_content
+            except NameError as e:
+                # Handle internal markitdown errors like 'excel_to_markdown' not defined
+                print(f"    Warning: markitdown internal error for {file_path.name}: {e}")
             except Exception as e:
-                print(f"    Error converting PDF with markitdown {file_path}: {e}")
-                return f"[PDF file available at: {file_path.name}]\n\n"
-        else:
-            return f"[PDF file available at: {file_path.name}]\n\n"
+                print(f"    Warning: markitdown failed for {file_path.name}: {e}")
+
+        # Try PyMuPDF (fitz) as fallback if available
+        try:
+            import fitz  # PyMuPDF
+            doc = fitz.open(str(file_path))
+            text_content = []
+            for page_num, page in enumerate(doc, 1):
+                text = page.get_text()
+                if text.strip():
+                    text_content.append(f"### Page {page_num}\n\n{text.strip()}")
+            doc.close()
+            if text_content:
+                return "\n\n".join(text_content) + "\n\n"
+        except ImportError:
+            pass  # PyMuPDF not installed
+        except Exception as e:
+            print(f"    Warning: PyMuPDF fallback failed for {file_path.name}: {e}")
+
+        # Try pdfplumber as another fallback
+        try:
+            import pdfplumber
+            text_content = []
+            with pdfplumber.open(str(file_path)) as pdf:
+                for page_num, page in enumerate(pdf.pages, 1):
+                    text = page.extract_text()
+                    if text and text.strip():
+                        text_content.append(f"### Page {page_num}\n\n{text.strip()}")
+            if text_content:
+                return "\n\n".join(text_content) + "\n\n"
+        except ImportError:
+            pass  # pdfplumber not installed
+        except Exception as e:
+            print(f"    Warning: pdfplumber fallback failed for {file_path.name}: {e}")
+
+        # Final fallback - just indicate the file exists
+        return f"[PDF file available at: {file_path.name} - text extraction failed, manual review required]\n\n"
