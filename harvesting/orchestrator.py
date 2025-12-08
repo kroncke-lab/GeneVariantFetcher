@@ -78,27 +78,36 @@ class PMCHarvester:
             doi: Digital Object Identifier (for fallback scraping)
 
         Returns:
-            List of supplement file dictionaries with 'url' and 'name' keys
+            List of supplement file dictionaries with 'url' and 'name' keys,
+            plus 'base_url' and 'original_url' for PMC supplements
         """
+        pmc_base_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/" if pmcid else None
+
         # 1. First, try the EuropePMC API
         api_url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/supplementaryFiles"
         try:
             response = self.session.get(api_url, timeout=30)
             response.raise_for_status()
-            
+
             # Check if response body is not empty
             if not response.text.strip():
                 raise ValueError("Empty response from API")
-            
+
             content_type = response.headers.get('Content-Type', '').lower()
-            
+
             # Try to parse as JSON first
             if 'application/json' in content_type:
                 data = response.json()
                 # The API can return a success response with an empty list of files
                 if data.get('result', {}).get('supplementaryFiles'):
                     print("  ✓ Found supplemental files via EuropePMC API (JSON)")
-                    return data['result']['supplementaryFiles']
+                    supp_files = data['result']['supplementaryFiles']
+                    # Add PMC base_url to enable URL variant generation
+                    if pmc_base_url:
+                        for f in supp_files:
+                            f['base_url'] = pmc_base_url
+                            f['original_url'] = f.get('url', '')
+                    return supp_files
             # Try to parse as XML if JSON fails
             elif 'application/xml' in content_type or 'text/xml' in content_type:
                 try:
@@ -112,7 +121,11 @@ class PMCHarvester:
                             url = elem.get('url') or elem.get('href') or elem.text
                             name = elem.get('name') or elem.get('title') or elem.get('filename')
                             if url and name:
-                                supp_files.append({'url': url, 'name': name})
+                                file_info = {'url': url, 'name': name}
+                                if pmc_base_url:
+                                    file_info['base_url'] = pmc_base_url
+                                    file_info['original_url'] = url
+                                supp_files.append(file_info)
                     if supp_files:
                         print(f"  ✓ Found {len(supp_files)} supplemental files via EuropePMC API (XML)")
                         return supp_files
@@ -134,11 +147,14 @@ class PMCHarvester:
             try:
                 pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
                 print(f"  - Trying to scrape PMC page directly: {pmc_url}")
-                pmc_response = self.session.get(pmc_url, timeout=30)
+                pmc_response = self.session.get(pmc_url, timeout=30, allow_redirects=True)
                 pmc_response.raise_for_status()
-                
+
+                # Use the final URL after redirects as the base URL
+                final_pmc_url = pmc_response.url
+
                 # Use generic scraper for PMC pages
-                pmc_files = self.scraper.scrape_generic_supplements(pmc_response.text, pmc_url)
+                pmc_files = self.scraper.scrape_generic_supplements(pmc_response.text, final_pmc_url)
                 if pmc_files:
                     print(f"  ✓ Found {len(pmc_files)} supplemental files via PMC page scraping")
                     return pmc_files
@@ -157,77 +173,93 @@ class PMCHarvester:
                 writer.writerow([pmid, 'Supplemental files API failed, no DOI', pmc_url])
             return []
 
-    def download_supplement(self, url: str, output_path: Path, pmid: str, filename: str) -> bool:
+    def download_supplement(self, url: str, output_path: Path, pmid: str, filename: str,
+                            base_url: str = None, original_url: str = None) -> bool:
         """
-        Download a supplemental file.
+        Download a supplemental file, trying multiple URL variants for PMC supplements.
 
         Args:
             url: URL of the supplement file
             output_path: Path to save the file
             pmid: PubMed ID (for logging)
             filename: Name of the file (for logging)
+            base_url: Base URL of the article page (for PMC URL variant generation)
+            original_url: Original URL before normalization (for PMC URL variant generation)
 
         Returns:
             True if download succeeded, False otherwise
         """
-        try:
-            # Use the session to download, which includes our headers
-            response = self.session.get(url, timeout=60, stream=True)
-            response.raise_for_status()
+        # Generate URL variants for PMC supplements
+        urls_to_try = [url]
+        if base_url and ('ncbi.nlm.nih.gov/pmc/' in base_url or 'pmc.ncbi.nlm.nih.gov/' in base_url):
+            # Use the scraper's method to generate URL variants
+            source_url = original_url if original_url else url
+            variants = self.scraper.get_pmc_supplement_url_variants(source_url, base_url)
+            # Put primary URL first, then add unique variants
+            urls_to_try = [url] + [v for v in variants if v != url]
 
-            # Collect content to validate before writing
-            content_chunks = []
-            for chunk in response.iter_content(chunk_size=8192):
-                content_chunks.append(chunk)
+        last_error = None
+        for try_url in urls_to_try:
+            try:
+                # Use the session to download, which includes our headers
+                response = self.session.get(try_url, timeout=60, stream=True, allow_redirects=True)
+                response.raise_for_status()
 
-            content = b''.join(content_chunks)
+                # Collect content to validate before writing
+                content_chunks = []
+                for chunk in response.iter_content(chunk_size=8192):
+                    content_chunks.append(chunk)
 
-            # Validate the downloaded content
-            ext = output_path.suffix.lower()
+                content = b''.join(content_chunks)
 
-            # Check for HTML error pages disguised as other file types
-            # HTML pages typically start with <!DOCTYPE, <html, or have these early in the content
-            content_start = content[:1024].lower() if len(content) >= 1024 else content.lower()
-            is_html_page = (
-                content_start.startswith(b'<!doctype') or
-                content_start.startswith(b'<html') or
-                b'<!doctype html' in content_start or
-                b'<html' in content_start[:500]
-            )
+                # Validate the downloaded content
+                ext = output_path.suffix.lower()
 
-            # PDF validation: PDFs should start with %PDF
-            if ext == '.pdf':
-                if not content.startswith(b'%PDF'):
+                # Check for HTML error pages disguised as other file types
+                # HTML pages typically start with <!DOCTYPE, <html, or have these early in the content
+                content_start = content[:1024].lower() if len(content) >= 1024 else content.lower()
+                is_html_page = (
+                    content_start.startswith(b'<!doctype') or
+                    content_start.startswith(b'<html') or
+                    b'<!doctype html' in content_start or
+                    b'<html' in content_start[:500]
+                )
+
+                # PDF validation: PDFs should start with %PDF
+                if ext == '.pdf':
+                    if not content.startswith(b'%PDF'):
+                        if is_html_page:
+                            last_error = f"{filename} is an HTML page, not a PDF (likely access denied or error page)"
+                            continue  # Try next URL variant
+                        else:
+                            last_error = f"{filename} does not appear to be a valid PDF file"
+                            continue  # Try next URL variant
+
+                # For other file types, check if we got an HTML error page
+                elif ext in ['.docx', '.xlsx', '.xls', '.doc', '.zip']:
                     if is_html_page:
-                        print(f"    Warning: {filename} is an HTML page, not a PDF (likely access denied or error page)")
-                    else:
-                        print(f"    Warning: {filename} does not appear to be a valid PDF file")
-                    with open(self.paywalled_log, 'a', newline='') as f:
-                        writer = csv.writer(f)
-                        writer.writerow([pmid, f'Invalid PDF content (not a real PDF): {filename}', url])
-                    return False
+                        last_error = f"{filename} appears to be an HTML page, not a {ext} file"
+                        continue  # Try next URL variant
 
-            # For other file types, check if we got an HTML error page
-            elif ext in ['.docx', '.xlsx', '.xls', '.doc', '.zip']:
-                if is_html_page:
-                    print(f"    Warning: {filename} appears to be an HTML page, not a {ext} file")
-                    with open(self.paywalled_log, 'a', newline='') as f:
-                        writer = csv.writer(f)
-                        writer.writerow([pmid, f'Invalid {ext} content (HTML error page): {filename}', url])
-                    return False
+                # Write the validated content
+                with open(output_path, 'wb') as f:
+                    f.write(content)
 
-            # Write the validated content
-            with open(output_path, 'wb') as f:
-                f.write(content)
+                if try_url != url:
+                    print(f"    ✓ Downloaded from alternate URL: {try_url}")
+                return True
 
-            return True
-        except Exception as e:
-            print(f"    Error downloading {url}: {e}")
-            # Log failed supplemental download
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, f'Supplemental file download failed: {filename}', url])
-            return False
+            except Exception as e:
+                last_error = str(e)
+                continue  # Try next URL variant
+
+        # All URL variants failed
+        print(f"    Error downloading {filename}: {last_error}")
+        # Log failed supplemental download
+        with open(self.paywalled_log, 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow([pmid, f'Supplemental file download failed: {filename}', url])
+        return False
 
     def _process_supplements(self, pmid: str, pmcid: str, doi: str) -> Tuple[str, int]:
         """
@@ -253,6 +285,9 @@ class PMCHarvester:
         for idx, supp in enumerate(supp_files, 1):
             url = supp.get('url', '')
             filename = supp.get('name', f'supplement_{idx}')
+            # Get PMC-specific URL info for trying multiple variants
+            base_url = supp.get('base_url')
+            original_url = supp.get('original_url')
 
             if not url:
                 continue
@@ -260,7 +295,7 @@ class PMCHarvester:
             file_path = supplements_dir / filename
             print(f"    Downloading: {filename}")
 
-            if self.download_supplement(url, file_path, pmid, filename):
+            if self.download_supplement(url, file_path, pmid, filename, base_url, original_url):
                 downloaded_count += 1
 
                 ext = file_path.suffix.lower()
@@ -268,10 +303,18 @@ class PMCHarvester:
 
                 if ext in ['.xlsx', '.xls']:
                     supplement_markdown += self.converter.excel_to_markdown(file_path)
-                elif ext in ['.docx']:
+                elif ext == '.docx':
                     supplement_markdown += self.converter.docx_to_markdown(file_path)
+                elif ext == '.doc':
+                    supplement_markdown += self.converter.doc_to_markdown(file_path)
                 elif ext == '.pdf':
                     supplement_markdown += self.converter.pdf_to_markdown(file_path)
+                elif ext in ['.txt', '.csv']:
+                    try:
+                        text = file_path.read_text(encoding='utf-8', errors='ignore')
+                        supplement_markdown += text + "\n\n"
+                    except Exception as e:
+                        supplement_markdown += f"[Error reading text file: {e}]\n\n"
                 else:
                     supplement_markdown += f"[File available at: {file_path}]\n\n"
 
@@ -499,10 +542,18 @@ class PMCHarvester:
                 # Convert supplement to markdown based on file type
                 if ext in ['.xlsx', '.xls']:
                     supplement_markdown += self.converter.excel_to_markdown(file_path)
-                elif ext in ['.docx']:
+                elif ext == '.docx':
                     supplement_markdown += self.converter.docx_to_markdown(file_path)
+                elif ext == '.doc':
+                    supplement_markdown += self.converter.doc_to_markdown(file_path)
                 elif ext == '.pdf':
                     supplement_markdown += self.converter.pdf_to_markdown(file_path)
+                elif ext in ['.txt', '.csv']:
+                    try:
+                        text = file_path.read_text(encoding='utf-8', errors='ignore')
+                        supplement_markdown += text + "\n\n"
+                    except Exception as e:
+                        supplement_markdown += f"[Error reading text file: {e}]\n\n"
                 else:
                     supplement_markdown += f"[File available at: {file_path}]\n\n"
 
