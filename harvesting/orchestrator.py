@@ -422,6 +422,16 @@ class PMCHarvester:
             main_markdown, final_url, supp_files = self.doi_resolver.resolve_and_fetch_fulltext(
                 doi, pmid, self.scraper
             )
+
+            # Validate that we got actual article content, not just an abstract
+            MIN_ARTICLE_LENGTH = 1000  # Minimum characters for a valid full-text article
+            if main_markdown and len(main_markdown) < MIN_ARTICLE_LENGTH:
+                print(f"  ⚠ DOI content too short ({len(main_markdown)} chars) - likely abstract only")
+                print(f"  ❌ Skipping - does not contain valid full article text")
+                with open(self.paywalled_log, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([pmid, 'DOI content too short (abstract only)', f"https://doi.org/{doi}"])
+                return False, "DOI content too short (abstract only)"
         elif free_url:
             # No DOI, but we have a direct URL to the free full text
             parsed_url = urlparse(free_url)
