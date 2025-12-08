@@ -51,15 +51,34 @@ class FormatConverter:
                 abstract_text = ''.join(abstract_elem.itertext()).strip()
                 markdown += f"{abstract_text}\n\n"
 
+            def process_section(sec, level: int = 3):
+                """Recursively process <sec> elements preserving hierarchy."""
+                nonlocal markdown
+
+                title_elem = sec.find("title")
+                if title_elem is not None:
+                    sec_title = ''.join(title_elem.itertext()).strip()
+                    markdown += f"{'#' * level} {sec_title}\n\n"
+
+                for child in sec:
+                    tag = child.tag.split('}')[-1]  # Handle optional namespaces
+                    if tag == "p":
+                        para_text = ''.join(child.itertext()).strip()
+                        if para_text:
+                            markdown += f"{para_text}\n\n"
+                    elif tag == "sec":
+                        process_section(child, min(level + 1, 6))
+
             body_elem = root.find(".//body")
             if body_elem is not None:
-                for sec in body_elem.findall(".//sec"):
-                    title_elem = sec.find("title")
-                    if title_elem is not None:
-                        sec_title = ''.join(title_elem.itertext()).strip()
-                        markdown += f"### {sec_title}\n\n"
+                sections = body_elem.findall("./sec")
 
-                    for p in sec.findall(".//p"):
+                if sections:
+                    for sec in sections:
+                        process_section(sec)
+                else:
+                    # Some PMC XML files use <p> directly under <body> without <sec> wrappers
+                    for p in body_elem.findall(".//p"):
                         para_text = ''.join(p.itertext()).strip()
                         if para_text:
                             markdown += f"{para_text}\n\n"
