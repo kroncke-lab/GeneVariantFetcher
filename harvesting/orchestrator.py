@@ -8,13 +8,13 @@ Main PMCHarvester class that coordinates all harvesting operations:
 """
 
 import os
+import re
 import time
 import csv
 import requests
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 from urllib.parse import urlparse
-import requests
 
 from .pmc_api import PMCAPIClient
 from .doi_resolver import DOIResolver
@@ -359,7 +359,7 @@ class PMCHarvester:
                 domain = urlparse(final_url).netloc
                 if "linkinghub.elsevier.com" in domain:
                     try:
-                        pii_match = requests.search(r'/pii/([^/?]+)', final_url)
+                        pii_match = re.search(r'/pii/([^/?]+)', final_url)
                         if pii_match:
                             pii = pii_match.group(1)
                             sciencedirect_url = f"https://www.sciencedirect.com/science/article/pii/{pii}"
