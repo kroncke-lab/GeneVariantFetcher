@@ -59,6 +59,7 @@ extractions/
 # PMC Harvester output
 pmc_harvest/
 test_pmc_harvest/
+test_kcnh2_*/
 
 # Testing
 .pytest_cache/
