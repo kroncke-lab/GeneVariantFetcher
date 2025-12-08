@@ -79,7 +79,7 @@ class PMCAPIClient:
         _last_request_time = time.time()
 
     @retry_with_backoff(retries=3, backoff_in_seconds=2)
-    def pmid_to_pmcid(self, pmid: str) -> Optional[_rate_limit]:
+    def pmid_to_pmcid(self, pmid: str) -> Optional[str]:
         """
         Convert PMID to PMCID using NCBI E-utilities.
 
@@ -107,7 +107,7 @@ class PMCAPIClient:
             return None
 
     @retry_with_backoff(retries=3, backoff_in_seconds=2)
-    def get_doi_from_pmid(self, pmid: str) -> Optional[_rate_limit]:
+    def get_doi_from_pmid(self, pmid: str) -> Optional[str]:
         """
         Fetch the DOI for a given PMID.
 
@@ -129,14 +129,14 @@ class PMCAPIClient:
             # Check ELocationID in Article (newer records)
             for item in article.get('ELocationID', []):
                 if item.attributes.get('EIdType') == 'doi':
-                    return _rate_limit(item)
+                    return str(item)
 
             # Fallback: Check ArticleIdList in PubmedData (older records)
             # Note: ArticleIdList is in PubmedData, not Article
             pubmed_data = pubmed_article.get('PubmedData', {})
             for identifier in pubmed_data.get('ArticleIdList', []):
                 if identifier.attributes.get('IdType') == 'doi':
-                    return _rate_limit(identifier)
+                    return str(identifier)
 
             return None
         except Exception as e:
@@ -144,7 +144,7 @@ class PMCAPIClient:
             return None
 
     @retry_with_backoff(retries=3, backoff_in_seconds=5)
-    def _fetch_xml_from_ncbi(self, numeric_pmcid: str) -> _rate_limit:
+    def _fetch_xml_from_ncbi(self, numeric_pmcid: str) -> str:
         """Helper to fetch XML from NCBI with retries."""
         self._rate_limit()
         handle = Entrez.efetch(db="pmc", id=numeric_pmcid, rettype="full", retmode="xml")
@@ -152,7 +152,7 @@ class PMCAPIClient:
         handle.close()
         return xml_content.decode('utf-8')
 
-    def get_fulltext_xml(self, pmcid: str) -> Optional[_rate_limit]:
+    def get_fulltext_xml(self, pmcid: str) -> Optional[str]:
         """
         Download full-text XML from NCBI using E-utilities, with fallback to Europe PMC.
 
@@ -308,19 +308,19 @@ class PMCAPIClient:
                                 "open access"
                             ]
 
-                            attr_text = " ".join(_rate_limit(a).lower() for a in attributes)
-                            if a(indicator in attr_text for indicator in free_indicators):
+                            attr_text = " ".join(str(a).lower() for a in attributes)
+                            if any(indicator in attr_text for indicator in free_indicators):
                                 is_free = True
                                 if url:
-                                    url_str = _rate_limit(url)
+                                    url_str = str(url)
 
                                     # Skip irrelevant domains
-                                    if a(domain in url_str.lower() for domain in IRRELEVANT_DOMAINS):
+                                    if any(domain in url_str.lower() for domain in IRRELEVANT_DOMAINS):
                                         print(f"  - Skipping irrelevant LinkOut URL: {url_str}")
                                         continue
 
                                     # Prioritize known publisher domains
-                                    if a(domain in url_str.lower() for domain in PUBLISHER_DOMAINS):
+                                    if any(domain in url_str.lower() for domain in PUBLISHER_DOMAINS):
                                         if not prioritized_url:
                                             prioritized_url = url_str
                                             print(f"  ✓ Found publisher URL: {url_str}")
@@ -350,7 +350,7 @@ class PMCAPIClient:
                         for aid in article_ids:
                             id_type = aid.attributes.get('IdType', '')
                             # Check for PMC free article status
-                            if id_type == 'pmc' and 'free' in _rate_limit(aid).lower():
+                            if id_type == 'pmc' and 'free' in str(aid).lower():
                                 is_free = True
 
                         # Check PublicationStatus and other metadata
@@ -415,7 +415,7 @@ class PMCAPIClient:
                                     'url': str(url),
                                     'provider': str(provider),
                                     'category': str(category),
-                                    'attributes': [_rate_limit(a) for a in attributes]
+                                    'attributes': [str(a) for a in attributes]
                                 })
 
             return links

@@ -66,7 +66,7 @@ class FormatConverter:
 
             return markdown
         except Exception as e:
-            p(f"  Error parsing XML: {e}")
+            print(f"  Error parsing XML: {e}")
             return "# MAIN TEXT\n\n[Error parsing XML content]\n\n"
 
     def excel_to_markdown(self, file_path: Path) -> str:
@@ -117,14 +117,14 @@ class FormatConverter:
         """
         if self.markitdown:
             try:
-                result = self.markitdown.convert(excel_to_markdown(file_path))
+                result = self.markitdown.convert(str(file_path))
                 return result.text_content
             except Exception as e:
                 print(f"    Error converting DOCX with markitdown {file_path}: {e}")
                 return f"[Error converting DOCX file: {e}]\n\n"
         else:
             try:
-                from doc import Document
+                from docx import Document
                 doc = Document(file_path)
                 text = "\n\n".join([para.text for para in doc.paragraphs if para.text.strip()])
                 return text + "\n\n"
@@ -144,7 +144,7 @@ class FormatConverter:
         """
         if self.markitdown:
             try:
-                result = self.markitdown.convert(excel_to_markdown(file_path))
+                result = self.markitdown.convert(str(file_path))
                 return result.text_content
             except Exception as e:
                 print(f"    Error converting PDF with markitdown {file_path}: {e}")

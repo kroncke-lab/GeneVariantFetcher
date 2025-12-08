@@ -18,6 +18,38 @@ from bs4 import BeautifulSoup
 class SupplementScraper:
     """Scrapes supplemental files from various publisher websites."""
 
+    def _normalize_pmc_url(self, url: str, base_url: str) -> str:
+        """
+        Normalize PMC supplement URLs to use the correct path format.
+
+        NCBI PMC pages sometimes have links with /articles/instance/{id}/bin/
+        but the actual files are served from /pmc/articles/PMC{id}/bin/
+
+        Args:
+            url: The URL to normalize
+            base_url: The base PMC article URL
+
+        Returns:
+            Normalized URL
+        """
+        # Check if this is a PMC page and if the URL needs fixing
+        if 'ncbi.nlm.nih.gov/pmc/articles/' in base_url:
+            # Extract the PMCID from the base URL
+            import re
+            pmcid_match = re.search(r'/pmc/articles/(PMC\d+)', base_url)
+            if pmcid_match:
+                pmcid = pmcid_match.group(1)
+
+                # Fix URLs that use /articles/instance/{numeric_id}/bin/ format
+                instance_match = re.search(r'/articles/instance/(\d+)/bin/(.+)$', url)
+                if instance_match:
+                    filename = instance_match.group(2)
+                    fixed_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/bin/{filename}"
+                    print(f"    Normalized PMC URL: {url} -> {fixed_url}")
+                    return fixed_url
+
+        return url
+
     def scrape_nature_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
         Scrape supplemental files from a Nature journal page.
@@ -49,7 +81,7 @@ class SupplementScraper:
                 if '/articles/' in href and '/figures/' not in href and 'author-information' not in href:
                     url = urljoin(base_url, href)
                     filename = Path(urlparse(url).path).name
-                    if filename and not a(f['name'] == filename for f in found_files):
+                    if filename and not any(f['name'] == filename for f in found_files):
                         found_files.append({'url': url, 'name': filename})
                         print(f"      Found potential supplement: {filename}")
 
@@ -197,6 +229,8 @@ class SupplementScraper:
             if is_supplement_link or is_file_link:
                 try:
                     url = urljoin(base_url, link['href'])
+                    # Normalize PMC URLs to use correct path format
+                    url = self._normalize_pmc_url(url, base_url)
                     filename = Path(urlparse(url).path).name
 
                     # Basic filtering to avoid irrelevant links
@@ -214,7 +248,7 @@ class SupplementScraper:
     # without PMCIDs.
     # ==========================================================================
 
-    def extract_fulltext_nature(self, html: str, base_url: str) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext_nature(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
         """
         Extract full-text content from a Nature journal page.
 
@@ -225,7 +259,7 @@ class SupplementScraper:
         Returns:
             Tuple of (markdown_content, title)
         """
-        p("  Extracting full text from Nature article...")
+        print("  Extracting full text from Nature article...")
         soup = BeautifulSoup(html, 'html.parser')
         markdown = "# MAIN TEXT\n\n"
 
@@ -275,7 +309,7 @@ class SupplementScraper:
 
         return markdown if len(markdown) > 200 else None, title
 
-    def extract_fulltext_elsevier(self, html: str, base_url: str) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext_elsevier(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
         """
         Extract full-text content from an Elsevier/ScienceDirect page.
 
@@ -286,7 +320,7 @@ class SupplementScraper:
         Returns:
             Tuple of (markdown_content, title)
         """
-        p("  Extracting full text from Elsevier/ScienceDirect article...")
+        print("  Extracting full text from Elsevier/ScienceDirect article...")
         soup = BeautifulSoup(html, 'html.parser')
         markdown = "# MAIN TEXT\n\n"
 
@@ -311,7 +345,7 @@ class SupplementScraper:
                         if isinstance(abstract_data, dict):
                             abstract_text = abstract_data.get('content', '')
                         else:
-                            abstract_text = scrape_elsevier_supplements(abstract_data)
+                            abstract_text = str(abstract_data)
                         # Clean HTML tags from abstract
                         abstract_soup = BeautifulSoup(abstract_text, 'html.parser')
                         markdown += abstract_soup.get_text().strip() + "\n\n"
@@ -370,7 +404,7 @@ class SupplementScraper:
 
         return markdown if len(markdown) > 200 else None, title
 
-    def extract_fulltext_wiley(self, html: str, base_url: str) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext_wiley(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
         """
         Extract full-text content from a Wiley Online Library page.
 
@@ -381,7 +415,7 @@ class SupplementScraper:
         Returns:
             Tuple of (markdown_content, title)
         """
-        p("  Extracting full text from Wiley article...")
+        print("  Extracting full text from Wiley article...")
         soup = BeautifulSoup(html, 'html.parser')
         markdown = "# MAIN TEXT\n\n"
 
@@ -420,7 +454,7 @@ class SupplementScraper:
 
         return markdown if len(markdown) > 200 else None, title
 
-    def extract_fulltext_generic(self, html: str, base_url: str) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext_generic(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
         """
         Generic full-text extraction for any publisher page.
 
@@ -433,7 +467,7 @@ class SupplementScraper:
         Returns:
             Tuple of (markdown_content, title)
         """
-        p("  Extracting full text using generic scraper...")
+        print("  Extracting full text using generic scraper...")
         soup = BeautifulSoup(html, 'html.parser')
         markdown = "# MAIN TEXT\n\n"
 
@@ -490,7 +524,7 @@ class SupplementScraper:
 
         return markdown if len(markdown) > 200 else None, title
 
-    def extract_fulltext(self, html: str, base_url: str) -> Tuple[Optional[scrape_elsevier_supplements], scrape_elsevier_supplements]:
+    def extract_fulltext(self, html: str, base_url: str) -> Tuple[Optional[str], str]:
         """
         Main entry point for full-text extraction.
         Routes to domain-specific extractors based on URL.
