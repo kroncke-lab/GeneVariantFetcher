@@ -132,6 +132,82 @@ class FormatConverter:
                 print(f"    Error converting DOCX {file_path}: {e}")
                 return f"[Error converting DOCX file: {e}]\n\n"
 
+    def doc_to_markdown(self, file_path: Path) -> str:
+        """
+        Convert legacy Word document (.doc) to markdown.
+
+        Args:
+            file_path: Path to Word document (.doc)
+
+        Returns:
+            Markdown formatted text
+        """
+        # MarkItDown can handle .doc files directly
+        if self.markitdown:
+            try:
+                result = self.markitdown.convert(str(file_path))
+                if result and result.text_content:
+                    return result.text_content
+            except Exception as e:
+                print(f"    Warning: markitdown failed for .doc file {file_path.name}: {e}")
+
+        # Try antiword as a fallback (if installed)
+        try:
+            import subprocess
+            result = subprocess.run(
+                ['antiword', str(file_path)],
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                return result.stdout + "\n\n"
+        except FileNotFoundError:
+            pass  # antiword not installed
+        except Exception as e:
+            print(f"    Warning: antiword fallback failed for {file_path.name}: {e}")
+
+        # Try catdoc as another fallback (if installed)
+        try:
+            import subprocess
+            result = subprocess.run(
+                ['catdoc', str(file_path)],
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                return result.stdout + "\n\n"
+        except FileNotFoundError:
+            pass  # catdoc not installed
+        except Exception as e:
+            print(f"    Warning: catdoc fallback failed for {file_path.name}: {e}")
+
+        # Try LibreOffice conversion as final fallback
+        try:
+            import subprocess
+            import tempfile
+            with tempfile.TemporaryDirectory() as tmpdir:
+                result = subprocess.run(
+                    ['soffice', '--headless', '--convert-to', 'txt:Text', '--outdir', tmpdir, str(file_path)],
+                    capture_output=True,
+                    text=True,
+                    timeout=120
+                )
+                if result.returncode == 0:
+                    txt_file = Path(tmpdir) / (file_path.stem + '.txt')
+                    if txt_file.exists():
+                        text = txt_file.read_text(encoding='utf-8', errors='ignore')
+                        if text.strip():
+                            return text + "\n\n"
+        except FileNotFoundError:
+            pass  # LibreOffice not installed
+        except Exception as e:
+            print(f"    Warning: LibreOffice fallback failed for {file_path.name}: {e}")
+
+        # Final fallback - indicate manual review needed
+        return f"[Legacy .doc file available at: {file_path.name} - text extraction failed, manual review required]\n\n"
+
     def pdf_to_markdown(self, file_path: Path) -> str:
         """
         Convert PDF to markdown.
