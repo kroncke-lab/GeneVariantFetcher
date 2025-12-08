@@ -111,7 +111,8 @@ class PMCSupplementClient:
         resp = self._get(url, params=params)
         root = ET.fromstring(resp.text)
         for link_set in root.findall("LinkSet/LinkSetDb"):
-            name = link_set.findtext("LinkSetDbName")
+            # Newer ELink responses use <DbTo> instead of LinkSetDbName
+            name = link_set.findtext("LinkSetDbName") or link_set.findtext("DbTo")
             if name and name.lower() == "pmc":
                 for id_elem in link_set.findall("Link/Id"):
                     pmcid_num = id_elem.text

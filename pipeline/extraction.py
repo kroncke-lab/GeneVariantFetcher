@@ -215,6 +215,56 @@ IMPORTANT NOTES:
         else:
             return "[NO TEXT AVAILABLE]"
 
+    def _truncate_text_for_prompt(self, full_text: str, max_chars: int = 60000) -> str:
+        """
+        Keep three slices (head/mid/tail) so large supplemental tables aren’t dropped.
+        The middle slice is centered on the last table/supplement mention when found.
+        """
+        if len(full_text) <= max_chars:
+            return full_text
+
+        marker = "\n\n[TRUNCATED FOR PROMPT - non-adjacent segments preserved to keep tables]\n\n"
+        mid_header = "### MIDDLE SEGMENT (around tables/supplements) ###\n"
+        tail_header = "### TRAILING SEGMENT ###\n"
+
+        # Allocate space across three segments
+        fixed_overhead = len(marker) * 2 + len(mid_header) + len(tail_header)
+        available = max_chars - fixed_overhead
+        if available < 0:
+            available = max_chars
+
+        # Distribute roughly evenly
+        head_len = available // 3
+        mid_len = available // 3
+        tail_len = available - head_len - mid_len
+
+        lower_text = full_text.lower()
+
+        # Anchor the middle slice near the last table/supplement mention
+        anchors = [
+            lower_text.rfind("table 2"),
+            lower_text.rfind("table"),
+            lower_text.rfind("supplement"),
+        ]
+        anchor_idx = max(anchors)
+        if anchor_idx == -1:
+            anchor_idx = len(full_text) // 2
+
+        mid_start = max(0, anchor_idx - mid_len // 2)
+        mid_chunk = full_text[mid_start : mid_start + mid_len]
+
+        truncated = (
+            f"{full_text[:head_len]}"
+            f"{marker}"
+            f"{mid_header}"
+            f"{mid_chunk}"
+            f"{marker}"
+            f"{tail_header}"
+            f"{full_text[-tail_len:]}"
+        )
+
+        return truncated[:max_chars]
+
     def _attempt_extraction(self, paper: Paper, model: str) -> ExtractionResult:
         """Attempt extraction with a single model."""
         logger.info(f"PMID {paper.pmid} - Starting expert extraction with {model}")
@@ -227,7 +277,7 @@ IMPORTANT NOTES:
         prompt = self.EXTRACTION_PROMPT.format(
             gene_symbol=paper.gene_symbol or "UNKNOWN",
             title=paper.title or "Unknown Title",
-            full_text=full_text[:30000],
+            full_text=self._truncate_text_for_prompt(full_text),
             pmid=paper.pmid
         )
 

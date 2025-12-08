@@ -63,6 +63,7 @@ def main():
     pmid = "19716085"
     gene = "KCNH2"
     output_dir = Path("test_kcnh2_19716085")
+    full_text_path = output_dir / f"{pmid}_FULL_CONTEXT.md"
 
     print(f"Testing PMID: {pmid}")
     print(f"Gene: {gene}")
@@ -86,34 +87,39 @@ def main():
     print("STEP 1: HARVESTING FULL-TEXT AND SUPPLEMENTS")
     print("=" * 60)
 
-    # First, use the main harvester which handles both PMC and publisher fallback
-    harvester = PMCHarvester(output_dir=str(output_dir))
-    success, result = harvester.process_pmid(pmid)
+    # Reuse cached harvest if available to avoid network in restricted runs
+    if full_text_path.exists():
+        print(f"Using cached full text: {full_text_path}")
+        success, result = True, str(full_text_path)
+    else:
+        # First, use the main harvester which handles both PMC and publisher fallback
+        harvester = PMCHarvester(output_dir=str(output_dir))
+        success, result = harvester.process_pmid(pmid)
 
-    # If paper has a PMCID, also try the BioC/JATS supplement harvest
-    supplement_client = PMCSupplementClient()
-    try:
-        pmcid = supplement_client.pmid_to_pmcid(pmid)
-        print(f"\nResolved PMID {pmid} to PMCID {pmcid}")
+        # If paper has a PMCID, also try the BioC/JATS supplement harvest
+        supplement_client = PMCSupplementClient()
+        try:
+            pmcid = supplement_client.pmid_to_pmcid(pmid)
+            print(f"\nResolved PMID {pmid} to PMCID {pmcid}")
 
-        supp_output_dir = output_dir / f"{pmid}_supplements_api"
-        print(f"Attempting BioC/JATS supplement harvest to: {supp_output_dir}")
-        supplements = supplement_client.get_all_supplement_text(pmcid, supp_output_dir)
-        extracted_count = sum(1 for s in supplements if s.text)
-        print(
-            f"✓ Retrieved {len(supplements)} supplements via API pipeline; "
-            f"{extracted_count} with extractable text"
-        )
-        for supp in supplements:
-            label = supp.label or f"Supplement {supp.index}"
-            print(f"  - {label}: {supp.filename or supp.href} (source={supp.source})")
-    except Exception as exc:
-        print(f"\n  Note: Could not resolve PMCID for PMID {pmid}: {exc}")
-        print("  (This is expected if the paper is not in PubMed Central)")
+            supp_output_dir = output_dir / f"{pmid}_supplements_api"
+            print(f"Attempting BioC/JATS supplement harvest to: {supp_output_dir}")
+            supplements = supplement_client.get_all_supplement_text(pmcid, supp_output_dir)
+            extracted_count = sum(1 for s in supplements if s.text)
+            print(
+                f"✓ Retrieved {len(supplements)} supplements via API pipeline; "
+                f"{extracted_count} with extractable text"
+            )
+            for supp in supplements:
+                label = supp.label or f"Supplement {supp.index}"
+                print(f"  - {label}: {supp.filename or supp.href} (source={supp.source})")
+        except Exception as exc:
+            print(f"\n  Note: Could not resolve PMCID for PMID {pmid}: {exc}")
+            print("  (This is expected if the paper is not in PubMed Central)")
 
-    if not success:
-        print(f"\n✗ FAILED: {result}")
-        return
+        if not success:
+            print(f"\n✗ FAILED: {result}")
+            return
 
     print(f"\n✓ SUCCESS: Created {result}")
 

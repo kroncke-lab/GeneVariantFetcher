@@ -99,7 +99,11 @@ class SupplementScraper:
         variants.append(f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/bin/{filename}")
         # 4. Old domain with PMC path
         variants.append(f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/bin/{filename}")
-        # 5. Original URL as fallback
+        # 5. Europe PMC (often bypasses PMC proof-of-work for downloads)
+        variants.append(f"https://europepmc.org/articles/{pmcid}/bin/{filename}")
+        if filename.lower().endswith(".pdf"):
+            variants.append(f"https://europepmc.org/articles/{pmcid}/pdf/{filename}")
+        # 6. Original URL as fallback
         if url not in variants:
             variants.append(url)
 

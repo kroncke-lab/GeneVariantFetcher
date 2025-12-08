@@ -68,6 +68,20 @@ class PMCHarvester:
             writer = csv.writer(f)
             writer.writerow(['PMID', 'PMCID', 'Supplements_Downloaded'])
 
+    @staticmethod
+    def _markdown_missing_body(markdown: str) -> bool:
+        """
+        Detect whether the converted markdown is missing main body text.
+
+        Returns True when only the abstract is present or the content
+        is suspiciously short, signalling that we should try an HTML scrape.
+        """
+        if not markdown:
+            return True
+        headings = [line for line in markdown.splitlines() if line.startswith("### ")]
+        non_abstract = [h for h in headings if not h.startswith("### Abstract")]
+        return (len(non_abstract) == 0) or (len(markdown) < 2000)
+
     def get_supplemental_files(self, pmcid: str, pmid: str, doi: str) -> List[Dict[str, Any]]:
         """
         Orchestrates fetching supplemental files, first via API, then by scraping.
@@ -369,6 +383,20 @@ class PMCHarvester:
 
         # Convert main text to markdown
         main_markdown = self.converter.xml_to_markdown(xml_content)
+
+        # Some PMC entries block XML full text (only abstract). Fall back to scraping
+        # the PMC HTML page when the markdown looks incomplete.
+        if self._markdown_missing_body(main_markdown):
+            pmc_url = f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/"
+            try:
+                html_response = self.session.get(pmc_url, timeout=30, allow_redirects=True)
+                html_response.raise_for_status()
+                html_markdown = self.converter.pmc_html_to_markdown(html_response.text)
+                if html_markdown and len(html_markdown) > len(main_markdown):
+                    main_markdown = html_markdown
+                    print("  ✓ Recovered full text from PMC HTML (XML body unavailable)")
+            except Exception as e:
+                print(f"  - PMC HTML fallback failed: {e}")
 
         supplement_markdown, downloaded_count = self._process_supplements(pmid, pmcid, doi)
 

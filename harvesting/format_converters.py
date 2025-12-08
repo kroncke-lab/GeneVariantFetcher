@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Optional
 import xml.etree.ElementTree as ET
 import pandas as pd
+from bs4 import BeautifulSoup
 
 try:
     from markitdown import MarkItDown
@@ -87,6 +88,78 @@ class FormatConverter:
         except Exception as e:
             print(f"  Error parsing XML: {e}")
             return "# MAIN TEXT\n\n[Error parsing XML content]\n\n"
+
+    def pmc_html_to_markdown(self, html_content: str) -> str:
+        """
+        Convert PMC HTML (when XML lacks body text) to markdown.
+
+        Args:
+            html_content: HTML string from a PMC article page
+
+        Returns:
+            Markdown formatted text (best effort)
+        """
+        soup = BeautifulSoup(html_content, 'html.parser')
+        markdown = "# MAIN TEXT\n\n"
+
+        # Title
+        title_elem = soup.find('h1')
+        if title_elem:
+            title = title_elem.get_text(strip=True)
+            markdown += f"## {title}\n\n"
+
+        # Abstract
+        abstract_section = soup.find('section', class_=lambda c: c and 'abstract' in c)
+        if abstract_section:
+            markdown += "### Abstract\n\n"
+            for p in abstract_section.find_all('p'):
+                text = p.get_text(" ", strip=True)
+                if text:
+                    markdown += f"{text}\n\n"
+
+        def process_section(section, level: int = 3):
+            """Recursively walk PMC <section> blocks."""
+            nonlocal markdown
+            heading = section.find(['h2', 'h3', 'h4'], recursive=False)
+            if heading:
+                sec_title = heading.get_text(" ", strip=True)
+                if sec_title:
+                    markdown += f"{'#' * level} {sec_title}\n\n"
+
+            for child in section.children:
+                if getattr(child, "name", None) is None:
+                    continue
+                tag = child.name.lower()
+                if tag == "p":
+                    text = child.get_text(" ", strip=True)
+                    if text:
+                        markdown += f"{text}\n\n"
+                elif tag in {"ul", "ol"}:
+                    for li in child.find_all("li", recursive=False):
+                        text = li.get_text(" ", strip=True)
+                        if text:
+                            markdown += f"- {text}\n"
+                    markdown += "\n"
+                elif tag == "section":
+                    process_section(child, min(level + 1, 6))
+
+        # Main body: PMC pages typically wrap text in section.body.main-article-body
+        body_section = soup.find('section', class_=lambda c: c and 'main-article-body' in c)
+        if body_section:
+            for sec in body_section.find_all('section', recursive=False):
+                # Skip duplicate abstract sections we already handled
+                sec_classes = sec.get('class', [])
+                if any('abstract' == c for c in sec_classes):
+                    continue
+                process_section(sec)
+        else:
+            # Fallback: just pull all reasonably long paragraphs
+            for p in soup.find_all('p'):
+                text = p.get_text(" ", strip=True)
+                if len(text) > 50:
+                    markdown += f"{text}\n\n"
+
+        return markdown
 
     def excel_to_markdown(self, file_path: Path) -> str:
         """
