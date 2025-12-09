@@ -208,7 +208,9 @@ def main():
         gene_symbol=gene
     )
 
-    extractor = ExpertExtractor()
+    # Pass fulltext_dir so ExpertExtractor can find DATA_ZONES.md
+    # Also increase max_tokens to handle large variant tables (200+ variants)
+    extractor = ExpertExtractor(fulltext_dir=str(output_dir), max_tokens=16000)
     extraction_result = extractor.extract(paper)
 
     if not extraction_result.success:

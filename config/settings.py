@@ -50,7 +50,7 @@ class Settings(BaseSettings):
 
     # Tier 3 Configuration
     tier3_temperature: float = Field(default=0.0, env="TIER3_TEMPERATURE", description="Temperature for Tier 3 LLM")
-    tier3_max_tokens: int = Field(default=8000, env="TIER3_MAX_TOKENS", description="Max tokens for Tier 3 LLM response")
+    tier3_max_tokens: int = Field(default=16000, env="TIER3_MAX_TOKENS", description="Max tokens for Tier 3 LLM response (increased for large variant tables)")
     tier3_threshold: int = Field(default=1, env="TIER3_THRESHOLD", description="Try next model if first finds fewer variants than this (0 = only use first model)")
 
     # Paper Sourcing Configuration
