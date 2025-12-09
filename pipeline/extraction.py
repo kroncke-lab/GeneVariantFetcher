@@ -476,20 +476,29 @@ IMPORTANT NOTES:
         if not self.models:
             return ExtractionResult(pmid=paper.pmid, success=False, error="No models configured for extraction")
 
-        last_result: Optional[ExtractionResult] = None
+        best_successful_result: Optional[ExtractionResult] = None
 
         for idx, model in enumerate(self.models):
             result = self._attempt_extraction(paper, model)
-            last_result = result
 
             if not result.success:
                 if idx + 1 < len(self.models):
                     logger.info(f"PMID {paper.pmid} - Extraction with {model} failed ({result.error}). Trying next model.")
                     continue
+                # If we have a previous successful result, return it instead of the failure
+                if best_successful_result is not None:
+                    logger.info(
+                        f"PMID {paper.pmid} - Later model failed, falling back to previous successful result "
+                        f"from {best_successful_result.model_used}."
+                    )
+                    return best_successful_result
                 return result
 
             num_variants = result.extracted_data.get('extraction_metadata', {}).get('total_variants_found', 0)
             if num_variants < self.tier_threshold and idx + 1 < len(self.models):
+                # Store this successful result as a fallback in case next model fails
+                # Always update to the most recent successful result
+                best_successful_result = result
                 next_model = self.models[idx + 1]
                 logger.info(
                     f"PMID {paper.pmid} - Found {num_variants} variants with {model} "
@@ -499,7 +508,11 @@ IMPORTANT NOTES:
 
             return result
 
-        return last_result or ExtractionResult(pmid=paper.pmid, success=False, error="Extraction failed with all models")
+        # If we looped through all models and have a successful result, return it
+        if best_successful_result is not None:
+            return best_successful_result
+
+        return ExtractionResult(pmid=paper.pmid, success=False, error="Extraction failed with all models")
 
     def extract_batch(self, papers: List[Paper]) -> List[ExtractionResult]:
         """Extract data from multiple papers."""
