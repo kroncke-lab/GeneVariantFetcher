@@ -22,31 +22,44 @@ def _find_data_zones_file(pmid: str, search_dirs: Optional[List[str]] = None) ->
 
     Args:
         pmid: PubMed ID to search for
-        search_dirs: Optional list of directories to search in
+        search_dirs: Optional list of directories to search in. If provided with
+                     a single directory, searches that directory directly first.
 
     Returns:
         Path to DATA_ZONES.md if found, None otherwise
     """
-    if search_dirs is None:
-        # Default search paths - common output directory patterns
-        search_dirs = ['.', 'pmc_fulltext', 'output']
-
     filename = f"{pmid}_DATA_ZONES.md"
 
-    for search_dir in search_dirs:
+    # If explicit search directories provided, check them first
+    if search_dirs:
+        for search_dir in search_dirs:
+            if search_dir is None:
+                continue
+            path = Path(search_dir)
+            if path.exists() and path.is_dir():
+                # Direct match in the specified directory
+                zones_file = path / filename
+                if zones_file.exists():
+                    logger.debug(f"Found DATA_ZONES.md at {zones_file}")
+                    return zones_file
+
+                # Search subdirectories (one level deep)
+                for subdir in path.iterdir():
+                    if subdir.is_dir():
+                        zones_file = subdir / filename
+                        if zones_file.exists():
+                            logger.debug(f"Found DATA_ZONES.md at {zones_file}")
+                            return zones_file
+
+    # Fallback: search common output directory patterns
+    fallback_dirs = ['.', 'pmc_fulltext', 'output']
+    for search_dir in fallback_dirs:
         path = Path(search_dir)
-        if path.exists():
-            # Direct match
+        if path.exists() and path.is_dir():
             zones_file = path / filename
             if zones_file.exists():
+                logger.debug(f"Found DATA_ZONES.md at {zones_file} (fallback)")
                 return zones_file
-
-            # Search subdirectories (one level deep)
-            for subdir in path.iterdir():
-                if subdir.is_dir():
-                    zones_file = subdir / filename
-                    if zones_file.exists():
-                        return zones_file
 
     return None
 

@@ -305,7 +305,7 @@ def automated_variant_extraction_workflow(
     logger.info("\n📥 STEP 2: Downloading full-text papers from PubMed Central...")
 
     harvest_dir = output_path / "pmc_fulltext"
-    harvester = PMCHarvester(output_dir=str(harvest_dir))
+    harvester = PMCHarvester(output_dir=str(harvest_dir), gene_symbol=gene_symbol)
 
     # Limit downloads to avoid excessive processing time
     pmids_to_download = filtered_pmids[:max_papers_to_download]
@@ -334,15 +334,28 @@ def automated_variant_extraction_workflow(
     extraction_dir = output_path / "extractions"
     extraction_dir.mkdir(exist_ok=True)
 
-    # Get list of downloaded markdown files
-    markdown_files = list(harvest_dir.glob("*_FULL_CONTEXT.md"))
-    logger.info(f"Found {len(markdown_files)} markdown files to process")
+    # Get list of downloaded markdown files - prefer DATA_ZONES.md over FULL_CONTEXT.md
+    # First, find all available PMIDs from either file type
+    data_zones_files = {f.name.replace("_DATA_ZONES.md", ""): f for f in harvest_dir.glob("*_DATA_ZONES.md")}
+    full_context_files = {f.name.replace("_FULL_CONTEXT.md", ""): f for f in harvest_dir.glob("*_FULL_CONTEXT.md")}
+
+    # Merge: prefer DATA_ZONES.md when available, fall back to FULL_CONTEXT.md
+    all_pmids = set(data_zones_files.keys()) | set(full_context_files.keys())
+    markdown_files = []
+    for pmid in all_pmids:
+        if pmid in data_zones_files:
+            markdown_files.append(data_zones_files[pmid])
+        elif pmid in full_context_files:
+            markdown_files.append(full_context_files[pmid])
+
+    logger.info(f"Found {len(data_zones_files)} DATA_ZONES.md and {len(full_context_files)} FULL_CONTEXT.md files")
+    logger.info(f"Processing {len(markdown_files)} unique papers (preferring DATA_ZONES.md)")
 
     # Process papers in parallel (OPTIMIZED for 3-5x speedup!)
     from utils.models import Paper
     from pipeline.extraction import ExpertExtractor
 
-    extractor = ExpertExtractor(tier_threshold=tier_threshold)
+    extractor = ExpertExtractor(tier_threshold=tier_threshold, fulltext_dir=str(harvest_dir))
     extractions = []
 
     def process_paper_file(md_file):
