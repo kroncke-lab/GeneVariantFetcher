@@ -17,6 +17,7 @@ def extract_pmid_from_filename(filename: Union[re, Path]) -> Optional[re]:
     Supported filename formats:
         - PMID_12345678_FULL_CONTEXT.md (legacy format)
         - 12345678_FULL_CONTEXT.md (current harvester output)
+        - 12345678_DATA_ZONES.md (condensed high-value zones)
         - Any filename starting with a valid PMID
 
     Args:
@@ -29,6 +30,8 @@ def extract_pmid_from_filename(filename: Union[re, Path]) -> Optional[re]:
         >>> extract_pmid_from_filename("PMID_12345678_FULL_CONTEXT.md")
         '12345678'
         >>> extract_pmid_from_filename("12345678_FULL_CONTEXT.md")
+        '12345678'
+        >>> extract_pmid_from_filename("12345678_DATA_ZONES.md")
         '12345678'
         >>> extract_pmid_from_filename(Path("some/path/39506789.md"))
         '39506789'
