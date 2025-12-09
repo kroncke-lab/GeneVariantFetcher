@@ -7,12 +7,48 @@ genetic variant data using advanced LLM prompting.
 
 import logging
 import json
+from pathlib import Path
 from typing import Optional, List
 from utils.models import Paper, ExtractionResult
 from utils.llm_utils import BaseLLMCaller
 from config.settings import get_settings
 
 logger = logging.getLogger(__name__)
+
+
+def _find_data_zones_file(pmid: str, search_dirs: Optional[List[str]] = None) -> Optional[Path]:
+    """
+    Search for a DATA_ZONES.md file for the given PMID.
+
+    Args:
+        pmid: PubMed ID to search for
+        search_dirs: Optional list of directories to search in
+
+    Returns:
+        Path to DATA_ZONES.md if found, None otherwise
+    """
+    if search_dirs is None:
+        # Default search paths - common output directory patterns
+        search_dirs = ['.', 'pmc_fulltext', 'output']
+
+    filename = f"{pmid}_DATA_ZONES.md"
+
+    for search_dir in search_dirs:
+        path = Path(search_dir)
+        if path.exists():
+            # Direct match
+            zones_file = path / filename
+            if zones_file.exists():
+                return zones_file
+
+            # Search subdirectories (one level deep)
+            for subdir in path.iterdir():
+                if subdir.is_dir():
+                    zones_file = subdir / filename
+                    if zones_file.exists():
+                        return zones_file
+
+    return None
 
 
 class ExpertExtractor(BaseLLMCaller):
@@ -185,6 +221,7 @@ IMPORTANT NOTES:
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
         tier_threshold: int = 1,
+        fulltext_dir: Optional[str] = None,
     ):
         """
         Initialize the Expert Extractor.
@@ -194,6 +231,7 @@ IMPORTANT NOTES:
             temperature: Model temperature. If None, uses config.
             max_tokens: Maximum tokens for response. If None, uses config.
             tier_threshold: If the first model finds fewer variants than this, the next model is tried.
+            fulltext_dir: Directory where full-text/DATA_ZONES files are stored.
         """
         settings = get_settings()
 
@@ -201,12 +239,34 @@ IMPORTANT NOTES:
         self.temperature = temperature if temperature is not None else settings.tier3_temperature
         self.max_tokens = max_tokens if max_tokens is not None else settings.tier3_max_tokens
         self.tier_threshold = tier_threshold
+        self.fulltext_dir = fulltext_dir
+        self.use_condensed = settings.scout_use_condensed
 
         super().__init__(model=self.models[0], temperature=self.temperature, max_tokens=self.max_tokens)
         logger.debug(f"ExpertExtractor initialized with models={self.models}, temp={self.temperature}, max_tokens={self.max_tokens}")
 
     def _prepare_full_text(self, paper: Paper) -> str:
-        """Prepare full text for extraction."""
+        """
+        Prepare full text for extraction.
+
+        If scout_use_condensed is enabled and a DATA_ZONES.md file exists,
+        prefer the condensed version for more focused extraction.
+        """
+        # Try to use condensed DATA_ZONES.md if enabled
+        if self.use_condensed and paper.pmid:
+            search_dirs = [self.fulltext_dir] if self.fulltext_dir else None
+            zones_file = _find_data_zones_file(paper.pmid, search_dirs)
+
+            if zones_file:
+                try:
+                    condensed_text = zones_file.read_text(encoding='utf-8')
+                    if condensed_text and len(condensed_text) > 100:
+                        logger.info(f"PMID {paper.pmid} - Using condensed DATA_ZONES.md ({len(condensed_text)} chars)")
+                        return condensed_text
+                except Exception as e:
+                    logger.warning(f"PMID {paper.pmid} - Failed to read DATA_ZONES.md: {e}")
+
+        # Fall back to paper.full_text
         if paper.full_text:
             return paper.full_text
         elif paper.abstract:
@@ -409,9 +469,21 @@ IMPORTANT NOTES:
         return [self.extract(paper) for paper in papers]
 
 
-def extract_variants_from_paper(paper: Paper, models: Optional[List[str]] = None) -> ExtractionResult:
+def extract_variants_from_paper(
+    paper: Paper,
+    models: Optional[List[str]] = None,
+    fulltext_dir: Optional[str] = None,
+) -> ExtractionResult:
     """
     Convenience function to extract variants from a single paper.
+
+    Args:
+        paper: Paper object with text to extract from
+        models: Optional list of model identifiers to use
+        fulltext_dir: Optional directory where DATA_ZONES.md files are stored
+
+    Returns:
+        ExtractionResult with extracted variant data
     """
-    extractor = ExpertExtractor(models=models)
+    extractor = ExpertExtractor(models=models, fulltext_dir=fulltext_dir)
     return extractor.extract(paper)

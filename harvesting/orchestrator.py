@@ -21,23 +21,33 @@ from .doi_resolver import DOIResolver
 from .supplement_scraper import SupplementScraper
 from .format_converters import FormatConverter
 
+# Import scout components (with fallback for import errors)
+try:
+    from pipeline.data_scout import GeneticDataScout
+    from config.settings import get_settings
+    SCOUT_AVAILABLE = True
+except ImportError:
+    SCOUT_AVAILABLE = False
+
 
 class PMCHarvester:
     """Harvests full-text and supplemental materials from PubMed Central."""
 
     SUSPICIOUS_FREE_URL_DOMAINS = {"antibodies.cancer.gov"}
 
-    def __init__(self, output_dir: str = "pmc_harvest"):
+    def __init__(self, output_dir: str = "pmc_harvest", gene_symbol: str = None):
         """
         Initialize PMC Harvester.
 
         Args:
             output_dir: Directory to save harvested files
+            gene_symbol: Target gene symbol for data scout analysis
         """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
         self.paywalled_log = self.output_dir / "paywalled_missing.csv"
         self.success_log = self.output_dir / "successful_downloads.csv"
+        self.gene_symbol = gene_symbol
 
         # Initialize session with browser-like headers
         self.session = requests.Session()
@@ -67,6 +77,56 @@ class PMCHarvester:
         with open(self.success_log, 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(['PMID', 'PMCID', 'Supplements_Downloaded'])
+
+    def _run_data_scout(self, pmid: str, unified_content: str) -> bool:
+        """
+        Run the Genetic Data Scout to identify high-value data zones.
+
+        Creates two additional files:
+        - {PMID}_DATA_ZONES.json: Zone metadata for debugging/analysis
+        - {PMID}_DATA_ZONES.md: Condensed markdown with only high-value zones
+
+        Args:
+            pmid: PubMed ID
+            unified_content: Full markdown content to analyze
+
+        Returns:
+            True if scout ran successfully, False otherwise
+        """
+        if not SCOUT_AVAILABLE:
+            return False
+
+        if not self.gene_symbol:
+            print(f"  - Skipping data scout: no gene symbol provided")
+            return False
+
+        try:
+            settings = get_settings()
+            if not settings.scout_enabled:
+                return False
+
+            scout = GeneticDataScout(
+                gene_symbol=self.gene_symbol,
+                min_relevance_score=settings.scout_min_relevance,
+                max_zones=settings.scout_max_zones,
+            )
+
+            report = scout.scan(unified_content, pmid=pmid)
+
+            # Write zone metadata JSON
+            zones_json_path = self.output_dir / f"{pmid}_DATA_ZONES.json"
+            zones_json_path.write_text(scout.to_json(report))
+
+            # Write condensed markdown with high-value zones only
+            zones_md_path = self.output_dir / f"{pmid}_DATA_ZONES.md"
+            zones_md_path.write_text(scout.format_markdown(report, unified_content))
+
+            print(f"  ✓ Data Scout: {report.zones_kept}/{report.total_zones_found} zones kept ({report.compression_ratio:.0%} of original)")
+            return True
+
+        except Exception as e:
+            print(f"  - Data scout failed: {e}")
+            return False
 
     @staticmethod
     def _markdown_missing_body(markdown: str) -> bool:
@@ -409,6 +469,9 @@ class PMCHarvester:
 
         print(f"  ✅ Created: {output_file.name} ({downloaded_count} supplements)")
 
+        # Run data scout to create condensed DATA_ZONES.md
+        self._run_data_scout(pmid, unified_content)
+
         # Log success
         with open(self.success_log, 'a', newline='') as f:
             writer = csv.writer(f)
@@ -605,6 +668,9 @@ class PMCHarvester:
             f.write(unified_content)
 
         print(f"  ✅ Created: {output_file.name} ({downloaded_count} supplements) [from publisher]")
+
+        # Run data scout to create condensed DATA_ZONES.md
+        self._run_data_scout(pmid, unified_content)
 
         # Log success with special marker for publisher-sourced content
         with open(self.success_log, 'a', newline='') as f:
