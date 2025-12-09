@@ -81,6 +81,8 @@ class ExpertExtractor(BaseLLMCaller):
 
     EXTRACTION_PROMPT = """You are an expert medical geneticist and data extraction specialist. Your task is to extract genetic variant information from the provided scientific paper, with special emphasis on penetrance data (affected vs unaffected carriers).
 
+Keep the response concise and fully valid JSON that can be parsed without errors. Stay under ~3500 tokens; if there are many variants (>120), shorten fields, limit individual_records to at most 3 per variant (or an empty list), and prefer cohort-level penetrance counts over verbose quotes.
+
 TARGET GENE: {gene_symbol}
 
 CRITICAL: Only extract variants in the gene "{gene_symbol}". Ignore all variants in other genes.
@@ -474,17 +476,30 @@ IMPORTANT NOTES:
         if not self.models:
             return ExtractionResult(pmid=paper.pmid, success=False, error="No models configured for extraction")
 
-        first_model = self.models[0]
-        result = self._attempt_extraction(paper, first_model)
+        last_result: Optional[ExtractionResult] = None
 
-        if result.success:
+        for idx, model in enumerate(self.models):
+            result = self._attempt_extraction(paper, model)
+            last_result = result
+
+            if not result.success:
+                if idx + 1 < len(self.models):
+                    logger.info(f"PMID {paper.pmid} - Extraction with {model} failed ({result.error}). Trying next model.")
+                    continue
+                return result
+
             num_variants = result.extracted_data.get('extraction_metadata', {}).get('total_variants_found', 0)
-            if num_variants < self.tier_threshold and len(self.models) > 1:
-                next_model = self.models[1]
-                logger.info(f"PMID {paper.pmid} - Found {num_variants} variants with {first_model} (threshold: {self.tier_threshold}). Retrying with {next_model}.")
-                return self._attempt_extraction(paper, next_model)
+            if num_variants < self.tier_threshold and idx + 1 < len(self.models):
+                next_model = self.models[idx + 1]
+                logger.info(
+                    f"PMID {paper.pmid} - Found {num_variants} variants with {model} "
+                    f"(threshold: {self.tier_threshold}). Retrying with {next_model}."
+                )
+                continue
 
-        return result
+            return result
+
+        return last_result or ExtractionResult(pmid=paper.pmid, success=False, error="Extraction failed with all models")
 
     def extract_batch(self, papers: List[Paper]) -> List[ExtractionResult]:
         """Extract data from multiple papers."""

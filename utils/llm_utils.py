@@ -62,6 +62,37 @@ class BaseLLMCaller:
             f"temperature={temperature}, max_tokens={max_tokens}"
         )
 
+    def _attempt_json_repair(self, raw_text: str) -> Optional[Dict[str, Any]]:
+        """
+        Best-effort repair for malformed/truncated JSON emitted by the LLM.
+
+        Uses the same model with a constrained prompt to fix the structure while
+        trimming incomplete trailing items. Returns None on failure.
+        """
+        repair_prompt = (
+            "The following text is intended to be a JSON object but is malformed or truncated. "
+            "Return a valid JSON object that keeps only intact content and discards incomplete tail fragments. "
+            "Do not add new information. Respond with JSON only.\n\n"
+            f"{raw_text[:20000]}"
+        )
+
+        try:
+            response = completion(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": "You fix malformed JSON. Respond with JSON only."},
+                    {"role": "user", "content": repair_prompt},
+                ],
+                temperature=0,
+                max_tokens=min(self.max_tokens, 4000),
+                response_format={"type": "json_object"},
+            )
+            repaired_text = response.choices[0].message.content
+            return parse_llm_json_response(repaired_text)
+        except Exception as repair_exc:
+            logger.error(f"JSON repair attempt failed: {repair_exc}")
+            return None
+
     @llm_retry
     def call_llm_json(
         self,
@@ -120,6 +151,7 @@ class BaseLLMCaller:
 
             # Extract response text
             result_text = response.choices[0].message.content
+            finish_reason = getattr(response.choices[0], "finish_reason", None)
 
             # Parse JSON response
             result_data = parse_llm_json_response(result_text)
@@ -130,6 +162,12 @@ class BaseLLMCaller:
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse LLM JSON response: {e}")
             logger.error(f"Response text: {result_text[:500]}")
+            if finish_reason == "length":
+                logger.warning("LLM response was cut off due to max_tokens; attempting repair.")
+            repaired = self._attempt_json_repair(result_text)
+            if repaired is not None:
+                logger.info("JSON repair succeeded after initial parse failure.")
+                return repaired
             raise
         except Exception as e:
             logger.error(f"LLM API call failed: {e}")

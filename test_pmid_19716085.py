@@ -64,6 +64,7 @@ def main():
     gene = "KCNH2"
     output_dir = Path("test_kcnh2_19716085")
     full_text_path = output_dir / f"{pmid}_FULL_CONTEXT.md"
+    data_zones_path = output_dir / f"{pmid}_DATA_ZONES.md"
 
     print(f"Testing PMID: {pmid}")
     print(f"Gene: {gene}")
@@ -87,13 +88,14 @@ def main():
     print("STEP 1: HARVESTING FULL-TEXT AND SUPPLEMENTS")
     print("=" * 60)
 
+    harvester = PMCHarvester(output_dir=str(output_dir), gene_symbol=gene)
+
     # Reuse cached harvest if available to avoid network in restricted runs
     if full_text_path.exists():
         print(f"Using cached full text: {full_text_path}")
         success, result = True, str(full_text_path)
     else:
         # First, use the main harvester which handles both PMC and publisher fallback
-        harvester = PMCHarvester(output_dir=str(output_dir))
         success, result = harvester.process_pmid(pmid)
 
         # If paper has a PMCID, also try the BioC/JATS supplement harvest
@@ -126,6 +128,15 @@ def main():
     # Read content
     with open(result, 'r') as f:
         content = f.read()
+
+    # Ensure condensed DATA_ZONES.md is created (even when using cached full text)
+    if harvester.gene_symbol and not data_zones_path.exists():
+        print(f"\nRunning data scout to create condensed zones for {pmid}...")
+        harvester._run_data_scout(pmid, content)
+        if data_zones_path.exists():
+            print(f"✓ Created DATA_ZONES.md: {data_zones_path}")
+        else:
+            print("⚠️  Data scout did not create DATA_ZONES.md")
 
     print(f"\nContent length: {len(content):,} characters")
     print(f"Line count: {len(content.splitlines()):,} lines")
@@ -208,9 +219,7 @@ def main():
         gene_symbol=gene
     )
 
-    # Pass fulltext_dir so ExpertExtractor can find DATA_ZONES.md
-    # Also increase max_tokens to handle large variant tables (200+ variants)
-    extractor = ExpertExtractor(fulltext_dir=str(output_dir), max_tokens=16000)
+    extractor = ExpertExtractor(fulltext_dir=str(output_dir))
     extraction_result = extractor.extract(paper)
 
     if not extraction_result.success:
