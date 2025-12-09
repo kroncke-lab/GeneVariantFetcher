@@ -61,6 +61,15 @@ def _find_data_zones_file(pmid: str, search_dirs: Optional[List[str]] = None) ->
                 logger.debug(f"Found DATA_ZONES.md at {zones_file} (fallback)")
                 return zones_file
 
+    # Also search subdirectories matching test/output patterns (e.g., test_gene_pmid/)
+    cwd = Path('.')
+    for subdir in cwd.iterdir():
+        if subdir.is_dir() and (subdir.name.startswith('test_') or subdir.name.startswith('output_') or pmid in subdir.name):
+            zones_file = subdir / filename
+            if zones_file.exists():
+                logger.debug(f"Found DATA_ZONES.md at {zones_file} (subdir fallback)")
+                return zones_file
+
     return None
 
 
