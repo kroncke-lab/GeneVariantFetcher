@@ -436,12 +436,28 @@ IMPORTANT NOTES:
 
         return truncated[:max_chars]
 
-    def _attempt_extraction(self, paper: Paper, model: str) -> ExtractionResult:
+    def _estimate_table_rows(self, full_text: str) -> int:
+        """
+        Estimate how many rows of tabular data are present.
+
+        This is used to detect when we're looking at a large variant table so
+        we can be more aggressive about rerunning extraction with stronger
+        models if the first attempt undercounts variants.
+        """
+        count = 0
+        for line in full_text.splitlines():
+            stripped = line.strip()
+            # Count lines that look like real table rows (multiple columns)
+            if stripped.startswith("|") and stripped.count("|") >= 3:
+                count += 1
+        return count
+
+    def _attempt_extraction(self, paper: Paper, model: str, prepared_full_text: Optional[str] = None) -> ExtractionResult:
         """Attempt extraction with a single model."""
         logger.info(f"PMID {paper.pmid} - Starting expert extraction with {model}")
         self.model = model
 
-        full_text = self._prepare_full_text(paper)
+        full_text = prepared_full_text if prepared_full_text is not None else self._prepare_full_text(paper)
         if full_text == "[NO TEXT AVAILABLE]":
             return ExtractionResult(pmid=paper.pmid, success=False, error="No text available", model_used=model)
 
@@ -477,9 +493,21 @@ IMPORTANT NOTES:
             return ExtractionResult(pmid=paper.pmid, success=False, error="No models configured for extraction")
 
         best_successful_result: Optional[ExtractionResult] = None
+        prepared_full_text = self._prepare_full_text(paper)
+        table_row_hint = self._estimate_table_rows(prepared_full_text)
+
+        # If we detect a large table, raise the bar so we try the next (stronger) model
+        adaptive_threshold = self.tier_threshold
+        if table_row_hint >= 50:
+            table_based_threshold = min(50, max(5, table_row_hint // 3))
+            adaptive_threshold = max(self.tier_threshold, table_based_threshold)
+            logger.info(
+                f"PMID {paper.pmid} - Detected {table_row_hint} table-like rows; "
+                f"using adaptive variant threshold {adaptive_threshold}"
+            )
 
         for idx, model in enumerate(self.models):
-            result = self._attempt_extraction(paper, model)
+            result = self._attempt_extraction(paper, model, prepared_full_text=prepared_full_text)
 
             if not result.success:
                 if idx + 1 < len(self.models):
@@ -495,14 +523,15 @@ IMPORTANT NOTES:
                 return result
 
             num_variants = result.extracted_data.get('extraction_metadata', {}).get('total_variants_found', 0)
-            if num_variants < self.tier_threshold and idx + 1 < len(self.models):
+            threshold = adaptive_threshold
+            if num_variants < threshold and idx + 1 < len(self.models):
                 # Store this successful result as a fallback in case next model fails
                 # Always update to the most recent successful result
                 best_successful_result = result
                 next_model = self.models[idx + 1]
                 logger.info(
                     f"PMID {paper.pmid} - Found {num_variants} variants with {model} "
-                    f"(threshold: {self.tier_threshold}). Retrying with {next_model}."
+                    f"(threshold: {threshold}). Retrying with {next_model}."
                 )
                 continue
 
