@@ -215,13 +215,100 @@ IMPORTANT NOTES:
         else:
             return "[NO TEXT AVAILABLE]"
 
-    def _truncate_text_for_prompt(self, full_text: str, max_chars: int = 60000) -> str:
+    def _merge_segments(self, segments: List[tuple], total_lines: int) -> List[tuple]:
+        """Merge overlapping (start, end) line index segments."""
+        if not segments:
+            return []
+        merged = []
+        for start, end in sorted(segments, key=lambda x: x[0]):
+            start = max(0, start)
+            end = min(total_lines, end)
+            if not merged or start > merged[-1][1]:
+                merged.append([start, end])
+            else:
+                merged[-1][1] = max(merged[-1][1], end)
+        return [(s, e) for s, e in merged]
+
+    def _gene_focused_truncation(
+        self,
+        full_text: str,
+        gene_symbol: Optional[str],
+        max_chars: int,
+        context_window: int = 80,
+    ) -> Optional[str]:
+        """
+        Prioritize slices that mention the target gene or contain gene-specific tables.
+        Returns concatenated segments if they fit within max_chars; otherwise None.
+        """
+        if not gene_symbol:
+            return None
+
+        lines = full_text.splitlines()
+        lower_gene = gene_symbol.lower()
+        segments: List[tuple] = []
+
+        for idx, line in enumerate(lines):
+            lower_line = line.lower()
+
+            # Capture any table caption that pairs the gene with a table label
+            if "table" in lower_line and lower_gene in lower_line:
+                end = idx + 1
+                while end < len(lines) and (
+                    lines[end].strip() == ""
+                    or lines[end].lstrip().startswith("|")
+                    or lines[end].strip().startswith("*")
+                ):
+                    end += 1
+                segments.append((max(0, idx - 5), end))
+                continue
+
+            # Generic gene mentions get a surrounding window
+            if lower_gene in lower_line:
+                segments.append((max(0, idx - context_window), idx + context_window))
+
+        merged = self._merge_segments(segments, len(lines))
+        if not merged:
+            return None
+
+        pieces = []
+        total_len = 0
+        for start, end in merged:
+            block = "\n".join(lines[start:end])
+            block_len = len(block)
+            if total_len + block_len > max_chars:
+                # Add as much as possible from this block
+                remaining = max_chars - total_len
+                if remaining <= 0:
+                    break
+                block = block[:remaining]
+                block_len = len(block)
+            pieces.append(block)
+            total_len += block_len
+            if total_len >= max_chars:
+                break
+
+        focused = (
+            f"[GENE-FOCUSED TRUNCATION for {gene_symbol}]\n\n"
+            + "\n\n---\n\n".join(pieces)
+        )
+        return focused[:max_chars] if focused else None
+
+    def _truncate_text_for_prompt(
+        self,
+        full_text: str,
+        gene_symbol: Optional[str] = None,
+        max_chars: int = 60000,
+    ) -> str:
         """
         Keep three slices (head/mid/tail) so large supplemental tables aren’t dropped.
         The middle slice is centered on the last table/supplement mention when found.
         """
         if len(full_text) <= max_chars:
             return full_text
+
+        focused = self._gene_focused_truncation(full_text, gene_symbol, max_chars)
+        if focused:
+            return focused
 
         marker = "\n\n[TRUNCATED FOR PROMPT - non-adjacent segments preserved to keep tables]\n\n"
         mid_header = "### MIDDLE SEGMENT (around tables/supplements) ###\n"
@@ -277,7 +364,7 @@ IMPORTANT NOTES:
         prompt = self.EXTRACTION_PROMPT.format(
             gene_symbol=paper.gene_symbol or "UNKNOWN",
             title=paper.title or "Unknown Title",
-            full_text=self._truncate_text_for_prompt(full_text),
+            full_text=self._truncate_text_for_prompt(full_text, gene_symbol=paper.gene_symbol),
             pmid=paper.pmid
         )
 
