@@ -60,6 +60,12 @@ class Settings(BaseSettings):
     pubmind_only: bool = Field(default=False, env="PUBMIND_ONLY", description="Use ONLY PubMind (ignore PubMed/EuropePMC)")
     max_papers_per_source: int = Field(default=100, env="MAX_PAPERS_PER_SOURCE", description="Max papers to fetch per source")
 
+    # Genetic Data Scout Configuration
+    scout_enabled: bool = Field(default=True, env="SCOUT_ENABLED", description="Enable Genetic Data Scout to create condensed DATA_ZONES.md files")
+    scout_min_relevance: float = Field(default=0.3, env="SCOUT_MIN_RELEVANCE", description="Minimum relevance score (0.0-1.0) for zones to be included")
+    scout_max_zones: int = Field(default=30, env="SCOUT_MAX_ZONES", description="Maximum number of data zones to identify per paper")
+    scout_use_condensed: bool = Field(default=True, env="SCOUT_USE_CONDENSED", description="Prefer DATA_ZONES.md over FULL_CONTEXT.md for extraction")
+
     model_config = SettingsConfigDict(
         env_file=_ENV_PATH,
         env_file_encoding="utf-8",
