@@ -7,6 +7,7 @@ genetic variant data using advanced LLM prompting.
 
 import logging
 import json
+import re
 from pathlib import Path
 from typing import Optional, List
 from utils.models import Paper, ExtractionResult
@@ -78,6 +79,34 @@ class ExpertExtractor(BaseLLMCaller):
     Tier 3: Expert-level extraction using advanced LLM (GPT-4, etc.).
     Handles full-text papers and markdown tables to extract structured variant data.
     """
+
+    CONTINUATION_PROMPT = """You previously extracted variants from this paper but the response was truncated.
+You extracted {extracted_count} variants so far. The paper contains approximately {expected_count} variants total.
+
+Previously extracted variants (DO NOT re-extract these):
+{extracted_variants_list}
+
+Please continue extracting the REMAINING variants starting AFTER the last one listed above.
+Return ONLY the variants you haven't extracted yet in the same JSON format.
+
+TARGET GENE: {gene_symbol}
+Paper Title: {title}
+
+Full Text:
+{full_text}
+
+Return a JSON object with this structure:
+{{
+    "continuation": true,
+    "variants": [
+        ... remaining variants only ...
+    ],
+    "extraction_metadata": {{
+        "continuation_variants_found": integer,
+        "notes": "any notes about this continuation"
+    }}
+}}
+"""
 
     EXTRACTION_PROMPT = """You are an expert medical geneticist and data extraction specialist. Your task is to extract genetic variant information from the provided scientific paper, with special emphasis on penetrance data (affected vs unaffected carriers).
 
@@ -469,8 +498,139 @@ IMPORTANT NOTES:
                 count += 1
         return count
 
+    def _get_extracted_variants_summary(self, variants: list) -> str:
+        """Create a compact summary of extracted variants for continuation prompts."""
+        summaries = []
+        for v in variants:
+            cdna = v.get('cdna_notation', '') or ''
+            protein = v.get('protein_notation', '') or ''
+            summaries.append(f"- {cdna} / {protein}")
+        return "\n".join(summaries)
+
+    def _merge_continuation_results(self, base_data: dict, continuation_data: dict) -> dict:
+        """Merge continuation extraction results into base results."""
+        # Add continuation variants
+        base_variants = base_data.get('variants', [])
+        continuation_variants = continuation_data.get('variants', [])
+
+        # Deduplicate by cdna_notation + protein_notation
+        existing_keys = set()
+        for v in base_variants:
+            key = (v.get('cdna_notation', ''), v.get('protein_notation', ''))
+            existing_keys.add(key)
+
+        new_variants = []
+        for v in continuation_variants:
+            key = (v.get('cdna_notation', ''), v.get('protein_notation', ''))
+            if key not in existing_keys:
+                new_variants.append(v)
+                existing_keys.add(key)
+
+        base_variants.extend(new_variants)
+        base_data['variants'] = base_variants
+
+        # Update metadata
+        if 'extraction_metadata' in base_data:
+            base_data['extraction_metadata']['total_variants_found'] = len(base_variants)
+            continuation_count = continuation_data.get('extraction_metadata', {}).get('continuation_variants_found', len(new_variants))
+            base_data['extraction_metadata']['notes'] = (
+                base_data['extraction_metadata'].get('notes', '') +
+                f" [Continuation added {continuation_count} variants]"
+            ).strip()
+
+        return base_data
+
+    def _attempt_continuation(self, paper: Paper, model: str, base_data: dict, full_text: str) -> dict:
+        """Attempt to extract remaining variants after truncation."""
+        variants = base_data.get('variants', [])
+        expected_count = base_data.get('extraction_metadata', {}).get('total_variants_found', len(variants))
+
+        # Only continue if we're missing a significant number of variants
+        if len(variants) >= expected_count or expected_count - len(variants) < 5:
+            return base_data
+
+        logger.info(
+            f"PMID {paper.pmid} - Truncation detected: extracted {len(variants)} of {expected_count} variants. "
+            f"Attempting continuation extraction."
+        )
+
+        prompt = self.CONTINUATION_PROMPT.format(
+            extracted_count=len(variants),
+            expected_count=expected_count,
+            extracted_variants_list=self._get_extracted_variants_summary(variants),
+            gene_symbol=paper.gene_symbol or "UNKNOWN",
+            title=paper.title or "Unknown Title",
+            full_text=self._truncate_text_for_prompt(full_text, gene_symbol=paper.gene_symbol)
+        )
+
+        try:
+            continuation_data = self.call_llm_json(prompt)
+            merged = self._merge_continuation_results(base_data, continuation_data)
+            logger.info(
+                f"PMID {paper.pmid} - Continuation successful. Total variants now: {len(merged.get('variants', []))}"
+            )
+            return merged
+        except Exception as e:
+            logger.warning(f"PMID {paper.pmid} - Continuation extraction failed: {e}")
+            return base_data
+
+    def _normalize_stop_codon_notation(self, extracted_data: dict) -> dict:
+        """
+        Normalize stop codon notation in extracted variants.
+
+        Converts various stop codon representations to the standard '*' notation:
+        - 'X' -> '*' (e.g., p.Arg412X -> p.Arg412*)
+        - 'Ter' -> '*' (e.g., p.Arg412Ter -> p.Arg412*)
+        - 'Stop' -> '*'
+        - Handles frameshift notation
+
+        Also handles novel mutation markers (asterisk AFTER the mutation).
+        """
+        for variant in extracted_data.get('variants', []):
+            protein = variant.get('protein_notation', '')
+            if not protein:
+                continue
+
+            original = protein
+
+            # Convert 'Ter' (termination) at the end of protein notation to '*'
+            # e.g., p.Arg412Ter -> p.Arg412*, p.R412Ter -> p.R412*
+            protein = re.sub(r'([A-Za-z]{1,3}\d+)Ter$', r'\1*', protein, flags=re.IGNORECASE)
+
+            # Convert 'Stop' at the end to '*'
+            protein = re.sub(r'([A-Za-z]{1,3}\d+)Stop$', r'\1*', protein, flags=re.IGNORECASE)
+
+            # Convert X at the end of protein notation to '*' (stop codon)
+            # e.g., p.Arg412X -> p.Arg412*, p.R412X -> p.R412*
+            protein = re.sub(r'([A-Za-z]{1,3}\d+)X$', r'\1*', protein)
+
+            # Pattern for frameshift with X or Ter: fs + digits + X/Ter
+            # e.g., p.Gly24fs+34X -> p.Gly24fs*34, p.Gly24fsTer58 -> p.Gly24fs*58
+            protein = re.sub(r'(fs\+?)(\d*)X$', r'\1*\2', protein)
+            protein = re.sub(r'(fs\+?)(\d*)Ter$', r'\1*\2', protein, flags=re.IGNORECASE)
+            protein = re.sub(r'(fs)\*(\d+)X$', r'\1*\2', protein)
+
+            # Handle cases where frameshift shows as fs*NUMBER or fsX NUMBER
+            # Normalize fs*58 format (already correct but might have extra chars)
+            protein = re.sub(r'(fs)\s*\*\s*(\d+)', r'\1*\2', protein)
+
+            # Handle truncating mutations that end with unusual patterns
+            # Sometimes 'stop gained' is written as the amino acid that replaces (incorrectly)
+            # This is harder to detect without context, but we can flag suspicious patterns
+
+            # If notation changed, update it
+            if protein != original:
+                variant['protein_notation'] = protein
+                notes = variant.get('additional_notes', '') or ''
+                if notes:
+                    notes += ' '
+                notes += f'[Stop codon notation normalized: {original} -> {protein}]'
+                variant['additional_notes'] = notes
+
+        return extracted_data
+
     def _attempt_extraction(self, paper: Paper, model: str, prepared_full_text: Optional[str] = None) -> ExtractionResult:
-        """Attempt extraction with a single model."""
+        """Attempt extraction with a single model, with continuation for truncated responses."""
         logger.info(f"PMID {paper.pmid} - Starting expert extraction with {model}")
         self.model = model
 
@@ -478,16 +638,31 @@ IMPORTANT NOTES:
         if full_text == "[NO TEXT AVAILABLE]":
             return ExtractionResult(pmid=paper.pmid, success=False, error="No text available", model_used=model)
 
+        truncated_text = self._truncate_text_for_prompt(full_text, gene_symbol=paper.gene_symbol)
         prompt = self.EXTRACTION_PROMPT.format(
             gene_symbol=paper.gene_symbol or "UNKNOWN",
             title=paper.title or "Unknown Title",
-            full_text=self._truncate_text_for_prompt(full_text, gene_symbol=paper.gene_symbol),
+            full_text=truncated_text,
             pmid=paper.pmid
         )
 
         try:
-            extracted_data = self.call_llm_json(prompt)
-            num_variants = extracted_data.get('extraction_metadata', {}).get('total_variants_found', 0)
+            # Use the new method that tracks truncation status
+            extracted_data, was_truncated, raw_text = self.call_llm_json_with_status(prompt)
+
+            # Normalize stop codon notation
+            extracted_data = self._normalize_stop_codon_notation(extracted_data)
+
+            # Check if we need continuation extraction
+            variants = extracted_data.get('variants', [])
+            expected_count = extracted_data.get('extraction_metadata', {}).get('total_variants_found', len(variants))
+
+            if was_truncated and len(variants) < expected_count:
+                extracted_data = self._attempt_continuation(paper, model, extracted_data, full_text)
+                # Normalize again after continuation
+                extracted_data = self._normalize_stop_codon_notation(extracted_data)
+
+            num_variants = len(extracted_data.get('variants', []))
             logger.info(f"PMID {paper.pmid} - Extraction with {model} successful. Found {num_variants} variants.")
             return ExtractionResult(
                 pmid=paper.pmid,
