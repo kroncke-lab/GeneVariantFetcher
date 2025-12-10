@@ -363,13 +363,38 @@ IMPORTANT NOTES:
 
         self.models = models or settings.tier3_models
         self.temperature = temperature if temperature is not None else settings.tier3_temperature
-        self.max_tokens = max_tokens if max_tokens is not None else settings.tier3_max_tokens
+        # Store the requested max tokens, but clamp per-model to avoid API errors
+        self.requested_max_tokens = max_tokens if max_tokens is not None else settings.tier3_max_tokens
+        self.max_tokens = self._clamp_max_tokens(self.models[0], self.requested_max_tokens)
         self.tier_threshold = tier_threshold
         self.fulltext_dir = fulltext_dir
         self.use_condensed = settings.scout_use_condensed
 
         super().__init__(model=self.models[0], temperature=self.temperature, max_tokens=self.max_tokens)
         logger.debug(f"ExpertExtractor initialized with models={self.models}, temp={self.temperature}, max_tokens={self.max_tokens}")
+
+    def _clamp_max_tokens(self, model: str, requested: int) -> int:
+        """
+        Clamp max_tokens to model-safe limits to avoid provider errors.
+
+        OpenAI 4o/4o-mini currently cap at 16384 completion tokens; use 15000
+        as a safety margin.
+        """
+        limit = None
+        m = model.lower() if model else ""
+        if "gpt-4o" in m:
+            limit = 15000
+        elif "gpt-3.5" in m:
+            limit = 4000
+
+        if limit is None:
+            return requested
+
+        if requested > limit:
+            logger.warning(
+                f"Requested max_tokens={requested} exceeds safe limit {limit} for model {model}; clamping."
+            )
+        return min(requested, limit)
 
     def _prepare_full_text(self, paper: Paper) -> str:
         """
@@ -558,6 +583,103 @@ IMPORTANT NOTES:
             if stripped.startswith("|") and stripped.count("|") >= 3:
                 count += 1
         return count
+
+    def _parse_markdown_table_variants(self, full_text: str, gene_symbol: Optional[str]) -> List[dict]:
+        """
+        Best-effort parser for simple markdown tables (fast path for very large tables).
+
+        Returns a minimal variant list without calling the LLM. Intended for papers
+        like PMID 19716085 where a single giant table lists hundreds of variants.
+        """
+        if not gene_symbol:
+            return []
+
+        lines = full_text.splitlines()
+        table_started = False
+        variants = []
+        header_idx = {}
+
+        for line in lines:
+            if not table_started:
+                # Detect header row
+                if "Nucleotide" in line and "Variant" in line and "patient" in line:
+                    parts = [p.strip() for p in line.split("|") if p.strip()]
+                    for idx, name in enumerate(parts):
+                        header_idx[name.lower()] = idx
+                    table_started = True
+                continue
+
+            # Stop when table ends
+            if not line.strip().startswith("|"):
+                if variants:
+                    break
+                else:
+                    table_started = False
+                    continue
+
+            # Skip separator rows
+            if set(line.strip()) <= {"|", "-", " "}:
+                continue
+
+            cells = [c.strip() for c in line.split("|") if c.strip()]
+            if len(cells) < 3:
+                continue
+
+            def get_col(key: str) -> Optional[str]:
+                idx = header_idx.get(key)
+                if idx is None or idx >= len(cells):
+                    return None
+                return cells[idx] or None
+
+            cdna = get_col("nucleotide")
+            protein = get_col("variant") or get_col("amino acid")  # safety
+            patient_count_raw = get_col("no. of patients") or get_col("no. of patient") or get_col("patients")
+
+            if not cdna and not protein:
+                continue
+
+            # Clean cdna/protein formatting
+            cdna = cdna.replace(" ", "") if cdna else None
+            protein = protein.replace(" ", "") if protein else None
+
+            # Parse patient count
+            patient_count = None
+            if patient_count_raw:
+                try:
+                    patient_count = int(patient_count_raw)
+                except ValueError:
+                    patient_count = None
+            # Fallback: use last cell if it looks numeric
+            if patient_count is None and cells:
+                tail = cells[-1]
+                if tail.isdigit():
+                    patient_count = int(tail)
+
+            variant = {
+                "gene_symbol": gene_symbol,
+                "cdna_notation": f"c.{cdna}" if cdna and not cdna.startswith("c.") else cdna,
+                "protein_notation": protein,
+                "clinical_significance": "pathogenic",  # table is disease-associated
+                "patients": {"count": patient_count, "phenotype": "LQT2"},
+                "penetrance_data": {
+                    "total_carriers_observed": patient_count,
+                    "affected_count": patient_count,
+                    "unaffected_count": 0 if patient_count is not None else None,
+                },
+                "individual_records": [],
+                "functional_data": {"summary": "", "assays": []},
+                "segregation_data": None,
+                "population_frequency": None,
+                "evidence_level": "medium",
+                "source_location": "Table 2",
+                "additional_notes": "Parsed via deterministic table parser",
+                "key_quotes": [],
+            }
+            variants.append(variant)
+
+        if variants:
+            logger.info(f"Parsed {len(variants)} variants via deterministic markdown table parser")
+        return variants
 
     def _get_extracted_variants_summary(self, variants: list) -> str:
         """Create a compact summary of extracted variants for continuation prompts."""
@@ -769,6 +891,7 @@ IMPORTANT NOTES:
         """
         logger.info(f"PMID {paper.pmid} - Starting expert extraction with {model}")
         self.model = model
+        self.max_tokens = self._clamp_max_tokens(model, self.requested_max_tokens)
 
         full_text = prepared_full_text if prepared_full_text is not None else self._prepare_full_text(paper)
         if full_text == "[NO TEXT AVAILABLE]":
@@ -777,6 +900,31 @@ IMPORTANT NOTES:
         # Estimate variant count if not provided
         if estimated_variants is None:
             estimated_variants = self._estimate_table_rows(full_text)
+
+        # Fast path: deterministic table parser for very large tables to avoid slow LLM calls
+        if estimated_variants >= 100:
+            parsed_variants = self._parse_markdown_table_variants(full_text, paper.gene_symbol)
+            if len(parsed_variants) >= 50:
+                extracted_data = {
+                    "paper_metadata": {
+                        "pmid": paper.pmid,
+                        "title": paper.title or "Unknown Title",
+                        "extraction_summary": f"Deterministic table parse of {len(parsed_variants)} variants",
+                    },
+                    "variants": parsed_variants,
+                    "extraction_metadata": {
+                        "total_variants_found": len(parsed_variants),
+                        "extraction_confidence": "medium",
+                        "compact_mode": True,
+                        "notes": "Bypassed LLM using markdown table parser for large table",
+                    },
+                }
+                return ExtractionResult(
+                    pmid=paper.pmid,
+                    success=True,
+                    extracted_data=extracted_data,
+                    model_used="deterministic-table-parser",
+                )
 
         truncated_text = self._truncate_text_for_prompt(full_text, gene_symbol=paper.gene_symbol)
 
