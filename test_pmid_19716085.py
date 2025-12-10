@@ -271,6 +271,11 @@ def main():
         print(f"    Protein: {variant.get('protein_notation', 'N/A')}")
         print(f"    Significance: {variant.get('clinical_significance', 'N/A')}")
 
+        # Patient count
+        patients = variant.get('patients', {})
+        if patients and patients.get('count'):
+            print(f"    Patients: {patients.get('count')} ({patients.get('phenotype', 'N/A')})")
+
         # Penetrance data
         pdata = variant.get('penetrance_data', {})
         if pdata:

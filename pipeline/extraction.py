@@ -201,6 +201,10 @@ CRITICAL REQUIREMENTS:
 - Distinguish between individual case reports and cohort study statistics
 - When paper states "10 people with variant X, 4 with disease" → extract: total_carriers=10, affected=4, unaffected=6
 - When individual cases are described, create individual_records entries for each person
+- IMPORTANT: For disease-associated mutation tables (e.g., "LQT2-associated mutations", "pathogenic variants"):
+  * Patient counts in these tables represent AFFECTED carriers
+  * Extract patient count to BOTH patients.count AND penetrance_data.total_carriers_observed/affected_count
+  * Example: Table shows "No. of patients: 1" for a pathogenic variant → patients.count=1, total_carriers_observed=1, affected_count=1
 
 OUTPUT FORMAT:
 Return a JSON object with this structure:
@@ -634,6 +638,72 @@ IMPORTANT NOTES:
 
         return extracted_data
 
+    def _populate_penetrance_from_patient_count(self, extracted_data: dict) -> dict:
+        """
+        Populate penetrance_data fields from patients.count when appropriate.
+
+        For disease-associated mutation tables (like "LQT2-associated mutations"),
+        the patient count represents affected carriers. This function maps:
+        - patients.count -> penetrance_data.total_carriers_observed
+        - patients.count -> penetrance_data.affected_count (for pathogenic variants)
+
+        Only populates when penetrance_data fields are null/missing but patients.count exists.
+        """
+        for variant in extracted_data.get('variants', []):
+            patients = variant.get('patients', {})
+            patient_count = patients.get('count') if patients else None
+
+            # Skip if no patient count
+            if patient_count is None or patient_count == 0:
+                continue
+
+            # Get or create penetrance_data
+            pdata = variant.get('penetrance_data', {})
+            if pdata is None:
+                pdata = {}
+                variant['penetrance_data'] = pdata
+
+            # Only populate if fields are missing/null
+            total_carriers = pdata.get('total_carriers_observed')
+            affected_count = pdata.get('affected_count')
+
+            if total_carriers is None and affected_count is None:
+                # Determine if this is a pathogenic/disease-associated variant
+                significance = (variant.get('clinical_significance') or '').lower()
+                phenotype = (patients.get('phenotype') or '').lower()
+                source_location = (variant.get('source_location') or '').lower()
+
+                # Check if from a disease-associated context
+                is_disease_associated = any([
+                    'pathogenic' in significance,
+                    'lqt' in phenotype,  # Long QT syndrome
+                    'brugada' in phenotype,
+                    'arrhythmia' in phenotype,
+                    'syndrome' in phenotype,
+                    'disease' in phenotype,
+                    'affected' in phenotype,
+                    'mutation' in source_location,
+                    'lqt' in source_location,
+                ])
+
+                # For disease-associated variants, patient count = affected count
+                if is_disease_associated:
+                    pdata['total_carriers_observed'] = patient_count
+                    pdata['affected_count'] = patient_count
+                    pdata['unaffected_count'] = 0
+
+                    # Add note about the mapping
+                    notes = variant.get('additional_notes', '') or ''
+                    if notes:
+                        notes += ' '
+                    notes += f'[Penetrance data inferred from patient count: {patient_count} affected carriers]'
+                    variant['additional_notes'] = notes
+                else:
+                    # For uncertain significance, just set total carriers
+                    pdata['total_carriers_observed'] = patient_count
+
+        return extracted_data
+
     def _attempt_extraction(self, paper: Paper, model: str, prepared_full_text: Optional[str] = None) -> ExtractionResult:
         """Attempt extraction with a single model, with continuation for truncated responses."""
         logger.info(f"PMID {paper.pmid} - Starting expert extraction with {model}")
@@ -657,6 +727,8 @@ IMPORTANT NOTES:
 
             # Normalize stop codon notation
             extracted_data = self._normalize_stop_codon_notation(extracted_data)
+            # Populate penetrance data from patient counts
+            extracted_data = self._populate_penetrance_from_patient_count(extracted_data)
 
             # Check if we need continuation extraction
             variants = extracted_data.get('variants', [])
@@ -666,6 +738,7 @@ IMPORTANT NOTES:
                 extracted_data = self._attempt_continuation(paper, model, extracted_data, full_text)
                 # Normalize again after continuation
                 extracted_data = self._normalize_stop_codon_notation(extracted_data)
+                extracted_data = self._populate_penetrance_from_patient_count(extracted_data)
 
             num_variants = len(extracted_data.get('variants', []))
             logger.info(f"PMID {paper.pmid} - Extraction with {model} successful. Found {num_variants} variants.")
