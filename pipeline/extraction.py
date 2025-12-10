@@ -80,6 +80,18 @@ class ExpertExtractor(BaseLLMCaller):
     Handles full-text papers and markdown tables to extract structured variant data.
     """
 
+    # Model-specific maximum completion token limits
+    # These are hard limits imposed by the API providers
+    MODEL_MAX_TOKENS = {
+        "gpt-4o": 16384,
+        "gpt-4o-mini": 16384,
+        "gpt-4-turbo": 4096,
+        "gpt-4": 8192,
+        "gpt-3.5-turbo": 4096,
+        "claude-3": 4096,  # Default for Claude 3 models
+    }
+    DEFAULT_MAX_TOKENS = 16384  # Safe default for unknown models
+
     CONTINUATION_PROMPT = """You previously extracted variants from this paper but the response was truncated.
 You extracted {extracted_count} variants so far. The paper contains approximately {expected_count} variants total.
 
@@ -367,9 +379,31 @@ IMPORTANT NOTES:
         self.tier_threshold = tier_threshold
         self.fulltext_dir = fulltext_dir
         self.use_condensed = settings.scout_use_condensed
+        self._configured_max_tokens = self.max_tokens  # Store original for per-model capping
 
         super().__init__(model=self.models[0], temperature=self.temperature, max_tokens=self.max_tokens)
         logger.debug(f"ExpertExtractor initialized with models={self.models}, temp={self.temperature}, max_tokens={self.max_tokens}")
+
+    def _get_model_max_tokens(self, model: str) -> int:
+        """
+        Get the maximum completion tokens allowed for a given model.
+
+        Args:
+            model: The model identifier (e.g., "gpt-4o-mini", "gpt-4o")
+
+        Returns:
+            Maximum completion tokens for the model
+        """
+        # Check for exact match first
+        if model in self.MODEL_MAX_TOKENS:
+            return self.MODEL_MAX_TOKENS[model]
+
+        # Check for prefix match (handles versioned models like gpt-4o-2024-05-13)
+        for model_prefix, max_tokens in self.MODEL_MAX_TOKENS.items():
+            if model.startswith(model_prefix):
+                return max_tokens
+
+        return self.DEFAULT_MAX_TOKENS
 
     def _prepare_full_text(self, paper: Paper) -> str:
         """
@@ -769,6 +803,13 @@ IMPORTANT NOTES:
         """
         logger.info(f"PMID {paper.pmid} - Starting expert extraction with {model}")
         self.model = model
+
+        # Cap max_tokens at the model's limit to avoid API errors
+        # Start from configured value (not any previously capped value)
+        model_limit = self._get_model_max_tokens(model)
+        self.max_tokens = min(self._configured_max_tokens, model_limit)
+        if self._configured_max_tokens > model_limit:
+            logger.info(f"PMID {paper.pmid} - Capping max_tokens from {self._configured_max_tokens} to {model_limit} for {model}")
 
         full_text = prepared_full_text if prepared_full_text is not None else self._prepare_full_text(paper)
         if full_text == "[NO TEXT AVAILABLE]":
