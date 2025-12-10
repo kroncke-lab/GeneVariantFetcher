@@ -81,7 +81,15 @@ class ExpertExtractor(BaseLLMCaller):
 
     EXTRACTION_PROMPT = """You are an expert medical geneticist and data extraction specialist. Your task is to extract genetic variant information from the provided scientific paper, with special emphasis on penetrance data (affected vs unaffected carriers).
 
-Keep the response concise and fully valid JSON that can be parsed without errors. Stay under ~3500 tokens; if there are many variants (>120), shorten fields, limit individual_records to at most 3 per variant (or an empty list), and prefer cohort-level penetrance counts over verbose quotes.
+RESPONSE SIZE GUIDANCE:
+- You MUST extract ALL variants found in the paper - do not stop early or truncate the list
+- For papers with many variants (large tables), use a simplified format per variant:
+  * Include: gene_symbol, cdna_notation, protein_notation, clinical_significance, patients.count, source_location
+  * Use empty arrays for: individual_records, key_quotes, functional_data.assays, age_dependent_penetrance
+  * Use null for: genomic_position, penetrance_data counts (unless explicitly stated), segregation_data, population_frequency
+  * Use brief strings for: patients.phenotype, additional_notes
+- If there are >50 variants, limit individual_records to at most 1 per variant (or empty list)
+- Prioritize completeness over detail: extract ALL variants with minimal fields rather than few variants with full detail
 
 TARGET GENE: {gene_symbol}
 
@@ -98,9 +106,18 @@ Extract ALL variants in the {gene_symbol} gene mentioned in this paper with the 
 For each variant, provide:
 1. Gene Symbol (e.g., "BRCA1", "TP53")
 2. Variant Notation:
-   - cDNA notation (e.g., "c.1234G>A")
-   - Protein notation (e.g., "p.Arg412His")
+   - cDNA notation (e.g., "c.1234G>A") - convert from nucleotide position if needed (e.g., "47 A>C" → "c.47A>C")
+   - Protein notation (e.g., "p.Arg412His") - use full HGVS notation:
+     * Single-letter amino acids should be converted to three-letter (e.g., "D16A" → "p.Asp16Ala")
+     * Nonsense/stop mutations: "X" or "*" in protein position means stop codon (e.g., "R412X" → "p.Arg412*")
+     * Frameshift: include fs and stop position (e.g., "G24fs+34X" → "p.Gly24fs*58" or "p.Gly24fs")
    - Genomic position (if available)
+
+   IMPORTANT - Novel mutation markers:
+   - An asterisk (*) AFTER a mutation name (e.g., "D16A*", "R20G*") typically indicates "novel mutation"
+     (first reported in this study). This is NOT a stop codon - note it in additional_notes as "novel mutation".
+   - An asterisk (*) IN the protein position (e.g., "R412*", "p.Arg412*") indicates a stop codon/nonsense mutation.
+
 3. Clinical Significance: pathogenic, likely pathogenic, benign, likely benign, VUS, etc.
 4. Patient Information:
    - Number of patients/cases
