@@ -19,6 +19,12 @@ except ImportError:
     MARKITDOWN_AVAILABLE = False
     print("WARNING: markitdown not available. Will use basic conversion for docx/xlsx.")
 
+try:
+    import olefile
+    OLEFILE_AVAILABLE = True
+except ImportError:
+    OLEFILE_AVAILABLE = False
+
 
 class FormatConverter:
     """Converts various file formats to markdown."""
@@ -26,6 +32,71 @@ class FormatConverter:
     def __init__(self):
         """Initialize format converter."""
         self.markitdown = MarkItDown() if MARKITDOWN_AVAILABLE else None
+
+    def _convert_tsv_to_markdown_tables(self, text: str) -> str:
+        """
+        Convert tab-separated content to markdown tables where possible.
+
+        This helps LLMs better understand tabular data extracted from documents.
+        Only converts sections that look like actual tables (multiple columns, consistent structure).
+        """
+        lines = text.split('\n')
+        result_lines = []
+        in_table = False
+        table_lines = []
+
+        for line in lines:
+            # Check if line has tabs (potential table row)
+            if '\t' in line:
+                cols = line.split('\t')
+                # Consider it a table row if it has 2+ non-empty columns
+                non_empty_cols = [c for c in cols if c.strip()]
+                if len(non_empty_cols) >= 2:
+                    if not in_table:
+                        in_table = True
+                        table_lines = []
+                    table_lines.append(cols)
+                    continue
+
+            # Line without tabs or single column - end current table if any
+            if in_table and table_lines:
+                # Convert accumulated table to markdown
+                markdown_table = self._table_lines_to_markdown(table_lines)
+                result_lines.append(markdown_table)
+                table_lines = []
+                in_table = False
+
+            result_lines.append(line)
+
+        # Handle table at end of text
+        if in_table and table_lines:
+            markdown_table = self._table_lines_to_markdown(table_lines)
+            result_lines.append(markdown_table)
+
+        return '\n'.join(result_lines)
+
+    def _table_lines_to_markdown(self, table_lines: list) -> str:
+        """Convert list of column lists to markdown table format."""
+        if not table_lines:
+            return ""
+
+        # Find max columns and normalize all rows
+        max_cols = max(len(row) for row in table_lines)
+
+        # Build markdown table
+        md_lines = []
+        for i, row in enumerate(table_lines):
+            # Pad row to max columns
+            padded_row = row + [''] * (max_cols - len(row))
+            # Clean up cells (remove excessive whitespace, escape pipes)
+            cleaned_row = [cell.strip().replace('|', '\\|') for cell in padded_row]
+            md_lines.append('| ' + ' | '.join(cleaned_row) + ' |')
+
+            # Add separator after first row (header)
+            if i == 0:
+                md_lines.append('|' + '|'.join(['---'] * max_cols) + '|')
+
+        return '\n'.join(md_lines)
 
     def xml_to_markdown(self, xml_content: str) -> str:
         """
@@ -245,8 +316,24 @@ class FormatConverter:
                 print(f"    Warning: markitdown failed for .doc file {file_path.name}: {e}")
 
         # Try antiword as a fallback (if installed)
+        # First try with -t flag for tab-delimited output (better for tables)
         try:
             import subprocess
+            # Try tab-delimited output first (better for tables)
+            result = subprocess.run(
+                ['antiword', '-t', str(file_path)],
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                text = result.stdout
+                # Convert tab-delimited tables to markdown format for better LLM extraction
+                text = self._convert_tsv_to_markdown_tables(text)
+                print(f"    ✓ Extracted text via antiword (tab-delimited, {len(text)} chars)")
+                return text + "\n\n"
+
+            # If -t flag fails or produces empty output, try standard output
             result = subprocess.run(
                 ['antiword', str(file_path)],
                 capture_output=True,
@@ -254,6 +341,7 @@ class FormatConverter:
                 timeout=60
             )
             if result.returncode == 0 and result.stdout.strip():
+                print(f"    ✓ Extracted text via antiword ({len(result.stdout)} chars)")
                 return result.stdout + "\n\n"
         except FileNotFoundError:
             pass  # antiword not installed
@@ -297,6 +385,58 @@ class FormatConverter:
             pass  # LibreOffice not installed
         except Exception as e:
             print(f"    Warning: LibreOffice fallback failed for {file_path.name}: {e}")
+
+        # Try OLE compound document parsing (more reliable than raw bytes)
+        if OLEFILE_AVAILABLE:
+            try:
+                ole = olefile.OleFileIO(str(file_path))
+                text_parts = []
+
+                # Try to extract text from WordDocument stream (main text storage)
+                for stream_name in ole.listdir():
+                    stream_path = '/'.join(stream_name)
+                    try:
+                        stream_data = ole.openstream(stream_name).read()
+                        # Word stores text as UTF-16LE in some streams
+                        # Try to decode as UTF-16 first, then fallback to latin-1
+                        decoded_text = None
+                        for encoding in ['utf-16-le', 'utf-16', 'latin-1', 'cp1252']:
+                            try:
+                                decoded_text = stream_data.decode(encoding, errors='ignore')
+                                # Filter to keep only printable text
+                                cleaned = re.sub(r'[^\x09\x0A\x0D\x20-\x7E\u00A0-\u00FF]', ' ', decoded_text)
+                                cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+                                # Only keep if it looks like meaningful text (has words)
+                                if len(cleaned) > 50 and re.search(r'[a-zA-Z]{3,}', cleaned):
+                                    text_parts.append(cleaned)
+                                    break
+                            except:
+                                continue
+                    except:
+                        continue
+
+                ole.close()
+
+                if text_parts:
+                    # Join all extracted text and clean up
+                    full_text = '\n'.join(text_parts)
+                    # Remove duplicate content (OLE files often have redundant streams)
+                    lines = full_text.split('\n')
+                    seen = set()
+                    unique_lines = []
+                    for line in lines:
+                        line_clean = line.strip()
+                        if line_clean and line_clean not in seen:
+                            seen.add(line_clean)
+                            unique_lines.append(line_clean)
+
+                    result = '\n'.join(unique_lines)
+                    if len(result) > 200:
+                        print(f"    ✓ Extracted {len(result)} chars via OLE parsing")
+                        return result + "\n\n"
+
+            except Exception as e:
+                print(f"    Warning: OLE parsing failed for {file_path.name}: {e}")
 
         # Lightweight heuristic extraction directly from the binary when no
         # conversion tools are available. Many legacy .doc files store
