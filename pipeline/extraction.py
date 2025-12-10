@@ -127,6 +127,7 @@ INSTRUCTIONS:
 3. Skip detailed fields (individual_records, functional_data, key_quotes, age_dependent_penetrance)
 
 OUTPUT FORMAT (compact):
+Return a JSON object with this structure:
 {{
     "paper_metadata": {{
         "pmid": "{pmid}",
