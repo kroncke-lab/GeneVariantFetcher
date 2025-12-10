@@ -108,6 +108,57 @@ Return a JSON object with this structure:
 }}
 """
 
+    # Threshold for switching to compact extraction mode
+    HIGH_VARIANT_THRESHOLD = 30
+
+    COMPACT_EXTRACTION_PROMPT = """You are an expert medical geneticist extracting genetic variants from a scientific paper.
+
+This paper contains MANY variants (estimated {estimated_variants}+). Use COMPACT output format.
+
+TARGET GENE: {gene_symbol}
+Paper Title: {title}
+
+Full Text:
+{full_text}
+
+INSTRUCTIONS:
+1. Extract ALL {gene_symbol} variants - completeness is critical
+2. Use MINIMAL fields per variant to fit all variants in the response
+3. Skip detailed fields (individual_records, functional_data, key_quotes, age_dependent_penetrance)
+
+OUTPUT FORMAT (compact):
+{{
+    "paper_metadata": {{
+        "pmid": "{pmid}",
+        "title": "{title}",
+        "extraction_summary": "Compact extraction of {gene_symbol} variants"
+    }},
+    "variants": [
+        {{
+            "gene_symbol": "{gene_symbol}",
+            "cdna_notation": "c.XXX",
+            "protein_notation": "p.XXX",
+            "clinical_significance": "pathogenic/likely_pathogenic/VUS/likely_benign/benign",
+            "patients": {{"count": N, "phenotype": "brief description"}},
+            "penetrance_data": {{
+                "total_carriers_observed": N or null,
+                "affected_count": N or null,
+                "unaffected_count": N or null
+            }},
+            "source_location": "Table X" or "Results"
+        }}
+    ],
+    "extraction_metadata": {{
+        "total_variants_found": integer,
+        "extraction_confidence": "high/medium/low",
+        "compact_mode": true,
+        "notes": "Compact extraction - detailed fields omitted for completeness"
+    }}
+}}
+
+CRITICAL: Extract ALL variants. Do NOT stop early. Completeness > detail.
+"""
+
     EXTRACTION_PROMPT = """You are an expert medical geneticist and data extraction specialist. Your task is to extract genetic variant information from the provided scientific paper, with special emphasis on penetrance data (affected vs unaffected carriers).
 
 RESPONSE SIZE GUIDANCE:
@@ -336,16 +387,16 @@ IMPORTANT NOTES:
                     condensed_text = zones_file.read_text(encoding='utf-8')
                     if condensed_text and len(condensed_text) > 100:
                         lines = len(condensed_text.splitlines())
-                        logger.info(f"PMID {paper.pmid} - Using condensed DATA_ZONES.md ({len(condensed_text)} chars)")
-                        print(f"Using DATA_ZONES.md for extraction: {len(condensed_text):,} chars, {lines:,} lines")
+                        logger.info(f"PMID {paper.pmid} - Using condensed {paper.pmid}_DATA_ZONES.md ({len(condensed_text)} chars)")
+                        print(f"Using {paper.pmid}_DATA_ZONES.md for extraction: {len(condensed_text):,} chars, {lines:,} lines")
                         return condensed_text
                 except Exception as e:
-                    logger.warning(f"PMID {paper.pmid} - Failed to read DATA_ZONES.md: {e}")
+                    logger.warning(f"PMID {paper.pmid} - Failed to read {paper.pmid}_DATA_ZONES.md: {e}")
 
         # Fall back to paper.full_text
         if paper.full_text:
             lines = len(paper.full_text.splitlines())
-            print(f"Using FULL_CONTEXT.md for extraction: {len(paper.full_text):,} chars, {lines:,} lines")
+            print(f"Using {paper.pmid}_FULL_CONTEXT.md for extraction: {len(paper.full_text):,} chars, {lines:,} lines")
             return paper.full_text
         elif paper.abstract:
             logger.warning(f"PMID {paper.pmid} - Full text not available, using abstract only")
@@ -704,8 +755,17 @@ IMPORTANT NOTES:
 
         return extracted_data
 
-    def _attempt_extraction(self, paper: Paper, model: str, prepared_full_text: Optional[str] = None) -> ExtractionResult:
-        """Attempt extraction with a single model, with continuation for truncated responses."""
+    def _attempt_extraction(
+        self,
+        paper: Paper,
+        model: str,
+        prepared_full_text: Optional[str] = None,
+        estimated_variants: Optional[int] = None,
+    ) -> ExtractionResult:
+        """Attempt extraction with a single model, with continuation for truncated responses.
+
+        Uses compact extraction mode for papers with many variants to avoid output truncation.
+        """
         logger.info(f"PMID {paper.pmid} - Starting expert extraction with {model}")
         self.model = model
 
@@ -713,13 +773,31 @@ IMPORTANT NOTES:
         if full_text == "[NO TEXT AVAILABLE]":
             return ExtractionResult(pmid=paper.pmid, success=False, error="No text available", model_used=model)
 
+        # Estimate variant count if not provided
+        if estimated_variants is None:
+            estimated_variants = self._estimate_table_rows(full_text)
+
         truncated_text = self._truncate_text_for_prompt(full_text, gene_symbol=paper.gene_symbol)
-        prompt = self.EXTRACTION_PROMPT.format(
-            gene_symbol=paper.gene_symbol or "UNKNOWN",
-            title=paper.title or "Unknown Title",
-            full_text=truncated_text,
-            pmid=paper.pmid
-        )
+
+        # Use compact mode for high-variant papers to avoid output truncation
+        use_compact = estimated_variants >= self.HIGH_VARIANT_THRESHOLD
+        if use_compact:
+            logger.info(f"PMID {paper.pmid} - Using COMPACT extraction mode ({estimated_variants} estimated variants)")
+            print(f"High-variant paper detected ({estimated_variants}+ rows) - using compact extraction mode")
+            prompt = self.COMPACT_EXTRACTION_PROMPT.format(
+                gene_symbol=paper.gene_symbol or "UNKNOWN",
+                title=paper.title or "Unknown Title",
+                full_text=truncated_text,
+                pmid=paper.pmid,
+                estimated_variants=estimated_variants,
+            )
+        else:
+            prompt = self.EXTRACTION_PROMPT.format(
+                gene_symbol=paper.gene_symbol or "UNKNOWN",
+                title=paper.title or "Unknown Title",
+                full_text=truncated_text,
+                pmid=paper.pmid
+            )
 
         try:
             # Use the new method that tracks truncation status
@@ -777,7 +855,11 @@ IMPORTANT NOTES:
             )
 
         for idx, model in enumerate(self.models):
-            result = self._attempt_extraction(paper, model, prepared_full_text=prepared_full_text)
+            result = self._attempt_extraction(
+                paper, model,
+                prepared_full_text=prepared_full_text,
+                estimated_variants=table_row_hint,
+            )
 
             if not result.success:
                 if idx + 1 < len(self.models):
