@@ -138,8 +138,18 @@ def main():
         else:
             print("⚠️  Data scout did not create DATA_ZONES.md")
 
-    print(f"\nContent length: {len(content):,} characters")
-    print(f"Line count: {len(content.splitlines()):,} lines")
+    print(f"\nFULL_CONTEXT.md stats:")
+    print(f"  Content length: {len(content):,} characters")
+    print(f"  Line count: {len(content.splitlines()):,} lines")
+
+    # Show DATA_ZONES.md stats if it exists
+    if data_zones_path.exists():
+        zones_content = data_zones_path.read_text()
+        compression = (len(zones_content) / len(content) * 100) if content else 0
+        print(f"\nDATA_ZONES.md stats (used for extraction):")
+        print(f"  Content length: {len(zones_content):,} characters")
+        print(f"  Line count: {len(zones_content.splitlines()):,} lines")
+        print(f"  Compression: {compression:.1f}% of original")
 
     # Check for supplements
     if "## Supplementary" in content or "supplement" in content.lower():

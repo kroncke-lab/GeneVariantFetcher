@@ -331,16 +331,21 @@ IMPORTANT NOTES:
                 try:
                     condensed_text = zones_file.read_text(encoding='utf-8')
                     if condensed_text and len(condensed_text) > 100:
+                        lines = len(condensed_text.splitlines())
                         logger.info(f"PMID {paper.pmid} - Using condensed DATA_ZONES.md ({len(condensed_text)} chars)")
+                        print(f"Using DATA_ZONES.md for extraction: {len(condensed_text):,} chars, {lines:,} lines")
                         return condensed_text
                 except Exception as e:
                     logger.warning(f"PMID {paper.pmid} - Failed to read DATA_ZONES.md: {e}")
 
         # Fall back to paper.full_text
         if paper.full_text:
+            lines = len(paper.full_text.splitlines())
+            print(f"Using FULL_CONTEXT.md for extraction: {len(paper.full_text):,} chars, {lines:,} lines")
             return paper.full_text
         elif paper.abstract:
             logger.warning(f"PMID {paper.pmid} - Full text not available, using abstract only")
+            print(f"Using ABSTRACT ONLY for extraction: {len(paper.abstract):,} chars")
             return f"[ABSTRACT ONLY - FULL TEXT NOT AVAILABLE]\n\n{paper.abstract}"
         else:
             return "[NO TEXT AVAILABLE]"
