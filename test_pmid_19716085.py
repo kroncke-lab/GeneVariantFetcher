@@ -129,24 +129,24 @@ def main():
     with open(result, 'r') as f:
         content = f.read()
 
-    # Ensure condensed DATA_ZONES.md is created (even when using cached full text)
+    # Ensure condensed {PMID}_DATA_ZONES.md is created (even when using cached full text)
     if harvester.gene_symbol and not data_zones_path.exists():
         print(f"\nRunning data scout to create condensed zones for {pmid}...")
         harvester._run_data_scout(pmid, content)
         if data_zones_path.exists():
-            print(f"✓ Created DATA_ZONES.md: {data_zones_path}")
+            print(f"✓ Created {pmid}_DATA_ZONES.md: {data_zones_path}")
         else:
-            print("⚠️  Data scout did not create DATA_ZONES.md")
+            print(f"⚠️  Data scout did not create {pmid}_DATA_ZONES.md")
 
-    print(f"\nFULL_CONTEXT.md stats:")
+    print(f"\n{pmid}_FULL_CONTEXT.md stats:")
     print(f"  Content length: {len(content):,} characters")
     print(f"  Line count: {len(content.splitlines()):,} lines")
 
-    # Show DATA_ZONES.md stats if it exists
+    # Show {PMID}_DATA_ZONES.md stats if it exists
     if data_zones_path.exists():
         zones_content = data_zones_path.read_text()
         compression = (len(zones_content) / len(content) * 100) if content else 0
-        print(f"\nDATA_ZONES.md stats (used for extraction):")
+        print(f"\n{pmid}_DATA_ZONES.md stats (used for extraction):")
         print(f"  Content length: {len(zones_content):,} characters")
         print(f"  Line count: {len(zones_content.splitlines()):,} lines")
         print(f"  Compression: {compression:.1f}% of original")
