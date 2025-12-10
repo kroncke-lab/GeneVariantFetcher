@@ -68,23 +68,36 @@ class BaseLLMCaller:
 
         Uses the same model with a constrained prompt to fix the structure while
         trimming incomplete trailing items. Returns None on failure.
+
+        For large variant extractions, uses higher token limits to preserve data.
         """
+        # Use a larger char limit for repair - variant tables can be very large
+        # Each variant is ~300-500 chars of JSON, so 150 variants needs ~75K chars
+        max_repair_chars = 80000
+        repair_chunk = raw_text[:max_repair_chars]
+
         repair_prompt = (
             "The following text is intended to be a JSON object but is malformed or truncated. "
-            "Return a valid JSON object that keeps only intact content and discards incomplete tail fragments. "
+            "Return a valid JSON object that keeps ALL intact content and discards only incomplete tail fragments. "
+            "CRITICAL: Preserve all special characters in protein notation, especially asterisks (*) for stop codons "
+            "(e.g., 'p.Arg412*' or 'p.Gly24fs*58'). "
             "Do not add new information. Respond with JSON only.\n\n"
-            f"{raw_text[:20000]}"
+            f"{repair_chunk}"
         )
+
+        # Use higher token limit for repair to handle large variant tables
+        # Default repair needs more tokens for 100+ variant extractions
+        repair_max_tokens = min(self.max_tokens, 16000)
 
         try:
             response = completion(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "You fix malformed JSON. Respond with JSON only."},
+                    {"role": "system", "content": "You fix malformed JSON. Preserve all data including special characters like asterisks (*) in protein notation. Respond with JSON only."},
                     {"role": "user", "content": repair_prompt},
                 ],
                 temperature=0,
-                max_tokens=min(self.max_tokens, 4000),
+                max_tokens=repair_max_tokens,
                 response_format={"type": "json_object"},
             )
             repaired_text = response.choices[0].message.content
@@ -92,6 +105,51 @@ class BaseLLMCaller:
         except Exception as repair_exc:
             logger.error(f"JSON repair attempt failed: {repair_exc}")
             return None
+
+    @llm_retry
+    def call_llm_json_with_status(
+        self,
+        prompt: str,
+        system_message: Optional[str] = None,
+        response_format: Optional[Dict[str, Any]] = None
+    ) -> tuple:
+        """
+        Call the LLM and parse JSON, returning (data, was_truncated, raw_text).
+
+        This variant returns additional metadata needed for continuation extraction.
+        """
+        messages = []
+        if system_message:
+            messages.append({"role": "system", "content": system_message})
+        messages.append({"role": "user", "content": prompt})
+
+        if response_format is None:
+            response_format = {"type": "json_object"}
+
+        response = completion(
+            model=self.model,
+            messages=messages,
+            temperature=self.temperature,
+            max_tokens=self.max_tokens,
+            response_format=response_format
+        )
+
+        result_text = response.choices[0].message.content
+        finish_reason = getattr(response.choices[0], "finish_reason", None)
+        was_truncated = finish_reason == "length"
+
+        try:
+            result_data = parse_llm_json_response(result_text)
+            return result_data, was_truncated, result_text
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse LLM JSON response: {e}")
+            if was_truncated:
+                logger.warning("LLM response was cut off due to max_tokens; attempting repair.")
+            repaired = self._attempt_json_repair(result_text)
+            if repaired is not None:
+                logger.info("JSON repair succeeded after initial parse failure.")
+                return repaired, was_truncated, result_text
+            raise
 
     @llm_retry
     def call_llm_json(
