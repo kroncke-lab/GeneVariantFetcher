@@ -100,6 +100,28 @@ def normalize_column_name(col: Any) -> str:
     return re.sub(r'[\s_\-]+', '', col_str.lower().strip())
 
 
+def normalize_pmid(pmid: Any) -> str:
+    """
+    Normalize a PMID value to a consistent string format.
+
+    Handles:
+    - Float values like 16470702.0 -> "16470702"
+    - Integer values -> "16470702"
+    - String values -> strip and convert
+    - NaN/None -> ""
+    """
+    if pmid is None or (isinstance(pmid, float) and pd.isna(pmid)):
+        return ""
+
+    # Try to convert to int first (handles floats like 16470702.0)
+    try:
+        pmid_int = int(float(pmid))
+        return str(pmid_int)
+    except (ValueError, TypeError):
+        # Fall back to string conversion
+        return str(pmid).strip()
+
+
 def detect_columns(df: pd.DataFrame, mapping: Optional[Dict[str, str]] = None) -> Dict[str, Optional[str]]:
     """
     Detect column mappings from DataFrame using synonym matching.
@@ -380,8 +402,8 @@ def extract_sqlite_data(conn: sqlite3.Connection, table_info: Dict[str, TableInf
         logger.info(f"Executing custom query on {primary_table.name}")
         df = pd.read_sql_query(query, conn)
 
-    # Ensure pmid is string
-    df['pmid'] = df['pmid'].astype(str)
+    # Normalize PMIDs (handles float conversion like 16470702.0 -> "16470702")
+    df['pmid'] = df['pmid'].apply(normalize_pmid)
 
     logger.info(f"Extracted {len(df)} records from SQLite")
     return df
@@ -426,6 +448,7 @@ def normalize_variant(variant: str) -> str:
     - Normalizes unicode
     - Collapses multiple spaces
     - Standardizes case for common prefixes
+    - Normalizes termination symbols (X -> *)
     """
     if not variant or pd.isna(variant):
         return ''
@@ -437,6 +460,13 @@ def normalize_variant(variant: str) -> str:
     # Standardize common prefixes
     variant = re.sub(r'^p\.\s*', 'p.', variant, flags=re.IGNORECASE)
     variant = re.sub(r'^c\.\s*', 'c.', variant, flags=re.IGNORECASE)
+
+    # Normalize termination symbols: X, Ter -> *
+    # Handle fsX, fsX123, X at end of variant
+    variant = re.sub(r'fsX(\d*)$', r'fs*\1', variant, flags=re.IGNORECASE)
+    variant = re.sub(r'Ter(\d*)$', r'*\1', variant)
+    # Handle X alone at end (but not in middle of word)
+    variant = re.sub(r'(\d)X$', r'\1*', variant)
 
     return variant
 
@@ -490,6 +520,40 @@ def convert_aa_1_to_3(variant: str) -> Optional[str]:
     return None
 
 
+def add_p_prefix(variant: str) -> Optional[str]:
+    """
+    Add p. prefix to a variant that looks like a protein change but lacks the prefix.
+
+    e.g., A123V -> p.A123V, Ala123Val -> p.Ala123Val
+    """
+    if not variant:
+        return None
+    if variant.lower().startswith('p.') or variant.lower().startswith('c.'):
+        return None  # Already has prefix
+
+    # Check if it looks like a protein variant:
+    # - Single letter + number + single letter (A123V)
+    # - Three letter + number + three letter (Ala123Val)
+    # - Single/three letter + number + fs* (A123fs*)
+    # - Single/three letter + number + * (A123*)
+    protein_pattern = r'^[A-Z][a-z]{0,2}\d+([A-Z][a-z]{0,2}|fs\*?\d*|\*\d*)$'
+    if re.match(protein_pattern, variant, re.IGNORECASE):
+        return f"p.{variant}"
+
+    return None
+
+
+def remove_p_prefix(variant: str) -> Optional[str]:
+    """
+    Remove p. prefix from a protein variant.
+
+    e.g., p.A123V -> A123V
+    """
+    if variant and variant.lower().startswith('p.'):
+        return variant[2:]
+    return None
+
+
 def get_variant_forms(variant: str) -> Set[str]:
     """
     Get all equivalent forms of a variant for matching.
@@ -498,6 +562,7 @@ def get_variant_forms(variant: str) -> Set[str]:
     - Original normalized
     - 3-letter to 1-letter conversion
     - 1-letter to 3-letter conversion
+    - With and without p. prefix
     """
     forms = set()
 
@@ -505,7 +570,7 @@ def get_variant_forms(variant: str) -> Set[str]:
     if normalized:
         forms.add(normalized)
 
-    # Try amino acid conversions
+    # Try amino acid conversions on normalized form
     converted_1 = convert_aa_3_to_1(normalized)
     if converted_1:
         forms.add(normalize_variant(converted_1))
@@ -513,6 +578,33 @@ def get_variant_forms(variant: str) -> Set[str]:
     converted_3 = convert_aa_1_to_3(normalized)
     if converted_3:
         forms.add(normalize_variant(converted_3))
+
+    # Try adding p. prefix if missing
+    with_prefix = add_p_prefix(normalized)
+    if with_prefix:
+        forms.add(normalize_variant(with_prefix))
+        # Also convert this form
+        converted_1_p = convert_aa_3_to_1(with_prefix)
+        if converted_1_p:
+            forms.add(normalize_variant(converted_1_p))
+        converted_3_p = convert_aa_1_to_3(with_prefix)
+        if converted_3_p:
+            forms.add(normalize_variant(converted_3_p))
+
+    # Try removing p. prefix
+    without_prefix = remove_p_prefix(normalized)
+    if without_prefix:
+        forms.add(normalize_variant(without_prefix))
+        # Also convert this form
+        converted_1_np = convert_aa_3_to_1(f"p.{without_prefix}")
+        if converted_1_np:
+            # Add both with and without prefix
+            forms.add(normalize_variant(converted_1_np))
+            forms.add(normalize_variant(converted_1_np[2:]) if converted_1_np.startswith('p.') else converted_1_np)
+        converted_3_np = convert_aa_1_to_3(f"p.{without_prefix}")
+        if converted_3_np:
+            forms.add(normalize_variant(converted_3_np))
+            forms.add(normalize_variant(converted_3_np[2:]) if converted_3_np.startswith('p.') else converted_3_np)
 
     return forms
 
@@ -703,7 +795,7 @@ def aggregate_excel_data(
     aggregated = {}
 
     for _, row in df.iterrows():
-        pmid = str(row[pmid_col]).strip()
+        pmid = normalize_pmid(row[pmid_col])
         variant_raw = str(row[variant_col]) if pd.notna(row[variant_col]) else ''
         variant_norm = normalize_variant(variant_raw)
 
@@ -750,7 +842,7 @@ def aggregate_sqlite_data(df: pd.DataFrame) -> Dict[Tuple[str, str], Dict[str, A
     aggregated = {}
 
     for _, row in df.iterrows():
-        pmid = str(row['pmid']).strip()
+        pmid = normalize_pmid(row['pmid'])
         variant_raw = str(row['variant']) if pd.notna(row['variant']) else ''
         variant_norm = normalize_variant(variant_raw)
 
