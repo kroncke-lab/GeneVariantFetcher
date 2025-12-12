@@ -6,7 +6,9 @@ consolidating different query approaches into a single consistent interface.
 """
 
 import logging
+from http.client import IncompleteRead
 from typing import Set, List, Dict, Any, Optional
+from urllib.error import URLError
 from Bio import Entrez
 from Bio.Entrez.Parser import ValidationError
 import requests
@@ -22,6 +24,8 @@ _RETRYABLE_EXCEPTIONS = (
     requests.exceptions.Timeout,
     ConnectionError,
     TimeoutError,
+    IncompleteRead,  # Server closes connection before sending complete response
+    URLError,  # General urllib network errors
 )
 
 
