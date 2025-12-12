@@ -646,7 +646,16 @@ def load_excel_data(
     """
     logger.info(f"Loading Excel file: {excel_path}")
 
-    df = pd.read_excel(excel_path, sheet_name=sheet_name, engine='openpyxl')
+    # Select engine based on file extension
+    excel_path_lower = excel_path.lower()
+    if excel_path_lower.endswith('.xls'):
+        engine = 'xlrd'
+    elif excel_path_lower.endswith(('.xlsx', '.xlsm')):
+        engine = 'openpyxl'
+    else:
+        engine = None  # Let pandas auto-detect
+
+    df = pd.read_excel(excel_path, sheet_name=sheet_name, engine=engine)
     logger.info(f"Loaded {len(df)} rows from Excel")
     logger.info(f"Columns: {list(df.columns)}")
 
