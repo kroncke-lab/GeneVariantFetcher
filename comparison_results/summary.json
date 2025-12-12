@@ -1,0 +1,15 @@
+{
+  "input_files": {
+    "excel": "/Users/kronckbm/Desktop/KCNH2 HeterozygoteDatabase-4-clinical_w_paris_japan_mayo_and_italycohort.xls",
+    "sqlite": "/Users/kronckbm/Desktop/KCNH2/20251211_201534/KCNH2.db"
+  },
+  "total_rows": 1941,
+  "matched_exact": 0,
+  "matched_fuzzy": 0,
+  "unmatched": 1941,
+  "missing_in_sqlite": 1502,
+  "missing_in_excel": 439,
+  "count_mismatches": 0,
+  "unique_pmids": 388,
+  "top_mismatches": []
+}

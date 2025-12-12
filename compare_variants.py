@@ -92,9 +92,12 @@ COLUMN_SYNONYMS: Dict[str, List[str]] = {
 }
 
 
-def normalize_column_name(col: str) -> str:
+def normalize_column_name(col: Any) -> str:
     """Normalize column name for matching (lowercase, strip, remove underscores/spaces)."""
-    return re.sub(r'[\s_\-]+', '', col.lower().strip())
+    if col is None:
+        return ''
+    col_str = str(col)
+    return re.sub(r'[\s_\-]+', '', col_str.lower().strip())
 
 
 def detect_columns(df: pd.DataFrame, mapping: Optional[Dict[str, str]] = None) -> Dict[str, Optional[str]]:
