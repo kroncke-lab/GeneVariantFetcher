@@ -69,17 +69,20 @@ COLUMN_SYNONYMS: Dict[str, List[str]] = {
         'carriers', 'n_carriers', 'carrier_count', 'total_carriers',
         'n_total', 'subjects', 'probands', 'individuals', 'n_individuals',
         'total', 'n', 'count', 'sample_size', 'n_subjects', 'carrier_n',
-        'total_n', 'num_carriers', 'number_carriers'
+        'total_n', 'num_carriers', 'number_carriers',
+        'car'  # LQTS-specific: carrier count
     ],
     'affected_count': [
         'affected', 'cases', 'n_affected', 'symptomatic', 'patients',
         'n_cases', 'case_count', 'affected_count', 'n_symptomatic',
-        'diseased', 'n_diseased', 'num_affected', 'number_affected'
+        'diseased', 'n_diseased', 'num_affected', 'number_affected',
+        'lqt'  # LQTS-specific: Long QT syndrome affected
     ],
     'unaffected_count': [
         'unaffected', 'controls', 'n_unaffected', 'asymptomatic',
         'n_controls', 'control_count', 'unaffected_count', 'n_asymptomatic',
-        'healthy', 'n_healthy', 'num_unaffected', 'number_unaffected'
+        'healthy', 'n_healthy', 'num_unaffected', 'number_unaffected',
+        'amb+una', 'ambuna'  # LQTS-specific: ambiguous + unaffected combined
     ],
     'phenotype': [
         'phenotype', 'condition', 'disease', 'diagnosis', 'clinical',
@@ -90,6 +93,11 @@ COLUMN_SYNONYMS: Dict[str, List[str]] = {
         'free_text', 'annotation', 'additional_notes'
     ]
 }
+
+# LQTS-specific affected phenotype columns to sum for total affected count
+AFFECTED_PHENOTYPE_COLUMNS: List[str] = [
+    'lqt', 'hom', 'smpt', 'asd', 'scd', 'drg', 'stqs'
+]
 
 
 def normalize_column_name(col: Any) -> str:
@@ -122,7 +130,7 @@ def normalize_pmid(pmid: Any) -> str:
         return str(pmid).strip()
 
 
-def detect_columns(df: pd.DataFrame, mapping: Optional[Dict[str, str]] = None) -> Dict[str, Optional[str]]:
+def detect_columns(df: pd.DataFrame, mapping: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
     """
     Detect column mappings from DataFrame using synonym matching.
 
@@ -131,9 +139,12 @@ def detect_columns(df: pd.DataFrame, mapping: Optional[Dict[str, str]] = None) -
         mapping: Optional explicit column mapping from user
 
     Returns:
-        Dict mapping semantic field names to actual column names
+        Dict mapping semantic field names to actual column names.
+        Special key 'affected_phenotype_columns' contains list of detected
+        phenotype-specific affected columns to sum.
     """
-    detected = {field: None for field in COLUMN_SYNONYMS.keys()}
+    detected: Dict[str, Any] = {field: None for field in COLUMN_SYNONYMS.keys()}
+    detected['affected_phenotype_columns'] = []  # List of columns to sum for affected
 
     # If explicit mapping provided, use it first
     if mapping:
@@ -169,6 +180,17 @@ def detect_columns(df: pd.DataFrame, mapping: Optional[Dict[str, str]] = None) -
                         break
                 if detected[field] is not None:
                     break
+
+    # Detect LQTS-specific affected phenotype columns to sum
+    for pheno_col in AFFECTED_PHENOTYPE_COLUMNS:
+        norm_pheno = normalize_column_name(pheno_col)
+        if norm_pheno in normalized_cols:
+            actual_col = normalized_cols[norm_pheno]
+            detected['affected_phenotype_columns'].append(actual_col)
+            logger.info(f"Detected affected phenotype column: {actual_col}")
+
+    if detected['affected_phenotype_columns']:
+        logger.info(f"Will sum {len(detected['affected_phenotype_columns'])} affected phenotype columns: {detected['affected_phenotype_columns']}")
 
     return detected
 
@@ -732,7 +754,7 @@ def load_excel_data(
     excel_path: Path,
     sheet_name: Optional[str],
     column_mapping: Optional[Dict[str, str]]
-) -> Tuple[pd.DataFrame, Dict[str, Optional[str]]]:
+) -> Tuple[pd.DataFrame, Dict[str, Any]]:
     """
     Load and parse Excel data.
 
@@ -777,7 +799,7 @@ def load_excel_data(
 
 def aggregate_excel_data(
     df: pd.DataFrame,
-    detected: Dict[str, Optional[str]]
+    detected: Dict[str, Any]
 ) -> Dict[Tuple[str, str], Dict[str, Any]]:
     """
     Aggregate Excel data by (pmid, variant) key.
@@ -791,6 +813,7 @@ def aggregate_excel_data(
     affected_col = detected.get('affected_count')
     unaffected_col = detected.get('unaffected_count')
     phenotype_col = detected.get('phenotype')
+    affected_phenotype_cols = detected.get('affected_phenotype_columns', [])
 
     aggregated = {}
 
@@ -819,7 +842,15 @@ def aggregate_excel_data(
         if carriers_col and pd.notna(row.get(carriers_col)):
             aggregated[key]['carriers_total'] += safe_int(row[carriers_col]) or 0
 
-        if affected_col and pd.notna(row.get(affected_col)):
+        # Sum affected from multiple phenotype columns if available
+        if affected_phenotype_cols:
+            row_affected = 0
+            for pheno_col in affected_phenotype_cols:
+                if pd.notna(row.get(pheno_col)):
+                    row_affected += safe_int(row[pheno_col]) or 0
+            aggregated[key]['affected_count'] += row_affected
+        elif affected_col and pd.notna(row.get(affected_col)):
+            # Fallback to single affected column
             aggregated[key]['affected_count'] += safe_int(row[affected_col]) or 0
 
         if unaffected_col and pd.notna(row.get(unaffected_col)):
