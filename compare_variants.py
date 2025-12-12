@@ -646,7 +646,19 @@ def load_excel_data(
     """
     logger.info(f"Loading Excel file: {excel_path}")
 
-    df = pd.read_excel(excel_path, sheet_name=sheet_name, engine='openpyxl')
+    # Select engine based on file suffix so legacy .xls files are supported
+    engine = 'xlrd' if excel_path.suffix.lower() == '.xls' else 'openpyxl'
+
+    try:
+        df = pd.read_excel(excel_path, sheet_name=sheet_name, engine=engine)
+    except ImportError as exc:
+        if engine == 'xlrd':
+            raise ImportError(
+                "Reading .xls files requires the optional dependency xlrd. "
+                "Install it (e.g., `pip install xlrd`) or convert the file to "
+                ".xlsx/.csv before retrying."
+            ) from exc
+        raise
     logger.info(f"Loaded {len(df)} rows from Excel")
     logger.info(f"Columns: {list(df.columns)}")
 
