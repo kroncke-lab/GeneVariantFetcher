@@ -83,7 +83,15 @@ def fetch_and_save_abstracts(
         logger.info("Processing PMID %s", pmid)
 
         metadata = all_metadata.get(pmid, {})
-        abstract = fetch_paper_abstract(pmid, email=email)
+        try:
+            abstract = fetch_paper_abstract(pmid, email=email)
+        except Exception as exc:  # Tenacity will re-raise after retries
+            logger.error(
+                "Failed to fetch abstract for PMID %s after retries; continuing without it. Error: %s",
+                pmid,
+                exc,
+            )
+            abstract = None
 
         record = {
             "metadata": {
