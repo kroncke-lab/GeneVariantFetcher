@@ -1,0 +1,94 @@
+variant_id,gene_symbol,cdna_notation,protein_notation,genomic_position,clinical_significance,evidence_level,total_carriers,total_affected,total_unaffected,total_uncertain,individual_affected_count,individual_unaffected_count,individual_uncertain_count,notes,source_pmids,source_locations,phenotype_descriptions,paper_count
+1,TTR,,,,,,897,843,28,0,10,1,0,All patients were diagnosed with TTR-FAP. | not specified | novel mutation | Two patients were diagnosed with hereditary transthyretin amyloidosis. | The study highlights the presence of corneal nerve damage and functional retinal abnormalities. | Includes patients with smoldering myeloma and hereditary ATTR polyneuropathy. | First known case presenting in childhood. | Variants co-segregated with affected status in family members. | No specific variants were detailed in the text. | Variants included due to their association with late-onset disease. | Study included 40 patients |  28 diagnosed with ATTR-CM. | This variant is associated with a high penetrance for ATTR-CM. | The case highlights the importance of early detection of TTR amyloidosis. | Study provides potential insights into the aetiopathogenesis of ATTRwt amyloidosis. | No variants were seen in the remaining 5 patients. | No mutations in the TTR gene were confirmed.,"29052096,29764897,30671265,31376091,31555519,32399692,32814468,34207092,34250046,34783874,34790974,34805759,34935411,35110594,35629214,35779241,36837536,37466024,37784196,39230471,39669619,40025610,40809950,40870035",Results |  paragraph 2 | Results |  paragraph 1 | Main Text |  Abstract | Text section | Main text |  Abstract | Materials and Methods |  paragraph 2 | Results |  paragraph 4 | Main Text |  Case Report | Results |  paragraph 3 | Text section |  Case Presentation,Cardiac involvement |  hereditary ATTR polyneuropathy | ATTRv | ATTR-CA | typical cardiac phenotype | diagnosed by Technetium Tc99m Pyrophosphate | typical phenotype on echocardiograms | heart failure |  cardiac amyloidosis | severe LGMD | ventricular non-compaction | TTR-CA | grade 1 uptake | suggestive of TTR-CA | progeroid phenotype with severe developmental delay | TTR-related amyloidosis | bilateral carpal tunnel syndrome | wild-type TTR cardiac amyloidosis | ocular manifestations of hATTR | ATTRwt amyloidosis | hereditary transthyretin amyloidosis | ATTRm | ATTR-CM | late-onset familial amyloid cardiomyopathy | wild-type transthyretin amyloidosis | transthyretin amyloid cardiomyopathy (ATTR-CM) | not specified | TTR-FAP | Dilated cardiomyopathy (DCM) and related cardiac issues,24
+42,TTR,,p.Glu109Lys,,pathogenic,strong,13,1,12,0,0,0,0,,36471404,Results |  paragraph 2,mixed phenotype of ATTR-CM and ATTR-PN,1
+41,TTR,,p.Val142Ile,,pathogenic,strong,13,5,8,0,0,0,0,,36471404,Results |  paragraph 2,ATTR-CM |  ATTR-PN |  carpal tunnel syndrome,1
+40,TTR,,p.Val50Met,,pathogenic,strong,13,7,6,0,0,0,0,,36471404,Results |  paragraph 2,sensorimotor polyneuropathy |  autonomic dysfunction |  ATTR-CM |  kidney involvement,1
+21,TTR,c.104981G>A,p.Ser34994Ala,,Damaging,High,1,1,0,0,1,0,0,,29263846,Table 2 |  Row 10,Macrocephaly |  Penile freckling |  Unknown,1
+86,TTR,c.104A>C,p.Lys35Asn,,likely pathogenic,,2,2,0,0,0,0,0,,33716932,Results |  paragraph 2,TTR-FAP,1
+80,TTR,c.107780_107790delinsTGAAAGAAAAA,p.Glu35927_Trp35930delinsValLysGluLys,,likely pathogenic,strong,3,3,0,0,1,0,0,,39807212,Results |  paragraph 3,Tibial muscular dystrophy (TMD) and limb-girdle muscular dystrophy type 10 (LGMD R10),1
+87,TTR,c.107C>T,p.Ala36Pro,,likely pathogenic,,1,1,0,0,0,0,0,,33716932,Results |  paragraph 2,TTR-FAP,1
+77,TTR,c.113A>G,p.Asp38Gly,,pathogenic,strong,1,1,0,0,1,0,0,novel mutation,34491937,Main Text |  Abstract,Leptomeningeal amyloidosis,1
+38,TTR,c.114A>T,p.Tyr38Phe,,likely pathogenic,moderate,1,1,0,0,1,0,0,novel mutation,34584331,text_para_1,neuropathy,1
+56,TTR,c.118A>C,p.Val30Met,,pathogenic,high,23,19,4,0,0,0,0,,40630302,Results |  paragraph 1,ATTRv-N,1
+67,TTR,c.118G>A,p.Val40Met,,pathogenic,strong,1,1,0,0,1,0,0,novel mutation,30333406,Main text |  Abstract,familial amyloid polyneuropathy (FAP-ATTR Val30Met),1
+34,TTR,c.122C>T,p.Val41Met,,likely pathogenic,moderate,1,1,0,0,1,0,0,,22149423,Discussion |  paragraph 1,cardiomyopathy,1
+47,TTR,c.122G>A,p.Val41Met,,pathogenic,strong,4,4,0,0,4,0,0,novel mutation,"34040908,34355354,34768388,39537877",Main Text |  Abstract | Table 1 |  Row 1,ATTRv-PN | isolated cardiac amyloidosis with severe systolic dysfunction | ATTR CA | ATTR-CA,4
+82,TTR,c.1234G>A,p.Val412Met,,pathogenic,high,10,4,6,0,1,0,0,novel mutation,40343652,Table 1 |  Row 1,TTR amyloidosis,1
+84,TTR,c.126G>A,p.Glu42Gly,,likely pathogenic,,2,2,0,0,0,0,0,,33716932,Results |  paragraph 2,TTR-FAP,1
+55,TTR,c.128C>A,p.Ser43Asn,,pathogenic,strong,1,1,0,0,1,0,0,novel mutation,40519714,Discussion |  paragraph 2,early-onset cardiomyopathy,1
+68,TTR,c.128G>A,p.Ser43Asn,,pathogenic,strong,4,4,0,0,0,1,0,The variant p.Ser43Asn is a novel mutation.,33345470,Main Text |  Abstract and Case Presentation,cardiac ATTR amyloidosis,1
+85,TTR,c.140G>A,p.Gly47Arg,,likely pathogenic,,2,2,0,0,0,0,0,,33716932,Results |  paragraph 2,TTR-FAP,1
+71,TTR,c.146C>G,p.Thr49Ala,,likely pathogenic,high,2,2,0,0,0,0,0,,33921571,Results |  paragraph 3,hATTR amyloidosis,1
+10,TTR,c.148G>A,p.Val30Met,,pathogenic,strong,2,2,0,0,2,0,0,novel mutation,"36003663,39790491",Text section |  paragraph 1 | Main Text |  paragraph 2,TTR-FAP with spinal cord damage | nephrotic syndrome,2
+9,TTR,c.148G>A,p.Val50Met,,pathogenic,strong,13,13,0,0,3,0,0,legacy nomenclature p.V30M | novel mutation,"27066555,35734096,37266816,39790491",Results |  Patient 2 | Main Text |  Abstract | Results |  paragraph 4 | Main Text |  paragraph 1,TTR-FAP with spinal cord damage | late-onset hereditary transthyretin amyloidosis | rapidly progressive weakness and sensory loss | ATTRv-PN,4
+57,TTR,c.149G>A,p.Ser50Arg,,pathogenic,high,23,1,22,0,0,0,0,,40630302,Results |  paragraph 1,ATTRv-N,1
+49,TTR,c.149G>A,p.Val50Met,,pathogenic,high,1,1,0,0,1,0,0,,39458146,Discussion |  paragraph 2,hATTR amyloidosis,1
+17,TTR,c.15286T>C,p.Cys5096Arg,,Damaging,High,1,1,0,0,1,0,0,,29263846,Table 2 |  Row 6,Macrocephaly |  Penile freckling |  Unknown,1
+76,TTR,c.162G>A,p.Glu54Gln,,pathogenic,high,22,0,0,0,0,0,0,,40002633,Text section |  paragraph 1,hereditary cardiac transthyretin amyloidosis (ATTR),1
+66,TTR,c.179C>T,p.Thr60Ala,,pathogenic,high,1,1,0,0,1,0,0,novel mutation,18241340,Case presentation |  paragraph 1,FAP with cardiac amyloidosis,1
+29,TTR,c.179C>T,p.Thr60Ala*,,pathogenic,strong,1,1,0,0,1,0,0,novel mutation,38834303,Main text |  paragraph 1,hereditary transthyretin amyloidosis,1
+45,TTR,c.182A>G,p.Lys61Glu,,likely pathogenic,not specified,1,1,0,0,1,0,0,,39811011,Results |  paragraph 1,not specified,1
+11,TTR,c.191C>T,p.Phe64Leu,,pathogenic,strong,14,11,3,0,3,0,0,novel mutation,"33921571,35592550,40309827",Results |  paragraph 3 | Text section |  Case Reports | Results |  paragraph 4,ATTRv Amyloidosis | hereditary transthyretin amyloidosis with polyneuropathy | hATTR amyloidosis,3
+64,TTR,c.200G>A,p.Gly67Glu,,pathogenic,,1,1,0,0,0,0,0,[Penetrance data inferred from patient count: 1 affected carriers],38028480,Introduction,mixed phenotype—neurological and cardiac,1
+79,TTR,c.204T>C,p.Ile68Leu*,,likely pathogenic,moderate,4,1,3,0,1,0,0,novel mutation,8038017,Main text |  paragraph 2,cardiac amyloidosis,1
+28,TTR,c.205A>C,p.Tyr69His,,pathogenic,strong,1,1,0,0,1,0,0,novel mutation,26156087,Main text |  Abstract,meningovascular amyloidosis with dementia,1
+61,TTR,c.20_221delGAinsCT,p.Glu74Leu,,pathogenic,"PM1, PM5, PP5, PM2",4,1,3,0,0,1,0,,38028480,Methods |  paragraph 2,asymptomatic carrier,1
+19,TTR,c.2138G>A,p.Arg713Gln,,Damaging,High,1,1,0,0,1,0,0,,29263846,Table 2 |  Row 8,Macrocephaly |  Penile freckling |  Unknown,1
+39,TTR,c.213C>T,p.Ala71Val,,likely pathogenic,moderate,5,2,3,0,1,0,0,novel mutation,8095302,Main text |  Abstract,neuropathy in all four extremities |  diarrhoea |  and orthostatic hypotension,1
+65,TTR,c.215C>T,p.Ser72Pro,,pathogenic,,1,1,0,0,0,0,0,[Penetrance data inferred from patient count: 1 affected carriers],38028480,Introduction,mixed phenotype—neurological and cardiac,1
+60,TTR,c.220_221delGAinsCT,p.Glu74Leu,,pathogenic,"PM1, PM5, PP5, PM2",4,1,3,0,0,1,0,,38028480,Methods |  paragraph 2,asymptomatic carrier,1
+92,TTR,c.230C>A,p.Ser77Tyr,,likely pathogenic,,1,1,0,0,0,0,0,,33716932,Results |  paragraph 2,TTR-FAP,1
+91,TTR,c.230C>T,p.Ser77Phe,,likely pathogenic,,1,1,0,0,0,0,0,,33716932,Results |  paragraph 2,TTR-FAP,1
+27,TTR,c.233T>C,p.Tyr78Phe,,pathogenic,strong,1,1,0,0,1,0,0,novel mutation,30604309,Main text |  Abstract,asymptomatic cardiac infiltration with subclinical neurological involvement,1
+16,TTR,c.23497G>C,p.Gly7833Arg,,Damaging,High,1,1,0,0,1,0,0,,29263846,Table 2 |  Row 5,Macrocephaly |  Penile freckling |  Unknown,1
+31,TTR,c.241G>A,p.Glu81Lys,,pathogenic,strong,2,1,1,0,1,0,0,,33324896,Results |  paragraph 2,hereditary ATTR amyloidosis with cardiomyopathy,1
+90,TTR,c.248G>A,p.Gly83Arg,,likely pathogenic,,1,1,0,0,0,0,0,,33716932,Results |  paragraph 2,TTR-FAP,1
+78,TTR,c.265T>C,p.Tyr89His,,pathogenic,strong,1,1,0,0,1,0,0,,40325410,Results |  paragraph 4,hereditary leptomeningeal transthyretin amyloidosis,1
+70,TTR,c.266G>A,p.Glu89Gln,,likely pathogenic,high,5,5,0,0,0,0,0,,33921571,Results |  paragraph 3,hATTR amyloidosis,1
+14,TTR,c.28549G>A,p.Val9517Met,,Damaging,High,1,1,0,0,1,0,0,,29263846,Table 2 |  Row 3,Macrocephaly |  Penile freckling |  Developmental delay/ASD,1
+83,TTR,c.289C>T,p.Ala97Ser,,likely pathogenic,,2,2,0,0,0,0,0,,33716932,Results |  paragraph 2,TTR-FAP,1
+63,TTR,c.290C>T,p.Ser97Phe,,pathogenic,,1,1,0,0,0,0,0,[Penetrance data inferred from patient count: 1 affected carriers],38028480,Introduction,mixed phenotype—neurological and cardiac,1
+18,TTR,c.29317G>A,p.Ala9773Thr,,Damaging,High,1,1,0,0,1,0,0,,29263846,Table 2 |  Row 7,Macrocephaly |  Penile freckling |  Unknown,1
+69,TTR,c.29A>G,p.Asp10Glu,,pathogenic,high,1,1,0,0,1,0,0,novel mutation,31965737,Case Report |  paragraph 1,familial transthyretin amyloidosis with autonomic neuropathy,1
+25,TTR,c.302C>T,p.Ala101Val,,likely pathogenic,strong,4,4,2,0,1,0,0,novel mutation,38399526,Results |  paragraph 3,cardiac ATTRv,1
+73,TTR,c.307 C>G,p.Gly83Arg,,pathogenic,strong,12,12,0,0,1,0,0,novel mutation,24113303,Text section |  paragraph 1,ocular manifestations |  polyneuropathy |  cardiac amyloidosis,1
+6,TTR,c.307G>C,p.Gly83Arg,,pathogenic,Strong evidence based on clinical evaluation and mutation analysis.,30,26,4,0,1,0,0,novel mutation,23901247,Results |  paragraph 3,hereditary vitreous amyloidosis,1
+26,TTR,c.30A>G,p.Met10Val,,pathogenic,strong,2,1,1,0,1,0,0,novel mutation,1977686,Main Text |  Summary,familial amyloidotic polyneuropathy,1
+48,TTR,c.30G>A,p.Val10Met,,pathogenic,high,104,63,41,0,0,0,0,,29177547,Main text |  Abstract,hereditary transthyretin amyloidosis,1
+51,TTR,c.310A>G,p.Ile104Val*,,VUS,unknown,0,0,0,0,0,0,0,novel mutation,39458146,Discussion |  paragraph 2,not specified,1
+50,TTR,c.311A>C,p.Ile104Thr,,pathogenic,high,1,1,0,0,1,0,0,,39458146,Discussion |  paragraph 3,hATTR amyloidosis,1
+37,TTR,c.322A>T,p.Ala108Ile,,likely pathogenic,moderate,1,1,0,0,1,0,0,,28338000,Results |  paragraph 1,not specified,1
+36,TTR,c.322G>A,p.Ala108Val,,likely pathogenic,moderate,1,1,0,0,1,0,0,,28338000,Results |  paragraph 1,not specified,1
+72,TTR,c.326C>T,p.Ala109Ser,,likely pathogenic,high,1,1,0,0,0,0,0,,33921571,Results |  paragraph 3,hATTR amyloidosis,1
+62,TTR,c.328G>A,p.Val50Met,,pathogenic,,1,1,0,0,0,0,0,Common variant in Bulgaria. [Penetrance data inferred from patient count: 1 affected carriers],38028480,Introduction,mixed phenotype—neurological and cardiac,1
+13,TTR,c.33856G>A,p.Glu11286Lys,,Damaging,High,1,1,0,0,1,0,0,,29263846,Table 2 |  Row 2,Unknown,1
+58,TTR,c.341T>C,p.Tyr114His,,pathogenic,not specified,1,1,0,0,1,0,0,novel mutation,36530839,Results |  paragraph 1,hATTR-CM,1
+43,TTR,c.349G>A,p.Val117Ile,,pathogenic,not specified,1,1,0,0,1,0,0,Combination with V122I mutation.,33192475,Results |  paragraph 2,characterized by progressive dyspnea,1
+2,TTR,c.349G>A,p.Val122Ile,,pathogenic,strong,1,1,0,0,1,0,0,novel mutation,38872953,Results |  paragraph 1,ATTRv with cardiac amyloidosis,1
+8,TTR,c.349T>C,p.Val117Ile,,likely pathogenic,medium,2,2,0,0,1,0,0,,35959393,Abstract,Bilateral Carpal Tunnel Syndrome,1
+3,TTR,c.349T>C,p.Val122Ile,,likely pathogenic,moderate,11,2,9,0,2,0,0,novel mutation,"39736876,40276302",Case Report |  paragraph 1 | Text section |  paragraph 1,AL amyloidosis with cardiac and soft tissue involvement | hATTR-CM |  congestive heart failure,2
+74,TTR,c.350G>T,p.Ala117Ser,,pathogenic,strong,2,1,1,0,1,0,0,novel mutation,28425041,Main text |  Abstract,familial amyloid cardiomyopathy,1
+35,TTR,c.355C>T,p.Ala119Val,,likely pathogenic,moderate,1,1,0,0,1,0,0,,28338000,Results |  paragraph 1,not specified,1
+44,TTR,c.364G>A,p.Val122Ile,,pathogenic,strong,26,5,21,0,0,1,0,novel mutation,"33133314,33921571,40630302",Case Report |  paragraph 1 | Results |  paragraph 3 | Results |  paragraph 1,ATTR amyloidosis | ATTRv-N | hATTR amyloidosis,3
+54,TTR,c.379A>G,p.Ile127Val,,likely pathogenic,moderate,1,1,0,0,1,0,0,legacy nomenclature p.I107V,27066555,Results |  Patient 1,progressive sensory loss |  dysarthria |  dysphagia,1
+30,TTR,c.380A>G,p.Ile127Val,,pathogenic,strong,2,1,1,0,1,0,0,,33324896,Results |  paragraph 1,ATTR-PN with neuropathic and cardiac manifestations,1
+53,TTR,c.392T>A,p.Leu131Gln*,,likely pathogenic,moderate,1,1,0,0,1,0,0,novel mutation,39100516,case_report_para_1,ATTRv amyloidosis,1
+4,TTR,c.424G>A,p.Val142Ile,,pathogenic,strong,16,16,0,0,2,0,0,novel mutation | This mutation suggests a strong African genetic influence.,"38661598,39458146,39981348",Results |  paragraph 1 | Discussion |  paragraph 3 | Results |  paragraph 4,cardiac amyloidosis | carpal tunnel syndrome (CTS) | hATTR amyloidosis,3
+52,TTR,c.427A>G,p.Thr143Ala*,,VUS,unknown,0,0,0,0,0,0,0,novel mutation,39458146,Discussion |  paragraph 2,not specified,1
+23,TTR,c.47G>A,p.Val16Ala,,pathogenic,strong,5,5,0,0,5,0,0,This variant is associated with ATTR-CA. | novel mutation,"34370783,39829628,40246385,41209567,41317182",Results |  paragraph 1 | Table 1 |  Row 1,cardiac amyloidosis | ATTR-CA | Familial Amyloid Polyneuropathy (FAP) | NF2-SWN,5
+7,TTR,c.47G>A,p.Val16Met,,likely pathogenic,moderate,2,2,0,0,2,0,0,novel mutation,"37720689,39139188",Table 1 |  Row 1,not specified | familial amyloid polyneuropathy,2
+75,TTR,c.47T>C,p.Val16Ala,,pathogenic,high,1,1,0,0,1,0,0,,37711552,Case Report |  paragraph 2,TTR amyloidosis,1
+81,TTR,c.64672+2dup,,,pathogenic,strong,3,3,0,0,1,0,0,novel mutation,39807212,Results |  paragraph 3,Tibial muscular dystrophy (TMD) and limb-girdle muscular dystrophy type 10 (LGMD R10),1
+12,TTR,c.66187G>C,p.Val22063Leu,,Damaging,High,1,1,0,0,1,0,0,,29263846,Table 2 |  Row 1,Macrocephaly |  Penile freckling |  Developmental delay/ASD,1
+32,TTR,c.68G>A,p.Ser23Asn,,pathogenic,strong,4,4,0,0,1,0,0,novel mutation,22149423,Discussion |  paragraph 1,heart failure |  peripheral neuropathy,1
+24,TTR,c.74987_74991dup,p.Ser24998LysfsTer28,,likely pathogenic,strong,3,3,0,0,1,0,0,novel mutation,34884792,Results |  paragraph 3,DCM and conduction disease,1
+22,TTR,c.80425G>A,p.Gly26809Ser,,Damaging,High,1,1,0,0,1,0,0,,29263846,Table 2 |  Row 11,Macrocephaly |  Penile freckling |  Unknown,1
+93,TTR,c.84G>A,p.Val28Ser,,likely pathogenic,,1,1,0,0,0,0,0,,33716932,Results |  paragraph 2,TTR-FAP,1
+46,TTR,c.89G>A,p.Val30Met,,likely pathogenic,not specified,4,4,0,0,2,0,0,Val30Met is a well-known pathogenic variant associated with hereditary transthyretin amyloidosis.,"33921571,37818527,39811011",Results |  paragraph 3 | Text section |  Case presentation | Results |  paragraph 1,amyloid polyneuropathy | shortness of breath |  cardiac amyloidosis | hATTR amyloidosis,3
+33,TTR,c.90G>A,p.Val30Met,,likely pathogenic,moderate,5,5,0,0,2,0,0,,"22149423,27499917,33716932",Discussion |  paragraph 1 | Main Text |  paragraph 2 | Results |  paragraph 2,neuropathy |  cardiomyopathy | no symptoms of FAP |  small amyloid deposits detected | TTR-FAP,3
+59,TTR,c.90G>T,p.Val30Leu,,pathogenic,strong,1,1,0,0,1,0,0,,27499917,Main Text |  paragraph 2,no symptoms of FAP |  small amyloid deposits detected,1
+15,TTR,c.92488G>A,p.Val30830Ile,,Damaging,High,1,1,0,0,1,0,0,,29263846,Table 2 |  Row 4,Macrocephaly |  Penile freckling |  Unknown,1
+88,TTR,c.98C>T,p.Phe33Leu,,likely pathogenic,,1,1,0,0,0,0,0,,33716932,Results |  paragraph 2,TTR-FAP,1
+89,TTR,c.98G>A,p.Phe33Val,,likely pathogenic,,1,1,0,0,0,0,0,,33716932,Results |  paragraph 2,TTR-FAP,1
+20,TTR,c.99154C>T,p.Arg33052Cys,,Damaging,High,1,1,0,0,1,0,0,,29263846,Table 2 |  Row 9,Macrocephaly |  Penile freckling |  Unknown,1
+5,TTR,null,null,null,pathogenic,high,2,2,0,0,2,0,0,novel mutation | null,"36562013,41296379",Discussion |  paragraph 2 | Text section |  paragraph 3,associated with congenital heart malformations | LVH and severe HF from amyloidosis,2
