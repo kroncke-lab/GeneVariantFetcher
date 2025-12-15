@@ -14,7 +14,7 @@ from Bio.Entrez.Parser import ValidationError
 import requests
 
 from config.settings import get_settings
-from .retry_utils import api_retry
+from .retry_utils import api_retry, get_standard_retry_decorator
 
 logger = logging.getLogger(__name__)
 
@@ -172,51 +172,56 @@ def fetch_paper_metadata(pmid: str, email: Optional[str] = None) -> Optional[Dic
         return None
 
 
-@api_retry
 def fetch_paper_abstract(pmid: str, email: Optional[str] = None) -> Optional[str]:
     """
     Fetch the abstract text for a paper from PubMed.
 
-    Uses the Entrez EFetch API to retrieve the full abstract text.
-
-    Args:
-        pmid: PubMed ID (as string)
-
-    Returns:
-        Abstract text, or None if not available
-
-    Example:
-        >>> abstract = fetch_paper_abstract("12345678")
-        >>> print(abstract[:100])
+    This wrapper handles failures gracefully so callers don't have to guard
+    against retries exhausting and raising. After retries are exhausted, the
+    function returns ``None`` and logs the error.
     """
-    logger.debug(f"Fetching abstract for PMID: {pmid}")
 
     try:
-        _set_entrez_email(email)
-        handle = Entrez.efetch(
-            db="pubmed",
-            id=pmid,
-            rettype="abstract",
-            retmode="text"
+        return _fetch_paper_abstract_with_retry(pmid, email=email)
+    except Exception as exc:
+        logger.error(
+            "Failed to fetch abstract for PMID %s after retries; returning None. Error: %s",
+            pmid,
+            exc,
         )
-        abstract = handle.read()
-        handle.close()
-
-        if abstract:
-            logger.debug(f"Successfully fetched abstract for PMID: {pmid}")
-            return abstract
-        else:
-            logger.warning(f"No abstract found for PMID: {pmid}")
-            return None
-
-    except _RETRYABLE_EXCEPTIONS as exc:
-        logger.warning(
-            "Transient error fetching abstract for PMID %s; raising for retry", pmid, exc_info=exc
-        )
-        raise
-    except (ValidationError, ValueError) as exc:
-        logger.error("Malformed abstract response for PMID %s: %s", pmid, exc)
         return None
+
+
+_abstract_retry = get_standard_retry_decorator(
+    retry_exceptions=_RETRYABLE_EXCEPTIONS,
+    max_attempts=3,
+    multiplier=1.5,
+    min_wait=1.0,
+    max_wait=15.0,
+)
+
+
+@_abstract_retry
+def _fetch_paper_abstract_with_retry(pmid: str, email: Optional[str] = None) -> Optional[str]:
+    """Retryable helper that performs the actual Entrez fetch."""
+    logger.debug(f"Fetching abstract for PMID: {pmid}")
+
+    _set_entrez_email(email)
+    handle = Entrez.efetch(
+        db="pubmed",
+        id=pmid,
+        rettype="abstract",
+        retmode="text"
+    )
+    abstract = handle.read()
+    handle.close()
+
+    if abstract:
+        logger.debug(f"Successfully fetched abstract for PMID: {pmid}")
+        return abstract
+
+    logger.warning(f"No abstract found for PMID: {pmid}")
+    return None
 
 
 @api_retry
