@@ -15,6 +15,7 @@ for demonstration purposes.
 
 import os
 import sys
+import csv
 import json
 import logging
 from pathlib import Path
@@ -299,6 +300,16 @@ def automated_variant_extraction_workflow(
             "; ".join([f"{pmid} ({reason})" for pmid, reason in dropped_pmids]),
         )
 
+    # Persist dropped PMIDs to disk for debugging and analysis
+    pmid_status_dir = output_path / "pmid_status"
+    pmid_status_dir.mkdir(parents=True, exist_ok=True)
+    filtered_out_file = pmid_status_dir / "filtered_out.csv"
+    with open(filtered_out_file, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerow(["PMID", "Reason"])
+        writer.writerows(dropped_pmids)
+    logger.info(f"✓ Wrote {len(dropped_pmids)} filtered-out PMIDs to {filtered_out_file}")
+
     # ============================================================================
     # STEP 2: Download Full-Text Papers from PMC
     # ============================================================================
@@ -359,7 +370,12 @@ def automated_variant_extraction_workflow(
     extractions = []
 
     def process_paper_file(md_file):
-        """Process a single paper file (for parallel execution)"""
+        """Process a single paper file (for parallel execution).
+
+        Returns:
+            tuple: (extraction_result or None, failure_info or None)
+                   where failure_info is (pmid, error_message)
+        """
         from utils.pmid_utils import extract_pmid_from_filename
 
         # Extract PMID from filename using shared utility
@@ -367,7 +383,7 @@ def automated_variant_extraction_workflow(
 
         if not pmid_match:
             logger.warning(f"Could not extract PMID from filename: {md_file.name}")
-            return None
+            return (None, (md_file.name, "Could not extract PMID from filename"))
 
         logger.info(f"Processing PMID {pmid_match}...")
 
@@ -400,18 +416,20 @@ def automated_variant_extraction_workflow(
                 logger.info(f"✓ Extracted {num_variants} variants from PMID {pmid_match}")
                 logger.info(f"✓ Saved to: {output_file}")
 
-                return extraction_result
+                return (extraction_result, None)
             else:
                 logger.warning(f"✗ Extraction failed for PMID {pmid_match}: {extraction_result.error}")
-                return None
+                return (None, (pmid_match, extraction_result.error))
 
         except Exception as e:
             logger.error(f"Error processing PMID {pmid_match}: {e}")
-            return None
+            return (None, (pmid_match, str(e)))
 
     # Process papers in parallel with ThreadPoolExecutor
     # LLM calls are I/O-bound, so threading provides excellent speedup
     max_workers = min(8, len(markdown_files)) if markdown_files else 1
+
+    extraction_failures = []
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         # Submit all papers for processing
@@ -427,12 +445,26 @@ def automated_variant_extraction_workflow(
             completed += 1
 
             try:
-                result = future.result()
+                result, failure_info = future.result()
                 if result:
                     extractions.append(result)
+                if failure_info:
+                    extraction_failures.append(failure_info)
                 logger.info(f"✓ Completed {completed}/{len(markdown_files)} papers")
             except Exception as e:
                 logger.error(f"⚠ Failed to process {md_file.name}: {e}")
+                # Track executor-level failures too
+                from utils.pmid_utils import extract_pmid_from_filename
+                pmid = extract_pmid_from_filename(md_file) or md_file.name
+                extraction_failures.append((pmid, f"Executor error: {e}"))
+
+    # Persist extraction failures to disk
+    extraction_failures_file = pmid_status_dir / "extraction_failures.csv"
+    with open(extraction_failures_file, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerow(["PMID", "Error"])
+        writer.writerows(extraction_failures)
+    logger.info(f"✓ Wrote {len(extraction_failures)} extraction failures to {extraction_failures_file}")
 
     # ============================================================================
     # STEP 4: Aggregate Penetrance Data
@@ -491,14 +523,29 @@ def automated_variant_extraction_workflow(
         for v in penetrance_summary.get("variants", [])
     )
 
+    # Count download failures from paywalled_missing.csv if it exists
+    paywalled_log = harvest_dir / "paywalled_missing.csv"
+    num_download_failures = 0
+    if paywalled_log.exists():
+        import pandas as pd
+        try:
+            paywalled_df = pd.read_csv(paywalled_log)
+            num_download_failures = len(paywalled_df)
+        except Exception:
+            pass
+
     # Create summary report
     summary = {
         "gene_symbol": gene_symbol,
         "workflow_timestamp": datetime.now().isoformat(),
         "statistics": {
             "pmids_discovered": len(pmids),
+            "pmids_filtered_out": len(dropped_pmids),
+            "pmids_passed_filters": len(filtered_pmids),
             "papers_downloaded": num_downloaded,
+            "papers_download_failed": num_download_failures,
             "papers_extracted": len(extractions),
+            "papers_extraction_failed": len(extraction_failures),
             "total_variants_found": total_variants,
             "variants_with_penetrance_data": penetrance_summary["total_variants"],
             "total_carriers_observed": total_carriers,
@@ -507,10 +554,19 @@ def automated_variant_extraction_workflow(
         },
         "output_locations": {
             "pmid_list": str(combined_pmids_file),
+            "pmid_status": str(pmid_status_dir),
             "full_text_papers": str(harvest_dir),
             "extractions": str(extraction_dir),
             "penetrance_summary": str(penetrance_summary_file),
             "sqlite_database": str(db_path)
+        },
+        "pmid_status": {
+            "filtered_out_file": str(filtered_out_file),
+            "filtered_out_count": len(dropped_pmids),
+            "extraction_failures_file": str(extraction_failures_file),
+            "extraction_failures_count": len(extraction_failures),
+            "download_failures_file": str(paywalled_log) if paywalled_log.exists() else None,
+            "download_failures_count": num_download_failures
         },
         "database_migration": {
             "successful": migration_stats["successful"],
@@ -532,14 +588,19 @@ def automated_variant_extraction_workflow(
     logger.info("="*80)
     logger.info(f"Gene: {gene_symbol}")
     logger.info(f"PMIDs discovered: {len(pmids)}")
+    logger.info(f"  - Filtered out: {len(dropped_pmids)}")
+    logger.info(f"  - Passed filters: {len(filtered_pmids)}")
     logger.info(f"Papers downloaded: {num_downloaded}")
+    logger.info(f"  - Download failures: {num_download_failures}")
     logger.info(f"Papers with extractions: {len(extractions)}")
+    logger.info(f"  - Extraction failures: {len(extraction_failures)}")
     logger.info(f"Total variants found: {total_variants}")
     logger.info(f"Variants with penetrance data: {penetrance_summary['total_variants']}")
     logger.info(f"Total carriers observed: {total_carriers}")
     logger.info(f"Total affected carriers: {total_affected}")
     logger.info(f"Success rate: {len(extractions) / len(pmids) * 100:.1f}%" if pmids else "0%")
     logger.info(f"\n💾 Database migrated: {migration_stats['successful']}/{migration_stats['total_files']} extractions")
+    logger.info(f"\n📋 PMID status files: {pmid_status_dir}")
     logger.info(f"\nAll outputs saved to: {output_path}")
     logger.info(f"Summary report: {summary_file}")
     logger.info(f"Penetrance summary: {penetrance_summary_file}")
