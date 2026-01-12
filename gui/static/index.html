@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeneVariantFetcher</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #16a34a;
+            --warning: #ca8a04;
+            --error: #dc2626;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            color: var(--gray-900);
+        }
+
+        header h1 span {
+            color: var(--primary);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            color: var(--gray-500);
+            cursor: pointer;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .nav-tab:hover {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--gray-900);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 0.25rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"] {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+        }
+
+        .collapsible {
+            border: 1px solid var(--gray-200);
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+        }
+
+        .collapsible-header {
+            padding: 0.75rem 1rem;
+            background: var(--gray-50);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .collapsible-header:hover {
+            background: var(--gray-100);
+        }
+
+        .collapsible-content {
+            padding: 1rem;
+            display: none;
+        }
+
+        .collapsible.open .collapsible-content {
+            display: block;
+        }
+
+        .collapsible-header::after {
+            content: '+';
+            font-weight: bold;
+        }
+
+        .collapsible.open .collapsible-header::after {
+            content: '-';
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-pending { background: var(--gray-200); color: var(--gray-700); }
+        .status-running { background: #dbeafe; color: #1e40af; }
+        .status-completed { background: #dcfce7; color: #166534; }
+        .status-failed { background: #fee2e2; color: #991b1b; }
+
+        .job-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .job-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 0.375rem;
+            background: white;
+        }
+
+        .job-item:hover {
+            border-color: var(--gray-300);
+        }
+
+        .job-info {
+            flex: 1;
+        }
+
+        .job-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .job-meta {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        .job-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .progress-section {
+            margin-top: 1.5rem;
+        }
+
+        .progress-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+        }
+
+        .progress-step.completed {
+            color: var(--success);
+        }
+
+        .progress-step.active {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
+        .progress-step.pending {
+            color: var(--gray-400);
+        }
+
+        .step-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 0.75rem;
+        }
+
+        .completed .step-icon {
+            background: var(--success);
+            color: white;
+        }
+
+        .active .step-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .pending .step-icon {
+            background: var(--gray-200);
+            color: var(--gray-500);
+        }
+
+        .log-viewer {
+            background: var(--gray-900);
+            color: #10b981;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.75rem;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .log-line {
+            margin-bottom: 0.25rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 0.375rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-top: 0.25rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Gene<span>Variant</span>Fetcher</h1>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="new-job">New Job</button>
+                <button class="nav-tab" data-tab="jobs">Jobs</button>
+                <button class="nav-tab" data-tab="active" id="active-tab">Active <span id="active-count"></span></button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Incomplete Jobs Alert -->
+        <div id="incomplete-alert" class="alert alert-warning hidden">
+            <strong>Incomplete Jobs Found!</strong>
+            <span id="incomplete-message"></span>
+            <button class="btn btn-warning btn-sm" onclick="showTab('jobs')">View Jobs</button>
+        </div>
+
+        <!-- New Job Tab -->
+        <section id="tab-new-job" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">Start New Extraction</h2>
+                <form id="job-form">
+                    <!-- Basic Settings -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="gene">Gene Symbol *</label>
+                            <input type="text" id="gene" name="gene_symbol" required placeholder="e.g., BRCA1, SCN5A">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="output">Output Directory *</label>
+                            <input type="text" id="output" name="output_dir" required value="./output">
+                        </div>
+                    </div>
+
+                    <!-- Pipeline Limits -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="max-pmids">Max PMIDs</label>
+                            <input type="number" id="max-pmids" name="max_pmids" value="100" min="1" max="1000">
+                        </div>
+                        <div class="form-group">
+                            <label for="max-downloads">Max Downloads</label>
+                            <input type="number" id="max-downloads" name="max_papers_to_download" value="50" min="1" max="500">
+                        </div>
+                    </div>
+
+                    <!-- Synonym Settings -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="auto-synonyms" name="auto_synonyms">
+                                <label for="auto-synonyms">Auto-discover gene synonyms</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="synonyms">Manual Synonyms (comma-separated)</label>
+                            <input type="text" id="synonyms" name="synonyms" placeholder="e.g., hERG, KCNH2">
+                        </div>
+                    </div>
+
+                    <!-- Advanced Settings (Collapsible) -->
+                    <div class="collapsible">
+                        <div class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
+                            Advanced Settings
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="tier-threshold">Tier Threshold</label>
+                                    <input type="number" id="tier-threshold" name="tier_threshold" value="1" min="0" max="10">
+                                    <small style="color: var(--gray-500); font-size: 0.75rem;">0 = single model, higher = retry if few variants found</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confidence">Filter Confidence Threshold</label>
+                                    <input type="number" id="confidence" name="tier2_confidence_threshold" value="0.5" min="0" max="1" step="0.1">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="enable-tier1" name="enable_tier1" checked>
+                                        <label for="enable-tier1">Enable Tier 1 (Keyword Filter)</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="enable-tier2" name="enable_tier2" checked>
+                                        <label for="enable-tier2">Enable Tier 2 (LLM Filter)</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="clinical-triage" name="use_clinical_triage">
+                                        <label for="clinical-triage">Use Clinical Triage Filter</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 style="margin: 1rem 0 0.5rem; font-size: 0.875rem;">Literature Sources</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="use-pubmind" name="use_pubmind" checked>
+                                        <label for="use-pubmind">PubMind</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="use-pubmed" name="use_pubmed" checked>
+                                        <label for="use-pubmed">PubMed</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="use-europepmc" name="use_europepmc">
+                                        <label for="use-europepmc">Europe PMC</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="scout-enabled" name="scout_enabled" checked>
+                                    <label for="scout-enabled">Enable DATA_ZONES condensation (faster extraction)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Start Pipeline</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Jobs List Tab -->
+        <section id="tab-jobs" class="tab-content hidden">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2 class="card-title" style="margin: 0;">All Jobs</h2>
+                    <button class="btn btn-secondary" onclick="loadJobs()">Refresh</button>
+                </div>
+                <div id="jobs-list" class="job-list">
+                    <p style="color: var(--gray-500); text-align: center;">Loading jobs...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Active Job Tab -->
+        <section id="tab-active" class="tab-content hidden">
+            <div id="no-active-job" class="card">
+                <p style="text-align: center; color: var(--gray-500);">No active job. Start a new extraction or resume an incomplete job.</p>
+            </div>
+
+            <div id="active-job-content" class="hidden">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2 class="card-title" style="margin: 0;" id="active-job-title">Job</h2>
+                            <p class="job-meta" id="active-job-meta"></p>
+                        </div>
+                        <div>
+                            <span class="status-badge" id="active-job-status">Running</span>
+                            <button class="btn btn-danger" id="stop-btn" onclick="stopJob()">Stop</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Steps -->
+                <div class="card">
+                    <h3 class="card-title">Progress</h3>
+                    <div class="progress-steps" id="progress-steps"></div>
+                </div>
+
+                <!-- Statistics -->
+                <div class="card">
+                    <h3 class="card-title">Statistics</h3>
+                    <div class="stats-grid" id="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-pmids">-</div>
+                            <div class="stat-label">PMIDs Found</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-filtered">-</div>
+                            <div class="stat-label">Passed Filters</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-downloaded">-</div>
+                            <div class="stat-label">Downloaded</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-extracted">-</div>
+                            <div class="stat-label">Extracted</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Log Viewer -->
+                <div class="card">
+                    <h3 class="card-title">Logs</h3>
+                    <div class="log-viewer" id="log-viewer"></div>
+                </div>
+
+                <!-- Results (shown when complete) -->
+                <div class="card hidden" id="results-card">
+                    <h3 class="card-title">Results</h3>
+                    <div id="results-content"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // State
+        let currentTab = 'new-job';
+        let activeJobId = null;
+        let websocket = null;
+
+        const PIPELINE_STEPS = [
+            { key: 'discovering_synonyms', label: 'Discovering Synonyms' },
+            { key: 'fetching_pmids', label: 'Fetching PMIDs' },
+            { key: 'fetching_abstracts', label: 'Fetching Abstracts' },
+            { key: 'filtering_papers', label: 'Filtering Papers' },
+            { key: 'downloading_fulltext', label: 'Downloading Full-Text' },
+            { key: 'extracting_variants', label: 'Extracting Variants' },
+            { key: 'aggregating_data', label: 'Aggregating Data' },
+            { key: 'migrating_database', label: 'Creating Database' },
+        ];
+
+        // Tab Navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => showTab(tab.dataset.tab));
+        });
+
+        function showTab(tabName) {
+            currentTab = tabName;
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+            if (tabName === 'jobs') loadJobs();
+            if (tabName === 'active' && activeJobId) connectWebSocket(activeJobId);
+        }
+
+        // API Calls
+        async function apiCall(method, endpoint, data = null) {
+            const options = {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+            };
+            if (data) options.body = JSON.stringify(data);
+
+            const response = await fetch(`/api${endpoint}`, options);
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.detail || 'API error');
+            }
+            return response.json();
+        }
+
+        // Load Jobs
+        async function loadJobs() {
+            try {
+                const data = await apiCall('GET', '/jobs');
+                renderJobsList(data.jobs);
+
+                // Check for incomplete jobs
+                if (data.incomplete_count > 0) {
+                    document.getElementById('incomplete-alert').classList.remove('hidden');
+                    document.getElementById('incomplete-message').textContent =
+                        `You have ${data.incomplete_count} job(s) that can be resumed.`;
+                } else {
+                    document.getElementById('incomplete-alert').classList.add('hidden');
+                }
+            } catch (err) {
+                console.error('Failed to load jobs:', err);
+            }
+        }
+
+        function renderJobsList(jobs) {
+            const container = document.getElementById('jobs-list');
+
+            if (jobs.length === 0) {
+                container.innerHTML = '<p style="color: var(--gray-500); text-align: center;">No jobs found.</p>';
+                return;
+            }
+
+            container.innerHTML = jobs.map(job => `
+                <div class="job-item">
+                    <div class="job-info">
+                        <div class="job-title">${job.gene_symbol}</div>
+                        <div class="job-meta">
+                            ${job.job_id} | ${formatDate(job.created_at)} | ${job.current_step_display}
+                        </div>
+                    </div>
+                    <div class="job-actions">
+                        <span class="status-badge status-${getStatusClass(job.current_step)}">${job.current_step_display}</span>
+                        ${job.is_resumable ? `<button class="btn btn-success" onclick="resumeJob('${job.job_id}')">Resume</button>` : ''}
+                        ${job.current_step === 'completed' ? `<button class="btn btn-primary" onclick="viewResults('${job.job_id}')">Results</button>` : ''}
+                        <button class="btn btn-secondary" onclick="viewJob('${job.job_id}')">View</button>
+                        ${!isJobActive(job) ? `<button class="btn btn-danger" onclick="deleteJob('${job.job_id}')">Delete</button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusClass(step) {
+            if (step === 'completed') return 'completed';
+            if (step === 'failed') return 'failed';
+            if (step === 'pending') return 'pending';
+            return 'running';
+        }
+
+        function isJobActive(job) {
+            return !['pending', 'completed', 'failed'].includes(job.current_step);
+        }
+
+        function formatDate(isoString) {
+            return new Date(isoString).toLocaleString();
+        }
+
+        // Create Job
+        document.getElementById('job-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const data = {};
+
+            formData.forEach((value, key) => {
+                if (key === 'synonyms') {
+                    data[key] = value ? value.split(',').map(s => s.trim()).filter(s => s) : [];
+                } else if (['auto_synonyms', 'use_clinical_triage', 'enable_tier1', 'enable_tier2',
+                           'use_pubmind', 'use_pubmed', 'use_europepmc', 'scout_enabled'].includes(key)) {
+                    data[key] = true;
+                } else if (['max_pmids', 'max_papers_to_download', 'tier_threshold'].includes(key)) {
+                    data[key] = parseInt(value);
+                } else if (key === 'tier2_confidence_threshold') {
+                    data[key] = parseFloat(value);
+                } else {
+                    data[key] = value;
+                }
+            });
+
+            // Handle unchecked checkboxes
+            ['auto_synonyms', 'use_clinical_triage', 'enable_tier1', 'enable_tier2',
+             'use_pubmind', 'use_pubmed', 'use_europepmc', 'scout_enabled'].forEach(key => {
+                if (!(key in data)) data[key] = false;
+            });
+
+            try {
+                const job = await apiCall('POST', '/jobs', data);
+                activeJobId = job.job_id;
+                showTab('active');
+                connectWebSocket(job.job_id);
+            } catch (err) {
+                alert('Failed to create job: ' + err.message);
+            }
+        });
+
+        // Resume Job
+        async function resumeJob(jobId) {
+            try {
+                await apiCall('POST', `/jobs/${jobId}/resume`);
+                activeJobId = jobId;
+                showTab('active');
+                connectWebSocket(jobId);
+            } catch (err) {
+                alert('Failed to resume job: ' + err.message);
+            }
+        }
+
+        // View Job
+        function viewJob(jobId) {
+            activeJobId = jobId;
+            showTab('active');
+            connectWebSocket(jobId);
+        }
+
+        // View Results
+        async function viewResults(jobId) {
+            try {
+                const results = await apiCall('GET', `/jobs/${jobId}/results`);
+                activeJobId = jobId;
+                showTab('active');
+                displayResults(results);
+            } catch (err) {
+                alert('Failed to load results: ' + err.message);
+            }
+        }
+
+        // Delete Job
+        async function deleteJob(jobId) {
+            if (!confirm('Are you sure you want to delete this job?')) return;
+
+            try {
+                await apiCall('DELETE', `/jobs/${jobId}`);
+                loadJobs();
+            } catch (err) {
+                alert('Failed to delete job: ' + err.message);
+            }
+        }
+
+        // Stop Job
+        async function stopJob() {
+            if (!activeJobId) return;
+
+            try {
+                await apiCall('POST', `/jobs/${activeJobId}/stop`);
+            } catch (err) {
+                alert('Failed to stop job: ' + err.message);
+            }
+        }
+
+        // WebSocket Connection
+        function connectWebSocket(jobId) {
+            if (websocket) {
+                websocket.close();
+            }
+
+            document.getElementById('no-active-job').classList.add('hidden');
+            document.getElementById('active-job-content').classList.remove('hidden');
+
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            websocket = new WebSocket(`${protocol}//${window.location.host}/ws/${jobId}`);
+
+            websocket.onopen = () => {
+                console.log('WebSocket connected');
+            };
+
+            websocket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                handleWebSocketMessage(data);
+            };
+
+            websocket.onclose = () => {
+                console.log('WebSocket disconnected');
+            };
+
+            websocket.onerror = (err) => {
+                console.error('WebSocket error:', err);
+            };
+
+            // Ping to keep alive
+            setInterval(() => {
+                if (websocket && websocket.readyState === WebSocket.OPEN) {
+                    websocket.send('ping');
+                }
+            }, 30000);
+        }
+
+        function handleWebSocketMessage(data) {
+            switch (data.type) {
+                case 'state':
+                    updateJobState(data.job);
+                    if (data.logs) {
+                        data.logs.forEach(log => appendLog(log));
+                    }
+                    break;
+                case 'step_start':
+                case 'step_complete':
+                    updateProgressStep(data.step, data.type === 'step_complete');
+                    if (data.stats) updateStats(data.stats);
+                    break;
+                case 'log':
+                    appendLog(data.message);
+                    break;
+                case 'error':
+                    appendLog(`ERROR: ${data.error}`, true);
+                    break;
+                case 'job_complete':
+                    updateJobComplete(data.status);
+                    break;
+            }
+        }
+
+        function updateJobState(job) {
+            document.getElementById('active-job-title').textContent = job.gene_symbol;
+            document.getElementById('active-job-meta').textContent =
+                `Job: ${job.job_id} | Started: ${formatDate(job.created_at)}`;
+
+            const statusBadge = document.getElementById('active-job-status');
+            statusBadge.textContent = job.current_step_display;
+            statusBadge.className = `status-badge status-${getStatusClass(job.current_step)}`;
+
+            // Show/hide stop button
+            document.getElementById('stop-btn').classList.toggle('hidden',
+                ['completed', 'failed', 'pending'].includes(job.current_step));
+
+            // Update progress steps
+            renderProgressSteps(job.current_step);
+
+            // Update stats
+            if (job.statistics) {
+                updateStats(job.statistics);
+            }
+        }
+
+        function renderProgressSteps(currentStep) {
+            const container = document.getElementById('progress-steps');
+            const currentIndex = PIPELINE_STEPS.findIndex(s => s.key === currentStep);
+
+            container.innerHTML = PIPELINE_STEPS.map((step, index) => {
+                let status = 'pending';
+                if (index < currentIndex) status = 'completed';
+                else if (index === currentIndex) status = 'active';
+
+                return `
+                    <div class="progress-step ${status}">
+                        <span class="step-icon">${status === 'completed' ? '✓' : index + 1}</span>
+                        <span>${step.label}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateProgressStep(stepKey, completed) {
+            renderProgressSteps(completed ? getNextStep(stepKey) : stepKey);
+        }
+
+        function getNextStep(currentKey) {
+            const index = PIPELINE_STEPS.findIndex(s => s.key === currentKey);
+            return index < PIPELINE_STEPS.length - 1 ? PIPELINE_STEPS[index + 1].key : 'completed';
+        }
+
+        function updateStats(stats) {
+            if (stats.pmids_discovered !== undefined || stats.total_unique !== undefined) {
+                document.getElementById('stat-pmids').textContent =
+                    stats.total_unique || stats.pmids_discovered || '-';
+            }
+            if (stats.pmids_filtered !== undefined || stats.passed_filters !== undefined) {
+                document.getElementById('stat-filtered').textContent =
+                    stats.passed_filters || stats.pmids_filtered || '-';
+            }
+            if (stats.papers_downloaded !== undefined || stats.downloaded !== undefined) {
+                document.getElementById('stat-downloaded').textContent =
+                    stats.downloaded || stats.papers_downloaded || '-';
+            }
+            if (stats.papers_extracted !== undefined) {
+                document.getElementById('stat-extracted').textContent =
+                    stats.papers_extracted || '-';
+            }
+        }
+
+        function appendLog(message, isError = false) {
+            const viewer = document.getElementById('log-viewer');
+            const line = document.createElement('div');
+            line.className = 'log-line';
+            line.style.color = isError ? '#ef4444' : '#10b981';
+            line.textContent = message;
+            viewer.appendChild(line);
+            viewer.scrollTop = viewer.scrollHeight;
+        }
+
+        function updateJobComplete(status) {
+            const statusBadge = document.getElementById('active-job-status');
+            statusBadge.textContent = status === 'completed' ? 'Completed' : 'Failed';
+            statusBadge.className = `status-badge status-${status}`;
+            document.getElementById('stop-btn').classList.add('hidden');
+
+            if (status === 'completed') {
+                viewResults(activeJobId);
+            }
+        }
+
+        function displayResults(results) {
+            const card = document.getElementById('results-card');
+            const content = document.getElementById('results-content');
+
+            card.classList.remove('hidden');
+
+            let html = `
+                <p><strong>Output Directory:</strong> ${results.output_path}</p>
+                <p><strong>Database:</strong> ${results.files.database}</p>
+            `;
+
+            if (results.workflow_summary) {
+                const stats = results.workflow_summary.statistics;
+                html += `
+                    <h4 style="margin: 1rem 0 0.5rem;">Summary</h4>
+                    <ul>
+                        <li>PMIDs Discovered: ${stats.pmids_discovered || 0}</li>
+                        <li>Papers Downloaded: ${stats.papers_downloaded || 0}</li>
+                        <li>Papers Extracted: ${stats.papers_extracted || 0}</li>
+                        <li>Total Variants: ${stats.total_variants_found || 0}</li>
+                    </ul>
+                `;
+            }
+
+            content.innerHTML = html;
+        }
+
+        // Initial load
+        loadJobs();
+    </script>
+</body>
+</html>
