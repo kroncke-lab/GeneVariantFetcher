@@ -427,6 +427,250 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Settings Page Styles */
+        .settings-group {
+            border: 1px solid var(--gray-200);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            background: var(--gray-50);
+        }
+
+        .settings-group-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 0.25rem 0;
+            color: var(--gray-900);
+        }
+
+        .settings-group-desc {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin: 0 0 1rem 0;
+        }
+
+        .form-help {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-top: 0.25rem;
+        }
+
+        .input-with-button {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-with-button input {
+            flex: 1;
+        }
+
+        .env-file-info {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+            color: var(--gray-500);
+        }
+
+        .env-file-info code {
+            background: var(--gray-100);
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            border: 1px solid #16a34a;
+            color: #166534;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.hidden {
+            display: none;
+        }
+
+        .modal-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.125rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-500);
+            padding: 0;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--gray-700);
+        }
+
+        .modal-body {
+            padding: 1rem 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        /* Directory Browser Styles */
+        .dir-shortcuts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .dir-shortcut {
+            padding: 0.375rem 0.75rem;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            border-radius: 0.375rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .dir-shortcut:hover {
+            background: var(--gray-200);
+        }
+
+        .dir-path {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .dir-path-input {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.375rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .dir-listing {
+            border: 1px solid var(--gray-200);
+            border-radius: 0.375rem;
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+        }
+
+        .dir-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .dir-item:last-child {
+            border-bottom: none;
+        }
+
+        .dir-item:hover {
+            background: var(--gray-50);
+        }
+
+        .dir-item.selected {
+            background: #dbeafe;
+        }
+
+        .dir-item-icon {
+            font-size: 1rem;
+        }
+
+        .dir-item-name {
+            flex: 1;
+            font-size: 0.875rem;
+        }
+
+        .dir-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .dir-new-folder {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .dir-new-folder input {
+            flex: 1;
+            padding: 0.375rem 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--gray-500);
+            padding: 2rem;
+        }
     </style>
 </head>
 <body>
@@ -437,6 +681,7 @@
                 <button class="nav-tab active" data-tab="new-job">New Job</button>
                 <button class="nav-tab" data-tab="jobs">Jobs</button>
                 <button class="nav-tab" data-tab="active" id="active-tab">Active <span id="active-count"></span></button>
+                <button class="nav-tab" data-tab="settings">Settings</button>
             </nav>
         </div>
     </header>
@@ -646,7 +891,198 @@
                 </div>
             </div>
         </section>
+
+        <!-- Settings Tab -->
+        <section id="tab-settings" class="tab-content hidden">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2 class="card-title" style="margin: 0;">Environment Settings</h2>
+                    <div>
+                        <button class="btn btn-secondary" onclick="loadSettings()">Reload</button>
+                        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+                    </div>
+                </div>
+
+                <!-- Validation Status -->
+                <div id="settings-validation" class="alert hidden"></div>
+
+                <!-- Settings Form -->
+                <form id="settings-form">
+                    <!-- API Keys Group -->
+                    <div class="settings-group">
+                        <h3 class="settings-group-title">API Keys</h3>
+                        <p class="settings-group-desc">Required credentials for accessing external services.</p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="setting-OPENAI_API_KEY">OpenAI API Key *</label>
+                                <input type="password" id="setting-OPENAI_API_KEY" name="OPENAI_API_KEY" placeholder="sk-...">
+                                <small class="form-help">Required for variant extraction</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="setting-ANTHROPIC_API_KEY">Anthropic API Key</label>
+                                <input type="password" id="setting-ANTHROPIC_API_KEY" name="ANTHROPIC_API_KEY" placeholder="sk-ant-...">
+                                <small class="form-help">Optional, for Claude models</small>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="setting-NCBI_EMAIL">NCBI Email *</label>
+                                <input type="email" id="setting-NCBI_EMAIL" name="NCBI_EMAIL" placeholder="your@email.com">
+                                <small class="form-help">Required for PubMed/NCBI API access</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="setting-NCBI_API_KEY">NCBI API Key</label>
+                                <input type="password" id="setting-NCBI_API_KEY" name="NCBI_API_KEY" placeholder="Optional">
+                                <small class="form-help">Increases rate limits (get from NCBI)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Models Group -->
+                    <div class="settings-group">
+                        <h3 class="settings-group-title">Model Configuration</h3>
+                        <p class="settings-group-desc">Configure the LLM models used for filtering and extraction.</p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="setting-TIER2_MODEL">Tier 2 Filter Model</label>
+                                <input type="text" id="setting-TIER2_MODEL" name="TIER2_MODEL" value="gpt-4o-mini">
+                                <small class="form-help">Model for paper relevance filtering</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="setting-TIER3_MODELS">Tier 3 Extraction Models</label>
+                                <input type="text" id="setting-TIER3_MODELS" name="TIER3_MODELS" value="gpt-4o-mini,gpt-4o">
+                                <small class="form-help">Comma-separated list of models</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pipeline Defaults Group -->
+                    <div class="settings-group">
+                        <h3 class="settings-group-title">Pipeline Defaults</h3>
+                        <p class="settings-group-desc">Default settings for new extraction jobs.</p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="setting-ENABLE_TIER1" name="ENABLE_TIER1" checked>
+                                    <label for="setting-ENABLE_TIER1">Enable Tier 1 (Keyword Filter)</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="setting-ENABLE_TIER2" name="ENABLE_TIER2" checked>
+                                    <label for="setting-ENABLE_TIER2">Enable Tier 2 (LLM Filter)</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="setting-TIER2_CONFIDENCE_THRESHOLD">Filter Confidence Threshold</label>
+                                <input type="number" id="setting-TIER2_CONFIDENCE_THRESHOLD" name="TIER2_CONFIDENCE_THRESHOLD" value="0.5" min="0" max="1" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Literature Sources Group -->
+                    <div class="settings-group">
+                        <h3 class="settings-group-title">Literature Sources</h3>
+                        <p class="settings-group-desc">Configure which databases to search for papers.</p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="setting-USE_PUBMIND" name="USE_PUBMIND" checked>
+                                    <label for="setting-USE_PUBMIND">Use PubMind</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="setting-USE_PUBMED" name="USE_PUBMED" checked>
+                                    <label for="setting-USE_PUBMED">Use PubMed</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="setting-USE_EUROPEPMC" name="USE_EUROPEPMC">
+                                    <label for="setting-USE_EUROPEPMC">Use Europe PMC</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scout Configuration -->
+                    <div class="settings-group">
+                        <h3 class="settings-group-title">Data Scout</h3>
+                        <p class="settings-group-desc">Genetic Data Scout creates condensed DATA_ZONES for faster extraction.</p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="setting-SCOUT_ENABLED" name="SCOUT_ENABLED" checked>
+                                    <label for="setting-SCOUT_ENABLED">Enable DATA_ZONES (recommended)</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="setting-SCOUT_MIN_RELEVANCE">Min Relevance Score</label>
+                                <input type="number" id="setting-SCOUT_MIN_RELEVANCE" name="SCOUT_MIN_RELEVANCE" value="0.3" min="0" max="1" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Output Configuration -->
+                    <div class="settings-group">
+                        <h3 class="settings-group-title">Output Configuration</h3>
+                        <p class="settings-group-desc">Default output location for extraction results.</p>
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label for="setting-DEFAULT_OUTPUT_DIR">Default Output Directory</label>
+                                <div class="input-with-button">
+                                    <input type="text" id="setting-DEFAULT_OUTPUT_DIR" name="DEFAULT_OUTPUT_DIR" value="./output">
+                                    <button type="button" class="btn btn-secondary" onclick="openDirectoryBrowser('setting-DEFAULT_OUTPUT_DIR')">Browse</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- .env file info -->
+                <div class="env-file-info" id="env-file-info">
+                    <small>Settings are saved to: <code id="env-file-path">.env</code></small>
+                </div>
+            </div>
+        </section>
     </main>
+
+    <!-- Directory Browser Modal -->
+    <div id="directory-modal" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeDirectoryBrowser()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Select Directory</h3>
+                <button class="modal-close" onclick="closeDirectoryBrowser()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Shortcuts -->
+                <div class="dir-shortcuts" id="dir-shortcuts"></div>
+
+                <!-- Current path -->
+                <div class="dir-path">
+                    <button class="btn btn-secondary btn-sm" id="dir-up-btn" onclick="navigateUp()">Up</button>
+                    <input type="text" id="dir-current-path" class="dir-path-input" onkeypress="if(event.key==='Enter')navigateToPath(this.value)">
+                </div>
+
+                <!-- Directory listing -->
+                <div class="dir-listing" id="dir-listing">
+                    <p class="loading">Loading...</p>
+                </div>
+
+                <!-- New folder -->
+                <div class="dir-new-folder">
+                    <input type="text" id="new-folder-name" placeholder="New folder name">
+                    <button class="btn btn-secondary btn-sm" onclick="createNewFolder()">Create Folder</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDirectoryBrowser()">Cancel</button>
+                <button class="btn btn-primary" onclick="selectDirectory()">Select</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // State
@@ -680,6 +1116,7 @@
 
             if (tabName === 'jobs') loadJobs();
             if (tabName === 'active' && activeJobId) connectWebSocket(activeJobId);
+            if (tabName === 'settings') loadSettings();
         }
 
         // API Calls
@@ -1031,6 +1468,297 @@
 
         // Initial load
         loadJobs();
+
+        // =====================================================================
+        // Settings Management
+        // =====================================================================
+
+        async function loadSettings() {
+            try {
+                const data = await apiCall('GET', '/settings');
+
+                // Populate form fields
+                for (const [key, value] of Object.entries(data.settings)) {
+                    const input = document.getElementById(`setting-${key}`);
+                    if (input) {
+                        if (input.type === 'checkbox') {
+                            input.checked = value === 'true' || value === true;
+                        } else {
+                            input.value = value || '';
+                        }
+                    }
+                }
+
+                // Update env file path display
+                document.getElementById('env-file-path').textContent = data.env_file_path;
+
+                // Validate settings
+                await validateSettings();
+
+                // Also update the email field in new job form if empty
+                const ncbiEmail = data.settings.NCBI_EMAIL;
+                const emailField = document.getElementById('email');
+                if (ncbiEmail && (!emailField.value || emailField.value === 'your@email.com')) {
+                    emailField.value = ncbiEmail;
+                }
+
+                // Update output dir default if set
+                const defaultOutput = data.settings.DEFAULT_OUTPUT_DIR;
+                const outputField = document.getElementById('output');
+                if (defaultOutput && outputField.value === './output') {
+                    outputField.value = defaultOutput;
+                }
+
+            } catch (err) {
+                console.error('Failed to load settings:', err);
+            }
+        }
+
+        async function saveSettings() {
+            const form = document.getElementById('settings-form');
+            const formData = new FormData(form);
+            const settings = {};
+
+            // Collect all settings
+            for (const [key, config] of Object.entries(getSettingsKeys())) {
+                const input = document.getElementById(`setting-${key}`);
+                if (input) {
+                    if (input.type === 'checkbox') {
+                        settings[key] = input.checked ? 'true' : 'false';
+                    } else {
+                        settings[key] = input.value;
+                    }
+                }
+            }
+
+            try {
+                await apiCall('POST', '/settings', { settings });
+
+                // Show success message
+                const validation = document.getElementById('settings-validation');
+                validation.className = 'alert alert-success';
+                validation.textContent = 'Settings saved successfully!';
+                validation.classList.remove('hidden');
+
+                // Re-validate
+                await validateSettings();
+
+                // Hide success after 3 seconds
+                setTimeout(() => {
+                    if (validation.classList.contains('alert-success')) {
+                        validation.classList.add('hidden');
+                    }
+                }, 3000);
+
+            } catch (err) {
+                alert('Failed to save settings: ' + err.message);
+            }
+        }
+
+        async function validateSettings() {
+            try {
+                const result = await apiCall('GET', '/settings/validate');
+                const validation = document.getElementById('settings-validation');
+
+                if (!result.valid) {
+                    validation.className = 'alert alert-error';
+                    validation.innerHTML = '<strong>Configuration Issues:</strong><ul>' +
+                        result.issues.map(i => `<li>${i}</li>`).join('') +
+                        '</ul>';
+                    validation.classList.remove('hidden');
+                } else if (result.warnings.length > 0) {
+                    validation.className = 'alert alert-warning';
+                    validation.innerHTML = '<strong>Warnings:</strong><ul>' +
+                        result.warnings.map(w => `<li>${w}</li>`).join('') +
+                        '</ul>';
+                    validation.classList.remove('hidden');
+                } else {
+                    validation.classList.add('hidden');
+                }
+            } catch (err) {
+                console.error('Failed to validate settings:', err);
+            }
+        }
+
+        function getSettingsKeys() {
+            // Return the settings we're managing
+            return {
+                'OPENAI_API_KEY': true,
+                'ANTHROPIC_API_KEY': true,
+                'NCBI_EMAIL': true,
+                'NCBI_API_KEY': true,
+                'TIER2_MODEL': true,
+                'TIER3_MODELS': true,
+                'ENABLE_TIER1': true,
+                'ENABLE_TIER2': true,
+                'TIER2_CONFIDENCE_THRESHOLD': true,
+                'USE_PUBMIND': true,
+                'USE_PUBMED': true,
+                'USE_EUROPEPMC': true,
+                'SCOUT_ENABLED': true,
+                'SCOUT_MIN_RELEVANCE': true,
+                'DEFAULT_OUTPUT_DIR': true,
+            };
+        }
+
+        // =====================================================================
+        // Directory Browser
+        // =====================================================================
+
+        let dirBrowserState = {
+            targetInput: null,
+            currentPath: '~',
+            selectedPath: null,
+            parentPath: null,
+        };
+
+        async function openDirectoryBrowser(inputId) {
+            dirBrowserState.targetInput = inputId;
+            const input = document.getElementById(inputId);
+            const startPath = input.value || '~';
+
+            document.getElementById('directory-modal').classList.remove('hidden');
+
+            // Load shortcuts
+            await loadDirectoryShortcuts();
+
+            // Navigate to starting path
+            await navigateToPath(startPath);
+        }
+
+        function closeDirectoryBrowser() {
+            document.getElementById('directory-modal').classList.add('hidden');
+            dirBrowserState.targetInput = null;
+            dirBrowserState.selectedPath = null;
+        }
+
+        async function loadDirectoryShortcuts() {
+            try {
+                const data = await apiCall('GET', '/browse/shortcuts');
+                const container = document.getElementById('dir-shortcuts');
+
+                const iconMap = {
+                    'home': '🏠',
+                    'desktop': '🖥️',
+                    'folder': '📁',
+                    'code': '📂',
+                    'output': '📤',
+                };
+
+                container.innerHTML = data.shortcuts.map(s => `
+                    <div class="dir-shortcut" onclick="navigateToPath('${s.path}')">
+                        <span>${iconMap[s.icon] || '📁'}</span>
+                        <span>${s.name}</span>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Failed to load shortcuts:', err);
+            }
+        }
+
+        async function navigateToPath(path) {
+            const listing = document.getElementById('dir-listing');
+            listing.innerHTML = '<p class="loading">Loading...</p>';
+
+            try {
+                const data = await apiCall('GET', `/browse?path=${encodeURIComponent(path)}`);
+
+                dirBrowserState.currentPath = data.current_path;
+                dirBrowserState.parentPath = data.parent_path;
+                dirBrowserState.selectedPath = data.current_path;
+
+                // Update path input
+                document.getElementById('dir-current-path').value = data.current_path;
+
+                // Update up button
+                document.getElementById('dir-up-btn').disabled = !data.parent_path;
+
+                // Render directory listing
+                if (data.entries.length === 0) {
+                    listing.innerHTML = '<p class="loading">Empty directory</p>';
+                } else {
+                    listing.innerHTML = data.entries
+                        .filter(e => e.is_dir)  // Only show directories
+                        .map(entry => `
+                            <div class="dir-item ${!entry.is_readable ? 'disabled' : ''}"
+                                 onclick="${entry.is_readable ? `navigateToPath('${entry.path.replace(/'/g, "\\'")}')` : ''}"
+                                 title="${entry.path}">
+                                <span class="dir-item-icon">📁</span>
+                                <span class="dir-item-name">${entry.name}</span>
+                            </div>
+                        `).join('');
+
+                    // If no directories, show message
+                    if (data.entries.filter(e => e.is_dir).length === 0) {
+                        listing.innerHTML = '<p class="loading">No subdirectories</p>';
+                    }
+                }
+
+            } catch (err) {
+                listing.innerHTML = `<p class="loading" style="color: var(--error);">Error: ${err.message}</p>`;
+            }
+        }
+
+        function navigateUp() {
+            if (dirBrowserState.parentPath) {
+                navigateToPath(dirBrowserState.parentPath);
+            }
+        }
+
+        async function createNewFolder() {
+            const nameInput = document.getElementById('new-folder-name');
+            const name = nameInput.value.trim();
+
+            if (!name) {
+                alert('Please enter a folder name');
+                return;
+            }
+
+            const newPath = dirBrowserState.currentPath + '/' + name;
+
+            try {
+                await apiCall('POST', `/browse/create?path=${encodeURIComponent(newPath)}`);
+                nameInput.value = '';
+                await navigateToPath(dirBrowserState.currentPath);
+                // Select the new folder
+                await navigateToPath(newPath);
+            } catch (err) {
+                alert('Failed to create folder: ' + err.message);
+            }
+        }
+
+        function selectDirectory() {
+            if (dirBrowserState.targetInput && dirBrowserState.selectedPath) {
+                document.getElementById(dirBrowserState.targetInput).value = dirBrowserState.selectedPath;
+            }
+            closeDirectoryBrowser();
+        }
+
+        // Also add browse button to the output directory field in new job form
+        function addBrowseToJobForm() {
+            const outputGroup = document.getElementById('output').parentElement;
+            const input = document.getElementById('output');
+
+            // Wrap input with button
+            const wrapper = document.createElement('div');
+            wrapper.className = 'input-with-button';
+
+            input.parentNode.insertBefore(wrapper, input);
+            wrapper.appendChild(input);
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn btn-secondary';
+            btn.textContent = 'Browse';
+            btn.onclick = () => openDirectoryBrowser('output');
+            wrapper.appendChild(btn);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            addBrowseToJobForm();
+            loadSettings();
+        });
     </script>
 </body>
 </html>
