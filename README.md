@@ -33,14 +33,34 @@ brew install poppler
 ```bash
 # Install
 pip install -e .
+pip install -r gui/requirements.txt
 
-# Set environment variables
+# Launch the GUI (recommended)
+python main.py
+```
+
+The GUI provides:
+- **Easy setup** - Configure API keys and settings through the Settings tab
+- **Directory browser** - Browse and select output directories like a native file picker
+- **Real-time progress** - Watch the pipeline execute with live updates
+- **Job management** - Pause, resume, and manage multiple extraction jobs
+
+On first launch, go to the **Settings** tab to configure your API keys:
+- OpenAI API Key (required)
+- NCBI Email (required)
+- Other optional settings
+
+### CLI Alternative
+
+For scripting and automation, use the command-line interface:
+
+```bash
+# Set environment variables (or use .env file)
 export OPENAI_API_KEY="your-key"
-export ANTHROPIC_API_KEY="your-key"
 export NCBI_EMAIL="your@email.com"
 
-# Run full pipeline
-python automated_workflow.py BRCA1 --email your@email.com --output ./results
+# Run from command line
+python main.py --cli BRCA1 --email your@email.com --output ./results
 ```
 
 ---
@@ -73,12 +93,46 @@ Before extraction, the pipeline identifies relevant "data zones" in each paperâ€
 
 ## Use Cases
 
-### 1. End-to-End Pipeline (Primary Use Case)
+### 1. Web GUI (Primary Use Case)
 
-Run the complete automated workflow from gene name to SQLite database.
+The web-based GUI is the recommended way to use GeneVariantFetcher.
 
-**Script:** `automated_workflow.py`
+**Script:** `main.py`
 
+```bash
+python main.py                    # localhost:8000
+python main.py --port 8080        # Custom port
+python main.py --host 0.0.0.0     # Allow external connections
+python main.py --no-browser       # Don't auto-open browser
+```
+
+**Features:**
+- **Settings Management** - Configure API keys and pipeline settings through the UI
+- **Directory Browser** - Browse and select output directories with a file-picker interface
+- **Background Execution** - Jobs continue running even if you close the browser
+- **Checkpoint/Resume** - Interrupt and resume jobs at any point
+- **Real-time Progress** - WebSocket-powered live updates
+- **Job History** - Track all past and current jobs
+
+**First-Time Setup:**
+1. Launch the GUI: `python main.py`
+2. Go to the **Settings** tab
+3. Enter your OpenAI API Key and NCBI Email
+4. Click **Save Settings**
+5. Go to **New Job** tab to start your first extraction
+
+---
+
+### 2. Command-Line Interface (Automation)
+
+For scripting, CI/CD, or batch processing, use the CLI mode.
+
+**Via main.py:**
+```bash
+python main.py --cli GENE --email EMAIL --output DIR
+```
+
+**Via automated_workflow.py (full options):**
 ```bash
 python automated_workflow.py GENE --email EMAIL --output DIR [OPTIONS]
 ```
@@ -112,30 +166,6 @@ PUBMIND_ONLY=true python automated_workflow.py KCNH2 --email user@email.com --ou
 # Skip to stronger model (disable cascade)
 python automated_workflow.py SCN5A --email user@email.com --output ./results --tier-threshold 0
 ```
-
----
-
-### 2. Browser-Based GUI
-
-Web interface for running pipelines with background job support.
-
-**Script:** `run_gui.py`
-
-```bash
-# Install GUI dependencies
-pip install -r gui/requirements.txt
-
-# Start server
-python run_gui.py                    # localhost:8000
-python run_gui.py --port 8080        # Custom port
-python run_gui.py --host 0.0.0.0     # Allow external connections
-```
-
-**Features:**
-- Background job execution (survives browser close)
-- Checkpoint/resume for interrupted jobs
-- Real-time progress updates via WebSocket
-- Job history and status tracking
 
 ---
 
