@@ -1075,17 +1075,15 @@
                     <div class="settings-group">
                         <h3 class="settings-group-title">Model Configuration</h3>
                         <p class="settings-group-desc">Configure the LLM models used for filtering and extraction.</p>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="setting-TIER2_MODEL">Tier 2 Filter Model</label>
-                                <input type="text" id="setting-TIER2_MODEL" name="TIER2_MODEL" value="gpt-4o-mini">
-                                <small class="form-help">Model for paper relevance filtering</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="setting-TIER3_MODELS">Tier 3 Extraction Models</label>
-                                <input type="text" id="setting-TIER3_MODELS" name="TIER3_MODELS" value="gpt-4o-mini,gpt-4o">
-                                <small class="form-help">Comma-separated list of models</small>
-                            </div>
+                        <div class="form-group">
+                            <label for="setting-TIER2_MODEL">Tier 2 Filter Model</label>
+                            <input type="text" id="setting-TIER2_MODEL" name="TIER2_MODEL" value="gpt-4o-mini" style="max-width: 400px;">
+                            <small class="form-help">Model for paper relevance filtering</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="setting-TIER3_MODELS">Tier 3 Extraction Models</label>
+                            <input type="text" id="setting-TIER3_MODELS" name="TIER3_MODELS" value="gpt-4o-mini,gpt-4o">
+                            <small class="form-help">Comma-separated list of models (e.g., gpt-4o-mini,gpt-4o,claude-3-5-sonnet-20241022)</small>
                         </div>
                     </div>
 
