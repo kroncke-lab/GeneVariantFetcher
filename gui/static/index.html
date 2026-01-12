@@ -671,6 +671,92 @@
             color: var(--gray-500);
             padding: 2rem;
         }
+
+        /* Info icon tooltips */
+        .info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            background: var(--gray-200);
+            color: var(--gray-600);
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: help;
+            margin-left: 6px;
+            position: relative;
+            vertical-align: middle;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .info-icon:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .info-tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gray-800);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.4;
+            white-space: normal;
+            width: 280px;
+            text-align: left;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            pointer-events: none;
+        }
+
+        .info-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--gray-800);
+        }
+
+        .info-icon:hover .info-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .label-with-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .setting-description {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-top: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .settings-subsection {
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .settings-subsection h4 {
+            margin: 0 0 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
     </style>
 </head>
 <body>
@@ -747,65 +833,110 @@
                             Advanced Settings
                         </div>
                         <div class="collapsible-content">
+                            <!-- Extraction Configuration -->
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="tier-threshold">Tier Threshold</label>
+                                    <div class="label-with-info">
+                                        <label for="tier-threshold">Tier Threshold</label>
+                                        <span class="info-icon">i
+                                            <span class="info-tooltip">Controls the model cascade behavior. If the first LLM model finds fewer variants than this threshold, the system automatically retries with the next model in the cascade. Set to 0 to use only a single model. Higher values (1-10) make the system more aggressive about trying additional models.</span>
+                                        </span>
+                                    </div>
                                     <input type="number" id="tier-threshold" name="tier_threshold" value="1" min="0" max="10">
-                                    <small style="color: var(--gray-500); font-size: 0.75rem;">0 = single model, higher = retry if few variants found</small>
+                                    <small class="setting-description">0 = single model, higher = retry if few variants found</small>
                                 </div>
                                 <div class="form-group">
-                                    <label for="confidence">Filter Confidence Threshold</label>
+                                    <div class="label-with-info">
+                                        <label for="confidence">Filter Confidence Threshold</label>
+                                        <span class="info-icon">i
+                                            <span class="info-tooltip">The minimum confidence score (0.0-1.0) required for the Tier 2 LLM filter to consider a paper relevant. Papers scoring below this threshold are excluded from extraction. Lower values include more papers but may increase noise; higher values are more selective.</span>
+                                        </span>
+                                    </div>
                                     <input type="number" id="confidence" name="tier2_confidence_threshold" value="0.5" min="0" max="1" step="0.1">
+                                    <small class="setting-description">Papers scoring below this are excluded</small>
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <div class="checkbox-group">
-                                        <input type="checkbox" id="enable-tier1" name="enable_tier1" checked>
-                                        <label for="enable-tier1">Enable Tier 1 (Keyword Filter)</label>
+                            <!-- Filter Controls -->
+                            <div class="settings-subsection">
+                                <h4>Paper Filtering Pipeline</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <input type="checkbox" id="enable-tier1" name="enable_tier1" checked>
+                                            <label for="enable-tier1">Enable Tier 1 (Keyword Filter)</label>
+                                            <span class="info-icon">i
+                                                <span class="info-tooltip">Fast initial filter using keyword matching to quickly eliminate obviously irrelevant papers. Searches for gene names, variant patterns, and phenotype-related terms. Recommended to keep enabled for faster processing.</span>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="checkbox-group">
-                                        <input type="checkbox" id="enable-tier2" name="enable_tier2" checked>
-                                        <label for="enable-tier2">Enable Tier 2 (LLM Filter)</label>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <input type="checkbox" id="enable-tier2" name="enable_tier2" checked>
+                                            <label for="enable-tier2">Enable Tier 2 (LLM Filter)</label>
+                                            <span class="info-icon">i
+                                                <span class="info-tooltip">Uses an LLM to intelligently assess whether papers contain extractable variant carrier data. More accurate than keyword filtering but slower and uses API credits. Applies the confidence threshold setting above.</span>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="checkbox-group">
-                                        <input type="checkbox" id="clinical-triage" name="use_clinical_triage">
-                                        <label for="clinical-triage">Use Clinical Triage Filter</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <h4 style="margin: 1rem 0 0.5rem; font-size: 0.875rem;">Literature Sources</h4>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <div class="checkbox-group">
-                                        <input type="checkbox" id="use-pubmind" name="use_pubmind" checked>
-                                        <label for="use-pubmind">PubMind</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="checkbox-group">
-                                        <input type="checkbox" id="use-pubmed" name="use_pubmed" checked>
-                                        <label for="use-pubmed">PubMed</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="checkbox-group">
-                                        <input type="checkbox" id="use-europepmc" name="use_europepmc">
-                                        <label for="use-europepmc">Europe PMC</label>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <input type="checkbox" id="clinical-triage" name="use_clinical_triage">
+                                            <label for="clinical-triage">Use Clinical Triage Filter</label>
+                                            <span class="info-icon">i
+                                                <span class="info-tooltip">Additional filter that prioritizes papers with clinical relevance (case reports, clinical studies, patient cohorts). Enable this if you're specifically interested in clinical variant data rather than functional studies.</span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <div class="checkbox-group">
-                                    <input type="checkbox" id="scout-enabled" name="scout_enabled" checked>
-                                    <label for="scout-enabled">Enable DATA_ZONES condensation (faster extraction)</label>
+                            <!-- Literature Sources -->
+                            <div class="settings-subsection">
+                                <h4>Literature Sources</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <input type="checkbox" id="use-pubmind" name="use_pubmind" checked>
+                                            <label for="use-pubmind">PubMind</label>
+                                            <span class="info-icon">i
+                                                <span class="info-tooltip">AI-powered literature discovery service that finds gene-relevant papers using semantic search. Often finds papers that keyword-based searches miss. Recommended as a primary source.</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <input type="checkbox" id="use-pubmed" name="use_pubmed" checked>
+                                            <label for="use-pubmed">PubMed</label>
+                                            <span class="info-icon">i
+                                                <span class="info-tooltip">NCBI's comprehensive biomedical literature database. Uses standard keyword and MeSH term searches. Good for broad coverage of published literature.</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-group">
+                                            <input type="checkbox" id="use-europepmc" name="use_europepmc">
+                                            <label for="use-europepmc">Europe PMC</label>
+                                            <span class="info-icon">i
+                                                <span class="info-tooltip">European literature database that includes preprints and additional European sources not always in PubMed. Can provide supplementary results but may have some overlap with PubMed.</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Optimization -->
+                            <div class="settings-subsection">
+                                <h4>Performance Optimization</h4>
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="scout-enabled" name="scout_enabled" checked>
+                                        <label for="scout-enabled">Enable DATA_ZONES condensation</label>
+                                        <span class="info-icon">i
+                                            <span class="info-tooltip">Pre-processes papers to identify and extract only the relevant sections (tables, results, methods) before sending to the LLM. Significantly reduces token usage and speeds up extraction. Disable only if you're seeing missing data that might be in unusual document locations.</span>
+                                        </span>
+                                    </div>
+                                    <small class="setting-description">Faster extraction by focusing on relevant document sections</small>
                                 </div>
                             </div>
                         </div>
