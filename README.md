@@ -5,15 +5,13 @@ Extract human genetic variant carriers from biomedical literature into a SQLite 
 ## What It Does
 
 Given a gene name, this tool:
-1. Discovers variant-related papers via PubMind and PubMed keyword searches, then merges and de-duplicates PMIDs
-2. Downloads full-text articles and supplemental materials (Excel, Word)
+1. Discovers variant-related papers via PubMind and PubMed keyword searches
+2. Downloads full-text articles and supplemental materials (Excel, Word, PDFs)
 3. Extracts patient-level variant data using LLM cascade
 4. Aggregates penetrance statistics across papers
 5. Writes normalized data to SQLite
 
 **Key Insight:** 70-80% of variant data is in supplemental files. This tool extracts it all.
-
-**Why combine PubMind + PubMed?** PubMind's LLM-driven filtering is highly precise but can miss edge cases; PubMed's recall-oriented keyword search helps recover those. Using both by default balances precision and recall while keeping the merged PMID list clean.
 
 ## Quick Start
 
@@ -25,74 +23,247 @@ pip install -e .
 export AI_INTEGRATIONS_OPENAI_API_KEY="your-key"
 export NCBI_EMAIL="your@email.com"
 
-# Run
+# Run full pipeline
 python automated_workflow.py BRCA1 --email your@email.com --output ./results
-
-# Control sourcing (optional)
-# Disable PubMed queries
-export PUBMIND_ONLY=true           # or: export USE_PUBMED=false
-
-# Force PubMed alongside PubMind (recall-heavy)
-export USE_PUBMED=true             # keeps default combined sourcing enabled
 ```
 
-## CLI Options
+---
+
+## Use Cases
+
+### 1. End-to-End Pipeline (Primary Use Case)
+
+Run the complete automated workflow from gene name to SQLite database.
+
+**Script:** `automated_workflow.py`
 
 ```bash
 python automated_workflow.py GENE --email EMAIL --output DIR [OPTIONS]
-
-Options:
-  --max-pmids N       Limit PMIDs to discover (default: 100)
-  --max-downloads N   Limit papers to download (default: 50)
-  --tier-threshold N  Model cascade threshold (default: 1)
-  --auto-synonyms     Automatically discover gene synonyms from NCBI Gene database
-  --synonym SYN       Manually specify gene synonym (can be used multiple times)
-  --verbose           Enable verbose logging
-
-PMID sources:
-  • PubMind-only: set PUBMIND_ONLY=true or USE_PUBMED=false (skips PubMed keyword search)
-  • PubMind + PubMed (default): leave both unset, or set USE_PUBMED=true
 ```
 
-## Gene Synonym Discovery
+**Options:**
+| Option | Description |
+|--------|-------------|
+| `--max-pmids N` | Limit PMIDs to discover (default: 100) |
+| `--max-downloads N` | Limit papers to download (default: 50) |
+| `--tier-threshold N` | Model cascade threshold (default: 1) |
+| `--auto-synonyms` | Auto-discover gene synonyms from NCBI |
+| `--synonym SYN` | Manual synonym (repeatable) |
+| `--verbose` | Enable verbose logging |
 
-The workflow can automatically discover gene synonyms from the NCBI Gene database to improve literature coverage:
+**Examples:**
+```bash
+# Basic run
+python automated_workflow.py TTR --email user@email.com --output ./results
+
+# With automatic synonym discovery
+python automated_workflow.py TTR --email user@email.com --output ./results --auto-synonyms
+
+# With manual synonyms
+python automated_workflow.py TTR --email user@email.com --output ./results \
+  --synonym PALB --synonym prealbumin
+
+# PubMind-only (skip PubMed keyword search)
+PUBMIND_ONLY=true python automated_workflow.py KCNH2 --email user@email.com --output ./results
+```
+
+---
+
+### 2. Export Database to CSV
+
+Export variant data from SQLite to CSV for analysis in Excel, R, or Python.
+
+**Script:** `extract_ttr_to_csv.py`
 
 ```bash
-# Automatic synonym discovery
-python automated_workflow.py TTR --email your@email.com --output ./results --auto-synonyms
-
-# Manual synonym specification
-python automated_workflow.py TTR --email your@email.com --output ./results --synonym PALB --synonym prealbumin
-
-# Combine both approaches
-python automated_workflow.py TTR --email your@email.com --output ./results --auto-synonyms --synonym "transthyretin amyloidosis"
+python extract_ttr_to_csv.py --db path/to/GENE.db [OPTIONS]
 ```
 
-When `--auto-synonyms` is enabled, the workflow:
-1. Queries NCBI Gene database for official gene symbols and aliases
-2. Automatically selects relevant synonyms (official symbols + aliases)
-3. Expands PubMed queries to include synonyms for better recall
+**Options:**
+| Option | Description |
+|--------|-------------|
+| `--db PATH` | Path to SQLite database (required) |
+| `--output FILE` | Output filename (default: `ttr_variants.csv`) |
+| `--no-individual-records` | Skip individual records CSV |
 
-## Output
+**Example:**
+```bash
+python extract_ttr_to_csv.py --db results/TTR/20250101_120000/TTR.db --output ttr_analysis.csv
+```
+
+**Output:**
+- `ttr_analysis.csv` - Variant-level aggregations with affected/unaffected counts
+- `ttr_analysis_individual_records.csv` - Individual patient records with onset ages
+
+---
+
+### 3. Compare Curated vs Automated Results
+
+Validate automated extractions against manually curated Excel sheets.
+
+**Script:** `compare_variants.py`
+
+```bash
+python compare_variants.py --excel CURATED.xlsx --sqlite GENE.db [OPTIONS]
+```
+
+**Options:**
+| Option | Description |
+|--------|-------------|
+| `--excel FILE` | Curated Excel file (required) |
+| `--sqlite DB` | SQLite database (required) |
+| `--variant-match-mode` | `exact` or `fuzzy` (default: fuzzy) |
+| `--fuzzy-threshold` | Similarity threshold (default: 0.85) |
+| `--output REPORT` | Output report path |
+
+**Example:**
+```bash
+python compare_variants.py \
+  --excel manual_curation.xlsx \
+  --sqlite results/KCNH2/20250101_120000/KCNH2.db \
+  --variant-match-mode fuzzy \
+  --fuzzy-threshold 0.85
+```
+
+---
+
+### 4. Semi-Manual Fetch for Paywalled Papers
+
+Browser-assisted workflow to recover papers the automated harvester couldn't access.
+
+**Script:** `fetch_manager.py`
+
+```bash
+python fetch_manager.py <csv_file> [OPTIONS]
+```
+
+**How it works:**
+1. Opens paper URL in your browser (DOI preferred)
+2. Waits for you to manually download PDF/supplements
+3. Detects new files in your Downloads folder
+4. Renames and moves files to target directory
+5. Tracks progress in CSV
+
+**Options:**
+| Option | Description |
+|--------|-------------|
+| `--doi-column` | Custom DOI column name |
+| `--target-dir` | Custom target directory |
+| `--downloads-dir` | Custom Downloads folder path |
+
+**Example:**
+```bash
+# Use the paywalled_missing.csv generated by the pipeline
+python fetch_manager.py results/TTR/20250101_120000/pmc_fulltext/paywalled_missing.csv
+```
+
+---
+
+### 5. SQLite Migration (Standalone)
+
+Convert JSON extraction files to SQLite database. Runs automatically as part of the pipeline, but can be used standalone for re-processing.
+
+**Script:** `harvesting/migrate_to_sqlite.py`
+
+```bash
+python harvesting/migrate_to_sqlite.py --data-dir /path/to/output/GENE/TIMESTAMP [OPTIONS]
+```
+
+**Options:**
+| Option | Description |
+|--------|-------------|
+| `--data-dir PATH` | Directory with extraction files (required) |
+| `--db DBNAME` | Custom database name |
+| `--cleanup` | Delete empty directories after migration |
+| `--delete-pmc-after-archive` | Archive and delete full-text directory |
+| `--dry-run` | Preview changes without applying |
+
+**Example:**
+```bash
+python harvesting/migrate_to_sqlite.py \
+  --data-dir results/TTR/20250101_120000 \
+  --cleanup
+```
+
+---
+
+### 6. Library Usage (Component-Level)
+
+Import individual components for custom workflows.
+
+#### Full-Text Harvesting Only
+
+```python
+from harvesting import PMCHarvester
+
+harvester = PMCHarvester(output_dir="my_papers")
+harvester.harvest(['35443093', '33442691'], delay=2.0)
+```
+
+#### Clinical Data Triage Only
+
+```python
+from pipeline.filters import ClinicalDataTriageFilter
+
+triage = ClinicalDataTriageFilter()
+result = triage.triage(
+    title="Novel SCN5A Mutation...",
+    abstract="We report a 28-year-old...",
+    gene="SCN5A",
+    pmid="12345678"
+)
+print(result.decision)  # "EXTRACT" or "SKIP"
+```
+
+#### PMID Discovery Only
+
+```python
+from gene_literature.discovery import discover_pmids_for_gene
+
+result = discover_pmids_for_gene(
+    gene_symbol="BRCA1",
+    email="user@email.com",
+    max_results=100,
+    synonyms=["BRCA1", "PSCP"]
+)
+print(result.pubmind_pmids)
+print(result.pubmed_pmids)
+```
+
+---
+
+## Output Structure
 
 ```
 {OUTPUT_DIR}/{GENE}/{TIMESTAMP}/
-├── {GENE}_pmids_pubmind.txt        # PMIDs from PubMind
-├── {GENE}_pmids_pubmed.txt         # PMIDs from PubMed keyword search
-├── {GENE}_pmids.txt                # Merged + de-duplicated PMIDs used by the workflow
-├── pmc_fulltext/                   # Full-text + supplements
-├── extractions/                    # Per-paper JSON
-├── {GENE}_penetrance_summary.json
-└── {GENE}.db                       # SQLite database
+├── {GENE}.db                        # SQLite database (final output)
+├── {GENE}_pmids.txt                 # Merged/deduplicated PMIDs
+├── {GENE}_pmids_pubmind.txt         # PubMind-only PMIDs
+├── {GENE}_pmids_pubmed.txt          # PubMed-only PMIDs
+├── {GENE}_penetrance_summary.json   # Aggregated penetrance statistics
+├── {GENE}_workflow_summary.json     # Pipeline run statistics
+├── abstract_json/                   # Paper metadata
+├── pmc_fulltext/                    # Full-text + supplements
+│   ├── PMID_35443093_FULL_CONTEXT.md
+│   ├── PMID_35443093_supplements/
+│   │   ├── Table_S1.xlsx
+│   │   └── Figure_S2.pdf
+│   └── paywalled_missing.csv        # Papers needing manual download
+└── extractions/                     # Per-paper JSON extractions
+    ├── GENE_PMID_35443093.json
+    └── GENE_PMID_33442691.json
 ```
 
 ## Database Schema
 
-- **papers** - Paper metadata (pmid, title, doi)
-- **variants** - Variant info (gene, cDNA, protein notation)
-- **individual_records** - Patient data (age, sex, affected_status, phenotype)
-- **penetrance_data** - Cohort statistics
+| Table | Description |
+|-------|-------------|
+| **papers** | Paper metadata (pmid, title, doi) |
+| **variants** | Variant info (gene, cDNA, protein notation) |
+| **individual_records** | Patient data (age, sex, affected_status, phenotype) |
+| **penetrance_data** | Cohort statistics |
+
+---
 
 ## Environment Variables
 
@@ -101,8 +272,11 @@ When `--auto-synonyms` is enabled, the workflow:
 | `AI_INTEGRATIONS_OPENAI_API_KEY` | Yes | OpenAI API key (or `OPENAI_API_KEY`) |
 | `NCBI_EMAIL` | Yes | Email for NCBI E-utilities |
 | `NCBI_API_KEY` | No | Increases NCBI rate limits |
-| `USE_PUBMED` | No | `true`/`false` toggle to include PubMed keyword search (defaults to `true`) |
-| `PUBMIND_ONLY` | No | If `true`, skip PubMed/EuropePMC and rely solely on PubMind |
+| `PUBMIND_ONLY` | No | If `true`, skip PubMed keyword search |
+| `USE_PUBMED` | No | `true`/`false` to toggle PubMed (default: true) |
+| `USE_EUROPEPMC` | No | `true`/`false` to toggle EuropePMC |
+
+---
 
 ## Development
 
@@ -111,4 +285,8 @@ See [CLAUDE.md](CLAUDE.md) for architecture details.
 ```bash
 # Run tests
 pytest tests/
+
+# Example scripts
+python tests/example_harvest_from_pubmind.py
+python tests/example_triage.py
 ```
