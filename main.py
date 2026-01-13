@@ -194,14 +194,14 @@ def run_cli_mode(args):
         sys.exit(1)
 
     # Import and run the automated workflow
-    from automated_workflow import run_workflow
+    from automated_workflow import automated_variant_extraction_workflow
 
     print(f"\n{'='*60}")
     print(f"Running CLI mode for gene: {gene}")
     print(f"Output directory: {output}")
     print(f"{'='*60}\n")
 
-    run_workflow(
+    automated_variant_extraction_workflow(
         gene_symbol=gene,
         email=email,
         output_dir=output,
