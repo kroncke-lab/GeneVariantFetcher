@@ -57,6 +57,9 @@ class JobCreateRequest(BaseModel):
     auto_synonyms: bool = Field(False, description="Auto-discover gene synonyms")
     synonyms: List[str] = Field(default_factory=list, description="Manual synonyms")
 
+    # Specific PMIDs for testing (skip discovery if provided)
+    specific_pmids: List[str] = Field(default_factory=list, description="Specific PMIDs for testing (skips discovery)")
+
     # Advanced settings
     tier_threshold: int = Field(1, ge=0, le=10, description="Model cascade threshold")
     use_clinical_triage: bool = Field(False, description="Use clinical triage filter")
@@ -463,6 +466,7 @@ async def create_new_job(request: JobCreateRequest, background_tasks: Background
         use_clinical_triage=request.use_clinical_triage,
         auto_synonyms=request.auto_synonyms,
         synonyms=request.synonyms,
+        specific_pmids=request.specific_pmids,
         enable_tier1=request.enable_tier1,
         enable_tier2=request.enable_tier2,
         use_pubmind=request.use_pubmind,

@@ -71,6 +71,9 @@ class JobCheckpoint:
     auto_synonyms: bool = False
     synonyms: List[str] = field(default_factory=list)
 
+    # Specific PMIDs for testing (skip discovery if provided)
+    specific_pmids: List[str] = field(default_factory=list)
+
     # Advanced settings
     enable_tier1: bool = True
     enable_tier2: bool = True

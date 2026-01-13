@@ -26,6 +26,7 @@ from gui.checkpoint import (
     JobCheckpoint,
     PipelineStep,
 )
+from utils.logging_utils import setup_logging, get_logger
 
 logger = logging.getLogger(__name__)
 
@@ -126,6 +127,11 @@ class PipelineWorker:
         # Create output directory structure
         output_path = checkpoint.output_path
         output_path.mkdir(parents=True, exist_ok=True)
+
+        # Set up file logging in the output directory for troubleshooting
+        log_file = output_path / "workflow.log"
+        setup_logging(level=logging.INFO, log_file=log_file)
+        self._log(checkpoint, f"Logging to file: {log_file}")
 
         try:
             # Determine which steps to run based on job type
@@ -242,6 +248,29 @@ class PipelineWorker:
 
     def _step_fetch_pmids(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
         """Step 1: Fetch PMIDs from literature sources."""
+
+        # If specific PMIDs provided, use those directly (for testing)
+        if checkpoint.specific_pmids:
+            self._log(checkpoint, f"Using {len(checkpoint.specific_pmids)} specific PMID(s) for testing...")
+            checkpoint.discovered_pmids = list(checkpoint.specific_pmids)
+
+            # Save to combined file for consistency
+            output_path = checkpoint.output_path
+            combined_file = output_path / f"{checkpoint.gene_symbol}_pmids.txt"
+            with open(combined_file, "w") as f:
+                for pmid in checkpoint.specific_pmids:
+                    f.write(f"{pmid}\n")
+
+            self._log(checkpoint, f"Using specific PMIDs: {', '.join(checkpoint.specific_pmids)}")
+
+            return {
+                "pubmind_count": 0,
+                "pubmed_count": 0,
+                "europepmc_count": 0,
+                "specific_pmids": len(checkpoint.specific_pmids),
+                "total_unique": len(checkpoint.discovered_pmids),
+            }
+
         self._log(checkpoint, "Fetching PMIDs from PubMind, PubMed, and Europe PMC...")
 
         from gene_literature.discovery import discover_pmids_for_gene
@@ -753,6 +782,7 @@ def create_job(
         use_clinical_triage=kwargs.get("use_clinical_triage", False),
         auto_synonyms=kwargs.get("auto_synonyms", False),
         synonyms=kwargs.get("synonyms", []),
+        specific_pmids=kwargs.get("specific_pmids", []),
         enable_tier1=kwargs.get("enable_tier1", True),
         enable_tier2=kwargs.get("enable_tier2", True),
         use_pubmind=kwargs.get("use_pubmind", True),
