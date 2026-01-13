@@ -15,7 +15,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Set
 
 from dotenv import load_dotenv
 
@@ -128,17 +128,30 @@ class PipelineWorker:
         output_path.mkdir(parents=True, exist_ok=True)
 
         try:
-            # Execute steps in order, skipping completed ones if resuming
-            steps = [
-                (PipelineStep.DISCOVERING_SYNONYMS, self._step_discover_synonyms),
-                (PipelineStep.FETCHING_PMIDS, self._step_fetch_pmids),
-                (PipelineStep.FETCHING_ABSTRACTS, self._step_fetch_abstracts),
-                (PipelineStep.FILTERING_PAPERS, self._step_filter_papers),
-                (PipelineStep.DOWNLOADING_FULLTEXT, self._step_download_fulltext),
-                (PipelineStep.EXTRACTING_VARIANTS, self._step_extract_variants),
-                (PipelineStep.AGGREGATING_DATA, self._step_aggregate_data),
-                (PipelineStep.MIGRATING_DATABASE, self._step_migrate_database),
-            ]
+            # Determine which steps to run based on job type
+            if checkpoint.is_folder_job:
+                # Folder jobs skip discovery/download, go straight to scouting/extraction
+                steps = []
+                if checkpoint.run_scout_on_folder:
+                    steps.append((PipelineStep.SCOUTING_DATA, self._step_scout_data))
+                steps.extend([
+                    (PipelineStep.EXTRACTING_VARIANTS, self._step_extract_variants),
+                    (PipelineStep.AGGREGATING_DATA, self._step_aggregate_data),
+                    (PipelineStep.MIGRATING_DATABASE, self._step_migrate_database),
+                ])
+            else:
+                # Full pipeline
+                steps = [
+                    (PipelineStep.DISCOVERING_SYNONYMS, self._step_discover_synonyms),
+                    (PipelineStep.FETCHING_PMIDS, self._step_fetch_pmids),
+                    (PipelineStep.FETCHING_ABSTRACTS, self._step_fetch_abstracts),
+                    (PipelineStep.FILTERING_PAPERS, self._step_filter_papers),
+                    (PipelineStep.DOWNLOADING_FULLTEXT, self._step_download_fulltext),
+                    (PipelineStep.SCOUTING_DATA, self._step_scout_data),
+                    (PipelineStep.EXTRACTING_VARIANTS, self._step_extract_variants),
+                    (PipelineStep.AGGREGATING_DATA, self._step_aggregate_data),
+                    (PipelineStep.MIGRATING_DATABASE, self._step_migrate_database),
+                ]
 
             started = not resume
             for step, step_func in steps:
@@ -414,6 +427,91 @@ class PipelineWorker:
 
         return {"downloaded": num_downloaded, "attempted": len(pmids_to_download)}
 
+    def _step_scout_data(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
+        """Step 2.5: Run Data Scout to create DATA_ZONES files."""
+        if not checkpoint.scout_enabled:
+            self._log(checkpoint, "Data Scout disabled, skipping...")
+            return {"skipped": True}
+
+        self._log(checkpoint, "Running Data Scout to identify high-value data zones...")
+
+        from pipeline.data_scout import GeneticDataScout
+
+        # Determine the fulltext directory
+        if checkpoint.is_folder_job and checkpoint.folder_path:
+            folder_path = Path(checkpoint.folder_path)
+            fulltext_dir = folder_path / "pmc_fulltext"
+            if not fulltext_dir.exists():
+                fulltext_dir = folder_path
+        else:
+            fulltext_dir = checkpoint.output_path / "pmc_fulltext"
+
+        if not fulltext_dir.exists():
+            self._log(checkpoint, "No fulltext directory found, skipping scout...")
+            return {"skipped": True, "reason": "no_fulltext_dir"}
+
+        # Find FULL_CONTEXT files that don't have corresponding DATA_ZONES
+        full_context_files = list(fulltext_dir.glob("*_FULL_CONTEXT.md"))
+        existing_zones = {f.name.replace("_DATA_ZONES.md", "") for f in fulltext_dir.glob("*_DATA_ZONES.md")}
+
+        files_to_scout = [
+            f for f in full_context_files
+            if f.name.replace("_FULL_CONTEXT.md", "") not in existing_zones
+        ]
+
+        if not files_to_scout:
+            self._log(checkpoint, "All papers already scouted, skipping...")
+            return {"skipped": True, "already_scouted": len(existing_zones)}
+
+        self._log(checkpoint, f"Scouting {len(files_to_scout)} papers...")
+
+        scout = GeneticDataScout(
+            gene_symbol=checkpoint.gene_symbol,
+            min_relevance_score=checkpoint.scout_min_relevance,
+            max_zones=30,
+        )
+
+        scouted = 0
+        errors = 0
+
+        for md_file in files_to_scout:
+            try:
+                with open(md_file, "r", encoding="utf-8") as f:
+                    full_text = f.read()
+
+                # Extract PMID from filename
+                pmid_match = md_file.name.replace("_FULL_CONTEXT.md", "")
+
+                # Run scout
+                report = scout.scan(full_text, pmid=pmid_match)
+
+                # Write DATA_ZONES.md
+                zones_file = md_file.parent / f"{pmid_match}_DATA_ZONES.md"
+                zones_markdown = scout.format_markdown(report, full_text)
+                with open(zones_file, "w", encoding="utf-8") as f:
+                    f.write(zones_markdown)
+
+                # Write zones JSON for reference
+                zones_json_file = md_file.parent / f"{pmid_match}_DATA_ZONES.json"
+                with open(zones_json_file, "w", encoding="utf-8") as f:
+                    f.write(scout.to_full_json(report))
+
+                scouted += 1
+                if scouted % 5 == 0:
+                    self._log(checkpoint, f"Scouted {scouted}/{len(files_to_scout)} papers...")
+
+            except Exception as e:
+                errors += 1
+                self._log(checkpoint, f"Error scouting {md_file.name}: {e}")
+
+        self._log(checkpoint, f"Scouted {scouted} papers ({errors} errors)")
+
+        return {
+            "scouted": scouted,
+            "errors": errors,
+            "already_scouted": len(existing_zones),
+        }
+
     def _step_extract_variants(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
         """Step 3: Extract variant data using LLM."""
         self._log(checkpoint, "Extracting variant data using AI...")
@@ -422,9 +520,18 @@ class PipelineWorker:
         from pipeline.extraction import ExpertExtractor
         from utils.pmid_utils import extract_pmid_from_filename
 
-        output_path = checkpoint.output_path
-        harvest_dir = output_path / "pmc_fulltext"
-        extraction_dir = output_path / "extractions"
+        # Determine directories based on job type
+        if checkpoint.is_folder_job and checkpoint.folder_path:
+            folder_path = Path(checkpoint.folder_path)
+            harvest_dir = folder_path / "pmc_fulltext"
+            if not harvest_dir.exists():
+                harvest_dir = folder_path
+            extraction_dir = folder_path / "extractions"
+        else:
+            output_path = checkpoint.output_path
+            harvest_dir = output_path / "pmc_fulltext"
+            extraction_dir = output_path / "extractions"
+
         extraction_dir.mkdir(exist_ok=True)
 
         # Find markdown files (prefer DATA_ZONES.md)
@@ -432,6 +539,15 @@ class PipelineWorker:
         full_context = {f.name.replace("_FULL_CONTEXT.md", ""): f for f in harvest_dir.glob("*_FULL_CONTEXT.md")}
 
         all_pmids = set(data_zones.keys()) | set(full_context.keys())
+
+        # Skip already extracted PMIDs if configured (for folder jobs)
+        if checkpoint.skip_already_extracted and checkpoint.extracted_pmids:
+            already_extracted = set(checkpoint.extracted_pmids)
+            skipped_count = len(all_pmids & already_extracted)
+            all_pmids = all_pmids - already_extracted
+            if skipped_count > 0:
+                self._log(checkpoint, f"Skipping {skipped_count} already-extracted papers")
+
         markdown_files = []
         for pmid in all_pmids:
             if pmid in data_zones:
@@ -522,9 +638,14 @@ class PipelineWorker:
 
         from pipeline.aggregation import aggregate_penetrance
 
-        output_path = checkpoint.output_path
-        extraction_dir = output_path / "extractions"
-        summary_file = output_path / f"{checkpoint.gene_symbol}_penetrance_summary.json"
+        # Determine directories based on job type
+        if checkpoint.is_folder_job and checkpoint.folder_path:
+            base_path = Path(checkpoint.folder_path)
+        else:
+            base_path = checkpoint.output_path
+
+        extraction_dir = base_path / "extractions"
+        summary_file = base_path / f"{checkpoint.gene_symbol}_penetrance_summary.json"
 
         penetrance_summary = aggregate_penetrance(
             extraction_dir=extraction_dir,
@@ -543,9 +664,14 @@ class PipelineWorker:
 
         from harvesting.migrate_to_sqlite import create_database_schema, migrate_extraction_directory
 
-        output_path = checkpoint.output_path
-        extraction_dir = output_path / "extractions"
-        db_path = output_path / f"{checkpoint.gene_symbol}.db"
+        # Determine directories based on job type
+        if checkpoint.is_folder_job and checkpoint.folder_path:
+            base_path = Path(checkpoint.folder_path)
+        else:
+            base_path = checkpoint.output_path
+
+        extraction_dir = base_path / "extractions"
+        db_path = base_path / f"{checkpoint.gene_symbol}.db"
 
         conn = create_database_schema(str(db_path))
         migration_stats = migrate_extraction_directory(conn, extraction_dir)
@@ -563,7 +689,11 @@ class PipelineWorker:
 
     def _write_workflow_summary(self, checkpoint: JobCheckpoint, migration_stats: Dict[str, Any]):
         """Write final workflow summary JSON."""
-        output_path = checkpoint.output_path
+        # Determine base path based on job type
+        if checkpoint.is_folder_job and checkpoint.folder_path:
+            output_path = Path(checkpoint.folder_path)
+        else:
+            output_path = checkpoint.output_path
 
         summary = {
             "job_id": checkpoint.job_id,
@@ -630,6 +760,74 @@ def create_job(
         use_europepmc=kwargs.get("use_europepmc", False),
         tier2_confidence_threshold=kwargs.get("tier2_confidence_threshold", 0.5),
         scout_enabled=kwargs.get("scout_enabled", True),
+    )
+
+    return checkpoint
+
+
+def create_folder_job(
+    folder_path: str,
+    gene_symbol: str,
+    email: str,
+    run_scout: bool = False,
+    skip_already_extracted: bool = True,
+    tier_threshold: int = 1,
+    scout_enabled: bool = True,
+    scout_min_relevance: float = 0.3,
+    full_context_pmids: List[str] = None,
+    data_zones_pmids: List[str] = None,
+    extraction_pmids: List[str] = None,
+) -> JobCheckpoint:
+    """
+    Create a job that processes an existing folder with downloaded papers.
+
+    This job skips discovery, filtering, and download steps, going directly
+    to extraction (or scouting first if enabled).
+
+    Args:
+        folder_path: Path to folder containing pmc_fulltext/ with markdown files
+        gene_symbol: Gene symbol for extraction
+        email: Email for NCBI (may be needed for some operations)
+        run_scout: Whether to run Data Scout on unscouted files first
+        skip_already_extracted: Skip PMIDs that already have extractions
+        tier_threshold: Model cascade threshold for extraction
+        scout_enabled: Enable DATA_ZONES preference during extraction
+        scout_min_relevance: Minimum relevance score for scout zones
+        full_context_pmids: List of PMIDs with FULL_CONTEXT files
+        data_zones_pmids: List of PMIDs with DATA_ZONES files
+        extraction_pmids: List of PMIDs already extracted (to skip)
+
+    Returns:
+        JobCheckpoint configured for folder-based extraction
+    """
+    import uuid
+
+    job_id = f"{gene_symbol.lower()}_folder_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}"
+
+    # Determine starting step
+    if run_scout:
+        starting_step = PipelineStep.SCOUTING_DATA
+    else:
+        starting_step = PipelineStep.EXTRACTING_VARIANTS
+
+    checkpoint = JobCheckpoint(
+        job_id=job_id,
+        gene_symbol=gene_symbol.upper(),
+        email=email,
+        output_dir=folder_path,  # Use folder as output dir for path calculations
+        tier_threshold=tier_threshold,
+        scout_enabled=scout_enabled,
+        scout_min_relevance=scout_min_relevance,
+        # Folder job specific settings
+        is_folder_job=True,
+        folder_path=folder_path,
+        run_scout_on_folder=run_scout,
+        skip_already_extracted=skip_already_extracted,
+        # Pre-populate PMID lists from analysis
+        downloaded_pmids=list(set((full_context_pmids or []) + (data_zones_pmids or []))),
+        extracted_pmids=extraction_pmids or [],
+        # Start at appropriate step
+        current_step=starting_step,
     )
 
     return checkpoint
