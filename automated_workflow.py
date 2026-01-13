@@ -64,6 +64,11 @@ def automated_variant_extraction_workflow(
     output_path = Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
     output_path.mkdir(parents=True, exist_ok=True)
 
+    # Set up file logging in the output directory for troubleshooting
+    log_file = output_path / "workflow.log"
+    setup_logging(level=logging.INFO, log_file=log_file)
+    logger.info(f"Logging to file: {log_file}")
+
     settings = get_settings()
 
     logger.info("="*80)
@@ -558,7 +563,8 @@ def automated_variant_extraction_workflow(
             "full_text_papers": str(harvest_dir),
             "extractions": str(extraction_dir),
             "penetrance_summary": str(penetrance_summary_file),
-            "sqlite_database": str(db_path)
+            "sqlite_database": str(db_path),
+            "workflow_log": str(log_file)
         },
         "pmid_status": {
             "filtered_out_file": str(filtered_out_file),
@@ -605,6 +611,7 @@ def automated_variant_extraction_workflow(
     logger.info(f"Summary report: {summary_file}")
     logger.info(f"Penetrance summary: {penetrance_summary_file}")
     logger.info(f"SQLite database: {db_path}")
+    logger.info(f"Workflow log: {log_file}")
     logger.info("="*80)
 
     return summary
