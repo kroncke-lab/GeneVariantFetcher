@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     anthropic_api_key: Optional[str] = Field(default=None, env="ANTHROPIC_API_KEY")
     ncbi_email: Optional[str] = Field(default=None, env="NCBI_EMAIL")
     ncbi_api_key: Optional[str] = Field(default=None, env="NCBI_API_KEY")
+    elsevier_api_key: Optional[str] = Field(default=None, env="ELSEVIER_API_KEY")
 
     # Model Configuration
     tier1_model: Optional[str] = Field(default=None, env="TIER1_MODEL", description="Optional LLM for Tier 1 (if using LLM-based Tier 1)")
