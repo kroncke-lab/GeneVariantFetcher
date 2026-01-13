@@ -125,6 +125,52 @@ class DirectoryListResponse(BaseModel):
     can_create: bool = True
 
 
+class FolderAnalysis(BaseModel):
+    """Analysis of an existing folder with downloaded papers."""
+
+    path: str
+    is_valid: bool
+    gene_symbol: Optional[str] = None
+    detected_gene_symbols: List[str] = Field(default_factory=list)
+
+    # File counts
+    full_context_count: int = 0
+    data_zones_count: int = 0
+    extraction_count: int = 0
+
+    # Lists of PMIDs found
+    full_context_pmids: List[str] = Field(default_factory=list)
+    data_zones_pmids: List[str] = Field(default_factory=list)
+    extraction_pmids: List[str] = Field(default_factory=list)
+
+    # Status flags
+    has_fulltext: bool = False
+    has_scouted: bool = False
+    scouting_complete: bool = False
+    has_extractions: bool = False
+
+    # Messages
+    status_message: str = ""
+    recommendations: List[str] = Field(default_factory=list)
+
+
+class FolderJobRequest(BaseModel):
+    """Request to create a job from an existing folder."""
+
+    folder_path: str = Field(..., description="Path to folder with downloaded papers")
+    gene_symbol: str = Field(..., description="Gene symbol for extraction")
+    email: str = Field(..., description="Email for NCBI (if needed)")
+
+    # Options
+    run_scout: bool = Field(False, description="Run Data Scout on unscouted files")
+    skip_already_extracted: bool = Field(True, description="Skip PMIDs that already have extractions")
+
+    # Advanced settings
+    tier_threshold: int = Field(1, ge=0, le=10)
+    scout_enabled: bool = Field(True)
+    scout_min_relevance: float = Field(0.3, ge=0.0, le=1.0)
+
+
 # =============================================================================
 # WebSocket Connection Manager
 # =============================================================================
@@ -740,6 +786,224 @@ async def validate_settings():
         "issues": issues,
         "warnings": warnings,
     }
+
+
+# =============================================================================
+# Folder Analysis API (for importing existing downloads)
+# =============================================================================
+
+
+def _extract_pmid_from_filename(filename: str) -> Optional[str]:
+    """Extract PMID from various filename formats."""
+    import re
+    # Patterns: 12345678_FULL_CONTEXT.md, PMID_12345678_FULL_CONTEXT.md, etc.
+    patterns = [
+        r'^(\d{6,10})_(?:FULL_CONTEXT|DATA_ZONES)\.md$',
+        r'^PMID_(\d{6,10})_(?:FULL_CONTEXT|DATA_ZONES)\.md$',
+        r'^[A-Z]+_PMID_(\d{6,10})\.json$',  # SCN5A_PMID_12345678.json
+    ]
+    for pattern in patterns:
+        match = re.match(pattern, filename, re.IGNORECASE)
+        if match:
+            return match.group(1)
+    return None
+
+
+def _extract_gene_from_extraction_filename(filename: str) -> Optional[str]:
+    """Extract gene symbol from extraction filename."""
+    import re
+    # Pattern: GENE_PMID_12345678.json
+    match = re.match(r'^([A-Z0-9]+)_PMID_\d+\.json$', filename, re.IGNORECASE)
+    if match:
+        return match.group(1).upper()
+    return None
+
+
+@app.get("/api/analyze-folder", response_model=FolderAnalysis)
+async def analyze_folder(path: str):
+    """
+    Analyze an existing folder to detect downloaded papers, scouting status, and extractions.
+
+    This endpoint helps users understand what files exist in a folder and what processing
+    steps are needed to complete extraction.
+    """
+    folder_path = Path(path).expanduser().resolve()
+
+    # Security check
+    allowed_roots = [Path.home(), Path("/tmp"), Path.cwd()]
+    is_allowed = any(
+        folder_path == root or root in folder_path.parents
+        for root in allowed_roots
+    )
+    if not is_allowed:
+        raise HTTPException(status_code=403, detail="Access to this directory is not allowed")
+
+    if not folder_path.exists():
+        return FolderAnalysis(
+            path=str(folder_path),
+            is_valid=False,
+            status_message="Directory does not exist",
+        )
+
+    if not folder_path.is_dir():
+        return FolderAnalysis(
+            path=str(folder_path),
+            is_valid=False,
+            status_message="Path is not a directory",
+        )
+
+    # Look for pmc_fulltext subdirectory or files directly in the folder
+    fulltext_dir = folder_path / "pmc_fulltext"
+    if fulltext_dir.exists():
+        search_dir = fulltext_dir
+    else:
+        search_dir = folder_path
+
+    # Find FULL_CONTEXT and DATA_ZONES files
+    full_context_files = list(search_dir.glob("*_FULL_CONTEXT.md"))
+    data_zones_files = list(search_dir.glob("*_DATA_ZONES.md"))
+
+    full_context_pmids = []
+    for f in full_context_files:
+        pmid = _extract_pmid_from_filename(f.name)
+        if pmid:
+            full_context_pmids.append(pmid)
+
+    data_zones_pmids = []
+    for f in data_zones_files:
+        pmid = _extract_pmid_from_filename(f.name)
+        if pmid:
+            data_zones_pmids.append(pmid)
+
+    # Look for extractions directory
+    extraction_dir = folder_path / "extractions"
+    extraction_pmids = []
+    detected_genes = set()
+
+    if extraction_dir.exists():
+        extraction_files = list(extraction_dir.glob("*_PMID_*.json"))
+        for f in extraction_files:
+            gene = _extract_gene_from_extraction_filename(f.name)
+            if gene:
+                detected_genes.add(gene)
+            # Extract PMID from filename
+            import re
+            match = re.search(r'PMID_(\d+)', f.name)
+            if match:
+                extraction_pmids.append(match.group(1))
+
+    # Also try to detect gene from folder name (e.g., output/SCN5A/20240101_120000)
+    folder_gene = None
+    if folder_path.parent.name and folder_path.parent.name.isupper() and len(folder_path.parent.name) <= 10:
+        folder_gene = folder_path.parent.name
+        detected_genes.add(folder_gene)
+
+    # Determine status
+    has_fulltext = len(full_context_pmids) > 0 or len(data_zones_pmids) > 0
+    has_scouted = len(data_zones_pmids) > 0
+    all_pmids = set(full_context_pmids) | set(data_zones_pmids)
+    scouting_complete = has_scouted and set(data_zones_pmids) >= set(full_context_pmids)
+    has_extractions = len(extraction_pmids) > 0
+
+    # Build recommendations
+    recommendations = []
+    if not has_fulltext:
+        recommendations.append("No downloaded papers found. Run a full pipeline or download papers first.")
+    elif not has_scouted:
+        recommendations.append("Papers not yet scouted. Enable 'Run Data Scout' to create condensed DATA_ZONES files for faster extraction.")
+    elif not scouting_complete:
+        unscouted = set(full_context_pmids) - set(data_zones_pmids)
+        recommendations.append(f"{len(unscouted)} papers have not been scouted yet. Enable 'Run Data Scout' to process them.")
+
+    if has_fulltext and not has_extractions:
+        recommendations.append("Ready for extraction. Start extraction to process papers.")
+    elif has_extractions:
+        unextracted = all_pmids - set(extraction_pmids)
+        if unextracted:
+            recommendations.append(f"{len(unextracted)} papers have not been extracted yet.")
+        else:
+            recommendations.append("All papers have been extracted. You can re-run extraction if needed.")
+
+    # Build status message
+    status_parts = []
+    if full_context_pmids:
+        status_parts.append(f"{len(full_context_pmids)} full-text papers")
+    if data_zones_pmids:
+        status_parts.append(f"{len(data_zones_pmids)} scouted")
+    if extraction_pmids:
+        status_parts.append(f"{len(extraction_pmids)} extracted")
+
+    status_message = "Found: " + ", ".join(status_parts) if status_parts else "No papers found"
+
+    return FolderAnalysis(
+        path=str(folder_path),
+        is_valid=has_fulltext,
+        gene_symbol=folder_gene or (list(detected_genes)[0] if len(detected_genes) == 1 else None),
+        detected_gene_symbols=sorted(detected_genes),
+        full_context_count=len(full_context_pmids),
+        data_zones_count=len(data_zones_pmids),
+        extraction_count=len(extraction_pmids),
+        full_context_pmids=full_context_pmids,
+        data_zones_pmids=data_zones_pmids,
+        extraction_pmids=extraction_pmids,
+        has_fulltext=has_fulltext,
+        has_scouted=has_scouted,
+        scouting_complete=scouting_complete,
+        has_extractions=has_extractions,
+        status_message=status_message,
+        recommendations=recommendations,
+    )
+
+
+@app.post("/api/jobs/from-folder", response_model=JobResponse)
+async def create_job_from_folder(request: FolderJobRequest, background_tasks: BackgroundTasks):
+    """
+    Create a job that processes an existing folder with downloaded papers.
+
+    This skips the discovery, abstract fetching, filtering, and download steps,
+    starting directly at extraction (or optionally scouting first).
+    """
+    from gui.worker import create_folder_job
+
+    folder_path = Path(request.folder_path).expanduser().resolve()
+
+    # Validate folder
+    analysis = await analyze_folder(str(folder_path))
+    if not analysis.is_valid:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid folder: {analysis.status_message}"
+        )
+
+    # Create checkpoint for folder job
+    checkpoint = create_folder_job(
+        folder_path=str(folder_path),
+        gene_symbol=request.gene_symbol,
+        email=request.email,
+        run_scout=request.run_scout,
+        skip_already_extracted=request.skip_already_extracted,
+        tier_threshold=request.tier_threshold,
+        scout_enabled=request.scout_enabled,
+        scout_min_relevance=request.scout_min_relevance,
+        full_context_pmids=analysis.full_context_pmids,
+        data_zones_pmids=analysis.data_zones_pmids,
+        extraction_pmids=analysis.extraction_pmids if request.skip_already_extracted else [],
+    )
+
+    # Save initial checkpoint
+    checkpoint_manager.save(checkpoint)
+
+    # Start job in background
+    loop = asyncio.get_event_loop()
+    background_tasks.add_task(
+        lambda: threading.Thread(
+            target=run_job_in_background,
+            args=(checkpoint.job_id, False, loop),
+            daemon=True,
+        ).start()
+    )
+
+    return checkpoint_to_response(checkpoint)
 
 
 # =============================================================================

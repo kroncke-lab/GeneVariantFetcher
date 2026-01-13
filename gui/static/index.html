@@ -759,6 +759,93 @@
             font-size: 0.875rem;
             color: var(--gray-700);
         }
+
+        /* Job Mode Toggle */
+        .job-mode-btn {
+            background: var(--gray-100);
+            color: var(--gray-600);
+            border: 1px solid var(--gray-200);
+        }
+
+        .job-mode-btn:hover {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .job-mode-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Folder Analysis Styles */
+        .analysis-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-stat {
+            text-align: center;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 0.375rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .analysis-stat-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .analysis-stat-label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        .analysis-status {
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .analysis-status.ready {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #16a34a;
+        }
+
+        .analysis-status.needs-scout {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #f59e0b;
+        }
+
+        .analysis-status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        .analysis-recommendations {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .analysis-recommendations li {
+            padding: 0.25rem 0;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .analysis-recommendations li::before {
+            content: '→ ';
+            color: var(--primary);
+        }
     </style>
 </head>
 <body>
@@ -784,7 +871,21 @@
 
         <!-- New Job Tab -->
         <section id="tab-new-job" class="tab-content">
-            <div class="card">
+            <!-- Mode Toggle -->
+            <div class="card" style="padding: 0.75rem 1.5rem;">
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <span style="font-weight: 500; color: var(--gray-700);">Mode:</span>
+                    <button type="button" class="btn btn-sm job-mode-btn active" data-mode="new" onclick="setJobMode('new')">
+                        New Pipeline
+                    </button>
+                    <button type="button" class="btn btn-sm job-mode-btn" data-mode="folder" onclick="setJobMode('folder')">
+                        Import Existing Folder
+                    </button>
+                </div>
+            </div>
+
+            <!-- New Job Form (existing) -->
+            <div id="new-job-panel" class="card">
                 <h2 class="card-title">Start New Extraction</h2>
                 <form id="job-form">
                     <!-- Basic Settings -->
@@ -945,6 +1046,100 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary">Start Pipeline</button>
+                </form>
+            </div>
+
+            <!-- Folder Import Panel (hidden by default) -->
+            <div id="folder-job-panel" class="card hidden">
+                <h2 class="card-title">Extract from Existing Folder</h2>
+                <p style="color: var(--gray-500); margin-bottom: 1rem; font-size: 0.875rem;">
+                    Select a folder containing downloaded manuscripts (_FULL_CONTEXT.md files) to run extraction without re-downloading.
+                </p>
+
+                <form id="folder-job-form">
+                    <!-- Folder Selection -->
+                    <div class="form-group">
+                        <label for="folder-path">Folder Path *</label>
+                        <div class="input-with-button">
+                            <input type="text" id="folder-path" name="folder_path" required placeholder="/path/to/output/GENE/timestamp">
+                            <button type="button" class="btn btn-secondary" onclick="openDirectoryBrowser('folder-path')">Browse</button>
+                            <button type="button" class="btn btn-secondary" onclick="analyzeFolder()">Analyze</button>
+                        </div>
+                    </div>
+
+                    <!-- Folder Analysis Results -->
+                    <div id="folder-analysis" class="hidden" style="margin-bottom: 1rem;">
+                        <div class="settings-group">
+                            <h3 class="settings-group-title">Folder Analysis</h3>
+                            <div id="folder-analysis-content"></div>
+                        </div>
+                    </div>
+
+                    <!-- Gene Symbol (auto-detected or manual) -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="folder-gene">Gene Symbol *</label>
+                            <input type="text" id="folder-gene" name="gene_symbol" required placeholder="e.g., SCN5A">
+                            <small class="form-help">Auto-detected from folder if possible</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="folder-email">Email *</label>
+                            <input type="email" id="folder-email" name="email" required placeholder="your@email.com">
+                        </div>
+                    </div>
+
+                    <!-- Scouting Options -->
+                    <div class="settings-group">
+                        <h3 class="settings-group-title">Data Scout Options</h3>
+                        <p class="settings-group-desc">
+                            Data Scout identifies high-value sections in papers, reducing extraction time by 60-80%.
+                        </p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="run-scout" name="run_scout">
+                                    <label for="run-scout">Run Data Scout on unscouted papers</label>
+                                    <span class="info-icon">i
+                                        <span class="info-tooltip">Creates DATA_ZONES.md files for papers that only have FULL_CONTEXT.md. This condenses papers to relevant sections before extraction, reducing API costs and improving accuracy.</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="skip-extracted" name="skip_already_extracted" checked>
+                                    <label for="skip-extracted">Skip already-extracted papers</label>
+                                    <span class="info-icon">i
+                                        <span class="info-tooltip">If the folder already has some extractions, skip those PMIDs and only extract new papers. Uncheck to re-extract everything.</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Settings (Collapsible) -->
+                    <div class="collapsible">
+                        <div class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
+                            Advanced Extraction Settings
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="folder-tier-threshold">Tier Threshold</label>
+                                    <input type="number" id="folder-tier-threshold" name="tier_threshold" value="1" min="0" max="10">
+                                    <small class="setting-description">Model cascade threshold (0 = single model)</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="folder-scout-relevance">Scout Min Relevance</label>
+                                    <input type="number" id="folder-scout-relevance" name="scout_min_relevance" value="0.3" min="0" max="1" step="0.1">
+                                    <small class="setting-description">Minimum relevance score for data zones</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="folder-submit-btn" disabled>
+                        Start Extraction
+                    </button>
                 </form>
             </div>
         </section>
@@ -1229,10 +1424,22 @@
             { key: 'fetching_abstracts', label: 'Fetching Abstracts' },
             { key: 'filtering_papers', label: 'Filtering Papers' },
             { key: 'downloading_fulltext', label: 'Downloading Full-Text' },
+            { key: 'scouting_data', label: 'Scouting Data Zones' },
             { key: 'extracting_variants', label: 'Extracting Variants' },
             { key: 'aggregating_data', label: 'Aggregating Data' },
             { key: 'migrating_database', label: 'Creating Database' },
         ];
+
+        // Folder job steps (subset)
+        const FOLDER_PIPELINE_STEPS = [
+            { key: 'scouting_data', label: 'Scouting Data Zones' },
+            { key: 'extracting_variants', label: 'Extracting Variants' },
+            { key: 'aggregating_data', label: 'Aggregating Data' },
+            { key: 'migrating_database', label: 'Creating Database' },
+        ];
+
+        let currentJobMode = 'new';
+        let lastFolderAnalysis = null;
 
         // Tab Navigation
         document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -1886,6 +2093,135 @@
             btn.onclick = () => openDirectoryBrowser('output');
             wrapper.appendChild(btn);
         }
+
+        // =====================================================================
+        // Folder Job Mode
+        // =====================================================================
+
+        function setJobMode(mode) {
+            currentJobMode = mode;
+
+            // Update toggle buttons
+            document.querySelectorAll('.job-mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === mode);
+            });
+
+            // Show/hide panels
+            document.getElementById('new-job-panel').classList.toggle('hidden', mode !== 'new');
+            document.getElementById('folder-job-panel').classList.toggle('hidden', mode !== 'folder');
+
+            // Reset folder analysis when switching to folder mode
+            if (mode === 'folder') {
+                document.getElementById('folder-analysis').classList.add('hidden');
+                document.getElementById('folder-submit-btn').disabled = true;
+                lastFolderAnalysis = null;
+            }
+        }
+
+        async function analyzeFolder() {
+            const pathInput = document.getElementById('folder-path');
+            const path = pathInput.value.trim();
+
+            if (!path) {
+                alert('Please enter or select a folder path');
+                return;
+            }
+
+            const analysisDiv = document.getElementById('folder-analysis');
+            const contentDiv = document.getElementById('folder-analysis-content');
+            const submitBtn = document.getElementById('folder-submit-btn');
+
+            // Show loading state
+            analysisDiv.classList.remove('hidden');
+            contentDiv.innerHTML = '<p style="color: var(--gray-500);">Analyzing folder...</p>';
+            submitBtn.disabled = true;
+
+            try {
+                const analysis = await apiCall('GET', `/analyze-folder?path=${encodeURIComponent(path)}`);
+                lastFolderAnalysis = analysis;
+
+                // Auto-fill gene symbol if detected
+                if (analysis.gene_symbol) {
+                    document.getElementById('folder-gene').value = analysis.gene_symbol;
+                }
+
+                // Render analysis results
+                let statusClass = 'ready';
+                let statusText = analysis.status_message;
+
+                if (!analysis.is_valid) {
+                    statusClass = 'error';
+                    statusText = 'Invalid folder: ' + analysis.status_message;
+                } else if (!analysis.scouting_complete && analysis.full_context_count > analysis.data_zones_count) {
+                    statusClass = 'needs-scout';
+                }
+
+                contentDiv.innerHTML = `
+                    <div class="analysis-status ${statusClass}">${statusText}</div>
+                    <div class="analysis-stats">
+                        <div class="analysis-stat">
+                            <div class="analysis-stat-value">${analysis.full_context_count}</div>
+                            <div class="analysis-stat-label">Full-Text Papers</div>
+                        </div>
+                        <div class="analysis-stat">
+                            <div class="analysis-stat-value">${analysis.data_zones_count}</div>
+                            <div class="analysis-stat-label">Scouted (DATA_ZONES)</div>
+                        </div>
+                        <div class="analysis-stat">
+                            <div class="analysis-stat-value">${analysis.extraction_count}</div>
+                            <div class="analysis-stat-label">Already Extracted</div>
+                        </div>
+                    </div>
+                    ${analysis.recommendations.length > 0 ? `
+                        <ul class="analysis-recommendations">
+                            ${analysis.recommendations.map(r => `<li>${r}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                `;
+
+                // Enable submit button if valid
+                submitBtn.disabled = !analysis.is_valid;
+
+                // Auto-check "Run Scout" if papers are unscouted
+                if (analysis.has_fulltext && !analysis.scouting_complete) {
+                    document.getElementById('run-scout').checked = true;
+                }
+
+            } catch (err) {
+                contentDiv.innerHTML = `<div class="analysis-status error">Error: ${err.message}</div>`;
+                submitBtn.disabled = true;
+            }
+        }
+
+        // Handle folder job form submission
+        document.getElementById('folder-job-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!lastFolderAnalysis || !lastFolderAnalysis.is_valid) {
+                alert('Please analyze a valid folder first');
+                return;
+            }
+
+            const formData = new FormData(e.target);
+            const data = {
+                folder_path: formData.get('folder_path'),
+                gene_symbol: formData.get('gene_symbol'),
+                email: formData.get('email'),
+                run_scout: document.getElementById('run-scout').checked,
+                skip_already_extracted: document.getElementById('skip-extracted').checked,
+                tier_threshold: parseInt(formData.get('tier_threshold')) || 1,
+                scout_min_relevance: parseFloat(formData.get('scout_min_relevance')) || 0.3,
+            };
+
+            try {
+                const job = await apiCall('POST', '/jobs/from-folder', data);
+                activeJobId = job.job_id;
+                showTab('active');
+                connectWebSocket(job.job_id);
+            } catch (err) {
+                alert('Failed to create job: ' + err.message);
+            }
+        });
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {

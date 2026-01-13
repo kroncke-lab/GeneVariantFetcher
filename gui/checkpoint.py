@@ -26,6 +26,7 @@ class PipelineStep(str, Enum):
     FETCHING_ABSTRACTS = "fetching_abstracts"
     FILTERING_PAPERS = "filtering_papers"
     DOWNLOADING_FULLTEXT = "downloading_fulltext"
+    SCOUTING_DATA = "scouting_data"  # New step for running Data Scout
     EXTRACTING_VARIANTS = "extracting_variants"
     AGGREGATING_DATA = "aggregating_data"
     MIGRATING_DATABASE = "migrating_database"
@@ -42,6 +43,7 @@ class PipelineStep(str, Enum):
             cls.FETCHING_ABSTRACTS: "Fetching Abstracts",
             cls.FILTERING_PAPERS: "Filtering Papers",
             cls.DOWNLOADING_FULLTEXT: "Downloading Full-Text",
+            cls.SCOUTING_DATA: "Scouting Data Zones",
             cls.EXTRACTING_VARIANTS: "Extracting Variants",
             cls.AGGREGATING_DATA: "Aggregating Data",
             cls.MIGRATING_DATABASE: "Creating Database",
@@ -77,6 +79,13 @@ class JobCheckpoint:
     use_europepmc: bool = False
     tier2_confidence_threshold: float = 0.5
     scout_enabled: bool = True
+    scout_min_relevance: float = 0.3
+
+    # Folder job mode (skip discovery/download, start from extraction)
+    is_folder_job: bool = False
+    folder_path: Optional[str] = None
+    run_scout_on_folder: bool = False
+    skip_already_extracted: bool = True
 
     # State tracking
     current_step: PipelineStep = PipelineStep.PENDING
