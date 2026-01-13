@@ -7,15 +7,42 @@ Also handles full-text retrieval from free articles without PMCIDs.
 """
 
 import csv
+import logging
+import random
 import re
+import time
 import requests
 from typing import List, Dict, Optional, Tuple
 from urllib.parse import urlparse
 from pathlib import Path
 
+logger = logging.getLogger(__name__)
+
+# User-Agent strings to rotate through when encountering 403 errors
+# These represent various browsers and research tools
+USER_AGENTS = [
+    # Chrome on macOS
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    # Chrome on Windows
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    # Firefox on Windows
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0',
+    # Safari on macOS
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15',
+    # Edge on Windows
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0',
+    # Research-oriented bot (some publishers whitelist these)
+    'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+]
+
 
 class DOIResolver:
     """Resolves DOIs and routes to domain-specific supplement scrapers."""
+
+    # Number of retry attempts for 403 errors
+    MAX_RETRIES = 3
+    # Initial backoff delay in seconds
+    INITIAL_BACKOFF = 2.0
 
     def __init__(
         self,
@@ -31,6 +58,83 @@ class DOIResolver:
         """
         self.session = session
         self.paywalled_log = paywalled_log
+        self._user_agent_index = 0
+
+    def _get_next_user_agent(self) -> str:
+        """
+        Get the next User-Agent in rotation.
+
+        Returns:
+            User-Agent string
+        """
+        ua = USER_AGENTS[self._user_agent_index % len(USER_AGENTS)]
+        self._user_agent_index += 1
+        return ua
+
+    def _resolve_with_retry(self, url: str, description: str = "DOI") -> Optional[requests.Response]:
+        """
+        Resolve a URL with retry logic and User-Agent rotation for 403 errors.
+
+        Args:
+            url: URL to resolve
+            description: Description for logging (e.g., "DOI", "ScienceDirect page")
+
+        Returns:
+            Response object if successful, None if all retries failed
+        """
+        last_exception = None
+        last_status = None
+
+        for attempt in range(self.MAX_RETRIES):
+            try:
+                # Rotate User-Agent for retries
+                if attempt > 0:
+                    new_ua = self._get_next_user_agent()
+                    self.session.headers['User-Agent'] = new_ua
+                    # Add a small random delay to avoid detection patterns
+                    backoff = self.INITIAL_BACKOFF * (2 ** (attempt - 1)) + random.uniform(0.5, 1.5)
+                    logger.debug(f"Retry {attempt + 1}/{self.MAX_RETRIES} for {description} with new User-Agent, waiting {backoff:.1f}s")
+                    time.sleep(backoff)
+
+                response = self.session.get(url, allow_redirects=True, timeout=30)
+                response.raise_for_status()
+                return response
+
+            except requests.exceptions.HTTPError as e:
+                last_exception = e
+                last_status = e.response.status_code if e.response else None
+
+                # Only retry on 403 errors (access denied)
+                if last_status == 403:
+                    if attempt < self.MAX_RETRIES - 1:
+                        logger.debug(f"Got 403 for {description}, will retry with different User-Agent")
+                        continue
+                    else:
+                        logger.debug(f"All retries exhausted for {description} (403 Forbidden)")
+                        break
+                else:
+                    # Don't retry other HTTP errors
+                    break
+
+            except requests.exceptions.RequestException as e:
+                last_exception = e
+                # Network errors - retry with backoff
+                if attempt < self.MAX_RETRIES - 1:
+                    backoff = self.INITIAL_BACKOFF * (2 ** attempt)
+                    logger.debug(f"Network error for {description}, retrying in {backoff:.1f}s: {e}")
+                    time.sleep(backoff)
+                    continue
+                break
+
+        # All retries failed
+        if last_status == 403:
+            raise requests.exceptions.HTTPError(
+                f"403 Forbidden after {self.MAX_RETRIES} attempts",
+                response=last_exception.response if hasattr(last_exception, 'response') else None
+            )
+        elif last_exception:
+            raise last_exception
+        return None
 
     def resolve_and_scrape_supplements(
         self,
@@ -40,6 +144,9 @@ class DOIResolver:
     ) -> List[Dict]:
         """
         Resolves a DOI to its final URL and routes to the appropriate scraper.
+
+        Uses retry logic with User-Agent rotation to handle 403 errors from
+        publishers with anti-bot measures.
 
         Args:
             doi: Digital Object Identifier
@@ -53,21 +160,28 @@ class DOIResolver:
             # Use the session with browser-like headers to resolve the DOI
             # allow_redirects=True follows the redirect chain to the final publisher page
             print(f"  Resolving DOI: https://doi.org/{doi}")
-            response = self.session.get(f"https://doi.org/{doi}", allow_redirects=True, timeout=30)
-            response.raise_for_status()
+            response = self._resolve_with_retry(f"https://doi.org/{doi}", f"DOI {doi}")
+
+            if not response:
+                print(f"  ❌ DOI resolution failed for {doi}: No response received")
+                with open(self.paywalled_log, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
+                return []
 
             final_url = response.url
             domain = urlparse(final_url).netloc
             print(f"  ✓ DOI resolved to: {final_url}")
 
         except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 403:
-                print(f"  ❌ DOI resolution blocked (403 Forbidden) for {doi} - publisher may require authentication")
+            status_code = e.response.status_code if e.response else "unknown"
+            if status_code == 403:
+                print(f"  ❌ DOI resolution blocked (403 Forbidden) for {doi} after {self.MAX_RETRIES} attempts - publisher may require authentication")
             else:
-                print(f"  ❌ DOI resolution failed for {doi}: HTTP {e.response.status_code} - {e}")
+                print(f"  ❌ DOI resolution failed for {doi}: HTTP {status_code}")
             with open(self.paywalled_log, 'a', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
+                writer.writerow([pmid, f'DOI resolution failed (HTTP {status_code}): {doi}', f"https://doi.org/{doi}"])
             return []
         except requests.exceptions.RequestException as e:
             print(f"  ❌ DOI resolution failed for {doi}: {e}")
@@ -122,7 +236,7 @@ class DOIResolver:
         Resolves a DOI to its final URL and fetches full text + supplements.
 
         This is used for free articles without PMCIDs. It:
-        1. Resolves the DOI to the publisher's article page
+        1. Resolves the DOI to the publisher's article page (with retry on 403)
         2. Extracts the full text content from the page
         3. Finds any supplemental files on the page
 
@@ -139,22 +253,30 @@ class DOIResolver:
         """
         try:
             # Use the session with browser-like headers to resolve the DOI
+            # Uses retry logic with User-Agent rotation for 403 errors
             print(f"  Resolving DOI for full text: https://doi.org/{doi}")
-            response = self.session.get(f"https://doi.org/{doi}", allow_redirects=True, timeout=30)
-            response.raise_for_status()
+            response = self._resolve_with_retry(f"https://doi.org/{doi}", f"DOI {doi} (full text)")
+
+            if not response:
+                print(f"  ❌ DOI resolution failed for {doi}: No response received")
+                with open(self.paywalled_log, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([pmid, f'DOI resolution failed (free text): {doi}', f"https://doi.org/{doi}"])
+                return None, None, []
 
             final_url = response.url
             domain = urlparse(final_url).netloc
             print(f"  ✓ DOI resolved to: {final_url}")
 
         except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 403:
-                print(f"  ❌ DOI resolution blocked (403 Forbidden) for {doi} - publisher may require authentication")
+            status_code = e.response.status_code if e.response else "unknown"
+            if status_code == 403:
+                print(f"  ❌ DOI resolution blocked (403 Forbidden) for {doi} after {self.MAX_RETRIES} attempts - publisher may require authentication")
             else:
-                print(f"  ❌ DOI resolution failed for {doi}: HTTP {e.response.status_code} - {e}")
+                print(f"  ❌ DOI resolution failed for {doi}: HTTP {status_code}")
             with open(self.paywalled_log, 'a', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow([pmid, f'DOI resolution failed (free text): {doi}', f"https://doi.org/{doi}"])
+                writer.writerow([pmid, f'DOI resolution failed (free text, HTTP {status_code}): {doi}', f"https://doi.org/{doi}"])
             return None, None, []
         except requests.exceptions.RequestException as e:
             print(f"  ❌ DOI resolution failed for {doi}: {e}")
@@ -205,6 +327,8 @@ class DOIResolver:
         """
         Resolve a DOI to its final URL without fetching full content.
 
+        Uses retry logic with User-Agent rotation to handle 403 errors.
+
         Args:
             doi: Digital Object Identifier
             pmid: PubMed ID (for logging)
@@ -214,8 +338,14 @@ class DOIResolver:
         """
         try:
             print(f"  Resolving DOI: https://doi.org/{doi}")
-            response = self.session.get(f"https://doi.org/{doi}", allow_redirects=True, timeout=30)
-            response.raise_for_status()
+            response = self._resolve_with_retry(f"https://doi.org/{doi}", f"DOI {doi}")
+
+            if not response:
+                print(f"  ❌ DOI resolution failed for {doi}: No response received")
+                with open(self.paywalled_log, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
+                return None, None
 
             final_url = response.url
             print(f"  ✓ DOI resolved to: {final_url}")
@@ -223,10 +353,11 @@ class DOIResolver:
             return final_url, response.text
 
         except requests.exceptions.HTTPError as e:
-            print(f"  ❌ DOI resolution failed for {doi}: HTTP {e.response.status_code}")
+            status_code = e.response.status_code if e.response else "unknown"
+            print(f"  ❌ DOI resolution failed for {doi}: HTTP {status_code}")
             with open(self.paywalled_log, 'a', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
+                writer.writerow([pmid, f'DOI resolution failed (HTTP {status_code}): {doi}', f"https://doi.org/{doi}"])
             return None, None
         except requests.exceptions.RequestException as e:
             print(f"  ❌ DOI resolution failed for {doi}: {e}")

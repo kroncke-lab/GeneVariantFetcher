@@ -441,9 +441,21 @@ class WileyAPIClient:
         content, error = self.get_fulltext_by_doi(doi)
         if content:
             markdown = self.content_to_markdown(content)
-            if markdown and len(markdown) > 500:
+            # Check for sufficient content - abstracts are typically 200-400 words
+            # Full articles should be at least 2000 characters (roughly 350+ words)
+            # Also check for section headings beyond just Abstract
+            MIN_FULLTEXT_LENGTH = 2000
+            has_body_sections = markdown and any(
+                section in markdown.lower()
+                for section in ['### introduction', '### methods', '### results',
+                                '### discussion', '### materials', '### content']
+            )
+            if markdown and (len(markdown) > MIN_FULLTEXT_LENGTH or has_body_sections):
                 logger.info(f"Successfully fetched Wiley article via DOI: {doi}")
                 return markdown, None
+            elif markdown and len(markdown) > 500:
+                # Got some content but likely just abstract
+                error = "Content conversion produced insufficient content (abstract only)"
             elif not error:
                 error = "Content conversion produced insufficient content"
 
