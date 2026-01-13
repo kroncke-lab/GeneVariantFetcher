@@ -21,6 +21,7 @@ from .doi_resolver import DOIResolver
 from .supplement_scraper import SupplementScraper
 from .format_converters import FormatConverter
 from .elsevier_api import ElsevierAPIClient
+from .wiley_api import WileyAPIClient
 
 # Import scout components (with fallback for import errors)
 try:
@@ -73,13 +74,16 @@ class PMCHarvester:
 
         # Initialize Elsevier API client (optional - uses API key from settings if available)
         elsevier_api_key = None
+        wiley_api_key = None
         if get_settings is not None:
             try:
                 settings = get_settings()
                 elsevier_api_key = settings.elsevier_api_key
+                wiley_api_key = settings.wiley_api_key
             except Exception:
                 pass  # Settings validation may fail if other keys are missing
         self.elsevier_api = ElsevierAPIClient(api_key=elsevier_api_key, session=self.session)
+        self.wiley_api = WileyAPIClient(api_key=wiley_api_key, session=self.session)
 
         # Initialize log files
         with open(self.paywalled_log, 'w', newline='') as f:
@@ -536,6 +540,35 @@ class PMCHarvester:
             print(f"  - Elsevier API: {error}")
             return None, error
 
+    def _try_wiley_api(self, doi: str, pmid: str) -> Tuple[Optional[str], Optional[str]]:
+        """
+        Try to fetch full text via Wiley TDM API if applicable.
+
+        Args:
+            doi: Digital Object Identifier
+            pmid: PubMed ID (for logging)
+
+        Returns:
+            Tuple of (markdown_content, error_message)
+            - markdown_content: Full text as markdown if successful, None otherwise
+            - error_message: Error description if failed, None if successful
+        """
+        if not self.wiley_api.is_available:
+            return None, "Wiley API key not configured"
+
+        if not doi or not self.wiley_api.is_wiley_doi(doi):
+            return None, "Not a Wiley DOI"
+
+        print(f"  Trying Wiley API for DOI: {doi}")
+        markdown, error = self.wiley_api.fetch_fulltext(doi=doi)
+
+        if markdown:
+            print(f"  ✓ Full text retrieved via Wiley API ({len(markdown)} characters)")
+            return markdown, None
+        else:
+            print(f"  - Wiley API: {error}")
+            return None, error
+
     def _process_free_text_pmid(self, pmid: str, doi: str) -> Tuple[bool, str]:
         """
         Process a PMID that has no PMCID but may have free full text via publisher.
@@ -570,6 +603,7 @@ class PMCHarvester:
         final_url = None
         supp_files = []
         used_elsevier_api = False
+        used_wiley_api = False
 
         # Try Elsevier API first if this is an Elsevier article
         if doi and self.elsevier_api.is_elsevier_doi(doi):
@@ -581,7 +615,17 @@ class PMCHarvester:
                 # Still need to get supplements via scraping
                 supp_files = self.doi_resolver.resolve_and_scrape_supplements(doi, pmid, self.scraper)
 
-        # Fall back to DOI resolver if Elsevier API didn't work
+        # Try Wiley API if this is a Wiley article and Elsevier didn't work
+        if not main_markdown and doi and self.wiley_api.is_wiley_doi(doi):
+            wiley_markdown, wiley_error = self._try_wiley_api(doi, pmid)
+            if wiley_markdown:
+                main_markdown = wiley_markdown
+                final_url = f"https://doi.org/{doi}"
+                used_wiley_api = True
+                # Still need to get supplements via scraping
+                supp_files = self.doi_resolver.resolve_and_scrape_supplements(doi, pmid, self.scraper)
+
+        # Fall back to DOI resolver if publisher APIs didn't work
         if not main_markdown and doi:
             # Try to fetch full text and supplements from publisher using DOI
             main_markdown, final_url, supp_files = self.doi_resolver.resolve_and_fetch_fulltext(
@@ -627,6 +671,25 @@ class PMCHarvester:
                             response = self.session.get(free_url, allow_redirects=True, timeout=10)
                             response.raise_for_status()
                             supp_files = self.scraper.scrape_elsevier_supplements(response.text, response.url)
+                        except Exception:
+                            supp_files = []
+
+            # Check if this is a Wiley URL and try API
+            if not main_markdown and self.wiley_api.is_available and self.wiley_api.is_wiley_url(free_url):
+                extracted_doi = self.wiley_api.extract_doi_from_url(free_url)
+                if extracted_doi:
+                    print(f"  Trying Wiley API for DOI: {extracted_doi}")
+                    wiley_markdown, wiley_error = self.wiley_api.fetch_fulltext(doi=extracted_doi)
+                    if wiley_markdown:
+                        main_markdown = wiley_markdown
+                        final_url = free_url
+                        used_wiley_api = True
+                        print(f"  ✓ Full text retrieved via Wiley API ({len(main_markdown)} characters)")
+                        # Get supplements via web scraping
+                        try:
+                            response = self.session.get(free_url, allow_redirects=True, timeout=10)
+                            response.raise_for_status()
+                            supp_files = self.scraper.scrape_generic_supplements(response.text, response.url)
                         except Exception:
                             supp_files = []
 
@@ -765,14 +828,24 @@ class PMCHarvester:
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(unified_content)
 
-        source_tag = "[via Elsevier API]" if used_elsevier_api else "[from publisher]"
+        if used_elsevier_api:
+            source_tag = "[via Elsevier API]"
+        elif used_wiley_api:
+            source_tag = "[via Wiley API]"
+        else:
+            source_tag = "[from publisher]"
         print(f"  ✅ Created: {output_file.name} ({downloaded_count} supplements) {source_tag}")
 
         # Run data scout to create condensed DATA_ZONES.md
         self._run_data_scout(pmid, unified_content)
 
         # Log success with special marker for publisher-sourced content
-        source_marker = 'ELSEVIER_API' if used_elsevier_api else 'PUBLISHER_FREE'
+        if used_elsevier_api:
+            source_marker = 'ELSEVIER_API'
+        elif used_wiley_api:
+            source_marker = 'WILEY_API'
+        else:
+            source_marker = 'PUBLISHER_FREE'
         with open(self.success_log, 'a', newline='') as f:
             writer = csv.writer(f)
             writer.writerow([pmid, source_marker, downloaded_count])
