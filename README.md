@@ -5,7 +5,7 @@ Extract human genetic variant carriers from biomedical literature into a SQLite 
 ## What It Does
 
 Given a gene name, this tool:
-1. **Discovers** variant-related papers via PubMind, PubMed, and Europe PMC
+1. **Discovers** variant-related papers via [PubMind](https://pubmind.ai/) (AI-powered literature search), PubMed, and Europe PMC
 2. **Filters** papers through a 3-tier relevance pipeline (keywords → LLM triage → extraction)
 3. **Downloads** full-text articles and supplemental materials (Excel, Word, PDFs)
 4. **Scouts** data zones in papers to focus extraction on relevant sections
@@ -14,6 +14,8 @@ Given a gene name, this tool:
 7. **Writes** normalized data to SQLite
 
 **Key Insight:** 70-80% of variant data is in supplemental files. This tool extracts it all.
+
+> **Note:** [PubMind](https://pubmind.ai/) is a third-party AI-powered biomedical literature search service that helps discover relevant papers more effectively than keyword-only searches.
 
 ## Prerequisites
 
@@ -173,10 +175,10 @@ python automated_workflow.py SCN5A --email user@email.com --output ./results --t
 
 Export variant data from SQLite to CSV for analysis in Excel, R, or Python.
 
-**Script:** `extract_ttr_to_csv.py`
+**Script:** `tests/extract_ttr_to_csv.py`
 
 ```bash
-python extract_ttr_to_csv.py --db path/to/GENE.db [OPTIONS]
+python tests/extract_ttr_to_csv.py --db path/to/GENE.db [OPTIONS]
 ```
 
 **Options:**
@@ -188,7 +190,7 @@ python extract_ttr_to_csv.py --db path/to/GENE.db [OPTIONS]
 
 **Example:**
 ```bash
-python extract_ttr_to_csv.py --db results/TTR/20250101_120000/TTR.db --output ttr_analysis.csv
+python tests/extract_ttr_to_csv.py --db results/TTR/20250101_120000/TTR.db --output ttr_analysis.csv
 ```
 
 **Output:**
@@ -201,10 +203,10 @@ python extract_ttr_to_csv.py --db results/TTR/20250101_120000/TTR.db --output tt
 
 Validate automated extractions against manually curated Excel sheets.
 
-**Script:** `compare_variants.py`
+**Script:** `tests/compare_variants.py`
 
 ```bash
-python compare_variants.py --excel CURATED.xlsx --sqlite GENE.db [OPTIONS]
+python tests/compare_variants.py --excel CURATED.xlsx --sqlite GENE.db [OPTIONS]
 ```
 
 **Options:**
@@ -218,7 +220,7 @@ python compare_variants.py --excel CURATED.xlsx --sqlite GENE.db [OPTIONS]
 
 **Example:**
 ```bash
-python compare_variants.py \
+python tests/compare_variants.py \
   --excel manual_curation.xlsx \
   --sqlite results/KCNH2/20250101_120000/KCNH2.db \
   --variant-match-mode fuzzy \
@@ -372,12 +374,26 @@ print(result.pubmed_pmids)
 
 ## Environment Variables
 
+Create a `.env` file in the project root (or set environment variables directly):
+
+```bash
+# Required
+OPENAI_API_KEY=sk-...              # OpenAI API key (primary LLM provider)
+NCBI_EMAIL=your@email.com          # Email for NCBI E-utilities
+
+# Required by settings validation (but not actively used by default pipeline)
+ANTHROPIC_API_KEY=sk-ant-...       # Anthropic API key (reserved for future use)
+
+# Optional - Higher NCBI rate limits
+NCBI_API_KEY=...                   # Get from https://www.ncbi.nlm.nih.gov/account/settings/
+```
+
 ### Required
 
 | Variable | Description |
 |----------|-------------|
-| `OPENAI_API_KEY` | OpenAI API key (or `AI_INTEGRATIONS_OPENAI_API_KEY`) |
-| `ANTHROPIC_API_KEY` | Anthropic API key |
+| `OPENAI_API_KEY` | OpenAI API key (or `AI_INTEGRATIONS_OPENAI_API_KEY`) - **primary LLM provider** |
+| `ANTHROPIC_API_KEY` | Anthropic API key (validated at startup, reserved for future model options) |
 | `NCBI_EMAIL` | Email for NCBI E-utilities |
 
 ### Optional - API Keys
@@ -454,6 +470,19 @@ print(result.pubmed_pmids)
 - Ensure all required environment variables are set (not placeholder values)
 - Check your `.env` file or export variables directly
 - Required: `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `NCBI_EMAIL`
+- Note: `ANTHROPIC_API_KEY` is validated but not used by default (OpenAI is primary)
+
+### GUI won't start
+
+- Ensure GUI dependencies are installed: `pip install -r gui/requirements.txt`
+- Check if port 8000 is already in use: `python main.py --port 8080`
+- For network issues: `python main.py --host 0.0.0.0` (allows external connections)
+
+### GUI shows "incomplete jobs"
+
+- This is normal - the GUI tracks interrupted jobs for resume capability
+- Use the Jobs tab to resume or clear incomplete jobs
+- Checkpoint data is stored in the output directory
 
 ---
 
@@ -469,3 +498,13 @@ pytest tests/
 python tests/example_harvest_from_pubmind.py
 python tests/example_triage.py
 ```
+
+### CLI Entry Point
+
+After installation (`pip install -e .`), a `gvf` command is available:
+
+```bash
+gvf --help  # Show available CLI commands
+```
+
+This provides an alternative interface to the pipeline via Typer (see `pipeline/cli.py`).
