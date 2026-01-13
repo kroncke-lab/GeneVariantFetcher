@@ -481,15 +481,21 @@ class FormatConverter:
             print(f"    Error reading PDF header {file_path}: {e}")
             return f"[Error reading PDF file: {file_path.name}]\n\n"
 
-        # Try markitdown first
+        # Try markitdown first (requires markitdown[pdf] extra for pdfminer.six)
         if self.markitdown:
             try:
                 result = self.markitdown.convert(str(file_path))
-                if result and result.text_content:
+                if result and result.text_content and len(result.text_content.strip()) > 100:
+                    print(f"    ✓ Extracted PDF via markitdown ({len(result.text_content)} chars)")
                     return result.text_content
+                elif result and result.text_content:
+                    print(f"    Warning: markitdown returned minimal content ({len(result.text_content)} chars)")
             except NameError as e:
                 # Handle internal markitdown errors like 'excel_to_markdown' not defined
                 print(f"    Warning: markitdown internal error for {file_path.name}: {e}")
+            except ImportError as e:
+                # Missing pdfminer.six - markitdown[pdf] not installed
+                print(f"    Warning: markitdown PDF support not installed (need markitdown[pdf]): {e}")
             except Exception as e:
                 print(f"    Warning: markitdown failed for {file_path.name}: {e}")
 

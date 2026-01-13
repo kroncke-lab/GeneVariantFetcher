@@ -79,7 +79,7 @@ class GeneticDataScout:
         r'\bpooled\s+(analysis|data)\b',          # pooled analysis
     ]
 
-    # Patterns for variant nomenclature
+    # Patterns for variant nomenclature (expanded for better detection)
     VARIANT_PATTERNS = [
         r'c\.\d+[ACGT]>[ACGT]',                   # cDNA: c.1234G>A
         r'c\.\d+[_\+\-]\d*[delinsdup]+',          # cDNA: c.1234_1235del
@@ -88,6 +88,12 @@ class GeneticDataScout:
         r'p\.[A-Z][a-z]{2}\d+\*',                 # Nonsense: p.Arg412*
         r'p\.[A-Z][a-z]{2}\d+fs',                 # Frameshift: p.Arg412fs
         r'p\.\([A-Z][a-z]{2}\d+[A-Z][a-z]{2}\)',  # Protein with parens: p.(Arg412His)
+        r'[A-Z]\d+[A-Z]',                         # Single-letter: R412H, G628S
+        r'[A-Z][a-z]{2}\d+[A-Z][a-z]{2}',         # Three-letter without p.: Arg412His
+        r'\d+\s*[ACGT]\s*>\s*[ACGT]',             # Nucleotide position: 1234 G>A
+        r'del[A-Z]{2,}',                          # Deletion: delAG, delCT
+        r'ins[A-Z]{2,}',                          # Insertion: insAG
+        r'IVS\d+[+-]\d+[ACGT]>[ACGT]',            # Intronic legacy: IVS2+1G>A
     ]
 
     # Clinical keywords for relevance scoring
@@ -205,9 +211,91 @@ class GeneticDataScout:
         - Markdown table markers (|---|)
         - Table captions (Table 1:, Supplementary Table S1:)
         - Table content rows
+        - Pseudo-tabular data (whitespace-aligned or TSV-like from PDF extraction)
         """
         candidates = []
         lines = text.split('\n')
+
+        # First pass: detect markdown tables
+        candidates.extend(self._detect_markdown_tables(lines, text))
+
+        # Second pass: detect pseudo-tabular data (common in PDF extractions)
+        candidates.extend(self._detect_pseudo_tables(lines, text))
+
+        return candidates
+
+    def _detect_pseudo_tables(self, lines: list[str], text: str) -> list[ZoneCandidate]:
+        """
+        Detect pseudo-tabular data that isn't in markdown format.
+
+        This catches variant tables extracted from PDFs that appear as:
+        - Tab-separated values
+        - Whitespace-aligned columns
+        - Lines with multiple variant-like patterns
+        """
+        candidates = []
+        i = 0
+
+        while i < len(lines):
+            line = lines[i]
+
+            # Check for lines with tab-separated or multi-column variant data
+            has_tabs = '\t' in line
+            has_multiple_spaces = '  ' in line  # Double-space column separator
+            variant_matches = sum(1 for p in self._variant_patterns if p.search(line))
+
+            # Detect start of pseudo-table: line with tabs/spaces and variant patterns
+            if (has_tabs or has_multiple_spaces) and variant_matches >= 1:
+                table_start = i
+
+                # Look backward for table header/caption
+                while table_start > 0:
+                    prev_line = lines[table_start - 1].strip().lower()
+                    if not prev_line:
+                        break
+                    # Table headers often contain these keywords
+                    if any(kw in prev_line for kw in ['mutation', 'variant', 'nucleotide', 'amino acid', 'patient', 'phenotype', 'table']):
+                        table_start -= 1
+                    else:
+                        break
+
+                # Look forward for table end
+                table_end = i + 1
+                while table_end < len(lines):
+                    next_line = lines[table_end]
+                    next_has_structure = '\t' in next_line or '  ' in next_line
+                    next_variant_matches = sum(1 for p in self._variant_patterns if p.search(next_line))
+                    # Continue if line has similar structure or is short (table row)
+                    if next_has_structure or next_variant_matches >= 1 or (len(next_line.strip()) < 100 and next_line.strip()):
+                        table_end += 1
+                    else:
+                        break
+
+                # Only create zone if we found a substantial table (3+ rows)
+                if table_end - table_start >= 3:
+                    char_start = sum(len(lines[j]) + 1 for j in range(table_start))
+                    char_end = sum(len(lines[j]) + 1 for j in range(table_end))
+                    raw_text = '\n'.join(lines[table_start:table_end])
+
+                    candidates.append(ZoneCandidate(
+                        start=char_start,
+                        end=char_end,
+                        zone_type="TABLE",
+                        raw_text=raw_text,
+                        table_caption=lines[table_start].strip() if table_start > 0 else None,
+                        source_section=self._find_parent_section(text, char_start),
+                    ))
+
+                    i = table_end
+                    continue
+
+            i += 1
+
+        return candidates
+
+    def _detect_markdown_tables(self, lines: list[str], text: str) -> list[ZoneCandidate]:
+        """Detect standard markdown tables with |---| separators."""
+        candidates = []
 
         i = 0
         while i < len(lines):
@@ -412,22 +500,34 @@ class GeneticDataScout:
         # Normalize to 0.0-1.0
         score = min(1.0, score)
 
-        # Determine keep/discard based on individual vs aggregate ratio
+        # Determine keep/discard based on content signals
+        # IMPORTANT: Be permissive - variant tables are often in supplements without prose
         keep = True
-        if aggregate_signals > individual_signals * 2:
+
+        # Only discard if aggregate data dominates AND no variant mentions
+        if aggregate_signals > individual_signals * 2 and variant_mentions == 0:
             keep = False
+
+        # Require SOME signal: gene OR variant OR individual mentions
+        # (relaxed from requiring all three)
         if individual_signals == 0 and gene_mentions == 0 and variant_mentions == 0:
             keep = False
 
+        # CRITICAL: Tables with variant mentions should ALWAYS be kept
+        # (they likely contain the data we're looking for)
+        if candidate.zone_type == "TABLE" and variant_mentions >= 2:
+            keep = True
+            score = max(score, 0.5)  # Ensure minimum score for variant tables
+
         # Methods section is usually not useful
         if candidate.source_section and 'methods' in candidate.source_section.lower():
-            if individual_signals < 2:  # Unless it has patient recruitment details
+            if individual_signals < 2 and variant_mentions < 3:  # Keep if has variants
                 keep = False
                 score *= 0.5
 
-        # Discussion section usually summarizes
+        # Discussion section usually summarizes (but keep if has variant data)
         if candidate.source_section and 'discussion' in candidate.source_section.lower():
-            if individual_signals < 3:
+            if individual_signals < 3 and variant_mentions < 2:
                 keep = False
                 score *= 0.7
 

@@ -396,12 +396,19 @@ IMPORTANT NOTES:
             )
         return min(requested, limit)
 
+    # Minimum size for DATA_ZONES.md to be considered useful
+    # If smaller than this, fall back to full text
+    MIN_CONDENSED_SIZE = 500
+
     def _prepare_full_text(self, paper: Paper) -> str:
         """
         Prepare full text for extraction.
 
         If scout_use_condensed is enabled and a DATA_ZONES.md file exists,
         prefer the condensed version for more focused extraction.
+
+        IMPORTANT: Falls back to full text if DATA_ZONES.md is too small,
+        as this indicates Data Scout failed to identify useful zones.
         """
         # Try to use condensed DATA_ZONES.md if enabled
         if self.use_condensed and paper.pmid:
@@ -411,7 +418,20 @@ IMPORTANT NOTES:
             if zones_file:
                 try:
                     condensed_text = zones_file.read_text(encoding='utf-8')
-                    if condensed_text and len(condensed_text) > 100:
+
+                    # Check if condensed text is useful (not just headers/metadata)
+                    # Look for actual data content, not just "No high-value data zones identified"
+                    has_no_zones = "No high-value data zones identified" in condensed_text
+                    is_too_small = len(condensed_text) < self.MIN_CONDENSED_SIZE
+
+                    if has_no_zones or is_too_small:
+                        logger.warning(
+                            f"PMID {paper.pmid} - DATA_ZONES.md too small or empty "
+                            f"({len(condensed_text)} chars), falling back to full text"
+                        )
+                        print(f"⚠ DATA_ZONES.md insufficient ({len(condensed_text)} chars) - using full text instead")
+                        # Fall through to use full text
+                    elif condensed_text and len(condensed_text) > self.MIN_CONDENSED_SIZE:
                         lines = len(condensed_text.splitlines())
                         logger.info(f"PMID {paper.pmid} - Using condensed {paper.pmid}_DATA_ZONES.md ({len(condensed_text)} chars)")
                         print(f"Using {paper.pmid}_DATA_ZONES.md for extraction: {len(condensed_text):,} chars, {lines:,} lines")
@@ -878,6 +898,50 @@ IMPORTANT NOTES:
 
         return extracted_data
 
+    # Patterns that indicate failed content extraction
+    FAILED_EXTRACTION_PATTERNS = [
+        "[PDF file available at:",
+        "[Error converting",
+        "[Error reading",
+        "[Legacy .doc file available at:",
+        "text extraction failed",
+        "manual review required",
+        "[NO TEXT AVAILABLE]",
+        "[ABSTRACT ONLY",
+    ]
+
+    def _assess_input_quality(self, text: str, gene_symbol: Optional[str]) -> tuple[bool, str]:
+        """
+        Assess whether the input text is of sufficient quality for extraction.
+
+        Returns:
+            (is_usable, reason) - whether text is usable and why/why not
+        """
+        if not text or len(text) < 200:
+            return False, f"Text too short ({len(text) if text else 0} chars)"
+
+        # Count failed extraction placeholders
+        failed_count = sum(1 for pattern in self.FAILED_EXTRACTION_PATTERNS if pattern in text)
+
+        # If most of the content is failure placeholders, skip
+        if failed_count >= 3:
+            return False, f"Multiple failed extraction placeholders ({failed_count} found)"
+
+        # Check for actual variant-like content
+        variant_patterns = [
+            r'c\.\d+', r'p\.[A-Z]', r'[A-Z]\d+[A-Z]',  # Basic variant patterns
+            r'mutation', r'variant', r'carrier',  # Clinical terms
+        ]
+        has_variant_content = any(re.search(p, text, re.IGNORECASE) for p in variant_patterns)
+
+        if not has_variant_content:
+            # Check if gene is at least mentioned
+            if gene_symbol and gene_symbol.upper() in text.upper():
+                return True, "Gene mentioned but no variant patterns found"
+            return False, "No variant patterns or gene mentions in text"
+
+        return True, "Text appears usable"
+
     def _attempt_extraction(
         self,
         paper: Paper,
@@ -896,6 +960,18 @@ IMPORTANT NOTES:
         full_text = prepared_full_text if prepared_full_text is not None else self._prepare_full_text(paper)
         if full_text == "[NO TEXT AVAILABLE]":
             return ExtractionResult(pmid=paper.pmid, success=False, error="No text available", model_used=model)
+
+        # Assess input quality before sending to LLM
+        is_usable, quality_reason = self._assess_input_quality(full_text, paper.gene_symbol)
+        if not is_usable:
+            logger.warning(f"PMID {paper.pmid} - Input quality check failed: {quality_reason}")
+            print(f"⚠ PMID {paper.pmid}: Skipping LLM extraction - {quality_reason}")
+            return ExtractionResult(
+                pmid=paper.pmid,
+                success=False,
+                error=f"Input quality insufficient: {quality_reason}",
+                model_used=model
+            )
 
         # Estimate variant count if not provided
         if estimated_variants is None:
