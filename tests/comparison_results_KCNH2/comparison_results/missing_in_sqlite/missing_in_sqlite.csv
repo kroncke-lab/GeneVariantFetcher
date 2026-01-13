@@ -1,0 +1,921 @@
+pmid,variant_raw,variant_norm,occurrences,carriers_total,affected_count,unaffected_count,phenotypes,phenotype_other_count,phenotype_has_other,notes
+16470702,7q34q36.2Del,7q34q36.2Del,1,2,2,0,,0,False,het chromosomal herg KO
+18348270,7q36.1q36.2Del,7q36.1q36.2Del,1,1,1,0,,0,False,"het, chromosomal herg KO"
+26496715,A1017fsX,A1017fs*,1,1,1,0,,0,False,Ala1017ProfsX40
+14661677,A1058E,A1058E,1,1,0,1,,0,False,
+16116052,A1116V,A1116V,1,4,2,3,,0,False,
+26496715,A169G,A169G,1,1,1,0,,0,False,
+24667783,A172V,A172V,1,1,1,0,,0,False,in table
+14661677,A190T,A190T,1,1,0,1,,0,False,
+15913580,A190T,A190T,1,1,1,0,,0,False,
+19038855,A193fsX,A193fs*,1,1,1,0,,0,False,seizure chart review
+21216356,A193T,A193T,1,1,2,0,,0,False,(541C>Y Arg>Trp) (577G>R Al>Thr) (62G>R Gly>Asp)
+29622001,A193V,A193V,1,1,1,0,,0,False,
+14661677,A203T,A203T,1,1,0,1,,0,False,
+22727609,A228V,A228V,1,1,1,0,,0,False,"didn't provide more details, included LQTS probands"
+29622001,A285fsX,A285fs*,1,3,3,0,,0,False,c.853_859dupGCCGACG
+26496715,A32T,A32T,1,1,1,0,,0,False,
+15242738,A422T,A422T,1,2,2,0,,0,False,
+15840476,A422T,A422T,1,1,1,0,,0,False,
+22727609,A448T,A448T,1,1,1,0,,0,False,"didn't provide more details, included LQTS probands"
+17560885,A490P,A490P,1,9,10,1,,0,False,had assumed 100% penetrance…
+11170080,A490T,A490T,1,1,2,0,,0,False,
+20975234,A490T,A490T,1,1,2,0,,0,False,
+29622001,A558E,A558E,1,3,3,0,,0,False,
+10220144,A558P,A558P,1,3,6,0,,0,False,symptom = syncope after acoustic
+19038855,A558P,A558P,1,1,1,0,,0,False,seizure chart review
+20390067,A558P,A558P,1,2,2,0,,0,False,may be reported elsewhere
+15280442,A561P,A561P,1,3,3,0,,0,False,
+8877771,A561T,A561T,1,5,6,2,,0,False,
+10973849,A561T,A561T,1,1,1,0,,0,False,
+11854117,A561T,A561T,1,2,2,0,,0,False,not sure if should trust
+15120823,A561T,A561T,1,2,4,0,,0,False,
+16379539,A561T,A561T,1,1,2,0,,0,False,
+15840476,A561T,A561T,1,1,1,0,,0,False,
+20197117,A561T,A561T,1,2,1,0,,0,False,No pedigree
+26496715,A561T,A561T,1,4,4,0,,0,False,
+28438721,A561T,A561T,1,1,2,0,,0,False,consanguity paper
+14642689,A561T,A561T,1,2,2,0,,0,False,FROM OTHER REFERENCE
+7889573,A561V,A561V,1,4,10,0,,0,False,
+10973849,A561V,A561V,1,1,1,0,,0,False,
+11854117,A561V,A561V,1,6,6,0,,0,False,not sure if should trust
+15840476,A561V,A561V,1,1,1,0,,0,False,
+17595376,A561V,A561V,1,1,2,0,,0,False,
+18593567,A561V,A561V,1,1,2,0,,0,False,
+19996378,A561V,A561V,1,1,1,0,,0,False,
+19352046,A561V,A561V,1,1,1,0,,0,False,
+24623279,A561V,A561V,1,1,1,0,,0,False,iPSC EP
+24606995,A561V,A561V,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+24667783,A561V,A561V,1,6,4,2,,0,False,data from figure
+26496715,A561V,A561V,1,1,1,0,,0,False,
+26847485,A561V,A561V,1,1,2,0,,0,False,
+26823142,A561V,A561V,1,1,2,0,,0,False,
+29650123,A561V,A561V,1,1,0,0,,0,False,
+29020304,A561V,A561V,1,2,3,0,,0,False,
+30246897,A561V,A561V,1,1,2,0,,0,False,
+26063740,A561V,A561V,1,1,2,0,,0,False,
+24103226,A57P,A57P,1,1,1,0,,0,False,Ala57Pro
+9544837,A614V,A614V,1,4,8,0,,0,False,
+9693036,A614V,A614V,1,10,10,0,,0,False,
+11854117,A614V,A614V,1,3,3,0,,0,False,not sure if should trust
+15090700,A614V,A614V,1,2,2,0,,0,False,
+15840476,A614V,A614V,1,2,2,0,,0,False,
+19070294,A614V,A614V,1,9,10,0,,0,False,
+19843919,A614V,A614V,1,1,1,1,,0,False,drug induced syncope
+19996378,A614V,A614V,1,1,1,0,,0,False,
+23864605,A614V,A614V,1,25,14,0,,0,False,too little info
+24218437,A614V,A614V,1,1,0,0,,0,False,
+26496715,A614V,A614V,1,9,9,0,,0,False,
+27555138,A614V,A614V,1,1,4,0,,0,False,
+14642690,A614V,A614V,1,1,1,0,,0,False,FROM OTHER REFERENCE
+15840476,A671Del,A671Del,1,1,1,0,,0,False,
+15840476,A715sp,A715sp,1,1,1,0,,0,False,
+10973849,A78P,A78P,1,1,1,0,,0,False,
+11854117,A78P,A78P,1,1,1,0,,0,False,not sure if should trust
+15840476,A78P,A78P,1,1,1,0,,0,False,
+27761169,A78T,A78T,1,1,0,1,,0,False,"the kid only had long QTc, nothing else of note…"
+26496715,A797T,A797T,1,2,2,0,,0,False,
+23098067,A79fsX,A79fs*,1,1,1,0,,0,False,
+18508782,A80V,A80V,1,1,1,0,,0,False,data in supplement
+24606995,A83fsX,A83fs*,1,1,1,0,,0,False,c.234_241dupTGCCGCGC
+10973849,A83fsX,A83fs*,1,1,1,0,,0,False,
+11854117,A83fsX,A83fs*,1,1,1,0,,0,False,not sure if should trust
+17876385,A85P,A85P,1,2,5,0,,0,False,
+15840476,A85V,A85V,1,1,1,0,,0,False,
+18776039,A8V,A8V,1,1,2,0,,0,False,good hERG 1a vs 1b study
+15840476,A913V,A913V,1,2,2,0,,0,False,
+23936059,A913V,A913V,1,1,0,0,,0,False,in patients with Turners Syndrome
+24606995,A913V,A913V,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+26746457,A913V,A913V,1,2,0,2,,0,False,
+29622001,A913V,A913V,1,1,1,0,,0,False,
+18984536,A915fsX,A915fs*,1,5,4,3,,0,False,described previously
+16922724,A915fsX,A915fs*,1,1,2,0,,0,False,
+14661677,A915V,A915V,1,6,0,6,,0,False,
+26496715,c.1557+1G>A,c.1557+1G>A,1,1,1,0,,0,False,splice site
+15364333,c.1945+6T>C,c.1945+6T>C,1,20,21,0,,0,False,WHAT IS MY CODE
+18272172,c.2398+1G>C,c.2398+1G>C,1,7,5,3,,0,False,previously reported
+10086972,c.2592+1G->A,c.2592+1G->A,1,5,4,0,,0,False,HOW TO NOTE THIS?!
+24217263,c.917-3T>C,c.917-3T>C,1,1,0,0,,0,False,something happens to splicing
+28749435,C108Y,C108Y,1,4,6,1,,0,False,also had other mutations
+10086971,C1117fsX,C1117fs*,1,4,3,2,,0,False,
+15176425,C39X,C39*,1,3,3,0,,0,False,
+27816319,C44W,C44W,1,1,1,0,,0,False,also had H429Y
+10973849,C44X,C44*,1,1,1,0,,0,False,
+11854117,C44X,C44*,1,1,1,0,,0,False,not sure if should trust
+29650123,C49Y,C49Y,1,1,0,0,,0,False,
+21499742,C566G,C566G,1,2,3,0,,0,False,
+30246897,C566R,C566R,1,1,0,1,,0,False,
+19038855,C64Y,C64Y,1,1,1,0,,0,False,seizure chart review
+10973849,C66G,C66G,1,1,1,0,,0,False,
+11854117,C66G,C66G,1,1,1,0,,0,False,not sure if should trust
+14661677,C723R,C723R,1,1,0,1,,0,False,
+26496715,C984fsX,C984fs*,1,2,2,0,,0,False,Cys984ThrfsX75
+26496715,D102H,D102H,1,1,1,0,,0,False,
+23098067,D1037fsX,D1037fs*,1,1,1,0,,0,False,Studied preiously by Berthet
+16922724,D1037fsX,D1037fs*,1,1,2,0,,0,False,
+20975234,D111V,D111V,1,1,2,0,,0,False,
+26746457,D119H,D119H,1,1,1,1,,0,False,
+23098067,D287fsX,D287fs*,1,1,1,0,,0,False,
+19843919,D342V,D342V,1,1,1,1,,0,False,drug induced TdP
+15840476,D456Y,D456Y,1,1,1,0,,0,False,
+19038855,D456Y,D456Y,1,1,1,0,,0,False,seizure chart review
+29622001,D460fsX,D460fs*,1,1,1,0,,0,False,c.1379delA
+15176425,D460fsX,D460fs*,1,1,1,0,,0,False,
+19038855,D501H,D501H,1,1,1,0,,0,False,seizure chart review
+12402336,D501N,D501N,1,1,1,0,,0,False,
+14998624,D501N,D501N,1,1,1,0,,0,False,
+19352046,D501N,D501N,1,1,1,0,,0,False,
+23134353,D540fsX,D540fs*,1,3,3,1,,0,False,"they note L539fs/18, explain it weird"
+26746457,D591N,D591N,1,1,0,1,,0,False,
+15500450,D609G,D609G,1,1,1,0,,0,False,
+26496715,D609G,D609G,1,2,2,0,,0,False,
+30844837,D609G,D609G,1,1,1,0,,0,False,is this sudden death? Is a cardiac arrest.
+10973849,D609N,D609N,1,1,1,0,,0,False,
+11854117,D609N,D609N,1,5,5,0,,0,False,not sure if should trust
+15840476,D774Y,D774Y,1,1,1,0,,0,False,
+17905336,D774Y,D774Y,1,3,7,0,,0,False,
+22429796,D774Y,D774Y,1,3,3,0,,0,False,
+30244407,D803Y,D803Y,1,2,2,1,,0,False,
+15840476,D837G,D837G,1,1,1,0,,0,False,
+26496715,D837Y,D837Y,1,2,2,0,,0,False,
+10973849,D864sp,D864sp,1,1,1,0,,0,False,
+15840476,D864sp,D864sp,1,1,1,0,,0,False,
+26496715,D896fsX,D896fs*,1,2,2,0,,0,False,Asp896ArgfsX77
+19996378,Del(7)(q32qter),Del(7)(q32qter),1,1,1,0,,0,False,
+29449639,E1039X,E1039*,1,9,8,3,,0,False,proband also had R174C in KCNQ1 and E428K in SCN5A
+15176425,E1053fsX,E1053fs*,1,1,1,0,,0,False,
+15840476,E1053X,E1053*,1,1,1,0,,0,False,
+27816319,E1126fsX,E1126fs*,1,2,2,0,,0,False,also had H429Y
+15090700,E130K,E130K,1,1,1,0,,0,False,
+23351921,E177X,E177*,1,1,0,1,,0,False,palpilatations with stress…. Not LQTS2
+15840476,E229X,E229*,1,2,2,0,,0,False,
+16818214,E229X,E229*,1,2,3,1,,0,False,one patient without QTc
+26496715,E480V,E480V,1,1,1,0,,0,False,
+29759541,E50D,E50D,1,2,2,0,,0,False,also reported before
+26496715,E544A,E544A,1,2,2,0,,0,False,
+29622001,E544fsX,E544fs*,1,4,4,0,,0,False,c.1631_1632delAG
+18508782,E544fsX,E544fs*,1,5,5,2,,0,False,data in supplement
+26496715,E575K,E575K,1,1,1,0,,0,False,
+19695459,E58K,E58K,1,1,0,0,,0,False,also had D85N
+21216356,E637G,E637G,1,1,3,0,,0,False,(1910A>G Glu>Gly) HOMO
+21109023,E637G,E637G,1,3,5,0,,0,False,
+12062363,E637K,E637K,1,3,4,0,,0,False,
+12808265,E637K,E637K,1,0,1,0,,0,False,
+10973849,E682X,E682*,1,1,1,0,,0,False,
+14642688,E682X,E682*,1,1,1,0,,0,False,
+12402336,E698X,E698*,1,1,1,0,,0,False,
+19038855,E698X,E698*,1,1,1,0,,0,False,seizure chart review
+15840476,E788D,E788D,1,1,1,0,,0,False,
+19184172,E788K,E788K,1,2,2,1,,0,False,
+24667783,E807X,E807*,1,1,1,0,,0,False,in table
+16922724,E876fsX,E876fs*,1,1,0,1,,0,False,"family history sudden death, no sympot (no diagnosis)"
+15840476,E876X,E876*,1,1,1,0,,0,False,
+19038855,E876X,E876*,1,1,1,0,,0,False,seizure chart review
+29214556,E876X,E876*,1,4,0,4,,0,False,"not LQTS2, no one has long enough QTc interval"
+18774102,ex6-14Del,ex6-14Del,1,2,4,0,,0,False,
+18774102,ex9-14dup,ex9-14dup,1,2,2,0,,0,False,
+21185499,exon1-14Del,exon1-14Del,1,3,2,2,,0,False,
+23098067,exon2dup,exon2dup,1,1,1,0,,0,False,
+21185499,exon4-14Del,exon4-14Del,1,7,8,1,,0,False,
+16399053,"exon5,6,7Xdup","exon5,6,7Xdup",1,5,4,1,,0,False,"DNA sequencing of this junction fragment revealed that the heterozygous duplication consisted of a
+tandem duplication of 3,682 bp (from position c.1129–2543) and included 2.5 kb of intron 5, exon 6 (429 bp), intron 6 (589 bp), and the first 121 bp of exon 7 (Figure 2C). Therefore, the duplication disrupts exon 7."
+20167303,exon6-14Del,exon6-14Del,1,2,2,0,,0,False,
+23098067,exon9-10Del,exon9-10Del,1,1,1,0,,0,False,
+24606995,F22S,F22S,1,1,1,0,,0,False,
+10973849,F29L,F29L,1,1,1,0,,0,False,
+11854117,F29L,F29L,1,1,1,0,,0,False,not sure if should trust
+15840476,F29L,F29L,1,1,1,0,,0,False,
+22882672,F29L,F29L,1,9,4,3,,0,False,
+24606995,F29L,F29L,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+26403377,F29L,F29L,1,33,53,7,,0,False,people not with LQT2 not added to symptomatic
+19065538,F463L,F463L,1,1,1,0,,0,False,assumption from abstract
+19215240,F463L,F463L,1,3,3,1,,0,False,
+26496715,F494Del,F494Del,1,1,1,0,,0,False,
+29650123,F617fsX,F617fs*,1,1,0,0,,0,False,
+30244407,F617V,F617V,1,2,3,0,,0,False,
+17905336,F627fsX,F627fs*,1,1,3,0,,0,False,
+10973849,F627L,F627L,1,1,1,0,,0,False,
+11854117,F627L,F627L,1,1,1,0,,0,False,not sure if should trust
+18848812,F627L,F627L,1,2,2,0,,0,False,also SCN5A R43Q
+24217263,F627L,F627L,1,1,0,0,,0,False,
+22727609,F640Del,F640Del,1,1,1,0,,0,False,"didn't provide more details, included LQTS probands"
+26823142,F640Del,F640Del,1,1,1,0,,0,False,
+10220144,F640L,F640L,1,1,2,0,,0,False,symptom = syncope after acoustic
+19038855,F640L,F640L,1,1,1,0,,0,False,seizure chart review
+15840476,F640V,F640V,1,1,1,0,,0,False,
+21063070,F68L,F68L,1,1,2,0,,0,False,
+10973849,F805C,F805C,1,1,1,0,,0,False,
+11854117,F805C,F805C,1,11,11,0,,0,False,not sure if should trust
+11844290,F805C,F805C,1,7,5,2,,0,False,used the graph to perfect
+15840476,F805C,F805C,1,1,1,0,,0,False,
+10973849,F805S,F805S,1,1,1,0,,0,False,
+26496715,F805S,F805S,1,1,1,0,,0,False,
+27871843,F991fsX,F991fs*,1,1,1,0,,0,False,
+12877697,G1006fsX,G1006fs*,1,3,3,0,,0,False,
+29622001,G1006fsX,G1006fs*,1,1,1,0,,0,False,c.3017delG
+10973849,G1031fsX,G1031fs*,1,1,1,0,,0,False,
+17905336,G1031fsX,G1031fs*,1,1,2,0,,0,False,
+15840476,G1036D,G1036D,1,1,1,0,,0,False,
+18675227,G1036D,G1036D,1,3,3,2,,0,False,
+29622001,G1036D,G1036D,1,1,1,0,,0,False,
+28532774,G1036Del,G1036Del,1,1,1,0,,0,False,
+19038855,G1036fsX,G1036fs*,1,1,1,0,,0,False,seizure chart review
+19371231,G183fsX,G183fs*,1,1,0,1,,0,False,
+24606995,G184Del,G184Del,1,1,1,0,,0,False,
+10491368,G186fsX,G186fs*,1,4,4,2,,0,False,consanguinous parents
+14661677,G187Del,G187Del,1,3,0,3,,0,False,
+21410720,G187Del,G187Del,1,1,1,0,,0,False,
+14661677,G187S,G187S,1,1,0,1,,0,False,
+10790218,G189Ins,G189Ins,1,1,0,1,,0,False,
+18452873,G189Ins,G189Ins,1,1,0,1,,0,False,how to note?
+12402336,G192fsX,G192fs*,1,1,1,0,,0,False,
+21216356,G21D,G21D,1,1,2,0,,0,False,(541C>Y Arg>Trp) (577G>R Al>Thr) (62G>R Gly>Asp)
+24667783,G238R,G238R,1,1,1,0,,0,False,in table
+15840476,G238S,G238S,1,1,1,0,,0,False,
+25935074,G262fsX,G262fs*,1,1,2,0,,0,False,"stop codon is on 359th position, they say Gly262AlafsX98… there's 96 AA b/w 262 and the stop codon"
+24667783,G262fsX,G262fs*,1,1,1,0,,0,False,data from supplement
+15913580,G294V,G294V,1,1,1,0,,0,False,
+15840476,G306W,G306W,1,1,1,0,,0,False,
+19038855,G306W,G306W,1,1,1,0,,0,False,seizure chart review
+23631430,G47D,G47D,1,1,0,0,,0,False,"Gly47Asp, also mutant in cav3 val82Ile"
+10973849,G47V,G47V,1,1,1,0,,0,False,
+11854117,G47V,G47V,1,8,8,0,,0,False,not sure if should trust
+22764740,G487R,G487R,1,3,0,3,,0,False,
+26746457,G487S,G487S,1,1,0,1,,0,False,
+24103226,G53R,G53R,1,1,1,0,,0,False,Gly52Arg
+10973849,G53R,G53R,1,1,1,0,,0,False,
+15840476,G53R,G53R,1,1,1,0,,0,False,
+23098067,G53S,G53S,1,1,1,0,,0,False,Studied preiously by Nagaoka
+9693036,G572C,G572C,1,2,2,0,,0,False,
+14642687,G572C,G572C,1,1,1,0,,0,False,number was wrong last time
+10735633,G572R,G572R,1,4,8,0,,0,False,
+24606995,G572R,G572R,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+15176425,G572S,G572S,1,2,2,0,,0,False,
+15840476,G572S,G572S,1,2,2,0,,0,False,
+17905336,G572S,G572S,1,1,2,0,,0,False,
+19038855,G572S,G572S,1,1,1,0,,0,False,seizure chart review
+19996378,G572S,G572S,1,1,1,0,,0,False,
+19306396,G572S,G572S,1,3,3,0,,0,False,
+19490267,G572S,G572S,1,1,2,0,,0,False,
+21308345,G572S,G572S,1,5,5,1,,0,False,G1714A
+20197117,G572S,G572S,1,4,2,0,,0,False,No pedigree
+21063070,G572S,G572S,1,1,1,0,,0,False,
+21216356,G572S,G572S,1,1,2,0,,0,False,(1714G>R Gly>Ser)
+22727609,G572S,G572S,1,1,1,0,,0,False,"didn't provide more details, included LQTS probands"
+24217263,G572S,G572S,1,1,0,0,,0,False,
+26496715,G572S,G572S,1,2,2,0,,0,False,
+27871843,G572S,G572S,1,1,1,0,,0,False,
+28532774,G572S,G572S,1,1,2,0,,0,False,
+29622001,G572S,G572S,1,2,2,0,,0,False,
+29650123,G572S,G572S,1,1,0,0,,0,False,
+29497013,G584R,G584R,1,1,0,1,,0,False,
+10862094,G584S,G584S,1,10,8,6,,0,False,
+10973849,G584S,G584S,1,1,1,0,,0,False,
+15840476,G584S,G584S,1,1,1,0,,0,False,
+19490267,G584S,G584S,1,19,10,16,,0,False,
+23098067,G584S,G584S,1,1,1,0,,0,False,Studied preiously by Swan
+24606995,G584S,G584S,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+29622001,G584S,G584S,1,10,10,0,,0,False,
+9452080,G601S,G601S,1,3,6,0,,0,False,
+10862094,G601S,G601S,1,3,2,2,,0,False,
+16969682,G601S,G601S,1,4,4,0,,0,False,2 unseqenced family deaths under 30
+19169982,G601S,G601S,1,1,3,0,,0,False,I can read Polish
+23864605,G601S,G601S,1,9,3,0,,0,False,too little info
+26496715,G601S,G601S,1,2,2,0,,0,False,
+29622001,G601S,G601S,1,2,2,0,,0,False,
+23917959,G603D,G603D,1,2,2,1,,0,False,also iPSC cardioomyocytes generated
+29037423,G604C,G604C,1,2,3,0,,0,False,
+10220144,G604S,G604S,1,1,2,0,,0,False,symptom = syncope after acoustic
+10973849,G604S,G604S,1,1,1,0,,0,False,
+11854117,G604S,G604S,1,2,2,0,,0,False,not sure if should trust
+14998624,G604S,G604S,1,1,1,0,,0,False,
+15840476,G604S,G604S,1,4,4,0,,0,False,
+22402334,G604S,G604S,1,1,2,0,,0,False,
+22821100,G604S,G604S,1,0,2,0,,0,False,
+24103226,G604S,G604S,1,1,1,0,,0,False,Gly604Ser
+26496715,G604S,G604S,1,2,2,0,,0,False,
+10973849,G626S,G626S,1,1,1,0,,0,False,
+26496715,G626S,G626S,1,2,2,0,,0,False,
+10862104,G626V,G626V,1,4,4,1,,0,False,
+19996378,G628A,G628A,1,1,1,0,,0,False,
+24112685,G628D,G628D,1,1,2,0,,0,False,
+30036649,G628Del,G628Del,1,1,1,0,,0,False,
+21216356,G628R,G628R,1,1,2,0,,0,False,(1882G>S Gly>Arg)
+7889573,G628S,G628S,1,0,2,0,,0,False,loss of K selectivity
+10973849,G628S,G628S,1,1,1,0,,0,False,
+11854117,G628S,G628S,1,2,2,0,,0,False,not sure if should trust
+14998624,G628S,G628S,1,1,1,0,,0,False,
+16379539,G628S,G628S,1,1,2,0,,0,False,
+15840476,G628S,G628S,1,2,2,0,,0,False,
+16922724,G628S,G628S,1,1,2,0,,0,False,
+19996378,G628S,G628S,1,2,2,0,,0,False,one case previously reported
+24218437,G628S,G628S,1,1,1,0,,0,False,
+26496715,G628S,G628S,1,2,2,0,,0,False,
+27492745,G628S,G628S,1,1,2,0,,0,False,
+29650123,G628S,G628S,1,1,0,0,,0,False,
+15840476,G628V,G628V,1,1,1,0,,0,False,
+29497013,G628V,G628V,1,1,1,0,,0,False,
+23631430,G71E,G71E,1,1,0,0,,0,False,"Gly71Glu, also mutant in SCN5! ICS8+5 G>A"
+26496715,G71W,G71W,1,1,1,0,,0,False,
+29497013,G71W,G71W,1,1,2,0,,0,False,
+26746457,G745A,G745A,1,1,0,1,,0,False,
+19695459,G745fsX,G745fs*,1,1,0,0,,0,False,also had D85N
+29146210,G785D,G785D,1,3,2,2,,0,False,
+24667783,G785fsX,G785fs*,1,1,1,0,,0,False,data from supplement
+21951015,G816V,G816V,1,3,1,3,,0,False,
+15840476,G820R,G820R,1,1,1,0,,0,False,
+26496715,G873fsX,G873fs*,1,1,1,0,,0,False,Gly873AlafsX5
+14661677,G873S,G873S,1,1,0,1,,0,False,
+16043162,G873S,G873S,1,1,0,0,,0,False,
+29650123,G911fsX,G911fs*,1,1,0,0,,0,False,
+26746457,G924W,G924W,1,1,1,0,,0,False,
+10973849,G925fsX,G925fs*,1,1,1,0,,0,False,
+19038855,G925fsX,G925fs*,1,1,1,0,,0,False,seizure chart review
+11854117,G925fsX,G925fs*,1,1,1,0,,0,False,not sure if should trust
+15840476,G925R,G925R,1,1,1,0,,0,False,
+22885918,G925R,G925R,1,1,2,0,,0,False,
+15840476,G928fsX,G928fs*,1,1,1,0,,0,False,
+29497013,G965fsX,G965fs*,1,1,0,1,,0,False,"QTc of 550, post seizure symptoms described…"
+16923798,G965X,G965*,1,1,1,0,,0,False,
+14661677,H254Q,H254Q,1,1,0,1,,0,False,
+24057343,H302fsX,H302fs*,1,3,5,1,,0,False,only patients with compound mutants had LQTS2
+19136169,H402R,H402R,1,2,3,0,,0,False,
+12808265,H492Y,H492Y,1,1,1,0,,0,False,
+19843919,H492Y,H492Y,1,1,1,1,,0,False,drug induced TdP
+24057343,H492Y,H492Y,1,4,5,2,,0,False,only patients with compound mutants had LQTS2
+27816319,H492Y,H492Y,1,14,14,3,,0,False,
+15242738,H562P,H562P,1,3,3,1,,0,False,
+15840476,H562P,H562P,1,1,1,0,,0,False,
+21499742,H562R,H562R,1,2,5,0,,0,False,
+25819988,H562R,H562R,1,13,16,4,,0,False,
+30929919,H562R,H562R,1,2,2,1,,0,False,
+18808722,H674fsX,H674fs*,1,1,2,0,,0,False,
+23631430,H703fsX,H703fs*,1,1,0,0,,0,False,"His703ProfsX11, also mutant in KCNE2 thr10met"
+10973849,H70R,H70R,1,2,2,0,,0,False,
+11854117,H70R,H70R,1,1,1,0,,0,False,not sure if should trust
+15840476,H70R,H70R,1,1,1,0,,0,False,
+22885918,H70R,H70R,1,1,2,0,,0,False,
+10973849,H739fsX,H739fs*,1,1,1,0,,0,False,
+19371231,H771fsX,H771fs*,1,3,2,1,,0,False,
+23098067,H771R,H771R,1,1,1,0,,0,False,
+24606995,I30Del,I30Del,1,1,1,0,,0,False,
+19038855,I30T,I30T,1,1,1,0,,0,False,seizure chart review
+15851119,I31S,I31S,1,1,3,0,,0,False,"REPEAT, better data"
+15840476,I31S,I31S,1,1,1,0,,0,False,
+24021552,I400N,I400N,1,10,14,1,,0,False,
+24606995,I400N,I400N,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+23981618,I414fsX,I414fs*,1,6,7,0,,0,False,
+17905336,I42N,I42N,1,1,3,0,,0,False,
+7889573,I500Del,I500Del,1,11,10,0,,0,False,
+19038855,I560fsX,I560fs*,1,1,1,0,,0,False,seizure chart review
+25974115,I560T,I560T,1,1,2,0,,0,False,
+29759541,I560T,I560T,1,1,1,0,,0,False,also reported before
+15840476,I571L,I571L,1,1,1,0,,0,False,
+24103226,I571V,I571V,1,1,1,0,,0,False,Ile571Val
+10973849,I593R,I593R,1,1,1,0,,0,False,
+16922724,I593R,I593R,1,1,2,0,,0,False,
+28438721,I593R,I593R,1,3,0,3,,0,False,consanguity paper
+11854117,I593X,I593*,1,1,1,0,,0,False,not sure if should trust
+19038855,I642Del,I642Del,1,1,1,0,,0,False,seizure chart review
+26746457,I711V,I711V,1,1,1,0,,0,False,
+19184172,I782fsX,I782fs*,1,2,3,1,,0,False,
+26496715,I782N,I782N,1,1,1,0,,0,False,
+10973849,I798fsX,I798fs*,1,1,1,0,,0,False,
+15840476,I798fsX,I798fs*,1,1,1,0,,0,False,
+23098067,I82dup,I82dup,1,1,1,0,,0,False,Studied preiously by Larsen
+23899126,I82T,I82T,1,2,3,0,,0,False,
+24606995,I858T,I858T,1,1,1,0,,0,False,
+24606995,I96T,I96T,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+15176425,IVS13+1G>A,IVS13+1G>A,1,4,4,0,,0,False,
+24103226,IVS9+5g>t,IVS9+5g>t,1,1,1,0,,0,False,IVS9+5g>t
+19187913,IVS9-28A/G,IVS9-28A/G,1,9,11,0,,0,False,"intronic mutation, not sure how to note"
+29020304,IVS9-28A/G,IVS9-28A/G,1,1,2,0,,0,False,
+15670565,K101E,K101E,1,1,2,0,,0,False,
+24606995,K101E,K101E,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+15699249,K28E,K28E,1,14,6,12,,0,False,Don't need to ask Ben.
+16922724,K525N,K525N,1,1,1,1,,0,False,
+10973849,K638Del,K638Del,1,1,1,0,,0,False,
+26831020,K638Del,K638Del,1,3,6,0,,0,False,
+26823142,K638Del,K638Del,1,1,2,0,,0,False,
+10973849,K638E,K638E,1,1,1,0,,0,False,
+11854117,K638E,K638E,1,3,3,0,,0,False,not sure if should trust
+22378279,K638E,K638E,1,1,0,0,,0,False,
+10973849,K886fsX,K886fs*,1,1,1,0,,0,False,
+26823142,K897fsX,K897fs*,1,1,2,0,,0,False,
+14661677,K897T,K897T,4,105,0,105,,0,False,
+16116052,K897T,K897T,1,3,1,2,,0,False,common variant
+19322600,K897T,K897T,1,19,11,0,,0,False,common polymorphism
+20636320,K897T,K897T,1,1,1,1,,0,False,
+21779290,K897T,K897T,1,1,1,1,,0,False,also had H558R in SCNA5A and P448R in KCNQ1
+22407026,K897T,K897T,1,1,1,1,,0,False,
+23277474,K897T,K897T,1,2,2,1,,0,False,F1473C in SCN5A
+28749435,K897T,K897T,1,2,2,1,,0,False,also had other mutations
+27871843,K897T,K897T,1,1,1,0,,0,False,
+29121719,K897T,K897T,1,1,0,0,,0,False,
+29214556,K897T,K897T,1,5,0,5,,0,False,
+17210839,K897T,K897T,1,1,1,0,,0,False,linked with R954C
+10862095,K897T,K897T,1,63,5,58,,0,False,
+27345990,L1012fsX,L1012fs*,1,1,2,0,,0,False,c.3035_3045delTCCCTCGATGC
+14661677,L1023Del,L1023Del,1,1,0,1,,0,False,
+22402334,L1045F,L1045F,1,1,2,0,,0,False,
+15840476,L1056fsX,L1056fs*,1,1,1,0,,0,False,
+24218437,L1064fsX,L1064fs*,1,1,0,0,,0,False,L1064fsX1068
+29650123,L109fsX,L109fs*,1,1,0,0,,0,False,
+24606995,L109P,L109P,1,1,1,0,,0,False,
+17905336,L171Ins,L171Ins,1,1,2,0,,0,False,
+19668779,L234Del,L234Del,1,3,2,1,,0,False,
+14508592,L296fsX,L296fs*,1,6,3,2,,0,False,
+24667783,L343fsX,L343fs*,1,1,1,0,,0,False,in table
+26496715,L413P,L413P,1,1,1,0,,0,False,
+26496715,L457P,L457P,1,1,1,0,,0,False,
+10841244,L552S,L552S,1,42,27,25,,0,False,
+10973849,L552S,L552S,1,1,1,0,,0,False,
+11854117,L552S,L552S,1,4,4,0,,0,False,not sure if should trust
+15840476,L552S,L552S,1,1,1,0,,0,False,
+16754261,L552S,L552S,1,77,0,13,,0,False,FinA
+23098067,L552S,L552S,1,1,1,0,,0,False,Studied preiously by Swan
+26063740,L552S,L552S,1,2,8,0,,0,False,girl died due to aspiration
+19160088,L552S,L552S,1,2,0,2,,0,False,
+24667783,L559H,L559H,1,1,1,0,,0,False,data from supplement
+26496715,L559H,L559H,1,1,1,0,,0,False,
+22402334,L586M,L586M,1,1,2,0,,0,False,
+10973849,L615V,L615V,1,1,1,0,,0,False,
+15840476,L622F,L622F,1,1,1,0,,0,False,
+32253972,L69P,L69P,1,1,1,0,,0,False,
+30036649,L776P,L776P,1,1,1,0,,0,False,
+29650123,L779P,L779P,1,1,0,0,,0,False,
+10973849,L799sp,L799sp,1,1,1,0,,0,False,
+11854117,L799sp,L799sp,1,5,5,0,,0,False,not sure if should trust
+15840476,L799sp,L799sp,2,4,4,0,,0,False,
+10973849,L86R,L86R,1,1,1,0,,0,False,
+11854117,L86R,L86R,1,7,7,0,,0,False,not sure if should trust
+12402336,L87P,L87P,1,1,1,0,,0,False,
+26823142,L908fsX,L908fs*,1,1,1,0,,0,False,
+18675227,L955V,L955V,1,2,1,2,,0,False,
+29650123,L987fsX,L987fs*,1,1,0,0,,0,False,
+26496715,L987fsX,L987fs*,1,3,3,0,,0,False,Leu987Valfs131X
+29622001,L987fsX,L987fs*,1,1,1,0,,0,False,c.2959_2960delCT
+23098067,L987fsX,L987fs*,1,1,1,0,,0,False,Studied preiously by Splawski
+11854117,M124R,M124R,1,17,17,0,,0,False,not sure if should trust
+11844290,M124R,M124R,1,14,9,5,,0,False,used the graph to perfect
+16029385,M124R,M124R,1,16,20,7,,0,False,
+15043509,M124T,M124T,1,4,4,1,,0,False,
+23546179,M579fsX,M579fs*,1,1,1,0,,0,False,
+26076856,M645I,M645I,1,1,2,0,,0,False,
+10973849,M645L,M645L,1,1,1,0,,0,False,
+19038855,M645L,M645L,1,1,1,0,,0,False,seizure chart review
+22407026,M645R,M645R,1,1,0,1,,0,False,
+29121719,M645R,M645R,1,1,0,0,,0,False,
+14998624,M645V,M645V,1,1,1,0,,0,False,
+24667783,M645V,M645V,1,1,1,0,,0,False,data from supplement
+19843919,M756V,M756V,1,1,1,1,,0,False,drug induced TdP
+14661677,N257H,N257H,1,1,0,1,,0,False,
+10973849,N33T,N33T,1,2,2,0,,0,False,
+11854117,N33T,N33T,1,1,1,0,,0,False,not sure if should trust
+14661677,N33T,N33T,1,1,0,1,,0,False,
+23237912,N45D,N45D,1,3,3,1,,0,False,"also mutants in A1428S SCN5A and D85N in KCNE1, affected brother also has KCNE1"
+7889573,N470D,N470D,1,4,6,0,,0,False,
+14642687,N470D,N470D,1,1,1,0,,0,False,FROM OTHER REFERENCE
+9693036,N588D,N588D,1,7,7,0,,0,False,
+15840476,N588D,N588D,1,1,1,0,,0,False,
+14676148,N588K,N588K,1,7,10,0,,0,False,increased tail speed
+29759541,N588K,N588K,1,16,16,0,,0,False,also reported before
+9544837,N629D,N629D,1,0,8,0,,0,False,
+19038855,N629I,N629I,1,1,1,0,,0,False,seizure chart review
+10517660,N629K,N629K,1,1,2,0,,0,False,
+9544837,N629S,N629S,1,0,5,0,,0,False,
+11854117,N629S,N629S,1,2,2,0,,0,False,not sure if should trust
+24606995,N629S,N629S,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+24667783,N629S,N629S,1,1,1,0,,0,False,data from supplement
+26496715,N629S,N629S,1,1,1,0,,0,False,
+29622001,N629S,N629S,1,1,1,0,,0,False,
+17905336,N629T,N629T,1,1,1,0,,0,False,
+16155735,N633D,N633D,1,1,1,0,,0,False,
+18593567,N633D,N633D,1,1,2,0,,0,False,previously reported
+9544837,N633S,N633S,1,0,3,0,,0,False,
+15840476,N633S,N633S,1,1,1,0,,0,False,
+19996378,N633S,N633S,1,1,1,0,,0,False,
+24606995,N633S,N633S,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+26496715,N633S,N633S,1,1,1,0,,0,False,
+29650123,N633S,N633S,1,1,0,0,,0,False,
+15840476,N635I,N635I,1,1,1,0,,0,False,
+10973849,N861I,N861I,1,1,1,0,,0,False,
+11854117,N861I,N861I,1,3,3,0,,0,False,not sure if should trust
+16043162,N985S,N985S,1,1,0,0,,0,False,
+15840476,N996I,N996I,1,1,1,0,,0,False,
+26496715,P1034fsX,P1034fs*,1,3,3,0,,0,False,Pro1034ArgfsX20
+15840476,P1034fsX,P1034fs*,1,1,1,0,,0,False,
+29622001,P1034fsX,P1034fs*,1,1,1,0,,0,False,c.3093_3106del
+17905336,P1075L,P1075L,1,1,3,0,,0,False,
+10973849,P1101fsX,P1101fs*,1,1,1,0,,0,False,
+27871843,P1122fsX,P1122fs*,1,1,1,0,,0,False,
+15572050,P1122fsX,P1122fs*,1,1,1,0,,0,False,
+23631430,P1122R,P1122R,1,1,0,0,,0,False,"Pro1122Arg, also mutant KCNQ1 thr513ser"
+23631430,P1132A,P1132A,1,1,0,0,,0,False,"Pro1132Ala, also mutant in asp317asn KCNQ1"
+16922724,P114S,P114S,1,1,0,1,,0,False,
+23465283,P1157L,P1157L,1,1,1,0,,0,False,
+10973849,P141fsX,P141fs*,1,1,1,0,,0,False,
+24606995,P151fsX,P151fs*,1,1,1,0,,0,False,"c.453delC, Previously Studied in a paper about Dannish people"
+15840476,P151fsX,P151fs*,2,3,3,0,,0,False,
+10973849,P151fsX,P151fs*,1,1,1,0,,0,False,
+16922724,P151fsX,P151fs*,1,1,1,0,,0,False,
+10862094,P151fsX,P151fs*,1,19,4,15,,0,False,
+26496715,P191fsX,P191fs*,1,1,1,0,,0,False,p.Pro191ArgX10
+10973849,P241fsX,P241fs*,1,1,1,0,,0,False,
+19038855,P241L,P241L,1,1,1,0,,0,False,seizure chart review
+14661677,P251A,P251A,1,1,0,1,,0,False,
+22882672,P297S,P297S,1,1,1,1,,0,False,
+10973849,P347S,P347S,1,1,1,0,,0,False,
+12402336,P347S,P347S,1,1,1,0,,0,False,
+14661677,P347S,P347S,1,1,0,1,,0,False,
+17531263,P347S,P347S,1,9,2,7,,0,False,
+21410720,P347S,P347S,1,1,1,0,,0,False,
+22378279,P347S,P347S,1,1,0,0,,0,False,
+19322600,P408A,P408A,1,1,1,0,,0,False,
+10862094,P451L,P451L,1,4,4,2,,0,False,
+11854117,P596L,P596L,1,2,2,0,,0,False,not sure if should trust
+24667783,P596L,P596L,1,1,1,0,,0,False,data from supplement
+15840476,P596R,P596R,1,1,1,0,,0,False,
+26496715,P596S,P596S,1,2,2,0,,0,False,
+10973849,P632S,P632S,1,1,1,0,,0,False,
+22727609,P632S,P632S,1,1,1,0,,0,False,"didn't provide more details, included LQTS probands"
+15840476,P721L,P721L,1,1,1,0,,0,False,
+10973849,P72Q,P72Q,1,2,2,0,,0,False,
+11854117,P72Q,P72Q,1,7,7,0,,0,False,not sure if should trust
+24667783,P72R,P72R,1,1,1,0,,0,False,data from supplement
+26496715,P72T,P72T,1,1,1,0,,0,False,
+28532774,P846S,P846S,1,1,1,0,,0,False,
+20975234,P846T,P846T,1,1,2,0,,0,False,
+12402336,P872fsX,P872fs*,1,1,1,0,,0,False,
+19038855,P872fsX,P872fs*,1,1,1,0,,0,False,seizure chart review
+15958262,P872fsX,P872fs*,1,11,8,4,,0,False,
+15851119,P910fsX,P910fs*,1,1,2,0,,0,False,"REPEAT, better data"
+15840476,P910fsX,P910fs*,1,1,1,0,,0,False,
+14661677,P910L,P910L,1,1,0,1,,0,False,
+10973849,P917L,P917L,1,1,1,0,,0,False,
+11854117,P917L,P917L,1,1,1,0,,0,False,not sure if should trust
+14661677,P917L,P917L,1,3,0,3,,0,False,
+24606995,P923fsX,P923fs*,1,1,1,0,,0,False,"c.2768delC, Previously Studied in a paper about Dannish people"
+16155735,P923fsX,P923fs*,1,1,1,0,,0,False,nomenclature was wrong
+18593567,P923fsX,P923fs*,1,1,2,0,,0,False,"they've got weird nomenclature in the paper, previously reported"
+26496715,P926fsX,P926fs*,1,4,4,0,,0,False,Pro926AlaX14
+29739726,P926fsX,P926fs*,1,1,2,0,,0,False,also has Gly188Glu in SCN1A
+16922724,P926fsX,P926fs*,1,1,2,0,,0,False,WRONG AA LAST TIME
+26496715,P926S,P926S,1,1,1,0,,0,False,
+24103226,P946fsX,P946fs*,1,1,1,0,,0,False,Pro946fs/8X
+29331839,P963T,P963T,1,4,2,2,,0,False,"very sick family, like 10 SIDS cases"
+14661677,P967L,P967L,1,1,0,1,,0,False,
+15913580,P967L,P967L,1,1,1,0,,0,False,
+29752375,P967L,P967L,1,1,1,0,,0,False,
+10973849,P968fsX,P968fs*,1,1,1,0,,0,False,
+11854117,P968fsX,P968fs*,1,1,1,0,,0,False,not sure if should trust
+21070882,P968L,P968L,1,2,1,1,,0,False,
+10973849,P986fsX,P986fs*,1,1,1,0,,0,False,
+21063070,Q1046X,Q1046*,1,1,2,0,,0,False,
+29650123,Q1046X,Q1046*,1,1,0,0,,0,False,
+14661677,Q1068R,Q1068R,1,1,0,1,,0,False,
+15913580,Q1068R,Q1068R,1,1,1,0,,0,False,
+18362022,Q1070X,Q1070*,1,5,4,3,,0,False,"consanguinous, 2 still births, third cooking"
+19184172,Q1070X,Q1070*,1,4,7,2,,0,False,replicate
+26496715,Q247X,Q247*,1,2,2,0,,0,False,
+10973849,Q376sp,Q376sp,2,2,2,0,,0,False,
+11854117,Q376sp,Q376sp,1,1,1,0,,0,False,not sure if should trust
+15840476,Q376sp,Q376sp,1,2,2,0,,0,False,
+18508782,Q376sp,Q376sp,1,2,1,1,,0,False,data in supplement
+23098067,Q61R,Q61R,1,1,1,0,,0,False,de novo mutant
+19038855,Q676fsX,Q676fs*,1,1,1,0,,0,False,seizure chart review
+29622001,Q725fsX,Q725fs*,1,1,1,0,,0,False,c.2173_2196del
+19157587,Q738X,Q738*,1,3,3,0,,0,False,
+20167303,Q81H,Q81H,1,2,1,1,,0,False,
+10973849,Q81X,Q81*,1,1,1,0,,0,False,
+15840476,Q901fsX,Q901fs*,1,1,1,0,,0,False,
+15851119,R1005fsX,R1005fs*,1,1,3,0,,0,False,"REPEAT, better data"
+15840476,R1005fsX,R1005fs*,1,1,1,0,,0,False,
+22429796,R1007H,R1007H,1,2,1,1,,0,False,
+16922724,R100G,R100G,1,1,2,0,,0,False,
+15840476,R100Q,R100Q,1,1,1,0,,0,False,
+16923798,R1014fsX,R1014fs*,1,12,7,5,,0,False,some don’t get to 3.5 points
+10973849,R1014X,R1014*,1,2,2,0,,0,False,
+15840476,R1014X,R1014*,1,1,1,0,,0,False,
+17576861,R1014X,R1014*,1,9,1,9,,0,False,
+14642691,R1014X,R1014*,1,2,2,0,,0,False,FROM OTHER REFERENCE
+26496715,R1032fsX,R1032fs*,1,2,2,0,,0,False,Arg1032AlafsX86
+16922724,R1032fsX,R1032fs*,1,1,2,0,,0,False,
+15840476,R1033fsX,R1033fs*,2,2,2,0,,0,False,
+29650123,R1035fsX,R1035fs*,1,1,0,0,,0,False,
+21063070,R1035fsX,R1035fs*,1,1,1,0,,0,False,
+14661677,R1035W,R1035W,1,1,0,1,,0,False,
+14556882,R1047L,R1047L,1,4,0,4,,0,False,BVT
+14661677,R1047L,R1047L,2,8,0,8,,0,False,
+19322600,R1047L,R1047L,1,2,1,0,,0,False,"aveolar hemmorhagex1 non sids, pulmonary viral diseasex1, sids"
+20167303,R1047L,R1047L,1,1,2,0,,0,False,
+21964171,R1047L,R1047L,1,2,2,0,,0,False,drowning
+22727609,R1047L,R1047L,1,1,1,0,,0,False,"didn't provide more details, included LQTS probands"
+23936059,R1047L,R1047L,1,5,0,0,,0,False,in patients with Turners Syndrome
+23571586,R1047L,R1047L,1,3,3,0,,0,False,
+26412604,R1047L,R1047L,1,3,2,3,,0,False,
+15913580,R1047L,R1047L,1,5,5,0,,0,False,1  baby also had G294V
+18692916,R1135H,R1135H,1,3,3,2,,0,False,
+24400717,R1135H,R1135H,1,1,1,0,,0,False,
+29759541,R1135H,R1135H,1,3,3,0,,0,False,also reported before
+27871843,R1135H,R1135H,1,1,1,0,,0,False,
+24606995,R148fsX,R148fs*,1,1,1,0,,0,False,c.446insC
+19322600,R148W,R148W,1,2,1,1,,0,False,"the father was also mutant, but not affected - gathered from paper #24334129"
+21410720,R148W,R148W,1,1,1,0,,0,False,
+23631430,R148W,R148W,1,1,0,0,,0,False,"Thr474Ile Arg148Trp, both muts"
+23465283,R148W,R148W,1,1,1,0,,0,False,
+24334129,R148W,R148W,1,14,5,12,,0,False,"the other SIDS male reported in this paper as result #2 was not included here (reported by Millat et al), but the family and Polish woman were"
+29650123,R148W,R148W,1,1,0,0,,0,False,
+24400717,R164C,R164C,1,1,1,0,,0,False,
+22429796,R164H,R164H,1,2,1,1,,0,False,
+10862094,R176W,R176W,1,6,6,2,,0,False,
+14661677,R176W,R176W,1,1,0,1,,0,False,
+16754261,R176W,R176W,1,75,0,12,,0,False,FinB
+16818214,R176W,R176W,1,1,1,1,,0,False,low QTc
+19160088,R176W,R176W,2,128,130,16,,0,False,based off the 112 database | own a huge database on 112 of these patients
+19038855,R176W,R176W,1,1,1,0,,0,False,seizure chart review
+23098067,R176W,R176W,1,1,1,0,,0,False,Studied preiously by Swan
+22067087,R176W,R176W,1,1,3,0,,0,False,
+24606995,R176W,R176W,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+24667783,R176W,R176W,1,1,1,0,,0,False,data from supplement
+29650123,R176W,R176W,1,1,0,0,,0,False,
+22429796,R176W,R176W,1,3,3,0,,0,False,
+26063740,R176W,R176W,1,1,0,1,,0,False,
+15840476,R181fsX,R181fs*,1,1,1,0,,0,False,
+14661677,R181Q,R181Q,1,4,0,4,,0,False,
+15913580,R181Q,R181Q,1,1,1,0,,0,False,
+21216356,R181W,R181W,1,1,2,0,,0,False,(541C>Y Arg>Trp) (577G>R Al>Thr) (62G>R Gly>Asp)
+19038855,R252fsX,R252fs*,1,1,1,0,,0,False,seizure chart review
+23571586,R25W,R25W,1,2,1,1,,0,False,aborted pregnancy
+25626866,R25W,R25W,1,7,0,7,,0,False,
+17210839,R273Q,R273Q,1,1,1,0,,0,False,
+15176425,R273X,R273*,1,1,1,0,,0,False,
+29622001,R273X,R273*,1,4,4,0,,0,False,R273Ter
+29622001,R281fsX,R281fs*,1,2,2,0,,0,False,c.842dupG
+10973849,R312C,R312C,1,1,1,0,,0,False,
+30246897,R312C,R312C,1,1,1,0,,0,False,
+15840476,R326fsX,R326fs*,1,1,1,0,,0,False,
+16253915,R328C,R328C,1,2,2,1,,0,False,
+15840476,R328C,R328C,1,2,2,0,,0,False,
+16922724,R328C,R328C,1,3,6,0,,0,False,
+23098067,R328C,R328C,1,1,1,0,,0,False,Studied preiously by Tester
+29650123,R328C,R328C,1,1,0,0,,0,False,
+17905336,R328fsX,R328fs*,1,1,3,0,,0,False,
+26066609,R35W,R35W,1,1,3,0,,0,False,symptomatic with low K
+15840476,R366X,R366*,1,1,1,0,,0,False,
+19038855,R366X,R366*,1,1,1,0,,0,False,seizure chart review
+24606995,R366X,R366*,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+26496715,R366X,R366*,1,1,1,0,,0,False,
+29020304,R366X,R366*,1,1,2,0,,0,False,
+16922724,R528P,R528P,1,1,1,1,,0,False,
+24606995,R531Del,R531Del,1,1,1,0,,0,False,
+10973849,R531Q,R531Q,1,1,1,0,,0,False,
+28532774,R531W,R531W,1,1,1,0,,0,False,
+9600240,R534C,R534C,1,5,0,0,,0,False,fam80
+10987356,R534C,R534C,1,3,3,1,,0,False,
+12808265,R534C,R534C,1,0,1,0,,0,False,
+15840476,R534C,R534C,1,1,1,0,,0,False,
+17905336,R534C,R534C,1,1,2,0,,0,False,
+19038855,R534C,R534C,1,1,1,0,,0,False,seizure chart review
+21308345,R534C,R534C,1,4,7,0,,0,False,C1600T
+22727609,R534C,R534C,1,1,1,0,,0,False,"didn't provide more details, included LQTS probands"
+24667783,R534C,R534C,1,1,1,0,,0,False,data from supplement
+26496715,R534C,R534C,1,1,1,0,,0,False,
+29650123,R534C,R534C,1,1,0,0,,0,False,
+19184172,R537W,R537W,1,2,3,1,,0,False,
+10973849,R56Q,R56Q,1,1,1,0,,0,False,
+11854117,R56Q,R56Q,1,8,8,0,,0,False,not sure if should trust
+10220144,R582C,R582C,1,10,20,6,,0,False,symptom = syncope after acoustic
+15840476,R582C,R582C,1,2,2,0,,0,False,
+19038855,R582C,R582C,1,2,2,0,,0,False,seizure chart review
+24667783,R582C,R582C,1,1,1,0,,0,False,data from supplement
+29881912,R62Q,R62Q,1,2,2,0,,0,False,"""A novel KCNH2 mutation, with functional properties consistent with a loss-of-function and type 2 LQTS, was found in a case of sudden intrauterine death in a male term baby and in the mother that suffered a cardiac arrest as she
+was informed about the death of her unborn baby."""
+23207121,R694H,R694H,1,1,1,1,,0,False,
+16922724,R696C,R696C,1,1,2,0,,0,False,
+30036649,R696C,R696C,1,1,1,0,,0,False,
+10973849,R73fsX,R73fs*,1,1,1,0,,0,False,
+15840476,R73fsX,R73fs*,1,1,1,0,,0,False,
+19038855,R73fsX,R73fs*,1,1,1,0,,0,False,seizure chart review
+26118593,R744fsX,R744fs*,1,1,2,0,,0,False,c.2229_2230delC - from supp tables
+18593567,R744fsX,R744fs*,1,1,2,0,,0,False,they've got weird nomenclature in the paper
+22314138,R744P,R744P,1,1,3,0,,0,False,
+26746457,R744Q,R744Q,1,1,1,0,,0,False,
+11802537,R744X,R744*,1,6,4,2,,0,False,
+11854117,R744X,R744*,1,2,2,0,,0,False,not sure if should trust
+29650123,R744X,R744*,1,1,0,0,,0,False,
+26271031,R752P,R752P,1,20,2,20,,0,False,
+12621127,R752Q,R752Q,1,4,2,3,,0,False,
+11009462,R752W,R752W,1,27,15,20,,0,False,
+10973849,R752W,R752W,1,1,1,0,,0,False,
+11332568,R752W,R752W,1,26,13,17,,0,False,"SAME FAMILY, HAS BETTER INFO"
+11854117,R752W,R752W,1,33,33,0,,0,False,not sure if should trust
+11844290,R752W,R752W,1,26,9,17,,0,False,"SAME FAMILY, litte worse DATA"
+23098067,R752W,R752W,1,1,1,0,,0,False,Studied preiously by Splawski
+29431731,R752W,R752W,1,26,3,23,,0,False,iPSC work as well
+11997281,R784W,R784W,1,1,0,1,,0,False,
+15840476,R784W,R784W,1,1,1,0,,0,False,
+12402336,R823fsX,R823fs*,1,1,1,0,,0,False,
+27871843,R823T,R823T,1,1,1,0,,0,False,
+10973849,R823W,R823W,1,2,2,0,,0,False,
+11854117,R823W,R823W,1,8,8,0,,0,False,not sure if should trust
+19695459,R823W,R823W,1,1,0,0,,0,False,also had D85N
+23631430,R823W,R823W,1,1,0,0,,0,False,"Arg823Trp, also mutant in KCNE2"
+26496715,R823W,R823W,1,3,3,0,,0,False,
+27871843,R823W,R823W,1,1,1,0,,0,False,
+26937396,R835fsX,R835fs*,1,1,0,1,,0,False,c.2503delC
+25140878,R835Q,R835Q,1,3,3,2,,0,False,
+14998625,R835W,R835W,1,1,1,0,,0,False,and other mutations
+14714110,R863X,R863*,1,7,6,1,,0,False,
+15840476,R863X,R863*,1,1,1,0,,0,False,
+22515331,R863X,R863*,1,1,2,0,,0,False,
+26496715,R863X,R863*,1,3,3,0,,0,False,
+26746457,R883W,R883W,1,1,0,1,,0,False,
+17210839,R885C,R885C,1,1,1,0,,0,False,
+22378279,R885C,R885C,1,1,0,0,,0,False,
+23465283,R885C,R885C,1,1,1,0,,0,False,
+15840476,R887H,R887H,1,1,1,0,,0,False,
+22378279,R887H,R887H,1,1,0,0,,0,False,
+29650123,R892fsX,R892fs*,1,1,0,0,,0,False,
+28532774,R894C,R894C,1,1,1,0,,0,False,
+22382559,R894fsX,R894fs*,1,1,2,0,,0,False,R894fsX920 - is my coding correct?
+26496715,R912W,R912W,1,2,2,0,,0,False,
+15851119,R920fsX,R920fs*,1,1,2,0,,0,False,"REPEAT, better data"
+15840476,R920fsX,R920fs*,1,1,1,0,,0,False,
+10973849,R920fsX,R920fs*,1,1,1,0,,0,False,
+11854117,R920fsX,R920fs*,1,1,1,0,,0,False,not sure if should trust
+23631430,R920Q,R920Q,1,1,0,0,,0,False,"Arg920Gln Ser620Asn, both must"
+15840476,R922fsX,R922fs*,1,1,1,0,,0,False,
+10973849,R922W,R922W,1,1,1,0,,0,False,
+29121719,R92C,R92C,1,1,0,0,,0,False,
+16922724,R948C,R948C,1,1,2,0,,0,False,
+19695459,R948S,R948S,1,1,0,0,,0,False,also had D85N
+18675227,R954C,R954C,1,2,1,2,,0,False,
+17210839,R954C,R954C,1,1,1,0,,0,False,linked with K897T
+27871843,S1021fsX,S1021fs*,1,1,1,0,,0,False,
+21216356,S1028Del,S1028Del,1,1,0,1,,0,False,(del3079–3124)
+24606995,S1029fsX,S1029fs*,1,1,1,0,,0,False,c.3090-3102del
+17210839,S1040G,S1040G,1,1,1,0,,0,False,
+15840476,S1057fsX,S1057fs*,1,1,1,0,,0,False,
+15840476,S182X,S182*,1,1,1,0,,0,False,
+19996378,S24fsX,S24fs*,1,1,0,1,,0,False,
+11854117,S26I,S26I,1,2,2,0,,0,False,not sure if should trust
+15840476,S26I,S26I,1,1,1,0,,0,False,
+15840476,S320L,S320L,1,1,1,0,,0,False,
+19695459,S320L,S320L,1,1,0,0,,0,False,also had D85N
+16922724,S320X,S320*,1,1,2,0,,0,False,
+24606995,S428fsX,S428fs*,1,1,1,0,,0,False,"c.1286delC, Previously Studied in a paper about Dannish people"
+11854117,S428L,S428L,1,1,1,0,,0,False,not sure if should trust
+24606995,S428L,S428L,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+28438721,S428L,S428L,1,4,0,4,,0,False,consanguity paper
+11854117,S428X,S428*,1,1,1,0,,0,False,not sure if should trust
+24667783,S428X,S428*,1,1,1,0,,0,False,data from supplement
+29020304,S428X,S428*,1,1,3,0,,0,False,
+10862094,S543fsX,S543fs*,1,1,1,0,,0,False,
+15840476,S55L,S55L,1,1,1,0,,0,False,
+18508782,S55L,S55L,1,4,3,2,,0,False,data in supplement
+22104571,S606F,S606F,1,1,2,0,,0,False,
+26066609,S620G,S620G,1,1,2,0,,0,False,
+26496715,S620I,S620I,1,1,1,0,,0,False,
+23631430,S620N,S620N,1,1,0,0,,0,False,"Arg920Gln Ser620Asn, both muts"
+14998624,S621N,S621N,1,1,1,0,,0,False,
+24606995,S621N,S621N,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+20167303,S621R,S621R,1,2,2,1,,0,False,
+29766883,S624R,S624R,1,1,1,0,,0,False,
+15840476,S641F,S641F,1,1,1,0,,0,False,
+29650123,S660L,S660L,1,1,0,0,,0,False,
+15028050,S706C,S706C,1,3,3,0,,0,False,
+19695459,S706F,S706F,1,1,0,0,,0,False,also had D85N
+19843919,S706F,S706F,1,1,1,1,,0,False,drug induced TdP
+16379539,S735L,S735L,1,2,0,2,,0,False,
+10086971,S818L,S818L,1,2,2,1,,0,False,
+23098067,S818L,S818L,1,1,1,0,,0,False,Studied preiously by Berthet
+24667783,S818L,S818L,1,1,1,0,,0,False,data from supplement
+26496715,S818L,S818L,1,3,3,0,,0,False,
+29650123,S818P,S818P,1,1,0,0,,0,False,
+26496715,S818W,S818W,1,1,1,0,,0,False,
+30036649,S818W,S818W,1,1,1,0,,0,False,
+24667783,S855R,S855R,1,1,1,0,,0,False,in table
+26823142,S871fsX,S871fs*,1,1,1,0,,0,False,
+24667783,S890C,S890C,1,1,2,0,,0,False,in table
+23631430,S937N,S937N,1,1,0,0,,0,False,"Ser937Asn, also mutant in snc5a flu178lys"
+23631430,S988fsX,S988fs*,1,1,0,0,,0,False,"Ser988ProfsX71, also mut in ar190gln kcnq1"
+22727609,T1054fsX,T1054fs*,1,1,1,0,,0,False,"didn't provide more details, included LQTS probands"
+29622001,T1054fsX,T1054fs*,1,1,1,0,,0,False,c.3160dupA
+26022375,T1083fsX,T1083fs*,1,1,3,0,,0,False,garenoxacin aggravatged
+29622001,T152fsX,T152fs*,1,24,0,0,,0,False,c.453delC
+23098067,T152fsX,T152fs*,1,1,1,0,,0,False,Studied preiously by Swan
+28049825,T152fsX,T152fs*,1,3,5,0,,0,False,
+24400717,T152I,T152I,1,1,0,0,,0,False,
+29396286,T353S,T353S,1,1,0,1,,0,False,
+14661677,T367S,T367S,1,1,0,1,,0,False,
+7889573,T421fsX,T421fs*,1,4,6,0,,0,False,
+15840476,T421M,T421M,1,1,1,0,,0,False,
+11854117,T436M,T436M,1,1,1,0,,0,False,not sure if should trust
+26129877,T436M,T436M,1,1,0,1,,0,False,
+26496715,T443fsX,T443fs*,2,2,2,0,,0,False,p.Thr443ArgfsX77 | p.Thr443ProfsX78
+23010577,T473P,T473P,1,2,5,0,,0,False,
+23631430,T474I,T474I,1,1,0,0,,0,False,"Thr474Ile Arg148Trp, both muts"
+26173150,T613A,T613A,1,3,5,0,,0,False,
+24218437,T613K,T613K,1,1,1,0,,0,False,
+23995044,T613L,T613L,1,1,1,0,,0,False,prenatal diagnosis
+10220144,T613M,T613M,1,1,2,0,,0,False,symptom = syncope after acoustic
+10862094,T613M,T613M,1,1,2,0,,0,False,
+10973849,T613M,T613M,1,1,1,0,,0,False,
+11854117,T613M,T613M,1,1,1,0,,0,False,not sure if should trust
+15466642,T613M,T613M,1,1,2,0,,0,False,drowning
+14720170,T613M,T613M,1,1,1,0,,0,False,
+14998624,T613M,T613M,1,2,2,0,,0,False,
+15090700,T613M,T613M,1,1,1,0,,0,False,
+16379539,T613M,T613M,1,2,2,1,,0,False,mother has mutation and ICD implant
+15840476,T613M,T613M,1,6,6,0,,0,False,
+16922724,T613M,T613M,1,1,2,0,,0,False,
+19731233,T613M,T613M,1,1,0,0,,0,False,"de novo, fetal demise"
+19038855,T613M,T613M,1,2,2,0,,0,False,seizure chart review
+19996378,T613M,T613M,1,2,2,0,,0,False,
+20197117,T613M,T613M,1,2,1,0,,0,False,No pedigree
+22402334,T613M,T613M,1,1,2,0,,0,False,
+24973560,T613M,T613M,1,2,2,1,,0,False,
+24667783,T613M,T613M,1,1,1,0,,0,False,data from figure
+26496715,T613M,T613M,1,8,8,0,,0,False,
+29766883,T613M,T613M,1,3,2,1,,0,False,
+30036649,T613M,T613M,1,1,1,0,,0,False,
+21130771,T618I,T618I,1,4,8,0,,0,False,
+29759541,T618I,T618I,1,18,18,0,,0,False,also includes previously reported patients
+30582453,T618I,T618I,1,1,1,0,,0,False,
+25974115,T618I,T618I,1,1,3,0,,0,False,
+15840476,T623I,T623I,1,1,1,0,,0,False,
+29766883,T623I,T623I,1,2,1,1,,0,False,
+26496715,T634P,T634P,1,2,2,0,,0,False,
+12354768,T65P,T65P,1,5,3,2,,0,False,
+15840476,T65P,T65P,1,1,1,0,,0,False,
+16922724,T65P,T65P,1,1,1,1,,0,False,
+29766883,T65P,T65P,1,2,0,2,,0,False,
+29622001,T74fsX,T74fs*,1,1,1,0,,0,False,c.221_242del
+24606995,T74M,T74M,1,1,1,0,,0,False,Previously Studied in a paper about Dannish people
+29146210,T826I,T826I,1,2,4,0,,0,False,
+18596570,T895M,T895M,1,1,0,0,,0,False,
+26129877,T895M,T895M,1,3,0,3,,0,False,
+15840476,T983I,T983I,1,1,1,0,,0,False,
+26746457,T983I,T983I,1,1,0,1,,0,False,also had D1243N in SCN5A
+29957233,T983I,T983I,1,1,0,1,,0,False,iPSC paper
+22378279,T983I,T983I,1,1,0,0,,0,False,
+16923798,V1038fsX,V1038fs*,1,4,2,0,,0,False,father had 480
+15840476,V1038fsX,V1038fs*,1,1,1,0,,0,False,
+24103226,V1038fsX,V1038fs*,1,1,1,0,,0,False,Gly1038fs/81X
+21216356,V115M,V115M,1,1,2,0,,0,False,(343G>R Val>Met)
+15466642,V131fsX,V131fs*,1,1,2,0,,0,False,drowning
+15840476,V131fsX,V131fs*,1,1,1,0,,0,False,
+14661677,V215G,V215G,1,1,0,1,,0,False,
+29622001,V215X,V215*,1,1,1,0,,0,False,c.643delG
+17210839,V279M,V279M,1,1,1,0,,0,False,
+10973849,V295fsX,V295fs*,1,1,1,0,,0,False,
+11854117,V295fsX,V295fs*,1,2,2,0,,0,False,not sure if should trust
+26066609,V491I,V491I,1,1,0,1,,0,False,
+22173492,V535M,V535M,1,2,0,2,,0,False,
+9544837,V612L,V612L,1,3,3,1,,0,False,
+9693036,V630A,V630A,1,1,1,0,,0,False,
+11854117,V630A,V630A,1,1,1,0,,0,False,not sure if should trust
+15840476,V630A,V630A,1,1,1,0,,0,False,
+27871843,V630T,V630T,1,1,1,0,,0,False,
+28532774,V716G,V716G,1,1,1,0,,0,False,
+8914737,V822M,V822M,1,30,27,0,,0,False,
+10086971,V822M,V822M,1,4,3,2,,0,False,
+11854117,V822M,V822M,1,18,18,0,,0,False,not sure if should trust
+11844290,V822M,V822M,1,21,8,13,,0,False,used the graph to perfect
+15840476,V822M,V822M,1,1,1,0,,0,False,
+11854117,W1001X,W1001*,1,20,20,0,,0,False,not sure if should trust
+11844290,W1001X,W1001*,1,18,12,6,,0,False,used the graph to perfect
+24218437,W1001X,W1001*,1,1,0,0,,0,False,
+26496715,W154X,W154*,1,1,1,0,,0,False,
+29650123,W412X,W412*,1,1,0,0,,0,False,
+15176425,W497X,W497*,1,1,1,0,,0,False,
+29622001,W497X,W497*,1,1,1,0,,0,False,W497Ter
+26063740,W497X,W497*,1,1,1,0,,0,False,
+29766883,W563C,W563C,1,2,0,2,,0,False,
+19306396,W563G,W563G,1,1,2,0,,0,False,
+23098067,W563X,W563*,1,1,1,0,,0,False,Studied preiously by Berge
+17905336,W568C,W568C,1,1,0,1,,0,False,
+10973849,W585C,W585C,1,1,1,0,,0,False,
+30105468,W585fsX,W585fs*,1,2,0,0,,0,False,c.1755delG
+24606995,W705fsX,W705fs*,1,1,1,0,,0,False,c.2111_2114dup
+24667783,W705fsX,W705fs*,1,1,1,0,,0,False,in table
+16922724,W705X,W705*,1,1,2,0,,0,False,
+24400717,W927G,W927G,1,1,2,0,,0,False,
+15840476,Y420C,Y420C,1,1,1,0,,0,False,
+16922724,Y427H,Y427H,1,1,2,0,,0,False,
+15840476,Y427S,Y427S,1,1,1,0,,0,False,
+23098067,Y43C,Y43C,1,1,1,0,,0,False,Studied preiously by Napolitano
+29650123,Y43C,Y43C,1,1,0,0,,0,False,
+12402336,Y447X,Y447*,1,1,1,0,,0,False,
+26496715,Y475C,Y475C,1,1,1,0,,0,False,
+15840476,Y475Del,Y475Del,1,1,1,0,,0,False,
+14998624,Y493C,Y493C,1,1,1,0,,0,False,
+9600240,Y493X,Y493*,1,1,0,0,,0,False,fam76
+23098067,Y569C,Y569C,1,1,1,0,,0,False,
+10862094,Y569H,Y569H,1,1,2,0,,0,False,
+29622001,Y569H,Y569H,1,1,1,0,,0,False,
+19034806,Y652X,Y652*,1,6,7,0,,0,False,
+10790218,Y667X,Y667*,1,2,0,2,,0,False,
+12402336,Y99S,Y99S,1,1,1,0,,0,False,
+19038855,Y99S,Y99S,1,1,1,0,,0,False,seizure chart review
