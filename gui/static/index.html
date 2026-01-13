@@ -1215,6 +1215,10 @@
                             <div class="stat-value" id="stat-extracted">-</div>
                             <div class="stat-label">Extracted</div>
                         </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-variants">-</div>
+                            <div class="stat-label">Total Variants</div>
+                        </div>
                     </div>
                 </div>
 
@@ -1771,6 +1775,11 @@
             if (stats.papers_extracted !== undefined) {
                 document.getElementById('stat-extracted').textContent =
                     stats.papers_extracted || '-';
+            }
+            // Handle total variants from extraction or aggregation steps
+            if (stats.total_variants !== undefined || stats.variants_aggregated !== undefined || stats.total_variants_found !== undefined) {
+                document.getElementById('stat-variants').textContent =
+                    stats.total_variants || stats.variants_aggregated || stats.total_variants_found || '-';
             }
         }
 

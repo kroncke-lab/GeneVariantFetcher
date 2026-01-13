@@ -383,6 +383,16 @@ def checkpoint_to_response(checkpoint: JobCheckpoint) -> JobResponse:
         "papers_downloaded": len(checkpoint.downloaded_pmids),
         "papers_extracted": len(checkpoint.extracted_pmids),
     }
+
+    # Include total_variants from extraction or aggregation step
+    extraction_stats = checkpoint.step_progress.get("extracting_variants", {})
+    aggregation_stats = checkpoint.step_progress.get("aggregating_data", {})
+    if "total_variants" in extraction_stats:
+        stats["total_variants"] = extraction_stats["total_variants"]
+    elif "variants_aggregated" in aggregation_stats:
+        stats["total_variants"] = aggregation_stats["variants_aggregated"]
+
+    # Merge current step progress
     stats.update(checkpoint.step_progress.get(checkpoint.current_step.value, {}))
 
     return JobResponse(

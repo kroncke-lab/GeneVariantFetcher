@@ -183,6 +183,10 @@ class PipelineWorker:
 
                 try:
                     stats = step_func(checkpoint)
+                    # Store step stats on checkpoint for later access
+                    if stats:
+                        checkpoint.step_progress[step.value] = stats
+                        self._save_checkpoint(checkpoint)
                     self.progress.on_step_complete(
                         step, f"Completed {step.value}", stats or {}
                     )
@@ -724,6 +728,31 @@ class PipelineWorker:
         else:
             output_path = checkpoint.output_path
 
+        # Get total variants from extraction step stats or penetrance summary
+        total_variants = 0
+
+        # First try to get from step_progress (extraction step)
+        extraction_stats = checkpoint.step_progress.get(PipelineStep.EXTRACTING_VARIANTS.value, {})
+        if "total_variants" in extraction_stats:
+            total_variants = extraction_stats["total_variants"]
+
+        # If not found, try aggregation step
+        if total_variants == 0:
+            aggregation_stats = checkpoint.step_progress.get(PipelineStep.AGGREGATING_DATA.value, {})
+            if "variants_aggregated" in aggregation_stats:
+                total_variants = aggregation_stats["variants_aggregated"]
+
+        # As fallback, read from penetrance summary file
+        if total_variants == 0:
+            penetrance_file = output_path / f"{checkpoint.gene_symbol}_penetrance_summary.json"
+            if penetrance_file.exists():
+                try:
+                    with open(penetrance_file, "r") as f:
+                        penetrance_data = json.load(f)
+                        total_variants = penetrance_data.get("total_variants", 0)
+                except Exception:
+                    pass
+
         summary = {
             "job_id": checkpoint.job_id,
             "gene_symbol": checkpoint.gene_symbol,
@@ -734,6 +763,7 @@ class PipelineWorker:
                 "pmids_passed_filters": len(checkpoint.filtered_pmids),
                 "papers_downloaded": len(checkpoint.downloaded_pmids),
                 "papers_extracted": len(checkpoint.extracted_pmids),
+                "total_variants_found": total_variants,
             },
             "database_migration": migration_stats,
             "output_locations": {
