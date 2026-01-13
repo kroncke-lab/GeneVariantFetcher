@@ -13,13 +13,14 @@ import time
 import csv
 import requests
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlparse
 
 from .pmc_api import PMCAPIClient
 from .doi_resolver import DOIResolver
 from .supplement_scraper import SupplementScraper
 from .format_converters import FormatConverter
+from .elsevier_api import ElsevierAPIClient
 
 # Import scout components (with fallback for import errors)
 try:
@@ -28,6 +29,7 @@ try:
     SCOUT_AVAILABLE = True
 except ImportError:
     SCOUT_AVAILABLE = False
+    get_settings = None
 
 
 class PMCHarvester:
@@ -68,6 +70,16 @@ class PMCHarvester:
         self.doi_resolver = DOIResolver(session=self.session, paywalled_log=self.paywalled_log)
         self.scraper = SupplementScraper()
         self.converter = FormatConverter()
+
+        # Initialize Elsevier API client (optional - uses API key from settings if available)
+        elsevier_api_key = None
+        if get_settings is not None:
+            try:
+                settings = get_settings()
+                elsevier_api_key = settings.elsevier_api_key
+            except Exception:
+                pass  # Settings validation may fail if other keys are missing
+        self.elsevier_api = ElsevierAPIClient(api_key=elsevier_api_key, session=self.session)
 
         # Initialize log files
         with open(self.paywalled_log, 'w', newline='') as f:
@@ -495,12 +507,42 @@ class PMCHarvester:
 
         return True, str(output_file)
 
+    def _try_elsevier_api(self, doi: str, pmid: str) -> Tuple[Optional[str], Optional[str]]:
+        """
+        Try to fetch full text via Elsevier API if applicable.
+
+        Args:
+            doi: Digital Object Identifier
+            pmid: PubMed ID (for logging)
+
+        Returns:
+            Tuple of (markdown_content, error_message)
+            - markdown_content: Full text as markdown if successful, None otherwise
+            - error_message: Error description if failed, None if successful
+        """
+        if not self.elsevier_api.is_available:
+            return None, "Elsevier API key not configured"
+
+        if not doi or not self.elsevier_api.is_elsevier_doi(doi):
+            return None, "Not an Elsevier DOI"
+
+        print(f"  Trying Elsevier API for DOI: {doi}")
+        markdown, error = self.elsevier_api.fetch_fulltext(doi=doi)
+
+        if markdown:
+            print(f"  ✓ Full text retrieved via Elsevier API ({len(markdown)} characters)")
+            return markdown, None
+        else:
+            print(f"  - Elsevier API: {error}")
+            return None, error
+
     def _process_free_text_pmid(self, pmid: str, doi: str) -> Tuple[bool, str]:
         """
         Process a PMID that has no PMCID but may have free full text via publisher.
 
         This method checks if the article is marked as "Free Full Text" on PubMed
         and attempts to fetch the content from the publisher's website.
+        For Elsevier articles, it first tries the Elsevier API if an API key is configured.
 
         Args:
             pmid: PubMed ID to process
@@ -523,8 +565,24 @@ class PMCHarvester:
 
         print(f"  ✓ Article marked as free full text on PubMed")
 
-        # Try to fetch using DOI first, or fall back to direct URL
-        if doi:
+        # Initialize variables for tracking content source
+        main_markdown = None
+        final_url = None
+        supp_files = []
+        used_elsevier_api = False
+
+        # Try Elsevier API first if this is an Elsevier article
+        if doi and self.elsevier_api.is_elsevier_doi(doi):
+            elsevier_markdown, elsevier_error = self._try_elsevier_api(doi, pmid)
+            if elsevier_markdown:
+                main_markdown = elsevier_markdown
+                final_url = f"https://doi.org/{doi}"
+                used_elsevier_api = True
+                # Still need to get supplements via scraping
+                supp_files = self.doi_resolver.resolve_and_scrape_supplements(doi, pmid, self.scraper)
+
+        # Fall back to DOI resolver if Elsevier API didn't work
+        if not main_markdown and doi:
             # Try to fetch full text and supplements from publisher using DOI
             main_markdown, final_url, supp_files = self.doi_resolver.resolve_and_fetch_fulltext(
                 doi, pmid, self.scraper
@@ -539,7 +597,9 @@ class PMCHarvester:
                     writer = csv.writer(f)
                     writer.writerow([pmid, 'DOI content too short (abstract only)', f"https://doi.org/{doi}"])
                 return False, "DOI content too short (abstract only)"
-        elif free_url:
+
+        # If no DOI or DOI-based methods failed, try free URL
+        if not main_markdown and free_url:
             # No DOI, but we have a direct URL to the free full text
             parsed_url = urlparse(free_url)
             if parsed_url.netloc in self.SUSPICIOUS_FREE_URL_DOMAINS:
@@ -550,66 +610,88 @@ class PMCHarvester:
                 return False, "Suspicious free URL"
 
             print(f"  - No DOI, attempting to fetch from free URL: {free_url}")
-            try:
-                response = self.session.get(free_url, allow_redirects=True, timeout=10)
-                response.raise_for_status()
-                final_url = response.url
-                print(f"  ✓ Retrieved free full text page")
 
-                # Handle Elsevier linkinghub redirects
-                domain = urlparse(final_url).netloc
-                if "linkinghub.elsevier.com" in domain:
-                    try:
-                        pii_match = re.search(r'/pii/([^/?]+)', final_url)
-                        if pii_match:
-                            pii = pii_match.group(1)
-                            sciencedirect_url = f"https://www.sciencedirect.com/science/article/pii/{pii}"
-                            print(f"  → Attempting to access ScienceDirect page: {sciencedirect_url}")
-                            redirect_response = self.session.get(sciencedirect_url, allow_redirects=True, timeout=30)
-                            redirect_response.raise_for_status()
-                            final_url = redirect_response.url
-                            response = redirect_response
-                            domain = urlparse(final_url).netloc
-                    except Exception as e:
-                        print(f"  - Could not follow redirect from linkinghub: {e}")
+            # Check if this is an Elsevier URL and try API first
+            if self.elsevier_api.is_available and self.elsevier_api.is_elsevier_url(free_url):
+                pii = self.elsevier_api.extract_pii_from_url(free_url)
+                if pii:
+                    print(f"  Trying Elsevier API for PII: {pii}")
+                    elsevier_markdown, elsevier_error = self.elsevier_api.fetch_fulltext(pii=pii)
+                    if elsevier_markdown:
+                        main_markdown = elsevier_markdown
+                        final_url = free_url
+                        used_elsevier_api = True
+                        print(f"  ✓ Full text retrieved via Elsevier API ({len(main_markdown)} characters)")
+                        # Get supplements via web scraping
+                        try:
+                            response = self.session.get(free_url, allow_redirects=True, timeout=10)
+                            response.raise_for_status()
+                            supp_files = self.scraper.scrape_elsevier_supplements(response.text, response.url)
+                        except Exception:
+                            supp_files = []
 
-                # Extract full text and supplements from the page
-                html_content = response.text
-                main_markdown, title = self.scraper.extract_fulltext(html_content, final_url)
+            # Fall back to web scraping if API didn't work
+            if not main_markdown:
+                try:
+                    response = self.session.get(free_url, allow_redirects=True, timeout=10)
+                    response.raise_for_status()
+                    final_url = response.url
+                    print(f"  ✓ Retrieved free full text page")
 
-                # Validate that we actually got article content (not a database page or error)
-                # Article text should be reasonably long and contain typical article indicators
-                MIN_ARTICLE_LENGTH = 1000  # Minimum characters for a valid article
-                if main_markdown and len(main_markdown) >= MIN_ARTICLE_LENGTH:
-                    print(f"  ✓ Extracted full text ({len(main_markdown)} characters)")
-                elif main_markdown:
-                    # Got some content but it's too short - likely not an article
-                    print(f"  ⚠ Extracted content too short ({len(main_markdown)} chars) - likely not full article text")
-                    print(f"  ❌ Skipping this URL as it doesn't contain valid article content")
+                    # Handle Elsevier linkinghub redirects
+                    domain = urlparse(final_url).netloc
+                    if "linkinghub.elsevier.com" in domain:
+                        try:
+                            pii_match = re.search(r'/pii/([^/?]+)', final_url)
+                            if pii_match:
+                                pii = pii_match.group(1)
+                                sciencedirect_url = f"https://www.sciencedirect.com/science/article/pii/{pii}"
+                                print(f"  → Attempting to access ScienceDirect page: {sciencedirect_url}")
+                                redirect_response = self.session.get(sciencedirect_url, allow_redirects=True, timeout=30)
+                                redirect_response.raise_for_status()
+                                final_url = redirect_response.url
+                                response = redirect_response
+                                domain = urlparse(final_url).netloc
+                        except Exception as e:
+                            print(f"  - Could not follow redirect from linkinghub: {e}")
+
+                    # Extract full text and supplements from the page
+                    html_content = response.text
+                    main_markdown, title = self.scraper.extract_fulltext(html_content, final_url)
+
+                    # Validate that we actually got article content (not a database page or error)
+                    # Article text should be reasonably long and contain typical article indicators
+                    MIN_ARTICLE_LENGTH = 1000  # Minimum characters for a valid article
+                    if main_markdown and len(main_markdown) >= MIN_ARTICLE_LENGTH:
+                        print(f"  ✓ Extracted full text ({len(main_markdown)} characters)")
+                    elif main_markdown:
+                        # Got some content but it's too short - likely not an article
+                        print(f"  ⚠ Extracted content too short ({len(main_markdown)} chars) - likely not full article text")
+                        print(f"  ❌ Skipping this URL as it doesn't contain valid article content")
+                        with open(self.paywalled_log, 'a', newline='') as f:
+                            writer = csv.writer(f)
+                            writer.writerow([pmid, 'Free URL content too short (not an article)', free_url])
+                        return False, "Free URL content invalid"
+                    else:
+                        print(f"  ❌ Could not extract full text from page")
+
+                    # Get supplements from the page
+                    domain = urlparse(final_url).netloc
+
+                    # Route to domain-specific scraper
+                    if "nature.com" in domain:
+                        supp_files = self.scraper.scrape_nature_supplements(html_content, final_url)
+                    elif any(d in domain for d in ["gimjournal.org", "sciencedirect.com", "elsevier.com"]):
+                        supp_files = self.scraper.scrape_elsevier_supplements(html_content, final_url)
+                    else:
+                        supp_files = self.scraper.scrape_generic_supplements(html_content, final_url)
+
+                except requests.exceptions.RequestException as e:
+                    print(f"  ❌ Failed to fetch free full text from {free_url}: {e}")
                     with open(self.paywalled_log, 'a', newline='') as f:
                         writer = csv.writer(f)
-                        writer.writerow([pmid, 'Free URL content too short (not an article)', free_url])
-                    return False, "Free URL content invalid"
-                else:
-                    print(f"  ❌ Could not extract full text from page")
-
-                # Get supplements from the page
-                domain = urlparse(final_url).netloc
-                
-                # Route to domain-specific scraper
-                if "nature.com" in domain:
-                    supp_files = self.scraper.scrape_nature_supplements(html_content, final_url)
-                elif any(d in domain for d in ["gimjournal.org", "sciencedirect.com", "elsevier.com"]):
-                    supp_files = self.scraper.scrape_elsevier_supplements(html_content, final_url)
-                else:
-                    supp_files = self.scraper.scrape_generic_supplements(html_content, final_url)
-
-            except requests.exceptions.RequestException as e:
-                print(f"  ❌ Failed to fetch free full text from {free_url}: {e}")
-                with open(self.paywalled_log, 'a', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow([pmid, f'Free full text fetch failed: {e}', free_url])
-                return False, "Free text fetch failed"
+                        writer.writerow([pmid, f'Free full text fetch failed: {e}', free_url])
+                    return False, "Free text fetch failed"
         else:
             # No DOI and no free URL
             print(f"  ❌ No DOI or free URL available to fetch full text")
@@ -683,15 +765,17 @@ class PMCHarvester:
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(unified_content)
 
-        print(f"  ✅ Created: {output_file.name} ({downloaded_count} supplements) [from publisher]")
+        source_tag = "[via Elsevier API]" if used_elsevier_api else "[from publisher]"
+        print(f"  ✅ Created: {output_file.name} ({downloaded_count} supplements) {source_tag}")
 
         # Run data scout to create condensed DATA_ZONES.md
         self._run_data_scout(pmid, unified_content)
 
         # Log success with special marker for publisher-sourced content
+        source_marker = 'ELSEVIER_API' if used_elsevier_api else 'PUBLISHER_FREE'
         with open(self.success_log, 'a', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow([pmid, 'PUBLISHER_FREE', downloaded_count])
+            writer.writerow([pmid, source_marker, downloaded_count])
 
         return True, str(output_file)
 
