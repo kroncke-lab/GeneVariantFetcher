@@ -916,6 +916,18 @@
                         </div>
                     </div>
 
+                    <!-- Specific PMIDs for Testing -->
+                    <div class="form-group">
+                        <div class="label-with-info">
+                            <label for="specific-pmids">Specific PMIDs (for testing)</label>
+                            <span class="info-icon">i
+                                <span class="info-tooltip">Enter specific PMID(s) to skip the discovery step and process only these papers. Useful for testing or re-processing specific articles. Leave empty to run full discovery.</span>
+                            </span>
+                        </div>
+                        <input type="text" id="specific-pmids" name="specific_pmids" placeholder="e.g., 12345678, 23456789 (comma-separated)">
+                        <small class="setting-description">Leave empty for full discovery, or enter PMIDs to process specific papers</small>
+                    </div>
+
                     <!-- Synonym Settings -->
                     <div class="form-row">
                         <div class="form-group">
@@ -1544,7 +1556,8 @@
             const data = {};
 
             formData.forEach((value, key) => {
-                if (key === 'synonyms') {
+                if (key === 'synonyms' || key === 'specific_pmids') {
+                    // Parse comma-separated lists (synonyms and PMIDs)
                     data[key] = value ? value.split(',').map(s => s.trim()).filter(s => s) : [];
                 } else if (['auto_synonyms', 'use_clinical_triage', 'enable_tier1', 'enable_tier2',
                            'use_pubmind', 'use_pubmed', 'use_europepmc', 'scout_enabled'].includes(key)) {
@@ -1563,6 +1576,9 @@
              'use_pubmind', 'use_pubmed', 'use_europepmc', 'scout_enabled'].forEach(key => {
                 if (!(key in data)) data[key] = false;
             });
+
+            // Ensure specific_pmids is set (even if empty)
+            if (!('specific_pmids' in data)) data.specific_pmids = [];
 
             try {
                 const job = await apiCall('POST', '/jobs', data);
