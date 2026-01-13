@@ -268,13 +268,16 @@ class ElsevierAPIClient:
 
             if body_elem is not None:
                 # Process sections
+                # Note: We strip namespace prefixes (like ce:) earlier in the code,
+                # so we search for plain element names. The wildcard {*} handles
+                # any remaining namespace URIs that weren't stripped.
                 sections = body_elem.findall('.//section')
                 if not sections:
                     sections = body_elem.findall('.//{*}section')
                 if not sections:
-                    sections = body_elem.findall('.//ce:section')
-                if not sections:
                     sections = body_elem.findall('.//sec')
+                if not sections:
+                    sections = body_elem.findall('.//{*}sec')
 
                 if sections:
                     for section in sections:
@@ -353,6 +356,8 @@ class ElsevierAPIClient:
             nested_sections = section_elem.findall('./{*}section')
         if not nested_sections:
             nested_sections = section_elem.findall('./sec')
+        if not nested_sections:
+            nested_sections = section_elem.findall('./{*}sec')
 
         for nested in nested_sections:
             markdown += self._process_section(nested, level + 1)
@@ -413,9 +418,21 @@ class ElsevierAPIClient:
             xml_content, error = self.get_fulltext_by_doi(doi)
             if xml_content:
                 markdown = self.xml_to_markdown(xml_content)
-                if markdown and len(markdown) > 500:
+                # Check for sufficient content - abstracts are typically 200-400 words
+                # Full articles should be at least 2000 characters (roughly 350+ words)
+                # Also check for section headings beyond just Abstract
+                MIN_FULLTEXT_LENGTH = 2000
+                has_body_sections = markdown and any(
+                    section in markdown.lower()
+                    for section in ['### introduction', '### methods', '### results',
+                                    '### discussion', '### materials', '### content']
+                )
+                if markdown and (len(markdown) > MIN_FULLTEXT_LENGTH or has_body_sections):
                     logger.info(f"Successfully fetched Elsevier article via DOI: {doi}")
                     return markdown, None
+                elif markdown and len(markdown) > 500:
+                    # Got some content but likely just abstract
+                    error = "XML conversion produced insufficient content (abstract only)"
                 elif not error:
                     error = "XML conversion produced insufficient content"
 
@@ -427,9 +444,18 @@ class ElsevierAPIClient:
             xml_content, pii_error = self.get_fulltext_by_pii(pii)
             if xml_content:
                 markdown = self.xml_to_markdown(xml_content)
-                if markdown and len(markdown) > 500:
+                # Check for sufficient content
+                MIN_FULLTEXT_LENGTH = 2000
+                has_body_sections = markdown and any(
+                    section in markdown.lower()
+                    for section in ['### introduction', '### methods', '### results',
+                                    '### discussion', '### materials', '### content']
+                )
+                if markdown and (len(markdown) > MIN_FULLTEXT_LENGTH or has_body_sections):
                     logger.info(f"Successfully fetched Elsevier article via PII: {pii}")
                     return markdown, None
+                elif markdown and len(markdown) > 500:
+                    pii_error = "XML conversion produced insufficient content (abstract only)"
                 elif not pii_error:
                     pii_error = "XML conversion produced insufficient content"
             # Use PII error if DOI wasn't tried or also failed

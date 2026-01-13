@@ -307,23 +307,44 @@ class PMCHarvester:
 
                 # Check for HTML error pages disguised as other file types
                 # HTML pages typically start with <!DOCTYPE, <html, or have these early in the content
-                content_start = content[:2048].lower() if len(content) >= 2048 else content.lower()
+                content_start = content[:4096].lower() if len(content) >= 4096 else content.lower()
                 is_html_page = (
                     content_start.startswith(b'<!doctype') or
                     content_start.startswith(b'<html') or
                     b'<!doctype html' in content_start or
-                    b'<html' in content_start[:500]
+                    b'<html' in content_start[:500] or
+                    # Some servers return XHTML
+                    b'<?xml' in content_start[:100] and b'<html' in content_start[:500]
                 )
 
                 # Detect specific access denial patterns in HTML
                 access_denied_patterns = [
-                    b'403 forbidden', b'access denied', b'not authorized',
+                    # HTTP error codes
+                    b'403 forbidden', b'401 unauthorized', b'access denied',
+                    # Paywall messages
                     b'subscription required', b'purchase this article',
                     b'institutional access', b'sign in to access',
+                    b'log in to access', b'login required',
+                    # Content not available
                     b'pdf not available', b'full text not available',
+                    b'content not available', b'article not found',
+                    # ScienceDirect specific
+                    b'sciencedirect', b'elsevier', b'get access',
+                    # Wiley specific
+                    b'wiley online library',
+                    # Generic paywall indicators
+                    b'buy this article', b'rent this article',
+                    b'get full access', b'view full text',
                 ]
                 is_access_denied = is_html_page and any(
                     pattern in content_start for pattern in access_denied_patterns
+                )
+
+                # Check for specific publisher error page signatures
+                is_publisher_error = is_html_page and (
+                    b'error' in content_start[:200] or
+                    b'not found' in content_start[:500] or
+                    b'unavailable' in content_start[:500]
                 )
 
                 # PDF validation: PDFs should start with %PDF
@@ -331,20 +352,33 @@ class PMCHarvester:
                     if not content.startswith(b'%PDF'):
                         if is_access_denied:
                             last_error = f"{filename}: ACCESS DENIED (paywall/login required)"
-                            print(f"    ⚠ {filename}: Access denied - paywall or login required")
+                            print(f"    ⚠ {filename}: Access denied - likely paywall or login required")
+                            continue  # Try next URL variant
+                        elif is_publisher_error:
+                            last_error = f"{filename}: Publisher error page received instead of PDF"
+                            print(f"    ⚠ {filename}: Received publisher error page instead of PDF")
                             continue  # Try next URL variant
                         elif is_html_page:
-                            last_error = f"{filename}: HTML error page received instead of PDF"
-                            print(f"    ⚠ {filename}: Received HTML error page, not PDF")
+                            last_error = f"{filename}: HTML page received instead of PDF (file may be paywalled)"
+                            print(f"    ⚠ {filename}: Received HTML page instead of PDF - file may be paywalled or URL expired")
                             continue  # Try next URL variant
                         else:
-                            last_error = f"{filename} does not appear to be a valid PDF file"
+                            # Content doesn't start with %PDF but isn't HTML either
+                            # Could be corrupted or wrong content type
+                            content_preview = content[:50].hex() if len(content) > 0 else "(empty)"
+                            last_error = f"{filename}: Invalid PDF (starts with: {content_preview[:20]}...)"
+                            print(f"    ⚠ {filename}: Invalid PDF file (wrong magic bytes)")
                             continue  # Try next URL variant
 
                 # For other file types, check if we got an HTML error page
                 elif ext in ['.docx', '.xlsx', '.xls', '.doc', '.zip']:
-                    if is_html_page:
-                        last_error = f"{filename} appears to be an HTML page, not a {ext} file"
+                    if is_access_denied:
+                        last_error = f"{filename}: ACCESS DENIED - file appears paywalled"
+                        print(f"    ⚠ {filename}: Access denied - file may be paywalled")
+                        continue  # Try next URL variant
+                    elif is_html_page:
+                        last_error = f"{filename}: HTML page received instead of {ext} file"
+                        print(f"    ⚠ {filename}: Received HTML page instead of {ext} file - may be paywalled")
                         continue  # Try next URL variant
 
                 # Write the validated content
@@ -605,6 +639,9 @@ class PMCHarvester:
         used_elsevier_api = False
         used_wiley_api = False
 
+        # Track whether we need to try web scraping as fallback
+        api_insufficient_content = False
+
         # Try Elsevier API first if this is an Elsevier article
         if doi and self.elsevier_api.is_elsevier_doi(doi):
             elsevier_markdown, elsevier_error = self._try_elsevier_api(doi, pmid)
@@ -614,6 +651,9 @@ class PMCHarvester:
                 used_elsevier_api = True
                 # Still need to get supplements via scraping
                 supp_files = self.doi_resolver.resolve_and_scrape_supplements(doi, pmid, self.scraper)
+            elif elsevier_error and "insufficient content" in elsevier_error.lower():
+                api_insufficient_content = True
+                print(f"  → Elsevier API returned abstract only, falling back to web scraping...")
 
         # Try Wiley API if this is a Wiley article and Elsevier didn't work
         if not main_markdown and doi and self.wiley_api.is_wiley_doi(doi):
@@ -624,8 +664,11 @@ class PMCHarvester:
                 used_wiley_api = True
                 # Still need to get supplements via scraping
                 supp_files = self.doi_resolver.resolve_and_scrape_supplements(doi, pmid, self.scraper)
+            elif wiley_error and "insufficient content" in wiley_error.lower():
+                api_insufficient_content = True
+                print(f"  → Wiley API returned abstract only, falling back to web scraping...")
 
-        # Fall back to DOI resolver if publisher APIs didn't work
+        # Fall back to DOI resolver if publisher APIs didn't work or returned insufficient content
         if not main_markdown and doi:
             # Try to fetch full text and supplements from publisher using DOI
             main_markdown, final_url, supp_files = self.doi_resolver.resolve_and_fetch_fulltext(
