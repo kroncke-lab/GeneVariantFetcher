@@ -291,7 +291,7 @@ class PMCHarvester:
 
                 # Check for HTML error pages disguised as other file types
                 # HTML pages typically start with <!DOCTYPE, <html, or have these early in the content
-                content_start = content[:1024].lower() if len(content) >= 1024 else content.lower()
+                content_start = content[:2048].lower() if len(content) >= 2048 else content.lower()
                 is_html_page = (
                     content_start.startswith(b'<!doctype') or
                     content_start.startswith(b'<html') or
@@ -299,11 +299,27 @@ class PMCHarvester:
                     b'<html' in content_start[:500]
                 )
 
+                # Detect specific access denial patterns in HTML
+                access_denied_patterns = [
+                    b'403 forbidden', b'access denied', b'not authorized',
+                    b'subscription required', b'purchase this article',
+                    b'institutional access', b'sign in to access',
+                    b'pdf not available', b'full text not available',
+                ]
+                is_access_denied = is_html_page and any(
+                    pattern in content_start for pattern in access_denied_patterns
+                )
+
                 # PDF validation: PDFs should start with %PDF
                 if ext == '.pdf':
                     if not content.startswith(b'%PDF'):
-                        if is_html_page:
-                            last_error = f"{filename} is an HTML page, not a PDF (likely access denied or error page)"
+                        if is_access_denied:
+                            last_error = f"{filename}: ACCESS DENIED (paywall/login required)"
+                            print(f"    ⚠ {filename}: Access denied - paywall or login required")
+                            continue  # Try next URL variant
+                        elif is_html_page:
+                            last_error = f"{filename}: HTML error page received instead of PDF"
+                            print(f"    ⚠ {filename}: Received HTML error page, not PDF")
                             continue  # Try next URL variant
                         else:
                             last_error = f"{filename} does not appear to be a valid PDF file"
