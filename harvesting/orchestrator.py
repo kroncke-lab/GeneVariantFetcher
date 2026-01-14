@@ -32,6 +32,20 @@ except ImportError:
     SCOUT_AVAILABLE = False
     get_settings = None
 
+# Import abstract carrier extraction (with fallback)
+try:
+    from pipeline.abstract_extraction import AbstractCarrierExtractor, AbstractCarrierResult
+    ABSTRACT_EXTRACTOR_AVAILABLE = True
+except ImportError:
+    ABSTRACT_EXTRACTOR_AVAILABLE = False
+    AbstractCarrierExtractor = None
+    AbstractCarrierResult = None
+
+import json
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class PMCHarvester:
     """Harvests full-text and supplemental materials from PubMed Central."""
@@ -85,14 +99,40 @@ class PMCHarvester:
         self.elsevier_api = ElsevierAPIClient(api_key=elsevier_api_key, session=self.session)
         self.wiley_api = WileyAPIClient(api_key=wiley_api_key, session=self.session)
 
-        # Initialize log files
+        # Initialize log files with extended columns for carrier data
         with open(self.paywalled_log, 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['PMID', 'Reason', 'URL'])
+            writer.writerow([
+                'PMID', 'Reason', 'URL',
+                'Abstract_Carriers', 'Affected_Count', 'Unaffected_Count',
+                'Variants_Mentioned', 'Extraction_Confidence',
+                'More_In_Fulltext_Probability', 'Priority_Score', 'Notes'
+            ])
 
         with open(self.success_log, 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(['PMID', 'PMCID', 'Supplements_Downloaded'])
+
+    def _log_paywalled(self, pmid: str, reason: str, url: str) -> None:
+        """
+        Log a paper to the paywalled/missing CSV with placeholder columns.
+
+        The carrier extraction columns will be populated later by enrich_paywalled_log().
+
+        Args:
+            pmid: PubMed ID
+            reason: Why the paper couldn't be downloaded
+            url: URL attempted or PubMed URL
+        """
+        with open(self.paywalled_log, 'a', newline='') as f:
+            writer = csv.writer(f)
+            # Write with empty placeholders for carrier columns
+            writer.writerow([
+                pmid, reason, url,
+                '', '', '',  # Abstract_Carriers, Affected_Count, Unaffected_Count
+                '', '',      # Variants_Mentioned, Extraction_Confidence
+                '', '', ''   # More_In_Fulltext_Probability, Priority_Score, Notes
+            ])
 
     def _run_data_scout(self, pmid: str, unified_content: str) -> bool:
         """
@@ -258,9 +298,7 @@ class PMCHarvester:
         else:
             print("  - API failed and no DOI available. Cannot scrape.")
             pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/" if pmcid else "N/A"
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, 'Supplemental files API failed, no DOI', pmc_url])
+            self._log_paywalled(pmid, 'Supplemental files API failed, no DOI', pmc_url)
             return []
 
     def download_supplement(self, url: str, output_path: Path, pmid: str, filename: str,
@@ -396,9 +434,7 @@ class PMCHarvester:
         # All URL variants failed
         print(f"    Error downloading {filename}: {last_error}")
         # Log failed supplemental download
-        with open(self.paywalled_log, 'a', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow([pmid, f'Supplemental file download failed: {filename}', url])
+        self._log_paywalled(pmid, f'Supplemental file download failed: {filename}', url)
         return False
 
     def _process_supplements(self, pmid: str, pmcid: str, doi: str) -> Tuple[str, int]:
@@ -500,9 +536,7 @@ class PMCHarvester:
         if not xml_content:
             print(f"  ❌ Full-text not available from PMC")
             pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, 'Full-text not available', pmc_url])
+            self._log_paywalled(pmid, 'Full-text not available', pmc_url)
             return False, "No full-text"
 
         print(f"  ✓ Full-text XML retrieved from PMC")
@@ -625,9 +659,7 @@ class PMCHarvester:
             # Not a free article - log and skip
             print(f"  ❌ No PMCID and not marked as free full text (likely paywalled)")
             pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, 'No PMCID found, not free full text', pubmed_url])
+            self._log_paywalled(pmid, 'No PMCID found, not free full text', pubmed_url)
             return False, "No PMCID"
 
         print(f"  ✓ Article marked as free full text on PubMed")
@@ -680,9 +712,7 @@ class PMCHarvester:
             if main_markdown and len(main_markdown) < MIN_ARTICLE_LENGTH:
                 print(f"  ⚠ DOI content too short ({len(main_markdown)} chars) - likely abstract only")
                 print(f"  ❌ Skipping - does not contain valid full article text")
-                with open(self.paywalled_log, 'a', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow([pmid, 'DOI content too short (abstract only)', f"https://doi.org/{doi}"])
+                self._log_paywalled(pmid, 'DOI content too short (abstract only)', f"https://doi.org/{doi}")
                 return False, "DOI content too short (abstract only)"
 
         # If no DOI or DOI-based methods failed, try free URL
@@ -691,9 +721,7 @@ class PMCHarvester:
             parsed_url = urlparse(free_url)
             if parsed_url.netloc in self.SUSPICIOUS_FREE_URL_DOMAINS:
                 print(f"  - Skipping suspicious free URL on {parsed_url.netloc} (likely non-article content)")
-                with open(self.paywalled_log, 'a', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow([pmid, 'Suspicious free URL skipped', free_url])
+                self._log_paywalled(pmid, 'Suspicious free URL skipped', free_url)
                 return False, "Suspicious free URL"
 
             print(f"  - No DOI, attempting to fetch from free URL: {free_url}")
@@ -774,9 +802,7 @@ class PMCHarvester:
                         # Got some content but it's too short - likely not an article
                         print(f"  ⚠ Extracted content too short ({len(main_markdown)} chars) - likely not full article text")
                         print(f"  ❌ Skipping this URL as it doesn't contain valid article content")
-                        with open(self.paywalled_log, 'a', newline='') as f:
-                            writer = csv.writer(f)
-                            writer.writerow([pmid, 'Free URL content too short (not an article)', free_url])
+                        self._log_paywalled(pmid, 'Free URL content too short (not an article)', free_url)
                         return False, "Free URL content invalid"
                     else:
                         print(f"  ❌ Could not extract full text from page")
@@ -794,25 +820,19 @@ class PMCHarvester:
 
                 except requests.exceptions.RequestException as e:
                     print(f"  ❌ Failed to fetch free full text from {free_url}: {e}")
-                    with open(self.paywalled_log, 'a', newline='') as f:
-                        writer = csv.writer(f)
-                        writer.writerow([pmid, f'Free full text fetch failed: {e}', free_url])
+                    self._log_paywalled(pmid, f'Free full text fetch failed: {e}', free_url)
                     return False, "Free text fetch failed"
         else:
             # No DOI and no free URL
             print(f"  ❌ No DOI or free URL available to fetch full text")
             pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, 'Free full text but no DOI or URL available', pubmed_url])
+            self._log_paywalled(pmid, 'Free full text but no DOI or URL available', pubmed_url)
             return False, "No DOI or URL for free text"
 
         if not main_markdown:
             print(f"  ❌ Could not retrieve full text from publisher")
             fallback_url = final_url or (f"https://doi.org/{doi}" if doi else f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/")
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, 'Free full text extraction failed', fallback_url])
+            self._log_paywalled(pmid, 'Free full text extraction failed', fallback_url)
             return False, "Free text extraction failed"
 
         print(f"  ✓ Full text retrieved from publisher ({len(main_markdown)} characters)")
@@ -931,6 +951,10 @@ class PMCHarvester:
         print(f"  Paywalled log: {self.paywalled_log}")
         print(f"{'='*60}")
 
+        # Enrich paywalled log with carrier counts from abstracts
+        if failed > 0:
+            self.enrich_paywalled_log()
+
     # Backward-compatible methods for tests and legacy code
     def pmid_to_pmcid(self, pmid: str):
         """Backward-compatible wrapper for PMC API."""
@@ -947,3 +971,284 @@ class PMCHarvester:
     def _get_supplemental_files_from_doi(self, doi: str, pmid: str):
         """Backward-compatible wrapper for DOI resolver."""
         return self.doi_resolver.resolve_and_scrape_supplements(doi, pmid, self.scraper)
+
+    def enrich_paywalled_log(self, abstract_dir: Optional[Path] = None) -> bool:
+        """
+        Enrich paywalled_missing.csv with carrier counts from abstracts.
+
+        This method reads the paywalled log, loads abstract data for each PMID,
+        runs the AbstractCarrierExtractor, estimates probability of additional
+        carriers in full text, and rewrites the CSV with enriched data.
+
+        Args:
+            abstract_dir: Directory containing abstract JSON files.
+                          If None, looks for abstract_json/ in parent directory.
+
+        Returns:
+            True if enrichment succeeded, False otherwise.
+        """
+        if not ABSTRACT_EXTRACTOR_AVAILABLE:
+            logger.warning("AbstractCarrierExtractor not available, skipping enrichment")
+            return False
+
+        if not self.paywalled_log.exists():
+            logger.info("No paywalled_missing.csv to enrich")
+            return True
+
+        # Find abstract directory
+        if abstract_dir is None:
+            # Look in parent directory (output_dir is typically pmc_fulltext/)
+            abstract_dir = self.output_dir.parent / "abstract_json"
+
+        if not abstract_dir.exists():
+            logger.warning(f"Abstract directory not found: {abstract_dir}")
+            return False
+
+        print(f"\n📊 Enriching paywalled log with carrier counts from abstracts...")
+
+        # Read existing paywalled log
+        import pandas as pd
+        try:
+            df = pd.read_csv(self.paywalled_log)
+        except Exception as e:
+            logger.error(f"Failed to read paywalled log: {e}")
+            return False
+
+        if df.empty:
+            logger.info("No paywalled papers to enrich")
+            return True
+
+        # Initialize extractor
+        extractor = AbstractCarrierExtractor()
+
+        # Process each paywalled paper
+        enriched_rows = []
+        for _, row in df.iterrows():
+            pmid = str(row['PMID'])
+            reason = row['Reason']
+            url = row['URL']
+
+            # Load abstract data
+            abstract_file = abstract_dir / f"{pmid}.json"
+            title = None
+            abstract = None
+
+            if abstract_file.exists():
+                try:
+                    with open(abstract_file, 'r') as f:
+                        data = json.load(f)
+                    title = data.get('metadata', {}).get('title')
+                    abstract = data.get('abstract')
+                except Exception as e:
+                    logger.warning(f"Failed to load abstract for PMID {pmid}: {e}")
+
+            # Initialize enrichment values
+            abstract_carriers = ''
+            affected_count = ''
+            unaffected_count = ''
+            variants_mentioned = ''
+            extraction_confidence = ''
+            more_in_fulltext_prob = ''
+            priority_score = ''
+            notes = ''
+
+            if abstract:
+                # Run carrier extraction
+                try:
+                    result = extractor.extract_from_text(
+                        pmid=pmid,
+                        title=title or "Unknown",
+                        abstract=abstract,
+                        gene_symbol=self.gene_symbol or "gene"
+                    )
+
+                    if result.success and result.has_carrier_counts:
+                        abstract_carriers = result.total_carriers if result.total_carriers is not None else ''
+                        affected_count = result.affected_count if result.affected_count is not None else ''
+                        unaffected_count = result.unaffected_count if result.unaffected_count is not None else ''
+                        variants_mentioned = '; '.join(result.variants_mentioned) if result.variants_mentioned else ''
+                        extraction_confidence = f"{result.confidence:.2f}"
+
+                        # Estimate probability of more carriers in full text
+                        more_prob, prob_notes = self._estimate_more_in_fulltext(
+                            abstract=abstract,
+                            title=title,
+                            carrier_count=result.total_carriers,
+                            variants=result.variants_mentioned
+                        )
+                        more_in_fulltext_prob = f"{more_prob:.0%}"
+                        notes = prob_notes
+
+                        # Calculate priority score (higher = more valuable to acquire)
+                        priority_score = self._calculate_priority_score(
+                            carrier_count=result.total_carriers or 0,
+                            more_prob=more_prob,
+                            confidence=result.confidence
+                        )
+
+                        print(f"  PMID {pmid}: {abstract_carriers} carriers, "
+                              f"{more_in_fulltext_prob} prob more in fulltext, "
+                              f"priority={priority_score}")
+                    elif result.success:
+                        notes = result.extraction_notes or "No carrier counts in abstract"
+                        more_in_fulltext_prob = "Unknown"
+                        print(f"  PMID {pmid}: No carrier counts found in abstract")
+                    else:
+                        notes = result.error or "Extraction failed"
+                        print(f"  PMID {pmid}: Extraction failed - {notes}")
+
+                except Exception as e:
+                    logger.warning(f"Carrier extraction failed for PMID {pmid}: {e}")
+                    notes = f"Extraction error: {str(e)[:50]}"
+            else:
+                notes = "No abstract available"
+                print(f"  PMID {pmid}: No abstract available")
+
+            enriched_rows.append([
+                pmid, reason, url,
+                abstract_carriers, affected_count, unaffected_count,
+                variants_mentioned, extraction_confidence,
+                more_in_fulltext_prob, priority_score, notes
+            ])
+
+        # Write enriched CSV
+        with open(self.paywalled_log, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow([
+                'PMID', 'Reason', 'URL',
+                'Abstract_Carriers', 'Affected_Count', 'Unaffected_Count',
+                'Variants_Mentioned', 'Extraction_Confidence',
+                'More_In_Fulltext_Probability', 'Priority_Score', 'Notes'
+            ])
+            writer.writerows(enriched_rows)
+
+        print(f"  ✅ Enriched {len(enriched_rows)} paywalled papers")
+        return True
+
+    def _estimate_more_in_fulltext(
+        self,
+        abstract: str,
+        title: Optional[str],
+        carrier_count: Optional[int],
+        variants: List[str]
+    ) -> Tuple[float, str]:
+        """
+        Estimate probability that full text contains more carriers than abstract.
+
+        Uses heuristics based on:
+        - Study type (cohort/population studies likely have more)
+        - Mentions of supplementary data
+        - Abstract truncation indicators
+        - Carrier count magnitude
+
+        Args:
+            abstract: Paper abstract text
+            title: Paper title
+            carrier_count: Number of carriers found in abstract
+            variants: Variants mentioned in abstract
+
+        Returns:
+            Tuple of (probability 0.0-1.0, explanation notes)
+        """
+        abstract_lower = abstract.lower()
+        title_lower = (title or '').lower()
+
+        prob = 0.5  # Base probability
+        notes = []
+
+        # Supplementary data mentions → high probability
+        supp_keywords = [
+            'supplementary', 'supplemental', 'table s', 'figure s',
+            'additional file', 'supporting information', 'online resource'
+        ]
+        if any(kw in abstract_lower for kw in supp_keywords):
+            prob += 0.25
+            notes.append("mentions supplementary data")
+
+        # Cohort/population study indicators → high probability
+        cohort_keywords = [
+            'cohort', 'population', 'screening', 'registry',
+            'database', 'biobank', 'exome', 'genome sequencing',
+            'patients were', 'subjects were', 'individuals were'
+        ]
+        if any(kw in abstract_lower for kw in cohort_keywords):
+            prob += 0.15
+            notes.append("cohort/population study")
+
+        # Large numbers mentioned → more likely to have detailed data
+        if carrier_count and carrier_count >= 10:
+            prob += 0.15
+            notes.append(f"larger cohort ({carrier_count}+)")
+        elif carrier_count and carrier_count >= 5:
+            prob += 0.10
+
+        # Case report indicators → lower probability
+        case_report_keywords = [
+            'case report', 'we report a', 'we describe a',
+            'a case of', 'single patient', 'one patient'
+        ]
+        if any(kw in abstract_lower or kw in title_lower for kw in case_report_keywords):
+            prob -= 0.20
+            notes.append("case report (less likely)")
+
+        # Review/meta-analysis → moderate probability
+        review_keywords = ['review', 'meta-analysis', 'systematic']
+        if any(kw in title_lower for kw in review_keywords):
+            prob += 0.10
+            notes.append("review/meta-analysis")
+
+        # Multiple variants mentioned → more detailed study
+        if variants and len(variants) >= 3:
+            prob += 0.10
+            notes.append("multiple variants")
+
+        # Truncation indicators
+        truncation_indicators = ['...', 'et al', 'and others', 'additional']
+        if any(ind in abstract[-100:].lower() for ind in truncation_indicators):
+            prob += 0.05
+
+        # Clamp probability to valid range
+        prob = max(0.05, min(0.95, prob))
+
+        note_str = "; ".join(notes) if notes else "baseline estimate"
+        return prob, note_str
+
+    def _calculate_priority_score(
+        self,
+        carrier_count: int,
+        more_prob: float,
+        confidence: float
+    ) -> int:
+        """
+        Calculate acquisition priority score for a paywalled paper.
+
+        Higher score = more valuable to manually acquire.
+
+        Args:
+            carrier_count: Known carriers from abstract
+            more_prob: Probability of more carriers in full text
+            confidence: Extraction confidence
+
+        Returns:
+            Priority score 0-100
+        """
+        # Base score from carrier count (0-40 points)
+        if carrier_count >= 20:
+            carrier_score = 40
+        elif carrier_count >= 10:
+            carrier_score = 30
+        elif carrier_count >= 5:
+            carrier_score = 20
+        elif carrier_count >= 1:
+            carrier_score = 10
+        else:
+            carrier_score = 0
+
+        # Probability bonus (0-40 points)
+        prob_score = int(more_prob * 40)
+
+        # Confidence bonus (0-20 points)
+        conf_score = int(confidence * 20)
+
+        total = carrier_score + prob_score + conf_score
+        return min(100, total)

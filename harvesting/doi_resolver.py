@@ -79,6 +79,25 @@ class DOIResolver:
         self.paywalled_log = paywalled_log
         self._user_agent_index = 0
 
+    def _log_paywalled(self, pmid: str, reason: str, url: str) -> None:
+        """
+        Log a paper to the paywalled/missing CSV with placeholder columns.
+
+        Args:
+            pmid: PubMed ID
+            reason: Why the paper couldn't be downloaded
+            url: URL attempted
+        """
+        with open(self.paywalled_log, 'a', newline='') as f:
+            writer = csv.writer(f)
+            # Write with empty placeholders for carrier columns (matching orchestrator format)
+            writer.writerow([
+                pmid, reason, url,
+                '', '', '',  # Abstract_Carriers, Affected_Count, Unaffected_Count
+                '', '',      # Variants_Mentioned, Extraction_Confidence
+                '', '', ''   # More_In_Fulltext_Probability, Priority_Score, Notes
+            ])
+
     def _get_next_user_agent(self) -> str:
         """
         Get the next User-Agent in rotation.
@@ -184,9 +203,7 @@ class DOIResolver:
 
             if not response:
                 print(f"  ❌ DOI resolution failed for {doi}: No response received")
-                with open(self.paywalled_log, 'a', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
+                self._log_paywalled(pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}")
                 return []
 
             final_url = response.url
@@ -199,15 +216,11 @@ class DOIResolver:
                 print(f"  ❌ DOI resolution blocked (403 Forbidden) for {doi} after {self.MAX_RETRIES} attempts - publisher may require authentication")
             else:
                 print(f"  ❌ DOI resolution failed for {doi}: HTTP {status_code}")
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, f'DOI resolution failed (HTTP {status_code}): {doi}', f"https://doi.org/{doi}"])
+            self._log_paywalled(pmid, f'DOI resolution failed (HTTP {status_code}): {doi}', f"https://doi.org/{doi}")
             return []
         except requests.exceptions.RequestException as e:
             print(f"  ❌ DOI resolution failed for {doi}: {e}")
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
+            self._log_paywalled(pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}")
             return []
 
         # Route to the specific scraper based on the resolved domain
@@ -280,9 +293,7 @@ class DOIResolver:
 
             if not response:
                 print(f"  ❌ DOI resolution failed for {doi}: No response received")
-                with open(self.paywalled_log, 'a', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow([pmid, f'DOI resolution failed (free text): {doi}', f"https://doi.org/{doi}"])
+                self._log_paywalled(pmid, f'DOI resolution failed (free text): {doi}', f"https://doi.org/{doi}")
                 return None, None, []
 
             final_url = response.url
@@ -295,15 +306,11 @@ class DOIResolver:
                 print(f"  ❌ DOI resolution blocked (403 Forbidden) for {doi} after {self.MAX_RETRIES} attempts - publisher may require authentication")
             else:
                 print(f"  ❌ DOI resolution failed for {doi}: HTTP {status_code}")
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, f'DOI resolution failed (free text, HTTP {status_code}): {doi}', f"https://doi.org/{doi}"])
+            self._log_paywalled(pmid, f'DOI resolution failed (free text, HTTP {status_code}): {doi}', f"https://doi.org/{doi}")
             return None, None, []
         except requests.exceptions.RequestException as e:
             print(f"  ❌ DOI resolution failed for {doi}: {e}")
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, f'DOI resolution failed (free text): {doi}', f"https://doi.org/{doi}"])
+            self._log_paywalled(pmid, f'DOI resolution failed (free text): {doi}', f"https://doi.org/{doi}")
             return None, None, []
 
         # Handle Elsevier linkinghub redirects
@@ -330,9 +337,7 @@ class DOIResolver:
             print(f"  ✓ Extracted full text from publisher page ({len(markdown_content)} characters)")
         else:
             print(f"  ❌ Could not extract full text from publisher page")
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, 'Full text extraction failed from publisher', final_url])
+            self._log_paywalled(pmid, 'Full text extraction failed from publisher', final_url)
 
         # Also get supplements
         if "nature.com" in domain:
@@ -364,9 +369,7 @@ class DOIResolver:
 
             if not response:
                 print(f"  ❌ DOI resolution failed for {doi}: No response received")
-                with open(self.paywalled_log, 'a', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
+                self._log_paywalled(pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}")
                 return None, None
 
             final_url = response.url
@@ -377,13 +380,9 @@ class DOIResolver:
         except requests.exceptions.HTTPError as e:
             status_code = e.response.status_code if e.response else "unknown"
             print(f"  ❌ DOI resolution failed for {doi}: HTTP {status_code}")
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, f'DOI resolution failed (HTTP {status_code}): {doi}', f"https://doi.org/{doi}"])
+            self._log_paywalled(pmid, f'DOI resolution failed (HTTP {status_code}): {doi}', f"https://doi.org/{doi}")
             return None, None
         except requests.exceptions.RequestException as e:
             print(f"  ❌ DOI resolution failed for {doi}: {e}")
-            with open(self.paywalled_log, 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}"])
+            self._log_paywalled(pmid, f'DOI resolution failed: {doi}', f"https://doi.org/{doi}")
             return None, None
