@@ -13,7 +13,7 @@ GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  STAGE 1: Paper Sourcing (pipeline/sourcing.py)                 │
+│  STAGE 1: Paper Sourcing (gene_literature/discovery.py)         │
 │                                                                   │
 │  ┌────────────────────────────────────────────────────────┐    │
 │  │              PubMind (PRIMARY SOURCE)                  │    │
@@ -33,7 +33,7 @@ GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  STAGE 2: Tiered Filtering (filters.py)                         │
+│  STAGE 2: Tiered Filtering (pipeline/filters.py)                │
 │                                                                   │
 │  ┌────────────────────────────────────────────────────────┐    │
 │  │ TIER 1: KeywordFilter                                  │    │
@@ -54,7 +54,7 @@ GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently
                         │
                         ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  STAGE 3: Full-text Harvesting (harvest_pmc_fulltext.py)       │
+│  STAGE 3: Full-text Harvesting (harvesting/orchestrator.py)    │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
 │  │ PMC XML      │  │ Unpaywall    │  │   Scraping   │         │
 │  │ (Free)       │  │   (DOI)      │  │  (Fallback)  │         │
@@ -67,7 +67,7 @@ GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  STAGE 4: Expert Extraction (extractor.py)                      │
+│  STAGE 4: Expert Extraction (pipeline/extraction.py)            │
 │  ┌──────────────────────────────────────────────────────┐      │
 │  │ ExpertExtractor (gpt-4o / claude-3-opus)             │      │
 │  │ - Structured variant extraction                       │      │
@@ -78,7 +78,7 @@ GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  STAGE 5: Data Aggregation (penetrance_aggregator.py)          │
+│  STAGE 5: Data Aggregation (pipeline/aggregation.py)           │
 │  - Validate extracted data                                       │
 │  - Calculate penetrance statistics                               │
 │  - Generate reports                                              │
@@ -87,7 +87,7 @@ GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently
 
 ## Core Components
 
-### 1. Paper Sourcing (`pipeline/sourcing.py`)
+### 1. Paper Sourcing (`gene_literature/discovery.py`)
 
 **Purpose:** Query literature databases to find relevant papers with variant-level data.
 
@@ -229,7 +229,7 @@ TIER3_MAX_TOKENS=8000      # Allow detailed responses
 - Functional study results
 - Segregation information
 
-### 4. Full-text Harvesting (`harvest_pmc_fulltext.py`)
+### 4. Full-text Harvesting (`harvesting/orchestrator.py`)
 
 **Purpose:** Retrieve full-text and supplemental materials for papers.
 
@@ -248,7 +248,7 @@ TIER3_MAX_TOKENS=8000      # Allow detailed responses
 - DOCX → Markdown
 - XML → Structured markdown
 
-### 5. Data Aggregation (`penetrance_aggregator.py`)
+### 5. Data Aggregation (`pipeline/aggregation.py`)
 
 **Purpose:** Validate and aggregate extracted variant data.
 
@@ -427,7 +427,7 @@ print(f"Using Tier 2 model: {settings.tier2_model}")
 print(f"PubMind only mode: {settings.pubmind_only}")
 ```
 
-## Pipeline Orchestration (`pipeline.py`)
+## Pipeline Orchestration (`automated_workflow.py`)
 
 **Classes:**
 - `BiomedicalExtractionPipeline`: Coordinates all stages with configuration-driven behavior

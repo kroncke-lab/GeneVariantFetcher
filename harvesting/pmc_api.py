@@ -8,13 +8,18 @@ Handles interactions with NCBI PubMed Central APIs:
 - Free full-text status detection from PubMed
 """
 
+import logging
 import os
+import threading
 import time
 from typing import List, Optional, Tuple
+
 import requests
 from Bio import Entrez
-import functools
 
+from utils.retry_utils import api_retry
+
+logger = logging.getLogger(__name__)
 
 # Configure Entrez
 Entrez.email = os.getenv("ENTREZ_EMAIL", "your.email@example.com")
@@ -26,32 +31,10 @@ Entrez.api_key = os.getenv("NCBI_API_KEY")  # Optional: get API key from https:/
 # We'll be conservative and use 0.34 seconds between requests (3 req/sec) without key
 # and 0.11 seconds (9 req/sec) with key to stay safely under the limit
 RATE_LIMIT_DELAY = 0.11 if Entrez.api_key else 0.34
+
+# Thread-safe rate limiting
+_rate_limit_lock = threading.Lock()
 _last_request_time = 0
-
-
-def retry_with_backoff(retries=3, backoff_in_seconds=1):
-    """
-    Decorator for retrying a function with exponential backoff.
-    """
-    def rwb(f):
-        @functools.wraps(f)
-        def wrapper(*args, **kwargs):
-            x = 0
-            while True:
-                try:
-                    return f(*args, **kwargs)
-                except Exception as e:
-                    if x >= retries:
-                        # Re-raise the last exception if all retries fail
-                        print(f"  All {retries} retries failed for {f.__name__}.")
-                        raise
-
-                    sleep_duration = backoff_in_seconds * (2 ** x)
-                    print(f"  Warning: {f.__name__} failed with {e}. Retrying in {sleep_duration:.2f} seconds...")
-                    time.sleep(sleep_duration)
-                    x += 1
-        return wrapper
-    return rwb
 
 
 class PMCAPIClient:
@@ -67,18 +50,19 @@ class PMCAPIClient:
         self.session = session or requests.Session()
 
     def _rate_limit(self):
-        """Enforce NCBI rate limiting by adding delays between requests."""
+        """Enforce NCBI rate limiting by adding delays between requests (thread-safe)."""
         global _last_request_time
-        current_time = time.time()
-        time_since_last = current_time - _last_request_time
+        with _rate_limit_lock:
+            current_time = time.time()
+            time_since_last = current_time - _last_request_time
 
-        if time_since_last < RATE_LIMIT_DELAY:
-            sleep_time = RATE_LIMIT_DELAY - time_since_last
-            time.sleep(sleep_time)
+            if time_since_last < RATE_LIMIT_DELAY:
+                sleep_time = RATE_LIMIT_DELAY - time_since_last
+                time.sleep(sleep_time)
 
-        _last_request_time = time.time()
+            _last_request_time = time.time()
 
-    @retry_with_backoff(retries=3, backoff_in_seconds=2)
+    @api_retry
     def pmid_to_pmcid(self, pmid: str) -> Optional[str]:
         """
         Convert PMID to PMCID using NCBI E-utilities.
@@ -106,7 +90,7 @@ class PMCAPIClient:
             print(f"  Error converting PMID {pmid} to PMCID: {e}")
             return None
 
-    @retry_with_backoff(retries=3, backoff_in_seconds=2)
+    @api_retry
     def get_doi_from_pmid(self, pmid: str) -> Optional[str]:
         """
         Fetch the DOI for a given PMID.
@@ -143,7 +127,7 @@ class PMCAPIClient:
             print(f"  Error fetching DOI for PMID {pmid}: {e}")
             return None
 
-    @retry_with_backoff(retries=3, backoff_in_seconds=5)
+    @api_retry
     def _fetch_xml_from_ncbi(self, numeric_pmcid: str) -> str:
         """Helper to fetch XML from NCBI with retries."""
         self._rate_limit()
@@ -201,7 +185,7 @@ class PMCAPIClient:
             print(f"  Europe PMC fallback also failed for {pmcid}: {e}")
             return None
 
-    @retry_with_backoff(retries=3, backoff_in_seconds=2)
+    @api_retry
     def is_free_full_text(self, pmid: str) -> Tuple[bool, Optional[str]]:
         """
         Check if a PubMed article is marked as free full text via the publisher.
@@ -373,7 +357,7 @@ class PMCAPIClient:
             print(f"  Error checking free full text status for PMID {pmid}: {e}")
             return False, None
 
-    @retry_with_backoff(retries=3, backoff_in_seconds=2)
+    @api_retry
     def get_pubmed_linkout_urls(self, pmid: str) -> List[str]:
         """
         Get all LinkOut URLs for a PubMed article.
