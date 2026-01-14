@@ -398,6 +398,8 @@ class WileyAPIClient:
         logger.info(f"Attempting to scrape Wiley web page for DOI: {doi}")
         logger.debug(f"Wiley web URL: {full_text_url}")
 
+        last_error = None
+
         try:
             self._rate_limit()
             response = self.session.get(full_text_url, timeout=30, allow_redirects=True)
@@ -406,48 +408,155 @@ class WileyAPIClient:
                 pdf_markdown, pdf_error = self._fetch_pdf_fulltext(doi)
                 if pdf_markdown:
                     return pdf_markdown, None
-                return None, pdf_error or "Access forbidden - article may be paywalled"
-            if response.status_code == 404:
-                return None, "Article not found on Wiley website"
-            if response.status_code != 200:
-                return None, f"HTTP {response.status_code}: {response.reason}"
-
-            html_content = response.text
-
-            # Check for paywall indicators
-            paywall_indicators = [
-                'purchase this article',
-                'get access',
-                'institutional access',
-                'sign in to access',
-                'subscription required',
-            ]
-            html_lower = html_content.lower()
-            if any(indicator in html_lower for indicator in paywall_indicators):
-                # Check if we also have full article content (some pages show both)
-                if 'article-section__content' not in html_lower:
-                    return None, "Article is behind paywall"
-
-            # Extract content using BeautifulSoup
-            markdown = self._scrape_wiley_html(html_content)
-            if markdown and len(markdown) > 2000:
-                logger.info(f"Successfully scraped Wiley article via web for DOI: {doi}")
-                return markdown, None
-            elif markdown and len(markdown) > 500:
-                pdf_markdown, pdf_error = self._fetch_pdf_fulltext(doi)
-                if pdf_markdown:
-                    return pdf_markdown, None
-                return None, pdf_error or "Web scrape produced insufficient content (abstract only)"
+                last_error = pdf_error or "Access forbidden - article may be paywalled"
+            elif response.status_code == 404:
+                last_error = "Article not found at /doi/full/ URL"
+            elif response.status_code != 200:
+                last_error = f"HTTP {response.status_code}: {response.reason}"
             else:
-                pdf_markdown, pdf_error = self._fetch_pdf_fulltext(doi)
-                if pdf_markdown:
-                    return pdf_markdown, None
-                return None, pdf_error or "Could not extract content from Wiley web page"
+                html_content = response.text
+
+                # Check for paywall indicators
+                paywall_indicators = [
+                    'purchase this article',
+                    'get access',
+                    'institutional access',
+                    'sign in to access',
+                    'subscription required',
+                ]
+                html_lower = html_content.lower()
+                if any(indicator in html_lower for indicator in paywall_indicators):
+                    # Check if we also have full article content (some pages show both)
+                    if 'article-section__content' not in html_lower:
+                        last_error = "Article is behind paywall"
+
+                if not last_error:
+                    # Extract content using BeautifulSoup
+                    markdown = self._scrape_wiley_html(html_content)
+                    if markdown and len(markdown) > 2000:
+                        logger.info(f"Successfully scraped Wiley article via web for DOI: {doi}")
+                        return markdown, None
+                    elif markdown and len(markdown) > 500:
+                        pdf_markdown, pdf_error = self._fetch_pdf_fulltext(doi)
+                        if pdf_markdown:
+                            return pdf_markdown, None
+                        last_error = pdf_error or "Web scrape produced insufficient content (abstract only)"
+                    else:
+                        pdf_markdown, pdf_error = self._fetch_pdf_fulltext(doi)
+                        if pdf_markdown:
+                            return pdf_markdown, None
+                        last_error = pdf_error or "Could not extract content from Wiley web page"
 
         except requests.exceptions.Timeout:
-            return None, "Web request timed out"
+            last_error = "Web request timed out"
         except requests.exceptions.RequestException as e:
-            return None, f"Web request failed: {str(e)}"
+            last_error = f"Web request failed: {str(e)}"
+
+        # If /doi/full/ failed, try the landing page via DOI resolution
+        # This works better for old SICI-style DOIs
+        if last_error:
+            logger.info(f"Trying DOI resolution fallback for: {doi}")
+            landing_markdown, landing_error = self._try_doi_landing_page(doi)
+            if landing_markdown:
+                return landing_markdown, None
+            # Combine errors for debugging
+            if landing_error:
+                return None, f"{last_error}; Landing page: {landing_error}"
+
+        return None, last_error
+
+    def _try_doi_landing_page(self, doi: str) -> Tuple[Optional[str], Optional[str]]:
+        """
+        Try to fetch full text by resolving DOI and scraping the landing page.
+
+        For old SICI-style DOIs, the /doi/full/ URL may not work, but resolving
+        through doi.org often leads to a working page with full text links.
+
+        Args:
+            doi: Digital Object Identifier
+
+        Returns:
+            Tuple of (markdown_content, error_message)
+        """
+        encoded_doi = quote(doi, safe='/:')  # Use same encoding as doi.org expects
+        doi_url = f"https://doi.org/{encoded_doi}"
+
+        try:
+            self._rate_limit()
+            response = self.session.get(doi_url, timeout=30, allow_redirects=True)
+
+            if response.status_code != 200:
+                return None, f"DOI resolution failed: HTTP {response.status_code}"
+
+            final_url = response.url
+            html_content = response.text
+
+            # Check if we landed on a Wiley page
+            if 'wiley.com' not in final_url.lower():
+                return None, f"DOI resolved to non-Wiley site: {final_url}"
+
+            logger.info(f"DOI resolved to: {final_url}")
+
+            # First, try to find and follow a "Full Text" link on the landing page
+            soup = BeautifulSoup(html_content, 'html.parser')
+
+            # Look for full text links (various patterns used by Wiley)
+            fulltext_link = None
+            fulltext_patterns = [
+                ('a', {'class': re.compile(r'full-?text', re.I)}),
+                ('a', {'href': re.compile(r'/doi/full/', re.I)}),
+                ('a', {'title': re.compile(r'full\s*text', re.I)}),
+                ('a', {'data-test': 'full-text-link'}),
+            ]
+
+            for tag, attrs in fulltext_patterns:
+                link = soup.find(tag, attrs)
+                if link and link.get('href'):
+                    fulltext_link = link['href']
+                    break
+
+            # Also check for common link text patterns
+            if not fulltext_link:
+                for a in soup.find_all('a', href=True):
+                    link_text = a.get_text(strip=True).lower()
+                    if any(pattern in link_text for pattern in ['full text', 'full-text', 'read full']):
+                        fulltext_link = a['href']
+                        break
+
+            # If found a full text link, follow it
+            if fulltext_link:
+                if not fulltext_link.startswith('http'):
+                    # Relative URL - construct absolute
+                    from urllib.parse import urljoin
+                    fulltext_link = urljoin(final_url, fulltext_link)
+
+                logger.info(f"Following full text link: {fulltext_link}")
+                self._rate_limit()
+                ft_response = self.session.get(fulltext_link, timeout=30, allow_redirects=True)
+
+                if ft_response.status_code == 200:
+                    markdown = self._scrape_wiley_html(ft_response.text)
+                    if markdown and len(markdown) > 2000:
+                        logger.info(f"Successfully scraped Wiley article via full text link")
+                        return markdown, None
+
+            # Try to extract from the landing page itself (some old articles have inline text)
+            markdown = self._scrape_wiley_html(html_content)
+            if markdown and len(markdown) > 2000:
+                logger.info(f"Successfully scraped Wiley article from landing page")
+                return markdown, None
+
+            # Try PDF as final fallback
+            pdf_markdown, pdf_error = self._fetch_pdf_fulltext(doi)
+            if pdf_markdown:
+                return pdf_markdown, None
+
+            return None, pdf_error or "Could not extract full text from landing page"
+
+        except requests.exceptions.Timeout:
+            return None, "DOI resolution timed out"
+        except requests.exceptions.RequestException as e:
+            return None, f"DOI resolution failed: {str(e)}"
 
     def _scrape_wiley_html(self, html_content: str) -> Optional[str]:
         """
@@ -463,29 +572,49 @@ class WileyAPIClient:
             soup = BeautifulSoup(html_content, 'html.parser')
             markdown = "# MAIN TEXT\n\n"
 
-            # Extract title
+            # Extract title - try multiple patterns for old and new layouts
             title_elem = soup.find('h1', class_='citation__title')
+            if not title_elem:
+                title_elem = soup.find('h1', class_='article-header__title')
+            if not title_elem:
+                title_elem = soup.find('h1', id='articleTitle')
             if not title_elem:
                 title_elem = soup.find('h1')
             if title_elem:
                 title = title_elem.get_text(strip=True)
                 markdown += f"## {title}\n\n"
 
-            # Extract abstract
+            # Extract abstract - try multiple patterns
             abstract = soup.find('section', class_='article-section__abstract')
             if not abstract:
                 abstract = soup.find('div', class_='abstract')
+            if not abstract:
+                abstract = soup.find('div', id='abstract')
+            if not abstract:
+                # Old layout: abstract might be in a paragraph with specific id
+                abstract = soup.find('p', id='abstract')
             if abstract:
                 abstract_text = abstract.get_text(separator=' ', strip=True)
                 markdown += f"### Abstract\n\n{abstract_text}\n\n"
 
             # Extract main content sections
-            # Wiley uses article-section__full divs for each section
+            # Modern Wiley uses article-section__full divs for each section
             content_sections = soup.find_all('section', class_='article-section__full')
             if not content_sections:
                 content_sections = soup.find_all('section', class_='article-section__content')
             if not content_sections:
                 content_sections = soup.find_all('div', class_='article__body')
+
+            # Old Wiley layout: try different container patterns
+            if not content_sections:
+                content_sections = soup.find_all('div', class_=re.compile(r'article-?body', re.I))
+            if not content_sections:
+                content_sections = soup.find_all('div', id=re.compile(r'(fulltext|article-?content|main-?content)', re.I))
+            if not content_sections:
+                # Very old layouts: look for main article div
+                main_article = soup.find('div', class_='mainContent')
+                if main_article:
+                    content_sections = [main_article]
 
             for section in content_sections:
                 # Get section heading
@@ -505,15 +634,39 @@ class WileyAPIClient:
                     if para_text and len(para_text) > 20:
                         markdown += f"{para_text}\n\n"
 
-            # Fallback: if structured extraction didn't find enough content,
+            # Fallback 1: if structured extraction didn't find enough content,
             # try extracting all paragraphs from the main content area
             if len(markdown) < 1000:
                 main_content = soup.find('div', class_='article__content')
+                if not main_content:
+                    main_content = soup.find('article')
+                if not main_content:
+                    main_content = soup.find('div', id='articleBody')
                 if main_content:
                     for para in main_content.find_all('p'):
                         para_text = para.get_text(separator=' ', strip=True)
                         if para_text and len(para_text) > 50:
                             markdown += f"{para_text}\n\n"
+
+            # Fallback 2: Try to find content in old-style Wiley pages with
+            # nested divs containing article sections
+            if len(markdown) < 1000:
+                # Look for sections by header text patterns
+                for header in soup.find_all(['h2', 'h3', 'h4']):
+                    header_text = header.get_text(strip=True)
+                    header_lower = header_text.lower()
+                    if any(kw in header_lower for kw in ['introduction', 'methods', 'results',
+                                                          'discussion', 'materials', 'patients',
+                                                          'background', 'conclusion']):
+                        markdown += f"### {header_text}\n\n"
+                        # Get following paragraphs until next header
+                        next_elem = header.find_next_sibling()
+                        while next_elem and next_elem.name not in ['h2', 'h3', 'h4']:
+                            if next_elem.name == 'p':
+                                para_text = next_elem.get_text(separator=' ', strip=True)
+                                if para_text and len(para_text) > 20:
+                                    markdown += f"{para_text}\n\n"
+                            next_elem = next_elem.find_next_sibling()
 
             # Ultimate fallback: extract all substantial paragraphs
             if len(markdown) < 500:
