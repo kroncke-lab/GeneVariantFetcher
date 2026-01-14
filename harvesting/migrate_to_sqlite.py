@@ -257,6 +257,8 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             notes TEXT,
             model_used TEXT,
             extraction_timestamp TEXT,
+            source_type TEXT,  -- 'fulltext', 'abstract_only', or NULL
+            abstract_only INTEGER DEFAULT 0,  -- 1 if extracted from abstract only
 
             FOREIGN KEY (pmid) REFERENCES papers(pmid) ON DELETE CASCADE
         )
@@ -537,15 +539,17 @@ def migrate_extraction_file(
             cursor.execute("""
                 INSERT INTO extraction_metadata (
                     pmid, total_variants_found, extraction_confidence,
-                    challenges, notes, extraction_timestamp
-                ) VALUES (?, ?, ?, ?, ?, ?)
+                    challenges, notes, extraction_timestamp, source_type, abstract_only
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 pmid,
                 extraction_meta.get("total_variants_found"),
                 extraction_meta.get("extraction_confidence"),
                 json.dumps(extraction_meta.get("challenges", [])),
                 extraction_meta.get("notes"),
-                datetime.now().isoformat()
+                datetime.now().isoformat(),
+                extraction_meta.get("source_type"),
+                1 if extraction_meta.get("abstract_only") else 0
             ))
 
         # Insert tables processed

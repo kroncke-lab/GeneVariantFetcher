@@ -193,7 +193,6 @@ def automated_variant_extraction_workflow(
     logger.info("\n🧹 STEP 1.6: Filtering papers by relevance before download...")
 
     from pipeline.filters import KeywordFilter, InternFilter, ClinicalDataTriageFilter
-    from pipeline.abstract_extraction import AbstractCarrierExtractor, AbstractCarrierResult
     from utils.models import Paper, FilterDecision, FilterResult, FilterTier
 
     keyword_filter = KeywordFilter(min_keyword_matches=settings.tier1_min_keywords)
@@ -316,97 +315,9 @@ def automated_variant_extraction_workflow(
         writer.writerows(dropped_pmids)
     logger.info(f"✓ Wrote {len(dropped_pmids)} filtered-out PMIDs to {filtered_out_file}")
 
-    # ============================================================================
-    # STEP 1.7: Extract Carrier Counts from Abstracts
-    # ============================================================================
-    logger.info("\n📋 STEP 1.7: Extracting carrier counts from abstracts...")
-
-    abstract_extractor = AbstractCarrierExtractor()
-    abstract_extraction_results: dict[str, AbstractCarrierResult] = {}
-    abstract_extraction_dir = output_path / "abstract_extraction"
-    abstract_extraction_dir.mkdir(parents=True, exist_ok=True)
-
-    # Process filtered papers (those that passed relevance filter)
-    for pmid in filtered_pmids:
-        record_path = abstract_records.get(pmid)
-        if not record_path or not Path(record_path).exists():
-            continue
-
-        try:
-            with open(record_path, "r", encoding="utf-8") as f:
-                record = json.load(f)
-
-            metadata = record.get("metadata", {})
-            paper = Paper(
-                pmid=pmid,
-                title=metadata.get("title"),
-                abstract=record.get("abstract"),
-                gene_symbol=gene_symbol,
-            )
-
-            result = abstract_extractor.extract(paper, gene_symbol)
-            abstract_extraction_results[pmid] = result
-
-        except Exception as e:
-            logger.error(f"PMID {pmid}: Abstract extraction failed: {e}")
-            abstract_extraction_results[pmid] = AbstractCarrierResult(
-                pmid=pmid,
-                success=False,
-                error=str(e),
-            )
-
-    # Count results
-    abstracts_with_carriers = sum(
-        1 for r in abstract_extraction_results.values()
-        if r.has_carrier_counts
-    )
-    abstracts_without_carriers = sum(
-        1 for r in abstract_extraction_results.values()
-        if r.success and not r.has_carrier_counts
-    )
-
-    logger.info(
-        f"✓ Abstract extraction complete: {abstracts_with_carriers} with carrier counts, "
-        f"{abstracts_without_carriers} without extractable counts"
-    )
-
-    # Save abstract extraction results to JSON
-    abstract_extraction_summary = {
-        "gene_symbol": gene_symbol,
-        "total_papers_processed": len(abstract_extraction_results),
-        "papers_with_carrier_counts": abstracts_with_carriers,
-        "papers_without_carrier_counts": abstracts_without_carriers,
-        "results": {
-            pmid: result.to_dict()
-            for pmid, result in abstract_extraction_results.items()
-        },
-    }
-
-    abstract_extraction_file = abstract_extraction_dir / f"{gene_symbol}_abstract_carriers.json"
-    with open(abstract_extraction_file, "w", encoding="utf-8") as f:
-        json.dump(abstract_extraction_summary, f, indent=2)
-    logger.info(f"✓ Saved abstract extraction results to {abstract_extraction_file}")
-
-    # Save CSV summary for easy analysis
-    abstract_extraction_csv = abstract_extraction_dir / f"{gene_symbol}_abstract_carriers.csv"
-    with open(abstract_extraction_csv, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow([
-            "PMID", "Has_Carrier_Counts", "Total_Carriers", "Affected_Count",
-            "Unaffected_Count", "Confidence", "Variants_Mentioned", "Notes"
-        ])
-        for pmid, result in abstract_extraction_results.items():
-            writer.writerow([
-                pmid,
-                result.has_carrier_counts,
-                result.total_carriers,
-                result.affected_count,
-                result.unaffected_count,
-                f"{result.confidence:.2f}",
-                "; ".join(result.variants_mentioned) if result.variants_mentioned else "",
-                result.extraction_notes or result.error or "",
-            ])
-    logger.info(f"✓ Saved abstract extraction CSV to {abstract_extraction_csv}")
+    # NOTE: Abstract extraction is now integrated into the main extraction pipeline (Step 3)
+    # Papers that pass filters but fail download will have their abstracts extracted
+    # using the same ExpertExtractor, ensuring all data flows into the final SQLite database.
 
     # ============================================================================
     # STEP 2: Download Full-Text Papers from PMC
@@ -438,15 +349,11 @@ def automated_variant_extraction_workflow(
         logger.warning("No papers were successfully downloaded from PMC")
 
     # ============================================================================
-    # STEP 2.5: Generate Priority Papers List
+    # STEP 2.5: Identify Papers for Abstract-Only Extraction
     # ============================================================================
-    # Identify papers that:
-    # 1. Passed the relevance filter (likely contain patient info)
-    # 2. Did NOT yield carrier counts from abstract
-    # 3. Either failed to download OR are missing/paywalled
-    #
-    # These are prime candidates for manual follow-up
-    logger.info("\n📌 STEP 2.5: Generating priority papers list for manual follow-up...")
+    # Papers that passed the relevance filter but failed to download will be
+    # extracted using their abstracts in Step 3.
+    logger.info("\n📌 STEP 2.5: Identifying papers that need abstract-only extraction...")
 
     # Load paywalled/missing log if it exists
     paywalled_log = harvest_dir / "paywalled_missing.csv"
@@ -459,97 +366,17 @@ def automated_variant_extraction_workflow(
         except Exception as e:
             logger.warning(f"Could not read paywalled_missing.csv: {e}")
 
-    # Create enhanced paywalled_missing with abstract extraction info
-    enhanced_paywalled_file = harvest_dir / "paywalled_missing_with_abstract_info.csv"
-    with open(enhanced_paywalled_file, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow([
-            "PMID", "Download_Status", "Reason",
-            "Abstract_Has_Carrier_Counts", "Abstract_Total_Carriers",
-            "Abstract_Affected", "Abstract_Unaffected", "Abstract_Confidence"
-        ])
-
-        for pmid in pmids_to_download:
-            pmid_str = str(pmid)
-
-            # Determine download status
-            if pmid_str in successfully_downloaded_pmids:
-                download_status = "Downloaded"
-                reason = ""
-            elif pmid_str in paywalled_pmids:
-                download_status = "Failed"
-                reason = paywalled_pmids[pmid_str]
-            else:
-                download_status = "Unknown"
-                reason = "Not in logs"
-
-            # Get abstract extraction result
-            abstract_result = abstract_extraction_results.get(pmid_str)
-            if abstract_result:
-                has_carriers = abstract_result.has_carrier_counts
-                total = abstract_result.total_carriers
-                affected = abstract_result.affected_count
-                unaffected = abstract_result.unaffected_count
-                confidence = f"{abstract_result.confidence:.2f}"
-            else:
-                has_carriers = ""
-                total = ""
-                affected = ""
-                unaffected = ""
-                confidence = ""
-
-            writer.writerow([
-                pmid_str, download_status, reason,
-                has_carriers, total, affected, unaffected, confidence
-            ])
-
-    logger.info(f"✓ Saved enhanced download status to {enhanced_paywalled_file}")
-
-    # Create priority papers CSV - papers needing manual follow-up
-    priority_papers_file = pmid_status_dir / "priority_papers.csv"
-    priority_papers = []
-
-    for pmid in filtered_pmids:
+    # Identify papers that passed filters but need abstract-only extraction
+    abstract_only_pmids = []
+    for pmid in pmids_to_download:
         pmid_str = str(pmid)
-
-        # Check abstract extraction result
-        abstract_result = abstract_extraction_results.get(pmid_str)
-        has_abstract_carriers = abstract_result.has_carrier_counts if abstract_result else False
-
-        # Check download status
-        is_downloaded = pmid_str in successfully_downloaded_pmids
-        is_paywalled = pmid_str in paywalled_pmids
-
-        # Priority papers: passed filter, no abstract carriers, and download failed
-        if not has_abstract_carriers and (is_paywalled or (pmid_str in [str(p) for p in pmids_to_download] and not is_downloaded)):
-            priority_papers.append({
-                "pmid": pmid_str,
-                "download_status": "Failed/Paywalled" if is_paywalled else "Not Downloaded",
-                "download_reason": paywalled_pmids.get(pmid_str, "N/A"),
-                "abstract_extraction_notes": abstract_result.extraction_notes if abstract_result else "No extraction",
-                "variants_mentioned_in_abstract": "; ".join(abstract_result.variants_mentioned) if abstract_result and abstract_result.variants_mentioned else "",
-            })
-
-    with open(priority_papers_file, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow([
-            "PMID", "Download_Status", "Download_Reason",
-            "Abstract_Extraction_Notes", "Variants_Mentioned_in_Abstract"
-        ])
-        for paper in priority_papers:
-            writer.writerow([
-                paper["pmid"],
-                paper["download_status"],
-                paper["download_reason"],
-                paper["abstract_extraction_notes"],
-                paper["variants_mentioned_in_abstract"],
-            ])
+        if pmid_str not in successfully_downloaded_pmids:
+            abstract_only_pmids.append(pmid_str)
 
     logger.info(
-        f"✓ Identified {len(priority_papers)} priority papers for manual follow-up "
-        f"(passed filter, no abstract carriers, download failed)"
+        f"✓ {len(successfully_downloaded_pmids)} papers downloaded successfully, "
+        f"{len(abstract_only_pmids)} will use abstract-only extraction"
     )
-    logger.info(f"✓ Saved priority papers list to {priority_papers_file}")
 
     # ============================================================================
     # STEP 3: Extract Variant and Patient Data
@@ -574,7 +401,17 @@ def automated_variant_extraction_workflow(
             markdown_files.append(full_context_files[pmid])
 
     logger.info(f"Found {len(data_zones_files)} DATA_ZONES.md and {len(full_context_files)} FULL_CONTEXT.md files")
-    logger.info(f"Processing {len(markdown_files)} unique papers (preferring DATA_ZONES.md)")
+    logger.info(f"Processing {len(markdown_files)} unique papers with full-text (preferring DATA_ZONES.md)")
+
+    # Also prepare papers that need abstract-only extraction
+    abstract_only_papers = []
+    for pmid in abstract_only_pmids:
+        record_path = abstract_records.get(pmid)
+        if record_path and Path(record_path).exists():
+            abstract_only_papers.append((pmid, record_path))
+
+    if abstract_only_papers:
+        logger.info(f"Also processing {len(abstract_only_papers)} papers using abstract-only extraction")
 
     # Process papers in parallel (OPTIMIZED for 3-5x speedup!)
     from utils.models import Paper
@@ -639,37 +476,110 @@ def automated_variant_extraction_workflow(
             logger.error(f"Error processing PMID {pmid_match}: {e}")
             return (None, (pmid_match, str(e)))
 
+    # Function to process abstract-only papers
+    def process_abstract_paper(pmid: str, record_path: str):
+        """Process a paper using only its abstract (for papers that failed download).
+
+        Returns:
+            tuple: (extraction_result or None, failure_info or None)
+                   where failure_info is (pmid, error_message)
+        """
+        logger.info(f"Processing PMID {pmid} (ABSTRACT ONLY)...")
+
+        try:
+            with open(record_path, "r", encoding="utf-8") as f:
+                record = json.load(f)
+
+            metadata = record.get("metadata", {})
+            abstract_text = record.get("abstract")
+
+            if not abstract_text:
+                return (None, (pmid, "No abstract available"))
+
+            # Create paper object with abstract as the text source
+            paper = Paper(
+                pmid=pmid,
+                title=metadata.get("title", f"Paper {pmid}"),
+                abstract=abstract_text,
+                full_text=None,  # No full text - extraction will use abstract
+                gene_symbol=gene_symbol
+            )
+
+            # Extract data using abstract
+            extraction_result = extractor.extract(paper)
+
+            if extraction_result.success:
+                # Mark as abstract-only extraction
+                if extraction_result.extracted_data:
+                    if "extraction_metadata" not in extraction_result.extracted_data:
+                        extraction_result.extracted_data["extraction_metadata"] = {}
+                    extraction_result.extracted_data["extraction_metadata"]["source_type"] = "abstract_only"
+                    extraction_result.extracted_data["extraction_metadata"]["abstract_only"] = True
+
+                # Save individual extraction
+                output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
+                with open(output_file, 'w') as f:
+                    json.dump(extraction_result.extracted_data, f, indent=2)
+
+                num_variants = extraction_result.extracted_data.get(
+                    'extraction_metadata', {}
+                ).get('total_variants_found', 0)
+
+                logger.info(f"✓ Extracted {num_variants} variants from PMID {pmid} (ABSTRACT ONLY)")
+                logger.info(f"✓ Saved to: {output_file}")
+
+                return (extraction_result, None)
+            else:
+                logger.warning(f"✗ Abstract extraction failed for PMID {pmid}: {extraction_result.error}")
+                return (None, (pmid, f"Abstract extraction: {extraction_result.error}"))
+
+        except Exception as e:
+            logger.error(f"Error processing abstract for PMID {pmid}: {e}")
+            return (None, (pmid, str(e)))
+
     # Process papers in parallel with ThreadPoolExecutor
     # LLM calls are I/O-bound, so threading provides excellent speedup
-    max_workers = min(8, len(markdown_files)) if markdown_files else 1
+    total_papers = len(markdown_files) + len(abstract_only_papers)
+    max_workers = min(8, total_papers) if total_papers > 0 else 1
 
     extraction_failures = []
+    abstract_extraction_count = 0
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        # Submit all papers for processing
-        future_to_file = {
-            executor.submit(process_paper_file, md_file): md_file
-            for md_file in markdown_files
-        }
+        # Submit all full-text papers for processing
+        future_to_source = {}
+        for md_file in markdown_files:
+            future = executor.submit(process_paper_file, md_file)
+            future_to_source[future] = ("fulltext", md_file)
+
+        # Submit all abstract-only papers for processing
+        for pmid, record_path in abstract_only_papers:
+            future = executor.submit(process_abstract_paper, pmid, record_path)
+            future_to_source[future] = ("abstract", pmid)
 
         # Collect results as they complete
         completed = 0
-        for future in as_completed(future_to_file):
-            md_file = future_to_file[future]
+        for future in as_completed(future_to_source):
+            source_type, source_info = future_to_source[future]
             completed += 1
 
             try:
                 result, failure_info = future.result()
                 if result:
                     extractions.append(result)
+                    if source_type == "abstract":
+                        abstract_extraction_count += 1
                 if failure_info:
                     extraction_failures.append(failure_info)
-                logger.info(f"✓ Completed {completed}/{len(markdown_files)} papers")
+                logger.info(f"✓ Completed {completed}/{total_papers} papers")
             except Exception as e:
-                logger.error(f"⚠ Failed to process {md_file.name}: {e}")
-                # Track executor-level failures too
-                from utils.pmid_utils import extract_pmid_from_filename
-                pmid = extract_pmid_from_filename(md_file) or md_file.name
+                if source_type == "fulltext":
+                    logger.error(f"⚠ Failed to process {source_info.name}: {e}")
+                    from utils.pmid_utils import extract_pmid_from_filename
+                    pmid = extract_pmid_from_filename(source_info) or source_info.name
+                else:
+                    logger.error(f"⚠ Failed to process abstract for {source_info}: {e}")
+                    pmid = source_info
                 extraction_failures.append((pmid, f"Executor error: {e}"))
 
     # Persist extraction failures to disk
@@ -759,6 +669,8 @@ def automated_variant_extraction_workflow(
             "papers_downloaded": num_downloaded,
             "papers_download_failed": num_download_failures,
             "papers_extracted": len(extractions),
+            "papers_from_fulltext": len(extractions) - abstract_extraction_count,
+            "papers_from_abstract_only": abstract_extraction_count,
             "papers_extraction_failed": len(extraction_failures),
             "total_variants_found": total_variants,
             "variants_with_penetrance_data": penetrance_summary["total_variants"],
@@ -766,22 +678,9 @@ def automated_variant_extraction_workflow(
             "total_affected_carriers": total_affected,
             "success_rate": f"{len(extractions) / len(pmids) * 100:.1f}%" if pmids else "0%"
         },
-        "abstract_extraction": {
-            "total_processed": len(abstract_extraction_results),
-            "with_carrier_counts": abstracts_with_carriers,
-            "without_carrier_counts": abstracts_without_carriers,
-            "results_file": str(abstract_extraction_file),
-            "csv_file": str(abstract_extraction_csv),
-        },
-        "priority_papers": {
-            "count": len(priority_papers),
-            "file": str(priority_papers_file),
-            "description": "Papers that passed filter but have no abstract carriers and download failed"
-        },
         "output_locations": {
             "pmid_list": str(combined_pmids_file),
             "pmid_status": str(pmid_status_dir),
-            "abstract_extraction": str(abstract_extraction_dir),
             "full_text_papers": str(harvest_dir),
             "extractions": str(extraction_dir),
             "penetrance_summary": str(penetrance_summary_file),
@@ -795,8 +694,6 @@ def automated_variant_extraction_workflow(
             "extraction_failures_count": len(extraction_failures),
             "download_failures_file": str(paywalled_log) if paywalled_log.exists() else None,
             "download_failures_count": num_download_failures,
-            "priority_papers_file": str(priority_papers_file),
-            "priority_papers_count": len(priority_papers)
         },
         "database_migration": {
             "successful": migration_stats["successful"],
@@ -820,23 +717,21 @@ def automated_variant_extraction_workflow(
     logger.info(f"PMIDs discovered: {len(pmids)}")
     logger.info(f"  - Filtered out: {len(dropped_pmids)}")
     logger.info(f"  - Passed filters: {len(filtered_pmids)}")
-    logger.info(f"Abstract extraction: {abstracts_with_carriers} with carrier counts, {abstracts_without_carriers} without")
     logger.info(f"Papers downloaded: {num_downloaded}")
     logger.info(f"  - Download failures: {num_download_failures}")
     logger.info(f"Papers with extractions: {len(extractions)}")
+    logger.info(f"  - From full-text: {len(extractions) - abstract_extraction_count}")
+    logger.info(f"  - From abstract only: {abstract_extraction_count}")
     logger.info(f"  - Extraction failures: {len(extraction_failures)}")
     logger.info(f"Total variants found: {total_variants}")
     logger.info(f"Variants with penetrance data: {penetrance_summary['total_variants']}")
     logger.info(f"Total carriers observed: {total_carriers}")
     logger.info(f"Total affected carriers: {total_affected}")
     logger.info(f"Success rate: {len(extractions) / len(pmids) * 100:.1f}%" if pmids else "0%")
-    logger.info(f"\n📋 Priority papers for manual follow-up: {len(priority_papers)}")
     logger.info(f"💾 Database migrated: {migration_stats['successful']}/{migration_stats['total_files']} extractions")
     logger.info(f"\n📋 PMID status files: {pmid_status_dir}")
     logger.info(f"\nAll outputs saved to: {output_path}")
     logger.info(f"Summary report: {summary_file}")
-    logger.info(f"Abstract extraction: {abstract_extraction_file}")
-    logger.info(f"Priority papers: {priority_papers_file}")
     logger.info(f"Penetrance summary: {penetrance_summary_file}")
     logger.info(f"SQLite database: {db_path}")
     logger.info(f"Workflow log: {log_file}")
