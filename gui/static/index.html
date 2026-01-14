@@ -1648,11 +1648,34 @@
             }
         }
 
+        // Clear job view when starting a new job
+        function clearJobView() {
+            // Hide results card and clear content
+            document.getElementById('results-card').classList.add('hidden');
+            document.getElementById('results-content').innerHTML = '';
+
+            // Reset all statistics to "-"
+            document.getElementById('stat-pmids').textContent = '-';
+            document.getElementById('stat-filtered').textContent = '-';
+            document.getElementById('stat-downloaded').textContent = '-';
+            document.getElementById('stat-extracted').textContent = '-';
+            document.getElementById('stat-variants').textContent = '-';
+
+            // Clear log viewer
+            document.getElementById('log-viewer').innerHTML = '';
+
+            // Reset progress steps
+            document.getElementById('progress-steps').innerHTML = '';
+        }
+
         // WebSocket Connection
         function connectWebSocket(jobId) {
             if (websocket) {
                 websocket.close();
             }
+
+            // Clear previous job's data when connecting to a new job
+            clearJobView();
 
             document.getElementById('no-active-job').classList.add('hidden');
             document.getElementById('active-job-content').classList.remove('hidden');
