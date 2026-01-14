@@ -7,12 +7,39 @@ consistent error handling, retry logic, and JSON response parsing.
 
 import json
 import logging
+import time
 from typing import Dict, Any, Optional, List
 from litellm import completion
+import litellm
 
 from .retry_utils import llm_retry
 
+# Configure LiteLLM retry behavior to reduce excessive retries
+litellm.num_retries = 2  # Reduce from default 6 to 2 (our @llm_retry handles additional retries)
+litellm.request_timeout = 600  # 10 minute timeout for large extractions
+
 logger = logging.getLogger(__name__)
+
+# Rate limiter: Simple token bucket to avoid hitting OpenAI rate limits
+class RateLimiter:
+    """Thread-safe rate limiter using token bucket algorithm."""
+    def __init__(self, requests_per_minute: int = 50):
+        self.requests_per_minute = requests_per_minute
+        self.min_interval = 60.0 / requests_per_minute  # seconds between requests
+        self.last_request_time = 0.0
+
+    def wait_if_needed(self):
+        """Sleep if necessary to respect rate limit."""
+        current_time = time.time()
+        time_since_last = current_time - self.last_request_time
+        if time_since_last < self.min_interval:
+            sleep_time = self.min_interval - time_since_last
+            logger.debug(f"Rate limiting: sleeping {sleep_time:.2f}s")
+            time.sleep(sleep_time)
+        self.last_request_time = time.time()
+
+# Global rate limiter - 50 requests/minute is safe for most OpenAI tiers
+_rate_limiter = RateLimiter(requests_per_minute=50)
 
 
 class BaseLLMCaller:
@@ -90,6 +117,7 @@ class BaseLLMCaller:
         repair_max_tokens = min(self.max_tokens, 16000)
 
         try:
+            _rate_limiter.wait_if_needed()
             response = completion(
                 model=self.model,
                 messages=[
@@ -126,6 +154,7 @@ class BaseLLMCaller:
         if response_format is None:
             response_format = {"type": "json_object"}
 
+        _rate_limiter.wait_if_needed()
         response = completion(
             model=self.model,
             messages=messages,
@@ -199,6 +228,7 @@ class BaseLLMCaller:
 
         try:
             # Make the LLM API call
+            _rate_limiter.wait_if_needed()
             response = completion(
                 model=self.model,
                 messages=messages,
@@ -262,6 +292,7 @@ class BaseLLMCaller:
         logger.debug(f"Calling LLM for text response, prompt length={len(prompt)}")
 
         try:
+            _rate_limiter.wait_if_needed()
             response = completion(
                 model=self.model,
                 messages=messages,
