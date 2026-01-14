@@ -216,6 +216,7 @@ class PMCAPIClient:
             'www.proteinatlas.org',  # Human Protein Atlas
             'biocyc.org',  # BioCyc metabolic pathway database
             'glygen.org',  # GlyGen landing pages (not full text)
+            'medlineplus.gov',  # NIH health information pages (not journal articles)
         ]
 
         # Known publisher domains - prioritize these
