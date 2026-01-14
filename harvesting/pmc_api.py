@@ -215,6 +215,7 @@ class PMCAPIClient:
             'www.genecards.org',  # GeneCards database
             'www.proteinatlas.org',  # Human Protein Atlas
             'biocyc.org',  # BioCyc metabolic pathway database
+            'glygen.org',  # GlyGen landing pages (not full text)
         ]
 
         # Known publisher domains - prioritize these
