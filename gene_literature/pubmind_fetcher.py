@@ -16,12 +16,14 @@ Features:
 import logging
 import re
 import time
-import requests
-from typing import List, Optional, Set, Tuple
 from pathlib import Path
+from typing import List, Optional, Set, Tuple
 
-from bs4 import BeautifulSoup
+import requests
 from Bio import Entrez
+from bs4 import BeautifulSoup
+
+from utils.http_utils import get_browser_session
 
 logger = logging.getLogger(__name__)
 
@@ -54,15 +56,8 @@ class PubMindFetcher:
         Entrez.email = email
         Entrez.tool = "PubMindFetcher"
 
-        # Setup session with headers to mimic browser
-        self.session = requests.Session()
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate',
-            'Connection': 'keep-alive',
-        })
+        # Use shared browser session from http_utils
+        self.session = get_browser_session()
 
     def _request_with_retry(
         self,
