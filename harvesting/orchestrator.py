@@ -74,15 +74,17 @@ class PMCHarvester:
 
         # Initialize Elsevier API client (optional - uses API key from settings if available)
         elsevier_api_key = None
+        elsevier_insttoken = None
         wiley_api_key = None
         if get_settings is not None:
             try:
                 settings = get_settings()
                 elsevier_api_key = settings.elsevier_api_key
+                elsevier_insttoken = settings.elsevier_insttoken
                 wiley_api_key = settings.wiley_api_key
             except Exception:
                 pass  # Settings validation may fail if other keys are missing
-        self.elsevier_api = ElsevierAPIClient(api_key=elsevier_api_key, session=self.session)
+        self.elsevier_api = ElsevierAPIClient(api_key=elsevier_api_key, insttoken=elsevier_insttoken, session=self.session)
         self.wiley_api = WileyAPIClient(api_key=wiley_api_key, session=self.session)
 
         # Initialize log files

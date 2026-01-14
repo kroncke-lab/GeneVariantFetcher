@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     ncbi_email: Optional[str] = Field(default=None, env="NCBI_EMAIL")
     ncbi_api_key: Optional[str] = Field(default=None, env="NCBI_API_KEY")
     elsevier_api_key: Optional[str] = Field(default=None, env="ELSEVIER_API_KEY")
+    elsevier_insttoken: Optional[str] = Field(default=None, env="ELSEVIER_INSTTOKEN", description="Elsevier institution token for subscription access")
     wiley_api_key: Optional[str] = Field(default=None, env="WILEY_API_KEY")
 
     # Model Configuration
