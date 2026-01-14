@@ -10,13 +10,17 @@ API Documentation: https://onlinelibrary.wiley.com/library-info/resources/text-a
 
 import logging
 import re
+import tempfile
 import time
+from pathlib import Path
 from typing import Optional, Tuple
 from urllib.parse import urlparse, quote
 
 import requests
 from bs4 import BeautifulSoup
 from xml.etree import ElementTree as ET
+
+from .format_converters import FormatConverter
 
 logger = logging.getLogger(__name__)
 
@@ -93,6 +97,22 @@ class WileyAPIClient:
             return False
         domain = urlparse(url).netloc.lower()
         return any(wiley_domain in domain for wiley_domain in WILEY_DOMAINS)
+
+    @staticmethod
+    def encode_doi_for_web(doi: str) -> str:
+        """
+        Encode a DOI for use in Wiley Online Library URLs.
+
+        Wiley web URLs typically expect slashes and parentheses to remain
+        unescaped, while characters like < and > must be percent-encoded.
+
+        Args:
+            doi: Digital Object Identifier
+
+        Returns:
+            URL-encoded DOI string suitable for Wiley web URLs
+        """
+        return quote(doi, safe='/:()')
 
     @staticmethod
     def extract_doi_from_url(url: str) -> Optional[str]:
@@ -371,7 +391,7 @@ class WileyAPIClient:
             - error_message: Error description if failed, None otherwise
         """
         # URL-encode the DOI for the web URL (same encoding as browser)
-        encoded_doi = quote(doi, safe='')
+        encoded_doi = self.encode_doi_for_web(doi)
         # Wiley HTML full-text URL format
         full_text_url = f"https://onlinelibrary.wiley.com/doi/full/{encoded_doi}"
 
@@ -383,7 +403,10 @@ class WileyAPIClient:
             response = self.session.get(full_text_url, timeout=30, allow_redirects=True)
 
             if response.status_code == 403:
-                return None, "Access forbidden - article may be paywalled"
+                pdf_markdown, pdf_error = self._fetch_pdf_fulltext(doi)
+                if pdf_markdown:
+                    return pdf_markdown, None
+                return None, pdf_error or "Access forbidden - article may be paywalled"
             if response.status_code == 404:
                 return None, "Article not found on Wiley website"
             if response.status_code != 200:
@@ -411,9 +434,15 @@ class WileyAPIClient:
                 logger.info(f"Successfully scraped Wiley article via web for DOI: {doi}")
                 return markdown, None
             elif markdown and len(markdown) > 500:
-                return None, "Web scrape produced insufficient content (abstract only)"
+                pdf_markdown, pdf_error = self._fetch_pdf_fulltext(doi)
+                if pdf_markdown:
+                    return pdf_markdown, None
+                return None, pdf_error or "Web scrape produced insufficient content (abstract only)"
             else:
-                return None, "Could not extract content from Wiley web page"
+                pdf_markdown, pdf_error = self._fetch_pdf_fulltext(doi)
+                if pdf_markdown:
+                    return pdf_markdown, None
+                return None, pdf_error or "Could not extract content from Wiley web page"
 
         except requests.exceptions.Timeout:
             return None, "Web request timed out"
@@ -499,6 +528,49 @@ class WileyAPIClient:
         except Exception as e:
             logger.debug(f"Error scraping Wiley HTML: {e}")
             return None
+
+    def _fetch_pdf_fulltext(self, doi: str) -> Tuple[Optional[str], Optional[str]]:
+        """
+        Attempt to download a Wiley PDF/EPDF and convert it to markdown.
+
+        Args:
+            doi: Digital Object Identifier
+
+        Returns:
+            Tuple of (markdown_content, error_message)
+        """
+        encoded_doi = self.encode_doi_for_web(doi)
+        pdf_urls = [
+            f"https://onlinelibrary.wiley.com/doi/epdf/{encoded_doi}",
+            f"https://onlinelibrary.wiley.com/doi/pdf/{encoded_doi}",
+        ]
+        converter = FormatConverter()
+
+        for pdf_url in pdf_urls:
+            try:
+                self._rate_limit()
+                response = self.session.get(pdf_url, timeout=30, allow_redirects=True)
+                if response.status_code != 200:
+                    continue
+                content_type = response.headers.get('Content-Type', '').lower()
+                if 'pdf' not in content_type and not response.content.startswith(b'%PDF'):
+                    continue
+                with tempfile.NamedTemporaryFile(suffix=".pdf", delete=True) as tmp_file:
+                    tmp_file.write(response.content)
+                    tmp_file.flush()
+                    markdown = converter.pdf_to_markdown(Path(tmp_file.name))
+                if markdown and len(markdown) > 500:
+                    logger.info(f"Successfully converted Wiley PDF to markdown for DOI: {doi}")
+                    return markdown, None
+            except requests.exceptions.Timeout:
+                continue
+            except requests.exceptions.RequestException:
+                continue
+            except Exception as e:
+                logger.debug(f"Error converting Wiley PDF to markdown: {e}")
+                continue
+
+        return None, "Wiley PDF full text not available"
 
     def _process_section(self, section_elem: ET.Element, level: int = 3) -> str:
         """
