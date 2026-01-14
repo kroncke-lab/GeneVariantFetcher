@@ -4,12 +4,17 @@ Extract human genetic variant carriers from biomedical literature into a SQLite 
 
 ## What It Does
 
-Given a gene name, this tool:
-1. **Discovers** variant-related papers via [PubMind](https://pubmind.ai/), PubMed, and Europe PMC
-2. **Filters** papers through a 3-tier relevance pipeline (keywords → LLM triage → extraction)
-3. **Downloads** full-text articles and supplemental materials (Excel, Word, PDFs)
-4. **Extracts** patient-level variant data using an LLM model cascade
-5. **Writes** normalized data to SQLite
+Given a gene name, this tool runs a 9-step pipeline:
+
+1. **Discover Synonyms** (optional) – Auto-find gene aliases via NCBI
+2. **Fetch PMIDs** – Query PubMind, PubMed, and Europe PMC
+3. **Fetch Abstracts** – Get metadata for all discovered papers
+4. **Filter Papers** – Tier 1 keyword filter + Tier 2 LLM relevance triage
+5. **Download Full-Text** – Fetch PMC articles and supplements (Excel, Word, PDFs)
+6. **Scout Data** – Identify high-value data zones to reduce token usage
+7. **Extract Variants** – LLM extraction with model cascade
+8. **Aggregate** – Validate and merge penetrance data
+9. **Migrate to SQLite** – Create normalized database
 
 **Key Insight:** 70-80% of variant data is in supplemental files. This tool extracts it all.
 
@@ -51,6 +56,17 @@ brew install poppler
 
 ## Pipeline Architecture
 
+### Entry Points
+
+| Command | Mode | Features |
+|---------|------|----------|
+| `python main.py` | **GUI** (default) | Web interface, checkpointing, pause/resume |
+| `python main.py --cli GENE` | CLI | Full pipeline, no checkpointing |
+
+The GUI is recommended for most use cases. It provides real-time progress, job management, and automatic resume after interruption.
+
+### Filter Tiers
+
 | Tier | Component | Purpose | Model |
 |------|-----------|---------|-------|
 | **1** | KeywordFilter | Fast heuristic filter | None (regex) |
@@ -62,6 +78,10 @@ brew install poppler
 ### Genetic Data Scout
 
 Before extraction, the pipeline identifies relevant "data zones" in each paper and creates condensed `DATA_ZONES.md` files. This reduces token usage by 60-80%.
+
+### Abstract-Only Fallback
+
+Papers that cannot be downloaded (paywalled, missing from PMC) are still processed using their abstracts. The `ExpertExtractor` handles both fulltext and abstract-only extraction transparently.
 
 ## Environment Variables
 
@@ -95,6 +115,8 @@ Create a `.env` file in the project root:
 ## CLI Options
 
 ```bash
+python main.py --cli GENE --email EMAIL --output DIR [OPTIONS]
+# or directly:
 python automated_workflow.py GENE --email EMAIL --output DIR [OPTIONS]
 ```
 
@@ -112,13 +134,13 @@ python automated_workflow.py GENE --email EMAIL --output DIR [OPTIONS]
 
 ```bash
 # Basic run
-python automated_workflow.py TTR --email user@email.com --output ./results
+python main.py --cli TTR --email user@email.com --output ./results
 
 # With synonym discovery
-python automated_workflow.py TTR --email user@email.com --output ./results --auto-synonyms
+python main.py --cli TTR --email user@email.com --output ./results --auto-synonyms
 
 # Skip to stronger model
-python automated_workflow.py SCN5A --email user@email.com --output ./results --tier-threshold 0
+python main.py --cli SCN5A --email user@email.com --output ./results --tier-threshold 0
 ```
 
 ## Output Structure
@@ -179,6 +201,19 @@ python fetch_manager.py results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.cs
 | "All papers filtered" | Lower `TIER2_CONFIDENCE_THRESHOLD` or disable filters |
 | Rate limiting | Set `NCBI_API_KEY` for higher limits |
 | GUI won't start | Install: `pip install -r gui/requirements.txt` |
+
+## GUI Features
+
+### Checkpointing & Resume
+
+Jobs automatically save state after each pipeline step to `~/.gvf_jobs/`. If interrupted, jobs can be resumed from the last completed step via the GUI's job management interface.
+
+### Folder Jobs
+
+The GUI supports "folder jobs" for processing existing paper collections:
+- Skip discovery and download steps
+- Start directly at scouting or extraction
+- Useful for re-processing or adding new extractions
 
 ## Development
 
