@@ -103,8 +103,9 @@ class WileyAPIClient:
         """
         Encode a DOI for use in Wiley Online Library URLs.
 
-        Wiley web URLs typically expect slashes and parentheses to remain
-        unescaped, while characters like < and > must be percent-encoded.
+        For SICI-style DOIs (older format with special characters like <, >, ::, etc.),
+        we need aggressive encoding - only keeping slashes unescaped. Modern DOIs
+        don't contain special characters so this is safe for all DOI formats.
 
         Args:
             doi: Digital Object Identifier
@@ -112,7 +113,9 @@ class WileyAPIClient:
         Returns:
             URL-encoded DOI string suitable for Wiley web URLs
         """
-        return quote(doi, safe='/:()')
+        # Only keep forward slash unencoded - encode everything else including
+        # parentheses and colons which are common in SICI-style DOIs
+        return quote(doi, safe='/')
 
     @staticmethod
     def extract_doi_from_url(url: str) -> Optional[str]:
@@ -478,7 +481,9 @@ class WileyAPIClient:
         Returns:
             Tuple of (markdown_content, error_message)
         """
-        encoded_doi = quote(doi, safe='/:')  # Use same encoding as doi.org expects
+        # Encode DOI for doi.org URL - keep only slash unencoded to handle
+        # SICI-style DOIs with special characters like parentheses, colons, etc.
+        encoded_doi = quote(doi, safe='/')
         doi_url = f"https://doi.org/{encoded_doi}"
 
         try:
