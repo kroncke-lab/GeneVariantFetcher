@@ -13,9 +13,10 @@ import re
 import time
 from typing import Optional, Tuple
 from urllib.parse import urlparse, quote
-from xml.etree import ElementTree as ET
 
 import requests
+from bs4 import BeautifulSoup
+from xml.etree import ElementTree as ET
 
 logger = logging.getLogger(__name__)
 
@@ -354,6 +355,151 @@ class WileyAPIClient:
             logger.debug(f"Error parsing Wiley HTML: {e}")
             return None
 
+    def scrape_fulltext_from_web(self, doi: str) -> Tuple[Optional[str], Optional[str]]:
+        """
+        Scrape full-text content directly from Wiley Online Library website.
+
+        This is a fallback method for when the TDM API fails (e.g., for older
+        SICI-style DOIs that aren't indexed in the TDM system).
+
+        Args:
+            doi: Digital Object Identifier
+
+        Returns:
+            Tuple of (markdown_content, error_message)
+            - markdown_content: Markdown text if successful, None otherwise
+            - error_message: Error description if failed, None otherwise
+        """
+        # URL-encode the DOI for the web URL (same encoding as browser)
+        encoded_doi = quote(doi, safe='')
+        # Wiley HTML full-text URL format
+        full_text_url = f"https://onlinelibrary.wiley.com/doi/full/{encoded_doi}"
+
+        logger.info(f"Attempting to scrape Wiley web page for DOI: {doi}")
+        logger.debug(f"Wiley web URL: {full_text_url}")
+
+        try:
+            self._rate_limit()
+            response = self.session.get(full_text_url, timeout=30, allow_redirects=True)
+
+            if response.status_code == 403:
+                return None, "Access forbidden - article may be paywalled"
+            if response.status_code == 404:
+                return None, "Article not found on Wiley website"
+            if response.status_code != 200:
+                return None, f"HTTP {response.status_code}: {response.reason}"
+
+            html_content = response.text
+
+            # Check for paywall indicators
+            paywall_indicators = [
+                'purchase this article',
+                'get access',
+                'institutional access',
+                'sign in to access',
+                'subscription required',
+            ]
+            html_lower = html_content.lower()
+            if any(indicator in html_lower for indicator in paywall_indicators):
+                # Check if we also have full article content (some pages show both)
+                if 'article-section__content' not in html_lower:
+                    return None, "Article is behind paywall"
+
+            # Extract content using BeautifulSoup
+            markdown = self._scrape_wiley_html(html_content)
+            if markdown and len(markdown) > 2000:
+                logger.info(f"Successfully scraped Wiley article via web for DOI: {doi}")
+                return markdown, None
+            elif markdown and len(markdown) > 500:
+                return None, "Web scrape produced insufficient content (abstract only)"
+            else:
+                return None, "Could not extract content from Wiley web page"
+
+        except requests.exceptions.Timeout:
+            return None, "Web request timed out"
+        except requests.exceptions.RequestException as e:
+            return None, f"Web request failed: {str(e)}"
+
+    def _scrape_wiley_html(self, html_content: str) -> Optional[str]:
+        """
+        Extract article content from Wiley Online Library HTML page.
+
+        Args:
+            html_content: Raw HTML from Wiley website
+
+        Returns:
+            Markdown string if extraction successful, None otherwise
+        """
+        try:
+            soup = BeautifulSoup(html_content, 'html.parser')
+            markdown = "# MAIN TEXT\n\n"
+
+            # Extract title
+            title_elem = soup.find('h1', class_='citation__title')
+            if not title_elem:
+                title_elem = soup.find('h1')
+            if title_elem:
+                title = title_elem.get_text(strip=True)
+                markdown += f"## {title}\n\n"
+
+            # Extract abstract
+            abstract = soup.find('section', class_='article-section__abstract')
+            if not abstract:
+                abstract = soup.find('div', class_='abstract')
+            if abstract:
+                abstract_text = abstract.get_text(separator=' ', strip=True)
+                markdown += f"### Abstract\n\n{abstract_text}\n\n"
+
+            # Extract main content sections
+            # Wiley uses article-section__full divs for each section
+            content_sections = soup.find_all('section', class_='article-section__full')
+            if not content_sections:
+                content_sections = soup.find_all('section', class_='article-section__content')
+            if not content_sections:
+                content_sections = soup.find_all('div', class_='article__body')
+
+            for section in content_sections:
+                # Get section heading
+                heading = section.find(['h2', 'h3', 'h4'], class_='article-section__title')
+                if not heading:
+                    heading = section.find(['h2', 'h3', 'h4'])
+                if heading:
+                    heading_text = heading.get_text(strip=True)
+                    # Skip duplicate abstract heading
+                    if heading_text.lower() != 'abstract':
+                        markdown += f"### {heading_text}\n\n"
+
+                # Get paragraphs within this section
+                paragraphs = section.find_all('p')
+                for para in paragraphs:
+                    para_text = para.get_text(separator=' ', strip=True)
+                    if para_text and len(para_text) > 20:
+                        markdown += f"{para_text}\n\n"
+
+            # Fallback: if structured extraction didn't find enough content,
+            # try extracting all paragraphs from the main content area
+            if len(markdown) < 1000:
+                main_content = soup.find('div', class_='article__content')
+                if main_content:
+                    for para in main_content.find_all('p'):
+                        para_text = para.get_text(separator=' ', strip=True)
+                        if para_text and len(para_text) > 50:
+                            markdown += f"{para_text}\n\n"
+
+            # Ultimate fallback: extract all substantial paragraphs
+            if len(markdown) < 500:
+                all_paragraphs = soup.find_all('p')
+                for para in all_paragraphs:
+                    para_text = para.get_text(separator=' ', strip=True)
+                    if para_text and len(para_text) > 100:
+                        markdown += f"{para_text}\n\n"
+
+            return markdown if len(markdown) > 200 else None
+
+        except Exception as e:
+            logger.debug(f"Error scraping Wiley HTML: {e}")
+            return None
+
     def _process_section(self, section_elem: ET.Element, level: int = 3) -> str:
         """
         Process a section element and convert to markdown.
@@ -429,25 +575,25 @@ class WileyAPIClient:
         return " ".join(filter(None, text_parts))
 
     def fetch_fulltext(self, doi: Optional[str] = None,
-                       url: Optional[str] = None) -> Tuple[Optional[str], Optional[str]]:
+                       url: Optional[str] = None,
+                       try_web_scraping: bool = True) -> Tuple[Optional[str], Optional[str]]:
         """
         Fetch full-text content and convert to markdown.
 
-        Tries to fetch using DOI. If a URL is provided and no DOI,
-        extracts DOI from the URL.
+        Tries to fetch using DOI via the TDM API first. If the API fails
+        (e.g., for older SICI-style DOIs), falls back to web scraping.
+        If a URL is provided and no DOI, extracts DOI from the URL.
 
         Args:
             doi: Digital Object Identifier
             url: URL (used to extract DOI if not provided)
+            try_web_scraping: If True, fall back to web scraping when API fails
 
         Returns:
             Tuple of (markdown_content, error_message)
             - markdown_content: Markdown text if successful, None otherwise
             - error_message: Error description if failed, None otherwise
         """
-        if not self.is_available:
-            return None, "Wiley API key not configured"
-
         # Extract DOI from URL if not provided
         if not doi and url:
             doi = self.extract_doi_from_url(url)
@@ -455,26 +601,47 @@ class WileyAPIClient:
         if not doi:
             return None, "No valid DOI available"
 
-        # Fetch content
-        content, error = self.get_fulltext_by_doi(doi)
-        if content:
-            markdown = self.content_to_markdown(content)
-            # Check for sufficient content - abstracts are typically 200-400 words
-            # Full articles should be at least 2000 characters (roughly 350+ words)
-            # Also check for section headings beyond just Abstract
-            MIN_FULLTEXT_LENGTH = 2000
-            has_body_sections = markdown and any(
-                section in markdown.lower()
-                for section in ['### introduction', '### methods', '### results',
-                                '### discussion', '### materials', '### content']
-            )
-            if markdown and (len(markdown) > MIN_FULLTEXT_LENGTH or has_body_sections):
-                logger.info(f"Successfully fetched Wiley article via DOI: {doi}")
-                return markdown, None
-            elif markdown and len(markdown) > 500:
-                # Got some content but likely just abstract
-                error = "Content conversion produced insufficient content (abstract only)"
-            elif not error:
-                error = "Content conversion produced insufficient content"
+        api_error = None
 
-        return None, error or "Failed to fetch content"
+        # Try TDM API first (if API key is available)
+        if self.is_available:
+            content, api_error = self.get_fulltext_by_doi(doi)
+            if content:
+                markdown = self.content_to_markdown(content)
+                # Check for sufficient content - abstracts are typically 200-400 words
+                # Full articles should be at least 2000 characters (roughly 350+ words)
+                # Also check for section headings beyond just Abstract
+                MIN_FULLTEXT_LENGTH = 2000
+                has_body_sections = markdown and any(
+                    section in markdown.lower()
+                    for section in ['### introduction', '### methods', '### results',
+                                    '### discussion', '### materials', '### content']
+                )
+                if markdown and (len(markdown) > MIN_FULLTEXT_LENGTH or has_body_sections):
+                    logger.info(f"Successfully fetched Wiley article via TDM API: {doi}")
+                    return markdown, None
+                elif markdown and len(markdown) > 500:
+                    # Got some content but likely just abstract
+                    api_error = "TDM API returned insufficient content (abstract only)"
+                elif not api_error:
+                    api_error = "TDM API content conversion produced insufficient content"
+
+            # Log API failure for debugging
+            if api_error:
+                logger.info(f"Wiley TDM API failed for DOI {doi}: {api_error}")
+
+        # Fall back to web scraping if API failed or isn't available
+        if try_web_scraping:
+            logger.info(f"Falling back to Wiley web scraping for DOI: {doi}")
+            web_markdown, web_error = self.scrape_fulltext_from_web(doi)
+            if web_markdown:
+                logger.info(f"Successfully fetched Wiley article via web scraping: {doi}")
+                return web_markdown, None
+
+            # Combine errors for debugging
+            if web_error:
+                if api_error:
+                    return None, f"TDM API: {api_error}; Web scraping: {web_error}"
+                return None, f"Web scraping: {web_error}"
+
+        return None, api_error or "Failed to fetch content"
