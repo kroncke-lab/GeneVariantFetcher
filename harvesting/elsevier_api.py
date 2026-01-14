@@ -12,7 +12,7 @@ import logging
 import re
 import time
 from typing import Optional, Tuple
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 from xml.etree import ElementTree as ET
 
 import requests
@@ -135,7 +135,9 @@ class ElsevierAPIClient:
 
         self._rate_limit()
 
-        url = f"{self.BASE_URL}/doi/{doi}"
+        # URL-encode the DOI (can contain special characters like <, >, parentheses)
+        encoded_doi = quote(doi, safe='/:')
+        url = f"{self.BASE_URL}/doi/{encoded_doi}"
         headers = {
             "X-ELS-APIKey": self.api_key,
             "Accept": "application/xml",

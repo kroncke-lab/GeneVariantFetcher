@@ -13,10 +13,29 @@ import re
 import time
 import requests
 from typing import List, Dict, Optional, Tuple
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+
+def encode_doi_for_url(doi: str) -> str:
+    """
+    Encode a DOI for use in URLs.
+
+    DOIs can contain special characters like <, >, (, ), etc. that need to be
+    percent-encoded when used in URLs. The safe characters are those that
+    don't need encoding in the path component of a URL.
+
+    Args:
+        doi: The raw DOI string
+
+    Returns:
+        URL-encoded DOI string
+    """
+    # Encode the DOI, keeping / and : as safe since they're common in DOIs
+    # and handled correctly by doi.org
+    return quote(doi, safe='/:')  # Keep common DOI characters unencoded
 
 # User-Agent strings to rotate through when encountering 403 errors
 # These represent various browsers and research tools
@@ -160,7 +179,8 @@ class DOIResolver:
             # Use the session with browser-like headers to resolve the DOI
             # allow_redirects=True follows the redirect chain to the final publisher page
             print(f"  Resolving DOI: https://doi.org/{doi}")
-            response = self._resolve_with_retry(f"https://doi.org/{doi}", f"DOI {doi}")
+            encoded_doi = encode_doi_for_url(doi)
+            response = self._resolve_with_retry(f"https://doi.org/{encoded_doi}", f"DOI {doi}")
 
             if not response:
                 print(f"  ❌ DOI resolution failed for {doi}: No response received")
@@ -255,7 +275,8 @@ class DOIResolver:
             # Use the session with browser-like headers to resolve the DOI
             # Uses retry logic with User-Agent rotation for 403 errors
             print(f"  Resolving DOI for full text: https://doi.org/{doi}")
-            response = self._resolve_with_retry(f"https://doi.org/{doi}", f"DOI {doi} (full text)")
+            encoded_doi = encode_doi_for_url(doi)
+            response = self._resolve_with_retry(f"https://doi.org/{encoded_doi}", f"DOI {doi} (full text)")
 
             if not response:
                 print(f"  ❌ DOI resolution failed for {doi}: No response received")
@@ -338,7 +359,8 @@ class DOIResolver:
         """
         try:
             print(f"  Resolving DOI: https://doi.org/{doi}")
-            response = self._resolve_with_retry(f"https://doi.org/{doi}", f"DOI {doi}")
+            encoded_doi = encode_doi_for_url(doi)
+            response = self._resolve_with_retry(f"https://doi.org/{encoded_doi}", f"DOI {doi}")
 
             if not response:
                 print(f"  ❌ DOI resolution failed for {doi}: No response received")
