@@ -20,6 +20,7 @@ import requests
 from bs4 import BeautifulSoup
 from xml.etree import ElementTree as ET
 
+from utils.http_utils import BROWSER_HEADERS
 from .format_converters import FormatConverter
 
 logger = logging.getLogger(__name__)
@@ -59,8 +60,17 @@ class WileyAPIClient:
         """
         self.api_key = api_key
         self.session = session or requests.Session()
+        # Ensure browser-like defaults for sessions created outside the orchestrator.
+        for key, value in BROWSER_HEADERS.items():
+            self.session.headers.setdefault(key, value)
         self._last_request_time = 0
         self._min_request_interval = 0.5  # Rate limiting: max 2 req/sec
+
+    def _get_wiley_headers(self, referer: Optional[str] = None) -> dict:
+        headers = dict(self.session.headers)
+        if referer:
+            headers["Referer"] = referer
+        return headers
 
     @property
     def is_available(self) -> bool:
@@ -409,7 +419,12 @@ class WileyAPIClient:
 
         try:
             self._rate_limit()
-            response = self.session.get(full_text_url, timeout=30, allow_redirects=True)
+            response = self.session.get(
+                full_text_url,
+                timeout=30,
+                allow_redirects=True,
+                headers=self._get_wiley_headers(referer="https://onlinelibrary.wiley.com/")
+            )
 
             if response.status_code == 403:
                 pdf_markdown, pdf_error = self._fetch_pdf_fulltext(doi)
@@ -494,6 +509,14 @@ class WileyAPIClient:
             self._rate_limit()
             response = self.session.get(doi_url, timeout=30, allow_redirects=True)
 
+            if response.status_code == 403 and response.url and "wiley.com" in response.url.lower():
+                response = self.session.get(
+                    response.url,
+                    timeout=30,
+                    allow_redirects=True,
+                    headers=self._get_wiley_headers(referer="https://doi.org/")
+                )
+
             if response.status_code != 200:
                 return None, f"DOI resolution failed: HTTP {response.status_code}"
 
@@ -541,7 +564,12 @@ class WileyAPIClient:
 
                 logger.info(f"Following full text link: {fulltext_link}")
                 self._rate_limit()
-                ft_response = self.session.get(fulltext_link, timeout=30, allow_redirects=True)
+                ft_response = self.session.get(
+                    fulltext_link,
+                    timeout=30,
+                    allow_redirects=True,
+                    headers=self._get_wiley_headers(referer=final_url)
+                )
 
                 if ft_response.status_code == 200:
                     markdown = self._scrape_wiley_html(ft_response.text)
@@ -711,7 +739,12 @@ class WileyAPIClient:
         for pdf_url in pdf_urls:
             try:
                 self._rate_limit()
-                response = self.session.get(pdf_url, timeout=30, allow_redirects=True)
+                response = self.session.get(
+                    pdf_url,
+                    timeout=30,
+                    allow_redirects=True,
+                    headers=self._get_wiley_headers(referer="https://onlinelibrary.wiley.com/")
+                )
                 if response.status_code != 200:
                     continue
                 content_type = response.headers.get('Content-Type', '').lower()
