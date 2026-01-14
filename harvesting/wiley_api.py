@@ -132,32 +132,48 @@ class WileyAPIClient:
         if not self.is_available:
             return None, "Wiley API key not configured"
 
-        self._rate_limit()
-
         # URL-encode the DOI (can contain special characters like <, >, parentheses)
-        encoded_doi = quote(doi, safe='/:')
+        encoded_doi = quote(doi, safe='')
         url = f"{self.BASE_URL}/{encoded_doi}"
         headers = {
             "Wiley-TDM-Client-Token": self.api_key,
             "Accept": "application/xml, text/xml, application/xhtml+xml, text/html",
         }
 
-        try:
+        def _request_fulltext(target_url: str) -> requests.Response:
+            self._rate_limit()
             logger.info(f"Fetching full text from Wiley API for DOI: {doi}")
-            response = self.session.get(url, headers=headers, timeout=30)
+            return self.session.get(target_url, headers=headers, timeout=30)
 
+        def _handle_response(response: requests.Response) -> Tuple[Optional[str], Optional[str]]:
             if response.status_code == 200:
                 return response.text, None
-            elif response.status_code == 401:
+            if response.status_code == 401:
                 return None, "Invalid or unauthorized API key"
-            elif response.status_code == 403:
+            if response.status_code == 403:
                 return None, "Access forbidden - API key may lack permissions or article not available"
-            elif response.status_code == 404:
+            if response.status_code == 404:
                 return None, "Article not found via Wiley API"
-            elif response.status_code == 429:
+            if response.status_code == 429:
                 return None, "Rate limit exceeded"
-            else:
-                return None, f"HTTP {response.status_code}: {response.reason}"
+            return None, f"HTTP {response.status_code}: {response.reason}"
+
+        try:
+            response = _request_fulltext(url)
+            content, error = _handle_response(response)
+            if content:
+                return content, None
+
+            if response.status_code == 404 and "/" in doi:
+                legacy_encoded_doi = quote(doi, safe='/:')
+                if legacy_encoded_doi != encoded_doi:
+                    legacy_url = f"{self.BASE_URL}/{legacy_encoded_doi}"
+                    response = _request_fulltext(legacy_url)
+                    content, error = _handle_response(response)
+                    if content:
+                        return content, None
+
+            return None, error
 
         except requests.exceptions.Timeout:
             return None, "Request timed out"
