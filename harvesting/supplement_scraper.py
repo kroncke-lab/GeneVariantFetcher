@@ -491,6 +491,9 @@ class SupplementScraper:
         """
         Extract full-text content from a Wiley Online Library page.
 
+        Handles both modern and older Wiley page layouts including SICI-style
+        DOI articles from the early 2000s.
+
         Args:
             html: HTML content of the publisher page
             base_url: Base URL of the article
@@ -502,38 +505,110 @@ class SupplementScraper:
         soup = BeautifulSoup(html, 'html.parser')
         markdown = "# MAIN TEXT\n\n"
 
-        # Extract title
+        # Extract title - try multiple patterns for old and new layouts
         title = ""
-        title_elem = soup.find('h1', class_='citation__title') or soup.find('h1')
+        title_elem = soup.find('h1', class_='citation__title')
+        if not title_elem:
+            title_elem = soup.find('h1', class_='article-header__title')
+        if not title_elem:
+            title_elem = soup.find('h1', id='articleTitle')
+        if not title_elem:
+            title_elem = soup.find('h1')
         if title_elem:
             title = title_elem.get_text().strip()
             markdown += f"## {title}\n\n"
 
-        # Extract abstract
-        abstract = soup.find('section', class_='article-section__abstract') or soup.find('div', class_='abstract')
+        # Extract abstract - try multiple patterns
+        abstract = soup.find('section', class_='article-section__abstract')
+        if not abstract:
+            abstract = soup.find('div', class_='abstract')
+        if not abstract:
+            abstract = soup.find('div', id='abstract')
+        if not abstract:
+            # Old layout: abstract might be in a paragraph with specific id
+            abstract = soup.find('p', id='abstract')
         if abstract:
             markdown += "### Abstract\n\n"
-            markdown += abstract.get_text().strip() + "\n\n"
+            markdown += abstract.get_text(separator=' ', strip=True) + "\n\n"
 
-        # Extract main body
-        body = soup.find('section', class_='article-section__content') or soup.find('div', class_='article__body')
-        if body:
-            for section in body.find_all(['section', 'div']):
-                section_title = section.find(['h2', 'h3', 'h4'])
-                if section_title:
-                    markdown += f"### {section_title.get_text().strip()}\n\n"
+        # Extract main content sections - try multiple selector patterns
+        # Modern Wiley uses article-section__full divs for each section
+        content_sections = soup.find_all('section', class_='article-section__full')
+        if not content_sections:
+            content_sections = soup.find_all('section', class_='article-section__content')
+        if not content_sections:
+            content_sections = soup.find_all('div', class_='article__body')
 
-                for p in section.find_all('p', recursive=False):
-                    text = p.get_text().strip()
-                    if text:
-                        markdown += f"{text}\n\n"
+        # Old Wiley layout: try different container patterns
+        if not content_sections:
+            content_sections = soup.find_all('div', class_=re.compile(r'article-?body', re.I))
+        if not content_sections:
+            content_sections = soup.find_all('div', id=re.compile(r'(fulltext|article-?content|main-?content)', re.I))
+        if not content_sections:
+            # Very old layouts: look for main article div
+            main_article = soup.find('div', class_='mainContent')
+            if main_article:
+                content_sections = [main_article]
 
-        # Fallback
+        for section in content_sections:
+            # Get section heading
+            heading = section.find(['h2', 'h3', 'h4'], class_='article-section__title')
+            if not heading:
+                heading = section.find(['h2', 'h3', 'h4'])
+            if heading:
+                heading_text = heading.get_text().strip()
+                # Skip duplicate abstract heading
+                if heading_text.lower() != 'abstract':
+                    markdown += f"### {heading_text}\n\n"
+
+            # Get paragraphs within this section
+            paragraphs = section.find_all('p')
+            for para in paragraphs:
+                para_text = para.get_text(separator=' ', strip=True)
+                if para_text and len(para_text) > 20:
+                    markdown += f"{para_text}\n\n"
+
+        # Fallback 1: if structured extraction didn't find enough content,
+        # try extracting all paragraphs from the main content area
+        if len(markdown) < 1000:
+            main_content = soup.find('div', class_='article__content')
+            if not main_content:
+                main_content = soup.find('article')
+            if not main_content:
+                main_content = soup.find('div', id='articleBody')
+            if main_content:
+                for para in main_content.find_all('p'):
+                    para_text = para.get_text(separator=' ', strip=True)
+                    if para_text and len(para_text) > 50:
+                        markdown += f"{para_text}\n\n"
+
+        # Fallback 2: Try to find content in old-style Wiley pages with
+        # nested divs containing article sections
+        if len(markdown) < 1000:
+            # Look for sections by header text patterns
+            for header in soup.find_all(['h2', 'h3', 'h4']):
+                header_text = header.get_text().strip()
+                header_lower = header_text.lower()
+                if any(kw in header_lower for kw in ['introduction', 'methods', 'results',
+                                                      'discussion', 'materials', 'patients',
+                                                      'background', 'conclusion']):
+                    markdown += f"### {header_text}\n\n"
+                    # Get following paragraphs until next header
+                    next_elem = header.find_next_sibling()
+                    while next_elem and next_elem.name not in ['h2', 'h3', 'h4']:
+                        if next_elem.name == 'p':
+                            para_text = next_elem.get_text(separator=' ', strip=True)
+                            if para_text and len(para_text) > 20:
+                                markdown += f"{para_text}\n\n"
+                        next_elem = next_elem.find_next_sibling()
+
+        # Ultimate fallback: extract all substantial paragraphs
         if len(markdown) < 500:
-            for p in soup.find_all('p'):
-                text = p.get_text().strip()
-                if len(text) > 50:
-                    markdown += f"{text}\n\n"
+            all_paragraphs = soup.find_all('p')
+            for para in all_paragraphs:
+                para_text = para.get_text(separator=' ', strip=True)
+                if para_text and len(para_text) > 100:
+                    markdown += f"{para_text}\n\n"
 
         return markdown if len(markdown) > 200 else None, title
 
