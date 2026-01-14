@@ -95,6 +95,10 @@ Create a `.env` file in the project root:
 ## CLI Options
 
 ```bash
+# Recommended CLI entry point
+python main.py --cli GENE --email EMAIL --output DIR [OPTIONS]
+
+# Alternative: direct workflow script
 python automated_workflow.py GENE --email EMAIL --output DIR [OPTIONS]
 ```
 
@@ -111,14 +115,14 @@ python automated_workflow.py GENE --email EMAIL --output DIR [OPTIONS]
 ### Examples
 
 ```bash
-# Basic run
-python automated_workflow.py TTR --email user@email.com --output ./results
+# Basic run (using main.py)
+python main.py --cli TTR --email user@email.com --output ./results
 
 # With synonym discovery
-python automated_workflow.py TTR --email user@email.com --output ./results --auto-synonyms
+python main.py --cli TTR --email user@email.com --output ./results --auto-synonyms
 
 # Skip to stronger model
-python automated_workflow.py SCN5A --email user@email.com --output ./results --tier-threshold 0
+python main.py --cli SCN5A --email user@email.com --output ./results --tier-threshold 0
 ```
 
 ## Output Structure

@@ -12,7 +12,7 @@ A web-based interface for running variant extraction pipelines with:
 pip install -r gui/requirements.txt
 
 # Launch the GUI
-python run_gui.py
+python main.py
 ```
 
 This will:
@@ -46,7 +46,7 @@ The **Active** tab shows:
 
 If your computer shuts down or the process is interrupted:
 
-1. Restart the GUI: `python run_gui.py`
+1. Restart the GUI: `python main.py`
 2. You'll see a notification about incomplete jobs
 3. Go to **Jobs** tab and click **Resume** on the interrupted job
 
@@ -104,7 +104,7 @@ Job checkpoints are stored in `~/.gvf_jobs/`:
 ### Command Line Options
 
 ```bash
-python run_gui.py --help
+python main.py --help
 
 Options:
   --host TEXT      Host to bind to (default: 127.0.0.1)
@@ -146,21 +146,21 @@ pip install -r gui/requirements.txt
 
 Use a different port:
 ```bash
-python run_gui.py --port 8080
+python main.py --port 8080
 ```
 
 ### Can't connect from another machine
 
 Bind to all interfaces:
 ```bash
-python run_gui.py --host 0.0.0.0
+python main.py --host 0.0.0.0
 ```
 
 ## Development
 
 Run with auto-reload:
 ```bash
-python run_gui.py --reload
+python main.py --reload
 ```
 
 The frontend is a single HTML file with embedded CSS/JS for simplicity.

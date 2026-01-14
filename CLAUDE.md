@@ -7,22 +7,27 @@ Extract human genetic variant carriers from biomedical literature (full text + s
 ## Quick Reference
 
 ```bash
-python automated_workflow.py GENE --email EMAIL --output OUTPUT_DIR
+# GUI (recommended)
+python main.py
+
+# CLI
+python main.py --cli GENE --email EMAIL --output OUTPUT_DIR
 ```
 
-## Pipeline (6 Steps)
+## Pipeline Steps
 
-1. **Discovery** - Fetch PMIDs from PubMind (`gene_literature/pubmind_fetcher.py`)
+1. **Discovery** - Fetch PMIDs from PubMind/PubMed/EuropePMC (`gene_literature/discovery.py`)
 2. **Abstracts** - Fetch metadata for discovered PMIDs (`harvesting/abstracts.py`)
-3. **Download** - Full-text + supplements → `{PMID}_FULL_CONTEXT.md` (`harvesting/orchestrator.py`)
-4. **Extract** - LLM extraction with model cascade (`pipeline/extraction.py`)
-5. **Aggregate** - Penetrance validation (`pipeline/aggregation.py`)
-6. **SQLite** - JSON → normalized database (`harvesting/migrate_to_sqlite.py`)
+3. **Filtering** - Tier 1 (keywords) + Tier 2 (LLM triage) (`pipeline/filters.py`)
+4. **Download** - Full-text + supplements → `{PMID}_FULL_CONTEXT.md` (`harvesting/orchestrator.py`)
+5. **Extract** - LLM extraction with model cascade (`pipeline/extraction.py`)
+6. **Aggregate** - Penetrance validation (`pipeline/aggregation.py`)
+7. **SQLite** - JSON → normalized database (`harvesting/migrate_to_sqlite.py`)
 
 ## Project Structure
 
 ```
-automated_workflow.py          # Entry point
+main.py                        # Primary entry point (GUI or CLI)
 config/settings.py             # Pydantic configuration
 gene_literature/               # Paper discovery (PubMind)
 harvesting/                    # Download & SQLite migration
