@@ -155,63 +155,152 @@ class WileyAPIClient:
             time.sleep(self._min_request_interval - elapsed)
         self._last_request_time = time.time()
 
+    @staticmethod
+    def encode_doi_for_api(doi: str) -> str:
+        """
+        Encode a DOI for use in Wiley TDM API URLs.
+
+        Based on the Wiley TDM API curl example, DOIs should have minimal encoding.
+        The API expects the DOI path segment with only truly unsafe URL characters
+        encoded. For SICI-style DOIs, only < and > need encoding.
+
+        Example: DOI 10.1002/(SICI)1098-1004(200005)15:5<483::AID-HUMU18>3.0.CO;2-T
+        becomes: 10.1002/(SICI)1098-1004(200005)15:5%3C483::AID-HUMU18%3E3.0.CO;2-T
+
+        Args:
+            doi: Digital Object Identifier
+
+        Returns:
+            URL-encoded DOI string suitable for Wiley TDM API URLs
+        """
+        # Match the curl example: minimal encoding - only < and > need escaping
+        # Parentheses, colons, semicolons, and slashes stay unencoded
+        return doi.replace('<', '%3C').replace('>', '%3E')
+
     def get_fulltext_by_doi(self, doi: str) -> Tuple[Optional[str], Optional[str]]:
         """
         Fetch full-text content from Wiley TDM API using DOI.
+
+        Uses the same URL format as the official curl example:
+        curl -L -H "Wiley-TDM-Client-Token: TOKEN" \\
+             https://api.wiley.com/onlinelibrary/tdm/v1/articles/DOI
+
+        The API may redirect (hence -L in curl) and can return PDF or XML/HTML.
 
         Args:
             doi: Digital Object Identifier
 
         Returns:
             Tuple of (content, error_message)
-            - content: Full-text XML/HTML if successful, None otherwise
+            - content: Full-text XML/HTML/PDF-converted if successful, None otherwise
             - error_message: Error description if failed, None otherwise
         """
         if not self.is_available:
             return None, "Wiley API key not configured"
 
-        # URL-encode the DOI (can contain special characters like <, >, parentheses)
-        encoded_doi = quote(doi, safe='')
-        url = f"{self.BASE_URL}/{encoded_doi}"
+        # TDM API headers - match curl example closely
+        # Only the token header is required; redirects are followed automatically
         headers = {
             "Wiley-TDM-Client-Token": self.api_key,
-            "Accept": "application/xml, text/xml, application/xhtml+xml, text/html",
+            # Accept both text formats and PDF
+            "Accept": "application/pdf, application/xml, text/xml, application/xhtml+xml, text/html, */*",
         }
 
         def _request_fulltext(target_url: str) -> requests.Response:
             self._rate_limit()
             logger.info(f"Fetching full text from Wiley API for DOI: {doi}")
-            return self.session.get(target_url, headers=headers, timeout=30)
+            logger.debug(f"TDM API URL: {target_url}")
+            # Follow redirects (curl -L behavior) - this is critical per Wiley docs
+            return self.session.get(target_url, headers=headers, timeout=30, allow_redirects=True)
 
-        def _handle_response(response: requests.Response) -> Tuple[Optional[str], Optional[str]]:
+        def _handle_response(response: requests.Response) -> Tuple[Optional[bytes], Optional[str], str]:
+            """Returns (content_bytes, error, content_type)"""
             if response.status_code == 200:
-                return response.text, None
+                content_type = response.headers.get('Content-Type', '').lower()
+                return response.content, None, content_type
             if response.status_code == 401:
-                return None, "Invalid or unauthorized API key"
+                return None, "Invalid or unauthorized API key", ""
             if response.status_code == 403:
-                return None, "Access forbidden - API key may lack permissions or article not available"
+                return None, "Access forbidden - API key may lack permissions or article not available", ""
             if response.status_code == 404:
-                return None, "Article not found via Wiley API"
+                return None, "Article not found via Wiley API", ""
             if response.status_code == 429:
-                return None, "Rate limit exceeded"
-            return None, f"HTTP {response.status_code}: {response.reason}"
+                return None, "Rate limit exceeded", ""
+            return None, f"HTTP {response.status_code}: {response.reason}", ""
 
+        def _process_content(content_bytes: bytes, content_type: str) -> Tuple[Optional[str], Optional[str]]:
+            """Process response content - handle both PDF and text formats."""
+            # Check if response is PDF (by content-type or magic bytes)
+            is_pdf = 'pdf' in content_type or content_bytes.startswith(b'%PDF')
+
+            if is_pdf:
+                # Convert PDF to markdown using FormatConverter
+                try:
+                    converter = FormatConverter()
+                    with tempfile.NamedTemporaryFile(suffix=".pdf", delete=True) as tmp_file:
+                        tmp_file.write(content_bytes)
+                        tmp_file.flush()
+                        markdown = converter.pdf_to_markdown(Path(tmp_file.name))
+                    if markdown and len(markdown) > 500:
+                        logger.info(f"Successfully converted TDM API PDF response for DOI: {doi}")
+                        return markdown, None
+                    return None, "PDF conversion produced insufficient content"
+                except Exception as e:
+                    logger.debug(f"Error converting TDM API PDF: {e}")
+                    return None, f"PDF conversion failed: {str(e)}"
+            else:
+                # Text content (XML/HTML)
+                try:
+                    text_content = content_bytes.decode('utf-8')
+                    return text_content, None
+                except UnicodeDecodeError:
+                    try:
+                        text_content = content_bytes.decode('latin-1')
+                        return text_content, None
+                    except Exception:
+                        return None, "Failed to decode response content"
+
+        # Try multiple URL encoding strategies for SICI-style DOIs
+        # Strategy 1: Minimal encoding (matches curl example) - only < and > encoded
+        encoding_strategies = [
+            ("minimal", self.encode_doi_for_api(doi)),
+            # Strategy 2: Keep slash and common chars unencoded
+            ("standard", quote(doi, safe='/:();-')),
+            # Strategy 3: Full encoding as fallback
+            ("full", quote(doi, safe='')),
+        ]
+
+        # Remove duplicate encodings
+        seen = set()
+        unique_strategies = []
+        for name, encoded in encoding_strategies:
+            if encoded not in seen:
+                seen.add(encoded)
+                unique_strategies.append((name, encoded))
+
+        last_error = None
         try:
-            response = _request_fulltext(url)
-            content, error = _handle_response(response)
-            if content:
-                return content, None
+            for strategy_name, encoded_doi in unique_strategies:
+                url = f"{self.BASE_URL}/{encoded_doi}"
+                logger.debug(f"Trying TDM API with {strategy_name} encoding: {url}")
 
-            if response.status_code == 404 and "/" in doi:
-                legacy_encoded_doi = quote(doi, safe='/:')
-                if legacy_encoded_doi != encoded_doi:
-                    legacy_url = f"{self.BASE_URL}/{legacy_encoded_doi}"
-                    response = _request_fulltext(legacy_url)
-                    content, error = _handle_response(response)
-                    if content:
-                        return content, None
+                response = _request_fulltext(url)
+                content_bytes, error, content_type = _handle_response(response)
 
-            return None, error
+                if content_bytes:
+                    text_content, process_error = _process_content(content_bytes, content_type)
+                    if text_content:
+                        return text_content, None
+                    last_error = process_error
+                elif response.status_code == 404:
+                    # Try next encoding strategy
+                    last_error = error
+                    continue
+                else:
+                    # Non-404 error, don't try other encodings
+                    return None, error
+
+            return None, last_error or "Article not found via Wiley API"
 
         except requests.exceptions.Timeout:
             return None, "Request timed out"
