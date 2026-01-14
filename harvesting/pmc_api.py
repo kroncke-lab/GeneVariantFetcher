@@ -214,6 +214,7 @@ class PMCAPIClient:
             'www.omim.org',  # OMIM database
             'www.genecards.org',  # GeneCards database
             'www.proteinatlas.org',  # Human Protein Atlas
+            'biocyc.org',  # BioCyc metabolic pathway database
         ]
 
         # Known publisher domains - prioritize these

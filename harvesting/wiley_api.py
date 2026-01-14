@@ -12,7 +12,7 @@ import logging
 import re
 import time
 from typing import Optional, Tuple
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 from xml.etree import ElementTree as ET
 
 import requests
@@ -134,7 +134,9 @@ class WileyAPIClient:
 
         self._rate_limit()
 
-        url = f"{self.BASE_URL}/{doi}"
+        # URL-encode the DOI (can contain special characters like <, >, parentheses)
+        encoded_doi = quote(doi, safe='/:')
+        url = f"{self.BASE_URL}/{encoded_doi}"
         headers = {
             "Wiley-TDM-Client-Token": self.api_key,
             "Accept": "application/xml, text/xml, application/xhtml+xml, text/html",
