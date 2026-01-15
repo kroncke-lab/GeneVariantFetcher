@@ -51,7 +51,7 @@ class JobCreateRequest(BaseModel):
 
     # Pipeline limits
     max_pmids: int = Field(100, ge=1, le=20000, description="Maximum PMIDs to fetch")
-    max_papers_to_download: int = Field(50, ge=1, le=500, description="Maximum papers to download")
+    max_papers_to_download: int = Field(50, ge=1, le=1000, description="Maximum papers to download")
 
     # Synonym settings
     auto_synonyms: bool = Field(False, description="Auto-discover gene synonyms")
