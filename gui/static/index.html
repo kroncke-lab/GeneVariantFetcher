@@ -830,6 +830,144 @@
             border: 1px solid #ef4444;
         }
 
+        .analysis-status.interrupted {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #f59e0b;
+        }
+
+        /* Pipeline Breakdown Styles */
+        .pipeline-breakdown {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 0.375rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .pipeline-breakdown-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pipeline-breakdown-title .icon {
+            font-size: 1rem;
+        }
+
+        .pipeline-stages {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .pipeline-stage {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0.75rem;
+            background: white;
+            border-radius: 0.25rem;
+            border: 1px solid var(--gray-200);
+            font-size: 0.8125rem;
+        }
+
+        .pipeline-stage-name {
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .pipeline-stage-counts {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .pipeline-stage-count {
+            text-align: center;
+        }
+
+        .pipeline-stage-count .value {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .pipeline-stage-count .label {
+            font-size: 0.6875rem;
+            color: var(--gray-500);
+        }
+
+        .pipeline-stage-count.success .value {
+            color: #16a34a;
+        }
+
+        .pipeline-stage-count.warning .value {
+            color: #f59e0b;
+        }
+
+        .pipeline-stage-count.error .value {
+            color: #dc2626;
+        }
+
+        .pipeline-stage-count.neutral .value {
+            color: var(--gray-600);
+        }
+
+        .pipeline-gap-alert {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 0.375rem;
+            font-size: 0.8125rem;
+            color: #92400e;
+        }
+
+        .pipeline-gap-alert strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .pipeline-collapsible {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .pipeline-collapsible::after {
+            content: ' [show details]';
+            font-size: 0.75rem;
+            color: var(--primary);
+        }
+
+        .pipeline-collapsible.open::after {
+            content: ' [hide details]';
+        }
+
+        .pipeline-details {
+            display: none;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #f3f4f6;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .pipeline-details.open {
+            display: block;
+        }
+
+        .pipeline-pmid-list {
+            font-family: monospace;
+            word-break: break-all;
+            color: var(--gray-600);
+        }
+
         .analysis-recommendations {
             list-style: none;
             padding: 0;
@@ -2200,8 +2338,107 @@
                 if (!analysis.is_valid) {
                     statusClass = 'error';
                     statusText = 'Invalid folder: ' + analysis.status_message;
+                } else if (analysis.pipeline_breakdown?.likely_interrupted) {
+                    statusClass = 'interrupted';
                 } else if (!analysis.scouting_complete && analysis.full_context_count > analysis.data_zones_count) {
                     statusClass = 'needs-scout';
+                }
+
+                // Build pipeline breakdown HTML if available
+                let pipelineBreakdownHtml = '';
+                const pb = analysis.pipeline_breakdown;
+                if (pb && pb.has_discovery_data) {
+                    pipelineBreakdownHtml = `
+                        <div class="pipeline-breakdown">
+                            <div class="pipeline-breakdown-title">
+                                <span class="icon">&#128202;</span> Pipeline Status Breakdown
+                            </div>
+                            <div class="pipeline-stages">
+                                <div class="pipeline-stage">
+                                    <span class="pipeline-stage-name">1. Discovery</span>
+                                    <div class="pipeline-stage-counts">
+                                        <div class="pipeline-stage-count success">
+                                            <div class="value">${pb.discovered_count}</div>
+                                            <div class="label">PMIDs found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                ${pb.has_harvest_data ? `
+                                <div class="pipeline-stage">
+                                    <span class="pipeline-stage-name">2. Harvesting</span>
+                                    <div class="pipeline-stage-counts">
+                                        <div class="pipeline-stage-count ${pb.harvested_count > 0 ? 'success' : 'neutral'}">
+                                            <div class="value">${pb.harvested_count}</div>
+                                            <div class="label">Harvested</div>
+                                        </div>
+                                        ${pb.harvest_gap_count > 0 ? `
+                                        <div class="pipeline-stage-count error">
+                                            <div class="value">${pb.harvest_gap_count}</div>
+                                            <div class="label">Missing</div>
+                                        </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                                ` : ''}
+                                ${pb.has_filter_data || pb.filtered_out_count > 0 ? `
+                                <div class="pipeline-stage">
+                                    <span class="pipeline-stage-name">3. Filtering</span>
+                                    <div class="pipeline-stage-counts">
+                                        <div class="pipeline-stage-count warning">
+                                            <div class="value">${pb.filtered_out_count}</div>
+                                            <div class="label">Filtered out</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                ` : ''}
+                                ${pb.has_download_data || pb.downloaded_count > 0 || pb.paywalled_count > 0 ? `
+                                <div class="pipeline-stage">
+                                    <span class="pipeline-stage-name">4. Download</span>
+                                    <div class="pipeline-stage-counts">
+                                        <div class="pipeline-stage-count success">
+                                            <div class="value">${pb.downloaded_count}</div>
+                                            <div class="label">Downloaded</div>
+                                        </div>
+                                        ${pb.paywalled_count > 0 ? `
+                                        <div class="pipeline-stage-count warning">
+                                            <div class="value">${pb.paywalled_count}</div>
+                                            <div class="label">Paywalled</div>
+                                        </div>
+                                        ` : ''}
+                                        ${pb.download_gap_count > 0 ? `
+                                        <div class="pipeline-stage-count error">
+                                            <div class="value">${pb.download_gap_count}</div>
+                                            <div class="label">Missing</div>
+                                        </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                                ` : ''}
+                            </div>
+                            ${pb.likely_interrupted ? `
+                            <div class="pipeline-gap-alert">
+                                <strong>Possible Interruption Detected at ${pb.interruption_stage} stage</strong>
+                                ${pb.interruption_details || ''}
+                                ${pb.harvest_gap_pmids?.length > 0 ? `
+                                <div class="pipeline-collapsible" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                                    View ${pb.harvest_gap_pmids.length} missing PMIDs
+                                </div>
+                                <div class="pipeline-details">
+                                    <div class="pipeline-pmid-list">${pb.harvest_gap_pmids.slice(0, 100).join(', ')}${pb.harvest_gap_pmids.length > 100 ? '...' : ''}</div>
+                                </div>
+                                ` : ''}
+                                ${pb.download_gap_pmids?.length > 0 && pb.interruption_stage === 'downloading' ? `
+                                <div class="pipeline-collapsible" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                                    View ${pb.download_gap_pmids.length} missing PMIDs
+                                </div>
+                                <div class="pipeline-details">
+                                    <div class="pipeline-pmid-list">${pb.download_gap_pmids.slice(0, 100).join(', ')}${pb.download_gap_pmids.length > 100 ? '...' : ''}</div>
+                                </div>
+                                ` : ''}
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
                 }
 
                 contentDiv.innerHTML = `
@@ -2220,6 +2457,7 @@
                             <div class="analysis-stat-label">Already Extracted</div>
                         </div>
                     </div>
+                    ${pipelineBreakdownHtml}
                     ${analysis.recommendations.length > 0 ? `
                         <ul class="analysis-recommendations">
                             ${analysis.recommendations.map(r => `<li>${r}</li>`).join('')}
