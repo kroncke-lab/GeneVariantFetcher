@@ -912,12 +912,21 @@ def _extract_gene_from_extraction_filename(filename: str) -> Optional[str]:
     return None
 
 
-def _build_pipeline_breakdown(folder_path: Path, detected_gene: Optional[str]) -> PipelineStageBreakdown:
+def _build_pipeline_breakdown(
+    folder_path: Path,
+    detected_gene: Optional[str],
+    actual_fulltext_pmids: Optional[List[str]] = None,
+) -> PipelineStageBreakdown:
     """
     Build a detailed breakdown of PMID status through each pipeline stage.
 
     This helps identify where the pipeline may have been interrupted vs where
     PMIDs were deliberately filtered out.
+
+    Args:
+        folder_path: Path to the job folder
+        detected_gene: Gene symbol detected from folder structure
+        actual_fulltext_pmids: PMIDs from actual *_FULL_CONTEXT.md files (source of truth)
     """
     import csv
 
@@ -986,27 +995,35 @@ def _build_pipeline_breakdown(folder_path: Path, detected_gene: Optional[str]) -
         except Exception:
             pass
 
-    # 4. Download stage: Read pmc_fulltext/successful_downloads.csv and paywalled_missing.csv
+    # 4. Download stage: Use actual files as source of truth, fall back to CSV
     fulltext_dir = folder_path / "pmc_fulltext"
 
-    # Successful downloads
+    # Prefer actual FULL_CONTEXT files over CSV (CSV may be incomplete/stale)
     downloaded_pmids = set()
-    success_log = fulltext_dir / "successful_downloads.csv"
-    if success_log.exists():
-        try:
-            with open(success_log, 'r', newline='', encoding='utf-8') as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    pmid = row.get('PMID', '').strip()
-                    if pmid:
-                        downloaded_pmids.add(pmid)
-            breakdown.has_download_data = True
-            breakdown.downloaded_count = len(downloaded_pmids)
-            breakdown.downloaded_pmids = sorted(downloaded_pmids, key=lambda x: int(x) if x.isdigit() else 0)
-        except Exception:
-            pass
+    if actual_fulltext_pmids:
+        # Use actual files found on disk - this is the authoritative source
+        downloaded_pmids = set(actual_fulltext_pmids)
+        breakdown.has_download_data = True
+        breakdown.downloaded_count = len(downloaded_pmids)
+        breakdown.downloaded_pmids = sorted(downloaded_pmids, key=lambda x: int(x) if x.isdigit() else 0)
+    else:
+        # Fall back to CSV if no actual files provided
+        success_log = fulltext_dir / "successful_downloads.csv"
+        if success_log.exists():
+            try:
+                with open(success_log, 'r', newline='', encoding='utf-8') as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        pmid = row.get('PMID', '').strip()
+                        if pmid:
+                            downloaded_pmids.add(pmid)
+                breakdown.has_download_data = True
+                breakdown.downloaded_count = len(downloaded_pmids)
+                breakdown.downloaded_pmids = sorted(downloaded_pmids, key=lambda x: int(x) if x.isdigit() else 0)
+            except Exception:
+                pass
 
-    # Paywalled/missing
+    # Paywalled/missing - exclude PMIDs that have actual downloaded files
     paywalled_pmids = set()
     paywalled_entries = []
     paywalled_log = fulltext_dir / "paywalled_missing.csv"
@@ -1018,7 +1035,8 @@ def _build_pipeline_breakdown(folder_path: Path, detected_gene: Optional[str]) -
                     pmid = row.get('PMID', '').strip()
                     reason = row.get('Reason', 'Unknown').strip()
                     url = row.get('URL', '').strip() or None
-                    if pmid:
+                    # Skip if this PMID actually has a downloaded file
+                    if pmid and pmid not in downloaded_pmids:
                         paywalled_pmids.add(pmid)
                         paywalled_entries.append(PmidPaywalledEntry(pmid=pmid, reason=reason, url=url))
             breakdown.paywalled_count = len(paywalled_pmids)
@@ -1193,7 +1211,9 @@ async def analyze_folder(path: str):
 
     # Build pipeline breakdown for debugging
     detected_gene = folder_gene or (list(detected_genes)[0] if len(detected_genes) == 1 else None)
-    pipeline_breakdown = _build_pipeline_breakdown(folder_path, detected_gene)
+    pipeline_breakdown = _build_pipeline_breakdown(
+        folder_path, detected_gene, actual_fulltext_pmids=full_context_pmids
+    )
 
     # Add recommendations based on pipeline breakdown
     if pipeline_breakdown.likely_interrupted:
