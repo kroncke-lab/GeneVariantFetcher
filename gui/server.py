@@ -128,6 +128,56 @@ class DirectoryListResponse(BaseModel):
     can_create: bool = True
 
 
+class PmidFilteredEntry(BaseModel):
+    """A PMID that was deliberately filtered out with its reason."""
+    pmid: str
+    reason: str
+
+
+class PmidPaywalledEntry(BaseModel):
+    """A PMID that was paywalled or could not be downloaded."""
+    pmid: str
+    reason: str
+    url: Optional[str] = None
+
+
+class PipelineStageBreakdown(BaseModel):
+    """Breakdown of PMIDs at each pipeline stage for debugging."""
+
+    # Discovery stage
+    discovered_count: int = 0
+    discovered_pmids: List[str] = Field(default_factory=list)
+
+    # Harvesting stage (abstract fetch)
+    harvested_count: int = 0
+    harvested_pmids: List[str] = Field(default_factory=list)
+    harvest_gap_count: int = 0  # discovered - harvested - filtered
+    harvest_gap_pmids: List[str] = Field(default_factory=list)  # PMIDs lost between discovery and harvest
+
+    # Filtering stage
+    filtered_out_count: int = 0
+    filtered_out_entries: List[PmidFilteredEntry] = Field(default_factory=list)
+
+    # Download stage
+    downloaded_count: int = 0
+    downloaded_pmids: List[str] = Field(default_factory=list)
+    paywalled_count: int = 0
+    paywalled_entries: List[PmidPaywalledEntry] = Field(default_factory=list)
+    download_gap_count: int = 0  # harvested - downloaded - paywalled - filtered
+    download_gap_pmids: List[str] = Field(default_factory=list)  # PMIDs lost during download
+
+    # Status flags
+    has_discovery_data: bool = False
+    has_harvest_data: bool = False
+    has_filter_data: bool = False
+    has_download_data: bool = False
+
+    # Interruption detection
+    likely_interrupted: bool = False
+    interruption_stage: Optional[str] = None
+    interruption_details: Optional[str] = None
+
+
 class FolderAnalysis(BaseModel):
     """Analysis of an existing folder with downloaded papers."""
 
@@ -155,6 +205,9 @@ class FolderAnalysis(BaseModel):
     # Messages
     status_message: str = ""
     recommendations: List[str] = Field(default_factory=list)
+
+    # Pipeline stage breakdown for debugging
+    pipeline_breakdown: Optional[PipelineStageBreakdown] = None
 
 
 class FolderJobRequest(BaseModel):
@@ -833,6 +886,169 @@ def _extract_gene_from_extraction_filename(filename: str) -> Optional[str]:
     return None
 
 
+def _build_pipeline_breakdown(folder_path: Path, detected_gene: Optional[str]) -> PipelineStageBreakdown:
+    """
+    Build a detailed breakdown of PMID status through each pipeline stage.
+
+    This helps identify where the pipeline may have been interrupted vs where
+    PMIDs were deliberately filtered out.
+    """
+    import csv
+
+    breakdown = PipelineStageBreakdown()
+
+    # 1. Discovery stage: Read {GENE}_pmids.txt
+    discovered_pmids = set()
+    pmids_file = None
+
+    # Try to find pmids file with detected gene first
+    if detected_gene:
+        pmids_file = folder_path / f"{detected_gene}_pmids.txt"
+        if not pmids_file.exists():
+            pmids_file = None
+
+    # Fall back to glob pattern
+    if pmids_file is None:
+        pmid_files = list(folder_path.glob("*_pmids.txt"))
+        # Filter out source-specific files (pubmind, pubmed)
+        pmid_files = [f for f in pmid_files if "_pubmind" not in f.name and "_pubmed" not in f.name]
+        if pmid_files:
+            pmids_file = pmid_files[0]
+
+    if pmids_file and pmids_file.exists():
+        try:
+            with open(pmids_file, 'r') as f:
+                for line in f:
+                    pmid = line.strip()
+                    if pmid and pmid.isdigit():
+                        discovered_pmids.add(pmid)
+            breakdown.has_discovery_data = True
+            breakdown.discovered_count = len(discovered_pmids)
+            breakdown.discovered_pmids = sorted(discovered_pmids, key=int)
+        except Exception:
+            pass
+
+    # 2. Harvesting stage: Read abstract_json/ directory
+    harvested_pmids = set()
+    abstract_dir = folder_path / "abstract_json"
+    if abstract_dir.exists():
+        for json_file in abstract_dir.glob("*.json"):
+            pmid = json_file.stem
+            if pmid.isdigit():
+                harvested_pmids.add(pmid)
+        breakdown.has_harvest_data = True
+        breakdown.harvested_count = len(harvested_pmids)
+        breakdown.harvested_pmids = sorted(harvested_pmids, key=int)
+
+    # 3. Filtering stage: Read pmid_status/filtered_out.csv
+    filtered_out_pmids = set()
+    filtered_entries = []
+    filtered_out_file = folder_path / "pmid_status" / "filtered_out.csv"
+    if filtered_out_file.exists():
+        try:
+            with open(filtered_out_file, 'r', newline='', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    pmid = row.get('PMID', '').strip()
+                    reason = row.get('Reason', 'Unknown').strip()
+                    if pmid:
+                        filtered_out_pmids.add(pmid)
+                        filtered_entries.append(PmidFilteredEntry(pmid=pmid, reason=reason))
+            breakdown.has_filter_data = True
+            breakdown.filtered_out_count = len(filtered_out_pmids)
+            breakdown.filtered_out_entries = filtered_entries
+        except Exception:
+            pass
+
+    # 4. Download stage: Read pmc_fulltext/successful_downloads.csv and paywalled_missing.csv
+    fulltext_dir = folder_path / "pmc_fulltext"
+
+    # Successful downloads
+    downloaded_pmids = set()
+    success_log = fulltext_dir / "successful_downloads.csv"
+    if success_log.exists():
+        try:
+            with open(success_log, 'r', newline='', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    pmid = row.get('PMID', '').strip()
+                    if pmid:
+                        downloaded_pmids.add(pmid)
+            breakdown.has_download_data = True
+            breakdown.downloaded_count = len(downloaded_pmids)
+            breakdown.downloaded_pmids = sorted(downloaded_pmids, key=lambda x: int(x) if x.isdigit() else 0)
+        except Exception:
+            pass
+
+    # Paywalled/missing
+    paywalled_pmids = set()
+    paywalled_entries = []
+    paywalled_log = fulltext_dir / "paywalled_missing.csv"
+    if paywalled_log.exists():
+        try:
+            with open(paywalled_log, 'r', newline='', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    pmid = row.get('PMID', '').strip()
+                    reason = row.get('Reason', 'Unknown').strip()
+                    url = row.get('URL', '').strip() or None
+                    if pmid:
+                        paywalled_pmids.add(pmid)
+                        paywalled_entries.append(PmidPaywalledEntry(pmid=pmid, reason=reason, url=url))
+            breakdown.paywalled_count = len(paywalled_pmids)
+            breakdown.paywalled_entries = paywalled_entries
+        except Exception:
+            pass
+
+    # 5. Calculate gaps (PMIDs lost at each stage that weren't deliberately filtered)
+
+    # Harvest gap: discovered but not harvested (and not filtered)
+    if breakdown.has_discovery_data and breakdown.has_harvest_data:
+        expected_harvested = discovered_pmids - filtered_out_pmids
+        harvest_gap = expected_harvested - harvested_pmids
+        breakdown.harvest_gap_count = len(harvest_gap)
+        breakdown.harvest_gap_pmids = sorted(harvest_gap, key=lambda x: int(x) if x.isdigit() else 0)
+
+    # Download gap: harvested but not downloaded (and not paywalled, not filtered)
+    if breakdown.has_harvest_data:
+        # PMIDs that passed filters = harvested - filtered_out
+        pmids_to_download = harvested_pmids - filtered_out_pmids
+        # Expected: should be either downloaded or paywalled
+        expected_accounted = downloaded_pmids | paywalled_pmids
+        download_gap = pmids_to_download - expected_accounted
+        breakdown.download_gap_count = len(download_gap)
+        breakdown.download_gap_pmids = sorted(download_gap, key=lambda x: int(x) if x.isdigit() else 0)
+
+    # 6. Detect likely interruption
+    if breakdown.has_discovery_data:
+        total_discovered = breakdown.discovered_count
+
+        # Check harvest stage
+        if breakdown.harvest_gap_count > 0:
+            gap_pct = (breakdown.harvest_gap_count / total_discovered) * 100
+            if gap_pct > 5:  # More than 5% lost = likely interruption
+                breakdown.likely_interrupted = True
+                breakdown.interruption_stage = "harvesting"
+                breakdown.interruption_details = (
+                    f"{breakdown.harvest_gap_count} PMIDs ({gap_pct:.1f}%) discovered but not harvested. "
+                    f"Process may have been interrupted during abstract fetching. "
+                    f"Last harvested: {breakdown.harvested_pmids[-1] if breakdown.harvested_pmids else 'N/A'}"
+                )
+
+        # Check download stage
+        elif breakdown.download_gap_count > 0:
+            gap_pct = (breakdown.download_gap_count / total_discovered) * 100
+            if gap_pct > 5:
+                breakdown.likely_interrupted = True
+                breakdown.interruption_stage = "downloading"
+                breakdown.interruption_details = (
+                    f"{breakdown.download_gap_count} PMIDs ({gap_pct:.1f}%) passed filters but not downloaded. "
+                    f"Process may have been interrupted during full-text download."
+                )
+
+    return breakdown
+
+
 @app.get("/api/analyze-folder", response_model=FolderAnalysis)
 async def analyze_folder(path: str):
     """
@@ -949,10 +1165,22 @@ async def analyze_folder(path: str):
 
     status_message = "Found: " + ", ".join(status_parts) if status_parts else "No papers found"
 
+    # Build pipeline breakdown for debugging
+    detected_gene = folder_gene or (list(detected_genes)[0] if len(detected_genes) == 1 else None)
+    pipeline_breakdown = _build_pipeline_breakdown(folder_path, detected_gene)
+
+    # Add recommendations based on pipeline breakdown
+    if pipeline_breakdown.likely_interrupted:
+        recommendations.insert(0, f"Pipeline may have been interrupted at {pipeline_breakdown.interruption_stage} stage. {pipeline_breakdown.interruption_details}")
+    elif pipeline_breakdown.has_discovery_data and pipeline_breakdown.harvest_gap_count > 0:
+        recommendations.append(f"{pipeline_breakdown.harvest_gap_count} PMIDs were discovered but not harvested.")
+    elif pipeline_breakdown.download_gap_count > 0:
+        recommendations.append(f"{pipeline_breakdown.download_gap_count} PMIDs passed filters but were not downloaded or marked as paywalled.")
+
     return FolderAnalysis(
         path=str(folder_path),
         is_valid=has_fulltext,
-        gene_symbol=folder_gene or (list(detected_genes)[0] if len(detected_genes) == 1 else None),
+        gene_symbol=detected_gene,
         detected_gene_symbols=sorted(detected_genes),
         full_context_count=len(full_context_pmids),
         data_zones_count=len(data_zones_pmids),
@@ -966,6 +1194,7 @@ async def analyze_folder(path: str):
         has_extractions=has_extractions,
         status_message=status_message,
         recommendations=recommendations,
+        pipeline_breakdown=pipeline_breakdown,
     )
 
 
