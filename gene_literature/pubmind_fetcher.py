@@ -134,7 +134,7 @@ class PubMindFetcher:
     def fetch_pmids_for_gene(
         self,
         gene_symbol: str,
-        max_results: int = 1000,
+        max_results: int = 20000,
         delay: float = 1.0
     ) -> List[str]:
         """
@@ -329,7 +329,7 @@ class PubMindFetcher:
 def fetch_pmids_for_gene(
     gene_symbol: str,
     email: str = "your.email@example.com",
-    max_results: int = 1000,
+    max_results: int = 20000,
     output_file: Optional[Path] = None
 ) -> List[str]:
     """

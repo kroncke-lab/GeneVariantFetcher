@@ -50,7 +50,7 @@ class JobCreateRequest(BaseModel):
     output_dir: str = Field(..., description="Output directory for results")
 
     # Pipeline limits
-    max_pmids: int = Field(100, ge=1, le=1000, description="Maximum PMIDs to fetch")
+    max_pmids: int = Field(100, ge=1, le=20000, description="Maximum PMIDs to fetch")
     max_papers_to_download: int = Field(50, ge=1, le=500, description="Maximum papers to download")
 
     # Synonym settings
