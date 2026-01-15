@@ -79,14 +79,31 @@ Look for:
 1. Total number of carriers/patients with variants in {gene_symbol}
 2. Number of AFFECTED carriers (those with disease/phenotype)
 3. Number of UNAFFECTED carriers (healthy/asymptomatic carriers)
-4. Any specific variant notations mentioned (e.g., c.1234G>A, p.Arg412His)
+4. Any specific variant notations mentioned (e.g., c.1234G>A, p.Arg412His, Y667X, R412Q)
 
-IMPORTANT DISTINCTIONS:
-- "Affected" = has the disease phenotype or clinical manifestations
-- "Unaffected" = carrier without disease phenotype (healthy carrier, asymptomatic)
-- If only patient counts are given without distinguishing affected/unaffected, report as total_carriers only
-- For disease-associated studies (case reports, clinical cohorts), patients are typically AFFECTED carriers
-- For population/screening studies, distinguish affected vs unaffected if stated
+IMPORTANT - RECOGNIZING IMPLICIT COUNTS:
+Natural language often implies counts without stating explicit numbers. You MUST recognize these:
+
+- "a patient" / "a case" / "an individual" / "one patient" = 1 carrier
+- "a healthy individual" / "an asymptomatic carrier" / "a healthy carrier" = 1 UNAFFECTED carrier
+- "an affected patient" / "a symptomatic carrier" / "a patient with [disease]" = 1 AFFECTED carrier
+- "proband" / "the proband" = 1 carrier (usually affected unless stated otherwise)
+- "two patients" / "three families" = 2 or 3 carriers
+- "a family with..." often means multiple carriers (at least 1 proband + family members)
+
+AFFECTED vs UNAFFECTED:
+- "Affected" = has the disease phenotype, symptoms, or clinical manifestations
+- "Unaffected" = carrier WITHOUT disease phenotype (described as: healthy, asymptomatic, no symptoms,
+  clinically silent, normal phenotype, unaffected family member)
+- Probands and "patients" in disease studies are typically AFFECTED unless explicitly stated as healthy carriers
+- Family members carrying the variant but described as "healthy" or "asymptomatic" are UNAFFECTED
+
+VARIANT NOTATION:
+Look for any of these patterns:
+- cDNA: c.1234G>A, c.123delA, c.456_789dup
+- Protein: p.Arg412His, p.R412H, R412Q, Y667X, Arg412*, Gly24fs
+- Legacy notation: D16A, G572R (single letter amino acid changes)
+- Nonsense/stop: Y667X, R412X, Arg412* (X or * indicates stop codon)
 
 Return a JSON object:
 {{
@@ -99,12 +116,15 @@ Return a JSON object:
     "notes": "Brief explanation of what was found or why extraction wasn't possible"
 }}
 
-CRITICAL RULES:
-- Only extract counts that are EXPLICITLY stated in the abstract
-- Do NOT infer or calculate counts that aren't directly stated
-- If the abstract mentions variants but no specific carrier counts, set extraction_possible to false
-- If numbers are ambiguous (could be patients, families, or variants), note the ambiguity
-- Set confidence lower if counts are unclear or potentially overlapping
+EXTRACTION RULES:
+- Extract counts from BOTH explicit numbers AND implicit language (see examples above)
+- "a healthy individual with the mutation" = extraction_possible: true, unaffected_count: 1
+- "a patient with long QT syndrome carrying Y667X" = extraction_possible: true, affected_count: 1
+- If the abstract mentions variants AND any carrier/patient language, extraction IS possible
+- For case reports, assume at least 1 affected carrier unless stated otherwise
+- If numbers are ambiguous (could be patients, families, or variants), note the ambiguity but still extract best estimate
+- Set confidence lower (0.5-0.7) for implicit counts, higher (0.8-1.0) for explicit numbers
+- Only set extraction_possible to false if there is truly NO information about carriers
 """
 
 
