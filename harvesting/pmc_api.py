@@ -216,6 +216,13 @@ class PMCAPIClient:
             'www.proteinatlas.org',  # Human Protein Atlas
             'biocyc.org',  # BioCyc metabolic pathway database
             'glygen.org',  # GlyGen landing pages (not full text)
+            'malacards.org',  # MalaCards disease database (not article full text)
+            'www.malacards.org',  # MalaCards disease database
+            'www.disgenet.org',  # DisGeNET disease-gene associations
+            'www.orphanet.org',  # Orphanet rare disease database
+            'www.hgmd.cf.ac.uk',  # Human Gene Mutation Database (requires subscription)
+            'www.lovd.nl',  # Leiden Open Variation Database
+            'databases.lovd.nl',  # LOVD database instances
         ]
 
         # Known publisher domains - prioritize these

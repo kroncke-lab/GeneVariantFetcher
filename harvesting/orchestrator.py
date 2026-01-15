@@ -823,10 +823,11 @@ class PMCHarvester:
                     self._log_paywalled(pmid, f'Free full text fetch failed: {e}', free_url)
                     return False, "Free text fetch failed"
         else:
-            # No DOI and no free URL
+            # No DOI and no free URL - PubMed indicates "free" but lacks actionable links
             print(f"  ❌ No DOI or free URL available to fetch full text")
+            print(f"     (PubMed metadata indicates free access but provides no usable link)")
             pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-            self._log_paywalled(pmid, 'Free full text but no DOI or URL available', pubmed_url)
+            self._log_paywalled(pmid, 'Free full text indicated but no DOI or URL in PubMed metadata', pubmed_url)
             return False, "No DOI or URL for free text"
 
         if not main_markdown:

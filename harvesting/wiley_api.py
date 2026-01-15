@@ -14,7 +14,7 @@ import tempfile
 import time
 from pathlib import Path
 from typing import Optional, Tuple
-from urllib.parse import urlparse, quote
+from urllib.parse import urlparse, quote, unquote
 
 import requests
 from bs4 import BeautifulSoup
@@ -136,16 +136,22 @@ class WileyAPIClient:
         """
         Extract DOI from a Wiley Online Library URL.
 
+        Handles URL-encoded DOIs (e.g., SICI-style DOIs where < and > are
+        encoded as %3C and %3E) by decoding them back to raw DOI format.
+
         Args:
             url: Wiley URL
 
         Returns:
-            DOI string if found, None otherwise
+            DOI string if found, None otherwise (decoded/unescaped)
         """
         # Pattern: /doi/full/10.1002/xxx or /doi/10.1002/xxx or /doi/abs/10.1002/xxx
         doi_match = re.search(r'/doi/(?:full/|abs/|epdf/|pdf/)?(\d+\.\d+/[^\s?#]+)', url, re.IGNORECASE)
         if doi_match:
-            return doi_match.group(1)
+            # Decode URL-encoded DOI (e.g., %3C -> <, %3E -> >)
+            # This handles SICI-style DOIs that may be pre-encoded in URLs
+            raw_doi = unquote(doi_match.group(1))
+            return raw_doi
         return None
 
     def _rate_limit(self):
