@@ -2435,6 +2435,12 @@
                                     <div class="pipeline-pmid-list">${pb.download_gap_pmids.slice(0, 100).join(', ')}${pb.download_gap_pmids.length > 100 ? '...' : ''}</div>
                                 </div>
                                 ` : ''}
+                                <div class="resume-pipeline-section" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.1);">
+                                    <p style="margin-bottom: 0.5rem; font-size: 0.875rem;">You can resume the pipeline to download the missing papers and continue extraction.</p>
+                                    <button type="button" class="btn btn-success" onclick="resumePipeline('${pb.interruption_stage}')">
+                                        Resume Pipeline
+                                    </button>
+                                </div>
                             </div>
                             ` : ''}
                         </div>
@@ -2458,6 +2464,13 @@
                         </div>
                     </div>
                     ${pipelineBreakdownHtml}
+                    ${(() => {
+                        const unextractedCount = analysis.full_context_count - analysis.extraction_count;
+                        if (unextractedCount > 0) {
+                            return '<p style="margin-top: 0.75rem; color: var(--gray-600); font-size: 0.875rem;"><strong>' + unextractedCount + ' papers</strong> have not been extracted yet.</p>';
+                        }
+                        return '';
+                    })()}
                     ${analysis.recommendations.length > 0 ? `
                         <ul class="analysis-recommendations">
                             ${analysis.recommendations.map(r => `<li>${r}</li>`).join('')}
@@ -2508,6 +2521,75 @@
                 alert('Failed to create job: ' + err.message);
             }
         });
+
+        // Resume Pipeline - handles resuming interrupted pipelines
+        async function resumePipeline(resumeStage) {
+            if (!lastFolderAnalysis) {
+                alert('Please analyze a folder first');
+                return;
+            }
+
+            const analysis = lastFolderAnalysis;
+            const pb = analysis.pipeline_breakdown;
+
+            // Get form values from the folder job form
+            const geneSymbol = document.getElementById('folder-gene').value;
+            const email = document.getElementById('folder-email').value;
+            const folderPath = document.getElementById('folder-path').value;
+
+            if (!geneSymbol) {
+                alert('Please enter a gene symbol');
+                document.getElementById('folder-gene').focus();
+                return;
+            }
+
+            if (!email) {
+                alert('Please enter an email address');
+                document.getElementById('folder-email').focus();
+                return;
+            }
+
+            // Determine which PMIDs need to be downloaded
+            let pmidsToDownload = [];
+            if (resumeStage === 'downloading' && pb.download_gap_pmids?.length > 0) {
+                pmidsToDownload = pb.download_gap_pmids;
+            } else if (resumeStage === 'harvesting' && pb.harvest_gap_pmids?.length > 0) {
+                // For harvest gaps, we'd need to re-run harvesting first (not yet supported)
+                alert('Resuming from harvesting stage is not yet supported. Please start a new pipeline.');
+                return;
+            }
+
+            const data = {
+                folder_path: folderPath,
+                gene_symbol: geneSymbol,
+                email: email,
+                resume_stage: resumeStage === 'downloading' ? 'downloading' : 'extraction',
+                pmids_to_download: pmidsToDownload,
+                max_papers_to_download: Math.min(pmidsToDownload.length, 1000),
+                run_scout: document.getElementById('run-scout').checked,
+                skip_already_extracted: document.getElementById('skip-extracted').checked,
+                tier_threshold: parseInt(document.getElementById('tier-threshold-folder')?.value) || 1,
+                scout_min_relevance: parseFloat(document.getElementById('scout-min-relevance')?.value) || 0.3,
+            };
+
+            // Confirm with user
+            const confirmMsg = resumeStage === 'downloading'
+                ? `Resume downloading ${pmidsToDownload.length} missing papers and continue pipeline?`
+                : `Resume extraction for papers that haven't been extracted yet?`;
+
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+
+            try {
+                const job = await apiCall('POST', '/jobs/resume-folder', data);
+                activeJobId = job.job_id;
+                showTab('active');
+                connectWebSocket(job.job_id);
+            } catch (err) {
+                alert('Failed to resume pipeline: ' + err.message);
+            }
+        }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
