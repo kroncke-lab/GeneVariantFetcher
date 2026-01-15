@@ -589,15 +589,15 @@ class PipelineWorker:
 
         # Determine directories based on job type
         if checkpoint.is_folder_job and checkpoint.folder_path:
-            folder_path = Path(checkpoint.folder_path)
-            harvest_dir = folder_path / "pmc_fulltext"
+            base_path = Path(checkpoint.folder_path)
+            harvest_dir = base_path / "pmc_fulltext"
             if not harvest_dir.exists():
-                harvest_dir = folder_path
-            extraction_dir = folder_path / "extractions"
+                harvest_dir = base_path
+            extraction_dir = base_path / "extractions"
         else:
-            output_path = checkpoint.output_path
-            harvest_dir = output_path / "pmc_fulltext"
-            extraction_dir = output_path / "extractions"
+            base_path = checkpoint.output_path
+            harvest_dir = base_path / "pmc_fulltext"
+            extraction_dir = base_path / "extractions"
 
         extraction_dir.mkdir(exist_ok=True)
 
@@ -677,7 +677,7 @@ class PipelineWorker:
         checkpoint.extracted_pmids = [str(e.extracted_data.get("pmid", "")) for e in extractions if e.extracted_data]
 
         # Save failures
-        pmid_status_dir = output_path / "pmid_status"
+        pmid_status_dir = base_path / "pmid_status"
         pmid_status_dir.mkdir(parents=True, exist_ok=True)
         failures_file = pmid_status_dir / "extraction_failures.csv"
         with open(failures_file, "w", newline="", encoding="utf-8") as f:
