@@ -90,6 +90,11 @@ class JobCheckpoint:
     run_scout_on_folder: bool = False
     skip_already_extracted: bool = True
 
+    # Resume job mode (resume interrupted pipeline from a specific stage)
+    is_resume_job: bool = False
+    resume_stage: Optional[str] = None  # 'downloading' or 'extraction'
+    pmids_to_download: List[str] = field(default_factory=list)  # PMIDs to download when resuming
+
     # State tracking
     current_step: PipelineStep = PipelineStep.PENDING
     step_progress: Dict[str, Any] = field(default_factory=dict)

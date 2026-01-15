@@ -135,7 +135,19 @@ class PipelineWorker:
 
         try:
             # Determine which steps to run based on job type
-            if checkpoint.is_folder_job:
+            if checkpoint.is_resume_job and checkpoint.resume_stage == "downloading":
+                # Resume from downloading stage - includes download, scout, extract, etc.
+                steps = [
+                    (PipelineStep.DOWNLOADING_FULLTEXT, self._step_download_fulltext),
+                ]
+                if checkpoint.run_scout_on_folder:
+                    steps.append((PipelineStep.SCOUTING_DATA, self._step_scout_data))
+                steps.extend([
+                    (PipelineStep.EXTRACTING_VARIANTS, self._step_extract_variants),
+                    (PipelineStep.AGGREGATING_DATA, self._step_aggregate_data),
+                    (PipelineStep.MIGRATING_DATABASE, self._step_migrate_database),
+                ])
+            elif checkpoint.is_folder_job:
                 # Folder jobs skip discovery/download, go straight to scouting/extraction
                 steps = []
                 if checkpoint.run_scout_on_folder:
@@ -433,30 +445,52 @@ class PipelineWorker:
 
         from harvesting import PMCHarvester
 
-        output_path = checkpoint.output_path
-        harvest_dir = output_path / "pmc_fulltext"
+        # Determine output directory based on job type
+        if checkpoint.is_resume_job and checkpoint.folder_path:
+            # Resume job: use the existing folder structure
+            folder_path = Path(checkpoint.folder_path)
+            harvest_dir = folder_path / "pmc_fulltext"
+        else:
+            output_path = checkpoint.output_path
+            harvest_dir = output_path / "pmc_fulltext"
 
         harvester = PMCHarvester(
             output_dir=str(harvest_dir),
             gene_symbol=checkpoint.gene_symbol,
         )
 
-        # Limit downloads
-        pmids_to_download = checkpoint.filtered_pmids[:checkpoint.max_papers_to_download]
-        self._log(checkpoint, f"Downloading up to {len(pmids_to_download)} papers...")
+        # Determine which PMIDs to download
+        if checkpoint.is_resume_job and checkpoint.pmids_to_download:
+            # Resume job: download the specific missing PMIDs
+            pmids_to_download = checkpoint.pmids_to_download[:checkpoint.max_papers_to_download]
+            self._log(checkpoint, f"Resuming download for {len(pmids_to_download)} missing papers...")
+        else:
+            # Normal job: use filtered PMIDs
+            pmids_to_download = checkpoint.filtered_pmids[:checkpoint.max_papers_to_download]
+            self._log(checkpoint, f"Downloading up to {len(pmids_to_download)} papers...")
 
         harvester.harvest(pmids_to_download, delay=2.0)
 
-        # Check results
+        # Check results - for resume jobs, merge with existing downloads
         success_log = harvest_dir / "successful_downloads.csv"
         num_downloaded = 0
+        newly_downloaded = []
+
         if success_log.exists():
             import pandas as pd
             successful_downloads = pd.read_csv(success_log)
             num_downloaded = len(successful_downloads)
-            checkpoint.downloaded_pmids = successful_downloads["PMID"].astype(str).tolist()
+            newly_downloaded = successful_downloads["PMID"].astype(str).tolist()
 
-        self._log(checkpoint, f"Successfully downloaded {num_downloaded} papers")
+        # Merge with existing downloaded PMIDs (for resume jobs)
+        if checkpoint.is_resume_job:
+            existing_pmids = set(checkpoint.downloaded_pmids)
+            new_pmids = set(newly_downloaded)
+            checkpoint.downloaded_pmids = list(existing_pmids | new_pmids)
+            self._log(checkpoint, f"Resume complete. Total downloaded: {len(checkpoint.downloaded_pmids)} papers ({len(new_pmids - existing_pmids)} new)")
+        else:
+            checkpoint.downloaded_pmids = newly_downloaded
+            self._log(checkpoint, f"Successfully downloaded {num_downloaded} papers")
 
         return {"downloaded": num_downloaded, "attempted": len(pmids_to_download)}
 
@@ -886,6 +920,92 @@ def create_folder_job(
         # Pre-populate PMID lists from analysis
         downloaded_pmids=list(set((full_context_pmids or []) + (data_zones_pmids or []))),
         extracted_pmids=extraction_pmids or [],
+        # Start at appropriate step
+        current_step=starting_step,
+    )
+
+    return checkpoint
+
+
+def create_resume_job(
+    folder_path: str,
+    gene_symbol: str,
+    email: str,
+    resume_stage: str,
+    pmids_to_download: List[str] = None,
+    max_papers_to_download: int = 500,
+    run_scout: bool = True,
+    skip_already_extracted: bool = True,
+    tier_threshold: int = 1,
+    scout_enabled: bool = True,
+    scout_min_relevance: float = 0.3,
+    full_context_pmids: List[str] = None,
+    data_zones_pmids: List[str] = None,
+    extraction_pmids: List[str] = None,
+) -> JobCheckpoint:
+    """
+    Create a job that resumes an interrupted pipeline from a specific stage.
+
+    This job handles two main scenarios:
+    1. Resume downloading - when the pipeline was interrupted during download
+    2. Resume extraction - when downloading is complete but extraction was interrupted
+
+    Args:
+        folder_path: Path to folder with partial pipeline results
+        gene_symbol: Gene symbol for the pipeline
+        email: Email for NCBI E-utilities
+        resume_stage: Stage to resume from ('downloading' or 'extraction')
+        pmids_to_download: PMIDs to download (for downloading stage)
+        max_papers_to_download: Maximum papers to download
+        run_scout: Whether to run Data Scout after downloading
+        skip_already_extracted: Skip PMIDs that already have extractions
+        tier_threshold: Model cascade threshold for extraction
+        scout_enabled: Enable DATA_ZONES preference during extraction
+        scout_min_relevance: Minimum relevance score for scout zones
+        full_context_pmids: List of PMIDs with FULL_CONTEXT files
+        data_zones_pmids: List of PMIDs with DATA_ZONES files
+        extraction_pmids: List of PMIDs already extracted (to skip)
+
+    Returns:
+        JobCheckpoint configured for resuming the pipeline
+    """
+    import uuid
+
+    job_id = f"{gene_symbol.lower()}_resume_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}"
+
+    # Determine starting step based on resume stage
+    if resume_stage == "downloading":
+        starting_step = PipelineStep.DOWNLOADING_FULLTEXT
+    else:
+        starting_step = PipelineStep.SCOUTING_DATA if run_scout else PipelineStep.EXTRACTING_VARIANTS
+
+    checkpoint = JobCheckpoint(
+        job_id=job_id,
+        gene_symbol=gene_symbol.upper(),
+        email=email,
+        output_dir=folder_path,
+        max_papers_to_download=max_papers_to_download,
+        tier_threshold=tier_threshold,
+        scout_enabled=scout_enabled,
+        scout_min_relevance=scout_min_relevance,
+        # Resume job specific settings
+        is_resume_job=True,
+        resume_stage=resume_stage,
+        pmids_to_download=pmids_to_download or [],
+        # Also set folder job flags for path handling
+        is_folder_job=True,
+        folder_path=folder_path,
+        run_scout_on_folder=run_scout,
+        skip_already_extracted=skip_already_extracted,
+        # Pre-populate PMID lists from existing files
+        downloaded_pmids=list(set((full_context_pmids or []) + (data_zones_pmids or []))),
+        extracted_pmids=extraction_pmids or [],
+        # For resume, also pre-populate filtered_pmids to include both downloaded and to-download
+        filtered_pmids=list(set(
+            (full_context_pmids or []) +
+            (data_zones_pmids or []) +
+            (pmids_to_download or [])
+        )),
         # Start at appropriate step
         current_step=starting_step,
     )

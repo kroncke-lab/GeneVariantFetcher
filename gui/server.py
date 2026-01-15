@@ -227,6 +227,32 @@ class FolderJobRequest(BaseModel):
     scout_min_relevance: float = Field(0.3, ge=0.0, le=1.0)
 
 
+class ResumeJobRequest(BaseModel):
+    """Request to resume an interrupted pipeline from a folder."""
+
+    folder_path: str = Field(..., description="Path to folder with partial pipeline results")
+    gene_symbol: str = Field(..., description="Gene symbol for the pipeline")
+    email: str = Field(..., description="Email for NCBI E-utilities")
+
+    # Resume stage - where to resume from
+    resume_stage: str = Field(..., description="Stage to resume from: 'downloading' or 'extraction'")
+
+    # PMIDs to process (for downloading stage)
+    pmids_to_download: List[str] = Field(default_factory=list, description="PMIDs to download (missing from interrupted download)")
+
+    # Pipeline limits for downloading
+    max_papers_to_download: int = Field(500, ge=1, le=1000, description="Maximum papers to download")
+
+    # Options for extraction
+    run_scout: bool = Field(True, description="Run Data Scout on downloaded files")
+    skip_already_extracted: bool = Field(True, description="Skip PMIDs that already have extractions")
+
+    # Advanced settings
+    tier_threshold: int = Field(1, ge=0, le=10)
+    scout_enabled: bool = Field(True)
+    scout_min_relevance: float = Field(0.3, ge=0.0, le=1.0)
+
+
 # =============================================================================
 # WebSocket Connection Manager
 # =============================================================================
@@ -1223,6 +1249,85 @@ async def create_job_from_folder(request: FolderJobRequest, background_tasks: Ba
         folder_path=str(folder_path),
         gene_symbol=request.gene_symbol,
         email=request.email,
+        run_scout=request.run_scout,
+        skip_already_extracted=request.skip_already_extracted,
+        tier_threshold=request.tier_threshold,
+        scout_enabled=request.scout_enabled,
+        scout_min_relevance=request.scout_min_relevance,
+        full_context_pmids=analysis.full_context_pmids,
+        data_zones_pmids=analysis.data_zones_pmids,
+        extraction_pmids=analysis.extraction_pmids if request.skip_already_extracted else [],
+    )
+
+    # Save initial checkpoint
+    checkpoint_manager.save(checkpoint)
+
+    # Start job in background
+    loop = asyncio.get_event_loop()
+    background_tasks.add_task(
+        lambda: threading.Thread(
+            target=run_job_in_background,
+            args=(checkpoint.job_id, False, loop),
+            daemon=True,
+        ).start()
+    )
+
+    return checkpoint_to_response(checkpoint)
+
+
+@app.post("/api/jobs/resume-folder", response_model=JobResponse)
+async def resume_job_from_folder(request: ResumeJobRequest, background_tasks: BackgroundTasks):
+    """
+    Resume an interrupted pipeline from a folder.
+
+    This endpoint handles two main scenarios:
+    1. Resume downloading - when the pipeline was interrupted during download stage
+    2. Resume extraction - when downloading is complete but extraction was interrupted
+
+    The job will continue from the specified stage and run through completion.
+    """
+    from gui.worker import create_resume_job
+
+    folder_path = Path(request.folder_path).expanduser().resolve()
+
+    # Security check
+    allowed_roots = [Path.home(), Path("/tmp"), Path.cwd()]
+    is_allowed = any(
+        folder_path == root or root in folder_path.parents
+        for root in allowed_roots
+    )
+    if not is_allowed:
+        raise HTTPException(status_code=403, detail="Access to this directory is not allowed")
+
+    if not folder_path.exists():
+        raise HTTPException(status_code=400, detail="Folder does not exist")
+
+    # Get current folder analysis for context
+    analysis = await analyze_folder(str(folder_path))
+
+    # Validate resume stage
+    valid_stages = ["downloading", "extraction"]
+    if request.resume_stage not in valid_stages:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid resume stage. Must be one of: {valid_stages}"
+        )
+
+    # For downloading stage, we need PMIDs to download
+    if request.resume_stage == "downloading" and not request.pmids_to_download:
+        raise HTTPException(
+            status_code=400,
+            detail="PMIDs to download must be provided when resuming from downloading stage"
+        )
+
+    # Create checkpoint for resume job
+    checkpoint = create_resume_job(
+        folder_path=str(folder_path),
+        gene_symbol=request.gene_symbol,
+        email=request.email,
+        resume_stage=request.resume_stage,
+        pmids_to_download=request.pmids_to_download,
+        max_papers_to_download=request.max_papers_to_download,
         run_scout=request.run_scout,
         skip_already_extracted=request.skip_already_extracted,
         tier_threshold=request.tier_threshold,
