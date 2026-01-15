@@ -51,6 +51,12 @@ INSTRUCTIONS:
 2. Use MINIMAL fields per variant to fit all variants in the response
 3. Skip detailed fields (individual_records, functional_data, key_quotes, age_dependent_penetrance)
 
+RECOGNIZING IMPLICIT COUNTS:
+- "a patient" / "a case" / "an individual" = 1 carrier
+- "a healthy individual" / "an asymptomatic carrier" = 1 UNAFFECTED carrier
+- "an affected patient" / "a patient with [disease]" = 1 AFFECTED carrier
+- Disease-associated mutation tables: patient counts are typically AFFECTED carriers
+
 OUTPUT FORMAT (compact):
 Return a JSON object with this structure:
 {{
@@ -140,6 +146,22 @@ For each variant, provide:
 
 PENETRANCE DATA EXTRACTION (CRITICAL):
 For calibrating disease prediction models, extract detailed penetrance information:
+
+RECOGNIZING IMPLICIT COUNTS (IMPORTANT):
+Natural language often implies counts without stating explicit numbers. You MUST recognize these:
+- "a patient" / "a case" / "an individual" / "one patient" = 1 carrier
+- "a healthy individual" / "an asymptomatic carrier" = 1 UNAFFECTED carrier
+- "an affected patient" / "a patient with [disease]" = 1 AFFECTED carrier
+- "proband" / "the proband" = 1 carrier (usually affected unless stated otherwise)
+- "two patients" / "three families" = 2 or 3 carriers
+- For case reports mentioning a mutation, assume at least 1 affected carrier
+
+AFFECTED vs UNAFFECTED:
+- "Affected" = has the disease phenotype, symptoms, or clinical manifestations
+- "Unaffected" = carrier WITHOUT disease (described as: healthy, asymptomatic, no symptoms,
+  clinically silent, normal phenotype, unaffected family member)
+- Probands and "patients" in disease studies are typically AFFECTED
+- Family members described as "healthy" or "asymptomatic" carriers are UNAFFECTED
 
 A. Individual-Level Records:
    - Extract EVERY individual person mentioned who carries the variant
@@ -260,8 +282,18 @@ Return a JSON object with this structure:
 IMPORTANT NOTES:
 - ONLY include variants in the {gene_symbol} gene. Do NOT include variants from other genes even if they are mentioned in the paper.
 - If the paper mentions the target gene {gene_symbol} but does not report any variants, return an empty variants list.
-- If full text is not available and only abstract is provided, note this limitation
 - Be thorough but accurate - don't invent data not present in the paper
 - If a field is not available, use null or an empty string as appropriate
 - Preserve exact nomenclature from the paper
+
+ABSTRACT-ONLY EXTRACTION:
+When only an abstract is available (indicated by "[ABSTRACT ONLY - FULL TEXT NOT AVAILABLE]"):
+- Extract whatever variant and carrier information is available, even if limited
+- Recognize implicit counts: "a patient with mutation X" = 1 affected carrier with variant X
+- Case reports typically describe at least 1 affected carrier
+- "A novel mutation" or "we report a mutation" implies at least 1 carrier
+- Even if carrier counts aren't explicit, extract the variant notation if mentioned
+- Set extraction_confidence to "low" or "medium" due to limited information
+- Note in extraction_metadata.notes that this was abstract-only extraction
+- Do NOT skip extraction just because information is limited - extract what's available
 """
