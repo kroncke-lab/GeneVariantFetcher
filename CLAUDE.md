@@ -22,7 +22,7 @@ python main.py --cli GENE --email EMAIL --output OUTPUT_DIR
 | `python main.py --cli GENE` | CLI | Full pipeline, no checkpointing |
 | `python automated_workflow.py GENE --email EMAIL --output OUTPUT_DIR` | CLI (direct) | Full CLI with advanced options |
 
-## Pipeline (9 Steps)
+## Pipeline Steps
 
 The GUI/CLI run identical logic. GUI adds checkpointing for resume after interruption.
 
@@ -31,10 +31,12 @@ The GUI/CLI run identical logic. GUI adds checkpointing for resume after interru
 3. **Fetch Abstracts** - Get metadata for all PMIDs (`harvesting/abstracts.py`)
 4. **Filter Papers** - Tier 1 keyword + Tier 2 LLM triage (`pipeline/filters.py`)
 5. **Download Full-Text** - PMC articles + supplements → `{PMID}_FULL_CONTEXT.md` (`harvesting/orchestrator.py`)
-6. **Scout Data** - Identify high-value zones → `{PMID}_DATA_ZONES.md` (`pipeline/data_scout.py`)
-7. **Extract Variants** - LLM extraction with model cascade (`pipeline/extraction.py`)
-8. **Aggregate** - Penetrance validation (`pipeline/aggregation.py`)
-9. **Migrate to SQLite** - JSON → normalized database (`harvesting/migrate_to_sqlite.py`)
+   - **Automatically runs Data Scout** during download → creates `{PMID}_DATA_ZONES.md` (`pipeline/data_scout.py`)
+6. **Extract Variants** - LLM extraction with model cascade (`pipeline/extraction.py`)
+   - Prefers `DATA_ZONES.md` if available, falls back to `FULL_CONTEXT.md` or abstract
+   - Handles abstract-only extraction for papers that failed download
+7. **Aggregate** - Penetrance validation (`pipeline/aggregation.py`)
+8. **Migrate to SQLite** - JSON → normalized database (`harvesting/migrate_to_sqlite.py`)
 
 ### Filter Tiers
 
@@ -61,12 +63,22 @@ utils/                         # Shared utilities
 
 ```
 {OUTPUT_DIR}/{GENE}/{TIMESTAMP}/
-├── {GENE}_pmids.txt           # Discovered PMIDs
-├── abstract_json/             # Paper metadata
-├── pmc_fulltext/              # Full-text markdown + logs
-├── extractions/               # Per-paper JSON extractions
-├── {GENE}_penetrance_summary.json
-└── {GENE}.db                  # Canonical SQLite database
+├── {GENE}_pmids.txt                    # Discovered PMIDs
+├── {GENE}_workflow_summary.json        # Overall workflow statistics
+├── {GENE}_penetrance_summary.json      # Aggregated penetrance statistics
+├── {GENE}_workflow.log                 # Workflow execution log
+├── abstract_json/                      # Paper metadata (JSON per PMID)
+├── pmid_status/                        # Filter decisions and failures
+│   ├── filtered_out.csv
+│   └── extraction_failures.csv
+├── pmc_fulltext/                       # Full-text markdown + logs
+│   ├── PMID_*_FULL_CONTEXT.md          # Full paper content
+│   ├── PMID_*_DATA_ZONES.md            # Condensed sections (auto-created)
+│   ├── successful_downloads.csv
+│   └── paywalled_missing.csv           # Use with fetch_manager.py
+├── extractions/                        # Per-paper JSON extractions
+│   └── {GENE}_PMID_*.json
+└── {GENE}.db                           # Canonical SQLite database
 ```
 
 ## Environment Variables
@@ -99,6 +111,8 @@ These files exist but are not used in the main pipeline:
 ## Key Implementation Details
 
 - **Abstract-only fallback**: Papers that fail download are still extracted using their abstracts (handled in `ExpertExtractor`)
-- **DATA_ZONES preference**: Extraction prefers `DATA_ZONES.md` over `FULL_CONTEXT.md` to reduce token usage
+- **DATA_ZONES preference**: Extraction prefers `DATA_ZONES.md` over `FULL_CONTEXT.md` to reduce token usage (created automatically during download)
+- **Scout Data integration**: Data Scout runs automatically during `PMCHarvester.harvest()` - no separate step needed
 - **Checkpoint system**: GUI jobs save state after each step to `~/.gvf_jobs/{job_id}/checkpoint.json`
 - **Folder jobs**: GUI supports processing existing folders (skip discovery/download, start at extraction)
+- **Two summary files**: Both `{GENE}_workflow_summary.json` (overall stats) and `{GENE}_penetrance_summary.json` (variant aggregations) are created

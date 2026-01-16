@@ -49,7 +49,9 @@ logger = logging.getLogger(__name__)
 
 # Default configuration
 DEFAULT_DOWNLOADS_DIR = Path.home() / "Downloads"
-DEFAULT_TARGET_DIR = Path.home() / "OneDrive - VUMC" / "Kroncke_Lab" / "Manual_Retrieval"
+# Default target directory - use current working directory to avoid hardcoded paths
+# Users can override with --target-dir flag
+DEFAULT_TARGET_DIR = Path.cwd() / "manual_retrieval"
 
 # File extensions to track
 PDF_EXTENSIONS = {'.pdf'}
@@ -272,6 +274,9 @@ def construct_url(
                 doi = doi[4:].strip()
             elif doi.startswith('10.'):
                 pass  # Already clean DOI
+            else:
+                # DOI doesn't start with expected prefix, try anyway
+                pass
             return f"https://doi.org/{doi}"
 
     # Check for URL column (from paywalled_missing.csv)

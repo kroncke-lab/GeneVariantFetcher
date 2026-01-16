@@ -4,17 +4,19 @@ Extract human genetic variant carriers from biomedical literature into a SQLite 
 
 ## What It Does
 
-Given a gene name, this tool runs a 9-step pipeline:
+Given a gene name, this tool runs a pipeline with these major steps:
 
 1. **Discover Synonyms** (optional) – Auto-find gene aliases via NCBI
 2. **Fetch PMIDs** – Query PubMind, PubMed, and Europe PMC
 3. **Fetch Abstracts** – Get metadata for all discovered papers
 4. **Filter Papers** – Tier 1 keyword filter + Tier 2 LLM relevance triage
 5. **Download Full-Text** – Fetch PMC articles and supplements (Excel, Word, PDFs)
-6. **Scout Data** – Identify high-value data zones to reduce token usage
-7. **Extract Variants** – LLM extraction with model cascade
-8. **Aggregate** – Validate and merge penetrance data
-9. **Migrate to SQLite** – Create normalized database
+   - Automatically creates condensed `DATA_ZONES.md` files during download to reduce token usage
+6. **Extract Variants** – LLM extraction with model cascade (uses `DATA_ZONES.md` if available, falls back to full text or abstracts)
+7. **Aggregate** – Validate and merge penetrance data
+8. **Migrate to SQLite** – Create normalized database
+
+**Note:** The Scout Data step (Step 6) runs automatically during the Download Full-Text step. Papers that can't be downloaded are still processed using abstract-only extraction.
 
 **Key Insight:** 70-80% of variant data is in supplemental files. This tool extracts it all.
 
@@ -79,11 +81,11 @@ The GUI is recommended for most use cases. It provides real-time progress, job m
 
 ### Genetic Data Scout
 
-Before extraction, the pipeline identifies relevant "data zones" in each paper and creates condensed `DATA_ZONES.md` files. This reduces token usage by 60-80%.
+During the download step, the pipeline automatically identifies relevant "data zones" in each paper and creates condensed `DATA_ZONES.md` files. The extraction step prefers these condensed files over full text, reducing token usage by 60-80%. This happens automatically - no separate step needed.
 
 ### Abstract-Only Fallback
 
-Papers that cannot be downloaded (paywalled, missing from PMC) are still processed using their abstracts. The `ExpertExtractor` handles both fulltext and abstract-only extraction transparently.
+Papers that cannot be downloaded (paywalled, missing from PMC, or failed download) are still processed using their abstracts. The `ExpertExtractor` handles both fulltext and abstract-only extraction transparently. These papers are tracked in `paywalled_missing.csv` and can be manually downloaded using `fetch_manager.py` if needed.
 
 ## Environment Variables
 
@@ -155,16 +157,21 @@ python main.py --cli SCN5A --email user@email.com --output ./results --tier-thre
 {OUTPUT_DIR}/{GENE}/{TIMESTAMP}/
 ├── {GENE}.db                        # SQLite database (final output)
 ├── {GENE}_pmids.txt                 # Discovered PMIDs
-├── {GENE}_penetrance_summary.json   # Aggregated statistics
-├── abstract_json/                   # Paper metadata
-├── pmid_status/                     # Filter decisions
+├── {GENE}_workflow_summary.json     # Overall workflow statistics
+├── {GENE}_penetrance_summary.json   # Aggregated penetrance statistics
+├── {GENE}_workflow.log              # Workflow execution log
+├── abstract_json/                   # Paper metadata (JSON files per PMID)
+├── pmid_status/                     # Filter decisions and failures
 │   ├── filtered_out.csv
 │   └── extraction_failures.csv
 ├── pmc_fulltext/                    # Full-text + supplements
-│   ├── PMID_*_FULL_CONTEXT.md
-│   ├── PMID_*_DATA_ZONES.md
-│   └── PMID_*_supplements/
-└── extractions/                     # Per-paper JSON
+│   ├── PMID_*_FULL_CONTEXT.md       # Full paper content (main + supplements)
+│   ├── PMID_*_DATA_ZONES.md         # Condensed high-value sections (created during download)
+│   ├── PMID_*_supplements/          # Original supplement files
+│   ├── successful_downloads.csv     # Successfully downloaded papers
+│   └── paywalled_missing.csv        # Papers that couldn't be downloaded
+└── extractions/                     # Per-paper JSON extractions
+    └── {GENE}_PMID_*.json           # Structured variant data per paper
 ```
 
 ## Database Schema
