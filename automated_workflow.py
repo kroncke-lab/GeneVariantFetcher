@@ -84,10 +84,12 @@ def automated_variant_extraction_workflow(
         logger.info("\n🔍 STEP 0: Discovering gene synonyms from NCBI Gene database...")
 
         from gene_literature.synonym_finder import SynonymFinder, automatic_synonym_selection
+        from config.settings import get_settings
 
+        settings = get_settings()
         synonym_finder = SynonymFinder(
             email=email,
-            api_key=os.getenv("NCBI_API_KEY"),
+            api_key=settings.get_effective_ncbi_api_key(),
         )
 
         try:

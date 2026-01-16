@@ -231,10 +231,12 @@ class PipelineWorker:
         self._log(checkpoint, f"Discovering synonyms for {checkpoint.gene_symbol}...")
 
         from gene_literature.synonym_finder import SynonymFinder, automatic_synonym_selection
+        from config.settings import get_settings
 
+        settings = get_settings()
         synonym_finder = SynonymFinder(
             email=checkpoint.email,
-            api_key=os.getenv("NCBI_API_KEY"),
+            api_key=settings.get_effective_ncbi_api_key(),
         )
 
         found_synonyms = synonym_finder.find_gene_synonyms(

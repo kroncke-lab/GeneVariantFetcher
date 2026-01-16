@@ -94,12 +94,31 @@ class Settings(BaseSettings):
         "change_me",
         "your-openai-api-key",
         "your-anthropic-api-key",
+        "your-ncbi-api-key-here",
+        "your-ncbi-api-key",
+        "your-elsevier-api-key",
+        "your-wiley-api-key",
     }
 
     @staticmethod
     def _is_placeholder(value: str) -> bool:
         normalized = value.strip().lower()
-        return normalized in Settings._PLACEHOLDER_VALUES or "example.com" in normalized
+        if normalized in Settings._PLACEHOLDER_VALUES:
+            return True
+        if "example.com" in normalized:
+            return True
+        # Catch generic placeholder patterns like "your-*-key-here" or "your-*-api-key"
+        if normalized.startswith("your-") or normalized.startswith("your_"):
+            return True
+        if normalized.endswith("-here") or normalized.endswith("_here"):
+            return True
+        return False
+
+    def get_effective_ncbi_api_key(self) -> Optional[str]:
+        """Return NCBI API key only if it's not a placeholder value."""
+        if self.ncbi_api_key and not self._is_placeholder(self.ncbi_api_key):
+            return self.ncbi_api_key
+        return None
 
     @model_validator(mode="after")
     def validate_required_settings(self):
