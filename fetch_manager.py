@@ -54,7 +54,16 @@ DEFAULT_TARGET_DIR = Path.home() / "OneDrive - VUMC" / "Kroncke_Lab" / "Manual_R
 # File extensions to track
 PDF_EXTENSIONS = {'.pdf'}
 SPREADSHEET_EXTENSIONS = {'.xlsx', '.xls', '.csv', '.tsv'}
-ALL_TRACKED_EXTENSIONS = PDF_EXTENSIONS | SPREADSHEET_EXTENSIONS
+DOC_EXTENSIONS = {'.docx', '.doc'}
+TEXT_EXTENSIONS = {'.txt'}
+ARCHIVE_EXTENSIONS = {'.zip', '.rar', '.gz'}
+ALL_TRACKED_EXTENSIONS = (
+    PDF_EXTENSIONS
+    | SPREADSHEET_EXTENSIONS
+    | DOC_EXTENSIONS
+    | TEXT_EXTENSIONS
+    | ARCHIVE_EXTENSIONS
+)
 
 # Files to ignore
 IGNORED_PATTERNS = {
@@ -143,7 +152,24 @@ def generate_new_filename(pmid: str, original_file: Path, file_index: int = 0) -
         base_name = f"{pmid}_Supp_Data"
         if file_index > 0:
             base_name = f"{pmid}_Supp_Data_{file_index}"
-        # Always save as xlsx for consistency (or keep original extension)
+        return f"{base_name}{suffix}"
+
+    elif suffix in DOC_EXTENSIONS:
+        base_name = f"{pmid}_Supplement_Doc"
+        if file_index > 0:
+            base_name = f"{pmid}_Supplement_Doc_{file_index}"
+        return f"{base_name}{suffix}"
+
+    elif suffix in TEXT_EXTENSIONS:
+        base_name = f"{pmid}_Supplement_Text"
+        if file_index > 0:
+            base_name = f"{pmid}_Supplement_Text_{file_index}"
+        return f"{base_name}{suffix}"
+
+    elif suffix in ARCHIVE_EXTENSIONS:
+        base_name = f"{pmid}_Supplement_Archive"
+        if file_index > 0:
+            base_name = f"{pmid}_Supplement_Archive_{file_index}"
         return f"{base_name}{suffix}"
 
     else:
@@ -170,6 +196,9 @@ def move_and_rename_files(
     moved_files = []
     pdf_count = 0
     spreadsheet_count = 0
+    doc_count = 0
+    text_count = 0
+    archive_count = 0
 
     # Ensure target directory exists
     target_dir.mkdir(parents=True, exist_ok=True)
@@ -184,6 +213,15 @@ def move_and_rename_files(
         elif suffix in SPREADSHEET_EXTENSIONS:
             file_index = spreadsheet_count
             spreadsheet_count += 1
+        elif suffix in DOC_EXTENSIONS:
+            file_index = doc_count
+            doc_count += 1
+        elif suffix in TEXT_EXTENSIONS:
+            file_index = text_count
+            text_count += 1
+        elif suffix in ARCHIVE_EXTENSIONS:
+            file_index = archive_count
+            archive_count += 1
         else:
             file_index = 0
 
@@ -207,7 +245,11 @@ def move_and_rename_files(
     return moved_files
 
 
-def construct_url(row: pd.Series, doi_column: Optional[str] = None) -> str:
+def construct_url(
+    row: pd.Series,
+    doi_column: Optional[str] = None,
+    pmid_column: str = "PMID",
+) -> str:
     """
     Construct URL for a paper from DOI or PMID.
 
@@ -237,7 +279,11 @@ def construct_url(row: pd.Series, doi_column: Optional[str] = None) -> str:
         return str(row['URL']).strip()
 
     # Fall back to PubMed
-    pmid = str(row['PMID']).strip()
+    pmid_value = row.get(pmid_column, row.get("PMID", ""))
+    pmid = str(pmid_value).strip()
+    if not pmid or pmid.lower() == "nan":
+        logger.warning("Missing PMID value in column '%s'", pmid_column)
+        return ""
     return f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
 
 
@@ -303,94 +349,111 @@ def run_fetch_manager(
     logger.info(f"Target directory: {target_dir}")
 
     # Count pending papers
-    pending_mask = df[status_column] != 'done'
+    df[status_column] = df[status_column].fillna("")
+    pending_mask = ~df[status_column].isin(["done", "skipped"])
     total_pending = pending_mask.sum()
     logger.info(f"Found {total_pending} papers to process (out of {len(df)} total)")
 
     # Process each paper
     processed = 0
     for idx, row in df.iterrows():
-        # Skip already done
-        if row[status_column] == 'done':
+        # Skip already done or skipped
+        if str(row[status_column]).strip().lower() in {"done", "skipped"}:
             continue
 
         # Skip if before start index
         if idx < start_index:
             continue
 
-        pmid = str(row[pmid_column]).strip()
-        url = construct_url(row, doi_column)
-
-        processed += 1
-        remaining = total_pending - processed + 1
-
-        print("\n" + "=" * 60)
-        print(f"Paper {processed}/{total_pending} (remaining: {remaining})")
-        print(f"  PMID: {pmid}")
-        print(f"  URL:  {url}")
-        if 'Reason' in row.index and pd.notna(row['Reason']):
-            print(f"  Note: {row['Reason']}")
-        print("=" * 60)
-
-        # Take 'before' snapshot
-        before_snapshot = get_downloads_snapshot(downloads_dir)
-
-        # Open URL in browser
-        logger.info("Opening in browser...")
-        webbrowser.open(url)
-
-        # Wait for user
-        response = wait_for_user_action()
-
-        if response == 'q':
-            logger.info("Quitting...")
-            df.to_csv(csv_file, index=False)
-            logger.info(f"Progress saved to {csv_file}")
-            return
-
-        if response == 'n':
-            logger.info("Skipping this paper...")
+        pmid = str(row.get(pmid_column, "")).strip()
+        if not pmid or pmid.lower() == "nan":
+            logger.warning(
+                "Row %s missing PMID in column '%s'; marking as skipped.",
+                idx,
+                pmid_column,
+            )
             df.at[idx, status_column] = 'skipped'
             df.to_csv(csv_file, index=False)
             continue
 
-        # Take 'after' snapshot
-        # Small delay to ensure files are fully written
-        time.sleep(0.5)
-        after_snapshot = get_downloads_snapshot(downloads_dir)
+        url = construct_url(row, doi_column, pmid_column=pmid_column)
 
-        # Identify new files
-        new_files = identify_new_files(before_snapshot, after_snapshot)
+        processed += 1
+        remaining = total_pending - processed + 1
 
-        if not new_files:
-            logger.warning("No new files detected in Downloads folder")
-            print("  No files found. Enter 'r' to retry, 's' to skip, or ENTER to mark done anyway: ", end='', flush=True)
-            retry_response = input().strip().lower()
+        while True:
+            print("\n" + "=" * 60)
+            print(f"Paper {processed}/{total_pending} (remaining: {remaining})")
+            print(f"  PMID: {pmid}")
+            print(f"  URL:  {url}")
+            if 'Reason' in row.index and pd.notna(row['Reason']):
+                print(f"  Note: {row['Reason']}")
+            print("=" * 60)
 
-            if retry_response == 'r':
-                # Put this paper back in queue by not marking it done
-                continue
-            elif retry_response == 's':
+            # Take 'before' snapshot
+            before_snapshot = get_downloads_snapshot(downloads_dir)
+
+            # Open URL in browser
+            if url:
+                logger.info("Opening in browser...")
+                webbrowser.open(url)
+            else:
+                logger.warning("No URL available for PMID %s; skipping.", pmid)
                 df.at[idx, status_column] = 'skipped'
                 df.to_csv(csv_file, index=False)
-                continue
-            # Otherwise mark as done (user confirmed no downloads needed)
+                break
 
-        else:
-            logger.info(f"Found {len(new_files)} new file(s):")
-            for f in new_files:
-                logger.info(f"  - {f.name}")
+            # Wait for user
+            response = wait_for_user_action()
 
-            # Move and rename files
-            moved = move_and_rename_files(new_files, pmid, target_dir)
+            if response == 'q':
+                logger.info("Quitting...")
+                df.to_csv(csv_file, index=False)
+                logger.info(f"Progress saved to {csv_file}")
+                return
 
-            if moved:
-                logger.info(f"Successfully processed {len(moved)} file(s)")
+            if response == 'n':
+                logger.info("Skipping this paper...")
+                df.at[idx, status_column] = 'skipped'
+                df.to_csv(csv_file, index=False)
+                break
 
-        # Mark as done and save
-        df.at[idx, status_column] = 'done'
-        df.to_csv(csv_file, index=False)
-        logger.info("Progress saved")
+            # Take 'after' snapshot
+            # Small delay to ensure files are fully written
+            time.sleep(0.5)
+            after_snapshot = get_downloads_snapshot(downloads_dir)
+
+            # Identify new files
+            new_files = identify_new_files(before_snapshot, after_snapshot)
+
+            if not new_files:
+                logger.warning("No new files detected in Downloads folder")
+                print("  No files found. Enter 'r' to retry, 's' to skip, or ENTER to mark done anyway: ", end='', flush=True)
+                retry_response = input().strip().lower()
+
+                if retry_response == 'r':
+                    continue
+                if retry_response == 's':
+                    df.at[idx, status_column] = 'skipped'
+                    df.to_csv(csv_file, index=False)
+                    break
+                # Otherwise mark as done (user confirmed no downloads needed)
+            else:
+                logger.info(f"Found {len(new_files)} new file(s):")
+                for f in new_files:
+                    logger.info(f"  - {f.name}")
+
+                # Move and rename files
+                moved = move_and_rename_files(new_files, pmid, target_dir)
+
+                if moved:
+                    logger.info(f"Successfully processed {len(moved)} file(s)")
+
+            # Mark as done and save
+            df.at[idx, status_column] = 'done'
+            df.to_csv(csv_file, index=False)
+            logger.info("Progress saved")
+            break
 
     print("\n" + "=" * 60)
     logger.info("All papers processed!")

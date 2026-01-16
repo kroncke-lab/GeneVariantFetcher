@@ -20,7 +20,7 @@ python main.py --cli GENE --email EMAIL --output OUTPUT_DIR
 |-------|------|----------|
 | `python main.py` | GUI (default) | Web interface, checkpointing, resume |
 | `python main.py --cli GENE` | CLI | Full pipeline, no checkpointing |
-| `python automated_workflow.py GENE` | CLI (direct) | Same as --cli mode |
+| `python automated_workflow.py GENE --email EMAIL --output OUTPUT_DIR` | CLI (direct) | Full CLI with advanced options |
 
 ## Pipeline (9 Steps)
 
@@ -72,9 +72,11 @@ utils/                         # Shared utilities
 ## Environment Variables
 
 ```bash
-AI_INTEGRATIONS_OPENAI_API_KEY=...  # Required (or OPENAI_API_KEY)
+OPENAI_API_KEY=...                   # Required (or AI_INTEGRATIONS_OPENAI_API_KEY)
+AI_INTEGRATIONS_OPENAI_API_KEY=...   # Alternate name for OpenAI key
 NCBI_EMAIL=...                       # Required
 NCBI_API_KEY=...                     # Optional (higher rate limits)
+ANTHROPIC_API_KEY=...                # Optional (Anthropic-backed features)
 ```
 
 ## Code Style

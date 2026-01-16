@@ -26,7 +26,7 @@ pip install -e .
 pip install -r gui/requirements.txt
 
 # Set required environment variables (or use .env file)
-export OPENAI_API_KEY="your-key"
+export OPENAI_API_KEY="your-key"  # or AI_INTEGRATIONS_OPENAI_API_KEY
 export NCBI_EMAIL="your@email.com"
 
 # Launch the GUI (recommended)
@@ -40,6 +40,8 @@ On first launch, go to the **Settings** tab to configure your API keys.
 ```bash
 python main.py --cli BRCA1 --email your@email.com --output ./results
 ```
+
+For advanced CLI options (limits, triage, synonyms), use `automated_workflow.py` directly.
 
 ## Prerequisites
 
@@ -85,14 +87,16 @@ Papers that cannot be downloaded (paywalled, missing from PMC) are still process
 
 ## Environment Variables
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root (see `.env.example`):
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | **API Keys** |
 | `OPENAI_API_KEY` | Yes | - | OpenAI API key (primary LLM provider) |
+| `AI_INTEGRATIONS_OPENAI_API_KEY` | Yes | - | OpenAI API key (alternate env var name) |
 | `NCBI_EMAIL` | Yes | - | Email for NCBI E-utilities |
 | `NCBI_API_KEY` | No | - | NCBI API key (10 req/s vs 3 req/s) |
+| `ANTHROPIC_API_KEY` | No | - | Anthropic API key (only needed for Anthropic-backed features) |
 | **Paper Sources** |
 | `USE_PUBMIND` | No | `true` | Use PubMind as primary source |
 | `USE_PUBMED` | No | `true` | Use PubMed keyword search |
@@ -115,10 +119,12 @@ Create a `.env` file in the project root:
 ## CLI Options
 
 ```bash
-python main.py --cli GENE --email EMAIL --output DIR [OPTIONS]
-# or directly:
+python main.py --cli GENE --email EMAIL --output DIR
+# for advanced options:
 python automated_workflow.py GENE --email EMAIL --output DIR [OPTIONS]
 ```
+
+Options below apply to `automated_workflow.py`.
 
 | Option | Description |
 |--------|-------------|
