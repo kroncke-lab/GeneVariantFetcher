@@ -97,6 +97,15 @@ ANTHROPIC_API_KEY=...                # Optional (Anthropic-backed features)
 - Logging: `logger = logging.getLogger(__name__)`
 - Commits: imperative mood ("Add feature" not "Added feature")
 
+## Standalone Tools
+
+These files are standalone utilities, not part of the automated pipeline:
+
+| File | Purpose | Usage |
+|------|---------|-------|
+| `fetch_manager.py` | Semi-manual download helper for paywalled papers | `python fetch_manager.py paywalled_missing.csv --convert --run-scout --gene GENE` |
+| `gene_literature/collect_literature.py` | Standalone literature collection CLI | Direct invocation for one-off literature searches |
+
 ## Known Unused/Stale Files
 
 These files exist but are not used in the main pipeline:
@@ -105,7 +114,6 @@ These files exist but are not used in the main pipeline:
 |------|--------|-------|
 | `pipeline/abstract_extraction.py` | **Unused** | Abstract-only extraction is now integrated into `ExpertExtractor.extract()` |
 | `pipeline/cli.py` | **Stub** | Only implements `version` command; `gvf` console script is non-functional |
-| `gene_literature/collect_literature.py` | **Standalone** | Separate CLI tool, not part of main pipeline |
 | `run_gui.py` | **Redundant** | Duplicates `main.py` GUI startup logic |
 
 ## Key Implementation Details

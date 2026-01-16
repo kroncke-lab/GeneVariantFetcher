@@ -12,6 +12,8 @@ Workflow:
 3. Detects new files in your Downloads folder
 4. Renames and moves them to the target directory with proper naming
 5. Tracks progress in the CSV file
+6. (Optional) Converts downloaded files to markdown format for extraction
+7. (Optional) Runs Data Scout to create DATA_ZONES.md files
 
 Usage:
     python fetch_manager.py <csv_file> [options]
@@ -24,6 +26,9 @@ Usage:
 
     # Specify a custom target directory
     python fetch_manager.py papers.csv --target-dir ~/MyData/Papers
+
+    # Convert downloaded files to markdown and run scout (for re-extraction)
+    python fetch_manager.py paywalled_missing.csv --convert --run-scout --gene SCN5A
 """
 
 import os
@@ -37,6 +42,23 @@ from datetime import datetime
 from typing import Optional, Set, List, Tuple
 
 import pandas as pd
+
+# Import converters and scout (optional - for --convert and --run-scout flags)
+try:
+    from harvesting.format_converters import FormatConverter
+    CONVERTER_AVAILABLE = True
+except ImportError:
+    CONVERTER_AVAILABLE = False
+    FormatConverter = None
+
+try:
+    from pipeline.data_scout import GeneticDataScout
+    from config.settings import get_settings
+    SCOUT_AVAILABLE = True
+except ImportError:
+    SCOUT_AVAILABLE = False
+    GeneticDataScout = None
+    get_settings = None
 
 # Setup logging
 logging.basicConfig(
@@ -247,6 +269,203 @@ def move_and_rename_files(
     return moved_files
 
 
+def convert_to_markdown(pmid: str, target_dir: Path) -> Optional[str]:
+    """
+    Convert downloaded files for a PMID to unified markdown format.
+
+    Looks for files matching the PMID in target_dir and creates
+    a {PMID}_FULL_CONTEXT.md file combining all content.
+
+    Args:
+        pmid: PubMed ID
+        target_dir: Directory containing downloaded files
+
+    Returns:
+        Path to created markdown file, or None if conversion failed
+    """
+    if not CONVERTER_AVAILABLE:
+        logger.error("FormatConverter not available. Install harvesting module dependencies.")
+        return None
+
+    converter = FormatConverter()
+    markdown_parts = []
+
+    # Find all files for this PMID
+    pmid_files = list(target_dir.glob(f"{pmid}_*"))
+    if not pmid_files:
+        logger.warning(f"No files found for PMID {pmid} in {target_dir}")
+        return None
+
+    # Sort files: main text first, then supplements
+    main_files = [f for f in pmid_files if 'Main_Text' in f.name or 'main' in f.name.lower()]
+    supp_files = [f for f in pmid_files if f not in main_files and f.suffix.lower() != '.md']
+
+    # Process main text file(s)
+    for idx, file_path in enumerate(main_files):
+        ext = file_path.suffix.lower()
+        if ext == '.pdf':
+            content = converter.pdf_to_markdown(file_path)
+            markdown_parts.append(f"# MAIN TEXT\n\n{content}")
+        elif ext == '.docx':
+            content = converter.docx_to_markdown(file_path)
+            markdown_parts.append(f"# MAIN TEXT\n\n{content}")
+        elif ext == '.doc':
+            content = converter.doc_to_markdown(file_path)
+            markdown_parts.append(f"# MAIN TEXT\n\n{content}")
+        elif ext in ['.txt', '.md']:
+            content = file_path.read_text(encoding='utf-8', errors='ignore')
+            markdown_parts.append(f"# MAIN TEXT\n\n{content}")
+
+    # Process supplemental files
+    for idx, file_path in enumerate(supp_files, 1):
+        ext = file_path.suffix.lower()
+        content = ""
+
+        if ext == '.pdf':
+            content = converter.pdf_to_markdown(file_path)
+        elif ext in ['.xlsx', '.xls']:
+            content = converter.excel_to_markdown(file_path)
+        elif ext == '.docx':
+            content = converter.docx_to_markdown(file_path)
+        elif ext == '.doc':
+            content = converter.doc_to_markdown(file_path)
+        elif ext in ['.txt', '.csv']:
+            try:
+                content = file_path.read_text(encoding='utf-8', errors='ignore')
+            except Exception as e:
+                content = f"[Error reading file: {e}]"
+
+        if content:
+            markdown_parts.append(f"\n\n# SUPPLEMENTAL FILE {idx}: {file_path.name}\n\n{content}")
+
+    if not markdown_parts:
+        logger.warning(f"No convertible content found for PMID {pmid}")
+        return None
+
+    # Write unified markdown
+    unified_content = "\n".join(markdown_parts)
+    output_file = target_dir / f"{pmid}_FULL_CONTEXT.md"
+    output_file.write_text(unified_content, encoding='utf-8')
+
+    logger.info(f"Created {output_file.name} ({len(unified_content)} characters)")
+    return str(output_file)
+
+
+def run_data_scout(pmid: str, target_dir: Path, gene_symbol: str) -> Optional[str]:
+    """
+    Run the Genetic Data Scout on a FULL_CONTEXT.md file.
+
+    Args:
+        pmid: PubMed ID
+        target_dir: Directory containing the FULL_CONTEXT.md file
+        gene_symbol: Gene symbol for relevance scoring
+
+    Returns:
+        Path to created DATA_ZONES.md file, or None if scout failed
+    """
+    if not SCOUT_AVAILABLE:
+        logger.error("GeneticDataScout not available. Install pipeline module dependencies.")
+        return None
+
+    full_context_file = target_dir / f"{pmid}_FULL_CONTEXT.md"
+    if not full_context_file.exists():
+        logger.warning(f"No FULL_CONTEXT.md found for PMID {pmid}")
+        return None
+
+    try:
+        settings = get_settings()
+        scout = GeneticDataScout(
+            gene_symbol=gene_symbol,
+            min_relevance_score=settings.scout_min_relevance if settings else 0.3,
+            max_zones=settings.scout_max_zones if settings else 30,
+        )
+
+        unified_content = full_context_file.read_text(encoding='utf-8')
+        report = scout.scan(unified_content, pmid=pmid)
+
+        # Write zone metadata JSON
+        zones_json_path = target_dir / f"{pmid}_DATA_ZONES.json"
+        zones_json_path.write_text(scout.to_json(report))
+
+        # Write condensed markdown
+        zones_md_path = target_dir / f"{pmid}_DATA_ZONES.md"
+        zones_md_path.write_text(scout.format_markdown(report, unified_content))
+
+        logger.info(f"Scout: {report.zones_kept}/{report.total_zones_found} zones kept "
+                    f"({report.compression_ratio:.0%} compression)")
+        return str(zones_md_path)
+
+    except Exception as e:
+        logger.error(f"Data scout failed for PMID {pmid}: {e}")
+        return None
+
+
+def process_completed_downloads(
+    csv_file: Path,
+    target_dir: Path,
+    gene_symbol: Optional[str] = None,
+    convert: bool = False,
+    run_scout: bool = False,
+    pmid_column: str = 'PMID',
+    status_column: str = 'Status',
+) -> Tuple[int, int]:
+    """
+    Process completed downloads: convert to markdown and/or run scout.
+
+    Args:
+        csv_file: Path to CSV file with paper list
+        target_dir: Directory containing downloaded files
+        gene_symbol: Gene symbol for scout (required if run_scout=True)
+        convert: Whether to convert files to markdown
+        run_scout: Whether to run data scout
+        pmid_column: Name of PMID column
+        status_column: Name of status column
+
+    Returns:
+        Tuple of (converted_count, scouted_count)
+    """
+    df = pd.read_csv(csv_file)
+
+    if status_column not in df.columns:
+        logger.error(f"Status column '{status_column}' not found in CSV")
+        return 0, 0
+
+    # Find completed downloads
+    done_mask = df[status_column].str.lower() == 'done'
+    done_pmids = df.loc[done_mask, pmid_column].astype(str).tolist()
+
+    if not done_pmids:
+        logger.info("No completed downloads to process")
+        return 0, 0
+
+    logger.info(f"Processing {len(done_pmids)} completed downloads...")
+
+    converted_count = 0
+    scouted_count = 0
+
+    for pmid in done_pmids:
+        pmid = pmid.strip()
+        if not pmid or pmid.lower() == 'nan':
+            continue
+
+        # Convert to markdown if requested
+        if convert:
+            result = convert_to_markdown(pmid, target_dir)
+            if result:
+                converted_count += 1
+
+        # Run scout if requested
+        if run_scout:
+            if not gene_symbol:
+                logger.warning("Gene symbol required for scout. Use --gene flag.")
+                break
+            result = run_data_scout(pmid, target_dir, gene_symbol)
+            if result:
+                scouted_count += 1
+
+    return converted_count, scouted_count
+
+
 def construct_url(
     row: pd.Series,
     doi_column: Optional[str] = None,
@@ -313,11 +532,15 @@ def wait_for_user_action() -> str:
 def run_fetch_manager(
     csv_file: Path,
     downloads_dir: Path = DEFAULT_DOWNLOADS_DIR,
-    target_dir: Path = DEFAULT_TARGET_DIR,
+    target_dir: Optional[Path] = None,
     doi_column: Optional[str] = None,
     pmid_column: str = 'PMID',
     status_column: str = 'Status',
     start_index: int = 0,
+    convert: bool = False,
+    run_scout: bool = False,
+    gene_symbol: Optional[str] = None,
+    process_only: bool = False,
 ):
     """
     Main workflow loop for semi-manual paper fetching.
@@ -325,12 +548,26 @@ def run_fetch_manager(
     Args:
         csv_file: Path to CSV file with paper list
         downloads_dir: Path to Downloads folder to monitor
-        target_dir: Path to move renamed files to
+        target_dir: Path to move renamed files to (auto-detected from CSV if None)
         doi_column: Name of DOI column (optional)
         pmid_column: Name of PMID column
         status_column: Name of status column for tracking progress
         start_index: Row index to start from (for resuming)
+        convert: Whether to convert downloaded files to markdown
+        run_scout: Whether to run data scout on converted files
+        gene_symbol: Gene symbol for scout (required if run_scout=True)
+        process_only: Skip download loop, just process existing completed downloads
     """
+    # Auto-detect target directory from CSV path if not specified
+    # If CSV is in pmc_fulltext/, use that directory
+    if target_dir is None:
+        csv_parent = csv_file.parent
+        if csv_parent.name == 'pmc_fulltext' or 'pmc_fulltext' in str(csv_parent):
+            target_dir = csv_parent
+            logger.info(f"Auto-detected target directory: {target_dir}")
+        else:
+            target_dir = DEFAULT_TARGET_DIR
+
     # Load the CSV
     logger.info(f"Loading CSV: {csv_file}")
     df = pd.read_csv(csv_file)
@@ -353,11 +590,40 @@ def run_fetch_manager(
     target_dir.mkdir(parents=True, exist_ok=True)
     logger.info(f"Target directory: {target_dir}")
 
+    # Validate scout requirements
+    if run_scout and not gene_symbol:
+        logger.error("--gene is required when using --run-scout")
+        sys.exit(1)
+
+    if run_scout and not SCOUT_AVAILABLE:
+        logger.error("GeneticDataScout not available. Install pipeline dependencies.")
+        sys.exit(1)
+
+    if convert and not CONVERTER_AVAILABLE:
+        logger.error("FormatConverter not available. Install harvesting dependencies.")
+        sys.exit(1)
+
     # Count pending papers
     df[status_column] = df[status_column].fillna("")
     pending_mask = ~df[status_column].isin(["done", "skipped"])
     total_pending = pending_mask.sum()
     logger.info(f"Found {total_pending} papers to process (out of {len(df)} total)")
+
+    # If process_only mode, skip download loop and just convert/scout
+    if process_only:
+        logger.info("Process-only mode: skipping download loop")
+        if convert or run_scout:
+            converted, scouted = process_completed_downloads(
+                csv_file=csv_file,
+                target_dir=target_dir,
+                gene_symbol=gene_symbol,
+                convert=convert,
+                run_scout=run_scout,
+                pmid_column=pmid_column,
+                status_column=status_column,
+            )
+            print(f"\nProcessing complete: {converted} converted, {scouted} scouted")
+        return
 
     # Process each paper
     processed = 0
@@ -465,6 +731,27 @@ def run_fetch_manager(
     logger.info(f"Files saved to: {target_dir}")
     print("=" * 60)
 
+    # Post-processing: convert and/or scout
+    if convert or run_scout:
+        print("\n" + "=" * 60)
+        logger.info("Running post-download processing...")
+        converted, scouted = process_completed_downloads(
+            csv_file=csv_file,
+            target_dir=target_dir,
+            gene_symbol=gene_symbol,
+            convert=convert,
+            run_scout=run_scout,
+            pmid_column=pmid_column,
+            status_column=status_column,
+        )
+        print(f"Post-processing complete: {converted} converted, {scouted} scouted")
+        print("=" * 60)
+
+        if convert:
+            print("\nNext steps:")
+            print("  - Re-run extraction using GUI 'folder job' feature")
+            print("  - Or run: python automated_workflow.py ... (with existing folder)")
+
 
 def main():
     """Main entry point."""
@@ -486,6 +773,12 @@ Examples:
 
   # Resume from a specific row (0-indexed)
   python fetch_manager.py papers.csv --start 10
+
+  # Convert downloaded files to markdown and run scout (for re-extraction)
+  python fetch_manager.py paywalled_missing.csv --convert --run-scout --gene SCN5A
+
+  # Only process already-completed downloads (no download loop)
+  python fetch_manager.py paywalled_missing.csv --process-only --convert --run-scout --gene TTR
         """
     )
 
@@ -503,8 +796,8 @@ Examples:
     parser.add_argument(
         "--target-dir", "-t",
         type=Path,
-        default=DEFAULT_TARGET_DIR,
-        help=f"Target directory for renamed files (default: {DEFAULT_TARGET_DIR})"
+        default=None,
+        help="Target directory for renamed files (auto-detected from CSV path if in pmc_fulltext/)"
     )
     parser.add_argument(
         "--doi-column",
@@ -535,6 +828,27 @@ Examples:
         action="store_true",
         help="Enable verbose logging"
     )
+    parser.add_argument(
+        "--convert", "-c",
+        action="store_true",
+        help="Convert downloaded files to FULL_CONTEXT.md format for extraction"
+    )
+    parser.add_argument(
+        "--run-scout",
+        action="store_true",
+        help="Run Data Scout to create DATA_ZONES.md files (requires --gene)"
+    )
+    parser.add_argument(
+        "--gene", "-g",
+        type=str,
+        default=None,
+        help="Gene symbol for Data Scout relevance scoring (required with --run-scout)"
+    )
+    parser.add_argument(
+        "--process-only",
+        action="store_true",
+        help="Skip download loop, only process already-completed downloads"
+    )
 
     args = parser.parse_args()
 
@@ -555,6 +869,10 @@ Examples:
         pmid_column=args.pmid_column,
         status_column=args.status_column,
         start_index=args.start,
+        convert=args.convert,
+        run_scout=args.run_scout,
+        gene_symbol=args.gene,
+        process_only=args.process_only,
     )
 
 

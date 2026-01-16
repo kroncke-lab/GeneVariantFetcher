@@ -16,7 +16,7 @@ Given a gene name, this tool runs a pipeline with these major steps:
 7. **Aggregate** – Validate and merge penetrance data
 8. **Migrate to SQLite** – Create normalized database
 
-**Note:** The Scout Data step (Step 6) runs automatically during the Download Full-Text step. Papers that can't be downloaded are still processed using abstract-only extraction.
+**Note:** The Data Scout runs automatically during the Download Full-Text step (step 5), creating condensed `DATA_ZONES.md` files. Papers that can't be downloaded are still processed using abstract-only extraction.
 
 **Key Insight:** 70-80% of variant data is in supplemental files. This tool extracts it all.
 
@@ -66,6 +66,7 @@ brew install poppler
 |---------|------|----------|
 | `python main.py` | **GUI** (default) | Web interface, checkpointing, pause/resume |
 | `python main.py --cli GENE` | CLI | Full pipeline, no checkpointing |
+| `python automated_workflow.py GENE` | CLI (direct) | Advanced options (`--auto-synonyms`, `--max-downloads`, etc.) |
 
 The GUI is recommended for most use cases. It provides real-time progress, job management, and automatic resume after interruption.
 
@@ -202,8 +203,22 @@ python tests/compare_variants.py --excel curated.xlsx --sqlite GENE.db
 ### Semi-Manual Fetch for Paywalled Papers
 
 ```bash
+# Step 1: Manually download papers using fetch_manager
 python fetch_manager.py results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv
+
+# Step 2: Convert downloaded files to markdown and run scout
+python fetch_manager.py results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv --convert --run-scout --gene GENE
+
+# Step 3: Re-run extraction on the folder (GUI folder job, or manually)
+# The GUI supports "folder jobs" that start at extraction for existing paper collections
 ```
+
+The fetch_manager workflow:
+1. Opens paper URLs in your browser for manual download
+2. Detects new files in your Downloads folder
+3. Renames and moves them to `pmc_fulltext/` with proper naming
+4. With `--convert`, creates `{PMID}_FULL_CONTEXT.md` files from PDFs
+5. With `--run-scout`, creates `{PMID}_DATA_ZONES.md` for extraction
 
 ## Troubleshooting
 
