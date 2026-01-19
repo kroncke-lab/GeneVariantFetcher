@@ -172,38 +172,6 @@ Must provide via `--email` flag for PubMed API compliance.
 
 ---
 
-## What Changed? (Simplification)
-
-**Before**: Multiple confusing scripts, manual steps, duplicated code
-```bash
-# Old way (manual, confusing):
-python pubmind_fetcher.py BRCA1            # Step 1
-python harvest_pmc_fulltext.py             # Step 2 (edit script first!)
-python pipeline.py                         # Step 3 (complex tiered system)
-python migrate_to_sqlite.py --data-dir ... # Step 4 (manual migration)
-```
-
-**After**: One command does everything
-```bash
-# New way (automatic, simple):
-python automated_workflow.py BRCA1 --email your@email.com
-```
-
-**Code cleanup**:
-- ❌ Deleted `extractor.py` (duplicate)
-- ❌ Deleted `pipeline/harvesting.py` (duplicate)
-- ❌ Deleted `pipeline/utils/llm_utils.py` (duplicate)
-- ❌ Archived `pipeline.py` → `pipeline_tiered_old.py` (overly complex)
-- ✅ Kept `automated_workflow.py` (clean, simple, complete)
-- ✅ Integrated SQLite migration (no manual step needed)
-
-**Results**:
-- 956 lines of code deleted
-- 68 lines added
-- **Net: -888 lines** (much simpler!)
-
----
-
 ## Troubleshooting
 
 ### "No PMIDs found"
@@ -222,24 +190,6 @@ python automated_workflow.py BRCA1 --email your@email.com
 
 ### "Email required"
 - Must provide `--email your@email.com` for NCBI compliance
-
----
-
-## Cost Estimation
-
-**PubMind/PMC**: Free ✓
-
-**OpenAI API**: ~$0.01-0.10 per paper
-- Depends on paper length
-- Full-text with supplements = longer = more expensive
-- Typical cost for 50 papers: $2-5
-
-**Example**:
-```
-Gene: BRCA1
-Papers extracted: 45
-Estimated cost: $3.50
-```
 
 ---
 

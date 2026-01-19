@@ -90,36 +90,16 @@ Papers that cannot be downloaded (paywalled, missing from PMC, or failed downloa
 
 ## Environment Variables
 
-Create a `.env` file in the project root (see `.env.example`):
+Create a `.env` file in the project root:
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| **API Keys** |
-| `OPENAI_API_KEY` | Yes | - | OpenAI API key (primary LLM provider) |
-| `NCBI_EMAIL` | Yes | - | Email for NCBI E-utilities |
-| `NCBI_API_KEY` | No | - | NCBI API key (10 req/s vs 3 req/s) |
-| `ANTHROPIC_API_KEY` | No | - | Anthropic API key (for Anthropic-backed features) |
-| `GEMINI_API_KEY` | No | - | Google Gemini API key |
-| `ELSEVIER_API_KEY` | No | - | Elsevier API key (for publisher access) |
-| `WILEY_API_KEY` | No | - | Wiley API key (for publisher access) |
-| **Paper Sources** |
-| `USE_PUBMIND` | No | `true` | Use PubMind as primary source |
-| `USE_PUBMED` | No | `true` | Use PubMed keyword search |
-| `USE_EUROPEPMC` | No | `false` | Use Europe PMC |
-| `PUBMIND_ONLY` | No | `false` | Disable all sources except PubMind |
-| `MAX_PAPERS_PER_SOURCE` | No | `100` | Max papers per source |
-| **Tier Configuration** |
-| `ENABLE_TIER1` | No | `true` | Enable keyword filtering |
-| `ENABLE_TIER2` | No | `true` | Enable LLM triage |
-| `TIER1_MIN_KEYWORDS` | No | `2` | Min keyword matches for Tier 1 |
-| `TIER2_MODEL` | No | `gpt-4o-mini` | Model for Tier 2 |
-| `TIER2_CONFIDENCE_THRESHOLD` | No | `0.5` | Min confidence for Tier 2 |
-| `TIER3_MODELS` | No | `gpt-4o-mini,gpt-4o` | Model cascade for Tier 3 |
-| `TIER3_THRESHOLD` | No | `1` | Retry threshold for cascade |
-| **Data Scout** |
-| `SCOUT_ENABLED` | No | `true` | Generate DATA_ZONES.md files |
-| `SCOUT_MIN_RELEVANCE` | No | `0.3` | Min zone relevance (0.0-1.0) |
-| `SCOUT_MAX_ZONES` | No | `30` | Max zones per paper |
+```bash
+OPENAI_API_KEY=...    # Required
+NCBI_EMAIL=...        # Required
+NCBI_API_KEY=...      # Optional (higher rate limits)
+ANTHROPIC_API_KEY=... # Optional
+```
+
+See `config/settings.py` for all configuration options.
 
 ## CLI Options
 
@@ -193,7 +173,7 @@ See [docs/SQLITE_MIGRATION_GUIDE.md](docs/SQLITE_MIGRATION_GUIDE.md) for details
 ### Export to CSV
 
 ```bash
-python tests/extract_ttr_to_csv.py --db path/to/GENE.db --output variants.csv
+python scripts/extract_ttr_to_csv.py --db path/to/GENE.db --output variants.csv
 ```
 
 ### Compare Curated vs Automated
@@ -254,8 +234,8 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for design details.
 pytest tests/
 
 # Example scripts
-python tests/example_harvest_from_pubmind.py
-python tests/example_triage.py
+python docs/examples/example_harvest_from_pubmind.py
+python docs/examples/example_triage.py
 ```
 
 ## License

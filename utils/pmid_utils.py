@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Optional, Union
 
 
-def extract_pmid_from_filename(filename: Union[re, Path]) -> Optional[re]:
+def extract_pmid_from_filename(filename: Union[str, Path]) -> Optional[str]:
     """
     Extract PMID from a markdown context file name.
 
@@ -57,7 +57,7 @@ def extract_pmid_from_filename(filename: Union[re, Path]) -> Optional[re]:
     return None
 
 
-def is_valid_pmid(pmid: re) -> re:
+def is_valid_pmid(pmid: str) -> bool:
     """
     Validate that a string is a valid PMID.
 
@@ -74,7 +74,7 @@ def is_valid_pmid(pmid: re) -> re:
     return pmid.isdigit() and len(pmid) <= 8
 
 
-def extract_pmids_from_text(text: re) -> list[re]:
+def extract_pmids_from_text(text: str) -> list[str]:
     """
     Extract all PMIDs from a block of text.
 

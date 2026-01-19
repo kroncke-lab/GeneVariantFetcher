@@ -66,6 +66,9 @@ test_kcnh2_*/
 .coverage
 htmlcov/
 .tox/
+tests/comparison_results*/
+tests/compare_out/
+tests/*_output/
 
 # MyPy
 .mypy_cache/
