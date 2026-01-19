@@ -182,25 +182,32 @@ python scripts/extract_ttr_to_csv.py --db path/to/GENE.db --output variants.csv
 python tests/compare_variants.py --excel curated.xlsx --sqlite GENE.db
 ```
 
-### Semi-Manual Fetch for Paywalled Papers
+### Fetching Paywalled Papers
 
+Two options for downloading papers that couldn't be auto-fetched:
+
+**Option 1: Browser Automation (recommended)**
 ```bash
-# Step 1: Manually download papers using fetch_manager
-python fetch_manager.py results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv
+# Install browser automation (one time)
+pip install playwright && playwright install chromium
 
-# Step 2: Convert downloaded files to markdown and run scout
-python fetch_manager.py results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv --convert --run-scout --gene GENE
+# Interactive mode: browser opens, you log in/download, files auto-organized
+python browser_fetch.py results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv --interactive
 
-# Step 3: Re-run extraction on the folder (GUI folder job, or manually)
-# The GUI supports "folder jobs" that start at extraction for existing paper collections
+# Fully automated (works for open-access papers)
+python browser_fetch.py paywalled_missing.csv --use-claude
 ```
 
-The fetch_manager workflow:
-1. Opens paper URLs in your browser for manual download
-2. Detects new files in your Downloads folder
-3. Renames and moves them to `pmc_fulltext/` with proper naming
-4. With `--convert`, creates `{PMID}_FULL_CONTEXT.md` files from PDFs
-5. With `--run-scout`, creates `{PMID}_DATA_ZONES.md` for extraction
+**Option 2: Manual with fetch_manager**
+```bash
+python fetch_manager.py results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv
+```
+
+**Post-download processing:**
+```bash
+# Convert PDFs to markdown and run scout
+python fetch_manager.py paywalled_missing.csv --convert --run-scout --gene GENE
+```
 
 ## Troubleshooting
 

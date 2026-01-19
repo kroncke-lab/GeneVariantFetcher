@@ -24,6 +24,11 @@ dependencies = [
     "typer>=0.9.0",
 ]
 
+[project.optional-dependencies]
+browser = [
+    "playwright>=1.40.0",
+]
+
 [project.scripts]
 gvf = "pipeline.cli:app"
 
