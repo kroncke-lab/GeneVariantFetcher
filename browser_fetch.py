@@ -39,6 +39,14 @@ from datetime import datetime
 
 import pandas as pd
 
+# Import supplement scraper from harvesting module
+try:
+    from harvesting.supplement_scraper import SupplementScraper
+    SCRAPER_AVAILABLE = True
+except ImportError:
+    SCRAPER_AVAILABLE = False
+    SupplementScraper = None
+
 # Setup logging
 logging.basicConfig(
     level=logging.INFO,
@@ -356,6 +364,93 @@ class BrowserFetcher:
 
         return None
 
+    def _download_supplements(self, page: Page, pmid: str) -> List[Path]:
+        """
+        Find and download supplement files from the current page.
+
+        Uses SupplementScraper to find supplement links, then downloads them.
+        """
+        if not SCRAPER_AVAILABLE:
+            logger.debug("SupplementScraper not available")
+            return []
+
+        downloaded = []
+        scraper = SupplementScraper()
+        html = page.content()
+        base_url = page.url
+
+        # Determine which scraper to use based on domain
+        domain = base_url.lower()
+        if 'nature.com' in domain:
+            supplements = scraper.scrape_nature_supplements(html, base_url)
+        elif any(d in domain for d in ['sciencedirect.com', 'elsevier.com', 'cell.com']):
+            supplements = scraper.scrape_elsevier_supplements(html, base_url)
+        else:
+            supplements = scraper.scrape_generic_supplements(html, base_url)
+
+        if not supplements:
+            logger.debug("  No supplements found on page")
+            return []
+
+        logger.info(f"  Found {len(supplements)} potential supplement(s)")
+
+        for idx, supp in enumerate(supplements, 1):
+            supp_url = supp.get('url', '')
+            supp_name = supp.get('name', f'supplement_{idx}')
+
+            if not supp_url:
+                continue
+
+            # Clean up filename
+            if not any(supp_name.lower().endswith(ext) for ext in ['.pdf', '.xlsx', '.xls', '.docx', '.doc', '.csv', '.zip']):
+                # Try to get extension from URL
+                url_path = supp_url.split('?')[0]
+                if '.' in url_path.split('/')[-1]:
+                    supp_name = url_path.split('/')[-1]
+
+            dest_name = f"{pmid}_Supp_{idx}_{supp_name}"
+            dest_path = self.target_dir / dest_name
+
+            # Try direct download first
+            result = self._download_file_direct(supp_url, dest_path)
+            if result:
+                downloaded.append(result)
+                logger.info(f"    Downloaded supplement: {dest_name}")
+            else:
+                logger.debug(f"    Failed to download: {supp_url}")
+
+        return downloaded
+
+    def _download_file_direct(self, url: str, dest_path: Path) -> Optional[Path]:
+        """Download a file directly using requests."""
+        import requests as req
+
+        try:
+            headers = {
+                'User-Agent': (
+                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
+                    'AppleWebKit/537.36 (KHTML, like Gecko) '
+                    'Chrome/120.0.0.0 Safari/537.36'
+                ),
+            }
+            response = req.get(url, headers=headers, timeout=60, allow_redirects=True)
+
+            if response.status_code == 200:
+                content = response.content
+
+                # Skip if it's an HTML error page
+                if content[:5] == b'<!DOC' or content[:5] == b'<html':
+                    logger.debug(f"    Got HTML instead of file for {url}")
+                    return None
+
+                dest_path.write_bytes(content)
+                return dest_path
+
+        except Exception as e:
+            logger.debug(f"    Download failed: {e}")
+
+        return None
+
     def _find_pdf_links_heuristic(self, page: Page) -> List[str]:
         """Find PDF links using heuristics (no Claude)."""
         links = []
@@ -524,31 +619,38 @@ class BrowserFetcher:
                     self.page.wait_for_load_state('networkidle', timeout=self.timeout)
                     time.sleep(2)
 
-            # Method 1: Try clicking download buttons
+            # Method 1: Try clicking download buttons for main PDF
             result = self._click_download_button(self.page, pmid)
             if result:
                 downloaded_files.append(str(result))
+                logger.info(f"  Downloaded main PDF via button click")
+
+            # Method 2: Try heuristic PDF link detection (if no PDF yet)
+            if not downloaded_files:
+                pdf_links = self._find_pdf_links_heuristic(self.page)
+                for link in pdf_links[:5]:  # Try first 5 links
+                    result = self._try_download_link(self.page, link, pmid)
+                    if result:
+                        downloaded_files.append(str(result))
+                        logger.info(f"  Downloaded main PDF via heuristic")
+                        break
+
+            # Method 3: Download supplement files (regardless of main PDF success)
+            logger.info("  Scanning for supplement files...")
+            supp_files = self._download_supplements(self.page, pmid)
+            for supp in supp_files:
+                downloaded_files.append(str(supp))
+
+            # If we got any files, consider it a success
+            if downloaded_files:
                 return DownloadResult(
                     pmid=pmid,
                     success=True,
                     files_downloaded=downloaded_files,
-                    method="button_click"
+                    method="auto_with_supplements"
                 )
 
-            # Method 2: Try heuristic PDF link detection
-            pdf_links = self._find_pdf_links_heuristic(self.page)
-            for link in pdf_links[:5]:  # Try first 5 links
-                result = self._try_download_link(self.page, link, pmid)
-                if result:
-                    downloaded_files.append(str(result))
-                    return DownloadResult(
-                        pmid=pmid,
-                        success=True,
-                        files_downloaded=downloaded_files,
-                        method="heuristic"
-                    )
-
-            # Method 3: Use Claude to analyze page (if enabled)
+            # Method 4: Use Claude to analyze page (if enabled and still no files)
             if self.use_claude and self.analyzer:
                 logger.info("  Using Claude to analyze page...")
                 page_content = self.page.content()
