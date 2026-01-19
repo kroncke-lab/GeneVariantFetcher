@@ -2405,7 +2405,7 @@
                                             <div class="label">Downloaded</div>
                                         </div>
                                         ${pb.paywalled_count > 0 ? `
-                                        <div class="pipeline-stage-count warning" style="cursor: pointer;" onclick="showBrowserFetchModal('${currentFolderPath}', '${analysis.gene_symbol || ''}', ${pb.paywalled_count})">
+                                        <div class="pipeline-stage-count warning" style="cursor: pointer;" onclick="showBrowserFetchModal('${path}', '${analysis.gene_symbol || ''}', ${pb.paywalled_count})">
                                             <div class="value">${pb.paywalled_count}</div>
                                             <div class="label">Paywalled</div>
                                             <div class="label" style="font-size: 0.65rem; color: var(--primary);">Click to fetch</div>
@@ -2485,7 +2485,7 @@
                     ${analysis.pipeline_breakdown && analysis.pipeline_breakdown.paywalled_count > 0 ? `
                         <div style="margin-top: 1rem; padding: 1rem; background: var(--warning-light, #fff3cd); border-radius: 0.5rem; border: 1px solid var(--warning, #ffc107);">
                             <strong>${analysis.pipeline_breakdown.paywalled_count} paywalled papers</strong> could not be downloaded automatically.
-                            <button type="button" class="btn btn-warning" style="margin-left: 1rem;" onclick="showBrowserFetchModal('${currentFolderPath}', '${analysis.gene_symbol || ''}', ${analysis.pipeline_breakdown.paywalled_count})">
+                            <button type="button" class="btn btn-warning" style="margin-left: 1rem;" onclick="showBrowserFetchModal('${path}', '${analysis.gene_symbol || ''}', ${analysis.pipeline_breakdown.paywalled_count})">
                                 Fetch with Browser
                             </button>
                         </div>
@@ -2493,7 +2493,7 @@
                 `;
 
                 // Check for paywalled_missing.csv even if pipeline_breakdown doesn't show it
-                checkForPaywalledCsv(currentFolderPath, analysis.gene_symbol);
+                checkForPaywalledCsv(path, analysis.gene_symbol);
 
                 // Enable submit button if valid
                 submitBtn.disabled = !analysis.is_valid;
