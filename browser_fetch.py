@@ -264,6 +264,98 @@ class BrowserFetcher:
 
         return None
 
+    def _browser_download_pdf(self, url: str, pmid: str) -> Optional[Path]:
+        """Download PDF using browser (handles JS redirects like PMC)."""
+        before_files = self._get_existing_files()
+
+        try:
+            # Navigate and wait for download to start
+            with self.page.expect_download(timeout=30000) as download_info:
+                self.page.goto(url, wait_until='commit', timeout=self.timeout)
+
+            download = download_info.value
+
+            # Save with PMID prefix
+            suggested = download.suggested_filename
+            if not suggested.endswith('.pdf'):
+                suggested = f"{pmid}_Main_Text.pdf"
+            else:
+                suggested = f"{pmid}_{suggested}"
+
+            dest_path = self.target_dir / suggested
+            download.save_as(str(dest_path))
+
+            # Verify it's actually a PDF
+            with open(dest_path, 'rb') as f:
+                header = f.read(4)
+            if header == b'%PDF':
+                logger.info(f"  Downloaded via browser: {dest_path.name}")
+                return dest_path
+            else:
+                logger.debug("  Browser download is not a valid PDF")
+                dest_path.unlink()  # Delete invalid file
+                return None
+
+        except PlaywrightTimeout:
+            # Check if a file appeared in downloads anyway
+            new_file = self._wait_for_new_file(before_files, timeout=10)
+            if new_file and new_file.suffix.lower() == '.pdf':
+                # Verify and move
+                with open(new_file, 'rb') as f:
+                    header = f.read(4)
+                if header == b'%PDF':
+                    dest_path = self.target_dir / f"{pmid}_{new_file.name}"
+                    new_file.rename(dest_path)
+                    logger.info(f"  Downloaded via browser: {dest_path.name}")
+                    return dest_path
+            return None
+
+        except Exception as e:
+            logger.debug(f"  Browser PDF download failed: {e}")
+            return None
+
+    def _download_pdf_direct(self, url: str, pmid: str) -> Optional[Path]:
+        """Try to download a PDF directly using requests."""
+        import requests as req
+
+        try:
+            headers = {
+                'User-Agent': (
+                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
+                    'AppleWebKit/537.36 (KHTML, like Gecko) '
+                    'Chrome/120.0.0.0 Safari/537.36'
+                ),
+            }
+            response = req.get(url, headers=headers, timeout=30)
+
+            if response.status_code == 200:
+                content = response.content
+
+                # Check if it's actually a PDF (PDF files start with %PDF)
+                if content[:4] == b'%PDF':
+                    # Extract filename from URL or use default
+                    filename = url.split('/')[-1]
+                    if not filename.endswith('.pdf'):
+                        filename = f"{pmid}_Main_Text.pdf"
+                    else:
+                        filename = f"{pmid}_{filename}"
+
+                    dest_path = self.target_dir / filename
+                    with open(dest_path, 'wb') as f:
+                        f.write(content)
+
+                    logger.info(f"  Downloaded: {dest_path.name}")
+                    return dest_path
+                else:
+                    logger.debug("  Response is not a PDF (missing %PDF header)")
+            else:
+                logger.debug(f"  HTTP {response.status_code} for {url}")
+
+        except Exception as e:
+            logger.debug(f"  Direct download failed: {e}")
+
+        return None
+
     def _find_pdf_links_heuristic(self, page: Page) -> List[str]:
         """Find PDF links using heuristics (no Claude)."""
         links = []
@@ -389,6 +481,30 @@ class BrowserFetcher:
         downloaded_files = []
 
         try:
+            # Check if URL is a direct PDF link
+            if url.lower().endswith('.pdf') or '/pdf/' in url.lower():
+                logger.info("  Direct PDF URL detected, attempting download...")
+                # Try direct download with requests first
+                result = self._download_pdf_direct(url, pmid)
+                if result:
+                    return DownloadResult(
+                        pmid=pmid,
+                        success=True,
+                        files_downloaded=[str(result)],
+                        method="direct_pdf"
+                    )
+
+                # If direct download failed, try browser-based (handles JS redirects)
+                logger.info("  Trying browser-based download for JS-redirect PDF...")
+                result = self._browser_download_pdf(url, pmid)
+                if result:
+                    return DownloadResult(
+                        pmid=pmid,
+                        success=True,
+                        files_downloaded=[str(result)],
+                        method="browser_pdf"
+                    )
+
             # Navigate to the paper - use 'load' instead of 'networkidle' for faster response
             try:
                 self.page.goto(url, wait_until='load', timeout=self.timeout)
