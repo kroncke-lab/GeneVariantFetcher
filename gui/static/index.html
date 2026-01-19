@@ -2400,9 +2400,10 @@
                                             <div class="label">Downloaded</div>
                                         </div>
                                         ${pb.paywalled_count > 0 ? `
-                                        <div class="pipeline-stage-count warning">
+                                        <div class="pipeline-stage-count warning" style="cursor: pointer;" onclick="showBrowserFetchModal('${currentFolderPath}', '${analysis.gene_symbol || ''}', ${pb.paywalled_count})">
                                             <div class="value">${pb.paywalled_count}</div>
                                             <div class="label">Paywalled</div>
+                                            <div class="label" style="font-size: 0.65rem; color: var(--primary);">Click to fetch</div>
                                         </div>
                                         ` : ''}
                                         ${pb.download_gap_count > 0 ? `
@@ -2588,6 +2589,141 @@
                 connectWebSocket(job.job_id);
             } catch (err) {
                 alert('Failed to resume pipeline: ' + err.message);
+            }
+        }
+
+        // =====================================================================
+        // Browser Fetch for Paywalled Papers
+        // =====================================================================
+
+        let browserFetchTaskId = null;
+        let browserFetchPollInterval = null;
+
+        function showBrowserFetchModal(folderPath, geneSymbol, count) {
+            const csvPath = folderPath + '/pmc_fulltext/paywalled_missing.csv';
+
+            const modal = document.createElement('div');
+            modal.id = 'browser-fetch-modal';
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <h3>Fetch Paywalled Papers</h3>
+                        <button class="close-btn" onclick="closeBrowserFetchModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p style="margin-bottom: 1rem;">
+                            <strong>${count} paywalled papers</strong> could not be downloaded automatically.
+                            The browser fetcher will attempt to download them using browser automation.
+                        </p>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="bf-headless" checked>
+                                Run in headless mode (faster, no visible browser)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="bf-use-claude">
+                                Use Claude to find download links (requires API key)
+                            </label>
+                        </div>
+                        <div id="bf-status" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--gray-100); border-radius: 0.5rem;">
+                            <div id="bf-status-text">Starting...</div>
+                            <div id="bf-progress" style="margin-top: 0.5rem;"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="closeBrowserFetchModal()">Cancel</button>
+                        <button class="btn btn-primary" id="bf-start-btn" onclick="startBrowserFetch('${csvPath}', '${geneSymbol}')">
+                            Start Fetch
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+        }
+
+        function closeBrowserFetchModal() {
+            const modal = document.getElementById('browser-fetch-modal');
+            if (modal) {
+                modal.remove();
+            }
+            if (browserFetchPollInterval) {
+                clearInterval(browserFetchPollInterval);
+                browserFetchPollInterval = null;
+            }
+        }
+
+        async function startBrowserFetch(csvPath, geneSymbol) {
+            const headless = document.getElementById('bf-headless').checked;
+            const useClaude = document.getElementById('bf-use-claude').checked;
+            const statusDiv = document.getElementById('bf-status');
+            const statusText = document.getElementById('bf-status-text');
+            const progressDiv = document.getElementById('bf-progress');
+            const startBtn = document.getElementById('bf-start-btn');
+
+            statusDiv.style.display = 'block';
+            statusText.textContent = 'Starting browser fetch...';
+            startBtn.disabled = true;
+            startBtn.textContent = 'Running...';
+
+            try {
+                const response = await fetch('/api/browser-fetch/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        csv_path: csvPath,
+                        gene_symbol: geneSymbol,
+                        headless: headless,
+                        use_claude: useClaude
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error((await response.json()).detail || 'Failed to start');
+                }
+
+                const task = await response.json();
+                browserFetchTaskId = task.task_id;
+
+                // Poll for status
+                browserFetchPollInterval = setInterval(async () => {
+                    try {
+                        const statusResponse = await fetch(`/api/browser-fetch/status/${browserFetchTaskId}`);
+                        const status = await statusResponse.json();
+
+                        if (status.status === 'running') {
+                            statusText.textContent = 'Fetching papers...';
+                            if (status.current_pmid) {
+                                progressDiv.textContent = `Processing PMID ${status.current_pmid}`;
+                            }
+                        } else if (status.status === 'completed') {
+                            clearInterval(browserFetchPollInterval);
+                            statusText.innerHTML = `<span style="color: var(--success);">Complete!</span>`;
+                            progressDiv.textContent = `Downloaded: ${status.successful}/${status.total} papers`;
+                            startBtn.textContent = 'Done';
+                            startBtn.onclick = closeBrowserFetchModal;
+                            startBtn.disabled = false;
+                        } else if (status.status === 'failed') {
+                            clearInterval(browserFetchPollInterval);
+                            statusText.innerHTML = `<span style="color: var(--error);">Failed</span>`;
+                            progressDiv.textContent = status.error || 'Unknown error';
+                            startBtn.textContent = 'Close';
+                            startBtn.onclick = closeBrowserFetchModal;
+                            startBtn.disabled = false;
+                        }
+                    } catch (e) {
+                        console.error('Error polling status:', e);
+                    }
+                }, 2000);
+
+            } catch (err) {
+                statusText.innerHTML = `<span style="color: var(--error);">Error: ${err.message}</span>`;
+                startBtn.textContent = 'Close';
+                startBtn.onclick = closeBrowserFetchModal;
+                startBtn.disabled = false;
             }
         }
 

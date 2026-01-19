@@ -253,6 +253,34 @@ class ResumeJobRequest(BaseModel):
     scout_min_relevance: float = Field(0.3, ge=0.0, le=1.0)
 
 
+class BrowserFetchRequest(BaseModel):
+    """Request to start browser-based fetching of paywalled papers."""
+
+    csv_path: str = Field(..., description="Path to paywalled_missing.csv")
+    gene_symbol: str = Field(..., description="Gene symbol for file naming")
+    headless: bool = Field(True, description="Run browser in headless mode")
+    max_papers: Optional[int] = Field(None, description="Maximum papers to process")
+    use_claude: bool = Field(False, description="Use Claude to find download links")
+
+
+class BrowserFetchStatus(BaseModel):
+    """Status of a browser fetch task."""
+
+    task_id: str
+    status: str  # "running", "completed", "failed"
+    progress: int = 0
+    total: int = 0
+    successful: int = 0
+    failed: int = 0
+    current_pmid: Optional[str] = None
+    error: Optional[str] = None
+    output_dir: Optional[str] = None
+
+
+# Track running browser fetch tasks
+_browser_fetch_tasks: Dict[str, BrowserFetchStatus] = {}
+
+
 # =============================================================================
 # WebSocket Connection Manager
 # =============================================================================
@@ -1509,6 +1537,118 @@ async def get_directory_shortcuts():
     shortcuts.append({"name": "Default Output", "path": str(default_output), "icon": "output"})
 
     return {"shortcuts": shortcuts}
+
+
+# =============================================================================
+# Browser Fetch for Paywalled Papers
+# =============================================================================
+
+
+def _run_browser_fetch(task_id: str, csv_path: str, headless: bool, max_papers: Optional[int], use_claude: bool):
+    """Run browser fetch in a background thread."""
+    import subprocess
+    import sys
+
+    try:
+        _browser_fetch_tasks[task_id].status = "running"
+
+        # Build command
+        cmd = [sys.executable, "browser_fetch.py", csv_path]
+        if headless:
+            cmd.append("--headless")
+        if max_papers:
+            cmd.extend(["--max", str(max_papers)])
+        if use_claude:
+            cmd.append("--use-claude")
+
+        # Run the command
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parent.parent,
+            timeout=3600,  # 1 hour timeout
+        )
+
+        # Parse output for results
+        output = result.stdout + result.stderr
+        logger.info(f"Browser fetch output: {output[-500:]}")
+
+        # Try to extract stats from output
+        import re
+        success_match = re.search(r'Successful:\s*(\d+)/(\d+)', output)
+        if success_match:
+            _browser_fetch_tasks[task_id].successful = int(success_match.group(1))
+            _browser_fetch_tasks[task_id].total = int(success_match.group(2))
+            _browser_fetch_tasks[task_id].failed = _browser_fetch_tasks[task_id].total - _browser_fetch_tasks[task_id].successful
+
+        if result.returncode == 0:
+            _browser_fetch_tasks[task_id].status = "completed"
+        else:
+            _browser_fetch_tasks[task_id].status = "failed"
+            _browser_fetch_tasks[task_id].error = result.stderr[-500:] if result.stderr else "Unknown error"
+
+    except subprocess.TimeoutExpired:
+        _browser_fetch_tasks[task_id].status = "failed"
+        _browser_fetch_tasks[task_id].error = "Browser fetch timed out after 1 hour"
+    except Exception as e:
+        _browser_fetch_tasks[task_id].status = "failed"
+        _browser_fetch_tasks[task_id].error = str(e)
+
+
+@app.post("/api/browser-fetch/start", response_model=BrowserFetchStatus)
+async def start_browser_fetch(request: BrowserFetchRequest, background_tasks: BackgroundTasks):
+    """
+    Start browser-based fetching of paywalled papers.
+
+    This runs browser_fetch.py in the background to download papers
+    that couldn't be fetched automatically.
+    """
+    import uuid
+
+    csv_path = Path(request.csv_path).expanduser().resolve()
+
+    if not csv_path.exists():
+        raise HTTPException(status_code=404, detail=f"CSV file not found: {csv_path}")
+
+    if not csv_path.name.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="File must be a CSV")
+
+    # Create task
+    task_id = str(uuid.uuid4())[:8]
+    output_dir = str(csv_path.parent)
+
+    _browser_fetch_tasks[task_id] = BrowserFetchStatus(
+        task_id=task_id,
+        status="starting",
+        output_dir=output_dir,
+    )
+
+    # Start in background
+    background_tasks.add_task(
+        lambda: threading.Thread(
+            target=_run_browser_fetch,
+            args=(task_id, str(csv_path), request.headless, request.max_papers, request.use_claude),
+            daemon=True,
+        ).start()
+    )
+
+    return _browser_fetch_tasks[task_id]
+
+
+@app.get("/api/browser-fetch/status/{task_id}", response_model=BrowserFetchStatus)
+async def get_browser_fetch_status(task_id: str):
+    """Get the status of a browser fetch task."""
+    if task_id not in _browser_fetch_tasks:
+        raise HTTPException(status_code=404, detail=f"Task not found: {task_id}")
+
+    return _browser_fetch_tasks[task_id]
+
+
+@app.get("/api/browser-fetch/tasks")
+async def list_browser_fetch_tasks():
+    """List all browser fetch tasks."""
+    return {"tasks": list(_browser_fetch_tasks.values())}
 
 
 # =============================================================================
