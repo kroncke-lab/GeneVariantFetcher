@@ -1,5 +1,11 @@
 # CLAUDE.md
 
+## CRITICAL: Do Not Modify
+
+**NEVER read, write, edit, or overwrite the `.env` file.** It contains API keys and credentials that are difficult to replace. If you need to reference environment variables, only document their names - never touch the actual file.
+
+---
+
 ## Mission
 
 Extract human genetic variant carriers from biomedical literature (full text + supplements) into a normalized SQLite database. Each individual is classified as **Affected**, **Unaffected**, or **Ambiguous**.
