@@ -787,10 +787,9 @@ Examples:
         logging.getLogger().setLevel(logging.DEBUG)
 
     # Check for API keys
-    if not (os.getenv("AI_INTEGRATIONS_OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")):
-        logger.error("⚠️  ERROR: OpenAI API key not found!")
-        logger.error("Please set AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY")
-        logger.error("Example: export AI_INTEGRATIONS_OPENAI_API_KEY='your-key-here'")
+    if not os.getenv("OPENAI_API_KEY"):
+        logger.error("⚠️  ERROR: OPENAI_API_KEY not found in environment!")
+        logger.error("Please set OPENAI_API_KEY in your .env file")
         sys.exit(1)
 
     # Get tier threshold from settings if not provided via CLI

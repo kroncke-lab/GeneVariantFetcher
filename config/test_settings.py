@@ -16,7 +16,7 @@ def clear_settings_cache():
 def test_missing_required_settings(monkeypatch):
     """Missing required values should raise a clear validation error."""
 
-    for env_var in ["OPENAI_API_KEY", "AI_INTEGRATIONS_OPENAI_API_KEY", "ANTHROPIC_API_KEY", "NCBI_EMAIL"]:
+    for env_var in ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "NCBI_EMAIL"]:
         monkeypatch.delenv(env_var, raising=False)
 
     with pytest.raises(ValueError) as exc:

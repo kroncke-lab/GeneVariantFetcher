@@ -134,9 +134,9 @@ def main():
 if __name__ == '__main__':
     # Check for API key
     import os
-    if not os.getenv('AI_INTEGRATIONS_OPENAI_API_KEY'):
-        print("\n⚠️  Warning: AI_INTEGRATIONS_OPENAI_API_KEY not set!")
-        print("   Set it with: export AI_INTEGRATIONS_OPENAI_API_KEY='your-key'\n")
+    if not os.getenv('OPENAI_API_KEY'):
+        print("\n⚠️  Warning: OPENAI_API_KEY not set!")
+        print("   Set it in your .env file\n")
         print("   This example requires API access to run.\n")
         exit(1)
 

@@ -16,7 +16,7 @@ import sys
 import tempfile
 
 # Ensure NCBI email is set
-os.environ.setdefault("ENTREZ_EMAIL", "test@example.com")
+# NCBI_EMAIL should be set in .env file
 
 from harvesting.orchestrator import PMCHarvester
 from harvesting.pmc_api import PMCAPIClient
@@ -99,11 +99,9 @@ def main():
     print("=" * 60)
 
     # Check if required environment variable is set
-    email = os.environ.get("ENTREZ_EMAIL") or os.environ.get("NCBI_EMAIL")
-    if not email or email == "test@example.com":
-        print("\nWARNING: ENTREZ_EMAIL or NCBI_EMAIL not set.")
-        print("Using default test@example.com")
-        print("For production use, set your email address.\n")
+    email = os.environ.get("NCBI_EMAIL")
+    if not email:
+        print("\nWARNING: NCBI_EMAIL not set in .env file.")
 
     # Run tests
     test_free_text_detection()

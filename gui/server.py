@@ -858,12 +858,8 @@ async def validate_settings():
     warnings = []
 
     # Check required settings
-    if (
-        not file_settings.get("OPENAI_API_KEY")
-        and not os.environ.get("OPENAI_API_KEY")
-        and not os.environ.get("AI_INTEGRATIONS_OPENAI_API_KEY")
-    ):
-        issues.append("OPENAI_API_KEY (or AI_INTEGRATIONS_OPENAI_API_KEY) is required for variant extraction")
+    if not file_settings.get("OPENAI_API_KEY") and not os.environ.get("OPENAI_API_KEY"):
+        issues.append("OPENAI_API_KEY is required for variant extraction")
 
     if not file_settings.get("NCBI_EMAIL") and not os.environ.get("NCBI_EMAIL"):
         issues.append("NCBI_EMAIL is required for literature fetching")

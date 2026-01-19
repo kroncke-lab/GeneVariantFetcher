@@ -21,10 +21,10 @@ from utils.retry_utils import api_retry
 
 logger = logging.getLogger(__name__)
 
-# Configure Entrez
-Entrez.email = os.getenv("ENTREZ_EMAIL", "your.email@example.com")
+# Configure Entrez - uses NCBI_EMAIL from environment
+Entrez.email = os.getenv("NCBI_EMAIL")
 Entrez.tool = "PMCHarvester"
-Entrez.api_key = os.getenv("NCBI_API_KEY")  # Optional: get API key from https://www.ncbi.nlm.nih.gov/account/
+Entrez.api_key = os.getenv("NCBI_API_KEY")
 
 
 # Rate limiting: NCBI allows 3 req/sec without API key, 10 req/sec with API key

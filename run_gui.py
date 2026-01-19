@@ -62,7 +62,7 @@ def check_env():
 
     warnings = []
 
-    if not (os.getenv("OPENAI_API_KEY") or os.getenv("AI_INTEGRATIONS_OPENAI_API_KEY")):
+    if not os.getenv("OPENAI_API_KEY"):
         warnings.append("OPENAI_API_KEY not set - extraction will fail")
 
     if not os.getenv("NCBI_EMAIL"):

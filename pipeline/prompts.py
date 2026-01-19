@@ -51,7 +51,29 @@ INSTRUCTIONS:
 2. Use MINIMAL fields per variant to fit all variants in the response
 3. Skip detailed fields (individual_records, functional_data, key_quotes, age_dependent_penetrance)
 
-RECOGNIZING IMPLICIT COUNTS:
+CRITICAL - FUNCTIONAL STUDY DETECTION:
+Before extracting, determine if this is a FUNCTIONAL STUDY vs CLINICAL STUDY:
+
+FUNCTIONAL STUDY indicators (DO NOT extract as patient carriers):
+- Tables with columns like "number of cells", "n (cells)", "replicates", "n="
+- Assay metrics: "trafficking", "current density", "fluorescence", "normalized"
+- Study types: "massively parallel assay", "high-throughput", "saturation mutagenesis", "functional characterization"
+- Systematic testing of all possible variants at specific positions
+- Sample sizes are ASSAY REPLICATES, not patients
+
+If this is a FUNCTIONAL STUDY:
+- The "n" or sample size column = cells/replicates tested, NOT patient carriers
+- Set penetrance_data counts to null (do not use assay replicates as carrier counts)
+- Look for SEPARATE columns labeled "LQTS", "patients", "carriers", "cases", "probands" for actual clinical data
+- Only extract penetrance_data from columns explicitly describing patient/carrier counts
+- Note in source_location: "Functional study - assay data only"
+
+CLINICAL STUDY indicators (extract normally):
+- Case reports, cohort studies, family studies
+- Columns like "patients", "carriers", "probands", "cases", "affected", "unaffected"
+- Individual patient descriptions with ages, symptoms, phenotypes
+
+RECOGNIZING IMPLICIT COUNTS (for CLINICAL studies only):
 - "a patient" / "a case" / "an individual" = 1 carrier
 - "a healthy individual" / "an asymptomatic carrier" = 1 UNAFFECTED carrier
 - "an affected patient" / "a patient with [disease]" = 1 AFFECTED carrier
@@ -83,6 +105,7 @@ Return a JSON object with this structure:
     "extraction_metadata": {{
         "total_variants_found": integer,
         "extraction_confidence": "high/medium/low",
+        "study_type": "clinical/functional/mixed (REQUIRED - indicate if this is a functional assay study)",
         "compact_mode": true,
         "notes": "Compact extraction - detailed fields omitted for completeness"
     }}
@@ -144,10 +167,37 @@ For each variant, provide:
 8. Evidence Level: How strong is the evidence for pathogenicity?
 9. Additional Notes: Any other relevant clinical or functional information
 
-PENETRANCE DATA EXTRACTION (CRITICAL):
+CRITICAL - FUNCTIONAL STUDY DETECTION:
+Before extracting penetrance data, determine if this is a FUNCTIONAL STUDY vs CLINICAL STUDY:
+
+FUNCTIONAL STUDY indicators (DO NOT extract as patient carriers):
+- Tables with columns like "number of cells", "n (cells)", "replicates", "n="
+- Assay metrics: "trafficking", "current density", "fluorescence", "normalized", "patch clamp"
+- Study types: "massively parallel assay", "high-throughput", "saturation mutagenesis", "functional characterization"
+- Systematic testing of all possible variants at specific positions (e.g., all SNVs in an exon)
+- Sample sizes are ASSAY REPLICATES, not patients
+
+If this is a FUNCTIONAL STUDY:
+- The "n" or sample size column = cells/replicates tested, NOT patient carriers
+- Set penetrance_data counts to null (do not use assay replicates as carrier counts)
+- Look for SEPARATE columns labeled "LQTS", "patients", "carriers", "cases", "probands" for actual clinical data
+- Only extract penetrance_data from columns explicitly describing patient/carrier counts
+- Extract functional metrics to functional_data.assays instead
+- Note in source_location: "Functional study - assay data only"
+
+CLINICAL STUDY indicators (extract penetrance normally):
+- Case reports, cohort studies, family studies, registry data
+- Columns explicitly labeled "patients", "carriers", "probands", "cases", "affected", "unaffected"
+- Individual patient descriptions with ages, symptoms, phenotypes
+- Pedigrees with affected/unaffected family members
+
+SANITY CHECK: If you find 50+ variants all with similar carrier counts (e.g., 20-50 each) and ~100% penetrance,
+this is likely a functional study where you're mistaking assay replicates for patients. Re-evaluate the table structure.
+
+PENETRANCE DATA EXTRACTION (CRITICAL - for CLINICAL studies only):
 For calibrating disease prediction models, extract detailed penetrance information:
 
-RECOGNIZING IMPLICIT COUNTS (IMPORTANT):
+RECOGNIZING IMPLICIT COUNTS (IMPORTANT - for CLINICAL studies):
 Natural language often implies counts without stating explicit numbers. You MUST recognize these:
 - "a patient" / "a case" / "an individual" / "one patient" = 1 carrier
 - "a healthy individual" / "an asymptomatic carrier" = 1 UNAFFECTED carrier
@@ -200,10 +250,11 @@ CRITICAL REQUIREMENTS:
 - Distinguish between individual case reports and cohort study statistics
 - When paper states "10 people with variant X, 4 with disease" → extract: total_carriers=10, affected=4, unaffected=6
 - When individual cases are described, create individual_records entries for each person
-- IMPORTANT: For disease-associated mutation tables (e.g., "LQT2-associated mutations", "pathogenic variants"):
+- IMPORTANT: For CLINICAL disease-associated mutation tables (e.g., "LQT2-associated mutations", "pathogenic variants"):
   * Patient counts in these tables represent AFFECTED carriers
   * Extract patient count to BOTH patients.count AND penetrance_data.total_carriers_observed/affected_count
   * Example: Table shows "No. of patients: 1" for a pathogenic variant → patients.count=1, total_carriers_observed=1, affected_count=1
+  * BUT: If table has "n (cells)" or assay metrics, it's a FUNCTIONAL study - do NOT use those numbers as patient counts
 
 OUTPUT FORMAT:
 Return a JSON object with this structure:
@@ -274,6 +325,7 @@ Return a JSON object with this structure:
     "extraction_metadata": {{
         "total_variants_found": integer,
         "extraction_confidence": "high/medium/low",
+        "study_type": "clinical/functional/mixed (REQUIRED - indicate if this is a functional assay study)",
         "challenges": ["any issues during extraction"],
         "notes": "any additional notes about the extraction process"
     }}

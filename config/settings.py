@@ -5,7 +5,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import ClassVar, List, Optional, Union
 
-from pydantic import AliasChoices, Field, model_validator, field_validator
+from pydantic import Field, model_validator, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
@@ -15,12 +15,10 @@ logger = logging.getLogger(__name__)
 class Settings(BaseSettings):
     """Centralized application settings loaded from environment variables."""
 
-    # API Keys
-    openai_api_key: Optional[str] = Field(
-        default=None,
-        validation_alias=AliasChoices("OPENAI_API_KEY", "AI_INTEGRATIONS_OPENAI_API_KEY"),
-    )
+    # API Keys - all loaded from .env file
+    openai_api_key: Optional[str] = Field(default=None, env="OPENAI_API_KEY")
     anthropic_api_key: Optional[str] = Field(default=None, env="ANTHROPIC_API_KEY")
+    gemini_api_key: Optional[str] = Field(default=None, env="GEMINI_API_KEY")
     ncbi_email: Optional[str] = Field(default=None, env="NCBI_EMAIL")
     ncbi_api_key: Optional[str] = Field(default=None, env="NCBI_API_KEY")
     elsevier_api_key: Optional[str] = Field(default=None, env="ELSEVIER_API_KEY")
@@ -104,7 +102,7 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def validate_required_settings(self):
         required = {
-            "openai_api_key": "OPENAI_API_KEY/AI_INTEGRATIONS_OPENAI_API_KEY",
+            "openai_api_key": "OPENAI_API_KEY",
             "ncbi_email": "NCBI_EMAIL",
         }
 

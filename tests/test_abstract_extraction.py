@@ -100,7 +100,7 @@ class TestAbstractCarrierExtractor:
     def extractor(self):
         """Create an AbstractCarrierExtractor instance."""
         # Skip if no API key
-        if not (os.getenv("AI_INTEGRATIONS_OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")):
+        if not os.getenv("OPENAI_API_KEY"):
             pytest.skip("No OpenAI API key available")
 
         from pipeline.abstract_extraction import AbstractCarrierExtractor
@@ -162,8 +162,8 @@ def run_live_tests():
     print("=" * 60)
 
     # Check for API key
-    if not (os.getenv("AI_INTEGRATIONS_OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")):
-        print("\n❌ No OpenAI API key found. Set AI_INTEGRATIONS_OPENAI_API_KEY to run tests.")
+    if not os.getenv("OPENAI_API_KEY"):
+        print("\n❌ No OpenAI API key found. Set OPENAI_API_KEY in .env to run tests.")
         return
 
     from pipeline.abstract_extraction import AbstractCarrierExtractor

@@ -72,10 +72,10 @@ def main():
     print("-" * 50)
 
     # Check for API key
-    api_key = os.getenv('AI_INTEGRATIONS_OPENAI_API_KEY') or os.getenv('OPENAI_API_KEY')
+    api_key = os.getenv('OPENAI_API_KEY')
     if not api_key:
-        print("\n⚠️  Warning: No OpenAI API key found!")
-        print("   Set AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY for triage/extraction.")
+        print("\n⚠️  Warning: OPENAI_API_KEY not found!")
+        print("   Set OPENAI_API_KEY in your .env file for triage/extraction.")
         print("   Continuing with harvesting only...\n")
         run_extraction = False
     else:
