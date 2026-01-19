@@ -83,12 +83,16 @@ utils/                         # Shared utilities
 
 ## Environment Variables
 
+All keys are loaded from `.env` file:
+
 ```bash
-OPENAI_API_KEY=...                   # Required (or AI_INTEGRATIONS_OPENAI_API_KEY)
-AI_INTEGRATIONS_OPENAI_API_KEY=...   # Alternate name for OpenAI key
+OPENAI_API_KEY=...                   # Required
 NCBI_EMAIL=...                       # Required
 NCBI_API_KEY=...                     # Optional (higher rate limits)
-ANTHROPIC_API_KEY=...                # Optional (Anthropic-backed features)
+ANTHROPIC_API_KEY=...                # Optional
+GEMINI_API_KEY=...                   # Optional
+ELSEVIER_API_KEY=...                 # Optional (publisher access)
+WILEY_API_KEY=...                    # Optional (publisher access)
 ```
 
 ## Code Style
@@ -124,3 +128,4 @@ These files exist but are not used in the main pipeline:
 - **Checkpoint system**: GUI jobs save state after each step to `~/.gvf_jobs/{job_id}/checkpoint.json`
 - **Folder jobs**: GUI supports processing existing folders (skip discovery/download, start at extraction)
 - **Two summary files**: Both `{GENE}_workflow_summary.json` (overall stats) and `{GENE}_penetrance_summary.json` (variant aggregations) are created
+- **Functional study detection**: Extraction prompts distinguish functional studies (massively parallel assays) from clinical studies to avoid misinterpreting assay replicates as patient carrier counts

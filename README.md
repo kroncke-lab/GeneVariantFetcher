@@ -28,7 +28,7 @@ pip install -e .
 pip install -r gui/requirements.txt
 
 # Set required environment variables (or use .env file)
-export OPENAI_API_KEY="your-key"  # or AI_INTEGRATIONS_OPENAI_API_KEY
+export OPENAI_API_KEY="your-key"
 export NCBI_EMAIL="your@email.com"
 
 # Launch the GUI (recommended)
@@ -96,10 +96,12 @@ Create a `.env` file in the project root (see `.env.example`):
 |----------|----------|---------|-------------|
 | **API Keys** |
 | `OPENAI_API_KEY` | Yes | - | OpenAI API key (primary LLM provider) |
-| `AI_INTEGRATIONS_OPENAI_API_KEY` | Yes | - | OpenAI API key (alternate env var name) |
 | `NCBI_EMAIL` | Yes | - | Email for NCBI E-utilities |
 | `NCBI_API_KEY` | No | - | NCBI API key (10 req/s vs 3 req/s) |
-| `ANTHROPIC_API_KEY` | No | - | Anthropic API key (only needed for Anthropic-backed features) |
+| `ANTHROPIC_API_KEY` | No | - | Anthropic API key (for Anthropic-backed features) |
+| `GEMINI_API_KEY` | No | - | Google Gemini API key |
+| `ELSEVIER_API_KEY` | No | - | Elsevier API key (for publisher access) |
+| `WILEY_API_KEY` | No | - | Wiley API key (for publisher access) |
 | **Paper Sources** |
 | `USE_PUBMIND` | No | `true` | Use PubMind as primary source |
 | `USE_PUBMED` | No | `true` | Use PubMed keyword search |

@@ -159,14 +159,12 @@ python automated_workflow.py BRCA1 --email your@email.com --verbose
 
 ### 1. OpenAI API Key (Required)
 ```bash
-export AI_INTEGRATIONS_OPENAI_API_KEY="sk-..."
-export AI_INTEGRATIONS_OPENAI_BASE_URL="https://api.openai.com/v1"
+export OPENAI_API_KEY="sk-..."
 ```
 
 Or create a `.env` file:
 ```env
-AI_INTEGRATIONS_OPENAI_API_KEY=sk-...
-AI_INTEGRATIONS_OPENAI_BASE_URL=https://api.openai.com/v1
+OPENAI_API_KEY=sk-...
 ```
 
 ### 2. Email (Required for NCBI)
@@ -218,7 +216,7 @@ python automated_workflow.py BRCA1 --email your@email.com
 - The workflow continues with available papers
 
 ### "OpenAI API error"
-- Check your API key is set: `echo $AI_INTEGRATIONS_OPENAI_API_KEY`
+- Check your API key is set: `echo $OPENAI_API_KEY`
 - Verify you have credits: https://platform.openai.com/usage
 - Check for rate limits in error message
 
