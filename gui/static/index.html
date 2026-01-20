@@ -2659,12 +2659,12 @@
             modal.id = 'browser-fetch-modal';
             modal.className = 'modal';
             modal.innerHTML = `
-                <div class="modal-content" style="max-width: 500px;">
+                <div class="modal-content" style="max-width: 700px; max-height: 90vh; display: flex; flex-direction: column;">
                     <div class="modal-header">
                         <h3>Fetch Paywalled Papers</h3>
                         <button class="close-btn" onclick="closeBrowserFetchModal()">&times;</button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
                         <p style="margin-bottom: 1rem;">
                             ${countText} could not be downloaded automatically.
                             The browser fetcher will attempt to download them using browser automation.
@@ -2681,9 +2681,13 @@
                                 Use Claude to find download links (requires API key)
                             </label>
                         </div>
-                        <div id="bf-status" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--gray-100); border-radius: 0.5rem;">
-                            <div id="bf-status-text">Starting...</div>
-                            <div id="bf-progress" style="margin-top: 0.5rem;"></div>
+                        <div id="bf-status" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--gray-100); border-radius: 0.5rem; flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <div id="bf-status-text" style="font-weight: 600;">Starting...</div>
+                                <div id="bf-progress-count" style="font-size: 0.85rem; color: var(--gray-600);"></div>
+                            </div>
+                            <div id="bf-current-step" style="font-size: 0.85rem; color: var(--primary); margin-bottom: 0.5rem;"></div>
+                            <div id="bf-logs" style="flex: 1; min-height: 200px; max-height: 300px; overflow-y: auto; background: #1e1e1e; color: #d4d4d4; font-family: monospace; font-size: 0.75rem; padding: 0.5rem; border-radius: 0.25rem; white-space: pre-wrap; word-break: break-all;"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -2714,13 +2718,40 @@
             const useClaude = document.getElementById('bf-use-claude').checked;
             const statusDiv = document.getElementById('bf-status');
             const statusText = document.getElementById('bf-status-text');
-            const progressDiv = document.getElementById('bf-progress');
+            const progressCount = document.getElementById('bf-progress-count');
+            const currentStep = document.getElementById('bf-current-step');
+            const logsDiv = document.getElementById('bf-logs');
             const startBtn = document.getElementById('bf-start-btn');
 
-            statusDiv.style.display = 'block';
+            statusDiv.style.display = 'flex';
             statusText.textContent = 'Starting browser fetch...';
+            logsDiv.textContent = 'Initializing...\n';
             startBtn.disabled = true;
             startBtn.textContent = 'Running...';
+
+            // Helper to update logs display
+            function updateLogs(logs) {
+                if (logs && logs.length > 0) {
+                    // Color-code certain lines
+                    const coloredLogs = logs.map(line => {
+                        if (line.includes('SUCCESS')) return `<span style="color: #4ec9b0;">${escapeHtml(line)}</span>`;
+                        if (line.includes('FAILED') || line.includes('ERROR')) return `<span style="color: #f14c4c;">${escapeHtml(line)}</span>`;
+                        if (line.includes('>>>')) return `<span style="color: #569cd6;">${escapeHtml(line)}</span>`;
+                        if (line.includes('Processing PMID') || line.includes('Fetching PMID')) return `<span style="color: #dcdcaa;">${escapeHtml(line)}</span>`;
+                        if (line.includes('[') && line.includes(']')) return `<span style="color: #9cdcfe;">${escapeHtml(line)}</span>`;
+                        return escapeHtml(line);
+                    }).join('\n');
+                    logsDiv.innerHTML = coloredLogs;
+                    // Auto-scroll to bottom
+                    logsDiv.scrollTop = logsDiv.scrollHeight;
+                }
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
 
             try {
                 const response = await fetch('/api/browser-fetch/start', {
@@ -2741,28 +2772,45 @@
                 const task = await response.json();
                 browserFetchTaskId = task.task_id;
 
-                // Poll for status
+                // Poll for status (faster polling for better log updates)
                 browserFetchPollInterval = setInterval(async () => {
                     try {
                         const statusResponse = await fetch(`/api/browser-fetch/status/${browserFetchTaskId}`);
                         const status = await statusResponse.json();
 
+                        // Update progress count
+                        if (status.total > 0) {
+                            progressCount.textContent = `${status.progress}/${status.total} papers | ✓${status.successful} ✗${status.failed}`;
+                        }
+
+                        // Update current step
+                        if (status.current_step) {
+                            currentStep.textContent = status.current_step;
+                        }
+
+                        // Update logs
+                        if (status.recent_logs && status.recent_logs.length > 0) {
+                            updateLogs(status.recent_logs);
+                        }
+
                         if (status.status === 'running') {
-                            statusText.textContent = 'Fetching papers...';
                             if (status.current_pmid) {
-                                progressDiv.textContent = `Processing PMID ${status.current_pmid}`;
+                                statusText.textContent = `Fetching PMID ${status.current_pmid}...`;
+                            } else {
+                                statusText.textContent = 'Fetching papers...';
                             }
                         } else if (status.status === 'completed') {
                             clearInterval(browserFetchPollInterval);
                             statusText.innerHTML = `<span style="color: var(--success);">Complete!</span>`;
-                            progressDiv.textContent = `Downloaded: ${status.successful}/${status.total} papers`;
+                            progressCount.textContent = `Downloaded: ${status.successful}/${status.total} papers`;
+                            currentStep.textContent = '';
                             startBtn.textContent = 'Done';
                             startBtn.onclick = closeBrowserFetchModal;
                             startBtn.disabled = false;
                         } else if (status.status === 'failed') {
                             clearInterval(browserFetchPollInterval);
                             statusText.innerHTML = `<span style="color: var(--error);">Failed</span>`;
-                            progressDiv.textContent = status.error || 'Unknown error';
+                            currentStep.textContent = status.error || 'Unknown error';
                             startBtn.textContent = 'Close';
                             startBtn.onclick = closeBrowserFetchModal;
                             startBtn.disabled = false;
@@ -2770,10 +2818,11 @@
                     } catch (e) {
                         console.error('Error polling status:', e);
                     }
-                }, 2000);
+                }, 1000);  // Poll every second for responsive updates
 
             } catch (err) {
                 statusText.innerHTML = `<span style="color: var(--error);">Error: ${err.message}</span>`;
+                logsDiv.textContent = err.message;
                 startBtn.textContent = 'Close';
                 startBtn.onclick = closeBrowserFetchModal;
                 startBtn.disabled = false;

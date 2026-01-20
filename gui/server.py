@@ -273,12 +273,16 @@ class BrowserFetchStatus(BaseModel):
     successful: int = 0
     failed: int = 0
     current_pmid: Optional[str] = None
+    current_step: Optional[str] = None  # Current step being executed
     error: Optional[str] = None
     output_dir: Optional[str] = None
+    recent_logs: List[str] = Field(default_factory=list)  # Last N log lines
 
 
 # Track running browser fetch tasks
 _browser_fetch_tasks: Dict[str, BrowserFetchStatus] = {}
+# Store full logs separately (can be large)
+_browser_fetch_logs: Dict[str, List[str]] = {}
 
 
 # =============================================================================
@@ -1545,15 +1549,64 @@ async def get_directory_shortcuts():
 
 
 def _run_browser_fetch(task_id: str, csv_path: str, headless: bool, max_papers: Optional[int], use_claude: bool):
-    """Run browser fetch in a background thread."""
+    """Run browser fetch in a background thread with real-time log streaming."""
     import subprocess
     import sys
+    import re
+
+    # Initialize logs storage
+    _browser_fetch_logs[task_id] = []
+    max_recent_logs = 20  # Keep last N lines in status for quick polling
+
+    def add_log(line: str):
+        """Add a log line and update status."""
+        line = line.strip()
+        if not line:
+            return
+
+        # Store in full logs
+        _browser_fetch_logs[task_id].append(line)
+
+        # Update recent logs (keep last N)
+        task = _browser_fetch_tasks[task_id]
+        recent = list(task.recent_logs)
+        recent.append(line)
+        if len(recent) > max_recent_logs:
+            recent = recent[-max_recent_logs:]
+        task.recent_logs = recent
+
+        # Parse line for progress info
+        # Match: [1/3] Processing PMID 12345678
+        progress_match = re.search(r'\[(\d+)/(\d+)\]\s*Processing\s*PMID\s*(\d+)', line)
+        if progress_match:
+            task.progress = int(progress_match.group(1))
+            task.total = int(progress_match.group(2))
+            task.current_pmid = progress_match.group(3)
+
+        # Match: >>> STEP 1: Direct PDF URL detected
+        step_match = re.search(r'>>>\s*(STEP\s*\d+[^:]*:?\s*[^\n]*)', line)
+        if step_match:
+            task.current_step = step_match.group(1).strip()
+
+        # Match: Fetching PMID 12345678
+        pmid_match = re.search(r'Fetching\s*PMID\s*(\d+)', line)
+        if pmid_match:
+            task.current_pmid = pmid_match.group(1)
+
+        # Match: SUCCESS: Downloaded N file(s)
+        if 'SUCCESS:' in line and 'Downloaded' in line:
+            task.successful = (task.successful or 0) + 1
+
+        # Match: FAILED:
+        if 'FAILED:' in line or 'WARNING' in line and 'FAILED' in line:
+            task.failed = (task.failed or 0) + 1
 
     try:
         _browser_fetch_tasks[task_id].status = "running"
+        add_log(f"Starting browser fetch for {csv_path}")
 
         # Build command
-        cmd = [sys.executable, "browser_fetch.py", csv_path]
+        cmd = [sys.executable, "-u", "browser_fetch.py", csv_path]  # -u for unbuffered output
         if headless:
             cmd.append("--headless")
         if max_papers:
@@ -1561,39 +1614,55 @@ def _run_browser_fetch(task_id: str, csv_path: str, headless: bool, max_papers: 
         if use_claude:
             cmd.append("--use-claude")
 
-        # Run the command
-        result = subprocess.run(
+        add_log(f"Command: {' '.join(cmd)}")
+
+        # Run with Popen for real-time output
+        process = subprocess.Popen(
             cmd,
-            capture_output=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,  # Combine stderr into stdout
             text=True,
+            bufsize=1,  # Line buffered
             cwd=Path(__file__).parent.parent,
-            timeout=3600,  # 1 hour timeout
         )
 
-        # Parse output for results
-        output = result.stdout + result.stderr
-        logger.info(f"Browser fetch output: {output[-500:]}")
+        # Read output line by line
+        try:
+            for line in process.stdout:
+                add_log(line)
+                logger.debug(f"[BrowserFetch {task_id}] {line.strip()}")
+        except Exception as e:
+            add_log(f"Error reading output: {e}")
 
-        # Try to extract stats from output
-        import re
-        success_match = re.search(r'Successful:\s*(\d+)/(\d+)', output)
+        # Wait for process to complete
+        return_code = process.wait(timeout=3600)
+
+        # Parse final stats from logs
+        full_output = '\n'.join(_browser_fetch_logs[task_id])
+        success_match = re.search(r'Successful:\s*(\d+)/(\d+)', full_output)
         if success_match:
             _browser_fetch_tasks[task_id].successful = int(success_match.group(1))
             _browser_fetch_tasks[task_id].total = int(success_match.group(2))
             _browser_fetch_tasks[task_id].failed = _browser_fetch_tasks[task_id].total - _browser_fetch_tasks[task_id].successful
 
-        if result.returncode == 0:
+        if return_code == 0:
             _browser_fetch_tasks[task_id].status = "completed"
+            add_log("Browser fetch completed successfully")
         else:
             _browser_fetch_tasks[task_id].status = "failed"
-            _browser_fetch_tasks[task_id].error = result.stderr[-500:] if result.stderr else "Unknown error"
+            _browser_fetch_tasks[task_id].error = f"Process exited with code {return_code}"
+            add_log(f"Browser fetch failed with exit code {return_code}")
 
     except subprocess.TimeoutExpired:
         _browser_fetch_tasks[task_id].status = "failed"
         _browser_fetch_tasks[task_id].error = "Browser fetch timed out after 1 hour"
+        add_log("ERROR: Browser fetch timed out after 1 hour")
+        if 'process' in locals():
+            process.kill()
     except Exception as e:
         _browser_fetch_tasks[task_id].status = "failed"
         _browser_fetch_tasks[task_id].error = str(e)
+        add_log(f"ERROR: {e}")
 
 
 @app.post("/api/browser-fetch/start", response_model=BrowserFetchStatus)
@@ -1649,6 +1718,25 @@ async def get_browser_fetch_status(task_id: str):
 async def list_browser_fetch_tasks():
     """List all browser fetch tasks."""
     return {"tasks": list(_browser_fetch_tasks.values())}
+
+
+@app.get("/api/browser-fetch/logs/{task_id}")
+async def get_browser_fetch_logs(task_id: str, tail: int = 100):
+    """
+    Get full logs for a browser fetch task.
+
+    Args:
+        task_id: The task ID
+        tail: Number of lines from the end (default 100, 0 for all)
+    """
+    if task_id not in _browser_fetch_logs:
+        raise HTTPException(status_code=404, detail=f"Logs not found for task: {task_id}")
+
+    logs = _browser_fetch_logs[task_id]
+    if tail > 0 and len(logs) > tail:
+        logs = logs[-tail:]
+
+    return {"task_id": task_id, "logs": logs, "total_lines": len(_browser_fetch_logs[task_id])}
 
 
 # =============================================================================
