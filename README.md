@@ -93,10 +93,13 @@ Papers that cannot be downloaded (paywalled, missing from PMC, or failed downloa
 Create a `.env` file in the project root:
 
 ```bash
-OPENAI_API_KEY=...    # Required
-NCBI_EMAIL=...        # Required
-NCBI_API_KEY=...      # Optional (higher rate limits)
-ANTHROPIC_API_KEY=... # Optional
+OPENAI_API_KEY=...       # Required - for LLM extraction
+NCBI_EMAIL=...           # Required - for PubMed API access
+NCBI_API_KEY=...         # Optional (higher rate limits)
+ANTHROPIC_API_KEY=...    # Optional (for browser_fetch --use-claude)
+GEMINI_API_KEY=...       # Optional (alternative LLM provider)
+ELSEVIER_API_KEY=...     # Optional (publisher API access)
+WILEY_API_KEY=...        # Optional (publisher API access)
 ```
 
 See `config/settings.py` for all configuration options.
@@ -159,14 +162,18 @@ python main.py --cli SCN5A --email user@email.com --output ./results --tier-thre
 
 ## Database Schema
 
-| Table | Description |
+| Table | Key Columns |
 |-------|-------------|
-| `papers` | Paper metadata (pmid, title, doi) |
-| `variants` | Variant info (gene, cDNA, protein notation) |
-| `individual_records` | Patient data (age, sex, affected_status) |
-| `penetrance_data` | Cohort statistics |
+| `papers` | pmid (PK), title, journal, doi, pmc_id, gene_symbol, extraction_timestamp |
+| `variants` | variant_id (PK), gene_symbol, cdna_notation, protein_notation, genomic_position, clinical_significance |
+| `individual_records` | record_id (PK), variant_id (FK), pmid (FK), age_at_onset, sex, affected_status (affected/unaffected/uncertain), phenotype_details |
+| `penetrance_data` | penetrance_id (PK), variant_id (FK), pmid (FK), total_carriers_observed, affected_count, unaffected_count, penetrance_percentage |
+| `age_dependent_penetrance` | age_penetrance_id (PK), penetrance_id (FK), age_range, penetrance_percentage, carriers_in_range |
+| `functional_data` | functional_id (PK), variant_id (FK), pmid (FK), summary, assays (JSON) |
+| `phenotypes` | phenotype_id (PK), variant_id (FK), pmid (FK), patient_count, phenotype_description |
+| `variant_papers` | variant_id + pmid (composite PK), source_location, key_quotes (JSON) |
 
-See [docs/SQLITE_MIGRATION_GUIDE.md](docs/SQLITE_MIGRATION_GUIDE.md) for details.
+See [docs/SQLITE_MIGRATION_GUIDE.md](docs/SQLITE_MIGRATION_GUIDE.md) for full schema details.
 
 ## Additional Tools
 
@@ -193,6 +200,12 @@ pip install playwright && playwright install chromium
 
 # Interactive mode: browser opens, you log in/download, files auto-organized
 python browser_fetch.py results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv --interactive
+
+# With CAPTCHA support: waits up to 5 min for manual CAPTCHA completion
+python browser_fetch.py paywalled_missing.csv --interactive --wait-for-captcha
+
+# Retry only previously failed papers
+python browser_fetch.py paywalled_missing.csv --retry-failures
 
 # Fully automated (works for open-access papers)
 python browser_fetch.py paywalled_missing.csv --use-claude
@@ -234,7 +247,7 @@ The GUI supports "folder jobs" for processing existing paper collections:
 
 ## Development
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for design details.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for design details.
 
 ```bash
 # Run tests
@@ -247,4 +260,4 @@ python docs/examples/example_triage.py
 
 ## License
 
-See LICENSE file for details.
+MIT License - see LICENSE file for details (if present).

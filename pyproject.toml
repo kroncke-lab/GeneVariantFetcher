@@ -33,5 +33,5 @@ browser = [
 gvf = "pipeline.cli:app"
 
 [tool.setuptools.packages.find]
-include = ["pipeline*", "harvesting*", "config*", "utils*"]
+include = ["pipeline*", "harvesting*", "config*", "utils*", "gene_literature*", "gui*"]
 exclude = ["test_*", "automated_output*"]
