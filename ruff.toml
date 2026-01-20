@@ -1,0 +1,24 @@
+[lint]
+# Ignore common patterns in this codebase
+ignore = [
+    "E402",   # Module level import not at top of file (common after logging setup)
+    "F401",   # Imported but unused (some are re-exports or conditional)
+    "E501",   # Line too long (let formatter handle this)
+    "F541",   # f-string without placeholders (minor, used for consistency)
+    "F841",   # Local variable assigned but never used (some are for debugging)
+    "E722",   # Do not use bare except (used in fallback converters)
+    "E713",   # Test for membership should be not in (style preference)
+]
+
+# Exclude directories from linting
+exclude = [
+    "output",
+    "venv",
+    "venv_update",
+    ".git",
+    "__pycache__",
+    "*.egg-info",
+    "docs/examples/*",    # Example scripts may have issues
+    "tests/*",            # Test files have pre-existing issues
+    "gene_literature/rename_downloads.py",  # Has type annotation issues
+]
