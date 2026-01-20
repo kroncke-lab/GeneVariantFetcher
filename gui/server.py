@@ -17,14 +17,30 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, BackgroundTasks
+from fastapi import (
+    FastAPI,
+    HTTPException,
+    WebSocket,
+    WebSocketDisconnect,
+    BackgroundTasks,
+)
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from gui.checkpoint import CheckpointManager, JobCheckpoint, PipelineStep
 from gui.worker import PipelineWorker, ProgressCallback, create_job
+
+# Import post-processing functions for browser fetch
+try:
+    from fetch_manager import convert_to_markdown, run_data_scout
+
+    FETCH_MANAGER_AVAILABLE = True
+except ImportError:
+    FETCH_MANAGER_AVAILABLE = False
+    convert_to_markdown = None
+    run_data_scout = None
 
 # Path to .env file
 ENV_FILE_PATH = Path(__file__).resolve().parent.parent / ".env"
@@ -51,14 +67,18 @@ class JobCreateRequest(BaseModel):
 
     # Pipeline limits
     max_pmids: int = Field(100, ge=1, le=20000, description="Maximum PMIDs to fetch")
-    max_papers_to_download: int = Field(50, ge=1, le=1000, description="Maximum papers to download")
+    max_papers_to_download: int = Field(
+        50, ge=1, le=1000, description="Maximum papers to download"
+    )
 
     # Synonym settings
     auto_synonyms: bool = Field(False, description="Auto-discover gene synonyms")
     synonyms: List[str] = Field(default_factory=list, description="Manual synonyms")
 
     # Specific PMIDs for testing (skip discovery if provided)
-    specific_pmids: List[str] = Field(default_factory=list, description="Specific PMIDs for testing (skips discovery)")
+    specific_pmids: List[str] = Field(
+        default_factory=list, description="Specific PMIDs for testing (skips discovery)"
+    )
 
     # Advanced settings
     tier_threshold: int = Field(1, ge=0, le=10, description="Model cascade threshold")
@@ -130,12 +150,14 @@ class DirectoryListResponse(BaseModel):
 
 class PmidFilteredEntry(BaseModel):
     """A PMID that was deliberately filtered out with its reason."""
+
     pmid: str
     reason: str
 
 
 class PmidPaywalledEntry(BaseModel):
     """A PMID that was paywalled or could not be downloaded."""
+
     pmid: str
     reason: str
     url: Optional[str] = None
@@ -152,7 +174,9 @@ class PipelineStageBreakdown(BaseModel):
     harvested_count: int = 0
     harvested_pmids: List[str] = Field(default_factory=list)
     harvest_gap_count: int = 0  # discovered - harvested - filtered
-    harvest_gap_pmids: List[str] = Field(default_factory=list)  # PMIDs lost between discovery and harvest
+    harvest_gap_pmids: List[str] = Field(
+        default_factory=list
+    )  # PMIDs lost between discovery and harvest
 
     # Filtering stage
     filtered_out_count: int = 0
@@ -164,7 +188,9 @@ class PipelineStageBreakdown(BaseModel):
     paywalled_count: int = 0
     paywalled_entries: List[PmidPaywalledEntry] = Field(default_factory=list)
     download_gap_count: int = 0  # harvested - downloaded - paywalled - filtered
-    download_gap_pmids: List[str] = Field(default_factory=list)  # PMIDs lost during download
+    download_gap_pmids: List[str] = Field(
+        default_factory=list
+    )  # PMIDs lost during download
 
     # Status flags
     has_discovery_data: bool = False
@@ -219,7 +245,9 @@ class FolderJobRequest(BaseModel):
 
     # Options
     run_scout: bool = Field(False, description="Run Data Scout on unscouted files")
-    skip_already_extracted: bool = Field(True, description="Skip PMIDs that already have extractions")
+    skip_already_extracted: bool = Field(
+        True, description="Skip PMIDs that already have extractions"
+    )
 
     # Advanced settings
     tier_threshold: int = Field(1, ge=0, le=10)
@@ -230,22 +258,33 @@ class FolderJobRequest(BaseModel):
 class ResumeJobRequest(BaseModel):
     """Request to resume an interrupted pipeline from a folder."""
 
-    folder_path: str = Field(..., description="Path to folder with partial pipeline results")
+    folder_path: str = Field(
+        ..., description="Path to folder with partial pipeline results"
+    )
     gene_symbol: str = Field(..., description="Gene symbol for the pipeline")
     email: str = Field(..., description="Email for NCBI E-utilities")
 
     # Resume stage - where to resume from
-    resume_stage: str = Field(..., description="Stage to resume from: 'downloading' or 'extraction'")
+    resume_stage: str = Field(
+        ..., description="Stage to resume from: 'downloading' or 'extraction'"
+    )
 
     # PMIDs to process (for downloading stage)
-    pmids_to_download: List[str] = Field(default_factory=list, description="PMIDs to download (missing from interrupted download)")
+    pmids_to_download: List[str] = Field(
+        default_factory=list,
+        description="PMIDs to download (missing from interrupted download)",
+    )
 
     # Pipeline limits for downloading
-    max_papers_to_download: int = Field(500, ge=1, le=1000, description="Maximum papers to download")
+    max_papers_to_download: int = Field(
+        500, ge=1, le=1000, description="Maximum papers to download"
+    )
 
     # Options for extraction
     run_scout: bool = Field(True, description="Run Data Scout on downloaded files")
-    skip_already_extracted: bool = Field(True, description="Skip PMIDs that already have extractions")
+    skip_already_extracted: bool = Field(
+        True, description="Skip PMIDs that already have extractions"
+    )
 
     # Advanced settings
     tier_threshold: int = Field(1, ge=0, le=10)
@@ -261,8 +300,16 @@ class BrowserFetchRequest(BaseModel):
     headless: bool = Field(True, description="Run browser in headless mode")
     max_papers: Optional[int] = Field(None, description="Maximum papers to process")
     use_claude: bool = Field(False, description="Use Claude to find download links")
-    wait_for_captcha: bool = Field(False, description="Wait up to 5 minutes for manual CAPTCHA completion")
-    retry_failures_only: bool = Field(False, description="Only process papers with browser_failed status")
+    wait_for_captcha: bool = Field(
+        False, description="Wait up to 5 minutes for manual CAPTCHA completion"
+    )
+    retry_failures_only: bool = Field(
+        False, description="Only process papers with browser_failed status"
+    )
+    auto_process: bool = Field(
+        True,
+        description="Automatically convert to markdown and run scout after download",
+    )
 
 
 class BrowserFetchStatus(BaseModel):
@@ -355,38 +402,46 @@ class WebSocketProgressCallback(ProgressCallback):
         )
 
     def on_step_start(self, step: PipelineStep, message: str):
-        self._broadcast({
-            "type": "step_start",
-            "step": step.value,
-            "step_display": PipelineStep.get_display_name(step),
-            "message": message,
-            "timestamp": datetime.now().isoformat(),
-        })
+        self._broadcast(
+            {
+                "type": "step_start",
+                "step": step.value,
+                "step_display": PipelineStep.get_display_name(step),
+                "message": message,
+                "timestamp": datetime.now().isoformat(),
+            }
+        )
 
     def on_step_complete(self, step: PipelineStep, message: str, stats: Dict[str, Any]):
-        self._broadcast({
-            "type": "step_complete",
-            "step": step.value,
-            "step_display": PipelineStep.get_display_name(step),
-            "message": message,
-            "stats": stats,
-            "timestamp": datetime.now().isoformat(),
-        })
+        self._broadcast(
+            {
+                "type": "step_complete",
+                "step": step.value,
+                "step_display": PipelineStep.get_display_name(step),
+                "message": message,
+                "stats": stats,
+                "timestamp": datetime.now().isoformat(),
+            }
+        )
 
     def on_log(self, message: str):
-        self._broadcast({
-            "type": "log",
-            "message": message,
-            "timestamp": datetime.now().isoformat(),
-        })
+        self._broadcast(
+            {
+                "type": "log",
+                "message": message,
+                "timestamp": datetime.now().isoformat(),
+            }
+        )
 
     def on_error(self, step: PipelineStep, error: str):
-        self._broadcast({
-            "type": "error",
-            "step": step.value,
-            "error": error,
-            "timestamp": datetime.now().isoformat(),
-        })
+        self._broadcast(
+            {
+                "type": "error",
+                "step": step.value,
+                "error": error,
+                "timestamp": datetime.now().isoformat(),
+            }
+        )
 
 
 # =============================================================================
@@ -420,22 +475,30 @@ def run_job_in_background(job_id: str, resume: bool, loop: asyncio.AbstractEvent
         # Broadcast completion
         final_checkpoint = checkpoint_manager.load(job_id)
         asyncio.run_coroutine_threadsafe(
-            connection_manager.broadcast(job_id, {
-                "type": "job_complete",
-                "status": final_checkpoint.current_step.value if final_checkpoint else "unknown",
-                "timestamp": datetime.now().isoformat(),
-            }),
+            connection_manager.broadcast(
+                job_id,
+                {
+                    "type": "job_complete",
+                    "status": final_checkpoint.current_step.value
+                    if final_checkpoint
+                    else "unknown",
+                    "timestamp": datetime.now().isoformat(),
+                },
+            ),
             loop,
         )
 
     except Exception as e:
         logger.exception(f"Job {job_id} failed: {e}")
         asyncio.run_coroutine_threadsafe(
-            connection_manager.broadcast(job_id, {
-                "type": "error",
-                "error": str(e),
-                "timestamp": datetime.now().isoformat(),
-            }),
+            connection_manager.broadcast(
+                job_id,
+                {
+                    "type": "error",
+                    "error": str(e),
+                    "timestamp": datetime.now().isoformat(),
+                },
+            ),
             loop,
         )
 
@@ -453,7 +516,9 @@ async def lifespan(app: FastAPI):
     if incomplete:
         logger.warning(f"Found {len(incomplete)} incomplete jobs that can be resumed")
         for job in incomplete:
-            logger.warning(f"  - {job.job_id}: {job.gene_symbol} at step {job.current_step.value}")
+            logger.warning(
+                f"  - {job.job_id}: {job.gene_symbol} at step {job.current_step.value}"
+            )
     yield
     # Cleanup on shutdown
     for job_id, worker in list(active_workers.items()):
@@ -710,8 +775,12 @@ async def get_job_results(job_id: str):
     # List output files
     results["files"] = {
         "database": str(output_path / f"{checkpoint.gene_symbol}.db"),
-        "extractions": [str(f) for f in (output_path / "extractions").glob("*.json")] if (output_path / "extractions").exists() else [],
-        "pmid_status": [str(f) for f in (output_path / "pmid_status").glob("*.csv")] if (output_path / "pmid_status").exists() else [],
+        "extractions": [str(f) for f in (output_path / "extractions").glob("*.json")]
+        if (output_path / "extractions").exists()
+        else [],
+        "pmid_status": [str(f) for f in (output_path / "pmid_status").glob("*.csv")]
+        if (output_path / "pmid_status").exists()
+        else [],
     }
 
     return results
@@ -724,31 +793,101 @@ async def get_job_results(job_id: str):
 # Define which settings are configurable via the GUI
 CONFIGURABLE_SETTINGS = {
     # API Keys (required)
-    "OPENAI_API_KEY": {"label": "OpenAI API Key", "type": "password", "required": True, "group": "API Keys"},
-    "ANTHROPIC_API_KEY": {"label": "Anthropic API Key", "type": "password", "required": False, "group": "API Keys"},
-    "NCBI_EMAIL": {"label": "NCBI Email", "type": "email", "required": True, "group": "API Keys"},
-    "NCBI_API_KEY": {"label": "NCBI API Key (optional)", "type": "password", "required": False, "group": "API Keys"},
-
+    "OPENAI_API_KEY": {
+        "label": "OpenAI API Key",
+        "type": "password",
+        "required": True,
+        "group": "API Keys",
+    },
+    "ANTHROPIC_API_KEY": {
+        "label": "Anthropic API Key",
+        "type": "password",
+        "required": False,
+        "group": "API Keys",
+    },
+    "NCBI_EMAIL": {
+        "label": "NCBI Email",
+        "type": "email",
+        "required": True,
+        "group": "API Keys",
+    },
+    "NCBI_API_KEY": {
+        "label": "NCBI API Key (optional)",
+        "type": "password",
+        "required": False,
+        "group": "API Keys",
+    },
     # Model Configuration
-    "TIER2_MODEL": {"label": "Tier 2 Model", "type": "text", "default": "gpt-4o-mini", "group": "Models"},
-    "TIER3_MODELS": {"label": "Tier 3 Models (comma-separated)", "type": "text", "default": "gpt-4o-mini,gpt-4o", "group": "Models"},
-
+    "TIER2_MODEL": {
+        "label": "Tier 2 Model",
+        "type": "text",
+        "default": "gpt-4o-mini",
+        "group": "Models",
+    },
+    "TIER3_MODELS": {
+        "label": "Tier 3 Models (comma-separated)",
+        "type": "text",
+        "default": "gpt-4o-mini,gpt-4o",
+        "group": "Models",
+    },
     # Pipeline Defaults
-    "ENABLE_TIER1": {"label": "Enable Tier 1 (Keyword Filter)", "type": "checkbox", "default": "true", "group": "Pipeline"},
-    "ENABLE_TIER2": {"label": "Enable Tier 2 (LLM Filter)", "type": "checkbox", "default": "true", "group": "Pipeline"},
-    "TIER2_CONFIDENCE_THRESHOLD": {"label": "Filter Confidence Threshold", "type": "number", "default": "0.5", "group": "Pipeline"},
-
+    "ENABLE_TIER1": {
+        "label": "Enable Tier 1 (Keyword Filter)",
+        "type": "checkbox",
+        "default": "true",
+        "group": "Pipeline",
+    },
+    "ENABLE_TIER2": {
+        "label": "Enable Tier 2 (LLM Filter)",
+        "type": "checkbox",
+        "default": "true",
+        "group": "Pipeline",
+    },
+    "TIER2_CONFIDENCE_THRESHOLD": {
+        "label": "Filter Confidence Threshold",
+        "type": "number",
+        "default": "0.5",
+        "group": "Pipeline",
+    },
     # Literature Sources
-    "USE_PUBMIND": {"label": "Use PubMind", "type": "checkbox", "default": "true", "group": "Sources"},
-    "USE_PUBMED": {"label": "Use PubMed", "type": "checkbox", "default": "true", "group": "Sources"},
-    "USE_EUROPEPMC": {"label": "Use Europe PMC", "type": "checkbox", "default": "false", "group": "Sources"},
-
+    "USE_PUBMIND": {
+        "label": "Use PubMind",
+        "type": "checkbox",
+        "default": "true",
+        "group": "Sources",
+    },
+    "USE_PUBMED": {
+        "label": "Use PubMed",
+        "type": "checkbox",
+        "default": "true",
+        "group": "Sources",
+    },
+    "USE_EUROPEPMC": {
+        "label": "Use Europe PMC",
+        "type": "checkbox",
+        "default": "false",
+        "group": "Sources",
+    },
     # Scout Configuration
-    "SCOUT_ENABLED": {"label": "Enable DATA_ZONES (faster extraction)", "type": "checkbox", "default": "true", "group": "Scout"},
-    "SCOUT_MIN_RELEVANCE": {"label": "Scout Min Relevance", "type": "number", "default": "0.3", "group": "Scout"},
-
+    "SCOUT_ENABLED": {
+        "label": "Enable DATA_ZONES (faster extraction)",
+        "type": "checkbox",
+        "default": "true",
+        "group": "Scout",
+    },
+    "SCOUT_MIN_RELEVANCE": {
+        "label": "Scout Min Relevance",
+        "type": "number",
+        "default": "0.3",
+        "group": "Scout",
+    },
     # Output Defaults
-    "DEFAULT_OUTPUT_DIR": {"label": "Default Output Directory", "type": "directory", "default": "./output", "group": "Output"},
+    "DEFAULT_OUTPUT_DIR": {
+        "label": "Default Output Directory",
+        "type": "directory",
+        "default": "./output",
+        "group": "Output",
+    },
 }
 
 
@@ -770,8 +909,9 @@ def parse_env_file(path: Path) -> Dict[str, str]:
                 key = key.strip()
                 value = value.strip()
                 # Remove quotes if present
-                if (value.startswith('"') and value.endswith('"')) or \
-                   (value.startswith("'") and value.endswith("'")):
+                if (value.startswith('"') and value.endswith('"')) or (
+                    value.startswith("'") and value.endswith("'")
+                ):
                     value = value[1:-1]
                 settings[key] = value
     return settings
@@ -859,8 +999,7 @@ async def update_settings(request: EnvSettingsUpdateRequest):
     unknown = set(request.settings.keys()) - set(CONFIGURABLE_SETTINGS.keys())
     if unknown:
         raise HTTPException(
-            status_code=400,
-            detail=f"Unknown settings: {', '.join(unknown)}"
+            status_code=400, detail=f"Unknown settings: {', '.join(unknown)}"
         )
 
     # Load existing settings
@@ -876,6 +1015,7 @@ async def update_settings(request: EnvSettingsUpdateRequest):
 
     # Reload dotenv to update current process
     from dotenv import load_dotenv
+
     load_dotenv(ENV_FILE_PATH, override=True)
 
     logger.info(f"Settings updated: {list(request.settings.keys())}")
@@ -923,11 +1063,12 @@ async def validate_settings():
 def _extract_pmid_from_filename(filename: str) -> Optional[str]:
     """Extract PMID from various filename formats."""
     import re
+
     # Patterns: 12345678_FULL_CONTEXT.md, PMID_12345678_FULL_CONTEXT.md, etc.
     patterns = [
-        r'^(\d{6,10})_(?:FULL_CONTEXT|DATA_ZONES)\.md$',
-        r'^PMID_(\d{6,10})_(?:FULL_CONTEXT|DATA_ZONES)\.md$',
-        r'^[A-Z]+_PMID_(\d{6,10})\.json$',  # SCN5A_PMID_12345678.json
+        r"^(\d{6,10})_(?:FULL_CONTEXT|DATA_ZONES)\.md$",
+        r"^PMID_(\d{6,10})_(?:FULL_CONTEXT|DATA_ZONES)\.md$",
+        r"^[A-Z]+_PMID_(\d{6,10})\.json$",  # SCN5A_PMID_12345678.json
     ]
     for pattern in patterns:
         match = re.match(pattern, filename, re.IGNORECASE)
@@ -939,8 +1080,9 @@ def _extract_pmid_from_filename(filename: str) -> Optional[str]:
 def _extract_gene_from_extraction_filename(filename: str) -> Optional[str]:
     """Extract gene symbol from extraction filename."""
     import re
+
     # Pattern: GENE_PMID_12345678.json
-    match = re.match(r'^([A-Z0-9]+)_PMID_\d+\.json$', filename, re.IGNORECASE)
+    match = re.match(r"^([A-Z0-9]+)_PMID_\d+\.json$", filename, re.IGNORECASE)
     if match:
         return match.group(1).upper()
     return None
@@ -980,13 +1122,17 @@ def _build_pipeline_breakdown(
     if pmids_file is None:
         pmid_files = list(folder_path.glob("*_pmids.txt"))
         # Filter out source-specific files (pubmind, pubmed)
-        pmid_files = [f for f in pmid_files if "_pubmind" not in f.name and "_pubmed" not in f.name]
+        pmid_files = [
+            f
+            for f in pmid_files
+            if "_pubmind" not in f.name and "_pubmed" not in f.name
+        ]
         if pmid_files:
             pmids_file = pmid_files[0]
 
     if pmids_file and pmids_file.exists():
         try:
-            with open(pmids_file, 'r') as f:
+            with open(pmids_file, "r") as f:
                 for line in f:
                     pmid = line.strip()
                     if pmid and pmid.isdigit():
@@ -1015,14 +1161,16 @@ def _build_pipeline_breakdown(
     filtered_out_file = folder_path / "pmid_status" / "filtered_out.csv"
     if filtered_out_file.exists():
         try:
-            with open(filtered_out_file, 'r', newline='', encoding='utf-8') as f:
+            with open(filtered_out_file, "r", newline="", encoding="utf-8") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
-                    pmid = row.get('PMID', '').strip()
-                    reason = row.get('Reason', 'Unknown').strip()
+                    pmid = row.get("PMID", "").strip()
+                    reason = row.get("Reason", "Unknown").strip()
                     if pmid:
                         filtered_out_pmids.add(pmid)
-                        filtered_entries.append(PmidFilteredEntry(pmid=pmid, reason=reason))
+                        filtered_entries.append(
+                            PmidFilteredEntry(pmid=pmid, reason=reason)
+                        )
             breakdown.has_filter_data = True
             breakdown.filtered_out_count = len(filtered_out_pmids)
             breakdown.filtered_out_entries = filtered_entries
@@ -1039,21 +1187,25 @@ def _build_pipeline_breakdown(
         downloaded_pmids = set(actual_fulltext_pmids)
         breakdown.has_download_data = True
         breakdown.downloaded_count = len(downloaded_pmids)
-        breakdown.downloaded_pmids = sorted(downloaded_pmids, key=lambda x: int(x) if x.isdigit() else 0)
+        breakdown.downloaded_pmids = sorted(
+            downloaded_pmids, key=lambda x: int(x) if x.isdigit() else 0
+        )
     else:
         # Fall back to CSV if no actual files provided
         success_log = fulltext_dir / "successful_downloads.csv"
         if success_log.exists():
             try:
-                with open(success_log, 'r', newline='', encoding='utf-8') as f:
+                with open(success_log, "r", newline="", encoding="utf-8") as f:
                     reader = csv.DictReader(f)
                     for row in reader:
-                        pmid = row.get('PMID', '').strip()
+                        pmid = row.get("PMID", "").strip()
                         if pmid:
                             downloaded_pmids.add(pmid)
                 breakdown.has_download_data = True
                 breakdown.downloaded_count = len(downloaded_pmids)
-                breakdown.downloaded_pmids = sorted(downloaded_pmids, key=lambda x: int(x) if x.isdigit() else 0)
+                breakdown.downloaded_pmids = sorted(
+                    downloaded_pmids, key=lambda x: int(x) if x.isdigit() else 0
+                )
             except Exception:
                 pass
 
@@ -1063,16 +1215,18 @@ def _build_pipeline_breakdown(
     paywalled_log = fulltext_dir / "paywalled_missing.csv"
     if paywalled_log.exists():
         try:
-            with open(paywalled_log, 'r', newline='', encoding='utf-8') as f:
+            with open(paywalled_log, "r", newline="", encoding="utf-8") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
-                    pmid = row.get('PMID', '').strip()
-                    reason = row.get('Reason', 'Unknown').strip()
-                    url = row.get('URL', '').strip() or None
+                    pmid = row.get("PMID", "").strip()
+                    reason = row.get("Reason", "Unknown").strip()
+                    url = row.get("URL", "").strip() or None
                     # Skip if this PMID actually has a downloaded file
                     if pmid and pmid not in downloaded_pmids:
                         paywalled_pmids.add(pmid)
-                        paywalled_entries.append(PmidPaywalledEntry(pmid=pmid, reason=reason, url=url))
+                        paywalled_entries.append(
+                            PmidPaywalledEntry(pmid=pmid, reason=reason, url=url)
+                        )
             breakdown.paywalled_count = len(paywalled_pmids)
             breakdown.paywalled_entries = paywalled_entries
         except Exception:
@@ -1085,7 +1239,9 @@ def _build_pipeline_breakdown(
         expected_harvested = discovered_pmids - filtered_out_pmids
         harvest_gap = expected_harvested - harvested_pmids
         breakdown.harvest_gap_count = len(harvest_gap)
-        breakdown.harvest_gap_pmids = sorted(harvest_gap, key=lambda x: int(x) if x.isdigit() else 0)
+        breakdown.harvest_gap_pmids = sorted(
+            harvest_gap, key=lambda x: int(x) if x.isdigit() else 0
+        )
 
     # Download gap: harvested but not downloaded (and not paywalled, not filtered)
     if breakdown.has_harvest_data:
@@ -1095,7 +1251,9 @@ def _build_pipeline_breakdown(
         expected_accounted = downloaded_pmids | paywalled_pmids
         download_gap = pmids_to_download - expected_accounted
         breakdown.download_gap_count = len(download_gap)
-        breakdown.download_gap_pmids = sorted(download_gap, key=lambda x: int(x) if x.isdigit() else 0)
+        breakdown.download_gap_pmids = sorted(
+            download_gap, key=lambda x: int(x) if x.isdigit() else 0
+        )
 
     # 6. Detect likely interruption
     if breakdown.has_discovery_data:
@@ -1140,11 +1298,12 @@ async def analyze_folder(path: str):
     # Security check
     allowed_roots = [Path.home(), Path("/tmp"), Path.cwd()]
     is_allowed = any(
-        folder_path == root or root in folder_path.parents
-        for root in allowed_roots
+        folder_path == root or root in folder_path.parents for root in allowed_roots
     )
     if not is_allowed:
-        raise HTTPException(status_code=403, detail="Access to this directory is not allowed")
+        raise HTTPException(
+            status_code=403, detail="Access to this directory is not allowed"
+        )
 
     if not folder_path.exists():
         return FolderAnalysis(
@@ -1196,13 +1355,18 @@ async def analyze_folder(path: str):
                 detected_genes.add(gene)
             # Extract PMID from filename
             import re
-            match = re.search(r'PMID_(\d+)', f.name)
+
+            match = re.search(r"PMID_(\d+)", f.name)
             if match:
                 extraction_pmids.append(match.group(1))
 
     # Also try to detect gene from folder name (e.g., output/SCN5A/20240101_120000)
     folder_gene = None
-    if folder_path.parent.name and folder_path.parent.name.isupper() and len(folder_path.parent.name) <= 10:
+    if (
+        folder_path.parent.name
+        and folder_path.parent.name.isupper()
+        and len(folder_path.parent.name) <= 10
+    ):
         folder_gene = folder_path.parent.name
         detected_genes.add(folder_gene)
 
@@ -1216,21 +1380,33 @@ async def analyze_folder(path: str):
     # Build recommendations
     recommendations = []
     if not has_fulltext:
-        recommendations.append("No downloaded papers found. Run a full pipeline or download papers first.")
+        recommendations.append(
+            "No downloaded papers found. Run a full pipeline or download papers first."
+        )
     elif not has_scouted:
-        recommendations.append("Papers not yet scouted. Enable 'Run Data Scout' to create condensed DATA_ZONES files for faster extraction.")
+        recommendations.append(
+            "Papers not yet scouted. Enable 'Run Data Scout' to create condensed DATA_ZONES files for faster extraction."
+        )
     elif not scouting_complete:
         unscouted = set(full_context_pmids) - set(data_zones_pmids)
-        recommendations.append(f"{len(unscouted)} papers have not been scouted yet. Enable 'Run Data Scout' to process them.")
+        recommendations.append(
+            f"{len(unscouted)} papers have not been scouted yet. Enable 'Run Data Scout' to process them."
+        )
 
     if has_fulltext and not has_extractions:
-        recommendations.append("Ready for extraction. Start extraction to process papers.")
+        recommendations.append(
+            "Ready for extraction. Start extraction to process papers."
+        )
     elif has_extractions:
         unextracted = all_pmids - set(extraction_pmids)
         if unextracted:
-            recommendations.append(f"{len(unextracted)} papers have not been extracted yet.")
+            recommendations.append(
+                f"{len(unextracted)} papers have not been extracted yet."
+            )
         else:
-            recommendations.append("All papers have been extracted. You can re-run extraction if needed.")
+            recommendations.append(
+                "All papers have been extracted. You can re-run extraction if needed."
+            )
 
     # Build status message
     status_parts = []
@@ -1241,21 +1417,35 @@ async def analyze_folder(path: str):
     if extraction_pmids:
         status_parts.append(f"{len(extraction_pmids)} extracted")
 
-    status_message = "Found: " + ", ".join(status_parts) if status_parts else "No papers found"
+    status_message = (
+        "Found: " + ", ".join(status_parts) if status_parts else "No papers found"
+    )
 
     # Build pipeline breakdown for debugging
-    detected_gene = folder_gene or (list(detected_genes)[0] if len(detected_genes) == 1 else None)
+    detected_gene = folder_gene or (
+        list(detected_genes)[0] if len(detected_genes) == 1 else None
+    )
     pipeline_breakdown = _build_pipeline_breakdown(
         folder_path, detected_gene, actual_fulltext_pmids=full_context_pmids
     )
 
     # Add recommendations based on pipeline breakdown
     if pipeline_breakdown.likely_interrupted:
-        recommendations.insert(0, f"Pipeline may have been interrupted at {pipeline_breakdown.interruption_stage} stage. {pipeline_breakdown.interruption_details}")
-    elif pipeline_breakdown.has_discovery_data and pipeline_breakdown.harvest_gap_count > 0:
-        recommendations.append(f"{pipeline_breakdown.harvest_gap_count} PMIDs were discovered but not harvested.")
+        recommendations.insert(
+            0,
+            f"Pipeline may have been interrupted at {pipeline_breakdown.interruption_stage} stage. {pipeline_breakdown.interruption_details}",
+        )
+    elif (
+        pipeline_breakdown.has_discovery_data
+        and pipeline_breakdown.harvest_gap_count > 0
+    ):
+        recommendations.append(
+            f"{pipeline_breakdown.harvest_gap_count} PMIDs were discovered but not harvested."
+        )
     elif pipeline_breakdown.download_gap_count > 0:
-        recommendations.append(f"{pipeline_breakdown.download_gap_count} PMIDs passed filters but were not downloaded or marked as paywalled.")
+        recommendations.append(
+            f"{pipeline_breakdown.download_gap_count} PMIDs passed filters but were not downloaded or marked as paywalled."
+        )
 
     return FolderAnalysis(
         path=str(folder_path),
@@ -1279,7 +1469,9 @@ async def analyze_folder(path: str):
 
 
 @app.post("/api/jobs/from-folder", response_model=JobResponse)
-async def create_job_from_folder(request: FolderJobRequest, background_tasks: BackgroundTasks):
+async def create_job_from_folder(
+    request: FolderJobRequest, background_tasks: BackgroundTasks
+):
     """
     Create a job that processes an existing folder with downloaded papers.
 
@@ -1294,8 +1486,7 @@ async def create_job_from_folder(request: FolderJobRequest, background_tasks: Ba
     analysis = await analyze_folder(str(folder_path))
     if not analysis.is_valid:
         raise HTTPException(
-            status_code=400,
-            detail=f"Invalid folder: {analysis.status_message}"
+            status_code=400, detail=f"Invalid folder: {analysis.status_message}"
         )
 
     # Create checkpoint for folder job
@@ -1310,7 +1501,9 @@ async def create_job_from_folder(request: FolderJobRequest, background_tasks: Ba
         scout_min_relevance=request.scout_min_relevance,
         full_context_pmids=analysis.full_context_pmids,
         data_zones_pmids=analysis.data_zones_pmids,
-        extraction_pmids=analysis.extraction_pmids if request.skip_already_extracted else [],
+        extraction_pmids=analysis.extraction_pmids
+        if request.skip_already_extracted
+        else [],
     )
 
     # Save initial checkpoint
@@ -1330,7 +1523,9 @@ async def create_job_from_folder(request: FolderJobRequest, background_tasks: Ba
 
 
 @app.post("/api/jobs/resume-folder", response_model=JobResponse)
-async def resume_job_from_folder(request: ResumeJobRequest, background_tasks: BackgroundTasks):
+async def resume_job_from_folder(
+    request: ResumeJobRequest, background_tasks: BackgroundTasks
+):
     """
     Resume an interrupted pipeline from a folder.
 
@@ -1347,11 +1542,12 @@ async def resume_job_from_folder(request: ResumeJobRequest, background_tasks: Ba
     # Security check
     allowed_roots = [Path.home(), Path("/tmp"), Path.cwd()]
     is_allowed = any(
-        folder_path == root or root in folder_path.parents
-        for root in allowed_roots
+        folder_path == root or root in folder_path.parents for root in allowed_roots
     )
     if not is_allowed:
-        raise HTTPException(status_code=403, detail="Access to this directory is not allowed")
+        raise HTTPException(
+            status_code=403, detail="Access to this directory is not allowed"
+        )
 
     if not folder_path.exists():
         raise HTTPException(status_code=400, detail="Folder does not exist")
@@ -1364,14 +1560,14 @@ async def resume_job_from_folder(request: ResumeJobRequest, background_tasks: Ba
     if request.resume_stage not in valid_stages:
         raise HTTPException(
             status_code=400,
-            detail=f"Invalid resume stage. Must be one of: {valid_stages}"
+            detail=f"Invalid resume stage. Must be one of: {valid_stages}",
         )
 
     # For downloading stage, we need PMIDs to download
     if request.resume_stage == "downloading" and not request.pmids_to_download:
         raise HTTPException(
             status_code=400,
-            detail="PMIDs to download must be provided when resuming from downloading stage"
+            detail="PMIDs to download must be provided when resuming from downloading stage",
         )
 
     # Create checkpoint for resume job
@@ -1389,7 +1585,9 @@ async def resume_job_from_folder(request: ResumeJobRequest, background_tasks: Ba
         scout_min_relevance=request.scout_min_relevance,
         full_context_pmids=analysis.full_context_pmids,
         data_zones_pmids=analysis.data_zones_pmids,
-        extraction_pmids=analysis.extraction_pmids if request.skip_already_extracted else [],
+        extraction_pmids=analysis.extraction_pmids
+        if request.skip_already_extracted
+        else [],
     )
 
     # Save initial checkpoint
@@ -1428,14 +1626,12 @@ async def browse_directory(path: str = "~") -> DirectoryListResponse:
     ]
 
     is_allowed = any(
-        browse_path == root or root in browse_path.parents
-        for root in allowed_roots
+        browse_path == root or root in browse_path.parents for root in allowed_roots
     )
 
     if not is_allowed:
         raise HTTPException(
-            status_code=403,
-            detail="Access to this directory is not allowed"
+            status_code=403, detail="Access to this directory is not allowed"
         )
 
     if not browse_path.exists():
@@ -1446,26 +1642,32 @@ async def browse_directory(path: str = "~") -> DirectoryListResponse:
 
     entries = []
     try:
-        for item in sorted(browse_path.iterdir(), key=lambda x: (not x.is_dir(), x.name.lower())):
+        for item in sorted(
+            browse_path.iterdir(), key=lambda x: (not x.is_dir(), x.name.lower())
+        ):
             # Skip hidden files (optional)
             if item.name.startswith("."):
                 continue
 
             try:
                 is_readable = os.access(item, os.R_OK)
-                entries.append(DirectoryEntry(
-                    name=item.name,
-                    path=str(item),
-                    is_dir=item.is_dir(),
-                    is_readable=is_readable,
-                ))
+                entries.append(
+                    DirectoryEntry(
+                        name=item.name,
+                        path=str(item),
+                        is_dir=item.is_dir(),
+                        is_readable=is_readable,
+                    )
+                )
             except PermissionError:
-                entries.append(DirectoryEntry(
-                    name=item.name,
-                    path=str(item),
-                    is_dir=item.is_dir(),
-                    is_readable=False,
-                ))
+                entries.append(
+                    DirectoryEntry(
+                        name=item.name,
+                        path=str(item),
+                        is_dir=item.is_dir(),
+                        is_readable=False,
+                    )
+                )
     except PermissionError:
         raise HTTPException(status_code=403, detail="Permission denied")
 
@@ -1493,14 +1695,12 @@ async def create_directory(path: str):
     # Security check
     allowed_roots = [Path.home(), Path("/tmp"), Path.cwd()]
     is_allowed = any(
-        root in new_path.parents or new_path == root
-        for root in allowed_roots
+        root in new_path.parents or new_path == root for root in allowed_roots
     )
 
     if not is_allowed:
         raise HTTPException(
-            status_code=403,
-            detail="Cannot create directory in this location"
+            status_code=403, detail="Cannot create directory in this location"
         )
 
     if new_path.exists():
@@ -1532,7 +1732,9 @@ async def get_directory_shortcuts():
     # Documents (if exists)
     documents = home / "Documents"
     if documents.exists():
-        shortcuts.append({"name": "Documents", "path": str(documents), "icon": "folder"})
+        shortcuts.append(
+            {"name": "Documents", "path": str(documents), "icon": "folder"}
+        )
 
     # Current working directory
     cwd = Path.cwd()
@@ -1540,7 +1742,9 @@ async def get_directory_shortcuts():
 
     # Default output directory
     default_output = cwd / "output"
-    shortcuts.append({"name": "Default Output", "path": str(default_output), "icon": "output"})
+    shortcuts.append(
+        {"name": "Default Output", "path": str(default_output), "icon": "output"}
+    )
 
     return {"shortcuts": shortcuts}
 
@@ -1558,6 +1762,8 @@ def _run_browser_fetch(
     use_claude: bool,
     wait_for_captcha: bool = False,
     retry_failures_only: bool = False,
+    gene_symbol: Optional[str] = None,
+    auto_process: bool = True,
 ):
     """Run browser fetch in a background thread with real-time log streaming."""
     import subprocess
@@ -1587,28 +1793,28 @@ def _run_browser_fetch(
 
         # Parse line for progress info
         # Match: [1/3] Processing PMID 12345678
-        progress_match = re.search(r'\[(\d+)/(\d+)\]\s*Processing\s*PMID\s*(\d+)', line)
+        progress_match = re.search(r"\[(\d+)/(\d+)\]\s*Processing\s*PMID\s*(\d+)", line)
         if progress_match:
             task.progress = int(progress_match.group(1))
             task.total = int(progress_match.group(2))
             task.current_pmid = progress_match.group(3)
 
         # Match: >>> STEP 1: Direct PDF URL detected
-        step_match = re.search(r'>>>\s*(STEP\s*\d+[^:]*:?\s*[^\n]*)', line)
+        step_match = re.search(r">>>\s*(STEP\s*\d+[^:]*:?\s*[^\n]*)", line)
         if step_match:
             task.current_step = step_match.group(1).strip()
 
         # Match: Fetching PMID 12345678
-        pmid_match = re.search(r'Fetching\s*PMID\s*(\d+)', line)
+        pmid_match = re.search(r"Fetching\s*PMID\s*(\d+)", line)
         if pmid_match:
             task.current_pmid = pmid_match.group(1)
 
         # Match: SUCCESS: Downloaded N file(s)
-        if 'SUCCESS:' in line and 'Downloaded' in line:
+        if "SUCCESS:" in line and "Downloaded" in line:
             task.successful = (task.successful or 0) + 1
 
         # Match: FAILED:
-        if 'FAILED:' in line or 'WARNING' in line and 'FAILED' in line:
+        if "FAILED:" in line or "WARNING" in line and "FAILED" in line:
             task.failed = (task.failed or 0) + 1
 
     try:
@@ -1616,7 +1822,12 @@ def _run_browser_fetch(
         add_log(f"Starting browser fetch for {csv_path}")
 
         # Build command
-        cmd = [sys.executable, "-u", "browser_fetch.py", csv_path]  # -u for unbuffered output
+        cmd = [
+            sys.executable,
+            "-u",
+            "browser_fetch.py",
+            csv_path,
+        ]  # -u for unbuffered output
         if headless:
             cmd.append("--headless")
         if max_papers:
@@ -1633,7 +1844,7 @@ def _run_browser_fetch(
         # Run with Popen for real-time output
         # Set PYTHONUNBUFFERED to ensure subprocess doesn't buffer
         env = os.environ.copy()
-        env['PYTHONUNBUFFERED'] = '1'
+        env["PYTHONUNBUFFERED"] = "1"
 
         process = subprocess.Popen(
             cmd,
@@ -1661,26 +1872,78 @@ def _run_browser_fetch(
         return_code = process.wait(timeout=3600)
 
         # Parse final stats from logs
-        full_output = '\n'.join(_browser_fetch_logs[task_id])
-        success_match = re.search(r'Successful:\s*(\d+)/(\d+)', full_output)
+        full_output = "\n".join(_browser_fetch_logs[task_id])
+        success_match = re.search(r"Successful:\s*(\d+)/(\d+)", full_output)
         if success_match:
             _browser_fetch_tasks[task_id].successful = int(success_match.group(1))
             _browser_fetch_tasks[task_id].total = int(success_match.group(2))
-            _browser_fetch_tasks[task_id].failed = _browser_fetch_tasks[task_id].total - _browser_fetch_tasks[task_id].successful
+            _browser_fetch_tasks[task_id].failed = (
+                _browser_fetch_tasks[task_id].total
+                - _browser_fetch_tasks[task_id].successful
+            )
 
         if return_code == 0:
-            _browser_fetch_tasks[task_id].status = "completed"
             add_log("Browser fetch completed successfully")
+
+            # Post-processing: convert to markdown and run scout
+            if auto_process and FETCH_MANAGER_AVAILABLE and gene_symbol:
+                add_log(
+                    "Starting post-processing: converting to markdown and running scout..."
+                )
+                _browser_fetch_tasks[task_id].current_step = "Post-processing"
+
+                target_dir = Path(csv_path).parent
+                converted = 0
+                scouted = 0
+
+                # Find PMIDs with downloaded files (Main_Text.pdf) but no FULL_CONTEXT.md
+                main_pdfs = list(target_dir.glob("*_Main_Text.pdf"))
+                for pdf_path in main_pdfs:
+                    pmid = pdf_path.name.split("_")[0]
+                    full_context = target_dir / f"{pmid}_FULL_CONTEXT.md"
+
+                    if not full_context.exists():
+                        add_log(f"Converting PMID {pmid} to markdown...")
+                        try:
+                            result = convert_to_markdown(pmid, target_dir)
+                            if result:
+                                converted += 1
+                                add_log(f"  Created {pmid}_FULL_CONTEXT.md")
+
+                                # Run scout
+                                add_log(f"Running scout for PMID {pmid}...")
+                                scout_result = run_data_scout(
+                                    pmid, target_dir, gene_symbol
+                                )
+                                if scout_result:
+                                    scouted += 1
+                                    add_log(f"  Created {pmid}_DATA_ZONES.md")
+                        except Exception as e:
+                            add_log(f"  Error processing {pmid}: {e}")
+
+                add_log(
+                    f"Post-processing complete: {converted} converted, {scouted} scouted"
+                )
+            elif auto_process and not FETCH_MANAGER_AVAILABLE:
+                add_log(
+                    "Warning: Post-processing skipped - fetch_manager not available"
+                )
+            elif auto_process and not gene_symbol:
+                add_log("Warning: Post-processing skipped - gene_symbol not provided")
+
+            _browser_fetch_tasks[task_id].status = "completed"
         else:
             _browser_fetch_tasks[task_id].status = "failed"
-            _browser_fetch_tasks[task_id].error = f"Process exited with code {return_code}"
+            _browser_fetch_tasks[
+                task_id
+            ].error = f"Process exited with code {return_code}"
             add_log(f"Browser fetch failed with exit code {return_code}")
 
     except subprocess.TimeoutExpired:
         _browser_fetch_tasks[task_id].status = "failed"
         _browser_fetch_tasks[task_id].error = "Browser fetch timed out after 1 hour"
         add_log("ERROR: Browser fetch timed out after 1 hour")
-        if 'process' in locals():
+        if "process" in locals():
             process.kill()
     except Exception as e:
         _browser_fetch_tasks[task_id].status = "failed"
@@ -1689,7 +1952,9 @@ def _run_browser_fetch(
 
 
 @app.post("/api/browser-fetch/start", response_model=BrowserFetchStatus)
-async def start_browser_fetch(request: BrowserFetchRequest, background_tasks: BackgroundTasks):
+async def start_browser_fetch(
+    request: BrowserFetchRequest, background_tasks: BackgroundTasks
+):
     """
     Start browser-based fetching of paywalled papers.
 
@@ -1703,7 +1968,7 @@ async def start_browser_fetch(request: BrowserFetchRequest, background_tasks: Ba
     if not csv_path.exists():
         raise HTTPException(status_code=404, detail=f"CSV file not found: {csv_path}")
 
-    if not csv_path.name.endswith('.csv'):
+    if not csv_path.name.endswith(".csv"):
         raise HTTPException(status_code=400, detail="File must be a CSV")
 
     # Create task
@@ -1728,6 +1993,8 @@ async def start_browser_fetch(request: BrowserFetchRequest, background_tasks: Ba
                 request.use_claude,
                 request.wait_for_captcha,
                 request.retry_failures_only,
+                request.gene_symbol,
+                request.auto_process,
             ),
             daemon=True,
         ).start()
@@ -1761,13 +2028,19 @@ async def get_browser_fetch_logs(task_id: str, tail: int = 100):
         tail: Number of lines from the end (default 100, 0 for all)
     """
     if task_id not in _browser_fetch_logs:
-        raise HTTPException(status_code=404, detail=f"Logs not found for task: {task_id}")
+        raise HTTPException(
+            status_code=404, detail=f"Logs not found for task: {task_id}"
+        )
 
     logs = _browser_fetch_logs[task_id]
     if tail > 0 and len(logs) > tail:
         logs = logs[-tail:]
 
-    return {"task_id": task_id, "logs": logs, "total_lines": len(_browser_fetch_logs[task_id])}
+    return {
+        "task_id": task_id,
+        "logs": logs,
+        "total_lines": len(_browser_fetch_logs[task_id]),
+    }
 
 
 # =============================================================================
@@ -1783,11 +2056,13 @@ async def websocket_endpoint(websocket: WebSocket, job_id: str):
     # Send current state
     checkpoint = checkpoint_manager.load(job_id)
     if checkpoint:
-        await websocket.send_json({
-            "type": "state",
-            "job": checkpoint_to_response(checkpoint).model_dump(),
-            "logs": checkpoint.log_lines[-50:],
-        })
+        await websocket.send_json(
+            {
+                "type": "state",
+                "job": checkpoint_to_response(checkpoint).model_dump(),
+                "logs": checkpoint.log_lines[-50:],
+            }
+        )
 
     try:
         while True:
@@ -1820,7 +2095,7 @@ def main():
     print("GeneVariantFetcher GUI Server")
     print(f"{'='*60}")
     print(f"Starting server at http://{args.host}:{args.port}")
-    print(f"Open this URL in your browser to access the GUI")
+    print("Open this URL in your browser to access the GUI")
     print(f"{'='*60}\n")
 
     uvicorn.run(

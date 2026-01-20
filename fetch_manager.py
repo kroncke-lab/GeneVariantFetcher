@@ -31,7 +31,6 @@ Usage:
     python fetch_manager.py paywalled_missing.csv --convert --run-scout --gene SCN5A
 """
 
-import os
 import sys
 import time
 import shutil
@@ -46,6 +45,7 @@ import pandas as pd
 # Import converters and scout (optional - for --convert and --run-scout flags)
 try:
     from harvesting.format_converters import FormatConverter
+
     CONVERTER_AVAILABLE = True
 except ImportError:
     CONVERTER_AVAILABLE = False
@@ -54,6 +54,7 @@ except ImportError:
 try:
     from pipeline.data_scout import GeneticDataScout
     from config.settings import get_settings
+
     SCOUT_AVAILABLE = True
 except ImportError:
     SCOUT_AVAILABLE = False
@@ -63,8 +64,8 @@ except ImportError:
 # Setup logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    datefmt='%H:%M:%S'
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%H:%M:%S",
 )
 logger = logging.getLogger(__name__)
 
@@ -76,11 +77,11 @@ DEFAULT_DOWNLOADS_DIR = Path.home() / "Downloads"
 DEFAULT_TARGET_DIR = Path.cwd() / "manual_retrieval"
 
 # File extensions to track
-PDF_EXTENSIONS = {'.pdf'}
-SPREADSHEET_EXTENSIONS = {'.xlsx', '.xls', '.csv', '.tsv'}
-DOC_EXTENSIONS = {'.docx', '.doc'}
-TEXT_EXTENSIONS = {'.txt'}
-ARCHIVE_EXTENSIONS = {'.zip', '.rar', '.gz'}
+PDF_EXTENSIONS = {".pdf"}
+SPREADSHEET_EXTENSIONS = {".xlsx", ".xls", ".csv", ".tsv"}
+DOC_EXTENSIONS = {".docx", ".doc"}
+TEXT_EXTENSIONS = {".txt"}
+ARCHIVE_EXTENSIONS = {".zip", ".rar", ".gz"}
 ALL_TRACKED_EXTENSIONS = (
     PDF_EXTENSIONS
     | SPREADSHEET_EXTENSIONS
@@ -91,13 +92,13 @@ ALL_TRACKED_EXTENSIONS = (
 
 # Files to ignore
 IGNORED_PATTERNS = {
-    '.DS_Store',
-    '.crdownload',  # Chrome partial download
-    '.part',        # Firefox partial download
-    '.tmp',
-    '.download',
-    'desktop.ini',
-    'Thumbs.db',
+    ".DS_Store",
+    ".crdownload",  # Chrome partial download
+    ".part",  # Firefox partial download
+    ".tmp",
+    ".download",
+    "desktop.ini",
+    "Thumbs.db",
 }
 
 
@@ -119,7 +120,7 @@ def get_downloads_snapshot(downloads_dir: Path) -> Set[Path]:
     for item in downloads_dir.iterdir():
         if item.is_file():
             # Skip hidden files and ignored patterns
-            if item.name.startswith('.'):
+            if item.name.startswith("."):
                 continue
             if any(pattern in item.name for pattern in IGNORED_PATTERNS):
                 continue
@@ -202,9 +203,7 @@ def generate_new_filename(pmid: str, original_file: Path, file_index: int = 0) -
 
 
 def move_and_rename_files(
-    new_files: List[Path],
-    pmid: str,
-    target_dir: Path
+    new_files: List[Path], pmid: str, target_dir: Path
 ) -> List[Tuple[Path, Path]]:
     """
     Rename and move new files to target directory.
@@ -284,8 +283,12 @@ def convert_to_markdown(pmid: str, target_dir: Path) -> Optional[str]:
         Path to created markdown file, or None if conversion failed
     """
     if not CONVERTER_AVAILABLE:
-        logger.error("FormatConverter not available. Install harvesting module dependencies.")
+        logger.error(
+            "FormatConverter not available. Install harvesting module dependencies."
+        )
         return None
+
+    import shutil
 
     converter = FormatConverter()
     markdown_parts = []
@@ -297,23 +300,35 @@ def convert_to_markdown(pmid: str, target_dir: Path) -> Optional[str]:
         return None
 
     # Sort files: main text first, then supplements
-    main_files = [f for f in pmid_files if 'Main_Text' in f.name or 'main' in f.name.lower()]
-    supp_files = [f for f in pmid_files if f not in main_files and f.suffix.lower() != '.md']
+    main_files = [
+        f for f in pmid_files if "Main_Text" in f.name or "main" in f.name.lower()
+    ]
+    supp_files = [
+        f
+        for f in pmid_files
+        if f not in main_files and f.suffix.lower() not in [".md", ".json"]
+    ]
+
+    # Create supplements folder if there are supplement files
+    supplements_dir = None
+    if supp_files:
+        supplements_dir = target_dir / f"{pmid}_supplements"
+        supplements_dir.mkdir(exist_ok=True)
 
     # Process main text file(s)
     for idx, file_path in enumerate(main_files):
         ext = file_path.suffix.lower()
-        if ext == '.pdf':
+        if ext == ".pdf":
             content = converter.pdf_to_markdown(file_path)
             markdown_parts.append(f"# MAIN TEXT\n\n{content}")
-        elif ext == '.docx':
+        elif ext == ".docx":
             content = converter.docx_to_markdown(file_path)
             markdown_parts.append(f"# MAIN TEXT\n\n{content}")
-        elif ext == '.doc':
+        elif ext == ".doc":
             content = converter.doc_to_markdown(file_path)
             markdown_parts.append(f"# MAIN TEXT\n\n{content}")
-        elif ext in ['.txt', '.md']:
-            content = file_path.read_text(encoding='utf-8', errors='ignore')
+        elif ext in [".txt", ".md"]:
+            content = file_path.read_text(encoding="utf-8", errors="ignore")
             markdown_parts.append(f"# MAIN TEXT\n\n{content}")
 
     # Process supplemental files
@@ -321,22 +336,33 @@ def convert_to_markdown(pmid: str, target_dir: Path) -> Optional[str]:
         ext = file_path.suffix.lower()
         content = ""
 
-        if ext == '.pdf':
+        if ext == ".pdf":
             content = converter.pdf_to_markdown(file_path)
-        elif ext in ['.xlsx', '.xls']:
+        elif ext in [".xlsx", ".xls"]:
             content = converter.excel_to_markdown(file_path)
-        elif ext == '.docx':
+        elif ext == ".docx":
             content = converter.docx_to_markdown(file_path)
-        elif ext == '.doc':
+        elif ext == ".doc":
             content = converter.doc_to_markdown(file_path)
-        elif ext in ['.txt', '.csv']:
+        elif ext in [".txt", ".csv"]:
             try:
-                content = file_path.read_text(encoding='utf-8', errors='ignore')
+                content = file_path.read_text(encoding="utf-8", errors="ignore")
             except Exception as e:
                 content = f"[Error reading file: {e}]"
 
         if content:
-            markdown_parts.append(f"\n\n# SUPPLEMENTAL FILE {idx}: {file_path.name}\n\n{content}")
+            markdown_parts.append(
+                f"\n\n# SUPPLEMENTAL FILE {idx}: {file_path.name}\n\n{content}"
+            )
+
+        # Move supplement file to supplements folder
+        if supplements_dir and file_path.exists():
+            dest = supplements_dir / file_path.name
+            try:
+                shutil.move(str(file_path), str(dest))
+                logger.debug(f"Moved {file_path.name} to {pmid}_supplements/")
+            except Exception as e:
+                logger.warning(f"Could not move {file_path.name}: {e}")
 
     if not markdown_parts:
         logger.warning(f"No convertible content found for PMID {pmid}")
@@ -345,9 +371,11 @@ def convert_to_markdown(pmid: str, target_dir: Path) -> Optional[str]:
     # Write unified markdown
     unified_content = "\n".join(markdown_parts)
     output_file = target_dir / f"{pmid}_FULL_CONTEXT.md"
-    output_file.write_text(unified_content, encoding='utf-8')
+    output_file.write_text(unified_content, encoding="utf-8")
 
     logger.info(f"Created {output_file.name} ({len(unified_content)} characters)")
+    if supplements_dir:
+        logger.info(f"Organized {len(supp_files)} supplements into {pmid}_supplements/")
     return str(output_file)
 
 
@@ -364,7 +392,9 @@ def run_data_scout(pmid: str, target_dir: Path, gene_symbol: str) -> Optional[st
         Path to created DATA_ZONES.md file, or None if scout failed
     """
     if not SCOUT_AVAILABLE:
-        logger.error("GeneticDataScout not available. Install pipeline module dependencies.")
+        logger.error(
+            "GeneticDataScout not available. Install pipeline module dependencies."
+        )
         return None
 
     full_context_file = target_dir / f"{pmid}_FULL_CONTEXT.md"
@@ -380,7 +410,7 @@ def run_data_scout(pmid: str, target_dir: Path, gene_symbol: str) -> Optional[st
             max_zones=settings.scout_max_zones if settings else 30,
         )
 
-        unified_content = full_context_file.read_text(encoding='utf-8')
+        unified_content = full_context_file.read_text(encoding="utf-8")
         report = scout.scan(unified_content, pmid=pmid)
 
         # Write zone metadata JSON
@@ -391,8 +421,10 @@ def run_data_scout(pmid: str, target_dir: Path, gene_symbol: str) -> Optional[st
         zones_md_path = target_dir / f"{pmid}_DATA_ZONES.md"
         zones_md_path.write_text(scout.format_markdown(report, unified_content))
 
-        logger.info(f"Scout: {report.zones_kept}/{report.total_zones_found} zones kept "
-                    f"({report.compression_ratio:.0%} compression)")
+        logger.info(
+            f"Scout: {report.zones_kept}/{report.total_zones_found} zones kept "
+            f"({report.compression_ratio:.0%} compression)"
+        )
         return str(zones_md_path)
 
     except Exception as e:
@@ -406,8 +438,8 @@ def process_completed_downloads(
     gene_symbol: Optional[str] = None,
     convert: bool = False,
     run_scout: bool = False,
-    pmid_column: str = 'PMID',
-    status_column: str = 'Status',
+    pmid_column: str = "PMID",
+    status_column: str = "Status",
 ) -> Tuple[int, int]:
     """
     Process completed downloads: convert to markdown and/or run scout.
@@ -431,7 +463,7 @@ def process_completed_downloads(
         return 0, 0
 
     # Find completed downloads
-    done_mask = df[status_column].str.lower() == 'done'
+    done_mask = df[status_column].str.lower() == "done"
     done_pmids = df.loc[done_mask, pmid_column].astype(str).tolist()
 
     if not done_pmids:
@@ -445,7 +477,7 @@ def process_completed_downloads(
 
     for pmid in done_pmids:
         pmid = pmid.strip()
-        if not pmid or pmid.lower() == 'nan':
+        if not pmid or pmid.lower() == "nan":
             continue
 
         # Convert to markdown if requested
@@ -487,11 +519,11 @@ def construct_url(
         if pd.notna(doi) and str(doi).strip():
             doi = str(doi).strip()
             # Handle various DOI formats
-            if doi.startswith('http'):
+            if doi.startswith("http"):
                 return doi
-            elif doi.startswith('doi:'):
+            elif doi.startswith("doi:"):
                 doi = doi[4:].strip()
-            elif doi.startswith('10.'):
+            elif doi.startswith("10."):
                 pass  # Already clean DOI
             else:
                 # DOI doesn't start with expected prefix, try anyway
@@ -499,8 +531,8 @@ def construct_url(
             return f"https://doi.org/{doi}"
 
     # Check for URL column (from paywalled_missing.csv)
-    if 'URL' in row.index and pd.notna(row['URL']):
-        return str(row['URL']).strip()
+    if "URL" in row.index and pd.notna(row["URL"]):
+        return str(row["URL"]).strip()
 
     # Fall back to PubMed
     pmid_value = row.get(pmid_column, row.get("PMID", ""))
@@ -518,15 +550,19 @@ def wait_for_user_action() -> str:
     Returns:
         User input string (empty for Enter, 'n' to skip, 'q' to quit)
     """
-    print("\n  Press ENTER when done downloading, 'n' to skip, 'q' to quit: ", end='', flush=True)
+    print(
+        "\n  Press ENTER when done downloading, 'n' to skip, 'q' to quit: ",
+        end="",
+        flush=True,
+    )
     try:
         response = input().strip().lower()
         return response
     except EOFError:
-        return 'q'
+        return "q"
     except KeyboardInterrupt:
         print()
-        return 'q'
+        return "q"
 
 
 def run_fetch_manager(
@@ -534,8 +570,8 @@ def run_fetch_manager(
     downloads_dir: Path = DEFAULT_DOWNLOADS_DIR,
     target_dir: Optional[Path] = None,
     doi_column: Optional[str] = None,
-    pmid_column: str = 'PMID',
-    status_column: str = 'Status',
+    pmid_column: str = "PMID",
+    status_column: str = "Status",
     start_index: int = 0,
     convert: bool = False,
     run_scout: bool = False,
@@ -562,7 +598,7 @@ def run_fetch_manager(
     # If CSV is in pmc_fulltext/, use that directory
     if target_dir is None:
         csv_parent = csv_file.parent
-        if csv_parent.name == 'pmc_fulltext' or 'pmc_fulltext' in str(csv_parent):
+        if csv_parent.name == "pmc_fulltext" or "pmc_fulltext" in str(csv_parent):
             target_dir = csv_parent
             logger.info(f"Auto-detected target directory: {target_dir}")
         else:
@@ -580,7 +616,7 @@ def run_fetch_manager(
 
     # Add status column if not present
     if status_column not in df.columns:
-        df[status_column] = ''
+        df[status_column] = ""
 
     # Validate directories
     if not downloads_dir.exists():
@@ -643,7 +679,7 @@ def run_fetch_manager(
                 idx,
                 pmid_column,
             )
-            df.at[idx, status_column] = 'skipped'
+            df.at[idx, status_column] = "skipped"
             df.to_csv(csv_file, index=False)
             continue
 
@@ -657,7 +693,7 @@ def run_fetch_manager(
             print(f"Paper {processed}/{total_pending} (remaining: {remaining})")
             print(f"  PMID: {pmid}")
             print(f"  URL:  {url}")
-            if 'Reason' in row.index and pd.notna(row['Reason']):
+            if "Reason" in row.index and pd.notna(row["Reason"]):
                 print(f"  Note: {row['Reason']}")
             print("=" * 60)
 
@@ -670,22 +706,22 @@ def run_fetch_manager(
                 webbrowser.open(url)
             else:
                 logger.warning("No URL available for PMID %s; skipping.", pmid)
-                df.at[idx, status_column] = 'skipped'
+                df.at[idx, status_column] = "skipped"
                 df.to_csv(csv_file, index=False)
                 break
 
             # Wait for user
             response = wait_for_user_action()
 
-            if response == 'q':
+            if response == "q":
                 logger.info("Quitting...")
                 df.to_csv(csv_file, index=False)
                 logger.info(f"Progress saved to {csv_file}")
                 return
 
-            if response == 'n':
+            if response == "n":
                 logger.info("Skipping this paper...")
-                df.at[idx, status_column] = 'skipped'
+                df.at[idx, status_column] = "skipped"
                 df.to_csv(csv_file, index=False)
                 break
 
@@ -699,13 +735,17 @@ def run_fetch_manager(
 
             if not new_files:
                 logger.warning("No new files detected in Downloads folder")
-                print("  No files found. Enter 'r' to retry, 's' to skip, or ENTER to mark done anyway: ", end='', flush=True)
+                print(
+                    "  No files found. Enter 'r' to retry, 's' to skip, or ENTER to mark done anyway: ",
+                    end="",
+                    flush=True,
+                )
                 retry_response = input().strip().lower()
 
-                if retry_response == 'r':
+                if retry_response == "r":
                     continue
-                if retry_response == 's':
-                    df.at[idx, status_column] = 'skipped'
+                if retry_response == "s":
+                    df.at[idx, status_column] = "skipped"
                     df.to_csv(csv_file, index=False)
                     break
                 # Otherwise mark as done (user confirmed no downloads needed)
@@ -721,7 +761,7 @@ def run_fetch_manager(
                     logger.info(f"Successfully processed {len(moved)} file(s)")
 
             # Mark as done and save
-            df.at[idx, status_column] = 'done'
+            df.at[idx, status_column] = "done"
             df.to_csv(csv_file, index=False)
             logger.info("Progress saved")
             break
@@ -779,75 +819,77 @@ Examples:
 
   # Only process already-completed downloads (no download loop)
   python fetch_manager.py paywalled_missing.csv --process-only --convert --run-scout --gene TTR
-        """
+        """,
     )
 
     parser.add_argument(
         "csv_file",
         type=Path,
-        help="Path to CSV file containing PMID (and optionally DOI) columns"
+        help="Path to CSV file containing PMID (and optionally DOI) columns",
     )
     parser.add_argument(
-        "--downloads", "-d",
+        "--downloads",
+        "-d",
         type=Path,
         default=DEFAULT_DOWNLOADS_DIR,
-        help=f"Path to Downloads folder to monitor (default: {DEFAULT_DOWNLOADS_DIR})"
+        help=f"Path to Downloads folder to monitor (default: {DEFAULT_DOWNLOADS_DIR})",
     )
     parser.add_argument(
-        "--target-dir", "-t",
+        "--target-dir",
+        "-t",
         type=Path,
         default=None,
-        help="Target directory for renamed files (auto-detected from CSV path if in pmc_fulltext/)"
+        help="Target directory for renamed files (auto-detected from CSV path if in pmc_fulltext/)",
     )
     parser.add_argument(
         "--doi-column",
         type=str,
         default=None,
-        help="Name of DOI column in CSV (if present, DOI URLs are preferred)"
+        help="Name of DOI column in CSV (if present, DOI URLs are preferred)",
     )
     parser.add_argument(
         "--pmid-column",
         type=str,
         default="PMID",
-        help="Name of PMID column in CSV (default: PMID)"
+        help="Name of PMID column in CSV (default: PMID)",
     )
     parser.add_argument(
         "--status-column",
         type=str,
         default="Status",
-        help="Name of status column for progress tracking (default: Status)"
+        help="Name of status column for progress tracking (default: Status)",
     )
     parser.add_argument(
         "--start",
         type=int,
         default=0,
-        help="Row index to start from (for resuming interrupted sessions)"
+        help="Row index to start from (for resuming interrupted sessions)",
     )
     parser.add_argument(
-        "--verbose", "-v",
-        action="store_true",
-        help="Enable verbose logging"
+        "--verbose", "-v", action="store_true", help="Enable verbose logging"
     )
     parser.add_argument(
-        "--convert", "-c",
+        "--convert",
+        "-c",
         action="store_true",
-        help="Convert downloaded files to FULL_CONTEXT.md format for extraction"
+        help="Convert downloaded files to FULL_CONTEXT.md format for extraction",
     )
     parser.add_argument(
         "--run-scout",
         action="store_true",
-        help="Run Data Scout to create DATA_ZONES.md files (requires --gene)"
+        help="Run Data Scout to create DATA_ZONES.md files (requires --gene)",
     )
     parser.add_argument(
-        "--gene", "-g",
+        "--gene",
+        "-g",
         type=str,
         default=None,
-        help="Gene symbol for Data Scout relevance scoring (required with --run-scout)"
+        help="Gene symbol for Data Scout relevance scoring (required with --run-scout)",
     )
     parser.add_argument(
         "--process-only",
         action="store_true",
-        help="Skip download loop, only process already-completed downloads"
+        help="Skip download loop, only process already-completed downloads",
     )
 
     args = parser.parse_args()
