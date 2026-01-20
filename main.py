@@ -55,8 +55,8 @@ The GUI is the recommended way to use GeneVariantFetcher. It provides:
     # GUI options
     parser.add_argument(
         "--host",
-        default="127.0.0.1",
-        help="Host to bind to (default: 127.0.0.1)",
+        default="localhost",
+        help="Host to bind to (default: localhost)",
     )
     parser.add_argument(
         "--port",
@@ -81,7 +81,8 @@ The GUI is the recommended way to use GeneVariantFetcher. It provides:
         help="Email for NCBI (CLI mode only, or set NCBI_EMAIL env var)",
     )
     parser.add_argument(
-        "--output", "-o",
+        "--output",
+        "-o",
         help="Output directory (CLI mode only)",
     )
 
@@ -126,10 +127,12 @@ def run_gui_mode(args):
     # Load environment (don't validate yet - GUI will help configure)
     import os
     from dotenv import load_dotenv
+
     load_dotenv()
 
     # Check for incomplete jobs
     from gui.checkpoint import CheckpointManager
+
     manager = CheckpointManager()
     incomplete = manager.get_incomplete_jobs()
 
@@ -182,6 +185,7 @@ def run_cli_mode(args):
     """Run the pipeline in CLI mode (for automation/scripting)."""
     import os
     from dotenv import load_dotenv
+
     load_dotenv()
 
     gene = args.cli

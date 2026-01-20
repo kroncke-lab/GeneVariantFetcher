@@ -2085,7 +2085,7 @@ def main():
     import uvicorn
 
     parser = argparse.ArgumentParser(description="GeneVariantFetcher GUI Server")
-    parser.add_argument("--host", default="127.0.0.1", help="Host to bind to")
+    parser.add_argument("--host", default="localhost", help="Host to bind to")
     parser.add_argument("--port", type=int, default=8000, help="Port to bind to")
     parser.add_argument("--reload", action="store_true", help="Enable auto-reload")
 
