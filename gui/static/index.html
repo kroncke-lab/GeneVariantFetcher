@@ -2681,6 +2681,18 @@
                                 Use Claude to find download links (requires API key)
                             </label>
                         </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="bf-retry-failures">
+                                Retry failed papers only (re-attempt browser_failed status)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="bf-wait-captcha">
+                                Wait for manual CAPTCHA (5 min timeout, uncheck headless to see browser)
+                            </label>
+                        </div>
                         <div id="bf-status" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--gray-100); border-radius: 0.5rem; flex: 1; display: flex; flex-direction: column; overflow: hidden;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                                 <div id="bf-status-text" style="font-weight: 600;">Starting...</div>
@@ -2716,6 +2728,8 @@
         async function startBrowserFetch(csvPath, geneSymbol) {
             const headless = document.getElementById('bf-headless').checked;
             const useClaude = document.getElementById('bf-use-claude').checked;
+            const retryFailures = document.getElementById('bf-retry-failures').checked;
+            const waitForCaptcha = document.getElementById('bf-wait-captcha').checked;
             const statusDiv = document.getElementById('bf-status');
             const statusText = document.getElementById('bf-status-text');
             const progressCount = document.getElementById('bf-progress-count');
@@ -2761,7 +2775,9 @@
                         csv_path: csvPath,
                         gene_symbol: geneSymbol,
                         headless: headless,
-                        use_claude: useClaude
+                        use_claude: useClaude,
+                        retry_failures_only: retryFailures,
+                        wait_for_captcha: waitForCaptcha
                     })
                 });
 

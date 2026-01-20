@@ -220,12 +220,14 @@ class BrowserFetcher:
         headless: bool = False,
         use_claude: bool = False,
         timeout: int = 60000,
+        captcha_wait_time: int = 30,
     ):
         self.downloads_dir = Path(downloads_dir)
         self.target_dir = Path(target_dir)
         self.headless = headless
         self.timeout = timeout
         self.use_claude = use_claude
+        self.captcha_wait_time = captcha_wait_time
 
         self.analyzer = PageAnalyzer() if use_claude else None
         self.browser: Optional[Browser] = None
@@ -330,13 +332,15 @@ class BrowserFetcher:
 
         return None
 
-    def _wait_for_cloudflare(self, page: Page, max_wait: int = 30) -> bool:
+    def _wait_for_cloudflare(self, page: Page, max_wait: Optional[int] = None) -> bool:
         """
         Detect and wait for Cloudflare challenge to be completed.
 
         Returns True if page is ready (no Cloudflare or challenge passed).
         Returns False if still blocked after max_wait seconds.
         """
+        if max_wait is None:
+            max_wait = self.captcha_wait_time
         start = time.time()
         check_count = 0
         while time.time() - start < max_wait:
@@ -990,6 +994,8 @@ def run_browser_fetch(
     specific_pmids: Optional[List[str]] = None,
     max_papers: Optional[int] = None,
     interactive: bool = False,
+    wait_for_captcha: bool = False,
+    retry_failures_only: bool = False,
 ):
     """
     Run browser-based fetching for papers in a CSV file.
@@ -1004,6 +1010,9 @@ def run_browser_fetch(
         status_column: Name of status column
         specific_pmids: Only process these PMIDs
         max_papers: Maximum number of papers to process
+        interactive: Interactive mode - navigate and wait for manual download
+        wait_for_captcha: Wait up to 5 minutes for manual CAPTCHA completion
+        retry_failures_only: Only process papers with browser_failed status
     """
     if not PLAYWRIGHT_AVAILABLE:
         logger.error("Playwright not installed. Run: pip install playwright && playwright install chromium")
@@ -1035,7 +1044,14 @@ def run_browser_fetch(
 
     # Filter to pending papers
     df[status_column] = df[status_column].fillna('')
-    pending_mask = ~df[status_column].str.lower().isin(['done', 'skipped', 'browser_done', 'browser_failed'])
+
+    if retry_failures_only:
+        # Only retry papers that previously failed
+        pending_mask = df[status_column].str.lower() == 'browser_failed'
+        logger.info("Retry mode: processing only browser_failed papers")
+    else:
+        # Process papers that haven't been attempted yet
+        pending_mask = ~df[status_column].str.lower().isin(['done', 'skipped', 'browser_done', 'browser_failed'])
 
     # Filter to specific PMIDs if provided
     if specific_pmids:
@@ -1055,12 +1071,20 @@ def run_browser_fetch(
         return
 
     # Run browser automation
+    # If wait_for_captcha is enabled, use 5 minute timeout for Cloudflare
+    captcha_wait_time = 300 if wait_for_captcha else 30
+    if wait_for_captcha:
+        logger.info("CAPTCHA wait mode: will wait up to 5 minutes for manual CAPTCHA completion")
+        if headless:
+            logger.warning("WARNING: wait_for_captcha works best with headless=False so you can see the browser")
+
     results = []
     with BrowserFetcher(
         downloads_dir=downloads_dir,
         target_dir=target_dir,
         headless=headless,
         use_claude=use_claude,
+        captcha_wait_time=captcha_wait_time,
     ) as fetcher:
         for idx, (row_idx, row) in enumerate(papers_to_process.iterrows(), 1):
             pmid = str(row[pmid_column]).strip()
@@ -1159,6 +1183,10 @@ Examples:
 
   # Limit to first 10 papers
   python browser_fetch.py paywalled_missing.csv -i --max 10
+
+  # Two-step workflow: automated first, then retry failures with CAPTCHA wait
+  python browser_fetch.py paywalled_missing.csv              # Step 1: automated
+  python browser_fetch.py paywalled_missing.csv --retry-failures --wait-for-captcha  # Step 2: retry failures
         """
     )
 
@@ -1169,6 +1197,10 @@ Examples:
     parser.add_argument('--interactive', '-i', action='store_true',
                         help='Interactive mode: navigate to page, let you download manually, auto-organize files')
     parser.add_argument('--use-claude', action='store_true', help='Use Claude to find download links')
+    parser.add_argument('--wait-for-captcha', '-w', action='store_true',
+                        help='Wait up to 5 minutes for manual CAPTCHA completion (use with visible browser)')
+    parser.add_argument('--retry-failures', '-r', action='store_true',
+                        help='Only process papers with browser_failed status (retry previously failed papers)')
     parser.add_argument('--pmid-column', default='PMID', help='PMID column name')
     parser.add_argument('--status-column', default='Status', help='Status column name')
     parser.add_argument('--pmids', type=str, help='Comma-separated list of specific PMIDs')
@@ -1199,6 +1231,8 @@ Examples:
         specific_pmids=specific_pmids,
         max_papers=args.max,
         interactive=args.interactive,
+        wait_for_captcha=args.wait_for_captcha,
+        retry_failures_only=args.retry_failures,
     )
 
 

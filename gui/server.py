@@ -261,6 +261,8 @@ class BrowserFetchRequest(BaseModel):
     headless: bool = Field(True, description="Run browser in headless mode")
     max_papers: Optional[int] = Field(None, description="Maximum papers to process")
     use_claude: bool = Field(False, description="Use Claude to find download links")
+    wait_for_captcha: bool = Field(False, description="Wait up to 5 minutes for manual CAPTCHA completion")
+    retry_failures_only: bool = Field(False, description="Only process papers with browser_failed status")
 
 
 class BrowserFetchStatus(BaseModel):
@@ -1548,7 +1550,15 @@ async def get_directory_shortcuts():
 # =============================================================================
 
 
-def _run_browser_fetch(task_id: str, csv_path: str, headless: bool, max_papers: Optional[int], use_claude: bool):
+def _run_browser_fetch(
+    task_id: str,
+    csv_path: str,
+    headless: bool,
+    max_papers: Optional[int],
+    use_claude: bool,
+    wait_for_captcha: bool = False,
+    retry_failures_only: bool = False,
+):
     """Run browser fetch in a background thread with real-time log streaming."""
     import subprocess
     import sys
@@ -1613,6 +1623,10 @@ def _run_browser_fetch(task_id: str, csv_path: str, headless: bool, max_papers: 
             cmd.extend(["--max", str(max_papers)])
         if use_claude:
             cmd.append("--use-claude")
+        if wait_for_captcha:
+            cmd.append("--wait-for-captcha")
+        if retry_failures_only:
+            cmd.append("--retry-failures")
 
         add_log(f"Command: {' '.join(cmd)}")
 
@@ -1706,7 +1720,15 @@ async def start_browser_fetch(request: BrowserFetchRequest, background_tasks: Ba
     background_tasks.add_task(
         lambda: threading.Thread(
             target=_run_browser_fetch,
-            args=(task_id, str(csv_path), request.headless, request.max_papers, request.use_claude),
+            args=(
+                task_id,
+                str(csv_path),
+                request.headless,
+                request.max_papers,
+                request.use_claude,
+                request.wait_for_captcha,
+                request.retry_failures_only,
+            ),
             daemon=True,
         ).start()
     )
