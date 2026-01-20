@@ -61,6 +61,11 @@ try:
     PLAYWRIGHT_AVAILABLE = True
 except ImportError:
     PLAYWRIGHT_AVAILABLE = False
+    # Define dummy types for type hints when Playwright not installed
+    Page = Any
+    Browser = Any
+    PlaywrightTimeout = Exception
+    sync_playwright = None
     logger.warning("Playwright not installed. Run: pip install playwright && playwright install chromium")
 
 # Try to import Anthropic for Claude assistance
