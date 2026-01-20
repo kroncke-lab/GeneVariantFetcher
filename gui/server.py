@@ -1617,6 +1617,10 @@ def _run_browser_fetch(task_id: str, csv_path: str, headless: bool, max_papers: 
         add_log(f"Command: {' '.join(cmd)}")
 
         # Run with Popen for real-time output
+        # Set PYTHONUNBUFFERED to ensure subprocess doesn't buffer
+        env = os.environ.copy()
+        env['PYTHONUNBUFFERED'] = '1'
+
         process = subprocess.Popen(
             cmd,
             stdout=subprocess.PIPE,
@@ -1624,13 +1628,18 @@ def _run_browser_fetch(task_id: str, csv_path: str, headless: bool, max_papers: 
             text=True,
             bufsize=1,  # Line buffered
             cwd=Path(__file__).parent.parent,
+            env=env,
         )
 
-        # Read output line by line
+        # Read output line by line using readline() for immediate reads
         try:
-            for line in process.stdout:
-                add_log(line)
-                logger.debug(f"[BrowserFetch {task_id}] {line.strip()}")
+            while True:
+                line = process.stdout.readline()
+                if not line and process.poll() is not None:
+                    break
+                if line:
+                    add_log(line)
+                    logger.info(f"[BrowserFetch {task_id}] {line.strip()}")
         except Exception as e:
             add_log(f"Error reading output: {e}")
 

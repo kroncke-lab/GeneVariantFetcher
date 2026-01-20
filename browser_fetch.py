@@ -47,11 +47,17 @@ except ImportError:
     SCRAPER_AVAILABLE = False
     SupplementScraper = None
 
-# Setup logging
+# Setup logging with immediate flush for real-time output
+class FlushingStreamHandler(logging.StreamHandler):
+    def emit(self, record):
+        super().emit(record)
+        self.flush()
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    datefmt='%H:%M:%S'
+    datefmt='%H:%M:%S',
+    handlers=[FlushingStreamHandler()]
 )
 logger = logging.getLogger(__name__)
 
@@ -324,7 +330,7 @@ class BrowserFetcher:
 
         return None
 
-    def _wait_for_cloudflare(self, page: Page, max_wait: int = 60) -> bool:
+    def _wait_for_cloudflare(self, page: Page, max_wait: int = 30) -> bool:
         """
         Detect and wait for Cloudflare challenge to be completed.
 
@@ -332,10 +338,17 @@ class BrowserFetcher:
         Returns False if still blocked after max_wait seconds.
         """
         start = time.time()
+        check_count = 0
         while time.time() - start < max_wait:
+            check_count += 1
             # Check for common Cloudflare indicators
-            page_content = page.content().lower()
-            title = page.title().lower() if page.title() else ""
+            try:
+                page_content = page.content().lower()
+                title = page.title().lower() if page.title() else ""
+            except Exception as e:
+                logger.info(f"  [Cloudflare] Error getting page content: {e}")
+                time.sleep(2)
+                continue
 
             cloudflare_indicators = [
                 'checking your browser' in page_content,
@@ -347,14 +360,16 @@ class BrowserFetcher:
 
             if any(cloudflare_indicators):
                 elapsed = int(time.time() - start)
-                logger.info(f"  [Cloudflare] Challenge detected, waiting... ({elapsed}s)")
-                time.sleep(3)
+                logger.info(f"  [Cloudflare] Challenge detected, waiting... ({elapsed}s/{max_wait}s)")
+                time.sleep(2)
                 continue
 
             # No Cloudflare detected or challenge passed
+            if check_count > 1:
+                logger.info(f"  [Cloudflare] Passed or not present")
             return True
 
-        logger.info(f"  [Cloudflare] Still blocked after {max_wait}s")
+        logger.info(f"  [Cloudflare] Still blocked after {max_wait}s, continuing anyway")
         return False
 
     def _browser_download_pdf(self, url: str, pmid: str) -> Optional[Path]:
@@ -395,7 +410,7 @@ class BrowserFetcher:
             logger.info("  [Browser] Timeout waiting for download, checking for Cloudflare...")
 
             # Check for Cloudflare challenge
-            if self._wait_for_cloudflare(self.page, max_wait=90):
+            if self._wait_for_cloudflare(self.page, max_wait=30):
                 logger.info("  [Browser] Cloudflare passed or not present, retrying download...")
                 # Try to get the PDF now that Cloudflare is cleared
                 try:
@@ -757,7 +772,7 @@ class BrowserFetcher:
                 logger.warning("  Page load timeout, continuing anyway...")
 
             # Check for Cloudflare and wait if needed
-            if not self._wait_for_cloudflare(self.page, max_wait=90):
+            if not self._wait_for_cloudflare(self.page, max_wait=30):
                 logger.warning("  Cloudflare challenge not passed, may have limited success")
 
             time.sleep(3)  # Wait for dynamic content
