@@ -739,6 +739,20 @@ class BrowserFetcher:
                 "challenge-running" in page_content,
                 "turnstile" in page_content,  # Cloudflare Turnstile widget
                 "challenge-form" in page_content,  # Additional indicator
+                # Additional CAPTCHA providers and patterns
+                "g-recaptcha" in page_content,  # Google reCAPTCHA
+                "recaptcha" in page_content and "challenge" in page_content,
+                "h-captcha" in page_content,  # hCaptcha
+                "hcaptcha" in page_content,
+                "verify you are human" in page_content,
+                "verify you're human" in page_content,
+                "human verification" in page_content,
+                "bot detection" in page_content,
+                "security check" in title,
+                "access denied" in title and "verify" in page_content,
+                "please verify" in page_content,
+                "complete the captcha" in page_content,
+                "solve the captcha" in page_content,
             ]
 
             # Check for actual content indicators (means we're past Cloudflare)
@@ -752,6 +766,31 @@ class BrowserFetcher:
 
             if any(cloudflare_indicators):
                 now = time.time()
+                # Log which type of challenge was detected
+                if "g-recaptcha" in page_content or (
+                    "recaptcha" in page_content and "challenge" in page_content
+                ):
+                    logger.info("  [Cloudflare] Detected: Google reCAPTCHA")
+                elif "h-captcha" in page_content or "hcaptcha" in page_content:
+                    logger.info("  [Cloudflare] Detected: hCaptcha")
+                elif "turnstile" in page_content:
+                    logger.info("  [Cloudflare] Detected: Cloudflare Turnstile")
+                elif (
+                    "cf-browser-verification" in page_content
+                    or "challenge-running" in page_content
+                ):
+                    logger.info("  [Cloudflare] Detected: Cloudflare challenge")
+                elif any(
+                    x in page_content
+                    for x in [
+                        "verify you are human",
+                        "verify you're human",
+                        "human verification",
+                    ]
+                ):
+                    logger.info("  [Cloudflare] Detected: Human verification challenge")
+                else:
+                    logger.info("  [Cloudflare] Detected: Generic security challenge")
                 # If we were previously clear and now see challenge again, we're in a loop
                 if clear_count > 0:
                     challenge_solve_count += 1
@@ -816,6 +855,16 @@ class BrowserFetcher:
                         "challenge-running" in recheck_content,
                         "turnstile" in recheck_content,
                         "challenge-form" in recheck_content,
+                        "g-recaptcha" in recheck_content,
+                        "recaptcha" in recheck_content
+                        and "challenge" in recheck_content,
+                        "h-captcha" in recheck_content,
+                        "hcaptcha" in recheck_content,
+                        "verify you are human" in recheck_content,
+                        "verify you're human" in recheck_content,
+                        "human verification" in recheck_content,
+                        "security check" in recheck_title,
+                        "please verify" in recheck_content,
                     ]
                     if any(recheck_indicators):
                         logger.warning(
@@ -858,6 +907,16 @@ class BrowserFetcher:
                             "challenge-running" in final_content,
                             "turnstile" in final_content,
                             "challenge-form" in final_content,
+                            "g-recaptcha" in final_content,
+                            "recaptcha" in final_content
+                            and "challenge" in final_content,
+                            "h-captcha" in final_content,
+                            "hcaptcha" in final_content,
+                            "verify you are human" in final_content,
+                            "verify you're human" in final_content,
+                            "human verification" in final_content,
+                            "security check" in final_title,
+                            "please verify" in final_content,
                         ]
                         if any(final_indicators):
                             logger.warning(
@@ -1256,8 +1315,47 @@ class BrowserFetcher:
 
             except PlaywrightTimeout:
                 logger.info(
-                    f"  [Button] Timeout after clicking '{selector}', checking files..."
+                    f"  [Button] Timeout after clicking '{selector}', checking for CAPTCHA..."
                 )
+
+                # Check if a CAPTCHA appeared after clicking
+                if self._wait_for_cloudflare(page, max_wait=60):
+                    logger.info(
+                        "  [Button] CAPTCHA solved or not present, retrying download..."
+                    )
+                    # After CAPTCHA, check if we're on a PDF page or can retry
+                    try:
+                        content_type = page.evaluate("() => document.contentType")
+                        if content_type == "application/pdf":
+                            result = self._save_embedded_pdf(page, pmid)
+                            if result:
+                                return result
+                    except Exception:
+                        pass
+
+                    # Try clicking the button again if we're back on the article page
+                    try:
+                        button = page.query_selector(selector)
+                        if button and button.is_visible():
+                            logger.info(
+                                f"  [Button] Re-clicking after CAPTCHA: {selector}"
+                            )
+                            with page.expect_download(timeout=30000) as download_info:
+                                button.click()
+                            download = download_info.value
+                            dest_path = (
+                                self.target_dir
+                                / f"{pmid}_{download.suggested_filename}"
+                            )
+                            download.save_as(str(dest_path))
+                            logger.info(
+                                f"  [Button] SUCCESS after CAPTCHA: {dest_path.name}"
+                            )
+                            return dest_path
+                    except Exception as e:
+                        logger.debug(f"  [Button] Retry after CAPTCHA failed: {e}")
+
+                # Check for new files
                 new_file = self._wait_for_new_file(before_files, timeout=5)
                 if new_file:
                     dest_path = self.target_dir / f"{pmid}_{new_file.name}"
