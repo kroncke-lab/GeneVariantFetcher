@@ -279,6 +279,199 @@ class BrowserFetcher:
         """Get set of existing files in downloads directory."""
         return {f.name for f in self.downloads_dir.iterdir() if f.is_file()}
 
+    def _handle_cookie_consent(self, page: Page) -> bool:
+        """
+        Detect and dismiss cookie consent dialogs.
+
+        Returns True if a dialog was found and dismissed.
+        """
+        # Common cookie consent button selectors
+        cookie_selectors = [
+            'button:has-text("Accept All Cookies")',
+            'button:has-text("Accept All")',
+            'button:has-text("Accept Cookies")',
+            'button:has-text("I Accept")',
+            'button:has-text("I Agree")',
+            'button:has-text("OK")',
+            'button:has-text("Got it")',
+            'button:has-text("Allow All")',
+            'button:has-text("Allow all cookies")',
+            "#onetrust-accept-btn-handler",  # OneTrust
+            ".cc-accept",  # Cookie Consent
+            ".cookie-accept",
+            '[data-testid="cookie-accept"]',
+            '[aria-label="Accept cookies"]',
+        ]
+
+        for selector in cookie_selectors:
+            try:
+                button = page.query_selector(selector)
+                if button and button.is_visible():
+                    logger.info(
+                        f"  [Cookies] Found consent dialog, clicking: {selector}"
+                    )
+                    button.click()
+                    time.sleep(1)  # Wait for dialog to close
+                    return True
+            except Exception:
+                continue
+
+        return False
+
+    def _scrape_article_html(self, page: Page, pmid: str) -> Optional[Path]:
+        """
+        Scrape article content from HTML when PDF is not available.
+
+        For older papers or sites without downloadable PDFs, extract the
+        article text from the HTML and save as markdown.
+
+        Returns path to saved markdown file, or None if extraction failed.
+        """
+        logger.info("  [HTMLScrape] Attempting to extract article content from HTML...")
+
+        try:
+            # Common selectors for article content
+            content_selectors = [
+                "article.article",
+                "article",
+                ".article-body",
+                ".article__body",
+                ".article-content",
+                ".fulltext",
+                ".full-text",
+                "#article-content",
+                "main.content",
+                ".hlFld-Fulltext",  # AHA journals
+            ]
+
+            article_html = None
+            for selector in content_selectors:
+                try:
+                    element = page.query_selector(selector)
+                    if element:
+                        article_html = element.inner_html()
+                        if len(article_html) > 1000:  # Meaningful content
+                            logger.info(
+                                f"  [HTMLScrape] Found content with selector: {selector}"
+                            )
+                            break
+                except Exception:
+                    continue
+
+            if not article_html or len(article_html) < 1000:
+                # Fallback: get the whole page
+                article_html = page.content()
+                logger.info("  [HTMLScrape] Using full page content")
+
+            # Extract title
+            title = ""
+            try:
+                title_el = page.query_selector(
+                    "h1.article-title, h1.citation__title, h1"
+                )
+                if title_el:
+                    title = title_el.text_content().strip()
+            except Exception:
+                pass
+
+            # Extract abstract
+            abstract = ""
+            abstract_selectors = [
+                ".abstractSection",
+                ".abstract",
+                "#abstract",
+                '[role="doc-abstract"]',
+            ]
+            for selector in abstract_selectors:
+                try:
+                    abs_el = page.query_selector(selector)
+                    if abs_el:
+                        abstract = abs_el.text_content().strip()
+                        break
+                except Exception:
+                    continue
+
+            # Convert HTML to simple text/markdown
+            # Remove script and style tags
+            import re
+
+            clean_html = re.sub(
+                r"<script[^>]*>.*?</script>",
+                "",
+                article_html,
+                flags=re.DOTALL | re.IGNORECASE,
+            )
+            clean_html = re.sub(
+                r"<style[^>]*>.*?</style>",
+                "",
+                clean_html,
+                flags=re.DOTALL | re.IGNORECASE,
+            )
+            clean_html = re.sub(
+                r"<nav[^>]*>.*?</nav>", "", clean_html, flags=re.DOTALL | re.IGNORECASE
+            )
+            clean_html = re.sub(
+                r"<header[^>]*>.*?</header>",
+                "",
+                clean_html,
+                flags=re.DOTALL | re.IGNORECASE,
+            )
+            clean_html = re.sub(
+                r"<footer[^>]*>.*?</footer>",
+                "",
+                clean_html,
+                flags=re.DOTALL | re.IGNORECASE,
+            )
+
+            # Convert common HTML to markdown-ish
+            clean_html = re.sub(r"<h1[^>]*>", "\n# ", clean_html)
+            clean_html = re.sub(r"</h1>", "\n", clean_html)
+            clean_html = re.sub(r"<h2[^>]*>", "\n## ", clean_html)
+            clean_html = re.sub(r"</h2>", "\n", clean_html)
+            clean_html = re.sub(r"<h3[^>]*>", "\n### ", clean_html)
+            clean_html = re.sub(r"</h3>", "\n", clean_html)
+            clean_html = re.sub(r"<p[^>]*>", "\n", clean_html)
+            clean_html = re.sub(r"</p>", "\n", clean_html)
+            clean_html = re.sub(r"<br\s*/?>", "\n", clean_html)
+            clean_html = re.sub(r"<li[^>]*>", "\n- ", clean_html)
+
+            # Remove remaining HTML tags
+            clean_text = re.sub(r"<[^>]+>", "", clean_html)
+
+            # Clean up whitespace
+            clean_text = re.sub(r"\n\s*\n\s*\n+", "\n\n", clean_text)
+            clean_text = re.sub(r"[ \t]+", " ", clean_text)
+            clean_text = clean_text.strip()
+
+            if len(clean_text) < 500:
+                logger.info(
+                    f"  [HTMLScrape] Content too short ({len(clean_text)} chars), skipping"
+                )
+                return None
+
+            # Build markdown content
+            markdown_content = f"# {title}\n\n" if title else ""
+            markdown_content += f"**Source URL:** {page.url}\n\n"
+            markdown_content += f"**PMID:** {pmid}\n\n"
+            if abstract:
+                markdown_content += f"## Abstract\n\n{abstract}\n\n"
+            markdown_content += "## Full Text\n\n"
+            markdown_content += clean_text
+
+            # Save to file
+            filename = f"PMID_{pmid}_FULL_CONTEXT.md"
+            dest_path = self.target_dir / filename
+            dest_path.write_text(markdown_content, encoding="utf-8")
+
+            logger.info(
+                f"  [HTMLScrape] SUCCESS: Saved {len(markdown_content)} chars to {filename}"
+            )
+            return dest_path
+
+        except Exception as e:
+            logger.error(f"  [HTMLScrape] ERROR: {e}")
+            return None
+
     def _wait_for_new_file(
         self, before_files: set, timeout: int = 60
     ) -> Optional[Path]:
@@ -1131,10 +1324,39 @@ class BrowserFetcher:
                 # Page might still be usable even if not fully loaded
                 logger.warning("  Page load timeout, continuing anyway...")
 
+            # EARLY HTML CAPTURE: Scrape article content BEFORE cookies/Cloudflare
+            # Some sites show content behind cookie dialogs that gets blocked later
+            early_html_result = None
+            try:
+                early_content = self.page.content()
+                if len(early_content) > 10000 and "abstract" in early_content.lower():
+                    logger.info(
+                        "  [EarlyCapture] Article content detected, saving as backup..."
+                    )
+                    early_html_result = self._scrape_article_html(self.page, pmid)
+            except Exception as e:
+                logger.debug(f"  [EarlyCapture] Failed: {e}")
+
+            # Handle cookie consent dialogs (common on publisher sites)
+            time.sleep(1)  # Brief wait for dialog to appear
+            self._handle_cookie_consent(self.page)
+
             # Check for Cloudflare and wait if needed
             # Reset the loop flag before checking
             self._cloudflare_loop_detected = False
             if not self._wait_for_cloudflare(self.page):
+                # Cloudflare blocked us - but check if we captured content early
+                if early_html_result:
+                    logger.info(
+                        ">>> Cloudflare blocked, but early HTML capture succeeded!"
+                    )
+                    return DownloadResult(
+                        pmid=pmid,
+                        success=True,
+                        files_downloaded=[str(early_html_result)],
+                        method="early_html_capture",
+                    )
+
                 # Check if we're stuck in an infinite loop
                 if (
                     self._cloudflare_loop_detected
@@ -1257,13 +1479,40 @@ class BrowserFetcher:
                                 method="claude_assisted",
                             )
 
-            # If we get here, automatic download failed
-            logger.info(">>> FAILED: Could not find download link automatically")
+            # If we get here, PDF download failed - try HTML scraping as fallback
+            logger.info(">>> STEP 7: PDF not found, trying HTML scrape fallback...")
+
+            # Navigate back to article page if we're on reader page
+            current = self.page.url
+            if "/reader/" in current or "/epub/" in current:
+                # Go back to main article page
+                article_url = current.replace("/reader/", "/").replace("/epub/", "/")
+                logger.info(
+                    f"  [HTMLScrape] Navigating to article page: {article_url[:60]}..."
+                )
+                try:
+                    self.page.goto(article_url, wait_until="load", timeout=30000)
+                    time.sleep(2)
+                    self._handle_cookie_consent(self.page)
+                except Exception as e:
+                    logger.info(f"  [HTMLScrape] Navigation failed: {e}")
+
+            html_result = self._scrape_article_html(self.page, pmid)
+            if html_result:
+                return DownloadResult(
+                    pmid=pmid,
+                    success=True,
+                    files_downloaded=[str(html_result)],
+                    method="html_scrape",
+                )
+
+            # If we get here, everything failed
+            logger.info(">>> FAILED: Could not download PDF or scrape HTML")
             return DownloadResult(
                 pmid=pmid,
                 success=False,
                 files_downloaded=[],
-                error="Could not find download link automatically",
+                error="Could not find download link or scrape article content",
                 method="needs_manual",
             )
 
