@@ -168,9 +168,17 @@ def run_gui_mode(args):
     print("Press Ctrl+C to stop the server")
     print(f"{'='*60}\n")
 
-    # Open browser
+    # Open browser after a short delay to allow server to start
     if not args.no_browser:
-        webbrowser.open(url)
+        import threading
+
+        def open_browser_delayed():
+            import time
+
+            time.sleep(1.0)  # Wait for server to start
+            webbrowser.open(url)
+
+        threading.Thread(target=open_browser_delayed, daemon=True).start()
 
     # Run server
     uvicorn.run(
