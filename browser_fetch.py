@@ -234,6 +234,7 @@ class BrowserFetcher:
         use_claude: bool = False,
         timeout: int = 60000,
         captcha_wait_time: int = 30,
+        fallback_to_manual: bool = True,
     ):
         self.downloads_dir = Path(downloads_dir)
         self.target_dir = Path(target_dir)
@@ -241,6 +242,8 @@ class BrowserFetcher:
         self.timeout = timeout
         self.use_claude = use_claude
         self.captcha_wait_time = captcha_wait_time
+        self.fallback_to_manual = fallback_to_manual
+        self._cloudflare_loop_detected = False  # Flag for loop detection
 
         self.analyzer = PageAnalyzer() if use_claude else None
         self.browser: Optional[Browser] = None
@@ -304,6 +307,156 @@ class BrowserFetcher:
 
         return None
 
+    def _manual_download_fallback(
+        self, pmid: str, timeout: int = 300
+    ) -> Optional[DownloadResult]:
+        """
+        Fallback to manual download when Cloudflare blocks automation.
+
+        Waits for user to manually download files in the browser window,
+        monitors the downloads folder, and organizes the files.
+
+        Args:
+            pmid: PubMed ID for file naming
+            timeout: Maximum time to wait for manual download (default 5 minutes)
+
+        Returns:
+            DownloadResult if files were downloaded, None if timed out/skipped
+        """
+        if self.headless:
+            logger.warning(
+                "  [ManualFallback] Cannot use manual fallback in headless mode"
+            )
+            return None
+
+        logger.info("")
+        logger.info("=" * 60)
+        logger.info("  MANUAL DOWNLOAD REQUIRED")
+        logger.info("=" * 60)
+        logger.info(f"  PMID: {pmid}")
+        logger.info(f"  The browser window is open - please download the PDF manually:")
+        logger.info(f"    1. Navigate to the PDF download link")
+        logger.info(f"    2. Click download (files go to your Downloads folder)")
+        logger.info(f"    3. Files will be auto-detected and organized")
+        logger.info(f"  Waiting up to {timeout}s for downloads...")
+        logger.info("=" * 60)
+
+        # Take snapshot of current files
+        before_files = self._get_existing_files()
+        start = time.time()
+        last_check_count = 0
+        downloaded_files = []
+
+        while time.time() - start < timeout:
+            elapsed = int(time.time() - start)
+
+            # Check for new files
+            current_files = {
+                f.name for f in self.downloads_dir.iterdir() if f.is_file()
+            }
+            new_files = current_files - before_files
+
+            # Filter out partial downloads
+            complete_files = [
+                f
+                for f in new_files
+                if not f.endswith((".crdownload", ".part", ".tmp", ".download"))
+                and not f.startswith(".")
+            ]
+
+            if len(complete_files) > last_check_count:
+                # New file detected
+                for filename in complete_files:
+                    if filename not in [Path(f).name for f in downloaded_files]:
+                        src = self.downloads_dir / filename
+                        ext = src.suffix.lower()
+
+                        # Determine new filename
+                        if ext == ".pdf" and not any(
+                            "Main_Text" in f for f in downloaded_files
+                        ):
+                            new_name = f"{pmid}_Main_Text.pdf"
+                        elif ext == ".pdf":
+                            idx = len([f for f in downloaded_files if ".pdf" in f])
+                            new_name = f"{pmid}_Supplement_{idx}.pdf"
+                        elif ext in (".xlsx", ".xls", ".csv"):
+                            idx = len(
+                                [
+                                    f
+                                    for f in downloaded_files
+                                    if any(e in f for e in [".xlsx", ".xls", ".csv"])
+                                ]
+                            )
+                            new_name = f"{pmid}_Supp_Data_{idx}{ext}"
+                        else:
+                            idx = len(downloaded_files)
+                            new_name = f"{pmid}_file_{idx}{ext}"
+
+                        dest = self.target_dir / new_name
+                        try:
+                            src.rename(dest)
+                            logger.info(
+                                f"  [ManualFallback] Downloaded: {filename} -> {new_name}"
+                            )
+                            downloaded_files.append(str(dest))
+                        except Exception as e:
+                            logger.error(
+                                f"  [ManualFallback] Failed to move {filename}: {e}"
+                            )
+
+                last_check_count = len(complete_files)
+
+            # Progress indicator every 30 seconds
+            if elapsed > 0 and elapsed % 30 == 0:
+                if downloaded_files:
+                    logger.info(
+                        f"  [ManualFallback] {elapsed}s elapsed, {len(downloaded_files)} file(s) downloaded"
+                    )
+                else:
+                    logger.info(
+                        f"  [ManualFallback] {elapsed}s/{timeout}s - waiting for downloads..."
+                    )
+
+            # If we have files and no new files for 10 seconds, consider done
+            if downloaded_files and elapsed > 10:
+                # Check if files are still being added
+                time.sleep(5)
+                current_files2 = {
+                    f.name for f in self.downloads_dir.iterdir() if f.is_file()
+                }
+                new_files2 = current_files2 - before_files
+                complete_files2 = [
+                    f
+                    for f in new_files2
+                    if not f.endswith((".crdownload", ".part", ".tmp", ".download"))
+                    and not f.startswith(".")
+                ]
+                if len(complete_files2) == len(complete_files):
+                    # No new files in 5 seconds, assume done
+                    logger.info(
+                        f"  [ManualFallback] Download complete! {len(downloaded_files)} file(s)"
+                    )
+                    break
+
+            time.sleep(1)
+
+        if downloaded_files:
+            return DownloadResult(
+                pmid=pmid,
+                success=True,
+                files_downloaded=downloaded_files,
+                method="manual_fallback",
+            )
+        else:
+            logger.warning(f"  [ManualFallback] No files downloaded after {timeout}s")
+            return DownloadResult(
+                pmid=pmid,
+                success=False,
+                files_downloaded=[],
+                error="Manual download timed out - no files detected",
+                method="manual_fallback_timeout",
+            )
+
     def _save_embedded_pdf(self, page: Page, pmid: str) -> Optional[Path]:
         """
         Save a PDF that is rendered inline in the browser.
@@ -359,7 +512,7 @@ class BrowserFetcher:
         Detect and wait for Cloudflare challenge to be completed.
 
         Returns True if page is ready (no Cloudflare or challenge passed).
-        Returns False if still blocked after max_wait seconds.
+        Returns False if still blocked after max_wait seconds or in infinite loop.
         """
         if max_wait is None:
             max_wait = self.captcha_wait_time
@@ -369,6 +522,8 @@ class BrowserFetcher:
         initial_url = page.url
         cloudflare_detected = False
         challenge_solve_count = 0  # Track how many times we've "solved" a challenge
+        last_challenge_time = None  # Track when we last saw a challenge
+        urls_seen = set()  # Track URL changes to detect redirect loops
 
         while time.time() - start < max_wait:
             check_count += 1
@@ -377,6 +532,7 @@ class BrowserFetcher:
                 page_content = page.content().lower()
                 title = page.title().lower() if page.title() else ""
                 current_url = page.url
+                urls_seen.add(current_url)
             except Exception as e:
                 logger.info(f"  [Cloudflare] Error getting page content: {e}")
                 clear_count = 0  # Reset stability counter on error
@@ -389,6 +545,7 @@ class BrowserFetcher:
                 "cf-browser-verification" in page_content,
                 "challenge-running" in page_content,
                 "turnstile" in page_content,  # Cloudflare Turnstile widget
+                "challenge-form" in page_content,  # Additional indicator
             ]
 
             # Check for actual content indicators (means we're past Cloudflare)
@@ -400,30 +557,46 @@ class BrowserFetcher:
                 "full text" in page_content,
             ]
 
-            # URL change after Cloudflare detection often means success
-            url_changed = current_url != initial_url and cloudflare_detected
-
             if any(cloudflare_indicators):
+                now = time.time()
                 # If we were previously clear and now see challenge again, we're in a loop
                 if clear_count > 0:
                     challenge_solve_count += 1
-                    if challenge_solve_count >= 3:
-                        elapsed = int(time.time() - start)
+                    # Detect loop after just 2 cycles (reduced from 3)
+                    if challenge_solve_count >= 2:
+                        elapsed = int(now - start)
                         logger.warning(
-                            f"  [Cloudflare] Infinite challenge loop detected "
-                            f"({challenge_solve_count} cycles, {elapsed}s elapsed). "
-                            f"Site may require manual intervention."
+                            f"  [Cloudflare] INFINITE LOOP DETECTED! "
+                            f"({challenge_solve_count} cycles, {elapsed}s elapsed)"
                         )
+                        logger.warning(
+                            f"  [Cloudflare] The site keeps re-challenging after CAPTCHA solve."
+                        )
+                        logger.warning(f"  [Cloudflare] This usually means:")
+                        logger.warning(
+                            f"  [Cloudflare]   1. The site blocks automated browsers"
+                        )
+                        logger.warning(
+                            f"  [Cloudflare]   2. Session cookies aren't persisting"
+                        )
+                        logger.warning(
+                            f"  [Cloudflare]   3. Will attempt manual download fallback..."
+                        )
+                        self._cloudflare_loop_detected = True
                         return False
+                    logger.warning(
+                        f"  [Cloudflare] Challenge REAPPEARED after solving! (cycle {challenge_solve_count}/2)"
+                    )
                     logger.info(
-                        f"  [Cloudflare] New challenge after clear (cycle {challenge_solve_count})"
+                        f"  [Cloudflare] If this keeps happening, the site may block automation"
                     )
 
                 cloudflare_detected = True
                 clear_count = 0  # Reset stability counter
-                elapsed = int(time.time() - start)
+                last_challenge_time = now
+                elapsed = int(now - start)
                 logger.info(
-                    f"  [Cloudflare] Challenge detected, waiting... ({elapsed}s/{max_wait}s)"
+                    f"  [Cloudflare] Challenge detected, waiting for solve... ({elapsed}s/{max_wait}s)"
                 )
                 time.sleep(2)
                 continue
@@ -433,9 +606,11 @@ class BrowserFetcher:
 
             # If we detected Cloudflare earlier and now see content, we passed
             if cloudflare_detected and any(content_indicators):
-                # Wait a bit longer and re-verify to catch reload loops
-                logger.info(f"  [Cloudflare] Content detected, verifying stability...")
-                time.sleep(3)
+                # Wait longer (5s instead of 3s) to catch reload loops
+                logger.info(
+                    f"  [Cloudflare] Content detected, verifying stability (5s)..."
+                )
+                time.sleep(5)
 
                 # Re-check for Cloudflare after the delay
                 try:
@@ -447,24 +622,39 @@ class BrowserFetcher:
                         "cf-browser-verification" in recheck_content,
                         "challenge-running" in recheck_content,
                         "turnstile" in recheck_content,
+                        "challenge-form" in recheck_content,
                     ]
                     if any(recheck_indicators):
-                        logger.info(f"  [Cloudflare] Challenge reappeared after reload")
+                        logger.warning(
+                            f"  [Cloudflare] Challenge reappeared after reload!"
+                        )
                         clear_count = 0
+                        # This counts as a new challenge cycle
+                        challenge_solve_count += 1
+                        if challenge_solve_count >= 2:
+                            logger.warning(
+                                f"  [Cloudflare] INFINITE LOOP - will try manual download."
+                            )
+                            self._cloudflare_loop_detected = True
+                            return False
                         continue
                 except Exception:
                     pass
 
-                logger.info(f"  [Cloudflare] Challenge passed! Content loaded.")
+                logger.info(
+                    f"  [Cloudflare] Challenge passed! Content loaded successfully."
+                )
                 return True
 
             # Require multiple consecutive clear checks for stability
             # This prevents false positives during page transitions
-            if clear_count >= 5:  # Increased from 3 to 5 for more stability
+            if clear_count >= 5:
                 if cloudflare_detected:
                     # Extra verification: wait and re-check one more time
-                    logger.info(f"  [Cloudflare] Appears clear, final verification...")
-                    time.sleep(3)
+                    logger.info(
+                        f"  [Cloudflare] Appears clear, final verification (5s)..."
+                    )
+                    time.sleep(5)
                     try:
                         final_content = page.content().lower()
                         final_title = page.title().lower() if page.title() else ""
@@ -474,25 +664,34 @@ class BrowserFetcher:
                             "cf-browser-verification" in final_content,
                             "challenge-running" in final_content,
                             "turnstile" in final_content,
+                            "challenge-form" in final_content,
                         ]
                         if any(final_indicators):
-                            logger.info(
-                                f"  [Cloudflare] Challenge reappeared on final check"
+                            logger.warning(
+                                f"  [Cloudflare] Challenge reappeared on final check!"
                             )
                             clear_count = 0
+                            challenge_solve_count += 1
+                            if challenge_solve_count >= 2:
+                                logger.warning(
+                                    f"  [Cloudflare] INFINITE LOOP - will try manual download."
+                                )
+                                self._cloudflare_loop_detected = True
+                                return False
                             continue
                     except Exception:
                         pass
 
                 if check_count > 1:
                     logger.info(f"  [Cloudflare] Passed or not present")
+                self._cloudflare_loop_detected = False
                 return True
 
             # Still checking for stability
             time.sleep(1)
 
-        logger.info(
-            f"  [Cloudflare] Still blocked after {max_wait}s, continuing anyway"
+        logger.warning(
+            f"  [Cloudflare] Timed out after {max_wait}s waiting for challenge"
         )
         return False
 
@@ -933,10 +1132,42 @@ class BrowserFetcher:
                 logger.warning("  Page load timeout, continuing anyway...")
 
             # Check for Cloudflare and wait if needed
+            # Reset the loop flag before checking
+            self._cloudflare_loop_detected = False
             if not self._wait_for_cloudflare(self.page):
-                logger.warning(
-                    "  Cloudflare challenge not passed, may have limited success"
-                )
+                # Check if we're stuck in an infinite loop
+                if (
+                    self._cloudflare_loop_detected
+                    and self.fallback_to_manual
+                    and not self.headless
+                ):
+                    # Try manual download fallback
+                    logger.info(
+                        ">>> Cloudflare loop detected - switching to manual download mode"
+                    )
+                    result = self._manual_download_fallback(pmid)
+                    if result:
+                        return result
+                    # If manual fallback failed/timed out, return failure
+                    return DownloadResult(
+                        pmid=pmid,
+                        success=False,
+                        files_downloaded=[],
+                        error="Manual download fallback timed out",
+                        method="manual_fallback_timeout",
+                    )
+                else:
+                    # No fallback available - abort
+                    logger.warning(
+                        "  Cloudflare challenge not passed - aborting this paper"
+                    )
+                    return DownloadResult(
+                        pmid=pmid,
+                        success=False,
+                        files_downloaded=[],
+                        error="Cloudflare blocks automation. Use non-headless mode with --fallback-manual for manual download.",
+                        method="cloudflare_blocked",
+                    )
 
             time.sleep(3)  # Wait for dynamic content
 
@@ -1185,6 +1416,7 @@ def run_browser_fetch(
     interactive: bool = False,
     wait_for_captcha: bool = False,
     retry_failures_only: bool = False,
+    fallback_to_manual: bool = True,
 ):
     """
     Run browser-based fetching for papers in a CSV file.
@@ -1202,6 +1434,7 @@ def run_browser_fetch(
         interactive: Interactive mode - navigate and wait for manual download
         wait_for_captcha: Wait up to 5 minutes for manual CAPTCHA completion
         retry_failures_only: Only process papers with browser_failed status
+        fallback_to_manual: Auto-switch to manual download when Cloudflare loops (default True)
     """
     if not PLAYWRIGHT_AVAILABLE:
         logger.error(
@@ -1282,6 +1515,7 @@ def run_browser_fetch(
         headless=headless,
         use_claude=use_claude,
         captcha_wait_time=captcha_wait_time,
+        fallback_to_manual=fallback_to_manual,
     ) as fetcher:
         for idx, (row_idx, row) in enumerate(papers_to_process.iterrows(), 1):
             pmid = str(row[pmid_column]).strip()
@@ -1425,6 +1659,11 @@ Examples:
     )
     parser.add_argument("--max", type=int, help="Maximum papers to process")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose logging")
+    parser.add_argument(
+        "--no-fallback-manual",
+        action="store_true",
+        help="Disable automatic fallback to manual download when Cloudflare loops (default: enabled)",
+    )
 
     args = parser.parse_args()
 
@@ -1452,6 +1691,7 @@ Examples:
         interactive=args.interactive,
         wait_for_captcha=args.wait_for_captcha,
         retry_failures_only=args.retry_failures,
+        fallback_to_manual=not args.no_fallback_manual,
     )
 
 

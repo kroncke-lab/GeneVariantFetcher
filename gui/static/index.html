@@ -2654,6 +2654,15 @@
                                 Wait for manual CAPTCHA (5 min timeout, uncheck headless to see browser)
                             </label>
                         </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="bf-fallback-manual" checked>
+                                Auto-fallback to manual download when Cloudflare loops detected
+                            </label>
+                            <div style="font-size: 0.75rem; color: var(--gray-600); margin-left: 1.5rem;">
+                                When sites keep re-challenging after CAPTCHA, switches to manual mode - download files in the browser and they'll be auto-organized
+                            </div>
+                        </div>
                         <div id="bf-status" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--gray-100); border-radius: 0.5rem; flex: 1; display: flex; flex-direction: column; overflow: hidden;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                                 <div id="bf-status-text" style="font-weight: 600;">Starting...</div>
@@ -2691,6 +2700,7 @@
             const useClaude = document.getElementById('bf-use-claude').checked;
             const retryFailures = document.getElementById('bf-retry-failures').checked;
             const waitForCaptcha = document.getElementById('bf-wait-captcha').checked;
+            const fallbackManual = document.getElementById('bf-fallback-manual').checked;
             const statusDiv = document.getElementById('bf-status');
             const statusText = document.getElementById('bf-status-text');
             const progressCount = document.getElementById('bf-progress-count');
@@ -2738,7 +2748,8 @@
                         headless: headless,
                         use_claude: useClaude,
                         retry_failures_only: retryFailures,
-                        wait_for_captcha: waitForCaptcha
+                        wait_for_captcha: waitForCaptcha,
+                        fallback_to_manual: fallbackManual
                     })
                 });
 

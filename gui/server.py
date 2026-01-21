@@ -310,6 +310,10 @@ class BrowserFetchRequest(BaseModel):
         True,
         description="Automatically convert to markdown and run scout after download",
     )
+    fallback_to_manual: bool = Field(
+        True,
+        description="Auto-switch to manual download mode when Cloudflare loops detected",
+    )
 
 
 class BrowserFetchStatus(BaseModel):
@@ -1764,6 +1768,7 @@ def _run_browser_fetch(
     retry_failures_only: bool = False,
     gene_symbol: Optional[str] = None,
     auto_process: bool = True,
+    fallback_to_manual: bool = True,
 ):
     """Run browser fetch in a background thread with real-time log streaming."""
     import subprocess
@@ -1838,6 +1843,8 @@ def _run_browser_fetch(
             cmd.append("--wait-for-captcha")
         if retry_failures_only:
             cmd.append("--retry-failures")
+        if not fallback_to_manual:
+            cmd.append("--no-fallback-manual")
 
         add_log(f"Command: {' '.join(cmd)}")
 
@@ -1995,6 +2002,7 @@ async def start_browser_fetch(
                 request.retry_failures_only,
                 request.gene_symbol,
                 request.auto_process,
+                request.fallback_to_manual,
             ),
             daemon=True,
         ).start()
