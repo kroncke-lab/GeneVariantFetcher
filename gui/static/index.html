@@ -2492,9 +2492,6 @@
                     ` : ''}
                 `;
 
-                // Check for paywalled_missing.csv even if pipeline_breakdown doesn't show it
-                checkForPaywalledCsv(path, analysis.gene_symbol);
-
                 // Enable submit button if valid
                 submitBtn.disabled = !analysis.is_valid;
 
@@ -2611,42 +2608,6 @@
         // =====================================================================
         // Browser Fetch for Paywalled Papers
         // =====================================================================
-
-        async function checkForPaywalledCsv(folderPath, geneSymbol) {
-            // Check if paywalled_missing.csv exists and add button if it does
-            const csvPath = folderPath + '/pmc_fulltext/paywalled_missing.csv';
-            const parentCsvPath = folderPath + '/paywalled_missing.csv';
-
-            try {
-                // Try to check if the CSV exists by attempting to analyze the folder
-                const response = await fetch(`/api/browse?path=${encodeURIComponent(folderPath + '/pmc_fulltext')}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    const hasPaywalledCsv = data.entries && data.entries.some(e => e.name === 'paywalled_missing.csv');
-
-                    if (hasPaywalledCsv) {
-                        // Count lines in CSV to get number of paywalled papers
-                        const existingDiv = document.getElementById('paywalled-fetch-section');
-                        if (!existingDiv) {
-                            const contentDiv = document.getElementById('folder-analysis-content');
-                            const fetchDiv = document.createElement('div');
-                            fetchDiv.id = 'paywalled-fetch-section';
-                            fetchDiv.style.cssText = 'margin-top: 1rem; padding: 1rem; background: #fff3cd; border-radius: 0.5rem; border: 1px solid #ffc107;';
-                            fetchDiv.innerHTML = `
-                                <strong>Paywalled papers found</strong> - Some papers could not be downloaded automatically.
-                                <button type="button" class="btn" style="margin-left: 1rem; background: #ffc107; color: #000;" onclick="showBrowserFetchModal('${folderPath}', '${geneSymbol || ''}', 0)">
-                                    Fetch with Browser
-                                </button>
-                            `;
-                            contentDiv.appendChild(fetchDiv);
-                        }
-                    }
-                }
-            } catch (e) {
-                // Ignore errors - just means we can't check for the CSV
-                console.debug('Could not check for paywalled CSV:', e);
-            }
-        }
 
         let browserFetchTaskId = null;
         let browserFetchPollInterval = null;
