@@ -20,6 +20,22 @@ python main.py
 python main.py --cli GENE --email EMAIL --output OUTPUT_DIR
 ```
 
+## Virtual Environment
+
+**Always use the project's virtual environment** when running Python scripts or tests:
+
+```bash
+# Activate venv (preferred)
+source venv/bin/activate
+python main.py
+
+# Or use venv Python directly
+./venv/bin/python main.py
+./venv/bin/python -m pytest tests/
+```
+
+The venv contains all required dependencies including `markitdown`, `PyMuPDF`, `pdfplumber`, etc.
+
 ## Entry Points
 
 | Entry | Mode | Features |
