@@ -79,3 +79,4 @@ dmypy.json
 *.tmp
 *.bak
 .cache/
+test_harvest/
