@@ -368,6 +368,7 @@ class BrowserFetcher:
         clear_count = 0  # Track consecutive clear checks for stability
         initial_url = page.url
         cloudflare_detected = False
+        challenge_solve_count = 0  # Track how many times we've "solved" a challenge
 
         while time.time() - start < max_wait:
             check_count += 1
@@ -387,6 +388,7 @@ class BrowserFetcher:
                 "just a moment" in title,
                 "cf-browser-verification" in page_content,
                 "challenge-running" in page_content,
+                "turnstile" in page_content,  # Cloudflare Turnstile widget
             ]
 
             # Check for actual content indicators (means we're past Cloudflare)
@@ -402,6 +404,21 @@ class BrowserFetcher:
             url_changed = current_url != initial_url and cloudflare_detected
 
             if any(cloudflare_indicators):
+                # If we were previously clear and now see challenge again, we're in a loop
+                if clear_count > 0:
+                    challenge_solve_count += 1
+                    if challenge_solve_count >= 3:
+                        elapsed = int(time.time() - start)
+                        logger.warning(
+                            f"  [Cloudflare] Infinite challenge loop detected "
+                            f"({challenge_solve_count} cycles, {elapsed}s elapsed). "
+                            f"Site may require manual intervention."
+                        )
+                        return False
+                    logger.info(
+                        f"  [Cloudflare] New challenge after clear (cycle {challenge_solve_count})"
+                    )
+
                 cloudflare_detected = True
                 clear_count = 0  # Reset stability counter
                 elapsed = int(time.time() - start)
@@ -414,14 +431,59 @@ class BrowserFetcher:
             # No Cloudflare indicators detected
             clear_count += 1
 
-            # If we detected Cloudflare earlier and now see content or URL changed, we passed
-            if cloudflare_detected and (any(content_indicators) or url_changed):
+            # If we detected Cloudflare earlier and now see content, we passed
+            if cloudflare_detected and any(content_indicators):
+                # Wait a bit longer and re-verify to catch reload loops
+                logger.info(f"  [Cloudflare] Content detected, verifying stability...")
+                time.sleep(3)
+
+                # Re-check for Cloudflare after the delay
+                try:
+                    recheck_content = page.content().lower()
+                    recheck_title = page.title().lower() if page.title() else ""
+                    recheck_indicators = [
+                        "checking your browser" in recheck_content,
+                        "just a moment" in recheck_title,
+                        "cf-browser-verification" in recheck_content,
+                        "challenge-running" in recheck_content,
+                        "turnstile" in recheck_content,
+                    ]
+                    if any(recheck_indicators):
+                        logger.info(f"  [Cloudflare] Challenge reappeared after reload")
+                        clear_count = 0
+                        continue
+                except Exception:
+                    pass
+
                 logger.info(f"  [Cloudflare] Challenge passed! Content loaded.")
                 return True
 
             # Require multiple consecutive clear checks for stability
             # This prevents false positives during page transitions
-            if clear_count >= 3:
+            if clear_count >= 5:  # Increased from 3 to 5 for more stability
+                if cloudflare_detected:
+                    # Extra verification: wait and re-check one more time
+                    logger.info(f"  [Cloudflare] Appears clear, final verification...")
+                    time.sleep(3)
+                    try:
+                        final_content = page.content().lower()
+                        final_title = page.title().lower() if page.title() else ""
+                        final_indicators = [
+                            "checking your browser" in final_content,
+                            "just a moment" in final_title,
+                            "cf-browser-verification" in final_content,
+                            "challenge-running" in final_content,
+                            "turnstile" in final_content,
+                        ]
+                        if any(final_indicators):
+                            logger.info(
+                                f"  [Cloudflare] Challenge reappeared on final check"
+                            )
+                            clear_count = 0
+                            continue
+                    except Exception:
+                        pass
+
                 if check_count > 1:
                     logger.info(f"  [Cloudflare] Passed or not present")
                 return True
