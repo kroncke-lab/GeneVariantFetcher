@@ -2483,7 +2483,7 @@
                         </ul>
                     ` : ''}
                     ${analysis.pipeline_breakdown && analysis.pipeline_breakdown.paywalled_count > 0 ? `
-                        <div style="margin-top: 1rem; padding: 1rem; background: var(--warning-light, #fff3cd); border-radius: 0.5rem; border: 1px solid var(--warning, #ffc107);">
+                        <div id="paywalled-fetch-section" style="margin-top: 1rem; padding: 1rem; background: var(--warning-light, #fff3cd); border-radius: 0.5rem; border: 1px solid var(--warning, #ffc107);">
                             <strong>${analysis.pipeline_breakdown.paywalled_count} paywalled papers</strong> could not be downloaded automatically.
                             <button type="button" class="btn btn-warning" style="margin-left: 1rem;" onclick="showBrowserFetchModal('${path}', '${analysis.gene_symbol || ''}', ${analysis.pipeline_breakdown.paywalled_count})">
                                 Fetch with Browser
