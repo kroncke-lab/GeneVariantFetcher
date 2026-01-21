@@ -136,7 +136,7 @@ Be reasonably selective - the goal is to expand searches with useful terms while
             import re
 
             # Look for JSON object in response
-            json_match = re.search(r'\{[^}]+\}', response_text, re.DOTALL)
+            json_match = re.search(r"\{[^}]+\}", response_text, re.DOTALL)
             if json_match:
                 result = json.loads(json_match.group())
                 return SynonymRelevance(
@@ -146,7 +146,9 @@ Be reasonably selective - the goal is to expand searches with useful terms while
                     reasoning=result.get("reasoning", ""),
                 )
             else:
-                logger.warning(f"Could not parse LLM response for synonym '{synonym}': {response_text}")
+                logger.warning(
+                    f"Could not parse LLM response for synonym '{synonym}': {response_text}"
+                )
                 return SynonymRelevance(
                     synonym=synonym,
                     is_relevant=True,

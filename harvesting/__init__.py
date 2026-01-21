@@ -17,5 +17,5 @@ Internal modules:
 
 from .orchestrator import PMCHarvester
 
-__all__ = ['PMCHarvester']
-__version__ = '2.0.0'
+__all__ = ["PMCHarvester"]
+__version__ = "2.0.0"

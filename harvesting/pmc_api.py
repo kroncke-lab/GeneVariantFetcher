@@ -75,7 +75,9 @@ class PMCAPIClient:
         """
         try:
             self._rate_limit()
-            handle = Entrez.elink(dbfrom="pubmed", db="pmc", id=pmid, linkname="pubmed_pmc")
+            handle = Entrez.elink(
+                dbfrom="pubmed", db="pmc", id=pmid, linkname="pubmed_pmc"
+            )
             record = Entrez.read(handle)
             handle.close()
 
@@ -107,19 +109,19 @@ class PMCAPIClient:
             records = Entrez.read(handle)
             handle.close()
 
-            pubmed_article = records['PubmedArticle'][0]
-            article = pubmed_article['MedlineCitation']['Article']
+            pubmed_article = records["PubmedArticle"][0]
+            article = pubmed_article["MedlineCitation"]["Article"]
 
             # Check ELocationID in Article (newer records)
-            for item in article.get('ELocationID', []):
-                if item.attributes.get('EIdType') == 'doi':
+            for item in article.get("ELocationID", []):
+                if item.attributes.get("EIdType") == "doi":
                     return str(item)
 
             # Fallback: Check ArticleIdList in PubmedData (older records)
             # Note: ArticleIdList is in PubmedData, not Article
-            pubmed_data = pubmed_article.get('PubmedData', {})
-            for identifier in pubmed_data.get('ArticleIdList', []):
-                if identifier.attributes.get('IdType') == 'doi':
+            pubmed_data = pubmed_article.get("PubmedData", {})
+            for identifier in pubmed_data.get("ArticleIdList", []):
+                if identifier.attributes.get("IdType") == "doi":
                     return str(identifier)
 
             return None
@@ -131,10 +133,12 @@ class PMCAPIClient:
     def _fetch_xml_from_ncbi(self, numeric_pmcid: str) -> str:
         """Helper to fetch XML from NCBI with retries."""
         self._rate_limit()
-        handle = Entrez.efetch(db="pmc", id=numeric_pmcid, rettype="full", retmode="xml")
+        handle = Entrez.efetch(
+            db="pmc", id=numeric_pmcid, rettype="full", retmode="xml"
+        )
         xml_content = handle.read()
         handle.close()
-        return xml_content.decode('utf-8')
+        return xml_content.decode("utf-8")
 
     def get_fulltext_xml(self, pmcid: str) -> Optional[str]:
         """
@@ -157,7 +161,9 @@ class PMCAPIClient:
             xml_string = self._fetch_xml_from_ncbi(numeric_pmcid)
 
             if not xml_string or "<error>" in xml_string.lower():
-                 print(f"  NCBI E-utilities returned empty or error for {pmcid}, trying Europe PMC...")
+                print(
+                    f"  NCBI E-utilities returned empty or error for {pmcid}, trying Europe PMC..."
+                )
             else:
                 return xml_string
         except Exception as e:
@@ -167,14 +173,20 @@ class PMCAPIClient:
 
         # Fallback to Europe PMC full-text API
         try:
-            europe_pmc_url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML"
+            europe_pmc_url = (
+                f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML"
+            )
             response = self.session.get(europe_pmc_url, timeout=30)
             response.raise_for_status()
 
             xml_string = response.text
 
             # Check for valid XML response
-            if xml_string and "<article" in xml_string.lower() and not "<error>" in xml_string.lower():
+            if (
+                xml_string
+                and "<article" in xml_string.lower()
+                and not "<error>" in xml_string.lower()
+            ):
                 print(f"  ✓ Retrieved full-text from Europe PMC")
                 return xml_string
             else:
@@ -204,52 +216,52 @@ class PMCAPIClient:
         """
         # Domains to skip - these are typically databases, tools, or other non-article resources
         IRRELEVANT_DOMAINS = [
-            'antibodies.cancer.gov',  # Antibody database
-            'www.antibodies-online.com',  # Antibody catalog
-            'www.uniprot.org',  # Protein database
-            'www.ncbi.nlm.nih.gov/protein',  # NCBI Protein database
-            'www.ncbi.nlm.nih.gov/gene',  # NCBI Gene database
-            'www.ncbi.nlm.nih.gov/nuccore',  # NCBI Nucleotide database
-            'www.ncbi.nlm.nih.gov/clinvar',  # ClinVar database
-            'www.omim.org',  # OMIM database
-            'www.genecards.org',  # GeneCards database
-            'www.proteinatlas.org',  # Human Protein Atlas
-            'biocyc.org',  # BioCyc metabolic pathway database
-            'glygen.org',  # GlyGen landing pages (not full text)
-            'malacards.org',  # MalaCards disease database (not article full text)
-            'www.malacards.org',  # MalaCards disease database
-            'www.disgenet.org',  # DisGeNET disease-gene associations
-            'www.orphanet.org',  # Orphanet rare disease database
-            'www.hgmd.cf.ac.uk',  # Human Gene Mutation Database (requires subscription)
-            'www.lovd.nl',  # Leiden Open Variation Database
-            'databases.lovd.nl',  # LOVD database instances
+            "antibodies.cancer.gov",  # Antibody database
+            "www.antibodies-online.com",  # Antibody catalog
+            "www.uniprot.org",  # Protein database
+            "www.ncbi.nlm.nih.gov/protein",  # NCBI Protein database
+            "www.ncbi.nlm.nih.gov/gene",  # NCBI Gene database
+            "www.ncbi.nlm.nih.gov/nuccore",  # NCBI Nucleotide database
+            "www.ncbi.nlm.nih.gov/clinvar",  # ClinVar database
+            "www.omim.org",  # OMIM database
+            "www.genecards.org",  # GeneCards database
+            "www.proteinatlas.org",  # Human Protein Atlas
+            "biocyc.org",  # BioCyc metabolic pathway database
+            "glygen.org",  # GlyGen landing pages (not full text)
+            "malacards.org",  # MalaCards disease database (not article full text)
+            "www.malacards.org",  # MalaCards disease database
+            "www.disgenet.org",  # DisGeNET disease-gene associations
+            "www.orphanet.org",  # Orphanet rare disease database
+            "www.hgmd.cf.ac.uk",  # Human Gene Mutation Database (requires subscription)
+            "www.lovd.nl",  # Leiden Open Variation Database
+            "databases.lovd.nl",  # LOVD database instances
         ]
 
         # Known publisher domains - prioritize these
         PUBLISHER_DOMAINS = [
-            'sciencedirect.com',
-            'nature.com',
-            'springer.com',
-            'wiley.com',
-            'onlinelibrary.wiley.com',
-            'academic.oup.com',
-            'journals.lww.com',
-            'tandfonline.com',
-            'karger.com',
-            'ahajournals.org',
-            'jamanetwork.com',
-            'nejm.org',
-            'thelancet.com',
-            'bmj.com',
-            'cell.com',
-            'science.org',
-            'pnas.org',
-            'frontiersin.org',
-            'mdpi.com',
-            'hindawi.com',
-            'plos.org',
-            'biomedcentral.com',
-            'gimjournal.org',
+            "sciencedirect.com",
+            "nature.com",
+            "springer.com",
+            "wiley.com",
+            "onlinelibrary.wiley.com",
+            "academic.oup.com",
+            "journals.lww.com",
+            "tandfonline.com",
+            "karger.com",
+            "ahajournals.org",
+            "jamanetwork.com",
+            "nejm.org",
+            "thelancet.com",
+            "bmj.com",
+            "cell.com",
+            "science.org",
+            "pnas.org",
+            "frontiersin.org",
+            "mdpi.com",
+            "hindawi.com",
+            "plos.org",
+            "biomedcentral.com",
+            "gimjournal.org",
         ]
 
         try:
@@ -262,15 +274,11 @@ class PMCAPIClient:
                 "free article",
                 "free",
                 "publisher free",
-                "open access"
+                "open access",
             ]
 
             # Fetch LinkOut information via elink
-            handle = Entrez.elink(
-                dbfrom="pubmed",
-                id=pmid,
-                cmd="llinks"
-            )
+            handle = Entrez.elink(dbfrom="pubmed", id=pmid, cmd="llinks")
             records = Entrez.read(handle)
             handle.close()
 
@@ -298,22 +306,32 @@ class PMCAPIClient:
                                 "free",
                                 "full text",
                                 "publisher free",
-                                "open access"
+                                "open access",
                             ]
 
                             attr_text = " ".join(str(a).lower() for a in attributes)
-                            if any(indicator in attr_text for indicator in free_indicators):
+                            if any(
+                                indicator in attr_text for indicator in free_indicators
+                            ):
                                 is_free = True
                                 if url:
                                     url_str = str(url)
 
                                     # Skip irrelevant domains
-                                    if any(domain in url_str.lower() for domain in IRRELEVANT_DOMAINS):
-                                        print(f"  - Skipping irrelevant LinkOut URL: {url_str}")
+                                    if any(
+                                        domain in url_str.lower()
+                                        for domain in IRRELEVANT_DOMAINS
+                                    ):
+                                        print(
+                                            f"  - Skipping irrelevant LinkOut URL: {url_str}"
+                                        )
                                         continue
 
                                     # Prioritize known publisher domains
-                                    if any(domain in url_str.lower() for domain in PUBLISHER_DOMAINS):
+                                    if any(
+                                        domain in url_str.lower()
+                                        for domain in PUBLISHER_DOMAINS
+                                    ):
                                         if not prioritized_url:
                                             prioritized_url = url_str
                                             print(f"  ✓ Found publisher URL: {url_str}")
@@ -334,27 +352,27 @@ class PMCAPIClient:
                     records = Entrez.read(handle)
                     handle.close()
 
-                    if records.get('PubmedArticle'):
-                        article = records['PubmedArticle'][0]
-                        pubmed_data = article.get('PubmedData', {})
+                    if records.get("PubmedArticle"):
+                        article = records["PubmedArticle"][0]
+                        pubmed_data = article.get("PubmedData", {})
 
                         # Check ArticleIdList for free full text URL
-                        article_ids = pubmed_data.get('ArticleIdList', [])
+                        article_ids = pubmed_data.get("ArticleIdList", [])
                         for aid in article_ids:
-                            id_type = aid.attributes.get('IdType', '')
+                            id_type = aid.attributes.get("IdType", "")
                             # Check for PMC free article status
-                            if id_type == 'pmc' and 'free' in str(aid).lower():
+                            if id_type == "pmc" and "free" in str(aid).lower():
                                 is_free = True
 
                         # Check PublicationStatus and other metadata
                         # Some journals provide free access after embargo
-                        reference_list = pubmed_data.get('ReferenceList', [])
+                        reference_list = pubmed_data.get("ReferenceList", [])
 
                         # Check history for free access indicators
-                        history = pubmed_data.get('History', [])
+                        history = pubmed_data.get("History", [])
                         for status in history:
-                            pub_status = status.attributes.get('PubStatus', '')
-                            if 'free' in pub_status.lower():
+                            pub_status = status.attributes.get("PubStatus", "")
+                            if "free" in pub_status.lower():
                                 is_free = True
 
                 except Exception as e:
@@ -382,11 +400,7 @@ class PMCAPIClient:
         """
         try:
             self._rate_limit()
-            handle = Entrez.elink(
-                dbfrom="pubmed",
-                id=pmid,
-                cmd="llinks"
-            )
+            handle = Entrez.elink(dbfrom="pubmed", id=pmid, cmd="llinks")
             record = Entrez.read(handle)
             handle.close()
 
@@ -399,17 +413,25 @@ class PMCAPIClient:
                         obj_urls = id_url_set[0].get("ObjUrl", [])
                         for obj_url in obj_urls:
                             url = obj_url.get("Url", "")
-                            provider = obj_url.get("Provider", {}).get("Name", "Unknown")
-                            category = obj_url.get("Category", ["Unknown"])[0] if obj_url.get("Category") else "Unknown"
+                            provider = obj_url.get("Provider", {}).get(
+                                "Name", "Unknown"
+                            )
+                            category = (
+                                obj_url.get("Category", ["Unknown"])[0]
+                                if obj_url.get("Category")
+                                else "Unknown"
+                            )
                             attributes = obj_url.get("Attribute", [])
 
                             if url:
-                                links.append({
-                                    'url': str(url),
-                                    'provider': str(provider),
-                                    'category': str(category),
-                                    'attributes': [str(a) for a in attributes]
-                                })
+                                links.append(
+                                    {
+                                        "url": str(url),
+                                        "provider": str(provider),
+                                        "category": str(category),
+                                        "attributes": [str(a) for a in attributes],
+                                    }
+                                )
 
             return links
 

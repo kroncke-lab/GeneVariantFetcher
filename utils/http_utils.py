@@ -53,6 +53,8 @@ def get_headers_for_domain(domain: str) -> Dict[str, str]:
 
     # Add domain-specific headers if needed
     if "ncbi.nlm.nih.gov" in domain:
-        headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+        headers["Accept"] = (
+            "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+        )
 
     return headers

@@ -134,7 +134,9 @@ class FileRenamer:
         pmid = metadata.get("pmid", "UnknownPMID")
         author = self._extract_last_name(metadata.get("first_author"))
         year = metadata.get("publication_year", "NoYear")
-        journal = self._sanitize_filename_part(metadata.get("journal", "UnknownJournal"))
+        journal = self._sanitize_filename_part(
+            metadata.get("journal", "UnknownJournal")
+        )
 
         # Create filename
         new_name = f"{pmid}_{author}_{year}_{journal}{extension}"
@@ -215,7 +217,9 @@ class FileRenamer:
                     logger.debug("Copied %s to %s", file_path, new_path)
             else:
                 # Could not match file
-                logger.warning("Unmatched file (no PMID or metadata found): %s", file_path.name)
+                logger.warning(
+                    "Unmatched file (no PMID or metadata found): %s", file_path.name
+                )
                 results["unmatched"].append(file_path.name)
 
         # Write log file if requested
@@ -237,7 +241,9 @@ class FileRenamer:
             f.write("# File Renaming Log\n\n")
 
             f.write("## Matched and Renamed Files\n\n")
-            for i, (orig, new) in enumerate(zip(results["matched"], results["renamed"]), 1):
+            for i, (orig, new) in enumerate(
+                zip(results["matched"], results["renamed"]), 1
+            ):
                 f.write(f"{i}. {orig} -> {new}\n")
 
             f.write(f"\n## Unmatched Files ({len(results['unmatched'])})\n\n")
@@ -248,11 +254,17 @@ class FileRenamer:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
 
     parser.add_argument("gene", help="Gene symbol for organizing files")
-    parser.add_argument("download_dir", type=Path, help="Directory containing downloaded files")
-    parser.add_argument("metadata_file", type=Path, help="Path to metadata file (JSON or SQLite)")
+    parser.add_argument(
+        "download_dir", type=Path, help="Directory containing downloaded files"
+    )
+    parser.add_argument(
+        "metadata_file", type=Path, help="Path to metadata file (JSON or SQLite)"
+    )
 
     parser.add_argument(
         "--output-dir",
@@ -293,7 +305,10 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
 
-    logging.basicConfig(level=getattr(logging, args.log_level), format="%(levelname)s:%(name)s:%(message)s")
+    logging.basicConfig(
+        level=getattr(logging, args.log_level),
+        format="%(levelname)s:%(name)s:%(message)s",
+    )
 
     # Initialize renamer
     renamer = FileRenamer(args.metadata_file, args.metadata_format)
@@ -309,7 +324,9 @@ def main() -> None:
 
     # Exit with non-zero code if there are unmatched files
     if results["unmatched"]:
-        logger.warning("Some files could not be matched. Use --log-file to save details.")
+        logger.warning(
+            "Some files could not be matched. Use --log-file to save details."
+        )
         exit(1)
 
 

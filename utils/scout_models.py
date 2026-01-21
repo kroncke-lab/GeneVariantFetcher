@@ -30,39 +30,29 @@ class DataZone(BaseModel):
         description="Brief description of zone contents (e.g., 'Table 2: List of 15 variants')"
     )
     text_snippet: str = Field(
-        description="First ~200 characters of the zone for preview",
-        max_length=500
+        description="First ~200 characters of the zone for preview", max_length=500
     )
-    char_start: int = Field(
-        description="Start character position in source text",
-        ge=0
-    )
-    char_end: int = Field(
-        description="End character position in source text",
-        ge=0
-    )
+    char_start: int = Field(description="Start character position in source text", ge=0)
+    char_end: int = Field(description="End character position in source text", ge=0)
     relevance_score: float = Field(
-        description="Confidence score for zone relevance (0.0 to 1.0)",
-        ge=0.0,
-        le=1.0
+        description="Confidence score for zone relevance (0.0 to 1.0)", ge=0.0, le=1.0
     )
 
     # Optional metadata
     gene_mentions: int = Field(
-        default=0,
-        description="Count of target gene mentions in this zone"
+        default=0, description="Count of target gene mentions in this zone"
     )
     variant_mentions: int = Field(
         default=0,
-        description="Count of variant notation patterns (c., p.) in this zone"
+        description="Count of variant notation patterns (c., p.) in this zone",
     )
     clinical_keywords: int = Field(
         default=0,
-        description="Count of clinical keywords (patient, proband, affected, etc.)"
+        description="Count of clinical keywords (patient, proband, affected, etc.)",
     )
     source_section: Optional[str] = Field(
         default=None,
-        description="Parent section name if identifiable (e.g., 'Results', 'Supplementary')"
+        description="Parent section name if identifiable (e.g., 'Results', 'Supplementary')",
     )
 
     @property
@@ -82,21 +72,12 @@ class DataZoneReport(BaseModel):
     """
 
     pmid: Optional[str] = Field(
-        default=None,
-        description="PubMed ID of the analyzed paper"
+        default=None, description="PubMed ID of the analyzed paper"
     )
-    gene_symbol: str = Field(
-        description="Target gene symbol used for analysis"
-    )
-    total_zones_found: int = Field(
-        description="Total number of data zones identified"
-    )
-    zones_kept: int = Field(
-        description="Number of zones marked keep=True"
-    )
-    zones_discarded: int = Field(
-        description="Number of zones marked keep=False"
-    )
+    gene_symbol: str = Field(description="Target gene symbol used for analysis")
+    total_zones_found: int = Field(description="Total number of data zones identified")
+    zones_kept: int = Field(description="Number of zones marked keep=True")
+    zones_discarded: int = Field(description="Number of zones marked keep=False")
     total_chars_original: int = Field(
         description="Character count of original full text"
     )
@@ -104,13 +85,10 @@ class DataZoneReport(BaseModel):
         description="Character count of condensed (kept) zones"
     )
     compression_ratio: float = Field(
-        description="Ratio of condensed to original size",
-        ge=0.0,
-        le=1.0
+        description="Ratio of condensed to original size", ge=0.0, le=1.0
     )
     zones: list[DataZone] = Field(
-        default_factory=list,
-        description="List of all identified data zones"
+        default_factory=list, description="List of all identified data zones"
     )
 
     @property

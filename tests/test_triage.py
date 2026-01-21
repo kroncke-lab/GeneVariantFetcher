@@ -12,9 +12,9 @@ from pipeline.filters import ClinicalDataTriageFilter
 
 def test_case_report():
     """Test Case 1: Should KEEP - Case report with patient data."""
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("TEST 1: Case Report with Patient Data")
-    print("="*80)
+    print("=" * 80)
 
     triage = ClinicalDataTriageFilter()
 
@@ -29,24 +29,21 @@ def test_case_report():
     """
 
     result = triage.triage(
-        title=title,
-        abstract=abstract,
-        gene="SCN5A",
-        pmid="12345678"
+        title=title, abstract=abstract, gene="SCN5A", pmid="12345678"
     )
 
     print(json.dumps(result, indent=2))
     print(f"\nExpected: KEEP (case report with patient phenotype)")
     print(f"Actual: {result['decision']}")
-    assert result['decision'] == 'KEEP', "Failed: Should KEEP case reports"
+    assert result["decision"] == "KEEP", "Failed: Should KEEP case reports"
     print("✓ PASSED")
 
 
 def test_review_article():
     """Test Case 2: Should DROP - Review article without new data."""
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("TEST 2: Review Article")
-    print("="*80)
+    print("=" * 80)
 
     triage = ClinicalDataTriageFilter()
 
@@ -62,24 +59,21 @@ def test_review_article():
     """
 
     result = triage.triage(
-        title=title,
-        abstract=abstract,
-        gene="SCN5A",
-        pmid="12345679"
+        title=title, abstract=abstract, gene="SCN5A", pmid="12345679"
     )
 
     print(json.dumps(result, indent=2))
     print(f"\nExpected: DROP (review article)")
     print(f"Actual: {result['decision']}")
-    assert result['decision'] == 'DROP', "Failed: Should DROP review articles"
+    assert result["decision"] == "DROP", "Failed: Should DROP review articles"
     print("✓ PASSED")
 
 
 def test_animal_study():
     """Test Case 3: Should DROP - Animal study without patient data."""
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("TEST 3: Animal Study (Mouse Model)")
-    print("="*80)
+    print("=" * 80)
 
     triage = ClinicalDataTriageFilter()
 
@@ -94,24 +88,21 @@ def test_animal_study():
     """
 
     result = triage.triage(
-        title=title,
-        abstract=abstract,
-        gene="SCN5A",
-        pmid="12345680"
+        title=title, abstract=abstract, gene="SCN5A", pmid="12345680"
     )
 
     print(json.dumps(result, indent=2))
     print(f"\nExpected: DROP (animal study)")
     print(f"Actual: {result['decision']}")
-    assert result['decision'] == 'DROP', "Failed: Should DROP animal studies"
+    assert result["decision"] == "DROP", "Failed: Should DROP animal studies"
     print("✓ PASSED")
 
 
 def test_cell_study():
     """Test Case 4: Should DROP - Cell study only."""
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("TEST 4: Cell Study Only (No Patients)")
-    print("="*80)
+    print("=" * 80)
 
     triage = ClinicalDataTriageFilter()
 
@@ -125,24 +116,21 @@ def test_cell_study():
     """
 
     result = triage.triage(
-        title=title,
-        abstract=abstract,
-        gene="SCN5A",
-        pmid="12345681"
+        title=title, abstract=abstract, gene="SCN5A", pmid="12345681"
     )
 
     print(json.dumps(result, indent=2))
     print(f"\nExpected: DROP (cell study only)")
     print(f"Actual: {result['decision']}")
-    assert result['decision'] == 'DROP', "Failed: Should DROP cell-only studies"
+    assert result["decision"] == "DROP", "Failed: Should DROP cell-only studies"
     print("✓ PASSED")
 
 
 def test_cohort_study():
     """Test Case 5: Should KEEP - Clinical cohort study."""
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("TEST 5: Clinical Cohort Study")
-    print("="*80)
+    print("=" * 80)
 
     triage = ClinicalDataTriageFilter()
 
@@ -157,28 +145,27 @@ def test_cohort_study():
     """
 
     result = triage.triage(
-        title=title,
-        abstract=abstract,
-        gene="SCN5A",
-        pmid="12345682"
+        title=title, abstract=abstract, gene="SCN5A", pmid="12345682"
     )
 
     print(json.dumps(result, indent=2))
     print(f"\nExpected: KEEP (clinical cohort)")
     print(f"Actual: {result['decision']}")
-    assert result['decision'] == 'KEEP', "Failed: Should KEEP cohort studies"
+    assert result["decision"] == "KEEP", "Failed: Should KEEP cohort studies"
     print("✓ PASSED")
 
 
 def test_functional_with_phenotype():
     """Test Case 6: Should KEEP - Functional study that also describes phenotype."""
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("TEST 6: Functional Study + Patient Phenotype")
-    print("="*80)
+    print("=" * 80)
 
     triage = ClinicalDataTriageFilter()
 
-    title = "Novel SCN5A mutation causes gain-of-function in patient with Long QT syndrome"
+    title = (
+        "Novel SCN5A mutation causes gain-of-function in patient with Long QT syndrome"
+    )
     abstract = """
     A 35-year-old female presented with recurrent syncope and QTc of 520 ms. Genetic
     testing identified a novel SCN5A mutation (c.1234G>T, p.Gly412Val). The patient's
@@ -190,24 +177,23 @@ def test_functional_with_phenotype():
     """
 
     result = triage.triage(
-        title=title,
-        abstract=abstract,
-        gene="SCN5A",
-        pmid="12345683"
+        title=title, abstract=abstract, gene="SCN5A", pmid="12345683"
     )
 
     print(json.dumps(result, indent=2))
     print(f"\nExpected: KEEP (functional + phenotype)")
     print(f"Actual: {result['decision']}")
-    assert result['decision'] == 'KEEP', "Failed: Should KEEP functional studies with phenotype"
+    assert (
+        result["decision"] == "KEEP"
+    ), "Failed: Should KEEP functional studies with phenotype"
     print("✓ PASSED")
 
 
 def test_meta_analysis():
     """Test Case 7: Should DROP - Meta-analysis without individual data."""
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("TEST 7: Meta-Analysis")
-    print("="*80)
+    print("=" * 80)
 
     triage = ClinicalDataTriageFilter()
 
@@ -222,24 +208,21 @@ def test_meta_analysis():
     """
 
     result = triage.triage(
-        title=title,
-        abstract=abstract,
-        gene="SCN5A",
-        pmid="12345684"
+        title=title, abstract=abstract, gene="SCN5A", pmid="12345684"
     )
 
     print(json.dumps(result, indent=2))
     print(f"\nExpected: DROP (meta-analysis)")
     print(f"Actual: {result['decision']}")
-    assert result['decision'] == 'DROP', "Failed: Should DROP meta-analyses"
+    assert result["decision"] == "DROP", "Failed: Should DROP meta-analyses"
     print("✓ PASSED")
 
 
 def test_guidelines():
     """Test Case 8: Should DROP - Clinical guidelines without new cases."""
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("TEST 8: Clinical Guidelines")
-    print("="*80)
+    print("=" * 80)
 
     triage = ClinicalDataTriageFilter()
 
@@ -255,24 +238,21 @@ def test_guidelines():
     """
 
     result = triage.triage(
-        title=title,
-        abstract=abstract,
-        gene="SCN5A",
-        pmid="12345685"
+        title=title, abstract=abstract, gene="SCN5A", pmid="12345685"
     )
 
     print(json.dumps(result, indent=2))
     print(f"\nExpected: DROP (guidelines)")
     print(f"Actual: {result['decision']}")
-    assert result['decision'] == 'DROP', "Failed: Should DROP guidelines"
+    assert result["decision"] == "DROP", "Failed: Should DROP guidelines"
     print("✓ PASSED")
 
 
 def test_case_series():
     """Test Case 9: Should KEEP - Case series with multiple patients."""
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("TEST 9: Case Series")
-    print("="*80)
+    print("=" * 80)
 
     triage = ClinicalDataTriageFilter()
 
@@ -288,24 +268,21 @@ def test_case_series():
     """
 
     result = triage.triage(
-        title=title,
-        abstract=abstract,
-        gene="SCN5A",
-        pmid="12345686"
+        title=title, abstract=abstract, gene="SCN5A", pmid="12345686"
     )
 
     print(json.dumps(result, indent=2))
     print(f"\nExpected: KEEP (case series)")
     print(f"Actual: {result['decision']}")
-    assert result['decision'] == 'KEEP', "Failed: Should KEEP case series"
+    assert result["decision"] == "KEEP", "Failed: Should KEEP case series"
     print("✓ PASSED")
 
 
 def run_all_tests():
     """Run all test cases."""
-    print("\n" + "#"*80)
+    print("\n" + "#" * 80)
     print("# CLINICAL DATA TRIAGE FILTER - TEST SUITE")
-    print("#"*80)
+    print("#" * 80)
 
     tests = [
         test_case_report,
@@ -333,14 +310,14 @@ def run_all_tests():
             failed += 1
             print(f"✗ ERROR: {e}")
 
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print(f"TEST SUMMARY: {passed} passed, {failed} failed out of {len(tests)} tests")
-    print("="*80 + "\n")
+    print("=" * 80 + "\n")
 
     return failed == 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     # Note: These tests require API access and will make real LLM calls
@@ -348,7 +325,7 @@ if __name__ == '__main__':
     print("    This will consume API credits (approximately $0.01-0.02 total).")
     response = input("\nProceed with tests? (y/n): ")
 
-    if response.lower() != 'y':
+    if response.lower() != "y":
         print("Tests cancelled.")
         sys.exit(0)
 

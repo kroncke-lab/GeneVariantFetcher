@@ -114,6 +114,7 @@ These files are standalone utilities, not part of the automated pipeline:
 | File | Purpose | Usage |
 |------|---------|-------|
 | `fetch_manager.py` | Semi-manual download helper for paywalled papers | `python fetch_manager.py paywalled_missing.csv --convert --run-scout --gene GENE` |
+| `browser_fetch.py` | Browser-automated download with Cloudflare/CAPTCHA handling | `python browser_fetch.py paywalled_missing.csv --interactive` or `--wait-for-captcha --retry-failures` |
 | `gene_literature/collect_literature.py` | Standalone literature collection CLI | Direct invocation for one-off literature searches |
 
 ## Known Unused/Stale Files

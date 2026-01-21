@@ -31,6 +31,7 @@ logger = logging.getLogger(__name__)
 # Try to import the actual WileyAPIClient, fall back to inline version if needed
 try:
     from harvesting.wiley_api import WileyAPIClient, WILEY_DOI_PREFIXES
+
     USING_REAL_MODULE = True
     logger.info("Using actual WileyAPIClient from harvesting.wiley_api")
 except ImportError as e:
@@ -40,12 +41,12 @@ except ImportError as e:
 
     # Inline fallback for when module import fails
     WILEY_DOI_PREFIXES = (
-        "10.1002/",   # Wiley main prefix
-        "10.1111/",   # Wiley-Blackwell
-        "10.1113/",   # The Physiological Society (Wiley)
-        "10.1096/",   # FASEB Journal (Wiley)
-        "10.1634/",   # Stem Cells (Wiley)
-        "10.1111/j.", # Wiley journal articles
+        "10.1002/",  # Wiley main prefix
+        "10.1111/",  # Wiley-Blackwell
+        "10.1113/",  # The Physiological Society (Wiley)
+        "10.1096/",  # FASEB Journal (Wiley)
+        "10.1634/",  # Stem Cells (Wiley)
+        "10.1111/j.",  # Wiley journal articles
     )
 
     class WileyAPIClient:
@@ -53,7 +54,11 @@ except ImportError as e:
 
         BASE_URL = "https://api.wiley.com/onlinelibrary/tdm/v1/articles"
 
-        def __init__(self, api_key: Optional[str] = None, session: Optional[requests.Session] = None):
+        def __init__(
+            self,
+            api_key: Optional[str] = None,
+            session: Optional[requests.Session] = None,
+        ):
             self.api_key = api_key
             self.session = session or requests.Session()
             self._last_request_time = 0
@@ -81,7 +86,7 @@ except ImportError as e:
 
             self._rate_limit()
 
-            encoded_doi = quote(doi, safe='/:')
+            encoded_doi = quote(doi, safe="/:")
             url = f"{self.BASE_URL}/{encoded_doi}"
             headers = {
                 "Wiley-TDM-Client-Token": self.api_key,
@@ -99,7 +104,10 @@ except ImportError as e:
                 elif response.status_code == 401:
                     return None, "Invalid or unauthorized API key"
                 elif response.status_code == 403:
-                    return None, "Access forbidden - API key may lack permissions or article not available"
+                    return (
+                        None,
+                        "Access forbidden - API key may lack permissions or article not available",
+                    )
                 elif response.status_code == 404:
                     return None, "Article not found via Wiley API"
                 elif response.status_code == 429:
@@ -117,24 +125,29 @@ except ImportError as e:
                 return None
             return f"Content received: {len(content)} chars"
 
-        def fetch_fulltext(self, doi: str = None, url: str = None, try_web_scraping: bool = True) -> Tuple[Optional[str], Optional[str]]:
+        def fetch_fulltext(
+            self, doi: str = None, url: str = None, try_web_scraping: bool = True
+        ) -> Tuple[Optional[str], Optional[str]]:
             return None, "Web scraping not available in fallback mode"
 
-        def scrape_fulltext_from_web(self, doi: str) -> Tuple[Optional[str], Optional[str]]:
+        def scrape_fulltext_from_web(
+            self, doi: str
+        ) -> Tuple[Optional[str], Optional[str]]:
             return None, "Web scraping not available in fallback mode"
+
 
 # Known Wiley test DOIs (mix of newer and older articles)
 TEST_DOIS = [
     # Recent Human Mutation articles (should work)
     ("10.1002/humu.24231", "Recent Human Mutation article"),
     ("10.1002/humu.24114", "Recent Human Mutation article"),
-
     # Recent JAHA (Wiley) articles
     ("10.1161/JAHA.121.022754", "Recent JAHA article"),
-
     # Older SICI-style DOI (may not work - like the user's failing case)
-    ("10.1002/(SICI)1098-1004(200005)15:5<483::AID-HUMU18>3.0.CO;2-T", "Old SICI-style DOI"),
-
+    (
+        "10.1002/(SICI)1098-1004(200005)15:5<483::AID-HUMU18>3.0.CO;2-T",
+        "Old SICI-style DOI",
+    ),
     # Another format test
     ("10.1111/cge.13351", "Wiley-Blackwell journal"),
 ]
@@ -157,6 +170,7 @@ def test_api_configuration():
         # Try loading from settings
         try:
             from config.settings import Settings
+
             settings = Settings()
             if settings.wiley_api_key:
                 api_key = settings.wiley_api_key
@@ -173,7 +187,9 @@ def test_api_configuration():
     return client
 
 
-def test_doi(client: WileyAPIClient, doi: str, description: str = "", verbose: bool = False):
+def test_doi(
+    client: WileyAPIClient, doi: str, description: str = "", verbose: bool = False
+):
     """Test fetching a single DOI via TDM API only."""
     print(f"\n{'─' * 50}")
     print(f"Testing DOI: {doi}")
@@ -220,7 +236,9 @@ def test_doi(client: WileyAPIClient, doi: str, description: str = "", verbose: b
     return False
 
 
-def test_web_scraping(client: WileyAPIClient, doi: str, description: str = "", verbose: bool = False):
+def test_web_scraping(
+    client: WileyAPIClient, doi: str, description: str = "", verbose: bool = False
+):
     """Test fetching a DOI via web scraping (fallback method)."""
     print(f"\n{'─' * 50}")
     print(f"Testing Web Scraping for DOI: {doi}")
@@ -228,10 +246,12 @@ def test_web_scraping(client: WileyAPIClient, doi: str, description: str = "", v
         print(f"Description: {description}")
 
     if not USING_REAL_MODULE:
-        print("⚠ Cannot test - real module not available (web scraping requires actual module)")
+        print(
+            "⚠ Cannot test - real module not available (web scraping requires actual module)"
+        )
         return False
 
-    if not hasattr(client, 'scrape_fulltext_from_web'):
+    if not hasattr(client, "scrape_fulltext_from_web"):
         print("⚠ Cannot test - scrape_fulltext_from_web method not available")
         return False
 
@@ -252,9 +272,16 @@ def test_web_scraping(client: WileyAPIClient, doi: str, description: str = "", v
             print("-" * 40)
 
         # Check for key article sections
-        has_abstract = '### Abstract' in markdown or '### abstract' in markdown.lower()
-        has_body = any(section in markdown.lower() for section in
-                      ['### introduction', '### methods', '### results', '### discussion'])
+        has_abstract = "### Abstract" in markdown or "### abstract" in markdown.lower()
+        has_body = any(
+            section in markdown.lower()
+            for section in [
+                "### introduction",
+                "### methods",
+                "### results",
+                "### discussion",
+            ]
+        )
 
         print(f"  Has Abstract: {'✓' if has_abstract else '✗'}")
         print(f"  Has Body Sections: {'✓' if has_body else '✗'}")
@@ -265,7 +292,9 @@ def test_web_scraping(client: WileyAPIClient, doi: str, description: str = "", v
     return False
 
 
-def test_fetch_fulltext(client: WileyAPIClient, doi: str, description: str = "", verbose: bool = False):
+def test_fetch_fulltext(
+    client: WileyAPIClient, doi: str, description: str = "", verbose: bool = False
+):
     """Test the full fetch_fulltext method (API + web scraping fallback)."""
     print(f"\n{'─' * 50}")
     print(f"Testing fetch_fulltext (API + fallback) for DOI: {doi}")
@@ -276,7 +305,7 @@ def test_fetch_fulltext(client: WileyAPIClient, doi: str, description: str = "",
         print("⚠ Cannot test - real module not available")
         return False
 
-    if not hasattr(client, 'fetch_fulltext'):
+    if not hasattr(client, "fetch_fulltext"):
         print("⚠ Cannot test - fetch_fulltext method not available")
         return False
 
@@ -305,11 +334,22 @@ def test_fetch_fulltext(client: WileyAPIClient, doi: str, description: str = "",
 def main():
     parser = argparse.ArgumentParser(description="Test Wiley TDM API")
     parser.add_argument("--doi", help="Test a specific DOI")
-    parser.add_argument("--verbose", "-v", action="store_true", help="Show response content")
+    parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Show response content"
+    )
     parser.add_argument("--all", "-a", action="store_true", help="Test all sample DOIs")
-    parser.add_argument("--key", "-k", help="Wiley API key (or set WILEY_API_KEY env var)")
-    parser.add_argument("--web-only", "-w", action="store_true", help="Test web scraping only (no API)")
-    parser.add_argument("--full", "-f", action="store_true", help="Test full fetch_fulltext (API + web fallback)")
+    parser.add_argument(
+        "--key", "-k", help="Wiley API key (or set WILEY_API_KEY env var)"
+    )
+    parser.add_argument(
+        "--web-only", "-w", action="store_true", help="Test web scraping only (no API)"
+    )
+    parser.add_argument(
+        "--full",
+        "-f",
+        action="store_true",
+        help="Test full fetch_fulltext (API + web fallback)",
+    )
     args = parser.parse_args()
 
     # If key provided via arg, set it in env for test_api_configuration
@@ -321,10 +361,14 @@ def main():
     if args.doi:
         if args.web_only:
             # Test web scraping only
-            success = test_web_scraping(client, args.doi, "User-provided DOI", args.verbose)
+            success = test_web_scraping(
+                client, args.doi, "User-provided DOI", args.verbose
+            )
         elif args.full:
             # Test full fetch with fallback
-            success = test_fetch_fulltext(client, args.doi, "User-provided DOI", args.verbose)
+            success = test_fetch_fulltext(
+                client, args.doi, "User-provided DOI", args.verbose
+            )
         else:
             # Test API only
             success = test_doi(client, args.doi, "User-provided DOI", args.verbose)
@@ -378,7 +422,9 @@ def main():
                 print("  - The DOI format is not supported (SICI-style)")
                 print("  - API rate limiting")
                 if args.full:
-                    print("  - Web scraping fallback also failed (paywall/access issue)")
+                    print(
+                        "  - Web scraping fallback also failed (paywall/access issue)"
+                    )
 
 
 if __name__ == "__main__":

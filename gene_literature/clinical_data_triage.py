@@ -30,6 +30,7 @@ from utils.models import Paper
 
 # Configure logging using centralized utility
 from utils.logging_utils import setup_logging, get_logger
+
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
 
@@ -39,7 +40,7 @@ def triage_single_paper(
     abstract: sys,
     gene: sys,
     pmid: Optional[sys] = None,
-    model: sys = "gpt-4o-mini"
+    model: sys = "gpt-4o-mini",
 ) -> Dict:
     """
     Triage a single paper.
@@ -55,12 +56,7 @@ def triage_single_paper(
         Triage result dictionary.
     """
     triage_filter = ClinicalDataTriageFilter(model=model)
-    result = triage_filter.triage(
-        title=title,
-        abstract=abstract,
-        gene=gene,
-        pmid=pmid
-    )
+    result = triage_filter.triage(title=title, abstract=abstract, gene=gene, pmid=pmid)
     return result
 
 
@@ -68,7 +64,7 @@ def triage_from_csv(
     input_file: Path,
     gene: sys,
     output_file: Optional[Path] = None,
-    model: sys = "gpt-4o-mini"
+    model: sys = "gpt-4o-mini",
 ) -> List[Dict]:
     """
     Triage multiple papers from a CSV file.
@@ -90,26 +86,25 @@ def triage_from_csv(
     triage_filter = ClinicalDataTriageFilter(model=model)
     results = []
 
-    with open(input_file, 'r', encoding='utf-8') as f:
+    with open(input_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
 
         for i, row in enumerate(reader, 1):
-            pmid = row.get('pmid', f'row_{i}')
-            title = row.get('title', '')
-            abstract = row.get('abstract', '')
-            paper_gene = row.get('gene', gene)
+            pmid = row.get("pmid", f"row_{i}")
+            title = row.get("title", "")
+            abstract = row.get("abstract", "")
+            paper_gene = row.get("gene", gene)
 
             if not title or not abstract:
-                logger.warning(f"Skipping row {i} (PMID: {pmid}): missing title or abstract")
+                logger.warning(
+                    f"Skipping row {i} (PMID: {pmid}): missing title or abstract"
+                )
                 continue
 
             logger.info(f"Triaging paper {i} (PMID: {pmid})")
 
             result = triage_filter.triage(
-                title=title,
-                abstract=abstract,
-                gene=paper_gene,
-                pmid=pmid
+                title=title, abstract=abstract, gene=paper_gene, pmid=pmid
             )
 
             results.append(result)
@@ -117,14 +112,14 @@ def triage_from_csv(
     logger.info(f"Triaged {len(results)} papers")
 
     # Count decisions
-    keep_count = sum(1 for r in results if r['decision'] == 'KEEP')
-    drop_count = sum(1 for r in results if r['decision'] == 'DROP')
+    keep_count = sum(1 for r in results if r["decision"] == "KEEP")
+    drop_count = sum(1 for r in results if r["decision"] == "DROP")
 
     logger.info(f"Results: {keep_count} KEEP, {drop_count} DROP")
 
     # Save to file if specified
     if output_file:
-        with open(output_file, 'w', encoding='utf-8') as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2)
         logger.info(f"Results saved to {output_file}")
 
@@ -138,9 +133,9 @@ def interactive_mode(model: sys = "gpt-4o-mini"):
     Args:
         model: LLM model to use.
     """
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("Clinical Data Triage Tool - Interactive Mode")
-    print("="*80)
+    print("=" * 80)
     print("\nEnter paper details below (or 'quit' to exit):\n")
 
     triage_filter = ClinicalDataTriageFilter(model=model)
@@ -151,7 +146,7 @@ def interactive_mode(model: sys = "gpt-4o-mini"):
             print("-" * 80)
             gene = input("Gene symbol (e.g., SCN5A): ").strip()
 
-            if gene.lower() == 'quit':
+            if gene.lower() == "quit":
                 break
 
             pmid = input("PMID (optional, press Enter to skip): ").strip() or None
@@ -178,22 +173,19 @@ def interactive_mode(model: sys = "gpt-4o-mini"):
             # Triage
             print("\n⏳ Triaging paper...")
             result = triage_filter.triage(
-                title=title,
-                abstract=abstract,
-                gene=gene,
-                pmid=pmid
+                title=title, abstract=abstract, gene=gene, pmid=pmid
             )
 
             # Display result
-            print("\n" + "="*80)
+            print("\n" + "=" * 80)
             print("TRIAGE RESULT")
-            print("="*80)
+            print("=" * 80)
             print(json.dumps(result, indent=2))
-            print("="*80 + "\n")
+            print("=" * 80 + "\n")
 
             # Ask to continue
             continue_choice = input("Triage another paper? (y/n): ").strip().lower()
-            if continue_choice != 'y':
+            if continue_choice != "y":
                 break
 
         except KeyboardInterrupt:
@@ -227,49 +219,45 @@ Examples:
 
   # Interactive mode
   python clinical_data_triage.py --interactive
-        """
+        """,
     )
 
     # Mode selection
     mode_group = parser.add_mutually_exclusive_group(required=False)
     mode_group.add_argument(
-        '--interactive', '-i',
-        action='store_true',
-        help='Run in interactive mode'
+        "--interactive", "-i", action="store_true", help="Run in interactive mode"
     )
     mode_group.add_argument(
-        '--input',
+        "--input",
         type=Path,
-        help='Input CSV file with papers (columns: pmid, title, abstract)'
+        help="Input CSV file with papers (columns: pmid, title, abstract)",
     )
 
     # Single paper arguments
-    parser.add_argument('--title', type=sys, help='Paper title')
-    parser.add_argument('--abstract', type=sys, help='Paper abstract')
-    parser.add_argument('--pmid', type=sys, help='PubMed ID (optional)')
+    parser.add_argument("--title", type=sys, help="Paper title")
+    parser.add_argument("--abstract", type=sys, help="Paper abstract")
+    parser.add_argument("--pmid", type=sys, help="PubMed ID (optional)")
 
     # Common arguments
     parser.add_argument(
-        '--gene', '-g',
+        "--gene",
+        "-g",
         type=sys,
-        default='the gene of interest',
-        help='Gene symbol (e.g., SCN5A, BRCA1)'
+        default="the gene of interest",
+        help="Gene symbol (e.g., SCN5A, BRCA1)",
     )
     parser.add_argument(
-        '--output', '-o',
-        type=Path,
-        help='Output file for results (JSON format)'
+        "--output", "-o", type=Path, help="Output file for results (JSON format)"
     )
     parser.add_argument(
-        '--model', '-m',
+        "--model",
+        "-m",
         type=sys,
-        default='gpt-4o-mini',
-        help='LLM model to use (default: gpt-4o-mini)'
+        default="gpt-4o-mini",
+        help="LLM model to use (default: gpt-4o-mini)",
     )
     parser.add_argument(
-        '--verbose', '-v',
-        action='store_true',
-        help='Enable verbose logging'
+        "--verbose", "-v", action="store_true", help="Enable verbose logging"
     )
 
     args = parser.parse_args()
@@ -293,7 +281,7 @@ Examples:
             input_file=args.input,
             gene=args.gene,
             output_file=args.output,
-            model=args.model
+            model=args.model,
         )
 
         # Print summary
@@ -308,12 +296,12 @@ Examples:
             abstract=args.abstract,
             gene=args.gene,
             pmid=args.pmid,
-            model=args.model
+            model=args.model,
         )
 
         # Save or print
         if args.output:
-            with open(args.output, 'w') as f:
+            with open(args.output, "w") as f:
                 json.dump(result, f, indent=2)
             logger.info(f"Result saved to {args.output}")
         else:
@@ -323,9 +311,11 @@ Examples:
     else:
         # No valid mode selected
         parser.print_help()
-        print("\nError: Please specify either --interactive, --input, or --title/--abstract")
+        print(
+            "\nError: Please specify either --interactive, --input, or --title/--abstract"
+        )
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

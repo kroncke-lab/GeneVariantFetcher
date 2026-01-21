@@ -14,7 +14,9 @@ from .pubmed_client import ArticleMetadata
 logger = logging.getLogger(__name__)
 
 
-def write_metadata(records: Sequence[ArticleMetadata], destination: Path, fmt: str = "json") -> None:
+def write_metadata(
+    records: Sequence[ArticleMetadata], destination: Path, fmt: str = "json"
+) -> None:
     """Persist article metadata to the desired destination in the requested format."""
 
     destination = destination.expanduser().resolve()
@@ -147,7 +149,9 @@ def _write_urls(records: Sequence[ArticleMetadata], destination: Path) -> None:
 
     with destination.open("w", encoding="utf-8") as handle:
         handle.write("# Downloadable URLs for Literature Collection\n")
-        handle.write("# Format: PMID | First Author | Year | Journal | URL Type | URL\n")
+        handle.write(
+            "# Format: PMID | First Author | Year | Journal | URL Type | URL\n"
+        )
         handle.write("# " + "=" * 78 + "\n\n")
 
         for record in records:

@@ -22,12 +22,12 @@ logger = logging.getLogger(__name__)
 
 # DOI prefixes known to be Elsevier
 ELSEVIER_DOI_PREFIXES = (
-    "10.1016/",   # ScienceDirect (main)
-    "10.1053/",   # Some Elsevier journals
-    "10.1067/",   # Mosby (Elsevier)
-    "10.1054/",   # Academic Press (Elsevier)
-    "10.1006/",   # Academic Press (Elsevier)
-    "10.1038/",   # Nature (some under Elsevier agreement)
+    "10.1016/",  # ScienceDirect (main)
+    "10.1053/",  # Some Elsevier journals
+    "10.1067/",  # Mosby (Elsevier)
+    "10.1054/",  # Academic Press (Elsevier)
+    "10.1006/",  # Academic Press (Elsevier)
+    "10.1038/",  # Nature (some under Elsevier agreement)
 )
 
 # Domains that indicate Elsevier publisher
@@ -45,7 +45,9 @@ class ElsevierAPIClient:
 
     BASE_URL = "https://api.elsevier.com/content/article"
 
-    def __init__(self, api_key: Optional[str] = None, session: Optional[requests.Session] = None):
+    def __init__(
+        self, api_key: Optional[str] = None, session: Optional[requests.Session] = None
+    ):
         """
         Initialize the Elsevier API client.
 
@@ -106,7 +108,7 @@ class ElsevierAPIClient:
             PII string if found, None otherwise
         """
         # Pattern: /pii/S0000000000000000
-        pii_match = re.search(r'/pii/([A-Z0-9]+)', url, re.IGNORECASE)
+        pii_match = re.search(r"/pii/([A-Z0-9]+)", url, re.IGNORECASE)
         if pii_match:
             return pii_match.group(1)
         return None
@@ -136,7 +138,7 @@ class ElsevierAPIClient:
         self._rate_limit()
 
         # URL-encode the DOI (can contain special characters like <, >, parentheses)
-        encoded_doi = quote(doi, safe='/:')
+        encoded_doi = quote(doi, safe="/:")
         url = f"{self.BASE_URL}/doi/{encoded_doi}"
         headers = {
             "X-ELS-APIKey": self.api_key,
@@ -152,7 +154,10 @@ class ElsevierAPIClient:
             elif response.status_code == 401:
                 return None, "Invalid or unauthorized API key"
             elif response.status_code == 403:
-                return None, "Access forbidden - API key may lack permissions or article not available"
+                return (
+                    None,
+                    "Access forbidden - API key may lack permissions or article not available",
+                )
             elif response.status_code == 404:
                 return None, "Article not found via Elsevier API"
             elif response.status_code == 429:
@@ -197,7 +202,10 @@ class ElsevierAPIClient:
             elif response.status_code == 401:
                 return None, "Invalid or unauthorized API key"
             elif response.status_code == 403:
-                return None, "Access forbidden - API key may lack permissions or article not available"
+                return (
+                    None,
+                    "Access forbidden - API key may lack permissions or article not available",
+                )
             elif response.status_code == 404:
                 return None, "Article not found via Elsevier API"
             elif response.status_code == 429:
@@ -229,57 +237,59 @@ class ElsevierAPIClient:
 
         try:
             # Remove XML namespace prefixes for easier parsing
-            xml_content = re.sub(r'xmlns[^=]*="[^"]*"', '', xml_content)
-            xml_content = re.sub(r'<([a-z]+):', r'<', xml_content)
-            xml_content = re.sub(r'</([a-z]+):', r'</', xml_content)
+            xml_content = re.sub(r'xmlns[^=]*="[^"]*"', "", xml_content)
+            xml_content = re.sub(r"<([a-z]+):", r"<", xml_content)
+            xml_content = re.sub(r"</([a-z]+):", r"</", xml_content)
 
             root = ET.fromstring(xml_content)
             markdown = "# MAIN TEXT\n\n"
 
             # Extract title
-            title_elem = root.find('.//dc:title', {'dc': 'http://purl.org/dc/elements/1.1/'})
+            title_elem = root.find(
+                ".//dc:title", {"dc": "http://purl.org/dc/elements/1.1/"}
+            )
             if title_elem is None:
-                title_elem = root.find('.//title')
+                title_elem = root.find(".//title")
             if title_elem is None:
-                title_elem = root.find('.//{*}title')
+                title_elem = root.find(".//{*}title")
             if title_elem is not None and title_elem.text:
                 markdown += f"## {title_elem.text.strip()}\n\n"
 
             # Extract abstract
-            abstract_elem = root.find('.//abstract')
+            abstract_elem = root.find(".//abstract")
             if abstract_elem is None:
-                abstract_elem = root.find('.//{*}abstract')
+                abstract_elem = root.find(".//{*}abstract")
             if abstract_elem is not None:
                 abstract_text = self._extract_text(abstract_elem)
                 if abstract_text:
                     markdown += f"### Abstract\n\n{abstract_text}\n\n"
 
             # Extract body/sections
-            body_elem = root.find('.//body')
+            body_elem = root.find(".//body")
             if body_elem is None:
-                body_elem = root.find('.//{*}body')
+                body_elem = root.find(".//{*}body")
             if body_elem is None:
                 # Try to find raw-text or originalText
-                body_elem = root.find('.//rawtext')
+                body_elem = root.find(".//rawtext")
                 if body_elem is None:
-                    body_elem = root.find('.//{*}rawtext')
+                    body_elem = root.find(".//{*}rawtext")
                 if body_elem is None:
-                    body_elem = root.find('.//originalText')
+                    body_elem = root.find(".//originalText")
                 if body_elem is None:
-                    body_elem = root.find('.//{*}originalText')
+                    body_elem = root.find(".//{*}originalText")
 
             if body_elem is not None:
                 # Process sections
                 # Note: We strip namespace prefixes (like ce:) earlier in the code,
                 # so we search for plain element names. The wildcard {*} handles
                 # any remaining namespace URIs that weren't stripped.
-                sections = body_elem.findall('.//section')
+                sections = body_elem.findall(".//section")
                 if not sections:
-                    sections = body_elem.findall('.//{*}section')
+                    sections = body_elem.findall(".//{*}section")
                 if not sections:
-                    sections = body_elem.findall('.//sec')
+                    sections = body_elem.findall(".//sec")
                 if not sections:
-                    sections = body_elem.findall('.//{*}sec')
+                    sections = body_elem.findall(".//{*}sec")
 
                 if sections:
                     for section in sections:
@@ -295,9 +305,9 @@ class ElsevierAPIClient:
             # If we got very little content, try to extract from full-text-retrieval-response
             if len(markdown) < 500:
                 # Try originalText element (common in Elsevier responses)
-                original_text = root.find('.//originalText')
+                original_text = root.find(".//originalText")
                 if original_text is None:
-                    original_text = root.find('.//{*}originalText')
+                    original_text = root.find(".//{*}originalText")
                 if original_text is not None:
                     full_text = self._extract_text(original_text)
                     if full_text and len(full_text) > len(markdown):
@@ -326,26 +336,26 @@ class ElsevierAPIClient:
         markdown = ""
 
         # Get section title
-        title_elem = section_elem.find('./section-title')
+        title_elem = section_elem.find("./section-title")
         if title_elem is None:
-            title_elem = section_elem.find('./title')
+            title_elem = section_elem.find("./title")
         if title_elem is None:
-            title_elem = section_elem.find('./{*}section-title')
+            title_elem = section_elem.find("./{*}section-title")
         if title_elem is None:
-            title_elem = section_elem.find('./{*}title')
+            title_elem = section_elem.find("./{*}title")
 
         if title_elem is not None and title_elem.text:
             heading_prefix = "#" * min(level, 6)
             markdown += f"{heading_prefix} {title_elem.text.strip()}\n\n"
 
         # Extract paragraphs
-        paragraphs = section_elem.findall('./para')
+        paragraphs = section_elem.findall("./para")
         if not paragraphs:
-            paragraphs = section_elem.findall('./{*}para')
+            paragraphs = section_elem.findall("./{*}para")
         if not paragraphs:
-            paragraphs = section_elem.findall('./p')
+            paragraphs = section_elem.findall("./p")
         if not paragraphs:
-            paragraphs = section_elem.findall('./{*}p')
+            paragraphs = section_elem.findall("./{*}p")
 
         for para in paragraphs:
             para_text = self._extract_text(para)
@@ -353,13 +363,13 @@ class ElsevierAPIClient:
                 markdown += f"{para_text}\n\n"
 
         # Process nested sections
-        nested_sections = section_elem.findall('./section')
+        nested_sections = section_elem.findall("./section")
         if not nested_sections:
-            nested_sections = section_elem.findall('./{*}section')
+            nested_sections = section_elem.findall("./{*}section")
         if not nested_sections:
-            nested_sections = section_elem.findall('./sec')
+            nested_sections = section_elem.findall("./sec")
         if not nested_sections:
-            nested_sections = section_elem.findall('./{*}sec')
+            nested_sections = section_elem.findall("./{*}sec")
 
         for nested in nested_sections:
             markdown += self._process_section(nested, level + 1)
@@ -394,8 +404,12 @@ class ElsevierAPIClient:
 
         return " ".join(filter(None, text_parts))
 
-    def fetch_fulltext(self, doi: Optional[str] = None, pii: Optional[str] = None,
-                       url: Optional[str] = None) -> Tuple[Optional[str], Optional[str]]:
+    def fetch_fulltext(
+        self,
+        doi: Optional[str] = None,
+        pii: Optional[str] = None,
+        url: Optional[str] = None,
+    ) -> Tuple[Optional[str], Optional[str]]:
         """
         Fetch full-text content and convert to markdown.
 
@@ -426,15 +440,25 @@ class ElsevierAPIClient:
                 MIN_FULLTEXT_LENGTH = 2000
                 has_body_sections = markdown and any(
                     section in markdown.lower()
-                    for section in ['### introduction', '### methods', '### results',
-                                    '### discussion', '### materials', '### content']
+                    for section in [
+                        "### introduction",
+                        "### methods",
+                        "### results",
+                        "### discussion",
+                        "### materials",
+                        "### content",
+                    ]
                 )
-                if markdown and (len(markdown) > MIN_FULLTEXT_LENGTH or has_body_sections):
+                if markdown and (
+                    len(markdown) > MIN_FULLTEXT_LENGTH or has_body_sections
+                ):
                     logger.info(f"Successfully fetched Elsevier article via DOI: {doi}")
                     return markdown, None
                 elif markdown and len(markdown) > 500:
                     # Got some content but likely just abstract
-                    error = "XML conversion produced insufficient content (abstract only)"
+                    error = (
+                        "XML conversion produced insufficient content (abstract only)"
+                    )
                 elif not error:
                     error = "XML conversion produced insufficient content"
 
@@ -450,14 +474,24 @@ class ElsevierAPIClient:
                 MIN_FULLTEXT_LENGTH = 2000
                 has_body_sections = markdown and any(
                     section in markdown.lower()
-                    for section in ['### introduction', '### methods', '### results',
-                                    '### discussion', '### materials', '### content']
+                    for section in [
+                        "### introduction",
+                        "### methods",
+                        "### results",
+                        "### discussion",
+                        "### materials",
+                        "### content",
+                    ]
                 )
-                if markdown and (len(markdown) > MIN_FULLTEXT_LENGTH or has_body_sections):
+                if markdown and (
+                    len(markdown) > MIN_FULLTEXT_LENGTH or has_body_sections
+                ):
                     logger.info(f"Successfully fetched Elsevier article via PII: {pii}")
                     return markdown, None
                 elif markdown and len(markdown) > 500:
-                    pii_error = "XML conversion produced insufficient content (abstract only)"
+                    pii_error = (
+                        "XML conversion produced insufficient content (abstract only)"
+                    )
                 elif not pii_error:
                     pii_error = "XML conversion produced insufficient content"
             # Use PII error if DOI wasn't tried or also failed

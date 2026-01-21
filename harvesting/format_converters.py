@@ -14,6 +14,7 @@ import re
 
 try:
     from markitdown import MarkItDown
+
     MARKITDOWN_AVAILABLE = True
 except ImportError:
     MARKITDOWN_AVAILABLE = False
@@ -21,6 +22,7 @@ except ImportError:
 
 try:
     import olefile
+
     OLEFILE_AVAILABLE = True
 except ImportError:
     OLEFILE_AVAILABLE = False
@@ -40,15 +42,15 @@ class FormatConverter:
         This helps LLMs better understand tabular data extracted from documents.
         Only converts sections that look like actual tables (multiple columns, consistent structure).
         """
-        lines = text.split('\n')
+        lines = text.split("\n")
         result_lines = []
         in_table = False
         table_lines = []
 
         for line in lines:
             # Check if line has tabs (potential table row)
-            if '\t' in line:
-                cols = line.split('\t')
+            if "\t" in line:
+                cols = line.split("\t")
                 # Consider it a table row if it has 2+ non-empty columns
                 non_empty_cols = [c for c in cols if c.strip()]
                 if len(non_empty_cols) >= 2:
@@ -73,7 +75,7 @@ class FormatConverter:
             markdown_table = self._table_lines_to_markdown(table_lines)
             result_lines.append(markdown_table)
 
-        return '\n'.join(result_lines)
+        return "\n".join(result_lines)
 
     def _table_lines_to_markdown(self, table_lines: list) -> str:
         """Convert list of column lists to markdown table format."""
@@ -87,16 +89,16 @@ class FormatConverter:
         md_lines = []
         for i, row in enumerate(table_lines):
             # Pad row to max columns
-            padded_row = row + [''] * (max_cols - len(row))
+            padded_row = row + [""] * (max_cols - len(row))
             # Clean up cells (remove excessive whitespace, escape pipes)
-            cleaned_row = [cell.strip().replace('|', '\\|') for cell in padded_row]
-            md_lines.append('| ' + ' | '.join(cleaned_row) + ' |')
+            cleaned_row = [cell.strip().replace("|", "\\|") for cell in padded_row]
+            md_lines.append("| " + " | ".join(cleaned_row) + " |")
 
             # Add separator after first row (header)
             if i == 0:
-                md_lines.append('|' + '|'.join(['---'] * max_cols) + '|')
+                md_lines.append("|" + "|".join(["---"] * max_cols) + "|")
 
-        return '\n'.join(md_lines)
+        return "\n".join(md_lines)
 
     def xml_to_markdown(self, xml_content: str) -> str:
         """
@@ -115,13 +117,13 @@ class FormatConverter:
 
             title_elem = root.find(".//article-title")
             if title_elem is not None:
-                title = ''.join(title_elem.itertext()).strip()
+                title = "".join(title_elem.itertext()).strip()
                 markdown += f"## {title}\n\n"
 
             abstract_elem = root.find(".//abstract")
             if abstract_elem is not None:
                 markdown += "### Abstract\n\n"
-                abstract_text = ''.join(abstract_elem.itertext()).strip()
+                abstract_text = "".join(abstract_elem.itertext()).strip()
                 markdown += f"{abstract_text}\n\n"
 
             def process_section(sec, level: int = 3):
@@ -130,13 +132,13 @@ class FormatConverter:
 
                 title_elem = sec.find("title")
                 if title_elem is not None:
-                    sec_title = ''.join(title_elem.itertext()).strip()
+                    sec_title = "".join(title_elem.itertext()).strip()
                     markdown += f"{'#' * level} {sec_title}\n\n"
 
                 for child in sec:
-                    tag = child.tag.split('}')[-1]  # Handle optional namespaces
+                    tag = child.tag.split("}")[-1]  # Handle optional namespaces
                     if tag == "p":
-                        para_text = ''.join(child.itertext()).strip()
+                        para_text = "".join(child.itertext()).strip()
                         if para_text:
                             markdown += f"{para_text}\n\n"
                     elif tag == "sec":
@@ -152,7 +154,7 @@ class FormatConverter:
                 else:
                     # Some PMC XML files use <p> directly under <body> without <sec> wrappers
                     for p in body_elem.findall(".//p"):
-                        para_text = ''.join(p.itertext()).strip()
+                        para_text = "".join(p.itertext()).strip()
                         if para_text:
                             markdown += f"{para_text}\n\n"
 
@@ -171,20 +173,20 @@ class FormatConverter:
         Returns:
             Markdown formatted text (best effort)
         """
-        soup = BeautifulSoup(html_content, 'html.parser')
+        soup = BeautifulSoup(html_content, "html.parser")
         markdown = "# MAIN TEXT\n\n"
 
         # Title
-        title_elem = soup.find('h1')
+        title_elem = soup.find("h1")
         if title_elem:
             title = title_elem.get_text(strip=True)
             markdown += f"## {title}\n\n"
 
         # Abstract
-        abstract_section = soup.find('section', class_=lambda c: c and 'abstract' in c)
+        abstract_section = soup.find("section", class_=lambda c: c and "abstract" in c)
         if abstract_section:
             markdown += "### Abstract\n\n"
-            for p in abstract_section.find_all('p'):
+            for p in abstract_section.find_all("p"):
                 text = p.get_text(" ", strip=True)
                 if text:
                     markdown += f"{text}\n\n"
@@ -192,7 +194,7 @@ class FormatConverter:
         def process_section(section, level: int = 3):
             """Recursively walk PMC <section> blocks."""
             nonlocal markdown
-            heading = section.find(['h2', 'h3', 'h4'], recursive=False)
+            heading = section.find(["h2", "h3", "h4"], recursive=False)
             if heading:
                 sec_title = heading.get_text(" ", strip=True)
                 if sec_title:
@@ -216,17 +218,19 @@ class FormatConverter:
                     process_section(child, min(level + 1, 6))
 
         # Main body: PMC pages typically wrap text in section.body.main-article-body
-        body_section = soup.find('section', class_=lambda c: c and 'main-article-body' in c)
+        body_section = soup.find(
+            "section", class_=lambda c: c and "main-article-body" in c
+        )
         if body_section:
-            for sec in body_section.find_all('section', recursive=False):
+            for sec in body_section.find_all("section", recursive=False):
                 # Skip duplicate abstract sections we already handled
-                sec_classes = sec.get('class', [])
-                if any('abstract' == c for c in sec_classes):
+                sec_classes = sec.get("class", [])
+                if any("abstract" == c for c in sec_classes):
                     continue
                 process_section(sec)
         else:
             # Fallback: just pull all reasonably long paragraphs
-            for p in soup.find_all('p'):
+            for p in soup.find_all("p"):
                 text = p.get_text(" ", strip=True)
                 if len(text) > 50:
                     markdown += f"{text}\n\n"
@@ -256,7 +260,9 @@ class FormatConverter:
                 markdown += f"#### Sheet: {sheet_name}\n\n"
 
                 if len(df) > 100:
-                    markdown += f"*Note: Showing first 100 rows of {len(df)} total rows*\n\n"
+                    markdown += (
+                        f"*Note: Showing first 100 rows of {len(df)} total rows*\n\n"
+                    )
                     df_display = df.head(100)
                 else:
                     df_display = df
@@ -289,8 +295,11 @@ class FormatConverter:
         else:
             try:
                 from docx import Document
+
                 doc = Document(file_path)
-                text = "\n\n".join([para.text for para in doc.paragraphs if para.text.strip()])
+                text = "\n\n".join(
+                    [para.text for para in doc.paragraphs if para.text.strip()]
+                )
                 return text + "\n\n"
             except Exception as e:
                 print(f"    Error converting DOCX {file_path}: {e}")
@@ -313,32 +322,34 @@ class FormatConverter:
                 if result and result.text_content:
                     return result.text_content
             except Exception as e:
-                print(f"    Warning: markitdown failed for .doc file {file_path.name}: {e}")
+                print(
+                    f"    Warning: markitdown failed for .doc file {file_path.name}: {e}"
+                )
 
         # Try antiword as a fallback (if installed)
         # First try with -t flag for tab-delimited output (better for tables)
         try:
             import subprocess
+
             # Try tab-delimited output first (better for tables)
             result = subprocess.run(
-                ['antiword', '-t', str(file_path)],
+                ["antiword", "-t", str(file_path)],
                 capture_output=True,
                 text=True,
-                timeout=60
+                timeout=60,
             )
             if result.returncode == 0 and result.stdout.strip():
                 text = result.stdout
                 # Convert tab-delimited tables to markdown format for better LLM extraction
                 text = self._convert_tsv_to_markdown_tables(text)
-                print(f"    ✓ Extracted text via antiword (tab-delimited, {len(text)} chars)")
+                print(
+                    f"    ✓ Extracted text via antiword (tab-delimited, {len(text)} chars)"
+                )
                 return text + "\n\n"
 
             # If -t flag fails or produces empty output, try standard output
             result = subprocess.run(
-                ['antiword', str(file_path)],
-                capture_output=True,
-                text=True,
-                timeout=60
+                ["antiword", str(file_path)], capture_output=True, text=True, timeout=60
             )
             if result.returncode == 0 and result.stdout.strip():
                 print(f"    ✓ Extracted text via antiword ({len(result.stdout)} chars)")
@@ -351,11 +362,9 @@ class FormatConverter:
         # Try catdoc as another fallback (if installed)
         try:
             import subprocess
+
             result = subprocess.run(
-                ['catdoc', str(file_path)],
-                capture_output=True,
-                text=True,
-                timeout=60
+                ["catdoc", str(file_path)], capture_output=True, text=True, timeout=60
             )
             if result.returncode == 0 and result.stdout.strip():
                 return result.stdout + "\n\n"
@@ -368,17 +377,26 @@ class FormatConverter:
         try:
             import subprocess
             import tempfile
+
             with tempfile.TemporaryDirectory() as tmpdir:
                 result = subprocess.run(
-                    ['soffice', '--headless', '--convert-to', 'txt:Text', '--outdir', tmpdir, str(file_path)],
+                    [
+                        "soffice",
+                        "--headless",
+                        "--convert-to",
+                        "txt:Text",
+                        "--outdir",
+                        tmpdir,
+                        str(file_path),
+                    ],
                     capture_output=True,
                     text=True,
-                    timeout=120
+                    timeout=120,
                 )
                 if result.returncode == 0:
-                    txt_file = Path(tmpdir) / (file_path.stem + '.txt')
+                    txt_file = Path(tmpdir) / (file_path.stem + ".txt")
                     if txt_file.exists():
-                        text = txt_file.read_text(encoding='utf-8', errors='ignore')
+                        text = txt_file.read_text(encoding="utf-8", errors="ignore")
                         if text.strip():
                             return text + "\n\n"
         except FileNotFoundError:
@@ -394,20 +412,28 @@ class FormatConverter:
 
                 # Try to extract text from WordDocument stream (main text storage)
                 for stream_name in ole.listdir():
-                    stream_path = '/'.join(stream_name)
+                    stream_path = "/".join(stream_name)
                     try:
                         stream_data = ole.openstream(stream_name).read()
                         # Word stores text as UTF-16LE in some streams
                         # Try to decode as UTF-16 first, then fallback to latin-1
                         decoded_text = None
-                        for encoding in ['utf-16-le', 'utf-16', 'latin-1', 'cp1252']:
+                        for encoding in ["utf-16-le", "utf-16", "latin-1", "cp1252"]:
                             try:
-                                decoded_text = stream_data.decode(encoding, errors='ignore')
+                                decoded_text = stream_data.decode(
+                                    encoding, errors="ignore"
+                                )
                                 # Filter to keep only printable text
-                                cleaned = re.sub(r'[^\x09\x0A\x0D\x20-\x7E\u00A0-\u00FF]', ' ', decoded_text)
-                                cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+                                cleaned = re.sub(
+                                    r"[^\x09\x0A\x0D\x20-\x7E\u00A0-\u00FF]",
+                                    " ",
+                                    decoded_text,
+                                )
+                                cleaned = re.sub(r"\s+", " ", cleaned).strip()
                                 # Only keep if it looks like meaningful text (has words)
-                                if len(cleaned) > 50 and re.search(r'[a-zA-Z]{3,}', cleaned):
+                                if len(cleaned) > 50 and re.search(
+                                    r"[a-zA-Z]{3,}", cleaned
+                                ):
                                     text_parts.append(cleaned)
                                     break
                             except:
@@ -419,9 +445,9 @@ class FormatConverter:
 
                 if text_parts:
                     # Join all extracted text and clean up
-                    full_text = '\n'.join(text_parts)
+                    full_text = "\n".join(text_parts)
                     # Remove duplicate content (OLE files often have redundant streams)
-                    lines = full_text.split('\n')
+                    lines = full_text.split("\n")
                     seen = set()
                     unique_lines = []
                     for line in lines:
@@ -430,7 +456,7 @@ class FormatConverter:
                             seen.add(line_clean)
                             unique_lines.append(line_clean)
 
-                    result = '\n'.join(unique_lines)
+                    result = "\n".join(unique_lines)
                     if len(result) > 200:
                         print(f"    ✓ Extracted {len(result)} chars via OLE parsing")
                         return result + "\n\n"
@@ -450,12 +476,16 @@ class FormatConverter:
             cleaned = re.sub(r"[^\x09\x0A\x0D\x20-\x7E]", "\n", decoded)
             # Collapse excessive whitespace/newlines while preserving row-ish
             # structure so tables remain legible to the extractor.
-            normalized_lines = [line.strip() for line in cleaned.splitlines() if line.strip()]
+            normalized_lines = [
+                line.strip() for line in cleaned.splitlines() if line.strip()
+            ]
             merged = "\n".join(normalized_lines)
             if len(merged) > 200:
                 return merged + "\n\n"
         except Exception as e:
-            print(f"    Warning: heuristic .doc extraction failed for {file_path.name}: {e}")
+            print(
+                f"    Warning: heuristic .doc extraction failed for {file_path.name}: {e}"
+            )
 
         # Final fallback - indicate manual review needed
         return f"[Legacy .doc file available at: {file_path.name} - text extraction failed, manual review required]\n\n"
@@ -472,9 +502,9 @@ class FormatConverter:
         """
         # First verify the file is a valid PDF
         try:
-            with open(file_path, 'rb') as f:
+            with open(file_path, "rb") as f:
                 header = f.read(8)
-                if not header.startswith(b'%PDF'):
+                if not header.startswith(b"%PDF"):
                     print(f"    Warning: {file_path.name} is not a valid PDF file")
                     return f"[Invalid PDF file: {file_path.name}]\n\n"
         except Exception as e:
@@ -485,23 +515,36 @@ class FormatConverter:
         if self.markitdown:
             try:
                 result = self.markitdown.convert(str(file_path))
-                if result and result.text_content and len(result.text_content.strip()) > 100:
-                    print(f"    ✓ Extracted PDF via markitdown ({len(result.text_content)} chars)")
+                if (
+                    result
+                    and result.text_content
+                    and len(result.text_content.strip()) > 100
+                ):
+                    print(
+                        f"    ✓ Extracted PDF via markitdown ({len(result.text_content)} chars)"
+                    )
                     return result.text_content
                 elif result and result.text_content:
-                    print(f"    Warning: markitdown returned minimal content ({len(result.text_content)} chars)")
+                    print(
+                        f"    Warning: markitdown returned minimal content ({len(result.text_content)} chars)"
+                    )
             except NameError as e:
                 # Handle internal markitdown errors like 'excel_to_markdown' not defined
-                print(f"    Warning: markitdown internal error for {file_path.name}: {e}")
+                print(
+                    f"    Warning: markitdown internal error for {file_path.name}: {e}"
+                )
             except ImportError as e:
                 # Missing pdfminer.six - markitdown[pdf] not installed
-                print(f"    Warning: markitdown PDF support not installed (need markitdown[pdf]): {e}")
+                print(
+                    f"    Warning: markitdown PDF support not installed (need markitdown[pdf]): {e}"
+                )
             except Exception as e:
                 print(f"    Warning: markitdown failed for {file_path.name}: {e}")
 
         # Try PyMuPDF (fitz) as fallback if available
         try:
             import fitz  # PyMuPDF
+
             doc = fitz.open(str(file_path))
             text_content = []
             for page_num, page in enumerate(doc, 1):
@@ -519,6 +562,7 @@ class FormatConverter:
         # Try pdfplumber as another fallback
         try:
             import pdfplumber
+
             text_content = []
             with pdfplumber.open(str(file_path)) as pdf:
                 for page_num, page in enumerate(pdf.pages, 1):

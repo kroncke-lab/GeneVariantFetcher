@@ -41,7 +41,9 @@ def _normalize_authors(raw_authors: Optional[List[Any]]) -> List[str]:
             name = author.get("Name")
             if not name:
                 name = " ".join(
-                    part for part in [author.get("ForeName"), author.get("LastName")] if part
+                    part
+                    for part in [author.get("ForeName"), author.get("LastName")]
+                    if part
                 )
             if name:
                 authors.append(str(name))

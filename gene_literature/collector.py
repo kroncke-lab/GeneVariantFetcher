@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 try:
     from .relevance_checker import RelevanceChecker
+
     RELEVANCE_CHECKER_AVAILABLE = True
 except ImportError:
     RELEVANCE_CHECKER_AVAILABLE = False
@@ -74,9 +75,7 @@ class LiteratureCollector:
         # Apply relevance checking if requested
         if filter_irrelevant and self.relevance_checker:
             logger.info("Checking relevance for %d papers", len(records))
-            records = self._filter_by_relevance(
-                gene, records, min_relevance_score
-            )
+            records = self._filter_by_relevance(gene, records, min_relevance_score)
             logger.info("After filtering: %d papers remain", len(records))
         elif filter_irrelevant and not self.relevance_checker:
             logger.warning(

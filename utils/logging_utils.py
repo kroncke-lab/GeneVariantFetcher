@@ -12,17 +12,17 @@ from typing import Optional, Union
 
 
 # Standard log format used across the project
-DEFAULT_LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 # Compact format for CLI tools
-CLI_LOG_FORMAT = '%(levelname)s: %(message)s'
+CLI_LOG_FORMAT = "%(levelname)s: %(message)s"
 
 
 def setup_logging(
     level: Union[str, int] = logging.INFO,
     log_file: Optional[Union[str, Path]] = None,
     format_string: Optional[str] = None,
-    use_cli_format: bool = False
+    use_cli_format: bool = False,
 ) -> None:
     """
     Configure logging for the application.
@@ -66,7 +66,7 @@ def setup_logging(
     if log_file:
         file_path = Path(log_file)
         file_path.parent.mkdir(parents=True, exist_ok=True)
-        file_handler = logging.FileHandler(file_path, encoding='utf-8')
+        file_handler = logging.FileHandler(file_path, encoding="utf-8")
         file_handler.setFormatter(logging.Formatter(DEFAULT_LOG_FORMAT))
         handlers.append(file_handler)
 
@@ -75,7 +75,7 @@ def setup_logging(
         level=level,
         format=log_format,
         handlers=handlers,
-        force=True  # Override any existing configuration
+        force=True,  # Override any existing configuration
     )
 
 

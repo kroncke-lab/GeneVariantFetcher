@@ -15,14 +15,18 @@ import litellm
 from .retry_utils import llm_retry
 
 # Configure LiteLLM retry behavior to reduce excessive retries
-litellm.num_retries = 2  # Reduce from default 6 to 2 (our @llm_retry handles additional retries)
+litellm.num_retries = (
+    2  # Reduce from default 6 to 2 (our @llm_retry handles additional retries)
+)
 litellm.request_timeout = 600  # 10 minute timeout for large extractions
 
 logger = logging.getLogger(__name__)
 
+
 # Rate limiter: Simple token bucket to avoid hitting OpenAI rate limits
 class RateLimiter:
     """Thread-safe rate limiter using token bucket algorithm."""
+
     def __init__(self, requests_per_minute: int = 50):
         self.requests_per_minute = requests_per_minute
         self.min_interval = 60.0 / requests_per_minute  # seconds between requests
@@ -37,6 +41,7 @@ class RateLimiter:
             logger.debug(f"Rate limiting: sleeping {sleep_time:.2f}s")
             time.sleep(sleep_time)
         self.last_request_time = time.time()
+
 
 # Global rate limiter - 50 requests/minute is safe for most OpenAI tiers
 _rate_limiter = RateLimiter(requests_per_minute=50)
@@ -68,10 +73,7 @@ class BaseLLMCaller:
     """
 
     def __init__(
-        self,
-        model: str = "gpt-4o",
-        temperature: float = 0.3,
-        max_tokens: float = 4000
+        self, model: str = "gpt-4o", temperature: float = 0.3, max_tokens: float = 4000
     ):
         """
         Initialize the LLM caller with model parameters.
@@ -121,7 +123,10 @@ class BaseLLMCaller:
             response = completion(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "You fix malformed JSON. Preserve all data including special characters like asterisks (*) in protein notation. Respond with JSON only."},
+                    {
+                        "role": "system",
+                        "content": "You fix malformed JSON. Preserve all data including special characters like asterisks (*) in protein notation. Respond with JSON only.",
+                    },
                     {"role": "user", "content": repair_prompt},
                 ],
                 temperature=0,
@@ -139,7 +144,7 @@ class BaseLLMCaller:
         self,
         prompt: str,
         system_message: Optional[str] = None,
-        response_format: Optional[Dict[str, Any]] = None
+        response_format: Optional[Dict[str, Any]] = None,
     ) -> tuple:
         """
         Call the LLM and parse JSON, returning (data, was_truncated, raw_text).
@@ -160,7 +165,7 @@ class BaseLLMCaller:
             messages=messages,
             temperature=self.temperature,
             max_tokens=self.max_tokens,
-            response_format=response_format
+            response_format=response_format,
         )
 
         result_text = response.choices[0].message.content
@@ -173,7 +178,9 @@ class BaseLLMCaller:
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse LLM JSON response: {e}")
             if was_truncated:
-                logger.warning("LLM response was cut off due to max_tokens; attempting repair.")
+                logger.warning(
+                    "LLM response was cut off due to max_tokens; attempting repair."
+                )
             repaired = self._attempt_json_repair(result_text)
             if repaired is not None:
                 logger.info("JSON repair succeeded after initial parse failure.")
@@ -185,7 +192,7 @@ class BaseLLMCaller:
         self,
         prompt: str,
         system_message: Optional[str] = None,
-        response_format: Optional[Dict[str, Any]] = None
+        response_format: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
         Call the LLM with a prompt and parse the JSON response.
@@ -224,7 +231,9 @@ class BaseLLMCaller:
         if response_format is None:
             response_format = {"type": "json_object"}
 
-        logger.debug(f"Calling LLM with model={self.model}, prompt length={len(prompt)}")
+        logger.debug(
+            f"Calling LLM with model={self.model}, prompt length={len(prompt)}"
+        )
 
         try:
             # Make the LLM API call
@@ -234,7 +243,7 @@ class BaseLLMCaller:
                 messages=messages,
                 temperature=self.temperature,
                 max_tokens=self.max_tokens,
-                response_format=response_format
+                response_format=response_format,
             )
 
             # Extract response text
@@ -244,14 +253,18 @@ class BaseLLMCaller:
             # Parse JSON response
             result_data = parse_llm_json_response(result_text)
 
-            logger.debug(f"LLM call successful, response keys: {list(result_data.keys())}")
+            logger.debug(
+                f"LLM call successful, response keys: {list(result_data.keys())}"
+            )
             return result_data
 
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse LLM JSON response: {e}")
             logger.error(f"Response text: {result_text[:500]}")
             if finish_reason == "length":
-                logger.warning("LLM response was cut off due to max_tokens; attempting repair.")
+                logger.warning(
+                    "LLM response was cut off due to max_tokens; attempting repair."
+                )
             repaired = self._attempt_json_repair(result_text)
             if repaired is not None:
                 logger.info("JSON repair succeeded after initial parse failure.")
@@ -261,11 +274,7 @@ class BaseLLMCaller:
             logger.error(f"LLM API call failed: {e}")
             raise
 
-    def call_llm_text(
-        self,
-        prompt: str,
-        system_message: Optional[str] = None
-    ) -> str:
+    def call_llm_text(self, prompt: str, system_message: Optional[str] = None) -> str:
         """
         Call the LLM and return the raw text response.
 
@@ -297,7 +306,7 @@ class BaseLLMCaller:
                 model=self.model,
                 messages=messages,
                 temperature=self.temperature,
-                max_tokens=self.max_tokens
+                max_tokens=self.max_tokens,
             )
 
             result_text = response.choices[0].message.content
@@ -356,7 +365,7 @@ def create_structured_prompt(
     task_description: str,
     input_data: str,
     output_format: Dict[parse_llm_json_response, parse_llm_json_response],
-    examples: Optional[List[Dict[str, Any]]] = None
+    examples: Optional[List[Dict[str, Any]]] = None,
 ) -> str:
     """
     Create a well-structured prompt for LLM calls.
@@ -399,13 +408,17 @@ def create_structured_prompt(
         prompt_parts.append(f"- {field}: {description}")
 
     if examples:
-        prompt_parts.extend([
-            "",
-            "# Examples",
-        ])
+        prompt_parts.extend(
+            [
+                "",
+                "# Examples",
+            ]
+        )
         for i, example in enumerate(examples, 1):
             prompt_parts.append(f"\nExample {i}:")
             prompt_parts.append(f"Input: {example.get('input', 'N/A')}")
-            prompt_parts.append(f"Output: {json.dumps(example.get('output', {}), indent=2)}")
+            prompt_parts.append(
+                f"Output: {json.dumps(example.get('output', {}), indent=2)}"
+            )
 
     return "\n".join(prompt_parts)

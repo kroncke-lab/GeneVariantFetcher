@@ -55,7 +55,12 @@ def build_gene_keyword_queries(
             queries.append(query)
 
     synonym_info = f" (+ {len(synonyms)} synonyms)" if synonyms else ""
-    logger.debug("Built %d PubMed keyword queries for %s%s", len(queries), gene_symbol, synonym_info)
+    logger.debug(
+        "Built %d PubMed keyword queries for %s%s",
+        len(queries),
+        gene_symbol,
+        synonym_info,
+    )
     return queries
 
 
@@ -95,7 +100,9 @@ def discover_pmids_for_gene(
     # Convert synonyms to list for consistent handling
     synonyms_list = list(synonyms) if synonyms else []
     if synonyms_list:
-        logger.info("Using %d gene synonyms: %s", len(synonyms_list), ", ".join(synonyms_list))
+        logger.info(
+            "Using %d gene synonyms: %s", len(synonyms_list), ", ".join(synonyms_list)
+        )
 
     effective_max_results = max_results or settings.max_papers_per_source
 
@@ -131,7 +138,9 @@ def discover_pmids_for_gene(
     if use_pubmed:
         pubmed_client = PubMedClient(api_key=api_key, email=effective_email)
         pubmed_pmids: set[str] = set()
-        for query in build_gene_keyword_queries(gene_symbol, synonyms=synonyms_list or None):
+        for query in build_gene_keyword_queries(
+            gene_symbol, synonyms=synonyms_list or None
+        ):
             try:
                 pubmed_pmids.update(
                     pubmed_client.search(query, retmax=effective_max_results)

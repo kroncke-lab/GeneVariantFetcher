@@ -17,9 +17,9 @@ load_dotenv()
 def main():
     """Run simple triage examples."""
 
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("Clinical Data Triage Filter - Example Usage")
-    print("="*80 + "\n")
+    print("=" * 80 + "\n")
 
     # Initialize the triage filter
     triage = ClinicalDataTriageFilter()
@@ -37,7 +37,7 @@ def main():
         The patient was successfully treated with an ICD implant.
         """,
         gene="SCN5A",
-        pmid="EX001"
+        pmid="EX001",
     )
 
     print(json.dumps(result1, indent=2))
@@ -57,7 +57,7 @@ def main():
         reported to date.
         """,
         gene="SCN5A",
-        pmid="EX002"
+        pmid="EX002",
     )
 
     print(json.dumps(result2, indent=2))
@@ -76,7 +76,7 @@ def main():
         provide insights into SCN5A function in mouse cardiac tissue.
         """,
         gene="SCN5A",
-        pmid="EX003"
+        pmid="EX003",
     )
 
     print(json.dumps(result3, indent=2))
@@ -96,20 +96,20 @@ def main():
         Mutation location predicted outcomes.
         """,
         gene="SCN5A",
-        pmid="EX004"
+        pmid="EX004",
     )
 
     print(json.dumps(result4, indent=2))
     print()
 
     # Summary
-    print("="*80)
+    print("=" * 80)
     print("Summary")
-    print("="*80)
+    print("=" * 80)
 
     results = [result1, result2, result3, result4]
-    keep_count = sum(1 for r in results if r['decision'] == 'KEEP')
-    drop_count = sum(1 for r in results if r['decision'] == 'DROP')
+    keep_count = sum(1 for r in results if r["decision"] == "KEEP")
+    drop_count = sum(1 for r in results if r["decision"] == "DROP")
 
     print(f"Total papers triaged: {len(results)}")
     print(f"KEEP decisions: {keep_count}")
@@ -119,22 +119,23 @@ def main():
     # Display which papers were kept
     print("Papers to KEEP (original clinical data):")
     for i, result in enumerate(results, 1):
-        if result['decision'] == 'KEEP':
+        if result["decision"] == "KEEP":
             print(f"  - Example {i} (PMID: {result['pmid']}): {result['reason']}")
 
     print()
     print("Papers to DROP (no original clinical data):")
     for i, result in enumerate(results, 1):
-        if result['decision'] == 'DROP':
+        if result["decision"] == "DROP":
             print(f"  - Example {i} (PMID: {result['pmid']}): {result['reason']}")
 
-    print("\n" + "="*80 + "\n")
+    print("\n" + "=" * 80 + "\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Check for API key
     import os
-    if not os.getenv('OPENAI_API_KEY'):
+
+    if not os.getenv("OPENAI_API_KEY"):
         print("\n⚠️  Warning: OPENAI_API_KEY not set!")
         print("   Set it in your .env file\n")
         print("   This example requires API access to run.\n")

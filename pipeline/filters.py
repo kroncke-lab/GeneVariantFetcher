@@ -23,26 +23,70 @@ class KeywordFilter:
 
     DEFAULT_CLINICAL_KEYWORDS = [
         # Variant/mutation terms
-        "variant", "mutation", "polymorphism", "SNP", "deletion", "insertion",
-        "substitution", "missense", "nonsense", "frameshift", "splice",
-        "indel", "copy number", "CNV",
-
+        "variant",
+        "mutation",
+        "polymorphism",
+        "SNP",
+        "deletion",
+        "insertion",
+        "substitution",
+        "missense",
+        "nonsense",
+        "frameshift",
+        "splice",
+        "indel",
+        "copy number",
+        "CNV",
         # Clinical terms
-        "patient", "patients", "clinical", "disease", "syndrome", "phenotype",
-        "diagnosis", "treatment", "therapy", "outcome", "prognosis",
-        "symptom", "symptoms", "manifestation", "pathogenic", "benign",
-
+        "patient",
+        "patients",
+        "clinical",
+        "disease",
+        "syndrome",
+        "phenotype",
+        "diagnosis",
+        "treatment",
+        "therapy",
+        "outcome",
+        "prognosis",
+        "symptom",
+        "symptoms",
+        "manifestation",
+        "pathogenic",
+        "benign",
         # Study types
-        "case report", "case series", "cohort", "clinical trial", "study",
-        "analysis", "association", "genotype", "phenotype",
-
+        "case report",
+        "case series",
+        "cohort",
+        "clinical trial",
+        "study",
+        "analysis",
+        "association",
+        "genotype",
+        "phenotype",
         # Medical/genetic terms
-        "pathology", "molecular", "genetic", "genomic", "exome", "sequencing",
-        "gene", "chromosome", "allele", "heterozygous", "homozygous",
-        "carrier", "inheritance", "familial", "sporadic"
+        "pathology",
+        "molecular",
+        "genetic",
+        "genomic",
+        "exome",
+        "sequencing",
+        "gene",
+        "chromosome",
+        "allele",
+        "heterozygous",
+        "homozygous",
+        "carrier",
+        "inheritance",
+        "familial",
+        "sporadic",
     ]
 
-    def __init__(self, keywords: Optional[List[str]] = None, min_keyword_matches: Optional[int] = None):
+    def __init__(
+        self,
+        keywords: Optional[List[str]] = None,
+        min_keyword_matches: Optional[int] = None,
+    ):
         """
         Initialize the keyword filter.
 
@@ -53,15 +97,21 @@ class KeywordFilter:
         settings = get_settings()
 
         self.keywords = keywords or self.DEFAULT_CLINICAL_KEYWORDS
-        self.min_keyword_matches = min_keyword_matches if min_keyword_matches is not None else settings.tier1_min_keywords
+        self.min_keyword_matches = (
+            min_keyword_matches
+            if min_keyword_matches is not None
+            else settings.tier1_min_keywords
+        )
 
         # Compile single combined regex pattern for 10x+ speedup
         # Uses alternation (|) to match any keyword in one pass
         escaped_keywords = [re.escape(keyword) for keyword in self.keywords]
-        combined_pattern = r'\b(' + '|'.join(escaped_keywords) + r')\b'
+        combined_pattern = r"\b(" + "|".join(escaped_keywords) + r")\b"
         self.pattern = re.compile(combined_pattern, re.IGNORECASE)
 
-        logger.debug(f"KeywordFilter initialized with {len(self.keywords)} keywords, min_matches={self.min_keyword_matches}")
+        logger.debug(
+            f"KeywordFilter initialized with {len(self.keywords)} keywords, min_matches={self.min_keyword_matches}"
+        )
 
     def filter(self, paper: Paper) -> FilterResult:
         """
@@ -81,13 +131,15 @@ class KeywordFilter:
                 reason="No abstract available",
                 pmid=paper.pmid,
                 confidence=1.0,
-                metadata={"matched_keywords": []}
+                metadata={"matched_keywords": []},
             )
 
         # Find all matching keywords in one pass (10x faster than individual searches)
         matches = self.pattern.findall(paper.abstract.lower())
         # Get unique matches (case-insensitive)
-        matched_keywords = list(dict.fromkeys(matches))  # Preserves order, removes duplicates
+        matched_keywords = list(
+            dict.fromkeys(matches)
+        )  # Preserves order, removes duplicates
         num_matches = len(matched_keywords)
 
         # Determine pass/fail
@@ -100,7 +152,9 @@ class KeywordFilter:
             decision = FilterDecision.FAIL
             reason = f"Only {num_matches} keyword match(es), minimum {self.min_keyword_matches} required"
 
-        logger.debug(f"PMID {paper.pmid} - Keyword filter: {decision.value} ({num_matches} matches)")
+        logger.debug(
+            f"PMID {paper.pmid} - Keyword filter: {decision.value} ({num_matches} matches)"
+        )
 
         return FilterResult(
             decision=decision,
@@ -108,10 +162,7 @@ class KeywordFilter:
             reason=reason,
             pmid=paper.pmid,
             confidence=min(num_matches / 10.0, 1.0),  # Simple confidence score
-            metadata={
-                "matched_keywords": matched_keywords,
-                "num_matches": num_matches
-            }
+            metadata={"matched_keywords": matched_keywords, "num_matches": num_matches},
         )
 
 
@@ -149,7 +200,7 @@ Respond with a JSON object:
         model: Optional[str] = None,
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
-        confidence_threshold: Optional[float] = None
+        confidence_threshold: Optional[float] = None,
     ):
         """
         Initialize the Intern filter.
@@ -164,13 +215,21 @@ Respond with a JSON object:
 
         # Use config defaults if not specified
         model = model or settings.tier2_model or settings.intern_model
-        temperature = temperature if temperature is not None else settings.tier2_temperature
+        temperature = (
+            temperature if temperature is not None else settings.tier2_temperature
+        )
         max_tokens = max_tokens if max_tokens is not None else settings.tier2_max_tokens
-        self.confidence_threshold = confidence_threshold if confidence_threshold is not None else settings.tier2_confidence_threshold
+        self.confidence_threshold = (
+            confidence_threshold
+            if confidence_threshold is not None
+            else settings.tier2_confidence_threshold
+        )
 
         super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
 
-        logger.debug(f"InternFilter initialized with model={model}, temp={temperature}, confidence_threshold={self.confidence_threshold}")
+        logger.debug(
+            f"InternFilter initialized with model={model}, temp={temperature}, confidence_threshold={self.confidence_threshold}"
+        )
 
     def filter(self, paper: Paper) -> FilterResult:
         """
@@ -183,19 +242,21 @@ Respond with a JSON object:
             FilterResult with LLM-based decision.
         """
         if not paper.abstract or not paper.title:
-            logger.warning(f"PMID {paper.pmid} missing title/abstract for Intern filter")
+            logger.warning(
+                f"PMID {paper.pmid} missing title/abstract for Intern filter"
+            )
             return FilterResult(
                 decision=FilterDecision.FAIL,
                 tier=FilterTier.TIER_2_INTERN,
                 reason="Missing title or abstract for LLM classification",
                 pmid=paper.pmid,
-                confidence=1.0
+                confidence=1.0,
             )
 
         # Construct prompt
         prompt = self.CLASSIFICATION_PROMPT.format(
             title=paper.title,
-            abstract=paper.abstract[:2000]  # Truncate very long abstracts
+            abstract=paper.abstract[:2000],  # Truncate very long abstracts
         )
 
         try:
@@ -212,9 +273,15 @@ Respond with a JSON object:
             if decision_str == "PASS" and confidence < self.confidence_threshold:
                 decision = FilterDecision.FAIL
                 reason = f"Low confidence ({confidence:.2f} < {self.confidence_threshold}): {reason}"
-                logger.info(f"PMID {paper.pmid} - Failed due to low confidence: {confidence:.2f}")
+                logger.info(
+                    f"PMID {paper.pmid} - Failed due to low confidence: {confidence:.2f}"
+                )
             else:
-                decision = FilterDecision.PASS if decision_str == "PASS" else FilterDecision.FAIL
+                decision = (
+                    FilterDecision.PASS
+                    if decision_str == "PASS"
+                    else FilterDecision.FAIL
+                )
 
             logger.info(
                 f"PMID {paper.pmid} - Intern filter: {decision.value} "
@@ -229,8 +296,8 @@ Respond with a JSON object:
                 confidence=confidence,
                 metadata={
                     "model": self.model,
-                    "confidence_threshold": self.confidence_threshold
-                }
+                    "confidence_threshold": self.confidence_threshold,
+                },
             )
 
         except Exception as e:
@@ -242,7 +309,7 @@ Respond with a JSON object:
                 reason=f"LLM classification error: {str(e)}",
                 pmid=paper.pmid,
                 confidence=0.0,
-                metadata={"error": str(e)}
+                metadata={"error": str(e)},
             )
 
 
@@ -303,7 +370,7 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
         self,
         model: Optional[str] = None,
         temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None
+        max_tokens: Optional[int] = None,
     ):
         """
         Initialize the Clinical Data Triage filter.
@@ -316,8 +383,12 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
         settings = get_settings()
 
         model = model or settings.tier2_model or settings.intern_model
-        temperature = temperature if temperature is not None else settings.tier2_temperature
-        max_tokens = max_tokens if max_tokens is not None else 200  # Slightly higher than default for triage
+        temperature = (
+            temperature if temperature is not None else settings.tier2_temperature
+        )
+        max_tokens = (
+            max_tokens if max_tokens is not None else 200
+        )  # Slightly higher than default for triage
 
         super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
 
@@ -328,7 +399,7 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
         title: str,
         abstract: str,
         gene: str = "the gene of interest",
-        pmid: Optional[str] = None
+        pmid: Optional[str] = None,
     ) -> str:
         """
         Triage a paper based on title and abstract.
@@ -347,23 +418,27 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
                 - pmid: PMID if provided
         """
         if not abstract or not title:
-            logger.warning(f"Missing title or abstract for triage{f' (PMID: {pmid})' if pmid else ''}")
+            logger.warning(
+                f"Missing title or abstract for triage{f' (PMID: {pmid})' if pmid else ''}"
+            )
             return {
                 "decision": "DROP",
                 "reason": "Missing title or abstract",
                 "confidence": 1.0,
-                "pmid": pmid
+                "pmid": pmid,
             }
 
         # Construct prompt
         prompt = self.TRIAGE_PROMPT.format(
             gene=gene,
             title=title,
-            abstract=abstract[:2500]  # Truncate very long abstracts
+            abstract=abstract[:2500],  # Truncate very long abstracts
         )
 
         try:
-            logger.debug(f"Triaging paper{f' PMID {pmid}' if pmid else ''} for gene {gene}")
+            logger.debug(
+                f"Triaging paper{f' PMID {pmid}' if pmid else ''} for gene {gene}"
+            )
 
             # Use shared LLM utility (includes retry logic)
             result_data = self.call_llm_json(prompt)
@@ -383,7 +458,7 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
                 "reason": reason,
                 "confidence": confidence,
                 "pmid": pmid,
-                "model": self.model
+                "model": self.model,
             }
 
             logger.info(
@@ -401,7 +476,7 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
                 "reason": f"Triage error: {str(e)}",
                 "confidence": 0.0,
                 "pmid": pmid,
-                "error": str(e)
+                "error": str(e),
             }
 
     def triage_paper(self, paper: Paper, gene: Optional[str] = None) -> str:
@@ -421,5 +496,5 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
             title=paper.title or "",
             abstract=paper.abstract or "",
             gene=gene_symbol,
-            pmid=paper.pmid
+            pmid=paper.pmid,
         )

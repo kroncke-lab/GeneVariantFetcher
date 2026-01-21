@@ -25,12 +25,20 @@ class Settings(BaseSettings):
     wiley_api_key: Optional[str] = Field(default=None, env="WILEY_API_KEY")
 
     # Model Configuration
-    tier1_model: Optional[str] = Field(default=None, env="TIER1_MODEL", description="Optional LLM for Tier 1 (if using LLM-based Tier 1)")
-    tier2_model: str = Field(default="gpt-4o-mini", env="TIER2_MODEL", description="Model for Tier 2 classification (cheap)")
+    tier1_model: Optional[str] = Field(
+        default=None,
+        env="TIER1_MODEL",
+        description="Optional LLM for Tier 1 (if using LLM-based Tier 1)",
+    )
+    tier2_model: str = Field(
+        default="gpt-4o-mini",
+        env="TIER2_MODEL",
+        description="Model for Tier 2 classification (cheap)",
+    )
     tier3_models: Union[str, List[str]] = Field(
         default="gpt-4o-mini,gpt-4o",
         env="TIER3_MODELS",
-        description="Comma-separated list of models for Tier 3 extraction (e.g., 'gpt-4o-mini,gpt-4o')"
+        description="Comma-separated list of models for Tier 3 extraction (e.g., 'gpt-4o-mini,gpt-4o')",
     )
 
     # Legacy aliases for backward compatibility
@@ -38,36 +46,108 @@ class Settings(BaseSettings):
     rate_limit_per_minute: int = Field(default=60, env="RATE_LIMIT_PER_MINUTE")
 
     # Tiered Classification Configuration
-    enable_tier1: bool = Field(default=True, env="ENABLE_TIER1", description="Enable Tier 1 keyword/heuristic filtering")
-    enable_tier2: bool = Field(default=True, env="ENABLE_TIER2", description="Enable Tier 2 LLM classification")
-    enable_tier3: bool = Field(default=True, env="ENABLE_TIER3", description="Enable Tier 3 expert extraction")
+    enable_tier1: bool = Field(
+        default=True,
+        env="ENABLE_TIER1",
+        description="Enable Tier 1 keyword/heuristic filtering",
+    )
+    enable_tier2: bool = Field(
+        default=True, env="ENABLE_TIER2", description="Enable Tier 2 LLM classification"
+    )
+    enable_tier3: bool = Field(
+        default=True, env="ENABLE_TIER3", description="Enable Tier 3 expert extraction"
+    )
 
     # Tier 1 Configuration
-    tier1_min_keywords: int = Field(default=2, env="TIER1_MIN_KEYWORDS", description="Minimum keyword matches for Tier 1 to pass")
-    tier1_use_llm: bool = Field(default=False, env="TIER1_USE_LLM", description="Use lightweight LLM for Tier 1 instead of keywords")
+    tier1_min_keywords: int = Field(
+        default=2,
+        env="TIER1_MIN_KEYWORDS",
+        description="Minimum keyword matches for Tier 1 to pass",
+    )
+    tier1_use_llm: bool = Field(
+        default=False,
+        env="TIER1_USE_LLM",
+        description="Use lightweight LLM for Tier 1 instead of keywords",
+    )
 
     # Tier 2 Configuration
-    tier2_temperature: float = Field(default=0.1, env="TIER2_TEMPERATURE", description="Temperature for Tier 2 LLM")
-    tier2_max_tokens: int = Field(default=150, env="TIER2_MAX_TOKENS", description="Max tokens for Tier 2 LLM response")
-    tier2_confidence_threshold: float = Field(default=0.5, env="TIER2_CONFIDENCE_THRESHOLD", description="Minimum confidence to pass Tier 2")
+    tier2_temperature: float = Field(
+        default=0.1, env="TIER2_TEMPERATURE", description="Temperature for Tier 2 LLM"
+    )
+    tier2_max_tokens: int = Field(
+        default=150,
+        env="TIER2_MAX_TOKENS",
+        description="Max tokens for Tier 2 LLM response",
+    )
+    tier2_confidence_threshold: float = Field(
+        default=0.5,
+        env="TIER2_CONFIDENCE_THRESHOLD",
+        description="Minimum confidence to pass Tier 2",
+    )
 
     # Tier 3 Configuration
-    tier3_temperature: float = Field(default=0.0, env="TIER3_TEMPERATURE", description="Temperature for Tier 3 LLM")
-    tier3_max_tokens: int = Field(default=16000, env="TIER3_MAX_TOKENS", description="Max tokens for Tier 3 LLM response (increased for large variant tables)")
-    tier3_threshold: int = Field(default=1, env="TIER3_THRESHOLD", description="Try next model if first finds fewer variants than this (0 = only use first model)")
+    tier3_temperature: float = Field(
+        default=0.0, env="TIER3_TEMPERATURE", description="Temperature for Tier 3 LLM"
+    )
+    tier3_max_tokens: int = Field(
+        default=16000,
+        env="TIER3_MAX_TOKENS",
+        description="Max tokens for Tier 3 LLM response (increased for large variant tables)",
+    )
+    tier3_threshold: int = Field(
+        default=1,
+        env="TIER3_THRESHOLD",
+        description="Try next model if first finds fewer variants than this (0 = only use first model)",
+    )
 
     # Paper Sourcing Configuration
-    use_pubmind: bool = Field(default=True, env="USE_PUBMIND", description="Use PubMind as primary literature source")
-    use_pubmed: bool = Field(default=True, env="USE_PUBMED", description="Use PubMed API as additional source")
-    use_europepmc: bool = Field(default=False, env="USE_EUROPEPMC", description="Use EuropePMC as additional source")
-    pubmind_only: bool = Field(default=False, env="PUBMIND_ONLY", description="Use ONLY PubMind (ignore PubMed/EuropePMC)")
-    max_papers_per_source: int = Field(default=100, env="MAX_PAPERS_PER_SOURCE", description="Max papers to fetch per source")
+    use_pubmind: bool = Field(
+        default=True,
+        env="USE_PUBMIND",
+        description="Use PubMind as primary literature source",
+    )
+    use_pubmed: bool = Field(
+        default=True,
+        env="USE_PUBMED",
+        description="Use PubMed API as additional source",
+    )
+    use_europepmc: bool = Field(
+        default=False,
+        env="USE_EUROPEPMC",
+        description="Use EuropePMC as additional source",
+    )
+    pubmind_only: bool = Field(
+        default=False,
+        env="PUBMIND_ONLY",
+        description="Use ONLY PubMind (ignore PubMed/EuropePMC)",
+    )
+    max_papers_per_source: int = Field(
+        default=100,
+        env="MAX_PAPERS_PER_SOURCE",
+        description="Max papers to fetch per source",
+    )
 
     # Genetic Data Scout Configuration
-    scout_enabled: bool = Field(default=True, env="SCOUT_ENABLED", description="Enable Genetic Data Scout to create condensed DATA_ZONES.md files")
-    scout_min_relevance: float = Field(default=0.3, env="SCOUT_MIN_RELEVANCE", description="Minimum relevance score (0.0-1.0) for zones to be included")
-    scout_max_zones: int = Field(default=30, env="SCOUT_MAX_ZONES", description="Maximum number of data zones to identify per paper")
-    scout_use_condensed: bool = Field(default=True, env="SCOUT_USE_CONDENSED", description="Prefer DATA_ZONES.md over FULL_CONTEXT.md for extraction")
+    scout_enabled: bool = Field(
+        default=True,
+        env="SCOUT_ENABLED",
+        description="Enable Genetic Data Scout to create condensed DATA_ZONES.md files",
+    )
+    scout_min_relevance: float = Field(
+        default=0.3,
+        env="SCOUT_MIN_RELEVANCE",
+        description="Minimum relevance score (0.0-1.0) for zones to be included",
+    )
+    scout_max_zones: int = Field(
+        default=30,
+        env="SCOUT_MAX_ZONES",
+        description="Maximum number of data zones to identify per paper",
+    )
+    scout_use_condensed: bool = Field(
+        default=True,
+        env="SCOUT_USE_CONDENSED",
+        description="Prefer DATA_ZONES.md over FULL_CONTEXT.md for extraction",
+    )
 
     model_config = SettingsConfigDict(
         env_file=_ENV_PATH,

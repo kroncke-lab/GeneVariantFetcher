@@ -142,21 +142,25 @@ class PipelineWorker:
                 ]
                 if checkpoint.run_scout_on_folder:
                     steps.append((PipelineStep.SCOUTING_DATA, self._step_scout_data))
-                steps.extend([
-                    (PipelineStep.EXTRACTING_VARIANTS, self._step_extract_variants),
-                    (PipelineStep.AGGREGATING_DATA, self._step_aggregate_data),
-                    (PipelineStep.MIGRATING_DATABASE, self._step_migrate_database),
-                ])
+                steps.extend(
+                    [
+                        (PipelineStep.EXTRACTING_VARIANTS, self._step_extract_variants),
+                        (PipelineStep.AGGREGATING_DATA, self._step_aggregate_data),
+                        (PipelineStep.MIGRATING_DATABASE, self._step_migrate_database),
+                    ]
+                )
             elif checkpoint.is_folder_job:
                 # Folder jobs skip discovery/download, go straight to scouting/extraction
                 steps = []
                 if checkpoint.run_scout_on_folder:
                     steps.append((PipelineStep.SCOUTING_DATA, self._step_scout_data))
-                steps.extend([
-                    (PipelineStep.EXTRACTING_VARIANTS, self._step_extract_variants),
-                    (PipelineStep.AGGREGATING_DATA, self._step_aggregate_data),
-                    (PipelineStep.MIGRATING_DATABASE, self._step_migrate_database),
-                ])
+                steps.extend(
+                    [
+                        (PipelineStep.EXTRACTING_VARIANTS, self._step_extract_variants),
+                        (PipelineStep.AGGREGATING_DATA, self._step_aggregate_data),
+                        (PipelineStep.MIGRATING_DATABASE, self._step_migrate_database),
+                    ]
+                )
             else:
                 # Full pipeline
                 steps = [
@@ -187,9 +191,7 @@ class PipelineWorker:
                     return checkpoint
 
                 # Run step
-                self.progress.on_step_start(
-                    step, PipelineStep.get_display_name(step)
-                )
+                self.progress.on_step_start(step, PipelineStep.get_display_name(step))
                 checkpoint.update_step(step)
                 self._save_checkpoint(checkpoint)
 
@@ -230,7 +232,10 @@ class PipelineWorker:
 
         self._log(checkpoint, f"Discovering synonyms for {checkpoint.gene_symbol}...")
 
-        from gene_literature.synonym_finder import SynonymFinder, automatic_synonym_selection
+        from gene_literature.synonym_finder import (
+            SynonymFinder,
+            automatic_synonym_selection,
+        )
 
         synonym_finder = SynonymFinder(
             email=checkpoint.email,
@@ -254,20 +259,32 @@ class PipelineWorker:
         # Merge with manually provided synonyms
         existing = set(s.lower() for s in checkpoint.synonyms)
         for syn in auto_selected:
-            if syn.lower() not in existing and syn.lower() != checkpoint.gene_symbol.lower():
+            if (
+                syn.lower() not in existing
+                and syn.lower() != checkpoint.gene_symbol.lower()
+            ):
                 checkpoint.synonyms.append(syn)
                 existing.add(syn.lower())
 
-        self._log(checkpoint, f"Found {len(auto_selected)} synonyms: {', '.join(checkpoint.synonyms)}")
+        self._log(
+            checkpoint,
+            f"Found {len(auto_selected)} synonyms: {', '.join(checkpoint.synonyms)}",
+        )
 
-        return {"synonyms_found": len(auto_selected), "total_synonyms": len(checkpoint.synonyms)}
+        return {
+            "synonyms_found": len(auto_selected),
+            "total_synonyms": len(checkpoint.synonyms),
+        }
 
     def _step_fetch_pmids(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
         """Step 1: Fetch PMIDs from literature sources."""
 
         # If specific PMIDs provided, use those directly (for testing)
         if checkpoint.specific_pmids:
-            self._log(checkpoint, f"Using {len(checkpoint.specific_pmids)} specific PMID(s) for testing...")
+            self._log(
+                checkpoint,
+                f"Using {len(checkpoint.specific_pmids)} specific PMID(s) for testing...",
+            )
             checkpoint.discovered_pmids = list(checkpoint.specific_pmids)
 
             # Save to combined file for consistency
@@ -277,7 +294,10 @@ class PipelineWorker:
                 for pmid in checkpoint.specific_pmids:
                     f.write(f"{pmid}\n")
 
-            self._log(checkpoint, f"Using specific PMIDs: {', '.join(checkpoint.specific_pmids)}")
+            self._log(
+                checkpoint,
+                f"Using specific PMIDs: {', '.join(checkpoint.specific_pmids)}",
+            )
 
             return {
                 "pubmind_count": 0,
@@ -317,7 +337,9 @@ class PipelineWorker:
         )
 
         checkpoint.discovered_pmids = list(pmid_discovery.combined_pmids)
-        self._log(checkpoint, f"Discovered {len(checkpoint.discovered_pmids)} unique PMIDs")
+        self._log(
+            checkpoint, f"Discovered {len(checkpoint.discovered_pmids)} unique PMIDs"
+        )
 
         return {
             "pubmind_count": len(pmid_discovery.pubmind_pmids),
@@ -354,7 +376,11 @@ class PipelineWorker:
         """Step 1.6: Filter papers by relevance."""
         self._log(checkpoint, "Filtering papers by relevance...")
 
-        from pipeline.filters import KeywordFilter, InternFilter, ClinicalDataTriageFilter
+        from pipeline.filters import (
+            KeywordFilter,
+            InternFilter,
+            ClinicalDataTriageFilter,
+        )
         from utils.models import Paper, FilterDecision
         from config.settings import get_settings
 
@@ -368,7 +394,9 @@ class PipelineWorker:
         tier2_filter = (
             ClinicalDataTriageFilter()
             if checkpoint.use_clinical_triage
-            else InternFilter(confidence_threshold=checkpoint.tier2_confidence_threshold)
+            else InternFilter(
+                confidence_threshold=checkpoint.tier2_confidence_threshold
+            )
         )
 
         filtered_pmids = []
@@ -409,9 +437,13 @@ class PipelineWorker:
             # Tier 2 filtering
             if checkpoint.enable_tier2:
                 if checkpoint.use_clinical_triage:
-                    triage_result = tier2_filter.triage_paper(paper, checkpoint.gene_symbol)
+                    triage_result = tier2_filter.triage_paper(
+                        paper, checkpoint.gene_symbol
+                    )
                     if triage_result.get("decision") != "KEEP":
-                        dropped_pmids.append((pmid, triage_result.get("reason", "Failed triage")))
+                        dropped_pmids.append(
+                            (pmid, triage_result.get("reason", "Failed triage"))
+                        )
                         continue
                 else:
                     tier2_result = tier2_filter.filter(paper)
@@ -432,7 +464,10 @@ class PipelineWorker:
             writer.writerow(["PMID", "Reason"])
             writer.writerows(dropped_pmids)
 
-        self._log(checkpoint, f"Passed filters: {len(filtered_pmids)}, Dropped: {len(dropped_pmids)}")
+        self._log(
+            checkpoint,
+            f"Passed filters: {len(filtered_pmids)}, Dropped: {len(dropped_pmids)}",
+        )
 
         return {
             "passed_filters": len(filtered_pmids),
@@ -462,12 +497,21 @@ class PipelineWorker:
         # Determine which PMIDs to download
         if checkpoint.is_resume_job and checkpoint.pmids_to_download:
             # Resume job: download the specific missing PMIDs
-            pmids_to_download = checkpoint.pmids_to_download[:checkpoint.max_papers_to_download]
-            self._log(checkpoint, f"Resuming download for {len(pmids_to_download)} missing papers...")
+            pmids_to_download = checkpoint.pmids_to_download[
+                : checkpoint.max_papers_to_download
+            ]
+            self._log(
+                checkpoint,
+                f"Resuming download for {len(pmids_to_download)} missing papers...",
+            )
         else:
             # Normal job: use filtered PMIDs
-            pmids_to_download = checkpoint.filtered_pmids[:checkpoint.max_papers_to_download]
-            self._log(checkpoint, f"Downloading up to {len(pmids_to_download)} papers...")
+            pmids_to_download = checkpoint.filtered_pmids[
+                : checkpoint.max_papers_to_download
+            ]
+            self._log(
+                checkpoint, f"Downloading up to {len(pmids_to_download)} papers..."
+            )
 
         harvester.harvest(pmids_to_download, delay=2.0)
 
@@ -478,6 +522,7 @@ class PipelineWorker:
 
         if success_log.exists():
             import pandas as pd
+
             successful_downloads = pd.read_csv(success_log)
             num_downloaded = len(successful_downloads)
             newly_downloaded = successful_downloads["PMID"].astype(str).tolist()
@@ -487,7 +532,10 @@ class PipelineWorker:
             existing_pmids = set(checkpoint.downloaded_pmids)
             new_pmids = set(newly_downloaded)
             checkpoint.downloaded_pmids = list(existing_pmids | new_pmids)
-            self._log(checkpoint, f"Resume complete. Total downloaded: {len(checkpoint.downloaded_pmids)} papers ({len(new_pmids - existing_pmids)} new)")
+            self._log(
+                checkpoint,
+                f"Resume complete. Total downloaded: {len(checkpoint.downloaded_pmids)} papers ({len(new_pmids - existing_pmids)} new)",
+            )
         else:
             checkpoint.downloaded_pmids = newly_downloaded
             self._log(checkpoint, f"Successfully downloaded {num_downloaded} papers")
@@ -519,10 +567,14 @@ class PipelineWorker:
 
         # Find FULL_CONTEXT files that don't have corresponding DATA_ZONES
         full_context_files = list(fulltext_dir.glob("*_FULL_CONTEXT.md"))
-        existing_zones = {f.name.replace("_DATA_ZONES.md", "") for f in fulltext_dir.glob("*_DATA_ZONES.md")}
+        existing_zones = {
+            f.name.replace("_DATA_ZONES.md", "")
+            for f in fulltext_dir.glob("*_DATA_ZONES.md")
+        }
 
         files_to_scout = [
-            f for f in full_context_files
+            f
+            for f in full_context_files
             if f.name.replace("_FULL_CONTEXT.md", "") not in existing_zones
         ]
 
@@ -565,7 +617,9 @@ class PipelineWorker:
 
                 scouted += 1
                 if scouted % 5 == 0:
-                    self._log(checkpoint, f"Scouted {scouted}/{len(files_to_scout)} papers...")
+                    self._log(
+                        checkpoint, f"Scouted {scouted}/{len(files_to_scout)} papers..."
+                    )
 
             except Exception as e:
                 errors += 1
@@ -602,8 +656,14 @@ class PipelineWorker:
         extraction_dir.mkdir(exist_ok=True)
 
         # Find markdown files (prefer DATA_ZONES.md)
-        data_zones = {f.name.replace("_DATA_ZONES.md", ""): f for f in harvest_dir.glob("*_DATA_ZONES.md")}
-        full_context = {f.name.replace("_FULL_CONTEXT.md", ""): f for f in harvest_dir.glob("*_FULL_CONTEXT.md")}
+        data_zones = {
+            f.name.replace("_DATA_ZONES.md", ""): f
+            for f in harvest_dir.glob("*_DATA_ZONES.md")
+        }
+        full_context = {
+            f.name.replace("_FULL_CONTEXT.md", ""): f
+            for f in harvest_dir.glob("*_FULL_CONTEXT.md")
+        }
 
         all_pmids = set(data_zones.keys()) | set(full_context.keys())
 
@@ -613,7 +673,9 @@ class PipelineWorker:
             skipped_count = len(all_pmids & already_extracted)
             all_pmids = all_pmids - already_extracted
             if skipped_count > 0:
-                self._log(checkpoint, f"Skipping {skipped_count} already-extracted papers")
+                self._log(
+                    checkpoint, f"Skipping {skipped_count} already-extracted papers"
+                )
 
         markdown_files = []
         for pmid in all_pmids:
@@ -622,7 +684,9 @@ class PipelineWorker:
             elif pmid in full_context:
                 markdown_files.append(full_context[pmid])
 
-        self._log(checkpoint, f"Processing {len(markdown_files)} papers for extraction...")
+        self._log(
+            checkpoint, f"Processing {len(markdown_files)} papers for extraction..."
+        )
 
         extractor = ExpertExtractor(
             tier_threshold=checkpoint.tier_threshold,
@@ -650,7 +714,10 @@ class PipelineWorker:
             try:
                 result = extractor.extract(paper)
                 if result.success:
-                    output_file = extraction_dir / f"{checkpoint.gene_symbol}_PMID_{pmid_match}.json"
+                    output_file = (
+                        extraction_dir
+                        / f"{checkpoint.gene_symbol}_PMID_{pmid_match}.json"
+                    )
                     with open(output_file, "w") as f:
                         json.dump(result.extracted_data, f, indent=2)
                     return (result, None)
@@ -672,9 +739,16 @@ class PipelineWorker:
                 if failure:
                     extraction_failures.append(failure)
                 if completed % 5 == 0:
-                    self._log(checkpoint, f"Processed {completed}/{len(markdown_files)} papers...")
+                    self._log(
+                        checkpoint,
+                        f"Processed {completed}/{len(markdown_files)} papers...",
+                    )
 
-        checkpoint.extracted_pmids = [str(e.extracted_data.get("pmid", "")) for e in extractions if e.extracted_data]
+        checkpoint.extracted_pmids = [
+            str(e.extracted_data.get("pmid", ""))
+            for e in extractions
+            if e.extracted_data
+        ]
 
         # Save failures
         pmid_status_dir = base_path / "pmid_status"
@@ -687,11 +761,17 @@ class PipelineWorker:
 
         # Count variants
         total_variants = sum(
-            e.extracted_data.get("extraction_metadata", {}).get("total_variants_found", 0)
-            for e in extractions if e.extracted_data
+            e.extracted_data.get("extraction_metadata", {}).get(
+                "total_variants_found", 0
+            )
+            for e in extractions
+            if e.extracted_data
         )
 
-        self._log(checkpoint, f"Extracted {total_variants} variants from {len(extractions)} papers")
+        self._log(
+            checkpoint,
+            f"Extracted {total_variants} variants from {len(extractions)} papers",
+        )
 
         return {
             "papers_extracted": len(extractions),
@@ -729,7 +809,10 @@ class PipelineWorker:
         """Step 5: Migrate to SQLite database."""
         self._log(checkpoint, "Creating SQLite database...")
 
-        from harvesting.migrate_to_sqlite import create_database_schema, migrate_extraction_directory
+        from harvesting.migrate_to_sqlite import (
+            create_database_schema,
+            migrate_extraction_directory,
+        )
 
         # Determine directories based on job type
         if checkpoint.is_folder_job and checkpoint.folder_path:
@@ -754,7 +837,9 @@ class PipelineWorker:
 
         return migration_stats
 
-    def _write_workflow_summary(self, checkpoint: JobCheckpoint, migration_stats: Dict[str, Any]):
+    def _write_workflow_summary(
+        self, checkpoint: JobCheckpoint, migration_stats: Dict[str, Any]
+    ):
         """Write final workflow summary JSON."""
         # Determine base path based on job type
         if checkpoint.is_folder_job and checkpoint.folder_path:
@@ -766,19 +851,25 @@ class PipelineWorker:
         total_variants = 0
 
         # First try to get from step_progress (extraction step)
-        extraction_stats = checkpoint.step_progress.get(PipelineStep.EXTRACTING_VARIANTS.value, {})
+        extraction_stats = checkpoint.step_progress.get(
+            PipelineStep.EXTRACTING_VARIANTS.value, {}
+        )
         if "total_variants" in extraction_stats:
             total_variants = extraction_stats["total_variants"]
 
         # If not found, try aggregation step
         if total_variants == 0:
-            aggregation_stats = checkpoint.step_progress.get(PipelineStep.AGGREGATING_DATA.value, {})
+            aggregation_stats = checkpoint.step_progress.get(
+                PipelineStep.AGGREGATING_DATA.value, {}
+            )
             if "variants_aggregated" in aggregation_stats:
                 total_variants = aggregation_stats["variants_aggregated"]
 
         # As fallback, read from penetrance summary file
         if total_variants == 0:
-            penetrance_file = output_path / f"{checkpoint.gene_symbol}_penetrance_summary.json"
+            penetrance_file = (
+                output_path / f"{checkpoint.gene_symbol}_penetrance_summary.json"
+            )
             if penetrance_file.exists():
                 try:
                     with open(penetrance_file, "r") as f:
@@ -918,7 +1009,9 @@ def create_folder_job(
         run_scout_on_folder=run_scout,
         skip_already_extracted=skip_already_extracted,
         # Pre-populate PMID lists from analysis
-        downloaded_pmids=list(set((full_context_pmids or []) + (data_zones_pmids or []))),
+        downloaded_pmids=list(
+            set((full_context_pmids or []) + (data_zones_pmids or []))
+        ),
         extracted_pmids=extraction_pmids or [],
         # Start at appropriate step
         current_step=starting_step,
@@ -977,7 +1070,11 @@ def create_resume_job(
     if resume_stage == "downloading":
         starting_step = PipelineStep.DOWNLOADING_FULLTEXT
     else:
-        starting_step = PipelineStep.SCOUTING_DATA if run_scout else PipelineStep.EXTRACTING_VARIANTS
+        starting_step = (
+            PipelineStep.SCOUTING_DATA
+            if run_scout
+            else PipelineStep.EXTRACTING_VARIANTS
+        )
 
     checkpoint = JobCheckpoint(
         job_id=job_id,
@@ -998,14 +1095,18 @@ def create_resume_job(
         run_scout_on_folder=run_scout,
         skip_already_extracted=skip_already_extracted,
         # Pre-populate PMID lists from existing files
-        downloaded_pmids=list(set((full_context_pmids or []) + (data_zones_pmids or []))),
+        downloaded_pmids=list(
+            set((full_context_pmids or []) + (data_zones_pmids or []))
+        ),
         extracted_pmids=extraction_pmids or [],
         # For resume, also pre-populate filtered_pmids to include both downloaded and to-download
-        filtered_pmids=list(set(
-            (full_context_pmids or []) +
-            (data_zones_pmids or []) +
-            (pmids_to_download or [])
-        )),
+        filtered_pmids=list(
+            set(
+                (full_context_pmids or [])
+                + (data_zones_pmids or [])
+                + (pmids_to_download or [])
+            )
+        ),
         # Start at appropriate step
         current_step=starting_step,
     )

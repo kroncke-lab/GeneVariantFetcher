@@ -5,6 +5,7 @@ E-utilities JATS XML when BioC data are unavailable. It provides a small
 orchestration layer for downloading supplements and extracting best-effort
 text content.
 """
+
 from __future__ import annotations
 
 import os
@@ -136,12 +137,16 @@ class PMCSupplementClient:
         items: List[Dict[str, Optional[str]]] = []
 
         for idx, doc in enumerate(list_root.findall(".//document"), start=1):
-            info = {child.get("key"): (child.text or "") for child in doc.findall("infon")}
-            items.append({
-                "index": idx,
-                "label": info.get("label") or doc.findtext("id"),
-                "href": info.get("href"),
-            })
+            info = {
+                child.get("key"): (child.text or "") for child in doc.findall("infon")
+            }
+            items.append(
+                {
+                    "index": idx,
+                    "label": info.get("label") or doc.findtext("id"),
+                    "href": info.get("href"),
+                }
+            )
 
         all_resp = self._get(all_url)
         all_root = ET.fromstring(all_resp.text)
@@ -150,7 +155,9 @@ class PMCSupplementClient:
         # Each <document> typically contains a supplementary item
         documents = all_root.findall(".//document")
         for idx, doc in enumerate(documents, start=1):
-            info = {child.get("key"): (child.text or "") for child in doc.findall("infon")}
+            info = {
+                child.get("key"): (child.text or "") for child in doc.findall("infon")
+            }
             label = info.get("label") or doc.findtext("id")
             href = info.get("href")
             text_chunks: List[str] = []
@@ -249,7 +256,9 @@ class PMCSupplementClient:
             supplements = self.fetch_supplements_bioc(pmcid)
             return supplements
         except Exception as exc:  # noqa: BLE001
-            self.logger.info("BioC retrieval failed for %s: %s; falling back to JATS", pmcid, exc)
+            self.logger.info(
+                "BioC retrieval failed for %s: %s; falling back to JATS", pmcid, exc
+            )
 
         supplements = self.fetch_supplements_jats(pmcid)
         downloaded: List[Supplement] = []
@@ -257,7 +266,9 @@ class PMCSupplementClient:
             downloaded.append(self.download_and_extract_text(supp, out_dir))
         return downloaded
 
-    def harvest_supplements(self, ids: Iterable[str], out_dir: Path) -> Dict[str, List[Supplement]]:
+    def harvest_supplements(
+        self, ids: Iterable[str], out_dir: Path
+    ) -> Dict[str, List[Supplement]]:
         """Harvest supplements for PMCIDs/PMIDs.
 
         PMIDs are resolved to PMCIDs via elink; if no mapping exists a helpful
@@ -314,7 +325,9 @@ def _convert_doc_to_text(path: Path) -> Optional[str]:
         if txt_path.exists():
             return txt_path.read_text(errors="ignore")
     except FileNotFoundError:
-        logging.getLogger(__name__).warning("LibreOffice not available for doc conversion")
+        logging.getLogger(__name__).warning(
+            "LibreOffice not available for doc conversion"
+        )
     except subprocess.CalledProcessError as exc:  # noqa: BLE001
         logging.getLogger(__name__).warning("LibreOffice conversion failed: %s", exc)
     return None

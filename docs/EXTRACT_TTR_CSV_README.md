@@ -123,4 +123,3 @@ Make sure the path to TTR.db is correct. Use absolute paths if needed.
 Warning: No variants found in database.
 ```
 Check that the database contains TTR variants. The script filters for gene_symbol = 'TTR'.
-

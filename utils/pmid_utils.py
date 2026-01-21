@@ -41,7 +41,7 @@ def extract_pmid_from_filename(filename: Union[str, Path]) -> Optional[str]:
     else:
         stem = Path(filename).stem
 
-    parts = stem.split('_')
+    parts = stem.split("_")
 
     if len(parts) > 1 and parts[0].upper() == "PMID":
         # Format: PMID_12345678_...
@@ -90,6 +90,6 @@ def extract_pmids_from_text(text: str) -> list[str]:
         List of unique PMIDs found in the text.
     """
     # Pattern matches PMID followed by optional colon/space and digits
-    pattern = r'(?:PMID|PubMed\s*ID)[:\s]*(\d{1,8})'
+    pattern = r"(?:PMID|PubMed\s*ID)[:\s]*(\d{1,8})"
     matches = re.findall(pattern, text, re.IGNORECASE)
     return list(dict.fromkeys(matches))  # Deduplicate while preserving order

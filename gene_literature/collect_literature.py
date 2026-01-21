@@ -12,6 +12,7 @@ from gene_literature.writer import write_metadata
 
 try:
     from gene_literature.relevance_checker import RelevanceChecker
+
     RELEVANCE_CHECKER_AVAILABLE = True
 except ImportError:
     RELEVANCE_CHECKER_AVAILABLE = False
@@ -37,8 +38,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Include verbose 'other designations' when finding synonyms (use with --auto-synonyms)",
     )
-    parser.add_argument("--retmax", type=int, default=100, help="Maximum number of PubMed results")
-    parser.add_argument("--email", help="Email address provided to PubMed", default=None)
+    parser.add_argument(
+        "--retmax", type=int, default=100, help="Maximum number of PubMed results"
+    )
+    parser.add_argument(
+        "--email", help="Email address provided to PubMed", default=None
+    )
     parser.add_argument("--api-key", help="NCBI API key", default=None)
     parser.add_argument(
         "--output",
@@ -80,7 +85,10 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
 
-    logging.basicConfig(level=getattr(logging, args.log_level), format="%(levelname)s:%(name)s:%(message)s")
+    logging.basicConfig(
+        level=getattr(logging, args.log_level),
+        format="%(levelname)s:%(name)s:%(message)s",
+    )
     logger = logging.getLogger(__name__)
 
     # Initialize synonym list with any manually provided synonyms
@@ -132,7 +140,9 @@ def main() -> None:
             )
             return
         relevance_checker = RelevanceChecker(api_key=args.anthropic_api_key)
-        logger.info("Relevance filtering enabled (min_score=%.2f)", args.min_relevance_score)
+        logger.info(
+            "Relevance filtering enabled (min_score=%.2f)", args.min_relevance_score
+        )
 
     # Initialize collector
     collector = LiteratureCollector(client, relevance_checker=relevance_checker)

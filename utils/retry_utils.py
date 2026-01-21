@@ -5,7 +5,12 @@ This module provides standardized retry configurations used across the project
 for API calls, LLM requests, and web scraping operations.
 """
 
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+from tenacity import (
+    retry,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential,
+)
 import requests
 from typing import Type, Tuple
 
@@ -15,7 +20,7 @@ from typing import Type, Tuple
 standard_retry = retry(
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=1, max=10),
-    reraise=True
+    reraise=True,
 )
 
 
@@ -28,7 +33,7 @@ def get_standard_retry_decorator(
         requests.exceptions.RequestException,
         ConnectionError,
         TimeoutError,
-    )
+    ),
 ):
     """
     Create a retry decorator with custom configuration.
@@ -55,7 +60,7 @@ def get_standard_retry_decorator(
         stop=stop_after_attempt(max_attempts),
         wait=wait_exponential(multiplier=multiplier, min=min_wait, max=max_wait),
         retry=retry_if_exception_type(retry_exceptions),
-        reraise=True
+        reraise=True,
     )
 
 
@@ -68,7 +73,7 @@ api_retry = get_standard_retry_decorator(
         requests.exceptions.RequestException,
         ConnectionError,
         TimeoutError,
-    )
+    ),
 )
 
 # For LLM calls that may hit rate limits or transient errors
@@ -82,7 +87,7 @@ llm_retry = get_standard_retry_decorator(
         ConnectionError,
         TimeoutError,
         Exception,  # Catch broader exceptions for LLM errors
-    )
+    ),
 )
 
 # For web scraping operations
@@ -95,5 +100,5 @@ scraping_retry = get_standard_retry_decorator(
         requests.exceptions.RequestException,
         ConnectionError,
         TimeoutError,
-    )
+    ),
 )

@@ -42,10 +42,12 @@ import pandas as pd
 # Import supplement scraper from harvesting module
 try:
     from harvesting.supplement_scraper import SupplementScraper
+
     SCRAPER_AVAILABLE = True
 except ImportError:
     SCRAPER_AVAILABLE = False
     SupplementScraper = None
+
 
 # Setup logging with immediate flush for real-time output
 class FlushingStreamHandler(logging.StreamHandler):
@@ -53,17 +55,24 @@ class FlushingStreamHandler(logging.StreamHandler):
         super().emit(record)
         self.flush()
 
+
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    datefmt='%H:%M:%S',
-    handlers=[FlushingStreamHandler()]
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%H:%M:%S",
+    handlers=[FlushingStreamHandler()],
 )
 logger = logging.getLogger(__name__)
 
 # Try to import Playwright
 try:
-    from playwright.sync_api import sync_playwright, Page, Browser, TimeoutError as PlaywrightTimeout
+    from playwright.sync_api import (
+        sync_playwright,
+        Page,
+        Browser,
+        TimeoutError as PlaywrightTimeout,
+    )
+
     PLAYWRIGHT_AVAILABLE = True
 except ImportError:
     PLAYWRIGHT_AVAILABLE = False
@@ -72,11 +81,14 @@ except ImportError:
     Browser = Any
     PlaywrightTimeout = Exception
     sync_playwright = None
-    logger.warning("Playwright not installed. Run: pip install playwright && playwright install chromium")
+    logger.warning(
+        "Playwright not installed. Run: pip install playwright && playwright install chromium"
+    )
 
 # Try to import Anthropic for Claude assistance
 try:
     import anthropic
+
     ANTHROPIC_AVAILABLE = True
 except ImportError:
     ANTHROPIC_AVAILABLE = False
@@ -85,6 +97,7 @@ except ImportError:
 @dataclass
 class DownloadResult:
     """Result of a download attempt."""
+
     pmid: str
     success: bool
     files_downloaded: List[str]
@@ -146,13 +159,13 @@ Return ONLY the JSON array, no other text."""
             response = self.client.messages.create(
                 model="claude-3-5-haiku-20241022",
                 max_tokens=2000,
-                messages=[{"role": "user", "content": prompt}]
+                messages=[{"role": "user", "content": prompt}],
             )
 
             # Parse JSON from response
             text = response.content[0].text.strip()
             # Find JSON array in response
-            match = re.search(r'\[[\s\S]*\]', text)
+            match = re.search(r"\[[\s\S]*\]", text)
             if match:
                 return json.loads(match.group())
             return []
@@ -176,40 +189,40 @@ class BrowserFetcher:
 
     # Publisher-specific selectors for PDF buttons
     PUBLISHER_SELECTORS = {
-        'sciencedirect.com': [
-            'a.pdf-download-btn-link',
+        "sciencedirect.com": [
+            "a.pdf-download-btn-link",
             'a[data-aa-name="PDF link"]',
-            '#pdfLink',
+            "#pdfLink",
         ],
-        'nature.com': [
-            'a[data-article-pdf]',
-            'a.c-pdf-download__link',
+        "nature.com": [
+            "a[data-article-pdf]",
+            "a.c-pdf-download__link",
         ],
-        'springer.com': [
-            'a.c-pdf-download__link',
+        "springer.com": [
+            "a.c-pdf-download__link",
             'a[data-track-action="Download PDF"]',
         ],
-        'wiley.com': [
-            'a.pdf-download',
+        "wiley.com": [
+            "a.pdf-download",
             'a[title="PDF"]',
         ],
-        'cell.com': [
-            'a.pdf-download',
+        "cell.com": [
+            "a.pdf-download",
             'a[data-action="download-pdf"]',
         ],
-        'pnas.org': [
-            'a.article-dl-pdf-link',
+        "pnas.org": [
+            "a.article-dl-pdf-link",
         ],
-        'ahajournals.org': [
-            'a.article__ctrl--pdf',
+        "ahajournals.org": [
+            "a.article__ctrl--pdf",
         ],
-        'oup.com': [  # Oxford Academic
-            'a.article-pdf-download',
+        "oup.com": [  # Oxford Academic
+            "a.article-pdf-download",
             'a[data-track="pdf-download"]',
         ],
-        'pubmed.ncbi.nlm.nih.gov': [
-            'a.link-item.pmc',  # Link to PMC
-            'a.id-link',  # DOI link
+        "pubmed.ncbi.nlm.nih.gov": [
+            "a.link-item.pmc",  # Link to PMC
+            "a.id-link",  # DOI link
         ],
     }
 
@@ -256,29 +269,35 @@ class BrowserFetcher:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.browser:
             self.browser.close()
-        if hasattr(self, 'playwright'):
+        if hasattr(self, "playwright"):
             self.playwright.stop()
 
     def _get_existing_files(self) -> set:
         """Get set of existing files in downloads directory."""
         return {f.name for f in self.downloads_dir.iterdir() if f.is_file()}
 
-    def _wait_for_new_file(self, before_files: set, timeout: int = 60) -> Optional[Path]:
+    def _wait_for_new_file(
+        self, before_files: set, timeout: int = 60
+    ) -> Optional[Path]:
         """Wait for a new file to appear in downloads directory."""
         start = time.time()
         while time.time() - start < timeout:
-            current_files = {f.name for f in self.downloads_dir.iterdir() if f.is_file()}
+            current_files = {
+                f.name for f in self.downloads_dir.iterdir() if f.is_file()
+            }
             new_files = current_files - before_files
 
             # Filter out partial downloads
             complete_files = [
-                f for f in new_files
-                if not f.endswith(('.crdownload', '.part', '.tmp'))
+                f for f in new_files if not f.endswith((".crdownload", ".part", ".tmp"))
             ]
 
             if complete_files:
                 # Return the newest file
-                newest = max(complete_files, key=lambda f: (self.downloads_dir / f).stat().st_mtime)
+                newest = max(
+                    complete_files,
+                    key=lambda f: (self.downloads_dir / f).stat().st_mtime,
+                )
                 return self.downloads_dir / newest
 
             time.sleep(0.5)
@@ -299,23 +318,26 @@ class BrowserFetcher:
             # Method 1: Use requests to fetch the URL now that browser has established session
             # Get cookies from browser to use with requests
             import requests as req
+
             cookies = page.context.cookies()
-            cookie_dict = {c['name']: c['value'] for c in cookies}
+            cookie_dict = {c["name"]: c["value"] for c in cookies}
 
             headers = {
-                'User-Agent': (
-                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
-                    'AppleWebKit/537.36 (KHTML, like Gecko) '
-                    'Chrome/120.0.0.0 Safari/537.36'
+                "User-Agent": (
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/120.0.0.0 Safari/537.36"
                 ),
             }
 
             response = req.get(url, headers=headers, cookies=cookie_dict, timeout=60)
-            logger.info(f"  [EmbeddedPDF] Response: HTTP {response.status_code}, {len(response.content)} bytes")
+            logger.info(
+                f"  [EmbeddedPDF] Response: HTTP {response.status_code}, {len(response.content)} bytes"
+            )
 
-            if response.status_code == 200 and response.content[:4] == b'%PDF':
-                filename = url.split('/')[-1]
-                if not filename.endswith('.pdf'):
+            if response.status_code == 200 and response.content[:4] == b"%PDF":
+                filename = url.split("/")[-1]
+                if not filename.endswith(".pdf"):
                     filename = f"{pmid}_Main_Text.pdf"
                 else:
                     filename = f"{pmid}_{filename}"
@@ -355,16 +377,18 @@ class BrowserFetcher:
                 continue
 
             cloudflare_indicators = [
-                'checking your browser' in page_content,
-                'just a moment' in title,
-                'cloudflare' in page_content and 'ray id' in page_content,
-                'cf-browser-verification' in page_content,
-                'challenge-running' in page_content,
+                "checking your browser" in page_content,
+                "just a moment" in title,
+                "cloudflare" in page_content and "ray id" in page_content,
+                "cf-browser-verification" in page_content,
+                "challenge-running" in page_content,
             ]
 
             if any(cloudflare_indicators):
                 elapsed = int(time.time() - start)
-                logger.info(f"  [Cloudflare] Challenge detected, waiting... ({elapsed}s/{max_wait}s)")
+                logger.info(
+                    f"  [Cloudflare] Challenge detected, waiting... ({elapsed}s/{max_wait}s)"
+                )
                 time.sleep(2)
                 continue
 
@@ -373,7 +397,9 @@ class BrowserFetcher:
                 logger.info(f"  [Cloudflare] Passed or not present")
             return True
 
-        logger.info(f"  [Cloudflare] Still blocked after {max_wait}s, continuing anyway")
+        logger.info(
+            f"  [Cloudflare] Still blocked after {max_wait}s, continuing anyway"
+        )
         return False
 
     def _browser_download_pdf(self, url: str, pmid: str) -> Optional[Path]:
@@ -384,14 +410,16 @@ class BrowserFetcher:
         try:
             # Navigate and wait for download to start
             with self.page.expect_download(timeout=30000) as download_info:
-                self.page.goto(url, wait_until='commit', timeout=self.timeout)
+                self.page.goto(url, wait_until="commit", timeout=self.timeout)
 
             download = download_info.value
-            logger.info(f"  [Browser] Download triggered, filename: {download.suggested_filename}")
+            logger.info(
+                f"  [Browser] Download triggered, filename: {download.suggested_filename}"
+            )
 
             # Save with PMID prefix
             suggested = download.suggested_filename
-            if not suggested.endswith('.pdf'):
+            if not suggested.endswith(".pdf"):
                 suggested = f"{pmid}_Main_Text.pdf"
             else:
                 suggested = f"{pmid}_{suggested}"
@@ -400,29 +428,35 @@ class BrowserFetcher:
             download.save_as(str(dest_path))
 
             # Verify it's actually a PDF
-            with open(dest_path, 'rb') as f:
+            with open(dest_path, "rb") as f:
                 header = f.read(4)
-            if header == b'%PDF':
+            if header == b"%PDF":
                 logger.info(f"  [Browser] SUCCESS: {dest_path.name}")
                 return dest_path
             else:
-                logger.info(f"  [Browser] Downloaded file is not a valid PDF (header: {header!r})")
+                logger.info(
+                    f"  [Browser] Downloaded file is not a valid PDF (header: {header!r})"
+                )
                 dest_path.unlink()  # Delete invalid file
                 return None
 
         except PlaywrightTimeout:
-            logger.info("  [Browser] Timeout waiting for download, checking for Cloudflare...")
+            logger.info(
+                "  [Browser] Timeout waiting for download, checking for Cloudflare..."
+            )
 
             # Check for Cloudflare challenge
-            if self._wait_for_cloudflare(self.page, max_wait=30):
-                logger.info("  [Browser] Cloudflare passed or not present, retrying download...")
+            if self._wait_for_cloudflare(self.page):
+                logger.info(
+                    "  [Browser] Cloudflare passed or not present, retrying download..."
+                )
                 # Try to get the PDF now that Cloudflare is cleared
                 try:
                     # Check if we're now on a PDF page
                     content_type = self.page.evaluate("() => document.contentType")
                     logger.info(f"  [Browser] Page content type: {content_type}")
 
-                    if content_type == 'application/pdf':
+                    if content_type == "application/pdf":
                         # The PDF is rendered inline in browser, try to save it
                         result = self._save_embedded_pdf(self.page, pmid)
                         if result:
@@ -437,12 +471,12 @@ class BrowserFetcher:
 
             # Check if a file appeared in downloads anyway
             new_file = self._wait_for_new_file(before_files, timeout=10)
-            if new_file and new_file.suffix.lower() == '.pdf':
+            if new_file and new_file.suffix.lower() == ".pdf":
                 logger.info(f"  [Browser] Found file after timeout: {new_file.name}")
                 # Verify and move
-                with open(new_file, 'rb') as f:
+                with open(new_file, "rb") as f:
                     header = f.read(4)
-                if header == b'%PDF':
+                if header == b"%PDF":
                     dest_path = self.target_dir / f"{pmid}_{new_file.name}"
                     new_file.rename(dest_path)
                     logger.info(f"  [Browser] SUCCESS: {dest_path.name}")
@@ -461,37 +495,39 @@ class BrowserFetcher:
         logger.info(f"  [Direct] Attempting: {url[:80]}...")
         try:
             headers = {
-                'User-Agent': (
-                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
-                    'AppleWebKit/537.36 (KHTML, like Gecko) '
-                    'Chrome/120.0.0.0 Safari/537.36'
+                "User-Agent": (
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/120.0.0.0 Safari/537.36"
                 ),
             }
             response = req.get(url, headers=headers, timeout=30)
-            logger.info(f"  [Direct] Response: HTTP {response.status_code}, {len(response.content)} bytes")
+            logger.info(
+                f"  [Direct] Response: HTTP {response.status_code}, {len(response.content)} bytes"
+            )
 
             if response.status_code == 200:
                 content = response.content
-                content_type = response.headers.get('Content-Type', 'unknown')
+                content_type = response.headers.get("Content-Type", "unknown")
                 logger.info(f"  [Direct] Content-Type: {content_type}")
 
                 # Check if it's actually a PDF (PDF files start with %PDF)
-                if content[:4] == b'%PDF':
+                if content[:4] == b"%PDF":
                     # Extract filename from URL or use default
-                    filename = url.split('/')[-1]
-                    if not filename.endswith('.pdf'):
+                    filename = url.split("/")[-1]
+                    if not filename.endswith(".pdf"):
                         filename = f"{pmid}_Main_Text.pdf"
                     else:
                         filename = f"{pmid}_{filename}"
 
                     dest_path = self.target_dir / filename
-                    with open(dest_path, 'wb') as f:
+                    with open(dest_path, "wb") as f:
                         f.write(content)
 
                     logger.info(f"  [Direct] SUCCESS: {dest_path.name}")
                     return dest_path
                 else:
-                    header_preview = content[:50].decode('utf-8', errors='replace')
+                    header_preview = content[:50].decode("utf-8", errors="replace")
                     logger.info(f"  [Direct] Not a PDF. Header: {header_preview!r}")
             else:
                 logger.info(f"  [Direct] FAILED: HTTP {response.status_code}")
@@ -508,7 +544,9 @@ class BrowserFetcher:
         Uses SupplementScraper to find supplement links, then downloads them.
         """
         if not SCRAPER_AVAILABLE:
-            logger.info("  [Supplements] SupplementScraper not available (harvesting module not found)")
+            logger.info(
+                "  [Supplements] SupplementScraper not available (harvesting module not found)"
+            )
             return []
 
         downloaded = []
@@ -519,10 +557,12 @@ class BrowserFetcher:
 
         # Determine which scraper to use based on domain
         domain = base_url.lower()
-        if 'nature.com' in domain:
+        if "nature.com" in domain:
             logger.info("  [Supplements] Using Nature scraper")
             supplements = scraper.scrape_nature_supplements(html, base_url)
-        elif any(d in domain for d in ['sciencedirect.com', 'elsevier.com', 'cell.com']):
+        elif any(
+            d in domain for d in ["sciencedirect.com", "elsevier.com", "cell.com"]
+        ):
             logger.info("  [Supplements] Using Elsevier scraper")
             supplements = scraper.scrape_elsevier_supplements(html, base_url)
         else:
@@ -536,18 +576,21 @@ class BrowserFetcher:
         logger.info(f"  [Supplements] Found {len(supplements)} potential supplement(s)")
 
         for idx, supp in enumerate(supplements, 1):
-            supp_url = supp.get('url', '')
-            supp_name = supp.get('name', f'supplement_{idx}')
+            supp_url = supp.get("url", "")
+            supp_name = supp.get("name", f"supplement_{idx}")
 
             if not supp_url:
                 continue
 
             # Clean up filename
-            if not any(supp_name.lower().endswith(ext) for ext in ['.pdf', '.xlsx', '.xls', '.docx', '.doc', '.csv', '.zip']):
+            if not any(
+                supp_name.lower().endswith(ext)
+                for ext in [".pdf", ".xlsx", ".xls", ".docx", ".doc", ".csv", ".zip"]
+            ):
                 # Try to get extension from URL
-                url_path = supp_url.split('?')[0]
-                if '.' in url_path.split('/')[-1]:
-                    supp_name = url_path.split('/')[-1]
+                url_path = supp_url.split("?")[0]
+                if "." in url_path.split("/")[-1]:
+                    supp_name = url_path.split("/")[-1]
 
             dest_name = f"{pmid}_Supp_{idx}_{supp_name}"
             dest_path = self.target_dir / dest_name
@@ -568,10 +611,10 @@ class BrowserFetcher:
 
         try:
             headers = {
-                'User-Agent': (
-                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
-                    'AppleWebKit/537.36 (KHTML, like Gecko) '
-                    'Chrome/120.0.0.0 Safari/537.36'
+                "User-Agent": (
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/120.0.0.0 Safari/537.36"
                 ),
             }
             response = req.get(url, headers=headers, timeout=60, allow_redirects=True)
@@ -580,7 +623,7 @@ class BrowserFetcher:
                 content = response.content
 
                 # Skip if it's an HTML error page
-                if content[:5] == b'<!DOC' or content[:5] == b'<html':
+                if content[:5] == b"<!DOC" or content[:5] == b"<html":
                     logger.debug(f"    Got HTML instead of file for {url}")
                     return None
 
@@ -603,7 +646,9 @@ class BrowserFetcher:
         for pattern in self.PDF_PATTERNS:
             matches = re.findall(pattern, content, re.IGNORECASE)
             if matches:
-                logger.info(f"  [Heuristic] Pattern '{pattern[:30]}...' found {len(matches)} match(es)")
+                logger.info(
+                    f"  [Heuristic] Pattern '{pattern[:30]}...' found {len(matches)} match(es)"
+                )
             links.extend(matches)
 
         # Try publisher-specific selectors
@@ -614,25 +659,27 @@ class BrowserFetcher:
                     try:
                         elements = page.query_selector_all(selector)
                         for el in elements:
-                            href = el.get_attribute('href')
+                            href = el.get_attribute("href")
                             if href:
-                                logger.info(f"  [Heuristic] Selector '{selector}' found: {href[:60]}...")
+                                logger.info(
+                                    f"  [Heuristic] Selector '{selector}' found: {href[:60]}..."
+                                )
                                 links.append(href)
                     except Exception as e:
                         logger.debug(f"  [Heuristic] Selector '{selector}' failed: {e}")
 
         # Make URLs absolute
-        base_url = '/'.join(current_url.split('/')[:3])
+        base_url = "/".join(current_url.split("/")[:3])
         absolute_links = []
         for link in links:
-            if link.startswith('http'):
+            if link.startswith("http"):
                 absolute_links.append(link)
-            elif link.startswith('//'):
-                absolute_links.append('https:' + link)
-            elif link.startswith('/'):
+            elif link.startswith("//"):
+                absolute_links.append("https:" + link)
+            elif link.startswith("/"):
                 absolute_links.append(base_url + link)
             else:
-                absolute_links.append(current_url.rsplit('/', 1)[0] + '/' + link)
+                absolute_links.append(current_url.rsplit("/", 1)[0] + "/" + link)
 
         unique_links = list(set(absolute_links))
         logger.info(f"  [Heuristic] Found {len(unique_links)} unique PDF link(s)")
@@ -648,7 +695,7 @@ class BrowserFetcher:
         try:
             # Set up download handler
             with page.expect_download(timeout=self.timeout) as download_info:
-                page.goto(url, wait_until='commit', timeout=self.timeout)
+                page.goto(url, wait_until="commit", timeout=self.timeout)
 
             download = download_info.value
 
@@ -683,9 +730,9 @@ class BrowserFetcher:
             'a:has-text("Download PDF")',
             'a:has-text("Full Text PDF")',
             'button:has-text("PDF")',
-            'a[download]',
-            '.pdf-download',
-            '.download-pdf',
+            "a[download]",
+            ".pdf-download",
+            ".download-pdf",
         ]
 
         for selector in button_selectors:
@@ -693,24 +740,38 @@ class BrowserFetcher:
                 button = page.query_selector(selector)
                 if button:
                     is_visible = button.is_visible()
-                    button_text = button.text_content()[:30] if button.text_content() else "(no text)"
-                    logger.info(f"  [Button] Found '{selector}' - visible: {is_visible}, text: {button_text}")
+                    button_text = (
+                        button.text_content()[:30]
+                        if button.text_content()
+                        else "(no text)"
+                    )
+                    logger.info(
+                        f"  [Button] Found '{selector}' - visible: {is_visible}, text: {button_text}"
+                    )
 
                     if is_visible:
                         logger.info(f"  [Button] Clicking: {selector}")
 
-                        with page.expect_download(timeout=self.timeout) as download_info:
+                        with page.expect_download(
+                            timeout=self.timeout
+                        ) as download_info:
                             button.click()
 
                         download = download_info.value
-                        logger.info(f"  [Button] Download started: {download.suggested_filename}")
-                        dest_path = self.target_dir / f"{pmid}_{download.suggested_filename}"
+                        logger.info(
+                            f"  [Button] Download started: {download.suggested_filename}"
+                        )
+                        dest_path = (
+                            self.target_dir / f"{pmid}_{download.suggested_filename}"
+                        )
                         download.save_as(str(dest_path))
                         logger.info(f"  [Button] SUCCESS: {dest_path.name}")
                         return dest_path
 
             except PlaywrightTimeout:
-                logger.info(f"  [Button] Timeout after clicking '{selector}', checking files...")
+                logger.info(
+                    f"  [Button] Timeout after clicking '{selector}', checking files..."
+                )
                 new_file = self._wait_for_new_file(before_files, timeout=5)
                 if new_file:
                     dest_path = self.target_dir / f"{pmid}_{new_file.name}"
@@ -743,7 +804,7 @@ class BrowserFetcher:
 
         try:
             # Check if URL is a direct PDF link
-            if url.lower().endswith('.pdf') or '/pdf/' in url.lower():
+            if url.lower().endswith(".pdf") or "/pdf/" in url.lower():
                 logger.info(">>> STEP 1: Direct PDF URL detected")
                 # Try direct download with requests first
                 result = self._download_pdf_direct(url, pmid)
@@ -752,32 +813,36 @@ class BrowserFetcher:
                         pmid=pmid,
                         success=True,
                         files_downloaded=[str(result)],
-                        method="direct_pdf"
+                        method="direct_pdf",
                     )
 
                 # If direct download failed, try browser-based (handles JS redirects)
-                logger.info(">>> STEP 1b: Trying browser-based download for JS-redirect PDF...")
+                logger.info(
+                    ">>> STEP 1b: Trying browser-based download for JS-redirect PDF..."
+                )
                 result = self._browser_download_pdf(url, pmid)
                 if result:
                     return DownloadResult(
                         pmid=pmid,
                         success=True,
                         files_downloaded=[str(result)],
-                        method="browser_pdf"
+                        method="browser_pdf",
                     )
 
             # Navigate to the paper - use 'load' instead of 'networkidle' for faster response
             logger.info(">>> STEP 2: Navigating to page...")
             try:
-                self.page.goto(url, wait_until='load', timeout=self.timeout)
+                self.page.goto(url, wait_until="load", timeout=self.timeout)
                 logger.info(f"  Page loaded. Final URL: {self.page.url[:70]}...")
             except PlaywrightTimeout:
                 # Page might still be usable even if not fully loaded
                 logger.warning("  Page load timeout, continuing anyway...")
 
             # Check for Cloudflare and wait if needed
-            if not self._wait_for_cloudflare(self.page, max_wait=30):
-                logger.warning("  Cloudflare challenge not passed, may have limited success")
+            if not self._wait_for_cloudflare(self.page):
+                logger.warning(
+                    "  Cloudflare challenge not passed, may have limited success"
+                )
 
             time.sleep(3)  # Wait for dynamic content
 
@@ -785,18 +850,22 @@ class BrowserFetcher:
             current_url = self.page.url
             logger.info(f"  Current URL after redirect: {current_url[:70]}...")
 
-            if 'pubmed.ncbi.nlm.nih.gov' in current_url:
+            if "pubmed.ncbi.nlm.nih.gov" in current_url:
                 logger.info("  On PubMed page, looking for full text link...")
                 # Try to find and click through to full text
-                full_text_link = self.page.query_selector('a.id-link')
+                full_text_link = self.page.query_selector("a.id-link")
                 if full_text_link:
-                    href = full_text_link.get_attribute('href')
+                    href = full_text_link.get_attribute("href")
                     logger.info(f"  Found full text link: {href}")
                     full_text_link.click()
                     try:
-                        self.page.wait_for_load_state('networkidle', timeout=self.timeout)
+                        self.page.wait_for_load_state(
+                            "networkidle", timeout=self.timeout
+                        )
                     except PlaywrightTimeout:
-                        logger.info("  Timeout waiting for publisher page, continuing...")
+                        logger.info(
+                            "  Timeout waiting for publisher page, continuing..."
+                        )
                     time.sleep(2)
                     logger.info(f"  Now on: {self.page.url[:70]}...")
 
@@ -812,7 +881,9 @@ class BrowserFetcher:
                 logger.info(">>> STEP 4: Trying heuristic PDF link detection...")
                 pdf_links = self._find_pdf_links_heuristic(self.page)
                 for i, link in enumerate(pdf_links[:5]):  # Try first 5 links
-                    logger.info(f"  Trying link {i+1}/{min(5, len(pdf_links))}: {link[:60]}...")
+                    logger.info(
+                        f"  Trying link {i+1}/{min(5, len(pdf_links))}: {link[:60]}..."
+                    )
                     result = self._try_download_link(self.page, link, pmid)
                     if result:
                         downloaded_files.append(str(result))
@@ -832,7 +903,7 @@ class BrowserFetcher:
                     pmid=pmid,
                     success=True,
                     files_downloaded=downloaded_files,
-                    method="auto_with_supplements"
+                    method="auto_with_supplements",
                 )
 
             # Method 4: Use Claude to analyze page (if enabled and still no files)
@@ -844,13 +915,13 @@ class BrowserFetcher:
                 logger.info(f"  Claude found {len(claude_links)} link(s)")
 
                 for link_info in claude_links:
-                    confidence = link_info.get('confidence', 0)
-                    logger.info(f"  Link: {link_info.get('url', '')[:50]}... (confidence: {confidence})")
+                    confidence = link_info.get("confidence", 0)
+                    logger.info(
+                        f"  Link: {link_info.get('url', '')[:50]}... (confidence: {confidence})"
+                    )
                     if confidence > 0.5:
                         result = self._try_download_link(
-                            self.page,
-                            link_info['url'],
-                            pmid
+                            self.page, link_info["url"], pmid
                         )
                         if result:
                             downloaded_files.append(str(result))
@@ -858,7 +929,7 @@ class BrowserFetcher:
                                 pmid=pmid,
                                 success=True,
                                 files_downloaded=downloaded_files,
-                                method="claude_assisted"
+                                method="claude_assisted",
                             )
 
             # If we get here, automatic download failed
@@ -868,19 +939,20 @@ class BrowserFetcher:
                 success=False,
                 files_downloaded=[],
                 error="Could not find download link automatically",
-                method="needs_manual"
+                method="needs_manual",
             )
 
         except Exception as e:
             logger.error(f">>> ERROR: {e}")
             import traceback
+
             logger.error(traceback.format_exc())
             return DownloadResult(
                 pmid=pmid,
                 success=False,
                 files_downloaded=downloaded_files,
                 error=str(e),
-                method="error"
+                method="error",
             )
 
 
@@ -906,7 +978,7 @@ def _interactive_fetch(
 
     # Navigate to page
     try:
-        fetcher.page.goto(url, wait_until='load', timeout=fetcher.timeout)
+        fetcher.page.goto(url, wait_until="load", timeout=fetcher.timeout)
     except PlaywrightTimeout:
         logger.warning("  Page load timeout, browser still usable")
 
@@ -918,18 +990,30 @@ def _interactive_fetch(
     print(f"  URL:  {fetcher.page.url}")
     print("-" * 50)
     print("  Download the PDF/supplements manually in the browser.")
-    print("  Press ENTER when done, 's' to skip, 'q' to quit: ", end='', flush=True)
+    print("  Press ENTER when done, 's' to skip, 'q' to quit: ", end="", flush=True)
 
     try:
         response = input().strip().lower()
     except (EOFError, KeyboardInterrupt):
-        response = 'q'
+        response = "q"
 
-    if response == 'q':
-        return DownloadResult(pmid=pmid, success=False, files_downloaded=[], error="User quit", method="manual")
+    if response == "q":
+        return DownloadResult(
+            pmid=pmid,
+            success=False,
+            files_downloaded=[],
+            error="User quit",
+            method="manual",
+        )
 
-    if response == 's':
-        return DownloadResult(pmid=pmid, success=False, files_downloaded=[], error="Skipped", method="manual")
+    if response == "s":
+        return DownloadResult(
+            pmid=pmid,
+            success=False,
+            files_downloaded=[],
+            error="Skipped",
+            method="manual",
+        )
 
     # Small delay for downloads to complete
     time.sleep(1)
@@ -940,17 +1024,28 @@ def _interactive_fetch(
 
     # Filter out partial downloads
     complete_files = [
-        f for f in new_files
-        if not f.endswith(('.crdownload', '.part', '.tmp', '.download'))
-        and not f.startswith('.')
+        f
+        for f in new_files
+        if not f.endswith((".crdownload", ".part", ".tmp", ".download"))
+        and not f.startswith(".")
     ]
 
     if not complete_files:
-        print("  No new files detected. Mark as done anyway? (y/n): ", end='', flush=True)
+        print(
+            "  No new files detected. Mark as done anyway? (y/n): ", end="", flush=True
+        )
         confirm = input().strip().lower()
-        if confirm == 'y':
-            return DownloadResult(pmid=pmid, success=True, files_downloaded=[], method="manual_no_files")
-        return DownloadResult(pmid=pmid, success=False, files_downloaded=[], error="No files downloaded", method="manual")
+        if confirm == "y":
+            return DownloadResult(
+                pmid=pmid, success=True, files_downloaded=[], method="manual_no_files"
+            )
+        return DownloadResult(
+            pmid=pmid,
+            success=False,
+            files_downloaded=[],
+            error="No files downloaded",
+            method="manual",
+        )
 
     # Move and rename files
     downloaded = []
@@ -958,11 +1053,11 @@ def _interactive_fetch(
         src = downloads_dir / filename
         ext = src.suffix.lower()
 
-        if idx == 0 and ext == '.pdf':
+        if idx == 0 and ext == ".pdf":
             new_name = f"{pmid}_Main_Text.pdf"
-        elif ext == '.pdf':
+        elif ext == ".pdf":
             new_name = f"{pmid}_Supplement_{idx}.pdf"
-        elif ext in ('.xlsx', '.xls', '.csv'):
+        elif ext in (".xlsx", ".xls", ".csv"):
             new_name = f"{pmid}_Supp_Data_{idx}{ext}"
         else:
             new_name = f"{pmid}_file_{idx}{ext}"
@@ -979,7 +1074,7 @@ def _interactive_fetch(
         pmid=pmid,
         success=len(downloaded) > 0,
         files_downloaded=downloaded,
-        method="manual"
+        method="manual",
     )
 
 
@@ -989,8 +1084,8 @@ def run_browser_fetch(
     target_dir: Optional[Path] = None,
     headless: bool = False,
     use_claude: bool = False,
-    pmid_column: str = 'PMID',
-    status_column: str = 'Status',
+    pmid_column: str = "PMID",
+    status_column: str = "Status",
     specific_pmids: Optional[List[str]] = None,
     max_papers: Optional[int] = None,
     interactive: bool = False,
@@ -1015,7 +1110,9 @@ def run_browser_fetch(
         retry_failures_only: Only process papers with browser_failed status
     """
     if not PLAYWRIGHT_AVAILABLE:
-        logger.error("Playwright not installed. Run: pip install playwright && playwright install chromium")
+        logger.error(
+            "Playwright not installed. Run: pip install playwright && playwright install chromium"
+        )
         sys.exit(1)
 
     # Set up directories
@@ -1023,7 +1120,7 @@ def run_browser_fetch(
 
     # Auto-detect target directory from CSV location
     if target_dir is None:
-        if csv_file.parent.name == 'pmc_fulltext':
+        if csv_file.parent.name == "pmc_fulltext":
             target_dir = csv_file.parent
         else:
             target_dir = csv_file.parent / "browser_downloads"
@@ -1040,18 +1137,20 @@ def run_browser_fetch(
 
     # Add status column if needed
     if status_column not in df.columns:
-        df[status_column] = ''
+        df[status_column] = ""
 
     # Filter to pending papers
-    df[status_column] = df[status_column].fillna('')
+    df[status_column] = df[status_column].fillna("")
 
     if retry_failures_only:
         # Only retry papers that previously failed
-        pending_mask = df[status_column].str.lower() == 'browser_failed'
+        pending_mask = df[status_column].str.lower() == "browser_failed"
         logger.info("Retry mode: processing only browser_failed papers")
     else:
         # Process papers that haven't been attempted yet
-        pending_mask = ~df[status_column].str.lower().isin(['done', 'skipped', 'browser_done', 'browser_failed'])
+        pending_mask = ~df[status_column].str.lower().isin(
+            ["done", "skipped", "browser_done", "browser_failed"]
+        )
 
     # Filter to specific PMIDs if provided
     if specific_pmids:
@@ -1074,9 +1173,13 @@ def run_browser_fetch(
     # If wait_for_captcha is enabled, use 5 minute timeout for Cloudflare
     captcha_wait_time = 300 if wait_for_captcha else 30
     if wait_for_captcha:
-        logger.info("CAPTCHA wait mode: will wait up to 5 minutes for manual CAPTCHA completion")
+        logger.info(
+            "CAPTCHA wait mode: will wait up to 5 minutes for manual CAPTCHA completion"
+        )
         if headless:
-            logger.warning("WARNING: wait_for_captcha works best with headless=False so you can see the browser")
+            logger.warning(
+                "WARNING: wait_for_captcha works best with headless=False so you can see the browser"
+            )
 
     results = []
     with BrowserFetcher(
@@ -1090,11 +1193,11 @@ def run_browser_fetch(
             pmid = str(row[pmid_column]).strip()
 
             # Construct URL
-            if 'URL' in row and pd.notna(row['URL']):
-                url = str(row['URL']).strip()
-            elif 'DOI' in row and pd.notna(row['DOI']):
-                doi = str(row['DOI']).strip()
-                if not doi.startswith('http'):
+            if "URL" in row and pd.notna(row["URL"]):
+                url = str(row["URL"]).strip()
+            elif "DOI" in row and pd.notna(row["DOI"]):
+                doi = str(row["DOI"]).strip()
+                if not doi.startswith("http"):
                     url = f"https://doi.org/{doi}"
                 else:
                     url = doi
@@ -1105,7 +1208,9 @@ def run_browser_fetch(
 
             if interactive:
                 # Interactive mode: navigate, let user download, monitor files
-                result = _interactive_fetch(fetcher, pmid, url, downloads_dir, target_dir)
+                result = _interactive_fetch(
+                    fetcher, pmid, url, downloads_dir, target_dir
+                )
             else:
                 # Fully automated mode
                 result = fetcher.fetch_paper(pmid, url)
@@ -1114,10 +1219,12 @@ def run_browser_fetch(
 
             # Update status in DataFrame
             if result.success:
-                df.at[row_idx, status_column] = 'browser_done'
-                logger.info(f"  SUCCESS: Downloaded {len(result.files_downloaded)} file(s)")
+                df.at[row_idx, status_column] = "browser_done"
+                logger.info(
+                    f"  SUCCESS: Downloaded {len(result.files_downloaded)} file(s)"
+                )
             else:
-                df.at[row_idx, status_column] = 'browser_failed'
+                df.at[row_idx, status_column] = "browser_failed"
                 logger.warning(f"  FAILED: {result.error}")
 
             # Save progress
@@ -1139,20 +1246,20 @@ def run_browser_fetch(
 
     # Save detailed results
     results_file = target_dir / "browser_fetch_results.json"
-    with open(results_file, 'w') as f:
+    with open(results_file, "w") as f:
         json.dump(
             [
                 {
-                    'pmid': r.pmid,
-                    'success': r.success,
-                    'files': r.files_downloaded,
-                    'error': r.error,
-                    'method': r.method,
+                    "pmid": r.pmid,
+                    "success": r.success,
+                    "files": r.files_downloaded,
+                    "error": r.error,
+                    "method": r.method,
                 }
                 for r in results
             ],
             f,
-            indent=2
+            indent=2,
         )
     logger.info(f"Results saved to: {results_file}")
 
@@ -1187,25 +1294,43 @@ Examples:
   # Two-step workflow: automated first, then retry failures with CAPTCHA wait
   python browser_fetch.py paywalled_missing.csv              # Step 1: automated
   python browser_fetch.py paywalled_missing.csv --retry-failures --wait-for-captcha  # Step 2: retry failures
-        """
+        """,
     )
 
-    parser.add_argument('csv_file', type=Path, help='CSV file with paper list')
-    parser.add_argument('--downloads', type=Path, help='Browser downloads directory')
-    parser.add_argument('--target-dir', type=Path, help='Target directory for files')
-    parser.add_argument('--headless', action='store_true', help='Run browser without window')
-    parser.add_argument('--interactive', '-i', action='store_true',
-                        help='Interactive mode: navigate to page, let you download manually, auto-organize files')
-    parser.add_argument('--use-claude', action='store_true', help='Use Claude to find download links')
-    parser.add_argument('--wait-for-captcha', '-w', action='store_true',
-                        help='Wait up to 5 minutes for manual CAPTCHA completion (use with visible browser)')
-    parser.add_argument('--retry-failures', '-r', action='store_true',
-                        help='Only process papers with browser_failed status (retry previously failed papers)')
-    parser.add_argument('--pmid-column', default='PMID', help='PMID column name')
-    parser.add_argument('--status-column', default='Status', help='Status column name')
-    parser.add_argument('--pmids', type=str, help='Comma-separated list of specific PMIDs')
-    parser.add_argument('--max', type=int, help='Maximum papers to process')
-    parser.add_argument('--verbose', '-v', action='store_true', help='Verbose logging')
+    parser.add_argument("csv_file", type=Path, help="CSV file with paper list")
+    parser.add_argument("--downloads", type=Path, help="Browser downloads directory")
+    parser.add_argument("--target-dir", type=Path, help="Target directory for files")
+    parser.add_argument(
+        "--headless", action="store_true", help="Run browser without window"
+    )
+    parser.add_argument(
+        "--interactive",
+        "-i",
+        action="store_true",
+        help="Interactive mode: navigate to page, let you download manually, auto-organize files",
+    )
+    parser.add_argument(
+        "--use-claude", action="store_true", help="Use Claude to find download links"
+    )
+    parser.add_argument(
+        "--wait-for-captcha",
+        "-w",
+        action="store_true",
+        help="Wait up to 5 minutes for manual CAPTCHA completion (use with visible browser)",
+    )
+    parser.add_argument(
+        "--retry-failures",
+        "-r",
+        action="store_true",
+        help="Only process papers with browser_failed status (retry previously failed papers)",
+    )
+    parser.add_argument("--pmid-column", default="PMID", help="PMID column name")
+    parser.add_argument("--status-column", default="Status", help="Status column name")
+    parser.add_argument(
+        "--pmids", type=str, help="Comma-separated list of specific PMIDs"
+    )
+    parser.add_argument("--max", type=int, help="Maximum papers to process")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose logging")
 
     args = parser.parse_args()
 
@@ -1218,7 +1343,7 @@ Examples:
 
     specific_pmids = None
     if args.pmids:
-        specific_pmids = [p.strip() for p in args.pmids.split(',')]
+        specific_pmids = [p.strip() for p in args.pmids.split(",")]
 
     run_browser_fetch(
         csv_file=args.csv_file,

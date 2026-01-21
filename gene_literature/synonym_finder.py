@@ -24,6 +24,7 @@ try:
         SynonymRelevanceChecker,
         SynonymRelevance,
     )
+
     RELEVANCE_CHECKER_AVAILABLE = True
 except ImportError:
     RELEVANCE_CHECKER_AVAILABLE = False
@@ -263,22 +264,26 @@ class SynonymFinder:
             # Official symbol
             official_symbol = result.get("name")
             if official_symbol:
-                synonyms.append(GeneSynonym(
-                    term=official_symbol,
-                    source="official_symbol",
-                    gene_id=gene_id,
-                ))
+                synonyms.append(
+                    GeneSynonym(
+                        term=official_symbol,
+                        source="official_symbol",
+                        gene_id=gene_id,
+                    )
+                )
 
             # Aliases (common synonyms)
             aliases = result.get("otheraliases", "").split(", ")
             for alias in aliases:
                 alias = alias.strip()
                 if alias:
-                    synonyms.append(GeneSynonym(
-                        term=alias,
-                        source="alias",
-                        gene_id=gene_id,
-                    ))
+                    synonyms.append(
+                        GeneSynonym(
+                            term=alias,
+                            source="alias",
+                            gene_id=gene_id,
+                        )
+                    )
 
             # Other designations (if requested)
             if include_other_designations:
@@ -286,11 +291,13 @@ class SynonymFinder:
                 for designation in other_designations:
                     designation = designation.strip()
                     if designation:
-                        synonyms.append(GeneSynonym(
-                            term=designation,
-                            source="other_designation",
-                            gene_id=gene_id,
-                        ))
+                        synonyms.append(
+                            GeneSynonym(
+                                term=designation,
+                                source="other_designation",
+                                gene_id=gene_id,
+                            )
+                        )
 
             return synonyms
 
@@ -316,7 +323,7 @@ class SynonymFinder:
             try:
                 # Add delay to respect NCBI rate limits (3 requests/sec without API key)
                 if attempt > 0:
-                    delay = 2 ** attempt  # Exponential backoff
+                    delay = 2**attempt  # Exponential backoff
                     logger.debug("Retrying request after %ds delay...", delay)
                     time.sleep(delay)
                 else:
@@ -330,7 +337,9 @@ class SynonymFinder:
             except requests.RequestException as e:
                 logger.warning("Request attempt %d failed: %s", attempt + 1, e)
                 if attempt == self.retry_attempts - 1:
-                    raise SynonymFinderError(f"Request failed after {self.retry_attempts} attempts") from e
+                    raise SynonymFinderError(
+                        f"Request failed after {self.retry_attempts} attempts"
+                    ) from e
 
         # Should not reach here, but just in case
         raise SynonymFinderError("Request failed")
@@ -372,7 +381,10 @@ def automatic_synonym_selection(
         if only_relevant and has_relevance_info:
             if syn.is_relevant is False:
                 continue
-            if syn.relevance_confidence is not None and syn.relevance_confidence < min_confidence:
+            if (
+                syn.relevance_confidence is not None
+                and syn.relevance_confidence < min_confidence
+            ):
                 continue
 
         # Filter by source type
@@ -436,7 +448,9 @@ def interactive_synonym_selection(
         """Format a synonym with optional relevance info."""
         if has_relevance_info and syn.is_relevant is not None:
             relevance_marker = "✓" if syn.is_relevant else "✗"
-            confidence_str = f"{syn.relevance_confidence:.0%}" if syn.relevance_confidence else "??"
+            confidence_str = (
+                f"{syn.relevance_confidence:.0%}" if syn.relevance_confidence else "??"
+            )
             return f"{syn.term} [{relevance_marker} {confidence_str}]"
         return syn.term
 
@@ -531,7 +545,9 @@ def interactive_synonym_selection(
             if has_relevance_info:
                 valid_options += ", 'relevant'"
             valid_options += ", 'none', or press Enter"
-            print(f"Invalid input. Please enter numbers separated by commas, {valid_options}")
+            print(
+                f"Invalid input. Please enter numbers separated by commas, {valid_options}"
+            )
 
     result = sorted(selected)
 

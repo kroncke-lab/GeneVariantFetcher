@@ -30,6 +30,7 @@ import pandas as pd
 # Try to import rapidfuzz for better fuzzy matching; fallback to difflib
 try:
     from rapidfuzz import fuzz as rapidfuzz_fuzz
+
     RAPIDFUZZ_AVAILABLE = True
 except ImportError:
     RAPIDFUZZ_AVAILABLE = False
@@ -38,6 +39,7 @@ except ImportError:
 # Optional YAML support for mapping files
 try:
     import yaml
+
     YAML_AVAILABLE = True
 except ImportError:
     YAML_AVAILABLE = False
@@ -51,61 +53,137 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 
 COLUMN_SYNONYMS: Dict[str, List[str]] = {
-    'pmid': [
-        'pmid', 'pubmed_id', 'pubmed', 'pm_id', 'pub_id', 'pubmedid',
-        'pmid_id', 'paper_id', 'article_id', 'reference_id'
+    "pmid": [
+        "pmid",
+        "pubmed_id",
+        "pubmed",
+        "pm_id",
+        "pub_id",
+        "pubmedid",
+        "pmid_id",
+        "paper_id",
+        "article_id",
+        "reference_id",
     ],
-    'variant': [
-        'hgvs', 'hgvs_p', 'hgvs_c', 'protein_change', 'cdna_change',
-        'variant', 'aa_change', 'mutation', 'amino_acid', 'protein_variant',
-        'cdna_variant', 'nucleotide_change', 'dna_change', 'protein_mutation',
-        'variant_name', 'variant_id', 'hgvs_protein', 'hgvs_cdna', 'p_notation',
-        'c_notation', 'protein_notation', 'cdna_notation'
+    "variant": [
+        "hgvs",
+        "hgvs_p",
+        "hgvs_c",
+        "protein_change",
+        "cdna_change",
+        "variant",
+        "aa_change",
+        "mutation",
+        "amino_acid",
+        "protein_variant",
+        "cdna_variant",
+        "nucleotide_change",
+        "dna_change",
+        "protein_mutation",
+        "variant_name",
+        "variant_id",
+        "hgvs_protein",
+        "hgvs_cdna",
+        "p_notation",
+        "c_notation",
+        "protein_notation",
+        "cdna_notation",
     ],
-    'rsid': [
-        'rsid', 'rs_id', 'dbsnp', 'rs', 'rs_number', 'dbsnp_id', 'snp_id'
+    "rsid": ["rsid", "rs_id", "dbsnp", "rs", "rs_number", "dbsnp_id", "snp_id"],
+    "carriers_total": [
+        "carriers",
+        "n_carriers",
+        "carrier_count",
+        "total_carriers",
+        "n_total",
+        "subjects",
+        "probands",
+        "individuals",
+        "n_individuals",
+        "total",
+        "n",
+        "count",
+        "sample_size",
+        "n_subjects",
+        "carrier_n",
+        "total_n",
+        "num_carriers",
+        "number_carriers",
+        "car",  # LQTS-specific: carrier count
     ],
-    'carriers_total': [
-        'carriers', 'n_carriers', 'carrier_count', 'total_carriers',
-        'n_total', 'subjects', 'probands', 'individuals', 'n_individuals',
-        'total', 'n', 'count', 'sample_size', 'n_subjects', 'carrier_n',
-        'total_n', 'num_carriers', 'number_carriers',
-        'car'  # LQTS-specific: carrier count
+    "affected_count": [
+        "affected",
+        "cases",
+        "n_affected",
+        "symptomatic",
+        "patients",
+        "n_cases",
+        "case_count",
+        "affected_count",
+        "n_symptomatic",
+        "diseased",
+        "n_diseased",
+        "num_affected",
+        "number_affected",
+        "lqt",  # LQTS-specific: Long QT syndrome affected
     ],
-    'affected_count': [
-        'affected', 'cases', 'n_affected', 'symptomatic', 'patients',
-        'n_cases', 'case_count', 'affected_count', 'n_symptomatic',
-        'diseased', 'n_diseased', 'num_affected', 'number_affected',
-        'lqt'  # LQTS-specific: Long QT syndrome affected
+    "unaffected_count": [
+        "unaffected",
+        "controls",
+        "n_unaffected",
+        "asymptomatic",
+        "n_controls",
+        "control_count",
+        "unaffected_count",
+        "n_asymptomatic",
+        "healthy",
+        "n_healthy",
+        "num_unaffected",
+        "number_unaffected",
+        "amb+una",
+        "ambuna",  # LQTS-specific: ambiguous + unaffected combined
     ],
-    'unaffected_count': [
-        'unaffected', 'controls', 'n_unaffected', 'asymptomatic',
-        'n_controls', 'control_count', 'unaffected_count', 'n_asymptomatic',
-        'healthy', 'n_healthy', 'num_unaffected', 'number_unaffected',
-        'amb+una', 'ambuna'  # LQTS-specific: ambiguous + unaffected combined
+    "phenotype": [
+        "phenotype",
+        "condition",
+        "disease",
+        "diagnosis",
+        "clinical",
+        "clinical_phenotype",
+        "phenotype_details",
+        "disorder",
+        "syndrome",
     ],
-    'phenotype': [
-        'phenotype', 'condition', 'disease', 'diagnosis', 'clinical',
-        'clinical_phenotype', 'phenotype_details', 'disorder', 'syndrome'
+    "notes": [
+        "notes",
+        "comments",
+        "remarks",
+        "additional_info",
+        "description",
+        "free_text",
+        "annotation",
+        "additional_notes",
     ],
-    'notes': [
-        'notes', 'comments', 'remarks', 'additional_info', 'description',
-        'free_text', 'annotation', 'additional_notes'
-    ]
 }
 
 # LQTS-specific affected phenotype columns to sum for total affected count
 AFFECTED_PHENOTYPE_COLUMNS: List[str] = [
-    'lqt', 'hom', 'smpt', 'asd', 'scd', 'drg', 'stqs'
+    "lqt",
+    "hom",
+    "smpt",
+    "asd",
+    "scd",
+    "drg",
+    "stqs",
 ]
 
 
 def normalize_column_name(col: Any) -> str:
     """Normalize column name for matching (lowercase, strip, remove underscores/spaces)."""
     if col is None:
-        return ''
+        return ""
     col_str = str(col)
-    return re.sub(r'[\s_\-]+', '', col_str.lower().strip())
+    return re.sub(r"[\s_\-]+", "", col_str.lower().strip())
 
 
 def normalize_pmid(pmid: Any) -> str:
@@ -130,7 +208,9 @@ def normalize_pmid(pmid: Any) -> str:
         return str(pmid).strip()
 
 
-def detect_columns(df: pd.DataFrame, mapping: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
+def detect_columns(
+    df: pd.DataFrame, mapping: Optional[Dict[str, str]] = None
+) -> Dict[str, Any]:
     """
     Detect column mappings from DataFrame using synonym matching.
 
@@ -144,7 +224,7 @@ def detect_columns(df: pd.DataFrame, mapping: Optional[Dict[str, str]] = None) -
         phenotype-specific affected columns to sum.
     """
     detected: Dict[str, Any] = {field: None for field in COLUMN_SYNONYMS.keys()}
-    detected['affected_phenotype_columns'] = []  # List of columns to sum for affected
+    detected["affected_phenotype_columns"] = []  # List of columns to sum for affected
 
     # If explicit mapping provided, use it first
     if mapping:
@@ -186,11 +266,13 @@ def detect_columns(df: pd.DataFrame, mapping: Optional[Dict[str, str]] = None) -
         norm_pheno = normalize_column_name(pheno_col)
         if norm_pheno in normalized_cols:
             actual_col = normalized_cols[norm_pheno]
-            detected['affected_phenotype_columns'].append(actual_col)
+            detected["affected_phenotype_columns"].append(actual_col)
             logger.info(f"Detected affected phenotype column: {actual_col}")
 
-    if detected['affected_phenotype_columns']:
-        logger.info(f"Will sum {len(detected['affected_phenotype_columns'])} affected phenotype columns: {detected['affected_phenotype_columns']}")
+    if detected["affected_phenotype_columns"]:
+        logger.info(
+            f"Will sum {len(detected['affected_phenotype_columns'])} affected phenotype columns: {detected['affected_phenotype_columns']}"
+        )
 
     return detected
 
@@ -199,9 +281,11 @@ def detect_columns(df: pd.DataFrame, mapping: Optional[Dict[str, str]] = None) -
 # SQLITE INTROSPECTION
 # =============================================================================
 
+
 @dataclass
 class TableInfo:
     """Information about a database table."""
+
     name: str
     columns: List[str]
     has_pmid: bool = False
@@ -230,16 +314,31 @@ def introspect_sqlite(conn: sqlite3.Connection) -> Dict[str, TableInfo]:
 
     logger.info(f"Discovered tables: {tables}")
 
-    pmid_patterns = ['pmid', 'pubmed', 'paper_id', 'article_id']
+    pmid_patterns = ["pmid", "pubmed", "paper_id", "article_id"]
     variant_patterns = [
-        'protein_notation', 'cdna_notation', 'hgvs', 'variant',
-        'mutation', 'genomic_position', 'protein_change'
+        "protein_notation",
+        "cdna_notation",
+        "hgvs",
+        "variant",
+        "mutation",
+        "genomic_position",
+        "protein_change",
     ]
     count_patterns = {
-        'carriers_total': ['total_carriers', 'carriers', 'total_carriers_observed', 'n_total'],
-        'affected_count': ['affected_count', 'affected', 'n_affected', 'cases'],
-        'unaffected_count': ['unaffected_count', 'unaffected', 'n_unaffected', 'controls'],
-        'uncertain_count': ['uncertain_count', 'uncertain', 'n_uncertain']
+        "carriers_total": [
+            "total_carriers",
+            "carriers",
+            "total_carriers_observed",
+            "n_total",
+        ],
+        "affected_count": ["affected_count", "affected", "n_affected", "cases"],
+        "unaffected_count": [
+            "unaffected_count",
+            "unaffected",
+            "n_unaffected",
+            "controls",
+        ],
+        "uncertain_count": ["uncertain_count", "uncertain", "n_uncertain"],
     }
 
     table_info = {}
@@ -279,7 +378,9 @@ def introspect_sqlite(conn: sqlite3.Connection) -> Dict[str, TableInfo]:
                         break
 
         table_info[table] = info
-        logger.debug(f"Table {table}: pmid={info.has_pmid}, variant={info.has_variant}, counts={info.has_counts}")
+        logger.debug(
+            f"Table {table}: pmid={info.has_pmid}, variant={info.has_variant}, counts={info.has_counts}"
+        )
 
     return table_info
 
@@ -300,29 +401,29 @@ def find_best_data_source(table_info: Dict[str, TableInfo]) -> Tuple[str, TableI
         Tuple of (strategy_name, primary_table_info)
     """
     # Check for penetrance_data (ideal case)
-    if 'penetrance_data' in table_info:
-        info = table_info['penetrance_data']
+    if "penetrance_data" in table_info:
+        info = table_info["penetrance_data"]
         if info.has_pmid and info.has_counts:
             logger.info("Using penetrance_data table as primary source")
-            return ('penetrance_data', info)
+            return ("penetrance_data", info)
 
     # Check for tables with all three: pmid, variant, counts
     for name, info in table_info.items():
         if info.has_pmid and info.has_variant and info.has_counts:
             logger.info(f"Using table {name} with pmid+variant+counts")
-            return ('combined', info)
+            return ("combined", info)
 
     # Check for individual_records (aggregate affected_status)
-    if 'individual_records' in table_info:
-        info = table_info['individual_records']
+    if "individual_records" in table_info:
+        info = table_info["individual_records"]
         if info.has_pmid:
             logger.info("Using individual_records table (will aggregate counts)")
-            return ('individual_records', info)
+            return ("individual_records", info)
 
     # Fallback: variant_papers + variants
-    if 'variant_papers' in table_info and 'variants' in table_info:
+    if "variant_papers" in table_info and "variants" in table_info:
         logger.info("Using variant_papers + variants join strategy")
-        return ('variant_papers_join', table_info['variant_papers'])
+        return ("variant_papers_join", table_info["variant_papers"])
 
     # No suitable source found
     raise ValueError(
@@ -333,7 +434,9 @@ def find_best_data_source(table_info: Dict[str, TableInfo]) -> Tuple[str, TableI
     )
 
 
-def extract_sqlite_data(conn: sqlite3.Connection, table_info: Dict[str, TableInfo]) -> pd.DataFrame:
+def extract_sqlite_data(
+    conn: sqlite3.Connection, table_info: Dict[str, TableInfo]
+) -> pd.DataFrame:
     """
     Extract variant data from SQLite database.
 
@@ -346,7 +449,7 @@ def extract_sqlite_data(conn: sqlite3.Connection, table_info: Dict[str, TableInf
     """
     strategy, primary_table = find_best_data_source(table_info)
 
-    if strategy == 'penetrance_data':
+    if strategy == "penetrance_data":
         # Join penetrance_data with variants to get variant notation
         query = """
             SELECT
@@ -364,7 +467,7 @@ def extract_sqlite_data(conn: sqlite3.Connection, table_info: Dict[str, TableInf
         logger.info("Executing penetrance_data query")
         df = pd.read_sql_query(query, conn)
 
-    elif strategy == 'individual_records':
+    elif strategy == "individual_records":
         # Aggregate individual records by variant+pmid
         query = """
             SELECT
@@ -383,7 +486,7 @@ def extract_sqlite_data(conn: sqlite3.Connection, table_info: Dict[str, TableInf
         logger.info("Executing individual_records aggregation query")
         df = pd.read_sql_query(query, conn)
 
-    elif strategy == 'variant_papers_join':
+    elif strategy == "variant_papers_join":
         # Just get variant-paper associations (no counts available)
         query = """
             SELECT
@@ -409,7 +512,9 @@ def extract_sqlite_data(conn: sqlite3.Connection, table_info: Dict[str, TableInf
         variant_cols = primary_table.variant_columns
         count_cols = primary_table.count_columns
 
-        variant_select = f"COALESCE({', '.join(variant_cols)})" if variant_cols else "NULL"
+        variant_select = (
+            f"COALESCE({', '.join(variant_cols)})" if variant_cols else "NULL"
+        )
 
         query = f"""
             SELECT
@@ -425,7 +530,7 @@ def extract_sqlite_data(conn: sqlite3.Connection, table_info: Dict[str, TableInf
         df = pd.read_sql_query(query, conn)
 
     # Normalize PMIDs (handles float conversion like 16470702.0 -> "16470702")
-    df['pmid'] = df['pmid'].apply(normalize_pmid)
+    df["pmid"] = df["pmid"].apply(normalize_pmid)
 
     logger.info(f"Extracted {len(df)} records from SQLite")
     return df
@@ -437,15 +542,32 @@ def extract_sqlite_data(conn: sqlite3.Connection, table_info: Dict[str, TableInf
 
 # Amino acid 3-letter to 1-letter mapping
 AA_3_TO_1 = {
-    'Ala': 'A', 'Arg': 'R', 'Asn': 'N', 'Asp': 'D', 'Cys': 'C',
-    'Gln': 'Q', 'Glu': 'E', 'Gly': 'G', 'His': 'H', 'Ile': 'I',
-    'Leu': 'L', 'Lys': 'K', 'Met': 'M', 'Phe': 'F', 'Pro': 'P',
-    'Ser': 'S', 'Thr': 'T', 'Trp': 'W', 'Tyr': 'Y', 'Val': 'V',
-    'Ter': '*', 'X': '*'
+    "Ala": "A",
+    "Arg": "R",
+    "Asn": "N",
+    "Asp": "D",
+    "Cys": "C",
+    "Gln": "Q",
+    "Glu": "E",
+    "Gly": "G",
+    "His": "H",
+    "Ile": "I",
+    "Leu": "L",
+    "Lys": "K",
+    "Met": "M",
+    "Phe": "F",
+    "Pro": "P",
+    "Ser": "S",
+    "Thr": "T",
+    "Trp": "W",
+    "Tyr": "Y",
+    "Val": "V",
+    "Ter": "*",
+    "X": "*",
 }
 
-AA_1_TO_3 = {v: k for k, v in AA_3_TO_1.items() if k != 'X'}
-AA_1_TO_3['*'] = 'Ter'
+AA_1_TO_3 = {v: k for k, v in AA_3_TO_1.items() if k != "X"}
+AA_1_TO_3["*"] = "Ter"
 
 
 def normalize_unicode(s: str) -> str:
@@ -453,12 +575,12 @@ def normalize_unicode(s: str) -> str:
     if not s:
         return s
     # Normalize to NFKC form
-    s = unicodedata.normalize('NFKC', s)
+    s = unicodedata.normalize("NFKC", s)
     # Replace various dash characters with standard hyphen
-    s = re.sub(r'[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]', '-', s)
+    s = re.sub(r"[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]", "-", s)
     # Replace fancy quotes
-    s = re.sub(r'[\u2018\u2019]', "'", s)
-    s = re.sub(r'[\u201c\u201d]', '"', s)
+    s = re.sub(r"[\u2018\u2019]", "'", s)
+    s = re.sub(r"[\u201c\u201d]", '"', s)
     return s
 
 
@@ -473,22 +595,22 @@ def normalize_variant(variant: str) -> str:
     - Normalizes termination symbols (X -> *)
     """
     if not variant or pd.isna(variant):
-        return ''
+        return ""
 
     variant = str(variant).strip()
     variant = normalize_unicode(variant)
-    variant = re.sub(r'\s+', ' ', variant)
+    variant = re.sub(r"\s+", " ", variant)
 
     # Standardize common prefixes
-    variant = re.sub(r'^p\.\s*', 'p.', variant, flags=re.IGNORECASE)
-    variant = re.sub(r'^c\.\s*', 'c.', variant, flags=re.IGNORECASE)
+    variant = re.sub(r"^p\.\s*", "p.", variant, flags=re.IGNORECASE)
+    variant = re.sub(r"^c\.\s*", "c.", variant, flags=re.IGNORECASE)
 
     # Normalize termination symbols: X, Ter -> *
     # Handle fsX, fsX123, X at end of variant
-    variant = re.sub(r'fsX(\d*)$', r'fs*\1', variant, flags=re.IGNORECASE)
-    variant = re.sub(r'Ter(\d*)$', r'*\1', variant)
+    variant = re.sub(r"fsX(\d*)$", r"fs*\1", variant, flags=re.IGNORECASE)
+    variant = re.sub(r"Ter(\d*)$", r"*\1", variant)
     # Handle X alone at end (but not in middle of word)
-    variant = re.sub(r'(\d)X$', r'\1*', variant)
+    variant = re.sub(r"(\d)X$", r"\1*", variant)
 
     return variant
 
@@ -499,20 +621,20 @@ def convert_aa_3_to_1(variant: str) -> Optional[str]:
 
     e.g., p.Arg123His -> p.R123H
     """
-    if not variant or not variant.lower().startswith('p.'):
+    if not variant or not variant.lower().startswith("p."):
         return None
 
     result = variant[:2]  # Keep "p."
     remaining = variant[2:]
 
     # Pattern: 3-letter AA, position, 3-letter AA (with optional fs, del, etc.)
-    pattern = r'([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2})?(.*)$'
+    pattern = r"([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2})?(.*)$"
     match = re.match(pattern, remaining)
 
     if match:
         aa1, pos, aa2, rest = match.groups()
         aa1_short = AA_3_TO_1.get(aa1, aa1)
-        aa2_short = AA_3_TO_1.get(aa2, aa2) if aa2 else ''
+        aa2_short = AA_3_TO_1.get(aa2, aa2) if aa2 else ""
         result = f"p.{aa1_short}{pos}{aa2_short}{rest or ''}"
         return result
 
@@ -525,17 +647,17 @@ def convert_aa_1_to_3(variant: str) -> Optional[str]:
 
     e.g., p.R123H -> p.Arg123His
     """
-    if not variant or not variant.lower().startswith('p.'):
+    if not variant or not variant.lower().startswith("p."):
         return None
 
     # Pattern: single letter AA, position, single letter AA (with optional suffix)
-    pattern = r'^p\.([A-Z\*])(\d+)([A-Z\*])?(.*)$'
+    pattern = r"^p\.([A-Z\*])(\d+)([A-Z\*])?(.*)$"
     match = re.match(pattern, variant)
 
     if match:
         aa1, pos, aa2, rest = match.groups()
         aa1_long = AA_1_TO_3.get(aa1, aa1)
-        aa2_long = AA_1_TO_3.get(aa2, aa2) if aa2 else ''
+        aa2_long = AA_1_TO_3.get(aa2, aa2) if aa2 else ""
         result = f"p.{aa1_long}{pos}{aa2_long}{rest or ''}"
         return result
 
@@ -550,7 +672,7 @@ def add_p_prefix(variant: str) -> Optional[str]:
     """
     if not variant:
         return None
-    if variant.lower().startswith('p.') or variant.lower().startswith('c.'):
+    if variant.lower().startswith("p.") or variant.lower().startswith("c."):
         return None  # Already has prefix
 
     # Check if it looks like a protein variant:
@@ -558,7 +680,7 @@ def add_p_prefix(variant: str) -> Optional[str]:
     # - Three letter + number + three letter (Ala123Val)
     # - Single/three letter + number + fs* (A123fs*)
     # - Single/three letter + number + * (A123*)
-    protein_pattern = r'^[A-Z][a-z]{0,2}\d+([A-Z][a-z]{0,2}|fs\*?\d*|\*\d*)$'
+    protein_pattern = r"^[A-Z][a-z]{0,2}\d+([A-Z][a-z]{0,2}|fs\*?\d*|\*\d*)$"
     if re.match(protein_pattern, variant, re.IGNORECASE):
         return f"p.{variant}"
 
@@ -571,7 +693,7 @@ def remove_p_prefix(variant: str) -> Optional[str]:
 
     e.g., p.A123V -> A123V
     """
-    if variant and variant.lower().startswith('p.'):
+    if variant and variant.lower().startswith("p."):
         return variant[2:]
     return None
 
@@ -622,11 +744,19 @@ def get_variant_forms(variant: str) -> Set[str]:
         if converted_1_np:
             # Add both with and without prefix
             forms.add(normalize_variant(converted_1_np))
-            forms.add(normalize_variant(converted_1_np[2:]) if converted_1_np.startswith('p.') else converted_1_np)
+            forms.add(
+                normalize_variant(converted_1_np[2:])
+                if converted_1_np.startswith("p.")
+                else converted_1_np
+            )
         converted_3_np = convert_aa_1_to_3(f"p.{without_prefix}")
         if converted_3_np:
             forms.add(normalize_variant(converted_3_np))
-            forms.add(normalize_variant(converted_3_np[2:]) if converted_3_np.startswith('p.') else converted_3_np)
+            forms.add(
+                normalize_variant(converted_3_np[2:])
+                if converted_3_np.startswith("p.")
+                else converted_3_np
+            )
 
     return forms
 
@@ -634,6 +764,7 @@ def get_variant_forms(variant: str) -> Set[str]:
 # =============================================================================
 # FUZZY MATCHING
 # =============================================================================
+
 
 def compute_similarity(s1: str, s2: str) -> float:
     """
@@ -652,9 +783,7 @@ def compute_similarity(s1: str, s2: str) -> float:
 
 
 def find_best_match(
-    query_variant: str,
-    candidates: List[str],
-    threshold: float = 0.85
+    query_variant: str, candidates: List[str], threshold: float = 0.85
 ) -> Tuple[Optional[str], float, str]:
     """
     Find the best matching variant from candidates.
@@ -676,7 +805,7 @@ def find_best_match(
         candidate_forms = get_variant_forms(candidate)
 
         if query_forms & candidate_forms:  # Intersection
-            return (candidate, 1.0, 'exact')
+            return (candidate, 1.0, "exact")
 
     # Fuzzy matching
     best_match = None
@@ -694,18 +823,20 @@ def find_best_match(
                     best_match = candidate
 
     if best_score >= threshold:
-        return (best_match, best_score, 'fuzzy')
+        return (best_match, best_score, "fuzzy")
 
-    return (None, best_score, 'none')
+    return (None, best_score, "none")
 
 
 # =============================================================================
 # COMPARISON LOGIC
 # =============================================================================
 
+
 @dataclass
 class ComparisonRow:
     """Single row of comparison results."""
+
     pmid: str
     excel_variant_raw: str
     excel_variant_norm: str
@@ -726,7 +857,7 @@ class ComparisonRow:
     sqlite_unaffected: Optional[int]
     unaffected_diff: Optional[int]
 
-    phenotype: str = 'ALL'
+    phenotype: str = "ALL"
 
     missing_in_sqlite: bool = False
     missing_in_excel: bool = False
@@ -753,7 +884,7 @@ def compute_diff(a: Optional[int], b: Optional[int]) -> Optional[int]:
 def load_excel_data(
     excel_path: Path,
     sheet_name: Optional[str],
-    column_mapping: Optional[Dict[str, str]]
+    column_mapping: Optional[Dict[str, str]],
 ) -> Tuple[pd.DataFrame, Dict[str, Any]]:
     """
     Load and parse Excel data.
@@ -764,12 +895,12 @@ def load_excel_data(
     logger.info(f"Loading Excel file: {excel_path}")
 
     # Select engine based on file suffix so legacy .xls files are supported
-    engine = 'xlrd' if excel_path.suffix.lower() == '.xls' else 'openpyxl'
+    engine = "xlrd" if excel_path.suffix.lower() == ".xls" else "openpyxl"
 
     try:
         df = pd.read_excel(excel_path, sheet_name=sheet_name, engine=engine)
     except ImportError as exc:
-        if engine == 'xlrd':
+        if engine == "xlrd":
             raise ImportError(
                 "Reading .xls files requires the optional dependency xlrd. "
                 "Install it (e.g., `pip install xlrd`) or convert the file to "
@@ -782,13 +913,13 @@ def load_excel_data(
     detected = detect_columns(df, column_mapping)
 
     # Validate required columns
-    if detected['pmid'] is None:
+    if detected["pmid"] is None:
         raise ValueError(
             f"Cannot find PMID column. Available columns: {list(df.columns)}\n"
             "Use --mapping to specify column mappings."
         )
 
-    if detected['variant'] is None:
+    if detected["variant"] is None:
         raise ValueError(
             f"Cannot find variant column. Available columns: {list(df.columns)}\n"
             "Use --mapping to specify column mappings."
@@ -798,8 +929,7 @@ def load_excel_data(
 
 
 def aggregate_excel_data(
-    df: pd.DataFrame,
-    detected: Dict[str, Any]
+    df: pd.DataFrame, detected: Dict[str, Any]
 ) -> Dict[Tuple[str, str], Dict[str, Any]]:
     """
     Aggregate Excel data by (pmid, variant) key.
@@ -807,19 +937,19 @@ def aggregate_excel_data(
     Returns:
         Dict mapping (pmid, variant_norm) -> aggregated data
     """
-    pmid_col = detected['pmid']
-    variant_col = detected['variant']
-    carriers_col = detected.get('carriers_total')
-    affected_col = detected.get('affected_count')
-    unaffected_col = detected.get('unaffected_count')
-    phenotype_col = detected.get('phenotype')
-    affected_phenotype_cols = detected.get('affected_phenotype_columns', [])
+    pmid_col = detected["pmid"]
+    variant_col = detected["variant"]
+    carriers_col = detected.get("carriers_total")
+    affected_col = detected.get("affected_count")
+    unaffected_col = detected.get("unaffected_count")
+    phenotype_col = detected.get("phenotype")
+    affected_phenotype_cols = detected.get("affected_phenotype_columns", [])
 
     aggregated = {}
 
     for _, row in df.iterrows():
         pmid = normalize_pmid(row[pmid_col])
-        variant_raw = str(row[variant_col]) if pd.notna(row[variant_col]) else ''
+        variant_raw = str(row[variant_col]) if pd.notna(row[variant_col]) else ""
         variant_norm = normalize_variant(variant_raw)
 
         if not pmid or not variant_norm:
@@ -829,18 +959,18 @@ def aggregate_excel_data(
 
         if key not in aggregated:
             aggregated[key] = {
-                'pmid': pmid,
-                'variant_raw': variant_raw,
-                'variant_norm': variant_norm,
-                'carriers_total': 0,
-                'affected_count': 0,
-                'unaffected_count': 0,
-                'phenotypes': set()
+                "pmid": pmid,
+                "variant_raw": variant_raw,
+                "variant_norm": variant_norm,
+                "carriers_total": 0,
+                "affected_count": 0,
+                "unaffected_count": 0,
+                "phenotypes": set(),
             }
 
         # Aggregate counts
         if carriers_col and pd.notna(row.get(carriers_col)):
-            aggregated[key]['carriers_total'] += safe_int(row[carriers_col]) or 0
+            aggregated[key]["carriers_total"] += safe_int(row[carriers_col]) or 0
 
         # Sum affected from multiple phenotype columns if available
         if affected_phenotype_cols:
@@ -848,18 +978,20 @@ def aggregate_excel_data(
             for pheno_col in affected_phenotype_cols:
                 if pd.notna(row.get(pheno_col)):
                     row_affected += safe_int(row[pheno_col]) or 0
-            aggregated[key]['affected_count'] += row_affected
+            aggregated[key]["affected_count"] += row_affected
         elif affected_col and pd.notna(row.get(affected_col)):
             # Fallback to single affected column
-            aggregated[key]['affected_count'] += safe_int(row[affected_col]) or 0
+            aggregated[key]["affected_count"] += safe_int(row[affected_col]) or 0
 
         if unaffected_col and pd.notna(row.get(unaffected_col)):
-            aggregated[key]['unaffected_count'] += safe_int(row[unaffected_col]) or 0
+            aggregated[key]["unaffected_count"] += safe_int(row[unaffected_col]) or 0
 
         if phenotype_col and pd.notna(row.get(phenotype_col)):
-            aggregated[key]['phenotypes'].add(str(row[phenotype_col]))
+            aggregated[key]["phenotypes"].add(str(row[phenotype_col]))
 
-    logger.info(f"Aggregated Excel data into {len(aggregated)} unique (pmid, variant) pairs")
+    logger.info(
+        f"Aggregated Excel data into {len(aggregated)} unique (pmid, variant) pairs"
+    )
     return aggregated
 
 
@@ -873,8 +1005,8 @@ def aggregate_sqlite_data(df: pd.DataFrame) -> Dict[Tuple[str, str], Dict[str, A
     aggregated = {}
 
     for _, row in df.iterrows():
-        pmid = normalize_pmid(row['pmid'])
-        variant_raw = str(row['variant']) if pd.notna(row['variant']) else ''
+        pmid = normalize_pmid(row["pmid"])
+        variant_raw = str(row["variant"]) if pd.notna(row["variant"]) else ""
         variant_norm = normalize_variant(variant_raw)
 
         if not pmid or not variant_norm:
@@ -884,22 +1016,26 @@ def aggregate_sqlite_data(df: pd.DataFrame) -> Dict[Tuple[str, str], Dict[str, A
 
         if key not in aggregated:
             aggregated[key] = {
-                'pmid': pmid,
-                'variant_raw': variant_raw,
-                'variant_norm': variant_norm,
-                'carriers_total': 0,
-                'affected_count': 0,
-                'unaffected_count': 0,
-                'protein_notation': row.get('protein_notation'),
-                'cdna_notation': row.get('cdna_notation')
+                "pmid": pmid,
+                "variant_raw": variant_raw,
+                "variant_norm": variant_norm,
+                "carriers_total": 0,
+                "affected_count": 0,
+                "unaffected_count": 0,
+                "protein_notation": row.get("protein_notation"),
+                "cdna_notation": row.get("cdna_notation"),
             }
 
         # Aggregate counts (handle None values)
-        aggregated[key]['carriers_total'] += safe_int(row.get('carriers_total')) or 0
-        aggregated[key]['affected_count'] += safe_int(row.get('affected_count')) or 0
-        aggregated[key]['unaffected_count'] += safe_int(row.get('unaffected_count')) or 0
+        aggregated[key]["carriers_total"] += safe_int(row.get("carriers_total")) or 0
+        aggregated[key]["affected_count"] += safe_int(row.get("affected_count")) or 0
+        aggregated[key]["unaffected_count"] += (
+            safe_int(row.get("unaffected_count")) or 0
+        )
 
-    logger.info(f"Aggregated SQLite data into {len(aggregated)} unique (pmid, variant) pairs")
+    logger.info(
+        f"Aggregated SQLite data into {len(aggregated)} unique (pmid, variant) pairs"
+    )
     return aggregated
 
 
@@ -907,7 +1043,7 @@ def compare_data(
     excel_data: Dict[Tuple[str, str], Dict[str, Any]],
     sqlite_data: Dict[Tuple[str, str], Dict[str, Any]],
     match_mode: str,
-    fuzzy_threshold: float
+    fuzzy_threshold: float,
 ) -> List[ComparisonRow]:
     """
     Compare Excel and SQLite data.
@@ -929,7 +1065,7 @@ def compare_data(
     for (pmid, variant_norm), data in sqlite_data.items():
         if pmid not in sqlite_by_pmid:
             sqlite_by_pmid[pmid] = []
-        sqlite_by_pmid[pmid].append((variant_norm, data['variant_raw']))
+        sqlite_by_pmid[pmid].append((variant_norm, data["variant_raw"]))
 
     # Process Excel entries
     for (excel_pmid, excel_variant_norm), excel_entry in excel_data.items():
@@ -938,29 +1074,21 @@ def compare_data(
         candidate_variants = [raw for (norm, raw) in sqlite_candidates]
 
         # Try to match
-        if match_mode == 'exact':
+        if match_mode == "exact":
             # Exact match only
             match_key = (excel_pmid, excel_variant_norm)
             if match_key in sqlite_data:
                 sqlite_entry = sqlite_data[match_key]
                 matched_sqlite_keys.add(match_key)
 
-                row = create_comparison_row(
-                    excel_entry, sqlite_entry,
-                    'exact', 1.0
-                )
+                row = create_comparison_row(excel_entry, sqlite_entry, "exact", 1.0)
             else:
-                row = create_comparison_row(
-                    excel_entry, None,
-                    'none', None
-                )
+                row = create_comparison_row(excel_entry, None, "none", None)
                 row.missing_in_sqlite = True
         else:
             # Fuzzy matching
             best_match, score, match_type = find_best_match(
-                excel_entry['variant_raw'],
-                candidate_variants,
-                fuzzy_threshold
+                excel_entry["variant_raw"], candidate_variants, fuzzy_threshold
             )
 
             if best_match:
@@ -975,7 +1103,7 @@ def compare_data(
                     # Search for matching variant in this PMID
                     sqlite_entry = None
                     for (pmid, norm), entry in sqlite_data.items():
-                        if pmid == excel_pmid and entry['variant_raw'] == best_match:
+                        if pmid == excel_pmid and entry["variant_raw"] == best_match:
                             sqlite_entry = entry
                             match_key = (pmid, norm)
                             break
@@ -983,20 +1111,13 @@ def compare_data(
                 if sqlite_entry:
                     matched_sqlite_keys.add(match_key)
                     row = create_comparison_row(
-                        excel_entry, sqlite_entry,
-                        match_type, score
+                        excel_entry, sqlite_entry, match_type, score
                     )
                 else:
-                    row = create_comparison_row(
-                        excel_entry, None,
-                        'none', None
-                    )
+                    row = create_comparison_row(excel_entry, None, "none", None)
                     row.missing_in_sqlite = True
             else:
-                row = create_comparison_row(
-                    excel_entry, None,
-                    'none', None
-                )
+                row = create_comparison_row(excel_entry, None, "none", None)
                 row.missing_in_sqlite = True
 
         results.append(row)
@@ -1005,23 +1126,23 @@ def compare_data(
     for key, sqlite_entry in sqlite_data.items():
         if key not in matched_sqlite_keys:
             row = ComparisonRow(
-                pmid=sqlite_entry['pmid'],
-                excel_variant_raw='',
-                excel_variant_norm='',
-                sqlite_variant_raw=sqlite_entry['variant_raw'],
-                sqlite_variant_norm=sqlite_entry['variant_norm'],
-                match_type='none',
+                pmid=sqlite_entry["pmid"],
+                excel_variant_raw="",
+                excel_variant_norm="",
+                sqlite_variant_raw=sqlite_entry["variant_raw"],
+                sqlite_variant_norm=sqlite_entry["variant_norm"],
+                match_type="none",
                 match_score=None,
                 excel_carriers_total=None,
-                sqlite_carriers_total=sqlite_entry['carriers_total'] or None,
+                sqlite_carriers_total=sqlite_entry["carriers_total"] or None,
                 carriers_diff=None,
                 excel_affected=None,
-                sqlite_affected=sqlite_entry['affected_count'] or None,
+                sqlite_affected=sqlite_entry["affected_count"] or None,
                 affected_diff=None,
                 excel_unaffected=None,
-                sqlite_unaffected=sqlite_entry['unaffected_count'] or None,
+                sqlite_unaffected=sqlite_entry["unaffected_count"] or None,
                 unaffected_diff=None,
-                missing_in_excel=True
+                missing_in_excel=True,
             )
             results.append(row)
 
@@ -1033,29 +1154,31 @@ def create_comparison_row(
     excel_entry: Dict[str, Any],
     sqlite_entry: Optional[Dict[str, Any]],
     match_type: str,
-    match_score: Optional[float]
+    match_score: Optional[float],
 ) -> ComparisonRow:
     """Create a ComparisonRow from Excel and SQLite entries."""
 
-    excel_carriers = excel_entry['carriers_total'] or None
-    excel_affected = excel_entry['affected_count'] or None
-    excel_unaffected = excel_entry['unaffected_count'] or None
+    excel_carriers = excel_entry["carriers_total"] or None
+    excel_affected = excel_entry["affected_count"] or None
+    excel_unaffected = excel_entry["unaffected_count"] or None
 
     if sqlite_entry:
-        sqlite_carriers = sqlite_entry['carriers_total'] or None
-        sqlite_affected = sqlite_entry['affected_count'] or None
-        sqlite_unaffected = sqlite_entry['unaffected_count'] or None
+        sqlite_carriers = sqlite_entry["carriers_total"] or None
+        sqlite_affected = sqlite_entry["affected_count"] or None
+        sqlite_unaffected = sqlite_entry["unaffected_count"] or None
 
         carriers_diff = compute_diff(excel_carriers, sqlite_carriers)
         affected_diff = compute_diff(excel_affected, sqlite_affected)
         unaffected_diff = compute_diff(excel_unaffected, sqlite_unaffected)
 
         # Determine if there's a count mismatch
-        count_mismatch = any([
-            carriers_diff is not None and carriers_diff != 0,
-            affected_diff is not None and affected_diff != 0,
-            unaffected_diff is not None and unaffected_diff != 0
-        ])
+        count_mismatch = any(
+            [
+                carriers_diff is not None and carriers_diff != 0,
+                affected_diff is not None and affected_diff != 0,
+                unaffected_diff is not None and unaffected_diff != 0,
+            ]
+        )
     else:
         sqlite_carriers = None
         sqlite_affected = None
@@ -1065,15 +1188,15 @@ def create_comparison_row(
         unaffected_diff = None
         count_mismatch = False
 
-    phenotypes = excel_entry.get('phenotypes', set())
-    phenotype = ', '.join(sorted(phenotypes)) if phenotypes else 'ALL'
+    phenotypes = excel_entry.get("phenotypes", set())
+    phenotype = ", ".join(sorted(phenotypes)) if phenotypes else "ALL"
 
     return ComparisonRow(
-        pmid=excel_entry['pmid'],
-        excel_variant_raw=excel_entry['variant_raw'],
-        excel_variant_norm=excel_entry['variant_norm'],
-        sqlite_variant_raw=sqlite_entry['variant_raw'] if sqlite_entry else None,
-        sqlite_variant_norm=sqlite_entry['variant_norm'] if sqlite_entry else None,
+        pmid=excel_entry["pmid"],
+        excel_variant_raw=excel_entry["variant_raw"],
+        excel_variant_norm=excel_entry["variant_norm"],
+        sqlite_variant_raw=sqlite_entry["variant_raw"] if sqlite_entry else None,
+        sqlite_variant_norm=sqlite_entry["variant_norm"] if sqlite_entry else None,
         match_type=match_type,
         match_score=match_score,
         excel_carriers_total=excel_carriers,
@@ -1086,7 +1209,7 @@ def create_comparison_row(
         sqlite_unaffected=sqlite_unaffected,
         unaffected_diff=unaffected_diff,
         phenotype=phenotype,
-        count_mismatch=count_mismatch
+        count_mismatch=count_mismatch,
     )
 
 
@@ -1094,11 +1217,9 @@ def create_comparison_row(
 # OUTPUT GENERATION
 # =============================================================================
 
+
 def generate_outputs(
-    results: List[ComparisonRow],
-    outdir: Path,
-    excel_path: Path,
-    sqlite_path: Path
+    results: List[ComparisonRow], outdir: Path, excel_path: Path, sqlite_path: Path
 ) -> Dict[str, Any]:
     """
     Generate all output files.
@@ -1119,58 +1240,60 @@ def generate_outputs(
 
     # Calculate summary statistics
     summary = {
-        'input_files': {
-            'excel': str(excel_path),
-            'sqlite': str(sqlite_path)
-        },
-        'total_rows': len(results),
-        'matched_exact': sum(1 for r in results if r.match_type == 'exact'),
-        'matched_fuzzy': sum(1 for r in results if r.match_type == 'fuzzy'),
-        'unmatched': sum(1 for r in results if r.match_type == 'none'),
-        'missing_in_sqlite': sum(1 for r in results if r.missing_in_sqlite),
-        'missing_in_excel': sum(1 for r in results if r.missing_in_excel),
-        'count_mismatches': sum(1 for r in results if r.count_mismatch),
-        'unique_pmids': len(set(r.pmid for r in results)),
-        'top_mismatches': []
+        "input_files": {"excel": str(excel_path), "sqlite": str(sqlite_path)},
+        "total_rows": len(results),
+        "matched_exact": sum(1 for r in results if r.match_type == "exact"),
+        "matched_fuzzy": sum(1 for r in results if r.match_type == "fuzzy"),
+        "unmatched": sum(1 for r in results if r.match_type == "none"),
+        "missing_in_sqlite": sum(1 for r in results if r.missing_in_sqlite),
+        "missing_in_excel": sum(1 for r in results if r.missing_in_excel),
+        "count_mismatches": sum(1 for r in results if r.count_mismatch),
+        "unique_pmids": len(set(r.pmid for r in results)),
+        "top_mismatches": [],
     }
 
     # Get top mismatches (by absolute diff)
     mismatched = [r for r in results if r.count_mismatch]
-    mismatched.sort(key=lambda r: abs(r.carriers_diff or 0) + abs(r.affected_diff or 0), reverse=True)
-    summary['top_mismatches'] = [asdict(r) for r in mismatched[:20]]
+    mismatched.sort(
+        key=lambda r: abs(r.carriers_diff or 0) + abs(r.affected_diff or 0),
+        reverse=True,
+    )
+    summary["top_mismatches"] = [asdict(r) for r in mismatched[:20]]
 
     # Write full comparison CSV
-    df.to_csv(outdir / 'discrepancies.csv', index=False)
+    df.to_csv(outdir / "discrepancies.csv", index=False)
     logger.info(f"Wrote {outdir / 'discrepancies.csv'}")
 
     # Write missing_in_sqlite.csv
-    missing_sqlite = df[df['missing_in_sqlite'] == True]
+    missing_sqlite = df[df["missing_in_sqlite"] == True]
     if len(missing_sqlite) > 0:
-        missing_sqlite.to_csv(outdir / 'missing_in_sqlite.csv', index=False)
-        logger.info(f"Wrote {outdir / 'missing_in_sqlite.csv'} ({len(missing_sqlite)} rows)")
+        missing_sqlite.to_csv(outdir / "missing_in_sqlite.csv", index=False)
+        logger.info(
+            f"Wrote {outdir / 'missing_in_sqlite.csv'} ({len(missing_sqlite)} rows)"
+        )
 
     # Write missing_in_excel.csv
-    missing_excel = df[df['missing_in_excel'] == True]
+    missing_excel = df[df["missing_in_excel"] == True]
     if len(missing_excel) > 0:
-        missing_excel.to_csv(outdir / 'missing_in_excel.csv', index=False)
-        logger.info(f"Wrote {outdir / 'missing_in_excel.csv'} ({len(missing_excel)} rows)")
+        missing_excel.to_csv(outdir / "missing_in_excel.csv", index=False)
+        logger.info(
+            f"Wrote {outdir / 'missing_in_excel.csv'} ({len(missing_excel)} rows)"
+        )
 
     # Write summary.json
-    with open(outdir / 'summary.json', 'w') as f:
+    with open(outdir / "summary.json", "w") as f:
         json.dump(summary, f, indent=2)
     logger.info(f"Wrote {outdir / 'summary.json'}")
 
     # Write markdown report
-    write_markdown_report(results, summary, outdir / 'report.md')
+    write_markdown_report(results, summary, outdir / "report.md")
     logger.info(f"Wrote {outdir / 'report.md'}")
 
     return summary
 
 
 def write_markdown_report(
-    results: List[ComparisonRow],
-    summary: Dict[str, Any],
-    output_path: Path
+    results: List[ComparisonRow], summary: Dict[str, Any], output_path: Path
 ) -> None:
     """Write a human-readable markdown report."""
 
@@ -1198,16 +1321,21 @@ def write_markdown_report(
     ]
 
     # Top mismatches table
-    if summary['count_mismatches'] > 0:
-        lines.extend([
-            "## Top Count Mismatches",
-            "",
-            "| PMID | Excel Variant | SQLite Variant | Carriers (E/S/Δ) | Affected (E/S/Δ) |",
-            "|------|---------------|----------------|------------------|------------------|",
-        ])
+    if summary["count_mismatches"] > 0:
+        lines.extend(
+            [
+                "## Top Count Mismatches",
+                "",
+                "| PMID | Excel Variant | SQLite Variant | Carriers (E/S/Δ) | Affected (E/S/Δ) |",
+                "|------|---------------|----------------|------------------|------------------|",
+            ]
+        )
 
         mismatched = [r for r in results if r.count_mismatch]
-        mismatched.sort(key=lambda r: abs(r.carriers_diff or 0) + abs(r.affected_diff or 0), reverse=True)
+        mismatched.sort(
+            key=lambda r: abs(r.carriers_diff or 0) + abs(r.affected_diff or 0),
+            reverse=True,
+        )
 
         for r in mismatched[:50]:
             carriers = f"{r.excel_carriers_total or '-'}/{r.sqlite_carriers_total or '-'}/{r.carriers_diff or '-'}"
@@ -1221,12 +1349,14 @@ def write_markdown_report(
     # Missing in SQLite
     missing_sqlite = [r for r in results if r.missing_in_sqlite]
     if missing_sqlite:
-        lines.extend([
-            "## Variants Missing in SQLite (Top 50)",
-            "",
-            "| PMID | Excel Variant |",
-            "|------|---------------|",
-        ])
+        lines.extend(
+            [
+                "## Variants Missing in SQLite (Top 50)",
+                "",
+                "| PMID | Excel Variant |",
+                "|------|---------------|",
+            ]
+        )
         for r in missing_sqlite[:50]:
             lines.append(f"| {r.pmid} | {r.excel_variant_raw} |")
         lines.append("")
@@ -1234,27 +1364,30 @@ def write_markdown_report(
     # Missing in Excel
     missing_excel = [r for r in results if r.missing_in_excel]
     if missing_excel:
-        lines.extend([
-            "## Variants Missing in Excel (Top 50)",
-            "",
-            "| PMID | SQLite Variant |",
-            "|------|----------------|",
-        ])
+        lines.extend(
+            [
+                "## Variants Missing in Excel (Top 50)",
+                "",
+                "| PMID | SQLite Variant |",
+                "|------|----------------|",
+            ]
+        )
         for r in missing_excel[:50]:
             lines.append(f"| {r.pmid} | {r.sqlite_variant_raw} |")
         lines.append("")
 
-    with open(output_path, 'w') as f:
-        f.write('\n'.join(lines))
+    with open(output_path, "w") as f:
+        f.write("\n".join(lines))
 
 
 # =============================================================================
 # CLI ENTRYPOINT
 # =============================================================================
 
+
 def load_mapping_file(mapping_path: Path) -> Dict[str, str]:
     """Load column mapping from JSON or YAML file."""
-    with open(mapping_path, 'r') as f:
+    with open(mapping_path, "r") as f:
         content = f.read()
 
     # Try JSON first
@@ -1294,63 +1427,67 @@ Examples:
   # Use explicit column mapping
   python compare_variants.py --excel curated.xlsx --sqlite KCNH2.db \\
       --mapping column_map.yaml
-"""
+""",
     )
 
     parser.add_argument(
-        '--excel', '-e',
+        "--excel",
+        "-e",
         type=Path,
         required=True,
-        help="Path to Excel file with curated variant data"
+        help="Path to Excel file with curated variant data",
     )
 
     parser.add_argument(
-        '--sqlite', '-s',
+        "--sqlite",
+        "-s",
         type=Path,
         required=True,
-        help="Path to SQLite database (e.g., KCNH2.db)"
+        help="Path to SQLite database (e.g., KCNH2.db)",
     )
 
     parser.add_argument(
-        '--sheet',
+        "--sheet",
         type=str,
         default=None,
-        help="Excel sheet name (default: first sheet)"
+        help="Excel sheet name (default: first sheet)",
     )
 
     parser.add_argument(
-        '--outdir', '-o',
+        "--outdir",
+        "-o",
         type=Path,
-        default=Path('./compare_out'),
-        help="Output directory (default: ./compare_out)"
+        default=Path("./compare_out"),
+        help="Output directory (default: ./compare_out)",
     )
 
     parser.add_argument(
-        '--mapping', '-m',
+        "--mapping",
+        "-m",
         type=Path,
         default=None,
-        help="JSON or YAML file with explicit column mappings"
+        help="JSON or YAML file with explicit column mappings",
     )
 
     parser.add_argument(
-        '--variant_match_mode',
-        choices=['exact', 'fuzzy'],
-        default='exact',
-        help="Variant matching mode (default: exact)"
+        "--variant_match_mode",
+        choices=["exact", "fuzzy"],
+        default="exact",
+        help="Variant matching mode (default: exact)",
     )
 
     parser.add_argument(
-        '--fuzzy_threshold',
+        "--fuzzy_threshold",
         type=float,
         default=0.85,
-        help="Minimum similarity for fuzzy matching (default: 0.85)"
+        help="Minimum similarity for fuzzy matching (default: 0.85)",
     )
 
     parser.add_argument(
-        '--log_level',
-        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'],
-        default='INFO',
-        help="Logging level (default: INFO)"
+        "--log_level",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+        default="INFO",
+        help="Logging level (default: INFO)",
     )
 
     args = parser.parse_args()
@@ -1358,7 +1495,7 @@ Examples:
     # Configure logging
     logging.basicConfig(
         level=getattr(logging, args.log_level),
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
 
     # Validate inputs
@@ -1385,7 +1522,7 @@ Examples:
     logger.info(f"Excel: {args.excel}")
     logger.info(f"SQLite: {args.sqlite}")
     logger.info(f"Match mode: {args.variant_match_mode}")
-    if args.variant_match_mode == 'fuzzy':
+    if args.variant_match_mode == "fuzzy":
         logger.info(f"Fuzzy threshold: {args.fuzzy_threshold}")
     logger.info("=" * 80)
 
@@ -1415,13 +1552,11 @@ Examples:
             excel_aggregated,
             sqlite_aggregated,
             args.variant_match_mode,
-            args.fuzzy_threshold
+            args.fuzzy_threshold,
         )
 
         # Generate outputs
-        summary = generate_outputs(
-            results, args.outdir, args.excel, args.sqlite
-        )
+        summary = generate_outputs(results, args.outdir, args.excel, args.sqlite)
 
         # Print summary
         logger.info("=" * 80)
@@ -1441,10 +1576,12 @@ Examples:
     except Exception as e:
         logger.error(f"Comparison failed: {e}")
         import traceback
+
         traceback.print_exc()
         return 1
 
 
 if __name__ == "__main__":
     import sys
+
     sys.exit(main())

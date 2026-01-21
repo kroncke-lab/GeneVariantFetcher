@@ -60,10 +60,7 @@ class PubMindFetcher:
         self.session = get_browser_session()
 
     def _request_with_retry(
-        self,
-        url: str,
-        params: dict,
-        timeout: int = 30
+        self, url: str, params: dict, timeout: int = 30
     ) -> Tuple[Optional[requests.Response], Optional[str]]:
         """
         Make a GET request with exponential backoff retry for transient errors.
@@ -85,15 +82,21 @@ class PubMindFetcher:
 
                 # Check for permanent failures (don't retry)
                 if response.status_code == 403:
-                    return None, "Access denied (403). PubMind may require authentication or be blocking automated access."
+                    return (
+                        None,
+                        "Access denied (403). PubMind may require authentication or be blocking automated access.",
+                    )
 
                 if response.status_code == 404:
-                    return None, "Resource not found (404). The PubMind search endpoint may have changed."
+                    return (
+                        None,
+                        "Resource not found (404). The PubMind search endpoint may have changed.",
+                    )
 
                 # Check for retryable server errors
                 if response.status_code in RETRYABLE_STATUS_CODES:
                     if attempt < MAX_RETRIES:
-                        backoff = INITIAL_BACKOFF_SECONDS * (2 ** attempt)
+                        backoff = INITIAL_BACKOFF_SECONDS * (2**attempt)
                         logger.warning(
                             f"PubMind returned {response.status_code}, retrying in {backoff:.1f}s "
                             f"(attempt {attempt + 1}/{MAX_RETRIES + 1})"
@@ -113,16 +116,20 @@ class PubMindFetcher:
             except requests.exceptions.Timeout:
                 last_error = "Request timed out"
                 if attempt < MAX_RETRIES:
-                    backoff = INITIAL_BACKOFF_SECONDS * (2 ** attempt)
-                    logger.warning(f"Request timed out, retrying in {backoff:.1f}s (attempt {attempt + 1}/{MAX_RETRIES + 1})")
+                    backoff = INITIAL_BACKOFF_SECONDS * (2**attempt)
+                    logger.warning(
+                        f"Request timed out, retrying in {backoff:.1f}s (attempt {attempt + 1}/{MAX_RETRIES + 1})"
+                    )
                     time.sleep(backoff)
                     continue
 
             except requests.exceptions.ConnectionError as e:
                 last_error = f"Connection error: {e}"
                 if attempt < MAX_RETRIES:
-                    backoff = INITIAL_BACKOFF_SECONDS * (2 ** attempt)
-                    logger.warning(f"Connection error, retrying in {backoff:.1f}s (attempt {attempt + 1}/{MAX_RETRIES + 1})")
+                    backoff = INITIAL_BACKOFF_SECONDS * (2**attempt)
+                    logger.warning(
+                        f"Connection error, retrying in {backoff:.1f}s (attempt {attempt + 1}/{MAX_RETRIES + 1})"
+                    )
                     time.sleep(backoff)
                     continue
 
@@ -132,10 +139,7 @@ class PubMindFetcher:
         return None, f"{last_error} after {MAX_RETRIES + 1} attempts"
 
     def fetch_pmids_for_gene(
-        self,
-        gene_symbol: str,
-        max_results: int = 20000,
-        delay: float = 1.0
+        self, gene_symbol: str, max_results: int = 20000, delay: float = 1.0
     ) -> List[str]:
         """
         Fetch PMIDs for papers discussing variants in a specific gene.
@@ -160,7 +164,7 @@ class PubMindFetcher:
         variant: str,
         gene_symbol: Optional[str] = None,
         max_results: int = 500,
-        delay: float = 1.0
+        delay: float = 1.0,
     ) -> List[str]:
         """
         Fetch PMIDs for papers discussing a specific variant.
@@ -174,18 +178,19 @@ class PubMindFetcher:
         Returns:
             List of PMIDs (as strings)
         """
-        logger.info(f"Fetching PMIDs for variant: {variant} (gene: {gene_symbol or 'any'})")
+        logger.info(
+            f"Fetching PMIDs for variant: {variant} (gene: {gene_symbol or 'any'})"
+        )
 
-        pmids = self._fetch_from_pubmind_variant(variant, gene_symbol, max_results, delay)
+        pmids = self._fetch_from_pubmind_variant(
+            variant, gene_symbol, max_results, delay
+        )
 
         logger.info(f"Found {len(pmids)} total PMIDs for variant {variant}")
         return pmids[:max_results]
 
     def _fetch_from_pubmind_gene(
-        self,
-        gene_symbol: str,
-        max_results: int,
-        delay: float
+        self, gene_symbol: str, max_results: int, delay: float
     ) -> List[str]:
         """
         Fetch PMIDs from PubMind for a gene symbol.
@@ -195,13 +200,11 @@ class PubMindFetcher:
 
         Includes retry logic with exponential backoff for transient server errors.
         """
-        search_params = {
-            'query': gene_symbol,
-            'field': 'gene',
-            'operator': 'OR'
-        }
+        search_params = {"query": gene_symbol, "field": "gene", "operator": "OR"}
 
-        response, error = self._request_with_retry(self.PUBMIND_SEARCH_URL, search_params)
+        response, error = self._request_with_retry(
+            self.PUBMIND_SEARCH_URL, search_params
+        )
 
         if error:
             logger.warning(f"Failed to access PubMind for gene {gene_symbol}: {error}")
@@ -211,13 +214,17 @@ class PubMindFetcher:
             time.sleep(delay)  # Respectful scraping
 
             # Parse HTML to extract PMIDs
-            soup = BeautifulSoup(response.text, 'html.parser')
+            soup = BeautifulSoup(response.text, "html.parser")
             pmids = self._extract_pmids_from_html(soup)
 
             if pmids:
-                logger.info(f"Successfully scraped {len(pmids)} PMIDs from PubMind for {gene_symbol}")
+                logger.info(
+                    f"Successfully scraped {len(pmids)} PMIDs from PubMind for {gene_symbol}"
+                )
             else:
-                logger.warning(f"PubMind page loaded but no PMIDs found for {gene_symbol}")
+                logger.warning(
+                    f"PubMind page loaded but no PMIDs found for {gene_symbol}"
+                )
 
             return pmids
 
@@ -226,26 +233,20 @@ class PubMindFetcher:
             return []
 
     def _fetch_from_pubmind_variant(
-        self,
-        variant: str,
-        gene_symbol: Optional[str],
-        max_results: int,
-        delay: float
+        self, variant: str, gene_symbol: Optional[str], max_results: int, delay: float
     ) -> List[str]:
         """
         Fetch PMIDs from PubMind for a specific variant.
 
         Includes retry logic with exponential backoff for transient server errors.
         """
-        search_params = {
-            'query': variant,
-            'field': 'variant',
-            'operator': 'OR'
-        }
+        search_params = {"query": variant, "field": "variant", "operator": "OR"}
         if gene_symbol:
-            search_params['query'] = f"{gene_symbol} {variant}"
+            search_params["query"] = f"{gene_symbol} {variant}"
 
-        response, error = self._request_with_retry(self.PUBMIND_SEARCH_URL, search_params)
+        response, error = self._request_with_retry(
+            self.PUBMIND_SEARCH_URL, search_params
+        )
 
         if error:
             logger.warning(f"Failed to access PubMind for variant {variant}: {error}")
@@ -254,11 +255,13 @@ class PubMindFetcher:
         try:
             time.sleep(delay)
 
-            soup = BeautifulSoup(response.text, 'html.parser')
+            soup = BeautifulSoup(response.text, "html.parser")
             pmids = self._extract_pmids_from_html(soup)
 
             if pmids:
-                logger.info(f"Successfully scraped {len(pmids)} PMIDs from PubMind for {variant}")
+                logger.info(
+                    f"Successfully scraped {len(pmids)} PMIDs from PubMind for {variant}"
+                )
 
             return pmids
 
@@ -279,21 +282,25 @@ class PubMindFetcher:
         pmids: Set[str] = set()
 
         # Pattern 1: Links to PubMed
-        pubmed_links = soup.find_all('a', href=re.compile(r'pubmed\.ncbi\.nlm\.nih\.gov/\d+'))
+        pubmed_links = soup.find_all(
+            "a", href=re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/\d+")
+        )
         for link in pubmed_links:
-            match = re.search(r'/(\d{7,8})', link['href'])
+            match = re.search(r"/(\d{7,8})", link["href"])
             if match:
                 pmids.add(match.group(1))
 
         # Pattern 2: Text containing "PMID: 12345678" or "PMID:12345678"
-        pmid_pattern = re.compile(r'PMID:?\s*(\d{7,8})', re.IGNORECASE)
+        pmid_pattern = re.compile(r"PMID:?\s*(\d{7,8})", re.IGNORECASE)
         for text in soup.find_all(string=pmid_pattern):
             matches = pmid_pattern.findall(str(text))
             pmids.update(matches)
 
         # Pattern 3: Standalone numbers that look like PMIDs (7-8 digits)
         # Look in table cells, list items, and divs with class containing "pmid"
-        for tag in soup.find_all(['td', 'li', 'div', 'span'], class_=re.compile(r'pmid', re.IGNORECASE)):
+        for tag in soup.find_all(
+            ["td", "li", "div", "span"], class_=re.compile(r"pmid", re.IGNORECASE)
+        ):
             text = tag.get_text(strip=True)
             if text.isdigit() and 7 <= len(text) <= 8:
                 pmids.add(text)
@@ -302,7 +309,7 @@ class PubMindFetcher:
         # This is a more aggressive approach for PubMind's format
         if not pmids:
             all_text = soup.get_text()
-            number_pattern = re.compile(r'\b(\d{7,8})\b')
+            number_pattern = re.compile(r"\b(\d{7,8})\b")
             potential_pmids = number_pattern.findall(all_text)
             pmids.update(potential_pmids)
 
@@ -319,7 +326,7 @@ class PubMindFetcher:
         output_file = Path(output_file)
         output_file.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(output_file, 'w') as f:
+        with open(output_file, "w") as f:
             for pmid in pmids:
                 f.write(f"{pmid}\n")
 
@@ -330,7 +337,7 @@ def fetch_pmids_for_gene(
     gene_symbol: str,
     email: str = "your.email@example.com",
     max_results: int = 20000,
-    output_file: Optional[Path] = None
+    output_file: Optional[Path] = None,
 ) -> List[str]:
     """
     Convenience function to fetch PMIDs for a gene from PubMind.
@@ -362,7 +369,7 @@ def fetch_pmids_for_variant(
     gene_symbol: Optional[str] = None,
     email: str = "your.email@example.com",
     max_results: int = 500,
-    output_file: Optional[Path] = None
+    output_file: Optional[Path] = None,
 ) -> List[str]:
     """
     Convenience function to fetch PMIDs for a variant from PubMind.
@@ -416,7 +423,7 @@ if __name__ == "__main__":
 
     # Offer to save
     save = input("\nSave to file? (y/n): ")
-    if save.lower() == 'y':
+    if save.lower() == "y":
         output = Path(f"{gene}_pmids.txt")
         fetcher = PubMindFetcher(email=email)
         fetcher.save_pmids_to_file(pmids, output)

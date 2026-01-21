@@ -28,6 +28,7 @@ load_dotenv()
 
 # Configure logging using centralized utility
 from utils.logging_utils import setup_logging, get_logger
+
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
 
@@ -61,7 +62,9 @@ def automated_variant_extraction_workflow(
     from harvesting import PMCHarvester
     from config.settings import get_settings
 
-    output_path = Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_path = (
+        Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
+    )
     output_path.mkdir(parents=True, exist_ok=True)
 
     # Set up file logging in the output directory for troubleshooting
@@ -71,9 +74,9 @@ def automated_variant_extraction_workflow(
 
     settings = get_settings()
 
-    logger.info("="*80)
+    logger.info("=" * 80)
     logger.info(f"AUTOMATED WORKFLOW FOR GENE: {gene_symbol}")
-    logger.info("="*80)
+    logger.info("=" * 80)
 
     # ============================================================================
     # STEP 0: Discover Gene Synonyms (if enabled)
@@ -83,7 +86,10 @@ def automated_variant_extraction_workflow(
     if auto_synonyms:
         logger.info("\n🔍 STEP 0: Discovering gene synonyms from NCBI Gene database...")
 
-        from gene_literature.synonym_finder import SynonymFinder, automatic_synonym_selection
+        from gene_literature.synonym_finder import (
+            SynonymFinder,
+            automatic_synonym_selection,
+        )
 
         synonym_finder = SynonymFinder(
             email=email,
@@ -109,7 +115,10 @@ def automated_variant_extraction_workflow(
             # Merge with manually provided synonyms (avoid duplicates)
             existing_set = set(s.lower() for s in all_synonyms)
             for syn in auto_selected:
-                if syn.lower() not in existing_set and syn.lower() != gene_symbol.lower():
+                if (
+                    syn.lower() not in existing_set
+                    and syn.lower() != gene_symbol.lower()
+                ):
                     all_synonyms.append(syn)
                     existing_set.add(syn.lower())
 
@@ -122,7 +131,11 @@ def automated_variant_extraction_workflow(
             logger.warning("Continuing without synonym expansion")
 
     elif all_synonyms:
-        logger.info("\n🔍 Using %d manually specified synonyms: %s", len(all_synonyms), ", ".join(all_synonyms))
+        logger.info(
+            "\n🔍 Using %d manually specified synonyms: %s",
+            len(all_synonyms),
+            ", ".join(all_synonyms),
+        )
 
     # ============================================================================
     # STEP 1: Fetch PMIDs from PubMind, PubMed, and Europe PMC
@@ -174,7 +187,9 @@ def automated_variant_extraction_workflow(
     # ============================================================================
     # STEP 1.5: Fetch Abstracts and Metadata
     # ============================================================================
-    logger.info("\n📝 STEP 1.5: Fetching abstracts and metadata for discovered PMIDs...")
+    logger.info(
+        "\n📝 STEP 1.5: Fetching abstracts and metadata for discovered PMIDs..."
+    )
 
     from harvesting.abstracts import fetch_and_save_abstracts
 
@@ -201,7 +216,9 @@ def automated_variant_extraction_workflow(
         if use_clinical_triage
         else InternFilter(confidence_threshold=settings.tier2_confidence_threshold)
     )
-    tier2_filter_name = "ClinicalDataTriageFilter" if use_clinical_triage else "InternFilter"
+    tier2_filter_name = (
+        "ClinicalDataTriageFilter" if use_clinical_triage else "InternFilter"
+    )
 
     filtered_pmids = []
     dropped_pmids = []
@@ -210,14 +227,18 @@ def automated_variant_extraction_workflow(
         record_path = abstract_records.get(pmid)
 
         if not record_path:
-            logger.warning("PMID %s has no saved abstract JSON; dropping from download queue", pmid)
+            logger.warning(
+                "PMID %s has no saved abstract JSON; dropping from download queue", pmid
+            )
             dropped_pmids.append((pmid, "Missing abstract JSON"))
             continue
 
         record_path = Path(record_path)
 
         if not record_path.exists():
-            logger.warning("PMID %s has no saved abstract JSON; dropping from download queue", pmid)
+            logger.warning(
+                "PMID %s has no saved abstract JSON; dropping from download queue", pmid
+            )
             dropped_pmids.append((pmid, "Missing abstract JSON"))
             continue
 
@@ -255,7 +276,11 @@ def automated_variant_extraction_workflow(
         if settings.enable_tier2:
             if use_clinical_triage:
                 triage_result = tier2_filter.triage_paper(paper, gene_symbol)
-                decision = FilterDecision.PASS if triage_result.get("decision") == "KEEP" else FilterDecision.FAIL
+                decision = (
+                    FilterDecision.PASS
+                    if triage_result.get("decision") == "KEEP"
+                    else FilterDecision.FAIL
+                )
                 confidence = triage_result.get("confidence")
                 reason = triage_result.get("reason", "No reason provided")
 
@@ -309,11 +334,13 @@ def automated_variant_extraction_workflow(
     pmid_status_dir = output_path / "pmid_status"
     pmid_status_dir.mkdir(parents=True, exist_ok=True)
     filtered_out_file = pmid_status_dir / "filtered_out.csv"
-    with open(filtered_out_file, 'w', newline='', encoding='utf-8') as f:
+    with open(filtered_out_file, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["PMID", "Reason"])
         writer.writerows(dropped_pmids)
-    logger.info(f"✓ Wrote {len(dropped_pmids)} filtered-out PMIDs to {filtered_out_file}")
+    logger.info(
+        f"✓ Wrote {len(dropped_pmids)} filtered-out PMIDs to {filtered_out_file}"
+    )
 
     # NOTE: Abstract extraction is now integrated into the main extraction pipeline (Step 3)
     # Papers that pass filters but fail download will have their abstracts extracted
@@ -340,9 +367,12 @@ def automated_variant_extraction_workflow(
     successfully_downloaded_pmids = set()
     if success_log.exists():
         import pandas as pd
+
         successful_downloads = pd.read_csv(success_log)
         num_downloaded = len(successful_downloads)
-        successfully_downloaded_pmids = set(str(p) for p in successful_downloads["PMID"].tolist())
+        successfully_downloaded_pmids = set(
+            str(p) for p in successful_downloads["PMID"].tolist()
+        )
         logger.info(f"✓ Successfully downloaded {num_downloaded} full-text papers")
     else:
         num_downloaded = 0
@@ -353,7 +383,9 @@ def automated_variant_extraction_workflow(
     # ============================================================================
     # Papers that passed the relevance filter but failed to download will be
     # extracted using their abstracts in Step 3.
-    logger.info("\n📌 STEP 2.5: Identifying papers that need abstract-only extraction...")
+    logger.info(
+        "\n📌 STEP 2.5: Identifying papers that need abstract-only extraction..."
+    )
 
     # Load paywalled/missing log if it exists
     paywalled_log = harvest_dir / "paywalled_missing.csv"
@@ -388,8 +420,14 @@ def automated_variant_extraction_workflow(
 
     # Get list of downloaded markdown files - prefer DATA_ZONES.md over FULL_CONTEXT.md
     # First, find all available PMIDs from either file type
-    data_zones_files = {f.name.replace("_DATA_ZONES.md", ""): f for f in harvest_dir.glob("*_DATA_ZONES.md")}
-    full_context_files = {f.name.replace("_FULL_CONTEXT.md", ""): f for f in harvest_dir.glob("*_FULL_CONTEXT.md")}
+    data_zones_files = {
+        f.name.replace("_DATA_ZONES.md", ""): f
+        for f in harvest_dir.glob("*_DATA_ZONES.md")
+    }
+    full_context_files = {
+        f.name.replace("_FULL_CONTEXT.md", ""): f
+        for f in harvest_dir.glob("*_FULL_CONTEXT.md")
+    }
 
     # Merge: prefer DATA_ZONES.md when available, fall back to FULL_CONTEXT.md
     all_pmids = set(data_zones_files.keys()) | set(full_context_files.keys())
@@ -400,8 +438,12 @@ def automated_variant_extraction_workflow(
         elif pmid in full_context_files:
             markdown_files.append(full_context_files[pmid])
 
-    logger.info(f"Found {len(data_zones_files)} DATA_ZONES.md and {len(full_context_files)} FULL_CONTEXT.md files")
-    logger.info(f"Processing {len(markdown_files)} unique papers with full-text (preferring DATA_ZONES.md)")
+    logger.info(
+        f"Found {len(data_zones_files)} DATA_ZONES.md and {len(full_context_files)} FULL_CONTEXT.md files"
+    )
+    logger.info(
+        f"Processing {len(markdown_files)} unique papers with full-text (preferring DATA_ZONES.md)"
+    )
 
     # Also prepare papers that need abstract-only extraction
     abstract_only_papers = []
@@ -411,13 +453,17 @@ def automated_variant_extraction_workflow(
             abstract_only_papers.append((pmid, record_path))
 
     if abstract_only_papers:
-        logger.info(f"Also processing {len(abstract_only_papers)} papers using abstract-only extraction")
+        logger.info(
+            f"Also processing {len(abstract_only_papers)} papers using abstract-only extraction"
+        )
 
     # Process papers in parallel (OPTIMIZED for 3-5x speedup!)
     from utils.models import Paper
     from pipeline.extraction import ExpertExtractor
 
-    extractor = ExpertExtractor(tier_threshold=tier_threshold, fulltext_dir=str(harvest_dir))
+    extractor = ExpertExtractor(
+        tier_threshold=tier_threshold, fulltext_dir=str(harvest_dir)
+    )
     extractions = []
 
     def process_paper_file(md_file):
@@ -439,7 +485,7 @@ def automated_variant_extraction_workflow(
         logger.info(f"Processing PMID {pmid_match}...")
 
         # Read the markdown content
-        with open(md_file, 'r', encoding='utf-8') as f:
+        with open(md_file, "r", encoding="utf-8") as f:
             full_text = f.read()
 
         # Create paper object
@@ -447,7 +493,7 @@ def automated_variant_extraction_workflow(
             pmid=pmid_match,
             title=f"Paper {pmid_match}",  # Title would be in the markdown
             full_text=full_text,
-            gene_symbol=gene_symbol
+            gene_symbol=gene_symbol,
         )
 
         # Extract data
@@ -457,19 +503,23 @@ def automated_variant_extraction_workflow(
             if extraction_result.success:
                 # Save individual extraction (thread-safe: each writes to unique file)
                 output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid_match}.json"
-                with open(output_file, 'w') as f:
+                with open(output_file, "w") as f:
                     json.dump(extraction_result.extracted_data, f, indent=2)
 
                 num_variants = extraction_result.extracted_data.get(
-                    'extraction_metadata', {}
-                ).get('total_variants_found', 0)
+                    "extraction_metadata", {}
+                ).get("total_variants_found", 0)
 
-                logger.info(f"✓ Extracted {num_variants} variants from PMID {pmid_match}")
+                logger.info(
+                    f"✓ Extracted {num_variants} variants from PMID {pmid_match}"
+                )
                 logger.info(f"✓ Saved to: {output_file}")
 
                 return (extraction_result, None)
             else:
-                logger.warning(f"✗ Extraction failed for PMID {pmid_match}: {extraction_result.error}")
+                logger.warning(
+                    f"✗ Extraction failed for PMID {pmid_match}: {extraction_result.error}"
+                )
                 return (None, (pmid_match, extraction_result.error))
 
         except Exception as e:
@@ -502,7 +552,7 @@ def automated_variant_extraction_workflow(
                 title=metadata.get("title", f"Paper {pmid}"),
                 abstract=abstract_text,
                 full_text=None,  # No full text - extraction will use abstract
-                gene_symbol=gene_symbol
+                gene_symbol=gene_symbol,
             )
 
             # Extract data using abstract
@@ -513,24 +563,32 @@ def automated_variant_extraction_workflow(
                 if extraction_result.extracted_data:
                     if "extraction_metadata" not in extraction_result.extracted_data:
                         extraction_result.extracted_data["extraction_metadata"] = {}
-                    extraction_result.extracted_data["extraction_metadata"]["source_type"] = "abstract_only"
-                    extraction_result.extracted_data["extraction_metadata"]["abstract_only"] = True
+                    extraction_result.extracted_data["extraction_metadata"][
+                        "source_type"
+                    ] = "abstract_only"
+                    extraction_result.extracted_data["extraction_metadata"][
+                        "abstract_only"
+                    ] = True
 
                 # Save individual extraction
                 output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
-                with open(output_file, 'w') as f:
+                with open(output_file, "w") as f:
                     json.dump(extraction_result.extracted_data, f, indent=2)
 
                 num_variants = extraction_result.extracted_data.get(
-                    'extraction_metadata', {}
-                ).get('total_variants_found', 0)
+                    "extraction_metadata", {}
+                ).get("total_variants_found", 0)
 
-                logger.info(f"✓ Extracted {num_variants} variants from PMID {pmid} (ABSTRACT ONLY)")
+                logger.info(
+                    f"✓ Extracted {num_variants} variants from PMID {pmid} (ABSTRACT ONLY)"
+                )
                 logger.info(f"✓ Saved to: {output_file}")
 
                 return (extraction_result, None)
             else:
-                logger.warning(f"✗ Abstract extraction failed for PMID {pmid}: {extraction_result.error}")
+                logger.warning(
+                    f"✗ Abstract extraction failed for PMID {pmid}: {extraction_result.error}"
+                )
                 return (None, (pmid, f"Abstract extraction: {extraction_result.error}"))
 
         except Exception as e:
@@ -576,6 +634,7 @@ def automated_variant_extraction_workflow(
                 if source_type == "fulltext":
                     logger.error(f"⚠ Failed to process {source_info.name}: {e}")
                     from utils.pmid_utils import extract_pmid_from_filename
+
                     pmid = extract_pmid_from_filename(source_info) or source_info.name
                 else:
                     logger.error(f"⚠ Failed to process abstract for {source_info}: {e}")
@@ -584,11 +643,13 @@ def automated_variant_extraction_workflow(
 
     # Persist extraction failures to disk
     extraction_failures_file = pmid_status_dir / "extraction_failures.csv"
-    with open(extraction_failures_file, 'w', newline='', encoding='utf-8') as f:
+    with open(extraction_failures_file, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["PMID", "Error"])
         writer.writerows(extraction_failures)
-    logger.info(f"✓ Wrote {len(extraction_failures)} extraction failures to {extraction_failures_file}")
+    logger.info(
+        f"✓ Wrote {len(extraction_failures)} extraction failures to {extraction_failures_file}"
+    )
 
     # ============================================================================
     # STEP 4: Aggregate Penetrance Data
@@ -601,10 +662,12 @@ def automated_variant_extraction_workflow(
     penetrance_summary = aggregate_penetrance(
         extraction_dir=extraction_dir,
         gene_symbol=gene_symbol,
-        output_file=penetrance_summary_file
+        output_file=penetrance_summary_file,
     )
 
-    logger.info(f"✓ Aggregated penetrance data for {penetrance_summary['total_variants']} variants")
+    logger.info(
+        f"✓ Aggregated penetrance data for {penetrance_summary['total_variants']} variants"
+    )
     logger.info(f"✓ Saved penetrance summary to: {penetrance_summary_file}")
 
     # ============================================================================
@@ -612,7 +675,10 @@ def automated_variant_extraction_workflow(
     # ============================================================================
     logger.info("\n💾 STEP 5: Migrating data to SQLite database...")
 
-    from harvesting.migrate_to_sqlite import create_database_schema, migrate_extraction_directory
+    from harvesting.migrate_to_sqlite import (
+        create_database_schema,
+        migrate_extraction_directory,
+    )
 
     # Create gene-specific database
     db_path = output_path / f"{gene_symbol}.db"
@@ -622,7 +688,9 @@ def automated_variant_extraction_workflow(
     migration_stats = migrate_extraction_directory(conn, extraction_dir)
     conn.close()
 
-    logger.info(f"✓ Migrated {migration_stats['successful']}/{migration_stats['total_files']} extractions to SQLite")
+    logger.info(
+        f"✓ Migrated {migration_stats['successful']}/{migration_stats['total_files']} extractions to SQLite"
+    )
     logger.info(f"✓ Database saved to: {db_path}")
 
     # ============================================================================
@@ -634,8 +702,8 @@ def automated_variant_extraction_workflow(
     for extraction in extractions:
         if extraction.extracted_data:
             total_variants += extraction.extracted_data.get(
-                'extraction_metadata', {}
-            ).get('total_variants_found', 0)
+                "extraction_metadata", {}
+            ).get("total_variants_found", 0)
 
     # Calculate total carriers and affected from penetrance summary
     total_carriers = sum(
@@ -652,6 +720,7 @@ def automated_variant_extraction_workflow(
     num_download_failures = 0
     if paywalled_log.exists():
         import pandas as pd
+
         try:
             paywalled_df = pd.read_csv(paywalled_log)
             num_download_failures = len(paywalled_df)
@@ -676,7 +745,9 @@ def automated_variant_extraction_workflow(
             "variants_with_penetrance_data": penetrance_summary["total_variants"],
             "total_carriers_observed": total_carriers,
             "total_affected_carriers": total_affected,
-            "success_rate": f"{len(extractions) / len(pmids) * 100:.1f}%" if pmids else "0%"
+            "success_rate": f"{len(extractions) / len(pmids) * 100:.1f}%"
+            if pmids
+            else "0%",
         },
         "output_locations": {
             "pmid_list": str(combined_pmids_file),
@@ -685,34 +756,38 @@ def automated_variant_extraction_workflow(
             "extractions": str(extraction_dir),
             "penetrance_summary": str(penetrance_summary_file),
             "sqlite_database": str(db_path),
-            "workflow_log": str(log_file)
+            "workflow_log": str(log_file),
         },
         "pmid_status": {
             "filtered_out_file": str(filtered_out_file),
             "filtered_out_count": len(dropped_pmids),
             "extraction_failures_file": str(extraction_failures_file),
             "extraction_failures_count": len(extraction_failures),
-            "download_failures_file": str(paywalled_log) if paywalled_log.exists() else None,
+            "download_failures_file": str(paywalled_log)
+            if paywalled_log.exists()
+            else None,
             "download_failures_count": num_download_failures,
         },
         "database_migration": {
             "successful": migration_stats["successful"],
             "failed": migration_stats["failed"],
-            "total_files": migration_stats["total_files"]
+            "total_files": migration_stats["total_files"],
         },
         "penetrance_validation": {
             "errors": penetrance_summary.get("validation", {}).get("error_count", 0),
-            "warnings": penetrance_summary.get("validation", {}).get("warning_count", 0)
-        }
+            "warnings": penetrance_summary.get("validation", {}).get(
+                "warning_count", 0
+            ),
+        },
     }
 
     summary_file = output_path / f"{gene_symbol}_workflow_summary.json"
-    with open(summary_file, 'w') as f:
+    with open(summary_file, "w") as f:
         json.dump(summary, f, indent=2)
 
-    logger.info("\n" + "="*80)
+    logger.info("\n" + "=" * 80)
     logger.info("WORKFLOW COMPLETE!")
-    logger.info("="*80)
+    logger.info("=" * 80)
     logger.info(f"Gene: {gene_symbol}")
     logger.info(f"PMIDs discovered: {len(pmids)}")
     logger.info(f"  - Filtered out: {len(dropped_pmids)}")
@@ -724,18 +799,24 @@ def automated_variant_extraction_workflow(
     logger.info(f"  - From abstract only: {abstract_extraction_count}")
     logger.info(f"  - Extraction failures: {len(extraction_failures)}")
     logger.info(f"Total variants found: {total_variants}")
-    logger.info(f"Variants with penetrance data: {penetrance_summary['total_variants']}")
+    logger.info(
+        f"Variants with penetrance data: {penetrance_summary['total_variants']}"
+    )
     logger.info(f"Total carriers observed: {total_carriers}")
     logger.info(f"Total affected carriers: {total_affected}")
-    logger.info(f"Success rate: {len(extractions) / len(pmids) * 100:.1f}%" if pmids else "0%")
-    logger.info(f"💾 Database migrated: {migration_stats['successful']}/{migration_stats['total_files']} extractions")
+    logger.info(
+        f"Success rate: {len(extractions) / len(pmids) * 100:.1f}%" if pmids else "0%"
+    )
+    logger.info(
+        f"💾 Database migrated: {migration_stats['successful']}/{migration_stats['total_files']} extractions"
+    )
     logger.info(f"\n📋 PMID status files: {pmid_status_dir}")
     logger.info(f"\nAll outputs saved to: {output_path}")
     logger.info(f"Summary report: {summary_file}")
     logger.info(f"Penetrance summary: {penetrance_summary_file}")
     logger.info(f"SQLite database: {db_path}")
     logger.info(f"Workflow log: {log_file}")
-    logger.info("="*80)
+    logger.info("=" * 80)
 
     return summary
 
@@ -759,27 +840,57 @@ Examples:
 
   # Quick test with small dataset
   python automated_workflow.py TP53 --email your@email.com --output ./test_output --max-pmids 10 --max-downloads 5
-        """
+        """,
     )
 
     parser.add_argument("gene", help="Gene symbol (e.g., BRCA1, SCN5A, TP53)")
-    parser.add_argument("--email", "-e", required=True, help="Your email for NCBI E-utilities")
-    parser.add_argument("--output", "-o", required=True,
-                       help="Output directory for all data and analyses (required)")
-    parser.add_argument("--max-pmids", type=int, default=100,
-                       help="Maximum PMIDs to fetch (default: 100)")
-    parser.add_argument("--max-downloads", type=int, default=50,
-                       help="Maximum papers to download (default: 50)")
-    parser.add_argument("--tier-threshold", type=int, default=None,
-                       help="If the first model finds fewer variants than this, the next model is tried (default: from .env TIER3_THRESHOLD or 1). Set to 0 to only use first model.")
-    parser.add_argument("--clinical-triage", action="store_true",
-                       help="Use ClinicalDataTriageFilter for Tier 2 filtering instead of InternFilter")
-    parser.add_argument("--auto-synonyms", action="store_true",
-                       help="Automatically discover and use gene synonyms from NCBI Gene database")
-    parser.add_argument("--synonym", action="append", dest="synonyms", default=None,
-                       help="Manually specify gene synonym (can be used multiple times)")
-    parser.add_argument("--verbose", "-v", action="store_true",
-                       help="Enable verbose logging")
+    parser.add_argument(
+        "--email", "-e", required=True, help="Your email for NCBI E-utilities"
+    )
+    parser.add_argument(
+        "--output",
+        "-o",
+        required=True,
+        help="Output directory for all data and analyses (required)",
+    )
+    parser.add_argument(
+        "--max-pmids",
+        type=int,
+        default=100,
+        help="Maximum PMIDs to fetch (default: 100)",
+    )
+    parser.add_argument(
+        "--max-downloads",
+        type=int,
+        default=50,
+        help="Maximum papers to download (default: 50)",
+    )
+    parser.add_argument(
+        "--tier-threshold",
+        type=int,
+        default=None,
+        help="If the first model finds fewer variants than this, the next model is tried (default: from .env TIER3_THRESHOLD or 1). Set to 0 to only use first model.",
+    )
+    parser.add_argument(
+        "--clinical-triage",
+        action="store_true",
+        help="Use ClinicalDataTriageFilter for Tier 2 filtering instead of InternFilter",
+    )
+    parser.add_argument(
+        "--auto-synonyms",
+        action="store_true",
+        help="Automatically discover and use gene synonyms from NCBI Gene database",
+    )
+    parser.add_argument(
+        "--synonym",
+        action="append",
+        dest="synonyms",
+        default=None,
+        help="Manually specify gene synonym (can be used multiple times)",
+    )
+    parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Enable verbose logging"
+    )
 
     args = parser.parse_args()
 
@@ -794,6 +905,7 @@ Examples:
 
     # Get tier threshold from settings if not provided via CLI
     from config.settings import get_settings
+
     tier_threshold = args.tier_threshold
     if tier_threshold is None:
         settings = get_settings()

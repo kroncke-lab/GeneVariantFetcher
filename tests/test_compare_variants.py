@@ -41,16 +41,17 @@ from compare_variants import (
 # FIXTURES
 # =============================================================================
 
+
 @pytest.fixture
 def sample_excel_df():
     """Create a sample DataFrame mimicking Excel input."""
     data = {
-        'PMID': ['12345678', '12345678', '87654321', '11111111'],
-        'protein_change': ['p.Arg123His', 'p.Val456Met', 'p.Gly789Ser', 'p.Leu100Pro'],
-        'carriers': [10, 5, 8, None],
-        'affected': [7, 3, 6, 2],
-        'unaffected': [3, 2, 2, 1],
-        'phenotype': ['LQT2', 'LQT2', 'BrS', 'LQT2'],
+        "PMID": ["12345678", "12345678", "87654321", "11111111"],
+        "protein_change": ["p.Arg123His", "p.Val456Met", "p.Gly789Ser", "p.Leu100Pro"],
+        "carriers": [10, 5, 8, None],
+        "affected": [7, 3, 6, 2],
+        "unaffected": [3, 2, 2, 1],
+        "phenotype": ["LQT2", "LQT2", "BrS", "LQT2"],
     }
     return pd.DataFrame(data)
 
@@ -58,7 +59,7 @@ def sample_excel_df():
 @pytest.fixture
 def sample_sqlite_db():
     """Create an in-memory SQLite database with test data."""
-    conn = sqlite3.connect(':memory:')
+    conn = sqlite3.connect(":memory:")
     cursor = conn.cursor()
 
     # Create schema matching GeneVariantFetcher
@@ -148,166 +149,174 @@ def sample_sqlite_db():
 # COLUMN DETECTION TESTS
 # =============================================================================
 
-class TestColumnDetection:
 
+class TestColumnDetection:
     def test_normalize_column_name(self):
-        assert normalize_column_name('PMID') == 'pmid'
-        assert normalize_column_name('PubMed_ID') == 'pubmedid'
-        assert normalize_column_name('protein change') == 'proteinchange'
-        assert normalize_column_name('  N_Affected  ') == 'naffected'
+        assert normalize_column_name("PMID") == "pmid"
+        assert normalize_column_name("PubMed_ID") == "pubmedid"
+        assert normalize_column_name("protein change") == "proteinchange"
+        assert normalize_column_name("  N_Affected  ") == "naffected"
 
     def test_detect_columns_basic(self, sample_excel_df):
         detected = detect_columns(sample_excel_df)
 
-        assert detected['pmid'] == 'PMID'
-        assert detected['variant'] == 'protein_change'
-        assert detected['carriers_total'] == 'carriers'
-        assert detected['affected_count'] == 'affected'
-        assert detected['unaffected_count'] == 'unaffected'
-        assert detected['phenotype'] == 'phenotype'
+        assert detected["pmid"] == "PMID"
+        assert detected["variant"] == "protein_change"
+        assert detected["carriers_total"] == "carriers"
+        assert detected["affected_count"] == "affected"
+        assert detected["unaffected_count"] == "unaffected"
+        assert detected["phenotype"] == "phenotype"
 
     def test_detect_columns_with_mapping(self, sample_excel_df):
-        mapping = {'pmid': 'PMID', 'variant': 'protein_change'}
+        mapping = {"pmid": "PMID", "variant": "protein_change"}
         detected = detect_columns(sample_excel_df, mapping)
 
-        assert detected['pmid'] == 'PMID'
-        assert detected['variant'] == 'protein_change'
+        assert detected["pmid"] == "PMID"
+        assert detected["variant"] == "protein_change"
 
     def test_detect_columns_alternative_names(self):
-        df = pd.DataFrame({
-            'PubMed ID': ['123'],
-            'hgvs_p': ['p.A1B'],
-            'n_carriers': [5],
-            'cases': [3],
-            'controls': [2]
-        })
+        df = pd.DataFrame(
+            {
+                "PubMed ID": ["123"],
+                "hgvs_p": ["p.A1B"],
+                "n_carriers": [5],
+                "cases": [3],
+                "controls": [2],
+            }
+        )
         detected = detect_columns(df)
 
-        assert detected['pmid'] == 'PubMed ID'
-        assert detected['variant'] == 'hgvs_p'
-        assert detected['carriers_total'] == 'n_carriers'
-        assert detected['affected_count'] == 'cases'
-        assert detected['unaffected_count'] == 'controls'
+        assert detected["pmid"] == "PubMed ID"
+        assert detected["variant"] == "hgvs_p"
+        assert detected["carriers_total"] == "n_carriers"
+        assert detected["affected_count"] == "cases"
+        assert detected["unaffected_count"] == "controls"
 
 
 # =============================================================================
 # VARIANT NORMALIZATION TESTS
 # =============================================================================
 
-class TestVariantNormalization:
 
+class TestVariantNormalization:
     def test_normalize_unicode(self):
         # Test various unicode dash characters
-        assert normalize_unicode('p.Arg123\u2013His') == 'p.Arg123-His'  # en-dash
-        assert normalize_unicode('p.Arg123\u2014His') == 'p.Arg123-His'  # em-dash
-        assert normalize_unicode('p.Arg123\u2212His') == 'p.Arg123-His'  # minus sign
+        assert normalize_unicode("p.Arg123\u2013His") == "p.Arg123-His"  # en-dash
+        assert normalize_unicode("p.Arg123\u2014His") == "p.Arg123-His"  # em-dash
+        assert normalize_unicode("p.Arg123\u2212His") == "p.Arg123-His"  # minus sign
 
     def test_normalize_variant_basic(self):
-        assert normalize_variant('  p.Arg123His  ') == 'p.Arg123His'
-        assert normalize_variant('P. Arg123His') == 'p.Arg123His'
-        assert normalize_variant('c. 368G>A') == 'c.368G>A'
-        assert normalize_variant('p.  Arg123His') == 'p. Arg123His'  # collapses multiple spaces
+        assert normalize_variant("  p.Arg123His  ") == "p.Arg123His"
+        assert normalize_variant("P. Arg123His") == "p.Arg123His"
+        assert normalize_variant("c. 368G>A") == "c.368G>A"
+        assert (
+            normalize_variant("p.  Arg123His") == "p. Arg123His"
+        )  # collapses multiple spaces
 
     def test_normalize_variant_none_handling(self):
-        assert normalize_variant(None) == ''
-        assert normalize_variant('') == ''
+        assert normalize_variant(None) == ""
+        assert normalize_variant("") == ""
 
     def test_convert_aa_3_to_1(self):
-        assert convert_aa_3_to_1('p.Arg123His') == 'p.R123H'
-        assert convert_aa_3_to_1('p.Val456Met') == 'p.V456M'
-        assert convert_aa_3_to_1('p.Gly789Ser') == 'p.G789S'
-        assert convert_aa_3_to_1('p.Trp999Ter') == 'p.W999*'
+        assert convert_aa_3_to_1("p.Arg123His") == "p.R123H"
+        assert convert_aa_3_to_1("p.Val456Met") == "p.V456M"
+        assert convert_aa_3_to_1("p.Gly789Ser") == "p.G789S"
+        assert convert_aa_3_to_1("p.Trp999Ter") == "p.W999*"
 
     def test_convert_aa_3_to_1_with_suffix(self):
         # Frameshift
-        assert convert_aa_3_to_1('p.Arg123fs') == 'p.R123fs'
+        assert convert_aa_3_to_1("p.Arg123fs") == "p.R123fs"
 
     def test_convert_aa_1_to_3(self):
-        assert convert_aa_1_to_3('p.R123H') == 'p.Arg123His'
-        assert convert_aa_1_to_3('p.V456M') == 'p.Val456Met'
-        assert convert_aa_1_to_3('p.G789S') == 'p.Gly789Ser'
-        assert convert_aa_1_to_3('p.W999*') == 'p.Trp999Ter'
+        assert convert_aa_1_to_3("p.R123H") == "p.Arg123His"
+        assert convert_aa_1_to_3("p.V456M") == "p.Val456Met"
+        assert convert_aa_1_to_3("p.G789S") == "p.Gly789Ser"
+        assert convert_aa_1_to_3("p.W999*") == "p.Trp999Ter"
 
     def test_convert_aa_non_protein(self):
         # Should return None for non-protein variants
-        assert convert_aa_3_to_1('c.368G>A') is None
-        assert convert_aa_1_to_3('c.368G>A') is None
+        assert convert_aa_3_to_1("c.368G>A") is None
+        assert convert_aa_1_to_3("c.368G>A") is None
 
     def test_get_variant_forms(self):
-        forms = get_variant_forms('p.Arg123His')
-        assert 'p.Arg123His' in forms
-        assert 'p.R123H' in forms
+        forms = get_variant_forms("p.Arg123His")
+        assert "p.Arg123His" in forms
+        assert "p.R123H" in forms
 
-        forms = get_variant_forms('p.R123H')
-        assert 'p.R123H' in forms
-        assert 'p.Arg123His' in forms
+        forms = get_variant_forms("p.R123H")
+        assert "p.R123H" in forms
+        assert "p.Arg123His" in forms
 
 
 # =============================================================================
 # MATCHING TESTS
 # =============================================================================
 
-class TestMatching:
 
+class TestMatching:
     def test_compute_similarity_exact(self):
-        score = compute_similarity('p.Arg123His', 'p.Arg123His')
+        score = compute_similarity("p.Arg123His", "p.Arg123His")
         assert score == 1.0
 
     def test_compute_similarity_different(self):
-        score = compute_similarity('p.Arg123His', 'p.Val456Met')
+        score = compute_similarity("p.Arg123His", "p.Val456Met")
         assert score < 0.5
 
     def test_compute_similarity_similar(self):
-        score = compute_similarity('p.Arg123His', 'p.Arg123Gln')
+        score = compute_similarity("p.Arg123His", "p.Arg123Gln")
         assert 0.7 < score < 1.0
 
     def test_find_best_match_exact(self):
-        candidates = ['p.Arg123His', 'p.Val456Met', 'p.Gly789Ser']
+        candidates = ["p.Arg123His", "p.Val456Met", "p.Gly789Ser"]
 
-        match, score, match_type = find_best_match('p.Arg123His', candidates)
-        assert match == 'p.Arg123His'
+        match, score, match_type = find_best_match("p.Arg123His", candidates)
+        assert match == "p.Arg123His"
         assert score == 1.0
-        assert match_type == 'exact'
+        assert match_type == "exact"
 
     def test_find_best_match_aa_conversion(self):
-        candidates = ['p.Arg123His', 'p.Val456Met']
+        candidates = ["p.Arg123His", "p.Val456Met"]
 
         # 1-letter should match 3-letter
-        match, score, match_type = find_best_match('p.R123H', candidates)
-        assert match == 'p.Arg123His'
+        match, score, match_type = find_best_match("p.R123H", candidates)
+        assert match == "p.Arg123His"
         assert score == 1.0
-        assert match_type == 'exact'
+        assert match_type == "exact"
 
     def test_find_best_match_fuzzy(self):
-        candidates = ['p.Arg123His', 'p.Val456Met']
+        candidates = ["p.Arg123His", "p.Val456Met"]
 
         # Similar but not exact
-        match, score, match_type = find_best_match('p.Arg123Gln', candidates, threshold=0.7)
-        assert match == 'p.Arg123His'
-        assert match_type == 'fuzzy'
+        match, score, match_type = find_best_match(
+            "p.Arg123Gln", candidates, threshold=0.7
+        )
+        assert match == "p.Arg123His"
+        assert match_type == "fuzzy"
         assert 0.7 <= score < 1.0
 
     def test_find_best_match_no_match(self):
-        candidates = ['p.Arg123His', 'p.Val456Met']
+        candidates = ["p.Arg123His", "p.Val456Met"]
 
-        match, score, match_type = find_best_match('p.Trp999Ter', candidates, threshold=0.9)
+        match, score, match_type = find_best_match(
+            "p.Trp999Ter", candidates, threshold=0.9
+        )
         assert match is None
-        assert match_type == 'none'
+        assert match_type == "none"
 
 
 # =============================================================================
 # UTILITY FUNCTION TESTS
 # =============================================================================
 
-class TestUtilities:
 
+class TestUtilities:
     def test_safe_int(self):
         assert safe_int(5) == 5
         assert safe_int(5.7) == 5
-        assert safe_int('10') == 10
+        assert safe_int("10") == 10
         assert safe_int(None) is None
-        assert safe_int('invalid') is None
-        assert safe_int(float('nan')) is None
+        assert safe_int("invalid") is None
+        assert safe_int(float("nan")) is None
 
     def test_compute_diff(self):
         assert compute_diff(10, 7) == 3
@@ -321,27 +330,27 @@ class TestUtilities:
 # DATA AGGREGATION TESTS
 # =============================================================================
 
-class TestAggregation:
 
+class TestAggregation:
     def test_aggregate_excel_data(self, sample_excel_df):
         detected = {
-            'pmid': 'PMID',
-            'variant': 'protein_change',
-            'carriers_total': 'carriers',
-            'affected_count': 'affected',
-            'unaffected_count': 'unaffected',
-            'phenotype': 'phenotype'
+            "pmid": "PMID",
+            "variant": "protein_change",
+            "carriers_total": "carriers",
+            "affected_count": "affected",
+            "unaffected_count": "unaffected",
+            "phenotype": "phenotype",
         }
 
         aggregated = aggregate_excel_data(sample_excel_df, detected)
 
         assert len(aggregated) == 4
 
-        key = ('12345678', 'p.Arg123His')
+        key = ("12345678", "p.Arg123His")
         assert key in aggregated
-        assert aggregated[key]['carriers_total'] == 10
-        assert aggregated[key]['affected_count'] == 7
-        assert aggregated[key]['unaffected_count'] == 3
+        assert aggregated[key]["carriers_total"] == 10
+        assert aggregated[key]["affected_count"] == 7
+        assert aggregated[key]["unaffected_count"] == 3
 
     def test_aggregate_sqlite_data(self, sample_sqlite_db):
         # First introspect and extract
@@ -353,55 +362,55 @@ class TestAggregation:
         assert len(aggregated) == 4
 
         # Check specific entry
-        key = ('12345678', 'p.Arg123His')
+        key = ("12345678", "p.Arg123His")
         assert key in aggregated
-        assert aggregated[key]['carriers_total'] == 10
-        assert aggregated[key]['affected_count'] == 7
+        assert aggregated[key]["carriers_total"] == 10
+        assert aggregated[key]["affected_count"] == 7
 
 
 # =============================================================================
 # SQLITE INTROSPECTION TESTS
 # =============================================================================
 
-class TestSQLiteIntrospection:
 
+class TestSQLiteIntrospection:
     def test_introspect_sqlite(self, sample_sqlite_db):
         table_info = introspect_sqlite(sample_sqlite_db)
 
-        assert 'papers' in table_info
-        assert 'variants' in table_info
-        assert 'penetrance_data' in table_info
+        assert "papers" in table_info
+        assert "variants" in table_info
+        assert "penetrance_data" in table_info
 
-        assert table_info['penetrance_data'].has_pmid
-        assert table_info['penetrance_data'].has_counts
-        assert 'affected_count' in table_info['penetrance_data'].count_columns
+        assert table_info["penetrance_data"].has_pmid
+        assert table_info["penetrance_data"].has_counts
+        assert "affected_count" in table_info["penetrance_data"].count_columns
 
     def test_extract_sqlite_data(self, sample_sqlite_db):
         table_info = introspect_sqlite(sample_sqlite_db)
         df = extract_sqlite_data(sample_sqlite_db, table_info)
 
         assert len(df) == 4
-        assert 'pmid' in df.columns
-        assert 'variant' in df.columns
-        assert 'carriers_total' in df.columns
-        assert 'affected_count' in df.columns
+        assert "pmid" in df.columns
+        assert "variant" in df.columns
+        assert "carriers_total" in df.columns
+        assert "affected_count" in df.columns
 
 
 # =============================================================================
 # COMPARISON TESTS
 # =============================================================================
 
-class TestComparison:
 
+class TestComparison:
     def test_compare_data_exact_match(self, sample_excel_df, sample_sqlite_db):
         # Prepare Excel data
         detected = {
-            'pmid': 'PMID',
-            'variant': 'protein_change',
-            'carriers_total': 'carriers',
-            'affected_count': 'affected',
-            'unaffected_count': 'unaffected',
-            'phenotype': 'phenotype'
+            "pmid": "PMID",
+            "variant": "protein_change",
+            "carriers_total": "carriers",
+            "affected_count": "affected",
+            "unaffected_count": "unaffected",
+            "phenotype": "phenotype",
         }
         excel_data = aggregate_excel_data(sample_excel_df, detected)
 
@@ -411,13 +420,13 @@ class TestComparison:
         sqlite_data = aggregate_sqlite_data(sqlite_df)
 
         # Compare
-        results = compare_data(excel_data, sqlite_data, 'exact', 0.85)
+        results = compare_data(excel_data, sqlite_data, "exact", 0.85)
 
         # Should have results for all entries
         assert len(results) > 0
 
         # Check for expected matches and mismatches
-        exact_matches = [r for r in results if r.match_type == 'exact']
+        exact_matches = [r for r in results if r.match_type == "exact"]
         assert len(exact_matches) >= 2  # At least Arg123His and Gly789Ser
 
         # Check for count mismatch (Val456Met has different counts)
@@ -435,15 +444,15 @@ class TestComparison:
     def test_compare_data_fuzzy_match(self, sample_excel_df, sample_sqlite_db):
         # Modify Excel to have 1-letter codes
         df = sample_excel_df.copy()
-        df.loc[0, 'protein_change'] = 'p.R123H'  # 1-letter version
+        df.loc[0, "protein_change"] = "p.R123H"  # 1-letter version
 
         detected = {
-            'pmid': 'PMID',
-            'variant': 'protein_change',
-            'carriers_total': 'carriers',
-            'affected_count': 'affected',
-            'unaffected_count': 'unaffected',
-            'phenotype': 'phenotype'
+            "pmid": "PMID",
+            "variant": "protein_change",
+            "carriers_total": "carriers",
+            "affected_count": "affected",
+            "unaffected_count": "unaffected",
+            "phenotype": "phenotype",
         }
         excel_data = aggregate_excel_data(df, detected)
 
@@ -453,37 +462,37 @@ class TestComparison:
         sqlite_data = aggregate_sqlite_data(sqlite_df)
 
         # Compare with fuzzy matching
-        results = compare_data(excel_data, sqlite_data, 'fuzzy', 0.85)
+        results = compare_data(excel_data, sqlite_data, "fuzzy", 0.85)
 
         # p.R123H should match p.Arg123His
-        r123h_result = [r for r in results if r.excel_variant_raw == 'p.R123H']
+        r123h_result = [r for r in results if r.excel_variant_raw == "p.R123H"]
         assert len(r123h_result) == 1
-        assert r123h_result[0].match_type == 'exact'  # AA conversion counts as exact
-        assert r123h_result[0].sqlite_variant_raw == 'p.Arg123His'
+        assert r123h_result[0].match_type == "exact"  # AA conversion counts as exact
+        assert r123h_result[0].sqlite_variant_raw == "p.Arg123His"
 
 
 # =============================================================================
 # INTEGRATION TESTS
 # =============================================================================
 
-class TestIntegration:
 
+class TestIntegration:
     def test_full_workflow(self, tmp_path):
         """Test the complete workflow with temp files."""
         # Create Excel file
         excel_data = {
-            'PMID': ['11111111', '22222222'],
-            'Variant': ['p.Arg100His', 'p.Val200Met'],
-            'Carriers': [5, 3],
-            'Affected': [4, 2],
-            'Unaffected': [1, 1]
+            "PMID": ["11111111", "22222222"],
+            "Variant": ["p.Arg100His", "p.Val200Met"],
+            "Carriers": [5, 3],
+            "Affected": [4, 2],
+            "Unaffected": [1, 1],
         }
         excel_df = pd.DataFrame(excel_data)
-        excel_path = tmp_path / 'test.xlsx'
+        excel_path = tmp_path / "test.xlsx"
         excel_df.to_excel(excel_path, index=False)
 
         # Create SQLite database
-        db_path = tmp_path / 'test.db'
+        db_path = tmp_path / "test.db"
         conn = sqlite3.connect(str(db_path))
         cursor = conn.cursor()
 
@@ -516,9 +525,9 @@ class TestIntegration:
 
         df, detected = load_excel_data(excel_path, None, None)
         assert len(df) == 2
-        assert detected['pmid'] == 'PMID'
-        assert detected['variant'] == 'Variant'
+        assert detected["pmid"] == "PMID"
+        assert detected["variant"] == "Variant"
 
 
-if __name__ == '__main__':
-    pytest.main([__file__, '-v'])
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])

@@ -22,7 +22,9 @@ class DataAggregator:
         self.validation_errors = []
         self.validation_warnings = []
 
-    def validate_penetrance_data(self, variant_data: Dict[str, Any], pmid: str) -> Tuple[List[str], List[str]]:
+    def validate_penetrance_data(
+        self, variant_data: Dict[str, Any], pmid: str
+    ) -> Tuple[List[str], List[str]]:
         """
         Validate penetrance data for a variant.
 
@@ -49,8 +51,7 @@ class DataAggregator:
         # If we have counts, validate they add up
         if total is not None:
             counts_sum = sum(
-                x if x is not None else 0
-                for x in [affected, unaffected, uncertain]
+                x if x is not None else 0 for x in [affected, unaffected, uncertain]
             )
 
             if counts_sum > total:
@@ -172,7 +173,7 @@ class DataAggregator:
         extractions = []
         for file_path in extraction_files:
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
                     extractions.append(data)
                     logger.debug(f"Loaded extraction from {file_path.name}")
@@ -194,12 +195,14 @@ class DataAggregator:
         Returns:
             Dictionary mapping variant keys to aggregated data
         """
-        variant_groups = defaultdict(lambda: {
-            "variants": [],
-            "individual_records": [],
-            "source_pmids": set(),
-            "penetrance_data_points": []
-        })
+        variant_groups = defaultdict(
+            lambda: {
+                "variants": [],
+                "individual_records": [],
+                "source_pmids": set(),
+                "penetrance_data_points": [],
+            }
+        )
 
         # Group variants by normalized key
         for extraction in extractions:
@@ -219,8 +222,14 @@ class DataAggregator:
                 individual_records = variant.get("individual_records", [])
                 for record in individual_records:
                     # Shallow copy with metadata - much faster than .copy()
-                    record_with_pmid = {**record, "_source_pmid": pmid, "_variant_key": variant_key}
-                    variant_groups[variant_key]["individual_records"].append(record_with_pmid)
+                    record_with_pmid = {
+                        **record,
+                        "_source_pmid": pmid,
+                        "_variant_key": variant_key,
+                    }
+                    variant_groups[variant_key]["individual_records"].append(
+                        record_with_pmid
+                    )
 
                 # Collect penetrance data
                 penetrance = variant.get("penetrance_data")
@@ -237,7 +246,9 @@ class DataAggregator:
                 self.validation_warnings.extend(val_warnings)
 
                 for record in individual_records:
-                    record_warnings = self.validate_individual_record(record, variant_key, pmid)
+                    record_warnings = self.validate_individual_record(
+                        record, variant_key, pmid
+                    )
                     self.validation_warnings.extend(record_warnings)
 
         return variant_groups
@@ -253,9 +264,7 @@ class DataAggregator:
             Sorted list of PMIDs without None values
         """
         return sorted(
-            pmid
-            for pmid in variant_group.get("source_pmids", [])
-            if pmid is not None
+            pmid for pmid in variant_group.get("source_pmids", []) if pmid is not None
         )
 
     def calculate_aggregate_penetrance(
@@ -293,20 +302,16 @@ class DataAggregator:
 
         # Aggregate from cohort-level penetrance data
         total_from_cohorts = sum(
-            p.get("total_carriers_observed", 0) or 0
-            for p in penetrance_points
+            p.get("total_carriers_observed", 0) or 0 for p in penetrance_points
         )
         affected_from_cohorts = sum(
-            p.get("affected_count", 0) or 0
-            for p in penetrance_points
+            p.get("affected_count", 0) or 0 for p in penetrance_points
         )
         unaffected_from_cohorts = sum(
-            p.get("unaffected_count", 0) or 0
-            for p in penetrance_points
+            p.get("unaffected_count", 0) or 0 for p in penetrance_points
         )
         uncertain_from_cohorts = sum(
-            p.get("uncertain_count", 0) or 0
-            for p in penetrance_points
+            p.get("uncertain_count", 0) or 0 for p in penetrance_points
         )
 
         # Combine (individual records take precedence, but add cohort data if no overlap)
@@ -350,11 +355,13 @@ class DataAggregator:
             "affected": affected,
             "unaffected": unaffected,
             "uncertain": uncertain,
-            "penetrance_percentage": round(penetrance_percentage, 2) if penetrance_percentage is not None else None,
+            "penetrance_percentage": round(penetrance_percentage, 2)
+            if penetrance_percentage is not None
+            else None,
             "age_dependent_penetrance": age_dependent,
             "individual_records_count": len(individual_records),
             "cohort_studies_count": len(penetrance_points),
-            "sources": source_pmids
+            "sources": source_pmids,
         }
 
     def create_summary(
@@ -386,10 +393,12 @@ class DataAggregator:
                 "cdna_notation": representative_variant.get("cdna_notation"),
                 "protein_notation": representative_variant.get("protein_notation"),
                 "genomic_position": representative_variant.get("genomic_position"),
-                "clinical_significance": representative_variant.get("clinical_significance"),
+                "clinical_significance": representative_variant.get(
+                    "clinical_significance"
+                ),
                 "aggregated_penetrance": aggregated_penetrance,
                 "source_pmids": source_pmids,
-                "number_of_papers": len(source_pmids)
+                "number_of_papers": len(source_pmids),
             }
 
             aggregated_variants.append(aggregated_variant)
@@ -398,9 +407,9 @@ class DataAggregator:
         aggregated_variants.sort(
             key=lambda x: (
                 x["aggregated_penetrance"]["total_carriers"] or 0,
-                x["aggregated_penetrance"]["penetrance_percentage"] or 0
+                x["aggregated_penetrance"]["penetrance_percentage"] or 0,
             ),
-            reverse=True
+            reverse=True,
         )
 
         return {
@@ -412,8 +421,8 @@ class DataAggregator:
                 "errors": self.validation_errors,
                 "warnings": self.validation_warnings,
                 "error_count": len(self.validation_errors),
-                "warning_count": len(self.validation_warnings)
-            }
+                "warning_count": len(self.validation_warnings),
+            },
         }
 
     def aggregate_from_directory(
@@ -430,7 +439,9 @@ class DataAggregator:
         Returns:
             Aggregated summary dictionary
         """
-        logger.info(f"Aggregating penetrance data for {gene_symbol} from {extraction_dir}")
+        logger.info(
+            f"Aggregating penetrance data for {gene_symbol} from {extraction_dir}"
+        )
 
         # Load extractions
         extractions = self.load_extraction_files(extraction_dir)
@@ -446,8 +457,8 @@ class DataAggregator:
                     "errors": [],
                     "warnings": ["No extraction files found"],
                     "error_count": 0,
-                    "warning_count": 1
-                }
+                    "warning_count": 1,
+                },
             }
 
         # Aggregate variants
@@ -459,7 +470,7 @@ class DataAggregator:
         # Save if output file specified
         if output_file:
             output_file.parent.mkdir(parents=True, exist_ok=True)
-            with open(output_file, 'w', encoding='utf-8') as f:
+            with open(output_file, "w", encoding="utf-8") as f:
                 json.dump(summary, f, indent=2)
             logger.info(f"Saved aggregated penetrance summary to {output_file}")
 
@@ -473,9 +484,7 @@ class DataAggregator:
 
 
 def aggregate_penetrance(
-    extraction_dir: Path,
-    gene_symbol: str,
-    output_file: Optional[Path] = None
+    extraction_dir: Path, gene_symbol: str, output_file: Optional[Path] = None
 ) -> Dict[str, Any]:
     """
     Convenience function to aggregate penetrance data.

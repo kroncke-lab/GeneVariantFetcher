@@ -72,7 +72,7 @@ def main():
     print("-" * 50)
 
     # Check for API key
-    api_key = os.getenv('OPENAI_API_KEY')
+    api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         print("\n⚠️  Warning: OPENAI_API_KEY not found!")
         print("   Set OPENAI_API_KEY in your .env file for triage/extraction.")
@@ -106,7 +106,9 @@ def main():
 
             supp_output_dir = output_dir / f"{pmid}_supplements_api"
             print(f"Attempting BioC/JATS supplement harvest to: {supp_output_dir}")
-            supplements = supplement_client.get_all_supplement_text(pmcid, supp_output_dir)
+            supplements = supplement_client.get_all_supplement_text(
+                pmcid, supp_output_dir
+            )
             extracted_count = sum(1 for s in supplements if s.text)
             print(
                 f"✓ Retrieved {len(supplements)} supplements via API pipeline; "
@@ -114,7 +116,9 @@ def main():
             )
             for supp in supplements:
                 label = supp.label or f"Supplement {supp.index}"
-                print(f"  - {label}: {supp.filename or supp.href} (source={supp.source})")
+                print(
+                    f"  - {label}: {supp.filename or supp.href} (source={supp.source})"
+                )
         except Exception as exc:
             print(f"\n  Note: Could not resolve PMCID for PMID {pmid}: {exc}")
             print("  (This is expected if the paper is not in PubMed Central)")
@@ -126,7 +130,7 @@ def main():
     print(f"\n✓ SUCCESS: Created {result}")
 
     # Read content
-    with open(result, 'r') as f:
+    with open(result, "r") as f:
         content = f.read()
 
     # Ensure condensed {PMID}_DATA_ZONES.md is created (even when using cached full text)
@@ -158,7 +162,7 @@ def main():
     # Show section headers
     print("\nSection headers found:")
     for line in content.splitlines():
-        if line.startswith('#'):
+        if line.startswith("#"):
             print(f"  {line}")
 
     # Check for supplement files
@@ -195,10 +199,7 @@ def main():
     triage_filter = ClinicalDataTriageFilter()
 
     triage_result = triage_filter.triage(
-        title=title,
-        abstract=abstract,
-        gene=gene,
-        pmid=pmid
+        title=title, abstract=abstract, gene=gene, pmid=pmid
     )
 
     print(f"\nTriage Result:")
@@ -206,9 +207,11 @@ def main():
     print(f"  Confidence: {triage_result['confidence']:.2f}")
     print(f"  Reason: {triage_result['reason']}")
 
-    if triage_result['decision'] == 'DROP':
+    if triage_result["decision"] == "DROP":
         print("\n⚠️  Paper dropped by triage - no original clinical data detected.")
-        print("    (This may be a review, animal study, or purely methodological paper)")
+        print(
+            "    (This may be a review, animal study, or purely methodological paper)"
+        )
         return
 
     print("\n✓ Paper passed triage - proceeding to extraction...")
@@ -222,11 +225,7 @@ def main():
 
     # Create Paper object for extraction
     paper = Paper(
-        pmid=pmid,
-        title=title,
-        abstract=abstract,
-        full_text=content,
-        gene_symbol=gene
+        pmid=pmid, title=title, abstract=abstract, full_text=content, gene_symbol=gene
     )
 
     extractor = ExpertExtractor(fulltext_dir=str(output_dir))
@@ -246,20 +245,20 @@ def main():
     print("EXTRACTION SUMMARY:")
     print("-" * 50)
 
-    if 'paper_metadata' in data:
-        meta = data['paper_metadata']
+    if "paper_metadata" in data:
+        meta = data["paper_metadata"]
         print(f"\nPaper: {meta.get('title', 'N/A')[:60]}...")
         print(f"Summary: {meta.get('extraction_summary', 'N/A')}")
 
-    if 'extraction_metadata' in data:
-        emeta = data['extraction_metadata']
+    if "extraction_metadata" in data:
+        emeta = data["extraction_metadata"]
         print(f"\nTotal variants found: {emeta.get('total_variants_found', 0)}")
         print(f"Confidence: {emeta.get('extraction_confidence', 'N/A')}")
-        if emeta.get('challenges'):
+        if emeta.get("challenges"):
             print(f"Challenges: {', '.join(emeta['challenges'])}")
 
     # Show variants
-    variants = data.get('variants', [])
+    variants = data.get("variants", [])
     print(f"\n" + "-" * 50)
     print(f"VARIANTS EXTRACTED: {len(variants)}")
     print("-" * 50)
@@ -272,27 +271,33 @@ def main():
         print(f"    Significance: {variant.get('clinical_significance', 'N/A')}")
 
         # Patient count
-        patients = variant.get('patients', {})
-        if patients and patients.get('count'):
-            print(f"    Patients: {patients.get('count')} ({patients.get('phenotype', 'N/A')})")
+        patients = variant.get("patients", {})
+        if patients and patients.get("count"):
+            print(
+                f"    Patients: {patients.get('count')} ({patients.get('phenotype', 'N/A')})"
+            )
 
         # Penetrance data
-        pdata = variant.get('penetrance_data', {})
+        pdata = variant.get("penetrance_data", {})
         if pdata:
             print(f"    Penetrance:")
-            print(f"      Total carriers: {pdata.get('total_carriers_observed', 'N/A')}")
+            print(
+                f"      Total carriers: {pdata.get('total_carriers_observed', 'N/A')}"
+            )
             print(f"      Affected: {pdata.get('affected_count', 'N/A')}")
             print(f"      Unaffected: {pdata.get('unaffected_count', 'N/A')}")
 
         # Individual records
-        individuals = variant.get('individual_records', [])
+        individuals = variant.get("individual_records", [])
         if individuals:
             print(f"    Individual records: {len(individuals)}")
             for ind in individuals[:3]:  # Show first 3
-                print(f"      - {ind.get('individual_id', '?')}: "
-                      f"{ind.get('affected_status', '?')}, "
-                      f"age={ind.get('age_at_evaluation', '?')}, "
-                      f"sex={ind.get('sex', '?')}")
+                print(
+                    f"      - {ind.get('individual_id', '?')}: "
+                    f"{ind.get('affected_status', '?')}, "
+                    f"age={ind.get('age_at_evaluation', '?')}, "
+                    f"sex={ind.get('sex', '?')}"
+                )
             if len(individuals) > 3:
                 print(f"      ... and {len(individuals) - 3} more")
 
@@ -301,7 +306,7 @@ def main():
 
     # Save full extraction to JSON
     output_json = output_dir / f"{pmid}_extraction.json"
-    with open(output_json, 'w') as f:
+    with open(output_json, "w") as f:
         json.dump(data, f, indent=2)
     print(f"\n✓ Full extraction saved to: {output_json}")
 
@@ -311,10 +316,12 @@ def main():
     print("=" * 60)
     print(f"  PMID: {pmid}")
     print(f"  Gene: {gene}")
-    print(f"  Triage: {triage_result['decision']} (confidence: {triage_result['confidence']:.2f})")
+    print(
+        f"  Triage: {triage_result['decision']} (confidence: {triage_result['confidence']:.2f})"
+    )
     print(f"  Variants extracted: {len(variants)}")
 
-    total_individuals = sum(len(v.get('individual_records', [])) for v in variants)
+    total_individuals = sum(len(v.get("individual_records", [])) for v in variants)
     print(f"  Individual patient records: {total_individuals}")
 
 

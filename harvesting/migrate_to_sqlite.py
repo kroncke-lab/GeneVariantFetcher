@@ -42,6 +42,7 @@ from datetime import datetime
 
 # Configure logging using centralized utility
 from utils.logging_utils import setup_logging, get_logger
+
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
 
@@ -49,6 +50,7 @@ logger = get_logger(__name__)
 # ============================================================================
 # DATABASE SCHEMA INITIALIZATION
 # ============================================================================
+
 
 def create_database_schema(db_path: str) -> sqlite3.Connection:
     """
@@ -289,10 +291,8 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
 # ETL FUNCTIONS: Extract, Transform, Load
 # ============================================================================
 
-def get_or_create_variant(
-    cursor: sqlite3.Cursor,
-    variant_data: Dict[str, Any]
-) -> int:
+
+def get_or_create_variant(cursor: sqlite3.Cursor, variant_data: Dict[str, Any]) -> int:
     """
     Get existing variant ID or create new variant entry.
 
@@ -309,39 +309,44 @@ def get_or_create_variant(
     genomic = variant_data.get("genomic_position")
 
     # Try to find existing variant
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT variant_id FROM variants
         WHERE gene_symbol = ?
         AND (cdna_notation = ? OR (cdna_notation IS NULL AND ? IS NULL))
         AND (protein_notation = ? OR (protein_notation IS NULL AND ? IS NULL))
         AND (genomic_position = ? OR (genomic_position IS NULL AND ? IS NULL))
-    """, (gene_symbol, cdna, cdna, protein, protein, genomic, genomic))
+    """,
+        (gene_symbol, cdna, cdna, protein, protein, genomic, genomic),
+    )
 
     result = cursor.fetchone()
     if result:
         return result[0]
 
     # Create new variant
-    cursor.execute("""
+    cursor.execute(
+        """
         INSERT INTO variants (
             gene_symbol, cdna_notation, protein_notation,
             genomic_position, clinical_significance, evidence_level
         ) VALUES (?, ?, ?, ?, ?, ?)
-    """, (
-        gene_symbol,
-        cdna,
-        protein,
-        genomic,
-        variant_data.get("clinical_significance"),
-        variant_data.get("evidence_level")
-    ))
+    """,
+        (
+            gene_symbol,
+            cdna,
+            protein,
+            genomic,
+            variant_data.get("clinical_significance"),
+            variant_data.get("evidence_level"),
+        ),
+    )
 
     return cursor.lastrowid
 
 
 def insert_paper_metadata(
-    cursor: sqlite3.Cursor,
-    extraction_data: Dict[str, Any]
+    cursor: sqlite3.Cursor, extraction_data: Dict[str, Any]
 ) -> None:
     """
     Insert or update paper metadata.
@@ -357,23 +362,26 @@ def insert_paper_metadata(
         logger.warning("No PMID found in extraction data")
         return
 
-    cursor.execute("""
+    cursor.execute(
+        """
         INSERT OR REPLACE INTO papers (
             pmid, title, gene_symbol, extraction_summary, extraction_timestamp
         ) VALUES (?, ?, ?, ?, ?)
-    """, (
-        pmid,
-        paper_meta.get("title"),
-        extraction_data.get("variants", [{}])[0].get("gene_symbol") if extraction_data.get("variants") else None,
-        paper_meta.get("extraction_summary"),
-        datetime.now().isoformat()
-    ))
+    """,
+        (
+            pmid,
+            paper_meta.get("title"),
+            extraction_data.get("variants", [{}])[0].get("gene_symbol")
+            if extraction_data.get("variants")
+            else None,
+            paper_meta.get("extraction_summary"),
+            datetime.now().isoformat(),
+        ),
+    )
 
 
 def insert_variant_data(
-    cursor: sqlite3.Cursor,
-    pmid: str,
-    variant_data: Dict[str, Any]
+    cursor: sqlite3.Cursor, pmid: str, variant_data: Dict[str, Any]
 ) -> int:
     """
     Insert variant and all associated data.
@@ -390,124 +398,145 @@ def insert_variant_data(
     variant_id = get_or_create_variant(cursor, variant_data)
 
     # Insert variant-paper association
-    cursor.execute("""
+    cursor.execute(
+        """
         INSERT OR IGNORE INTO variant_papers (
             variant_id, pmid, source_location, additional_notes, key_quotes
         ) VALUES (?, ?, ?, ?, ?)
-    """, (
-        variant_id,
-        pmid,
-        variant_data.get("source_location"),
-        variant_data.get("additional_notes"),
-        json.dumps(variant_data.get("key_quotes", []))
-    ))
+    """,
+        (
+            variant_id,
+            pmid,
+            variant_data.get("source_location"),
+            variant_data.get("additional_notes"),
+            json.dumps(variant_data.get("key_quotes", [])),
+        ),
+    )
 
     # Insert penetrance data
     penetrance = variant_data.get("penetrance_data", {})
-    if penetrance and any(penetrance.get(k) is not None for k in [
-        "total_carriers_observed", "affected_count", "unaffected_count"
-    ]):
-        cursor.execute("""
+    if penetrance and any(
+        penetrance.get(k) is not None
+        for k in ["total_carriers_observed", "affected_count", "unaffected_count"]
+    ):
+        cursor.execute(
+            """
             INSERT INTO penetrance_data (
                 variant_id, pmid, total_carriers_observed, affected_count,
                 unaffected_count, uncertain_count, penetrance_percentage
             ) VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, (
-            variant_id,
-            pmid,
-            penetrance.get("total_carriers_observed"),
-            penetrance.get("affected_count"),
-            penetrance.get("unaffected_count"),
-            penetrance.get("uncertain_count"),
-            penetrance.get("penetrance_percentage")
-        ))
+        """,
+            (
+                variant_id,
+                pmid,
+                penetrance.get("total_carriers_observed"),
+                penetrance.get("affected_count"),
+                penetrance.get("unaffected_count"),
+                penetrance.get("uncertain_count"),
+                penetrance.get("penetrance_percentage"),
+            ),
+        )
 
         penetrance_id = cursor.lastrowid
 
         # Insert age-dependent penetrance
         for age_dep in penetrance.get("age_dependent_penetrance", []):
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO age_dependent_penetrance (
                     penetrance_id, age_range, penetrance_percentage,
                     carriers_in_range, affected_in_range
                 ) VALUES (?, ?, ?, ?, ?)
-            """, (
-                penetrance_id,
-                age_dep.get("age_range"),
-                age_dep.get("penetrance_percentage"),
-                age_dep.get("carriers_in_range"),
-                age_dep.get("affected_in_range")
-            ))
+            """,
+                (
+                    penetrance_id,
+                    age_dep.get("age_range"),
+                    age_dep.get("penetrance_percentage"),
+                    age_dep.get("carriers_in_range"),
+                    age_dep.get("affected_in_range"),
+                ),
+            )
 
     # Insert individual records
     for record in variant_data.get("individual_records", []):
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO individual_records (
                 variant_id, pmid, individual_id, age_at_evaluation,
                 age_at_onset, age_at_diagnosis, sex, affected_status,
                 phenotype_details, evidence_sentence
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            variant_id,
-            pmid,
-            record.get("individual_id"),
-            record.get("age_at_evaluation"),
-            record.get("age_at_onset"),
-            record.get("age_at_diagnosis"),
-            record.get("sex"),
-            record.get("affected_status"),
-            record.get("phenotype_details"),
-            record.get("evidence_sentence")
-        ))
+        """,
+            (
+                variant_id,
+                pmid,
+                record.get("individual_id"),
+                record.get("age_at_evaluation"),
+                record.get("age_at_onset"),
+                record.get("age_at_diagnosis"),
+                record.get("sex"),
+                record.get("affected_status"),
+                record.get("phenotype_details"),
+                record.get("evidence_sentence"),
+            ),
+        )
 
     # Insert functional data
     functional = variant_data.get("functional_data", {})
     if functional and (functional.get("summary") or functional.get("assays")):
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO functional_data (
                 variant_id, pmid, summary, assays
             ) VALUES (?, ?, ?, ?)
-        """, (
-            variant_id,
-            pmid,
-            functional.get("summary"),
-            json.dumps(functional.get("assays", []))
-        ))
+        """,
+            (
+                variant_id,
+                pmid,
+                functional.get("summary"),
+                json.dumps(functional.get("assays", [])),
+            ),
+        )
 
     # Insert phenotype data
     patients = variant_data.get("patients", {})
     if patients and (patients.get("count") or patients.get("phenotype")):
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO phenotypes (
                 variant_id, pmid, patient_count, demographics, phenotype_description
             ) VALUES (?, ?, ?, ?, ?)
-        """, (
-            variant_id,
-            pmid,
-            patients.get("count"),
-            patients.get("demographics"),
-            patients.get("phenotype")
-        ))
+        """,
+            (
+                variant_id,
+                pmid,
+                patients.get("count"),
+                patients.get("demographics"),
+                patients.get("phenotype"),
+            ),
+        )
 
     # Insert variant metadata
     if variant_data.get("segregation_data") or variant_data.get("population_frequency"):
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO variant_metadata (
                 variant_id, pmid, segregation_data, population_frequency
             ) VALUES (?, ?, ?, ?)
-        """, (
-            variant_id,
-            pmid,
-            variant_data.get("segregation_data"),
-            variant_data.get("population_frequency")
-        ))
+        """,
+            (
+                variant_id,
+                pmid,
+                variant_data.get("segregation_data"),
+                variant_data.get("population_frequency"),
+            ),
+        )
 
     return variant_id
 
 
 def migrate_extraction_file(
-    cursor: sqlite3.Cursor,
-    json_file: Path
+    cursor: sqlite3.Cursor, json_file: Path
 ) -> Tuple[bool, str]:
     """
     Migrate a single extraction JSON file to the database.
@@ -520,7 +549,7 @@ def migrate_extraction_file(
         Tuple of (success, message)
     """
     try:
-        with open(json_file, 'r', encoding='utf-8') as f:
+        with open(json_file, "r", encoding="utf-8") as f:
             extraction_data = json.load(f)
 
         # Insert paper metadata
@@ -536,34 +565,40 @@ def migrate_extraction_file(
         # Insert extraction metadata
         extraction_meta = extraction_data.get("extraction_metadata", {})
         if extraction_meta:
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO extraction_metadata (
                     pmid, total_variants_found, extraction_confidence,
                     challenges, notes, extraction_timestamp, source_type, abstract_only
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                pmid,
-                extraction_meta.get("total_variants_found"),
-                extraction_meta.get("extraction_confidence"),
-                json.dumps(extraction_meta.get("challenges", [])),
-                extraction_meta.get("notes"),
-                datetime.now().isoformat(),
-                extraction_meta.get("source_type"),
-                1 if extraction_meta.get("abstract_only") else 0
-            ))
+            """,
+                (
+                    pmid,
+                    extraction_meta.get("total_variants_found"),
+                    extraction_meta.get("extraction_confidence"),
+                    json.dumps(extraction_meta.get("challenges", [])),
+                    extraction_meta.get("notes"),
+                    datetime.now().isoformat(),
+                    extraction_meta.get("source_type"),
+                    1 if extraction_meta.get("abstract_only") else 0,
+                ),
+            )
 
         # Insert tables processed
         for table in extraction_data.get("tables_processed", []):
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO tables_processed (
                     pmid, table_name, table_caption, variants_extracted
                 ) VALUES (?, ?, ?, ?)
-            """, (
-                pmid,
-                table.get("table_name"),
-                table.get("table_caption"),
-                table.get("variants_extracted")
-            ))
+            """,
+                (
+                    pmid,
+                    table.get("table_name"),
+                    table.get("table_caption"),
+                    table.get("variants_extracted"),
+                ),
+            )
 
         return True, f"Successfully migrated {json_file.name}"
 
@@ -574,8 +609,7 @@ def migrate_extraction_file(
 
 
 def migrate_extraction_directory(
-    conn: sqlite3.Connection,
-    extraction_dir: Path
+    conn: sqlite3.Connection, extraction_dir: Path
 ) -> Dict[str, Any]:
     """
     Migrate all extraction JSON files from a directory.
@@ -595,12 +629,7 @@ def migrate_extraction_directory(
 
     if not json_files:
         logger.warning(f"No extraction JSON files found in {extraction_dir}")
-        return {
-            "total_files": 0,
-            "successful": 0,
-            "failed": 0,
-            "errors": []
-        }
+        return {"total_files": 0, "successful": 0, "failed": 0, "errors": []}
 
     logger.info(f"Found {len(json_files)} extraction files to migrate")
 
@@ -625,7 +654,7 @@ def migrate_extraction_directory(
         "total_files": len(json_files),
         "successful": successful,
         "failed": failed,
-        "errors": errors
+        "errors": errors,
     }
 
     logger.info(f"✓ Migration complete: {successful}/{len(json_files)} successful")
@@ -637,7 +666,10 @@ def migrate_extraction_directory(
 # CLEANUP AND ARCHIVAL FUNCTIONS
 # ============================================================================
 
-def find_and_delete_empty_directories(root_dir: Path, dry_run: bool = False) -> List[Path]:
+
+def find_and_delete_empty_directories(
+    root_dir: Path, dry_run: bool = False
+) -> List[Path]:
     """
     Recursively find and delete all empty directories.
 
@@ -660,7 +692,9 @@ def find_and_delete_empty_directories(root_dir: Path, dry_run: bool = False) -> 
         try:
             if not any(current_dir.iterdir()):
                 if dry_run:
-                    logger.info(f"[DRY RUN] Would delete empty directory: {current_dir}")
+                    logger.info(
+                        f"[DRY RUN] Would delete empty directory: {current_dir}"
+                    )
                 else:
                     current_dir.rmdir()
                     logger.info(f"✓ Deleted empty directory: {current_dir}")
@@ -668,15 +702,15 @@ def find_and_delete_empty_directories(root_dir: Path, dry_run: bool = False) -> 
         except Exception as e:
             logger.warning(f"Could not process directory {current_dir}: {e}")
 
-    logger.info(f"{'[DRY RUN] Found' if dry_run else 'Deleted'} {len(deleted_dirs)} empty directories")
+    logger.info(
+        f"{'[DRY RUN] Found' if dry_run else 'Deleted'} {len(deleted_dirs)} empty directories"
+    )
 
     return deleted_dirs
 
 
 def archive_pmc_fulltext(
-    pmc_dir: Path,
-    archive_path: Optional[Path] = None,
-    delete_after_zip: bool = False
+    pmc_dir: Path, archive_path: Optional[Path] = None, delete_after_zip: bool = False
 ) -> Tuple[bool, str]:
     """
     Compress pmc_fulltext directory into a ZIP archive.
@@ -702,9 +736,9 @@ def archive_pmc_fulltext(
 
     try:
         # Create ZIP archive
-        with zipfile.ZipFile(archive_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        with zipfile.ZipFile(archive_path, "w", zipfile.ZIP_DEFLATED) as zipf:
             file_count = 0
-            for file_path in pmc_dir.rglob('*'):
+            for file_path in pmc_dir.rglob("*"):
                 if file_path.is_file():
                     arcname = file_path.relative_to(pmc_dir.parent)
                     zipf.write(file_path, arcname)
@@ -738,7 +772,7 @@ def cleanup_data_directory(
     delete_empty_dirs: bool = True,
     archive_pmc: bool = True,
     delete_pmc_after_archive: bool = False,
-    dry_run: bool = False
+    dry_run: bool = False,
 ) -> Dict[str, Any]:
     """
     Comprehensive cleanup of data directory.
@@ -753,13 +787,11 @@ def cleanup_data_directory(
     Returns:
         Cleanup statistics
     """
-    logger.info(f"{'[DRY RUN] ' if dry_run else ''}Cleaning up data directory: {data_dir}")
+    logger.info(
+        f"{'[DRY RUN] ' if dry_run else ''}Cleaning up data directory: {data_dir}"
+    )
 
-    results = {
-        "empty_dirs_deleted": [],
-        "archives_created": [],
-        "errors": []
-    }
+    results = {"empty_dirs_deleted": [], "archives_created": [], "errors": []}
 
     # Find and delete empty directories
     if delete_empty_dirs:
@@ -777,11 +809,12 @@ def cleanup_data_directory(
         if pmc_dir.exists():
             if not dry_run:
                 success, message = archive_pmc_fulltext(
-                    pmc_dir,
-                    delete_after_zip=delete_pmc_after_archive
+                    pmc_dir, delete_after_zip=delete_pmc_after_archive
                 )
                 if success:
-                    results["archives_created"].append(str(pmc_dir.parent / f"{pmc_dir.name}.zip"))
+                    results["archives_created"].append(
+                        str(pmc_dir.parent / f"{pmc_dir.name}.zip")
+                    )
                 else:
                     results["errors"].append(message)
             else:
@@ -796,6 +829,7 @@ def cleanup_data_directory(
 # ============================================================================
 # MAIN CLI
 # ============================================================================
+
 
 def extract_gene_from_path(data_dir: Path) -> Optional[str]:
     """
@@ -820,7 +854,11 @@ def extract_gene_from_path(data_dir: Path) -> Optional[str]:
                 # Check if next part looks like a timestamp (YYYYMMDD_HHMMSS)
                 if i + 1 < len(parts):
                     next_part = parts[i + 1]
-                    if len(next_part) == 15 and '_' in next_part and next_part.replace('_', '').isdigit():
+                    if (
+                        len(next_part) == 15
+                        and "_" in next_part
+                        and next_part.replace("_", "").isdigit()
+                    ):
                         return part
                 # If no timestamp but path looks reasonable, still accept it
                 return part
@@ -841,7 +879,7 @@ def extract_gene_from_json(json_file: Path) -> Optional[str]:
         Gene symbol or None if not found
     """
     try:
-        with open(json_file, 'r', encoding='utf-8') as f:
+        with open(json_file, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         # Try to get gene from variants
@@ -857,7 +895,9 @@ def extract_gene_from_json(json_file: Path) -> Optional[str]:
     return None
 
 
-def determine_database_name(data_dir: Path, extraction_dir: Optional[Path] = None) -> str:
+def determine_database_name(
+    data_dir: Path, extraction_dir: Optional[Path] = None
+) -> str:
     """
     Determine the appropriate database name based on gene symbol.
 
@@ -899,39 +939,39 @@ def main():
         "--data-dir",
         type=Path,
         required=True,
-        help="Path to data directory. Can point to parent dir with extractions/ subdir, or directly to dir containing *_PMID_*.json files"
+        help="Path to data directory. Can point to parent dir with extractions/ subdir, or directly to dir containing *_PMID_*.json files",
     )
 
     parser.add_argument(
         "--db",
         type=str,
         default=None,
-        help="SQLite database path (default: auto-detect based on gene symbol, e.g., TTR.db)"
+        help="SQLite database path (default: auto-detect based on gene symbol, e.g., TTR.db)",
     )
 
     parser.add_argument(
         "--cleanup",
         action="store_true",
-        help="Run cleanup and archival after migration"
+        help="Run cleanup and archival after migration",
     )
 
     parser.add_argument(
         "--delete-pmc-after-archive",
         action="store_true",
-        help="Delete pmc_fulltext directory after successful archival"
+        help="Delete pmc_fulltext directory after successful archival",
     )
 
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Dry run mode: report actions without executing"
+        help="Dry run mode: report actions without executing",
     )
 
     parser.add_argument(
         "--extractions-subdir",
         type=str,
         default="extractions",
-        help="Name of extractions subdirectory (default: extractions, could be extractions_rerun)"
+        help="Name of extractions subdirectory (default: extractions, could be extractions_rerun)",
     )
 
     args = parser.parse_args()
@@ -952,7 +992,9 @@ def main():
     json_files_in_data_dir = list(data_dir.glob("*_PMID_*.json"))
     if json_files_in_data_dir:
         extraction_dir = data_dir
-        logger.info(f"✓ Found {len(json_files_in_data_dir)} JSON files directly in: {extraction_dir}")
+        logger.info(
+            f"✓ Found {len(json_files_in_data_dir)} JSON files directly in: {extraction_dir}"
+        )
     else:
         # Strategy 2: Check specified extractions subdirectory
         extraction_subdir = data_dir / args.extractions_subdir
@@ -960,9 +1002,13 @@ def main():
             json_files_in_subdir = list(extraction_subdir.glob("*_PMID_*.json"))
             if json_files_in_subdir:
                 extraction_dir = extraction_subdir
-                logger.info(f"✓ Found {len(json_files_in_subdir)} JSON files in: {extraction_dir}")
+                logger.info(
+                    f"✓ Found {len(json_files_in_subdir)} JSON files in: {extraction_dir}"
+                )
             else:
-                logger.warning(f"Subdirectory exists but no JSON files found: {extraction_subdir}")
+                logger.warning(
+                    f"Subdirectory exists but no JSON files found: {extraction_subdir}"
+                )
         else:
             logger.warning(f"Extraction subdirectory not found: {extraction_subdir}")
 
@@ -980,7 +1026,9 @@ def main():
                             json_files = list(potential_dir.glob("*_PMID_*.json"))
                             if json_files:
                                 extraction_dir = potential_dir
-                                logger.info(f"✓ Found {len(json_files)} JSON files in: {extraction_dir}")
+                                logger.info(
+                                    f"✓ Found {len(json_files)} JSON files in: {extraction_dir}"
+                                )
                                 break
                     if extraction_dir:
                         break
@@ -993,12 +1041,16 @@ def main():
                         json_files_in_alt = list(alt_dir.glob("*_PMID_*.json"))
                         if json_files_in_alt:
                             extraction_dir = alt_dir
-                            logger.info(f"✓ Found {len(json_files_in_alt)} JSON files in: {extraction_dir}")
+                            logger.info(
+                                f"✓ Found {len(json_files_in_alt)} JSON files in: {extraction_dir}"
+                            )
                             break
 
     # Final check
     if not extraction_dir:
-        logger.error(f"No extraction JSON files found in {data_dir} or its subdirectories")
+        logger.error(
+            f"No extraction JSON files found in {data_dir} or its subdirectories"
+        )
         logger.error("Expected files matching pattern: *_PMID_*.json")
         return 1
 
@@ -1011,14 +1063,14 @@ def main():
     else:
         db_path = determine_database_name(data_dir, extraction_dir)
 
-    logger.info("="*80)
+    logger.info("=" * 80)
     logger.info("GENE VARIANT FETCHER: SQLite MIGRATION")
-    logger.info("="*80)
+    logger.info("=" * 80)
     logger.info(f"Data directory: {data_dir}")
     logger.info(f"Database: {db_path}")
     logger.info(f"Cleanup: {args.cleanup}")
     logger.info(f"Dry run: {args.dry_run}")
-    logger.info("="*80)
+    logger.info("=" * 80)
 
     # ========================================================================
     # STEP 3: Create database schema
@@ -1035,19 +1087,21 @@ def main():
     if not args.dry_run:
         migration_stats = migrate_extraction_directory(conn, extraction_dir)
 
-        logger.info("\n" + "="*80)
+        logger.info("\n" + "=" * 80)
         logger.info("MIGRATION STATISTICS")
-        logger.info("="*80)
+        logger.info("=" * 80)
         logger.info(f"Total files: {migration_stats['total_files']}")
         logger.info(f"Successful: {migration_stats['successful']}")
         logger.info(f"Failed: {migration_stats['failed']}")
 
-        if migration_stats['errors']:
+        if migration_stats["errors"]:
             logger.info("\nErrors:")
-            for error in migration_stats['errors']:
+            for error in migration_stats["errors"]:
                 logger.info(f"  - {error}")
     else:
-        logger.info(f"[DRY RUN] Would migrate {len(list(extraction_dir.glob('*.json')))} JSON files")
+        logger.info(
+            f"[DRY RUN] Would migrate {len(list(extraction_dir.glob('*.json')))} JSON files"
+        )
 
     # ========================================================================
     # STEP 5: Database statistics
@@ -1067,14 +1121,14 @@ def main():
         cursor.execute("SELECT COUNT(*) FROM penetrance_data")
         penetrance_count = cursor.fetchone()[0]
 
-        logger.info("\n" + "="*80)
+        logger.info("\n" + "=" * 80)
         logger.info("DATABASE STATISTICS")
-        logger.info("="*80)
+        logger.info("=" * 80)
         logger.info(f"Papers: {paper_count}")
         logger.info(f"Variants: {variant_count}")
         logger.info(f"Individual records: {individual_count}")
         logger.info(f"Penetrance data points: {penetrance_count}")
-        logger.info("="*80)
+        logger.info("=" * 80)
 
         conn.close()
 
@@ -1082,29 +1136,31 @@ def main():
     # STEP 6: Cleanup and archival
     # ========================================================================
     if args.cleanup:
-        logger.info("\n" + "="*80)
+        logger.info("\n" + "=" * 80)
         logger.info("CLEANUP AND ARCHIVAL")
-        logger.info("="*80)
+        logger.info("=" * 80)
 
         cleanup_results = cleanup_data_directory(
             data_dir,
             delete_empty_dirs=True,
             archive_pmc=True,
             delete_pmc_after_archive=args.delete_pmc_after_archive,
-            dry_run=args.dry_run
+            dry_run=args.dry_run,
         )
 
-        logger.info(f"Empty directories {'found' if args.dry_run else 'deleted'}: {len(cleanup_results['empty_dirs_deleted'])}")
+        logger.info(
+            f"Empty directories {'found' if args.dry_run else 'deleted'}: {len(cleanup_results['empty_dirs_deleted'])}"
+        )
         logger.info(f"Archives created: {len(cleanup_results['archives_created'])}")
 
-        if cleanup_results['errors']:
+        if cleanup_results["errors"]:
             logger.info(f"Errors: {len(cleanup_results['errors'])}")
-            for error in cleanup_results['errors']:
+            for error in cleanup_results["errors"]:
                 logger.info(f"  - {error}")
 
-    logger.info("\n" + "="*80)
+    logger.info("\n" + "=" * 80)
     logger.info("✓ MIGRATION COMPLETE")
-    logger.info("="*80)
+    logger.info("=" * 80)
 
     return 0
 
@@ -1112,4 +1168,5 @@ def main():
 if __name__ == "__main__":
     import sys
     import os
+
     sys.exit(main())

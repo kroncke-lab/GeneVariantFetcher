@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 class PipelineStep(str, Enum):
     """Pipeline steps in execution order."""
+
     PENDING = "pending"
     DISCOVERING_SYNONYMS = "discovering_synonyms"
     FETCHING_PMIDS = "fetching_pmids"
@@ -93,7 +94,9 @@ class JobCheckpoint:
     # Resume job mode (resume interrupted pipeline from a specific stage)
     is_resume_job: bool = False
     resume_stage: Optional[str] = None  # 'downloading' or 'extraction'
-    pmids_to_download: List[str] = field(default_factory=list)  # PMIDs to download when resuming
+    pmids_to_download: List[str] = field(
+        default_factory=list
+    )  # PMIDs to download when resuming
 
     # State tracking
     current_step: PipelineStep = PipelineStep.PENDING
@@ -137,7 +140,9 @@ class JobCheckpoint:
             data["current_step"] = PipelineStep(data["current_step"])
         return cls(**data)
 
-    def update_step(self, step: PipelineStep, progress: Optional[Dict[str, Any]] = None):
+    def update_step(
+        self, step: PipelineStep, progress: Optional[Dict[str, Any]] = None
+    ):
         """Update current step and optional progress info."""
         self.current_step = step
         self.updated_at = datetime.now().isoformat()
@@ -270,6 +275,7 @@ class CheckpointManager:
         job_dir = self._job_dir(job_id)
         if job_dir.exists():
             import shutil
+
             shutil.rmtree(job_dir)
             return True
         return False

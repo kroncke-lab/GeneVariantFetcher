@@ -66,12 +66,7 @@ def query_pubmed_with_entrez(
 
     try:
         _set_entrez_email(email)
-        handle = Entrez.esearch(
-            db="pubmed",
-            term=query,
-            retmax=max_results,
-            sort=sort
-        )
+        handle = Entrez.esearch(db="pubmed", term=query, retmax=max_results, sort=sort)
         record = Entrez.read(handle)
         handle.close()
 
@@ -82,7 +77,9 @@ def query_pubmed_with_entrez(
 
     except _RETRYABLE_EXCEPTIONS as exc:
         logger.warning(
-            "Transient error during PubMed query for '%s'; raising for retry", query, exc_info=exc
+            "Transient error during PubMed query for '%s'; raising for retry",
+            query,
+            exc_info=exc,
         )
         raise
     except (ValidationError, ValueError) as exc:
@@ -127,7 +124,9 @@ def query_pubmed_for_gene(
 
 
 @api_retry
-def fetch_paper_metadata(pmid: str, email: Optional[str] = None) -> Optional[Dict[str, Any]]:
+def fetch_paper_metadata(
+    pmid: str, email: Optional[str] = None
+) -> Optional[Dict[str, Any]]:
     """
     Fetch metadata for a single paper from PubMed.
 
@@ -164,7 +163,9 @@ def fetch_paper_metadata(pmid: str, email: Optional[str] = None) -> Optional[Dic
 
     except _RETRYABLE_EXCEPTIONS as exc:
         logger.warning(
-            "Transient error fetching metadata for PMID %s; raising for retry", pmid, exc_info=exc
+            "Transient error fetching metadata for PMID %s; raising for retry",
+            pmid,
+            exc_info=exc,
         )
         raise
     except (ValidationError, ValueError, IndexError, KeyError) as exc:
@@ -202,17 +203,14 @@ _abstract_retry = get_standard_retry_decorator(
 
 
 @_abstract_retry
-def _fetch_paper_abstract_with_retry(pmid: str, email: Optional[str] = None) -> Optional[str]:
+def _fetch_paper_abstract_with_retry(
+    pmid: str, email: Optional[str] = None
+) -> Optional[str]:
     """Retryable helper that performs the actual Entrez fetch."""
     logger.debug(f"Fetching abstract for PMID: {pmid}")
 
     _set_entrez_email(email)
-    handle = Entrez.efetch(
-        db="pubmed",
-        id=pmid,
-        rettype="abstract",
-        retmode="text"
-    )
+    handle = Entrez.efetch(db="pubmed", id=pmid, rettype="abstract", retmode="text")
     abstract = handle.read()
     handle.close()
 
@@ -245,12 +243,7 @@ def get_doi_from_pmid(pmid: str, email: Optional[str] = None) -> Optional[str]:
     try:
         _set_entrez_email(email)
         # Fetch the full record in XML format
-        handle = Entrez.efetch(
-            db="pubmed",
-            id=pmid,
-            rettype="xml",
-            retmode="xml"
-        )
+        handle = Entrez.efetch(db="pubmed", id=pmid, rettype="xml", retmode="xml")
         records = Entrez.read(handle)
         handle.close()
 
@@ -259,8 +252,10 @@ def get_doi_from_pmid(pmid: str, email: Optional[str] = None) -> Optional[str]:
             for article in records["PubmedArticle"]:
                 article_ids = article.get("PubmedData", {}).get("ArticleIdList", [])
                 for article_id in article_ids:
-                    if hasattr(article_id, 'attributes') and \
-                       article_id.attributes.get("IdType") == "doi":
+                    if (
+                        hasattr(article_id, "attributes")
+                        and article_id.attributes.get("IdType") == "doi"
+                    ):
                         doi = str(article_id)
                         logger.debug(f"Found DOI {doi} for PMID {pmid}")
                         return doi
@@ -270,7 +265,9 @@ def get_doi_from_pmid(pmid: str, email: Optional[str] = None) -> Optional[str]:
 
     except _RETRYABLE_EXCEPTIONS as exc:
         logger.warning(
-            "Transient error fetching DOI for PMID %s; raising for retry", pmid, exc_info=exc
+            "Transient error fetching DOI for PMID %s; raising for retry",
+            pmid,
+            exc_info=exc,
         )
         raise
     except (ValidationError, ValueError, KeyError, IndexError) as exc:
@@ -279,10 +276,7 @@ def get_doi_from_pmid(pmid: str, email: Optional[str] = None) -> Optional[str]:
 
 
 @api_retry
-def query_europepmc(
-    gene_symbol: str,
-    max_results: int = 100
-) -> Set[str]:
+def query_europepmc(gene_symbol: str, max_results: int = 100) -> Set[str]:
     """
     Query Europe PMC for papers mentioning a gene symbol.
 
@@ -307,7 +301,7 @@ def query_europepmc(
         "query": f"{gene_symbol}",
         "format": "json",
         "pageSize": max_results,
-        "resultType": "core"
+        "resultType": "core",
     }
 
     try:
@@ -328,7 +322,9 @@ def query_europepmc(
 
     except _RETRYABLE_EXCEPTIONS as exc:
         logger.warning(
-            "Transient error querying Europe PMC for %s; raising for retry", gene_symbol, exc_info=exc
+            "Transient error querying Europe PMC for %s; raising for retry",
+            gene_symbol,
+            exc_info=exc,
         )
         raise
     except ValueError as exc:
@@ -337,9 +333,7 @@ def query_europepmc(
 
 
 def batch_fetch_metadata(
-    pmids: List[str],
-    batch_size: int = 200,
-    email: Optional[str] = None
+    pmids: List[str], batch_size: int = 200, email: Optional[str] = None
 ) -> Dict[str, Dict[str, Any]]:
     """
     Fetch metadata for multiple papers in batches.
@@ -364,7 +358,7 @@ def batch_fetch_metadata(
 
     # Process in batches
     for i in range(0, len(pmids), batch_size):
-        batch = pmids[i:i + batch_size]
+        batch = pmids[i : i + batch_size]
         batch_ids = ",".join(batch)
 
         try:

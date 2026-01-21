@@ -55,7 +55,7 @@ def test_free_text_detection():
             print(f"  LinkOut URLs ({len(linkouts)} found):")
             for link in linkouts[:3]:  # Show first 3
                 print(f"    - {link['provider']}: {link['url'][:60]}...")
-                if link.get('attributes'):
+                if link.get("attributes"):
                     print(f"      Attributes: {link['attributes']}")
 
 
@@ -82,7 +82,7 @@ def test_full_text_retrieval():
             if success:
                 print(f"\n✅ SUCCESS: {result}")
                 # Show first 500 characters of output
-                with open(result, 'r') as f:
+                with open(result, "r") as f:
                     content = f.read()
                     print(f"\nOutput preview ({len(content)} total characters):")
                     print("-" * 40)

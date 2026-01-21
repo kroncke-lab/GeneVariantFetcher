@@ -17,8 +17,9 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Only load .env if needed - shell env vars take precedence
-if not os.getenv('NCBI_EMAIL'):
+if not os.getenv("NCBI_EMAIL"):
     from dotenv import load_dotenv
+
     load_dotenv()
 
 from pipeline.extraction import ExpertExtractor
@@ -50,7 +51,7 @@ def main():
         title="A massively parallel assay accurately discriminates between functionally normal and abnormal variants in a hotspot domain of KCNH2.",
         abstract="",
         full_text=content,
-        gene_symbol=gene
+        gene_symbol=gene,
     )
 
     print(f"\nTesting extraction for PMID {pmid}")
@@ -70,7 +71,7 @@ def main():
     print(f"Model used: {result.model_used}")
 
     # Check extraction metadata
-    meta = data.get('extraction_metadata', {})
+    meta = data.get("extraction_metadata", {})
     print(f"\n=== EXTRACTION METADATA ===")
     print(f"Study type: {meta.get('study_type', 'NOT SET')}")
     print(f"Total variants: {meta.get('total_variants_found', 0)}")
@@ -78,22 +79,25 @@ def main():
     print(f"Notes: {meta.get('notes', 'N/A')}")
 
     # Check variants
-    variants = data.get('variants', [])
+    variants = data.get("variants", [])
     print(f"\n=== VARIANTS ({len(variants)} total) ===")
 
     # Show first 10 variants
     for i, v in enumerate(variants[:10]):
         print(f"\n  Variant {i+1}: {v.get('protein_notation', 'N/A')}")
-        pdata = v.get('penetrance_data', {})
-        carriers = pdata.get('total_carriers_observed')
-        affected = pdata.get('affected_count')
+        pdata = v.get("penetrance_data", {})
+        carriers = pdata.get("total_carriers_observed")
+        affected = pdata.get("affected_count")
         print(f"    Carriers: {carriers if carriers is not None else 'NULL'}")
         print(f"    Affected: {affected if affected is not None else 'NULL'}")
         print(f"    Source: {v.get('source_location', 'N/A')}")
 
     # Count how many have null penetrance data (expected for functional study)
-    null_penetrance = sum(1 for v in variants
-                          if v.get('penetrance_data', {}).get('total_carriers_observed') is None)
+    null_penetrance = sum(
+        1
+        for v in variants
+        if v.get("penetrance_data", {}).get("total_carriers_observed") is None
+    )
 
     print(f"\n=== SUMMARY ===")
     print(f"Total variants: {len(variants)}")
@@ -101,22 +105,28 @@ def main():
     print(f"Variants with numeric penetrance: {len(variants) - null_penetrance}")
 
     # Check if the fix worked
-    study_type = meta.get('study_type', '')
-    if 'functional' in study_type.lower():
+    study_type = meta.get("study_type", "")
+    if "functional" in study_type.lower():
         print("\n✓ SUCCESS: Study correctly identified as FUNCTIONAL")
     else:
         print(f"\n⚠ WARNING: Study type is '{study_type}' - expected 'functional'")
 
     # For a functional study, most variants should have null penetrance
     if null_penetrance > len(variants) * 0.5:
-        print(f"✓ SUCCESS: {null_penetrance}/{len(variants)} variants have NULL penetrance (expected for functional study)")
+        print(
+            f"✓ SUCCESS: {null_penetrance}/{len(variants)} variants have NULL penetrance (expected for functional study)"
+        )
     else:
-        print(f"⚠ WARNING: Only {null_penetrance}/{len(variants)} variants have NULL penetrance")
-        print("   This suggests assay replicates may still be extracted as patient counts")
+        print(
+            f"⚠ WARNING: Only {null_penetrance}/{len(variants)} variants have NULL penetrance"
+        )
+        print(
+            "   This suggests assay replicates may still be extracted as patient counts"
+        )
 
     # Save result
     output_json = Path(f"tests/test_35688148_extraction_fixed.json")
-    with open(output_json, 'w') as f:
+    with open(output_json, "w") as f:
         json.dump(data, f, indent=2)
     print(f"\nSaved to: {output_json}")
 

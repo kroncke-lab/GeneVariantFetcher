@@ -137,7 +137,7 @@ Lean toward relevance unless the abstract unmistakably indicates it is not about
             import re
 
             # Look for JSON object in response
-            json_match = re.search(r'\{[^}]+\}', response_text, re.DOTALL)
+            json_match = re.search(r"\{[^}]+\}", response_text, re.DOTALL)
             if json_match:
                 result = json.loads(json_match.group())
                 return RelevanceScore(
@@ -147,7 +147,9 @@ Lean toward relevance unless the abstract unmistakably indicates it is not about
                     pmid=pmid,
                 )
             else:
-                logger.warning(f"Could not parse LLM response for PMID {pmid}: {response_text}")
+                logger.warning(
+                    f"Could not parse LLM response for PMID {pmid}: {response_text}"
+                )
                 return RelevanceScore(
                     is_relevant=True,
                     confidence=0.5,

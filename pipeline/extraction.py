@@ -24,7 +24,9 @@ from utils.models import ExtractionResult, Paper
 logger = logging.getLogger(__name__)
 
 
-def _find_data_zones_file(pmid: str, search_dirs: Optional[List[str]] = None) -> Optional[Path]:
+def _find_data_zones_file(
+    pmid: str, search_dirs: Optional[List[str]] = None
+) -> Optional[Path]:
     """
     Search for a DATA_ZONES.md file for the given PMID.
 
@@ -60,7 +62,7 @@ def _find_data_zones_file(pmid: str, search_dirs: Optional[List[str]] = None) ->
                             return zones_file
 
     # Fallback: search common output directory patterns
-    fallback_dirs = ['.', 'pmc_fulltext', 'output']
+    fallback_dirs = [".", "pmc_fulltext", "output"]
     for search_dir in fallback_dirs:
         path = Path(search_dir)
         if path.exists() and path.is_dir():
@@ -70,9 +72,13 @@ def _find_data_zones_file(pmid: str, search_dirs: Optional[List[str]] = None) ->
                 return zones_file
 
     # Also search subdirectories matching test/output patterns (e.g., test_gene_pmid/)
-    cwd = Path('.')
+    cwd = Path(".")
     for subdir in cwd.iterdir():
-        if subdir.is_dir() and (subdir.name.startswith('test_') or subdir.name.startswith('output_') or pmid in subdir.name):
+        if subdir.is_dir() and (
+            subdir.name.startswith("test_")
+            or subdir.name.startswith("output_")
+            or pmid in subdir.name
+        ):
             zones_file = subdir / filename
             if zones_file.exists():
                 logger.debug(f"Found DATA_ZONES.md at {zones_file} (subdir fallback)")
@@ -110,16 +116,28 @@ class ExpertExtractor(BaseLLMCaller):
         settings = get_settings()
 
         self.models = models or settings.tier3_models
-        self.temperature = temperature if temperature is not None else settings.tier3_temperature
+        self.temperature = (
+            temperature if temperature is not None else settings.tier3_temperature
+        )
         # Store the requested max tokens, but clamp per-model to avoid API errors
-        self.requested_max_tokens = max_tokens if max_tokens is not None else settings.tier3_max_tokens
-        self.max_tokens = self._clamp_max_tokens(self.models[0], self.requested_max_tokens)
+        self.requested_max_tokens = (
+            max_tokens if max_tokens is not None else settings.tier3_max_tokens
+        )
+        self.max_tokens = self._clamp_max_tokens(
+            self.models[0], self.requested_max_tokens
+        )
         self.tier_threshold = tier_threshold
         self.fulltext_dir = fulltext_dir
         self.use_condensed = settings.scout_use_condensed
 
-        super().__init__(model=self.models[0], temperature=self.temperature, max_tokens=self.max_tokens)
-        logger.debug(f"ExpertExtractor initialized with models={self.models}, temp={self.temperature}, max_tokens={self.max_tokens}")
+        super().__init__(
+            model=self.models[0],
+            temperature=self.temperature,
+            max_tokens=self.max_tokens,
+        )
+        logger.debug(
+            f"ExpertExtractor initialized with models={self.models}, temp={self.temperature}, max_tokens={self.max_tokens}"
+        )
 
     def _clamp_max_tokens(self, model: str, requested: int) -> int:
         """
@@ -165,11 +183,13 @@ class ExpertExtractor(BaseLLMCaller):
 
             if zones_file:
                 try:
-                    condensed_text = zones_file.read_text(encoding='utf-8')
+                    condensed_text = zones_file.read_text(encoding="utf-8")
 
                     # Check if condensed text is useful (not just headers/metadata)
                     # Look for actual data content, not just "No high-value data zones identified"
-                    has_no_zones = "No high-value data zones identified" in condensed_text
+                    has_no_zones = (
+                        "No high-value data zones identified" in condensed_text
+                    )
                     is_too_small = len(condensed_text) < self.MIN_CONDENSED_SIZE
 
                     if has_no_zones or is_too_small:
@@ -177,23 +197,37 @@ class ExpertExtractor(BaseLLMCaller):
                             f"PMID {paper.pmid} - DATA_ZONES.md too small or empty "
                             f"({len(condensed_text)} chars), falling back to full text"
                         )
-                        print(f"⚠ DATA_ZONES.md insufficient ({len(condensed_text)} chars) - using full text instead")
+                        print(
+                            f"⚠ DATA_ZONES.md insufficient ({len(condensed_text)} chars) - using full text instead"
+                        )
                         # Fall through to use full text
-                    elif condensed_text and len(condensed_text) > self.MIN_CONDENSED_SIZE:
+                    elif (
+                        condensed_text and len(condensed_text) > self.MIN_CONDENSED_SIZE
+                    ):
                         lines = len(condensed_text.splitlines())
-                        logger.info(f"PMID {paper.pmid} - Using condensed {paper.pmid}_DATA_ZONES.md ({len(condensed_text)} chars)")
-                        print(f"Using {paper.pmid}_DATA_ZONES.md for extraction: {len(condensed_text):,} chars, {lines:,} lines")
+                        logger.info(
+                            f"PMID {paper.pmid} - Using condensed {paper.pmid}_DATA_ZONES.md ({len(condensed_text)} chars)"
+                        )
+                        print(
+                            f"Using {paper.pmid}_DATA_ZONES.md for extraction: {len(condensed_text):,} chars, {lines:,} lines"
+                        )
                         return condensed_text
                 except Exception as e:
-                    logger.warning(f"PMID {paper.pmid} - Failed to read {paper.pmid}_DATA_ZONES.md: {e}")
+                    logger.warning(
+                        f"PMID {paper.pmid} - Failed to read {paper.pmid}_DATA_ZONES.md: {e}"
+                    )
 
         # Fall back to paper.full_text
         if paper.full_text:
             lines = len(paper.full_text.splitlines())
-            print(f"Using {paper.pmid}_FULL_CONTEXT.md for extraction: {len(paper.full_text):,} chars, {lines:,} lines")
+            print(
+                f"Using {paper.pmid}_FULL_CONTEXT.md for extraction: {len(paper.full_text):,} chars, {lines:,} lines"
+            )
             return paper.full_text
         elif paper.abstract:
-            logger.warning(f"PMID {paper.pmid} - Full text not available, using abstract only")
+            logger.warning(
+                f"PMID {paper.pmid} - Full text not available, using abstract only"
+            )
             print(f"Using ABSTRACT ONLY for extraction: {len(paper.abstract):,} chars")
             return f"[ABSTRACT ONLY - FULL TEXT NOT AVAILABLE]\n\n{paper.abstract}"
         else:
@@ -352,7 +386,9 @@ class ExpertExtractor(BaseLLMCaller):
                 count += 1
         return count
 
-    def _parse_markdown_table_variants(self, full_text: str, gene_symbol: Optional[str]) -> List[dict]:
+    def _parse_markdown_table_variants(
+        self, full_text: str, gene_symbol: Optional[str]
+    ) -> List[dict]:
         """
         Best-effort parser for simple markdown tables (fast path for very large tables).
 
@@ -401,7 +437,11 @@ class ExpertExtractor(BaseLLMCaller):
 
             cdna = get_col("nucleotide")
             protein = get_col("variant") or get_col("amino acid")  # safety
-            patient_count_raw = get_col("no. of patients") or get_col("no. of patient") or get_col("patients")
+            patient_count_raw = (
+                get_col("no. of patients")
+                or get_col("no. of patient")
+                or get_col("patients")
+            )
 
             if not cdna and not protein:
                 continue
@@ -425,7 +465,9 @@ class ExpertExtractor(BaseLLMCaller):
 
             variant = {
                 "gene_symbol": gene_symbol,
-                "cdna_notation": f"c.{cdna}" if cdna and not cdna.startswith("c.") else cdna,
+                "cdna_notation": f"c.{cdna}"
+                if cdna and not cdna.startswith("c.")
+                else cdna,
                 "protein_notation": protein,
                 "clinical_significance": "pathogenic",  # table is disease-associated
                 "patients": {"count": patient_count, "phenotype": "LQT2"},
@@ -446,55 +488,67 @@ class ExpertExtractor(BaseLLMCaller):
             variants.append(variant)
 
         if variants:
-            logger.info(f"Parsed {len(variants)} variants via deterministic markdown table parser")
+            logger.info(
+                f"Parsed {len(variants)} variants via deterministic markdown table parser"
+            )
         return variants
 
     def _get_extracted_variants_summary(self, variants: list) -> str:
         """Create a compact summary of extracted variants for continuation prompts."""
         summaries = []
         for v in variants:
-            cdna = v.get('cdna_notation', '') or ''
-            protein = v.get('protein_notation', '') or ''
+            cdna = v.get("cdna_notation", "") or ""
+            protein = v.get("protein_notation", "") or ""
             summaries.append(f"- {cdna} / {protein}")
         return "\n".join(summaries)
 
-    def _merge_continuation_results(self, base_data: dict, continuation_data: dict) -> dict:
+    def _merge_continuation_results(
+        self, base_data: dict, continuation_data: dict
+    ) -> dict:
         """Merge continuation extraction results into base results."""
         # Add continuation variants
-        base_variants = base_data.get('variants', [])
-        continuation_variants = continuation_data.get('variants', [])
+        base_variants = base_data.get("variants", [])
+        continuation_variants = continuation_data.get("variants", [])
 
         # Deduplicate by cdna_notation + protein_notation
         existing_keys = set()
         for v in base_variants:
-            key = (v.get('cdna_notation', ''), v.get('protein_notation', ''))
+            key = (v.get("cdna_notation", ""), v.get("protein_notation", ""))
             existing_keys.add(key)
 
         new_variants = []
         for v in continuation_variants:
-            key = (v.get('cdna_notation', ''), v.get('protein_notation', ''))
+            key = (v.get("cdna_notation", ""), v.get("protein_notation", ""))
             if key not in existing_keys:
                 new_variants.append(v)
                 existing_keys.add(key)
 
         base_variants.extend(new_variants)
-        base_data['variants'] = base_variants
+        base_data["variants"] = base_variants
 
         # Update metadata
-        if 'extraction_metadata' in base_data:
-            base_data['extraction_metadata']['total_variants_found'] = len(base_variants)
-            continuation_count = continuation_data.get('extraction_metadata', {}).get('continuation_variants_found', len(new_variants))
-            base_data['extraction_metadata']['notes'] = (
-                base_data['extraction_metadata'].get('notes', '') +
-                f" [Continuation added {continuation_count} variants]"
+        if "extraction_metadata" in base_data:
+            base_data["extraction_metadata"]["total_variants_found"] = len(
+                base_variants
+            )
+            continuation_count = continuation_data.get("extraction_metadata", {}).get(
+                "continuation_variants_found", len(new_variants)
+            )
+            base_data["extraction_metadata"]["notes"] = (
+                base_data["extraction_metadata"].get("notes", "")
+                + f" [Continuation added {continuation_count} variants]"
             ).strip()
 
         return base_data
 
-    def _attempt_continuation(self, paper: Paper, model: str, base_data: dict, full_text: str) -> dict:
+    def _attempt_continuation(
+        self, paper: Paper, model: str, base_data: dict, full_text: str
+    ) -> dict:
         """Attempt to extract remaining variants after truncation."""
-        variants = base_data.get('variants', [])
-        expected_count = base_data.get('extraction_metadata', {}).get('total_variants_found', len(variants))
+        variants = base_data.get("variants", [])
+        expected_count = base_data.get("extraction_metadata", {}).get(
+            "total_variants_found", len(variants)
+        )
 
         # Only continue if we're missing a significant number of variants
         if len(variants) >= expected_count or expected_count - len(variants) < 5:
@@ -511,7 +565,9 @@ class ExpertExtractor(BaseLLMCaller):
             extracted_variants_list=self._get_extracted_variants_summary(variants),
             gene_symbol=paper.gene_symbol or "UNKNOWN",
             title=paper.title or "Unknown Title",
-            full_text=self._truncate_text_for_prompt(full_text, gene_symbol=paper.gene_symbol)
+            full_text=self._truncate_text_for_prompt(
+                full_text, gene_symbol=paper.gene_symbol
+            ),
         )
 
         try:
@@ -537,8 +593,8 @@ class ExpertExtractor(BaseLLMCaller):
 
         Also handles novel mutation markers (asterisk AFTER the mutation).
         """
-        for variant in extracted_data.get('variants', []):
-            protein = variant.get('protein_notation', '')
+        for variant in extracted_data.get("variants", []):
+            protein = variant.get("protein_notation", "")
             if not protein:
                 continue
 
@@ -546,24 +602,30 @@ class ExpertExtractor(BaseLLMCaller):
 
             # Convert 'Ter' (termination) at the end of protein notation to '*'
             # e.g., p.Arg412Ter -> p.Arg412*, p.R412Ter -> p.R412*
-            protein = re.sub(r'([A-Za-z]{1,3}\d+)Ter$', r'\1*', protein, flags=re.IGNORECASE)
+            protein = re.sub(
+                r"([A-Za-z]{1,3}\d+)Ter$", r"\1*", protein, flags=re.IGNORECASE
+            )
 
             # Convert 'Stop' at the end to '*'
-            protein = re.sub(r'([A-Za-z]{1,3}\d+)Stop$', r'\1*', protein, flags=re.IGNORECASE)
+            protein = re.sub(
+                r"([A-Za-z]{1,3}\d+)Stop$", r"\1*", protein, flags=re.IGNORECASE
+            )
 
             # Convert X at the end of protein notation to '*' (stop codon)
             # e.g., p.Arg412X -> p.Arg412*, p.R412X -> p.R412*
-            protein = re.sub(r'([A-Za-z]{1,3}\d+)X$', r'\1*', protein)
+            protein = re.sub(r"([A-Za-z]{1,3}\d+)X$", r"\1*", protein)
 
             # Pattern for frameshift with X or Ter: fs + digits + X/Ter
             # e.g., p.Gly24fs+34X -> p.Gly24fs*34, p.Gly24fsTer58 -> p.Gly24fs*58
-            protein = re.sub(r'(fs\+?)(\d*)X$', r'\1*\2', protein)
-            protein = re.sub(r'(fs\+?)(\d*)Ter$', r'\1*\2', protein, flags=re.IGNORECASE)
-            protein = re.sub(r'(fs)\*(\d+)X$', r'\1*\2', protein)
+            protein = re.sub(r"(fs\+?)(\d*)X$", r"\1*\2", protein)
+            protein = re.sub(
+                r"(fs\+?)(\d*)Ter$", r"\1*\2", protein, flags=re.IGNORECASE
+            )
+            protein = re.sub(r"(fs)\*(\d+)X$", r"\1*\2", protein)
 
             # Handle cases where frameshift shows as fs*NUMBER or fsX NUMBER
             # Normalize fs*58 format (already correct but might have extra chars)
-            protein = re.sub(r'(fs)\s*\*\s*(\d+)', r'\1*\2', protein)
+            protein = re.sub(r"(fs)\s*\*\s*(\d+)", r"\1*\2", protein)
 
             # Handle truncating mutations that end with unusual patterns
             # Sometimes 'stop gained' is written as the amino acid that replaces (incorrectly)
@@ -571,12 +633,12 @@ class ExpertExtractor(BaseLLMCaller):
 
             # If notation changed, update it
             if protein != original:
-                variant['protein_notation'] = protein
-                notes = variant.get('additional_notes', '') or ''
+                variant["protein_notation"] = protein
+                notes = variant.get("additional_notes", "") or ""
                 if notes:
-                    notes += ' '
-                notes += f'[Stop codon notation normalized: {original} -> {protein}]'
-                variant['additional_notes'] = notes
+                    notes += " "
+                notes += f"[Stop codon notation normalized: {original} -> {protein}]"
+                variant["additional_notes"] = notes
 
         return extracted_data
 
@@ -591,58 +653,60 @@ class ExpertExtractor(BaseLLMCaller):
 
         Only populates when penetrance_data fields are null/missing but patients.count exists.
         """
-        for variant in extracted_data.get('variants', []):
-            patients = variant.get('patients', {})
-            patient_count = patients.get('count') if patients else None
+        for variant in extracted_data.get("variants", []):
+            patients = variant.get("patients", {})
+            patient_count = patients.get("count") if patients else None
 
             # Skip if no patient count
             if patient_count is None or patient_count == 0:
                 continue
 
             # Get or create penetrance_data
-            pdata = variant.get('penetrance_data', {})
+            pdata = variant.get("penetrance_data", {})
             if pdata is None:
                 pdata = {}
-                variant['penetrance_data'] = pdata
+                variant["penetrance_data"] = pdata
 
             # Only populate if fields are missing/null
-            total_carriers = pdata.get('total_carriers_observed')
-            affected_count = pdata.get('affected_count')
+            total_carriers = pdata.get("total_carriers_observed")
+            affected_count = pdata.get("affected_count")
 
             if total_carriers is None and affected_count is None:
                 # Determine if this is a pathogenic/disease-associated variant
-                significance = (variant.get('clinical_significance') or '').lower()
-                phenotype = (patients.get('phenotype') or '').lower()
-                source_location = (variant.get('source_location') or '').lower()
+                significance = (variant.get("clinical_significance") or "").lower()
+                phenotype = (patients.get("phenotype") or "").lower()
+                source_location = (variant.get("source_location") or "").lower()
 
                 # Check if from a disease-associated context
-                is_disease_associated = any([
-                    'pathogenic' in significance,
-                    'lqt' in phenotype,  # Long QT syndrome
-                    'brugada' in phenotype,
-                    'arrhythmia' in phenotype,
-                    'syndrome' in phenotype,
-                    'disease' in phenotype,
-                    'affected' in phenotype,
-                    'mutation' in source_location,
-                    'lqt' in source_location,
-                ])
+                is_disease_associated = any(
+                    [
+                        "pathogenic" in significance,
+                        "lqt" in phenotype,  # Long QT syndrome
+                        "brugada" in phenotype,
+                        "arrhythmia" in phenotype,
+                        "syndrome" in phenotype,
+                        "disease" in phenotype,
+                        "affected" in phenotype,
+                        "mutation" in source_location,
+                        "lqt" in source_location,
+                    ]
+                )
 
                 # For disease-associated variants, patient count = affected count
                 if is_disease_associated:
-                    pdata['total_carriers_observed'] = patient_count
-                    pdata['affected_count'] = patient_count
-                    pdata['unaffected_count'] = 0
+                    pdata["total_carriers_observed"] = patient_count
+                    pdata["affected_count"] = patient_count
+                    pdata["unaffected_count"] = 0
 
                     # Add note about the mapping
-                    notes = variant.get('additional_notes', '') or ''
+                    notes = variant.get("additional_notes", "") or ""
                     if notes:
-                        notes += ' '
-                    notes += f'[Penetrance data inferred from patient count: {patient_count} affected carriers]'
-                    variant['additional_notes'] = notes
+                        notes += " "
+                    notes += f"[Penetrance data inferred from patient count: {patient_count} affected carriers]"
+                    variant["additional_notes"] = notes
                 else:
                     # For uncertain significance, just set total carriers
-                    pdata['total_carriers_observed'] = patient_count
+                    pdata["total_carriers_observed"] = patient_count
 
         return extracted_data
 
@@ -658,7 +722,9 @@ class ExpertExtractor(BaseLLMCaller):
         "[ABSTRACT ONLY",
     ]
 
-    def _assess_input_quality(self, text: str, gene_symbol: Optional[str]) -> tuple[bool, str]:
+    def _assess_input_quality(
+        self, text: str, gene_symbol: Optional[str]
+    ) -> tuple[bool, str]:
         """
         Assess whether the input text is of sufficient quality for extraction.
 
@@ -669,18 +735,29 @@ class ExpertExtractor(BaseLLMCaller):
             return False, f"Text too short ({len(text) if text else 0} chars)"
 
         # Count failed extraction placeholders
-        failed_count = sum(1 for pattern in self.FAILED_EXTRACTION_PATTERNS if pattern in text)
+        failed_count = sum(
+            1 for pattern in self.FAILED_EXTRACTION_PATTERNS if pattern in text
+        )
 
         # If most of the content is failure placeholders, skip
         if failed_count >= 3:
-            return False, f"Multiple failed extraction placeholders ({failed_count} found)"
+            return (
+                False,
+                f"Multiple failed extraction placeholders ({failed_count} found)",
+            )
 
         # Check for actual variant-like content
         variant_patterns = [
-            r'c\.\d+', r'p\.[A-Z]', r'[A-Z]\d+[A-Z]',  # Basic variant patterns
-            r'mutation', r'variant', r'carrier',  # Clinical terms
+            r"c\.\d+",
+            r"p\.[A-Z]",
+            r"[A-Z]\d+[A-Z]",  # Basic variant patterns
+            r"mutation",
+            r"variant",
+            r"carrier",  # Clinical terms
         ]
-        has_variant_content = any(re.search(p, text, re.IGNORECASE) for p in variant_patterns)
+        has_variant_content = any(
+            re.search(p, text, re.IGNORECASE) for p in variant_patterns
+        )
 
         if not has_variant_content:
             # Check if gene is at least mentioned
@@ -705,20 +782,33 @@ class ExpertExtractor(BaseLLMCaller):
         self.model = model
         self.max_tokens = self._clamp_max_tokens(model, self.requested_max_tokens)
 
-        full_text = prepared_full_text if prepared_full_text is not None else self._prepare_full_text(paper)
+        full_text = (
+            prepared_full_text
+            if prepared_full_text is not None
+            else self._prepare_full_text(paper)
+        )
         if full_text == "[NO TEXT AVAILABLE]":
-            return ExtractionResult(pmid=paper.pmid, success=False, error="No text available", model_used=model)
+            return ExtractionResult(
+                pmid=paper.pmid,
+                success=False,
+                error="No text available",
+                model_used=model,
+            )
 
         # Assess input quality before sending to LLM
-        is_usable, quality_reason = self._assess_input_quality(full_text, paper.gene_symbol)
+        is_usable, quality_reason = self._assess_input_quality(
+            full_text, paper.gene_symbol
+        )
         if not is_usable:
-            logger.warning(f"PMID {paper.pmid} - Input quality check failed: {quality_reason}")
+            logger.warning(
+                f"PMID {paper.pmid} - Input quality check failed: {quality_reason}"
+            )
             print(f"⚠ PMID {paper.pmid}: Skipping LLM extraction - {quality_reason}")
             return ExtractionResult(
                 pmid=paper.pmid,
                 success=False,
                 error=f"Input quality insufficient: {quality_reason}",
-                model_used=model
+                model_used=model,
             )
 
         # Estimate variant count if not provided
@@ -727,7 +817,9 @@ class ExpertExtractor(BaseLLMCaller):
 
         # Fast path: deterministic table parser for very large tables to avoid slow LLM calls
         if estimated_variants >= 100:
-            parsed_variants = self._parse_markdown_table_variants(full_text, paper.gene_symbol)
+            parsed_variants = self._parse_markdown_table_variants(
+                full_text, paper.gene_symbol
+            )
             if len(parsed_variants) >= 50:
                 extracted_data = {
                     "paper_metadata": {
@@ -750,13 +842,19 @@ class ExpertExtractor(BaseLLMCaller):
                     model_used="deterministic-table-parser",
                 )
 
-        truncated_text = self._truncate_text_for_prompt(full_text, gene_symbol=paper.gene_symbol)
+        truncated_text = self._truncate_text_for_prompt(
+            full_text, gene_symbol=paper.gene_symbol
+        )
 
         # Use compact mode for high-variant papers to avoid output truncation
         use_compact = estimated_variants >= HIGH_VARIANT_THRESHOLD
         if use_compact:
-            logger.info(f"PMID {paper.pmid} - Using COMPACT extraction mode ({estimated_variants} estimated variants)")
-            print(f"High-variant paper detected ({estimated_variants}+ rows) - using compact extraction mode")
+            logger.info(
+                f"PMID {paper.pmid} - Using COMPACT extraction mode ({estimated_variants} estimated variants)"
+            )
+            print(
+                f"High-variant paper detected ({estimated_variants}+ rows) - using compact extraction mode"
+            )
             prompt = COMPACT_EXTRACTION_PROMPT.format(
                 gene_symbol=paper.gene_symbol or "UNKNOWN",
                 title=paper.title or "Unknown Title",
@@ -769,49 +867,75 @@ class ExpertExtractor(BaseLLMCaller):
                 gene_symbol=paper.gene_symbol or "UNKNOWN",
                 title=paper.title or "Unknown Title",
                 full_text=truncated_text,
-                pmid=paper.pmid
+                pmid=paper.pmid,
             )
 
         try:
             # Use the new method that tracks truncation status
-            extracted_data, was_truncated, raw_text = self.call_llm_json_with_status(prompt)
+            extracted_data, was_truncated, raw_text = self.call_llm_json_with_status(
+                prompt
+            )
 
             # Normalize stop codon notation
             extracted_data = self._normalize_stop_codon_notation(extracted_data)
             # Populate penetrance data from patient counts
-            extracted_data = self._populate_penetrance_from_patient_count(extracted_data)
+            extracted_data = self._populate_penetrance_from_patient_count(
+                extracted_data
+            )
 
             # Check if we need continuation extraction
-            variants = extracted_data.get('variants', [])
-            expected_count = extracted_data.get('extraction_metadata', {}).get('total_variants_found', len(variants))
+            variants = extracted_data.get("variants", [])
+            expected_count = extracted_data.get("extraction_metadata", {}).get(
+                "total_variants_found", len(variants)
+            )
 
             if was_truncated and len(variants) < expected_count:
-                extracted_data = self._attempt_continuation(paper, model, extracted_data, full_text)
+                extracted_data = self._attempt_continuation(
+                    paper, model, extracted_data, full_text
+                )
                 # Normalize again after continuation
                 extracted_data = self._normalize_stop_codon_notation(extracted_data)
-                extracted_data = self._populate_penetrance_from_patient_count(extracted_data)
+                extracted_data = self._populate_penetrance_from_patient_count(
+                    extracted_data
+                )
 
-            num_variants = len(extracted_data.get('variants', []))
-            logger.info(f"PMID {paper.pmid} - Extraction with {model} successful. Found {num_variants} variants.")
+            num_variants = len(extracted_data.get("variants", []))
+            logger.info(
+                f"PMID {paper.pmid} - Extraction with {model} successful. Found {num_variants} variants."
+            )
             return ExtractionResult(
                 pmid=paper.pmid,
                 success=True,
                 extracted_data=extracted_data,
-                model_used=model
+                model_used=model,
             )
         except json.JSONDecodeError as e:
             logger.error(f"PMID {paper.pmid} - JSON parsing error with {model}: {e}")
-            return ExtractionResult(pmid=paper.pmid, success=False, error=f"JSON error: {e}", model_used=model)
+            return ExtractionResult(
+                pmid=paper.pmid,
+                success=False,
+                error=f"JSON error: {e}",
+                model_used=model,
+            )
         except Exception as e:
             logger.error(f"PMID {paper.pmid} - Extraction failed with {model}: {e}")
-            return ExtractionResult(pmid=paper.pmid, success=False, error=f"Extraction error: {e}", model_used=model)
+            return ExtractionResult(
+                pmid=paper.pmid,
+                success=False,
+                error=f"Extraction error: {e}",
+                model_used=model,
+            )
 
     def extract(self, paper: Paper) -> ExtractionResult:
         """
         Extract structured variant data from a paper using a tiered model approach.
         """
         if not self.models:
-            return ExtractionResult(pmid=paper.pmid, success=False, error="No models configured for extraction")
+            return ExtractionResult(
+                pmid=paper.pmid,
+                success=False,
+                error="No models configured for extraction",
+            )
 
         best_successful_result: Optional[ExtractionResult] = None
         prepared_full_text = self._prepare_full_text(paper)
@@ -829,14 +953,17 @@ class ExpertExtractor(BaseLLMCaller):
 
         for idx, model in enumerate(self.models):
             result = self._attempt_extraction(
-                paper, model,
+                paper,
+                model,
                 prepared_full_text=prepared_full_text,
                 estimated_variants=table_row_hint,
             )
 
             if not result.success:
                 if idx + 1 < len(self.models):
-                    logger.info(f"PMID {paper.pmid} - Extraction with {model} failed ({result.error}). Trying next model.")
+                    logger.info(
+                        f"PMID {paper.pmid} - Extraction with {model} failed ({result.error}). Trying next model."
+                    )
                     continue
                 # If we have a previous successful result, return it instead of the failure
                 if best_successful_result is not None:
@@ -847,7 +974,9 @@ class ExpertExtractor(BaseLLMCaller):
                     return best_successful_result
                 return result
 
-            num_variants = result.extracted_data.get('extraction_metadata', {}).get('total_variants_found', 0)
+            num_variants = result.extracted_data.get("extraction_metadata", {}).get(
+                "total_variants_found", 0
+            )
             threshold = adaptive_threshold
             if num_variants < threshold and idx + 1 < len(self.models):
                 # Store this successful result as a fallback in case next model fails
@@ -866,7 +995,9 @@ class ExpertExtractor(BaseLLMCaller):
         if best_successful_result is not None:
             return best_successful_result
 
-        return ExtractionResult(pmid=paper.pmid, success=False, error="Extraction failed with all models")
+        return ExtractionResult(
+            pmid=paper.pmid, success=False, error="Extraction failed with all models"
+        )
 
     def extract_batch(self, papers: List[Paper]) -> List[ExtractionResult]:
         """Extract data from multiple papers."""

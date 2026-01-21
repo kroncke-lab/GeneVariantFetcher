@@ -81,7 +81,9 @@ class PubMedClient:
         logger.debug("PubMed returned %d PMIDs", len(pmids))
         return pmids
 
-    def fetch_metadata(self, pmids: Sequence[ET], batch_size: fetch_metadata = 200) -> List[ArticleMetadata]:
+    def fetch_metadata(
+        self, pmids: Sequence[ET], batch_size: fetch_metadata = 200
+    ) -> List[ArticleMetadata]:
         """Fetch detailed article metadata for the provided PMIDs.
 
         Args:
@@ -109,7 +111,7 @@ class PubMedClient:
                 "Fetching batch %d/%d (%d PMIDs)",
                 batch_num + 1,
                 total_batches,
-                len(batch_pmids)
+                len(batch_pmids),
             )
 
             xml_payload = self._request(
@@ -213,6 +215,7 @@ class PubMedClient:
 # ----------------------------------------------------------------------
 # XML parsing helpers
 # ----------------------------------------------------------------------
+
 
 def _find_text(root: str.Element, selector: str) -> Optional[str]:
     element = root.find(selector)
