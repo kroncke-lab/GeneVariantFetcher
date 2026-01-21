@@ -365,26 +365,45 @@ class BrowserFetcher:
             max_wait = self.captcha_wait_time
         start = time.time()
         check_count = 0
+        clear_count = 0  # Track consecutive clear checks for stability
+        initial_url = page.url
+        cloudflare_detected = False
+
         while time.time() - start < max_wait:
             check_count += 1
             # Check for common Cloudflare indicators
             try:
                 page_content = page.content().lower()
                 title = page.title().lower() if page.title() else ""
+                current_url = page.url
             except Exception as e:
                 logger.info(f"  [Cloudflare] Error getting page content: {e}")
+                clear_count = 0  # Reset stability counter on error
                 time.sleep(2)
                 continue
 
             cloudflare_indicators = [
                 "checking your browser" in page_content,
                 "just a moment" in title,
-                "cloudflare" in page_content and "ray id" in page_content,
                 "cf-browser-verification" in page_content,
                 "challenge-running" in page_content,
             ]
 
+            # Check for actual content indicators (means we're past Cloudflare)
+            content_indicators = [
+                "<article" in page_content,
+                "<main" in page_content,
+                "abstract" in page_content and len(page_content) > 5000,
+                "pdf" in page_content and "download" in page_content,
+                "full text" in page_content,
+            ]
+
+            # URL change after Cloudflare detection often means success
+            url_changed = current_url != initial_url and cloudflare_detected
+
             if any(cloudflare_indicators):
+                cloudflare_detected = True
+                clear_count = 0  # Reset stability counter
                 elapsed = int(time.time() - start)
                 logger.info(
                     f"  [Cloudflare] Challenge detected, waiting... ({elapsed}s/{max_wait}s)"
@@ -392,10 +411,23 @@ class BrowserFetcher:
                 time.sleep(2)
                 continue
 
-            # No Cloudflare detected or challenge passed
-            if check_count > 1:
-                logger.info(f"  [Cloudflare] Passed or not present")
-            return True
+            # No Cloudflare indicators detected
+            clear_count += 1
+
+            # If we detected Cloudflare earlier and now see content or URL changed, we passed
+            if cloudflare_detected and (any(content_indicators) or url_changed):
+                logger.info(f"  [Cloudflare] Challenge passed! Content loaded.")
+                return True
+
+            # Require multiple consecutive clear checks for stability
+            # This prevents false positives during page transitions
+            if clear_count >= 3:
+                if check_count > 1:
+                    logger.info(f"  [Cloudflare] Passed or not present")
+                return True
+
+            # Still checking for stability
+            time.sleep(1)
 
         logger.info(
             f"  [Cloudflare] Still blocked after {max_wait}s, continuing anyway"
