@@ -260,4 +260,4 @@ python docs/examples/example_triage.py
 
 ## License
 
-MIT License - see LICENSE file for details (if present).
+Wild Wild West
