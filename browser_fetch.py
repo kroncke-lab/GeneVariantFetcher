@@ -103,6 +103,9 @@ class DownloadResult:
     files_downloaded: List[str]
     error: Optional[str] = None
     method: str = "unknown"  # "direct", "claude_assisted", "manual"
+    failure_type: Optional[str] = (
+        None  # "captcha_blocked", "paywall", "timeout", "crash", None for success
+    )
 
 
 class PageAnalyzer:
@@ -254,20 +257,90 @@ class BrowserFetcher:
             raise RuntimeError("Playwright not installed")
 
         self.playwright = sync_playwright().start()
+
+        # Launch with anti-detection arguments
         self.browser = self.playwright.chromium.launch(
             headless=self.headless,
             downloads_path=str(self.downloads_dir),
+            args=[
+                "--disable-blink-features=AutomationControlled",
+                "--disable-dev-shm-usage",
+                "--no-first-run",
+                "--no-default-browser-check",
+                "--disable-infobars",
+                "--window-size=1920,1080",
+                "--start-maximized",
+            ],
         )
+
+        # Create context with more realistic browser fingerprint
         self.context = self.browser.new_context(
             accept_downloads=True,
             user_agent=(
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                 "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/120.0.0.0 Safari/537.36"
+                "Chrome/122.0.0.0 Safari/537.36"
             ),
+            viewport={"width": 1920, "height": 1080},
+            locale="en-US",
+            timezone_id="America/New_York",
+            permissions=["geolocation"],
+            color_scheme="light",
         )
         self.page = self.context.new_page()
+
+        # Apply stealth patches to mask automation fingerprints
+        self._apply_stealth_patches(self.page)
+
         return self
+
+    def _apply_stealth_patches(self, page: Page):
+        """Apply JavaScript patches to mask Playwright automation fingerprints."""
+        # These scripts run before page content loads
+        stealth_scripts = """
+        // Remove webdriver property
+        Object.defineProperty(navigator, 'webdriver', {
+            get: () => undefined
+        });
+
+        // Mock plugins array (real browsers have plugins)
+        Object.defineProperty(navigator, 'plugins', {
+            get: () => [
+                { name: 'Chrome PDF Plugin', filename: 'internal-pdf-viewer' },
+                { name: 'Chrome PDF Viewer', filename: 'mhjfbmdgcfjbbpaeojofohoefgiehjai' },
+                { name: 'Native Client', filename: 'internal-nacl-plugin' }
+            ]
+        });
+
+        // Mock languages
+        Object.defineProperty(navigator, 'languages', {
+            get: () => ['en-US', 'en']
+        });
+
+        // Hide automation flags in chrome object
+        window.chrome = {
+            runtime: {},
+            loadTimes: function() {},
+            csi: function() {},
+            app: {}
+        };
+
+        // Mock permissions API
+        const originalQuery = window.navigator.permissions.query;
+        window.navigator.permissions.query = (parameters) => (
+            parameters.name === 'notifications' ?
+                Promise.resolve({ state: Notification.permission }) :
+                originalQuery(parameters)
+        );
+
+        // Add realistic screen properties
+        Object.defineProperty(screen, 'availWidth', { get: () => 1920 });
+        Object.defineProperty(screen, 'availHeight', { get: () => 1080 });
+        Object.defineProperty(screen, 'colorDepth', { get: () => 24 });
+        """
+
+        page.add_init_script(stealth_scripts)
+        logger.debug("  [Stealth] Applied anti-detection patches")
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.browser:
@@ -648,6 +721,7 @@ class BrowserFetcher:
                 files_downloaded=[],
                 error="Manual download timed out - no files detected",
                 method="manual_fallback_timeout",
+                failure_type="timeout",
             )
 
     def _save_embedded_pdf(self, page: Page, pmid: str) -> Optional[Path]:
@@ -700,12 +774,23 @@ class BrowserFetcher:
 
         return None
 
-    def _wait_for_cloudflare(self, page: Page, max_wait: Optional[int] = None) -> bool:
+    def _wait_for_cloudflare(
+        self,
+        page: Page,
+        max_wait: Optional[int] = None,
+        has_early_content: bool = False,
+    ) -> bool:
         """
         Detect and wait for Cloudflare challenge to be completed.
 
         Returns True if page is ready (no Cloudflare or challenge passed).
         Returns False if still blocked after max_wait seconds or in infinite loop.
+
+        Args:
+            page: The Playwright page object
+            max_wait: Maximum seconds to wait for challenge to clear
+            has_early_content: If True, we already captured content before hitting
+                              Cloudflare, so we can exit faster when stuck
         """
         if max_wait is None:
             max_wait = self.captcha_wait_time
@@ -717,6 +802,10 @@ class BrowserFetcher:
         challenge_solve_count = 0  # Track how many times we've "solved" a challenge
         last_challenge_time = None  # Track when we last saw a challenge
         urls_seen = set()  # Track URL changes to detect redirect loops
+        stuck_on_challenge_start = None  # Track when we first saw current challenge
+        STUCK_THRESHOLD = (
+            45  # Exit after 45 seconds stuck on same challenge if we have content
+        )
 
         while time.time() - start < max_wait:
             check_count += 1
@@ -766,6 +855,22 @@ class BrowserFetcher:
 
             if any(cloudflare_indicators):
                 now = time.time()
+
+                # Track how long we've been stuck on the same challenge
+                if stuck_on_challenge_start is None:
+                    stuck_on_challenge_start = now
+                elif has_early_content:
+                    stuck_time = now - stuck_on_challenge_start
+                    if stuck_time > STUCK_THRESHOLD:
+                        logger.warning(
+                            f"  [Cloudflare] Stuck on challenge for {int(stuck_time)}s with no progress."
+                        )
+                        logger.info(
+                            f"  [Cloudflare] Early content capture exists - exiting to use that instead."
+                        )
+                        self._cloudflare_loop_detected = True
+                        return False
+
                 # Log which type of challenge was detected
                 if "g-recaptcha" in page_content or (
                     "recaptcha" in page_content and "challenge" in page_content
@@ -835,6 +940,7 @@ class BrowserFetcher:
 
             # No Cloudflare indicators detected
             clear_count += 1
+            stuck_on_challenge_start = None  # Reset stuck timer when clear
 
             # If we detected Cloudflare earlier and now see content, we passed
             if cloudflare_detected and any(content_indicators):
@@ -1386,6 +1492,20 @@ class BrowserFetcher:
         logger.info(f"{'='*60}")
         downloaded_files = []
 
+        # Check if we already have this paper from a previous run
+        existing_md = self.target_dir / f"PMID_{pmid}_FULL_CONTEXT.md"
+        if existing_md.exists() and existing_md.stat().st_size > 1000:
+            logger.info(
+                f">>> ALREADY EXISTS: {existing_md.name} ({existing_md.stat().st_size} bytes)"
+            )
+            logger.info(">>> Skipping download - marking as success")
+            return DownloadResult(
+                pmid=pmid,
+                success=True,
+                files_downloaded=[str(existing_md)],
+                method="already_exists",
+            )
+
         try:
             # Check if URL is a direct PDF link
             if url.lower().endswith(".pdf") or "/pdf/" in url.lower():
@@ -1442,7 +1562,14 @@ class BrowserFetcher:
             # Check for Cloudflare and wait if needed
             # Reset the loop flag before checking
             self._cloudflare_loop_detected = False
-            if not self._wait_for_cloudflare(self.page):
+            has_early_content = early_html_result is not None
+            if has_early_content:
+                logger.info(
+                    "  [EarlyCapture] Content already saved - will exit faster if CAPTCHA blocks us"
+                )
+            if not self._wait_for_cloudflare(
+                self.page, has_early_content=has_early_content
+            ):
                 # Cloudflare blocked us - but check if we captured content early
                 if early_html_result:
                     logger.info(
@@ -1475,6 +1602,7 @@ class BrowserFetcher:
                         files_downloaded=[],
                         error="Manual download fallback timed out",
                         method="manual_fallback_timeout",
+                        failure_type="captcha_blocked",
                     )
                 else:
                     # No fallback available - abort
@@ -1487,6 +1615,7 @@ class BrowserFetcher:
                         files_downloaded=[],
                         error="Cloudflare blocks automation. Use non-headless mode with --fallback-manual for manual download.",
                         method="cloudflare_blocked",
+                        failure_type="captcha_blocked",
                     )
 
             time.sleep(3)  # Wait for dynamic content
@@ -1612,19 +1741,35 @@ class BrowserFetcher:
                 files_downloaded=[],
                 error="Could not find download link or scrape article content",
                 method="needs_manual",
+                failure_type="paywall",
             )
 
         except Exception as e:
             logger.error(f">>> ERROR: {e}")
             import traceback
 
+            error_msg = str(e)
+            # Detect browser/page crash vs other errors
+            if any(
+                x in error_msg.lower()
+                for x in ["closed", "crashed", "target page", "context"]
+            ):
+                failure_type = "crash"
+            elif any(
+                x in error_msg.lower() for x in ["captcha", "cloudflare", "challenge"]
+            ):
+                failure_type = "captcha_blocked"
+            else:
+                failure_type = "crash"
+
             logger.error(traceback.format_exc())
             return DownloadResult(
                 pmid=pmid,
                 success=False,
                 files_downloaded=downloaded_files,
-                error=str(e),
+                error=error_msg,
                 method="error",
+                failure_type=failure_type,
             )
 
 
@@ -1763,6 +1908,8 @@ def run_browser_fetch(
     interactive: bool = False,
     wait_for_captcha: bool = False,
     retry_failures_only: bool = False,
+    retry_captcha_only: bool = False,
+    retry_paywall_only: bool = False,
     fallback_to_manual: bool = True,
 ):
     """
@@ -1816,15 +1963,36 @@ def run_browser_fetch(
     # Filter to pending papers
     df[status_column] = df[status_column].fillna("")
 
-    if retry_failures_only:
-        # Only retry papers that previously failed
-        pending_mask = df[status_column].str.lower() == "browser_failed"
-        logger.info("Retry mode: processing only browser_failed papers")
+    if retry_captcha_only:
+        # Only retry CAPTCHA-blocked papers
+        pending_mask = df[status_column].str.lower() == "captcha_blocked"
+        logger.info("Retry mode: processing only captcha_blocked papers")
+    elif retry_paywall_only:
+        # Only retry paywalled papers
+        pending_mask = df[status_column].str.lower() == "paywall"
+        logger.info("Retry mode: processing only paywall papers")
+    elif retry_failures_only:
+        # Retry any failed papers
+        failed_statuses = [
+            "browser_failed",
+            "captcha_blocked",
+            "paywall",
+            "browser_crashed",
+        ]
+        pending_mask = df[status_column].str.lower().isin(failed_statuses)
+        logger.info(f"Retry mode: processing papers with status in {failed_statuses}")
     else:
-        # Process papers that haven't been attempted yet
-        pending_mask = ~df[status_column].str.lower().isin(
-            ["done", "skipped", "browser_done", "browser_failed"]
-        )
+        # Process papers that haven't been attempted yet (exclude all terminal states)
+        terminal_statuses = [
+            "done",
+            "skipped",
+            "browser_done",
+            "browser_failed",
+            "captcha_blocked",
+            "paywall",
+            "browser_crashed",
+        ]
+        pending_mask = ~df[status_column].str.lower().isin(terminal_statuses)
 
     # Filter to specific PMIDs if provided
     if specific_pmids:
@@ -1892,15 +2060,31 @@ def run_browser_fetch(
 
             results.append(result)
 
-            # Update status in DataFrame
+            # Update status in DataFrame with granular failure tracking
+            # Add Failure_Reason column if it doesn't exist
+            if "Failure_Reason" not in df.columns:
+                df["Failure_Reason"] = ""
+
             if result.success:
                 df.at[row_idx, status_column] = "browser_done"
+                df.at[row_idx, "Failure_Reason"] = ""
                 logger.info(
                     f"  SUCCESS: Downloaded {len(result.files_downloaded)} file(s)"
                 )
             else:
-                df.at[row_idx, status_column] = "browser_failed"
-                logger.warning(f"  FAILED: {result.error}")
+                # Use granular status based on failure type
+                failure_type = result.failure_type or "unknown"
+                if failure_type == "captcha_blocked":
+                    df.at[row_idx, status_column] = "captcha_blocked"
+                elif failure_type == "paywall":
+                    df.at[row_idx, status_column] = "paywall"
+                elif failure_type == "crash":
+                    df.at[row_idx, status_column] = "browser_crashed"
+                else:
+                    df.at[row_idx, status_column] = "browser_failed"
+
+                df.at[row_idx, "Failure_Reason"] = result.error or ""
+                logger.warning(f"  FAILED [{failure_type}]: {result.error}")
 
             # Save progress
             df.to_csv(csv_file, index=False)
@@ -1930,6 +2114,7 @@ def run_browser_fetch(
                     "files": r.files_downloaded,
                     "error": r.error,
                     "method": r.method,
+                    "failure_type": r.failure_type,
                 }
                 for r in results
             ],
@@ -1937,6 +2122,22 @@ def run_browser_fetch(
             indent=2,
         )
     logger.info(f"Results saved to: {results_file}")
+
+    # Print failure breakdown
+    if failed > 0:
+        captcha_blocked = sum(1 for r in results if r.failure_type == "captcha_blocked")
+        paywalled = sum(1 for r in results if r.failure_type == "paywall")
+        crashed = sum(1 for r in results if r.failure_type == "crash")
+        other = failed - captcha_blocked - paywalled - crashed
+        print(f"\nFailure breakdown:")
+        if captcha_blocked:
+            print(f"  CAPTCHA blocked: {captcha_blocked}")
+        if paywalled:
+            print(f"  Paywall/no access: {paywalled}")
+        if crashed:
+            print(f"  Browser crashed: {crashed}")
+        if other:
+            print(f"  Other: {other}")
 
 
 def main():
@@ -1948,7 +2149,6 @@ def main():
         epilog="""
 Examples:
   # Interactive mode (recommended for paywalled papers)
-  # Opens browser, you download manually, files auto-organized
   python browser_fetch.py paywalled_missing.csv --interactive
 
   # Fully automated mode - tries to find and click download links
@@ -1966,9 +2166,18 @@ Examples:
   # Limit to first 10 papers
   python browser_fetch.py paywalled_missing.csv -i --max 10
 
-  # Two-step workflow: automated first, then retry failures with CAPTCHA wait
-  python browser_fetch.py paywalled_missing.csv              # Step 1: automated
-  python browser_fetch.py paywalled_missing.csv --retry-failures --wait-for-captcha  # Step 2: retry failures
+  # Two-step workflow for sites with CAPTCHAs:
+  python browser_fetch.py paywalled_missing.csv              # Step 1: automated run
+  python browser_fetch.py paywalled_missing.csv --retry-captcha --wait-for-captcha  # Step 2: manually solve CAPTCHAs
+
+  # Retry only paywalled papers (e.g., after getting VPN/library access)
+  python browser_fetch.py paywalled_missing.csv --retry-paywall
+
+Status tracking (in CSV Status column):
+  - browser_done: Successfully downloaded
+  - captcha_blocked: Blocked by CAPTCHA/Cloudflare
+  - paywall: Requires subscription/login
+  - browser_crashed: Browser error during fetch
         """,
     )
 
@@ -1997,7 +2206,17 @@ Examples:
         "--retry-failures",
         "-r",
         action="store_true",
-        help="Only process papers with browser_failed status (retry previously failed papers)",
+        help="Retry all previously failed papers (any failure type)",
+    )
+    parser.add_argument(
+        "--retry-captcha",
+        action="store_true",
+        help="Retry only CAPTCHA-blocked papers (use with --wait-for-captcha for manual solving)",
+    )
+    parser.add_argument(
+        "--retry-paywall",
+        action="store_true",
+        help="Retry only paywalled papers (useful if you now have institutional access)",
     )
     parser.add_argument("--pmid-column", default="PMID", help="PMID column name")
     parser.add_argument("--status-column", default="Status", help="Status column name")
@@ -2038,6 +2257,8 @@ Examples:
         interactive=args.interactive,
         wait_for_captcha=args.wait_for_captcha,
         retry_failures_only=args.retry_failures,
+        retry_captcha_only=args.retry_captcha,
+        retry_paywall_only=args.retry_paywall,
         fallback_to_manual=not args.no_fallback_manual,
     )
 
