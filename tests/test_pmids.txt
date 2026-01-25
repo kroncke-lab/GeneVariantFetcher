@@ -1,0 +1,83 @@
+# GeneVariantFetcher Test PMIDs
+# Generated 2026-01-25
+#
+# These PMIDs represent various failure modes for testing extraction improvements.
+# Each category targets a specific issue type.
+
+# =============================================================================
+# CATEGORY 1: COMPLETE MISS - No extraction file exists (25 PMIDs)
+# These papers have variants in curated Excel but zero extraction output.
+# Root cause: Full-text retrieval failed (PDF conversion, HTML artifacts, etc.)
+# =============================================================================
+15840476  # 86 variants expected - Tester 2005 "Compendium of cardiac channel mutations"
+10973849  # 59 variants expected - Splawski 2000 "Spectrum of mutations in long-QT syndrome genes"
+26496715  # 53 variants expected - Gao 2016 "Common Genotypes of Long QT Syndrome in China"
+11854117  # 44 variants expected - Moss 2002 "Increased risk of arrhythmic events in long-QT syndrome"
+19038855  # 28 variants expected
+14661677  # 25 variants expected
+29650123  # 22 variants expected
+16922724  # 20 variants expected
+17905336  # 11 variants expected
+19996378  # 9 variants expected
+27871843  # 9 variants expected
+12402336  # 9 variants expected
+10862094  # 8 variants expected
+21216356  # 8 variants expected
+22727609  # 8 variants expected
+15176425  # 7 variants expected
+14998624  # 7 variants expected
+24103226  # 7 variants expected
+28532774  # 6 variants expected
+17210839  # 6 variants expected
+15913580  # 6 variants expected
+19695459  # 6 variants expected
+19843919  # 5 variants expected
+29759541  # 5 variants expected
+29766883  # 5 variants expected
+
+# =============================================================================
+# CATEGORY 2: PARTIAL EXTRACTION - Some variants found, many missing (5 PMIDs)
+# Extraction ran and found SOME variants, but missed many others.
+# Root cause: Large tables truncated, supplements not fully parsed, gene filtering
+# =============================================================================
+24606995  # 1 found, 27 missing - Danish LQTS study, "64 mutations in 70 families"
+24667783  # 2 found, 21 missing
+23098067  # 2 found, 20 missing
+29622001  # 19 found, 16 missing - Good partial extraction, missing frameshifts
+24217263  # 1 found, 3 missing
+
+# =============================================================================
+# CATEGORY 3: COUNT MISMATCHES - Variants found but carrier counts differ (10 PMIDs)
+# Extraction identified correct variants but penetrance/carrier counts are wrong.
+# Root cause: Family vs proband counting, cohort aggregation, assay confusion
+# =============================================================================
+9544837   # 5 count mismatches
+12442276  # 3 count mismatches
+26823142  # 3 count mismatches
+18808722  # 3 count mismatches - A490T: Excel=7, SQLite=2
+20181576  # 2 count mismatches
+26066609  # 2 count mismatches
+22338672  # 2 count mismatches
+28491588  # 2 count mismatches
+29146210  # 2 count mismatches
+18551196  # count mismatch - A558P: Excel=3, SQLite=2
+
+# =============================================================================
+# CATEGORY 4: WRONG VARIANTS EXTRACTED - Extraction ran but found wrong variants (10 PMIDs)
+# Paper is in database, but extracted variants don't match Excel at all.
+# Root cause: Gene confusion (KCNQ1 vs KCNH2), variant nomenclature mismatch
+# =============================================================================
+23631430  # 12 expected variants not found
+26746457  # 10 expected variants not found
+11844290  # 5 expected variants not found
+30036649  # 5 expected variants not found
+24218437  # 5 expected variants not found
+22378279  # 5 expected variants not found
+19160088  # 2 expected variants not found
+28749435  # 2 expected variants not found
+23936059  # 2 expected variants not found
+22882672  # 2 expected variants not found
+
+# =============================================================================
+# TOTAL: 55 test PMIDs
+# =============================================================================

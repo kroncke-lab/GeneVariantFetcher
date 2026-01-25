@@ -1061,11 +1061,20 @@ def compare_data(
     matched_sqlite_keys = set()
 
     # Group SQLite variants by PMID for matching
+    # Include both protein and cDNA notations as candidates
     sqlite_by_pmid: Dict[str, List[Tuple[str, str]]] = {}
+    sqlite_cdna_by_pmid: Dict[
+        str, Dict[str, str]
+    ] = {}  # Maps cDNA -> variant_norm for reverse lookup
     for (pmid, variant_norm), data in sqlite_data.items():
         if pmid not in sqlite_by_pmid:
             sqlite_by_pmid[pmid] = []
+            sqlite_cdna_by_pmid[pmid] = {}
         sqlite_by_pmid[pmid].append((variant_norm, data["variant_raw"]))
+        # Also index by cDNA notation if available
+        cdna = data.get("cdna_notation")
+        if cdna and pd.notna(cdna) and cdna.strip():
+            sqlite_cdna_by_pmid[pmid][normalize_variant(cdna)] = variant_norm
 
     # Process Excel entries
     for (excel_pmid, excel_variant_norm), excel_entry in excel_data.items():
@@ -1083,13 +1092,55 @@ def compare_data(
 
                 row = create_comparison_row(excel_entry, sqlite_entry, "exact", 1.0)
             else:
-                row = create_comparison_row(excel_entry, None, "none", None)
-                row.missing_in_sqlite = True
+                # Try cDNA matching for exact mode
+                cdna_map = sqlite_cdna_by_pmid.get(excel_pmid, {})
+                cdna_match_norm = cdna_map.get(excel_variant_norm)
+                if cdna_match_norm:
+                    match_key = (excel_pmid, cdna_match_norm)
+                    if match_key in sqlite_data:
+                        sqlite_entry = sqlite_data[match_key]
+                        matched_sqlite_keys.add(match_key)
+                        row = create_comparison_row(
+                            excel_entry, sqlite_entry, "exact_cdna", 1.0
+                        )
+                    else:
+                        row = create_comparison_row(excel_entry, None, "none", None)
+                        row.missing_in_sqlite = True
+                else:
+                    row = create_comparison_row(excel_entry, None, "none", None)
+                    row.missing_in_sqlite = True
         else:
-            # Fuzzy matching
+            # Fuzzy matching - first try protein notation
             best_match, score, match_type = find_best_match(
                 excel_entry["variant_raw"], candidate_variants, fuzzy_threshold
             )
+
+            # If protein matching failed or scored low, also try cDNA matching
+            if not best_match or score < fuzzy_threshold:
+                cdna_map = sqlite_cdna_by_pmid.get(excel_pmid, {})
+                cdna_candidates = list(cdna_map.keys())
+                if cdna_candidates:
+                    cdna_match, cdna_score, cdna_match_type = find_best_match(
+                        excel_entry["variant_raw"], cdna_candidates, fuzzy_threshold
+                    )
+                    # Use cDNA match if it's better than protein match
+                    if cdna_match and (not best_match or cdna_score > score):
+                        # Get the protein variant_norm from the cDNA mapping
+                        protein_norm = cdna_map.get(cdna_match)
+                        if protein_norm:
+                            match_key = (excel_pmid, protein_norm)
+                            if match_key in sqlite_data:
+                                sqlite_entry = sqlite_data[match_key]
+                                matched_sqlite_keys.add(match_key)
+                                # Mark as cDNA match
+                                row = create_comparison_row(
+                                    excel_entry,
+                                    sqlite_entry,
+                                    f"{cdna_match_type}_cdna",
+                                    cdna_score,
+                                )
+                                results.append(row)
+                                continue
 
             if best_match:
                 # Find the sqlite entry for this match
