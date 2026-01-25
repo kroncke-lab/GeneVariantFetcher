@@ -2,7 +2,7 @@
 
 Extract human genetic variant carriers from biomedical literature into a SQLite database.
 
-## What It Does
+## What It Do
 
 Given a gene name, this tool runs a pipeline with these major steps:
 
