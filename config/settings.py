@@ -149,6 +149,28 @@ class Settings(BaseSettings):
         description="Prefer DATA_ZONES.md over FULL_CONTEXT.md for extraction",
     )
 
+    # Figure/Image Extraction Configuration
+    extract_figures: bool = Field(
+        default=True,
+        env="EXTRACT_FIGURES",
+        description="Extract images from PDFs during harvesting",
+    )
+    extract_pedigrees: bool = Field(
+        default=True,
+        env="EXTRACT_PEDIGREES",
+        description="Run pedigree detection and extraction on extracted figures",
+    )
+    vision_model: str = Field(
+        default="gpt-4o",
+        env="VISION_MODEL",
+        description="Vision-capable model for pedigree analysis (gpt-4o, gemini-1.5-pro, claude-3-5-sonnet)",
+    )
+    pedigree_confidence_threshold: float = Field(
+        default=0.7,
+        env="PEDIGREE_CONFIDENCE_THRESHOLD",
+        description="Minimum confidence (0.0-1.0) to classify an image as a pedigree",
+    )
+
     model_config = SettingsConfigDict(
         env_file=_ENV_PATH,
         env_file_encoding="utf-8",

@@ -3,14 +3,20 @@ Format Converters Module
 
 Converts various file formats (XML, Excel, Word, PDF) to markdown
 for unified LLM processing.
+
+Supports optional image extraction from PDFs for downstream vision analysis.
 """
 
+import base64
+import logging
 from pathlib import Path
-from typing import Optional
+from typing import Dict, List, Optional, Tuple
 import xml.etree.ElementTree as ET
 import pandas as pd
 from bs4 import BeautifulSoup
 import re
+
+logger = logging.getLogger(__name__)
 
 try:
     from markitdown import MarkItDown
@@ -578,3 +584,170 @@ class FormatConverter:
 
         # Final fallback - just indicate the file exists
         return f"[PDF file available at: {file_path.name} - text extraction failed, manual review required]\n\n"
+
+    def pdf_to_markdown_with_images(
+        self,
+        file_path: Path,
+        output_dir: Optional[Path] = None,
+        extract_images: bool = True,
+        min_image_size: int = 100,
+    ) -> Tuple[str, List[Dict]]:
+        """
+        Convert PDF to markdown AND extract images for vision analysis.
+
+        Args:
+            file_path: Path to PDF file
+            output_dir: Directory to save extracted images. If None, images are
+                       returned as base64 in the metadata.
+            extract_images: If True, extract images from the PDF
+            min_image_size: Minimum width/height in pixels to extract (filters icons)
+
+        Returns:
+            Tuple of (markdown_text, list of image metadata dicts)
+
+            Image metadata dict contains:
+            - page: Page number (1-indexed)
+            - index: Image index on that page
+            - width: Image width in pixels
+            - height: Image height in pixels
+            - size_bytes: Size of image data
+            - ext: File extension (png, jpeg, etc.)
+            - path: Path to saved image (if output_dir provided)
+            - base64: Base64-encoded image data (if no output_dir)
+        """
+        extracted_images: List[Dict] = []
+
+        # First verify the file is a valid PDF
+        try:
+            with open(file_path, "rb") as f:
+                header = f.read(8)
+                if not header.startswith(b"%PDF"):
+                    logger.warning(f"{file_path.name} is not a valid PDF file")
+                    return f"[Invalid PDF file: {file_path.name}]\n\n", []
+        except Exception as e:
+            logger.error(f"Error reading PDF header {file_path}: {e}")
+            return f"[Error reading PDF file: {file_path.name}]\n\n", []
+
+        # Try PyMuPDF (fitz) - best for image extraction
+        try:
+            import fitz  # PyMuPDF
+
+            doc = fitz.open(str(file_path))
+            text_content = []
+
+            # Create figures directory if extracting images
+            figures_dir = None
+            if extract_images and output_dir:
+                figures_dir = output_dir / "figures"
+                figures_dir.mkdir(exist_ok=True)
+
+            for page_num, page in enumerate(doc, 1):
+                # Extract text
+                text = page.get_text()
+                if text.strip():
+                    text_content.append(f"### Page {page_num}\n\n{text.strip()}")
+
+                # Extract images
+                if extract_images:
+                    for img_index, img in enumerate(page.get_images(full=True)):
+                        try:
+                            xref = img[0]
+                            base_image = doc.extract_image(xref)
+                            image_bytes = base_image["image"]
+                            image_ext = base_image.get("ext", "png")
+
+                            # Get dimensions
+                            width = base_image.get("width", 0)
+                            height = base_image.get("height", 0)
+
+                            # Skip tiny images (icons, bullets, decorations)
+                            if width < min_image_size or height < min_image_size:
+                                continue
+
+                            # Skip very small file sizes (likely low-value)
+                            if len(image_bytes) < 1000:
+                                continue
+
+                            img_filename = f"fig_p{page_num}_{img_index}.{image_ext}"
+                            img_meta: Dict = {
+                                "page": page_num,
+                                "index": img_index,
+                                "width": width,
+                                "height": height,
+                                "size_bytes": len(image_bytes),
+                                "ext": image_ext,
+                                "filename": img_filename,
+                            }
+
+                            if figures_dir:
+                                img_path = figures_dir / img_filename
+                                img_path.write_bytes(image_bytes)
+                                img_meta["path"] = img_path
+                                logger.debug(
+                                    f"Extracted image: {img_filename} ({width}x{height})"
+                                )
+                            else:
+                                # Store as base64 if no output dir
+                                img_meta["base64"] = base64.b64encode(
+                                    image_bytes
+                                ).decode()
+
+                            extracted_images.append(img_meta)
+
+                            # Add placeholder in markdown for reference
+                            text_content.append(
+                                f"\n[Figure {len(extracted_images)} from page {page_num}: "
+                                f"{img_filename} ({width}x{height}px)]\n"
+                            )
+
+                        except Exception as e:
+                            logger.warning(
+                                f"Failed to extract image {img_index} from page {page_num}: {e}"
+                            )
+
+            doc.close()
+
+            if text_content:
+                markdown = "\n\n".join(text_content) + "\n\n"
+                if extracted_images:
+                    logger.info(
+                        f"Extracted {len(extracted_images)} images from {file_path.name}"
+                    )
+                return markdown, extracted_images
+
+        except ImportError:
+            logger.warning(
+                "PyMuPDF not installed - falling back to text-only extraction"
+            )
+        except Exception as e:
+            logger.warning(f"PyMuPDF extraction failed for {file_path.name}: {e}")
+
+        # Fall back to text-only extraction
+        text_only = self.pdf_to_markdown(file_path)
+        return text_only, []
+
+    def get_image_as_base64_url(self, image_path: Path) -> str:
+        """
+        Convert an image file to a base64 data URL for vision API calls.
+
+        Args:
+            image_path: Path to image file
+
+        Returns:
+            Data URL string (e.g., "data:image/png;base64,...")
+        """
+        image_bytes = image_path.read_bytes()
+        b64 = base64.b64encode(image_bytes).decode()
+
+        ext = image_path.suffix.lower()
+        mime_type = {
+            ".png": "image/png",
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".gif": "image/gif",
+            ".webp": "image/webp",
+            ".tiff": "image/tiff",
+            ".bmp": "image/bmp",
+        }.get(ext, "image/png")
+
+        return f"data:{mime_type};base64,{b64}"

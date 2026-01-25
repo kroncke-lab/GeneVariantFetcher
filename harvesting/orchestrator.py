@@ -33,6 +33,15 @@ except ImportError:
     SCOUT_AVAILABLE = False
     get_settings = None
 
+# Import pedigree extractor (with fallback)
+try:
+    from pipeline.pedigree_extractor import PedigreeExtractor
+
+    PEDIGREE_EXTRACTOR_AVAILABLE = True
+except ImportError:
+    PEDIGREE_EXTRACTOR_AVAILABLE = False
+    PedigreeExtractor = None
+
 # Import abstract carrier extraction (with fallback)
 try:
     from pipeline.abstract_extraction import (
@@ -160,6 +169,183 @@ class PMCHarvester:
                     "",  # More_In_Fulltext_Probability, Priority_Score, Notes
                 ]
             )
+
+    def _extract_pmc_figures(self, pmcid: str, pmid: str) -> int:
+        """
+        Extract figure images from a PMC article page.
+
+        PMC articles have figures embedded in the HTML, not as separate downloads.
+        This method scrapes the article page to find and download figure images.
+
+        Args:
+            pmcid: PubMed Central ID
+            pmid: PubMed ID (for output directory naming)
+
+        Returns:
+            Number of figures extracted
+        """
+        # Check if figure extraction is enabled
+        try:
+            if get_settings is not None:
+                settings = get_settings()
+                if not settings.extract_figures:
+                    return 0
+        except Exception:
+            pass
+
+        if not pmcid:
+            return 0
+
+        # Create figures directory
+        figures_dir = self.output_dir / f"{pmid}_figures"
+        figures_dir.mkdir(exist_ok=True)
+
+        try:
+            from bs4 import BeautifulSoup
+
+            # Fetch the PMC article page
+            pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+            response = self.session.get(pmc_url, timeout=30)
+            response.raise_for_status()
+
+            soup = BeautifulSoup(response.text, "html.parser")
+
+            # Find figure images - PMC uses cdn.ncbi.nlm.nih.gov URLs
+            figure_urls = []
+            for img in soup.find_all("img"):
+                src = img.get("src", "") or img.get("data-src", "")
+                if src and "cdn.ncbi.nlm.nih.gov/pmc" in src:
+                    # Skip logos and small images
+                    if "logo" in src.lower() or "icon" in src.lower():
+                        continue
+                    # Only keep figure images (usually .jpg or .png)
+                    if src.endswith((".jpg", ".jpeg", ".png", ".gif")):
+                        figure_urls.append(src)
+
+            if not figure_urls:
+                logger.debug(f"No figures found in PMC article {pmcid}")
+                return 0
+
+            # Download each figure
+            downloaded = 0
+            for i, url in enumerate(figure_urls, 1):
+                try:
+                    # Determine file extension
+                    ext = ".jpg"
+                    for e in [".png", ".gif", ".jpeg"]:
+                        if e in url.lower():
+                            ext = e
+                            break
+
+                    filename = f"fig_pmc_{i}{ext}"
+                    filepath = figures_dir / filename
+
+                    # Download the image
+                    img_response = self.session.get(url, timeout=30)
+                    img_response.raise_for_status()
+
+                    # Validate it's actually an image (not HTML error page)
+                    content = img_response.content
+                    if content[:4] in (
+                        b"\x89PNG",
+                        b"\xff\xd8\xff\xe0",
+                        b"\xff\xd8\xff\xe1",
+                        b"GIF8",
+                    ):
+                        filepath.write_bytes(content)
+                        downloaded += 1
+                        logger.debug(
+                            f"Downloaded figure: {filename} ({len(content)} bytes)"
+                        )
+                    elif content[:4] == b"\xff\xd8\xff\xdb":  # Another JPEG variant
+                        filepath.write_bytes(content)
+                        downloaded += 1
+                    else:
+                        logger.debug(f"Skipped non-image content from {url}")
+
+                except Exception as e:
+                    logger.warning(f"Failed to download figure from {url}: {e}")
+                    continue
+
+            if downloaded > 0:
+                print(f"  ✓ Extracted {downloaded} figures from PMC article")
+                logger.info(f"Extracted {downloaded} figures from PMC article {pmcid}")
+
+            return downloaded
+
+        except Exception as e:
+            logger.warning(f"Failed to extract figures from PMC article {pmcid}: {e}")
+            return 0
+
+    def _run_pedigree_extraction(self, pmid: str) -> Optional[str]:
+        """
+        Run pedigree extraction on figures extracted from this paper.
+
+        Args:
+            pmid: PubMed ID
+
+        Returns:
+            Markdown summary of pedigree findings, or None if no pedigrees found
+        """
+        if not PEDIGREE_EXTRACTOR_AVAILABLE:
+            return None
+
+        try:
+            settings = get_settings()
+            if not settings.extract_pedigrees:
+                return None
+        except Exception:
+            return None
+
+        # Look for figures directory
+        figures_dir = self.output_dir / f"{pmid}_figures"
+        if not figures_dir.exists():
+            logger.debug(f"No figures directory for PMID {pmid}")
+            return None
+
+        # Check if there are any images
+        image_files = list(figures_dir.glob("*.png")) + list(figures_dir.glob("*.jpg"))
+        if not image_files:
+            return None
+
+        try:
+            settings = get_settings()
+            extractor = PedigreeExtractor(
+                model=settings.vision_model,
+                detection_confidence_threshold=settings.pedigree_confidence_threshold,
+            )
+
+            print(f"  Analyzing {len(image_files)} figures for pedigrees...")
+            results = extractor.process_figures_directory(figures_dir)
+
+            if results:
+                # Save pedigree results as JSON
+                pedigree_json_path = self.output_dir / f"{pmid}_PEDIGREES.json"
+                with open(pedigree_json_path, "w") as f:
+                    json.dump(results, f, indent=2, default=str)
+
+                # Generate markdown summary
+                summary = extractor.summarize_for_extraction(results)
+
+                # Also save as standalone markdown
+                pedigree_md_path = self.output_dir / f"{pmid}_PEDIGREES.md"
+                pedigree_md_path.write_text(summary)
+
+                pedigree_count = len(results)
+                total_individuals = sum(len(r.get("individuals", [])) for r in results)
+                print(
+                    f"  ✓ Pedigree analysis: {pedigree_count} pedigree(s), "
+                    f"{total_individuals} individuals extracted"
+                )
+                return summary
+            else:
+                print(f"  - No pedigrees detected in figures")
+                return None
+
+        except Exception as e:
+            logger.warning(f"Pedigree extraction failed for PMID {pmid}: {e}")
+            print(f"  - Pedigree extraction failed: {e}")
+            return None
 
     def _run_data_scout(self, pmid: str, unified_content: str) -> bool:
         """
@@ -550,6 +736,8 @@ class PMCHarvester:
         """
         Download supplemental files and convert them to markdown.
 
+        Also extracts figures from PDF supplements when extract_figures is enabled.
+
         Args:
             pmid: PubMed ID
             pmcid: PubMed Central ID
@@ -561,11 +749,27 @@ class PMCHarvester:
         supplements_dir = self.output_dir / f"{pmid}_supplements"
         supplements_dir.mkdir(exist_ok=True)
 
+        # Check if figure extraction is enabled
+        extract_figures = False
+        try:
+            if get_settings is not None:
+                settings = get_settings()
+                extract_figures = settings.extract_figures
+        except Exception:
+            pass
+
+        # Create figures directory if extracting
+        figures_dir = None
+        if extract_figures:
+            figures_dir = self.output_dir / f"{pmid}_figures"
+            figures_dir.mkdir(exist_ok=True)
+
         supp_files = self.get_supplemental_files(pmcid, pmid, doi)
         print(f"  Found {len(supp_files)} supplemental files")
 
         supplement_markdown = ""
         downloaded_count = 0
+        total_figures_extracted = 0
 
         for idx, supp in enumerate(supp_files, 1):
             url = supp.get("url", "")
@@ -595,7 +799,20 @@ class PMCHarvester:
                 elif ext == ".doc":
                     supplement_markdown += self.converter.doc_to_markdown(file_path)
                 elif ext == ".pdf":
-                    supplement_markdown += self.converter.pdf_to_markdown(file_path)
+                    # Use image extraction if enabled
+                    if extract_figures and figures_dir:
+                        text, images = self.converter.pdf_to_markdown_with_images(
+                            file_path,
+                            output_dir=figures_dir,
+                        )
+                        supplement_markdown += text
+                        if images:
+                            total_figures_extracted += len(images)
+                            logger.info(
+                                f"Extracted {len(images)} figures from {filename}"
+                            )
+                    else:
+                        supplement_markdown += self.converter.pdf_to_markdown(file_path)
                 elif ext in [".txt", ".csv"]:
                     try:
                         text = file_path.read_text(encoding="utf-8", errors="ignore")
@@ -606,6 +823,11 @@ class PMCHarvester:
                     supplement_markdown += f"[File available at: {file_path}]\n\n"
 
             time.sleep(0.5)
+
+        if total_figures_extracted > 0:
+            print(
+                f"  ✓ Extracted {total_figures_extracted} figures from PDF supplements"
+            )
 
         return supplement_markdown, downloaded_count
 
@@ -652,6 +874,9 @@ class PMCHarvester:
 
         print(f"  ✓ Full-text XML retrieved from PMC")
 
+        # Extract figures from the PMC article page
+        self._extract_pmc_figures(pmcid, pmid)
+
         # Convert main text to markdown
         main_markdown = self.converter.xml_to_markdown(xml_content)
 
@@ -679,6 +904,11 @@ class PMCHarvester:
 
         # Create unified markdown file
         unified_content = main_markdown + supplement_markdown
+
+        # Run pedigree extraction on figures (if any were extracted)
+        pedigree_summary = self._run_pedigree_extraction(pmid)
+        if pedigree_summary:
+            unified_content += pedigree_summary
 
         output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
         with open(output_file, "w", encoding="utf-8") as f:
@@ -1046,10 +1276,26 @@ class PMCHarvester:
         supplements_dir = self.output_dir / f"{pmid}_supplements"
         supplements_dir.mkdir(exist_ok=True)
 
+        # Check if figure extraction is enabled
+        extract_figures = False
+        try:
+            if get_settings is not None:
+                settings = get_settings()
+                extract_figures = settings.extract_figures
+        except Exception:
+            pass
+
+        # Create figures directory if extracting
+        figures_dir = None
+        if extract_figures:
+            figures_dir = self.output_dir / f"{pmid}_figures"
+            figures_dir.mkdir(exist_ok=True)
+
         print(f"  Found {len(supp_files)} supplemental files")
 
         supplement_markdown = ""
         downloaded_count = 0
+        total_figures_extracted = 0
 
         # Download and convert each supplement
         for idx, supp in enumerate(supp_files, 1):
@@ -1077,7 +1323,17 @@ class PMCHarvester:
                 elif ext == ".doc":
                     supplement_markdown += self.converter.doc_to_markdown(file_path)
                 elif ext == ".pdf":
-                    supplement_markdown += self.converter.pdf_to_markdown(file_path)
+                    # Use image extraction if enabled
+                    if extract_figures and figures_dir:
+                        text, images = self.converter.pdf_to_markdown_with_images(
+                            file_path,
+                            output_dir=figures_dir,
+                        )
+                        supplement_markdown += text
+                        if images:
+                            total_figures_extracted += len(images)
+                    else:
+                        supplement_markdown += self.converter.pdf_to_markdown(file_path)
                 elif ext in [".txt", ".csv"]:
                     try:
                         text = file_path.read_text(encoding="utf-8", errors="ignore")
@@ -1089,8 +1345,18 @@ class PMCHarvester:
 
             time.sleep(0.5)
 
+        if total_figures_extracted > 0:
+            print(
+                f"  ✓ Extracted {total_figures_extracted} figures from PDF supplements"
+            )
+
         # Create unified markdown file
         unified_content = main_markdown + supplement_markdown
+
+        # Run pedigree extraction on figures (if any were extracted)
+        pedigree_summary = self._run_pedigree_extraction(pmid)
+        if pedigree_summary:
+            unified_content += pedigree_summary
 
         output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
         with open(output_file, "w", encoding="utf-8") as f:
