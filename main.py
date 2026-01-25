@@ -15,7 +15,7 @@ Usage:
     python main.py --cli GENE   # CLI mode for scripting/automation
 
 For CLI-only usage (scripting, automation):
-    python automated_workflow.py GENE --email EMAIL --output OUTPUT_DIR
+    python -m cli.automated_workflow GENE --email EMAIL --output OUTPUT_DIR
 """
 
 import argparse
@@ -206,7 +206,7 @@ def run_cli_mode(args):
         sys.exit(1)
 
     # Import and run the automated workflow
-    from automated_workflow import automated_variant_extraction_workflow
+    from cli.automated_workflow import automated_variant_extraction_workflow
 
     print(f"\n{'='*60}")
     print(f"Running CLI mode for gene: {gene}")

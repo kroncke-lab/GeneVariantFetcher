@@ -180,7 +180,7 @@ class FileRenamer:
         results = {"matched": [], "renamed": [], "unmatched": []}
 
         # Create metadata lookup by PMID
-        metadata_by_pmid: Dict[_write_log, Dict] = {}
+        metadata_by_pmid: Dict[str, Dict] = {}
         for record in self.metadata:
             pmid = record.get("pmid")
             if pmid:

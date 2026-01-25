@@ -42,7 +42,7 @@ The venv contains all required dependencies including `markitdown`, `PyMuPDF`, `
 |-------|------|----------|
 | `python main.py` | GUI (default) | Web interface, checkpointing, resume |
 | `python main.py --cli GENE` | CLI | Full pipeline, no checkpointing |
-| `python automated_workflow.py GENE --email EMAIL --output OUTPUT_DIR` | CLI (direct) | Full CLI with advanced options |
+| `python -m cli.automated_workflow GENE --email EMAIL --output OUTPUT_DIR` | CLI (direct) | Full CLI with advanced options |
 
 ## Pipeline Steps
 
@@ -72,13 +72,23 @@ The GUI/CLI run identical logic. GUI adds checkpointing for resume after interru
 
 ```
 main.py                        # Primary entry point (GUI/CLI)
-automated_workflow.py          # CLI workflow implementation
+cli/                           # Standalone CLI tools
+  automated_workflow.py        # Full pipeline CLI
+  fetch_manager.py             # Semi-manual download helper
+  browser_fetch.py             # Browser automation for paywalled papers
+  clinical_data_triage.py      # Paper triage CLI
+  collect_literature.py        # Literature collection CLI
+  rename_downloads.py          # File renaming utility
 config/settings.py             # Pydantic configuration
 gene_literature/               # Paper discovery (PubMind, PubMed, Europe PMC)
 harvesting/                    # Download, abstracts, SQLite migration
 pipeline/                      # Filters, extraction, aggregation, data scout
 gui/                           # FastAPI web interface + checkpointing
+  models.py                    # Pydantic request/response models
+  server.py                    # FastAPI routes and WebSocket
+  worker.py                    # Pipeline execution with checkpointing
 utils/                         # Shared utilities
+scripts/                       # Maintenance and repair scripts
 ```
 
 ## Output
@@ -125,13 +135,15 @@ WILEY_API_KEY=...                    # Optional (publisher access)
 
 ## Standalone Tools
 
-These files are standalone utilities, not part of the automated pipeline:
+These CLI tools in `cli/` are standalone utilities, not part of the automated pipeline:
 
 | File | Purpose | Usage |
 |------|---------|-------|
-| `fetch_manager.py` | Semi-manual download helper for paywalled papers | `python fetch_manager.py paywalled_missing.csv --convert --run-scout --gene GENE` |
-| `browser_fetch.py` | Browser-automated download with Cloudflare/CAPTCHA handling | `python browser_fetch.py paywalled_missing.csv --interactive` or `--wait-for-captcha --retry-failures` |
-| `gene_literature/collect_literature.py` | Standalone literature collection CLI | Direct invocation for one-off literature searches |
+| `cli/fetch_manager.py` | Semi-manual download helper for paywalled papers | `python -m cli.fetch_manager paywalled_missing.csv --convert --run-scout --gene GENE` |
+| `cli/browser_fetch.py` | Browser-automated download with Cloudflare/CAPTCHA handling | `python -m cli.browser_fetch paywalled_missing.csv --interactive` |
+| `cli/collect_literature.py` | Standalone literature collection CLI | `python -m cli.collect_literature GENE` |
+| `cli/clinical_data_triage.py` | Triage papers for clinical data | `python -m cli.clinical_data_triage --title "..." --abstract "..."` |
+| `cli/rename_downloads.py` | Rename/organize downloaded files | `python -m cli.rename_downloads /path/to/downloads` |
 
 ## Key Implementation Details
 
