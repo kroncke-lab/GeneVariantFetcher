@@ -116,6 +116,22 @@ class PipelineWorker:
         """
         self._stop_requested = False
 
+        # Log job configuration for debugging
+        self._log(checkpoint, f"=== PIPELINE START ===")
+        self._log(checkpoint, f"Job ID: {checkpoint.job_id}")
+        self._log(checkpoint, f"Gene: {checkpoint.gene_symbol}")
+        self._log(checkpoint, f"is_folder_job: {checkpoint.is_folder_job}")
+        self._log(checkpoint, f"is_resume_job: {checkpoint.is_resume_job}")
+        self._log(checkpoint, f"resume_stage: {checkpoint.resume_stage}")
+        self._log(checkpoint, f"folder_path: {checkpoint.folder_path}")
+        self._log(checkpoint, f"run_scout_on_folder: {checkpoint.run_scout_on_folder}")
+        self._log(checkpoint, f"scout_enabled: {checkpoint.scout_enabled}")
+        self._log(
+            checkpoint, f"skip_already_extracted: {checkpoint.skip_already_extracted}"
+        )
+        self._log(checkpoint, f"resume parameter: {resume}")
+        self._log(checkpoint, f"current_step: {checkpoint.current_step.value}")
+
         # Determine starting step
         if resume and checkpoint.current_step != PipelineStep.PENDING:
             start_step = checkpoint.current_step
@@ -175,6 +191,13 @@ class PipelineWorker:
                     (PipelineStep.MIGRATING_DATABASE, self._step_migrate_database),
                 ]
 
+            # Log which steps will be executed
+            step_names = [s[0].value for s in steps]
+            self._log(checkpoint, f"=== STEPS TO EXECUTE: {step_names} ===")
+            self._log(
+                checkpoint, f"start_step: {start_step.value}, resume param: {resume}"
+            )
+
             started = not resume
             for step, step_func in steps:
                 # Skip until we reach the resume point
@@ -191,6 +214,7 @@ class PipelineWorker:
                     return checkpoint
 
                 # Run step
+                self._log(checkpoint, f">>> Entering step: {step.value}")
                 self.progress.on_step_start(step, PipelineStep.get_display_name(step))
                 checkpoint.update_step(step)
                 self._save_checkpoint(checkpoint)
@@ -204,7 +228,17 @@ class PipelineWorker:
                     self.progress.on_step_complete(
                         step, f"Completed {step.value}", stats or {}
                     )
+                    self._log(
+                        checkpoint,
+                        f">>> Step completed: {step.value} with stats={stats}",
+                    )
                 except Exception as e:
+                    import traceback
+
+                    error_tb = traceback.format_exc()
+                    self._log(checkpoint, f">>> Step FAILED: {step.value}")
+                    self._log(checkpoint, f">>> Error: {e}")
+                    self._log(checkpoint, f">>> Traceback: {error_tb}")
                     checkpoint.mark_failed(str(e), step)
                     self._save_checkpoint(checkpoint)
                     self.progress.on_error(step, str(e))
@@ -213,12 +247,22 @@ class PipelineWorker:
             # Mark completed
             checkpoint.mark_completed()
             self._save_checkpoint(checkpoint)
-            self._log(checkpoint, "Pipeline completed successfully!")
+            self._log(checkpoint, "=== PIPELINE COMPLETED SUCCESSFULLY ===")
+            self._log(
+                checkpoint,
+                f"Final stats: extracted_pmids={len(checkpoint.extracted_pmids)}",
+            )
 
             return checkpoint
 
         except Exception as e:
+            import traceback
+
+            error_traceback = traceback.format_exc()
             logger.exception(f"Pipeline failed: {e}")
+            self._log(checkpoint, f"=== PIPELINE FAILED ===")
+            self._log(checkpoint, f"Error: {e}")
+            self._log(checkpoint, f"Traceback: {error_traceback}")
             if checkpoint.current_step != PipelineStep.FAILED:
                 checkpoint.mark_failed(str(e))
                 self._save_checkpoint(checkpoint)
@@ -544,8 +588,13 @@ class PipelineWorker:
 
     def _step_scout_data(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
         """Step 2.5: Run Data Scout to create DATA_ZONES files."""
+        self._log(checkpoint, "=== ZONE FINDING START ===")
+
         if not checkpoint.scout_enabled:
-            self._log(checkpoint, "Data Scout disabled, skipping...")
+            self._log(
+                checkpoint, "Data Scout disabled (scout_enabled=False), skipping..."
+            )
+            self._log(checkpoint, "=== ZONE FINDING END (skipped) ===")
             return {"skipped": True}
 
         self._log(checkpoint, "Running Data Scout to identify high-value data zones...")
@@ -562,7 +611,11 @@ class PipelineWorker:
             fulltext_dir = checkpoint.output_path / "pmc_fulltext"
 
         if not fulltext_dir.exists():
-            self._log(checkpoint, "No fulltext directory found, skipping scout...")
+            self._log(
+                checkpoint,
+                f"No fulltext directory found at {fulltext_dir}, skipping scout...",
+            )
+            self._log(checkpoint, "=== ZONE FINDING END (no fulltext dir) ===")
             return {"skipped": True, "reason": "no_fulltext_dir"}
 
         # Find FULL_CONTEXT files that don't have corresponding DATA_ZONES
@@ -579,7 +632,11 @@ class PipelineWorker:
         ]
 
         if not files_to_scout:
-            self._log(checkpoint, "All papers already scouted, skipping...")
+            self._log(
+                checkpoint,
+                f"All {len(existing_zones)} papers already scouted, skipping...",
+            )
+            self._log(checkpoint, "=== ZONE FINDING END (already complete) ===")
             return {"skipped": True, "already_scouted": len(existing_zones)}
 
         self._log(checkpoint, f"Scouting {len(files_to_scout)} papers...")
@@ -626,6 +683,7 @@ class PipelineWorker:
                 self._log(checkpoint, f"Error scouting {md_file.name}: {e}")
 
         self._log(checkpoint, f"Scouted {scouted} papers ({errors} errors)")
+        self._log(checkpoint, "=== ZONE FINDING END (success) ===")
 
         return {
             "scouted": scouted,
@@ -635,6 +693,7 @@ class PipelineWorker:
 
     def _step_extract_variants(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
         """Step 3: Extract variant data using LLM."""
+        self._log(checkpoint, "=== VARIANT EXTRACTION START ===")
         self._log(checkpoint, "Extracting variant data using AI...")
 
         from utils.models import Paper
@@ -648,10 +707,16 @@ class PipelineWorker:
             if not harvest_dir.exists():
                 harvest_dir = base_path
             extraction_dir = base_path / "extractions"
+            self._log(checkpoint, f"Using folder job paths:")
         else:
             base_path = checkpoint.output_path
             harvest_dir = base_path / "pmc_fulltext"
             extraction_dir = base_path / "extractions"
+            self._log(checkpoint, f"Using standard paths:")
+
+        self._log(checkpoint, f"  base_path: {base_path}")
+        self._log(checkpoint, f"  harvest_dir: {harvest_dir}")
+        self._log(checkpoint, f"  extraction_dir: {extraction_dir}")
 
         extraction_dir.mkdir(exist_ok=True)
 
@@ -665,17 +730,28 @@ class PipelineWorker:
             for f in harvest_dir.glob("*_FULL_CONTEXT.md")
         }
 
+        self._log(
+            checkpoint,
+            f"Found {len(data_zones)} DATA_ZONES files, {len(full_context)} FULL_CONTEXT files",
+        )
+
         all_pmids = set(data_zones.keys()) | set(full_context.keys())
+        self._log(checkpoint, f"Total unique PMIDs to consider: {len(all_pmids)}")
 
         # Skip already extracted PMIDs if configured (for folder jobs)
         if checkpoint.skip_already_extracted and checkpoint.extracted_pmids:
             already_extracted = set(checkpoint.extracted_pmids)
             skipped_count = len(all_pmids & already_extracted)
             all_pmids = all_pmids - already_extracted
-            if skipped_count > 0:
-                self._log(
-                    checkpoint, f"Skipping {skipped_count} already-extracted papers"
-                )
+            self._log(
+                checkpoint,
+                f"skip_already_extracted=True: {skipped_count} in extracted_pmids list, {len(all_pmids)} remaining",
+            )
+        else:
+            self._log(
+                checkpoint,
+                f"skip_already_extracted={checkpoint.skip_already_extracted}, extracted_pmids count={len(checkpoint.extracted_pmids)}",
+            )
 
         markdown_files = []
         for pmid in all_pmids:
@@ -772,6 +848,9 @@ class PipelineWorker:
             checkpoint,
             f"Extracted {total_variants} variants from {len(extractions)} papers",
         )
+        self._log(checkpoint, f"Extraction failures: {len(extraction_failures)}")
+        self._log(checkpoint, f"Failures file: {failures_file}")
+        self._log(checkpoint, "=== VARIANT EXTRACTION END ===")
 
         return {
             "papers_extracted": len(extractions),
@@ -781,6 +860,7 @@ class PipelineWorker:
 
     def _step_aggregate_data(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
         """Step 4: Aggregate penetrance data."""
+        self._log(checkpoint, "=== AGGREGATION START ===")
         self._log(checkpoint, "Aggregating penetrance data...")
 
         from pipeline.aggregation import aggregate_penetrance
@@ -794,6 +874,10 @@ class PipelineWorker:
         extraction_dir = base_path / "extractions"
         summary_file = base_path / f"{checkpoint.gene_symbol}_penetrance_summary.json"
 
+        self._log(checkpoint, f"  base_path: {base_path}")
+        self._log(checkpoint, f"  extraction_dir: {extraction_dir}")
+        self._log(checkpoint, f"  summary_file: {summary_file}")
+
         penetrance_summary = aggregate_penetrance(
             extraction_dir=extraction_dir,
             gene_symbol=checkpoint.gene_symbol,
@@ -802,11 +886,13 @@ class PipelineWorker:
 
         total_variants = penetrance_summary.get("total_variants", 0)
         self._log(checkpoint, f"Aggregated data for {total_variants} variants")
+        self._log(checkpoint, "=== AGGREGATION END ===")
 
         return {"variants_aggregated": total_variants}
 
     def _step_migrate_database(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
         """Step 5: Migrate to SQLite database."""
+        self._log(checkpoint, "=== DATABASE MIGRATION START ===")
         self._log(checkpoint, "Creating SQLite database...")
 
         from harvesting.migrate_to_sqlite import (
@@ -823,6 +909,21 @@ class PipelineWorker:
         extraction_dir = base_path / "extractions"
         db_path = base_path / f"{checkpoint.gene_symbol}.db"
 
+        self._log(checkpoint, f"  base_path: {base_path}")
+        self._log(checkpoint, f"  extraction_dir: {extraction_dir}")
+        self._log(checkpoint, f"  DB PATH: {db_path}")
+
+        # Check if extraction directory exists and has files
+        if not extraction_dir.exists():
+            self._log(
+                checkpoint, f"WARNING: extraction_dir does not exist: {extraction_dir}"
+            )
+        else:
+            extraction_files = list(extraction_dir.glob("*.json"))
+            self._log(
+                checkpoint, f"Found {len(extraction_files)} extraction JSON files"
+            )
+
         conn = create_database_schema(str(db_path))
         migration_stats = migrate_extraction_directory(conn, extraction_dir)
         conn.close()
@@ -831,6 +932,9 @@ class PipelineWorker:
             checkpoint,
             f"Migrated {migration_stats['successful']}/{migration_stats['total_files']} extractions to database",
         )
+        self._log(checkpoint, f"Migration stats: {migration_stats}")
+        self._log(checkpoint, f"Database written to: {db_path}")
+        self._log(checkpoint, "=== DATABASE MIGRATION END ===")
 
         # Write final summary
         self._write_workflow_summary(checkpoint, migration_stats)

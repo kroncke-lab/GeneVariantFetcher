@@ -42,9 +42,140 @@ from datetime import datetime
 
 # Configure logging using centralized utility
 from utils.logging_utils import setup_logging, get_logger
+from utils.pmid_utils import extract_pmid_from_filename, extract_gene_from_filename
 
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
+
+
+def validate_extraction_data(
+    data: Dict[str, Any], filename: str = ""
+) -> Tuple[bool, List[str], List[str]]:
+    """
+    Validate extraction data before migration.
+
+    Args:
+        data: Extraction JSON data
+        filename: Source filename (for error messages)
+
+    Returns:
+        Tuple of (is_valid, errors, warnings)
+    """
+    errors = []
+    warnings = []
+
+    # Check paper_metadata
+    paper_meta = data.get("paper_metadata", {})
+    if not paper_meta:
+        errors.append("Missing paper_metadata section")
+    else:
+        pmid = paper_meta.get("pmid")
+        if not pmid or pmid == "UNKNOWN":
+            errors.append(f"Missing or invalid paper_metadata.pmid: {pmid}")
+        if not paper_meta.get("title"):
+            warnings.append("Missing paper_metadata.title")
+
+    # Check variants
+    variants = data.get("variants", [])
+    if not variants:
+        warnings.append("No variants in extraction")
+    else:
+        for i, variant in enumerate(variants):
+            gene = variant.get("gene_symbol")
+            if not gene:
+                errors.append(f"Variant {i}: missing required field 'gene_symbol'")
+
+            # Check for at least one notation
+            has_notation = any(
+                [
+                    variant.get("cdna_notation"),
+                    variant.get("protein_notation"),
+                    variant.get("genomic_position"),
+                ]
+            )
+            if not has_notation:
+                warnings.append(f"Variant {i}: no notation (cdna/protein/genomic)")
+
+            # Check individuals for penetrance data
+            individuals = variant.get("individuals", [])
+            for j, ind in enumerate(individuals):
+                if not ind.get("affected_status"):
+                    warnings.append(
+                        f"Variant {i}, Individual {j}: missing affected_status"
+                    )
+
+    is_valid = len(errors) == 0
+    return is_valid, errors, warnings
+
+
+def repair_extraction_data(
+    data: Dict[str, Any], filename: str, gene_symbol_override: Optional[str] = None
+) -> Tuple[Dict[str, Any], List[str]]:
+    """
+    Attempt to repair common issues in extraction data.
+
+    Args:
+        data: Extraction JSON data
+        filename: Source filename (for PMID/gene extraction)
+        gene_symbol_override: Force this gene symbol if provided
+
+    Returns:
+        Tuple of (repaired_data, list of repairs made)
+    """
+    repairs = []
+    data = json.loads(json.dumps(data))  # Deep copy
+
+    # Extract info from filename
+    filename_pmid = extract_pmid_from_filename(filename)
+    filename_gene = extract_gene_from_filename(filename)
+    default_gene = gene_symbol_override or filename_gene
+
+    # Ensure paper_metadata exists
+    if "paper_metadata" not in data:
+        data["paper_metadata"] = {}
+        repairs.append("Created missing paper_metadata section")
+
+    paper_meta = data["paper_metadata"]
+
+    # Fix missing PMID
+    if not paper_meta.get("pmid") or paper_meta.get("pmid") == "UNKNOWN":
+        if filename_pmid:
+            old_val = paper_meta.get("pmid", "MISSING")
+            paper_meta["pmid"] = filename_pmid
+            repairs.append(f"Set pmid from filename: {old_val} -> {filename_pmid}")
+
+    # Fix missing title
+    if not paper_meta.get("title"):
+        paper_meta["title"] = f"Paper {paper_meta.get('pmid', 'Unknown')}"
+        repairs.append("Set default title")
+
+    # Store gene in paper_metadata for fallback
+    if default_gene and not paper_meta.get("gene_symbol"):
+        paper_meta["gene_symbol"] = default_gene
+        repairs.append(f"Set paper_metadata.gene_symbol: {default_gene}")
+
+    # Repair variants
+    variants = data.get("variants", [])
+    for i, variant in enumerate(variants):
+        if not variant.get("gene_symbol"):
+            gene = paper_meta.get("gene_symbol") or default_gene or "UNKNOWN_GENE"
+            variant["gene_symbol"] = gene
+            repairs.append(f"Variant {i}: set gene_symbol to '{gene}'")
+
+        # Ensure individuals have affected_status
+        for j, ind in enumerate(variant.get("individuals", [])):
+            if not ind.get("affected_status"):
+                ind["affected_status"] = "Ambiguous"
+                repairs.append(f"Variant {i}, Individual {j}: set affected_status")
+
+    # Mark as repaired
+    if repairs:
+        if "extraction_metadata" not in data:
+            data["extraction_metadata"] = {}
+        data["extraction_metadata"]["was_repaired"] = True
+        data["extraction_metadata"]["repair_count"] = len(repairs)
+
+    return data, repairs
 
 
 # ============================================================================
@@ -536,7 +667,7 @@ def insert_variant_data(
 
 
 def migrate_extraction_file(
-    cursor: sqlite3.Cursor, json_file: Path
+    cursor: sqlite3.Cursor, json_file: Path, auto_repair: bool = True
 ) -> Tuple[bool, str]:
     """
     Migrate a single extraction JSON file to the database.
@@ -544,6 +675,7 @@ def migrate_extraction_file(
     Args:
         cursor: Database cursor
         json_file: Path to JSON file
+        auto_repair: If True, attempt to repair common issues before migration
 
     Returns:
         Tuple of (success, message)
@@ -551,6 +683,33 @@ def migrate_extraction_file(
     try:
         with open(json_file, "r", encoding="utf-8") as f:
             extraction_data = json.load(f)
+
+        # Validate before migration
+        is_valid, errors, warnings = validate_extraction_data(
+            extraction_data, json_file.name
+        )
+
+        # Log warnings
+        for w in warnings:
+            logger.warning(f"{json_file.name}: {w}")
+
+        # Attempt repair if invalid and auto_repair is enabled
+        if not is_valid and auto_repair:
+            logger.info(f"Attempting auto-repair for {json_file.name}: {errors}")
+            extraction_data, repairs = repair_extraction_data(
+                extraction_data, json_file.name
+            )
+            if repairs:
+                logger.info(f"Applied {len(repairs)} repairs: {repairs}")
+
+            # Re-validate after repair
+            is_valid, errors, _ = validate_extraction_data(
+                extraction_data, json_file.name
+            )
+
+        # If still invalid after repair, fail
+        if not is_valid:
+            return False, f"Validation failed for {json_file.name}: {errors}"
 
         # Insert paper metadata
         insert_paper_metadata(cursor, extraction_data)

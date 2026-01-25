@@ -18,7 +18,7 @@ from pipeline.prompts import (
     EXTRACTION_PROMPT,
     HIGH_VARIANT_THRESHOLD,
 )
-from utils.llm_utils import BaseLLMCaller
+from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 from utils.models import ExtractionResult, Paper
 
 logger = logging.getLogger(__name__)
@@ -140,27 +140,8 @@ class ExpertExtractor(BaseLLMCaller):
         )
 
     def _clamp_max_tokens(self, model: str, requested: int) -> int:
-        """
-        Clamp max_tokens to model-safe limits to avoid provider errors.
-
-        OpenAI 4o/4o-mini currently cap at 16384 completion tokens; use 15000
-        as a safety margin.
-        """
-        limit = None
-        m = model.lower() if model else ""
-        if "gpt-4o" in m:
-            limit = 15000
-        elif "gpt-3.5" in m:
-            limit = 4000
-
-        if limit is None:
-            return requested
-
-        if requested > limit:
-            logger.warning(
-                f"Requested max_tokens={requested} exceeds safe limit {limit} for model {model}; clamping."
-            )
-        return min(requested, limit)
+        """Clamp max_tokens to model-safe limits to avoid provider errors."""
+        return clamp_max_tokens(model, requested)
 
     # Minimum size for DATA_ZONES.md to be considered useful
     # If smaller than this, fall back to full text

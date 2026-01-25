@@ -23,6 +23,89 @@ litellm.request_timeout = 600  # 10 minute timeout for large extractions
 logger = logging.getLogger(__name__)
 
 
+# =============================================================================
+# MODEL TOKEN LIMITS REGISTRY
+# =============================================================================
+# Completion (output) token limits with safety margins for various models.
+# Format: model_pattern -> (actual_limit, safe_limit)
+# The safe_limit accounts for overhead and prevents edge-case failures.
+
+MODEL_TOKEN_LIMITS = {
+    # OpenAI models - gpt-4o has 16384 completion limit
+    "gpt-4o-mini": (16384, 15000),
+    "gpt-4o": (16384, 15000),
+    "gpt-4-turbo": (4096, 4000),
+    "gpt-4-": (8192, 8000),  # Standard GPT-4 variants
+    "gpt-3.5-turbo": (4096, 4000),
+    "gpt-3.5": (4096, 4000),
+    # Anthropic Claude models
+    "claude-3-opus": (4096, 4000),
+    "claude-3-sonnet": (4096, 4000),
+    "claude-3-haiku": (4096, 4000),
+    "claude-3.5-sonnet": (8192, 8000),
+    "claude-3.5": (8192, 8000),
+    "claude-2": (4096, 4000),
+    # Google models
+    "gemini-1.5-pro": (8192, 8000),
+    "gemini-1.5-flash": (8192, 8000),
+    "gemini-pro": (8192, 8000),
+    # Mistral models
+    "mistral-large": (8192, 8000),
+    "mistral-medium": (8192, 8000),
+    "mistral-small": (8192, 8000),
+}
+
+# Default for unknown models (conservative)
+DEFAULT_TOKEN_LIMIT = (4096, 4000)
+
+
+def get_model_token_limit(model: str, use_safe_limit: bool = True) -> int:
+    """
+    Get the token limit for a model.
+
+    Args:
+        model: Model name/identifier
+        use_safe_limit: If True, return the safe limit with margin;
+                       if False, return the actual API limit
+
+    Returns:
+        Token limit for the model
+    """
+    m = model.lower() if model else ""
+
+    # Check patterns from most specific to least specific
+    for pattern in sorted(MODEL_TOKEN_LIMITS.keys(), key=len, reverse=True):
+        if pattern in m:
+            actual, safe = MODEL_TOKEN_LIMITS[pattern]
+            return safe if use_safe_limit else actual
+
+    # Return default
+    actual, safe = DEFAULT_TOKEN_LIMIT
+    return safe if use_safe_limit else actual
+
+
+def clamp_max_tokens(model: str, requested: int, warn: bool = True) -> int:
+    """
+    Clamp max_tokens to the safe limit for a model.
+
+    Args:
+        model: Model name/identifier
+        requested: Requested max_tokens value
+        warn: If True, log when clamping occurs
+
+    Returns:
+        Clamped max_tokens value
+    """
+    limit = get_model_token_limit(model, use_safe_limit=True)
+
+    if requested > limit:
+        if warn:
+            logger.info(f"Clamping max_tokens for '{model}': {requested} -> {limit}")
+        return limit
+
+    return requested
+
+
 # Rate limiter: Simple token bucket to avoid hitting OpenAI rate limits
 class RateLimiter:
     """Thread-safe rate limiter using token bucket algorithm."""
