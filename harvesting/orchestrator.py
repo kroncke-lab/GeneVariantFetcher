@@ -131,8 +131,6 @@ class PMCHarvester:
         """
         Log a paper to the paywalled/missing CSV with placeholder columns.
 
-        The carrier extraction columns will be populated later by enrich_paywalled_log().
-
         Args:
             pmid: PubMed ID
             reason: Why the paper couldn't be downloaded
@@ -1410,10 +1408,6 @@ class PMCHarvester:
         print(f"  Success log: {self.success_log}")
         print(f"  Paywalled log: {self.paywalled_log}")
         print(f"{'='*60}")
-
-        # Enrich paywalled log with carrier counts from abstracts
-        if failed > 0:
-            self.enrich_paywalled_log()
 
     # Backward-compatible methods for tests and legacy code
     def pmid_to_pmcid(self, pmid: str):
