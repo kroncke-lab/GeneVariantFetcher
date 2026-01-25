@@ -141,7 +141,7 @@ class GeneticDataScout:
     ]
 
     def __init__(
-        self, gene_symbol: str, min_relevance_score: float = 0.3, max_zones: int = 30
+        self, gene_symbol: str, min_relevance_score: float = 0.1, max_zones: int = 30
     ):
         """
         Initialize the Genetic Data Scout.
@@ -202,7 +202,12 @@ class GeneticDataScout:
         zones = []
         for candidate in candidates:
             zone = self._score_and_create_zone(candidate, text, len(zones))
-            if zone.relevance_score >= self.min_relevance_score:
+            # Always keep TABLE zones (they often contain variant data)
+            # For TEXT zones, apply relevance threshold
+            if (
+                candidate.zone_type == "TABLE"
+                or zone.relevance_score >= self.min_relevance_score
+            ):
                 zones.append(zone)
 
         # Sort by relevance score (descending) and limit
@@ -798,7 +803,7 @@ def scout_data_zones(
     text: str,
     gene_symbol: str,
     pmid: Optional[str] = None,
-    min_relevance_score: float = 0.3,
+    min_relevance_score: float = 0.1,
     max_zones: int = 30,
 ) -> DataZoneReport:
     """

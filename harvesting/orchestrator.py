@@ -155,6 +155,107 @@ class PMCHarvester:
                 ]
             )
 
+    # Patterns that indicate junk/non-article content
+    JUNK_CONTENT_PATTERNS = [
+        "we've detected you are running an older version",
+        "browsehappy.com",
+        "phosphositeplus",
+        "uniprot database entry",
+        "sign in to access",
+        "subscribe to read",
+        "please enable javascript",
+        "your browser does not support",
+        "access denied",
+        "403 forbidden",
+        "404 not found",
+        "page not found",
+        "cookies must be enabled",
+        "this site requires javascript",
+    ]
+
+    # Domains that return non-article content
+    JUNK_CONTENT_DOMAINS = {
+        "assays.cancer.gov",
+        "antibodies.cancer.gov",
+        "biocyc.org",
+        "glygen.org",
+        "malacards.org",
+        "lens.org",
+        "clinicaltrials.gov",
+        "medlineplus.gov",
+    }
+
+    def _validate_content_quality(
+        self, content: str, source_url: str = None
+    ) -> Tuple[bool, str]:
+        """
+        Validate that extracted content is actual paper text, not junk.
+
+        Args:
+            content: The extracted markdown/text content
+            source_url: Optional URL the content came from
+
+        Returns:
+            Tuple of (is_valid, reason)
+        """
+        if not content:
+            return False, "Empty content"
+
+        content_lower = content.lower()
+
+        # Check for junk patterns
+        for pattern in self.JUNK_CONTENT_PATTERNS:
+            if pattern in content_lower:
+                return False, f"Junk content detected: '{pattern}'"
+
+        # Check source URL domain
+        if source_url:
+            try:
+                domain = urlparse(source_url).netloc.lower()
+                for junk_domain in self.JUNK_CONTENT_DOMAINS:
+                    if junk_domain in domain:
+                        return False, f"Content from non-article domain: {junk_domain}"
+            except Exception:
+                pass
+
+        # Check minimum length
+        if len(content) < 1500:
+            return False, f"Content too short ({len(content)} chars)"
+
+        # Check for paper-like structure (at least 2 of these indicators)
+        paper_indicators = [
+            "abstract",
+            "introduction",
+            "methods",
+            "results",
+            "discussion",
+            "conclusion",
+            "references",
+            "materials and methods",
+            "patients and methods",
+            "study population",
+        ]
+        indicator_count = sum(1 for ind in paper_indicators if ind in content_lower)
+        if indicator_count < 2:
+            # Also check for variant-related content as an alternative indicator
+            variant_patterns = [
+                r"[A-Z]\d{2,4}[A-Z]",  # A561V
+                r"p\.[A-Z][a-z]{2}\d+",  # p.Ala561
+                r"c\.\d+[ACGT]>[ACGT]",  # c.1234A>G
+                r"mutation",
+                r"variant",
+            ]
+            variant_matches = sum(
+                1 for pat in variant_patterns if re.search(pat, content, re.IGNORECASE)
+            )
+            if variant_matches < 2:
+                return (
+                    False,
+                    f"Missing paper structure (only {indicator_count} indicators) and no variant content",
+                )
+
+        return True, "Valid content"
+
     def _extract_pmc_figures(self, pmcid: str, pmid: str) -> int:
         """
         Extract figure images from a PMC article page.
@@ -1053,21 +1154,20 @@ class PMCHarvester:
                 self.doi_resolver.resolve_and_fetch_fulltext(doi, pmid, self.scraper)
             )
 
-            # Validate that we got actual article content, not just an abstract
-            MIN_ARTICLE_LENGTH = (
-                1000  # Minimum characters for a valid full-text article
-            )
-            if main_markdown and len(main_markdown) < MIN_ARTICLE_LENGTH:
-                print(
-                    f"  ⚠ DOI content too short ({len(main_markdown)} chars) - likely abstract only"
+            # Validate content quality (not just length)
+            if main_markdown:
+                is_valid, reason = self._validate_content_quality(
+                    main_markdown, f"https://doi.org/{doi}"
                 )
-                print(f"  ❌ Skipping - does not contain valid full article text")
-                self._log_paywalled(
-                    pmid,
-                    "DOI content too short (abstract only)",
-                    f"https://doi.org/{doi}",
-                )
-                return False, "DOI content too short (abstract only)"
+                if not is_valid:
+                    print(f"  ⚠ DOI content validation failed: {reason}")
+                    print(f"  ❌ Skipping - does not contain valid full article text")
+                    self._log_paywalled(
+                        pmid,
+                        f"DOI content validation failed: {reason}",
+                        f"https://doi.org/{doi}",
+                    )
+                    main_markdown = None  # Clear invalid content
 
         # If no DOI or DOI-based methods failed, try free URL
         if not main_markdown and free_url:
@@ -1179,27 +1279,26 @@ class PMCHarvester:
                         html_content, final_url
                     )
 
-                    # Validate that we actually got article content (not a database page or error)
-                    # Article text should be reasonably long and contain typical article indicators
-                    MIN_ARTICLE_LENGTH = 1000  # Minimum characters for a valid article
-                    if main_markdown and len(main_markdown) >= MIN_ARTICLE_LENGTH:
-                        print(
-                            f"  ✓ Extracted full text ({len(main_markdown)} characters)"
+                    # Validate content quality (not just length, but actual paper content)
+                    if main_markdown:
+                        is_valid, reason = self._validate_content_quality(
+                            main_markdown, final_url
                         )
-                    elif main_markdown:
-                        # Got some content but it's too short - likely not an article
-                        print(
-                            f"  ⚠ Extracted content too short ({len(main_markdown)} chars) - likely not full article text"
-                        )
-                        print(
-                            f"  ❌ Skipping this URL as it doesn't contain valid article content"
-                        )
-                        self._log_paywalled(
-                            pmid,
-                            "Free URL content too short (not an article)",
-                            free_url,
-                        )
-                        return False, "Free URL content invalid"
+                        if is_valid:
+                            print(
+                                f"  ✓ Extracted full text ({len(main_markdown)} characters)"
+                            )
+                        else:
+                            print(f"  ⚠ Content validation failed: {reason}")
+                            print(
+                                f"  ❌ Skipping this URL as it doesn't contain valid article content"
+                            )
+                            self._log_paywalled(
+                                pmid,
+                                f"Content validation failed: {reason}",
+                                free_url,
+                            )
+                            main_markdown = None  # Clear invalid content
                     else:
                         print(f"  ❌ Could not extract full text from page")
 

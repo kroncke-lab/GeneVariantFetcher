@@ -367,6 +367,163 @@ class ExpertExtractor(BaseLLMCaller):
                 count += 1
         return count
 
+    def _extract_variants_from_tables(
+        self, full_text: str, gene_symbol: Optional[str]
+    ) -> List[dict]:
+        """
+        Extract variants directly from markdown tables using regex patterns.
+
+        This is a supplemental extraction pass that catches variants the LLM might miss,
+        especially in large tables with many rows.
+
+        Returns a list of minimal variant dicts.
+        """
+        if not gene_symbol:
+            return []
+
+        variants = []
+        seen_variants = set()
+
+        # Variant patterns to look for in table cells
+        protein_pattern = re.compile(
+            r"p\.([A-Z][a-z]{2}\d+[A-Z][a-z]{2}|[A-Z]\d+[A-Z*]|[A-Z][a-z]{2}\d+(?:fs|del|dup|ins))",
+            re.IGNORECASE,
+        )
+        cdna_pattern = re.compile(
+            r"c\.(\d+[+-]?\d*[ACGT]>[ACGT]|\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*|\d+[ACGT]>[ACGT])",
+            re.IGNORECASE,
+        )
+        short_protein_pattern = re.compile(r"\b([A-Z]\d{2,4}(?:[A-Z*]|fs|del|dup))\b")
+
+        # Find all markdown table rows
+        for line in full_text.splitlines():
+            line = line.strip()
+            if not line.startswith("|"):
+                continue
+            if set(line) <= {"|", "-", " ", ":"}:  # Skip separator rows
+                continue
+
+            # Extract variants from this row
+            # Look for protein notation
+            for match in protein_pattern.finditer(line):
+                notation = f"p.{match.group(1)}"
+                if notation not in seen_variants:
+                    seen_variants.add(notation)
+                    variants.append(
+                        {
+                            "gene_symbol": gene_symbol,
+                            "protein_notation": notation,
+                            "source_location": "Table (regex extraction)",
+                        }
+                    )
+
+            # Look for cDNA notation
+            for match in cdna_pattern.finditer(line):
+                notation = f"c.{match.group(1)}"
+                if notation not in seen_variants:
+                    seen_variants.add(notation)
+                    variants.append(
+                        {
+                            "gene_symbol": gene_symbol,
+                            "cdna_notation": notation,
+                            "source_location": "Table (regex extraction)",
+                        }
+                    )
+
+            # Look for short protein notation (A561V)
+            for match in short_protein_pattern.finditer(line):
+                notation = match.group(1)
+                # Skip if it looks like a figure/table reference (e.g., "S1", "T1")
+                if len(notation) < 4:
+                    continue
+                if notation not in seen_variants:
+                    seen_variants.add(notation)
+                    variants.append(
+                        {
+                            "gene_symbol": gene_symbol,
+                            "protein_notation": notation,
+                            "source_location": "Table (regex extraction)",
+                        }
+                    )
+
+        if variants:
+            logger.info(
+                f"Table regex extraction found {len(variants)} additional variants"
+            )
+        return variants
+
+    def _merge_table_variants(
+        self, extracted_data: dict, table_variants: List[dict]
+    ) -> dict:
+        """
+        Merge variants found via table regex extraction with LLM-extracted variants.
+
+        Avoids duplicates by checking normalized notation.
+        """
+        from utils.variant_utils import normalize_variant
+
+        existing_variants = extracted_data.get("variants", [])
+
+        # Build set of existing variant keys
+        existing_keys = set()
+        for v in existing_variants:
+            protein = normalize_variant(v.get("protein_notation", "") or "")
+            cdna = normalize_variant(v.get("cdna_notation", "") or "")
+            if protein:
+                existing_keys.add(protein)
+            if cdna:
+                existing_keys.add(cdna)
+
+        # Add new variants not already present
+        added_count = 0
+        for tv in table_variants:
+            protein = normalize_variant(tv.get("protein_notation", "") or "")
+            cdna = normalize_variant(tv.get("cdna_notation", "") or "")
+
+            # Check if already exists
+            if protein and protein in existing_keys:
+                continue
+            if cdna and cdna in existing_keys:
+                continue
+
+            # Add to existing variants (minimal record)
+            new_variant = {
+                "gene_symbol": tv.get("gene_symbol"),
+                "cdna_notation": tv.get("cdna_notation"),
+                "protein_notation": tv.get("protein_notation"),
+                "clinical_significance": "unknown",
+                "evidence_level": "low",
+                "source_location": tv.get("source_location", "Table"),
+                "additional_notes": "Added via table regex extraction",
+                "patients": {},
+                "penetrance_data": {},
+                "individual_records": [],
+                "functional_data": {"summary": "", "assays": []},
+                "key_quotes": [],
+            }
+            existing_variants.append(new_variant)
+            added_count += 1
+
+            # Update keys
+            if protein:
+                existing_keys.add(protein)
+            if cdna:
+                existing_keys.add(cdna)
+
+        if added_count > 0:
+            logger.info(
+                f"Merged {added_count} additional variants from table extraction"
+            )
+            # Update metadata
+            if "extraction_metadata" in extracted_data:
+                extracted_data["extraction_metadata"]["total_variants_found"] = len(
+                    existing_variants
+                )
+                extracted_data["extraction_metadata"]["table_regex_added"] = added_count
+
+        extracted_data["variants"] = existing_variants
+        return extracted_data
+
     def _parse_markdown_table_variants(
         self, full_text: str, gene_symbol: Optional[str]
     ) -> List[dict]:
@@ -878,6 +1035,15 @@ class ExpertExtractor(BaseLLMCaller):
                 extracted_data = self._normalize_stop_codon_notation(extracted_data)
                 extracted_data = self._populate_penetrance_from_patient_count(
                     extracted_data
+                )
+
+            # Supplement with table regex extraction to catch any missed variants
+            table_variants = self._extract_variants_from_tables(
+                full_text, paper.gene_symbol
+            )
+            if table_variants:
+                extracted_data = self._merge_table_variants(
+                    extracted_data, table_variants
                 )
 
             num_variants = len(extracted_data.get("variants", []))
