@@ -133,16 +133,6 @@ These files are standalone utilities, not part of the automated pipeline:
 | `browser_fetch.py` | Browser-automated download with Cloudflare/CAPTCHA handling | `python browser_fetch.py paywalled_missing.csv --interactive` or `--wait-for-captcha --retry-failures` |
 | `gene_literature/collect_literature.py` | Standalone literature collection CLI | Direct invocation for one-off literature searches |
 
-## Known Unused/Stale Files
-
-These files exist but are not used in the main pipeline:
-
-| File | Status | Notes |
-|------|--------|-------|
-| `pipeline/abstract_extraction.py` | **Unused** | Abstract-only extraction is now integrated into `ExpertExtractor.extract()` |
-| `pipeline/cli.py` | **Stub** | Only implements `version` command; `gvf` console script is non-functional |
-| `run_gui.py` | **Redundant** | Duplicates `main.py` GUI startup logic |
-
 ## Key Implementation Details
 
 - **Abstract-only fallback**: Papers that fail download are still extracted using their abstracts (handled in `ExpertExtractor`)
@@ -152,3 +142,4 @@ These files exist but are not used in the main pipeline:
 - **Folder jobs**: GUI supports processing existing folders (skip discovery/download, start at extraction)
 - **Two summary files**: Both `{GENE}_workflow_summary.json` (overall stats) and `{GENE}_penetrance_summary.json` (variant aggregations) are created
 - **Functional study detection**: Extraction prompts distinguish functional studies (massively parallel assays) from clinical studies to avoid misinterpreting assay replicates as patient carrier counts
+- **Pedigree extraction**: Vision-capable LLMs can extract carrier information from pedigree diagrams in paper figures (`pipeline/pedigree_extractor.py`)
