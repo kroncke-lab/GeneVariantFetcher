@@ -113,18 +113,23 @@ After running, you'll have:
 
 ## Querying Your Database
 
-Once you have the SQLite database, query it:
+Once you have the SQLite database, query it directly with SQLite:
 
 ```bash
-# Get overall statistics
-python query_variants_db.py /path/to/output/BRCA1/20231126_143022/BRCA1.db --stats
+# Open database in SQLite CLI
+sqlite3 /path/to/output/BRCA1/20231126_143022/BRCA1.db
 
-# Search for a specific variant
-python query_variants_db.py /path/to/output/BRCA1/20231126_143022/BRCA1.db --variant "c.1234G>A"
+# Get variant counts
+sqlite> SELECT COUNT(*) FROM variants;
 
-# Get penetrance for a variant
-python query_variants_db.py /path/to/output/BRCA1/20231126_143022/BRCA1.db --penetrance "p.Arg412Gln"
+# List all variants with penetrance data
+sqlite> SELECT protein_notation, gene_symbol FROM variants WHERE variant_id IN (SELECT variant_id FROM penetrance_data);
+
+# Get affected/unaffected counts for a variant
+sqlite> SELECT affected_status, COUNT(*) FROM individual_records WHERE variant_id = 1 GROUP BY affected_status;
 ```
+
+See [SQLITE_MIGRATION_GUIDE.md](SQLITE_MIGRATION_GUIDE.md) for more query examples.
 
 ---
 
@@ -195,19 +200,21 @@ Must provide via `--email` flag for PubMed API compliance.
 
 ## Advanced: Re-running Extraction Only
 
-If you already have full-text papers downloaded and just want to re-extract:
+If you already have full-text papers downloaded and just want to re-extract, use the GUI's "Folder Jobs" feature:
 
-```bash
-python rerun_extraction.py /path/to/output/BRCA1/20231126_143022/pmc_fulltext
-```
+1. Launch the GUI: `python main.py`
+2. Go to the **New Job** tab
+3. Select "Process existing folder" mode
+4. Point to your existing output directory
+5. Choose to start at the extraction step
 
-This skips steps 1-2 and only runs extraction + aggregation + SQLite migration.
+This skips discovery and download, running only extraction + aggregation + SQLite migration.
 
 ---
 
 ## Questions?
 
-- ✅ **Simple workflow**: Use `automated_workflow.py`
-- ✅ **Query database**: Use `query_variants_db.py`
-- ✅ **Re-extract**: Use `rerun_extraction.py`
-- ❌ **DON'T use**: `pipeline.py` (archived as `pipeline_tiered_old.py`)
+- **Simple workflow**: Use `automated_workflow.py` or `python main.py` (GUI)
+- **Query database**: Use SQLite directly or see [SQLITE_MIGRATION_GUIDE.md](SQLITE_MIGRATION_GUIDE.md)
+- **Re-extract**: Use GUI "Folder Jobs" feature
+- **Export to CSV**: Use `python scripts/extract_ttr_to_csv.py`

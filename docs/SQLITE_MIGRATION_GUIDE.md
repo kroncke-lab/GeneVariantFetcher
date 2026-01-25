@@ -4,11 +4,10 @@ This guide explains how to migrate your Gene Variant Fetcher data from file-base
 
 ## Overview
 
-The migration system consists of three main components:
+The migration system consists of two main components:
 
 1. **`migrate_to_sqlite.py`** - Main migration script that creates the database and imports data
-2. **`query_variants_db.py`** - Query helper for exploring and analyzing the database
-3. **SQLite Database (`variants.db`)** - Normalized relational database for efficient storage and querying
+2. **SQLite Database (`{GENE}.db`)** - Normalized relational database for efficient storage and querying
 
 ## Benefits of SQLite Migration
 
@@ -113,64 +112,34 @@ python migrate_to_sqlite.py \
 
 ## Querying the Database
 
-### Database Statistics
+Use SQLite directly to query the database. You can use the `sqlite3` command-line tool or any SQLite client.
+
+### Basic Queries with SQLite CLI
 
 ```bash
-python query_variants_db.py --stats
-```
+# Open database
+sqlite3 GENE.db
 
-Example output:
-```
-=== DATABASE STATISTICS ===
-Papers: 142
-Variants: 387
-Unique Genes: 3
-Variants With Penetrance: 156
-Individuals Affected: 1234
-Individuals Unaffected: 567
-```
+# Get database statistics
+sqlite> SELECT 'Papers' as type, COUNT(*) as count FROM papers
+   ...> UNION ALL SELECT 'Variants', COUNT(*) FROM variants
+   ...> UNION ALL SELECT 'Individual Records', COUNT(*) FROM individual_records;
 
-### List All Genes
+# List all genes
+sqlite> SELECT DISTINCT gene_symbol FROM variants;
 
-```bash
-python query_variants_db.py --list-genes
-```
+# List variants for a gene
+sqlite> SELECT protein_notation, cdna_notation, clinical_significance
+   ...> FROM variants WHERE gene_symbol = 'TTR';
 
-### List Variants for a Gene
+# Get variant details
+sqlite> SELECT * FROM variants WHERE protein_notation = 'p.Val30Met';
 
-```bash
-python query_variants_db.py --list-variants --gene TTR
-```
-
-### Get Variant Details
-
-```bash
-python query_variants_db.py --variant "p.Val30Met" --details
-```
-
-### Penetrance Summary for a Gene
-
-```bash
-python query_variants_db.py --gene TTR --penetrance
-```
-
-### Search Variants
-
-Search pathogenic variants with at least 10 carriers:
-
-```bash
-python query_variants_db.py \
-    --search \
-    --clinical-significance pathogenic \
-    --min-carriers 10
-```
-
-### JSON Output
-
-All queries support JSON output for programmatic use:
-
-```bash
-python query_variants_db.py --list-genes --json > genes.json
+# Penetrance summary for a gene
+sqlite> SELECT v.protein_notation, pd.total_carriers_observed, pd.affected_count, pd.unaffected_count
+   ...> FROM variants v
+   ...> JOIN penetrance_data pd ON v.variant_id = pd.variant_id
+   ...> WHERE v.gene_symbol = 'TTR';
 ```
 
 ## Advanced SQL Queries
@@ -305,7 +274,7 @@ You can query the database from your Python code:
 ```python
 import sqlite3
 
-conn = sqlite3.connect('variants.db')
+conn = sqlite3.connect('GENE.db')
 cursor = conn.cursor()
 
 # Get all variants for a gene
@@ -321,15 +290,24 @@ for row in cursor.fetchall():
 conn.close()
 ```
 
-Or use the query helper as a library:
+For more complex queries, consider using pandas:
 
 ```python
-from query_variants_db import VariantDatabaseQuery
+import pandas as pd
+import sqlite3
 
-with VariantDatabaseQuery("variants.db") as db:
-    variants = db.list_variants(gene_symbol="TTR")
-    for v in variants:
-        print(v['protein_notation'])
+conn = sqlite3.connect('GENE.db')
+
+# Load variants with penetrance data into a DataFrame
+df = pd.read_sql_query("""
+    SELECT v.protein_notation, v.gene_symbol,
+           pd.total_carriers_observed, pd.affected_count, pd.unaffected_count
+    FROM variants v
+    JOIN penetrance_data pd ON v.variant_id = pd.variant_id
+""", conn)
+
+print(df.head())
+conn.close()
 ```
 
 ## Future Enhancements

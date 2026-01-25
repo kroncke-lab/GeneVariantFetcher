@@ -74,6 +74,38 @@ def is_valid_pmid(pmid: str) -> bool:
     return pmid.isdigit() and len(pmid) <= 8
 
 
+def extract_gene_from_filename(filename: Union[str, Path]) -> Optional[str]:
+    """
+    Extract gene symbol from extraction filename.
+
+    Supported filename formats:
+        - KCNH2_PMID_31361068.json
+        - BRCA1_PMID_12345678.json
+
+    Args:
+        filename: Filename or Path object
+
+    Returns:
+        The extracted gene symbol (uppercase), or None if extraction failed.
+
+    Examples:
+        >>> extract_gene_from_filename("KCNH2_PMID_31361068.json")
+        'KCNH2'
+        >>> extract_gene_from_filename(Path("extractions/BRCA1_PMID_12345678.json"))
+        'BRCA1'
+    """
+    if isinstance(filename, Path):
+        name = filename.name
+    else:
+        name = Path(filename).name
+
+    # Pattern: GENE_PMID_12345678.json
+    match = re.match(r"([A-Z0-9]+)_PMID", name, re.IGNORECASE)
+    if match:
+        return match.group(1).upper()
+    return None
+
+
 def extract_pmids_from_text(text: str) -> list[str]:
     """
     Extract all PMIDs from a block of text.
