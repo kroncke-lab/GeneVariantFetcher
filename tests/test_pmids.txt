@@ -67,6 +67,7 @@
 # Paper is in database, but extracted variants don't match Excel at all.
 # Root cause: Gene confusion (KCNQ1 vs KCNH2), variant nomenclature mismatch
 # =============================================================================
+19716085  # Reference test case - used in unit tests
 23631430  # 12 expected variants not found
 26746457  # 10 expected variants not found
 11844290  # 5 expected variants not found
@@ -79,5 +80,5 @@
 22882672  # 2 expected variants not found
 
 # =============================================================================
-# TOTAL: 55 test PMIDs
+# TOTAL: 56 test PMIDs
 # =============================================================================
