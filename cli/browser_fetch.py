@@ -238,6 +238,9 @@ class BrowserFetcher:
         timeout: int = 60000,
         captcha_wait_time: int = 30,
         fallback_to_manual: bool = True,
+        use_profile: bool = False,
+        profile_path: Optional[Path] = None,
+        slow_mo: int = 0,
     ):
         self.downloads_dir = Path(downloads_dir)
         self.target_dir = Path(target_dir)
@@ -246,6 +249,9 @@ class BrowserFetcher:
         self.use_claude = use_claude
         self.captcha_wait_time = captcha_wait_time
         self.fallback_to_manual = fallback_to_manual
+        self.use_profile = use_profile
+        self.profile_path = profile_path
+        self.slow_mo = slow_mo
         self._cloudflare_loop_detected = False  # Flag for loop detection
 
         self.analyzer = PageAnalyzer() if use_claude else None
@@ -258,36 +264,72 @@ class BrowserFetcher:
 
         self.playwright = sync_playwright().start()
 
-        # Launch with anti-detection arguments
-        self.browser = self.playwright.chromium.launch(
-            headless=self.headless,
-            downloads_path=str(self.downloads_dir),
-            args=[
-                "--disable-blink-features=AutomationControlled",
-                "--disable-dev-shm-usage",
-                "--no-first-run",
-                "--no-default-browser-check",
-                "--disable-infobars",
-                "--window-size=1920,1080",
-                "--start-maximized",
-            ],
-        )
+        # Common launch args for anti-detection
+        launch_args = [
+            "--disable-blink-features=AutomationControlled",
+            "--disable-dev-shm-usage",
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--disable-infobars",
+            "--window-size=1920,1080",
+            "--start-maximized",
+        ]
 
-        # Create context with more realistic browser fingerprint
-        self.context = self.browser.new_context(
-            accept_downloads=True,
-            user_agent=(
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/122.0.0.0 Safari/537.36"
-            ),
-            viewport={"width": 1920, "height": 1080},
-            locale="en-US",
-            timezone_id="America/New_York",
-            permissions=["geolocation"],
-            color_scheme="light",
-        )
-        self.page = self.context.new_page()
+        if self.use_profile:
+            # Use persistent context with real Chrome profile
+            # This makes the browser look much more legitimate
+            if self.profile_path:
+                user_data_dir = str(self.profile_path)
+            else:
+                # Default Chrome profile location on macOS
+                user_data_dir = str(
+                    Path.home() / "Library/Application Support/Google/Chrome"
+                )
+
+            logger.info(f"  [Profile] Using Chrome profile: {user_data_dir}")
+
+            # Note: launch_persistent_context combines browser + context
+            self.context = self.playwright.chromium.launch_persistent_context(
+                user_data_dir,
+                headless=self.headless,
+                downloads_path=str(self.downloads_dir),
+                slow_mo=self.slow_mo,
+                args=launch_args,
+                accept_downloads=True,
+                viewport={"width": 1920, "height": 1080},
+                locale="en-US",
+                timezone_id="America/New_York",
+                color_scheme="light",
+                channel="chrome",  # Use installed Chrome, not Chromium
+            )
+            self.browser = None  # Not used with persistent context
+            self.page = (
+                self.context.pages[0] if self.context.pages else self.context.new_page()
+            )
+        else:
+            # Standard launch with fresh browser
+            self.browser = self.playwright.chromium.launch(
+                headless=self.headless,
+                downloads_path=str(self.downloads_dir),
+                slow_mo=self.slow_mo,
+                args=launch_args,
+            )
+
+            # Create context with more realistic browser fingerprint
+            self.context = self.browser.new_context(
+                accept_downloads=True,
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/122.0.0.0 Safari/537.36"
+                ),
+                viewport={"width": 1920, "height": 1080},
+                locale="en-US",
+                timezone_id="America/New_York",
+                permissions=["geolocation"],
+                color_scheme="light",
+            )
+            self.page = self.context.new_page()
 
         # Apply stealth patches to mask automation fingerprints
         self._apply_stealth_patches(self.page)
@@ -1911,6 +1953,9 @@ def run_browser_fetch(
     retry_captcha_only: bool = False,
     retry_paywall_only: bool = False,
     fallback_to_manual: bool = True,
+    use_profile: bool = False,
+    profile_path: Optional[Path] = None,
+    slow_mo: int = 0,
 ):
     """
     Run browser-based fetching for papers in a CSV file.
@@ -2031,6 +2076,9 @@ def run_browser_fetch(
         use_claude=use_claude,
         captcha_wait_time=captcha_wait_time,
         fallback_to_manual=fallback_to_manual,
+        use_profile=use_profile,
+        profile_path=profile_path,
+        slow_mo=slow_mo,
     ) as fetcher:
         for idx, (row_idx, row) in enumerate(papers_to_process.iterrows(), 1):
             pmid = str(row[pmid_column]).strip()
@@ -2230,6 +2278,22 @@ Status tracking (in CSV Status column):
         action="store_true",
         help="Disable automatic fallback to manual download when Cloudflare loops (default: enabled)",
     )
+    parser.add_argument(
+        "--use-profile",
+        action="store_true",
+        help="Use your real Chrome profile (has cookies/history, better against CAPTCHAs)",
+    )
+    parser.add_argument(
+        "--profile-path",
+        type=Path,
+        help="Custom Chrome profile path (default: ~/Library/Application Support/Google/Chrome)",
+    )
+    parser.add_argument(
+        "--slow-mo",
+        type=int,
+        default=0,
+        help="Slow down browser actions by N milliseconds (helps avoid detection)",
+    )
 
     args = parser.parse_args()
 
@@ -2260,6 +2324,9 @@ Status tracking (in CSV Status column):
         retry_captcha_only=args.retry_captcha,
         retry_paywall_only=args.retry_paywall,
         fallback_to_manual=not args.no_fallback_manual,
+        use_profile=args.use_profile,
+        profile_path=args.profile_path,
+        slow_mo=args.slow_mo,
     )
 
 

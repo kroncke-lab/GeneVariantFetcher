@@ -524,6 +524,61 @@ class ExpertExtractor(BaseLLMCaller):
         extracted_data["variants"] = existing_variants
         return extracted_data
 
+    def _filter_by_gene(self, extracted_data: dict, target_gene: str) -> dict:
+        """
+        Filter variants to only keep those matching the target gene.
+
+        This removes variants that were extracted for other genes (common in papers
+        that study multiple genes). Matching is case-insensitive.
+
+        Args:
+            extracted_data: The extraction result dictionary
+            target_gene: The target gene symbol to filter for (e.g., "KCNH2")
+
+        Returns:
+            Updated extracted_data with filtered variants
+        """
+        variants = extracted_data.get("variants", [])
+        if not variants:
+            return extracted_data
+
+        target_upper = target_gene.upper()
+        original_count = len(variants)
+
+        filtered_variants = []
+        removed_genes = set()
+
+        for v in variants:
+            gene = v.get("gene_symbol", "") or ""
+            gene_upper = gene.upper()
+
+            # Keep if gene matches target or is empty/unknown
+            if not gene or gene_upper == target_upper or gene_upper in ("UNKNOWN", ""):
+                filtered_variants.append(v)
+            else:
+                removed_genes.add(gene)
+
+        removed_count = original_count - len(filtered_variants)
+
+        if removed_count > 0:
+            logger.info(
+                f"Filtered out {removed_count} variants from non-target genes: {removed_genes}"
+            )
+            # Update metadata
+            if "extraction_metadata" in extracted_data:
+                extracted_data["extraction_metadata"]["total_variants_found"] = len(
+                    filtered_variants
+                )
+                extracted_data["extraction_metadata"]["filtered_out_by_gene"] = (
+                    removed_count
+                )
+                extracted_data["extraction_metadata"]["filtered_genes"] = list(
+                    removed_genes
+                )
+
+        extracted_data["variants"] = filtered_variants
+        return extracted_data
+
     def _parse_markdown_table_variants(
         self, full_text: str, gene_symbol: Optional[str]
     ) -> List[dict]:
@@ -1045,6 +1100,10 @@ class ExpertExtractor(BaseLLMCaller):
                 extracted_data = self._merge_table_variants(
                     extracted_data, table_variants
                 )
+
+            # Filter variants to only keep those matching the target gene
+            if paper.gene_symbol:
+                extracted_data = self._filter_by_gene(extracted_data, paper.gene_symbol)
 
             num_variants = len(extracted_data.get("variants", []))
             logger.info(
