@@ -1,0 +1,816 @@
+"""
+Shared workflow step implementations.
+
+This module contains the core logic for each pipeline step, used by both
+the CLI (automated_workflow.py) and GUI (worker.py) implementations.
+
+Each step function takes explicit parameters and returns a result dict,
+allowing the callers to handle their own context (checkpoints, logging, etc.).
+"""
+
+import csv
+import json
+import logging
+import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+
+logger = logging.getLogger(__name__)
+
+
+# =============================================================================
+# Step Result Types
+# =============================================================================
+
+
+@dataclass
+class StepResult:
+    """Result from a workflow step."""
+
+    success: bool
+    stats: Dict[str, Any] = field(default_factory=dict)
+    error: Optional[str] = None
+    data: Dict[str, Any] = field(default_factory=dict)
+
+
+# =============================================================================
+# Step 0: Discover Synonyms
+# =============================================================================
+
+
+def discover_synonyms(
+    gene_symbol: str,
+    email: str,
+    existing_synonyms: Optional[List[str]] = None,
+    api_key: Optional[str] = None,
+) -> StepResult:
+    """
+    Discover gene synonyms from NCBI Gene database.
+
+    Args:
+        gene_symbol: Primary gene symbol
+        email: Email for NCBI API
+        existing_synonyms: Already known synonyms to merge with
+        api_key: Optional NCBI API key for higher rate limits
+
+    Returns:
+        StepResult with synonyms in data["synonyms"]
+    """
+    from gene_literature.synonym_finder import (
+        SynonymFinder,
+        automatic_synonym_selection,
+    )
+
+    all_synonyms = list(existing_synonyms) if existing_synonyms else []
+
+    try:
+        synonym_finder = SynonymFinder(
+            email=email,
+            api_key=api_key or os.getenv("NCBI_API_KEY"),
+        )
+
+        found_synonyms = synonym_finder.find_gene_synonyms(
+            gene_symbol,
+            include_other_designations=False,
+        )
+
+        auto_selected = automatic_synonym_selection(
+            gene_symbol,
+            found_synonyms,
+            include_official=True,
+            include_aliases=True,
+            include_other_designations=False,
+            only_relevant=False,
+        )
+
+        # Merge with existing synonyms (avoid duplicates)
+        existing_set = set(s.lower() for s in all_synonyms)
+        for syn in auto_selected:
+            if syn.lower() not in existing_set and syn.lower() != gene_symbol.lower():
+                all_synonyms.append(syn)
+                existing_set.add(syn.lower())
+
+        return StepResult(
+            success=True,
+            stats={
+                "synonyms_found": len(auto_selected),
+                "total_synonyms": len(all_synonyms),
+            },
+            data={"synonyms": all_synonyms},
+        )
+
+    except Exception as e:
+        logger.warning(f"Failed to discover synonyms: {e}")
+        return StepResult(
+            success=False,
+            error=str(e),
+            data={"synonyms": all_synonyms},
+        )
+
+
+# =============================================================================
+# Step 1: Fetch PMIDs
+# =============================================================================
+
+
+def fetch_pmids(
+    gene_symbol: str,
+    email: str,
+    output_path: Path,
+    max_results: int = 100,
+    synonyms: Optional[List[str]] = None,
+    use_pubmind: bool = True,
+    use_pubmed: bool = True,
+    use_europepmc: bool = False,
+    api_key: Optional[str] = None,
+) -> StepResult:
+    """
+    Fetch PMIDs from literature sources.
+
+    Args:
+        gene_symbol: Gene to search for
+        email: Email for NCBI API
+        output_path: Directory to save PMID files
+        max_results: Maximum PMIDs to fetch
+        synonyms: Gene synonyms to include in search
+        use_pubmind: Enable PubMind source
+        use_pubmed: Enable PubMed source
+        use_europepmc: Enable Europe PMC source
+        api_key: Optional NCBI API key
+
+    Returns:
+        StepResult with PMIDs in data["pmids"]
+    """
+    from gene_literature.discovery import discover_pmids_for_gene
+    from config.settings import get_settings
+
+    settings = get_settings()
+    settings.use_pubmind = use_pubmind
+    settings.use_pubmed = use_pubmed
+    settings.use_europepmc = use_europepmc
+
+    pubmind_file = output_path / f"{gene_symbol}_pmids_pubmind.txt"
+    pubmed_file = output_path / f"{gene_symbol}_pmids_pubmed.txt"
+    combined_file = output_path / f"{gene_symbol}_pmids.txt"
+
+    try:
+        pmid_discovery = discover_pmids_for_gene(
+            gene_symbol=gene_symbol,
+            email=email,
+            max_results=max_results,
+            pubmind_output=pubmind_file,
+            pubmed_output=pubmed_file,
+            combined_output=combined_file,
+            api_key=api_key or os.getenv("NCBI_API_KEY"),
+            settings=settings,
+            synonyms=synonyms,
+        )
+
+        return StepResult(
+            success=True,
+            stats={
+                "pubmind_count": len(pmid_discovery.pubmind_pmids),
+                "pubmed_count": len(pmid_discovery.pubmed_pmids),
+                "europepmc_count": len(pmid_discovery.europepmc_pmids),
+                "total_unique": len(pmid_discovery.combined_pmids),
+            },
+            data={"pmids": list(pmid_discovery.combined_pmids)},
+        )
+
+    except Exception as e:
+        logger.error(f"PMID discovery failed: {e}")
+        return StepResult(success=False, error=str(e), data={"pmids": []})
+
+
+# =============================================================================
+# Step 2: Fetch Abstracts
+# =============================================================================
+
+
+def fetch_abstracts(
+    pmids: List[str],
+    output_path: Path,
+    email: str,
+) -> StepResult:
+    """
+    Fetch and save abstracts for PMIDs.
+
+    Args:
+        pmids: List of PMIDs to fetch
+        output_path: Base output directory
+        email: Email for NCBI API
+
+    Returns:
+        StepResult with abstract records in data["abstract_records"]
+    """
+    from harvesting.abstracts import fetch_and_save_abstracts
+
+    abstract_dir = output_path / "abstract_json"
+
+    try:
+        abstract_records = fetch_and_save_abstracts(
+            pmids=pmids,
+            output_dir=str(abstract_dir),
+            email=email,
+        )
+
+        return StepResult(
+            success=True,
+            stats={"abstracts_fetched": len(abstract_records)},
+            data={"abstract_records": abstract_records, "abstract_dir": abstract_dir},
+        )
+
+    except Exception as e:
+        logger.error(f"Abstract fetch failed: {e}")
+        return StepResult(success=False, error=str(e))
+
+
+# =============================================================================
+# Step 3: Filter Papers
+# =============================================================================
+
+
+def filter_papers(
+    pmids: List[str],
+    abstract_records: Dict[str, str],
+    gene_symbol: str,
+    output_path: Path,
+    enable_tier1: bool = True,
+    enable_tier2: bool = True,
+    use_clinical_triage: bool = False,
+    tier1_min_keywords: int = 1,
+    tier2_confidence_threshold: float = 0.5,
+) -> StepResult:
+    """
+    Filter papers using tiered filtering.
+
+    Args:
+        pmids: List of PMIDs to filter
+        abstract_records: Dict mapping PMID to abstract JSON path
+        gene_symbol: Gene being searched
+        output_path: Base output directory
+        enable_tier1: Enable keyword filtering
+        enable_tier2: Enable LLM filtering
+        use_clinical_triage: Use ClinicalDataTriageFilter for Tier 2
+        tier1_min_keywords: Minimum keywords for Tier 1
+        tier2_confidence_threshold: Confidence threshold for Tier 2
+
+    Returns:
+        StepResult with filtered PMIDs in data["filtered_pmids"]
+    """
+    from pipeline.filters import KeywordFilter, InternFilter, ClinicalDataTriageFilter
+    from utils.models import Paper, FilterDecision, FilterResult, FilterTier
+
+    keyword_filter = KeywordFilter(min_keyword_matches=tier1_min_keywords)
+    tier2_filter = (
+        ClinicalDataTriageFilter()
+        if use_clinical_triage
+        else InternFilter(confidence_threshold=tier2_confidence_threshold)
+    )
+
+    filtered_pmids = []
+    dropped_pmids = []
+
+    for pmid in pmids:
+        record_path = abstract_records.get(pmid)
+
+        if not record_path or not Path(record_path).exists():
+            dropped_pmids.append((pmid, "Missing abstract JSON"))
+            continue
+
+        try:
+            with open(record_path, "r", encoding="utf-8") as f:
+                record = json.load(f)
+        except Exception as e:
+            dropped_pmids.append((pmid, f"Abstract JSON read error: {e}"))
+            continue
+
+        metadata = record.get("metadata", {})
+        paper = Paper(
+            pmid=pmid,
+            title=metadata.get("title"),
+            abstract=record.get("abstract"),
+            authors=metadata.get("authors"),
+            journal=metadata.get("journal"),
+            publication_date=metadata.get("year"),
+            gene_symbol=gene_symbol,
+            source="PubMed",
+        )
+
+        # Tier 1: Keyword filter
+        if enable_tier1:
+            tier1_result = keyword_filter.filter(paper)
+            if tier1_result.decision is not FilterDecision.PASS:
+                dropped_pmids.append((pmid, tier1_result.reason))
+                continue
+
+        # Tier 2: LLM filter
+        if enable_tier2:
+            if use_clinical_triage:
+                triage_result = tier2_filter.triage_paper(paper, gene_symbol)
+                decision = (
+                    FilterDecision.PASS
+                    if triage_result.get("decision") == "KEEP"
+                    else FilterDecision.FAIL
+                )
+                confidence = triage_result.get("confidence")
+                reason = triage_result.get("reason", "No reason provided")
+
+                if (
+                    decision is FilterDecision.PASS
+                    and confidence is not None
+                    and confidence < tier2_confidence_threshold
+                ):
+                    decision = FilterDecision.FAIL
+                    reason = f"Low confidence ({confidence:.2f}): {reason}"
+
+                tier2_result = FilterResult(
+                    decision=decision,
+                    tier=FilterTier.TIER_2_INTERN,
+                    reason=reason,
+                    pmid=pmid,
+                    confidence=confidence,
+                )
+            else:
+                tier2_result = tier2_filter.filter(paper)
+
+            if tier2_result.decision is not FilterDecision.PASS:
+                dropped_pmids.append((pmid, tier2_result.reason))
+                continue
+
+        filtered_pmids.append(pmid)
+
+    # Save dropped PMIDs
+    pmid_status_dir = output_path / "pmid_status"
+    pmid_status_dir.mkdir(parents=True, exist_ok=True)
+    filtered_out_file = pmid_status_dir / "filtered_out.csv"
+
+    with open(filtered_out_file, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["PMID", "Reason"])
+        writer.writerows(dropped_pmids)
+
+    return StepResult(
+        success=True,
+        stats={
+            "passed_filter": len(filtered_pmids),
+            "dropped": len(dropped_pmids),
+        },
+        data={
+            "filtered_pmids": filtered_pmids,
+            "dropped_pmids": dropped_pmids,
+        },
+    )
+
+
+# =============================================================================
+# Step 4: Download Full-Text
+# =============================================================================
+
+
+def download_fulltext(
+    pmids: List[str],
+    output_path: Path,
+    gene_symbol: str,
+    max_papers: Optional[int] = None,
+    delay: float = 2.0,
+) -> StepResult:
+    """
+    Download full-text papers from PMC.
+
+    Args:
+        pmids: List of PMIDs to download
+        output_path: Base output directory
+        gene_symbol: Gene symbol for naming
+        max_papers: Maximum papers to download (None = all)
+        delay: Delay between downloads in seconds
+
+    Returns:
+        StepResult with download stats
+    """
+    from harvesting import PMCHarvester
+    import pandas as pd
+
+    harvest_dir = output_path / "pmc_fulltext"
+    harvester = PMCHarvester(output_dir=str(harvest_dir), gene_symbol=gene_symbol)
+
+    pmids_to_download = pmids[:max_papers] if max_papers else pmids
+    harvester.harvest(pmids_to_download, delay=delay)
+
+    # Check results
+    success_log = harvest_dir / "successful_downloads.csv"
+    successfully_downloaded = set()
+
+    if success_log.exists():
+        try:
+            df = pd.read_csv(success_log)
+            successfully_downloaded = set(str(p) for p in df["PMID"].tolist())
+        except Exception as e:
+            logger.warning(f"Could not read success log: {e}")
+
+    # Get paywalled/failed PMIDs
+    paywalled_log = harvest_dir / "paywalled_missing.csv"
+    paywalled_pmids = {}
+
+    if paywalled_log.exists():
+        try:
+            df = pd.read_csv(paywalled_log)
+            for _, row in df.iterrows():
+                paywalled_pmids[str(row["PMID"])] = row.get("Reason", "Unknown")
+        except Exception:
+            pass
+
+    # Identify abstract-only PMIDs
+    abstract_only = [
+        p for p in pmids_to_download if str(p) not in successfully_downloaded
+    ]
+
+    return StepResult(
+        success=True,
+        stats={
+            "attempted": len(pmids_to_download),
+            "downloaded": len(successfully_downloaded),
+            "paywalled": len(paywalled_pmids),
+            "abstract_only": len(abstract_only),
+        },
+        data={
+            "harvest_dir": harvest_dir,
+            "downloaded_pmids": list(successfully_downloaded),
+            "abstract_only_pmids": abstract_only,
+            "paywalled_pmids": paywalled_pmids,
+        },
+    )
+
+
+# =============================================================================
+# Step 5: Run Data Scout
+# =============================================================================
+
+
+def run_data_scout(
+    harvest_dir: Path,
+    gene_symbol: str,
+    min_relevance: float = 0.3,
+) -> StepResult:
+    """
+    Run Data Scout to create DATA_ZONES files.
+
+    Args:
+        harvest_dir: Directory with FULL_CONTEXT.md files
+        gene_symbol: Gene symbol for context
+        min_relevance: Minimum relevance threshold
+
+    Returns:
+        StepResult with scouting stats
+    """
+    from pipeline.data_scout import GeneticDataScout
+    from config.settings import get_settings
+
+    if not harvest_dir.exists():
+        return StepResult(
+            success=True,
+            stats={"skipped": True, "reason": "no_fulltext_dir"},
+        )
+
+    settings = get_settings()
+
+    # Find files needing scouting
+    full_context_files = list(harvest_dir.glob("*_FULL_CONTEXT.md"))
+    existing_zones = set(
+        f.name.replace("_DATA_ZONES.md", "")
+        for f in harvest_dir.glob("*_DATA_ZONES.md")
+    )
+
+    files_to_scout = [
+        f
+        for f in full_context_files
+        if f.name.replace("_FULL_CONTEXT.md", "") not in existing_zones
+    ]
+
+    if not files_to_scout:
+        return StepResult(
+            success=True,
+            stats={"skipped": True, "already_scouted": len(existing_zones)},
+        )
+
+    scout = GeneticDataScout(
+        model=settings.scout_model,
+        min_relevance=min_relevance,
+        extraction_focus=gene_symbol,
+    )
+
+    scouted = 0
+    errors = 0
+
+    for md_file in files_to_scout:
+        try:
+            content = md_file.read_text(encoding="utf-8")
+            zones = scout.identify_high_value_zones(content)
+
+            if zones:
+                condensed = scout.extract_condensed_context(content, zones)
+                output_file = md_file.with_name(
+                    md_file.name.replace("_FULL_CONTEXT.md", "_DATA_ZONES.md")
+                )
+                output_file.write_text(condensed, encoding="utf-8")
+                scouted += 1
+        except Exception as e:
+            logger.warning(f"Error scouting {md_file.name}: {e}")
+            errors += 1
+
+    return StepResult(
+        success=True,
+        stats={"scouted": scouted, "errors": errors, "skipped": len(existing_zones)},
+    )
+
+
+# =============================================================================
+# Step 6: Extract Variants
+# =============================================================================
+
+
+def extract_variants(
+    harvest_dir: Path,
+    extraction_dir: Path,
+    gene_symbol: str,
+    abstract_records: Optional[Dict[str, str]] = None,
+    abstract_only_pmids: Optional[List[str]] = None,
+    tier_threshold: int = 1,
+    max_workers: int = 8,
+    progress_callback: Optional[Callable[[int, int], None]] = None,
+) -> StepResult:
+    """
+    Extract variant data from papers.
+
+    Args:
+        harvest_dir: Directory with markdown files
+        extraction_dir: Directory to save extractions
+        gene_symbol: Gene symbol
+        abstract_records: Dict mapping PMID to abstract JSON path
+        abstract_only_pmids: PMIDs that need abstract-only extraction
+        tier_threshold: Model cascade threshold
+        max_workers: Max parallel workers
+        progress_callback: Optional callback(completed, total)
+
+    Returns:
+        StepResult with extraction stats
+    """
+    from utils.models import Paper
+    from pipeline.extraction import ExpertExtractor
+    from utils.pmid_utils import extract_pmid_from_filename
+
+    extraction_dir.mkdir(exist_ok=True)
+
+    # Find markdown files (prefer DATA_ZONES over FULL_CONTEXT)
+    data_zones = {
+        f.name.replace("_DATA_ZONES.md", ""): f
+        for f in harvest_dir.glob("*_DATA_ZONES.md")
+    }
+    full_context = {
+        f.name.replace("_FULL_CONTEXT.md", ""): f
+        for f in harvest_dir.glob("*_FULL_CONTEXT.md")
+    }
+
+    markdown_files = []
+    for pmid in set(data_zones.keys()) | set(full_context.keys()):
+        if pmid in data_zones:
+            markdown_files.append(data_zones[pmid])
+        elif pmid in full_context:
+            markdown_files.append(full_context[pmid])
+
+    # Prepare abstract-only papers
+    abstract_papers = []
+    if abstract_only_pmids and abstract_records:
+        for pmid in abstract_only_pmids:
+            record_path = abstract_records.get(pmid)
+            if record_path and Path(record_path).exists():
+                abstract_papers.append((pmid, record_path))
+
+    extractor = ExpertExtractor(
+        tier_threshold=tier_threshold, fulltext_dir=str(harvest_dir)
+    )
+
+    extractions = []
+    failures = []
+    total = len(markdown_files) + len(abstract_papers)
+    completed = 0
+
+    def process_fulltext(md_file: Path) -> Tuple[Any, Optional[Tuple[str, str]]]:
+        pmid = extract_pmid_from_filename(md_file)
+        if not pmid:
+            return (None, (md_file.name, "Could not extract PMID"))
+
+        try:
+            content = md_file.read_text(encoding="utf-8")
+            paper = Paper(
+                pmid=pmid,
+                title=f"Paper {pmid}",
+                full_text=content,
+                gene_symbol=gene_symbol,
+            )
+
+            result = extractor.extract(paper)
+
+            if result.success:
+                output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
+                with open(output_file, "w") as f:
+                    json.dump(result.extracted_data, f, indent=2)
+                return (result, None)
+            else:
+                return (None, (pmid, result.error))
+
+        except Exception as e:
+            return (None, (pmid, str(e)))
+
+    def process_abstract(
+        pmid: str, record_path: str
+    ) -> Tuple[Any, Optional[Tuple[str, str]]]:
+        try:
+            with open(record_path, "r", encoding="utf-8") as f:
+                record = json.load(f)
+
+            abstract_text = record.get("abstract")
+            if not abstract_text:
+                return (None, (pmid, "No abstract available"))
+
+            metadata = record.get("metadata", {})
+            paper = Paper(
+                pmid=pmid,
+                title=metadata.get("title", f"Paper {pmid}"),
+                abstract=abstract_text,
+                gene_symbol=gene_symbol,
+            )
+
+            result = extractor.extract(paper)
+
+            if result.success:
+                if result.extracted_data:
+                    if "extraction_metadata" not in result.extracted_data:
+                        result.extracted_data["extraction_metadata"] = {}
+                    result.extracted_data["extraction_metadata"]["abstract_only"] = True
+
+                output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
+                with open(output_file, "w") as f:
+                    json.dump(result.extracted_data, f, indent=2)
+                return (result, None)
+            else:
+                return (None, (pmid, result.error))
+
+        except Exception as e:
+            return (None, (pmid, str(e)))
+
+    # Process in parallel
+    workers = min(max_workers, total) if total > 0 else 1
+
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {}
+
+        for md_file in markdown_files:
+            futures[executor.submit(process_fulltext, md_file)] = ("fulltext", md_file)
+
+        for pmid, record_path in abstract_papers:
+            futures[executor.submit(process_abstract, pmid, record_path)] = (
+                "abstract",
+                pmid,
+            )
+
+        for future in as_completed(futures):
+            completed += 1
+            if progress_callback:
+                progress_callback(completed, total)
+
+            try:
+                result, failure = future.result()
+                if result:
+                    extractions.append(result)
+                if failure:
+                    failures.append(failure)
+            except Exception as e:
+                source_type, source_info = futures[future]
+                pmid = (
+                    extract_pmid_from_filename(source_info)
+                    if source_type == "fulltext"
+                    else source_info
+                )
+                failures.append((pmid, str(e)))
+
+    # Save failures
+    if failures:
+        failures_file = (
+            extraction_dir.parent / "pmid_status" / "extraction_failures.csv"
+        )
+        failures_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(failures_file, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(["PMID", "Error"])
+            writer.writerows(failures)
+
+    # Count variants
+    total_variants = sum(
+        e.extracted_data.get("extraction_metadata", {}).get("total_variants_found", 0)
+        for e in extractions
+        if e.extracted_data
+    )
+
+    return StepResult(
+        success=True,
+        stats={
+            "papers_extracted": len(extractions),
+            "failures": len(failures),
+            "total_variants": total_variants,
+        },
+        data={
+            "extractions": extractions,
+            "failures": failures,
+        },
+    )
+
+
+# =============================================================================
+# Step 7: Aggregate Data
+# =============================================================================
+
+
+def aggregate_data(
+    extraction_dir: Path,
+    gene_symbol: str,
+    output_path: Path,
+) -> StepResult:
+    """
+    Aggregate penetrance data across extractions.
+
+    Args:
+        extraction_dir: Directory with extraction JSONs
+        gene_symbol: Gene symbol
+        output_path: Base output directory for summary file
+
+    Returns:
+        StepResult with aggregation stats
+    """
+    from pipeline.aggregation import aggregate_penetrance
+
+    summary_file = output_path / f"{gene_symbol}_penetrance_summary.json"
+
+    try:
+        penetrance_summary = aggregate_penetrance(
+            extraction_dir=extraction_dir,
+            gene_symbol=gene_symbol,
+            output_file=summary_file,
+        )
+
+        return StepResult(
+            success=True,
+            stats={
+                "variants_aggregated": penetrance_summary.get("total_variants", 0),
+            },
+            data={"summary": penetrance_summary},
+        )
+
+    except Exception as e:
+        logger.error(f"Aggregation failed: {e}")
+        return StepResult(success=False, error=str(e))
+
+
+# =============================================================================
+# Step 8: Migrate to SQLite
+# =============================================================================
+
+
+def migrate_to_sqlite(
+    extraction_dir: Path,
+    db_path: Path,
+) -> StepResult:
+    """
+    Migrate extraction JSONs to SQLite database.
+
+    Args:
+        extraction_dir: Directory with extraction JSONs
+        db_path: Path for output database
+
+    Returns:
+        StepResult with migration stats
+    """
+    from harvesting.migrate_to_sqlite import (
+        create_database_schema,
+        migrate_extraction_directory,
+    )
+
+    try:
+        conn = create_database_schema(str(db_path))
+        stats = migrate_extraction_directory(conn, extraction_dir)
+        conn.close()
+
+        return StepResult(
+            success=True,
+            stats={
+                "total_files": stats["total_files"],
+                "successful": stats["successful"],
+                "failed": stats["failed"],
+            },
+        )
+
+    except Exception as e:
+        logger.error(f"Migration failed: {e}")
+        return StepResult(success=False, error=str(e))

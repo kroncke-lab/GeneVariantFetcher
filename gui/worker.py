@@ -11,11 +11,10 @@ import json
 import logging
 import os
 import csv
-import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional
 
 from dotenv import load_dotenv
 
@@ -26,7 +25,8 @@ from gui.checkpoint import (
     JobCheckpoint,
     PipelineStep,
 )
-from utils.logging_utils import setup_logging, get_logger
+from pipeline import steps as workflow_steps
+from utils.logging_utils import setup_logging
 
 logger = logging.getLogger(__name__)
 
@@ -276,49 +276,23 @@ class PipelineWorker:
 
         self._log(checkpoint, f"Discovering synonyms for {checkpoint.gene_symbol}...")
 
-        from gene_literature.synonym_finder import (
-            SynonymFinder,
-            automatic_synonym_selection,
-        )
-
-        synonym_finder = SynonymFinder(
+        result = workflow_steps.discover_synonyms(
+            gene_symbol=checkpoint.gene_symbol,
             email=checkpoint.email,
+            existing_synonyms=checkpoint.synonyms,
             api_key=os.getenv("NCBI_API_KEY"),
         )
 
-        found_synonyms = synonym_finder.find_gene_synonyms(
-            checkpoint.gene_symbol,
-            include_other_designations=False,
-        )
+        if result.success:
+            checkpoint.synonyms = result.data["synonyms"]
+            self._log(
+                checkpoint,
+                f"Found {result.stats['synonyms_found']} synonyms: {', '.join(checkpoint.synonyms)}",
+            )
+        else:
+            self._log(checkpoint, f"Synonym discovery failed: {result.error}")
 
-        auto_selected = automatic_synonym_selection(
-            checkpoint.gene_symbol,
-            found_synonyms,
-            include_official=True,
-            include_aliases=True,
-            include_other_designations=False,
-            only_relevant=False,
-        )
-
-        # Merge with manually provided synonyms
-        existing = set(s.lower() for s in checkpoint.synonyms)
-        for syn in auto_selected:
-            if (
-                syn.lower() not in existing
-                and syn.lower() != checkpoint.gene_symbol.lower()
-            ):
-                checkpoint.synonyms.append(syn)
-                existing.add(syn.lower())
-
-        self._log(
-            checkpoint,
-            f"Found {len(auto_selected)} synonyms: {', '.join(checkpoint.synonyms)}",
-        )
-
-        return {
-            "synonyms_found": len(auto_selected),
-            "total_synonyms": len(checkpoint.synonyms),
-        }
+        return result.stats
 
     def _step_fetch_pmids(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
         """Step 1: Fetch PMIDs from literature sources."""
@@ -353,170 +327,89 @@ class PipelineWorker:
 
         self._log(checkpoint, "Fetching PMIDs from PubMind, PubMed, and Europe PMC...")
 
-        from gene_literature.discovery import discover_pmids_for_gene
-        from config.settings import get_settings
-
-        output_path = checkpoint.output_path
-        settings = get_settings()
-
-        # Override settings with checkpoint config
-        settings.use_pubmind = checkpoint.use_pubmind
-        settings.use_pubmed = checkpoint.use_pubmed
-        settings.use_europepmc = checkpoint.use_europepmc
-
-        pubmind_file = output_path / f"{checkpoint.gene_symbol}_pmids_pubmind.txt"
-        pubmed_file = output_path / f"{checkpoint.gene_symbol}_pmids_pubmed.txt"
-        combined_file = output_path / f"{checkpoint.gene_symbol}_pmids.txt"
-
-        pmid_discovery = discover_pmids_for_gene(
+        result = workflow_steps.fetch_pmids(
             gene_symbol=checkpoint.gene_symbol,
             email=checkpoint.email,
+            output_path=checkpoint.output_path,
             max_results=checkpoint.max_pmids,
-            pubmind_output=pubmind_file,
-            pubmed_output=pubmed_file,
-            combined_output=combined_file,
-            api_key=os.getenv("NCBI_API_KEY"),
-            settings=settings,
             synonyms=checkpoint.synonyms if checkpoint.synonyms else None,
+            use_pubmind=checkpoint.use_pubmind,
+            use_pubmed=checkpoint.use_pubmed,
+            use_europepmc=checkpoint.use_europepmc,
+            api_key=os.getenv("NCBI_API_KEY"),
         )
 
-        checkpoint.discovered_pmids = list(pmid_discovery.combined_pmids)
-        self._log(
-            checkpoint, f"Discovered {len(checkpoint.discovered_pmids)} unique PMIDs"
-        )
+        if result.success:
+            checkpoint.discovered_pmids = result.data.get("pmids", [])
+            self._log(
+                checkpoint,
+                f"Discovered {len(checkpoint.discovered_pmids)} unique PMIDs",
+            )
+        else:
+            self._log(checkpoint, f"PMID discovery failed: {result.error}")
+            checkpoint.discovered_pmids = []
 
-        return {
-            "pubmind_count": len(pmid_discovery.pubmind_pmids),
-            "pubmed_count": len(pmid_discovery.pubmed_pmids),
-            "europepmc_count": len(pmid_discovery.europepmc_pmids),
-            "total_unique": len(checkpoint.discovered_pmids),
-        }
+        return result.stats
 
     def _step_fetch_abstracts(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
         """Step 1.5: Fetch abstracts and metadata."""
         self._log(checkpoint, "Fetching abstracts and metadata...")
 
-        from harvesting.abstracts import fetch_and_save_abstracts
-
-        output_path = checkpoint.output_path
-        abstract_dir = output_path / "abstract_json"
-
-        abstract_records = fetch_and_save_abstracts(
+        result = workflow_steps.fetch_abstracts(
             pmids=checkpoint.discovered_pmids,
-            output_dir=str(abstract_dir),
+            output_path=checkpoint.output_path,
             email=checkpoint.email,
         )
 
-        # Store the paths for filtering step
-        checkpoint.step_progress["abstract_records"] = {
-            pmid: str(path) for pmid, path in abstract_records.items()
-        }
+        if result.success:
+            # Store the paths for filtering step
+            abstract_records = result.data.get("abstract_records", {})
+            checkpoint.step_progress["abstract_records"] = {
+                pmid: str(path) for pmid, path in abstract_records.items()
+            }
+            self._log(
+                checkpoint,
+                f"Fetched abstracts for {result.stats['abstracts_fetched']} PMIDs",
+            )
+        else:
+            self._log(checkpoint, f"Abstract fetch failed: {result.error}")
 
-        self._log(checkpoint, f"Fetched abstracts for {len(abstract_records)} PMIDs")
-
-        return {"abstracts_fetched": len(abstract_records)}
+        return result.stats
 
     def _step_filter_papers(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
         """Step 1.6: Filter papers by relevance."""
         self._log(checkpoint, "Filtering papers by relevance...")
 
-        from pipeline.filters import (
-            KeywordFilter,
-            InternFilter,
-            ClinicalDataTriageFilter,
-        )
-        from utils.models import Paper, FilterDecision
         from config.settings import get_settings
 
         settings = get_settings()
-        output_path = checkpoint.output_path
 
         # Get abstract records from previous step
         abstract_records = checkpoint.step_progress.get("abstract_records", {})
 
-        keyword_filter = KeywordFilter(min_keyword_matches=settings.tier1_min_keywords)
-        tier2_filter = (
-            ClinicalDataTriageFilter()
-            if checkpoint.use_clinical_triage
-            else InternFilter(
-                confidence_threshold=checkpoint.tier2_confidence_threshold
-            )
+        result = workflow_steps.filter_papers(
+            pmids=checkpoint.discovered_pmids,
+            abstract_records=abstract_records,
+            gene_symbol=checkpoint.gene_symbol,
+            output_path=checkpoint.output_path,
+            enable_tier1=checkpoint.enable_tier1,
+            enable_tier2=checkpoint.enable_tier2,
+            use_clinical_triage=checkpoint.use_clinical_triage,
+            tier1_min_keywords=settings.tier1_min_keywords,
+            tier2_confidence_threshold=checkpoint.tier2_confidence_threshold,
         )
 
-        filtered_pmids = []
-        dropped_pmids = []
-
-        for pmid in checkpoint.discovered_pmids:
-            record_path = abstract_records.get(pmid)
-            if not record_path or not Path(record_path).exists():
-                dropped_pmids.append((pmid, "Missing abstract"))
-                continue
-
-            try:
-                with open(record_path, "r", encoding="utf-8") as f:
-                    record = json.load(f)
-            except Exception as e:
-                dropped_pmids.append((pmid, f"Read error: {e}"))
-                continue
-
-            metadata = record.get("metadata", {})
-            paper = Paper(
-                pmid=pmid,
-                title=metadata.get("title"),
-                abstract=record.get("abstract"),
-                authors=metadata.get("authors"),
-                journal=metadata.get("journal"),
-                publication_date=metadata.get("year"),
-                gene_symbol=checkpoint.gene_symbol,
-                source="PubMed",
+        if result.success:
+            checkpoint.filtered_pmids = result.data.get("filtered_pmids", [])
+            self._log(
+                checkpoint,
+                f"Passed filters: {result.stats['passed_filter']}, Dropped: {result.stats['dropped']}",
             )
+        else:
+            self._log(checkpoint, f"Filtering failed: {result.error}")
+            checkpoint.filtered_pmids = []
 
-            # Tier 1 filtering
-            if checkpoint.enable_tier1:
-                tier1_result = keyword_filter.filter(paper)
-                if tier1_result.decision is not FilterDecision.PASS:
-                    dropped_pmids.append((pmid, tier1_result.reason))
-                    continue
-
-            # Tier 2 filtering
-            if checkpoint.enable_tier2:
-                if checkpoint.use_clinical_triage:
-                    triage_result = tier2_filter.triage_paper(
-                        paper, checkpoint.gene_symbol
-                    )
-                    if triage_result.get("decision") != "KEEP":
-                        dropped_pmids.append(
-                            (pmid, triage_result.get("reason", "Failed triage"))
-                        )
-                        continue
-                else:
-                    tier2_result = tier2_filter.filter(paper)
-                    if tier2_result.decision is not FilterDecision.PASS:
-                        dropped_pmids.append((pmid, tier2_result.reason))
-                        continue
-
-            filtered_pmids.append(pmid)
-
-        checkpoint.filtered_pmids = filtered_pmids
-
-        # Save dropped PMIDs for reference
-        pmid_status_dir = output_path / "pmid_status"
-        pmid_status_dir.mkdir(parents=True, exist_ok=True)
-        filtered_out_file = pmid_status_dir / "filtered_out.csv"
-        with open(filtered_out_file, "w", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            writer.writerow(["PMID", "Reason"])
-            writer.writerows(dropped_pmids)
-
-        self._log(
-            checkpoint,
-            f"Passed filters: {len(filtered_pmids)}, Dropped: {len(dropped_pmids)}",
-        )
-
-        return {
-            "passed_filters": len(filtered_pmids),
-            "dropped": len(dropped_pmids),
-        }
+        return result.stats
 
     def _step_download_fulltext(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
         """Step 2: Download full-text papers."""
@@ -863,8 +756,6 @@ class PipelineWorker:
         self._log(checkpoint, "=== AGGREGATION START ===")
         self._log(checkpoint, "Aggregating penetrance data...")
 
-        from pipeline.aggregation import aggregate_penetrance
-
         # Determine directories based on job type
         if checkpoint.is_folder_job and checkpoint.folder_path:
             base_path = Path(checkpoint.folder_path)
@@ -872,33 +763,31 @@ class PipelineWorker:
             base_path = checkpoint.output_path
 
         extraction_dir = base_path / "extractions"
-        summary_file = base_path / f"{checkpoint.gene_symbol}_penetrance_summary.json"
 
         self._log(checkpoint, f"  base_path: {base_path}")
         self._log(checkpoint, f"  extraction_dir: {extraction_dir}")
-        self._log(checkpoint, f"  summary_file: {summary_file}")
 
-        penetrance_summary = aggregate_penetrance(
+        result = workflow_steps.aggregate_data(
             extraction_dir=extraction_dir,
             gene_symbol=checkpoint.gene_symbol,
-            output_file=summary_file,
+            output_path=base_path,
         )
 
-        total_variants = penetrance_summary.get("total_variants", 0)
-        self._log(checkpoint, f"Aggregated data for {total_variants} variants")
-        self._log(checkpoint, "=== AGGREGATION END ===")
+        if result.success:
+            self._log(
+                checkpoint,
+                f"Aggregated data for {result.stats.get('variants_aggregated', 0)} variants",
+            )
+        else:
+            self._log(checkpoint, f"Aggregation failed: {result.error}")
 
-        return {"variants_aggregated": total_variants}
+        self._log(checkpoint, "=== AGGREGATION END ===")
+        return result.stats
 
     def _step_migrate_database(self, checkpoint: JobCheckpoint) -> Dict[str, Any]:
         """Step 5: Migrate to SQLite database."""
         self._log(checkpoint, "=== DATABASE MIGRATION START ===")
         self._log(checkpoint, "Creating SQLite database...")
-
-        from harvesting.migrate_to_sqlite import (
-            create_database_schema,
-            migrate_extraction_directory,
-        )
 
         # Determine directories based on job type
         if checkpoint.is_folder_job and checkpoint.folder_path:
@@ -924,22 +813,27 @@ class PipelineWorker:
                 checkpoint, f"Found {len(extraction_files)} extraction JSON files"
             )
 
-        conn = create_database_schema(str(db_path))
-        migration_stats = migrate_extraction_directory(conn, extraction_dir)
-        conn.close()
-
-        self._log(
-            checkpoint,
-            f"Migrated {migration_stats['successful']}/{migration_stats['total_files']} extractions to database",
+        result = workflow_steps.migrate_to_sqlite(
+            extraction_dir=extraction_dir,
+            db_path=db_path,
         )
-        self._log(checkpoint, f"Migration stats: {migration_stats}")
+
+        if result.success:
+            self._log(
+                checkpoint,
+                f"Migrated {result.stats['successful']}/{result.stats['total_files']} extractions to database",
+            )
+        else:
+            self._log(checkpoint, f"Migration failed: {result.error}")
+
+        self._log(checkpoint, f"Migration stats: {result.stats}")
         self._log(checkpoint, f"Database written to: {db_path}")
         self._log(checkpoint, "=== DATABASE MIGRATION END ===")
 
         # Write final summary
-        self._write_workflow_summary(checkpoint, migration_stats)
+        self._write_workflow_summary(checkpoint, result.stats)
 
-        return migration_stats
+        return result.stats
 
     def _write_workflow_summary(
         self, checkpoint: JobCheckpoint, migration_stats: Dict[str, Any]
