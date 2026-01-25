@@ -86,3 +86,5 @@ dmypy.json
 *.bak
 .cache/
 test_harvest/
+tests/test_run_output/
+tests/run_*.py
