@@ -125,7 +125,6 @@ def run_gui_mode(args):
         sys.exit(1)
 
     # Load environment (don't validate yet - GUI will help configure)
-    import os
     from dotenv import load_dotenv
 
     load_dotenv()

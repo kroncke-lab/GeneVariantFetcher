@@ -7,7 +7,6 @@ Main PMCHarvester class that coordinates all harvesting operations:
 - Creates unified markdown files for LLM processing
 """
 
-import os
 import re
 import time
 import csv

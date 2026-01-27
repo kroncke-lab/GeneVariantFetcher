@@ -15,7 +15,6 @@ import sqlite3
 import csv
 import sys
 from pathlib import Path
-from typing import Optional, List, Dict, Any
 import argparse
 
 

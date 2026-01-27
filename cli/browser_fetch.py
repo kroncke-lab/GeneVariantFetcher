@@ -33,9 +33,8 @@ import json
 import logging
 import re
 from pathlib import Path
-from typing import Optional, List, Dict, Any, Tuple
+from typing import Optional, List, Dict, Any
 from dataclasses import dataclass
-from datetime import datetime
 
 import pandas as pd
 
@@ -406,7 +405,7 @@ class BrowserFetcher:
             pass
 
         try:
-            if hasattr(self, 'context') and self.context:
+            if hasattr(self, "context") and self.context:
                 self.context.close()
         except Exception:
             pass
@@ -2180,14 +2179,23 @@ def run_browser_fetch(
                         break  # Success, exit retry loop
                     except Exception as e:
                         error_str = str(e).lower()
-                        is_crash = any(term in error_str for term in [
-                            "crash", "target closed", "connection closed",
-                            "browser has been closed", "page closed",
-                            "protocol error", "session closed"
-                        ])
+                        is_crash = any(
+                            term in error_str
+                            for term in [
+                                "crash",
+                                "target closed",
+                                "connection closed",
+                                "browser has been closed",
+                                "page closed",
+                                "protocol error",
+                                "session closed",
+                            ]
+                        )
 
                         if is_crash and attempt < max_retries - 1:
-                            logger.warning(f"  Browser crash detected (attempt {attempt + 1}/{max_retries}): {e}")
+                            logger.warning(
+                                f"  Browser crash detected (attempt {attempt + 1}/{max_retries}): {e}"
+                            )
                             logger.info("  Attempting to restart browser...")
                             try:
                                 # Try to restart the browser
@@ -2196,7 +2204,9 @@ def run_browser_fetch(
                                 logger.info("  Browser restarted, retrying...")
                                 continue
                             except Exception as restart_error:
-                                logger.error(f"  Failed to restart browser: {restart_error}")
+                                logger.error(
+                                    f"  Failed to restart browser: {restart_error}"
+                                )
 
                         # Final failure
                         result = DownloadResult(

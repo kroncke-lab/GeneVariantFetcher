@@ -58,7 +58,6 @@ def automated_variant_extraction_workflow(
     """
     from config.settings import get_settings
     from pipeline.steps import (
-        StepResult,
         discover_synonyms,
         fetch_pmids,
         fetch_abstracts,

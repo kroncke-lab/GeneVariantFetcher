@@ -7,7 +7,7 @@ PubMed IDs (PMIDs) from various sources including PubMind and PMC.
 
 import logging
 import re
-from typing import Any, Dict, List, Set, Union
+from typing import Any, Dict, Set, Union
 
 import requests
 from bs4 import BeautifulSoup

@@ -12,7 +12,6 @@ import logging
 import time
 from dataclasses import dataclass
 from typing import List, Optional, Set
-from urllib.parse import urlencode
 
 import requests
 from requests.adapters import HTTPAdapter, Retry

@@ -8,7 +8,6 @@ Usage:
 """
 
 import csv
-import sys
 import time
 import webbrowser
 from pathlib import Path

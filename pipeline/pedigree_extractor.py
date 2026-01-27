@@ -10,7 +10,6 @@ shown as half-filled symbols).
 """
 
 import base64
-import json
 import logging
 from pathlib import Path
 from typing import Dict, List, Optional

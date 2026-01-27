@@ -22,7 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config.settings import get_settings
 from harvesting.format_converters import FormatConverter
-from pipeline.pedigree_extractor import PedigreeExtractor, extract_pedigrees_from_paper
+from pipeline.pedigree_extractor import PedigreeExtractor
 
 
 def test_pdf_extraction(pdf_path: Path, output_dir: Path):

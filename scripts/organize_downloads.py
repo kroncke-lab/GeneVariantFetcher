@@ -7,9 +7,7 @@ Usage:
     python scripts/organize_downloads.py TARGET_DIR --pmids 12345,67890
 """
 
-import re
 import shutil
-import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
