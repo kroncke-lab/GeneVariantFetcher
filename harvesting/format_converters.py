@@ -418,7 +418,6 @@ class FormatConverter:
 
                 # Try to extract text from WordDocument stream (main text storage)
                 for stream_name in ole.listdir():
-                    stream_path = "/".join(stream_name)
                     try:
                         stream_data = ole.openstream(stream_name).read()
                         # Word stores text as UTF-16LE in some streams

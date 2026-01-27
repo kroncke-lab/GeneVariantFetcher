@@ -364,10 +364,6 @@ class PMCAPIClient:
                             if id_type == "pmc" and "free" in str(aid).lower():
                                 is_free = True
 
-                        # Check PublicationStatus and other metadata
-                        # Some journals provide free access after embargo
-                        reference_list = pubmed_data.get("ReferenceList", [])
-
                         # Check history for free access indicators
                         history = pubmed_data.get("History", [])
                         for status in history:

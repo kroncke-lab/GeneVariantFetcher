@@ -55,7 +55,6 @@ def normalize_protein_variant(variant: str) -> str:
     if not variant:
         return ""
 
-    original = variant
     variant = variant.strip()
 
     # Remove p. prefix
