@@ -22,13 +22,16 @@ from pipeline.extraction import ExpertExtractor
 from utils.models import Paper
 from dotenv import load_dotenv
 
+# Import fixture paths from conftest
+from tests.conftest import KCNH2_19716085_DIR
+
 # Load environment variables
 load_dotenv()
 
 # Test constants
 PMID = "19716085"
 GENE = "KCNH2"
-OUTPUT_DIR = Path("test_kcnh2_19716085")
+OUTPUT_DIR = KCNH2_19716085_DIR
 FULL_TEXT_PATH = OUTPUT_DIR / f"{PMID}_FULL_CONTEXT.md"
 DATA_ZONES_PATH = OUTPUT_DIR / f"{PMID}_DATA_ZONES.md"
 

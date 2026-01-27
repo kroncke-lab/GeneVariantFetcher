@@ -1,6 +1,8 @@
 import pytest
 from harvesting import PMCHarvester
 
+from tests.conftest import TEST_HARVEST_DIR
+
 
 # A pytest fixture to create a single harvester instance for all tests.
 # The 'scope="module"' part means this will only run once for this test file.
@@ -8,7 +10,7 @@ from harvesting import PMCHarvester
 def harvester():
     """Provides a PMCHarvester instance for testing."""
     # Use a separate directory for test outputs
-    return PMCHarvester(output_dir="test_harvest")
+    return PMCHarvester(output_dir=str(TEST_HARVEST_DIR))
 
 
 def test_nature_doi_resolution_and_scraping(harvester):

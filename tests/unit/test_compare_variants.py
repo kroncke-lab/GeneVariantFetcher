@@ -14,7 +14,7 @@ import pandas as pd
 import pytest
 
 # Import the module under test
-from compare_variants import (
+from cli.compare_variants import (
     AA_3_TO_1,
     AA_1_TO_3,
     normalize_column_name,

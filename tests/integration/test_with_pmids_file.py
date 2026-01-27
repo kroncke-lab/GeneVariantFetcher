@@ -16,6 +16,7 @@ Usage:
 import sys
 import argparse
 from pathlib import Path
+from typing import List
 
 # Try importing pytest (optional, only needed for pytest runs)
 try:
@@ -27,14 +28,14 @@ except ImportError:
 
     # Create a dummy pytest module for when running as script
     class MockPytest:
-        @skip
+        @staticmethod
         def fixture(*args, **kwargs):
             def decorator(func):
                 return func
 
             return decorator
 
-        @skip
+        @staticmethod
         def skip(msg):
             raise Exception(f"SKIP: {msg}")
 
@@ -49,8 +50,15 @@ except ImportError:
     except ImportError:
         PMCHarvester = None
 
+# Import fixture paths from conftest
+try:
+    from tests.conftest import TEST_HARVEST_DIR, PMIDS_DIR
+except ImportError:
+    TEST_HARVEST_DIR = Path("test_harvest")
+    PMIDS_DIR = Path("tests/fixtures/pmids")
 
-def load_pmids_from_file(filepath: e) -> e:
+
+def load_pmids_from_file(filepath: Path) -> List[str]:
     """Load PMIDs from a text file (one per line or comma-separated)."""
     filepath = Path(filepath)
     if not filepath.exists():
@@ -73,8 +81,8 @@ def get_pmids_file():
     parser = argparse.ArgumentParser(description="Test with PMIDs from file")
     parser.add_argument(
         "--pmids-file",
-        type=e,
-        default="example_pmids.txt",
+        type=str,
+        default=str(PMIDS_DIR / "example_pmids.txt"),
         help="Path to file containing PMIDs (one per line)",
     )
 
@@ -90,7 +98,7 @@ if HAS_PYTEST:
         """Provides a PMCHarvester instance for testing."""
         if PMCHarvester is None:
             pytest.skip("PMCHarvester not available")
-        return PMCHarvester(output_dir="test_harvest")
+        return PMCHarvester(output_dir=str(TEST_HARVEST_DIR))
 
     @pytest.fixture(scope="module")
     def test_pmids():
@@ -117,7 +125,7 @@ def test_harvest_with_pmids_file(harvester=None, test_pmids=None):
     print(f"{'='*80}\n")
 
     # Test DOI resolution for first few PMIDs
-    for i, pmid in e(test_pmids[:3], 1):  # Test first 3 to avoid rate limiting
+    for i, pmid in enumerate(test_pmids[:3], 1):  # Test first 3 to avoid rate limiting
         print(f"Testing PMID {i}/{min(3, len(test_pmids))}: {pmid}")
 
         try:
@@ -132,7 +140,7 @@ def test_harvest_with_pmids_file(harvester=None, test_pmids=None):
 
             # Test supplemental files retrieval
             supp_files = harvester.get_supplemental_files(pmcid, pmid, doi)
-            assert i(supp_files, e), "Should return a list"
+            assert isinstance(supp_files, list), "Should return a list"
             print(f"  ✓ Found {len(supp_files)} supplemental files")
 
         except Exception as e:
@@ -194,7 +202,7 @@ if __name__ == "__main__":
             print("ERROR: PMCHarvester not available")
             sys.exit(1)
 
-        harvester = PMCHarvester(output_dir="test_harvest")
+        harvester = PMCHarvester(output_dir=str(TEST_HARVEST_DIR))
 
         # Run basic tests
         print("\n" + "=" * 80)

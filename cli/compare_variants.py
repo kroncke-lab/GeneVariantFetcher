@@ -659,7 +659,11 @@ def convert_aa_1_to_3(variant: str) -> Optional[str]:
     Also handles: R123H (without p. prefix), R123del, R123fs, R123*
     """
     # Handle variants without p. prefix
-    if variant and not variant.lower().startswith("p.") and not variant.lower().startswith("c."):
+    if (
+        variant
+        and not variant.lower().startswith("p.")
+        and not variant.lower().startswith("c.")
+    ):
         # Check if it looks like a protein variant (letter + number + letter/suffix)
         if re.match(r"^[A-Z]\d+[A-Z*]", variant, re.IGNORECASE):
             variant = f"p.{variant}"
@@ -1350,7 +1354,7 @@ def generate_outputs(
     logger.info(f"Wrote {outdir / 'discrepancies.csv'}")
 
     # Write missing_in_sqlite.csv
-    missing_sqlite = df[df["missing_in_sqlite"] == True]
+    missing_sqlite = df[df["missing_in_sqlite"]]
     if len(missing_sqlite) > 0:
         missing_sqlite.to_csv(outdir / "missing_in_sqlite.csv", index=False)
         logger.info(
@@ -1358,7 +1362,7 @@ def generate_outputs(
         )
 
     # Write missing_in_excel.csv
-    missing_excel = df[df["missing_in_excel"] == True]
+    missing_excel = df[df["missing_in_excel"]]
     if len(missing_excel) > 0:
         missing_excel.to_csv(outdir / "missing_in_excel.csv", index=False)
         logger.info(

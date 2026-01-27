@@ -6,11 +6,13 @@ Test script to verify DOI resolution and supplemental file scraping.
 from harvesting import PMCHarvester
 from pathlib import Path
 
+from tests.conftest import TEST_PMC_HARVEST_DIR
+
 
 def test_doi_resolution():
     """Test DOI resolution for various publishers."""
 
-    harvester = PMCHarvester(output_dir="test_pmc_harvest")
+    harvester = PMCHarvester(output_dir=str(TEST_PMC_HARVEST_DIR))
 
     # Test cases: PMID, DOI (hardcoded to avoid rate limiting), Expected Domain, Description
     test_cases = [
