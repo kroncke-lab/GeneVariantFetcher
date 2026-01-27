@@ -1,341 +1,166 @@
-# GeneVariantFetcher Test Pipeline - Revised v2
+# GeneVariantFetcher Test Pipeline - Revised v3
 
 ## Overview
 
-Run the complete GeneVariantFetcher test pipeline on `tests/test_pmids.txt` for the KCNH2 gene. This includes automated downloads with browser crash recovery, enhanced HTML parsing, VPN-assisted manual downloads, figure extraction, data scouting, and LLM-based variant extraction with improved notation normalization.
+Run the complete GeneVariantFetcher test pipeline on `tests/test_pmids.txt` (51 PMIDs) for the KCNH2 gene. **Designed for Claude Code cowork mode** - fully automated browser-based downloading with VPN access.
 
-**Recent Fixes Applied (2026-01-26):**
+**Updated 2026-01-26:**
+- New automated runner scripts for Claude Code cowork
 - Browser crash auto-recovery with 3x retry logic
-- Enhanced HTML parsing for AHA, Oxford, Springer, PNAS publishers
-- SOCKS proxy support installed
+- Uses real Chrome profile for VPN/institutional access
 - Fuzzy variant matching with notation normalization (HGVS ↔ legacy)
 
 ---
 
 ## Prerequisites
 
-### Required Packages
-```bash
-# Install required dependencies (run once)
-pip install "httpx[socks]" --break-system-packages
-pip install rapidfuzz --break-system-packages
-```
-
 ### Environment Setup
-- **Vanderbilt VPN active** - Required for accessing paywalled Elsevier, Wiley, and AHA journal articles
-- **Claude in Chrome extension installed** - For browser-based downloads of paywalled papers
-- **API keys configured** in `.env`:
-  - `ANTHROPIC_API_KEY` (required)
-  - `OPENAI_API_KEY` (optional fallback)
-  - `ELSEVIER_API_KEY` (optional, improves Elsevier access)
+- **Vanderbilt VPN active** - Required for accessing paywalled journals
+- **API keys configured** in `.env` (do not modify this file)
+- **Playwright installed** with chromium browser
 
 ---
 
-## Quick Start (Full Pipeline)
+## Quick Start (Claude Code Cowork Mode)
 
-For a complete end-to-end test run:
+**For fully automated execution with Claude Code:**
 
 ```bash
-cd /path/to/GeneVariantFetcher
+cd /Users/kronckbm/GitRepos/GeneVariantFetcher
 
-# Step 1: Run automated pipeline
-python tests/run_test_pipeline.py
+# Step 1: Download papers via browser automation (uses VPN + Chrome profile)
+./venv/bin/python tests/run_browser_download.py
 
-# Step 2: Check what's missing and download manually (see Step 2 below)
+# Step 2: Process downloaded PDFs (convert to markdown + run data scout)
+./venv/bin/python tests/run_post_download.py
 
-# Step 3: Re-run extraction on new downloads
-python cli/run_extraction.py --gene KCNH2 --input tests/test_run_output/KCNH2/*/pmc_fulltext/
+# Step 3: Run full extraction pipeline
+./venv/bin/python tests/run_test_pipeline.py
 
-# Step 4: Compare results with reference database (uses fuzzy matching by default)
-python tests/compare_variants.py \
+# Step 4: Compare results (if reference database available)
+./venv/bin/python tests/compare_variants.py \
   --sqlite tests/test_run_output/KCNH2/*/KCNH2.db \
-  --excel tests/reference/KCNH2_HeterozygoteDatabase.xlsx \
-  --output tests/test_run_output/KCNH2/*/comparison/
+  --output tests/test_run_output/KCNH2/comparison/
+```
+
+### Runner Script Options
+
+```bash
+# Download only first 5 papers (for testing)
+./venv/bin/python tests/run_browser_download.py --max 5
+
+# Use Claude API to help find download links
+./venv/bin/python tests/run_browser_download.py --use-claude
+
+# Retry only paywalled papers (after fixing VPN)
+./venv/bin/python tests/run_browser_download.py --retry-paywall
+
+# Download specific PMIDs
+./venv/bin/python tests/run_browser_download.py --pmids 15840476,10973849
 ```
 
 ---
 
-## Step 1: Run Automated Pipeline
+## Step 1: Browser-Based Download
 
-Execute the initial automated pipeline which handles PMC open-access papers:
+Downloads papers using Playwright browser automation with your Chrome profile (for VPN/cookies):
 
 ```bash
-cd /path/to/GeneVariantFetcher
-python tests/run_test_pipeline.py
+cd /Users/kronckbm/GitRepos/GeneVariantFetcher
+./venv/bin/python tests/run_browser_download.py
 ```
 
 This will:
-- Parse PMIDs from `tests/test_pmids.txt`
-- Attempt automated downloads from PMC, Elsevier API, Wiley API
-- **Auto-retry up to 3 times on browser crashes** (new fix)
-- **Enhanced HTML extraction** for more publisher formats (new fix)
-- Generate `paywalled_missing.csv` for papers that need manual download
-- Create markdown files and run initial data scout on successful downloads
+- Open each paper URL in a browser (uses real Chrome profile)
+- Attempt to find and download PDFs automatically
+- **Auto-retry up to 3 times on browser crashes**
+- Save PDFs to `tests/test_run_output/KCNH2/downloads/pmc_fulltext/`
+- Update CSV with status (browser_done, paywall, captcha_blocked)
 
-**Output location:** `tests/test_run_output/KCNH2/{timestamp}/pmc_fulltext/`
+**Output location:** `tests/test_run_output/KCNH2/downloads/pmc_fulltext/`
 
-### Check Pipeline Results
-
-```bash
-# Find the latest test run
-LATEST=$(ls -td tests/test_run_output/KCNH2/*/ | head -1)
-echo "Latest run: $LATEST"
-
-# Check download success rate
-echo "=== Download Stats ==="
-wc -l ${LATEST}pmc_fulltext/successful_downloads.csv
-wc -l ${LATEST}pmc_fulltext/paywalled_missing.csv
-
-# Check extraction success rate
-echo "=== Extraction Stats ==="
-ls ${LATEST}extractions/*.json 2>/dev/null | wc -l
-```
-
----
-
-## Step 2: Manual Download of Paywalled Papers
-
-### 2.1 Identify Papers Needing Manual Download
+### Check Download Results
 
 ```bash
-# List papers that failed automated download
-cat tests/test_run_output/KCNH2/*/pmc_fulltext/paywalled_missing.csv
+# Check download status
+cat tests/test_run_output/KCNH2/downloads/test_pmids_download.csv | grep -c "browser_done"
 
-# Prioritize by expected variant count (if reference data available)
-python tests/compare_variants.py --list-priority-missing \
-  --sqlite tests/test_run_output/KCNH2/*/KCNH2.db \
-  --excel tests/reference/KCNH2_HeterozygoteDatabase.xlsx
+# List downloaded PDFs
+ls tests/test_run_output/KCNH2/downloads/pmc_fulltext/*.pdf 2>/dev/null | wc -l
+
+# Check what failed
+grep -E "paywall|captcha" tests/test_run_output/KCNH2/downloads/test_pmids_download.csv
 ```
 
-### 2.2 Download Papers by Publisher
+---
 
-**Priority order (by typical success rate with Vanderbilt VPN):**
+## Step 2: Post-Download Processing
 
-#### A. PMC Direct PDFs (Open Access)
-- Pattern: `https://pmc.ncbi.nlm.nih.gov/articles/PMC{id}/pdf/{filename}.pdf`
-- Should download automatically; failures usually due to rate limiting
-
-#### B. AHA/Circulation Journals (VPN IP-based access)
-- Navigate to: `https://www.ahajournals.org/doi/pdf/{DOI}`
-- Example: `https://www.ahajournals.org/doi/pdf/10.1161/01.cir.102.10.1178`
-- VPN should auto-grant access - no login required
-- **Check for supplemental materials** in "Data Supplement" section
-
-#### C. Wiley Journals (May require institutional login)
-- Navigate to: `https://onlinelibrary.wiley.com/doi/pdf/{DOI}`
-- If paywall shown, click "Access through your institution" → search "Vanderbilt"
-
-#### D. Elsevier/ScienceDirect (Often blocked by CAPTCHA)
-- Navigate to: `https://www.sciencedirect.com/science/article/pii/{PII}/pdfft`
-- If CAPTCHA appears, solve manually then proceed
-
-### 2.3 Download Supplemental Materials
-
-**CRITICAL: Supplements often contain the most valuable variant tables!**
-
-For each paper, navigate to the article's main page and look for:
-- "Supplementary Materials" / "Supporting Information" / "Data Supplement"
-
-**File naming convention:**
-```
-PMID_{pmid}_supplement_1.pdf
-PMID_{pmid}_supplement_table_S1.xlsx
-```
-
-### 2.4 Organize Downloaded Files
+Convert downloaded PDFs to markdown and run data scout:
 
 ```bash
-# Create pdfs directory
-mkdir -p tests/test_run_output/KCNH2/{timestamp}/pmc_fulltext/pdfs/
-
-# Use organize script (auto-matches recent downloads to PMIDs)
-python scripts/organize_downloads.py \
-  tests/test_run_output/KCNH2/{timestamp}/pmc_fulltext/pdfs/ \
-  --pmids "12345,67890" \
-  --since 120
+./venv/bin/python tests/run_post_download.py
 ```
 
----
+This will:
+- Convert all PDFs to markdown format
+- Combine main text + supplements into `{PMID}_FULL_CONTEXT.md`
+- Run Data Scout to create condensed `{PMID}_DATA_ZONES.md` files
+- Organize supplement files into `{PMID}_supplements/` folders
 
-## Step 3: Process Downloaded PDFs
+### Retry Failed Downloads
 
-### 3.1 Convert PDFs to Markdown
-
-```python
-from harvesting.format_converters import FormatConverter
-
-converter = FormatConverter()
-
-# Convert main PDF
-md_content = converter.pdf_to_markdown("path/to/PMID_12345.pdf")
-with open("12345_main.md", "w") as f:
-    f.write(md_content)
-
-# Convert supplement PDFs
-supp_md = converter.pdf_to_markdown("path/to/PMID_12345_supplement.pdf")
-with open("12345_supplement.md", "w") as f:
-    f.write(supp_md)
-```
-
-### 3.2 Create FULL_CONTEXT.md Files
-
-```python
-# Template for FULL_CONTEXT.md
-full_context = f"""# PMID: {pmid}
-# Title: {title}
-# Gene: KCNH2
-
-## Main Text
-{main_markdown}
-
-## Supplementary Materials
-{supplement_markdown}
-"""
-
-with open(f"{pmid}_FULL_CONTEXT.md", "w") as f:
-    f.write(full_context)
-```
-
----
-
-## Step 4: Extract Figures (Optional)
-
-For papers with pedigrees, tables, or variant diagrams:
-
-```python
-from harvesting.format_converters import FormatConverter
-from pathlib import Path
-
-converter = FormatConverter()
-figure_dir = Path(f"tests/test_run_output/KCNH2/{timestamp}/pmc_fulltext/{pmid}_figures")
-figure_dir.mkdir(exist_ok=True)
-
-converter.extract_pdf_figures(
-    pdf_path="path/to/PMID_12345.pdf",
-    output_dir=figure_dir
-)
-```
-
----
-
-## Step 5: Run Data Scout (LLM Analysis)
-
-```python
-from pipeline.data_scout import GeneticDataScout
-
-scout = GeneticDataScout()
-
-with open(f"{pmid}_FULL_CONTEXT.md") as f:
-    full_text = f.read()
-
-# Identify high-value data zones
-zones = scout.analyze(text=full_text, gene_symbol="KCNH2", pmid=pmid)
-
-# Save results
-with open(f"{pmid}_DATA_ZONES.json", "w") as f:
-    json.dump(zones.to_dict(), f, indent=2)
-
-# Generate condensed markdown
-condensed_md = scout.generate_condensed_markdown(zones, full_text)
-with open(f"{pmid}_DATA_ZONES.md", "w") as f:
-    f.write(condensed_md)
-```
-
----
-
-## Step 6: Run LLM Extraction
-
-### 6.1 Extract Variant Data
-
-```python
-from pipeline.extraction import ExpertExtractor
-from utils.models import Paper
-
-extractor = ExpertExtractor(
-    models=["claude-sonnet-4-20250514", "gpt-4o"],
-    gene_symbol="KCNH2"
-)
-
-paper = Paper(
-    pmid=pmid,
-    title=title,
-    full_text=full_context_md,
-    data_zones_md=data_zones_md
-)
-
-result = extractor.extract(paper)
-
-with open(f"{pmid}_extraction.json", "w") as f:
-    json.dump(result.to_dict(), f, indent=2)
-```
-
-### 6.2 Aggregate Results
-
-```python
-from pipeline.aggregation import ResultAggregator
-
-aggregator = ResultAggregator(output_dir="tests/test_run_output/KCNH2/{timestamp}")
-summary = aggregator.aggregate_all()
-aggregator.export_to_csv("KCNH2_variants_extracted.csv")
-```
-
----
-
-## Step 7: Verify Results
-
-### 7.1 Compare Against Reference Database
-
-The comparison script now uses **fuzzy matching by default** with automatic notation normalization (HGVS ↔ legacy format).
+If some papers are paywalled or CAPTCHA-blocked:
 
 ```bash
-# Full comparison with fuzzy matching (default)
-python tests/compare_variants.py \
-  --sqlite tests/test_run_output/KCNH2/*/KCNH2.db \
-  --excel tests/reference/KCNH2_HeterozygoteDatabase.xlsx \
-  --output tests/test_run_output/KCNH2/*/comparison/
+# Retry paywalled papers (make sure VPN is active)
+./venv/bin/python tests/run_browser_download.py --retry-paywall
 
-# Exact matching only (stricter)
-python tests/compare_variants.py \
-  --sqlite tests/test_run_output/KCNH2/*/KCNH2.db \
-  --excel tests/reference/KCNH2_HeterozygoteDatabase.xlsx \
-  --variant_match_mode exact \
-  --output tests/test_run_output/KCNH2/*/comparison/
-
-# Custom fuzzy threshold (default is 0.80)
-python tests/compare_variants.py \
-  --sqlite tests/test_run_output/KCNH2/*/KCNH2.db \
-  --excel tests/reference/KCNH2_HeterozygoteDatabase.xlsx \
-  --fuzzy_threshold 0.85 \
-  --output tests/test_run_output/KCNH2/*/comparison/
+# For CAPTCHA-blocked papers, use interactive mode
+./venv/bin/python -m cli.browser_fetch \
+  tests/test_run_output/KCNH2/downloads/test_pmids_download.csv \
+  --retry-captcha --wait-for-captcha --interactive
 ```
 
-**Output files generated:**
-- `comparison/report.md` - Summary comparison report
-- `comparison/exact_matches.csv` - Variants matching exactly
-- `comparison/fuzzy_matches.csv` - Variants matching via fuzzy/notation normalization
-- `comparison/missing_in_sqlite.csv` - Coverage gaps (in reference, not extracted)
-- `comparison/missing_in_excel.csv` - New discoveries (extracted, not in reference)
-- `comparison/count_mismatches.csv` - Carrier count discrepancies
+---
 
-### 7.2 Understand Notation Normalization
+## Step 3: Run Extraction Pipeline
 
-The comparison script automatically converts between formats:
-
-| Extraction (HGVS) | Reference (Legacy) | Status |
-|-------------------|-------------------|--------|
-| p.Arg328Cys | R328C | ✅ Matched |
-| p.Ala490Thr | A490T | ✅ Matched |
-| p.Pro926Alafs*14 | P926fsX | ✅ Fuzzy match |
-| p.Arg123_Lys130del | R123_K130del | ✅ Matched |
-
-### 7.3 Check for Missing Papers
+Run the full extraction pipeline on downloaded papers:
 
 ```bash
-# Count successfully processed papers
-ls tests/test_run_output/KCNH2/{timestamp}/pmc_fulltext/*_FULL_CONTEXT.md | wc -l
+./venv/bin/python tests/run_test_pipeline.py
+```
+
+This will:
+- Use the downloaded `FULL_CONTEXT.md` files
+- Run LLM-based variant extraction (Claude/GPT-4o cascade)
+- Aggregate results into SQLite database
+- Create `KCNH2_penetrance_summary.json`
+
+Alternatively, run extraction on a specific folder:
+
+```bash
+./venv/bin/python tests/run_folder_extraction.py \
+  --folder tests/test_run_output/KCNH2/downloads/pmc_fulltext \
+  --gene KCNH2
+```
+
+---
+
+## Step 4: Verify Results
+
+### Check Extraction Results
+
+```bash
+# Count downloaded papers
+ls tests/test_run_output/KCNH2/downloads/pmc_fulltext/*_FULL_CONTEXT.md 2>/dev/null | wc -l
+
+# Count extractions
+ls tests/test_run_output/KCNH2/*/extractions/*.json 2>/dev/null | wc -l
 
 # Check which PMIDs are still missing
-python -c "
+./venv/bin/python -c "
 from pathlib import Path
 
 with open('tests/test_pmids.txt') as f:
@@ -344,37 +169,53 @@ with open('tests/test_pmids.txt') as f:
 processed = {p.stem.split('_')[0] for p in Path('tests/test_run_output/KCNH2').rglob('*_FULL_CONTEXT.md')}
 
 missing = expected - processed
+print(f'Downloaded: {len(processed)}/{len(expected)} papers')
 print(f'Missing {len(missing)} papers:')
-for pmid in sorted(missing):
+for pmid in sorted(missing)[:10]:
     print(f'  {pmid}')
+if len(missing) > 10:
+    print(f'  ... and {len(missing)-10} more')
 "
 ```
+
+### Compare Against Reference Database (Optional)
+
+If you have a reference Excel file:
+
+```bash
+./venv/bin/python tests/compare_variants.py \
+  --sqlite tests/test_run_output/KCNH2/*/KCNH2.db \
+  --excel /path/to/KCNH2_reference.xlsx \
+  --output tests/test_run_output/KCNH2/comparison/
+```
+
+**Output files:**
+- `comparison/report.md` - Summary report
+- `comparison/exact_matches.csv` - Exact variant matches
+- `comparison/fuzzy_matches.csv` - Notation-normalized matches
+- `comparison/missing_in_sqlite.csv` - Coverage gaps
 
 ---
 
 ## Expected Output Structure
 
 ```
-tests/test_run_output/KCNH2/{timestamp}/
-├── pmc_fulltext/
-│   ├── paywalled_missing.csv      # Papers needing manual download
-│   ├── successful_downloads.csv   # Successfully downloaded papers
-│   ├── pdfs/                      # Manually downloaded PDFs
-│   ├── {pmid}_FULL_CONTEXT.md     # Combined main + supplements
-│   ├── {pmid}_DATA_ZONES.json     # Scout analysis results
-│   ├── {pmid}_DATA_ZONES.md       # Condensed high-value content
-│   └── {pmid}_figures/            # Extracted figures
-├── extractions/
-│   └── {pmid}_extraction.json     # LLM extraction results
-├── comparison/
-│   ├── report.md                  # Summary report
-│   ├── exact_matches.csv          # Perfect matches
-│   ├── fuzzy_matches.csv          # Notation-normalized matches
-│   ├── missing_in_sqlite.csv      # Coverage gaps
-│   └── missing_in_excel.csv       # New discoveries
-├── KCNH2.db                       # SQLite database
-├── KCNH2_penetrance_summary.json  # Aggregated data
-└── pipeline_log.txt               # Full pipeline log
+tests/test_run_output/KCNH2/
+├── downloads/                         # Browser download output
+│   ├── test_pmids_download.csv        # Download status tracking
+│   └── pmc_fulltext/
+│       ├── {pmid}_Main_Text.pdf       # Downloaded PDFs
+│       ├── {pmid}_FULL_CONTEXT.md     # Converted markdown
+│       ├── {pmid}_DATA_ZONES.md       # Condensed high-value content
+│       └── {pmid}_supplements/        # Supplement files
+├── {timestamp}/                       # Pipeline run output
+│   ├── extractions/
+│   │   └── KCNH2_PMID_{pmid}.json     # LLM extraction results
+│   ├── KCNH2.db                       # SQLite database
+│   └── KCNH2_penetrance_summary.json  # Aggregated data
+└── comparison/                        # Optional comparison output
+    ├── report.md
+    └── *.csv
 ```
 
 ---
@@ -384,76 +225,75 @@ tests/test_run_output/KCNH2/{timestamp}/
 ### Common Issues
 
 1. **Browser crashes during download**
-   - Now handled automatically with 3x retry logic
-   - If still failing, check Playwright installation: `playwright install chromium`
+   - Handled automatically with 3x retry logic
+   - If still failing: `./venv/bin/playwright install chromium`
 
-2. **"Text too short" extraction errors**
-   - Enhanced HTML parser now handles more publisher formats
-   - If still occurring, check if article is behind paywall (abstract-only)
+2. **VPN not working / Paywall errors**
+   - Make sure Vanderbilt VPN is connected
+   - Retry with: `./venv/bin/python tests/run_browser_download.py --retry-paywall`
 
-3. **SOCKS proxy errors**
-   - Fixed by installing: `pip install "httpx[socks]"`
-   - Verify: `python -c "import httpx; print('OK')"`
+3. **CAPTCHA blocks**
+   - Use interactive mode to solve manually:
+   ```bash
+   ./venv/bin/python -m cli.browser_fetch \
+     tests/test_run_output/KCNH2/downloads/test_pmids_download.csv \
+     --retry-captcha --wait-for-captcha --interactive
+   ```
 
-4. **Low match rate with reference database**
-   - Now uses fuzzy matching by default (0.80 threshold)
-   - Check `fuzzy_matches.csv` for notation-based matches
-   - Try lowering threshold: `--fuzzy_threshold 0.75`
-
-5. **Elsevier CAPTCHA blocks**
-   - User must solve CAPTCHA manually in browser
-   - Consider using Elsevier API key for better access
-
-6. **PDF conversion fails**
+4. **PDF conversion fails**
    - Some PDFs have DRM or are image-only
-   - Use OCR fallback: `converter.pdf_to_markdown(path, use_ocr=True)`
+   - Check the PDF manually and re-download if corrupted
 
-### Re-running Failed Papers
+5. **"Text too short" extraction errors**
+   - Paper may be abstract-only (paywall blocked full text)
+   - Re-download with VPN active
 
-```bash
-# Re-run pipeline for specific PMIDs only
-python cli/run_extraction.py \
-  --gene KCNH2 \
-  --pmids "12345,67890" \
-  --output tests/test_run_output/KCNH2/{timestamp}/
-```
-
-### Viewing Fix Details
+### Re-running Specific Papers
 
 ```bash
-# See all fixes applied in this test run
-cat tests/test_run_output/KCNH2/*/FIXES_APPLIED.md
+# Download specific PMIDs
+./venv/bin/python tests/run_browser_download.py --pmids "15840476,10973849"
+
+# Re-process downloads only
+./venv/bin/python tests/run_post_download.py
 ```
 
 ---
 
 ## Performance Targets
 
-| Metric | Baseline | Target | Current |
-|--------|----------|--------|---------|
-| Download success rate | 62.7% | 80% | Track in results |
-| Extraction success rate | 35.3% | 60% | Track in results |
-| Variant coverage (vs reference) | ~10% | 80% | Track in comparison |
-| Exact + fuzzy match rate | 0.2% | 90% | **4.5%** (improved) |
+| Metric | Target |
+|--------|--------|
+| Download success rate (with VPN) | 80%+ |
+| Extraction success rate | 60%+ |
+| Papers with usable full text | 40/51 |
 
 ---
 
-## Notes for Claude (AI Assistant)
+## Notes for Claude Code Cowork
 
 When executing this pipeline:
 
-1. **Browser crashes are now auto-recovered** - No need to manually restart
-2. **HTML parsing is enhanced** - Most publishers should extract full text now
-3. **Always check VPN status first** - Many papers require institutional access
-4. **Download supplements proactively** - They often contain the most valuable variant tables
-5. **Use fuzzy comparison** - Default mode now handles notation differences automatically
-6. **Name files consistently** - Include PMID in all filenames for easy tracking
-7. **Verify downloads** - Check PDF file sizes (>10KB usually means real content)
-8. **Run data scout before extraction** - It identifies the most valuable sections
-9. **Save intermediate results** - Pipeline can be resumed from any step
-10. **Check FIXES_APPLIED.md** - Documents all improvements made to the pipeline
+1. **Run scripts in order**: download → post-process → extract
+2. **Check VPN first**: Run `curl -s ifconfig.me` - should show Vanderbilt IP
+3. **Browser uses real profile**: Cookies/sessions from Chrome are available
+4. **Auto-retry on failures**: Browser crashes are handled automatically
+5. **Check CSV status**: `grep -c browser_done test_pmids_download.csv`
+6. **Retry paywalled papers**: Use `--retry-paywall` after fixing VPN
+
+### Quick Commands for Claude Code
+
+```bash
+# Full automated run
+cd /Users/kronckbm/GitRepos/GeneVariantFetcher
+./venv/bin/python tests/run_browser_download.py
+./venv/bin/python tests/run_post_download.py
+./venv/bin/python tests/run_test_pipeline.py
+
+# Check progress
+cat tests/test_run_output/KCNH2/downloads/test_pmids_download.csv | cut -d, -f3 | sort | uniq -c
+```
 
 ---
 
 *Last updated: 2026-01-26*
-*See FIXES_APPLIED.md for detailed fix documentation*
