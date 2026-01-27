@@ -5,11 +5,14 @@ This module provides unified utilities for parsing HTML and extracting
 PubMed IDs (PMIDs) from various sources including PubMind and PMC.
 """
 
-import re
-import requests
 import logging
-from typing import Set, List, Union, Dict, Any
+import re
+from typing import Any, Dict, List, Set, Union
+
+import requests
 from bs4 import BeautifulSoup
+
+from utils.http_utils import get_browser_session
 
 logger = logging.getLogger(__name__)
 
@@ -182,6 +185,10 @@ def create_scraping_session() -> requests.Session:
     This function creates a session with headers that mimic a regular browser,
     which helps avoid being blocked by websites that check for bot traffic.
 
+    Note:
+        This is an alias for get_browser_session() from utils.http_utils.
+        Prefer using get_browser_session() directly in new code.
+
     Returns:
         Configured requests.Session object
 
@@ -189,25 +196,8 @@ def create_scraping_session() -> requests.Session:
         >>> session = create_scraping_session()
         >>> response = session.get("https://example.com")
     """
-    session = requests.Session()
-
-    # Set browser-like headers
-    session.headers.update(
-        {
-            "User-Agent": (
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/120.0.0.0 Safari/537.36"
-            ),
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Language": "en-US,en;q=0.9",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Connection": "keep-alive",
-        }
-    )
-
     logger.debug("Created scraping session with browser-like headers")
-    return session
+    return get_browser_session()
 
 
 def parse_html_safe(html: str, parser: str = "html.parser") -> BeautifulSoup:
