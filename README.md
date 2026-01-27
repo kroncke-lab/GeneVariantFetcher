@@ -66,7 +66,7 @@ brew install poppler
 |---------|------|----------|
 | `python main.py` | **GUI** (default) | Web interface, checkpointing, pause/resume |
 | `python main.py --cli GENE` | CLI | Full pipeline, no checkpointing |
-| `python automated_workflow.py GENE` | CLI (direct) | Advanced options (`--auto-synonyms`, `--max-downloads`, etc.) |
+| `python -m cli.automated_workflow GENE` | CLI (direct) | Advanced options (`--auto-synonyms`, `--max-downloads`, etc.) |
 
 The GUI is recommended for most use cases. It provides real-time progress, job management, and automatic resume after interruption.
 
@@ -186,7 +186,7 @@ python scripts/extract_ttr_to_csv.py --db path/to/GENE.db --output variants.csv
 ### Compare Curated vs Automated
 
 ```bash
-python tests/compare_variants.py --excel curated.xlsx --sqlite GENE.db
+python -m cli.compare_variants --excel curated.xlsx --sqlite GENE.db
 ```
 
 ### Fetching Paywalled Papers
@@ -199,27 +199,27 @@ Two options for downloading papers that couldn't be auto-fetched:
 pip install playwright && playwright install chromium
 
 # Interactive mode: browser opens, you log in/download, files auto-organized
-python browser_fetch.py results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv --interactive
+python -m cli.browser_fetch results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv --interactive
 
 # With CAPTCHA support: waits up to 5 min for manual CAPTCHA completion
-python browser_fetch.py paywalled_missing.csv --interactive --wait-for-captcha
+python -m cli.browser_fetch paywalled_missing.csv --interactive --wait-for-captcha
 
 # Retry only previously failed papers
-python browser_fetch.py paywalled_missing.csv --retry-failures
+python -m cli.browser_fetch paywalled_missing.csv --retry-failures
 
 # Fully automated (works for open-access papers)
-python browser_fetch.py paywalled_missing.csv --use-claude
+python -m cli.browser_fetch paywalled_missing.csv --use-claude
 ```
 
 **Option 2: Manual with fetch_manager**
 ```bash
-python fetch_manager.py results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv
+python -m cli.fetch_manager results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv
 ```
 
 **Post-download processing:**
 ```bash
 # Convert PDFs to markdown and run scout
-python fetch_manager.py paywalled_missing.csv --convert --run-scout --gene GENE
+python -m cli.fetch_manager paywalled_missing.csv --convert --run-scout --gene GENE
 ```
 
 ## Troubleshooting
