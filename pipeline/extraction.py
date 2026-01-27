@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import List, Optional
 
 from config.settings import get_settings
+from config.constants import MIN_CONDENSED_SIZE
 from pipeline.prompts import (
     COMPACT_EXTRACTION_PROMPT,
     CONTINUATION_PROMPT,
@@ -143,9 +144,8 @@ class ExpertExtractor(BaseLLMCaller):
         """Clamp max_tokens to model-safe limits to avoid provider errors."""
         return clamp_max_tokens(model, requested)
 
-    # Minimum size for DATA_ZONES.md to be considered useful
-    # If smaller than this, fall back to full text
-    MIN_CONDENSED_SIZE = 500
+    # Use centralized constant for minimum condensed size threshold
+    MIN_CONDENSED_SIZE = MIN_CONDENSED_SIZE
 
     def _prepare_full_text(self, paper: Paper) -> str:
         """

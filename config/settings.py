@@ -41,9 +41,8 @@ class Settings(BaseSettings):
         description="Comma-separated list of models for Tier 3 extraction (e.g., 'gpt-4o-mini,gpt-4o')",
     )
 
-    # Legacy aliases for backward compatibility
+    # Legacy alias for backward compatibility
     intern_model: str = Field(default="gpt-4o-mini", env="INTERN_MODEL")
-    rate_limit_per_minute: int = Field(default=60, env="RATE_LIMIT_PER_MINUTE")
 
     # Tiered Classification Configuration
     enable_tier1: bool = Field(

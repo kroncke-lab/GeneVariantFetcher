@@ -48,4 +48,3 @@ def test_valid_settings_are_loaded(monkeypatch):
     assert settings.openai_api_key == "sk-openai"
     assert settings.ncbi_email == "user@example.org"
     assert settings.intern_model == "gpt-4o-mini"
-    assert settings.rate_limit_per_minute == 60

@@ -11,6 +11,7 @@ from typing import List, Optional
 from utils.models import Paper, FilterResult, FilterDecision, FilterTier
 from utils.llm_utils import BaseLLMCaller
 from config.settings import get_settings
+from config.constants import FILTER_CLINICAL_KEYWORDS
 
 logger = logging.getLogger(__name__)
 
@@ -21,66 +22,8 @@ class KeywordFilter:
     Checks for clinical/variant-related keywords to reduce obviously irrelevant papers.
     """
 
-    DEFAULT_CLINICAL_KEYWORDS = [
-        # Variant/mutation terms
-        "variant",
-        "mutation",
-        "polymorphism",
-        "SNP",
-        "deletion",
-        "insertion",
-        "substitution",
-        "missense",
-        "nonsense",
-        "frameshift",
-        "splice",
-        "indel",
-        "copy number",
-        "CNV",
-        # Clinical terms
-        "patient",
-        "patients",
-        "clinical",
-        "disease",
-        "syndrome",
-        "phenotype",
-        "diagnosis",
-        "treatment",
-        "therapy",
-        "outcome",
-        "prognosis",
-        "symptom",
-        "symptoms",
-        "manifestation",
-        "pathogenic",
-        "benign",
-        # Study types
-        "case report",
-        "case series",
-        "cohort",
-        "clinical trial",
-        "study",
-        "analysis",
-        "association",
-        "genotype",
-        "phenotype",
-        # Medical/genetic terms
-        "pathology",
-        "molecular",
-        "genetic",
-        "genomic",
-        "exome",
-        "sequencing",
-        "gene",
-        "chromosome",
-        "allele",
-        "heterozygous",
-        "homozygous",
-        "carrier",
-        "inheritance",
-        "familial",
-        "sporadic",
-    ]
+    # Use centralized constant for keywords
+    DEFAULT_CLINICAL_KEYWORDS = FILTER_CLINICAL_KEYWORDS
 
     def __init__(
         self,
@@ -91,12 +34,12 @@ class KeywordFilter:
         Initialize the keyword filter.
 
         Args:
-            keywords: List of keywords to search for. If None, uses DEFAULT_CLINICAL_KEYWORDS.
+            keywords: List of keywords to search for. If None, uses FILTER_CLINICAL_KEYWORDS from config.
             min_keyword_matches: Minimum number of keyword matches required to pass. If None, uses config default.
         """
         settings = get_settings()
 
-        self.keywords = keywords or self.DEFAULT_CLINICAL_KEYWORDS
+        self.keywords = keywords or FILTER_CLINICAL_KEYWORDS
         self.min_keyword_matches = (
             min_keyword_matches
             if min_keyword_matches is not None

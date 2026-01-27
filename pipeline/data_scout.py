@@ -17,6 +17,7 @@ from typing import Optional
 from dataclasses import dataclass
 
 from utils.scout_models import DataZone, DataZoneReport
+from config.constants import SCOUT_CLINICAL_KEYWORDS
 
 logger = logging.getLogger(__name__)
 
@@ -97,28 +98,8 @@ class GeneticDataScout:
         r"IVS\d+[+-]\d+[ACGT]>[ACGT]",  # Intronic legacy: IVS2+1G>A
     ]
 
-    # Clinical keywords for relevance scoring
-    CLINICAL_KEYWORDS = [
-        "patient",
-        "proband",
-        "carrier",
-        "affected",
-        "unaffected",
-        "phenotype",
-        "family",
-        "pedigree",
-        "segregation",
-        "penetrance",
-        "symptomatic",
-        "asymptomatic",
-        "diagnosis",
-        "onset",
-        "presentation",
-        "heterozygous",
-        "homozygous",
-        "compound heterozygous",
-        "de novo",
-    ]
+    # Clinical keywords for relevance scoring (from centralized constants)
+    CLINICAL_KEYWORDS = SCOUT_CLINICAL_KEYWORDS
 
     # Section headers to identify source context
     SECTION_PATTERNS = {
