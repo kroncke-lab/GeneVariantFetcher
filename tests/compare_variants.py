@@ -620,6 +620,7 @@ def convert_aa_3_to_1(variant: str) -> Optional[str]:
     Convert 3-letter amino acid codes to 1-letter in a variant string.
 
     e.g., p.Arg123His -> p.R123H
+    Also handles: p.Arg123del, p.Arg123fs, p.Arg123*, p.Arg123_Lys130del
     """
     if not variant or not variant.lower().startswith("p."):
         return None
@@ -627,7 +628,7 @@ def convert_aa_3_to_1(variant: str) -> Optional[str]:
     result = variant[:2]  # Keep "p."
     remaining = variant[2:]
 
-    # Pattern: 3-letter AA, position, 3-letter AA (with optional fs, del, etc.)
+    # Pattern 1: 3-letter AA, position, 3-letter AA (with optional fs, del, etc.)
     pattern = r"([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2})?(.*)$"
     match = re.match(pattern, remaining)
 
@@ -638,6 +639,15 @@ def convert_aa_3_to_1(variant: str) -> Optional[str]:
         result = f"p.{aa1_short}{pos}{aa2_short}{rest or ''}"
         return result
 
+    # Pattern 2: Handle range deletions like p.Arg123_Lys130del
+    range_pattern = r"([A-Z][a-z]{2})(\d+)_([A-Z][a-z]{2})(\d+)(.*)"
+    range_match = re.match(range_pattern, remaining)
+    if range_match:
+        aa1, pos1, aa2, pos2, rest = range_match.groups()
+        aa1_short = AA_3_TO_1.get(aa1, aa1)
+        aa2_short = AA_3_TO_1.get(aa2, aa2)
+        return f"p.{aa1_short}{pos1}_{aa2_short}{pos2}{rest}"
+
     return None
 
 
@@ -646,7 +656,14 @@ def convert_aa_1_to_3(variant: str) -> Optional[str]:
     Convert 1-letter amino acid codes to 3-letter in a variant string.
 
     e.g., p.R123H -> p.Arg123His
+    Also handles: R123H (without p. prefix), R123del, R123fs, R123*
     """
+    # Handle variants without p. prefix
+    if variant and not variant.lower().startswith("p.") and not variant.lower().startswith("c."):
+        # Check if it looks like a protein variant (letter + number + letter/suffix)
+        if re.match(r"^[A-Z]\d+[A-Z*]", variant, re.IGNORECASE):
+            variant = f"p.{variant}"
+
     if not variant or not variant.lower().startswith("p."):
         return None
 
@@ -660,6 +677,15 @@ def convert_aa_1_to_3(variant: str) -> Optional[str]:
         aa2_long = AA_1_TO_3.get(aa2, aa2) if aa2 else ""
         result = f"p.{aa1_long}{pos}{aa2_long}{rest or ''}"
         return result
+
+    # Pattern 2: Handle range deletions like p.R123_K130del
+    range_pattern = r"^p\.([A-Z\*])(\d+)_([A-Z\*])(\d+)(.*)$"
+    range_match = re.match(range_pattern, variant)
+    if range_match:
+        aa1, pos1, aa2, pos2, rest = range_match.groups()
+        aa1_long = AA_1_TO_3.get(aa1, aa1)
+        aa2_long = AA_1_TO_3.get(aa2, aa2)
+        return f"p.{aa1_long}{pos1}_{aa2_long}{pos2}{rest}"
 
     return None
 
@@ -898,7 +924,15 @@ def load_excel_data(
     engine = "xlrd" if excel_path.suffix.lower() == ".xls" else "openpyxl"
 
     try:
-        df = pd.read_excel(excel_path, sheet_name=sheet_name, engine=engine)
+        # If sheet_name is None, default to first sheet (index 0)
+        read_sheet = sheet_name if sheet_name is not None else 0
+        df = pd.read_excel(excel_path, sheet_name=read_sheet, engine=engine)
+        # Handle case where read_excel returns a dict (when sheet_name is a list or None with multiple sheets)
+        if isinstance(df, dict):
+            # Get the first sheet
+            first_sheet = list(df.keys())[0]
+            logger.info(f"Multiple sheets found, using first sheet: {first_sheet}")
+            df = df[first_sheet]
     except ImportError as exc:
         if engine == "xlrd":
             raise ImportError(
@@ -1523,15 +1557,15 @@ Examples:
     parser.add_argument(
         "--variant_match_mode",
         choices=["exact", "fuzzy"],
-        default="exact",
-        help="Variant matching mode (default: exact)",
+        default="fuzzy",
+        help="Variant matching mode (default: fuzzy for better cross-notation matching)",
     )
 
     parser.add_argument(
         "--fuzzy_threshold",
         type=float,
-        default=0.85,
-        help="Minimum similarity for fuzzy matching (default: 0.85)",
+        default=0.80,
+        help="Minimum similarity for fuzzy matching (default: 0.80 for better cross-notation matching)",
     )
 
     parser.add_argument(

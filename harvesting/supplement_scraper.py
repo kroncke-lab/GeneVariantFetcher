@@ -557,20 +557,33 @@ class SupplementScraper:
                     if text:
                         markdown += f"{text}\n\n"
 
-        # Ultimate fallback: int all paragraphs
+        # Ultimate fallback: more aggressive extraction
         if len(markdown) < 500:
             markdown = "# MAIN TEXT\n\n"
             if title:
                 markdown += f"## {title}\n\n"
 
+            # Try multiple content containers
             content_divs = soup.find_all(
-                "div", class_=re.compile(r"(Body|content|article)", re.I)
+                "div", class_=re.compile(r"(Body|content|article|fulltext|full-text|text)", re.I)
             )
             for div in content_divs:
                 for p in div.find_all("p"):
                     text = p.get_text().strip()
                     if len(text) > 50:
                         markdown += f"{text}\n\n"
+
+        # If still too short, extract all paragraphs from body
+        if len(markdown) < 500:
+            body = soup.find("body")
+            if body:
+                for p in body.find_all("p"):
+                    text = p.get_text().strip()
+                    if len(text) > 50:
+                        # Skip common non-content patterns
+                        skip_patterns = ["cookie", "privacy", "sign in", "subscribe", "javascript"]
+                        if not any(pattern in text.lower() for pattern in skip_patterns):
+                            markdown += f"{text}\n\n"
 
         return markdown if len(markdown) > 200 else None, title
 
@@ -651,7 +664,7 @@ class SupplementScraper:
 
         # Remove script, style, nav, footer, header elements
         for element in soup.find_all(
-            ["script", "style", "nav", "footer", "header", "aside"]
+            ["script", "style", "nav", "footer", "header", "aside", "noscript"]
         ):
             element.decompose()
 
@@ -664,43 +677,97 @@ class SupplementScraper:
             title = re.sub(r"\s*[-|].*$", "", title)
             markdown += f"## {title}\n\n"
 
-        # Look for common article containers
+        # Look for common article containers - expanded list for better coverage
         article_containers = [
             soup.find("article"),
-            soup.find("div", class_=re.compile(r"(article|content|body|main)", re.I)),
+            soup.find("div", class_=re.compile(r"(article|content|body|main|fulltext|full-text)", re.I)),
             soup.find("main"),
-            soup.find("div", id=re.compile(r"(article|content|body|main)", re.I)),
+            soup.find("div", id=re.compile(r"(article|content|body|main|fulltext|full-text)", re.I)),
+            # Publisher-specific containers
+            soup.find("div", class_=re.compile(r"(hlFld-Fulltext|article-content|ArticleBody)", re.I)),
+            soup.find("section", class_=re.compile(r"(article|content|body)", re.I)),
+            # AHA journals specific
+            soup.find("div", class_="article__body"),
+            soup.find("div", class_="article-full-text"),
+            # Oxford Academic specific
+            soup.find("div", class_="article-body"),
+            # Springer specific
+            soup.find("div", class_="c-article-body"),
+            # PNAS specific
+            soup.find("div", class_="article fulltext-view"),
         ]
 
         content_found = False
+        extracted_text = []
+
         for container in article_containers:
             if container:
-                # Extract sections
-                for section in container.find_all(["section", "div"], recursive=False):
-                    section_title = section.find(["h2", "h3", "h4"])
+                # Try to extract from sections first
+                sections = container.find_all(["section", "div"], recursive=True)
+                for section in sections:
+                    section_title = section.find(["h2", "h3", "h4"], recursive=False)
                     if section_title:
-                        markdown += f"### {section_title.get_text().strip()}\n\n"
+                        title_text = section_title.get_text().strip()
+                        if title_text and len(title_text) < 100:  # Skip overly long "titles"
+                            extracted_text.append(f"### {title_text}\n\n")
 
-                    for p in section.find_all("p"):
+                    for p in section.find_all("p", recursive=False):
                         text = p.get_text().strip()
                         if len(text) > 30:
-                            markdown += f"{text}\n\n"
+                            extracted_text.append(f"{text}\n\n")
+                            content_found = True
+
+                # If no sections, try getting paragraphs directly
+                if not content_found:
+                    for p in container.find_all("p"):
+                        text = p.get_text().strip()
+                        if len(text) > 30:
+                            extracted_text.append(f"{text}\n\n")
                             content_found = True
 
                 if content_found:
                     break
 
-        # Ultimate fallback: int all paragraphs
-        if not content_found or len(markdown) < 500:
-            markdown = "# MAIN TEXT\n\n"
-            if title:
-                markdown += f"## {title}\n\n"
+        # If containers didn't work, try extracting from the whole page more aggressively
+        if not content_found or len("".join(extracted_text)) < 500:
+            extracted_text = []
 
-            for p in soup.find_all("p"):
-                text = p.get_text().strip()
-                # Filter out short paragraphs that are likely navigation or UI elements
-                if len(text) > 100:
-                    markdown += f"{text}\n\n"
+            # Look for abstract first
+            abstract = soup.find(["div", "section"], class_=re.compile(r"abstract", re.I))
+            if abstract:
+                abstract_text = abstract.get_text().strip()
+                if len(abstract_text) > 100:
+                    extracted_text.append(f"### Abstract\n\n{abstract_text}\n\n")
+
+            # Get all paragraphs from body
+            body = soup.find("body")
+            if body:
+                for p in body.find_all("p"):
+                    text = p.get_text().strip()
+                    # Filter out short paragraphs that are likely navigation or UI elements
+                    # But use a lower threshold to capture more content
+                    if len(text) > 50:
+                        # Skip cookie notices, login prompts, etc.
+                        skip_patterns = [
+                            "cookie", "privacy policy", "sign in", "log in",
+                            "subscribe", "register", "your browser", "javascript"
+                        ]
+                        if not any(pattern in text.lower() for pattern in skip_patterns):
+                            extracted_text.append(f"{text}\n\n")
+                            content_found = True
+
+        if extracted_text:
+            markdown += "".join(extracted_text)
+
+        # Final fallback: just get all text if nothing worked
+        if len(markdown) < 500:
+            body = soup.find("body")
+            if body:
+                all_text = body.get_text(separator="\n", strip=True)
+                # Clean up excessive whitespace
+                all_text = re.sub(r'\n{3,}', '\n\n', all_text)
+                if len(all_text) > 500:
+                    markdown = f"# MAIN TEXT\n\n## {title}\n\n{all_text}\n"
 
         return markdown if len(markdown) > 200 else None, title
 

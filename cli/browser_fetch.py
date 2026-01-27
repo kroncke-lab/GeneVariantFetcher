@@ -390,6 +390,75 @@ class BrowserFetcher:
         if hasattr(self, "playwright"):
             self.playwright.stop()
 
+    def _restart_browser(self):
+        """
+        Restart the browser after a crash.
+
+        Closes existing browser/context and creates a new one.
+        """
+        logger.info("  [Recovery] Restarting browser...")
+
+        # Close existing browser if possible
+        try:
+            if self.page:
+                self.page.close()
+        except Exception:
+            pass
+
+        try:
+            if hasattr(self, 'context') and self.context:
+                self.context.close()
+        except Exception:
+            pass
+
+        try:
+            if self.browser:
+                self.browser.close()
+        except Exception:
+            pass
+
+        # Common launch args for anti-detection
+        launch_args = [
+            "--disable-blink-features=AutomationControlled",
+            "--disable-dev-shm-usage",
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--disable-infobars",
+            "--window-size=1920,1080",
+            "--start-maximized",
+        ]
+
+        # Re-create browser
+        self.browser = self.playwright.chromium.launch(
+            headless=self.headless,
+            downloads_path=str(self.downloads_dir),
+            slow_mo=self.slow_mo,
+            args=launch_args,
+        )
+
+        # Create new context
+        self.context = self.browser.new_context(
+            accept_downloads=True,
+            user_agent=(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/122.0.0.0 Safari/537.36"
+            ),
+            viewport={"width": 1920, "height": 1080},
+            locale="en-US",
+            timezone_id="America/New_York",
+            permissions=["geolocation"],
+            color_scheme="light",
+        )
+
+        # Create new page
+        self.page = self.context.new_page()
+
+        # Apply stealth patches
+        self._apply_stealth_patches(self.page)
+
+        logger.info("  [Recovery] Browser restarted successfully")
+
     def _get_existing_files(self) -> set:
         """Get set of existing files in downloads directory."""
         return {f.name for f in self.downloads_dir.iterdir() if f.is_file()}
@@ -2103,8 +2172,42 @@ def run_browser_fetch(
                     fetcher, pmid, url, downloads_dir, target_dir
                 )
             else:
-                # Fully automated mode
-                result = fetcher.fetch_paper(pmid, url)
+                # Fully automated mode with retry on crash
+                max_retries = 3
+                for attempt in range(max_retries):
+                    try:
+                        result = fetcher.fetch_paper(pmid, url)
+                        break  # Success, exit retry loop
+                    except Exception as e:
+                        error_str = str(e).lower()
+                        is_crash = any(term in error_str for term in [
+                            "crash", "target closed", "connection closed",
+                            "browser has been closed", "page closed",
+                            "protocol error", "session closed"
+                        ])
+
+                        if is_crash and attempt < max_retries - 1:
+                            logger.warning(f"  Browser crash detected (attempt {attempt + 1}/{max_retries}): {e}")
+                            logger.info("  Attempting to restart browser...")
+                            try:
+                                # Try to restart the browser
+                                fetcher._restart_browser()
+                                time.sleep(2)  # Give browser time to stabilize
+                                logger.info("  Browser restarted, retrying...")
+                                continue
+                            except Exception as restart_error:
+                                logger.error(f"  Failed to restart browser: {restart_error}")
+
+                        # Final failure
+                        result = DownloadResult(
+                            pmid=pmid,
+                            success=False,
+                            files_downloaded=[],
+                            error=f"Browser crash after {attempt + 1} attempts: {str(e)}",
+                            method="crash_recovery_failed",
+                            failure_type="crash",
+                        )
+                        break
 
             results.append(result)
 
