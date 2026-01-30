@@ -37,6 +37,7 @@ from typing import Optional, List, Dict, Any
 from dataclasses import dataclass
 
 import pandas as pd
+import requests
 
 # Import supplement scraper from harvesting module
 try:
@@ -501,18 +502,144 @@ class BrowserFetcher:
 
         return False
 
+    def _extract_and_save_figures(self, page: Page, pmid: str, article_html: str) -> List[Dict]:
+        """
+        Extract figure images from the page and save them locally.
+        
+        Returns list of dicts with figure info (local_path, caption, original_url).
+        """
+        from urllib.parse import urljoin
+        
+        figures_dir = self.target_dir / f"{pmid}_figures"
+        figures = []
+        
+        try:
+            # Find figure images using various selectors
+            figure_selectors = [
+                "figure img",
+                ".figure img", 
+                ".article-figure img",
+                "img.figure",
+                "img[class*='figure']",
+                "img[src*='figure']",
+                "img[src*='fig']",
+                ".highres-img",
+                "picture img",
+            ]
+            
+            seen_urls = set()
+            img_elements = []
+            
+            for selector in figure_selectors:
+                try:
+                    elements = page.query_selector_all(selector)
+                    img_elements.extend(elements)
+                except Exception:
+                    continue
+            
+            if not img_elements:
+                logger.info("  [Figures] No figure images found")
+                return figures
+            
+            # Create figures directory
+            figures_dir.mkdir(exist_ok=True)
+            logger.info(f"  [Figures] Found {len(img_elements)} potential figure images")
+            
+            fig_count = 0
+            captions_data = []
+            
+            for img in img_elements:
+                try:
+                    src = img.get_attribute("src") or img.get_attribute("data-src")
+                    if not src or src in seen_urls:
+                        continue
+                    seen_urls.add(src)
+                    
+                    # Skip small icons, logos, etc.
+                    if any(skip in src.lower() for skip in ['icon', 'logo', 'button', 'arrow', 'spinner']):
+                        continue
+                    
+                    # Make absolute URL
+                    full_url = urljoin(page.url, src)
+                    
+                    # Get caption (look for nearby figcaption or alt text)
+                    caption = img.get_attribute("alt") or ""
+                    try:
+                        parent = img.evaluate_handle("el => el.closest('figure')")
+                        if parent:
+                            figcaption = parent.query_selector("figcaption")
+                            if figcaption:
+                                caption = figcaption.text_content().strip()
+                    except Exception:
+                        pass
+                    
+                    # Determine file extension
+                    ext = Path(src.split('?')[0]).suffix.lower()
+                    if ext not in ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']:
+                        ext = '.jpg'  # Default
+                    
+                    fig_count += 1
+                    filename = f"figure_{fig_count:03d}{ext}"
+                    local_path = figures_dir / filename
+                    
+                    # Download the image
+                    try:
+                        response = requests.get(full_url, timeout=30, headers={
+                            'User-Agent': 'Mozilla/5.0 (compatible; research-bot)'
+                        })
+                        if response.status_code == 200 and len(response.content) > 1000:
+                            local_path.write_bytes(response.content)
+                            figures.append({
+                                'local_path': str(local_path),
+                                'filename': filename,
+                                'caption': caption,
+                                'original_url': full_url
+                            })
+                            captions_data.append({
+                                'filename': filename,
+                                'caption': caption,
+                                'original_url': full_url
+                            })
+                            logger.info(f"  [Figures] Saved {filename}")
+                    except Exception as e:
+                        logger.warning(f"  [Figures] Failed to download {full_url}: {e}")
+                        
+                except Exception as e:
+                    logger.debug(f"  [Figures] Error processing image: {e}")
+                    continue
+            
+            # Save captions to JSON
+            if captions_data:
+                captions_path = figures_dir / "captions.json"
+                captions_path.write_text(json.dumps(captions_data, indent=2))
+                logger.info(f"  [Figures] Saved {len(captions_data)} figures to {figures_dir}")
+            
+        except Exception as e:
+            logger.error(f"  [Figures] Error extracting figures: {e}")
+        
+        return figures
+
     def _scrape_article_html(self, page: Page, pmid: str) -> Optional[Path]:
         """
         Scrape article content from HTML when PDF is not available.
 
         For older papers or sites without downloadable PDFs, extract the
-        article text from the HTML and save as markdown.
+        article text from the HTML and save as markdown. Also saves raw HTML
+        and extracts figure images.
 
         Returns path to saved markdown file, or None if extraction failed.
         """
         logger.info("  [HTMLScrape] Attempting to extract article content from HTML...")
 
         try:
+            # Get the full page HTML first (for raw saving)
+            full_page_html = page.content()
+            
+            # Save raw HTML
+            raw_html_path = self.target_dir / f"{pmid}_raw.html"
+            raw_html_path.write_text(full_page_html, encoding="utf-8")
+            logger.info(f"  [HTMLScrape] Saved raw HTML to {pmid}_raw.html")
+            
             # Common selectors for article content
             content_selectors = [
                 "article.article",
@@ -543,8 +670,11 @@ class BrowserFetcher:
 
             if not article_html or len(article_html) < 1000:
                 # Fallback: get the whole page
-                article_html = page.content()
+                article_html = full_page_html
                 logger.info("  [HTMLScrape] Using full page content")
+            
+            # Extract and save figures
+            figures = self._extract_and_save_figures(page, pmid, article_html)
 
             # Extract title
             title = ""
