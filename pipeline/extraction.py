@@ -551,6 +551,36 @@ class ExpertExtractor(BaseLLMCaller):
         extracted_data["variants"] = existing_variants
         return extracted_data
 
+    def _format_table_hints(self, table_variants: List[dict]) -> str:
+        """
+        Format pre-extracted table variants as structured hints for the LLM prompt.
+
+        This gives the LLM a head start by showing variants already detected via regex,
+        helping it focus on extracting clinical details and catching any missed variants.
+        """
+        if not table_variants:
+            return ""
+
+        hints = [
+            "\n\n--- PRE-EXTRACTED TABLE VARIANTS (regex detection) ---",
+            f"The following {len(table_variants)} variant(s) were detected in tables via pattern matching.",
+            "Use these as hints - verify and enrich with clinical details from the text:",
+            "",
+        ]
+
+        for i, v in enumerate(table_variants, 1):
+            parts = [f"{i}."]
+            if v.get("cdna_notation"):
+                parts.append(v["cdna_notation"])
+            if v.get("protein_notation"):
+                parts.append(f"/ {v['protein_notation']}")
+            if v.get("source_location"):
+                parts.append(f"[{v['source_location']}]")
+            hints.append(" ".join(parts))
+
+        hints.append("\n--- END PRE-EXTRACTED HINTS ---\n")
+        return "\n".join(hints)
+
     def _filter_by_gene(self, extracted_data: dict, target_gene: str) -> dict:
         """
         Filter variants to only keep those matching the target gene.
@@ -1111,6 +1141,19 @@ class ExpertExtractor(BaseLLMCaller):
             full_text, gene_symbol=paper.gene_symbol
         )
 
+        # Pre-extract variants from tables BEFORE LLM call (provides hints to improve extraction)
+        pre_extracted_variants = self._extract_variants_from_tables(
+            full_text, paper.gene_symbol
+        )
+        table_hints = self._format_table_hints(pre_extracted_variants)
+        if pre_extracted_variants:
+            logger.info(
+                f"PMID {paper.pmid} - Pre-extracted {len(pre_extracted_variants)} variants from tables as LLM hints"
+            )
+            print(
+                f"Pre-extracted {len(pre_extracted_variants)} variant hints from tables"
+            )
+
         # Use compact mode for high-variant papers to avoid output truncation
         use_compact = estimated_variants >= HIGH_VARIANT_THRESHOLD
         if use_compact:
@@ -1123,7 +1166,7 @@ class ExpertExtractor(BaseLLMCaller):
             prompt = COMPACT_EXTRACTION_PROMPT.format(
                 gene_symbol=paper.gene_symbol or "UNKNOWN",
                 title=paper.title or "Unknown Title",
-                full_text=truncated_text,
+                full_text=truncated_text + table_hints,
                 pmid=paper.pmid,
                 estimated_variants=estimated_variants,
             )
@@ -1131,7 +1174,7 @@ class ExpertExtractor(BaseLLMCaller):
             prompt = EXTRACTION_PROMPT.format(
                 gene_symbol=paper.gene_symbol or "UNKNOWN",
                 title=paper.title or "Unknown Title",
-                full_text=truncated_text,
+                full_text=truncated_text + table_hints,
                 pmid=paper.pmid,
             )
 
@@ -1164,13 +1207,11 @@ class ExpertExtractor(BaseLLMCaller):
                     extracted_data
                 )
 
-            # Supplement with table regex extraction to catch any missed variants
-            table_variants = self._extract_variants_from_tables(
-                full_text, paper.gene_symbol
-            )
-            if table_variants:
+            # Merge pre-extracted table variants to catch any the LLM missed
+            # (uses the already-extracted variants from before the LLM call)
+            if pre_extracted_variants:
                 extracted_data = self._merge_table_variants(
-                    extracted_data, table_variants
+                    extracted_data, pre_extracted_variants
                 )
 
             # Filter variants to only keep those matching the target gene
