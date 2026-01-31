@@ -392,6 +392,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             extraction_timestamp TEXT,
             source_type TEXT,  -- 'fulltext', 'abstract_only', or NULL
             abstract_only INTEGER DEFAULT 0,  -- 1 if extracted from abstract only
+            source_file TEXT,  -- Path to source file (DATA_ZONES.md, FULL_CONTEXT.md, etc.)
 
             FOREIGN KEY (pmid) REFERENCES papers(pmid) ON DELETE CASCADE
         )
@@ -415,7 +416,36 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
     conn.commit()
     logger.info("✓ Database schema created successfully")
 
+    # Upgrade existing schema if needed
+    upgrade_database_schema(conn)
+
     return conn
+
+
+def upgrade_database_schema(conn: sqlite3.Connection) -> None:
+    """
+    Upgrade existing database schema to add new columns.
+    
+    Handles backward compatibility for databases created before
+    new columns were added.
+    
+    Args:
+        conn: Database connection
+    """
+    cursor = conn.cursor()
+    
+    # Check if source_file column exists in extraction_metadata
+    cursor.execute("PRAGMA table_info(extraction_metadata)")
+    columns = {row[1] for row in cursor.fetchall()}
+    
+    if "source_file" not in columns:
+        logger.info("Upgrading schema: adding source_file column to extraction_metadata")
+        cursor.execute("""
+            ALTER TABLE extraction_metadata 
+            ADD COLUMN source_file TEXT
+        """)
+        conn.commit()
+        logger.info("✓ Schema upgrade complete: source_file column added")
 
 
 # ============================================================================
@@ -723,13 +753,21 @@ def migrate_extraction_file(
 
         # Insert extraction metadata
         extraction_meta = extraction_data.get("extraction_metadata", {})
-        if extraction_meta:
+        # Determine source_file: prefer from metadata, fallback to extraction JSON filename
+        source_file = extraction_meta.get("source_file")
+        if not source_file:
+            # Fallback: use the JSON file path itself as the source reference
+            source_file = str(json_file)
+        
+        # Always insert extraction metadata (at minimum we have pmid and source_file)
+        if extraction_meta or source_file:
             cursor.execute(
                 """
                 INSERT INTO extraction_metadata (
                     pmid, total_variants_found, extraction_confidence,
-                    challenges, notes, extraction_timestamp, source_type, abstract_only
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    challenges, notes, extraction_timestamp, source_type, abstract_only,
+                    source_file, model_used
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
                 (
                     pmid,
@@ -740,6 +778,8 @@ def migrate_extraction_file(
                     datetime.now().isoformat(),
                     extraction_meta.get("source_type"),
                     1 if extraction_meta.get("abstract_only") else 0,
+                    source_file,
+                    extraction_meta.get("model_used"),
                 ),
             )
 
