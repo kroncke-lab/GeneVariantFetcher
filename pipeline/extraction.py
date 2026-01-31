@@ -31,6 +31,11 @@ def _find_data_zones_file(
     """
     Search for a DATA_ZONES.md file for the given PMID.
 
+    .. deprecated::
+        This function uses directory scanning which is inefficient and fragile.
+        Prefer using manifest-based file discovery via `cli.extract` which reads
+        file paths directly from scout_manifest.json.
+
     Args:
         pmid: PubMed ID to search for
         search_dirs: Optional list of directories to search in. If provided with
@@ -39,6 +44,8 @@ def _find_data_zones_file(
     Returns:
         Path to DATA_ZONES.md if found, None otherwise
     """
+    import warnings
+    
     filename = f"{pmid}_DATA_ZONES.md"
 
     # If explicit search directories provided, check them first
@@ -62,17 +69,26 @@ def _find_data_zones_file(
                             logger.debug(f"Found DATA_ZONES.md at {zones_file}")
                             return zones_file
 
-    # Fallback: search common output directory patterns
+    # Fallback: search common output directory patterns (DEPRECATED behavior)
     fallback_dirs = [".", "pmc_fulltext", "output"]
+    used_fallback = False
     for search_dir in fallback_dirs:
         path = Path(search_dir)
         if path.exists() and path.is_dir():
             zones_file = path / filename
             if zones_file.exists():
+                if not used_fallback:
+                    warnings.warn(
+                        f"Using deprecated directory scanning fallback for {pmid}. "
+                        "Use cli.extract with --manifest for better reliability.",
+                        DeprecationWarning,
+                        stacklevel=2,
+                    )
+                    used_fallback = True
                 logger.debug(f"Found DATA_ZONES.md at {zones_file} (fallback)")
                 return zones_file
 
-    # Also search subdirectories matching test/output patterns (e.g., test_gene_pmid/)
+    # Also search subdirectories matching test/output patterns (DEPRECATED)
     cwd = Path(".")
     for subdir in cwd.iterdir():
         if subdir.is_dir() and (
@@ -82,6 +98,13 @@ def _find_data_zones_file(
         ):
             zones_file = subdir / filename
             if zones_file.exists():
+                if not used_fallback:
+                    warnings.warn(
+                        f"Using deprecated directory scanning fallback for {pmid}. "
+                        "Use cli.extract with --manifest for better reliability.",
+                        DeprecationWarning,
+                        stacklevel=2,
+                    )
                 logger.debug(f"Found DATA_ZONES.md at {zones_file} (subdir fallback)")
                 return zones_file
 
