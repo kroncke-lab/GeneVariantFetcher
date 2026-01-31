@@ -916,18 +916,29 @@ class PMCHarvester:
 
         return supplement_markdown, downloaded_count
 
-    def process_pmid(self, pmid: str) -> Tuple[bool, str]:
+    def download_pmid(self, pmid: str) -> Tuple[bool, str, Optional[str]]:
         """
-        Process a single PMID: convert to PMCID, download content, create unified markdown.
-
-        For papers without PMCIDs but marked as "Free Full Text" on PubMed, this method
-        will attempt to fetch full text directly from the publisher's website.
+        Download content for a single PMID and run cheap analysis.
+        
+        This method handles the download phase:
+        - PMID to PMCID conversion
+        - Full-text XML download
+        - Figure extraction from PMC
+        - Supplement download and conversion
+        - Create unified markdown file
+        - Run data scout (cheap text analysis)
+        
+        NO pedigree extraction - that's expensive (GPT-4o vision) and happens
+        in run_post_processing() after all downloads complete.
 
         Args:
             pmid: PubMed ID to process
 
         Returns:
-            Tuple of (success: bool, result: str) where result is output file path or error message
+            Tuple of (success: bool, result: str, unified_content: Optional[str])
+            - success: Whether download completed successfully
+            - result: Output file path on success, or error message on failure
+            - unified_content: The full markdown content (for passing to post-processing)
         """
         print(f"\nProcessing PMID: {pmid}")
 
@@ -944,7 +955,7 @@ class PMCHarvester:
         if not pmcid:
             # No PMCID - check if this is a free full text article via publisher
             print(f"  - No PMCID found, checking for free full text via publisher...")
-            return self._process_free_text_pmid(pmid, doi)
+            return self._download_free_text_pmid(pmid, doi)
 
         print(f"  ✓ PMCID: {pmcid}")
 
@@ -955,7 +966,7 @@ class PMCHarvester:
             print(f"  ❌ Full-text not available from PMC")
             pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
             self._log_paywalled(pmid, "Full-text not available", pmc_url)
-            return False, "No full-text"
+            return False, "No full-text", None
 
         print(f"  ✓ Full-text XML retrieved from PMC")
 
@@ -987,108 +998,35 @@ class PMCHarvester:
             pmid, pmcid, doi
         )
 
-        # Create unified markdown file
+        # Create unified markdown file (WITHOUT pedigree extraction)
         unified_content = main_markdown + supplement_markdown
-
-        # Run pedigree extraction on figures (if any were extracted)
-        pedigree_summary = self._run_pedigree_extraction(pmid)
-        if pedigree_summary:
-            unified_content += pedigree_summary
 
         output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
         with open(output_file, "w", encoding="utf-8") as f:
             f.write(unified_content)
 
-        print(f"  ✅ Created: {output_file.name} ({downloaded_count} supplements)")
-
-        # Run data scout to create condensed DATA_ZONES.md
-        self._run_data_scout(pmid, unified_content)
+        print(f"  ✅ Downloaded: {output_file.name} ({downloaded_count} supplements)")
 
         # Log success
         with open(self.success_log, "a", newline="") as f:
             writer = csv.writer(f)
             writer.writerow([pmid, pmcid, downloaded_count])
 
-        return True, str(output_file)
+        return True, str(output_file), unified_content
 
-    def _try_elsevier_api(
-        self, doi: str, pmid: str
-    ) -> Tuple[Optional[str], Optional[str]]:
+    def _download_free_text_pmid(self, pmid: str, doi: str) -> Tuple[bool, str, Optional[str]]:
         """
-        Try to fetch full text via Elsevier API if applicable.
-
-        Args:
-            doi: Digital Object Identifier
-            pmid: PubMed ID (for logging)
-
-        Returns:
-            Tuple of (markdown_content, error_message)
-            - markdown_content: Full text as markdown if successful, None otherwise
-            - error_message: Error description if failed, None if successful
-        """
-        if not self.elsevier_api.is_available:
-            return None, "Elsevier API key not configured"
-
-        if not doi or not self.elsevier_api.is_elsevier_doi(doi):
-            return None, "Not an Elsevier DOI"
-
-        print(f"  Trying Elsevier API for DOI: {doi}")
-        markdown, error = self.elsevier_api.fetch_fulltext(doi=doi)
-
-        if markdown:
-            print(
-                f"  ✓ Full text retrieved via Elsevier API ({len(markdown)} characters)"
-            )
-            return markdown, None
-        else:
-            print(f"  - Elsevier API: {error}")
-            return None, error
-
-    def _try_wiley_api(
-        self, doi: str, pmid: str
-    ) -> Tuple[Optional[str], Optional[str]]:
-        """
-        Try to fetch full text via Wiley TDM API if applicable.
-
-        Args:
-            doi: Digital Object Identifier
-            pmid: PubMed ID (for logging)
-
-        Returns:
-            Tuple of (markdown_content, error_message)
-            - markdown_content: Full text as markdown if successful, None otherwise
-            - error_message: Error description if failed, None if successful
-        """
-        if not self.wiley_api.is_available:
-            return None, "Wiley API key not configured"
-
-        if not doi or not self.wiley_api.is_wiley_doi(doi):
-            return None, "Not a Wiley DOI"
-
-        print(f"  Trying Wiley API for DOI: {doi}")
-        markdown, error = self.wiley_api.fetch_fulltext(doi=doi)
-
-        if markdown:
-            print(f"  ✓ Full text retrieved via Wiley API ({len(markdown)} characters)")
-            return markdown, None
-        else:
-            print(f"  - Wiley API: {error}")
-            return None, error
-
-    def _process_free_text_pmid(self, pmid: str, doi: str) -> Tuple[bool, str]:
-        """
-        Process a PMID that has no PMCID but may have free full text via publisher.
-
-        This method checks if the article is marked as "Free Full Text" on PubMed
-        and attempts to fetch the content from the publisher's website.
-        For Elsevier articles, it first tries the Elsevier API if an API key is configured.
+        Download content for a PMID that has no PMCID but may have free full text via publisher.
+        
+        This handles download + data scout (cheap text analysis).
+        NO pedigree extraction - that happens in run_post_processing().
 
         Args:
             pmid: PubMed ID to process
             doi: DOI for the article (may be None)
 
         Returns:
-            Tuple of (success: bool, result: str) where result is output file path or error message
+            Tuple of (success: bool, result: str, unified_content: Optional[str])
         """
         # Check if article is marked as free full text
         is_free, free_url = self.pmc_api.is_free_full_text(pmid)
@@ -1098,7 +1036,7 @@ class PMCHarvester:
             print(f"  ❌ No PMCID and not marked as free full text (likely paywalled)")
             pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
             self._log_paywalled(pmid, "No PMCID found, not free full text", pubmed_url)
-            return False, "No PMCID"
+            return False, "No PMCID", None
 
         print(f"  ✓ Article marked as free full text on PubMed")
 
@@ -1177,7 +1115,7 @@ class PMCHarvester:
                     f"  - Skipping suspicious free URL on {parsed_url.netloc} (likely non-article content)"
                 )
                 self._log_paywalled(pmid, "Suspicious free URL skipped", free_url)
-                return False, "Suspicious free URL"
+                return False, "Suspicious free URL", None
 
             print(f"  - No DOI, attempting to fetch from free URL: {free_url}")
 
@@ -1326,8 +1264,8 @@ class PMCHarvester:
                     self._log_paywalled(
                         pmid, f"Free full text fetch failed: {e}", free_url
                     )
-                    return False, "Free text fetch failed"
-        else:
+                    return False, "Free text fetch failed", None
+        elif not main_markdown:
             # No DOI and no free URL - PubMed indicates "free" but lacks actionable links
             print(f"  ❌ No DOI or free URL available to fetch full text")
             print(
@@ -1339,7 +1277,7 @@ class PMCHarvester:
                 "Free full text indicated but no DOI or URL in PubMed metadata",
                 pubmed_url,
             )
-            return False, "No DOI or URL for free text"
+            return False, "No DOI or URL for free text", None
 
         if not main_markdown:
             print(f"  ❌ Could not retrieve full text from publisher")
@@ -1349,7 +1287,7 @@ class PMCHarvester:
                 else f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
             )
             self._log_paywalled(pmid, "Free full text extraction failed", fallback_url)
-            return False, "Free text extraction failed"
+            return False, "Free text extraction failed", None
 
         print(
             f"  ✓ Full text retrieved from publisher ({len(main_markdown)} characters)"
@@ -1433,13 +1371,8 @@ class PMCHarvester:
                 f"  ✓ Extracted {total_figures_extracted} figures from PDF supplements"
             )
 
-        # Create unified markdown file
+        # Create unified markdown file (WITHOUT pedigree extraction)
         unified_content = main_markdown + supplement_markdown
-
-        # Run pedigree extraction on figures (if any were extracted)
-        pedigree_summary = self._run_pedigree_extraction(pmid)
-        if pedigree_summary:
-            unified_content += pedigree_summary
 
         output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
         with open(output_file, "w", encoding="utf-8") as f:
@@ -1452,11 +1385,8 @@ class PMCHarvester:
         else:
             source_tag = "[from publisher]"
         print(
-            f"  ✅ Created: {output_file.name} ({downloaded_count} supplements) {source_tag}"
+            f"  ✅ Downloaded: {output_file.name} ({downloaded_count} supplements) {source_tag}"
         )
-
-        # Run data scout to create condensed DATA_ZONES.md
-        self._run_data_scout(pmid, unified_content)
 
         # Log success with special marker for publisher-sourced content
         if used_elsevier_api:
@@ -1469,39 +1399,437 @@ class PMCHarvester:
             writer = csv.writer(f)
             writer.writerow([pmid, source_marker, downloaded_count])
 
-        return True, str(output_file)
+        return True, str(output_file), unified_content
 
-    def harvest(self, pmids: List[str], delay: float = 2.0):
+    def run_post_processing(self, pmid: str, unified_content: str = None) -> bool:
+        """
+        Run post-processing on a downloaded paper (pedigree extraction only).
+        
+        This method should be called AFTER download_pmid() completes for all papers.
+        It handles:
+        - Pedigree extraction from figures (expensive GPT-4o vision calls)
+        - Appending pedigree summary to the unified markdown file
+        
+        Note: Data scout runs during the download phase (it's cheap text analysis).
+
+        Args:
+            pmid: PubMed ID to post-process
+            unified_content: Optional pre-loaded content. If not provided, reads from file.
+
+        Returns:
+            True if post-processing completed successfully, False otherwise
+        """
+        print(f"\n  Post-processing PMID: {pmid}")
+        
+        output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
+        
+        # Load unified content if not provided
+        if unified_content is None:
+            if not output_file.exists():
+                print(f"  ❌ Cannot post-process: {output_file.name} not found")
+                return False
+            unified_content = output_file.read_text(encoding="utf-8")
+        
+        # Run pedigree extraction on figures (if any were extracted)
+        # This is the expensive GPT-4o vision step - batched after all downloads complete
+        pedigree_summary = self._run_pedigree_extraction(pmid)
+        if pedigree_summary:
+            # Append pedigree summary to unified content and re-save
+            unified_content += pedigree_summary
+            with open(output_file, "w", encoding="utf-8") as f:
+                f.write(unified_content)
+            print(f"  ✓ Updated {output_file.name} with pedigree data")
+        
+        return True
+
+    def batch_data_scout(self, pmids: List[str]) -> Tuple[int, int]:
+        """
+        Run data scout on a batch of downloaded papers.
+        
+        Data scout identifies high-value data zones in the text - this is cheap
+        text analysis that should run before expensive pedigree extraction.
+
+        Args:
+            pmids: List of PubMed IDs to analyze
+
+        Returns:
+            Tuple of (successful_count, failed_count)
+        """
+        if not pmids:
+            print("  No PMIDs for data scout")
+            return 0, 0
+            
+        print(f"\n{'='*60}")
+        print(f"DATA SCOUT PHASE: {len(pmids)} papers")
+        print(f"(Identifying high-value data zones)")
+        print(f"{'='*60}")
+        
+        successful = 0
+        failed = 0
+        
+        for idx, pmid in enumerate(pmids, 1):
+            print(f"\n[{idx}/{len(pmids)}] Scouting PMID {pmid}...", end="")
+            
+            try:
+                output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
+                if not output_file.exists():
+                    print(f" ❌ File not found")
+                    failed += 1
+                    continue
+                    
+                unified_content = output_file.read_text(encoding="utf-8")
+                if self._run_data_scout(pmid, unified_content):
+                    successful += 1
+                else:
+                    # Data scout may return False if disabled or no gene symbol
+                    successful += 1  # Still count as processed
+            except Exception as e:
+                print(f" ❌ Failed: {e}")
+                failed += 1
+        
+        print(f"\n  Data scout complete: {successful} succeeded, {failed} failed")
+        return successful, failed
+
+    def _has_pedigree_indicators(self, pmid: str) -> bool:
+        """
+        Check if a paper's figure legends suggest pedigree content.
+        
+        Scans the FULL_CONTEXT.md for figure-related text containing
+        pedigree indicators like "pedigree", "family", "proband", etc.
+        
+        Args:
+            pmid: PubMed ID to check
+            
+        Returns:
+            True if pedigree-related figure content is likely present
+        """
+        # Keywords that suggest pedigree figures
+        pedigree_keywords = [
+            'pedigree', 'family tree', 'proband', 'affected', 'carrier',
+            'unaffected', 'heterozygous', 'homozygous', 'kindred',
+            'index patient', 'index case', 'familial', 'inheritance',
+            'autosomal dominant', 'autosomal recessive', 'segregat',
+            'generation', 'siblings', 'offspring', 'consanguineous'
+        ]
+        
+        output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
+        if not output_file.exists():
+            return False
+            
+        try:
+            content = output_file.read_text(encoding="utf-8").lower()
+            
+            # Look for figure legends/captions containing pedigree keywords
+            # Common patterns: "Figure 1.", "Fig. 1:", "**Figure 1**", etc.
+            import re
+            
+            # Find all figure caption regions (figure reference + next ~500 chars)
+            figure_pattern = r'(fig\.?(?:ure)?\.?\s*\d+[^a-z])'
+            matches = list(re.finditer(figure_pattern, content, re.IGNORECASE))
+            
+            for match in matches:
+                # Get text around the figure reference (caption area)
+                start = match.start()
+                end = min(start + 500, len(content))
+                caption_region = content[start:end]
+                
+                # Check for pedigree keywords in this region
+                for keyword in pedigree_keywords:
+                    if keyword in caption_region:
+                        return True
+            
+            # Also check for standalone pedigree mentions that might indicate figures
+            if 'pedigree' in content and ('figure' in content or 'fig.' in content):
+                return True
+                
+        except Exception as e:
+            logger.warning(f"Error checking pedigree indicators for {pmid}: {e}")
+            return True  # Err on the side of processing if we can't check
+            
+        return False
+
+    def batch_pedigree_extraction(self, pmids: List[str]) -> Tuple[int, int]:
+        """
+        Run pedigree extraction on a batch of downloaded papers.
+        
+        This method filters papers in two stages:
+        1. Must have figures extracted
+        2. Figure legends must suggest pedigree content (keyword scan)
+        
+        This dramatically reduces expensive GPT-4o vision API calls.
+        Should be called after data scout completes.
+
+        Args:
+            pmids: List of PubMed IDs to process
+
+        Returns:
+            Tuple of (successful_count, failed_count)
+        """
+        if not pmids:
+            print("  No PMIDs for pedigree extraction")
+            return 0, 0
+        
+        # Stage 1: Filter to only papers that have figures
+        pmids_with_figures = []
+        for pmid in pmids:
+            figures_dir = self.output_dir / f"{pmid}_figures"
+            if figures_dir.exists():
+                image_files = list(figures_dir.glob("*.png")) + list(figures_dir.glob("*.jpg"))
+                if image_files:
+                    pmids_with_figures.append(pmid)
+        
+        no_figures_count = len(pmids) - len(pmids_with_figures)
+        
+        # Stage 2: Filter by figure legend content (pedigree keywords)
+        print(f"\n  Scanning {len(pmids_with_figures)} papers for pedigree indicators...")
+        pmids_likely_pedigree = []
+        for pmid in pmids_with_figures:
+            if self._has_pedigree_indicators(pmid):
+                pmids_likely_pedigree.append(pmid)
+        
+        no_indicators_count = len(pmids_with_figures) - len(pmids_likely_pedigree)
+        
+        print(f"\n{'='*60}")
+        print(f"PEDIGREE EXTRACTION PHASE")
+        print(f"  {len(pmids_likely_pedigree)} papers likely have pedigrees")
+        print(f"  (Skipped: {no_figures_count} no figures, {no_indicators_count} no pedigree keywords)")
+        print(f"  (GPT-4o vision calls)")
+        print(f"{'='*60}")
+        
+        if not pmids_likely_pedigree:
+            print("  No papers appear to have pedigree figures")
+            return 0, 0
+        
+        successful = 0
+        failed = 0
+        
+        for idx, pmid in enumerate(pmids_likely_pedigree, 1):
+            print(f"\n[{idx}/{len(pmids_likely_pedigree)}]", end="")
+            
+            try:
+                if self.run_post_processing(pmid):
+                    successful += 1
+                else:
+                    failed += 1
+            except Exception as e:
+                print(f"  ❌ Pedigree extraction failed for {pmid}: {e}")
+                failed += 1
+        
+        print(f"\n  Pedigree extraction complete: {successful} succeeded, {failed} failed")
+        return successful, failed
+
+    def batch_post_process(self, pmids: List[str]) -> Tuple[int, int]:
+        """
+        Run full post-processing on a batch of downloaded papers.
+        
+        This runs both data scout AND pedigree extraction in sequence.
+        For more control, use batch_data_scout() and batch_pedigree_extraction() separately.
+
+        Args:
+            pmids: List of PubMed IDs to post-process
+
+        Returns:
+            Tuple of (successful_count, failed_count) for pedigree extraction
+        """
+        if not pmids:
+            print("  No PMIDs to post-process")
+            return 0, 0
+        
+        # Phase 1: Data scout (cheap text analysis)
+        self.batch_data_scout(pmids)
+        
+        # Phase 2: Pedigree extraction (expensive GPT-4o)
+        return self.batch_pedigree_extraction(pmids)
+
+    def process_pmid(self, pmid: str) -> Tuple[bool, str]:
+        """
+        Process a single PMID: convert to PMCID, download content, create unified markdown.
+
+        For papers without PMCIDs but marked as "Free Full Text" on PubMed, this method
+        will attempt to fetch full text directly from the publisher's website.
+        
+        This is the original combined method - downloads AND post-processes in one pass.
+        Kept for backward compatibility. For batch processing, use download_pmid() + 
+        batch_post_process() instead.
+
+        Args:
+            pmid: PubMed ID to process
+
+        Returns:
+            Tuple of (success: bool, result: str) where result is output file path or error message
+        """
+        # Phase 1: Download
+        success, result, unified_content = self.download_pmid(pmid)
+        
+        if not success:
+            return False, result
+        
+        # Phase 2: Post-process (pedigree extraction + data scout)
+        self.run_post_processing(pmid, unified_content)
+        
+        return True, result
+
+    def _try_elsevier_api(
+        self, doi: str, pmid: str
+    ) -> Tuple[Optional[str], Optional[str]]:
+        """
+        Try to fetch full text via Elsevier API if applicable.
+
+        Args:
+            doi: Digital Object Identifier
+            pmid: PubMed ID (for logging)
+
+        Returns:
+            Tuple of (markdown_content, error_message)
+            - markdown_content: Full text as markdown if successful, None otherwise
+            - error_message: Error description if failed, None if successful
+        """
+        if not self.elsevier_api.is_available:
+            return None, "Elsevier API key not configured"
+
+        if not doi or not self.elsevier_api.is_elsevier_doi(doi):
+            return None, "Not an Elsevier DOI"
+
+        print(f"  Trying Elsevier API for DOI: {doi}")
+        markdown, error = self.elsevier_api.fetch_fulltext(doi=doi)
+
+        if markdown:
+            print(
+                f"  ✓ Full text retrieved via Elsevier API ({len(markdown)} characters)"
+            )
+            return markdown, None
+        else:
+            print(f"  - Elsevier API: {error}")
+            return None, error
+
+    def _try_wiley_api(
+        self, doi: str, pmid: str
+    ) -> Tuple[Optional[str], Optional[str]]:
+        """
+        Try to fetch full text via Wiley TDM API if applicable.
+
+        Args:
+            doi: Digital Object Identifier
+            pmid: PubMed ID (for logging)
+
+        Returns:
+            Tuple of (markdown_content, error_message)
+            - markdown_content: Full text as markdown if successful, None otherwise
+            - error_message: Error description if failed, None if successful
+        """
+        if not self.wiley_api.is_available:
+            return None, "Wiley API key not configured"
+
+        if not doi or not self.wiley_api.is_wiley_doi(doi):
+            return None, "Not a Wiley DOI"
+
+        print(f"  Trying Wiley API for DOI: {doi}")
+        markdown, error = self.wiley_api.fetch_fulltext(doi=doi)
+
+        if markdown:
+            print(f"  ✓ Full text retrieved via Wiley API ({len(markdown)} characters)")
+            return markdown, None
+        else:
+            print(f"  - Wiley API: {error}")
+            return None, error
+
+    def _process_free_text_pmid(self, pmid: str, doi: str) -> Tuple[bool, str]:
+        """
+        Process a PMID that has no PMCID but may have free full text via publisher.
+
+        This method checks if the article is marked as "Free Full Text" on PubMed
+        and attempts to fetch the content from the publisher's website.
+        For Elsevier articles, it first tries the Elsevier API if an API key is configured.
+        
+        This is the original combined method - kept for backward compatibility.
+        Internally calls _download_free_text_pmid() + run_post_processing().
+
+        Args:
+            pmid: PubMed ID to process
+            doi: DOI for the article (may be None)
+
+        Returns:
+            Tuple of (success: bool, result: str) where result is output file path or error message
+        """
+        # Phase 1: Download
+        success, result, unified_content = self._download_free_text_pmid(pmid, doi)
+        
+        if not success:
+            return False, result
+        
+        # Phase 2: Post-process (pedigree extraction + data scout)
+        self.run_post_processing(pmid, unified_content)
+        
+        return True, result
+
+    def harvest(self, pmids: List[str], delay: float = 2.0, run_scout: bool = False):
         """
         Harvest full-text and supplements for a list of PMIDs.
+        
+        By default, only performs downloads. Post-processing (data scout and pedigree
+        extraction) can be enabled via run_scout flag or called separately via
+        batch_data_scout() and batch_pedigree_extraction().
 
         Args:
             pmids: List of PubMed IDs to process
             delay: Delay in seconds between processing each PMID
+            run_scout: If True, run data scout and pedigree extraction after downloads.
+                       Default False - download only. Call batch_post_process() separately
+                       for post-processing.
         """
         print(f"Starting harvest for {len(pmids)} PMIDs")
         print(f"Output directory: {self.output_dir.absolute()}\n")
 
-        successful = 0
-        failed = 0
+        # ============================================
+        # PHASE 1: DOWNLOAD ALL PAPERS
+        # ============================================
+        print(f"{'='*60}")
+        print(f"DOWNLOAD PHASE: {len(pmids)} papers")
+        print(f"{'='*60}")
+        
+        downloaded_pmids = []
+        download_successful = 0
+        download_failed = 0
 
         for idx, pmid in enumerate(pmids, 1):
             print(f"[{idx}/{len(pmids)}]", end=" ")
 
-            success, result = self.process_pmid(pmid)
+            success, result, content = self.download_pmid(pmid)
 
             if success:
-                successful += 1
+                download_successful += 1
+                downloaded_pmids.append(pmid)
             else:
-                failed += 1
+                download_failed += 1
 
             if idx < len(pmids):
                 time.sleep(delay)
+        
+        print(f"\n{'='*60}")
+        print(f"Download phase complete!")
+        print(f"  ✅ Downloaded: {download_successful}")
+        print(f"  ❌ Failed: {download_failed}")
+        print(f"{'='*60}")
 
+        # ============================================
+        # PHASE 2: POST-PROCESS ALL DOWNLOADED PAPERS
+        # (Only runs if run_scout=True)
+        # ============================================
+        post_successful, post_failed = 0, 0
+        if run_scout and downloaded_pmids:
+            post_successful, post_failed = self.batch_post_process(downloaded_pmids)
+        elif downloaded_pmids and not run_scout:
+            print(f"\n  ℹ️  Skipping post-processing (run_scout=False)")
+            print(f"  To analyze downloaded papers, call batch_post_process() separately.")
+
+        # ============================================
+        # FINAL SUMMARY
+        # ============================================
         print(f"\n{'='*60}")
         print(f"Harvest complete!")
-        print(f"  ✅ Successful: {successful}")
-        print(f"  ❌ Failed: {failed}")
+        print(f"  ✅ Successful: {download_successful}")
+        print(f"  ❌ Failed: {download_failed}")
+        print(f"  📊 Post-processed: {post_successful}/{len(downloaded_pmids)}")
         print(f"  Output directory: {self.output_dir.absolute()}")
         print(f"  Success log: {self.success_log}")
         print(f"  Paywalled log: {self.paywalled_log}")
