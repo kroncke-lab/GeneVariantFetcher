@@ -12,7 +12,11 @@ from pathlib import Path
 from typing import List, Optional
 
 from config.settings import get_settings
-from config.constants import MIN_CONDENSED_SIZE
+from config.constants import (
+    MIN_CONDENSED_SIZE,
+    MIN_EXTRACTION_INPUT_SIZE,
+    MIN_ALPHANUMERIC_RATIO,
+)
 from pipeline.prompts import (
     COMPACT_EXTRACTION_PROMPT,
     CONTINUATION_PROMPT,
@@ -936,6 +940,23 @@ class ExpertExtractor(BaseLLMCaller):
         "manual review required",
         "[NO TEXT AVAILABLE]",
         "[ABSTRACT ONLY",
+        "Access Denied",
+        "403 Forbidden",
+        "404 Not Found",
+        "Page not found",
+        "Unable to retrieve",
+        "Subscription required",
+        "Please login",
+        "Session expired",
+    ]
+
+    # Patterns indicating HTML/markup garbage
+    HTML_GARBAGE_PATTERNS = [
+        r"<(?:div|span|script|style|html|body|head)[^>]*>",
+        r"</(?:div|span|script|style|html|body|head)>",
+        r"\{[\s]*[\"\']?[a-zA-Z_]+[\"\']?\s*:",  # JSON-like fragments
+        r"class=[\"\'][^\"\']+[\"\']",
+        r"style=[\"\'][^\"\']+[\"\']",
     ]
 
     def _assess_input_quality(
@@ -944,25 +965,53 @@ class ExpertExtractor(BaseLLMCaller):
         """
         Assess whether the input text is of sufficient quality for extraction.
 
+        This is a circuit breaker that prevents wasting LLM calls on garbage input.
+        Checks for:
+        - Minimum content length
+        - Failed extraction placeholders
+        - HTML/markup garbage
+        - Sufficient alphanumeric content ratio
+        - Relevant variant or gene content
+
         Returns:
             (is_usable, reason) - whether text is usable and why/why not
         """
-        if not text or len(text) < 200:
-            return False, f"Text too short ({len(text) if text else 0} chars)"
+        # Check 1: Minimum length threshold
+        if not text:
+            return False, "No text provided"
 
-        # Count failed extraction placeholders
+        text_len = len(text)
+        if text_len < MIN_EXTRACTION_INPUT_SIZE:
+            return False, f"Text too short ({text_len} chars, min={MIN_EXTRACTION_INPUT_SIZE})"
+
+        # Check 2: Failed extraction placeholders
         failed_count = sum(
             1 for pattern in self.FAILED_EXTRACTION_PATTERNS if pattern in text
         )
-
-        # If most of the content is failure placeholders, skip
-        if failed_count >= 3:
+        if failed_count >= 2:
             return (
                 False,
-                f"Multiple failed extraction placeholders ({failed_count} found)",
+                f"Contains {failed_count} failed extraction markers",
             )
 
-        # Check for actual variant-like content
+        # Check 3: HTML/markup garbage detection
+        html_matches = sum(
+            1 for pattern in self.HTML_GARBAGE_PATTERNS if re.search(pattern, text)
+        )
+        if html_matches >= 3:
+            return False, f"Contains HTML/markup garbage ({html_matches} patterns)"
+
+        # Check 4: Alphanumeric content ratio
+        # Filters out text that's mostly punctuation, whitespace, or special chars
+        alphanumeric_chars = sum(1 for c in text if c.isalnum() or c.isspace())
+        ratio = alphanumeric_chars / text_len if text_len > 0 else 0
+        if ratio < MIN_ALPHANUMERIC_RATIO:
+            return (
+                False,
+                f"Low alphanumeric ratio ({ratio:.2f}, min={MIN_ALPHANUMERIC_RATIO})",
+            )
+
+        # Check 5: Variant-like or gene content
         variant_patterns = [
             r"c\.\d+",
             r"p\.[A-Z]",
@@ -1168,6 +1217,24 @@ class ExpertExtractor(BaseLLMCaller):
 
         best_successful_result: Optional[ExtractionResult] = None
         prepared_full_text = self._prepare_full_text(paper)
+
+        # Circuit breaker: Check input quality BEFORE attempting any model
+        # This prevents wasting LLM calls on garbage/unusable input
+        is_usable, quality_reason = self._assess_input_quality(
+            prepared_full_text, paper.gene_symbol
+        )
+        if not is_usable:
+            logger.warning(
+                f"PMID {paper.pmid} - Circuit breaker triggered: {quality_reason}"
+            )
+            print(f"⚡ PMID {paper.pmid}: SKIPPED (circuit breaker) - {quality_reason}")
+            return ExtractionResult(
+                pmid=paper.pmid,
+                success=False,
+                error=f"SKIPPED: {quality_reason}",
+                model_used=None,
+            )
+
         table_row_hint = self._estimate_table_rows(prepared_full_text)
 
         # If we detect a large table, raise the bar so we try the next (stronger) model

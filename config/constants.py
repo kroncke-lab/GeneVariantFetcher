@@ -105,6 +105,14 @@ SCOUT_CLINICAL_KEYWORDS: List[str] = [
 # Minimum size (chars) for DATA_ZONES.md to be used instead of FULL_CONTEXT.md
 MIN_CONDENSED_SIZE: int = 500
 
+# Minimum size (chars) for extraction input to be considered usable
+# Below this threshold, LLM extraction is skipped (circuit breaker)
+MIN_EXTRACTION_INPUT_SIZE: int = 500
+
+# Minimum ratio of alphanumeric content to total content
+# Below this indicates garbage/placeholder text
+MIN_ALPHANUMERIC_RATIO: float = 0.3
+
 # =============================================================================
 # HTTP Request Constants
 # =============================================================================
