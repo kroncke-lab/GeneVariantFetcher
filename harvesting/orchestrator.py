@@ -41,6 +41,9 @@ except ImportError:
     PEDIGREE_EXTRACTOR_AVAILABLE = False
     PedigreeExtractor = None
 
+# Import manifest utilities for tracking download outcomes
+from utils.manifest import Manifest, ManifestEntry, Status, Stage
+
 import json
 import logging
 
@@ -1762,7 +1765,13 @@ class PMCHarvester:
         
         return True, result
 
-    def harvest(self, pmids: List[str], delay: float = 2.0, run_scout: bool = False):
+    def harvest(
+        self,
+        pmids: List[str],
+        delay: float = 2.0,
+        run_scout: bool = False,
+        manifest_path: Optional[str] = None,
+    ):
         """
         Harvest full-text and supplements for a list of PMIDs.
         
@@ -1776,9 +1785,18 @@ class PMCHarvester:
             run_scout: If True, run data scout and pedigree extraction after downloads.
                        Default False - download only. Call batch_post_process() separately
                        for post-processing.
+            manifest_path: Path to write manifest.json. If None, defaults to 
+                          {output_dir}/manifest.json
         """
         print(f"Starting harvest for {len(pmids)} PMIDs")
         print(f"Output directory: {self.output_dir.absolute()}\n")
+
+        # Initialize manifest for tracking download outcomes
+        manifest = Manifest(stage=Stage.DOWNLOAD, gene=self.gene_symbol)
+        if manifest_path is None:
+            manifest_path = self.output_dir / "manifest.json"
+        else:
+            manifest_path = Path(manifest_path)
 
         # ============================================
         # PHASE 1: DOWNLOAD ALL PAPERS
@@ -1799,11 +1817,50 @@ class PMCHarvester:
             if success:
                 download_successful += 1
                 downloaded_pmids.append(pmid)
+                # Track files created for this PMID
+                files_created = []
+                full_context = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
+                if full_context.exists():
+                    files_created.append(str(full_context.name))
+                # Check for supplements directory
+                supp_dir = self.output_dir / f"{pmid}_supplements"
+                if supp_dir.exists():
+                    files_created.extend([f.name for f in supp_dir.iterdir() if f.is_file()])
+                # Check for figures directory
+                fig_dir = self.output_dir / f"{pmid}_figures"
+                if fig_dir.exists():
+                    files_created.extend([f.name for f in fig_dir.iterdir() if f.is_file()])
+                
+                manifest.add_entry(ManifestEntry(
+                    pmid=pmid,
+                    status=Status.SUCCESS,
+                    files_created=files_created,
+                ))
             else:
                 download_failed += 1
+                # Map error messages to Status enum
+                error_msg = result.lower() if result else ""
+                if "timeout" in error_msg:
+                    status = Status.TIMEOUT
+                elif "captcha" in error_msg:
+                    status = Status.CAPTCHA
+                elif any(kw in error_msg for kw in ["paywall", "full-text", "access", "no pmcid"]):
+                    status = Status.PAYWALL
+                else:
+                    status = Status.FAILED
+                
+                manifest.add_entry(ManifestEntry(
+                    pmid=pmid,
+                    status=status,
+                    error_message=result,
+                ))
 
             if idx < len(pmids):
                 time.sleep(delay)
+        
+        # Save manifest after download phase
+        manifest.save(manifest_path)
+        print(f"\n  📋 Manifest saved: {manifest_path}")
         
         print(f"\n{'='*60}")
         print(f"Download phase complete!")
