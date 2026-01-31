@@ -7,6 +7,7 @@ Main PMCHarvester class that coordinates all harvesting operations:
 - Creates unified markdown files for LLM processing
 """
 
+import os
 import re
 import time
 import csv
@@ -21,6 +22,123 @@ from .supplement_scraper import SupplementScraper
 from .format_converters import FormatConverter
 from .elsevier_api import ElsevierAPIClient
 from .wiley_api import WileyAPIClient
+
+
+# =============================================================================
+# INPUT VALIDATION
+# =============================================================================
+
+# PMID pattern: 1-8 digit numeric string
+PMID_PATTERN = re.compile(r'^\d{1,8}$')
+
+
+class ValidationError(Exception):
+    """Raised when input validation fails."""
+    pass
+
+
+def validate_pmid_format(pmid: str) -> bool:
+    """
+    Validate that a PMID has correct format.
+    
+    Args:
+        pmid: PMID string to validate
+        
+    Returns:
+        True if valid, False otherwise
+    """
+    if not pmid:
+        return False
+    # Strip whitespace and check format
+    return bool(PMID_PATTERN.match(str(pmid).strip()))
+
+
+def validate_pmid_list(pmids: List[str]) -> Tuple[List[str], List[str]]:
+    """
+    Validate a list of PMIDs and return valid/invalid lists.
+    
+    Args:
+        pmids: List of PMID strings
+        
+    Returns:
+        Tuple of (valid_pmids, invalid_pmids)
+    """
+    valid = []
+    invalid = []
+    
+    for pmid in pmids:
+        pmid_str = str(pmid).strip()
+        if validate_pmid_format(pmid_str):
+            valid.append(pmid_str)
+        else:
+            invalid.append(pmid_str)
+    
+    return valid, invalid
+
+
+def validate_output_directory(output_dir: Path) -> None:
+    """
+    Validate that output directory is writable.
+    
+    Args:
+        output_dir: Path to output directory
+        
+    Raises:
+        ValidationError: If output directory is not writable
+    """
+    if output_dir.exists():
+        if not output_dir.is_dir():
+            raise ValidationError(
+                f"Output path exists but is not a directory: {output_dir}"
+            )
+        if not os.access(output_dir, os.W_OK):
+            raise ValidationError(f"Output directory is not writable: {output_dir}")
+    else:
+        # Check if parent directory is writable (so we can create output_dir)
+        parent = output_dir.parent
+        if parent.exists() and not os.access(parent, os.W_OK):
+            raise ValidationError(
+                f"Cannot create output directory (parent not writable): {output_dir}"
+            )
+
+
+def validate_harvest_inputs(pmids: List[str], output_dir: Path) -> List[str]:
+    """
+    Validate all inputs for the harvest operation.
+    
+    Args:
+        pmids: List of PMIDs to process
+        output_dir: Path to output directory
+        
+    Returns:
+        List of valid PMIDs (after filtering out invalid ones)
+        
+    Raises:
+        ValidationError: If critical validation fails
+    """
+    # Check PMID list is not empty
+    if not pmids:
+        raise ValidationError("PMID list is empty. Provide at least one PMID to process.")
+    
+    # Validate PMIDs format
+    valid_pmids, invalid_pmids = validate_pmid_list(pmids)
+    
+    if invalid_pmids:
+        logger.warning(
+            f"Skipping {len(invalid_pmids)} invalid PMIDs: {invalid_pmids[:5]}"
+            + (f"... and {len(invalid_pmids) - 5} more" if len(invalid_pmids) > 5 else "")
+        )
+    
+    if not valid_pmids:
+        raise ValidationError(
+            f"No valid PMIDs found. All {len(pmids)} PMIDs have invalid format. "
+            f"PMIDs must be 1-8 digit numbers (e.g., 12345678)."
+        )
+    
+    # Validate output directory
+    validate_output_directory(output_dir)
+    
+    return valid_pmids
 
 # Import scout components (with fallback for import errors)
 try:
@@ -1787,9 +1905,21 @@ class PMCHarvester:
                        for post-processing.
             manifest_path: Path to write manifest.json. If None, defaults to 
                           {output_dir}/manifest.json
+                          
+        Raises:
+            ValidationError: If input validation fails
         """
-        print(f"Starting harvest for {len(pmids)} PMIDs")
+        # Validate inputs and filter to valid PMIDs only
+        valid_pmids = validate_harvest_inputs(pmids, self.output_dir)
+        
+        if len(valid_pmids) < len(pmids):
+            print(f"⚠ Filtered {len(pmids) - len(valid_pmids)} invalid PMIDs")
+        
+        print(f"Starting harvest for {len(valid_pmids)} PMIDs")
         print(f"Output directory: {self.output_dir.absolute()}\n")
+        
+        # Use validated PMIDs for processing
+        pmids = valid_pmids
 
         # Initialize manifest for tracking download outcomes
         manifest = Manifest(stage=Stage.DOWNLOAD, gene=self.gene_symbol)

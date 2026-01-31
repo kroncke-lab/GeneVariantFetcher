@@ -48,6 +48,119 @@ setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
 
 
+# =============================================================================
+# INPUT VALIDATION
+# =============================================================================
+
+class ValidationError(Exception):
+    """Raised when input validation fails."""
+    pass
+
+
+def validate_input_directory(data_dir: Path) -> None:
+    """
+    Validate that input directory exists and is readable.
+    
+    Args:
+        data_dir: Path to data directory
+        
+    Raises:
+        ValidationError: If directory is invalid
+    """
+    if not data_dir.exists():
+        raise ValidationError(f"Input directory does not exist: {data_dir}")
+    
+    if not data_dir.is_dir():
+        raise ValidationError(f"Input path is not a directory: {data_dir}")
+    
+    if not os.access(data_dir, os.R_OK):
+        raise ValidationError(f"Input directory is not readable: {data_dir}")
+
+
+def validate_has_extraction_files(extraction_dir: Path) -> int:
+    """
+    Validate that directory contains extraction JSON files.
+    
+    Args:
+        extraction_dir: Path to directory with extraction files
+        
+    Returns:
+        Number of JSON files found
+        
+    Raises:
+        ValidationError: If no extraction files found
+    """
+    json_files = list(extraction_dir.glob("*_PMID_*.json"))
+    json_files.extend(extraction_dir.glob("*_extraction.json"))
+    
+    if not json_files:
+        raise ValidationError(
+            f"No extraction JSON files found in {extraction_dir}. "
+            f"Expected files matching pattern: *_PMID_*.json or *_extraction.json"
+        )
+    
+    return len(json_files)
+
+
+def validate_db_path_writable(db_path: str) -> None:
+    """
+    Validate that database path is writable.
+    
+    Args:
+        db_path: Path to SQLite database file
+        
+    Raises:
+        ValidationError: If database path is not writable
+    """
+    db_path = Path(db_path)
+    
+    if db_path.exists():
+        # Check if existing file is writable
+        if not os.access(db_path, os.W_OK):
+            raise ValidationError(f"Database file exists but is not writable: {db_path}")
+    else:
+        # Check if parent directory is writable
+        parent = db_path.parent if db_path.parent.exists() else Path.cwd()
+        if not os.access(parent, os.W_OK):
+            raise ValidationError(
+                f"Cannot create database file (directory not writable): {db_path}"
+            )
+
+
+def validate_migrate_inputs(
+    data_dir: Path,
+    extraction_dir: Optional[Path],
+    db_path: str,
+) -> Path:
+    """
+    Validate all inputs for the migrate operation.
+    
+    Args:
+        data_dir: Path to data directory
+        extraction_dir: Path to directory with extraction files (may be None if not yet found)
+        db_path: Path to SQLite database file
+        
+    Returns:
+        Validated extraction directory path
+        
+    Raises:
+        ValidationError: If validation fails
+    """
+    # Validate input directory
+    validate_input_directory(data_dir)
+    
+    # Validate database path is writable
+    validate_db_path_writable(db_path)
+    
+    # If extraction_dir is provided, validate it has files
+    if extraction_dir:
+        validate_input_directory(extraction_dir)
+        validate_has_extraction_files(extraction_dir)
+        return extraction_dir
+    
+    return data_dir
+
+
 def validate_extraction_data(
     data: Dict[str, Any], filename: str = ""
 ) -> Tuple[bool, List[str], List[str]]:
@@ -1177,9 +1290,14 @@ def main():
 
     data_dir = args.data_dir
 
-    if not data_dir.exists():
-        logger.error(f"Data directory not found: {data_dir}")
-        return 1
+    # ========================================================================
+    # INPUT VALIDATION
+    # ========================================================================
+    try:
+        validate_input_directory(data_dir)
+    except ValidationError as e:
+        logger.error(f"Input validation failed: {e}")
+        return 2
 
     # ========================================================================
     # STEP 1: Find extraction directory
@@ -1261,6 +1379,15 @@ def main():
         logger.info(f"Using user-specified database: {db_path}")
     else:
         db_path = determine_database_name(data_dir, extraction_dir)
+
+    # ========================================================================
+    # STEP 2.5: Validate all inputs
+    # ========================================================================
+    try:
+        validate_migrate_inputs(data_dir, extraction_dir, db_path)
+    except ValidationError as e:
+        logger.error(f"Input validation failed: {e}")
+        return 2
 
     logger.info("=" * 80)
     logger.info("GENE VARIANT FETCHER: SQLite MIGRATION")

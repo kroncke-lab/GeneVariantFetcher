@@ -20,6 +20,8 @@ Usage:
 
 import argparse
 import logging
+import os
+import re
 import sys
 from pathlib import Path
 from typing import Optional
@@ -34,6 +36,123 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 logger = logging.getLogger(__name__)
+
+
+# =============================================================================
+# INPUT VALIDATION
+# =============================================================================
+
+# Gene symbol pattern: 1-10 uppercase letters/numbers, optionally followed by orf suffix
+GENE_SYMBOL_PATTERN = re.compile(r'^[A-Z][A-Z0-9]{0,9}(?:orf\d+)?$', re.IGNORECASE)
+
+
+class ValidationError(Exception):
+    """Raised when input validation fails."""
+    pass
+
+
+def validate_gene_symbol(gene: str) -> None:
+    """
+    Validate gene symbol format.
+    
+    Args:
+        gene: Gene symbol to validate
+        
+    Raises:
+        ValidationError: If gene symbol is invalid
+    """
+    if not gene:
+        raise ValidationError("Gene symbol is required but was not provided")
+    
+    if not GENE_SYMBOL_PATTERN.match(gene):
+        raise ValidationError(
+            f"Invalid gene symbol format: '{gene}'. "
+            f"Expected format: 1-10 alphanumeric characters starting with a letter "
+            f"(e.g., BRCA1, TP53, SCN5A)"
+        )
+
+
+def validate_input_path(input_path: Path) -> None:
+    """
+    Validate that input path exists and is accessible.
+    
+    Args:
+        input_path: Path to input directory or manifest file
+        
+    Raises:
+        ValidationError: If input path is invalid
+    """
+    if not input_path.exists():
+        raise ValidationError(f"Input path does not exist: {input_path}")
+    
+    if input_path.is_file():
+        if not input_path.name.endswith('.json'):
+            raise ValidationError(
+                f"Input file must be a JSON manifest: {input_path}"
+            )
+        # Check file is readable
+        if not os.access(input_path, os.R_OK):
+            raise ValidationError(f"Input file is not readable: {input_path}")
+    elif input_path.is_dir():
+        # Check directory is readable
+        if not os.access(input_path, os.R_OK):
+            raise ValidationError(f"Input directory is not readable: {input_path}")
+    else:
+        raise ValidationError(
+            f"Input path must be a file or directory: {input_path}"
+        )
+
+
+def validate_output_directory(output_dir: Path) -> None:
+    """
+    Validate that output directory is writable.
+    
+    Args:
+        output_dir: Path to output directory
+        
+    Raises:
+        ValidationError: If output directory is not writable
+    """
+    if output_dir.exists():
+        if not output_dir.is_dir():
+            raise ValidationError(
+                f"Output path exists but is not a directory: {output_dir}"
+            )
+        if not os.access(output_dir, os.W_OK):
+            raise ValidationError(f"Output directory is not writable: {output_dir}")
+    else:
+        # Check if parent directory is writable (so we can create output_dir)
+        parent = output_dir.parent
+        if not parent.exists():
+            raise ValidationError(
+                f"Parent directory does not exist: {parent}. "
+                f"Cannot create output directory: {output_dir}"
+            )
+        if not os.access(parent, os.W_OK):
+            raise ValidationError(
+                f"Cannot create output directory (parent not writable): {output_dir}"
+            )
+
+
+def validate_scout_inputs(
+    input_path: Path,
+    output_dir: Path,
+    gene: str,
+) -> None:
+    """
+    Validate all inputs for the scout stage.
+    
+    Args:
+        input_path: Path to input directory or manifest
+        output_dir: Path to output directory
+        gene: Gene symbol
+        
+    Raises:
+        ValidationError: If any validation fails
+    """
+    validate_gene_symbol(gene)
+    validate_input_path(input_path)
+    validate_output_directory(output_dir)
 
 
 def find_input_files(input_path: Path, manifest: Optional[Manifest] = None) -> list[Path]:
@@ -167,7 +286,13 @@ def run_scout(
 
     Returns:
         Manifest with processing results
+        
+    Raises:
+        ValidationError: If input validation fails
     """
+    # Validate inputs before processing
+    validate_scout_inputs(input_path, output_dir, gene)
+    
     # Ensure output directory exists
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -304,6 +429,9 @@ Examples:
         if all(e.status != Status.SUCCESS for e in manifest.entries):
             sys.exit(1)
 
+    except ValidationError as e:
+        logger.error(f"Input validation failed: {e}")
+        sys.exit(2)
     except Exception as e:
         logger.error(f"Fatal error: {e}")
         sys.exit(1)
