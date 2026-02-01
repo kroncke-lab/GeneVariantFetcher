@@ -52,14 +52,14 @@ NO SPECIFIC HANDLERS (Remaining Gaps):
 --------------------------------------
 These publishers fall through to the generic scraper, which often fails:
 
-5. OXFORD ACADEMIC (academic.oup.com)
-   - NO dedicated handler  
-   - Supplement location: "Supplementary data" tab/section
-   - Actual URLs: /downloadSupplement?file=XXXXX_supplementary_data.xlsx
-   - The generic scraper MISSES these because:
-     * Supplements often on separate page/tab requiring JavaScript
-     * Links use "downloadSupplement" endpoint, not file extensions
-     * May require clicking "Supplementary data" tab first
+5. OXFORD ACADEMIC (scrape_oxford_supplements) - IMPLEMENTED 2026-02-01
+   - Looks for:
+     * "Supplementary data" section/tab
+     * /downloadSupplement?file=... endpoint URLs (Oxford's download pattern)
+     * Links with supplement/supplementary in href or text
+     * data-doi links in supplementary sections
+   - Coverage: Good for academic.oup.com journals
+   - URL pattern: /downloadSupplement?file=XXXXX_supplementary_data.xlsx
 
 6. WILEY (onlinelibrary.wiley.com)
    - NO supplement handler (only full-text extractor exists)
@@ -101,16 +101,13 @@ WHY KARGER FAILS
 3. No browser fallback integration in main pipeline
 4. HTTP requests from scraper blocked by Cloudflare
 
-WHY OXFORD FAILS (Springer now has dedicated handler)
-=====================================================
-1. No dedicated scraper - falls to generic
-2. Generic keyword matching doesn't match Oxford terminology:
-   - Oxford: "Supplementary data" (matches) but download URLs don't
-   - /downloadSupplement endpoint not recognized by generic
-3. Often requires:
-   - JavaScript rendering to show supplement tab
-   - Navigation to a separate supplements page
-   - Authentication for some supplements
+OXFORD ACADEMIC - HANDLER IMPLEMENTED (2026-02-01)
+===================================================
+scrape_oxford_supplements() now handles academic.oup.com:
+- Detects "Supplementary data" sections
+- Parses /downloadSupplement?file=... URLs
+- Extracts file parameter for proper naming
+Note: Some Oxford supplements may still require authentication.
 
 RECOMMENDED FIXES (Priority Order)
 ==================================
@@ -455,6 +452,161 @@ class SupplementScraper:
             return found_files
         
         print("    No specific Springer/BMC supplements found. Trying generic scan.")
+        return self.scrape_generic_supplements(html, base_url)
+
+    def scrape_oxford_supplements(self, html: str, base_url: str) -> List[Dict]:
+        """
+        Scrape supplemental files from Oxford Academic journal pages.
+        
+        Oxford Academic (academic.oup.com) uses a distinctive pattern:
+        - Supplement section: "Supplementary data" or "Supplementary Material"
+        - Download URLs: /downloadSupplement?file=XXXXX_supplementary_data.xlsx
+        - The file parameter contains the actual filename
+        
+        Key patterns:
+        - Section classes: "supplementary-data", "supplementary-material"
+        - Link patterns: /downloadSupplement?file=..., /oup/backfile/...
+        - data-doi attributes on supplement links
+        
+        Args:
+            html: HTML content of the publisher page
+            base_url: Base URL for resolving relative links
+            
+        Returns:
+            List of supplement file dictionaries with 'url' and 'name' keys
+        """
+        print("  Scraping with scrape_oxford_supplements...")
+        soup = BeautifulSoup(html, "html.parser")
+        found_files = []
+        seen_urls = set()  # Track URLs to avoid duplicates
+        
+        def add_file(url: str, name: str) -> bool:
+            """Add a file if not already seen. Returns True if added."""
+            # Normalize for deduplication
+            norm_url = url.split('#')[0]
+            if norm_url in seen_urls:
+                return False
+            seen_urls.add(norm_url)
+            
+            # Clean up the name
+            name = re.sub(r'[^\w\-_\.\s]', '', name).strip()
+            if not name:
+                name = 'supplement'
+            
+            found_files.append({'url': url, 'name': name})
+            print(f"      Found supplement: {name}")
+            return True
+        
+        # 1. Look for /downloadSupplement links anywhere on page (most reliable pattern)
+        for link in soup.find_all('a', href=re.compile(r'downloadSupplement', re.IGNORECASE)):
+            href = link['href']
+            url = urljoin(base_url, href)
+            
+            # Extract filename from the 'file' parameter
+            file_match = re.search(r'file=([^&]+)', href)
+            if file_match:
+                filename = file_match.group(1)
+                # URL decode if needed
+                from urllib.parse import unquote
+                filename = unquote(filename)
+            else:
+                # Fallback to link text
+                filename = link.get_text().strip() or 'supplement'
+            
+            add_file(url, filename)
+        
+        # 2. Look for supplementary data section by class
+        supp_section = None
+        section_classes = [
+            r'supplementary-data',
+            r'supplementary-material',
+            r'supp-data',
+            r'article-supplementary',
+        ]
+        
+        for class_pattern in section_classes:
+            supp_section = soup.find(['section', 'div', 'aside'], 
+                class_=re.compile(class_pattern, re.IGNORECASE))
+            if supp_section:
+                print(f"    Found supplementary section with class matching: {class_pattern}")
+                break
+        
+        # 3. Fallback: Find by heading text
+        if not supp_section:
+            heading_patterns = [
+                r'Supplementary\s+[Dd]ata',
+                r'Supplementary\s+[Mm]aterial',
+                r'Supporting\s+[Ii]nformation',
+                r'Additional\s+[Ff]iles?',
+            ]
+            for pattern in heading_patterns:
+                heading = soup.find(['h2', 'h3', 'h4', 'h5'], 
+                    string=re.compile(pattern, re.IGNORECASE))
+                if heading:
+                    supp_section = heading.find_parent(['section', 'div', 'article'])
+                    if not supp_section:
+                        supp_section = heading.find_next_sibling(['div', 'section', 'ul', 'ol'])
+                    if supp_section:
+                        print(f"    Found supplementary section via heading: {heading.get_text().strip()[:50]}")
+                        break
+        
+        # 4. Extract links from supplementary section
+        if supp_section:
+            for link in supp_section.find_all('a', href=True):
+                href = link['href']
+                link_text = link.get_text().strip()
+                
+                # Check if this looks like a download link
+                is_download = 'download' in href.lower() or 'download' in link_text.lower()
+                has_extension = any(ext in href.lower() for ext in 
+                    ['.pdf', '.doc', '.xls', '.csv', '.zip', '.txt', '.pptx', '.xlsx', '.docx'])
+                is_supplement = 'suppl' in href.lower() or 'suppl' in link_text.lower()
+                
+                if is_download or has_extension or is_supplement:
+                    url = urljoin(base_url, href)
+                    
+                    # Try to get filename from file parameter or URL path
+                    file_match = re.search(r'file=([^&]+)', href)
+                    if file_match:
+                        from urllib.parse import unquote
+                        filename = unquote(file_match.group(1))
+                    else:
+                        filename = Path(urlparse(url).path).name
+                        if not filename or filename == '':
+                            filename = link_text if link_text else 'supplement'
+                    
+                    add_file(url, filename)
+        
+        # 5. Look for Oxford backfile links (another common pattern)
+        for link in soup.find_all('a', href=re.compile(r'/oup/backfile/', re.IGNORECASE)):
+            href = link['href']
+            url = urljoin(base_url, href)
+            filename = Path(urlparse(url).path).name
+            if filename:
+                add_file(url, filename)
+        
+        # 6. Look for links with data-doi attribute in supplementary context
+        for link in soup.find_all('a', attrs={'data-doi': True}):
+            href = link.get('href', '')
+            if href and ('suppl' in href.lower() or 'download' in href.lower()):
+                url = urljoin(base_url, href)
+                filename = link.get_text().strip() or Path(urlparse(url).path).name or 'supplement'
+                add_file(url, filename)
+        
+        # 7. Look for links in supplementary list items
+        for li in soup.find_all('li', class_=re.compile(r'suppl', re.IGNORECASE)):
+            for link in li.find_all('a', href=True):
+                href = link['href']
+                url = urljoin(base_url, href)
+                filename = link.get_text().strip() or Path(urlparse(url).path).name
+                if filename:
+                    add_file(url, filename)
+        
+        if found_files:
+            print(f"    Total Oxford supplements found: {len(found_files)}")
+            return found_files
+        
+        print("    No specific Oxford supplements found. Trying generic scan.")
         return self.scrape_generic_supplements(html, base_url)
 
     def scrape_karger_supplements(self, html: str, base_url: str) -> List[Dict]:
