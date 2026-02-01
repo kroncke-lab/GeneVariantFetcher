@@ -119,6 +119,99 @@ class SupplementScraper:
 
         return variants
 
+    def scrape_karger_supplements(self, html: str, base_url: str) -> List[Dict]:
+        """
+        Scrape supplemental files from a Karger journal page.
+        
+        Karger supplements are typically at a separate URL:
+        - Article: karger.com/crd/article/133/2/73/...
+        - Supplements: karger.com/doi/suppl/10.1159/XXXXXX
+        
+        Args:
+            html: HTML content of the publisher page
+            base_url: Base URL for resolving relative links
+            
+        Returns:
+            List of supplement file dictionaries with 'url' and 'name' keys
+        """
+        print("  Scraping with scrape_karger_supplements...")
+        soup = BeautifulSoup(html, "html.parser")
+        found_files = []
+        
+        # 1. Look for supplement links on the page
+        # Karger often has a "Supplementary Material" section
+        supp_sections = soup.find_all(['section', 'div'], 
+            class_=re.compile(r'supplement|supp-material|additional', re.IGNORECASE))
+        
+        for section in supp_sections:
+            print(f"    Found supplementary section")
+            for link in section.find_all('a', href=True):
+                href = link['href']
+                if any(ext in href.lower() for ext in ['.pdf', '.doc', '.xls', '.csv', '.zip']):
+                    url = urljoin(base_url, href)
+                    filename = Path(urlparse(url).path).name or link.get_text().strip()
+                    if filename and not any(f['name'] == filename for f in found_files):
+                        found_files.append({'url': url, 'name': filename})
+                        print(f"      Found supplement: {filename}")
+        
+        # 2. Look for explicit supplement links with common Karger patterns
+        for link in soup.find_all('a', href=True):
+            href = link['href']
+            link_text = link.get_text().lower()
+            
+            # Check for supplement-related links
+            if 'suppl' in href.lower() or 'suppl' in link_text:
+                url = urljoin(base_url, href)
+                filename = Path(urlparse(url).path).name or 'supplement'
+                if filename and not any(f['name'] == filename for f in found_files):
+                    found_files.append({'url': url, 'name': filename})
+                    print(f"      Found supplement link: {filename}")
+        
+        # 3. Try to construct the supplement URL from DOI
+        # Karger pattern: karger.com/doi/suppl/10.1159/XXXXXX
+        doi_match = re.search(r'10\.1159/\d+', base_url)
+        if not doi_match:
+            # Try to find DOI in the page content
+            doi_match = re.search(r'10\.1159/\d+', html)
+        
+        if doi_match:
+            doi = doi_match.group(0)
+            supp_url = f"https://karger.com/doi/suppl/{doi}"
+            print(f"    Constructed supplement URL from DOI: {supp_url}")
+            
+            # Try to fetch the supplement page
+            try:
+                import requests
+                headers = {
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                }
+                supp_response = requests.get(supp_url, headers=headers, timeout=30, allow_redirects=True)
+                
+                if supp_response.status_code == 200:
+                    supp_soup = BeautifulSoup(supp_response.text, 'html.parser')
+                    
+                    # Find all downloadable files on the supplement page
+                    for link in supp_soup.find_all('a', href=True):
+                        href = link['href']
+                        # Look for file downloads
+                        if any(ext in href.lower() for ext in ['.pdf', '.doc', '.xls', '.csv', '.zip', '.txt']):
+                            file_url = urljoin(supp_url, href)
+                            filename = Path(urlparse(file_url).path).name
+                            if filename and not any(f['name'] == filename for f in found_files):
+                                found_files.append({'url': file_url, 'name': filename})
+                                print(f"      Found supplement from DOI page: {filename}")
+                else:
+                    print(f"    Supplement page returned status {supp_response.status_code}")
+            except Exception as e:
+                print(f"    Could not fetch supplement page: {e}")
+        
+        if not found_files:
+            print("    No Karger supplements found. Trying generic scan.")
+            return self.scrape_generic_supplements(html, base_url)
+        
+        return found_files
+
     def scrape_nature_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
         Scrape supplemental files from a Nature journal page.

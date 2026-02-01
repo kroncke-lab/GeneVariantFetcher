@@ -1,0 +1,292 @@
+[
+  {
+    "pmid": "15840476",
+    "doi": "10.1016/j.hrthm.2005.01.020",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 353106,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "10973849",
+    "doi": "10.1161/01.cir.102.10.1178",
+    "publisher": "AHA (Circulation/JAHA)",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "has_fulltext": false,
+    "error": "No content from DOI resolver (URL: None)"
+  },
+  {
+    "pmid": "26496715",
+    "doi": "10.1159/000440608",
+    "publisher": "Unknown (10.1159/0004406...)",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "has_fulltext": false,
+    "error": "No content from DOI resolver (URL: None)"
+  },
+  {
+    "pmid": "11854117",
+    "doi": "10.1161/hc0702.105124",
+    "publisher": "AHA (Circulation/JAHA)",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "has_fulltext": false,
+    "error": "No content from DOI resolver (URL: None)"
+  },
+  {
+    "pmid": "14661677",
+    "doi": "10.4065/78.12.1479",
+    "publisher": "Unknown (10.4065/78.12.1...)",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "has_fulltext": false,
+    "error": "No content from DOI resolver (URL: https://linkinghub.elsevier.com/retrieve/pii/S0025619611627444)"
+  },
+  {
+    "pmid": "29650123",
+    "doi": "10.1016/j.jacc.2018.01.078",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 200017,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "16922724",
+    "doi": "10.1111/j.1399-0004.2006.00671.x",
+    "publisher": "Wiley",
+    "success": true,
+    "method": "wiley_api",
+    "content_length": 66985,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "17905336",
+    "doi": "10.1016/j.hrthm.2007.06.022",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 334793,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "19996378",
+    "doi": "10.1161/CIRCEP.109.882159",
+    "publisher": "AHA (Circulation/JAHA)",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "has_fulltext": false,
+    "error": "No content from DOI resolver (URL: None)"
+  },
+  {
+    "pmid": "27871843",
+    "doi": "10.1016/j.cca.2016.11.013",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 241632,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "12402336",
+    "doi": "10.1002/humu.10131",
+    "publisher": "Wiley",
+    "success": true,
+    "method": "wiley_api",
+    "content_length": 43657,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "10862094",
+    "doi": "10.1002/1098-1004(200006)15:6<580::AID-HUMU16>3.0.CO;2-0",
+    "publisher": "Wiley",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "has_fulltext": false,
+    "error": "Article not found via Wiley API"
+  },
+  {
+    "pmid": "21216356",
+    "doi": "10.1016/j.recesp.2010.10.002",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 6010,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "22727609",
+    "doi": "10.1016/j.jelectrocard.2012.05.004",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 156871,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "15176425",
+    "doi": "10.1080/17431380410032689",
+    "publisher": "Unknown (10.1080/1743138...)",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "has_fulltext": false,
+    "error": "No content from DOI resolver (URL: None)"
+  },
+  {
+    "pmid": "14998624",
+    "doi": "10.1016/j.jacc.2003.09.049",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 124416,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "24103226",
+    "doi": "10.1016/j.hrthm.2013.10.010",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 122682,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "28532774",
+    "doi": "10.1016/j.amjcard.2017.04.018",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 116411,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "17210839",
+    "doi": "10.1161/CIRCULATIONAHA.106.658021",
+    "publisher": "AHA (Circulation/JAHA)",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "has_fulltext": false,
+    "error": "No content from DOI resolver (URL: None)"
+  },
+  {
+    "pmid": "15913580",
+    "doi": "10.1016/j.cardiores.2005.02.013",
+    "publisher": "Elsevier",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "has_fulltext": false,
+    "error": "Article not found via Elsevier API"
+  },
+  {
+    "pmid": "19695459",
+    "doi": "10.1016/j.jacc.2009.06.005",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 181734,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "19843919",
+    "doi": "10.1161/CIRCEP.109.862649",
+    "publisher": "AHA (Circulation/JAHA)",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "has_fulltext": false,
+    "error": "No content from DOI resolver (URL: None)"
+  },
+  {
+    "pmid": "29759541",
+    "doi": "10.1016/j.jacep.2016.11.013",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 317277,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "29766883",
+    "doi": "10.1016/j.jacep.2015.10.010",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 254672,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "9544837",
+    "doi": "10.1007/s004390050690",
+    "publisher": "Springer",
+    "success": true,
+    "method": "doi_resolver",
+    "content_length": 2424,
+    "has_fulltext": false,
+    "error": null
+  },
+  {
+    "pmid": "26823142",
+    "doi": "10.1253/circj.CJ-15-0933",
+    "publisher": "Unknown (10.1253/circj.C...)",
+    "success": true,
+    "method": "doi_resolver",
+    "content_length": 1234,
+    "has_fulltext": false,
+    "error": null
+  },
+  {
+    "pmid": "29146210",
+    "doi": "10.1016/j.jjcc.2017.10.004",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 173787,
+    "has_fulltext": true,
+    "error": null
+  },
+  {
+    "pmid": "23631430",
+    "doi": "10.1089/gtmb.2012.0118",
+    "publisher": "Unknown (10.1089/gtmb.20...)",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "has_fulltext": false,
+    "error": "No content from DOI resolver (URL: None)"
+  },
+  {
+    "pmid": "22882672",
+    "doi": "10.1111/j.1540-8167.2012.02371.x",
+    "publisher": "Wiley",
+    "success": true,
+    "method": "wiley_api",
+    "content_length": 33348,
+    "has_fulltext": true,
+    "error": null
+  }
+]

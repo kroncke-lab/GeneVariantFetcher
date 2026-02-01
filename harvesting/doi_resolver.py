@@ -255,6 +255,8 @@ class DOIResolver:
         # Route to the specific scraper based on the resolved domain
         if "nature.com" in domain:
             return scraper.scrape_nature_supplements(response.text, final_url)
+        elif "karger.com" in domain:
+            return scraper.scrape_karger_supplements(response.text, final_url)
         elif (
             "gimjournal.org" in domain
             or "sciencedirect.com" in domain
@@ -409,6 +411,8 @@ class DOIResolver:
         # Also get supplements
         if "nature.com" in domain:
             supplements = scraper.scrape_nature_supplements(html_content, final_url)
+        elif "karger.com" in domain:
+            supplements = scraper.scrape_karger_supplements(html_content, final_url)
         elif any(
             d in domain for d in ["gimjournal.org", "sciencedirect.com", "elsevier.com"]
         ):

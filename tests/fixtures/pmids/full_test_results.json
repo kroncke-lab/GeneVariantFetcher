@@ -1,0 +1,512 @@
+[
+  {
+    "pmid": "15840476",
+    "doi": "10.1016/j.hrthm.2005.01.020",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 353106,
+    "error": null
+  },
+  {
+    "pmid": "10973849",
+    "doi": "10.1161/01.cir.102.10.1178",
+    "pmcid": null,
+    "publisher": "AHA",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://doi.org/10.1161/01.cir.102.10.1178\", waiting until \"networkidle\"\n"
+  },
+  {
+    "pmid": "26496715",
+    "doi": "10.1159/000440608",
+    "pmcid": null,
+    "publisher": "Other",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://doi.org/10.1159/000440608\", waiting until \"networkidle\"\n"
+  },
+  {
+    "pmid": "11854117",
+    "doi": "10.1161/hc0702.105124",
+    "pmcid": null,
+    "publisher": "AHA",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://doi.org/10.1161/hc0702.105124\", waiting until \"networkidle\"\n"
+  },
+  {
+    "pmid": "19038855",
+    "doi": "10.1212/01.wnl.0000335760.02995.ca",
+    "pmcid": "PMC2677528",
+    "publisher": "Other",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "14661677",
+    "doi": "10.4065/78.12.1479",
+    "pmcid": null,
+    "publisher": "Other",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "error": "No usable content extracted"
+  },
+  {
+    "pmid": "29650123",
+    "doi": "10.1016/j.jacc.2018.01.078",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 200088,
+    "error": null
+  },
+  {
+    "pmid": "16922724",
+    "doi": "10.1111/j.1399-0004.2006.00671.x",
+    "pmcid": null,
+    "publisher": "Wiley",
+    "success": true,
+    "method": "wiley_api",
+    "content_length": 66985,
+    "error": null
+  },
+  {
+    "pmid": "17905336",
+    "doi": "10.1016/j.hrthm.2007.06.022",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 334793,
+    "error": null
+  },
+  {
+    "pmid": "19996378",
+    "doi": "10.1161/CIRCEP.109.882159",
+    "pmcid": null,
+    "publisher": "AHA",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://doi.org/10.1161/CIRCEP.109.882159\", waiting until \"networkidle\"\n"
+  },
+  {
+    "pmid": "27871843",
+    "doi": "10.1016/j.cca.2016.11.013",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 241561,
+    "error": null
+  },
+  {
+    "pmid": "12402336",
+    "doi": "10.1002/humu.10131",
+    "pmcid": null,
+    "publisher": "Wiley",
+    "success": true,
+    "method": "wiley_api",
+    "content_length": 43657,
+    "error": null
+  },
+  {
+    "pmid": "10862094",
+    "doi": "10.1002/1098-1004(200006)15:6<580::AID-HUMU16>3.0.CO;2-0",
+    "pmcid": null,
+    "publisher": "Wiley",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://doi.org/10.1002/1098-1004(200006)15:6%3C580::AID-HUMU16%3E3.0.CO;2-0\", waiting until \"networkidle\"\n"
+  },
+  {
+    "pmid": "21216356",
+    "doi": "10.1016/j.recesp.2010.10.002",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 6010,
+    "error": null
+  },
+  {
+    "pmid": "22727609",
+    "doi": "10.1016/j.jelectrocard.2012.05.004",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 156871,
+    "error": null
+  },
+  {
+    "pmid": "15176425",
+    "doi": "10.1080/17431380410032689",
+    "pmcid": null,
+    "publisher": "Other",
+    "success": true,
+    "method": "browser_fetch",
+    "content_length": 3655,
+    "error": null
+  },
+  {
+    "pmid": "14998624",
+    "doi": "10.1016/j.jacc.2003.09.049",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 124416,
+    "error": null
+  },
+  {
+    "pmid": "24103226",
+    "doi": "10.1016/j.hrthm.2013.10.010",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 122682,
+    "error": null
+  },
+  {
+    "pmid": "28532774",
+    "doi": "10.1016/j.amjcard.2017.04.018",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 116411,
+    "error": null
+  },
+  {
+    "pmid": "17210839",
+    "doi": "10.1161/CIRCULATIONAHA.106.658021",
+    "pmcid": null,
+    "publisher": "AHA",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://doi.org/10.1161/CIRCULATIONAHA.106.658021\", waiting until \"networkidle\"\n"
+  },
+  {
+    "pmid": "15913580",
+    "doi": "10.1016/j.cardiores.2005.02.013",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://doi.org/10.1016/j.cardiores.2005.02.013\", waiting until \"networkidle\"\n"
+  },
+  {
+    "pmid": "19695459",
+    "doi": "10.1016/j.jacc.2009.06.005",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 181734,
+    "error": null
+  },
+  {
+    "pmid": "19843919",
+    "doi": "10.1161/CIRCEP.109.862649",
+    "pmcid": null,
+    "publisher": "AHA",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://doi.org/10.1161/CIRCEP.109.862649\", waiting until \"networkidle\"\n"
+  },
+  {
+    "pmid": "29759541",
+    "doi": "10.1016/j.jacep.2016.11.013",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 317277,
+    "error": null
+  },
+  {
+    "pmid": "29766883",
+    "doi": "10.1016/j.jacep.2015.10.010",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 254672,
+    "error": null
+  },
+  {
+    "pmid": "24606995",
+    "doi": "10.1186/1471-2350-15-31",
+    "pmcid": "PMC4007532",
+    "publisher": "Other",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "24667783",
+    "doi": "10.1038/ejhg.2014.54",
+    "pmcid": "PMC4266740",
+    "publisher": "Nature",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "23098067",
+    "doi": "10.1186/1471-2261-12-95",
+    "pmcid": "PMC3520728",
+    "publisher": "Other",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "29622001",
+    "doi": "10.1186/s12881-018-0574-0",
+    "pmcid": "PMC5887247",
+    "publisher": "Other",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "24217263",
+    "doi": "10.5830/CVJA-2013-032",
+    "pmcid": "PMC3772322",
+    "publisher": "Other",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "9544837",
+    "doi": "10.1007/s004390050690",
+    "pmcid": null,
+    "publisher": "Springer",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://doi.org/10.1007/s004390050690\", waiting until \"networkidle\"\n"
+  },
+  {
+    "pmid": "12442276",
+    "doi": "10.1002/humu.9085",
+    "pmcid": "PMC1679868",
+    "publisher": "Wiley",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "26823142",
+    "doi": "10.1253/circj.CJ-15-0933",
+    "pmcid": null,
+    "publisher": "Other",
+    "success": true,
+    "method": "browser_fetch",
+    "content_length": 12274,
+    "error": null
+  },
+  {
+    "pmid": "18808722",
+    "doi": "10.1186/1471-2350-9-87",
+    "pmcid": "PMC2570672",
+    "publisher": "Other",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "20181576",
+    "doi": "10.1161/CIRCGENETICS.109.898569",
+    "pmcid": "PMC2858238",
+    "publisher": "AHA",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "26066609",
+    "doi": "10.1038/srep10009",
+    "pmcid": "PMC4464365",
+    "publisher": "Nature",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "22338672",
+    "doi": "10.1016/j.hrthm.2012.02.014",
+    "pmcid": "PMC3566559",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "28491588",
+    "doi": "10.1016/j.hrcr.2015.07.001",
+    "pmcid": "PMC5419677",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "29146210",
+    "doi": "10.1016/j.jjcc.2017.10.004",
+    "pmcid": null,
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "elsevier_api",
+    "content_length": 173787,
+    "error": null
+  },
+  {
+    "pmid": "18551196",
+    "doi": "10.1172/JCI35337",
+    "pmcid": "PMC2423868",
+    "publisher": "Other",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "19716085",
+    "doi": "10.1016/j.hrthm.2009.05.021",
+    "pmcid": "PMC3049907",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "23631430",
+    "doi": "10.1089/gtmb.2012.0118",
+    "pmcid": null,
+    "publisher": "Other",
+    "success": false,
+    "method": "none",
+    "content_length": 0,
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://doi.org/10.1089/gtmb.2012.0118\", waiting until \"networkidle\"\n"
+  },
+  {
+    "pmid": "26746457",
+    "doi": "10.1001/jama.2015.17701",
+    "pmcid": "PMC4758131",
+    "publisher": "Other",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "11844290",
+    "doi": "10.1111/j.1542-474x.2001.tb00137.x",
+    "pmcid": "PMC7027696",
+    "publisher": "Wiley",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "30036649",
+    "doi": "10.1016/j.ipej.2018.07.007",
+    "pmcid": "PMC6198685",
+    "publisher": "Elsevier",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "24218437",
+    "doi": "10.1161/CIRCULATIONAHA.113.004840",
+    "pmcid": "PMC3831174",
+    "publisher": "AHA",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "22378279",
+    "doi": "10.1038/ejhg.2012.23",
+    "pmcid": "PMC3400735",
+    "publisher": "Nature",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "19160088",
+    "doi": "10.1080/07853890802668530",
+    "pmcid": "PMC2704397",
+    "publisher": "Other",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "28749435",
+    "doi": "10.3390/ijms18081633",
+    "pmcid": "PMC5578023",
+    "publisher": "Other",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "23936059",
+    "doi": "10.1371/journal.pone.0069614",
+    "pmcid": "PMC3723856",
+    "publisher": "Other",
+    "success": true,
+    "method": "pmc",
+    "content_length": 0,
+    "error": null
+  },
+  {
+    "pmid": "22882672",
+    "doi": "10.1111/j.1540-8167.2012.02371.x",
+    "pmcid": null,
+    "publisher": "Wiley",
+    "success": true,
+    "method": "wiley_api",
+    "content_length": 33348,
+    "error": null
+  }
+]
