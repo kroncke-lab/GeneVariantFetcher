@@ -96,6 +96,7 @@ class GeneticDataScout:
         r"del[A-Z]{2,}",  # Deletion: delAG, delCT
         r"ins[A-Z]{2,}",  # Insertion: insAG
         r"IVS\d+[+-]\d+[ACGT]>[ACGT]",  # Intronic legacy: IVS2+1G>A
+        r"[A-Z][A-Z0-9]{2,}-[A-Z]\d+[A-Z]",  # Gene-mutation: KCNH2-T895M, SCN5A-G1743R
     ]
 
     # Clinical keywords for relevance scoring (from centralized constants)
