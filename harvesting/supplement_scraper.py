@@ -207,8 +207,10 @@ class SupplementScraper:
                 print(f"    Could not fetch supplement page: {e}")
         
         if not found_files:
-            print("    No Karger supplements found. Trying generic scan.")
-            return self.scrape_generic_supplements(html, base_url)
+            print("    No Karger supplements found via HTTP. Will try browser fallback if available.")
+            # Return empty - the orchestrator should try browser-based fetching
+            # We don't call generic here because Karger pages are different
+            return []
         
         return found_files
 

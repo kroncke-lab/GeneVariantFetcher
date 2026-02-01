@@ -34,6 +34,19 @@
 3. Karger hides supplements behind a separate URL (not linked on main page)
 4. Result: Supplements not found
 
+### Cloudflare Protection Issue
+
+Karger uses Cloudflare with JavaScript challenges that block:
+- Direct HTTP requests (403 Forbidden)
+- Headless browser automation (challenge doesn't resolve)
+- Even stealth-mode Playwright
+
+**Workaround Options:**
+1. **Manual download** - Use `browser_fetch.py --interactive` mode
+2. **Chrome extension relay** - Use OpenClaw browser attachment for real browser access
+3. **LOVD database** - Paper mentions depositing data to LOVD (alternative source)
+4. **Contact authors** - Request supplementary data directly
+
 ## Generic Scraper Analysis
 
 **File:** `harvesting/supplement_scraper.py` → `scrape_generic_supplements()`
