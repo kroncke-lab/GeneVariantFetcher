@@ -1,10 +1,167 @@
 """
 Supplement Scraper Module
+========================
 
 Web scraping logic for extracting supplemental files and full-text content
 from publisher websites.
-Includes domain-specific scrapers for Nature, Elsevier, and a generic fallback.
-Also includes full-text extraction for free articles without PMCIDs.
+
+CRITICAL CONTEXT - 94.6% Variant Extraction Failure
+----------------------------------------------------
+The Gene Variant Fetcher pipeline fails to extract variants from ~94.6% of papers.
+This module is a major bottleneck because most variant data is in supplementary
+files (Excel tables, PDFs), NOT the main article text.
+
+PUBLISHER COVERAGE SUMMARY
+==========================
+
+SPECIFIC HANDLERS IMPLEMENTED (4 publishers):
+---------------------------------------------
+1. Nature (scrape_nature_supplements)
+   - Looks for: #supplementary-information section, h2 with "Supplementary Information/Data"
+   - Coverage: Good for Nature, Nature Genetics, Nature Communications
+   - Pattern: /articles/ URLs in the supplementary section
+   
+2. Elsevier (scrape_elsevier_supplements) - Also covers ScienceDirect, GIM Journal
+   - Looks for: 
+     * JSON in <script type="application/json"> with supplementaryMaterials
+     * Sections with supplement/supporting/additional/appendix headings
+     * MMC (multimedia component) links via regex: mmc\d+\.(pdf|docx|xlsx|...)
+     * Links with class "S_C_9cf8451f" (ScienceDirect specific)
+   - Coverage: Good for most Elsevier journals
+   
+3. Karger (scrape_karger_supplements)
+   - Looks for:
+     * Supplement sections/divs with supplement|supp-material|additional classes
+     * Constructs supplement URL from DOI: karger.com/doi/suppl/10.1159/XXXXXX
+     * Makes HTTP request to supplement page to find files
+   - Coverage: POOR - See "Why Karger Fails" below
+   - Browser fallback: harvesting/browser_supplement_fetcher.py
+
+4. SPRINGER/BMC (scrape_springer_supplements) - IMPLEMENTED 2026-02-01
+   - Looks for:
+     * Section classes: c-article-supplementary, SupplementaryMaterial, additional-files
+     * Heading patterns: "Electronic Supplementary Material", "Additional files", "ESM"
+     * /MediaObjects/ links (Springer's CDN for ESM files)
+     * MOESM naming pattern in URLs and link text
+     * data-track attributes for download links
+   - Coverage: Good for link.springer.com, biomedcentral.com, springeropen.com
+   - Filters out: citation links, anchor-only URLs, main article PDFs
+   - Tested with: 10.1186/s12864-019-6413-7 (5 supplements found)
+
+NO SPECIFIC HANDLERS (Remaining Gaps):
+--------------------------------------
+These publishers fall through to the generic scraper, which often fails:
+
+5. OXFORD ACADEMIC (academic.oup.com)
+   - NO dedicated handler  
+   - Supplement location: "Supplementary data" tab/section
+   - Actual URLs: /downloadSupplement?file=XXXXX_supplementary_data.xlsx
+   - The generic scraper MISSES these because:
+     * Supplements often on separate page/tab requiring JavaScript
+     * Links use "downloadSupplement" endpoint, not file extensions
+     * May require clicking "Supplementary data" tab first
+
+6. WILEY (onlinelibrary.wiley.com)
+   - NO supplement handler (only full-text extractor exists)
+   - Supplement location: "Supporting Information" section
+   - Actual URLs: /action/downloadSupplement?doi=...&file=...
+   - Similar issues to Oxford
+
+7. AHA JOURNALS (ahajournals.org) - Circulation, etc.
+   - NO dedicated handler
+   - Supplements at: /doi/suppl/10.1161/XXXXX
+   
+8. PLOS, Frontiers, MDPI
+   - NO dedicated handlers
+   - Usually better handled by generic due to cleaner HTML structure
+
+GENERIC SCRAPER (scrape_generic_supplements)
+============================================
+Keywords searched: "supplement", "supporting", "appendix", "additional file"
+Extensions matched: .pdf, .docx, .xlsx, .csv, .zip, .rar, .gz, .txt, .doc
+
+CRITICAL LIMITATION: The generic scraper only finds supplements when:
+- Link text contains one of the keywords, OR
+- Link href ends with a known file extension
+
+This misses:
+- JavaScript-rendered supplement sections
+- Supplements on separate pages (requires navigation)
+- Downloads via API endpoints (e.g., /downloadSupplement?...)
+- Publisher-specific naming (ESM, MOESM, mmc, etc.)
+- Links with generic text like "Download" or just icons
+
+WHY KARGER FAILS
+================
+1. DOI extraction unreliable - DOI may not be on page or in expected format
+2. Supplement page (karger.com/doi/suppl/...) often returns:
+   - 403 Forbidden (anti-bot)
+   - Redirect to login
+   - Different HTML structure than expected
+3. No browser fallback integration in main pipeline
+4. HTTP requests from scraper blocked by Cloudflare
+
+WHY OXFORD FAILS (Springer now has dedicated handler)
+=====================================================
+1. No dedicated scraper - falls to generic
+2. Generic keyword matching doesn't match Oxford terminology:
+   - Oxford: "Supplementary data" (matches) but download URLs don't
+   - /downloadSupplement endpoint not recognized by generic
+3. Often requires:
+   - JavaScript rendering to show supplement tab
+   - Navigation to a separate supplements page
+   - Authentication for some supplements
+
+RECOMMENDED FIXES (Priority Order)
+==================================
+1. ✅ DONE: scrape_springer_supplements handler implemented (2026-02-01)
+   - Handles link.springer.com, biomedcentral.com, springeropen.com
+   - Extracts /MediaObjects/ URLs with MOESM naming
+   - Routing added to doi_resolver.py
+   
+2. Add scrape_oxford_supplements handler:
+   - Look for "Supplementary data" section
+   - Handle /downloadSupplement endpoint URLs
+   - May need to follow "Supplementary data" tab links
+
+3. Improve generic scraper:
+   - Add more keywords: "ESM", "MOESM", "electronic supplementary", "supporting information"
+   - Match /downloadSupplement, /MediaObjects/, /figures/ paths
+   - Try following links that say "Supplementary" even without file extension
+
+4. Browser fallback integration:
+   - Karger browser fetcher exists but not integrated into main pipeline
+   - Need similar for Oxford, Springer (Cloudflare protection common)
+
+5. Consider Playwright for all publishers:
+   - JavaScript rendering would solve most issues
+   - Expensive in terms of time/resources
+   - browser_supplement_fetcher.py has Karger-specific implementation
+
+FULL-TEXT EXTRACTORS
+====================
+Also includes extractors for article main text (for free articles without PMCIDs):
+- extract_fulltext_nature
+- extract_fulltext_elsevier
+- extract_fulltext_wiley
+- extract_fulltext_generic
+
+These route via extract_fulltext() based on domain.
+
+FILE STRUCTURE
+==============
+- scrape_*_supplements: Returns List[Dict] with 'url' and 'name' keys
+- extract_fulltext_*: Returns Tuple[Optional[str], str] - (markdown, title)
+- _normalize_pmc_url: Handles PMC URL variants
+- get_pmc_supplement_url_variants: Generates fallback URLs for PMC downloads
+
+Related files:
+- harvesting/doi_resolver.py - Routes DOIs to appropriate scrapers
+- harvesting/browser_supplement_fetcher.py - Playwright-based Karger fetcher
+- cli/browser_fetch.py - General browser-based PDF fetcher with selector patterns
+
+Author: Gene Variant Fetcher Team
+Last audit: 2026-02-01
 """
 
 import re
@@ -119,6 +276,187 @@ class SupplementScraper:
 
         return variants
 
+    def scrape_springer_supplements(self, html: str, base_url: str) -> List[Dict]:
+        """
+        Scrape supplemental files from Springer/BMC journal pages.
+        
+        Springer/BMC (link.springer.com, biomedcentral.com) is one of the largest
+        publishers. This handler addresses a major gap in the 94.6% failure rate.
+        
+        Key patterns:
+        - Section heading: "Electronic Supplementary Material" or "Additional files"
+        - Section classes: "c-article-supplementary", "Supplementary", "SupplementaryMaterial"
+        - Link patterns:
+          * /MediaObjects/XXXXX_YYYY_ZZZZ_MOESM1_ESM.pdf
+          * /article/10.1007/.../figures/N (figure files)
+        - Link text: "ESM 1", "MOESM1", "Additional file 1", etc.
+        - data-track attributes for analytics (useful for finding links)
+        
+        Args:
+            html: HTML content of the publisher page
+            base_url: Base URL for resolving relative links
+            
+        Returns:
+            List of supplement file dictionaries with 'url' and 'name' keys
+        """
+        print("  Scraping with scrape_springer_supplements...")
+        soup = BeautifulSoup(html, "html.parser")
+        found_files = []
+        seen_urls = set()  # Track URLs to avoid duplicates
+        
+        def add_file(url: str, name: str) -> bool:
+            """Add a file if not already seen and passes validation. Returns True if added."""
+            # Normalize URL for deduplication (strip trailing slashes and anchors for comparison)
+            parsed = urlparse(url)
+            
+            # Skip anchor-only links (e.g., article.html#MOESM1) - these aren't actual files
+            if parsed.fragment and not any(ext in parsed.path.lower() for ext in 
+                ['.pdf', '.doc', '.xls', '.csv', '.zip', '.txt', '.pptx', '.xlsx', '.docx']):
+                return False
+            
+            # Skip citation/reference links
+            if 'citation-needed' in url or 'refman' in url or 'format=refman' in url:
+                return False
+            
+            # Skip main article PDF (we want supplements only, not the paper itself)
+            # Main article PDFs typically have paths like /content/pdf/DOI.pdf
+            if '/content/pdf/' in url and 'MOESM' not in url and 'ESM' not in url:
+                return False
+            
+            # Create a normalized key for deduplication
+            norm_url = url.split('#')[0].rstrip('/')  # Remove anchor and trailing slash
+            if norm_url in seen_urls:
+                return False
+            seen_urls.add(norm_url)
+            
+            # Skip if name looks like a DOI fragment without extension
+            if re.match(r'^s?\d{5}-\d{3}-\d{4}-\d+$', name) and not any(ext in name.lower() for ext in 
+                ['.pdf', '.doc', '.xls', '.csv', '.zip', '.txt', '.pptx', '.xlsx', '.docx']):
+                return False
+            
+            found_files.append({'url': url, 'name': name})
+            print(f"      Found supplement: {name}")
+            return True
+        
+        # 1. Look for ESM section by class (most reliable)
+        # Springer uses various class names for supplementary sections
+        esm_section = None
+        section_classes = [
+            r'c-article-supplementary',  # Nature/Springer style
+            r'SupplementaryMaterial',
+            r'Supplementary',
+            r'additional-files',
+            r'supplementary-content',
+            r'esm-container',
+        ]
+        
+        for class_pattern in section_classes:
+            esm_section = soup.find(['section', 'div', 'aside'], 
+                class_=re.compile(class_pattern, re.IGNORECASE))
+            if esm_section:
+                print(f"    Found supplementary section with class matching: {class_pattern}")
+                break
+        
+        # 2. Fallback: Find by heading text
+        if not esm_section:
+            # Try various heading patterns
+            heading_patterns = [
+                r'Electronic\s+Supplementary\s+Material',
+                r'Additional\s+files?',
+                r'Supplementary\s+(Information|Material|Data|Files?)',
+                r'Supporting\s+Information',
+                r'ESM',
+            ]
+            for pattern in heading_patterns:
+                heading = soup.find(['h2', 'h3', 'h4', 'h5'], 
+                    string=re.compile(pattern, re.IGNORECASE))
+                if heading:
+                    # Get the parent section or the next sibling containing links
+                    esm_section = heading.find_parent(['section', 'div', 'article'])
+                    if not esm_section:
+                        esm_section = heading.find_next_sibling(['div', 'section', 'ul', 'ol'])
+                    if esm_section:
+                        print(f"    Found supplementary section via heading: {heading.get_text().strip()[:50]}")
+                        break
+        
+        # 3. Extract links from ESM section
+        if esm_section:
+            for link in esm_section.find_all('a', href=True):
+                href = link['href']
+                link_text = link.get_text().strip()
+                
+                # Check if this looks like a supplement download link
+                is_media_object = '/MediaObjects/' in href or '/media/' in href.lower()
+                is_esm_link = re.search(r'(MOESM|ESM|supplementary|additional)', 
+                                        href + link_text, re.IGNORECASE)
+                has_extension = any(ext in href.lower() for ext in 
+                    ['.pdf', '.doc', '.xls', '.csv', '.zip', '.txt', '.pptx', '.xlsx', '.docx'])
+                
+                if is_media_object or is_esm_link or has_extension:
+                    url = urljoin(base_url, href)
+                    # Extract filename from URL or use link text
+                    filename = Path(urlparse(url).path).name
+                    if not filename or filename == '':
+                        filename = link_text if link_text else 'supplement'
+                    # Clean up filename
+                    filename = re.sub(r'[^\w\-_\.\s]', '', filename).strip()
+                    if not filename:
+                        filename = 'supplement'
+                    add_file(url, filename)
+        
+        # 4. Scan entire page for /MediaObjects/ links (Springer's CDN for supplements)
+        for link in soup.find_all('a', href=re.compile(r'/MediaObjects/', re.IGNORECASE)):
+            href = link['href']
+            url = urljoin(base_url, href)
+            filename = Path(urlparse(url).path).name
+            if filename:
+                add_file(url, filename)
+        
+        # 5. Look for links with data-track attributes (Springer analytics)
+        for link in soup.find_all('a', attrs={'data-track-action': re.compile(r'(download|supplement)', re.IGNORECASE)}):
+            href = link.get('href', '')
+            if href:
+                url = urljoin(base_url, href)
+                link_text = link.get_text().strip()
+                filename = Path(urlparse(url).path).name or link_text or 'supplement'
+                add_file(url, filename)
+        
+        # 6. Look for MOESM pattern in any link on the page
+        for link in soup.find_all('a', href=re.compile(r'MOESM\d*', re.IGNORECASE)):
+            href = link['href']
+            url = urljoin(base_url, href)
+            filename = Path(urlparse(url).path).name
+            link_text = link.get_text().strip()
+            if filename:
+                add_file(url, filename)
+            elif link_text:
+                add_file(url, link_text)
+        
+        # 7. Check for BMC-style "Additional file" links
+        for link in soup.find_all('a', string=re.compile(r'Additional\s+file\s*\d*', re.IGNORECASE)):
+            href = link.get('href', '')
+            if href:
+                url = urljoin(base_url, href)
+                link_text = link.get_text().strip()
+                filename = Path(urlparse(url).path).name or link_text
+                add_file(url, filename)
+        
+        # 8. Look for links in figure/table supplement sections
+        for container in soup.find_all(['figure', 'div'], class_=re.compile(r'(figure|table).*supplement', re.IGNORECASE)):
+            for link in container.find_all('a', href=True):
+                href = link['href']
+                if any(ext in href.lower() for ext in ['.pdf', '.doc', '.xls', '.csv', '.zip', '.txt']):
+                    url = urljoin(base_url, href)
+                    filename = Path(urlparse(url).path).name
+                    add_file(url, filename)
+        
+        if found_files:
+            print(f"    Total Springer supplements found: {len(found_files)}")
+            return found_files
+        
+        print("    No specific Springer/BMC supplements found. Trying generic scan.")
+        return self.scrape_generic_supplements(html, base_url)
+
     def scrape_karger_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
         Scrape supplemental files from a Karger journal page.
@@ -127,12 +465,24 @@ class SupplementScraper:
         - Article: karger.com/crd/article/133/2/73/...
         - Supplements: karger.com/doi/suppl/10.1159/XXXXXX
         
+        KNOWN ISSUES (contributing to 94.6% failure):
+        1. DOI extraction often fails if DOI not in expected format
+        2. Supplement page (karger.com/doi/suppl/...) returns 403 (Cloudflare)
+        3. HTTP requests blocked by anti-bot protection
+        4. Returns empty list when HTTP fails, relies on browser fallback
+           that isn't integrated into the main pipeline
+        
+        BROWSER FALLBACK: harvesting/browser_supplement_fetcher.py has
+        fetch_karger_supplements_browser() but it's not called from the
+        main orchestrator.
+        
         Args:
             html: HTML content of the publisher page
             base_url: Base URL for resolving relative links
             
         Returns:
-            List of supplement file dictionaries with 'url' and 'name' keys
+            List of supplement file dictionaries with 'url' and 'name' keys.
+            Often returns [] due to access issues.
         """
         print("  Scraping with scrape_karger_supplements...")
         soup = BeautifulSoup(html, "html.parser")
@@ -407,6 +757,33 @@ class SupplementScraper:
     def scrape_generic_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
         A best-effort generic scraper for supplemental files.
+        
+        This is the fallback for publishers without specific handlers.
+        
+        CRITICAL LIMITATIONS (major contributor to 94.6% failure rate):
+        
+        Current keywords: "supplement", "supporting", "appendix", "additional file"
+        
+        MISSES these common patterns:
+        - "Electronic Supplementary Material" / "ESM" (Springer)
+        - "MOESM" file naming (Springer)
+        - /MediaObjects/ URLs (Springer) 
+        - /downloadSupplement endpoint (Oxford, Wiley)
+        - Links with icon-only text (no keyword match)
+        - JavaScript-rendered supplement sections
+        - Supplements on separate pages requiring navigation
+        
+        MATCHING LOGIC:
+        - Link text contains keyword, OR
+        - Link href ends with known extension (.pdf, .xlsx, etc.)
+        
+        This means a link like:
+          <a href="/downloadSupplement?file=data.xlsx">Download</a>
+        Will NOT match because:
+        - "Download" doesn't contain keywords
+        - href doesn't END with .xlsx (has query params)
+        
+        TODO: Expand keywords and match URL patterns not just extensions.
 
         Args:
             html: HTML content of the publisher page
@@ -890,3 +1267,79 @@ class SupplementScraper:
             return self.extract_fulltext_wiley(html, base_url)
         else:
             return self.extract_fulltext_generic(html, base_url)
+
+
+# =============================================================================
+# TODO: REMAINING IMPLEMENTATIONS TO IMPROVE FAILURE RATE
+# =============================================================================
+#
+# PRIORITY 1: ✅ DONE - scrape_springer_supplements() implemented (2026-02-01)
+# See the actual implementation above in the SupplementScraper class.
+# Handles: link.springer.com, biomedcentral.com, springeropen.com
+# Tested with: 10.1186/s12864-019-6413-7 (found 5 MOESM PDFs)
+#
+# PRIORITY 2: Add scrape_oxford_supplements()
+# -------------------------------------------
+# Oxford Academic (academic.oup.com) is critical for genetics journals.
+#
+# def scrape_oxford_supplements(self, html: str, base_url: str) -> List[Dict]:
+#     """
+#     Scrape supplements from Oxford Academic (academic.oup.com)
+#     
+#     Key patterns:
+#     - Section: "Supplementary data" tab/section
+#     - Link class: "supplementary-data" or similar
+#     - URL patterns:
+#       * /downloadSupplement?file=XXXXX_supplementary_data.xlsx
+#       * /article/XXXXX/XXXXX/supplementary-data
+#     
+#     CHALLENGE: Often requires JavaScript to render supplement tab.
+#     May need to construct supplement URL from article URL pattern.
+#     """
+#     soup = BeautifulSoup(html, "html.parser")
+#     found_files = []
+#     
+#     # 1. Look for direct download links
+#     for link in soup.find_all('a', href=re.compile(r'downloadSupplement')):
+#         href = link['href']
+#         url = urljoin(base_url, href)
+#         filename = link.get_text().strip() or 'supplement'
+#         found_files.append({'url': url, 'name': filename})
+#     
+#     # 2. Look for supplementary-data section
+#     supp_section = soup.find(id='supplementary-data') or \
+#                    soup.find('section', class_=re.compile(r'supplementary'))
+#     
+#     # 3. Try constructing supplement page URL from article URL
+#     # Oxford pattern: /article/doi/xxxxx -> /article/doi/xxxxx/supplementary-data
+#     
+#     return found_files if found_files else self.scrape_generic_supplements(html, base_url)
+#
+#
+# PRIORITY 3: Improve scrape_generic_supplements()
+# ------------------------------------------------
+# Current keywords miss too much. Add:
+#   - Keywords: "ESM", "MOESM", "electronic supplementary", "supporting information"
+#   - URL patterns: /downloadSupplement, /MediaObjects/, /figures/, /suppl/
+#   - Don't require file extension if URL contains clear supplement indicators
+#
+#
+# PRIORITY 4: Add routing in doi_resolver.py
+# ------------------------------------------
+# Once handlers are implemented, add to resolve_and_scrape_supplements():
+#
+#     elif "springer.com" in domain or "biomedcentral.com" in domain:
+#         return scraper.scrape_springer_supplements(response.text, final_url)
+#     elif "academic.oup.com" in domain or "oup.com" in domain:
+#         return scraper.scrape_oxford_supplements(response.text, final_url)
+#
+#
+# PRIORITY 5: Browser fallback integration
+# ----------------------------------------
+# browser_supplement_fetcher.py has Karger implementation.
+# Need to:
+# 1. Integrate browser fallback into main pipeline (when HTTP fails)
+# 2. Add browser handlers for Oxford, Springer (similar to Karger)
+# 3. Consider making browser the default for known-problematic publishers
+#
+# =============================================================================

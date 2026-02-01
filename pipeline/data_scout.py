@@ -47,8 +47,8 @@ class GeneticDataScout:
 
     # Patterns for detecting individual-level data (keep=True signals)
     INDIVIDUAL_PATTERNS = [
-        r"\bpatient\s*\d+",  # Patient 1, Patient 2
-        r"\bcase\s*\d+",  # Case 1, Case 2
+        r"\bpatient[- ]?\d+",  # Patient 1, Patient-1, Patient1
+        r"\bcase[- ]?\d+",  # Case 1, Case-62, Case1
         r"\bproband\b",  # proband
         r"\bindex\s*case\b",  # index case
         r"\b[IVX]+-\d+\b",  # Pedigree notation: II-1, III-2, IV-1

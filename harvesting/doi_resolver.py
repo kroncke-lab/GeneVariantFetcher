@@ -255,6 +255,9 @@ class DOIResolver:
         # Route to the specific scraper based on the resolved domain
         if "nature.com" in domain:
             return scraper.scrape_nature_supplements(response.text, final_url)
+        elif "springer.com" in domain or "biomedcentral.com" in domain or "springeropen.com" in domain:
+            # Springer/BMC is a critical publisher - many variants are in their supplements
+            return scraper.scrape_springer_supplements(response.text, final_url)
         elif "karger.com" in domain:
             return scraper.scrape_karger_supplements(response.text, final_url)
         elif (
@@ -411,6 +414,8 @@ class DOIResolver:
         # Also get supplements
         if "nature.com" in domain:
             supplements = scraper.scrape_nature_supplements(html_content, final_url)
+        elif "springer.com" in domain or "biomedcentral.com" in domain or "springeropen.com" in domain:
+            supplements = scraper.scrape_springer_supplements(html_content, final_url)
         elif "karger.com" in domain:
             supplements = scraper.scrape_karger_supplements(html_content, final_url)
         elif any(
