@@ -14,7 +14,7 @@ Supplement scraper missing handlers for most publishers → 94.6% of variants mi
 - [x] Audit supplement_scraper.py - documented all gaps
 - [x] Springer/BMC handler implemented
 - [x] Oxford Academic handler implemented
-- [ ] Wiley handler
+- [x] Wiley handler implemented (2026-02-01)
 - [ ] Karger browser fallback (blocked by Cloudflare)
 - [ ] Test all handlers with real extraction run
 - [ ] Measure recall improvement
@@ -40,9 +40,9 @@ Supplement scraper missing handlers for most publishers → 94.6% of variants mi
 | Elsevier | ✅ | Working |
 | Springer/BMC | ✅ | Implemented, needs testing |
 | Oxford Academic | ✅ | Implemented, needs testing |
+| Wiley | ✅ | Implemented, needs testing |
 | Karger | ❌ | Blocked by Cloudflare |
-| Wiley | ❌ | Not started |
 
 ---
 
-*Last updated: 2026-02-01 17:56*
+*Last updated: 2026-02-01 18:28*
