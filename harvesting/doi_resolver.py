@@ -261,6 +261,9 @@ class DOIResolver:
         elif "oup.com" in domain or "academic.oup.com" in domain:
             # Oxford Academic - another major publisher with supplements
             return scraper.scrape_oxford_supplements(response.text, final_url)
+        elif "wiley.com" in domain or "onlinelibrary.wiley.com" in domain:
+            # Wiley Online Library - major publisher for genetics/medical journals
+            return scraper.scrape_wiley_supplements(response.text, final_url)
         elif "karger.com" in domain:
             return scraper.scrape_karger_supplements(response.text, final_url)
         elif (
@@ -421,6 +424,8 @@ class DOIResolver:
             supplements = scraper.scrape_springer_supplements(html_content, final_url)
         elif "oup.com" in domain:
             supplements = scraper.scrape_oxford_supplements(html_content, final_url)
+        elif "wiley.com" in domain or "onlinelibrary.wiley.com" in domain:
+            supplements = scraper.scrape_wiley_supplements(html_content, final_url)
         elif "karger.com" in domain:
             supplements = scraper.scrape_karger_supplements(html_content, final_url)
         elif any(

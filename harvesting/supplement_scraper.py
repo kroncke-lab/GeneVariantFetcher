@@ -609,6 +609,187 @@ class SupplementScraper:
         print("    No specific Oxford supplements found. Trying generic scan.")
         return self.scrape_generic_supplements(html, base_url)
 
+    def scrape_wiley_supplements(self, html: str, base_url: str) -> List[Dict]:
+        """
+        Scrape supplemental files from Wiley Online Library journal pages.
+        
+        Wiley (onlinelibrary.wiley.com) is a major publisher for genetics/medical journals.
+        This handler addresses a gap in the 94.6% failure rate.
+        
+        Key patterns:
+        - Section heading: "Supporting Information" or "Data Availability"
+        - Section classes: "article-section__supporting", "article-section__supplement"
+        - Link patterns:
+          * /action/downloadSupplement?doi=...&file=...
+          * Direct file links ending in .pdf, .xlsx, .docx, .zip
+        - Link text: "Filename:", "Supporting Information", "Appendix S1", etc.
+        
+        Args:
+            html: HTML content of the publisher page
+            base_url: Base URL for resolving relative links
+            
+        Returns:
+            List of supplement file dictionaries with 'url' and 'name' keys
+        """
+        print("  Scraping with scrape_wiley_supplements...")
+        soup = BeautifulSoup(html, "html.parser")
+        found_files = []
+        seen_urls = set()  # Track URLs to avoid duplicates
+        
+        def add_file(url: str, name: str) -> bool:
+            """Add a file if not already seen. Returns True if added."""
+            # Normalize for deduplication
+            norm_url = url.split('#')[0]
+            if norm_url in seen_urls:
+                return False
+            seen_urls.add(norm_url)
+            
+            # Clean up the name
+            name = re.sub(r'[^\w\-_\.\s]', '', name).strip()
+            if not name:
+                name = 'supplement'
+            
+            found_files.append({'url': url, 'name': name})
+            print(f"      Found supplement: {name}")
+            return True
+        
+        # 1. Look for /action/downloadSupplement links anywhere on page (most reliable)
+        for link in soup.find_all('a', href=re.compile(r'/action/downloadSupplement', re.IGNORECASE)):
+            href = link['href']
+            url = urljoin(base_url, href)
+            
+            # Extract filename from the 'file' parameter
+            file_match = re.search(r'file=([^&]+)', href)
+            if file_match:
+                from urllib.parse import unquote
+                filename = unquote(file_match.group(1))
+            else:
+                # Fallback to link text or inner content
+                filename = link.get_text().strip()
+                # Wiley sometimes has "Filename: xxx.pdf" format
+                filename_match = re.search(r'Filename:\s*(.+)', filename, re.IGNORECASE)
+                if filename_match:
+                    filename = filename_match.group(1).strip()
+                if not filename:
+                    filename = 'supplement'
+            
+            add_file(url, filename)
+        
+        # 2. Look for "Supporting Information" section by class
+        supp_section = None
+        section_classes = [
+            r'article-section__supporting',
+            r'article-section__supplement',
+            r'article-supplementary',
+            r'supporting-info',
+            r'data-availability',
+        ]
+        
+        for class_pattern in section_classes:
+            supp_section = soup.find(['section', 'div', 'aside'], 
+                class_=re.compile(class_pattern, re.IGNORECASE))
+            if supp_section:
+                print(f"    Found supplementary section with class matching: {class_pattern}")
+                break
+        
+        # 3. Fallback: Find by heading text
+        if not supp_section:
+            heading_patterns = [
+                r'Supporting\s+Information',
+                r'Supplementary\s+(Material|Data|Files?)',
+                r'Data\s+Availability',
+                r'Additional\s+Supporting\s+Information',
+                r'Appendix',
+            ]
+            for pattern in heading_patterns:
+                heading = soup.find(['h2', 'h3', 'h4', 'h5'], 
+                    string=re.compile(pattern, re.IGNORECASE))
+                if heading:
+                    supp_section = heading.find_parent(['section', 'div', 'article'])
+                    if not supp_section:
+                        supp_section = heading.find_next_sibling(['div', 'section', 'ul', 'ol'])
+                    if supp_section:
+                        print(f"    Found supplementary section via heading: {heading.get_text().strip()[:50]}")
+                        break
+        
+        # 4. Extract links from supplementary section
+        if supp_section:
+            for link in supp_section.find_all('a', href=True):
+                href = link['href']
+                link_text = link.get_text().strip()
+                
+                # Check if this looks like a download link
+                is_download = 'download' in href.lower() or 'download' in link_text.lower()
+                has_extension = any(ext in href.lower() for ext in 
+                    ['.pdf', '.doc', '.xls', '.csv', '.zip', '.txt', '.pptx', '.xlsx', '.docx'])
+                is_supplement = 'suppl' in href.lower() or 'suppl' in link_text.lower() or 'appendix' in link_text.lower()
+                
+                if is_download or has_extension or is_supplement:
+                    url = urljoin(base_url, href)
+                    
+                    # Try to get filename from file parameter, URL path, or link text
+                    file_match = re.search(r'file=([^&]+)', href)
+                    if file_match:
+                        from urllib.parse import unquote
+                        filename = unquote(file_match.group(1))
+                    else:
+                        filename = Path(urlparse(url).path).name
+                        if not filename or filename == '':
+                            # Look for "Filename: xxx" in link text
+                            filename_match = re.search(r'Filename:\s*(.+)', link_text, re.IGNORECASE)
+                            if filename_match:
+                                filename = filename_match.group(1).strip()
+                            elif link_text:
+                                filename = link_text
+                            else:
+                                filename = 'supplement'
+                    
+                    add_file(url, filename)
+        
+        # 5. Look for links with "supporting" or "supplementary" in text
+        for link in soup.find_all('a', string=re.compile(r'(supporting|supplementary|appendix)', re.IGNORECASE)):
+            href = link.get('href', '')
+            if href and any(ext in href.lower() for ext in ['.pdf', '.doc', '.xls', '.csv', '.zip', '.txt']):
+                url = urljoin(base_url, href)
+                filename = link.get_text().strip()
+                # Extract "Filename: xxx" pattern
+                filename_match = re.search(r'Filename:\s*(.+)', filename, re.IGNORECASE)
+                if filename_match:
+                    filename = filename_match.group(1).strip()
+                if not filename:
+                    filename = Path(urlparse(url).path).name
+                add_file(url, filename)
+        
+        # 6. Look for data-article-supporting-info attributes (Wiley specific)
+        for link in soup.find_all('a', attrs={'data-article-supporting-info': True}):
+            href = link.get('href', '')
+            if href:
+                url = urljoin(base_url, href)
+                filename = link.get_text().strip() or Path(urlparse(url).path).name or 'supplement'
+                add_file(url, filename)
+        
+        # 7. Look for list items in supporting info sections
+        for li in soup.find_all('li', class_=re.compile(r'(supporting|supplement)', re.IGNORECASE)):
+            for link in li.find_all('a', href=True):
+                href = link['href']
+                if any(ext in href.lower() for ext in ['.pdf', '.doc', '.xls', '.csv', '.zip', '.txt']):
+                    url = urljoin(base_url, href)
+                    filename = link.get_text().strip()
+                    filename_match = re.search(r'Filename:\s*(.+)', filename, re.IGNORECASE)
+                    if filename_match:
+                        filename = filename_match.group(1).strip()
+                    if not filename:
+                        filename = Path(urlparse(url).path).name
+                    if filename:
+                        add_file(url, filename)
+        
+        if found_files:
+            print(f"    Total Wiley supplements found: {len(found_files)}")
+            return found_files
+        
+        print("    No specific Wiley supplements found. Trying generic scan.")
+        return self.scrape_generic_supplements(html, base_url)
+
     def scrape_karger_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
         Scrape supplemental files from a Karger journal page.
