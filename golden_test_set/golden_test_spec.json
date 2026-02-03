@@ -1,0 +1,451 @@
+{
+  "description": "Golden test set for GVF extraction validation",
+  "created": "2026-02-03",
+  "overall_recall": "39.6%",
+  "papers": [
+    {
+      "pmid": "30036649",
+      "excel_count": 5,
+      "extracted_count": 4,
+      "recall": 0.8,
+      "matched": [
+        [
+          "T613M",
+          "T613M"
+        ],
+        [
+          "S818W",
+          "S818W"
+        ],
+        [
+          "G628Del",
+          "G628del"
+        ],
+        [
+          "R696C",
+          "R696C"
+        ]
+      ],
+      "missed": [
+        "L776P"
+      ],
+      "extra": []
+    },
+    {
+      "pmid": "18808722",
+      "excel_count": 8,
+      "extracted_count": 8,
+      "recall": 0.875,
+      "matched": [
+        [
+          "K897T",
+          "K897T"
+        ],
+        [
+          "N629S",
+          "N629S"
+        ],
+        [
+          "A490T",
+          "A490T"
+        ],
+        [
+          "A561T",
+          "A561T"
+        ],
+        [
+          "R366X",
+          "R366X"
+        ],
+        [
+          "A614V",
+          "A614V"
+        ],
+        [
+          "D609N",
+          "D609N"
+        ]
+      ],
+      "missed": [
+        "H674fsX"
+      ],
+      "extra": [
+        "G674fs"
+      ]
+    },
+    {
+      "pmid": "26746457",
+      "excel_count": 10,
+      "extracted_count": 129,
+      "recall": 1.0,
+      "matched": [
+        [
+          "G745A",
+          "G745A"
+        ],
+        [
+          "G924W",
+          "G924W"
+        ],
+        [
+          "R744Q",
+          "R744Q"
+        ],
+        [
+          "I711V",
+          "I711V"
+        ],
+        [
+          "D591N",
+          "D591N"
+        ],
+        [
+          "R883W",
+          "R883W"
+        ],
+        [
+          "D119H",
+          "D119H"
+        ],
+        [
+          "T983I",
+          "T983I"
+        ],
+        [
+          "G487S",
+          "G487S"
+        ],
+        [
+          "A913V",
+          "A913V"
+        ]
+      ],
+      "missed": [],
+      "extra": [
+        "E48K",
+        "A286S",
+        "R912W",
+        "G1935S",
+        "R222Q",
+        "T1304M",
+        "R1929H",
+        "K897T",
+        "R34C",
+        "S1103Y",
+        "R689H",
+        "R1991Q",
+        "A1270S",
+        "L1704H",
+        "F1293S",
+        "R252W",
+        "R394H",
+        "S571I",
+        "R894H",
+        "L299M",
+        "P717L",
+        "R328C",
+        "Y403C",
+        "S1787N",
+        "A572V",
+        "G238S",
+        "H558R",
+        "L1194M",
+        "F2004V",
+        "A572S",
+        "R513H",
+        "R1193Q",
+        "P656L",
+        "R1898C",
+        "C373F",
+        "V924I",
+        "V1098L",
+        "S88N",
+        "R975Q",
+        "R181Q",
+        "I848F",
+        "A1680T",
+        "G903R",
+        "R1035Q",
+        "G552W",
+        "P347S",
+        "S524Y",
+        "A188V",
+        "L315P",
+        "R1739Q",
+        "D297N",
+        "V1063L",
+        "F532C",
+        "P1090L",
+        "A9V",
+        "R1174Q",
+        "V325M",
+        "C982R",
+        "A1294G",
+        "A1180V",
+        "R1027Q",
+        "G615E",
+        "R1023H",
+        "R1195S",
+        "L1105S",
+        "F1596I",
+        "P1030L",
+        "A413T",
+        "T594S",
+        "S1904L",
+        "D1275N",
+        "P2006A",
+        "E1032K",
+        "S11R",
+        "A175D",
+        "V1532I",
+        "T630M",
+        "L959F",
+        "V1251M",
+        "M291R",
+        "V1287M",
+        "G873S",
+        "D1091Y",
+        "T1016M",
+        "R1116W",
+        "T1145I",
+        "V1951L",
+        "V1353M",
+        "L1988R",
+        "L461V",
+        "R1047L",
+        "D982N",
+        "A572D",
+        "F2004L",
+        "A190T",
+        "R481W",
+        "R1512W",
+        "R620H",
+        "R326H",
+        "T865T",
+        "R948S",
+        "R148W",
+        "R535Q",
+        "R885C",
+        "R2012C",
+        "A997T",
+        "T632M",
+        "P967L",
+        "A551V",
+        "P1018A",
+        "E1053K",
+        "D1274N",
+        "R282C",
+        "S981G",
+        "W927L",
+        "L618F",
+        "D1243N",
+        "A1983G",
+        "I1836T"
+      ]
+    },
+    {
+      "pmid": "9544837",
+      "excel_count": 5,
+      "extracted_count": 5,
+      "recall": 1.0,
+      "matched": [
+        [
+          "N629S",
+          "N629S"
+        ],
+        [
+          "N633S",
+          "N633S"
+        ],
+        [
+          "V612L",
+          "V612L"
+        ],
+        [
+          "N629D",
+          "N629D"
+        ],
+        [
+          "A614V",
+          "A614V"
+        ]
+      ],
+      "missed": [],
+      "extra": []
+    },
+    {
+      "pmid": "21063070",
+      "excel_count": 4,
+      "extracted_count": 4,
+      "recall": 1.0,
+      "matched": [
+        [
+          "Q1046X",
+          "Q1046X"
+        ],
+        [
+          "R1035fsX",
+          "R1035fsX"
+        ],
+        [
+          "G572S",
+          "G572S"
+        ],
+        [
+          "F68L",
+          "F68L"
+        ]
+      ],
+      "missed": [],
+      "extra": []
+    },
+    {
+      "pmid": "16155735",
+      "excel_count": 2,
+      "extracted_count": 2,
+      "recall": 0.5,
+      "matched": [
+        [
+          "N633D",
+          "N633D"
+        ]
+      ],
+      "missed": [
+        "P923fsX"
+      ],
+      "extra": [
+        "?"
+      ]
+    },
+    {
+      "pmid": "28049825",
+      "excel_count": 2,
+      "extracted_count": 2,
+      "recall": 0.5,
+      "matched": [
+        [
+          "Q1068R",
+          "Q1068R"
+        ]
+      ],
+      "missed": [
+        "T152fsX"
+      ],
+      "extra": [
+        "T152HfsX180"
+      ]
+    },
+    {
+      "pmid": "19668779",
+      "excel_count": 3,
+      "extracted_count": 3,
+      "recall": 0.6666666666666666,
+      "matched": [
+        [
+          "Y493F",
+          "Y493F"
+        ],
+        [
+          "A429P",
+          "A429P"
+        ]
+      ],
+      "missed": [
+        "L234Del"
+      ],
+      "extra": [
+        "X78del"
+      ]
+    },
+    {
+      "pmid": "23098067",
+      "excel_count": 22,
+      "extracted_count": 5,
+      "recall": 0.0,
+      "matched": [],
+      "missed": [
+        "A79fsX",
+        "T152fsX",
+        "S818L",
+        "E95G",
+        "Y569C",
+        "H771R",
+        "R752W",
+        "G584S",
+        "I82dup",
+        "G53S",
+        "Y43C",
+        "L987fsX",
+        "Q61R",
+        "D287fsX",
+        "exon2dup",
+        "exon9-10Del",
+        "R176W",
+        "D1037fsX",
+        "L552S",
+        "E365G",
+        "W563X",
+        "R328C"
+      ],
+      "extra": [
+        "R1047L",
+        "K897T",
+        "G604G",
+        "D213G",
+        "T983I"
+      ]
+    },
+    {
+      "pmid": "11844290",
+      "excel_count": 5,
+      "extracted_count": 0,
+      "recall": 0.0,
+      "matched": [],
+      "missed": [
+        "M124R",
+        "V822M",
+        "R752W",
+        "W1001X",
+        "F805C"
+      ],
+      "extra": []
+    },
+    {
+      "pmid": "29016797",
+      "excel_count": 2,
+      "extracted_count": 2,
+      "recall": 0.0,
+      "matched": [],
+      "missed": [
+        "N588K",
+        "S631A"
+      ],
+      "extra": [
+        "G334R",
+        "K335R"
+      ]
+    },
+    {
+      "pmid": "15973763",
+      "excel_count": 1,
+      "extracted_count": 0,
+      "recall": 0.0,
+      "matched": [],
+      "missed": [
+        "c.Exon9 IVS Del (\u221212\u2192\u22122)"
+      ],
+      "extra": []
+    },
+    {
+      "pmid": "21964171",
+      "excel_count": 1,
+      "extracted_count": 0,
+      "recall": 0.0,
+      "matched": [],
+      "missed": [
+        "R1047L"
+      ],
+      "extra": []
+    }
+  ]
+}
