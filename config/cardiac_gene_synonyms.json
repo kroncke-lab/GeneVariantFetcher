@@ -1,0 +1,130 @@
+{
+  "KCNH2": {
+    "official": "KCNH2",
+    "aliases": [
+      "HERG",
+      "HERG1",
+      "ERG",
+      "ERG1",
+      "H-ERG",
+      "Kv11.1",
+      "LQT2",
+      "SQT1"
+    ],
+    "description": "Potassium voltage-gated channel subfamily H member 2 (IKr)",
+    "disease": "Long QT syndrome type 2, Short QT syndrome"
+  },
+  "KCNQ1": {
+    "official": "KCNQ1",
+    "aliases": [
+      "KVLQT1",
+      "KvLQT1",
+      "Kv7.1",
+      "LQT1",
+      "JLNS1",
+      "KCNA9",
+      "ATFB3"
+    ],
+    "description": "Potassium voltage-gated channel subfamily Q member 1 (IKs)",
+    "disease": "Long QT syndrome type 1, Jervell Lange-Nielsen syndrome"
+  },
+  "SCN5A": {
+    "official": "SCN5A",
+    "aliases": [
+      "Nav1.5",
+      "HB1",
+      "HB2",
+      "HBBD",
+      "HH1",
+      "IVF",
+      "LQT3",
+      "SSS1",
+      "VF1",
+      "ICCD",
+      "PFHB1"
+    ],
+    "description": "Sodium voltage-gated channel alpha subunit 5 (INa)",
+    "disease": "Long QT syndrome type 3, Brugada syndrome, cardiac conduction disease"
+  },
+  "KCNE1": {
+    "official": "KCNE1",
+    "aliases": [
+      "MinK",
+      "ISK",
+      "JLNS2",
+      "LQT5"
+    ],
+    "description": "Potassium voltage-gated channel subfamily E member 1 (IKs auxiliary)",
+    "disease": "Long QT syndrome type 5, Jervell Lange-Nielsen syndrome"
+  },
+  "KCNE2": {
+    "official": "KCNE2",
+    "aliases": [
+      "MiRP1",
+      "LQT6"
+    ],
+    "description": "Potassium voltage-gated channel subfamily E member 2 (IKr auxiliary)",
+    "disease": "Long QT syndrome type 6"
+  },
+  "RYR2": {
+    "official": "RYR2",
+    "aliases": [
+      "ARVC2",
+      "ARVD2",
+      "RYR-2",
+      "VTSIP"
+    ],
+    "description": "Ryanodine receptor 2 (calcium release channel)",
+    "disease": "Catecholaminergic polymorphic ventricular tachycardia (CPVT)"
+  },
+  "CACNA1C": {
+    "official": "CACNA1C",
+    "aliases": [
+      "Cav1.2",
+      "CACH2",
+      "CACN2",
+      "CACNL1A1",
+      "CCHL1A1",
+      "LQT8",
+      "TS"
+    ],
+    "description": "Calcium voltage-gated channel subunit alpha1 C (ICaL)",
+    "disease": "Timothy syndrome, Long QT syndrome type 8, Brugada"
+  },
+  "KCNJ2": {
+    "official": "KCNJ2",
+    "aliases": [
+      "Kir2.1",
+      "IRK1",
+      "LQT7",
+      "HHIRK1",
+      "HHIRK",
+      "ATFB9",
+      "SQT3"
+    ],
+    "description": "Potassium inwardly rectifying channel subfamily J member 2 (IK1)",
+    "disease": "Andersen-Tawil syndrome, Short QT syndrome type 3"
+  },
+  "CALM1": {
+    "official": "CALM1",
+    "aliases": [
+      "CALML2",
+      "CaM",
+      "CAMI",
+      "LQT14",
+      "CPVT4"
+    ],
+    "description": "Calmodulin 1",
+    "disease": "Long QT syndrome type 14, CPVT"
+  },
+  "CALM2": {
+    "official": "CALM2",
+    "aliases": [
+      "CAMII",
+      "LQT15",
+      "CPVT5"
+    ],
+    "description": "Calmodulin 2",
+    "disease": "Long QT syndrome type 15, CPVT"
+  }
+}
