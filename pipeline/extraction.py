@@ -404,7 +404,19 @@ class ExpertExtractor(BaseLLMCaller):
         especially in large tables with many rows.
 
         Returns a list of minimal variant dicts.
+        
+        NOTE (2026-02-04): DISABLED due to significant noise generation.
+        The regex extraction was grabbing variants from ALL genes in multi-gene
+        tables without validation, causing 2370 extractions vs 1359 in baseline.
+        Council review recommended disabling until proper gene validation is added.
+        See: gene_config.py for planned validation approach.
         """
+        # DISABLED: Return empty list to prevent noise generation
+        # Re-enable after implementing gene-specific validation
+        logger.info(f"Table regex extraction DISABLED for {gene_symbol} (noise reduction)")
+        return []
+        
+        # --- Original code below (kept for future re-enablement) ---
         if not gene_symbol:
             return []
 
