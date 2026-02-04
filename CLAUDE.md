@@ -1,157 +1,72 @@
-# CLAUDE.md
+# GeneVariantFetcher
 
-## CRITICAL: Do Not Modify
+## Objective
+Extract genetic variants from biomedical literature with **90% recall**.
+Part of the Kroncke Lab variant interpretation pipeline.
 
-**NEVER read, write, edit, or overwrite the `.env` file.** It contains API keys and credentials that are difficult to replace. If you need to reference environment variables, only document their names - never touch the actual file.
+## Current Status
+- **Recall:** 45.2% (on golden test set of 13 papers)
+- **Latest run:** 2370 variant mentions from 249 papers
+- **Deadline:** June 2026 (R01 grant submission)
 
----
+## Architecture
+```
+GeneVariantFetcher/
+├── cli/                    # Command-line interface
+│   ├── extract.py          # Main extraction pipeline
+│   └── compare_variants.py # Validation against curated data
+├── harvesting/             # Paper discovery & download
+│   ├── orchestrator.py     # Main pipeline coordinator
+│   ├── pubmed_client.py    # PubMed search
+│   ├── supplement_scraper.py # Publisher handlers
+│   └── supplement_reference_parser.py # Reference extraction
+├── pipeline/               # LLM extraction pipeline
+│   ├── extraction.py       # Variant extraction from text
+│   └── steps.py            # Pipeline stages
+├── config/
+│   └── gene_config.py      # Gene-specific validation (protein/transcript lengths)
+└── comparison_results/     # Baseline Excel files for validation
+```
 
-## Mission
-
-Extract human genetic variant carriers from biomedical literature (full text + supplements) into a normalized SQLite database. Each individual is classified as **Affected**, **Unaffected**, or **Ambiguous**.
-
-## Quick Reference
-
+## Key Commands
 ```bash
-# GUI (recommended - supports checkpointing/resume)
-python main.py
+# Run extraction for a gene
+python -m cli.extract --gene KCNH2 --output /mnt/temp2/kronckbm/gvf_output/
 
-# CLI mode
-python main.py --cli GENE --email EMAIL --output OUTPUT_DIR
+# Compare against baseline
+python -m cli.compare_variants --gene KCNH2 --baseline comparison_results/KCNH2*.xls
+
+# Full pipeline with synonyms
+python -m harvesting.orchestrator --gene KCNH2 --use-synonyms
 ```
 
-## Virtual Environment
+## Publisher Coverage
+| Publisher | Handler | API | Status |
+|-----------|---------|-----|--------|
+| Nature | ✅ | - | Working |
+| Elsevier | ✅ | ✅ | Working |
+| Springer/BMC | ✅ | ❌ | Handler working, API needs registration |
+| Oxford Academic | ✅ | - | Working |
+| Wiley | ✅ | ✅ | Working |
+| Karger | ❌ | - | Blocked by Cloudflare |
 
-**Always use the project's virtual environment** when running Python scripts or tests:
+## Current Blockers
+1. **Springer API** - Brett needs to register with Vanderbilt credentials
+2. **Karger access** - Cloudflare blocking; TDM request drafted
 
-```bash
-# Activate venv (preferred)
-source venv/bin/activate
-python main.py
+## Related Repos
+- **VariantFeatures** - Aggregates features for extracted variants
+- **BayesianPenetranceEstimator** - Uses extracted phenotype data
+- **Variant_Browser** - Displays results clinically
 
-# Or use venv Python directly
-./venv/bin/python main.py
-./venv/bin/python -m pytest tests/
-```
+## File Locations
+- **Output:** `/mnt/temp2/kronckbm/gvf_output/`
+- **Baseline:** `comparison_results/KCNH2*.xls`
+- **API keys:** `.env` (Elsevier, Wiley configured)
 
-The venv contains all required dependencies including `markitdown`, `PyMuPDF`, `pdfplumber`, etc.
-
-## Entry Points
-
-| Entry | Mode | Features |
-|-------|------|----------|
-| `python main.py` | GUI (default) | Web interface, checkpointing, resume |
-| `python main.py --cli GENE` | CLI | Full pipeline, no checkpointing |
-| `python -m cli.automated_workflow GENE --email EMAIL --output OUTPUT_DIR` | CLI (direct) | Full CLI with advanced options |
-
-## Pipeline Steps
-
-The GUI/CLI run identical logic. GUI adds checkpointing for resume after interruption.
-
-1. **Discover Synonyms** (optional) - Auto-find gene aliases via NCBI (`gene_literature/synonym_finder.py`)
-2. **Fetch PMIDs** - Query PubMind, PubMed, Europe PMC (`gene_literature/discovery.py`)
-3. **Fetch Abstracts** - Get metadata for all PMIDs (`harvesting/abstracts.py`)
-4. **Filter Papers** - Tier 1 keyword + Tier 2 LLM triage (`pipeline/filters.py`)
-5. **Download Full-Text** - PMC articles + supplements → `{PMID}_FULL_CONTEXT.md` (`harvesting/orchestrator.py`)
-   - **Automatically runs Data Scout** during download → creates `{PMID}_DATA_ZONES.md` (`pipeline/data_scout.py`)
-6. **Extract Variants** - LLM extraction with model cascade (`pipeline/extraction.py`)
-   - Prefers `DATA_ZONES.md` if available, falls back to `FULL_CONTEXT.md` or abstract
-   - Handles abstract-only extraction for papers that failed download
-7. **Aggregate** - Penetrance validation (`pipeline/aggregation.py`)
-8. **Migrate to SQLite** - JSON → normalized database (`harvesting/migrate_to_sqlite.py`)
-
-### Filter Tiers
-
-| Tier | Component | Purpose | Model |
-|------|-----------|---------|-------|
-| **1** | `KeywordFilter` | Fast regex filter | None |
-| **2** | `InternFilter` / `ClinicalDataTriageFilter` | LLM relevance check | gpt-4o-mini |
-| **3** | `ExpertExtractor` | Full extraction with cascade | gpt-4o-mini → gpt-4o |
-
-## Project Structure
-
-```
-main.py                        # Primary entry point (GUI/CLI)
-cli/                           # Standalone CLI tools
-  automated_workflow.py        # Full pipeline CLI
-  fetch_manager.py             # Semi-manual download helper
-  browser_fetch.py             # Browser automation for paywalled papers
-  clinical_data_triage.py      # Paper triage CLI
-  collect_literature.py        # Literature collection CLI
-  rename_downloads.py          # File renaming utility
-config/settings.py             # Pydantic configuration
-gene_literature/               # Paper discovery (PubMind, PubMed, Europe PMC)
-harvesting/                    # Download, abstracts, SQLite migration
-pipeline/                      # Filters, extraction, aggregation, data scout
-gui/                           # FastAPI web interface + checkpointing
-  models.py                    # Pydantic request/response models
-  server.py                    # FastAPI routes and WebSocket
-  worker.py                    # Pipeline execution with checkpointing
-utils/                         # Shared utilities
-scripts/                       # Maintenance and repair scripts
-```
-
-## Output
-
-```
-{OUTPUT_DIR}/{GENE}/{TIMESTAMP}/
-├── {GENE}_pmids.txt                    # Discovered PMIDs
-├── {GENE}_workflow_summary.json        # Overall workflow statistics
-├── {GENE}_penetrance_summary.json      # Aggregated penetrance statistics
-├── {GENE}_workflow.log                 # Workflow execution log
-├── abstract_json/                      # Paper metadata (JSON per PMID)
-├── pmid_status/                        # Filter decisions and failures
-│   ├── filtered_out.csv
-│   └── extraction_failures.csv
-├── pmc_fulltext/                       # Full-text markdown + logs
-│   ├── PMID_*_FULL_CONTEXT.md          # Full paper content
-│   ├── PMID_*_DATA_ZONES.md            # Condensed sections (auto-created)
-│   ├── successful_downloads.csv
-│   └── paywalled_missing.csv           # Use with fetch_manager.py
-├── extractions/                        # Per-paper JSON extractions
-│   └── {GENE}_PMID_*.json
-└── {GENE}.db                           # Canonical SQLite database
-```
-
-## Environment Variables
-
-All keys are loaded from `.env` file:
-
-```bash
-OPENAI_API_KEY=...                   # Required
-NCBI_EMAIL=...                       # Required
-NCBI_API_KEY=...                     # Optional (higher rate limits)
-ANTHROPIC_API_KEY=...                # Optional
-GEMINI_API_KEY=...                   # Optional
-ELSEVIER_API_KEY=...                 # Optional (publisher access)
-WILEY_API_KEY=...                    # Optional (publisher access)
-```
-
-## Code Style
-
-- Python 3.11+, PEP 8, type hints
-- Logging: `logger = logging.getLogger(__name__)`
-- Commits: imperative mood ("Add feature" not "Added feature")
-
-## Standalone Tools
-
-These CLI tools in `cli/` are standalone utilities, not part of the automated pipeline:
-
-| File | Purpose | Usage |
-|------|---------|-------|
-| `cli/fetch_manager.py` | Semi-manual download helper for paywalled papers | `python -m cli.fetch_manager paywalled_missing.csv --convert --run-scout --gene GENE` |
-| `cli/browser_fetch.py` | Browser-automated download with Cloudflare/CAPTCHA handling | `python -m cli.browser_fetch paywalled_missing.csv --interactive` |
-| `cli/collect_literature.py` | Standalone literature collection CLI | `python -m cli.collect_literature GENE` |
-| `cli/clinical_data_triage.py` | Triage papers for clinical data | `python -m cli.clinical_data_triage --title "..." --abstract "..."` |
-| `cli/rename_downloads.py` | Rename/organize downloaded files | `python -m cli.rename_downloads /path/to/downloads` |
-
-## Key Implementation Details
-
-- **Abstract-only fallback**: Papers that fail download are still extracted using their abstracts (handled in `ExpertExtractor`)
-- **DATA_ZONES preference**: Extraction prefers `DATA_ZONES.md` over `FULL_CONTEXT.md` to reduce token usage (created automatically during download)
-- **Scout Data integration**: Data Scout runs automatically during `PMCHarvester.harvest()` - no separate step needed
-- **Checkpoint system**: GUI jobs save state after each step to `~/.gvf_jobs/{job_id}/checkpoint.json`
-- **Folder jobs**: GUI supports processing existing folders (skip discovery/download, start at extraction)
-- **Two summary files**: Both `{GENE}_workflow_summary.json` (overall stats) and `{GENE}_penetrance_summary.json` (variant aggregations) are created
-- **Functional study detection**: Extraction prompts distinguish functional studies (massively parallel assays) from clinical studies to avoid misinterpreting assay replicates as patient carrier counts
-- **Pedigree extraction**: Vision-capable LLMs can extract carrier information from pedigree diagrams in paper figures (`pipeline/pedigree_extractor.py`)
+## Next Steps
+See TASKS.md for detailed task list. Priority:
+1. Springer API registration
+2. Re-run extraction with regex disabled
+3. Browser fetch paywalled papers
+4. Expand to SCN5A, KCNQ1
