@@ -22,6 +22,12 @@ from .supplement_scraper import SupplementScraper
 from .format_converters import FormatConverter
 from .elsevier_api import ElsevierAPIClient
 from .wiley_api import WileyAPIClient
+from .springer_api import SpringerAPIClient
+from .supplement_reference_parser import (
+    parse_supplement_references,
+    extract_supplement_urls_from_text,
+    check_supplement_gap,
+)
 
 
 # =============================================================================
@@ -209,20 +215,28 @@ class PMCHarvester:
         self.scraper = SupplementScraper()
         self.converter = FormatConverter()
 
-        # Initialize Elsevier API client (optional - uses API key from settings if available)
+        # Initialize publisher API clients (optional - uses API keys from settings/env if available)
         elsevier_api_key = None
         wiley_api_key = None
+        springer_api_key = None
         if get_settings is not None:
             try:
                 settings = get_settings()
                 elsevier_api_key = settings.elsevier_api_key
                 wiley_api_key = settings.wiley_api_key
+                springer_api_key = getattr(settings, 'springer_api_key', None)
             except Exception:
                 pass  # Settings validation may fail if other keys are missing
+        
+        # Fall back to environment variables if not in settings
+        if springer_api_key is None:
+            springer_api_key = os.environ.get("SPRINGER_API_KEY")
+        
         self.elsevier_api = ElsevierAPIClient(
             api_key=elsevier_api_key, session=self.session
         )
         self.wiley_api = WileyAPIClient(api_key=wiley_api_key, session=self.session)
+        self.springer_api = SpringerAPIClient(api_key=springer_api_key, session=self.session)
 
         # Initialize log files with extended columns for carrier data
         with open(self.paywalled_log, "w", newline="") as f:
@@ -1128,6 +1142,17 @@ class PMCHarvester:
 
         print(f"  ✅ Downloaded: {output_file.name} ({downloaded_count} supplements)")
 
+        # Check for supplement gaps (Task 5: post-download validation)
+        gap_result = check_supplement_gap(
+            text=main_markdown,
+            downloaded_count=downloaded_count,
+            extracted_variant_count=0  # Will be filled in after extraction
+        )
+        if gap_result["has_gap"]:
+            for warning in gap_result["warnings"]:
+                print(f"  ⚠️  PMID {pmid}: {warning}")
+                logger.warning(f"PMID {pmid}: {warning}")
+
         # Log success
         with open(self.success_log, "a", newline="") as f:
             writer = csv.writer(f)
@@ -1203,6 +1228,21 @@ class PMCHarvester:
                 api_insufficient_content = True
                 print(
                     f"  → Wiley API returned abstract only, falling back to web scraping..."
+                )
+
+        # Try Springer API if this is a Springer/Nature/BMC article
+        if not main_markdown and doi and self.springer_api.is_springer_doi(doi):
+            springer_markdown, springer_error = self._try_springer_api(doi, pmid)
+            if springer_markdown:
+                main_markdown = springer_markdown
+                final_url = f"https://doi.org/{doi}"
+                # Still need to get supplements via scraping
+                supp_files = self.doi_resolver.resolve_and_scrape_supplements(
+                    doi, pmid, self.scraper
+                )
+            elif springer_error and "not openaccess" in springer_error.lower():
+                print(
+                    f"  → Springer API: article not OpenAccess, falling back to web scraping..."
                 )
 
         # Fall back to DOI resolver if publisher APIs didn't work or returned insufficient content
@@ -1852,6 +1892,43 @@ class PMCHarvester:
             return markdown, None
         else:
             print(f"  - Wiley API: {error}")
+            return None, error
+
+    def _try_springer_api(
+        self, doi: str, pmid: str
+    ) -> Tuple[Optional[str], Optional[str]]:
+        """
+        Try to fetch full text via Springer Nature OpenAccess API if applicable.
+
+        Args:
+            doi: Digital Object Identifier
+            pmid: PubMed ID (for logging)
+
+        Returns:
+            Tuple of (markdown_content, error_message)
+            - markdown_content: Full text as markdown if successful, None otherwise
+            - error_message: Error description if failed, None if successful
+        """
+        if not self.springer_api.is_available:
+            return None, "Springer API key not configured"
+
+        if not doi or not self.springer_api.is_springer_doi(doi):
+            return None, "Not a Springer/Nature/BMC DOI"
+
+        print(f"  Trying Springer OpenAccess API for DOI: {doi}")
+        markdown, metadata, error = self.springer_api.fetch_article(doi)
+
+        if markdown:
+            print(
+                f"  ✓ Full text retrieved via Springer API ({len(markdown)} characters)"
+            )
+            return markdown, None
+        elif metadata:
+            # Got metadata but no full text - article may not be open access
+            print(f"  - Springer API: Full text unavailable (not OpenAccess)")
+            return None, "Article not available in OpenAccess"
+        else:
+            print(f"  - Springer API: {error}")
             return None, error
 
     def _process_free_text_pmid(self, pmid: str, doi: str) -> Tuple[bool, str]:
