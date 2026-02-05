@@ -3,7 +3,7 @@
 ## Goal
 90% variant extraction recall
 
-## Current Status (2026-02-04 11:30)
+## Current Status (2026-02-04 23:30)
 
 ### Recall Analysis Complete
 | Metric | Value |
@@ -42,8 +42,11 @@
 
 ### Testing & Validation
 - [x] Full extraction run with synonyms (749 papers downloaded)
-- [x] Golden test set created (13 papers)
+- [x] Golden test set created (13 papers, 39.6% recall on overlapping subset)
 - [x] Extraction JSON files generated (249 papers)
+- [x] Cardiac gene synonyms database created (10 genes, 58 aliases)
+- [x] Aggregate extractions to SQLite
+- [x] Run formal recall comparison - 6% recall, 14% PMID coverage
 
 ---
 
@@ -53,23 +56,21 @@
 - [ ] **Download 224 missing baseline PMIDs** - See `missing_baseline_pmids.txt`
   - Top 10 papers cover 381 variants (38% of gap)
   - PMID 15840476 alone has 89 variants!
+  - Progress: 4 papers downloaded to `KCNH2_missing/`
 - [ ] **Re-run extraction** on newly downloaded papers
 - [ ] **Re-enable table regex with gene validation** - Currently DISABLED
 
 ### Medium Priority
 - [ ] **Karger browser fallback** - Blocked by Cloudflare, need TDM request
 - [ ] **Springer API** - Brett needs to register with Vanderbilt credentials
-- [x] **Aggregate extractions to SQLite** - DONE: `/mnt/temp2/kronckbm/gvf_output/KCNH2_fresh.db`
-- [x] **Run formal recall comparison** - DONE: 6% recall, 14% PMID coverage
 
-### Medium Priority
+### Lower Priority
 - [ ] Merge `feature/save-raw-assets` branch to main
 - [ ] Update documentation with new handlers
 - [ ] Browser fetch remaining paywalled papers (10 in golden test)
 
-### Low Priority
+### Future
 - [ ] Extend to additional genes (SCN5A, KCNQ1, etc.)
-- [ ] Create gene synonyms lookup file
 
 ---
 
@@ -94,4 +95,4 @@
 
 ---
 
-*Last updated: 2026-02-04 08:30*
+*Last updated: 2026-02-04 23:30*
