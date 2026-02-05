@@ -30,8 +30,8 @@ browser = [
 ]
 
 [project.scripts]
-gvf = "pipeline.cli:app"
+gvf = "cli:app"
 
 [tool.setuptools.packages.find]
-include = ["pipeline*", "harvesting*", "config*", "utils*", "gene_literature*", "gui*"]
+include = ["pipeline*", "harvesting*", "config*", "utils*", "gene_literature*", "gui*", "cli*"]
 exclude = ["test_*", "automated_output*"]
