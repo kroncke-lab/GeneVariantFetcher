@@ -502,22 +502,24 @@ class BrowserFetcher:
 
         return False
 
-    def _extract_and_save_figures(self, page: Page, pmid: str, article_html: str) -> List[Dict]:
+    def _extract_and_save_figures(
+        self, page: Page, pmid: str, article_html: str
+    ) -> List[Dict]:
         """
         Extract figure images from the page and save them locally.
-        
+
         Returns list of dicts with figure info (local_path, caption, original_url).
         """
         from urllib.parse import urljoin
-        
+
         figures_dir = self.target_dir / f"{pmid}_figures"
         figures = []
-        
+
         try:
             # Find figure images using various selectors
             figure_selectors = [
                 "figure img",
-                ".figure img", 
+                ".figure img",
                 ".article-figure img",
                 "img.figure",
                 "img[class*='figure']",
@@ -526,42 +528,47 @@ class BrowserFetcher:
                 ".highres-img",
                 "picture img",
             ]
-            
+
             seen_urls = set()
             img_elements = []
-            
+
             for selector in figure_selectors:
                 try:
                     elements = page.query_selector_all(selector)
                     img_elements.extend(elements)
                 except Exception:
                     continue
-            
+
             if not img_elements:
                 logger.info("  [Figures] No figure images found")
                 return figures
-            
+
             # Create figures directory
             figures_dir.mkdir(exist_ok=True)
-            logger.info(f"  [Figures] Found {len(img_elements)} potential figure images")
-            
+            logger.info(
+                f"  [Figures] Found {len(img_elements)} potential figure images"
+            )
+
             fig_count = 0
             captions_data = []
-            
+
             for img in img_elements:
                 try:
                     src = img.get_attribute("src") or img.get_attribute("data-src")
                     if not src or src in seen_urls:
                         continue
                     seen_urls.add(src)
-                    
+
                     # Skip small icons, logos, etc.
-                    if any(skip in src.lower() for skip in ['icon', 'logo', 'button', 'arrow', 'spinner']):
+                    if any(
+                        skip in src.lower()
+                        for skip in ["icon", "logo", "button", "arrow", "spinner"]
+                    ):
                         continue
-                    
+
                     # Make absolute URL
                     full_url = urljoin(page.url, src)
-                    
+
                     # Get caption (look for nearby figcaption or alt text)
                     caption = img.get_attribute("alt") or ""
                     try:
@@ -572,51 +579,63 @@ class BrowserFetcher:
                                 caption = figcaption.text_content().strip()
                     except Exception:
                         pass
-                    
+
                     # Determine file extension
-                    ext = Path(src.split('?')[0]).suffix.lower()
-                    if ext not in ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']:
-                        ext = '.jpg'  # Default
-                    
+                    ext = Path(src.split("?")[0]).suffix.lower()
+                    if ext not in [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"]:
+                        ext = ".jpg"  # Default
+
                     fig_count += 1
                     filename = f"figure_{fig_count:03d}{ext}"
                     local_path = figures_dir / filename
-                    
+
                     # Download the image
                     try:
-                        response = requests.get(full_url, timeout=30, headers={
-                            'User-Agent': 'Mozilla/5.0 (compatible; research-bot)'
-                        })
+                        response = requests.get(
+                            full_url,
+                            timeout=30,
+                            headers={
+                                "User-Agent": "Mozilla/5.0 (compatible; research-bot)"
+                            },
+                        )
                         if response.status_code == 200 and len(response.content) > 1000:
                             local_path.write_bytes(response.content)
-                            figures.append({
-                                'local_path': str(local_path),
-                                'filename': filename,
-                                'caption': caption,
-                                'original_url': full_url
-                            })
-                            captions_data.append({
-                                'filename': filename,
-                                'caption': caption,
-                                'original_url': full_url
-                            })
+                            figures.append(
+                                {
+                                    "local_path": str(local_path),
+                                    "filename": filename,
+                                    "caption": caption,
+                                    "original_url": full_url,
+                                }
+                            )
+                            captions_data.append(
+                                {
+                                    "filename": filename,
+                                    "caption": caption,
+                                    "original_url": full_url,
+                                }
+                            )
                             logger.info(f"  [Figures] Saved {filename}")
                     except Exception as e:
-                        logger.warning(f"  [Figures] Failed to download {full_url}: {e}")
-                        
+                        logger.warning(
+                            f"  [Figures] Failed to download {full_url}: {e}"
+                        )
+
                 except Exception as e:
                     logger.debug(f"  [Figures] Error processing image: {e}")
                     continue
-            
+
             # Save captions to JSON
             if captions_data:
                 captions_path = figures_dir / "captions.json"
                 captions_path.write_text(json.dumps(captions_data, indent=2))
-                logger.info(f"  [Figures] Saved {len(captions_data)} figures to {figures_dir}")
-            
+                logger.info(
+                    f"  [Figures] Saved {len(captions_data)} figures to {figures_dir}"
+                )
+
         except Exception as e:
             logger.error(f"  [Figures] Error extracting figures: {e}")
-        
+
         return figures
 
     def _scrape_article_html(self, page: Page, pmid: str) -> Optional[Path]:
@@ -634,12 +653,12 @@ class BrowserFetcher:
         try:
             # Get the full page HTML first (for raw saving)
             full_page_html = page.content()
-            
+
             # Save raw HTML
             raw_html_path = self.target_dir / f"{pmid}_raw.html"
             raw_html_path.write_text(full_page_html, encoding="utf-8")
             logger.info(f"  [HTMLScrape] Saved raw HTML to {pmid}_raw.html")
-            
+
             # Common selectors for article content
             content_selectors = [
                 "article.article",
@@ -672,7 +691,7 @@ class BrowserFetcher:
                 # Fallback: get the whole page
                 article_html = full_page_html
                 logger.info("  [HTMLScrape] Using full page content")
-            
+
             # Extract and save figures
             figures = self._extract_and_save_figures(page, pmid, article_html)
 
@@ -1575,7 +1594,7 @@ class BrowserFetcher:
         unique_links = list(set(absolute_links))
         logger.info(f"  [Heuristic] Found {len(unique_links)} unique PDF link(s)")
         for i, link in enumerate(unique_links[:5]):
-            logger.info(f"  [Heuristic]   {i+1}. {link[:70]}...")
+            logger.info(f"  [Heuristic]   {i + 1}. {link[:70]}...")
 
         return unique_links
 
@@ -1726,10 +1745,10 @@ class BrowserFetcher:
         Returns:
             DownloadResult with success status and downloaded files
         """
-        logger.info(f"\n{'='*60}")
+        logger.info(f"\n{'=' * 60}")
         logger.info(f"Fetching PMID {pmid}")
         logger.info(f"URL: {url}")
-        logger.info(f"{'='*60}")
+        logger.info(f"{'=' * 60}")
         downloaded_files = []
 
         # Check if we already have this paper from a previous run
@@ -1896,7 +1915,7 @@ class BrowserFetcher:
                 pdf_links = self._find_pdf_links_heuristic(self.page)
                 for i, link in enumerate(pdf_links[:5]):  # Try first 5 links
                     logger.info(
-                        f"  Trying link {i+1}/{min(5, len(pdf_links))}: {link[:60]}..."
+                        f"  Trying link {i + 1}/{min(5, len(pdf_links))}: {link[:60]}..."
                     )
                     result = self._try_download_link(self.page, link, pmid)
                     if result:

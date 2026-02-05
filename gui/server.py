@@ -1425,12 +1425,12 @@ def main():
 
     args = parser.parse_args()
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("GeneVariantFetcher GUI Server")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"Starting server at http://{args.host}:{args.port}")
     print("Open this URL in your browser to access the GUI")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     uvicorn.run(
         "gui.server:app",

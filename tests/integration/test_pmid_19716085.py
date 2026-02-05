@@ -144,9 +144,9 @@ class TestPMID19716085Harvesting:
 
         title, _ = extract_title_and_abstract_from_content(content)
         assert title is not None, "Title should be extractable"
-        assert (
-            "FAMILION" in title or "long QT" in title.lower()
-        ), f"Title should be about LQTS genetic testing, got: {title}"
+        assert "FAMILION" in title or "long QT" in title.lower(), (
+            f"Title should be about LQTS genetic testing, got: {title}"
+        )
 
 
 class TestPMID19716085SupplementAPI:
@@ -262,9 +262,9 @@ class TestPMID19716085Extraction:
         variants = data.get("variants", [])
 
         # This paper should have many KCNH2 variants
-        assert (
-            len(variants) > 50
-        ), f"Should find many variants (this paper has ~199), found: {len(variants)}"
+        assert len(variants) > 50, (
+            f"Should find many variants (this paper has ~199), found: {len(variants)}"
+        )
 
         # Check that variants have expected fields
         for v in variants[:5]:

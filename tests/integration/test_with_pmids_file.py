@@ -119,10 +119,10 @@ def test_harvest_with_pmids_file(harvester=None, test_pmids=None):
         # Running as script, not pytest
         return
 
-    print(f"\n{'='*80}")
+    print(f"\n{'=' * 80}")
     print(f"Testing with {len(test_pmids)} PMIDs from file")
     print(f"PMIDs: {', '.join(test_pmids[:5])}{'...' if len(test_pmids) > 5 else ''}")
-    print(f"{'='*80}\n")
+    print(f"{'=' * 80}\n")
 
     # Test DOI resolution for first few PMIDs
     for i, pmid in enumerate(test_pmids[:3], 1):  # Test first 3 to avoid rate limiting
@@ -157,9 +157,9 @@ def test_doi_resolution_with_pmids_file(harvester=None, test_pmids=None):
         # Running as script, not pytest
         return
 
-    print(f"\n{'='*80}")
+    print(f"\n{'=' * 80}")
     print(f"Testing DOI resolution for PMIDs from file")
-    print(f"{'='*80}\n")
+    print(f"{'=' * 80}\n")
 
     successful = 0
     failed = 0
@@ -190,9 +190,9 @@ if __name__ == "__main__":
     # When run as a script (not pytest)
     pmids_file = get_pmids_file()
 
-    print(f"\n{'='*80}")
+    print(f"\n{'=' * 80}")
     print(f"Running tests with PMIDs from: {pmids_file}")
-    print(f"{'='*80}\n")
+    print(f"{'=' * 80}\n")
 
     try:
         pmids = load_pmids_from_file(pmids_file)
@@ -227,9 +227,9 @@ if __name__ == "__main__":
             except Exception as e:
                 print(f"  ✗ Error: {e}")
 
-        print(f"\n{'='*80}")
+        print(f"\n{'=' * 80}")
         print("Tests completed!")
-        print(f"{'='*80}\n")
+        print(f"{'=' * 80}\n")
 
     except FileNotFoundError as e:
         print(f"ERROR: {e}")

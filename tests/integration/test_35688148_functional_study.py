@@ -84,7 +84,7 @@ def main():
 
     # Show first 10 variants
     for i, v in enumerate(variants[:10]):
-        print(f"\n  Variant {i+1}: {v.get('protein_notation', 'N/A')}")
+        print(f"\n  Variant {i + 1}: {v.get('protein_notation', 'N/A')}")
         pdata = v.get("penetrance_data", {})
         carriers = pdata.get("total_carriers_observed")
         affected = pdata.get("affected_count")

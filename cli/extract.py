@@ -47,27 +47,28 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 
 # Gene symbol pattern: 1-10 uppercase letters/numbers, optionally followed by orf suffix
-GENE_SYMBOL_PATTERN = re.compile(r'^[A-Z][A-Z0-9]{0,9}(?:orf\d+)?$', re.IGNORECASE)
+GENE_SYMBOL_PATTERN = re.compile(r"^[A-Z][A-Z0-9]{0,9}(?:orf\d+)?$", re.IGNORECASE)
 
 
 class ValidationError(Exception):
     """Raised when input validation fails."""
+
     pass
 
 
 def validate_gene_symbol(gene: str) -> None:
     """
     Validate gene symbol format.
-    
+
     Args:
         gene: Gene symbol to validate
-        
+
     Raises:
         ValidationError: If gene symbol is invalid
     """
     if not gene:
         raise ValidationError("Gene symbol is required but was not provided")
-    
+
     if not GENE_SYMBOL_PATTERN.match(gene):
         raise ValidationError(
             f"Invalid gene symbol format: '{gene}'. "
@@ -79,21 +80,19 @@ def validate_gene_symbol(gene: str) -> None:
 def validate_input_path(input_path: Path) -> None:
     """
     Validate that input path exists and is accessible.
-    
+
     Args:
         input_path: Path to input directory or manifest file
-        
+
     Raises:
         ValidationError: If input path is invalid
     """
     if not input_path.exists():
         raise ValidationError(f"Input path does not exist: {input_path}")
-    
+
     if input_path.is_file():
-        if not input_path.name.endswith('.json'):
-            raise ValidationError(
-                f"Input file must be a JSON manifest: {input_path}"
-            )
+        if not input_path.name.endswith(".json"):
+            raise ValidationError(f"Input file must be a JSON manifest: {input_path}")
         # Check file is readable
         if not os.access(input_path, os.R_OK):
             raise ValidationError(f"Input file is not readable: {input_path}")
@@ -102,18 +101,16 @@ def validate_input_path(input_path: Path) -> None:
         if not os.access(input_path, os.R_OK):
             raise ValidationError(f"Input directory is not readable: {input_path}")
     else:
-        raise ValidationError(
-            f"Input path must be a file or directory: {input_path}"
-        )
+        raise ValidationError(f"Input path must be a file or directory: {input_path}")
 
 
 def validate_output_directory(output_dir: Path) -> None:
     """
     Validate that output directory is writable.
-    
+
     Args:
         output_dir: Path to output directory
-        
+
     Raises:
         ValidationError: If output directory is not writable
     """
@@ -141,11 +138,11 @@ def validate_output_directory(output_dir: Path) -> None:
 def validate_manifest_has_success(manifest: Manifest, manifest_path: Path) -> None:
     """
     Validate that a manifest has at least one SUCCESS entry.
-    
+
     Args:
         manifest: Loaded manifest object
         manifest_path: Path to manifest (for error message)
-        
+
     Raises:
         ValidationError: If manifest has no SUCCESS entries
     """
@@ -166,12 +163,12 @@ def validate_extract_inputs(
 ) -> None:
     """
     Validate all inputs for the extract stage.
-    
+
     Args:
         input_path: Path to input directory or manifest
         output_dir: Path to output directory
         gene: Gene symbol
-        
+
     Raises:
         ValidationError: If any validation fails
     """
@@ -200,7 +197,7 @@ def find_input_files(
         List of (path, pmid) tuples
     """
     results = []
-    
+
     if manifest:
         # Get successful entries from manifest
         successful = manifest.get_successful()
@@ -247,16 +244,18 @@ def find_input_files(
             pattern = "*_FULL_CONTEXT.md"
         else:
             pattern = "*_DATA_ZONES.md"
-        
+
         for file_path in input_path.glob(pattern):
             pmid = extract_pmid_from_filename(file_path.name, use_full_text)
             if pmid:
                 results.append((file_path, pmid))
-        
+
         return results
 
 
-def extract_pmid_from_filename(filename: str, use_full_text: bool = False) -> Optional[str]:
+def extract_pmid_from_filename(
+    filename: str, use_full_text: bool = False
+) -> Optional[str]:
     """Extract PMID from filename like '12345678_DATA_ZONES.md' or '12345678_FULL_CONTEXT.md'."""
     if use_full_text:
         if "_FULL_CONTEXT.md" in filename:
@@ -329,13 +328,13 @@ def process_file(
         # Generate output file
         files_created = []
         output_file = output_dir / f"{pmid}_extraction.json"
-        
+
         # Add model info to metadata
         if "extraction_metadata" not in extracted_data:
             extracted_data["extraction_metadata"] = {}
         extracted_data["extraction_metadata"]["model_used"] = result.model_used
         extracted_data["extraction_metadata"]["source_file"] = str(file_path)
-        
+
         with open(output_file, "w", encoding="utf-8") as f:
             json.dump(extracted_data, f, indent=2)
         files_created.append(str(output_file))
@@ -348,7 +347,7 @@ def process_file(
             status=Status.SUCCESS,
             files_created=files_created,
         )
-        
+
         return entry, extracted_data
 
     except Exception as e:
@@ -383,13 +382,13 @@ def run_extraction(
 
     Returns:
         Manifest with processing results
-        
+
     Raises:
         ValidationError: If input validation fails
     """
     # Validate inputs before processing
     validate_extract_inputs(input_path, output_dir, gene)
-    
+
     # Ensure output directory exists
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -399,7 +398,9 @@ def run_extraction(
         # Load manifest and use its directory
         input_manifest = Manifest.load(input_path)
         input_dir = input_path.parent
-        logger.info(f"Loaded manifest with {len(input_manifest)} entries (stage: {input_manifest.stage.value})")
+        logger.info(
+            f"Loaded manifest with {len(input_manifest)} entries (stage: {input_manifest.stage.value})"
+        )
         # Validate manifest has successful entries
         validate_manifest_has_success(input_manifest, input_path)
     elif input_path.is_dir():
@@ -407,7 +408,7 @@ def run_extraction(
         # Check for scout_manifest.json or manifest.json in directory
         scout_manifest_path = input_dir / "scout_manifest.json"
         manifest_path = input_dir / "manifest.json"
-        
+
         if scout_manifest_path.exists():
             input_manifest = Manifest.load(scout_manifest_path)
             logger.info(f"Found scout_manifest.json with {len(input_manifest)} entries")
@@ -419,7 +420,9 @@ def run_extraction(
             # Validate manifest has successful entries
             validate_manifest_has_success(input_manifest, manifest_path)
     else:
-        raise ValidationError(f"Input path must be a directory or manifest.json: {input_path}")
+        raise ValidationError(
+            f"Input path must be a directory or manifest.json: {input_path}"
+        )
 
     # Find files to process
     files = find_input_files(input_dir, input_manifest, use_full_text)
@@ -455,7 +458,7 @@ def run_extraction(
             use_full_text=use_full_text,
         )
         output_manifest.add_entry(entry)
-        
+
         if extracted_data:
             num_variants = len(extracted_data.get("variants", []))
             total_variants += num_variants
@@ -464,7 +467,7 @@ def run_extraction(
     # Save manifest with extended metadata
     if manifest_out is None:
         manifest_out = output_dir / "extraction_manifest.json"
-    
+
     # Save the manifest
     output_manifest.save(manifest_out)
     logger.info(f"Saved manifest to {manifest_out}")
@@ -514,19 +517,22 @@ Examples:
     )
 
     parser.add_argument(
-        "--input", "-i",
+        "--input",
+        "-i",
         type=Path,
         required=True,
         help="Input directory or manifest.json file (scout_manifest.json or manifest.json)",
     )
     parser.add_argument(
-        "--output", "-o",
+        "--output",
+        "-o",
         type=Path,
         required=True,
         help="Output directory for extraction JSON files",
     )
     parser.add_argument(
-        "--gene", "-g",
+        "--gene",
+        "-g",
         type=str,
         required=True,
         help="Gene symbol being analyzed (e.g., KCNQ1, BRCA1)",
@@ -557,7 +563,8 @@ Examples:
         help="Use FULL_CONTEXT.md files instead of DATA_ZONES.md",
     )
     parser.add_argument(
-        "--verbose", "-v",
+        "--verbose",
+        "-v",
         action="store_true",
         help="Enable debug logging",
     )
@@ -579,7 +586,9 @@ Examples:
         )
 
         # Exit with error if all failed
-        if manifest.entries and all(e.status != Status.SUCCESS for e in manifest.entries):
+        if manifest.entries and all(
+            e.status != Status.SUCCESS for e in manifest.entries
+        ):
             sys.exit(1)
 
     except ValidationError as e:
@@ -589,6 +598,7 @@ Examples:
         logger.error(f"Fatal error: {e}")
         if args.verbose:
             import traceback
+
             traceback.print_exc()
         sys.exit(1)
 

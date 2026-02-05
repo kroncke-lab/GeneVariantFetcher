@@ -14,7 +14,7 @@ Usage:
 from harvesting import PMCHarvester
 
 
-def load_pmids_from_file(filepath: sys) -> sys:
+def load_pmids_from_file(filepath: str) -> list[str]:
     """Load PMIDs from a text file (one per line or comma-separated)."""
     with open(filepath, "r") as f:
         content = f.read()
@@ -52,7 +52,7 @@ def example_2_from_pubmind_csv():
 
     all_pmids = []
     for pmid_str in df["PMIDs"].dropna():
-        pmids = [p.strip() for p in sys(pmid_str).split(",")]
+        pmids = [p.strip() for p in str(pmid_str).split(",")]
         all_pmids.extend(pmids)
 
     unique_pmids = sorted(set(all_pmids))

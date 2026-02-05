@@ -179,11 +179,13 @@ class TestManifest:
             gene="TP53",
             created_at="2025-01-30T12:00:00Z",
         )
-        manifest.add_entry(ManifestEntry(
-            pmid="12345",
-            status=Status.SUCCESS,
-            timestamp="2025-01-30T12:01:00Z",
-        ))
+        manifest.add_entry(
+            ManifestEntry(
+                pmid="12345",
+                status=Status.SUCCESS,
+                timestamp="2025-01-30T12:01:00Z",
+            )
+        )
 
         d = manifest.to_dict()
         assert d["schema_version"] == SCHEMA_VERSION
@@ -205,16 +207,20 @@ class TestManifestPersistence:
     def test_save_and_load(self, tmp_path):
         """Test round-trip save and load."""
         manifest = Manifest(stage=Stage.DOWNLOAD, gene="BRCA1")
-        manifest.add_entry(ManifestEntry(
-            pmid="12345678",
-            status=Status.SUCCESS,
-            files_created=["file1.pdf", "file2.json"],
-        ))
-        manifest.add_entry(ManifestEntry(
-            pmid="87654321",
-            status=Status.PAYWALL,
-            error_message="Subscription required",
-        ))
+        manifest.add_entry(
+            ManifestEntry(
+                pmid="12345678",
+                status=Status.SUCCESS,
+                files_created=["file1.pdf", "file2.json"],
+            )
+        )
+        manifest.add_entry(
+            ManifestEntry(
+                pmid="87654321",
+                status=Status.PAYWALL,
+                error_message="Subscription required",
+            )
+        )
 
         path = tmp_path / "manifest.json"
         manifest.save(path)
@@ -248,10 +254,10 @@ class TestManifestPersistence:
         """Test that save uses atomic write pattern."""
         manifest = Manifest(stage=Stage.DOWNLOAD)
         manifest.add_entry(ManifestEntry(pmid="123", status=Status.SUCCESS))
-        
+
         path = tmp_path / "manifest.json"
         manifest.save(path)
-        
+
         # No temp files should remain
         temp_files = list(tmp_path.glob(".manifest_*.tmp"))
         assert len(temp_files) == 0
@@ -259,18 +265,18 @@ class TestManifestPersistence:
     def test_overwrite_existing(self, tmp_path):
         """Test overwriting an existing manifest."""
         path = tmp_path / "manifest.json"
-        
+
         # Create initial manifest
         m1 = Manifest(stage=Stage.DOWNLOAD, gene="GENE1")
         m1.add_entry(ManifestEntry(pmid="111", status=Status.SUCCESS))
         m1.save(path)
-        
+
         # Overwrite with new manifest
         m2 = Manifest(stage=Stage.SCOUT, gene="GENE2")
         m2.add_entry(ManifestEntry(pmid="222", status=Status.FAILED))
         m2.add_entry(ManifestEntry(pmid="333", status=Status.SUCCESS))
         m2.save(path)
-        
+
         # Load and verify it's the new one
         loaded = Manifest.load(path)
         assert loaded.stage == Stage.SCOUT

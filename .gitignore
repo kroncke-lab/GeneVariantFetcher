@@ -49,8 +49,12 @@ venv.bak/
 # Pipeline output
 output/
 automated_output/
+gvf_output/
 *.log
 pipeline.log
+
+# Git filter-branch artifacts
+.git-rewrite/
 
 # Extracted data
 extractions/

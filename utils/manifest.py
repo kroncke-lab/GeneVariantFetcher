@@ -22,6 +22,7 @@ SCHEMA_VERSION = "1.0"
 
 class Status(str, Enum):
     """Processing outcome status codes."""
+
     SUCCESS = "SUCCESS"
     FAILED = "FAILED"
     SKIPPED = "SKIPPED"
@@ -32,6 +33,7 @@ class Status(str, Enum):
 
 class Stage(str, Enum):
     """Pipeline stages."""
+
     DOWNLOAD = "download"
     SCOUT = "scout"
     EXTRACT = "extract"
@@ -41,6 +43,7 @@ class Stage(str, Enum):
 @dataclass
 class ManifestEntry:
     """A single processing result entry."""
+
     pmid: str
     status: Status
     error_message: Optional[str] = None
@@ -51,7 +54,7 @@ class ManifestEntry:
         # Auto-set timestamp if not provided
         if self.timestamp is None:
             self.timestamp = datetime.now(timezone.utc).isoformat()
-        
+
         # Convert string status to enum if needed
         if isinstance(self.status, str):
             self.status = Status(self.status)
@@ -84,7 +87,7 @@ class ManifestEntry:
 class Manifest:
     """
     Pipeline stage manifest for tracking processing results.
-    
+
     Attributes:
         stage: Pipeline stage that produced this manifest
         gene: Gene symbol being processed (optional)
@@ -92,6 +95,7 @@ class Manifest:
         entries: List of processing result entries
         schema_version: Schema version for compatibility
     """
+
     stage: Stage
     gene: Optional[str] = None
     created_at: Optional[str] = None
@@ -102,7 +106,7 @@ class Manifest:
         # Auto-set created_at if not provided
         if self.created_at is None:
             self.created_at = datetime.now(timezone.utc).isoformat()
-        
+
         # Convert string stage to enum if needed
         if isinstance(self.stage, str):
             self.stage = Stage(self.stage)
@@ -142,21 +146,19 @@ class Manifest:
     def save(self, path: str | Path) -> None:
         """
         Save manifest to file atomically.
-        
+
         Uses write-to-temp-then-rename pattern to prevent corruption
         from interrupted writes.
         """
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         # Write to temp file in same directory (for atomic rename)
         fd, tmp_path = tempfile.mkstemp(
-            dir=path.parent,
-            prefix=".manifest_",
-            suffix=".tmp"
+            dir=path.parent, prefix=".manifest_", suffix=".tmp"
         )
         try:
-            with os.fdopen(fd, 'w') as f:
+            with os.fdopen(fd, "w") as f:
                 json.dump(self.to_dict(), f, indent=2)
             # Atomic rename
             os.replace(tmp_path, path)
@@ -172,7 +174,7 @@ class Manifest:
         path = Path(path)
         with open(path) as f:
             data = json.load(f)
-        
+
         return cls(
             schema_version=data.get("schema_version", SCHEMA_VERSION),
             stage=Stage(data["stage"]),

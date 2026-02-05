@@ -24,26 +24,26 @@ def test_nature_doi_resolution_and_scraping(harvester):
     pmcid = harvester.pmid_to_pmcid(pmid)
 
     assert doi is not None, "Test setup failed: Could not retrieve DOI for Nature PMID"
-    assert (
-        pmcid is not None
-    ), "Test setup failed: Could not retrieve PMCID for Nature PMID"
+    assert pmcid is not None, (
+        "Test setup failed: Could not retrieve PMCID for Nature PMID"
+    )
 
     # We call the top-level function to test the complete "waterfall" logic
     supp_files = harvester.get_supplemental_files(pmcid, pmid, doi)
 
     # Assertions
     assert isinstance(supp_files, list), "The function should always return a list."
-    assert (
-        len(supp_files) > 0
-    ), "The Nature scraper should have found at least one supplemental file."
+    assert len(supp_files) > 0, (
+        "The Nature scraper should have found at least one supplemental file."
+    )
 
     # Check the structure of the returned data
     first_file = supp_files[0]
     assert "url" in first_file, "Each file dictionary must have a 'url' key."
     assert "name" in first_file, "Each file dictionary must have a 'name' key."
-    assert first_file["url"].startswith(
-        "http"
-    ), "The file URL should be a full, valid URL."
+    assert first_file["url"].startswith("http"), (
+        "The file URL should be a full, valid URL."
+    )
 
     print(
         f"\n✅ Nature test passed. Found {len(supp_files)} files. First file: {first_file['name']}"
@@ -65,9 +65,9 @@ def test_gim_doi_resolution_and_scraping(harvester):
     supp_files = harvester.get_supplemental_files(pmcid, pmid, doi)
 
     assert isinstance(supp_files, list)
-    assert (
-        len(supp_files) > 0
-    ), "The Elsevier/GIM scraper should have found at least one supplemental file."
+    assert len(supp_files) > 0, (
+        "The Elsevier/GIM scraper should have found at least one supplemental file."
+    )
 
     first_file = supp_files[0]
     assert "url" in first_file

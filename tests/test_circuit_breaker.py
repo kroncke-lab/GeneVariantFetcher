@@ -39,13 +39,16 @@ class TestCircuitBreaker:
 
     def test_failed_extraction_markers_trigger_circuit_breaker(self, extractor):
         """Text with multiple failed extraction markers should be skipped."""
-        garbage_text = """
+        garbage_text = (
+            """
         [PDF file available at: http://example.com/paper.pdf]
         [Error converting PDF to text]
         [Legacy .doc file available at: http://example.com/paper.doc]
         Some minimal text content here that won't be enough.
-        """ + "x" * 500  # Pad to meet length threshold
-        
+        """
+            + "x" * 500
+        )  # Pad to meet length threshold
+
         paper = Paper(
             pmid="12345678",
             gene_symbol="BRCA1",
@@ -54,11 +57,15 @@ class TestCircuitBreaker:
         result = extractor.extract(paper)
         assert not result.success
         assert "SKIPPED" in result.error
-        assert "failed extraction" in result.error.lower() or "marker" in result.error.lower()
+        assert (
+            "failed extraction" in result.error.lower()
+            or "marker" in result.error.lower()
+        )
 
     def test_html_garbage_triggers_circuit_breaker(self, extractor):
         """Text with HTML markup garbage should be skipped."""
-        html_garbage = """
+        html_garbage = (
+            """
         <div class="article-content">
         <span style="font-size: 12px">
         <script type="text/javascript">
@@ -66,8 +73,10 @@ class TestCircuitBreaker:
         </script>
         </span>
         </div>
-        """ + "x" * 500
-        
+        """
+            + "x" * 500
+        )
+
         paper = Paper(
             pmid="12345678",
             gene_symbol="BRCA1",
@@ -80,7 +89,7 @@ class TestCircuitBreaker:
     def test_low_alphanumeric_ratio_triggers_circuit_breaker(self, extractor):
         """Text with low alphanumeric ratio should be skipped."""
         punctuation_garbage = "!@#$%^&*()_+{}|:<>?[];',./" * 50 + "\n" * 100
-        
+
         paper = Paper(
             pmid="12345678",
             gene_symbol="BRCA1",
@@ -92,14 +101,17 @@ class TestCircuitBreaker:
 
     def test_no_variant_content_triggers_circuit_breaker(self, extractor):
         """Text without variant content or gene mentions should be skipped."""
-        irrelevant_text = """
+        irrelevant_text = (
+            """
         This is a long article about cooking recipes. It discusses
         various ingredients and methods for preparing delicious meals.
         The author shares their experience with different cuisines from
         around the world. Topics include Italian pasta, Japanese sushi,
         and Mexican tacos. No scientific or medical content here at all.
-        """ * 10  # Make it long enough
-        
+        """
+            * 10
+        )  # Make it long enough
+
         paper = Paper(
             pmid="12345678",
             gene_symbol="BRCA1",
@@ -112,14 +124,17 @@ class TestCircuitBreaker:
 
     def test_valid_text_passes_circuit_breaker(self, extractor):
         """Valid scientific text with variant content should pass."""
-        valid_text = """
+        valid_text = (
+            """
         We identified a novel BRCA1 mutation c.5266dupC (p.Gln1756fs)
         in a patient with early-onset breast cancer. The variant was
         confirmed by Sanger sequencing. Additional mutations included
         p.R1699Q and c.181T>G. A total of 15 carriers were identified
         in the study cohort, with penetrance estimated at 85%.
-        """ * 10  # Make it long enough
-        
+        """
+            * 10
+        )  # Make it long enough
+
         paper = Paper(
             pmid="12345678",
             gene_symbol="BRCA1",
@@ -132,13 +147,16 @@ class TestCircuitBreaker:
 
     def test_gene_mention_alone_passes_circuit_breaker(self, extractor):
         """Text mentioning the gene but without variant notation should pass (with warning)."""
-        gene_only_text = """
+        gene_only_text = (
+            """
         This study examines the role of BRCA1 in DNA repair pathways.
         We performed functional assays to characterize BRCA1 activity
         in cell lines. The BRCA1 protein was found to interact with
         multiple partners in the homologous recombination pathway.
-        """ * 10
-        
+        """
+            * 10
+        )
+
         paper = Paper(
             pmid="12345678",
             gene_symbol="BRCA1",

@@ -27,11 +27,11 @@ from pipeline.pedigree_extractor import PedigreeExtractor
 
 def test_pdf_extraction(pdf_path: Path, output_dir: Path):
     """Test image extraction from a PDF."""
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Testing PDF image extraction")
     print(f"PDF: {pdf_path}")
     print(f"Output: {output_dir}")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     converter = FormatConverter()
 
@@ -62,11 +62,11 @@ def test_pdf_extraction(pdf_path: Path, output_dir: Path):
 
 def test_pedigree_detection(figures_dir: Path, detect_only: bool = False):
     """Test pedigree detection on a figures directory."""
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Testing pedigree detection")
     print(f"Figures directory: {figures_dir}")
     print(f"Mode: {'detect only' if detect_only else 'full extraction'}")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     settings = get_settings()
     print(f"Vision model: {settings.vision_model}")
@@ -122,12 +122,12 @@ def test_pedigree_detection(figures_dir: Path, detect_only: bool = False):
 
 def test_full_pipeline(pmid: str, gene: str, output_dir: Path):
     """Test the full pipeline on a specific PMID."""
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Testing full pipeline")
     print(f"PMID: {pmid}")
     print(f"Gene: {gene}")
     print(f"Output: {output_dir}")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     from harvesting.orchestrator import PMCHarvester
 

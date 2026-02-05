@@ -455,7 +455,7 @@ def print_report(results: Dict[str, Any], verbose: bool = False):
     print("-" * 40)
     print(f"Total files scanned:  {summary['total_files']}")
     print(
-        f"Short/problem files:  {summary['short_files']} ({100*summary['short_files']/max(1,summary['total_files']):.1f}%)"
+        f"Short/problem files:  {summary['short_files']} ({100 * summary['short_files'] / max(1, summary['total_files']):.1f}%)"
     )
     print()
 

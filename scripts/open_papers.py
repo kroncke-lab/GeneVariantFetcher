@@ -65,7 +65,7 @@ def main():
     print("Files go to ~/Downloads, then run organize_downloads.py\n")
 
     for i, (pmid, url) in enumerate(papers):
-        print(f"[{i+1}/{len(papers)}] PMID {pmid}: {url[:60]}...")
+        print(f"[{i + 1}/{len(papers)}] PMID {pmid}: {url[:60]}...")
         webbrowser.open(url)
         if i < len(papers) - 1:
             time.sleep(args.delay)

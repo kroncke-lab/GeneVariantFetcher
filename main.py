@@ -136,14 +136,14 @@ def run_gui_mode(args):
     incomplete = manager.get_incomplete_jobs()
 
     if incomplete:
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"Found {len(incomplete)} incomplete job(s) that can be resumed:")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
         for job in incomplete:
             print(f"  - {job.job_id}")
             print(f"    Gene: {job.gene_symbol}")
             print(f"    Step: {job.current_step.value}")
-        print(f"{'='*60}\n")
+        print(f"{'=' * 60}\n")
 
     # Print startup info
     import uvicorn
@@ -153,9 +153,9 @@ def run_gui_mode(args):
     if args.host == "0.0.0.0":
         url = f"http://localhost:{args.port}"
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("GeneVariantFetcher")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"Starting GUI at {url}")
     print()
     print("Features:")
@@ -165,7 +165,7 @@ def run_gui_mode(args):
     print("  - Pause, resume, and manage jobs")
     print()
     print("Press Ctrl+C to stop the server")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     # Open browser after a short delay to allow server to start
     if not args.no_browser:
@@ -207,10 +207,10 @@ def run_cli_mode(args):
     # Import and run the automated workflow
     from cli.automated_workflow import automated_variant_extraction_workflow
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Running CLI mode for gene: {gene}")
     print(f"Output directory: {output}")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     automated_variant_extraction_workflow(
         gene_symbol=gene,

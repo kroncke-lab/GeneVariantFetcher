@@ -82,7 +82,7 @@ def identify_publisher(doi: str) -> str:
 def main():
     # Read non-PMC PMIDs
     input_file = Path(__file__).parent.parent / "tests/fixtures/pmids/non_pmc_pmids.txt"
-    
+
     pmids = []
     with open(input_file) as f:
         for line in f:
@@ -93,10 +93,10 @@ def main():
             pmids.append(pmid)
 
     print(f"Looking up DOIs for {len(pmids)} non-PMC PMIDs...\n")
-    
+
     results = []
     publisher_counts = {}
-    
+
     for i, pmid in enumerate(pmids, 1):
         doi = get_doi(pmid)
         publisher = identify_publisher(doi)
@@ -107,48 +107,58 @@ def main():
     print("\n" + "=" * 60)
     print("PUBLISHER BREAKDOWN")
     print("=" * 60)
-    
+
     for publisher, count in sorted(publisher_counts.items(), key=lambda x: -x[1]):
         print(f"  {publisher}: {count}")
-    
+
     # Group by download strategy
     print("\n" + "=" * 60)
     print("DOWNLOAD STRATEGIES")
     print("=" * 60)
-    
+
     wiley = [(p, d) for p, d, pub in results if "Wiley" in pub]
     elsevier = [(p, d) for p, d, pub in results if "Elsevier" in pub]
     aha = [(p, d) for p, d, pub in results if "AHA" in pub]
-    other = [(p, d, pub) for p, d, pub in results if not any(x in pub for x in ["Wiley", "Elsevier", "AHA"])]
-    
+    other = [
+        (p, d, pub)
+        for p, d, pub in results
+        if not any(x in pub for x in ["Wiley", "Elsevier", "AHA"])
+    ]
+
     if wiley:
         print(f"\n🔧 WILEY API ({len(wiley)} papers):")
         for pmid, doi in wiley:
             print(f"   {pmid}: {doi}")
-    
+
     if elsevier:
         print(f"\n🔧 ELSEVIER API ({len(elsevier)} papers):")
         for pmid, doi in elsevier:
             print(f"   {pmid}: {doi}")
-    
+
     if aha:
         print(f"\n🔧 AHA JOURNALS ({len(aha)} papers) - often free after embargo:")
         for pmid, doi in aha:
             print(f"   {pmid}: {doi}")
-    
+
     if other:
         print(f"\n📥 OTHER - may need manual or browser fetch ({len(other)} papers):")
         for pmid, doi, pub in other:
             print(f"   {pmid}: {doi or 'NO DOI'} ({pub})")
 
     # Write detailed CSV for fetch_manager
-    output_csv = Path(__file__).parent.parent / "tests/fixtures/pmids/non_pmc_papers.csv"
+    output_csv = (
+        Path(__file__).parent.parent / "tests/fixtures/pmids/non_pmc_papers.csv"
+    )
     with open(output_csv, "w") as f:
         f.write("PMID,DOI,Publisher,URL,Status\n")
         for pmid, doi, publisher in results:
-            url = f"https://doi.org/{doi}" if doi else f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-            f.write(f'{pmid},{doi or ""},{publisher},{url},\n')
-    
+            url = (
+                f"https://doi.org/{doi}"
+                if doi
+                else f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
+            )
+            f.write(f"{pmid},{doi or ''},{publisher},{url},\n")
+
     print(f"\nWrote detailed CSV to: {output_csv}")
 
 

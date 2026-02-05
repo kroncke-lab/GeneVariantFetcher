@@ -520,10 +520,10 @@ def extract_sqlite_data(
             SELECT
                 {pmid_col} as pmid,
                 {variant_select} as variant,
-                {count_cols.get('carriers_total', 'NULL')} as carriers_total,
-                {count_cols.get('affected_count', 'NULL')} as affected_count,
-                {count_cols.get('unaffected_count', 'NULL')} as unaffected_count,
-                {count_cols.get('uncertain_count', 'NULL')} as uncertain_count
+                {count_cols.get("carriers_total", "NULL")} as carriers_total,
+                {count_cols.get("affected_count", "NULL")} as affected_count,
+                {count_cols.get("unaffected_count", "NULL")} as unaffected_count,
+                {count_cols.get("uncertain_count", "NULL")} as uncertain_count
             FROM {primary_table.name}
         """
         logger.info(f"Executing custom query on {primary_table.name}")

@@ -49,7 +49,7 @@ def _find_data_zones_file(
         Path to DATA_ZONES.md if found, None otherwise
     """
     import warnings
-    
+
     filename = f"{pmid}_DATA_ZONES.md"
 
     # If explicit search directories provided, check them first
@@ -404,7 +404,7 @@ class ExpertExtractor(BaseLLMCaller):
         especially in large tables with many rows.
 
         Returns a list of minimal variant dicts.
-        
+
         NOTE (2026-02-04): DISABLED due to significant noise generation.
         The regex extraction was grabbing variants from ALL genes in multi-gene
         tables without validation, causing 2370 extractions vs 1359 in baseline.
@@ -413,9 +413,11 @@ class ExpertExtractor(BaseLLMCaller):
         """
         # DISABLED: Return empty list to prevent noise generation
         # Re-enable after implementing gene-specific validation
-        logger.info(f"Table regex extraction DISABLED for {gene_symbol} (noise reduction)")
+        logger.info(
+            f"Table regex extraction DISABLED for {gene_symbol} (noise reduction)"
+        )
         return []
-        
+
         # --- Original code below (kept for future re-enablement) ---
         if not gene_symbol:
             return []
@@ -1024,7 +1026,10 @@ class ExpertExtractor(BaseLLMCaller):
 
         text_len = len(text)
         if text_len < MIN_EXTRACTION_INPUT_SIZE:
-            return False, f"Text too short ({text_len} chars, min={MIN_EXTRACTION_INPUT_SIZE})"
+            return (
+                False,
+                f"Text too short ({text_len} chars, min={MIN_EXTRACTION_INPUT_SIZE})",
+            )
 
         # Check 2: Failed extraction placeholders
         failed_count = sum(

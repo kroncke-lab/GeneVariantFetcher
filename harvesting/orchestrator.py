@@ -35,21 +35,22 @@ from .supplement_reference_parser import (
 # =============================================================================
 
 # PMID pattern: 1-8 digit numeric string
-PMID_PATTERN = re.compile(r'^\d{1,8}$')
+PMID_PATTERN = re.compile(r"^\d{1,8}$")
 
 
 class ValidationError(Exception):
     """Raised when input validation fails."""
+
     pass
 
 
 def validate_pmid_format(pmid: str) -> bool:
     """
     Validate that a PMID has correct format.
-    
+
     Args:
         pmid: PMID string to validate
-        
+
     Returns:
         True if valid, False otherwise
     """
@@ -62,33 +63,33 @@ def validate_pmid_format(pmid: str) -> bool:
 def validate_pmid_list(pmids: List[str]) -> Tuple[List[str], List[str]]:
     """
     Validate a list of PMIDs and return valid/invalid lists.
-    
+
     Args:
         pmids: List of PMID strings
-        
+
     Returns:
         Tuple of (valid_pmids, invalid_pmids)
     """
     valid = []
     invalid = []
-    
+
     for pmid in pmids:
         pmid_str = str(pmid).strip()
         if validate_pmid_format(pmid_str):
             valid.append(pmid_str)
         else:
             invalid.append(pmid_str)
-    
+
     return valid, invalid
 
 
 def validate_output_directory(output_dir: Path) -> None:
     """
     Validate that output directory is writable.
-    
+
     Args:
         output_dir: Path to output directory
-        
+
     Raises:
         ValidationError: If output directory is not writable
     """
@@ -111,40 +112,47 @@ def validate_output_directory(output_dir: Path) -> None:
 def validate_harvest_inputs(pmids: List[str], output_dir: Path) -> List[str]:
     """
     Validate all inputs for the harvest operation.
-    
+
     Args:
         pmids: List of PMIDs to process
         output_dir: Path to output directory
-        
+
     Returns:
         List of valid PMIDs (after filtering out invalid ones)
-        
+
     Raises:
         ValidationError: If critical validation fails
     """
     # Check PMID list is not empty
     if not pmids:
-        raise ValidationError("PMID list is empty. Provide at least one PMID to process.")
-    
+        raise ValidationError(
+            "PMID list is empty. Provide at least one PMID to process."
+        )
+
     # Validate PMIDs format
     valid_pmids, invalid_pmids = validate_pmid_list(pmids)
-    
+
     if invalid_pmids:
         logger.warning(
             f"Skipping {len(invalid_pmids)} invalid PMIDs: {invalid_pmids[:5]}"
-            + (f"... and {len(invalid_pmids) - 5} more" if len(invalid_pmids) > 5 else "")
+            + (
+                f"... and {len(invalid_pmids) - 5} more"
+                if len(invalid_pmids) > 5
+                else ""
+            )
         )
-    
+
     if not valid_pmids:
         raise ValidationError(
             f"No valid PMIDs found. All {len(pmids)} PMIDs have invalid format. "
             f"PMIDs must be 1-8 digit numbers (e.g., 12345678)."
         )
-    
+
     # Validate output directory
     validate_output_directory(output_dir)
-    
+
     return valid_pmids
+
 
 # Import scout components (with fallback for import errors)
 try:
@@ -224,19 +232,21 @@ class PMCHarvester:
                 settings = get_settings()
                 elsevier_api_key = settings.elsevier_api_key
                 wiley_api_key = settings.wiley_api_key
-                springer_api_key = getattr(settings, 'springer_api_key', None)
+                springer_api_key = getattr(settings, "springer_api_key", None)
             except Exception:
                 pass  # Settings validation may fail if other keys are missing
-        
+
         # Fall back to environment variables if not in settings
         if springer_api_key is None:
             springer_api_key = os.environ.get("SPRINGER_API_KEY")
-        
+
         self.elsevier_api = ElsevierAPIClient(
             api_key=elsevier_api_key, session=self.session
         )
         self.wiley_api = WileyAPIClient(api_key=wiley_api_key, session=self.session)
-        self.springer_api = SpringerAPIClient(api_key=springer_api_key, session=self.session)
+        self.springer_api = SpringerAPIClient(
+            api_key=springer_api_key, session=self.session
+        )
 
         # Initialize log files with extended columns for carrier data
         with open(self.paywalled_log, "w", newline="") as f:
@@ -1054,7 +1064,7 @@ class PMCHarvester:
     def download_pmid(self, pmid: str) -> Tuple[bool, str, Optional[str]]:
         """
         Download content for a single PMID and run cheap analysis.
-        
+
         This method handles the download phase:
         - PMID to PMCID conversion
         - Full-text XML download
@@ -1062,7 +1072,7 @@ class PMCHarvester:
         - Supplement download and conversion
         - Create unified markdown file
         - Run data scout (cheap text analysis)
-        
+
         NO pedigree extraction - that's expensive (GPT-4o vision) and happens
         in run_post_processing() after all downloads complete.
 
@@ -1146,7 +1156,7 @@ class PMCHarvester:
         gap_result = check_supplement_gap(
             text=main_markdown,
             downloaded_count=downloaded_count,
-            extracted_variant_count=0  # Will be filled in after extraction
+            extracted_variant_count=0,  # Will be filled in after extraction
         )
         if gap_result["has_gap"]:
             for warning in gap_result["warnings"]:
@@ -1160,10 +1170,12 @@ class PMCHarvester:
 
         return True, str(output_file), unified_content
 
-    def _download_free_text_pmid(self, pmid: str, doi: str) -> Tuple[bool, str, Optional[str]]:
+    def _download_free_text_pmid(
+        self, pmid: str, doi: str
+    ) -> Tuple[bool, str, Optional[str]]:
         """
         Download content for a PMID that has no PMCID but may have free full text via publisher.
-        
+
         This handles download + data scout (cheap text analysis).
         NO pedigree extraction - that happens in run_post_processing().
 
@@ -1565,12 +1577,12 @@ class PMCHarvester:
     def run_post_processing(self, pmid: str, unified_content: str = None) -> bool:
         """
         Run post-processing on a downloaded paper (pedigree extraction only).
-        
+
         This method should be called AFTER download_pmid() completes for all papers.
         It handles:
         - Pedigree extraction from figures (expensive GPT-4o vision calls)
         - Appending pedigree summary to the unified markdown file
-        
+
         Note: Data scout runs during the download phase (it's cheap text analysis).
 
         Args:
@@ -1581,16 +1593,16 @@ class PMCHarvester:
             True if post-processing completed successfully, False otherwise
         """
         print(f"\n  Post-processing PMID: {pmid}")
-        
+
         output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
-        
+
         # Load unified content if not provided
         if unified_content is None:
             if not output_file.exists():
                 print(f"  ❌ Cannot post-process: {output_file.name} not found")
                 return False
             unified_content = output_file.read_text(encoding="utf-8")
-        
+
         # Run pedigree extraction on figures (if any were extracted)
         # This is the expensive GPT-4o vision step - batched after all downloads complete
         pedigree_summary = self._run_pedigree_extraction(pmid)
@@ -1600,13 +1612,13 @@ class PMCHarvester:
             with open(output_file, "w", encoding="utf-8") as f:
                 f.write(unified_content)
             print(f"  ✓ Updated {output_file.name} with pedigree data")
-        
+
         return True
 
     def batch_data_scout(self, pmids: List[str]) -> Tuple[int, int]:
         """
         Run data scout on a batch of downloaded papers.
-        
+
         Data scout identifies high-value data zones in the text - this is cheap
         text analysis that should run before expensive pedigree extraction.
 
@@ -1619,25 +1631,25 @@ class PMCHarvester:
         if not pmids:
             print("  No PMIDs for data scout")
             return 0, 0
-            
-        print(f"\n{'='*60}")
+
+        print(f"\n{'=' * 60}")
         print(f"DATA SCOUT PHASE: {len(pmids)} papers")
         print(f"(Identifying high-value data zones)")
-        print(f"{'='*60}")
-        
+        print(f"{'=' * 60}")
+
         successful = 0
         failed = 0
-        
+
         for idx, pmid in enumerate(pmids, 1):
             print(f"\n[{idx}/{len(pmids)}] Scouting PMID {pmid}...", end="")
-            
+
             try:
                 output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
                 if not output_file.exists():
                     print(f" ❌ File not found")
                     failed += 1
                     continue
-                    
+
                 unified_content = output_file.read_text(encoding="utf-8")
                 if self._run_data_scout(pmid, unified_content):
                     successful += 1
@@ -1647,76 +1659,91 @@ class PMCHarvester:
             except Exception as e:
                 print(f" ❌ Failed: {e}")
                 failed += 1
-        
+
         print(f"\n  Data scout complete: {successful} succeeded, {failed} failed")
         return successful, failed
 
     def _has_pedigree_indicators(self, pmid: str) -> bool:
         """
         Check if a paper's figure legends suggest pedigree content.
-        
+
         Scans the FULL_CONTEXT.md for figure-related text containing
         pedigree indicators like "pedigree", "family", "proband", etc.
-        
+
         Args:
             pmid: PubMed ID to check
-            
+
         Returns:
             True if pedigree-related figure content is likely present
         """
         # Keywords that suggest pedigree figures
         pedigree_keywords = [
-            'pedigree', 'family tree', 'proband', 'affected', 'carrier',
-            'unaffected', 'heterozygous', 'homozygous', 'kindred',
-            'index patient', 'index case', 'familial', 'inheritance',
-            'autosomal dominant', 'autosomal recessive', 'segregat',
-            'generation', 'siblings', 'offspring', 'consanguineous'
+            "pedigree",
+            "family tree",
+            "proband",
+            "affected",
+            "carrier",
+            "unaffected",
+            "heterozygous",
+            "homozygous",
+            "kindred",
+            "index patient",
+            "index case",
+            "familial",
+            "inheritance",
+            "autosomal dominant",
+            "autosomal recessive",
+            "segregat",
+            "generation",
+            "siblings",
+            "offspring",
+            "consanguineous",
         ]
-        
+
         output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
         if not output_file.exists():
             return False
-            
+
         try:
             content = output_file.read_text(encoding="utf-8").lower()
-            
+
             # Look for figure legends/captions containing pedigree keywords
             # Common patterns: "Figure 1.", "Fig. 1:", "**Figure 1**", etc.
             import re
-            
+
             # Find all figure caption regions (figure reference + next ~500 chars)
-            figure_pattern = r'(fig\.?(?:ure)?\.?\s*\d+[^a-z])'
+            figure_pattern = r"(fig\.?(?:ure)?\.?\s*\d+[^a-z])"
             matches = list(re.finditer(figure_pattern, content, re.IGNORECASE))
-            
+
             for match in matches:
                 # Get text around the figure reference (caption area)
                 start = match.start()
                 end = min(start + 500, len(content))
                 caption_region = content[start:end]
-                
+
                 # Check for pedigree keywords in this region
                 for keyword in pedigree_keywords:
                     if keyword in caption_region:
                         return True
-            
+
             # Also check for standalone pedigree mentions that might indicate figures
-            if 'pedigree' in content and ('figure' in content or 'fig.' in content):
+            if "pedigree" in content and ("figure" in content or "fig." in content):
                 return True
-                
+
         except Exception as e:
             logger.warning(f"Error checking pedigree indicators for {pmid}: {e}")
             return True  # Err on the side of processing if we can't check
-            
+
         return False
 
     def batch_pedigree_extraction(self, pmids: List[str]) -> Tuple[int, int]:
         """
         Run pedigree extraction on a batch of downloaded papers.
-        
+
         This method filters papers in two stages:
         1. Must have figures extracted
         2. Figure legends must suggest pedigree content (keyword scan)
-        
+
         This dramatically reduces expensive GPT-4o vision API calls.
         Should be called after data scout completes.
 
@@ -1729,44 +1756,50 @@ class PMCHarvester:
         if not pmids:
             print("  No PMIDs for pedigree extraction")
             return 0, 0
-        
+
         # Stage 1: Filter to only papers that have figures
         pmids_with_figures = []
         for pmid in pmids:
             figures_dir = self.output_dir / f"{pmid}_figures"
             if figures_dir.exists():
-                image_files = list(figures_dir.glob("*.png")) + list(figures_dir.glob("*.jpg"))
+                image_files = list(figures_dir.glob("*.png")) + list(
+                    figures_dir.glob("*.jpg")
+                )
                 if image_files:
                     pmids_with_figures.append(pmid)
-        
+
         no_figures_count = len(pmids) - len(pmids_with_figures)
-        
+
         # Stage 2: Filter by figure legend content (pedigree keywords)
-        print(f"\n  Scanning {len(pmids_with_figures)} papers for pedigree indicators...")
+        print(
+            f"\n  Scanning {len(pmids_with_figures)} papers for pedigree indicators..."
+        )
         pmids_likely_pedigree = []
         for pmid in pmids_with_figures:
             if self._has_pedigree_indicators(pmid):
                 pmids_likely_pedigree.append(pmid)
-        
+
         no_indicators_count = len(pmids_with_figures) - len(pmids_likely_pedigree)
-        
-        print(f"\n{'='*60}")
+
+        print(f"\n{'=' * 60}")
         print(f"PEDIGREE EXTRACTION PHASE")
         print(f"  {len(pmids_likely_pedigree)} papers likely have pedigrees")
-        print(f"  (Skipped: {no_figures_count} no figures, {no_indicators_count} no pedigree keywords)")
+        print(
+            f"  (Skipped: {no_figures_count} no figures, {no_indicators_count} no pedigree keywords)"
+        )
         print(f"  (GPT-4o vision calls)")
-        print(f"{'='*60}")
-        
+        print(f"{'=' * 60}")
+
         if not pmids_likely_pedigree:
             print("  No papers appear to have pedigree figures")
             return 0, 0
-        
+
         successful = 0
         failed = 0
-        
+
         for idx, pmid in enumerate(pmids_likely_pedigree, 1):
             print(f"\n[{idx}/{len(pmids_likely_pedigree)}]", end="")
-            
+
             try:
                 if self.run_post_processing(pmid):
                     successful += 1
@@ -1775,14 +1808,16 @@ class PMCHarvester:
             except Exception as e:
                 print(f"  ❌ Pedigree extraction failed for {pmid}: {e}")
                 failed += 1
-        
-        print(f"\n  Pedigree extraction complete: {successful} succeeded, {failed} failed")
+
+        print(
+            f"\n  Pedigree extraction complete: {successful} succeeded, {failed} failed"
+        )
         return successful, failed
 
     def batch_post_process(self, pmids: List[str]) -> Tuple[int, int]:
         """
         Run full post-processing on a batch of downloaded papers.
-        
+
         This runs both data scout AND pedigree extraction in sequence.
         For more control, use batch_data_scout() and batch_pedigree_extraction() separately.
 
@@ -1795,10 +1830,10 @@ class PMCHarvester:
         if not pmids:
             print("  No PMIDs to post-process")
             return 0, 0
-        
+
         # Phase 1: Data scout (cheap text analysis)
         self.batch_data_scout(pmids)
-        
+
         # Phase 2: Pedigree extraction (expensive GPT-4o)
         return self.batch_pedigree_extraction(pmids)
 
@@ -1808,9 +1843,9 @@ class PMCHarvester:
 
         For papers without PMCIDs but marked as "Free Full Text" on PubMed, this method
         will attempt to fetch full text directly from the publisher's website.
-        
+
         This is the original combined method - downloads AND post-processes in one pass.
-        Kept for backward compatibility. For batch processing, use download_pmid() + 
+        Kept for backward compatibility. For batch processing, use download_pmid() +
         batch_post_process() instead.
 
         Args:
@@ -1821,13 +1856,13 @@ class PMCHarvester:
         """
         # Phase 1: Download
         success, result, unified_content = self.download_pmid(pmid)
-        
+
         if not success:
             return False, result
-        
+
         # Phase 2: Post-process (pedigree extraction + data scout)
         self.run_post_processing(pmid, unified_content)
-        
+
         return True, result
 
     def _try_elsevier_api(
@@ -1938,7 +1973,7 @@ class PMCHarvester:
         This method checks if the article is marked as "Free Full Text" on PubMed
         and attempts to fetch the content from the publisher's website.
         For Elsevier articles, it first tries the Elsevier API if an API key is configured.
-        
+
         This is the original combined method - kept for backward compatibility.
         Internally calls _download_free_text_pmid() + run_post_processing().
 
@@ -1951,13 +1986,13 @@ class PMCHarvester:
         """
         # Phase 1: Download
         success, result, unified_content = self._download_free_text_pmid(pmid, doi)
-        
+
         if not success:
             return False, result
-        
+
         # Phase 2: Post-process (pedigree extraction + data scout)
         self.run_post_processing(pmid, unified_content)
-        
+
         return True, result
 
     def harvest(
@@ -1969,7 +2004,7 @@ class PMCHarvester:
     ):
         """
         Harvest full-text and supplements for a list of PMIDs.
-        
+
         By default, only performs downloads. Post-processing (data scout and pedigree
         extraction) can be enabled via run_scout flag or called separately via
         batch_data_scout() and batch_pedigree_extraction().
@@ -1980,21 +2015,21 @@ class PMCHarvester:
             run_scout: If True, run data scout and pedigree extraction after downloads.
                        Default False - download only. Call batch_post_process() separately
                        for post-processing.
-            manifest_path: Path to write manifest.json. If None, defaults to 
+            manifest_path: Path to write manifest.json. If None, defaults to
                           {output_dir}/manifest.json
-                          
+
         Raises:
             ValidationError: If input validation fails
         """
         # Validate inputs and filter to valid PMIDs only
         valid_pmids = validate_harvest_inputs(pmids, self.output_dir)
-        
+
         if len(valid_pmids) < len(pmids):
             print(f"⚠ Filtered {len(pmids) - len(valid_pmids)} invalid PMIDs")
-        
+
         print(f"Starting harvest for {len(valid_pmids)} PMIDs")
         print(f"Output directory: {self.output_dir.absolute()}\n")
-        
+
         # Use validated PMIDs for processing
         pmids = valid_pmids
 
@@ -2008,10 +2043,10 @@ class PMCHarvester:
         # ============================================
         # PHASE 1: DOWNLOAD ALL PAPERS
         # ============================================
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
         print(f"DOWNLOAD PHASE: {len(pmids)} papers")
-        print(f"{'='*60}")
-        
+        print(f"{'=' * 60}")
+
         downloaded_pmids = []
         download_successful = 0
         download_failed = 0
@@ -2032,17 +2067,23 @@ class PMCHarvester:
                 # Check for supplements directory
                 supp_dir = self.output_dir / f"{pmid}_supplements"
                 if supp_dir.exists():
-                    files_created.extend([f.name for f in supp_dir.iterdir() if f.is_file()])
+                    files_created.extend(
+                        [f.name for f in supp_dir.iterdir() if f.is_file()]
+                    )
                 # Check for figures directory
                 fig_dir = self.output_dir / f"{pmid}_figures"
                 if fig_dir.exists():
-                    files_created.extend([f.name for f in fig_dir.iterdir() if f.is_file()])
-                
-                manifest.add_entry(ManifestEntry(
-                    pmid=pmid,
-                    status=Status.SUCCESS,
-                    files_created=files_created,
-                ))
+                    files_created.extend(
+                        [f.name for f in fig_dir.iterdir() if f.is_file()]
+                    )
+
+                manifest.add_entry(
+                    ManifestEntry(
+                        pmid=pmid,
+                        status=Status.SUCCESS,
+                        files_created=files_created,
+                    )
+                )
             else:
                 download_failed += 1
                 # Map error messages to Status enum
@@ -2051,29 +2092,34 @@ class PMCHarvester:
                     status = Status.TIMEOUT
                 elif "captcha" in error_msg:
                     status = Status.CAPTCHA
-                elif any(kw in error_msg for kw in ["paywall", "full-text", "access", "no pmcid"]):
+                elif any(
+                    kw in error_msg
+                    for kw in ["paywall", "full-text", "access", "no pmcid"]
+                ):
                     status = Status.PAYWALL
                 else:
                     status = Status.FAILED
-                
-                manifest.add_entry(ManifestEntry(
-                    pmid=pmid,
-                    status=status,
-                    error_message=result,
-                ))
+
+                manifest.add_entry(
+                    ManifestEntry(
+                        pmid=pmid,
+                        status=status,
+                        error_message=result,
+                    )
+                )
 
             if idx < len(pmids):
                 time.sleep(delay)
-        
+
         # Save manifest after download phase
         manifest.save(manifest_path)
         print(f"\n  📋 Manifest saved: {manifest_path}")
-        
-        print(f"\n{'='*60}")
+
+        print(f"\n{'=' * 60}")
         print(f"Download phase complete!")
         print(f"  ✅ Downloaded: {download_successful}")
         print(f"  ❌ Failed: {download_failed}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
 
         # ============================================
         # PHASE 2: POST-PROCESS ALL DOWNLOADED PAPERS
@@ -2084,12 +2130,14 @@ class PMCHarvester:
             post_successful, post_failed = self.batch_post_process(downloaded_pmids)
         elif downloaded_pmids and not run_scout:
             print(f"\n  ℹ️  Skipping post-processing (run_scout=False)")
-            print(f"  To analyze downloaded papers, call batch_post_process() separately.")
+            print(
+                f"  To analyze downloaded papers, call batch_post_process() separately."
+            )
 
         # ============================================
         # FINAL SUMMARY
         # ============================================
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"Harvest complete!")
         print(f"  ✅ Successful: {download_successful}")
         print(f"  ❌ Failed: {download_failed}")
@@ -2097,7 +2145,7 @@ class PMCHarvester:
         print(f"  Output directory: {self.output_dir.absolute()}")
         print(f"  Success log: {self.success_log}")
         print(f"  Paywalled log: {self.paywalled_log}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
 
     # Backward-compatible methods for tests and legacy code
     def pmid_to_pmcid(self, pmid: str):

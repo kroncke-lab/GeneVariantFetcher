@@ -1,10 +1,10 @@
 """
 Springer Nature API Module
 
-Provides access to Springer Nature (including Nature, BMC, Springer journals) 
+Provides access to Springer Nature (including Nature, BMC, Springer journals)
 full-text content via the official OpenAccess API.
 
-This is used as a preferred method for fetching Springer/Nature/BMC articles when 
+This is used as a preferred method for fetching Springer/Nature/BMC articles when
 an API key is available, before falling back to web scraping.
 
 API Documentation: https://dev.springernature.com/
@@ -26,14 +26,14 @@ logger = logging.getLogger(__name__)
 
 # DOI prefixes known to be Springer Nature
 SPRINGER_DOI_PREFIXES = (
-    "10.1007/",   # Springer main
-    "10.1038/",   # Nature
-    "10.1186/",   # BMC (BioMed Central)
-    "10.1140/",   # European Physical Journal
-    "10.1057/",   # Palgrave Macmillan
-    "10.1023/",   # Springer (older)
-    "10.1134/",   # Pleiades (Springer)
-    "10.1365/",   # Springer Science
+    "10.1007/",  # Springer main
+    "10.1038/",  # Nature
+    "10.1186/",  # BMC (BioMed Central)
+    "10.1140/",  # European Physical Journal
+    "10.1057/",  # Palgrave Macmillan
+    "10.1023/",  # Springer (older)
+    "10.1134/",  # Pleiades (Springer)
+    "10.1365/",  # Springer Science
     "10.26508/",  # Some Springer journals
 )
 
@@ -54,7 +54,7 @@ class SpringerAPIClient:
     # OpenAccess API endpoint (works with free API keys)
     OPENACCESS_URL = "https://api.springernature.com/openaccess/json"
     OPENACCESS_JATS_URL = "https://api.springernature.com/openaccess/jats"
-    
+
     # Meta API endpoint (requires higher-tier API key)
     META_URL = "https://api.springernature.com/meta/v2/json"
 
@@ -107,6 +107,7 @@ class SpringerAPIClient:
         if not url:
             return False
         from urllib.parse import urlparse
+
         domain = urlparse(url).netloc.lower()
         return any(springer_domain in domain for springer_domain in SPRINGER_DOMAINS)
 
@@ -143,9 +144,7 @@ class SpringerAPIClient:
 
         try:
             logger.info(f"Searching Springer OpenAccess for: {query}")
-            response = self.session.get(
-                self.OPENACCESS_URL, params=params, timeout=30
-            )
+            response = self.session.get(self.OPENACCESS_URL, params=params, timeout=30)
 
             if response.status_code == 200:
                 data = response.json()
@@ -238,9 +237,7 @@ class SpringerAPIClient:
 
         try:
             logger.info(f"Fetching metadata from Springer for DOI: {doi}")
-            response = self.session.get(
-                self.OPENACCESS_URL, params=params, timeout=30
-            )
+            response = self.session.get(self.OPENACCESS_URL, params=params, timeout=30)
 
             if response.status_code == 200:
                 data = response.json()
@@ -275,28 +272,30 @@ class SpringerAPIClient:
         try:
             # Parse the JATS XML
             root = ET.fromstring(jats_content)
-            
+
             # Define namespace (JATS often uses namespaces)
             ns = {}
             # Try to extract namespace from root
             if root.tag.startswith("{"):
                 ns_end = root.tag.find("}")
                 ns["jats"] = root.tag[1:ns_end]
-            
+
             parts = []
-            
+
             # Extract title
-            title_elem = root.find(".//article-title", ns) or root.find(".//title-group/article-title")
+            title_elem = root.find(".//article-title", ns) or root.find(
+                ".//title-group/article-title"
+            )
             if title_elem is not None and title_elem.text:
                 parts.append(f"# {title_elem.text.strip()}\n")
-            
+
             # Extract abstract
             abstract_elem = root.find(".//abstract", ns) or root.find(".//abstract/p")
             if abstract_elem is not None:
                 abstract_text = "".join(abstract_elem.itertext()).strip()
                 if abstract_text:
                     parts.append(f"## Abstract\n\n{abstract_text}\n")
-            
+
             # Extract body sections
             body = root.find(".//body", ns)
             if body is not None:
@@ -305,31 +304,31 @@ class SpringerAPIClient:
                     sec_title = section.find("title")
                     if sec_title is not None and sec_title.text:
                         parts.append(f"\n## {sec_title.text.strip()}\n")
-                    
+
                     # Section paragraphs
                     for para in section.findall("p"):
                         para_text = "".join(para.itertext()).strip()
                         if para_text:
                             parts.append(f"\n{para_text}\n")
-            
+
             # If body parsing didn't yield much, try to get all text
             if len(parts) < 3:
                 all_text = "".join(root.itertext())
                 if len(all_text) > 500:
                     # Clean up whitespace
-                    all_text = re.sub(r'\s+', ' ', all_text).strip()
+                    all_text = re.sub(r"\s+", " ", all_text).strip()
                     parts.append(f"\n{all_text}\n")
-            
+
             if parts:
                 return "\n".join(parts)
             return None
-            
+
         except ET.ParseError as e:
             logger.warning(f"Failed to parse JATS XML: {e}")
             # Try with BeautifulSoup as fallback
             try:
-                soup = BeautifulSoup(jats_content, 'xml')
-                text = soup.get_text(separator='\n\n', strip=True)
+                soup = BeautifulSoup(jats_content, "xml")
+                text = soup.get_text(separator="\n\n", strip=True)
                 if len(text) > 500:
                     return text
             except Exception:
@@ -353,7 +352,7 @@ class SpringerAPIClient:
         """
         # Get full text
         jats_content, error = self.get_fulltext_by_doi(doi)
-        
+
         if error:
             # Try to at least get metadata
             metadata, meta_error = self.get_metadata_by_doi(doi)
@@ -361,31 +360,31 @@ class SpringerAPIClient:
                 # Return metadata even without full text
                 return None, metadata, f"Full text unavailable: {error}"
             return None, None, error
-        
+
         # Convert JATS to markdown
         markdown = self.jats_to_markdown(jats_content)
-        
+
         # Get metadata
         metadata, _ = self.get_metadata_by_doi(doi)
-        
+
         return markdown, metadata, None
 
 
 def get_springer_client(api_key: Optional[str] = None) -> SpringerAPIClient:
     """
     Factory function to create a Springer API client.
-    
+
     If no API key is provided, attempts to read from environment variable.
-    
+
     Args:
         api_key: Optional API key (if not provided, reads from SPRINGER_API_KEY env var)
-    
+
     Returns:
         Configured SpringerAPIClient instance
     """
     import os
-    
+
     if api_key is None:
         api_key = os.environ.get("SPRINGER_API_KEY")
-    
+
     return SpringerAPIClient(api_key=api_key)

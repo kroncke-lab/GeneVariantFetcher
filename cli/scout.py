@@ -43,27 +43,28 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 
 # Gene symbol pattern: 1-10 uppercase letters/numbers, optionally followed by orf suffix
-GENE_SYMBOL_PATTERN = re.compile(r'^[A-Z][A-Z0-9]{0,9}(?:orf\d+)?$', re.IGNORECASE)
+GENE_SYMBOL_PATTERN = re.compile(r"^[A-Z][A-Z0-9]{0,9}(?:orf\d+)?$", re.IGNORECASE)
 
 
 class ValidationError(Exception):
     """Raised when input validation fails."""
+
     pass
 
 
 def validate_gene_symbol(gene: str) -> None:
     """
     Validate gene symbol format.
-    
+
     Args:
         gene: Gene symbol to validate
-        
+
     Raises:
         ValidationError: If gene symbol is invalid
     """
     if not gene:
         raise ValidationError("Gene symbol is required but was not provided")
-    
+
     if not GENE_SYMBOL_PATTERN.match(gene):
         raise ValidationError(
             f"Invalid gene symbol format: '{gene}'. "
@@ -75,21 +76,19 @@ def validate_gene_symbol(gene: str) -> None:
 def validate_input_path(input_path: Path) -> None:
     """
     Validate that input path exists and is accessible.
-    
+
     Args:
         input_path: Path to input directory or manifest file
-        
+
     Raises:
         ValidationError: If input path is invalid
     """
     if not input_path.exists():
         raise ValidationError(f"Input path does not exist: {input_path}")
-    
+
     if input_path.is_file():
-        if not input_path.name.endswith('.json'):
-            raise ValidationError(
-                f"Input file must be a JSON manifest: {input_path}"
-            )
+        if not input_path.name.endswith(".json"):
+            raise ValidationError(f"Input file must be a JSON manifest: {input_path}")
         # Check file is readable
         if not os.access(input_path, os.R_OK):
             raise ValidationError(f"Input file is not readable: {input_path}")
@@ -98,18 +97,16 @@ def validate_input_path(input_path: Path) -> None:
         if not os.access(input_path, os.R_OK):
             raise ValidationError(f"Input directory is not readable: {input_path}")
     else:
-        raise ValidationError(
-            f"Input path must be a file or directory: {input_path}"
-        )
+        raise ValidationError(f"Input path must be a file or directory: {input_path}")
 
 
 def validate_output_directory(output_dir: Path) -> None:
     """
     Validate that output directory is writable.
-    
+
     Args:
         output_dir: Path to output directory
-        
+
     Raises:
         ValidationError: If output directory is not writable
     """
@@ -141,12 +138,12 @@ def validate_scout_inputs(
 ) -> None:
     """
     Validate all inputs for the scout stage.
-    
+
     Args:
         input_path: Path to input directory or manifest
         output_dir: Path to output directory
         gene: Gene symbol
-        
+
     Raises:
         ValidationError: If any validation fails
     """
@@ -155,7 +152,9 @@ def validate_scout_inputs(
     validate_output_directory(output_dir)
 
 
-def find_input_files(input_path: Path, manifest: Optional[Manifest] = None) -> list[Path]:
+def find_input_files(
+    input_path: Path, manifest: Optional[Manifest] = None
+) -> list[Path]:
     """
     Find input files to process.
 
@@ -286,13 +285,13 @@ def run_scout(
 
     Returns:
         Manifest with processing results
-        
+
     Raises:
         ValidationError: If input validation fails
     """
     # Validate inputs before processing
     validate_scout_inputs(input_path, output_dir, gene)
-    
+
     # Ensure output directory exists
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -311,7 +310,9 @@ def run_scout(
             input_manifest = Manifest.load(manifest_path)
             logger.info(f"Found manifest with {len(input_manifest)} entries")
     else:
-        raise ValueError(f"Input path must be a directory or manifest.json: {input_path}")
+        raise ValueError(
+            f"Input path must be a directory or manifest.json: {input_path}"
+        )
 
     # Find files to process
     files = find_input_files(input_dir, input_manifest)
@@ -369,19 +370,22 @@ Examples:
     )
 
     parser.add_argument(
-        "--input", "-i",
+        "--input",
+        "-i",
         type=Path,
         required=True,
         help="Input directory or manifest.json file",
     )
     parser.add_argument(
-        "--output", "-o",
+        "--output",
+        "-o",
         type=Path,
         required=True,
         help="Output directory for DATA_ZONES files",
     )
     parser.add_argument(
-        "--gene", "-g",
+        "--gene",
+        "-g",
         type=str,
         required=True,
         help="Gene symbol to search for (e.g., KCNQ1, BRCA1)",
@@ -405,7 +409,8 @@ Examples:
         help="Maximum zones per paper (default: 30)",
     )
     parser.add_argument(
-        "--verbose", "-v",
+        "--verbose",
+        "-v",
         action="store_true",
         help="Enable debug logging",
     )

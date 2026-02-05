@@ -25,13 +25,25 @@ class TestExtractPmidFromFilename:
 
     def test_extract_from_full_context(self):
         """Test extracting PMID from FULL_CONTEXT filename."""
-        assert extract_pmid_from_filename("12345678_FULL_CONTEXT.md", use_full_text=True) == "12345678"
-        assert extract_pmid_from_filename("PMC12345_FULL_CONTEXT.md", use_full_text=True) == "PMC12345"
+        assert (
+            extract_pmid_from_filename("12345678_FULL_CONTEXT.md", use_full_text=True)
+            == "12345678"
+        )
+        assert (
+            extract_pmid_from_filename("PMC12345_FULL_CONTEXT.md", use_full_text=True)
+            == "PMC12345"
+        )
 
     def test_wrong_suffix_returns_none(self):
         """Test that wrong suffix returns None."""
-        assert extract_pmid_from_filename("12345678_FULL_CONTEXT.md", use_full_text=False) is None
-        assert extract_pmid_from_filename("12345678_DATA_ZONES.md", use_full_text=True) is None
+        assert (
+            extract_pmid_from_filename("12345678_FULL_CONTEXT.md", use_full_text=False)
+            is None
+        )
+        assert (
+            extract_pmid_from_filename("12345678_DATA_ZONES.md", use_full_text=True)
+            is None
+        )
 
 
 class TestFindInputFiles:
@@ -45,11 +57,13 @@ class TestFindInputFiles:
 
         # Create manifest with file reference
         manifest = Manifest(stage=Stage.SCOUT, gene="BRCA1")
-        manifest.add_entry(ManifestEntry(
-            pmid="12345678",
-            status=Status.SUCCESS,
-            files_created=[str(zones_file)],
-        ))
+        manifest.add_entry(
+            ManifestEntry(
+                pmid="12345678",
+                status=Status.SUCCESS,
+                files_created=[str(zones_file)],
+            )
+        )
 
         files = find_input_files(tmp_path, manifest)
         assert len(files) == 1
@@ -63,11 +77,13 @@ class TestFindInputFiles:
 
         # Create manifest without files_created
         manifest = Manifest(stage=Stage.SCOUT, gene="BRCA1")
-        manifest.add_entry(ManifestEntry(
-            pmid="12345678",
-            status=Status.SUCCESS,
-            files_created=[],  # Empty
-        ))
+        manifest.add_entry(
+            ManifestEntry(
+                pmid="12345678",
+                status=Status.SUCCESS,
+                files_created=[],  # Empty
+            )
+        )
 
         files = find_input_files(tmp_path, manifest)
         assert len(files) == 1
@@ -122,16 +138,20 @@ class TestRunExtraction:
 
         # Create scout manifest
         scout_manifest = Manifest(stage=Stage.SCOUT, gene="BRCA1")
-        scout_manifest.add_entry(ManifestEntry(
-            pmid="12345678",
-            status=Status.SUCCESS,
-            files_created=[str(input_dir / "12345678_DATA_ZONES.md")],
-        ))
+        scout_manifest.add_entry(
+            ManifestEntry(
+                pmid="12345678",
+                status=Status.SUCCESS,
+                files_created=[str(input_dir / "12345678_DATA_ZONES.md")],
+            )
+        )
         scout_manifest.save(input_dir / "scout_manifest.json")
 
         # Create the DATA_ZONES file
         zones_file = input_dir / "12345678_DATA_ZONES.md"
-        zones_file.write_text("# PMID 12345678\n## Data Zone 1\n| Variant | Effect |\n| p.R1234H | Pathogenic |")
+        zones_file.write_text(
+            "# PMID 12345678\n## Data Zone 1\n| Variant | Effect |\n| p.R1234H | Pathogenic |"
+        )
 
         # Mock the extractor
         mock_extractor = Mock()
@@ -165,7 +185,9 @@ class TestRunExtraction:
         assert (output_dir / "12345678_extraction.json").exists()
 
     @patch("cli.extract.ExpertExtractor")
-    def test_run_extraction_directory_with_auto_manifest(self, mock_extractor_class, tmp_path):
+    def test_run_extraction_directory_with_auto_manifest(
+        self, mock_extractor_class, tmp_path
+    ):
         """Test running extraction when directory contains scout_manifest.json."""
         input_dir = tmp_path / "scout_output"
         input_dir.mkdir()
@@ -173,10 +195,12 @@ class TestRunExtraction:
 
         # Create scout manifest in directory
         scout_manifest = Manifest(stage=Stage.SCOUT, gene="TP53")
-        scout_manifest.add_entry(ManifestEntry(
-            pmid="99999999",
-            status=Status.SUCCESS,
-        ))
+        scout_manifest.add_entry(
+            ManifestEntry(
+                pmid="99999999",
+                status=Status.SUCCESS,
+            )
+        )
         scout_manifest.save(input_dir / "scout_manifest.json")
 
         # Create DATA_ZONES file

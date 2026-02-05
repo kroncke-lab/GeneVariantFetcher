@@ -4,54 +4,55 @@
 import json
 from pathlib import Path
 
-results_file = Path(__file__).parent.parent / "tests/fixtures/pmids/full_test_results.json"
+results_file = (
+    Path(__file__).parent.parent / "tests/fixtures/pmids/full_test_results.json"
+)
 
 with open(results_file) as f:
     data = json.load(f)
 
-failed = [r for r in data if not r['success']]
+failed = [r for r in data if not r["success"]]
 
 print(f"Failed papers: {len(failed)}")
 print()
 
 # Categorize failures
-categories = {
-    'timeout': [],
-    'captcha': [],
-    'no_content': [],
-    'other': []
-}
+categories = {"timeout": [], "captcha": [], "no_content": [], "other": []}
 
 for r in failed:
-    error = r['error'] or 'Unknown'
-    
-    if 'Timeout' in error:
-        categories['timeout'].append(r)
-    elif 'captcha' in error.lower() or 'robot' in error.lower() or 'cloudflare' in error.lower():
-        categories['captcha'].append(r)
-    elif 'No usable content' in error:
-        categories['no_content'].append(r)
+    error = r["error"] or "Unknown"
+
+    if "Timeout" in error:
+        categories["timeout"].append(r)
+    elif (
+        "captcha" in error.lower()
+        or "robot" in error.lower()
+        or "cloudflare" in error.lower()
+    ):
+        categories["captcha"].append(r)
+    elif "No usable content" in error:
+        categories["no_content"].append(r)
     else:
-        categories['other'].append(r)
+        categories["other"].append(r)
 
 print("=" * 60)
 print("FAILURE BREAKDOWN")
 print("=" * 60)
 
 print(f"\n🕐 TIMEOUT (page took >30s): {len(categories['timeout'])}")
-for r in categories['timeout']:
+for r in categories["timeout"]:
     print(f"   {r['pmid']} ({r['publisher']}) - {r['doi']}")
 
 print(f"\n🤖 CAPTCHA/BOT DETECTION: {len(categories['captcha'])}")
-for r in categories['captcha']:
+for r in categories["captcha"]:
     print(f"   {r['pmid']} ({r['publisher']}) - {r['doi']}")
 
 print(f"\n📄 NO USABLE CONTENT: {len(categories['no_content'])}")
-for r in categories['no_content']:
+for r in categories["no_content"]:
     print(f"   {r['pmid']} ({r['publisher']}) - {r['doi']}")
 
 print(f"\n❓ OTHER: {len(categories['other'])}")
-for r in categories['other']:
+for r in categories["other"]:
     print(f"   {r['pmid']} ({r['publisher']})")
     print(f"      Error: {r['error'][:80] if r['error'] else 'Unknown'}...")
 
@@ -59,7 +60,7 @@ print("\n" + "=" * 60)
 print("ANALYSIS")
 print("=" * 60)
 
-if categories['timeout']:
+if categories["timeout"]:
     print("""
 TIMEOUT issues (most common):
 - The 30s timeout isn't enough for Cloudflare challenges
@@ -67,7 +68,7 @@ TIMEOUT issues (most common):
 - These are likely recoverable with longer timeouts
 """)
 
-if categories['captcha']:
+if categories["captcha"]:
     print("""
 CAPTCHA issues:
 - Explicit bot detection requiring human verification
@@ -75,7 +76,7 @@ CAPTCHA issues:
 - Or use abstract-only extraction
 """)
 
-if categories['no_content']:
+if categories["no_content"]:
     print("""
 NO CONTENT issues:
 - Page loaded but article text couldn't be extracted

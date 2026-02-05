@@ -432,9 +432,9 @@ def interactive_synonym_selection(
     # Check if any synonyms have relevance information
     has_relevance_info = any(s.is_relevant is not None for s in synonyms)
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Found {len(synonyms)} potential synonyms for '{gene}':")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     # Group synonyms by source
     official = [s for s in synonyms if s.source == "official_symbol"]
@@ -550,10 +550,10 @@ def interactive_synonym_selection(
 
     result = sorted(selected)
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Selected {len(result)} terms for PubMed search:")
     for term in result:
         print(f"  ✓ {term}")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     return result
