@@ -33,7 +33,7 @@ from .supplement_reference_parser import (
     extract_supplement_urls_from_text,
     check_supplement_gap,
 )
-from ..utils.resilience import CircuitBreaker, ResilientAPIClient
+from utils.resilience import CircuitBreaker, ResilientAPIClient
 
 
 # Setup logging for circuit breaker monitoring

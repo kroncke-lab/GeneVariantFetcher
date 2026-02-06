@@ -18,15 +18,16 @@ def get_pmid_status(output_dir: str, pmid: str) -> Dict:
 
 def get_failed_pmids(output_dir: str) -> List[str]:
     """
-    Returns a list of failed PMIDs.
+    Returns a list of failed PMIDs (includes 'failed' and 'paywalled' statuses).
     """
     status_dir = os.path.join(output_dir, "pmid_status")
     failed_pmids = []
+    failed_statuses = {"failed", "paywalled"}
     for filename in os.listdir(status_dir):
         if filename.endswith(".json"):
             pmid = filename[:-5]  # Remove ".json"
             status = get_pmid_status(output_dir, pmid)
-            if status and status.get("status") == "paywalled":
+            if status and status.get("status") in failed_statuses:
                 failed_pmids.append(pmid)
     return failed_pmids
 

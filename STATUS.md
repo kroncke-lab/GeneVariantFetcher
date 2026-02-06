@@ -1,0 +1,1 @@
+The Gene Variant Fetcher pipeline fails to extract variants from ~94.6% of papers. This module is a major bottleneck because most variant data is in supplementary files (Excel tables, PDFs), NOT the main article text.
