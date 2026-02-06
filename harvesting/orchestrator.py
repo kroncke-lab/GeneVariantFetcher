@@ -11,6 +11,7 @@ import os
 import re
 import time
 import csv
+import logging
 import requests
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -32,6 +33,15 @@ from .supplement_reference_parser import (
     extract_supplement_urls_from_text,
     check_supplement_gap,
 )
+from ..utils.resilience import CircuitBreaker, ResilientAPIClient
+
+
+# Setup logging for circuit breaker monitoring
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 
 # =============================================================================
@@ -265,6 +275,16 @@ class PMCHarvester:
             config=RetryConfig(max_retries=3, base_delay=2.0),
             log_file=self.output_dir / "retry_log.jsonl"
         )
+        
+        # Initialize circuit breakers for API resilience
+        self.elsevier_circuit = CircuitBreaker("elsevier", max_failures=5, reset_timeout=60)
+        self.wiley_circuit = CircuitBreaker("wiley", max_failures=5, reset_timeout=60)
+        self.springer_circuit = CircuitBreaker("springer", max_failures=5, reset_timeout=60)
+        
+        # Create resilient API clients with circuit breaker protection
+        self.elsevier_client = ResilientAPIClient(self.elsevier_api, self.elsevier_circuit)
+        self.wiley_client = ResilientAPIClient(self.wiley_api, self.wiley_circuit)
+        self.springer_client = ResilientAPIClient(self.springer_api, self.springer_circuit)
         
         # Initialize priority queue for manual acquisition
         self.priority_queue = PriorityQueue(self.output_dir / "manual_acquisition_queue.json")
@@ -1397,17 +1417,23 @@ class PMCHarvester:
             ):
                 pii = self.elsevier_api.extract_pii_from_url(free_url)
                 if pii:
-                    print(f"  Trying Elsevier API for PII: {pii}")
-                    elsevier_markdown, elsevier_error = (
-                        self.elsevier_api.fetch_fulltext(pii=pii)
-                    )
-                    if elsevier_markdown:
-                        main_markdown = elsevier_markdown
-                        final_url = free_url
-                        used_elsevier_api = True
-                        print(
-                            f"  ✓ Full text retrieved via Elsevier API ({len(main_markdown)} characters)"
+                    print(f"  Trying Elsevier API (with circuit breaker) for PII: {pii}")
+                    try:
+                        elsevier_markdown, elsevier_error = (
+                            self.elsevier_client.fetch_fulltext(pii=pii)
                         )
+                        if elsevier_markdown:
+                            main_markdown = elsevier_markdown
+                            final_url = free_url
+                            used_elsevier_api = True
+                            print(
+                                f"  ✓ Full text retrieved via Elsevier API ({len(main_markdown)} characters)"
+                            )
+                    except Exception as e:
+                        if "circuit breaker" in str(e).lower():
+                            print(f"  ⚠ Circuit breaker protection activated for Elsevier: {e}")
+                        else:
+                            print(f"  - Elsevier API failed: {e}")
                         # Get supplements via web scraping
                         try:
                             response = self.session.get(
@@ -1428,17 +1454,23 @@ class PMCHarvester:
             ):
                 extracted_doi = self.wiley_api.extract_doi_from_url(free_url)
                 if extracted_doi:
-                    print(f"  Trying Wiley API for DOI: {extracted_doi}")
-                    wiley_markdown, wiley_error = self.wiley_api.fetch_fulltext(
-                        doi=extracted_doi
-                    )
-                    if wiley_markdown:
-                        main_markdown = wiley_markdown
-                        final_url = free_url
-                        used_wiley_api = True
-                        print(
-                            f"  ✓ Full text retrieved via Wiley API ({len(main_markdown)} characters)"
+                    print(f"  Trying Wiley API (with circuit breaker) for DOI: {extracted_doi}")
+                    try:
+                        wiley_markdown, wiley_error = self.wiley_client.fetch_fulltext(
+                            doi=extracted_doi
                         )
+                        if wiley_markdown:
+                            main_markdown = wiley_markdown
+                            final_url = free_url
+                            used_wiley_api = True
+                            print(
+                                f"  ✓ Full text retrieved via Wiley API ({len(main_markdown)} characters)"
+                            )
+                    except Exception as e:
+                        if "circuit breaker" in str(e).lower():
+                            print(f"  ⚠ Circuit breaker protection activated for Wiley: {e}")
+                        else:
+                            print(f"  - Wiley API failed: {e}")
                         # Get supplements via web scraping
                         try:
                             response = self.session.get(
@@ -1985,17 +2017,23 @@ class PMCHarvester:
         if not doi or not self.elsevier_api.is_elsevier_doi(doi):
             return None, "Not an Elsevier DOI"
 
-        print(f"  Trying Elsevier API for DOI: {doi}")
-        markdown, error = self.elsevier_api.fetch_fulltext(doi=doi)
+        print(f"  Trying Elsevier API (with circuit breaker) for DOI: {doi}")
+        
+        try:
+            markdown, error = self.elsevier_client.fetch_fulltext(doi=doi)
 
-        if markdown:
-            print(
-                f"  ✓ Full text retrieved via Elsevier API ({len(markdown)} characters)"
-            )
-            return markdown, None
-        else:
-            print(f"  - Elsevier API: {error}")
-            return None, error
+            if markdown:
+                print(
+                    f"  ✓ Full text retrieved via Elsevier API ({len(markdown)} characters)"
+                )
+                return markdown, None
+            else:
+                print(f"  - Elsevier API: {error}")
+                return None, error
+        except Exception as e:
+            if "circuit breaker" in str(e).lower():
+                print(f"  ⚠ Circuit breaker protection activated: {e}")
+            return None, str(e)
 
     def _try_wiley_api(
         self, doi: str, pmid: str
@@ -2018,15 +2056,21 @@ class PMCHarvester:
         if not doi or not self.wiley_api.is_wiley_doi(doi):
             return None, "Not a Wiley DOI"
 
-        print(f"  Trying Wiley API for DOI: {doi}")
-        markdown, error = self.wiley_api.fetch_fulltext(doi=doi)
+        print(f"  Trying Wiley API (with circuit breaker) for DOI: {doi}")
+        
+        try:
+            markdown, error = self.wiley_client.fetch_fulltext(doi=doi)
 
-        if markdown:
-            print(f"  ✓ Full text retrieved via Wiley API ({len(markdown)} characters)")
-            return markdown, None
-        else:
-            print(f"  - Wiley API: {error}")
-            return None, error
+            if markdown:
+                print(f"  ✓ Full text retrieved via Wiley API ({len(markdown)} characters)")
+                return markdown, None
+            else:
+                print(f"  - Wiley API: {error}")
+                return None, error
+        except Exception as e:
+            if "circuit breaker" in str(e).lower():
+                print(f"  ⚠ Circuit breaker protection activated: {e}")
+            return None, str(e)
 
     def _try_springer_api(
         self, doi: str, pmid: str
@@ -2049,21 +2093,27 @@ class PMCHarvester:
         if not doi or not self.springer_api.is_springer_doi(doi):
             return None, "Not a Springer/Nature/BMC DOI"
 
-        print(f"  Trying Springer OpenAccess API for DOI: {doi}")
-        markdown, metadata, error = self.springer_api.fetch_article(doi)
+        print(f"  Trying Springer OpenAccess API (with circuit breaker) for DOI: {doi}")
+        
+        try:
+            markdown, metadata, error = self.springer_client.fetch_article(doi)
 
-        if markdown:
-            print(
-                f"  ✓ Full text retrieved via Springer API ({len(markdown)} characters)"
-            )
-            return markdown, None
-        elif metadata:
-            # Got metadata but no full text - article may not be open access
-            print(f"  - Springer API: Full text unavailable (not OpenAccess)")
-            return None, "Article not available in OpenAccess"
-        else:
-            print(f"  - Springer API: {error}")
-            return None, error
+            if markdown:
+                print(
+                    f"  ✓ Full text retrieved via Springer API ({len(markdown)} characters)"
+                )
+                return markdown, None
+            elif metadata:
+                # Got metadata but no full text - article may not be open access
+                print(f"  - Springer API: Full text unavailable (not OpenAccess)")
+                return None, "Article not available in OpenAccess"
+            else:
+                print(f"  - Springer API: {error}")
+                return None, error
+        except Exception as e:
+            if "circuit breaker" in str(e).lower():
+                print(f"  ⚠ Circuit breaker protection activated: {e}")
+            return None, str(e)
 
     def _process_free_text_pmid(self, pmid: str, doi: str) -> Tuple[bool, str]:
         """
