@@ -11,6 +11,7 @@ import os
 import re
 import time
 import csv
+import datetime
 import logging
 import requests
 from pathlib import Path
@@ -361,7 +362,6 @@ class PMCHarvester:
             details: Dictionary of details to write to the file
         """
         import json
-        import datetime
         status_dir = self.output_dir / "pmid_status"
         status_dir.mkdir(exist_ok=True)
         status_file = status_dir / f"{pmid}.json"
