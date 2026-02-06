@@ -23,6 +23,10 @@ from .format_converters import FormatConverter
 from .elsevier_api import ElsevierAPIClient
 from .wiley_api import WileyAPIClient
 from .springer_api import SpringerAPIClient
+from .unpaywall_api import UnpaywallClient, get_unpaywall_client
+from .retry_manager import RetryManager, RetryConfig
+from .priority_queue import PriorityQueue, Priority, Status as QueueStatus
+from .core_api import COREAPIClient, get_core_client
 from .supplement_reference_parser import (
     parse_supplement_references,
     extract_supplement_urls_from_text,
@@ -247,6 +251,23 @@ class PMCHarvester:
         self.springer_api = SpringerAPIClient(
             api_key=springer_api_key, session=self.session
         )
+        
+        # Initialize Unpaywall client (free service, uses NCBI_EMAIL)
+        ncbi_email = os.environ.get("NCBI_EMAIL", "gvf@example.com")
+        self.unpaywall = UnpaywallClient(email=ncbi_email, session=self.session)
+        
+        # Initialize CORE API client (optional, uses CORE_API_KEY)
+        core_api_key = os.environ.get("CORE_API_KEY")
+        self.core_api = COREAPIClient(api_key=core_api_key, session=self.session)
+        
+        # Initialize retry manager for transient failures
+        self.retry_manager = RetryManager(
+            config=RetryConfig(max_retries=3, base_delay=2.0),
+            log_file=self.output_dir / "retry_log.jsonl"
+        )
+        
+        # Initialize priority queue for manual acquisition
+        self.priority_queue = PriorityQueue(self.output_dir / "manual_acquisition_queue.json")
 
         # Initialize log files with extended columns for carrier data
         with open(self.paywalled_log, "w", newline="") as f:
@@ -298,6 +319,46 @@ class PMCHarvester:
                     "",  # More_In_Fulltext_Probability, Priority_Score, Notes
                 ]
             )
+        
+        # Also add to priority queue for manual acquisition
+        try:
+            self.priority_queue.add_paper(
+                pmid=pmid,
+                failure_reason=reason,
+                priority=Priority.MEDIUM,  # Default priority
+                failed_sources=[url] if url else [],
+            )
+        except Exception as e:
+            logger.warning(f"Failed to add {pmid} to priority queue: {e}")
+
+    def _write_pmid_status(self, pmid: str, status: str, details: Dict[str, Any] = None) -> None:
+        """
+        Write the status of a PMID to a JSON file.
+
+        Args:
+            pmid: PubMed ID
+            status: Status of the PMID (downloaded, extracted, failed, paywalled, no_variants)
+            details: Dictionary of details to write to the file
+        """
+        import json
+        import datetime
+        status_dir = self.output_dir / "pmid_status"
+        status_dir.mkdir(exist_ok=True)
+        status_file = status_dir / f"{pmid}.json"
+
+        data = {
+            "pmid": pmid,
+            "status": status,
+            "download_timestamp": details.get("download_timestamp", datetime.datetime.now().isoformat()),
+            "extract_timestamp": details.get("extract_timestamp", datetime.datetime.now().isoformat()),
+            "variant_count": details.get("variant_count", None),
+            "failure_reason": details.get("failure_reason", None),
+            "source": details.get("source", None),
+        }
+
+        with open(status_file, "w") as f:
+            json.dump(data, f, indent=2)
+
 
     # Patterns that indicate junk/non-article content
     JUNK_CONTENT_PATTERNS = [
@@ -1168,6 +1229,12 @@ class PMCHarvester:
             writer = csv.writer(f)
             writer.writerow([pmid, pmcid, downloaded_count])
 
+        self._write_pmid_status(pmid, "extracted", {
+            "download_timestamp": datetime.datetime.now().isoformat(),
+            "variant_count": 0, #FIXME: Add actual variant count
+            "source": "pmc"
+        })
+
         return True, str(output_file), unified_content
 
     def _download_free_text_pmid(
@@ -1190,11 +1257,43 @@ class PMCHarvester:
         is_free, free_url = self.pmc_api.is_free_full_text(pmid)
 
         if not is_free:
-            # Not a free article - log and skip
-            print(f"  ❌ No PMCID and not marked as free full text (likely paywalled)")
-            pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-            self._log_paywalled(pmid, "No PMCID found, not free full text", pubmed_url)
-            return False, "No PMCID", None
+            # Not marked as free - try Unpaywall as last resort
+            print(f"  - No PMCID and not marked as free, trying Unpaywall...")
+            if doi:
+                unpaywall_result, unpaywall_error = self.unpaywall.find_open_access(doi)
+                if unpaywall_result and unpaywall_result.get("pdf_url"):
+                    print(f"  ✓ Unpaywall found OA version: {unpaywall_result.get('oa_status')}")
+                    # Download the PDF and convert to markdown
+                    pdf_url = unpaywall_result["pdf_url"]
+                    pdf_path = self.output_dir / f"{pmid}_unpaywall.pdf"
+                    success, dl_error = self.unpaywall.download_pdf(pdf_url, str(pdf_path))
+                    if success:
+                        # Convert PDF to markdown
+                        main_markdown = self.converter.pdf_to_markdown(str(pdf_path))
+                        if main_markdown and len(main_markdown) > 500:
+                            print(f"  ✓ Retrieved via Unpaywall ({len(main_markdown)} chars)")
+                            # Continue with the rest of the flow
+                            is_free = True
+                            free_url = pdf_url
+                        else:
+                            print(f"  - Unpaywall PDF conversion failed or content too short")
+                    else:
+                        print(f"  - Unpaywall download failed: {dl_error}")
+                elif unpaywall_result and unpaywall_result.get("landing_page"):
+                    print(f"  - Unpaywall found landing page but no direct PDF")
+                else:
+                    print(f"  - Unpaywall: {unpaywall_error or 'No OA version found'}")
+            
+            if not is_free:
+                print(f"  ❌ No PMCID and not available via any method (likely paywalled)")
+                pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
+                self._log_paywalled(pmid, "No PMCID found, not free full text, Unpaywall failed", pubmed_url)
+                self._write_pmid_status(pmid, "paywalled", {
+                    "download_timestamp": datetime.datetime.now().isoformat(),
+                    "failure_reason": "No PMCID found, not free full text, Unpaywall failed",
+                    "source": "unpaywall"
+                })
+                return False, "No PMCID", None
 
         print(f"  ✓ Article marked as free full text on PubMed")
 
