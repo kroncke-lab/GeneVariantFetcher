@@ -26,6 +26,8 @@ load_dotenv()
 
 # Configure logging using centralized utility
 from utils.logging_utils import setup_logging, get_logger
+from utils.run_manifest import RunManifestManager
+from gui.checkpoint import CheckpointManager, JobCheckpoint, PipelineStep
 
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
@@ -79,6 +81,41 @@ def automated_variant_extraction_workflow(
     setup_logging(level=logging.INFO, log_file=log_file)
     logger.info(f"Logging to file: {log_file}")
 
+    # Initialize run manifest
+    run_manifest = RunManifestManager.create_for_workflow(gene_symbol, str(output_path))
+    run_manifest.set_config(
+        max_pmids=max_pmids,
+        max_papers_to_download=max_papers_to_download,
+        tier_threshold=tier_threshold,
+        use_clinical_triage=use_clinical_triage,
+        auto_synonyms=auto_synonyms,
+        synonyms=synonyms or []
+    )
+    
+    # Initialize checkpoint manager
+    checkpoint_manager = CheckpointManager()
+    
+    # Create unique job ID for this run
+    job_id = run_manifest.run_id
+    
+    # Create initial checkpoint
+    checkpoint = JobCheckpoint(
+        job_id=job_id,
+        gene_symbol=gene_symbol,
+        email=email,
+        output_dir=str(output_path),
+        max_pmids=max_pmids,
+        max_papers_to_download=max_papers_to_download,
+        tier_threshold=tier_threshold,
+        use_clinical_triage=use_clinical_triage,
+        auto_synonyms=auto_synonyms,
+        synonyms=synonyms or []
+    )
+    
+    # Save initial checkpoint and manifest
+    checkpoint_manager.save(checkpoint)
+    run_manifest.save()
+
     settings = get_settings()
 
     logger.info("=" * 80)
@@ -95,6 +132,11 @@ def automated_variant_extraction_workflow(
     # STEP 0: Discover Gene Synonyms (if enabled)
     # =========================================================================
     all_synonyms: list[str] = list(synonyms) if synonyms else []
+
+    checkpoint.update_step(PipelineStep.DISCOVERING_SYNONYMS)
+    checkpoint_manager.save(checkpoint)
+    run_manifest.update_status("discovering_synonyms")
+    run_manifest.save()
 
     if auto_synonyms:
         logger.info("\n🔍 STEP 0: Discovering gene synonyms from NCBI Gene database...")
@@ -113,18 +155,32 @@ def automated_variant_extraction_workflow(
             )
             if all_synonyms:
                 logger.info(f"✓ Total synonyms to use: {', '.join(all_synonyms)}")
+            
+            # Update checkpoint with discovered synonyms
+            checkpoint.synonyms = all_synonyms
+            checkpoint.step_progress["did_synonyms"] = True
+            checkpoint_manager.save(checkpoint)
+            
         else:
             logger.warning(f"Failed to discover synonyms: {synonym_result.error}")
             logger.warning("Continuing without synonym expansion")
-
+            run_manifest.add_warning(f"Synonym discovery failed: {synonym_result.error}")
+            
     elif all_synonyms:
         logger.info(
             f"\n🔍 Using {len(all_synonyms)} manually specified synonyms: {', '.join(all_synonyms)}"
         )
+        checkpoint.synonyms = all_synonyms
+        checkpoint_manager.save(checkpoint)
 
     # =========================================================================
     # STEP 1: Fetch PMIDs from PubMind, PubMed, and Europe PMC
     # =========================================================================
+    checkpoint.update_step(PipelineStep.FETCHING_PMIDS)
+    checkpoint_manager.save(checkpoint)
+    run_manifest.update_status("fetching_pmids")
+    run_manifest.save()
+
     logger.info(
         "\n📚 STEP 1: Discovering relevant papers from PubMind, PubMed, and Europe PMC..."
     )
@@ -143,6 +199,10 @@ def automated_variant_extraction_workflow(
 
     if not pmid_result.success:
         logger.error(f"PMID discovery failed: {pmid_result.error}")
+        checkpoint.mark_failed(pmid_result.error, PipelineStep.FETCHING_PMIDS)
+        checkpoint_manager.save(checkpoint)
+        run_manifest.add_error(f"PMID discovery failed: {pmid_result.error}")
+        run_manifest.finalize(success=False)
         return {"success": False, "error": pmid_result.error}
 
     pmids = pmid_result.data.get("pmids", [])
@@ -155,13 +215,27 @@ def automated_variant_extraction_workflow(
 
     if not pmids:
         logger.warning(f"No PMIDs found for {gene_symbol}. Workflow terminated.")
+        checkpoint.mark_failed("No PMIDs found", PipelineStep.FETCHING_PMIDS)
+        checkpoint_manager.save(checkpoint)
+        run_manifest.add_warning("No PMIDs found for gene")
+        run_manifest.finalize(success=False)
         return {"success": False, "error": "No PMIDs found"}
 
     workflow_stats["pmids_discovered"] = len(pmids)
+    
+    # Update checkpoint and manifest with discovered PMIDs
+    checkpoint.discovered_pmids = pmids
+    checkpoint_manager.save(checkpoint)
+    run_manifest.update_statistics(pmids_discovered=len(pmids))
 
     # =========================================================================
     # STEP 1.5: Fetch Abstracts and Metadata
     # =========================================================================
+    checkpoint.update_step(PipelineStep.FETCHING_ABSTRACTS)
+    checkpoint_manager.save(checkpoint)
+    run_manifest.update_status("fetching_abstracts")
+    run_manifest.save()
+
     logger.info(
         "\n📝 STEP 1.5: Fetching abstracts and metadata for discovered PMIDs..."
     )
@@ -174,6 +248,10 @@ def automated_variant_extraction_workflow(
 
     if not abstract_result.success:
         logger.error(f"Abstract fetch failed: {abstract_result.error}")
+        checkpoint.mark_failed(abstract_result.error, PipelineStep.FETCHING_ABSTRACTS)
+        checkpoint_manager.save(checkpoint)
+        run_manifest.add_error(f"Abstract fetch failed: {abstract_result.error}")
+        run_manifest.finalize(success=False)
         return {"success": False, "error": abstract_result.error}
 
     abstract_records = abstract_result.data.get("abstract_records", {})
@@ -185,6 +263,11 @@ def automated_variant_extraction_workflow(
     # =========================================================================
     # STEP 1.6: Filter Papers by Relevance
     # =========================================================================
+    checkpoint.update_step(PipelineStep.FILTERING_PAPERS)
+    checkpoint_manager.save(checkpoint)
+    run_manifest.update_status("filtering_papers")
+    run_manifest.save()
+
     logger.info("\n🧹 STEP 1.6: Filtering papers by relevance before download...")
 
     filter_result = filter_papers(
@@ -209,10 +292,23 @@ def automated_variant_extraction_workflow(
 
     workflow_stats["pmids_filtered_out"] = len(dropped_pmids)
     workflow_stats["pmids_passed_filters"] = len(filtered_pmids)
+    
+    # Update checkpoint and manifest with filtered results
+    checkpoint.filtered_pmids = filtered_pmids
+    checkpoint_manager.save(checkpoint)
+    run_manifest.update_statistics(
+        pmids_filtered_out=len(dropped_pmids),
+        pmids_passed_filters=len(filtered_pmids)
+    )
 
     # =========================================================================
     # STEP 2: Download Full-Text Papers from PMC
     # =========================================================================
+    checkpoint.update_step(PipelineStep.DOWNLOADING_FULLTEXT)
+    checkpoint_manager.save(checkpoint)
+    run_manifest.update_status("downloading_fulltext")
+    run_manifest.save()
+
     logger.info("\n📥 STEP 2: Downloading full-text papers from PubMed Central...")
 
     download_result = download_fulltext(
@@ -234,10 +330,24 @@ def automated_variant_extraction_workflow(
 
     workflow_stats["papers_downloaded"] = len(downloaded_pmids)
     workflow_stats["papers_download_failed"] = len(abstract_only_pmids)
+    
+    # Update checkpoint and manifest
+    checkpoint.downloaded_pmids = downloaded_pmids
+    checkpoint_manager.save(checkpoint)
+    run_manifest.update_statistics(
+        papers_downloaded=len(downloaded_pmids),
+        papers_download_failed=len(abstract_only_pmids)
+    )
+    run_manifest.update_output_locations(harvest_dir=str(harvest_dir))
 
     # =========================================================================
     # STEP 3: Extract Variant and Patient Data
     # =========================================================================
+    checkpoint.update_step(PipelineStep.EXTRACTING_VARIANTS)
+    checkpoint_manager.save(checkpoint)
+    run_manifest.update_status("extracting_variants")
+    run_manifest.save()
+
     logger.info("\n🧬 STEP 3: Extracting variant and patient data using AI...")
 
     extraction_dir = output_path / "extractions"
@@ -264,10 +374,36 @@ def automated_variant_extraction_workflow(
     workflow_stats["total_variants_found"] = extract_result.stats.get(
         "total_variants", 0
     )
+    
+    # Update checkpoint and manifest
+    checkpoint.extracted_pmids = [e.pmid for e in extractions if hasattr(e, 'pmid')]
+    checkpoint_manager.save(checkpoint)
+    
+    # Count abstract vs fulltext extractions
+    abstract_extraction_count = sum(
+        1
+        for e in extractions
+        if e.extracted_data
+        and e.extracted_data.get("extraction_metadata", {}).get("abstract_only")
+    )
+    
+    run_manifest.update_statistics(
+        papers_extracted=len(extractions),
+        papers_extraction_failed=len(extraction_failures),
+        total_variants_found=extract_result.stats.get("total_variants", 0),
+        papers_from_fulltext=len(extractions) - abstract_extraction_count,
+        papers_from_abstract_only=abstract_extraction_count
+    )
+    run_manifest.update_output_locations(extractions_dir=str(extraction_dir))
 
     # =========================================================================
     # STEP 4: Aggregate Penetrance Data
     # =========================================================================
+    checkpoint.update_step(PipelineStep.AGGREGATING_DATA)
+    checkpoint_manager.save(checkpoint)
+    run_manifest.update_status("aggregating_data")
+    run_manifest.save()
+
     logger.info("\n📊 STEP 4: Aggregating penetrance data across papers...")
 
     aggregate_result = aggregate_data(
@@ -287,10 +423,22 @@ def automated_variant_extraction_workflow(
     workflow_stats["variants_with_penetrance"] = aggregate_result.stats.get(
         "variants_aggregated", 0
     )
+    
+    # Update checkpoint and manifest
+    checkpoint_manager.save(checkpoint)
+    run_manifest.update_statistics(
+        variants_with_penetrance_data=aggregate_result.stats.get("variants_aggregated", 0)
+    )
+    run_manifest.update_output_locations(penetrance_summary=str(penetrance_summary_file))
 
     # =========================================================================
     # STEP 5: Migrate to SQLite Database
     # =========================================================================
+    checkpoint.update_step(PipelineStep.MIGRATING_DATABASE)
+    checkpoint_manager.save(checkpoint)
+    run_manifest.update_status("migrating_database")
+    run_manifest.save()
+
     logger.info("\n💾 STEP 5: Migrating data to SQLite database...")
 
     db_path = output_path / f"{gene_symbol}.db"
@@ -308,6 +456,9 @@ def automated_variant_extraction_workflow(
 
     workflow_stats["migration_successful"] = migrate_result.stats.get("successful", 0)
     workflow_stats["migration_failed"] = migrate_result.stats.get("failed", 0)
+    
+    # Update manifest with database location
+    run_manifest.update_output_locations(sqlite_database=str(db_path))
 
     # =========================================================================
     # STEP 6: Compile Results and Statistics
@@ -378,15 +529,41 @@ def automated_variant_extraction_workflow(
         },
     }
 
+    # =========================================================================
+    # STEP 6: Compile Results, Save Manifest, and Update Checkpoints
+    # =========================================================================
+    logger.info("\n📊 STEP 6: Finalizing results and saving manifests...")
+
+    # Calculate success rate
+    success_rate = f"{len(extractions) / len(pmids) * 100:.1f}%" if pmids else "0%"
+
     summary_file = output_path / f"{gene_symbol}_workflow_summary.json"
     with open(summary_file, "w") as f:
         json.dump(summary, f, indent=2)
+
+    # Finalize checkpoint and run manifest
+    checkpoint.mark_completed()
+    checkpoint_manager.save(checkpoint)
+    
+    # Final manifest updates
+    run_manifest.update_statistics(
+        **workflow_stats,
+        success_rate=success_rate,
+        total_carriers_observed=total_carriers,
+        total_affected_carriers=total_affected
+    )
+    run_manifest.update_output_locations(
+        workflow_summary=str(summary_file),
+        workflow_log=str(log_file)
+    )
+    manifest_file = run_manifest.finalize(success=True)
 
     # Print final summary
     logger.info("\n" + "=" * 80)
     logger.info("WORKFLOW COMPLETE!")
     logger.info("=" * 80)
     logger.info(f"Gene: {gene_symbol}")
+    logger.info(f"Run ID: {job_id}")
     logger.info(f"PMIDs discovered: {workflow_stats.get('pmids_discovered', 0)}")
     logger.info(f"  - Filtered out: {workflow_stats.get('pmids_filtered_out', 0)}")
     logger.info(f"  - Passed filters: {workflow_stats.get('pmids_passed_filters', 0)}")
@@ -408,19 +585,21 @@ def automated_variant_extraction_workflow(
     )
     logger.info(f"Total carriers observed: {total_carriers}")
     logger.info(f"Total affected carriers: {total_affected}")
-    logger.info(
-        f"Success rate: {len(extractions) / len(pmids) * 100:.1f}%" if pmids else "0%"
-    )
+    logger.info(f"Success rate: {success_rate}")
     logger.info(
         f"💾 Database migrated: {migrate_result.stats.get('successful', 0)}/"
         f"{migrate_result.stats.get('total_files', 0)} extractions"
     )
     logger.info(f"\nAll outputs saved to: {output_path}")
     logger.info(f"Summary report: {summary_file}")
+    logger.info(f"Run manifest: {manifest_file}")
     logger.info(f"Penetrance summary: {penetrance_summary_file}")
     logger.info(f"SQLite database: {db_path}")
     logger.info(f"Workflow log: {log_file}")
     logger.info("=" * 80)
+
+    # Clean up checkpoint since workflow completed successfully
+    checkpoint_manager.delete(job_id)
 
     return summary
 
