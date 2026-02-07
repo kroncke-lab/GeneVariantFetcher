@@ -1,47 +1,5 @@
-<frozen runpy>:128: RuntimeWarning: 'cli.automated_workflow' found in sys.modules after import of package 'cli', but prior to execution of 'cli.automated_workflow'; this may result in unpredictable behaviour
-usage: automated_workflow.py [-h] --email EMAIL --output OUTPUT
-                             [--max-pmids MAX_PMIDS]
-                             [--max-downloads MAX_DOWNLOADS]
-                             [--tier-threshold TIER_THRESHOLD]
-                             [--clinical-triage] [--auto-synonyms]
-                             [--synonym SYNONYMS] [--verbose]
-                             gene
+fatal: '2' does not appear to be a git repository
+fatal: Could not read from remote repository.
 
-Automated variant extraction workflow from gene symbol to structured data
-
-positional arguments:
-  gene                  Gene symbol (e.g., BRCA1, SCN5A, TP53)
-
-options:
-  -h, --help            show this help message and exit
-  --email EMAIL, -e EMAIL
-                        Your email for NCBI E-utilities
-  --output OUTPUT, -o OUTPUT
-                        Output directory for all data and analyses (required)
-  --max-pmids MAX_PMIDS
-                        Maximum PMIDs to fetch (default: 100)
-  --max-downloads MAX_DOWNLOADS
-                        Maximum papers to download (default: 50)
-  --tier-threshold TIER_THRESHOLD
-                        If the first model finds fewer variants than this, the
-                        next model is tried (default: from .env
-                        TIER3_THRESHOLD or 1). Set to 0 to only use first
-                        model.
-  --clinical-triage     Use ClinicalDataTriageFilter for Tier 2 filtering
-                        instead of InternFilter
-  --auto-synonyms       Automatically discover and use gene synonyms from NCBI
-                        Gene database
-  --synonym SYNONYMS    Manually specify gene synonym (can be used multiple
-                        times)
-  --verbose, -v         Enable verbose logging
-
-Examples:
-  # Extract all variant data for BRCA1
-  python automated_workflow.py BRCA1 --email your@email.com --output /path/to/output
-
-  # Extract data for SCN5A with custom limits
-  python automated_workflow.py SCN5A --email your@email.com --output ./results --max-pmids 200 --max-downloads 100
-
-  # Quick test with small dataset
-  python automated_workflow.py TP53 --email your@email.com --output ./test_output --max-pmids 10 --max-downloads 5
-        
+Please make sure you have the correct access rights
+and the repository exists.

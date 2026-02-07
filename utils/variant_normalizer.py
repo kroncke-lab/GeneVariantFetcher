@@ -39,21 +39,35 @@ PROTEIN_LENGTHS = {
 
 # Patterns for variant parsing
 PROTEIN_PATTERNS = [
-    # p.Ala561Val or p.A561V
-    re.compile(r'^p\.?([A-Z][a-z]{2}|\*|[A-Z])(\d+)([A-Z][a-z]{2}|\*|[A-Z])$'),
-    # A561V (no prefix)
-    re.compile(r'^([A-Z])(\d+)([A-Z\*])$'),
-    # Ala561Val (three-letter, no prefix)
-    re.compile(r'^([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2}|\*)$'),
+    # Already normalized three-letter: p.Ala561Val
+    re.compile(r'^p\.([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2}|[fs\*]|[delins\*])$', re.IGNORECASE),
+    
+    # Three-letter without prefix: Ala561Val
+    re.compile(r'^([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2})$', re.IGNORECASE),
+    
+    # Single-letter conversion: A561V -> p.Ala561Val
+    re.compile(r'^(?:p\.)?([A-Z])(\d+)([A-Z])$', re.IGNORECASE),
+    
+    # Frame-shift with single-letter: A193fsX
+    re.compile(r'^(?:p\.)?([A-Z])(\d+)(fsX|fs\*|fs)$', re.IGNORECASE),
+    
+    # Frame-shift with three-letter: Ala193fsX
+    re.compile(r'^(?:p\.)?([A-Z][a-z]{2})(\d+)(fsX|fs\*|fs)$', re.IGNORECASE),
+    
+    # Insertion/deletion: G184Del, G184Ins
+    re.compile(r'^(?:p\.)?([A-Z]|[A-Z][a-z]{2})(\d+)(Del|Ins)$', re.IGNORECASE),
+    
+    # Stop/truncation: R864stop, D864sp
+    re.compile(r'^(?:p\.)?([A-Z]|[A-Z][a-z]{2})(\d+)(sp|stop|trunc|\*|Ter)$', re.IGNORECASE),
 ]
 
 CDNA_PATTERNS = [
     # c.1234A>G
     re.compile(r'^c\.(\d+)([ACGT])>([ACGT])$'),
     # c.1234delA, c.1234dupG
-    re.compile(r'^c\.(\d+)(del|dup|ins)([ACGT]*)$'),
+    re.compile(r'^c\.(\d+)(del|dup|ins)([ACGT]*)$', re.IGNORECASE),
     # c.1234_1235delAG
-    re.compile(r'^c\.(\d+)_(\d+)(del|dup|ins)([ACGT]*)$'),
+    re.compile(r'^c\.(\d+)_(\d+)(del|dup|ins)([ACGT]*)$', re.IGNORECASE),
 ]
 
 
@@ -75,7 +89,7 @@ class VariantNormalizer:
         Normalize protein variant to p.Xxx###Yyy format.
         
         Args:
-            variant: Variant string in various formats
+            variant: Variant string in various formats including fs, del, ins patterns
             
         Returns:
             Normalized variant string or None if unparseable
@@ -84,27 +98,65 @@ class VariantNormalizer:
             'A561V' -> 'p.Ala561Val'
             'p.A561V' -> 'p.Ala561Val'
             'Ala561Val' -> 'p.Ala561Val'
-            'p.Ala561Val' -> 'p.Ala561Val'
+            'A193fsX' -> 'p.Ala193fs*'
+            'G184Del' -> 'p.Gly184del'
+            'R864sp' -> 'p.Arg864*'
         """
         if not variant:
             return None
             
         variant = variant.strip()
+        original_variant = variant
         
         for pattern in PROTEIN_PATTERNS:
             match = pattern.match(variant)
             if match:
-                ref, pos, alt = match.groups()
+                groups = match.groups()
+                if len(groups) != 3:
+                    continue
+                    
+                ref, pos, suffix = groups
                 
-                # Convert to three-letter codes
-                ref_3 = self._to_three_letter(ref)
-                alt_3 = self._to_three_letter(alt)
+                # Convert reference to three-letter code
+                ref_3 = self._to_three_letter(ref.upper())
+                if not ref_3:
+                    continue
                 
-                if ref_3 and alt_3:
-                    return f"p.{ref_3}{pos}{alt_3}"
+                suffix_upper = suffix.upper()
+                
+                # Handle different variant types
+                if suffix_upper.startswith('FS'):
+                    # Frame-shift mutations
+                    normalized_suffix = 'fs*'
+                elif suffix_upper in ['X', 'TER']:
+                    # Stop codon
+                    normalized_suffix = '*'
+                elif suffix_upper in ['SP', 'STOP', 'TRUNC']:
+                    # Alternative stop annotations
+                    normalized_suffix = '*'
+                elif suffix_upper in ['DEL', 'INS']:
+                    # Insertion/deletion
+                    normalized_suffix = suffix_upper.lower()
+                elif len(suffix) == 1 and suffix.isalpha():
+                    # Single amino acid change
+                    alt_3 = self._to_three_letter(suffix.upper())
+                    if alt_3:
+                        normalized_suffix = alt_3
+                    else:
+                        continue
+                elif len(suffix) == 3 and suffix[0].isupper():
+                    # Three-letter amino acid change
+                    normalized_suffix = suffix.capitalize()
+                elif '*' in suffix:
+                    # Stop codon variants
+                    normalized_suffix = '*'
+                else:
+                    continue
+                
+                return f"p.{ref_3}{pos}{normalized_suffix}"
         
         # If no pattern matched, return None
-        logger.debug(f"Could not normalize protein variant: {variant}")
+        logger.debug(f"Could not normalize protein variant: {original_variant}")
         return None
     
     def normalize_cdna(self, variant: str) -> Optional[str]:

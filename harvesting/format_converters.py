@@ -562,13 +562,7 @@ class FormatConverter:
         # Final fallback - indicate manual review needed
         return f"[Legacy .doc file available at: {file_path.name} - text extraction failed, manual review required]\n\n"
 
-    import logging
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-def pdf_to_markdown(self, file_path: Path) -> str:
-    print("PDF_TO_MARKDOWN CALLED")
-    logger.debug(f"Starting PDF conversion for {file_path}")
+    def pdf_to_markdown(self, file_path: Path) -> str:
         """
         Convert PDF to markdown.
 

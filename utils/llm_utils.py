@@ -12,13 +12,22 @@ from typing import Dict, Any, Optional, List
 from litellm import completion
 import litellm
 
+import json
+import logging
+import time
+from typing import Dict, Any, Optional, List
+from litellm import completion
+import litellm
+
+litellm.drop_params = True
+
 from .retry_utils import llm_retry
 
 # Configure LiteLLM retry behavior to reduce excessive retries
 litellm.num_retries = (
     2  # Reduce from default 6 to 2 (our @llm_retry handles additional retries)
 )
-litellm.request_timeout = 600  # 10 minute timeout for large extractions
+litellm.request_timeout = 1200  # 20 minute timeout for large extractions (increased from 600)
 
 logger = logging.getLogger(__name__)
 
