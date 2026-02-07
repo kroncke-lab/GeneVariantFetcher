@@ -332,7 +332,39 @@ class FormatConverter:
                     f"    Warning: markitdown failed for .doc file {file_path.name}: {e}"
                 )
 
-        # Try antiword as a fallback (if installed)
+        # Try LibreOffice first - best for preserving table structure
+        try:
+            import subprocess
+            import tempfile
+
+            with tempfile.TemporaryDirectory() as tmpdir:
+                result = subprocess.run(
+                    [
+                        "soffice",
+                        "--headless",
+                        "--convert-to",
+                        "txt:Text",
+                        "--outdir",
+                        tmpdir,
+                        str(file_path),
+                    ],
+                    capture_output=True,
+                    text=True,
+                    timeout=120,
+                )
+                if result.returncode == 0:
+                    txt_file = Path(tmpdir) / (file_path.stem + ".txt")
+                    if txt_file.exists():
+                        text = txt_file.read_text(encoding="utf-8", errors="ignore")
+                        if text.strip():
+                            print(f"    ✓ Extracted text via LibreOffice ({len(text)} chars)")
+                            return text + "\n\n"
+        except FileNotFoundError:
+            pass  # LibreOffice not installed
+        except Exception as e:
+            print(f"    Warning: LibreOffice conversion failed for {file_path.name}: {e}")
+
+        # Try antiword as fallback (if installed)
         # First try with -t flag for tab-delimited output (better for tables)
         try:
             import subprocess
@@ -379,36 +411,7 @@ class FormatConverter:
         except Exception as e:
             print(f"    Warning: catdoc fallback failed for {file_path.name}: {e}")
 
-        # Try LibreOffice conversion as final fallback
-        try:
-            import subprocess
-            import tempfile
-
-            with tempfile.TemporaryDirectory() as tmpdir:
-                result = subprocess.run(
-                    [
-                        "soffice",
-                        "--headless",
-                        "--convert-to",
-                        "txt:Text",
-                        "--outdir",
-                        tmpdir,
-                        str(file_path),
-                    ],
-                    capture_output=True,
-                    text=True,
-                    timeout=120,
-                )
-                if result.returncode == 0:
-                    txt_file = Path(tmpdir) / (file_path.stem + ".txt")
-                    if txt_file.exists():
-                        text = txt_file.read_text(encoding="utf-8", errors="ignore")
-                        if text.strip():
-                            return text + "\n\n"
-        except FileNotFoundError:
-            pass  # LibreOffice not installed
-        except Exception as e:
-            print(f"    Warning: LibreOffice fallback failed for {file_path.name}: {e}")
+        # Try OLE compound document parsing as final fallback
 
         # Try OLE compound document parsing (more reliable than raw bytes)
         if OLEFILE_AVAILABLE:
@@ -495,7 +498,13 @@ class FormatConverter:
         # Final fallback - indicate manual review needed
         return f"[Legacy .doc file available at: {file_path.name} - text extraction failed, manual review required]\n\n"
 
-    def pdf_to_markdown(self, file_path: Path) -> str:
+    import logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+def pdf_to_markdown(self, file_path: Path) -> str:
+    print("PDF_TO_MARKDOWN CALLED")
+    logger.debug(f"Starting PDF conversion for {file_path}")
         """
         Convert PDF to markdown.
 
@@ -582,6 +591,7 @@ class FormatConverter:
             print(f"    Warning: pdfplumber fallback failed for {file_path.name}: {e}")
 
         # Final fallback - just indicate the file exists
+        logger.debug(f"PDF conversion for {file_path} complete")
         return f"[PDF file available at: {file_path.name} - text extraction failed, manual review required]\n\n"
 
     def pdf_to_markdown_with_images(
