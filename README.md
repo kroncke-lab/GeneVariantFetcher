@@ -1,54 +1,83 @@
-# GeneVariantFetcher
+# GeneVariantFetcher (GVF)
 
-Extract human genetic variant carriers from biomedical literature into a SQLite database.
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-2.1.0-orange.svg)](CHANGELOG.md)
 
-## What It Do
+**Automated extraction of human genetic variant carriers from biomedical literature into a normalized SQLite database.**
 
-Given a gene name, this tool runs a pipeline with these major steps:
+---
 
-1. **Discover Synonyms** (optional) – Auto-find gene aliases via NCBI
-2. **Fetch PMIDs** – Query PubMind, PubMed, and Europe PMC
-3. **Fetch Abstracts** – Get metadata for all discovered papers
-4. **Filter Papers** – Tier 1 keyword filter + Tier 2 LLM relevance triage
-5. **Download Full-Text** – Fetch PMC articles and supplements (Excel, Word, PDFs)
-   - Automatically creates condensed `DATA_ZONES.md` files during download to reduce token usage
-6. **Extract Variants** – LLM extraction with model cascade (uses `DATA_ZONES.md` if available, falls back to full text or abstracts)
-7. **Aggregate** – Validate and merge penetrance data
-8. **Migrate to SQLite** – Create normalized database
+## Overview
 
-**Note:** The Data Scout runs automatically during the Download Full-Text step (step 5), creating condensed `DATA_ZONES.md` files. Papers that can't be downloaded are still processed using abstract-only extraction.
+GeneVariantFetcher (GVF) is an end-to-end pipeline that discovers, downloads, and extracts genetic variant data from published literature. Given a gene name, it queries multiple databases (PubMed, PubMind, Europe PMC), downloads full-text articles and supplemental materials, uses LLM-powered extraction to identify variant carriers, and outputs a normalized SQLite database ready for downstream analysis. Designed for genetics researchers studying penetrance, variant pathogenicity, and genotype-phenotype correlations, GVF automates what would otherwise take weeks of manual curation — with the key insight that **70-80% of variant data lives in supplemental files** (Excel tables, PDFs, Word documents), not just main text.
 
-**Key Insight:** 70-80% of variant data is in supplemental files. This tool extracts it all.
+---
+
+## Key Features
+
+- 🔍 **Multi-source literature discovery** — PubMind, PubMed, and Europe PMC integration
+- 📄 **Full-text + supplement harvesting** — PMC, Elsevier, Springer, Wiley APIs with automatic format conversion
+- 🧠 **Intelligent Data Scout** — Condenses papers to high-value "data zones," reducing LLM token usage by 60-80%
+- 🤖 **Tiered LLM extraction** — Keyword filter → LLM triage → Expert extraction with model cascade
+- 📊 **Rich table extraction** — Excel, Word, and PDF tables parsed with comprehensive header recognition
+- 🔄 **Fuzzy variant matching** — Normalizes all frameshift/nonsense/deletion conventions for deduplication
+- 💾 **SQLite output** — Normalized relational database with penetrance, phenotypes, and functional data
+- ⏸️ **Checkpoint/resume** — Jobs survive interruption and resume from last completed step
+- 🖥️ **GUI + CLI** — Web interface for interactive use, CLI for automation and scripting
+
+---
+
+## Performance
+
+Validated on KCNH2 (Long QT Syndrome type 2) with manually curated gold standard:
+
+| Metric | Recall |
+|--------|--------|
+| **Unique variants** | 59.1% |
+| **Total carriers** | 71.3% |
+| **Affected individuals** | 67.6% |
+
+Version 2.1.0 improved recall from 19.4% → 54.6% through Springer API integration and enhanced table extraction.
+
+> **Note:** Performance varies by gene and literature availability. Cardiac genes (15 validated) have optimized configurations; other genes work generically but may have lower recall.
+
+---
 
 ## Quick Start
 
 ```bash
-# Install
+# 1. Clone and install
+git clone https://github.com/your-org/GeneVariantFetcher.git
+cd GeneVariantFetcher
+python -m venv venv && source venv/bin/activate
 pip install -e .
-pip install -r gui/requirements.txt
 
-# Set required environment variables (or use .env file)
-export OPENAI_API_KEY="your-key"
-export NCBI_EMAIL="your@email.com"
+# 2. Configure API keys (create .env file)
+cat > .env << 'EOF'
+OPENAI_API_KEY=sk-...
+NCBI_EMAIL=your@email.com
+EOF
 
-# Launch the GUI (recommended)
+# 3. Run your first extraction
+gvf extract BRCA1 --email your@email.com --output ./results
+
+# Or launch the GUI
 python main.py
 ```
 
-On first launch, go to the **Settings** tab to configure your API keys.
+Your results will be in `./results/BRCA1/{timestamp}/BRCA1.db`
 
-### CLI Mode
+---
 
-```bash
-python main.py --cli BRCA1 --email your@email.com --output ./results
-```
+## Installation
 
-For advanced CLI options (limits, triage, synonyms), use `automated_workflow.py` directly.
+### Requirements
 
-## Prerequisites
+- **Python 3.11+** (tested on 3.11.8)
+- **poppler-utils** (for PDF processing)
 
-- Python 3.11+
-- System dependencies for PDF processing:
+### System Dependencies
 
 ```bash
 # Ubuntu/Debian
@@ -56,208 +85,431 @@ sudo apt-get install poppler-utils
 
 # macOS
 brew install poppler
+
+# RHEL/CentOS
+sudo dnf install poppler-utils
 ```
+
+### Python Setup
+
+```bash
+# Create virtual environment
+python3.11 -m venv venv
+source venv/bin/activate  # Linux/macOS
+# or: venv\Scripts\activate  # Windows
+
+# Install GVF
+pip install -e .
+
+# For GUI support
+pip install -r gui/requirements.txt
+
+# For browser automation (optional, for paywalled papers)
+pip install playwright && playwright install chromium
+```
+
+### Verify Installation
+
+```bash
+gvf --help
+# Should show: extract, scout commands
+```
+
+---
+
+## Usage
+
+### CLI Commands
+
+#### Basic Extraction
+
+```bash
+gvf extract GENE --email EMAIL --output DIR
+```
+
+**Required arguments:**
+- `GENE` — Gene symbol (e.g., KCNH2, BRCA1, SCN5A)
+- `--email` — Your email for NCBI API access
+- `--output` — Directory for results
+
+**Examples:**
+
+```bash
+# Basic run
+gvf extract TTN --email researcher@university.edu --output ./results
+
+# With automatic synonym discovery
+gvf extract KCNH2 --email you@email.com --output ./results --auto-synonyms
+
+# Limit scope for quick testing
+gvf extract SCN5A --email you@email.com --output ./results \
+    --max-pmids 50 --max-downloads 25
+
+# Use clinical triage filter (stricter relevance)
+gvf extract RYR2 --email you@email.com --output ./results --clinical-triage
+
+# Skip to stronger model immediately (slower, more thorough)
+gvf extract CACNA1C --email you@email.com --output ./results --tier-threshold 0
+
+# Run Data Scout first for better token efficiency
+gvf extract KCNQ1 --email you@email.com --output ./results --scout-first
+```
+
+#### Key Flags
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--max-pmids N` | Maximum PMIDs to discover | 100 |
+| `--max-downloads N` | Maximum papers to download | 50 |
+| `--tier-threshold N` | Model cascade threshold (0=always use strong model) | 1 |
+| `--clinical-triage` | Use stricter clinical relevance filter | off |
+| `--auto-synonyms` | Auto-discover gene aliases from NCBI | off |
+| `--synonym SYN` | Add manual synonym (repeatable) | — |
+| `--scout-first` | Run Data Scout before extraction | off |
+| `--verbose` | Enable verbose logging | off |
+
+#### Data Scout (Standalone)
+
+Run the Data Scout on existing downloaded papers:
+
+```bash
+gvf scout ./results/KCNH2/20260210_143000/pmc_fulltext --gene KCNH2
+```
+
+### GUI Mode
+
+```bash
+python main.py
+# Opens http://localhost:8000 in your browser
+```
+
+The GUI provides:
+- Real-time progress tracking
+- Job management (pause, resume, cancel)
+- Settings configuration
+- Folder job support (process existing paper collections)
+
+---
 
 ## Pipeline Architecture
 
-### Entry Points
+```
+INPUT: Gene Symbol (e.g., "KCNH2")
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  STAGE 1: SYNONYM DISCOVERY (optional)                              │
+│    • Query NCBI Gene database for aliases                           │
+│    • Output: ["HERG", "LQT2", "Kv11.1", ...]                        │
+└─────────────────────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  STAGE 2: PMID DISCOVERY                                            │
+│    • PubMind API (gene-variant focused)                             │
+│    • PubMed E-Utilities (broad search)                              │
+│    • Europe PMC (optional, additional coverage)                     │
+│    • Output: {gene}_pmids.txt (merged, deduplicated)               │
+└─────────────────────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  STAGE 3: ABSTRACT FETCH                                            │
+│    • PubMed E-Utilities efetch                                      │
+│    • Output: abstract_json/{PMID}.json                             │
+└─────────────────────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  STAGE 4: PAPER FILTERING                                           │
+│    • Tier 1: KeywordFilter (regex, ~65 clinical terms)             │
+│    • Tier 2: InternFilter (LLM relevance, gpt-4o-mini)             │
+│    • Output: pmid_status/filtered_out.csv                          │
+└─────────────────────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  STAGE 5: FULL-TEXT DOWNLOAD                                        │
+│    Sources (priority order):                                        │
+│      1. PMC Open Access (BioC XML)                                  │
+│      2. Elsevier API (ScienceDirect)                               │
+│      3. Springer API (SpringerLink)                                │
+│      4. Wiley API                                                   │
+│      5. Unpaywall (OA PDF links)                                   │
+│    Conversion: XML/PDF/Excel/Word → Markdown                        │
+│    Output: pmc_fulltext/{PMID}_FULL_CONTEXT.md                     │
+└─────────────────────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  STAGE 6: DATA SCOUT                                                │
+│    • Identifies tables, variant lists, patient data                │
+│    • Creates condensed files for efficient LLM processing          │
+│    • Output: pmc_fulltext/{PMID}_DATA_ZONES.md                     │
+└─────────────────────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  STAGE 7: VARIANT EXTRACTION (Tier 3)                               │
+│    • Input: DATA_ZONES.md > FULL_CONTEXT.md > abstract             │
+│    • Model cascade: gpt-4o-mini → gpt-4o (if low yield)            │
+│    • Pre-scan with regex variant scanner                           │
+│    • Output: extractions/{gene}_PMID_{pmid}.json                   │
+└─────────────────────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  STAGE 8: AGGREGATION & SQLITE MIGRATION                            │
+│    • Normalize variant names (HGVS standardization)                │
+│    • Fuzzy matching for deduplication                              │
+│    • Aggregate penetrance statistics                               │
+│    • Output: {gene}.db (SQLite database)                           │
+└─────────────────────────────────────────────────────────────────────┘
+         │
+         ▼
+OUTPUT: SQLite database + JSON summaries + workflow logs
+```
 
-| Command | Mode | Features |
-|---------|------|----------|
-| `python main.py` | **GUI** (default) | Web interface, checkpointing, pause/resume |
-| `python main.py --cli GENE` | CLI | Full pipeline, no checkpointing |
-| `python -m cli.automated_workflow GENE` | CLI (direct) | Advanced options (`--auto-synonyms`, `--max-downloads`, etc.) |
+---
 
-The GUI is recommended for most use cases. It provides real-time progress, job management, and automatic resume after interruption.
+## API Keys
 
-### Filter Tiers
+### Required
 
-| Tier | Component | Purpose | Model |
-|------|-----------|---------|-------|
-| **1** | KeywordFilter | Fast heuristic filter | None (regex) |
-| **2** | InternFilter | LLM relevance classification | gpt-4o-mini |
-| **3** | ExpertExtractor | Full variant extraction | gpt-4o-mini → gpt-4o |
+| API | Purpose | How to Get |
+|-----|---------|-----------|
+| **OpenAI** | LLM extraction (Tier 2 & 3) | [platform.openai.com](https://platform.openai.com/api-keys) |
+| **NCBI Email** | PubMed access (required for E-utilities) | Your institutional email |
 
-**Model Cascade:** If Tier 3's first model finds fewer variants than threshold, it retries with the next model.
+### Optional (Improves Coverage)
 
-### Genetic Data Scout
+| API | Purpose | How to Get |
+|-----|---------|-----------|
+| **NCBI API Key** | 10x higher rate limits (3→10 req/sec) | [ncbi.nlm.nih.gov/account](https://www.ncbi.nlm.nih.gov/account/) |
+| **Elsevier** | ScienceDirect full-text | [dev.elsevier.com](https://dev.elsevier.com/) |
+| **Springer** | SpringerLink content | [dev.springernature.com](https://dev.springernature.com/) |
+| **Wiley** | Wiley Online Library | [onlinelibrary.wiley.com/library-info/resources/text-and-datamining](https://onlinelibrary.wiley.com/library-info/resources/text-and-datamining) |
 
-During the download step, the pipeline automatically identifies relevant "data zones" in each paper and creates condensed `DATA_ZONES.md` files. The extraction step prefers these condensed files over full text, reducing token usage by 60-80%. This happens automatically - no separate step needed.
+### Free (No Key Required)
 
-### Abstract-Only Fallback
+- **PMC Open Access** — Free BioC XML for all open access papers
+- **Unpaywall** — Uses your NCBI email for OA link resolution
 
-Papers that cannot be downloaded (paywalled, missing from PMC, or failed download) are still processed using their abstracts. The `ExpertExtractor` handles both fulltext and abstract-only extraction transparently. These papers are tracked in `paywalled_missing.csv` and can be manually downloaded using `fetch_manager.py` if needed.
+---
 
-## Environment Variables
+## Output Format
+
+### Directory Structure
+
+```
+{output}/{GENE}/{TIMESTAMP}/
+├── {GENE}.db                           # ← Primary output: SQLite database
+├── {GENE}_pmids.txt                    # Discovered PMIDs
+├── {GENE}_workflow_summary.json        # Run statistics
+├── {GENE}_penetrance_summary.json      # Aggregated variant data
+├── {GENE}_workflow.log                 # Execution log
+├── run_manifest.json                   # Full execution metadata
+│
+├── abstract_json/                      # Paper metadata
+│   └── {PMID}.json
+│
+├── pmid_status/                        # Filter decisions
+│   ├── filtered_out.csv
+│   └── extraction_failures.csv
+│
+├── pmc_fulltext/                       # Downloaded papers
+│   ├── {PMID}_FULL_CONTEXT.md          # Full paper (main + supplements)
+│   ├── {PMID}_DATA_ZONES.md            # Condensed high-value sections
+│   ├── {PMID}_supplements/             # Original supplement files
+│   ├── successful_downloads.csv
+│   └── paywalled_missing.csv           # Papers needing manual fetch
+│
+└── extractions/                        # Per-paper extractions
+    └── {GENE}_PMID_{PMID}.json
+```
+
+### SQLite Schema
+
+| Table | Description | Key Columns |
+|-------|-------------|-------------|
+| `papers` | Paper metadata | pmid (PK), title, journal, doi, pmc_id |
+| `variants` | Unique variants | variant_id (PK), cdna_notation, protein_notation, clinical_significance |
+| `individual_records` | Per-patient data | record_id (PK), variant_id (FK), age_at_onset, sex, affected_status |
+| `penetrance_data` | Carrier statistics | total_carriers, affected_count, unaffected_count, penetrance_percentage |
+| `age_dependent_penetrance` | Age-stratified penetrance | age_range, penetrance_percentage, carriers_in_range |
+| `functional_data` | Functional studies | summary, assays (JSON) |
+| `phenotypes` | Clinical phenotypes | patient_count, phenotype_description |
+| `variant_papers` | Variant↔paper links | source_location, key_quotes (JSON) |
+
+See [docs/SQLITE_MIGRATION_GUIDE.md](docs/SQLITE_MIGRATION_GUIDE.md) for full schema details.
+
+---
+
+## Configuration
+
+### Environment Variables (.env)
 
 Create a `.env` file in the project root:
 
 ```bash
-OPENAI_API_KEY=...       # Required - for LLM extraction
-NCBI_EMAIL=...           # Required - for PubMed API access
-NCBI_API_KEY=...         # Optional (higher rate limits)
-ANTHROPIC_API_KEY=...    # Optional (for browser_fetch --use-claude)
-GEMINI_API_KEY=...       # Optional (alternative LLM provider)
-ELSEVIER_API_KEY=...     # Optional (publisher API access)
-WILEY_API_KEY=...        # Optional (publisher API access)
+# Required
+OPENAI_API_KEY=sk-...              # For LLM extraction
+NCBI_EMAIL=your@email.com          # For PubMed API
+
+# Recommended
+NCBI_API_KEY=...                   # 10x rate limits
+
+# Optional (publisher access)
+ELSEVIER_API_KEY=...               # ScienceDirect
+SPRINGER_API_KEY=...               # SpringerLink  
+WILEY_API_KEY=...                  # Wiley Online
+
+# Alternative LLM providers
+ANTHROPIC_API_KEY=...              # For Claude
+GEMINI_API_KEY=...                 # For Gemini
 ```
 
-See `config/settings.py` for all configuration options.
+### Pipeline Settings (config/settings.py)
 
-## CLI Options
+Key tunable parameters:
 
-```bash
-python main.py --cli GENE --email EMAIL --output DIR
-# for advanced options:
-python automated_workflow.py GENE --email EMAIL --output DIR [OPTIONS]
+```python
+# Filtering
+TIER1_MIN_KEYWORD_MATCHES = 2      # Keywords required to pass Tier 1
+TIER2_CONFIDENCE_THRESHOLD = 0.5   # LLM confidence for Tier 2
+
+# Extraction  
+TIER3_MODELS = ["gpt-4o-mini", "gpt-4o"]  # Model cascade
+TIER3_MAX_TOKENS = 16000           # Max tokens for extraction
+TIER3_TEMPERATURE = 0.1            # LLM temperature
+
+# Downloads
+DOWNLOAD_DELAY = 2.0               # Seconds between API requests
+MAX_RETRIES = 3                    # Retry attempts for failed downloads
 ```
 
-Options below apply to `automated_workflow.py`.
+---
 
-| Option | Description |
-|--------|-------------|
-| `--max-pmids N` | Limit PMIDs to discover (default: 100) |
-| `--max-downloads N` | Limit papers to download (default: 50) |
-| `--tier-threshold N` | Model cascade threshold (default: 1) |
-| `--clinical-triage` | Use ClinicalDataTriageFilter for Tier 2 |
-| `--auto-synonyms` | Auto-discover gene synonyms from NCBI |
-| `--synonym SYN` | Manual synonym (repeatable) |
-| `--verbose` | Enable verbose logging |
+## Supported Genes
 
-### Examples
+### Validated (Cardiac Ion Channels)
 
-```bash
-# Basic run
-python main.py --cli TTR --email user@email.com --output ./results
+These 15 genes have optimized configurations and have been validated against curated datasets:
 
-# With synonym discovery
-python main.py --cli TTR --email user@email.com --output ./results --auto-synonyms
+| Gene | Associated Condition |
+|------|---------------------|
+| KCNH2 | Long QT Syndrome Type 2 |
+| KCNQ1 | Long QT Syndrome Type 1 |
+| SCN5A | Brugada Syndrome, Long QT Type 3 |
+| KCNE1 | Long QT Syndrome Type 5 |
+| KCNE2 | Long QT Syndrome Type 6 |
+| KCNJ2 | Andersen-Tawil Syndrome |
+| CACNA1C | Timothy Syndrome |
+| SCN1B, SCN2B, SCN3B | Brugada Syndrome |
+| RYR2 | CPVT |
+| CALM1, CALM2, CALM3 | Calmodulinopathies |
 
-# Skip to stronger model
-python main.py --cli SCN5A --email user@email.com --output ./results --tier-threshold 0
-```
+### Generic Support
 
-## Output Structure
+Any gene symbol works with the pipeline. However:
+- Synonym discovery depends on NCBI Gene database coverage
+- Variant normalization uses generic HGVS rules (no gene-specific aliases)
+- No pre-tuned keyword filters for non-cardiac domains
 
-```
-{OUTPUT_DIR}/{GENE}/{TIMESTAMP}/
-├── {GENE}.db                        # SQLite database (final output)
-├── {GENE}_pmids.txt                 # Discovered PMIDs
-├── {GENE}_workflow_summary.json     # Overall workflow statistics
-├── {GENE}_penetrance_summary.json   # Aggregated penetrance statistics
-├── {GENE}_workflow.log              # Workflow execution log
-├── abstract_json/                   # Paper metadata (JSON files per PMID)
-├── pmid_status/                     # Filter decisions and failures
-│   ├── filtered_out.csv
-│   └── extraction_failures.csv
-├── pmc_fulltext/                    # Full-text + supplements
-│   ├── PMID_*_FULL_CONTEXT.md       # Full paper content (main + supplements)
-│   ├── PMID_*_DATA_ZONES.md         # Condensed high-value sections (created during download)
-│   ├── PMID_*_supplements/          # Original supplement files
-│   ├── successful_downloads.csv     # Successfully downloaded papers
-│   └── paywalled_missing.csv        # Papers that couldn't be downloaded
-└── extractions/                     # Per-paper JSON extractions
-    └── {GENE}_PMID_*.json           # Structured variant data per paper
-```
-
-## Database Schema
-
-| Table | Key Columns |
-|-------|-------------|
-| `papers` | pmid (PK), title, journal, doi, pmc_id, gene_symbol, extraction_timestamp |
-| `variants` | variant_id (PK), gene_symbol, cdna_notation, protein_notation, genomic_position, clinical_significance |
-| `individual_records` | record_id (PK), variant_id (FK), pmid (FK), age_at_onset, sex, affected_status (affected/unaffected/uncertain), phenotype_details |
-| `penetrance_data` | penetrance_id (PK), variant_id (FK), pmid (FK), total_carriers_observed, affected_count, unaffected_count, penetrance_percentage |
-| `age_dependent_penetrance` | age_penetrance_id (PK), penetrance_id (FK), age_range, penetrance_percentage, carriers_in_range |
-| `functional_data` | functional_id (PK), variant_id (FK), pmid (FK), summary, assays (JSON) |
-| `phenotypes` | phenotype_id (PK), variant_id (FK), pmid (FK), patient_count, phenotype_description |
-| `variant_papers` | variant_id + pmid (composite PK), source_location, key_quotes (JSON) |
-
-See [docs/SQLITE_MIGRATION_GUIDE.md](docs/SQLITE_MIGRATION_GUIDE.md) for full schema details.
-
-## Additional Tools
-
-### Export to CSV
-
-```bash
-python scripts/extract_ttr_to_csv.py --db path/to/GENE.db --output variants.csv
-```
-
-### Compare Curated vs Automated
-
-```bash
-python -m cli.compare_variants --excel curated.xlsx --sqlite GENE.db
-```
-
-### Fetching Paywalled Papers
-
-Two options for downloading papers that couldn't be auto-fetched:
-
-**Option 1: Browser Automation (recommended)**
-```bash
-# Install browser automation (one time)
-pip install playwright && playwright install chromium
-
-# Interactive mode: browser opens, you log in/download, files auto-organized
-python -m cli.browser_fetch results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv --interactive
-
-# With CAPTCHA support: waits up to 5 min for manual CAPTCHA completion
-python -m cli.browser_fetch paywalled_missing.csv --interactive --wait-for-captcha
-
-# Retry only previously failed papers
-python -m cli.browser_fetch paywalled_missing.csv --retry-failures
-
-# Fully automated (works for open-access papers)
-python -m cli.browser_fetch paywalled_missing.csv --use-claude
-```
-
-**Option 2: Manual with fetch_manager**
-```bash
-python -m cli.fetch_manager results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv
-```
-
-**Post-download processing:**
-```bash
-# Convert PDFs to markdown and run scout
-python -m cli.fetch_manager paywalled_missing.csv --convert --run-scout --gene GENE
-```
+---
 
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| "No papers downloaded" | Check `paywalled_missing.csv`, use `fetch_manager.py` |
-| "Extraction failed" | Check `extraction_failures.csv`, increase `TIER3_MAX_TOKENS` |
-| "All papers filtered" | Lower `TIER2_CONFIDENCE_THRESHOLD` or disable filters |
-| Rate limiting | Set `NCBI_API_KEY` for higher limits |
+| "No papers downloaded" | Check `paywalled_missing.csv`; add publisher API keys or use `browser_fetch` |
+| "Extraction failed" | Check `extraction_failures.csv`; increase `TIER3_MAX_TOKENS` |
+| "All papers filtered out" | Lower `TIER2_CONFIDENCE_THRESHOLD` or use `--tier-threshold 0` |
+| Rate limiting errors | Set `NCBI_API_KEY` for higher limits; increase `DOWNLOAD_DELAY` |
 | GUI won't start | Install: `pip install -r gui/requirements.txt` |
+| PDF conversion fails | Install poppler: `apt install poppler-utils` |
 
-## GUI Features
+### Fetching Paywalled Papers
 
-### Checkpointing & Resume
-
-Jobs automatically save state after each pipeline step to `~/.gvf_jobs/`. If interrupted, jobs can be resumed from the last completed step via the GUI's job management interface.
-
-### Folder Jobs
-
-The GUI supports "folder jobs" for processing existing paper collections:
-- Skip discovery and download steps
-- Start directly at scouting or extraction
-- Useful for re-processing or adding new extractions
-
-## Development
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for design details.
+For papers that couldn't be auto-downloaded:
 
 ```bash
+# Option 1: Browser automation (recommended)
+python -m cli.browser_fetch results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv --interactive
+
+# Option 2: Manual workflow
+python -m cli.fetch_manager results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv
+```
+
+---
+
+## Contributing
+
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+### Adding Support for New Genes
+
+1. **Add gene config** in `config/gene_config.py`:
+   ```python
+   "NEW_GENE": GeneConfig(
+       symbol="NEW_GENE",
+       protein_length=1234,
+       aliases=["ALIAS1", "ALIAS2"],
+   )
+   ```
+
+2. **Add variant aliases** (optional) in `utils/variant_normalizer.py`
+
+3. **Create golden test set** in `golden_test_set/` for validation
+
+### Extending Extractors
+
+- **New publisher API**: Add module in `harvesting/`, register in `orchestrator.py`
+- **New extraction field**: Modify prompts in `pipeline/prompts.py`, update schema
+
+### Development Setup
+
+```bash
+# Install dev dependencies
+pip install -e ".[dev]"
+
 # Run tests
 pytest tests/
 
-# Example scripts
-python docs/examples/example_harvest_from_pubmind.py
-python docs/examples/example_triage.py
+# Run with coverage
+pytest --cov=. tests/
+
+# Format code
+ruff format .
 ```
+
+---
+
+## Citation
+
+If you use GeneVariantFetcher in your research, please cite:
+
+```bibtex
+@software{genevariantfetcher,
+  title = {GeneVariantFetcher: Automated Extraction of Genetic Variant Carriers from Biomedical Literature},
+  author = {Kronck, Brett M. and Roden, Dan M.},
+  year = {2026},
+  version = {2.1.0},
+  url = {https://github.com/your-org/GeneVariantFetcher}
+}
+```
+
+---
 
 ## License
 
-Wild Wild West
+MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+## Acknowledgments
+
+- Built at Vanderbilt University Medical Center
+- Supported by NIH/NHLBI grants [grant numbers]
+- Uses [LiteLLM](https://github.com/BerriAI/litellm) for LLM provider abstraction
+- PDF processing via [pdfplumber](https://github.com/jsvine/pdfplumber) and [PyMuPDF](https://github.com/pymupdf/PyMuPDF)
