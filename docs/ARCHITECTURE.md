@@ -1,611 +1,398 @@
-# GeneVariantFetcher Architecture
+# GeneVariantFetcher — Technical Architecture
 
-## Overview
+A deep dive into GVF's pipeline architecture, module responsibilities, and extension points.
 
-GeneVariantFetcher is a tiered biomedical extraction pipeline that intelligently gathers and processes genetic variant data from scientific literature. The system uses a **PubMind-first** sourcing strategy and **configuration-driven tiered classification** to optimize both relevance and cost. Progressive filtering minimizes expensive LLM API calls while maximizing extraction quality.
+## Pipeline Overview
 
-## System Architecture
+GVF is a multi-stage pipeline that transforms a gene symbol into a structured database of variants and patient data extracted from the biomedical literature.
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                         Input: Gene Symbol                       │
-└────────────────────────┬────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  STAGE 1: Paper Sourcing (gene_literature/discovery.py)         │
-│                                                                   │
-│  ┌────────────────────────────────────────────────────────┐    │
-│  │              PubMind (PRIMARY SOURCE)                  │    │
-│  │  Variant-focused literature with LLM-extracted data    │    │
-│  └────────────────────────────────────────────────────────┘    │
-│         │                                                        │
-│         │  (Additional sources when PUBMIND_ONLY=false, the default) │
-│         │                                                        │
-│  ┌──────────────┐  ┌──────────────┐                           │
-│  │   PubMed API │  │ Europe PMC   │                           │
-│  │  (enabled)   │  │  (enabled)   │                           │
-│  └──────────────┘  └──────────────┘                           │
-│         │                 │                                      │
-│         └─────────────────┘                                     │
-│                  Deduplicated PMIDs                             │
-└────────────────────────┬────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  STAGE 2: Tiered Filtering (pipeline/filters.py)                │
-│                                                                   │
-│  ┌────────────────────────────────────────────────────────┐    │
-│  │ TIER 1: KeywordFilter                                  │    │
-│  │ - Fast keyword matching                                │    │
-│  │ - No API calls                                         │    │
-│  │ - Filters ~40-60% of papers                           │    │
-│  └────────────────────┬───────────────────────────────────┘    │
-│                       │ PASS                                     │
-│                       ▼                                          │
-│  ┌────────────────────────────────────────────────────────┐    │
-│  │ TIER 2: InternFilter (gpt-4o-mini)                    │    │
-│  │ - LLM-based classification                             │    │
-│  │ - Identifies original clinical data                    │    │
-│  │ - Cost-effective model                                 │    │
-│  └────────────────────┬───────────────────────────────────┘    │
-│                       │ PASS                                     │
-└───────────────────────┼──────────────────────────────────────────┘
-                        │
-                        ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  STAGE 3: Full-text Harvesting (harvesting/orchestrator.py)    │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
-│  │ PMC XML      │  │ Unpaywall    │  │   Scraping   │         │
-│  │ (Free)       │  │   (DOI)      │  │  (Fallback)  │         │
-│  └──────────────┘  └──────────────┘  └──────────────┘         │
-│         │                 │                 │                    │
-│         └─────────────────┴─────────────────┘                   │
-│                           │                                      │
-│              Full-text + Supplemental Files                     │
-└────────────────────────┬────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  STAGE 4: Expert Extraction (pipeline/extraction.py)            │
-│  ┌──────────────────────────────────────────────────────┐      │
-│  │ ExpertExtractor (gpt-4o / claude-3-opus)             │      │
-│  │ - Structured variant extraction                       │      │
-│  │ - Penetrance data identification                      │      │
-│  │ - Patient-level information                           │      │
-│  └────────────────────┬─────────────────────────────────┘      │
-└────────────────────────┼────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  STAGE 5: Data Aggregation (pipeline/aggregation.py)           │
-│  - Validate extracted data                                       │
-│  - Calculate penetrance statistics                               │
-│  - Generate reports                                              │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         GeneVariantFetcher Pipeline                              │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+INPUT: Gene Symbol (e.g., "KCNH2")
+  │
+  ├──────────────────────────────────────────────────────────────────────────────┐
+  │ STEP 0: Synonym Discovery (optional)                                         │
+  │   • NCBI Gene Database → gene aliases                                         │
+  │   • Example: KCNH2 → ["HERG", "LQT2", "Kv11.1"]                               │
+  └──────────────────────────────────────────────────────────────────────────────┘
+  │
+  ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 1: PMID Discovery                                                           │
+│   • PubMind API → {gene}_pmids_pubmind.txt                                       │
+│   • PubMed E-Utilities → {gene}_pmids_pubmed.txt                                 │
+│   OUTPUT: {gene}_pmids.txt (merged, deduplicated)                                │
+└──────────────────────────────────────────────────────────────────────────────────┘
+  │
+  ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 1.5: Fetch Abstracts                                                        │
+│   • PubMed E-Utilities (efetch)                                                  │
+│   OUTPUT: abstract_json/{PMID}.json                                              │
+└──────────────────────────────────────────────────────────────────────────────────┘
+  │
+  ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 1.6: Filter Papers (Two-Tier)                                               │
+│   Tier 1: KeywordFilter (regex, fast) — ~65 clinical/variant keywords            │
+│   Tier 2: InternFilter (LLM, gpt-4o-mini) — relevance classification             │
+│   OUTPUT: pmid_status/filtered_out.csv                                           │
+└──────────────────────────────────────────────────────────────────────────────────┘
+  │
+  ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 2: Download Full-Text (PMCHarvester)                                        │
+│   Sources (priority order):                                                      │
+│     1. PMC OA (Open Access) → BioC XML                                           │
+│     2. Publisher APIs (Elsevier, Springer, Wiley) → XML/PDF                      │
+│     3. Unpaywall → OA PDF links                                                  │
+│     4. CORE API → aggregated OA content                                          │
+│   OUTPUT: pmc_fulltext/{PMID}_FULL_CONTEXT.md                                    │
+└──────────────────────────────────────────────────────────────────────────────────┘
+  │
+  ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 2.5: Data Scout (optional)                                                  │
+│   • Identifies high-value data zones (tables, methods sections)                  │
+│   • Creates condensed context for LLM extraction                                 │
+│   OUTPUT: pmc_fulltext/{PMID}_DATA_ZONES.md                                      │
+└──────────────────────────────────────────────────────────────────────────────────┘
+  │
+  ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 3: Variant Extraction (ExpertExtractor)                                     │
+│   • Input: DATA_ZONES.md > FULL_CONTEXT.md > abstract                            │
+│   • Model: gpt-4o-mini → gpt-4o (escalation if needed)                           │
+│   • Pre-scan: Regex variant detection for prompt enhancement                     │
+│   OUTPUT: extractions/{gene}_PMID_{pmid}.json                                    │
+└──────────────────────────────────────────────────────────────────────────────────┘
+  │
+  ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 4: Aggregation                                                              │
+│   • HGVS variant name normalization                                              │
+│   • Fuzzy matching for variant deduplication                                     │
+│   • Cross-paper penetrance aggregation                                           │
+│   OUTPUT: {gene}_penetrance_summary.json                                         │
+└──────────────────────────────────────────────────────────────────────────────────┘
+  │
+  ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│ STEP 5: SQLite Migration                                                         │
+│   • Normalized relational schema (8 core tables)                                 │
+│   • Indexed for efficient querying                                               │
+│   OUTPUT: {gene}.db                                                              │
+└──────────────────────────────────────────────────────────────────────────────────┘
+  │
+  ▼
+FINAL OUTPUTS:
+  • {gene}.db                       (SQLite database)
+  • {gene}_workflow_summary.json    (run statistics)
+  • {gene}_penetrance_summary.json  (aggregated data)
+  • run_manifest.json               (execution metadata)
 ```
 
-## Core Components
+## Module Responsibilities
 
-### 1. Paper Sourcing (`gene_literature/discovery.py`)
+### Core Pipeline Modules
 
-**Purpose:** Query literature databases to find relevant papers with variant-level data.
+| Module | Location | Responsibility |
+|--------|----------|----------------|
+| **CLI Entry** | `cli/__init__.py` | Typer app, command registration |
+| **Automated Workflow** | `cli/automated_workflow.py` | End-to-end orchestration |
+| **Pipeline Steps** | `pipeline/steps.py` | Individual step implementations |
 
-**Classes:**
-- `PaperSourcer`: Main class for aggregating PMIDs from multiple sources
+### Discovery & Filtering
 
-**Data Sources (PubMind-First Strategy):**
-- **PubMind** (PRIMARY): Variant-specific literature database with LLM-extracted data
-  - Provides highly relevant papers with genetic variant information
-  - Reduces false positives compared to broad PubMed searches
-  - **Default configuration**: `PUBMIND_ONLY=false` (all sources active)
-- **PubMed** (ADDITIONAL): NCBI's primary biomedical literature database
-  - Enabled by default (`USE_PUBMED=true`)
-  - Disable with `USE_PUBMED=false` if you want PubMind-only runs
-- **Europe PMC** (ADDITIONAL): European alternative with broader coverage
-  - Enabled by default (`USE_EUROPEPMC=true`)
-  - Disable with `USE_EUROPEPMC=false` if you want to exclude it
+| Module | Location | Responsibility |
+|--------|----------|----------------|
+| **Discovery** | `gene_literature/discovery.py` | PMID collection from multiple sources |
+| **PubMind Fetcher** | `gene_literature/pubmind_fetcher.py` | PubMind variant-specific search |
+| **PubMed Client** | `gene_literature/pubmed_client.py` | NCBI E-Utilities interface |
+| **Synonym Finder** | `gene_literature/synonym_finder.py` | NCBI Gene synonym lookup |
+| **Filters** | `pipeline/filters.py` | Keyword + LLM paper filtering |
 
-**Configuration-Driven Behavior:**
-The sourcing behavior is fully configurable via environment variables:
-```python
-USE_PUBMIND=true          # Use PubMind (recommended)
-PUBMIND_ONLY=false        # Allow additional sources by default
-USE_PUBMED=true           # Enable PubMed by default
-USE_EUROPEPMC=true        # Enable EuropePMC by default
-MAX_PAPERS_PER_SOURCE=100 # Limit papers per source
+### Harvesting (Full-Text Acquisition)
+
+| Module | Location | Responsibility |
+|--------|----------|----------------|
+| **Orchestrator** | `harvesting/orchestrator.py` | Multi-source download coordination |
+| **PMC API** | `harvesting/pmc_api.py` | PubMed Central BioC access |
+| **Elsevier API** | `harvesting/elsevier_api.py` | ScienceDirect downloads |
+| **Springer API** | `harvesting/springer_api.py` | SpringerLink + Nature downloads |
+| **Wiley API** | `harvesting/wiley_api.py` | Wiley Online Library access |
+| **Format Converters** | `harvesting/format_converters.py` | XML/PDF/DOCX → Markdown |
+
+### Extraction & Analysis
+
+| Module | Location | Responsibility |
+|--------|----------|----------------|
+| **Extraction** | `pipeline/extraction.py` | LLM-based variant extraction |
+| **Prompts** | `pipeline/prompts.py` | LLM prompt templates |
+| **Data Scout** | `pipeline/data_scout.py` | High-value zone identification |
+| **Aggregation** | `pipeline/aggregation.py` | Cross-paper data combination |
+
+### Utilities
+
+| Module | Location | Responsibility |
+|--------|----------|----------------|
+| **Variant Normalizer** | `utils/variant_normalizer.py` | HGVS standardization |
+| **Variant Scanner** | `utils/variant_scanner.py` | Regex-based variant detection |
+| **LLM Utils** | `utils/llm_utils.py` | OpenAI/LiteLLM interface |
+| **SQLite Migration** | `harvesting/migrate_to_sqlite.py` | JSON → SQLite conversion |
+
+## Data Flow Detail
+
+### Stage 1: PMID → Text
+
+```
+Gene Symbol
+    │
+    ├─→ PubMind API ──────────→ PMIDs (gene-variant focused)
+    │
+    ├─→ PubMed E-Utils ───────→ PMIDs (broader search)
+    │
+    └─→ Merge & Deduplicate ──→ {gene}_pmids.txt
+                                    │
+                                    ▼
+                            Abstract Fetch (E-Utils)
+                                    │
+                                    ▼
+                            abstract_json/{PMID}.json
+                                    │
+                                    ▼
+                            Relevance Filtering
+                            (Keyword + LLM tiers)
+                                    │
+                                    ▼
+                            Filtered PMID list
 ```
 
-**Key Methods:**
-- `fetch_papers()`: Queries enabled sources (configuration-driven) and returns deduplicated PMIDs
-- `fetch_paper_metadata()`: Retrieves metadata (title, authors, DOI) for a PMID
+### Stage 2: PMID → Full Text
 
-**Why PubMind-First?**
-1. **Higher Relevance**: PubMind pre-filters for variant-level data
-2. **Reduced Noise**: Fewer irrelevant papers = lower processing costs
-3. **Better Quality**: Papers already identified as containing genetic variant information
-4. **Cost Efficiency**: Process fewer papers with higher success rates
-
-### 2. Tiered Filtering (`pipeline/filters.py`)
-
-**Purpose:** Progressively filter papers to reduce expensive LLM API calls.
-
-**Configuration-Driven Tier System:**
-All tiers can be enabled/disabled and configured via environment variables:
-
-```python
-# Enable/disable tiers
-ENABLE_TIER1=true     # Keyword filtering
-ENABLE_TIER2=true     # LLM classification
-ENABLE_TIER3=true     # Expert extraction
-
-# Tier 1 configuration
-TIER1_MIN_KEYWORDS=2  # Minimum keyword matches
-TIER1_USE_LLM=false   # Use LLM instead of keywords (optional)
-
-# Tier 2 configuration
-TIER2_MODEL=gpt-4o-mini           # Cheap model
-TIER2_TEMPERATURE=0.1              # Low temperature for consistency
-TIER2_MAX_TOKENS=150               # Limit response size
-TIER2_CONFIDENCE_THRESHOLD=0.5     # Minimum confidence to pass
-
-# Tier 3 configuration
-TIER3_MODEL=gpt-4o                 # Smart model
-TIER3_TEMPERATURE=0.0              # Deterministic
-TIER3_MAX_TOKENS=8000              # Large for detailed extraction
+```
+Filtered PMIDs
+    │
+    ├─→ PMC OA Check ─────────→ BioC XML (if available)
+    │
+    ├─→ DOI Resolution ───────→ Publisher identification
+    │       │
+    │       ├─→ Elsevier API ─→ ScienceDirect XML
+    │       ├─→ Springer API ─→ SpringerLink HTML/PDF
+    │       └─→ Wiley API ────→ Wiley XML/PDF
+    │
+    ├─→ Unpaywall ────────────→ OA PDF location
+    │
+    └─→ CORE API ─────────────→ Aggregated OA content
+            │
+            ▼
+    Format Conversion (XML/PDF/HTML → Markdown)
+            │
+            ▼
+    Supplement Processing (Excel, Word, PDFs)
+            │
+            ▼
+    {PMID}_FULL_CONTEXT.md (unified document)
 ```
 
-**Classes:**
+### Stage 3: Text → Variants
 
-#### Tier 1: `KeywordFilter` (Fast & Free)
-- **Model:** None (keyword matching) - or optional lightweight LLM if `TIER1_USE_LLM=true`
-- **Cost:** Free (keywords) or ~$0.00001/paper (LLM)
-- **Speed:** ~0.1ms per paper (keywords) or ~200ms (LLM)
-- **Configuration:** `TIER1_MIN_KEYWORDS`, `TIER1_USE_LLM`
-- **Filters:** Papers lacking clinical/variant keywords
-- **Pass Rate:** ~40-60% to next tier
-- **Purpose:** Eliminate obviously irrelevant papers immediately
-
-#### Tier 2: `InternFilter` (Smart & Cheap)
-- **Model:** Configurable via `TIER2_MODEL` (default: `gpt-4o-mini`)
-- **Cost:** ~$0.0001 per paper
-- **Speed:** ~500ms per paper
-- **Configuration:** `TIER2_MODEL`, `TIER2_TEMPERATURE`, `TIER2_CONFIDENCE_THRESHOLD`
-- **Filters:** Papers without original clinical data
-- **Pass Rate:** ~20-30% to extraction
-- **Purpose:** LLM-based classification for clinical relevance
-- **Features:**
-  - Confidence threshold filtering
-  - Identifies original clinical data vs reviews
-  - Configurable decision thresholds
-
-#### Tier 2b: `ClinicalDataTriageFilter` (Specialized)
-- **Model:** Configurable via `TIER2_MODEL` (default: `gpt-4o-mini`)
-- **Purpose:** Specialized triage for clinical case identification
-- **Use Case:** More nuanced filtering for edge cases
-- **Configuration:** Uses same settings as Tier 2
-
-**Cost Optimization:**
 ```
-1000 papers input
-├─ Tier 1 (KeywordFilter): 1000 papers × $0.00 = $0.00
-│  ├─ FAIL: 500 papers (50%)
-│  └─ PASS: 500 papers
-├─ Tier 2 (InternFilter): 500 papers × $0.0001 = $0.05
-│  ├─ FAIL: 350 papers (70%)
-│  └─ PASS: 150 papers
-└─ Tier 3 (ExpertExtractor): 150 papers × $0.10 = $15.00
-                                                Total: $15.05
-
-Without filtering: 1000 papers × $0.10 = $100.00
-Savings: $84.95 (85% cost reduction)
+{PMID}_FULL_CONTEXT.md
+    │
+    ├─→ Variant Scanner ──────→ Pre-detected variant patterns
+    │                           (enhances LLM prompt)
+    │
+    ├─→ Data Scout (optional)─→ {PMID}_DATA_ZONES.md
+    │                           (condensed high-value sections)
+    │
+    └─→ ExpertExtractor ──────→ LLM extraction
+            │                   (gpt-4o-mini or gpt-4o)
+            │
+            ▼
+    Structured JSON extraction
+    {
+      "paper_metadata": {...},
+      "variants": [
+        {
+          "protein_notation": "p.Gly628Ser",
+          "cdna_notation": "c.1883G>A",
+          "clinical_significance": "pathogenic",
+          "penetrance_data": {...},
+          "functional_data": {...}
+        }
+      ],
+      "extraction_metadata": {...}
+    }
 ```
 
-### 3. Expert Extraction (`pipeline/extraction.py`)
+### Stage 4: Variants → Database
 
-**Purpose:** Extract structured genetic variant data from full-text papers.
-
-**Classes:**
-- `ExpertExtractor`: Uses advanced LLMs for detailed extraction
-
-**Configuration:**
-```python
-TIER3_MODEL=gpt-4o        # Smart extraction model
-TIER3_TEMPERATURE=0.0      # Deterministic extraction
-TIER3_MAX_TOKENS=8000      # Allow detailed responses
+```
+extractions/{gene}_PMID_*.json
+    │
+    ├─→ Variant Normalization ─→ Standardized names
+    │   (frameshift, nonsense, protein notation)
+    │
+    ├─→ Fuzzy Matching ────────→ Variant deduplication
+    │   (handles notation variants)
+    │
+    └─→ Aggregation ───────────→ {gene}_penetrance_summary.json
+            │
+            ▼
+    SQLite Migration
+            │
+            ▼
+    {gene}.db (normalized relational schema)
 ```
 
-**Model Options:**
-- `gpt-4o`: Balanced cost/performance (default)
-- `gpt-4o-mini`: Cheaper, less accurate
-- `claude-3-opus-20240229`: Higher accuracy for complex papers
-- `claude-3-sonnet-20240229`: Good balance for Claude users
+## External API Integration
 
-**Extracted Data:**
-- Gene symbols and variant notations (cDNA, protein)
-- Clinical significance classifications
-- Patient demographics and phenotypes
-- Penetrance data (affected vs. unaffected carriers)
-- Functional study results
-- Segregation information
+### API Rate Limits & Authentication
 
-### 4. Full-text Harvesting (`harvesting/orchestrator.py`)
+| API | Auth Required | Rate Limit | Notes |
+|-----|---------------|------------|-------|
+| **PubMed E-Utils** | Email (key optional) | 3/sec (10/sec with key) | NCBI_EMAIL required |
+| **PubMind** | None | Courteous use | Variant-focused search |
+| **PMC OA** | None | 3/sec | Free full-text |
+| **Elsevier** | API key | 5/sec | Requires registration |
+| **Springer** | API key | Variable | Free for researchers |
+| **Wiley** | API key | Variable | TDM agreement needed |
+| **Unpaywall** | Email | 100k/day | OA link resolution |
+| **OpenAI** | API key | Per plan | Required for extraction |
 
-**Purpose:** Retrieve full-text and supplemental materials for papers.
+### Retry & Circuit Breaker
 
-**Classes:**
-- `PMCHarvester`: Downloads and processes full-text content
-
-**Workflow:**
-1. **PMC Open Access**: Check if paper has free full-text XML
-2. **DOI Resolution**: Try Unpaywall and CrossRef for open access
-3. **Web Scraping**: Fallback to direct publisher scraping
-4. **Supplemental Files**: Download Excel/CSV tables with variant data
-
-**File Conversions:**
-- PDF → Markdown (via `markitdown`)
-- Excel → Markdown tables
-- DOCX → Markdown
-- XML → Structured markdown
-
-### 5. Data Aggregation (`pipeline/aggregation.py`)
-
-**Purpose:** Validate and aggregate extracted variant data.
-
-**Key Functions:**
-- `validate_penetrance_data()`: Ensures data quality and completeness
-- `aggregate_variant_data()`: Combines data across multiple papers
-- Calculate penetrance statistics with confidence intervals
-
-## Shared Utilities (`utils/`)
-
-The codebase has been refactored to eliminate redundancies through shared utility modules:
-
-### `llm_utils.py`
-**Purpose:** Unified LLM calling with consistent error handling
-
-**Key Components:**
-- `BaseLLMCaller`: Base class for all LLM-using components
-  - Handles retries automatically
-  - Parses JSON responses
-  - Provides consistent logging
-- `parse_llm_json_response()`: Cleans and parses LLM JSON output
-- `create_structured_prompt()`: Builds well-formatted prompts
-
-**Usage:**
-```python
-class MyFilter(BaseLLMCaller):
-    def __init__(self):
-        super().__init__(model="gpt-4o-mini", temperature=0.1)
-
-    def process(self, text):
-        result = self.call_llm_json(f"Analyze: {text}")
-        return result
-```
-
-### `html_utils.py`
-**Purpose:** Extract PMIDs and DOIs from HTML content
-
-**Key Functions:**
-- `extract_pmids_from_html()`: Finds PMIDs using multiple strategies
-  - PubMed links
-  - "PMID: 12345678" patterns
-  - Table cells with numeric IDs
-- `extract_dois_from_html()`: Extracts DOIs from various formats
-- `create_scraping_session()`: Creates browser-like HTTP session
-
-### `pubmed_utils.py`
-**Purpose:** Unified access to PubMed/NCBI APIs
-
-**Key Functions:**
-- `query_pubmed_with_entrez()`: Standard PubMed query using Bio.Entrez
-- `query_pubmed_for_gene()`: Gene-specific query builder
-- `fetch_paper_metadata()`: Get comprehensive paper metadata
-- `fetch_paper_abstract()`: Retrieve abstract text
-- `get_doi_from_pmid()`: Resolve DOI from PMID
-- `query_europepmc()`: Query Europe PMC database
-- `batch_fetch_metadata()`: Efficient bulk metadata retrieval
-
-### `retry_utils.py`
-**Purpose:** Standardized retry logic for transient failures
-
-**Pre-configured Decorators:**
-- `standard_retry`: 3 attempts, exponential backoff (1s, 2s, 4s)
-- `api_retry`: Optimized for API calls
-- `llm_retry`: Longer backoff for rate limits (2s, 4s, 8s)
-- `scraping_retry`: Fewer retries for web scraping
-
-**Usage:**
-```python
-from utils.retry_utils import api_retry
-
-@api_retry
-def fetch_data():
-    return requests.get("https://api.example.com")
-```
-
-## Data Models (`models.py`)
-
-### Core Models
-
-#### `Paper`
-- `pmid`: PubMed ID
-- `title`, `abstract`: Text content
-- `authors`, `journal`: Metadata
-- `doi`, `pmc_id`: Identifiers
-- `full_text`: Harvested content
-
-#### `FilterResult`
-- `decision`: PASS/FAIL
-- `tier`: Which filter made the decision
-- `reason`: Explanation
-- `confidence`: 0.0-1.0 score
-
-#### `ExtractionResult`
-- `pmid`: Paper identifier
-- `success`: Boolean
-- `extracted_data`: Structured variant data (dict)
-- `model_used`: LLM model identifier
-
-## Configuration (`config/settings.py`)
-
-**Environment Variables:**
-
-All pipeline behavior is controlled via environment variables (loaded from `.env` file):
-
-**API Keys:**
-- `OPENAI_API_KEY`: OpenAI API access (required if using GPT models)
-- `ANTHROPIC_API_KEY`: Anthropic (Claude) API access (required if using Claude models)
-- `NCBI_EMAIL`: Required for NCBI/PubMed API access
-- `NCBI_API_KEY`: Optional NCBI API key (increases rate limits)
-
-**Paper Sourcing (PubMind-First):**
-- `USE_PUBMIND=true`: Use PubMind as primary source (default: true)
-- `PUBMIND_ONLY=false`: Use PubMind plus other sources unless disabled (default: false)
-- `USE_PUBMED=true`: Enable/disable PubMed API (default: true)
-- `USE_EUROPEPMC=true`: Enable/disable EuropePMC (default: true)
-- `MAX_PAPERS_PER_SOURCE=100`: Limit papers per source
-
-**Tiered Classification:**
-- `ENABLE_TIER1=true`: Enable Tier 1 keyword filtering (default: true)
-- `ENABLE_TIER2=true`: Enable Tier 2 LLM classification (default: true)
-- `ENABLE_TIER3=true`: Enable Tier 3 expert extraction (default: true)
-
-**Tier 1 (Keyword Filter):**
-- `TIER1_MIN_KEYWORDS=2`: Minimum keyword matches to pass
-- `TIER1_USE_LLM=false`: Use lightweight LLM instead of keywords (optional)
-- `TIER1_MODEL=`: Optional LLM model for Tier 1 (if TIER1_USE_LLM=true)
-
-**Tier 2 (LLM Classification):**
-- `TIER2_MODEL=gpt-4o-mini`: Model for Tier 2 classification
-- `TIER2_TEMPERATURE=0.1`: Temperature for Tier 2 LLM
-- `TIER2_MAX_TOKENS=150`: Max tokens for Tier 2 response
-- `TIER2_CONFIDENCE_THRESHOLD=0.5`: Minimum confidence to pass
-
-**Tier 3 (Expert Extraction):**
-- `TIER3_MODEL=gpt-4o`: Model for Tier 3 extraction
-- `TIER3_TEMPERATURE=0.0`: Temperature for Tier 3 LLM
-- `TIER3_MAX_TOKENS=8000`: Max tokens for Tier 3 response
-
-**Legacy Settings (backward compatibility):**
-- `INTERN_MODEL`: Alias for TIER2_MODEL
-- `EXTRACTOR_MODEL`: Alias for TIER3_MODEL
-
-**Configuration Class:**
-```python
-class Settings(BaseSettings):
-    """Centralized application settings loaded from environment variables."""
-
-    # API Keys
-    openai_api_key: str | None
-    anthropic_api_key: str | None
-    ncbi_email: str | None
-    ncbi_api_key: str | None
-
-    # Tiered Classification
-    enable_tier1: bool = True
-    enable_tier2: bool = True
-    enable_tier3: bool = True
-
-    tier1_min_keywords: int = 2
-    tier2_model: str = "gpt-4o-mini"
-    tier3_model: str = "gpt-4o"
-
-    # Paper Sourcing
-    use_pubmind: bool = True
-    pubmind_only: bool = False
-    use_pubmed: bool = True
-    use_europepmc: bool = True
-```
-
-**Usage:**
-```python
-from config.settings import get_settings
-
-settings = get_settings()  # Cached singleton
-print(f"Using Tier 2 model: {settings.tier2_model}")
-print(f"PubMind only mode: {settings.pubmind_only}")
-```
-
-## Pipeline Orchestration (`automated_workflow.py`)
-
-**Classes:**
-- `BiomedicalExtractionPipeline`: Coordinates all stages with configuration-driven behavior
-
-**Configuration-Driven Pipeline:**
-The pipeline automatically reads all settings from environment variables via `config/settings.py`:
+GVF implements exponential backoff with jitter:
 
 ```python
-from pipeline import BiomedicalExtractionPipeline
-
-# All configuration from .env file
-pipeline = BiomedicalExtractionPipeline()
-
-# Run for a specific gene
-results = pipeline.run(
-    gene_symbol="BRCA1",
-    max_papers=50  # Optional limit
-)
+@dataclass
+class RetryConfig:
+    max_retries: int = 3
+    base_delay: float = 1.0
+    max_delay: float = 60.0
+    exponential_base: float = 2.0
+    jitter: bool = True
 ```
 
-**Workflow:**
+Circuit breakers prevent cascading failures:
+- Skip extractions on files < 500 chars
+- Skip files with < 30% alphanumeric content
+- Timeout extraction after 1200 seconds
+
+## Checkpoint/Resume System
+
+GVF supports resumable jobs via the checkpoint system:
+
 ```python
-# Stage 1: Source papers (PubMind by default)
-pmids = pipeline.sourcer.fetch_papers(gene_symbol)  # Uses config settings
-
-# Stage 2: Process each paper through tiered filters
-for paper in papers:
-    result = pipeline.process_paper(paper)
-
-    # Tier 1: Keyword filter (if ENABLE_TIER1=true)
-    if keyword_filter.filter(paper) == FAIL:
-        continue  # Drop paper
-
-    # Tier 2: LLM classification (if ENABLE_TIER2=true)
-    if intern_filter.filter(paper) == FAIL:
-        continue  # Drop paper
-
-    # Tier 3: Expert extraction (if ENABLE_TIER3=true)
-    extraction = expert_extractor.extract(paper)
-
-# Stage 3: Aggregate results and statistics
-pipeline.stats.calculate_cost_savings()
+# Pipeline steps (in order)
+class PipelineStep(Enum):
+    PENDING = "pending"
+    DISCOVERING_SYNONYMS = "discovering_synonyms"
+    FETCHING_PMIDS = "fetching_pmids"
+    FETCHING_ABSTRACTS = "fetching_abstracts"
+    FILTERING_PAPERS = "filtering_papers"
+    DOWNLOADING_FULLTEXT = "downloading_fulltext"
+    SCOUTING_DATA = "scouting_data"
+    EXTRACTING_VARIANTS = "extracting_variants"
+    AGGREGATING_DATA = "aggregating_data"
+    MIGRATING_DATABASE = "migrating_database"
+    COMPLETED = "completed"
+    FAILED = "failed"
 ```
 
-**Key Features:**
-- **Configuration-driven**: All behavior controlled by environment variables
-- **Automatic tier management**: Tiers enabled/disabled via config
-- **Cost tracking**: Automatic calculation of cost savings from filtering
-- **Logging**: Detailed progress logging at each tier
-- **Error handling**: Graceful degradation on failures
+Checkpoints are stored in `~/.gvf_jobs/{job_id}/checkpoint.json` with atomic writes and file locking.
 
-## Example Workflows
+## Extension Points
 
-### Basic Usage (`example_usage.py`)
-Simple gene symbol → variant extraction
+### Adding a New Publisher API
 
-### Automated Workflow (`example_automated_workflow.py`)
-Full pipeline with all stages enabled
+1. Create `harvesting/{publisher}_api.py`:
+   ```python
+   class PublisherAPI:
+       def can_handle(self, doi: str) -> bool:
+           """Return True if this publisher can handle the DOI."""
+           pass
+       
+       def download(self, doi: str, output_dir: Path) -> Optional[Path]:
+           """Download and return path to content, or None on failure."""
+           pass
+   ```
 
-### Triage Workflow (`example_triage.py`)
-Focus on clinical data triage filtering
+2. Register in `harvesting/orchestrator.py`:
+   ```python
+   self.publishers = [
+       ElsevierAPI(),
+       SpringerAPI(),
+       WileyAPI(),
+       YourNewPublisherAPI(),  # Add here
+   ]
+   ```
 
-### PubMind Harvesting (`example_harvest_from_pubmind.py`)
-Specialized workflow for PubMind-sourced papers
+### Adding a New Gene Configuration
 
-## Cost Optimization Strategies
+Add to `config/gene_config.py`:
+```python
+GENE_CONFIGS = {
+    "YOUR_GENE": {
+        "aliases": ["ALIAS1", "ALIAS2"],
+        "chromosome": "chr1",
+        "coding_positions": (start, end),
+        "domains": [
+            {"name": "Domain1", "start": 1, "end": 100},
+        ],
+    },
+}
+```
 
-### 1. Tiered Filtering
-- Eliminate irrelevant papers before expensive LLM calls
-- 85% cost reduction vs. direct extraction
+### Customizing Extraction Prompts
 
-### 2. Model Selection
-- **Filtering**: Use `gpt-4o-mini` (~$0.0001/paper)
-- **Extraction**: Use `gpt-4o` or `claude-3-opus` (~$0.10/paper)
+Modify `pipeline/prompts.py`:
+```python
+EXTRACTION_PROMPT = """
+Your custom extraction instructions here.
+Focus on specific data types relevant to your use case.
+"""
+```
 
-### 3. Text Truncation
-- Abstracts: 2000 characters
-- Full text: 30,000 characters
-- Reduces token usage without losing key information
+### Adding New Output Formats
 
-### 4. Caching and Deduplication
-- PMIDs deduplicated across sources
-- Metadata cached locally
-- Avoid re-processing same papers
+Extend `harvesting/migrate_to_sqlite.py` or create a new exporter:
+```python
+def export_to_csv(db_path: Path, output_dir: Path):
+    """Export SQLite database to CSV files."""
+    pass
+```
 
-## Error Handling
+## Performance Considerations
 
-### Retry Logic
-All network operations have automatic retry with exponential backoff:
-- PubMed/PMC API calls: 3 attempts
-- LLM API calls: 3 attempts with longer backoff
-- Web scraping: 2 attempts
+### Typical Resource Usage
 
-### Fallback Strategies
-- **Full-text**: PMC → Unpaywall → Scraping
-- **PubMind**: API → HTML scraping → PubMed fallback
-- **Extraction**: Full-text → Abstract-only
+| Gene Size | Papers | RAM | Disk | Time |
+|-----------|--------|-----|------|------|
+| Small (rare) | 10-50 | 2 GB | 500 MB | 10-20 min |
+| Medium | 50-200 | 4 GB | 2 GB | 30-60 min |
+| Large (BRCA1) | 200-500 | 8 GB | 5 GB | 1-3 hours |
 
-### Logging
-Comprehensive logging at multiple levels:
-- `INFO`: Pipeline progress
-- `DEBUG`: Detailed operation logs
-- `WARNING`: Fallbacks and missing data
-- `ERROR`: Failures and exceptions
+### Optimization Tips
 
-## Performance Metrics
+1. **Parallel downloads**: Orchestrator fetches 3 papers concurrently by default
+2. **SSD storage**: Significantly improves SQLite migration speed
+3. **API keys**: Publisher keys unlock 2-3x more papers
+4. **Data Scout**: `--scout-first` reduces LLM token usage for long papers
 
-### Throughput
-- **Sourcing**: ~100 PMIDs/second
-- **Keyword Filtering**: ~1000 papers/second
-- **LLM Filtering**: ~2 papers/second (gpt-4o-mini)
-- **Extraction**: ~0.1 papers/second (gpt-4o)
+## Known Limitations
 
-### Accuracy
-- **Keyword Filter**: ~95% recall, ~60% precision
-- **Intern Filter**: ~90% recall, ~80% precision
-- **Expert Extractor**: ~85% variant extraction accuracy
+1. **Gene-specific tuning**: Best performance on cardiac genes (KCNH2, SCN5A, etc.)
+2. **Variant aliases**: Only KCNH2 has a comprehensive alias dictionary
+3. **PDF extraction**: Tables in scanned PDFs may not extract cleanly
+4. **LLM hallucination**: Occasional false positives in extraction (validate critical findings)
 
-## Future Improvements
+## Further Reading
 
-### Planned Enhancements
-1. **Multi-threading**: Parallel paper processing
-2. **Advanced Caching**: Redis-based result caching
-3. **Model Fine-tuning**: Domain-specific LLM fine-tuning
-4. **Structured Output**: Native JSON mode for newer models
-5. **Web Interface**: Streamlit/Gradio UI for non-technical users
-
-### Research Directions
-- **Active Learning**: Iteratively improve filters based on user feedback
-- **Ensemble Methods**: Combine multiple LLMs for higher accuracy
-- **Knowledge Graph**: Link variants across papers
-- **Real-time Monitoring**: Track new papers as they're published
-
-## Dependencies
-
-### Core Libraries
-- `litellm`: Unified LLM API access
-- `biopython`: PubMed/Entrez interactions
-- `pydantic`: Data validation and models
-- `tenacity`: Retry logic
-
-### Optional Libraries
-- `markitdown`: PDF/DOCX to markdown conversion
-- `beautifulsoup4`: HTML parsing
-- `pandas`: Data manipulation
-
-## Testing
-
-### Unit Tests
-- `test_triage.py`: Clinical data triage filter tests
-- `test_doi_resolution.py`: DOI resolution workflow tests
-
-### Integration Tests
-- Full pipeline end-to-end tests
-- Mock API responses for deterministic testing
-
-## Contributing
-
-### Code Style
-- Follow PEP 8
-- Use type hints
-- Comprehensive docstrings
-- Descriptive variable names
-
-### Adding New Filters
-1. Inherit from `BaseLLMCaller` if using LLMs
-2. Implement `filter()` method returning `FilterResult`
-3. Add to pipeline configuration
-
-### Adding New Data Sources
-1. Implement query method returning PMIDs
-2. Add to `PaperSourcer.fetch_papers()`
-3. Handle source-specific errors
-
-## License
-
-See LICENSE file for details.
-
-## Contact
-
-For questions or issues, please open a GitHub issue or contact the maintainers.
+- [OUTPUT_FORMAT.md](OUTPUT_FORMAT.md) — Database schema and file formats
+- [VALIDATION.md](VALIDATION.md) — Recall measurement methodology
+- [API_KEYS.md](API_KEYS.md) — Obtaining API credentials
