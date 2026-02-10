@@ -265,11 +265,14 @@ class FormatConverter:
 
                 markdown += f"#### Sheet: {sheet_name}\n\n"
 
-                if len(df) > 100:
+                # NOTE: Previously truncated to 100 rows which silently dropped variant data
+                # from Excel supplements. Increased to 10000 to preserve full tables.
+                # Fix applied 2026-02-10 for GVF pipeline accuracy.
+                if len(df) > 10000:
                     markdown += (
-                        f"*Note: Showing first 100 rows of {len(df)} total rows*\n\n"
+                        f"*Note: Showing first 10000 rows of {len(df)} total rows*\n\n"
                     )
-                    df_display = df.head(100)
+                    df_display = df.head(10000)
                 else:
                     df_display = df
 

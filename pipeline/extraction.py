@@ -405,25 +405,21 @@ class ExpertExtractor(BaseLLMCaller):
 
         Returns a list of minimal variant dicts.
 
-        NOTE (2026-02-04): DISABLED due to significant noise generation.
-        The regex extraction was grabbing variants from ALL genes in multi-gene
-        tables without validation, causing 2370 extractions vs 1359 in baseline.
-        Council review recommended disabling until proper gene validation is added.
-        See: gene_config.py for planned validation approach.
+        RE-ENABLED (2026-02-10): Now uses VariantNormalizer.is_non_target_variant()
+        to filter out non-target gene variants (TP53, KRAS, BRAF hotspots etc.) and
+        validates position against gene-specific protein length.
         """
-        # DISABLED: Return empty list to prevent noise generation
-        # Re-enable after implementing gene-specific validation
-        logger.info(
-            f"Table regex extraction DISABLED for {gene_symbol} (noise reduction)"
-        )
-        return []
-
-        # --- Original code below (kept for future re-enablement) ---
+        from utils.variant_normalizer import VariantNormalizer, normalize_variant
+        
         if not gene_symbol:
             return []
 
+        # Create normalizer for validation
+        normalizer = VariantNormalizer(gene_symbol)
+        
         variants = []
         seen_variants = set()
+        filtered_count = 0
 
         # Variant patterns to look for in table cells
         protein_pattern = re.compile(
@@ -448,12 +444,21 @@ class ExpertExtractor(BaseLLMCaller):
             # Look for protein notation
             for match in protein_pattern.finditer(line):
                 notation = f"p.{match.group(1)}"
-                if notation not in seen_variants:
-                    seen_variants.add(notation)
+                normalized = normalize_variant(notation, gene_symbol)
+                
+                # Validate: skip non-target gene variants
+                is_non_target, reason = normalizer.is_non_target_variant(normalized)
+                if is_non_target:
+                    filtered_count += 1
+                    logger.debug(f"Table regex: filtered {notation} - {reason}")
+                    continue
+                
+                if normalized not in seen_variants:
+                    seen_variants.add(normalized)
                     variants.append(
                         {
                             "gene_symbol": gene_symbol,
-                            "protein_notation": notation,
+                            "protein_notation": normalized,
                             "source_location": "Table (regex extraction)",
                         }
                     )
@@ -477,19 +482,29 @@ class ExpertExtractor(BaseLLMCaller):
                 # Skip if it looks like a figure/table reference (e.g., "S1", "T1")
                 if len(notation) < 4:
                     continue
-                if notation not in seen_variants:
-                    seen_variants.add(notation)
+                
+                normalized = normalize_variant(notation, gene_symbol)
+                
+                # Validate: skip non-target gene variants
+                is_non_target, reason = normalizer.is_non_target_variant(normalized)
+                if is_non_target:
+                    filtered_count += 1
+                    logger.debug(f"Table regex: filtered {notation} - {reason}")
+                    continue
+                    
+                if normalized not in seen_variants:
+                    seen_variants.add(normalized)
                     variants.append(
                         {
                             "gene_symbol": gene_symbol,
-                            "protein_notation": notation,
+                            "protein_notation": normalized,
                             "source_location": "Table (regex extraction)",
                         }
                     )
 
         if variants:
             logger.info(
-                f"Table regex extraction found {len(variants)} additional variants"
+                f"Table regex extraction found {len(variants)} variants (filtered {filtered_count} non-target)"
             )
         return variants
 
@@ -645,6 +660,120 @@ class ExpertExtractor(BaseLLMCaller):
                 )
                 extracted_data["extraction_metadata"]["filtered_genes"] = list(
                     removed_genes
+                )
+
+        extracted_data["variants"] = filtered_variants
+        return extracted_data
+
+    # Artifact patterns that indicate failed/invalid extraction
+    ARTIFACT_PATTERNS = [
+        r'^p\.XXX$',           # Placeholder notation
+        r'^p\.unknown$',       # Unknown notation
+        r'^p\.null$',          # Null notation
+        r'^null$',             # Raw null
+        r'^unknown$',          # Raw unknown
+        r'^Splicesite$',       # Generic splice label (not actual notation)
+        r'^splice$',           # Generic splice label
+        r'^N/A$',              # Not applicable
+        r'^NA$',               # Not applicable variant
+        r'^-$',                # Dash placeholder
+        r'^\?$',               # Question mark placeholder
+    ]
+
+    def _filter_extraction_artifacts(
+        self, extracted_data: dict, target_gene: str
+    ) -> dict:
+        """
+        Filter out extraction artifacts and invalid variants.
+
+        Removes:
+        - Placeholder notations: p.XXX, p.unknown, null, Splicesite, etc.
+        - Variants with amino acid position exceeding protein length
+          (e.g., position > 1159 for KCNH2)
+
+        This is a post-extraction cleanup step that removes noise introduced
+        by LLM extraction errors or malformed source data.
+
+        Args:
+            extracted_data: The extraction result dictionary
+            target_gene: The target gene symbol for position validation
+
+        Returns:
+            Updated extracted_data with artifacts removed
+        """
+        from utils.variant_normalizer import VariantNormalizer, PROTEIN_LENGTHS
+
+        variants = extracted_data.get("variants", [])
+        if not variants:
+            return extracted_data
+
+        # Compile artifact patterns
+        artifact_re = re.compile(
+            '|'.join(self.ARTIFACT_PATTERNS), re.IGNORECASE
+        )
+
+        # Get protein length for position validation
+        protein_length = PROTEIN_LENGTHS.get(target_gene.upper())
+        normalizer = VariantNormalizer(target_gene)
+
+        original_count = len(variants)
+        filtered_variants = []
+        artifact_count = 0
+        position_invalid_count = 0
+        artifact_examples = []
+        position_examples = []
+
+        for v in variants:
+            protein = v.get("protein_notation", "") or ""
+            cdna = v.get("cdna_notation", "") or ""
+
+            # Check for artifact patterns
+            is_artifact = False
+            if protein and artifact_re.match(protein.strip()):
+                is_artifact = True
+                if len(artifact_examples) < 5:
+                    artifact_examples.append(protein)
+            if cdna and artifact_re.match(cdna.strip()):
+                is_artifact = True
+                if len(artifact_examples) < 5:
+                    artifact_examples.append(cdna)
+
+            if is_artifact:
+                artifact_count += 1
+                continue
+
+            # Check position validity (for protein variants)
+            if protein and protein_length:
+                position = normalizer.extract_position(protein)
+                if position and position > protein_length:
+                    position_invalid_count += 1
+                    if len(position_examples) < 5:
+                        position_examples.append(f"{protein} (pos={position})")
+                    continue
+
+            filtered_variants.append(v)
+
+        removed_count = original_count - len(filtered_variants)
+
+        if removed_count > 0:
+            logger.info(
+                f"Filtered out {removed_count} artifacts: "
+                f"{artifact_count} artifact patterns, "
+                f"{position_invalid_count} invalid positions"
+            )
+            if artifact_examples:
+                logger.debug(f"Artifact examples: {artifact_examples}")
+            if position_examples:
+                logger.debug(f"Position invalid examples: {position_examples}")
+
+            # Update metadata
+            if "extraction_metadata" in extracted_data:
+                extracted_data["extraction_metadata"]["total_variants_found"] = len(
+                    filtered_variants
+                )
+                extracted_data["extraction_metadata"]["artifacts_filtered"] = artifact_count
+                extracted_data["extraction_metadata"]["position_invalid_filtered"] = (
+                    position_invalid_count
                 )
 
         extracted_data["variants"] = filtered_variants
@@ -1234,6 +1363,10 @@ class ExpertExtractor(BaseLLMCaller):
             # Filter variants to only keep those matching the target gene
             if paper.gene_symbol:
                 extracted_data = self._filter_by_gene(extracted_data, paper.gene_symbol)
+                # Filter out extraction artifacts (p.XXX, invalid positions, etc.)
+                extracted_data = self._filter_extraction_artifacts(
+                    extracted_data, paper.gene_symbol
+                )
 
             num_variants = len(extracted_data.get("variants", []))
             logger.info(
