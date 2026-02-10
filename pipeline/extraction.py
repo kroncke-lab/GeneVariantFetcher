@@ -779,6 +779,41 @@ class ExpertExtractor(BaseLLMCaller):
         extracted_data["variants"] = filtered_variants
         return extracted_data
 
+    # Header patterns for variant table detection - broadened to catch more table formats
+    # Groups: cdna_headers, protein_headers, count_headers
+    VARIANT_CDNA_HEADERS = {
+        'nucleotide', 'nucleotide change', 'cdna', 'c.', 'cdna change',
+        'cdna_change', 'hgvs cdna', 'hgvs_cdna', 'dna change', 'dna mutation',
+        'coding change', 'nt change', 'base change'
+    }
+    VARIANT_PROTEIN_HEADERS = {
+        'variant', 'amino acid', 'protein', 'p.', 'aa change', 'aachange',
+        'protein change', 'aa', 'mutation', 'hgvs protein', 'hgvs_protein',
+        'amino acid change', 'protein mutation', 'missense', 'effect'
+    }
+    VARIANT_COUNT_HEADERS = {
+        'patient', 'patients', 'no. of patients', 'no. of patient', 'n',
+        'affected', 'carriers', 'probands', 'families', 'subjects',
+        'count', 'cases', 'individuals', 'number', 'freq', 'frequency'
+    }
+
+    def _is_variant_table_header(self, line: str) -> bool:
+        """
+        Check if a line looks like a variant table header row.
+        
+        Requires at least one cDNA/protein-like header AND one count-like header,
+        OR two different variant notation headers (cDNA + protein).
+        """
+        line_lower = line.lower()
+        
+        has_cdna_header = any(h in line_lower for h in self.VARIANT_CDNA_HEADERS)
+        has_protein_header = any(h in line_lower for h in self.VARIANT_PROTEIN_HEADERS)
+        has_count_header = any(h in line_lower for h in self.VARIANT_COUNT_HEADERS)
+        
+        # Accept: (cDNA OR protein) AND count
+        # OR: cDNA AND protein (variant mapping table)
+        return (has_cdna_header or has_protein_header) and (has_count_header or (has_cdna_header and has_protein_header))
+
     def _parse_markdown_table_variants(
         self, full_text: str, gene_symbol: Optional[str]
     ) -> List[dict]:
@@ -787,6 +822,11 @@ class ExpertExtractor(BaseLLMCaller):
 
         Returns a minimal variant list without calling the LLM. Intended for papers
         like PMID 19716085 where a single giant table lists hundreds of variants.
+        
+        BROADENED (2026-02-10): Now recognizes many more header patterns:
+        - cDNA: nucleotide, cDNA, c., HGVS cdna, etc.
+        - Protein: variant, amino acid, protein, p., AAChange, mutation, etc.
+        - Counts: patient(s), N, affected, carriers, probands, families, subjects, etc.
         """
         if not gene_symbol:
             return []
@@ -795,14 +835,25 @@ class ExpertExtractor(BaseLLMCaller):
         table_started = False
         variants = []
         header_idx = {}
+        header_mapping = {}  # Maps our standard keys to actual column indices
 
         for line in lines:
             if not table_started:
-                # Detect header row
-                if "Nucleotide" in line and "Variant" in line and "patient" in line:
+                # Detect header row using broadened patterns
+                if self._is_variant_table_header(line):
                     parts = [p.strip() for p in line.split("|") if p.strip()]
                     for idx, name in enumerate(parts):
-                        header_idx[name.lower()] = idx
+                        name_lower = name.lower().strip()
+                        header_idx[name_lower] = idx
+                        
+                        # Map to standard keys for retrieval
+                        if any(h in name_lower for h in self.VARIANT_CDNA_HEADERS):
+                            header_mapping['cdna'] = idx
+                        if any(h in name_lower for h in self.VARIANT_PROTEIN_HEADERS):
+                            header_mapping['protein'] = idx
+                        if any(h in name_lower for h in self.VARIANT_COUNT_HEADERS):
+                            header_mapping['count'] = idx
+                    
                     table_started = True
                 continue
 
@@ -812,29 +863,29 @@ class ExpertExtractor(BaseLLMCaller):
                     break
                 else:
                     table_started = False
+                    header_mapping = {}
                     continue
 
             # Skip separator rows
-            if set(line.strip()) <= {"|", "-", " "}:
+            if set(line.strip()) <= {"|", "-", " ", ":"}:
                 continue
 
             cells = [c.strip() for c in line.split("|") if c.strip()]
-            if len(cells) < 3:
+            if len(cells) < 2:  # Relaxed from 3 to 2 for simpler tables
                 continue
 
             def get_col(key: str) -> Optional[str]:
-                idx = header_idx.get(key)
+                idx = header_mapping.get(key)
                 if idx is None or idx >= len(cells):
-                    return None
+                    # Fallback to direct header lookup
+                    idx = header_idx.get(key)
+                    if idx is None or idx >= len(cells):
+                        return None
                 return cells[idx] or None
 
-            cdna = get_col("nucleotide")
-            protein = get_col("variant") or get_col("amino acid")  # safety
-            patient_count_raw = (
-                get_col("no. of patients")
-                or get_col("no. of patient")
-                or get_col("patients")
-            )
+            cdna = get_col("cdna")
+            protein = get_col("protein")
+            patient_count_raw = get_col("count")
 
             if not cdna and not protein:
                 continue
