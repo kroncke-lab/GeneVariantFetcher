@@ -323,7 +323,7 @@ class InstitutionalAccessManager:
             f.write(f"| {result.status}")
             f.write(f"| {result.size}")
             f.write(f"| {result.method}")
-            f.write(f"| {'None' if not result.error else result.error[:50]...}\n")
+            f.write(f"| {'None' if not result.error else result.error[:50]}\n")
     
     def _generate_summary_report(self, work_dir: Path, results: List[DownloadResult]):
         """Generate final summary report."""
