@@ -501,7 +501,7 @@ class ExpertExtractor(BaseLLMCaller):
 
         Avoids duplicates by checking normalized notation.
         """
-        from utils.variant_utils import normalize_variant
+        from utils.variant_normalizer import normalize_variant
 
         existing_variants = extracted_data.get("variants", [])
 

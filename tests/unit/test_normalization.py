@@ -6,7 +6,12 @@ Tests against real KCNH2 data from missing_in_sqlite.csv
 
 import csv
 import os
-from variant_normalizer import VariantNormalizer
+import sys
+
+# Add project root to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+from utils.variant_normalizer import VariantNormalizer
 
 def load_test_variants(csv_file):
     """Load variants from CSV file for testing."""

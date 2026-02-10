@@ -2,6 +2,9 @@
 Aggregation module for the Gene Variant Fetcher Pipeline.
 
 Aggregates penetrance data across multiple papers for variant-level statistics.
+
+Uses normalized variant keys to ensure variants in different notations
+(e.g., p.Arg534Cys vs R534C) are correctly grouped together.
 """
 
 import json
@@ -10,6 +13,8 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from collections import defaultdict
 from datetime import datetime
+
+from utils.variant_normalizer import create_variant_key, normalize_variant
 
 logger = logging.getLogger(__name__)
 
@@ -130,32 +135,25 @@ class DataAggregator:
 
         return warnings
 
-    def normalize_variant_key(self, variant: Dict[str, Any]) -> str:
+    def normalize_variant_key(self, variant: Dict[str, Any], gene_symbol: str = 'KCNH2') -> str:
         """
         Create a normalized key for grouping variants.
+        
+        Uses the consolidated variant normalizer to ensure variants in
+        different notations (p.Arg534Cys vs R534C) are grouped together.
 
         Args:
             variant: Variant data dictionary
+            gene_symbol: Gene symbol for normalization context
 
         Returns:
-            Normalized variant key
+            Normalized variant key (e.g., "KCNH2:R534C")
         """
-        # Prefer protein notation, fallback to cDNA, then genomic
-        protein = variant.get("protein_notation")
-        if protein:
-            return protein.strip()
-
-        cdna = variant.get("cdna_notation")
-        if cdna:
-            return cdna.strip()
-
-        genomic = variant.get("genomic_position")
-        if genomic:
-            return genomic.strip()
-
-        # Last resort: use gene + clinical significance
-        gene = variant.get("gene_symbol", "UNKNOWN")
-        return f"{gene}_unknown_variant"
+        # Use gene_symbol from variant if available
+        gene = variant.get("gene_symbol", gene_symbol)
+        
+        # Use the consolidated normalizer for proper key creation
+        return create_variant_key(variant, gene)
 
     def load_extraction_files(self, extraction_dir: Path) -> List[Dict[str, Any]]:
         """

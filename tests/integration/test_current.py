@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
+"""Test current normalizer functionality."""
 import sys
 import os
-sys.path.insert(0, 'utils')
-from variant_normalizer import VariantNormalizer
+
+# Add project root to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+from utils.variant_normalizer import VariantNormalizer
 
 # Test some key cases
 normalizer = VariantNormalizer('KCNH2')

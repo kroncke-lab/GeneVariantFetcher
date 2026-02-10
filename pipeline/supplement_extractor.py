@@ -364,7 +364,7 @@ class SupplementExtractor:
 
     def merge_main_and_supplement(self, main_variants: List[Dict], supplement_variants: List[Dict]) -> List[Dict]:
         """Merge main text and supplement variants with deduplication"""
-        from utils.variant_utils import normalize_variant
+        from utils.variant_normalizer import normalize_variant
         
         # Create normalized keys for deduplication
         all_variants = []

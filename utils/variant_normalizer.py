@@ -1,15 +1,31 @@
 """
 Variant Normalizer for GeneVariantFetcher
 
+CANONICAL NORMALIZER - Use this module for all variant normalization.
+(Consolidated from variant_utils.py and improved_variant_normalizer.py)
+
 Normalizes variant nomenclature to standard HGVS-style forms and validates
 positions against known gene/protein lengths.
 
-Merged features from improved_variant_normalizer.py:
+Features:
+- Protein normalization: p.Ala561Val ↔ A561V (both directions)
+- cDNA normalization with prefix handling and intronic variants
+- Splice variant handling (IVS notation)
+- Frameshift normalization (fs, fsX, fs*, fsX10 → fs*)
 - Non-target variant detection (TP53/KRAS/BRAF/PIK3CA hotspots)
-- Fuzzy position matching for off-by-one errors  
-- Enhanced cDNA normalization with prefix handling
-- normalize_to_single_letter() and get_all_forms() methods
-- match_variants_to_baseline() function
+- Fuzzy position matching for off-by-one errors
+- KCNH2 variant aliases from ClinVar
+- Gene-specific validation (protein length, position bounds)
+
+Usage:
+    # Standalone function (drop-in replacement for variant_utils)
+    from utils.variant_normalizer import normalize_variant
+    normalized = normalize_variant("p.Ala561Val")  # Returns "A561V"
+    
+    # Class-based for gene-specific validation
+    from utils.variant_normalizer import VariantNormalizer
+    norm = VariantNormalizer("KCNH2")
+    result = norm.get_all_forms("A561V")
 """
 
 import re
@@ -31,6 +47,7 @@ AA_MAP = {
 AA_MAP_REVERSE = {v: k for k, v in AA_MAP.items()}
 AA_MAP_REVERSE['Ter'] = '*'
 AA_MAP_REVERSE['Stop'] = '*'
+AA_MAP_REVERSE['Xaa'] = 'X'  # Unknown amino acid
 
 # Protein lengths for common cardiac genes
 PROTEIN_LENGTHS = {
@@ -60,6 +77,49 @@ NON_TARGET_HOTSPOTS = {
     'E545K', 'H1047R', 'H1047L',
 }
 
+# KCNH2 variant aliases from ClinVar - maps alternative names to canonical form
+# Key: canonical single-letter form, Values: alternative representations
+KCNH2_VARIANT_ALIASES = {
+    # Well-known founder mutations with multiple names
+    'A561V': ['A561V', 'p.Ala561Val', 'Ala561Val', 'c.1682C>T'],
+    'R534C': ['R534C', 'p.Arg534Cys', 'Arg534Cys', 'c.1600C>T'],
+    'A614V': ['A614V', 'p.Ala614Val', 'Ala614Val', 'c.1841C>T'],
+    'G628S': ['G628S', 'p.Gly628Ser', 'Gly628Ser', 'c.1882G>A'],
+    'N470D': ['N470D', 'p.Asn470Asp', 'Asn470Asp', 'c.1408A>G'],
+    'R176W': ['R176W', 'p.Arg176Trp', 'Arg176Trp', 'c.526C>T'],
+    'T613M': ['T613M', 'p.Thr613Met', 'Thr613Met', 'c.1838C>T'],
+    'A422T': ['A422T', 'p.Ala422Thr', 'Ala422Thr', 'c.1264G>A'],
+    'R784W': ['R784W', 'p.Arg784Trp', 'Arg784Trp', 'c.2350C>T'],
+    'Y611H': ['Y611H', 'p.Tyr611His', 'Tyr611His', 'c.1831T>C'],
+    # Common splice variants
+    'c.2398+1G>A': ['c.2398+1G>A', 'IVS10+1G>A'],
+    'c.1129-1G>A': ['c.1129-1G>A', 'IVS5-1G>A'],
+}
+
+# Build reverse lookup for aliases
+_KCNH2_ALIAS_LOOKUP = {}
+for canonical, aliases in KCNH2_VARIANT_ALIASES.items():
+    for alias in aliases:
+        _KCNH2_ALIAS_LOOKUP[alias.upper()] = canonical
+
+# IVS to cDNA splice notation mapping for KCNH2
+# This is a partial list - in practice would need full gene coordinates
+KCNH2_IVS_MAP = {
+    'IVS1': 'c.175',
+    'IVS2': 'c.453', 
+    'IVS3': 'c.575',
+    'IVS4': 'c.787',
+    'IVS5': 'c.1129',
+    'IVS6': 'c.1351',
+    'IVS7': 'c.1592',
+    'IVS8': 'c.1759',
+    'IVS9': 'c.2006',
+    'IVS10': 'c.2398',
+    'IVS11': 'c.2599',
+    'IVS12': 'c.2769',
+    'IVS13': 'c.3040',
+}
+
 # Patterns for variant parsing
 PROTEIN_PATTERNS = [
     # Already normalized three-letter: p.Ala561Val
@@ -71,17 +131,20 @@ PROTEIN_PATTERNS = [
     # Single-letter conversion: A561V -> p.Ala561Val
     re.compile(r'^(?:p\.)?([A-Z])(\d+)([A-Z])$', re.IGNORECASE),
     
-    # Frame-shift with single-letter: A193fsX
-    re.compile(r'^(?:p\.)?([A-Z])(\d+)(fsX|fs\*|fs)$', re.IGNORECASE),
+    # Frame-shift with single-letter: A193fsX, A193fsX10, A193fs*10
+    re.compile(r'^(?:p\.)?([A-Z])(\d+)(fsX\d*|fs\*\d*|fs)$', re.IGNORECASE),
     
-    # Frame-shift with three-letter: Ala193fsX
-    re.compile(r'^(?:p\.)?([A-Z][a-z]{2})(\d+)(fsX|fs\*|fs)$', re.IGNORECASE),
+    # Frame-shift with three-letter: Ala193fsX, Ala193fs*10
+    re.compile(r'^(?:p\.)?([A-Z][a-z]{2})(\d+)(fsX\d*|fs\*\d*|fs)$', re.IGNORECASE),
     
-    # Insertion/deletion: G184Del, G184Ins
-    re.compile(r'^(?:p\.)?([A-Z]|[A-Z][a-z]{2})(\d+)(Del|Ins)$', re.IGNORECASE),
+    # Insertion/deletion: G184Del, G184Ins, G184_G185del
+    re.compile(r'^(?:p\.)?([A-Z]|[A-Z][a-z]{2})(\d+)(Del|Ins|Dup)$', re.IGNORECASE),
     
-    # Stop/truncation: R864stop, D864sp
-    re.compile(r'^(?:p\.)?([A-Z]|[A-Z][a-z]{2})(\d+)(sp|stop|trunc|\*|Ter)$', re.IGNORECASE),
+    # Stop/truncation: R864stop, D864sp, R864*, R864X, R864Ter
+    re.compile(r'^(?:p\.)?([A-Z]|[A-Z][a-z]{2})(\d+)(sp|stop|trunc|\*|Ter|X)$', re.IGNORECASE),
+    
+    # Extended deletion/dup with range: p.Gly184_Leu186del
+    re.compile(r'^(?:p\.)?([A-Z][a-z]{2})(\d+)_([A-Z][a-z]{2})(\d+)(del|dup|ins)$', re.IGNORECASE),
 ]
 
 CDNA_PATTERNS = [
@@ -91,10 +154,20 @@ CDNA_PATTERNS = [
     re.compile(r'^c\.(\d+)(del|dup|ins)([ACGT]*)$', re.IGNORECASE),
     # c.1234_1235delAG
     re.compile(r'^c\.(\d+)_(\d+)(del|dup|ins)([ACGT]*)$', re.IGNORECASE),
-    # c.1234+1G>A (intronic)
-    re.compile(r'^c\.(\d+[\+\-]\d+)([ACGT])>([ACGT])$'),
-    # c.1234-1G>A (intronic)
+    # c.1234+1G>A (intronic - donor)
+    re.compile(r'^c\.(\d+[\+]\d+)([ACGT])>([ACGT])$'),
+    # c.1234-1G>A (intronic - acceptor)
+    re.compile(r'^c\.(\d+[\-]\d+)([ACGT])>([ACGT])$'),
+    # c.1234+1del or c.1234-1del (intronic indels)
     re.compile(r'^c\.(\d+[\+\-]\d+)(del|dup|ins)([ACGT]*)$', re.IGNORECASE),
+]
+
+# IVS (splice) patterns - legacy notation
+SPLICE_PATTERNS = [
+    # IVS10+1G>A, IVS5-2A>G
+    re.compile(r'^IVS(\d+)([\+\-]\d+)([ACGT])>([ACGT])$', re.IGNORECASE),
+    # IVS10+1del
+    re.compile(r'^IVS(\d+)([\+\-]\d+)(del|dup|ins)([ACGT]*)$', re.IGNORECASE),
 ]
 
 
@@ -637,6 +710,251 @@ def match_variants_to_baseline(
     return results
 
 
+# =============================================================================
+# STANDALONE FUNCTIONS (drop-in replacement for variant_utils.py)
+# =============================================================================
+
+def normalize_variant(variant: str, gene_symbol: str = 'KCNH2') -> str:
+    """
+    Normalize any variant notation to a comparable format.
+    
+    This is the primary normalization function - use this for deduplication
+    and comparison. Normalizes to single-letter format for protein variants
+    (A561V) and c. prefix format for cDNA.
+    
+    DROP-IN REPLACEMENT for utils.variant_utils.normalize_variant()
+    
+    Args:
+        variant: Variant in any format (p.Ala561Val, A561V, c.1682C>T, etc.)
+        gene_symbol: Gene symbol for context (default: KCNH2)
+        
+    Returns:
+        Normalized variant string (uppercase, consistent format)
+        
+    Examples:
+        >>> normalize_variant('p.Ala561Val')
+        'A561V'
+        >>> normalize_variant('c.1682C>T')
+        'c.1682C>T'
+        >>> normalize_variant('IVS10+1G>A')
+        'c.2398+1G>A'
+    """
+    if not variant:
+        return ""
+    
+    variant = variant.strip()
+    
+    # Check KCNH2 alias lookup first
+    if gene_symbol.upper() == 'KCNH2':
+        canonical = _KCNH2_ALIAS_LOOKUP.get(variant.upper())
+        if canonical:
+            # Return canonical form (single-letter for protein, as-is for cDNA)
+            if canonical.startswith('c.'):
+                return canonical
+            return canonical
+    
+    # Create normalizer for the gene
+    normalizer = VariantNormalizer(gene_symbol)
+    
+    # Try to detect variant type and normalize
+    v_upper = variant.upper()
+    v_lower = variant.lower()
+    
+    # Handle IVS notation (splice variants)
+    ivs_match = re.match(r'^IVS(\d+)([\+\-]\d+)([ACGT])>([ACGT])$', variant, re.IGNORECASE)
+    if ivs_match:
+        ivs_num, offset, ref, alt = ivs_match.groups()
+        # Try to convert to c. notation using gene-specific map
+        if gene_symbol.upper() == 'KCNH2':
+            base_pos = KCNH2_IVS_MAP.get(f'IVS{ivs_num}')
+            if base_pos:
+                return f"{base_pos}{offset}{ref.upper()}>{alt.upper()}"
+        # If no mapping, return cleaned up IVS notation
+        return f"IVS{ivs_num}{offset}{ref.upper()}>{alt.upper()}"
+    
+    # Protein variant detection
+    if v_lower.startswith('p.') or re.match(r'^[A-Z][a-z]{2}\d+', variant):
+        # Protein variant with p. prefix or 3-letter AA
+        single = normalizer.normalize_to_single_letter(variant)
+        if single:
+            return single
+    
+    # cDNA variant detection  
+    if v_lower.startswith('c.') or re.match(r'^\d+[\+\-]?\d*[ACGT]', variant):
+        cdna = normalizer.normalize_cdna(variant)
+        if cdna:
+            return cdna
+    
+    # Short protein format (A561V) - already normalized
+    if re.match(r'^[A-Z]\d+[A-Z*X]$', v_upper):
+        return v_upper.replace('*', 'X')
+    
+    # Frameshift variants
+    if re.match(r'^[A-Z]\d+fs', variant, re.IGNORECASE):
+        single = normalizer.normalize_to_single_letter(variant)
+        if single:
+            return single
+    
+    # Stop variants
+    if re.match(r'^[A-Z]\d+(stop|sp|ter|\*|X)$', variant, re.IGNORECASE):
+        single = normalizer.normalize_to_single_letter(variant)
+        if single:
+            return single
+    
+    # Deletion/insertion variants
+    if re.match(r'^[A-Z]\d+(del|ins|dup)', variant, re.IGNORECASE):
+        # Normalize to uppercase with standard suffix
+        m = re.match(r'^([A-Z])(\d+)(del|ins|dup)(.*)$', variant, re.IGNORECASE)
+        if m:
+            return f"{m.group(1).upper()}{m.group(2)}{m.group(3).lower()}{m.group(4).upper()}"
+    
+    # Unknown format - return uppercase
+    return variant.upper()
+
+
+def normalize_protein_variant(variant: str) -> str:
+    """
+    Normalize a protein variant to short format (e.g., A561V).
+    
+    DROP-IN REPLACEMENT for utils.variant_utils.normalize_protein_variant()
+    
+    Args:
+        variant: Protein variant in any format (p.Ala561Val, A561V, etc.)
+        
+    Returns:
+        Normalized variant in short format (A561V)
+    """
+    if not variant:
+        return ""
+    
+    normalizer = VariantNormalizer('UNKNOWN')
+    single = normalizer.normalize_to_single_letter(variant)
+    return single if single else variant.strip().upper()
+
+
+def normalize_cdna_variant(variant: str) -> str:
+    """
+    Normalize a cDNA variant notation.
+    
+    DROP-IN REPLACEMENT for utils.variant_utils.normalize_cdna_variant()
+    
+    Args:
+        variant: cDNA variant (c.1682C>T, 1682C>T, etc.)
+        
+    Returns:
+        Normalized cDNA variant (c.1682C>T)
+    """
+    if not variant:
+        return ""
+    
+    normalizer = VariantNormalizer('UNKNOWN')
+    cdna = normalizer.normalize_cdna(variant)
+    return cdna if cdna else variant.strip()
+
+
+def variants_match(v1: str, v2: str, gene_symbol: str = 'KCNH2') -> bool:
+    """
+    Check if two variant notations refer to the same variant.
+    
+    DROP-IN REPLACEMENT for utils.variant_utils.variants_match()
+    
+    Args:
+        v1: First variant notation
+        v2: Second variant notation
+        gene_symbol: Gene symbol for context
+        
+    Returns:
+        True if variants match after normalization
+    """
+    norm1 = normalize_variant(v1, gene_symbol)
+    norm2 = normalize_variant(v2, gene_symbol)
+    
+    if not norm1 or not norm2:
+        return False
+    
+    return norm1 == norm2
+
+
+def find_matching_variants(
+    extracted: List[str], 
+    expected: List[str],
+    gene_symbol: str = 'KCNH2'
+) -> Tuple[List[Tuple[str, str]], List[str], List[str]]:
+    """
+    Compare extracted variants against expected variants.
+    
+    DROP-IN REPLACEMENT for utils.variant_utils.find_matching_variants()
+    
+    Args:
+        extracted: List of extracted variant strings
+        expected: List of expected variant strings
+        gene_symbol: Gene symbol for context
+        
+    Returns:
+        Tuple of (matched, missed, extra) where:
+        - matched: List of (extracted, expected) tuples that match
+        - missed: List of expected variants not found in extracted
+        - extra: List of extracted variants not found in expected
+    """
+    # Normalize all variants
+    norm_extracted = {normalize_variant(v, gene_symbol): v for v in extracted if v}
+    norm_expected = {normalize_variant(v, gene_symbol): v for v in expected if v}
+    
+    matched = []
+    missed = []
+    extra = []
+    
+    # Find matches
+    for norm_exp, orig_exp in norm_expected.items():
+        if norm_exp in norm_extracted:
+            matched.append((norm_extracted[norm_exp], orig_exp))
+        else:
+            missed.append(orig_exp)
+    
+    # Find extras
+    for norm_ext, orig_ext in norm_extracted.items():
+        if norm_ext not in norm_expected:
+            extra.append(orig_ext)
+    
+    return matched, missed, extra
+
+
+def create_variant_key(variant: Dict[str, Any], gene_symbol: str = 'KCNH2') -> str:
+    """
+    Create a normalized key for variant grouping/deduplication.
+    
+    This is the key function for aggregation - ensures variants in different
+    notations (p.Arg534Cys vs R534C) are grouped together.
+    
+    Args:
+        variant: Variant dict with protein_notation, cdna_notation, etc.
+        gene_symbol: Gene symbol for context
+        
+    Returns:
+        Normalized variant key for grouping
+    """
+    # Try protein notation first (most common)
+    protein = variant.get('protein_notation') or variant.get('protein_change')
+    if protein:
+        normalized = normalize_variant(protein, gene_symbol)
+        if normalized:
+            return f"{gene_symbol}:{normalized}"
+    
+    # Fall back to cDNA
+    cdna = variant.get('cdna_notation') or variant.get('cdna_change')
+    if cdna:
+        normalized = normalize_variant(cdna, gene_symbol)
+        if normalized:
+            return f"{gene_symbol}:{normalized}"
+    
+    # Last resort: genomic position
+    genomic = variant.get('genomic_position')
+    if genomic:
+        return f"{gene_symbol}:{genomic.strip()}"
+    
+    return f"{gene_symbol}:unknown_variant"
+
+
 if __name__ == '__main__':
     # Test the normalizer
     print("=" * 60)
@@ -648,13 +966,30 @@ if __name__ == '__main__':
     # Test protein normalization
     test_variants = [
         'A561V', 'p.Ala561Val', 'Ala561Val', 'p.A561V',
-        'A193fsX', 'G584S', 'R864stop', 'G184Del'
+        'A193fsX', 'G584S', 'R864stop', 'G184Del',
+        'p.Arg534Cys', 'R534C',  # Common variant in multiple notations
     ]
     
-    print("\n1. Protein Normalization:")
+    print("\n1. Protein Normalization (Class-based):")
     for v in test_variants:
         forms = norm.get_all_forms(v)
         print(f"  {v:15} -> single: {forms.get('single', 'N/A'):12} three: {forms.get('three', 'N/A')}")
+    
+    # Test standalone normalize_variant function
+    print("\n2. Standalone normalize_variant() Function:")
+    standalone_tests = [
+        'p.Ala561Val',   # Three-letter protein
+        'A561V',         # Already normalized
+        'c.1682C>T',     # cDNA
+        '1682C>T',       # cDNA without prefix
+        'IVS10+1G>A',    # Splice variant (IVS notation)
+        'A193fsX10',     # Frameshift with position
+        'R864*',         # Stop codon
+        'p.Gly628Ser',   # KCNH2 variant
+    ]
+    for v in standalone_tests:
+        normalized = normalize_variant(v)
+        print(f"  {v:18} -> {normalized}")
     
     # Test non-target detection
     non_target_tests = [
@@ -665,7 +1000,7 @@ if __name__ == '__main__':
         'A561V',    # Valid KCNH2 variant
     ]
     
-    print("\n2. Non-Target Variant Detection:")
+    print("\n3. Non-Target Variant Detection:")
     for v in non_target_tests:
         is_non, reason = norm.is_non_target_variant(v)
         status = f"⚠️  NON-TARGET: {reason}" if is_non else "✓ Valid"
@@ -679,13 +1014,38 @@ if __name__ == '__main__':
         '3152+1G>A',     # Missing prefix, intronic
     ]
     
-    print("\n3. cDNA Normalization:")
+    print("\n4. cDNA Normalization:")
     for v in cdna_tests:
         normalized = norm.normalize_cdna(v)
         print(f"  {v:18} -> {normalized}")
     
+    # Test variant matching
+    print("\n5. variants_match() Function:")
+    match_tests = [
+        ('p.Ala561Val', 'A561V'),
+        ('p.Arg534Cys', 'R534C'),
+        ('c.1682C>T', '1682C>T'),
+        ('A561V', 'G584S'),  # Should NOT match
+    ]
+    for v1, v2 in match_tests:
+        result = variants_match(v1, v2)
+        status = "✓ MATCH" if result else "✗ no match"
+        print(f"  {v1:15} vs {v2:10} -> {status}")
+    
+    # Test create_variant_key for aggregation
+    print("\n6. create_variant_key() for Aggregation:")
+    key_tests = [
+        {'protein_notation': 'p.Ala561Val', 'cdna_notation': 'c.1682C>T'},
+        {'protein_notation': 'A561V'},
+        {'protein_notation': 'p.Arg534Cys'},
+        {'cdna_notation': 'c.1600C>T'},
+    ]
+    for vdict in key_tests:
+        key = create_variant_key(vdict)
+        print(f"  {vdict} -> {key}")
+    
     # Test baseline matching
-    print("\n4. Baseline Matching with Fuzzy Position:")
+    print("\n7. Baseline Matching with Fuzzy Position:")
     baseline = {'A561V', 'G584S', 'R534C', 'c.1234A>G'}
     extracted = ['p.Ala561Val', 'G585S', 'R248W', '1234A>G', 'unknown']
     
