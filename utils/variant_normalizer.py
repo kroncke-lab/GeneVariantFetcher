@@ -96,11 +96,45 @@ KCNH2_VARIANT_ALIASES = {
     'c.1129-1G>A': ['c.1129-1G>A', 'IVS5-1G>A'],
 }
 
-# Build reverse lookup for aliases
+# Build reverse lookup for aliases from hardcoded dict
 _KCNH2_ALIAS_LOOKUP = {}
 for canonical, aliases in KCNH2_VARIANT_ALIASES.items():
     for alias in aliases:
         _KCNH2_ALIAS_LOOKUP[alias.upper()] = canonical
+
+# Load comprehensive alias dictionary from JSON if available
+_KCNH2_COMPREHENSIVE_ALIASES = {}
+try:
+    import json
+    from pathlib import Path
+    _alias_path = Path(__file__).parent / 'kcnh2_variant_aliases.json'
+    if _alias_path.exists():
+        with open(_alias_path) as f:
+            _alias_data = json.load(f)
+            _KCNH2_COMPREHENSIVE_ALIASES = _alias_data.get('aliases', {})
+            logger.debug(f"Loaded {len(_KCNH2_COMPREHENSIVE_ALIASES)} KCNH2 aliases from JSON")
+except Exception as e:
+    logger.warning(f"Could not load KCNH2 alias dictionary: {e}")
+
+def _lookup_alias(variant: str, gene: str = 'KCNH2') -> Optional[str]:
+    """
+    Look up a variant in the comprehensive alias dictionary.
+    Returns the canonical form if found, None otherwise.
+    """
+    if gene.upper() != 'KCNH2':
+        return None
+    
+    v_upper = variant.upper().strip()
+    
+    # Try comprehensive aliases first (from JSON)
+    if v_upper in _KCNH2_COMPREHENSIVE_ALIASES:
+        return _KCNH2_COMPREHENSIVE_ALIASES[v_upper]
+    
+    # Fall back to hardcoded aliases
+    if v_upper in _KCNH2_ALIAS_LOOKUP:
+        return _KCNH2_ALIAS_LOOKUP[v_upper]
+    
+    return None
 
 # IVS to cDNA splice notation mapping for KCNH2
 # This is a partial list - in practice would need full gene coordinates
@@ -1278,9 +1312,10 @@ def normalize_variant(variant: str, gene_symbol: str = 'KCNH2') -> str:
     if simple_lower_match:
         variant = f"{simple_lower_match.group(1).upper()}{simple_lower_match.group(2)}{simple_lower_match.group(3).upper()}"
     
-    # Check KCNH2 alias lookup first
+    # Check comprehensive KCNH2 alias lookup first
     if gene_symbol.upper() == 'KCNH2':
-        canonical = _KCNH2_ALIAS_LOOKUP.get(variant.upper())
+        # Try comprehensive aliases (from JSON) first
+        canonical = _lookup_alias(variant, gene_symbol)
         if canonical:
             # Return canonical form (single-letter for protein, as-is for cDNA)
             if canonical.startswith('c.'):
