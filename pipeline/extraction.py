@@ -25,6 +25,11 @@ from pipeline.prompts import (
 )
 from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 from utils.models import ExtractionResult, Paper
+from utils.variant_scanner import (
+    VariantScanner,
+    scan_document_for_variants,
+    merge_scanner_results,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -1350,7 +1355,23 @@ class ExpertExtractor(BaseLLMCaller):
             print(
                 f"Pre-extracted {len(pre_extracted_variants)} variant hints from tables"
             )
+        
+        # NEW: Run comprehensive variant scanner on full text (catches narrative mentions)
+        scanner_result = scan_document_for_variants(
+            full_text, gene_symbol=paper.gene_symbol or "UNKNOWN", source=f"PMID_{paper.pmid}"
+        )
+        scanner_hints = scanner_result.get_hints_for_prompt(max_hints=50)
+        if scanner_result.variants:
+            logger.info(
+                f"PMID {paper.pmid} - Variant scanner found {len(scanner_result.variants)} candidates as LLM hints"
+            )
+            print(
+                f"Variant scanner found {len(scanner_result.variants)} potential variants in text"
+            )
 
+        # Combine all hints (table + scanner)
+        all_hints = table_hints + scanner_hints
+        
         # Use compact mode for high-variant papers to avoid output truncation
         use_compact = estimated_variants >= HIGH_VARIANT_THRESHOLD
         if use_compact:
@@ -1363,7 +1384,7 @@ class ExpertExtractor(BaseLLMCaller):
             prompt = COMPACT_EXTRACTION_PROMPT.format(
                 gene_symbol=paper.gene_symbol or "UNKNOWN",
                 title=paper.title or "Unknown Title",
-                full_text=truncated_text + table_hints,
+                full_text=truncated_text + all_hints,
                 pmid=paper.pmid,
                 estimated_variants=estimated_variants,
             )
@@ -1371,7 +1392,7 @@ class ExpertExtractor(BaseLLMCaller):
             prompt = EXTRACTION_PROMPT.format(
                 gene_symbol=paper.gene_symbol or "UNKNOWN",
                 title=paper.title or "Unknown Title",
-                full_text=truncated_text + table_hints,
+                full_text=truncated_text + all_hints,
                 pmid=paper.pmid,
             )
 
@@ -1409,6 +1430,13 @@ class ExpertExtractor(BaseLLMCaller):
             if pre_extracted_variants:
                 extracted_data = self._merge_table_variants(
                     extracted_data, pre_extracted_variants
+                )
+            
+            # NEW: Merge scanner-found variants (catches narrative mentions the LLM missed)
+            if scanner_result.variants:
+                extracted_data = merge_scanner_results(
+                    extracted_data, scanner_result, paper.gene_symbol or "UNKNOWN",
+                    min_confidence=0.6  # Only merge reasonably confident scanner finds
                 )
 
             # Filter variants to only keep those matching the target gene
