@@ -43,6 +43,7 @@ def automated_variant_extraction_workflow(
     use_clinical_triage: bool = False,
     auto_synonyms: bool = False,
     synonyms: list[str] | None = None,
+    scout_first: bool = False,
 ):
     """
     Complete automated workflow from gene symbol to extracted variant data.
@@ -57,6 +58,7 @@ def automated_variant_extraction_workflow(
         use_clinical_triage: Use ClinicalDataTriageFilter for Tier 2 instead of InternFilter.
         auto_synonyms: Automatically discover and use gene synonyms from NCBI Gene database.
         synonyms: List of manually specified gene synonyms to include in searches.
+        scout_first: Run Data Scout before extraction to identify high-value data zones.
     """
     from config.settings import get_settings
     from pipeline.steps import (
@@ -89,7 +91,8 @@ def automated_variant_extraction_workflow(
         tier_threshold=tier_threshold,
         use_clinical_triage=use_clinical_triage,
         auto_synonyms=auto_synonyms,
-        synonyms=synonyms or []
+        synonyms=synonyms or [],
+        scout_first=scout_first
     )
     
     # Initialize checkpoint manager
@@ -341,6 +344,36 @@ def automated_variant_extraction_workflow(
     run_manifest.update_output_locations(harvest_dir=str(harvest_dir))
 
     # =========================================================================
+    # STEP 2.5 (Optional): Run Data Scout for Better Context
+    # =========================================================================
+    scout_manifest_path = None
+    if scout_first:
+        logger.info("\n🔍 STEP 2.5: Running Data Scout to identify high-value data zones...")
+        
+        scout_output_dir = output_path / "scout_output"
+        scout_output_dir.mkdir(parents=True, exist_ok=True)
+        
+        try:
+            scout_result = run_scout(
+                input_path=str(harvest_dir),
+                output_dir=str(scout_output_dir),
+                gene=gene_symbol,
+                min_relevance=0.1,
+                max_zones=30,
+            )
+            
+            scout_manifest_path = scout_output_dir / "scout_manifest.json"
+            if scout_manifest_path.exists():
+                logger.info(f"✓ Data Scout completed. Manifest saved to: {scout_manifest_path}")
+                run_manifest.update_output_locations(scout_manifest=str(scout_manifest_path))
+            else:
+                logger.warning("Data Scout completed but no manifest generated")
+                
+        except Exception as e:
+            logger.warning(f"Data Scout failed: {e}. Continuing with standard extraction.")
+            run_manifest.add_warning(f"Data Scout failed: {e}")
+
+    # =========================================================================
     # STEP 3: Extract Variant and Patient Data
     # =========================================================================
     checkpoint.update_step(PipelineStep.EXTRACTING_VARIANTS)
@@ -352,6 +385,7 @@ def automated_variant_extraction_workflow(
 
     extraction_dir = output_path / "extractions"
 
+    # If scout_first was used, pass the scout manifest for better context
     extract_result = extract_variants(
         harvest_dir=harvest_dir,
         extraction_dir=extraction_dir,
@@ -672,6 +706,11 @@ Examples:
         help="Manually specify gene synonym (can be used multiple times)",
     )
     parser.add_argument(
+        "--scout-first",
+        action="store_true",
+        help="Run Data Scout before extraction to identify high-value data zones for better context",
+    )
+    parser.add_argument(
         "--verbose", "-v", action="store_true", help="Enable verbose logging"
     )
 
@@ -706,6 +745,7 @@ Examples:
             use_clinical_triage=args.clinical_triage,
             auto_synonyms=args.auto_synonyms,
             synonyms=args.synonyms,
+            scout_first=args.scout_first,
         )
 
         # Exit with success code

@@ -31,6 +31,7 @@ def extract_command(
     clinical_triage: Annotated[bool, typer.Option("--clinical-triage", help="Use ClinicalDataTriageFilter for Tier 2 filtering")] = False,
     auto_synonyms: Annotated[bool, typer.Option("--auto-synonyms", help="Automatically discover and use gene synonyms")] = False,
     synonyms: Annotated[list[str], typer.Option("--synonym", help="Manually specify gene synonym (can be used multiple times)")] = None,
+    scout_first: Annotated[bool, typer.Option("--scout-first", help="Run Data Scout before extraction to identify high-value data zones for better context")] = False,
     verbose: Annotated[bool, typer.Option("--verbose", "-v", help="Enable verbose logging")] = False,
 ):
     """Run the complete automated workflow from gene symbol to extracted variant data."""
@@ -59,6 +60,7 @@ def extract_command(
             use_clinical_triage=clinical_triage,
             auto_synonyms=auto_synonyms,
             synonyms=synonyms or [],
+            scout_first=scout_first,
         )
     except KeyboardInterrupt:
         typer.echo("\n⚠️  Workflow interrupted by user", err=True)
