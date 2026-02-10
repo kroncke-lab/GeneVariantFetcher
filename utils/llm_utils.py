@@ -57,6 +57,8 @@ MODEL_TOKEN_LIMITS = {
     # Google models
     "gemini-1.5-pro": (8192, 8000),
     "gemini-1.5-flash": (8192, 8000),
+    "gemini-2.0-flash": (8192, 8000),
+    "gemini-2.0": (8192, 8000),
     "gemini-pro": (8192, 8000),
     # Mistral models
     "mistral-large": (8192, 8000),

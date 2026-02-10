@@ -18,24 +18,14 @@ def main():
     # Setup paths
     gvf_repo = Path("/mnt/temp2/kronckbm/gitrepos/GeneVariantFetcher/")
     output_base = Path("/mnt/temp2/kronckbm/gvf_output/")
-    output_dir = output_base / "download_batch_20260206"
+    output_dir = output_base / "download_batch_20260207"
     
     # Ensure output directory exists
     output_dir.mkdir(parents=True, exist_ok=True)
     
     # Top 10 high-impact PMIDs for testing
-    high_impact_pmids = [
-        "15840476",
-        "10973849", 
-        "26496715",
-        "11854117",
-        "14661677",
-        "19038855",
-        "24667783",
-        "29650123",
-        "16922724",
-        "23631430"
-    ]
+    with open("/mnt/temp2/kronckbm/gvf_output/missing_baseline_pmids.txt", "r") as f:
+        high_impact_pmids = [line.strip() for line in f]
     
     print("=" * 80)
     print("GVF PHASE 1: DOWNLOADING HIGH-IMPACT PMIDs")
@@ -76,6 +66,6 @@ def main():
 
 if __name__ == "__main__":
     # Ensure we're in the GVF directory
-    os.chdir("/mnt/temp2/kronckbm/gitrepos/GeneVariantFetcher/")
+    #os.chdir("/mnt/temp2/kronckbm/gitrepos/GeneVariantFetcher/")
     success = main()
     sys.exit(0 if success else 1)

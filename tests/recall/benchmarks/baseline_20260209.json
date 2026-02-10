@@ -1,0 +1,41 @@
+{
+  "date": "2026-02-09",
+  "description": "Initial baseline measurement with working test framework",
+  "metrics": {
+    "paper_recall": 0.553,
+    "variant_coverage_by_paper": 0.375,
+    "variant_extraction_recall": 0.171,
+    "carrier_recall": 0.289,
+    "lqt_recall": 0.276
+  },
+  "counts": {
+    "paper": {"captured": 145, "total": 262, "missing": 117},
+    "variant_coverage": {"captured": 324, "total": 864, "note": "variants in downloaded papers"},
+    "variant_extraction": {"captured": 148, "total": 863, "note": "variants actually extracted"},
+    "carrier": {"captured": 481, "total": 1662, "no_pmid": 661},
+    "lqt": {"captured": 367, "total": 1332}
+  },
+  "composite_score": 34.7,
+  "grade": "D",
+  "notes": "Baseline with working test framework. Two variant metrics: coverage (what's in downloaded papers) vs extraction (what's actually found).",
+  "bottlenecks": [
+    "BOTTLENECK 1: 117 PMIDs missing (44.7% of gold standard) - blocks all metrics",
+    "BOTTLENECK 2: Extraction quality 17.1% - only finding ~half of possible variants",
+    "BOTTLENECK 3: 661 carriers (39.8%) have no PMID - theoretical max ~60%",
+    "BOTTLENECK 4: 0% supplement coverage - many variants in supps"
+  ],
+  "target": {
+    "paper_recall": 0.80,
+    "variant_recall": 0.80,
+    "carrier_recall": 0.80,
+    "lqt_recall": 0.80,
+    "composite_score": 80.0
+  },
+  "tests": {
+    "location": "tests/recall/",
+    "total": 19,
+    "passed": 16,
+    "skipped": 3,
+    "failed": 0
+  }
+}

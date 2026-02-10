@@ -615,6 +615,144 @@ def normalize_variant(variant: str) -> str:
     return variant
 
 
+def to_canonical_form(variant: str) -> Optional[str]:
+    """
+    Reduce a variant to a single canonical form for matching.
+
+    The canonical form uses:
+    - Single-letter amino acid codes
+    - No p. prefix
+    - 'X' for stop codons
+    - 'fsX' for frameshifts (no terminal position)
+    - 'Del' for deletions
+    - 'Ins' for insertions
+
+    This matches the gold-standard heterozygote database format.
+
+    Examples:
+        p.Ala561Val     -> A561V
+        p.A561V         -> A561V
+        Ala561Val       -> A561V
+        A561V           -> A561V
+        p.Ala121Leufs*12 -> A121fsX
+        p.H302fsX339    -> H302fsX
+        A282fs          -> A282fsX
+        p.Glu807*       -> E807X
+        p.C39*          -> C39X
+        p.Cys108Tyr*    -> C108Y  (trailing * on missense is artifact)
+        p.Gly628del     -> G628Del
+        Y475del         -> Y475Del
+    """
+    if not variant or pd.isna(variant):
+        return None
+
+    v = str(variant).strip()
+
+    # Strip p. prefix
+    if v.startswith("p."):
+        v = v[2:]
+
+    # --- Three-letter missense with trailing *: Ala429Pro* -> A429P ---
+    m = re.match(r"^([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2})\*$", v)
+    if m:
+        ref = AA_3_TO_1.get(m.group(1))
+        alt = AA_3_TO_1.get(m.group(3))
+        if ref and alt:
+            return f"{ref}{m.group(2)}{alt}"
+
+    # --- Three-letter missense: Ala561Val -> A561V ---
+    m = re.match(r"^([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2})$", v)
+    if m:
+        ref = AA_3_TO_1.get(m.group(1))
+        alt = AA_3_TO_1.get(m.group(3))
+        if ref and alt:
+            return f"{ref}{m.group(2)}{alt}"
+
+    # --- Three-letter frameshift: Ala121Leufs*12 -> A121fsX ---
+    m = re.match(r"^([A-Z][a-z]{2})(\d+)(?:[A-Z][a-z]{2})?fs[\*]?\d*$", v)
+    if m:
+        ref = AA_3_TO_1.get(m.group(1))
+        if ref:
+            return f"{ref}{m.group(2)}fsX"
+
+    # --- Single-letter frameshift: A282fs, A282fs*, A282fsX, A282fsX339 -> A282fsX ---
+    m = re.match(r"^([A-Z])(\d+)fs[\*X]?\d*$", v, re.IGNORECASE)
+    if m:
+        return f"{m.group(1)}{m.group(2)}fsX"
+
+    # --- Three-letter stop: Glu807Ter, Arg1014* -> E807X ---
+    m = re.match(r"^([A-Z][a-z]{2})(\d+)(?:Ter|\*|Stop)$", v)
+    if m:
+        ref = AA_3_TO_1.get(m.group(1))
+        if ref:
+            return f"{ref}{m.group(2)}X"
+
+    # --- Single-letter stop: E807*, C39* -> E807X ---
+    m = re.match(r"^([A-Z])(\d+)[\*]$", v)
+    if m:
+        return f"{m.group(1)}{m.group(2)}X"
+
+    # --- Three-letter del: Gly628del -> G628Del ---
+    m = re.match(r"^([A-Z][a-z]{2})(\d+)(del)$", v, re.IGNORECASE)
+    if m:
+        ref = AA_3_TO_1.get(m.group(1))
+        if ref:
+            return f"{ref}{m.group(2)}Del"
+
+    # --- Single-letter del: A671del -> A671Del ---
+    m = re.match(r"^([A-Z])(\d+)(del)$", v, re.IGNORECASE)
+    if m:
+        return f"{m.group(1)}{m.group(2)}Del"
+
+    # --- Three-letter dup: Ile82dup -> I82dup ---
+    m = re.match(r"^([A-Z][a-z]{2})(\d+)(dup)$", v, re.IGNORECASE)
+    if m:
+        ref = AA_3_TO_1.get(m.group(1))
+        if ref:
+            return f"{ref}{m.group(2)}dup"
+
+    # --- Three-letter ins: Gly189ins -> G189Ins ---
+    m = re.match(r"^([A-Z][a-z]{2})(\d+)(ins)$", v, re.IGNORECASE)
+    if m:
+        ref = AA_3_TO_1.get(m.group(1))
+        if ref:
+            return f"{ref}{m.group(2)}Ins"
+
+    # --- Single-letter ins: G189ins -> G189Ins ---
+    m = re.match(r"^([A-Z])(\d+)(ins)$", v, re.IGNORECASE)
+    if m:
+        return f"{m.group(1)}{m.group(2)}Ins"
+
+    # --- Single-letter stop with X (already canonical) ---
+    m = re.match(r"^([A-Z])(\d+)X$", v)
+    if m:
+        return v
+
+    # --- Single-letter missense: A561V (already canonical) ---
+    m = re.match(r"^[A-Z]\d+[A-Z]$", v)
+    if m:
+        return v
+
+    # --- Splice: A715sp (already canonical) ---
+    m = re.match(r"^([A-Z])(\d+)sp$", v, re.IGNORECASE)
+    if m:
+        return f"{m.group(1)}{m.group(2)}sp"
+
+    # --- Three-letter splice: Ala715sp -> A715sp ---
+    m = re.match(r"^([A-Z][a-z]{2})(\d+)sp$", v, re.IGNORECASE)
+    if m:
+        ref = AA_3_TO_1.get(m.group(1))
+        if ref:
+            return f"{ref}{m.group(2)}sp"
+
+    # --- IVS notation: pass through ---
+    if v.startswith("IVS"):
+        return v
+
+    # Could not canonicalize
+    return None
+
+
 def convert_aa_3_to_1(variant: str) -> Optional[str]:
     """
     Convert 3-letter amino acid codes to 1-letter in a variant string.
@@ -734,6 +872,7 @@ def get_variant_forms(variant: str) -> Set[str]:
 
     Returns set of normalized variant strings including:
     - Original normalized
+    - Canonical form (single-letter, no prefix, gold-standard format)
     - 3-letter to 1-letter conversion
     - 1-letter to 3-letter conversion
     - With and without p. prefix
@@ -743,6 +882,13 @@ def get_variant_forms(variant: str) -> Set[str]:
     normalized = normalize_variant(variant)
     if normalized:
         forms.add(normalized)
+
+    # Add canonical form (the most important for matching)
+    canonical = to_canonical_form(variant)
+    if canonical:
+        forms.add(canonical)
+        # Also add p.-prefixed canonical
+        forms.add(f"p.{canonical}")
 
     # Try amino acid conversions on normalized form
     converted_1 = convert_aa_3_to_1(normalized)
