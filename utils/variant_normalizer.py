@@ -265,6 +265,14 @@ class VariantNormalizer:
         
         Handles: A561V, p.Ala561Val, Ala561Val, p.A561V
         
+        Normalization rules:
+        - Strip p. prefix
+        - Remove trailing asterisks (DMS artifacts): A561V* → A561V
+        - Remove trailing annotations: R176W(het) → R176W
+        - Case normalization: a561v → A561V
+        - 3-letter → 1-letter: Ala561Val → A561V
+        - Frameshift standardization: fs*46 → fsX, fsXNN → fsX, Alafs → AfsX
+        
         Args:
             variant: Variant string in various formats
             
@@ -275,41 +283,83 @@ class VariantNormalizer:
             return None
         
         v = variant.strip()
-        if v.startswith('p.'):
+        
+        # Remove p. prefix
+        if v.lower().startswith('p.'):
             v = v[2:]
         
-        # Already single-letter
-        m = re.match(r'^([A-Z])(\d+)([A-Z\*X])$', v)
-        if m:
-            return f"{m.group(1)}{m.group(2)}{m.group(3)}"
+        # Remove trailing DMS asterisks (A561V* → A561V, but keep R864* as stop)
+        if v.endswith('*') and len(v) >= 2 and v[-2].isalpha():
+            v = v[:-1]
         
-        # Three-letter: Ala561Val
-        m = re.match(r'^([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2}|\*|Ter|X)$', v)
+        # Remove trailing annotations
+        v = re.sub(r'\([^)]*\)$', '', v)  # (het), (hom)
+        v = re.sub(r'/[Ww][Tt]$', '', v)  # /WT
+        v = re.sub(r'/[\+\-]$', '', v)    # /+, /-
+        v = v.strip()
+        
+        # Single-letter format (handles both lowercase and uppercase): A561V, a561v, R864*, R864X
+        m = re.match(r'^([A-Za-z])(\d+)([A-Za-z\*X])$', v, re.IGNORECASE)
+        if m:
+            ref = m.group(1).upper()
+            pos = m.group(2)
+            alt = m.group(3).upper()
+            # Normalize * to X for stop codons
+            if alt == '*':
+                alt = 'X'
+            return f"{ref}{pos}{alt}"
+        
+        # Three-letter: Ala561Val, Arg864Ter, Arg864*
+        m = re.match(r'^([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2}|\*|Ter|X)$', v, re.IGNORECASE)
         if m:
             ref = AA_MAP_REVERSE.get(m.group(1).capitalize())
             alt_raw = m.group(3)
-            if alt_raw in ['*', 'Ter', 'X']:
+            if alt_raw.upper() in ['*', 'TER', 'X']:
                 alt = 'X'
             else:
                 alt = AA_MAP_REVERSE.get(alt_raw.capitalize())
             if ref and alt:
                 return f"{ref}{m.group(2)}{alt}"
         
-        # Frameshift: A193fsX
-        m = re.match(r'^([A-Z]|[A-Z][a-z]{2})(\d+)(fs[X\*]?|fsX\d*)$', v, re.IGNORECASE)
+        # === FRAMESHIFT STANDARDIZATION ===
+        # All frameshift variants → REFposfsX (drop position after fs)
+        # Patterns: fs*46, fsX10, fs*10, fs, fsXNN, fs+NX, fsTerN
+        
+        # Pattern 1: Three-letter with frameshift: Ala193fs*46, Gly262Alafs*98, Arg518fs*
+        m = re.match(r'^([A-Z][a-z]{2})(\d+)(?:[A-Z][a-z]{2})?fs[\*X]?\d*$', v, re.IGNORECASE)
         if m:
-            ref_raw = m.group(1)
-            if len(ref_raw) == 1:
-                ref = ref_raw.upper()
-            else:
-                ref = AA_MAP_REVERSE.get(ref_raw.capitalize())
+            ref = AA_MAP_REVERSE.get(m.group(1).capitalize())
             if ref:
                 return f"{ref}{m.group(2)}fsX"
         
-        # Stop variants
-        m = re.match(r'^([A-Z])(\d+)(sp|stop|X|\*)$', v, re.IGNORECASE)
+        # Pattern 2: Single-letter with frameshift: A193fsX, A193fs*46, A193fs
+        m = re.match(r'^([A-Za-z])(\d+)fs[\*X]?\d*$', v, re.IGNORECASE)
         if m:
-            return f"{m.group(1)}{m.group(2)}X"
+            return f"{m.group(1).upper()}{m.group(2)}fsX"
+        
+        # Pattern 3: fs+NX format: A1077fs+X*, A193fs+34X
+        m = re.match(r'^([A-Za-z])(\d+)fs\+?\d*X?\*?$', v, re.IGNORECASE)
+        if m:
+            return f"{m.group(1).upper()}{m.group(2)}fsX"
+        
+        # Pattern 4: fsTer format: Gly24fsTer58
+        m = re.match(r'^([A-Z][a-z]{2})(\d+)(?:[A-Z][a-z]{2})?fsTer\d*$', v, re.IGNORECASE)
+        if m:
+            ref = AA_MAP_REVERSE.get(m.group(1).capitalize())
+            if ref:
+                return f"{ref}{m.group(2)}fsX"
+        
+        # Pattern 5: Three-letter stop: Arg518*
+        m = re.match(r'^([A-Z][a-z]{2})(\d+)\*$', v, re.IGNORECASE)
+        if m:
+            ref = AA_MAP_REVERSE.get(m.group(1).capitalize())
+            if ref:
+                return f"{ref}{m.group(2)}X"
+        
+        # Stop variants: R864sp, R864stop, R864Ter
+        m = re.match(r'^([A-Za-z])(\d+)(sp|stop|Ter)$', v, re.IGNORECASE)
+        if m:
+            return f"{m.group(1).upper()}{m.group(2)}X"
         
         return None
     
@@ -724,6 +774,15 @@ def normalize_variant(variant: str, gene_symbol: str = 'KCNH2') -> str:
     
     DROP-IN REPLACEMENT for utils.variant_utils.normalize_variant()
     
+    Normalization rules applied (in order):
+    1. Strip whitespace and common prefixes
+    2. Remove trailing asterisks from DMS studies: A561V* → A561V
+    3. Remove trailing annotations: R176W(het) → R176W, A561V/WT → A561V
+    4. Case normalization: a561v → A561V
+    5. 3-letter → 1-letter amino acid: p.Ala561Val → A561V
+    6. Frameshift standardization: fs*46 → fsX, fsXNN → fsX
+    7. p. prefix removal: p.R176W → R176W
+    
     Args:
         variant: Variant in any format (p.Ala561Val, A561V, c.1682C>T, etc.)
         gene_symbol: Gene symbol for context (default: KCNH2)
@@ -734,6 +793,12 @@ def normalize_variant(variant: str, gene_symbol: str = 'KCNH2') -> str:
     Examples:
         >>> normalize_variant('p.Ala561Val')
         'A561V'
+        >>> normalize_variant('A561V*')
+        'A561V'
+        >>> normalize_variant('R176W(het)')
+        'R176W'
+        >>> normalize_variant('a561v')
+        'A561V'
         >>> normalize_variant('c.1682C>T')
         'c.1682C>T'
         >>> normalize_variant('IVS10+1G>A')
@@ -743,6 +808,35 @@ def normalize_variant(variant: str, gene_symbol: str = 'KCNH2') -> str:
         return ""
     
     variant = variant.strip()
+    
+    # === RULE 1: Remove trailing asterisks (DMS study artifacts) ===
+    # A561V* → A561V, p.Arg231Cys* → p.Arg231Cys
+    # But preserve * when it's a stop codon: R864* should stay R864* (later normalized to R864X)
+    # Pattern: if * is at the very end AFTER a letter (not a number), remove it
+    if variant.endswith('*'):
+        # Check if this is likely a DMS asterisk vs stop codon
+        # Stop codon: ends in digit + * (R864*, Arg864*)
+        # DMS artifact: ends in letter + * (A561V*, Cys*)
+        if len(variant) >= 2 and variant[-2].isalpha():
+            variant = variant[:-1]
+    
+    # === RULE 2: Remove trailing annotations ===
+    # R176W(het) → R176W, A561V/WT → A561V, G584S(hom) → G584S
+    # Remove parenthetical annotations
+    variant = re.sub(r'\([^)]*\)$', '', variant)
+    # Remove /WT or /wt suffix
+    variant = re.sub(r'/[Ww][Tt]$', '', variant)
+    # Remove other slash annotations like /+ or /-
+    variant = re.sub(r'/[\+\-]$', '', variant)
+    
+    variant = variant.strip()
+    
+    # === RULE 3: Early case normalization for simple variants ===
+    # Handle lowercase variants like a561v → A561V before other processing
+    # This catches variants that might not match patterns otherwise
+    simple_lower_match = re.match(r'^([a-z])(\d+)([a-z\*])$', variant)
+    if simple_lower_match:
+        variant = f"{simple_lower_match.group(1).upper()}{simple_lower_match.group(2)}{simple_lower_match.group(3).upper()}"
     
     # Check KCNH2 alias lookup first
     if gene_symbol.upper() == 'KCNH2':
@@ -772,9 +866,19 @@ def normalize_variant(variant: str, gene_symbol: str = 'KCNH2') -> str:
         # If no mapping, return cleaned up IVS notation
         return f"IVS{ivs_num}{offset}{ref.upper()}>{alt.upper()}"
     
-    # Protein variant detection
-    if v_lower.startswith('p.') or re.match(r'^[A-Z][a-z]{2}\d+', variant):
-        # Protein variant with p. prefix or 3-letter AA
+    # === RULE 4: Protein variant detection ===
+    # Try normalize_to_single_letter first - it handles most cases now
+    
+    # Check for protein-like patterns: p.XXX, Ala123Val, A123V, frameshifts
+    is_protein_like = (
+        v_lower.startswith('p.') or 
+        re.match(r'^[A-Z][a-z]{2}\d+', variant, re.IGNORECASE) or
+        re.match(r'^[A-Za-z]\d+[A-Za-z\*X]$', variant, re.IGNORECASE) or
+        re.match(r'^[A-Za-z]\d+fs', variant, re.IGNORECASE) or
+        re.match(r'^[A-Za-z]\d+(stop|sp|ter)$', variant, re.IGNORECASE)
+    )
+    
+    if is_protein_like:
         single = normalizer.normalize_to_single_letter(variant)
         if single:
             return single
@@ -785,26 +889,33 @@ def normalize_variant(variant: str, gene_symbol: str = 'KCNH2') -> str:
         if cdna:
             return cdna
     
-    # Short protein format (A561V) - already normalized
-    if re.match(r'^[A-Z]\d+[A-Z*X]$', v_upper):
-        return v_upper.replace('*', 'X')
+    # Short protein format (A561V) - normalize case and stop codon
+    # This is a fallback if normalize_to_single_letter didn't catch it
+    m = re.match(r'^([A-Za-z])(\d+)([A-Za-z\*X])$', variant, re.IGNORECASE)
+    if m:
+        ref = m.group(1).upper()
+        pos = m.group(2)
+        alt = m.group(3).upper()
+        if alt == '*':
+            alt = 'X'
+        return f"{ref}{pos}{alt}"
     
-    # Frameshift variants
-    if re.match(r'^[A-Z]\d+fs', variant, re.IGNORECASE):
+    # Frameshift variants - ensure normalization
+    if re.match(r'^[A-Za-z]\d+fs', variant, re.IGNORECASE):
         single = normalizer.normalize_to_single_letter(variant)
         if single:
             return single
     
     # Stop variants
-    if re.match(r'^[A-Z]\d+(stop|sp|ter|\*|X)$', variant, re.IGNORECASE):
+    if re.match(r'^[A-Za-z]\d+(stop|sp|ter|\*|X)$', variant, re.IGNORECASE):
         single = normalizer.normalize_to_single_letter(variant)
         if single:
             return single
     
     # Deletion/insertion variants
-    if re.match(r'^[A-Z]\d+(del|ins|dup)', variant, re.IGNORECASE):
+    if re.match(r'^[A-Za-z]\d+(del|ins|dup)', variant, re.IGNORECASE):
         # Normalize to uppercase with standard suffix
-        m = re.match(r'^([A-Z])(\d+)(del|ins|dup)(.*)$', variant, re.IGNORECASE)
+        m = re.match(r'^([A-Za-z])(\d+)(del|ins|dup)(.*)$', variant, re.IGNORECASE)
         if m:
             return f"{m.group(1).upper()}{m.group(2)}{m.group(3).lower()}{m.group(4).upper()}"
     
@@ -990,6 +1101,74 @@ if __name__ == '__main__':
     for v in standalone_tests:
         normalized = normalize_variant(v)
         print(f"  {v:18} -> {normalized}")
+    
+    # === NEW TESTS: Normalization gap fixes (2026-02-10) ===
+    print("\n8. NEW Normalization Gap Fixes (2026-02-10):")
+    
+    # Test 8a: Trailing asterisk removal (DMS artifacts)
+    print("\n  8a. Trailing Asterisk Removal (DMS artifacts):")
+    asterisk_tests = [
+        ('A561V*', 'A561V'),      # DMS artifact
+        ('p.Arg231Cys*', 'R231C'), # Three-letter with asterisk
+        ('M291T*', 'M291T'),      # DMS study variant
+        ('R864*', 'R864X'),       # Stop codon - should convert * to X
+    ]
+    for v, expected in asterisk_tests:
+        result = normalize_variant(v)
+        status = "✓" if result == expected else f"✗ (got {result})"
+        print(f"    {v:18} -> {result:10} expected {expected:10} {status}")
+    
+    # Test 8b: Trailing annotation removal
+    print("\n  8b. Trailing Annotation Removal:")
+    annotation_tests = [
+        ('R176W(het)', 'R176W'),
+        ('A561V/WT', 'A561V'),
+        ('G584S(hom)', 'G584S'),
+        ('R534C/+', 'R534C'),
+    ]
+    for v, expected in annotation_tests:
+        result = normalize_variant(v)
+        status = "✓" if result == expected else f"✗ (got {result})"
+        print(f"    {v:18} -> {result:10} expected {expected:10} {status}")
+    
+    # Test 8c: Case normalization
+    print("\n  8c. Case Normalization:")
+    case_tests = [
+        ('a561v', 'A561V'),
+        ('r176w', 'R176W'),
+        ('g584s', 'G584S'),
+    ]
+    for v, expected in case_tests:
+        result = normalize_variant(v)
+        status = "✓" if result == expected else f"✗ (got {result})"
+        print(f"    {v:18} -> {result:10} expected {expected:10} {status}")
+    
+    # Test 8d: Frameshift standardization
+    print("\n  8d. Frameshift Standardization:")
+    fs_tests = [
+        ('A193fs*46', 'A193fsX'),
+        ('p.Gly262Alafs*98', 'G262fsX'),
+        ('G262fsX10', 'G262fsX'),
+        ('A1077fs+X*', 'A1077fsX'),
+        ('p.Arg518fs*', 'R518fsX'),
+        ('Gly24fsTer58', 'G24fsX'),
+    ]
+    for v, expected in fs_tests:
+        result = normalize_variant(v)
+        status = "✓" if result == expected else f"✗ (got {result})"
+        print(f"    {v:18} -> {result:10} expected {expected:10} {status}")
+    
+    # Test 8e: p. prefix removal (should already work)
+    print("\n  8e. p. Prefix Removal:")
+    prefix_tests = [
+        ('p.R176W', 'R176W'),
+        ('p.A561V', 'A561V'),
+        ('p.Ala561Val', 'A561V'),
+    ]
+    for v, expected in prefix_tests:
+        result = normalize_variant(v)
+        status = "✓" if result == expected else f"✗ (got {result})"
+        print(f"    {v:18} -> {result:10} expected {expected:10} {status}")
     
     # Test non-target detection
     non_target_tests = [
