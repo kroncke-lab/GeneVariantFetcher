@@ -48,10 +48,13 @@ venv.bak/
 
 # Pipeline output
 output/
+output_directory/
 automated_output/
 gvf_output/
+europepmc_downloads/
 *.log
 pipeline.log
+*.db
 
 # Git filter-branch artifacts
 .git-rewrite/
