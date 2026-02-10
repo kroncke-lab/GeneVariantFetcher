@@ -267,7 +267,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="GeneVariantFetcher GUI",
     description="Web interface for extracting genetic variant data from literature",
-    version="1.0.0",
+    version="2.1.0",
     lifespan=lifespan,
 )
 

@@ -1,6 +1,6 @@
 [project]
 name = "genevariantfetcher"
-version = "0.1.0"
+version = "2.1.0"
 description = "A collection of Python tools for extracting genetic variant data, patient-level information, and full-text articles from PubMed literature"
 requires-python = ">=3.11"
 dependencies = [
