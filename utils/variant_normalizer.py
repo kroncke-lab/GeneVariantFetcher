@@ -627,23 +627,395 @@ def normalize_variant_list(variants: list, gene_symbol: str) -> Tuple[list, dict
     return normalized, stats
 
 
+def normalize_frameshift(variant: str) -> Optional[str]:
+    """
+    Normalize all frameshift naming conventions to a standard form: REFposfsX
+    
+    Handles:
+    - L987fs, L987fsX, L987fsX10, L987fs*10 → L987fsX
+    - p.Leu987fs, p.Leu987fsTer10, p.Leu987Profs*10 → L987fsX
+    - 987fs, fs987 → position extracted if possible
+    
+    Args:
+        variant: Frameshift variant in any notation
+        
+    Returns:
+        Normalized form (L987fsX) or None if not a frameshift
+    """
+    if not variant:
+        return None
+    
+    v = variant.strip()
+    
+    # Remove p. prefix
+    if v.lower().startswith('p.'):
+        v = v[2:]
+    
+    # Pattern 1: Single letter + position + fs variants
+    # L987fs, L987fsX, L987fsX10, L987fs*10, L987fs*
+    m = re.match(r'^([A-Za-z])(\d+)fs[\*X]?\d*$', v, re.IGNORECASE)
+    if m:
+        return f"{m.group(1).upper()}{m.group(2)}fsX"
+    
+    # Pattern 2: Three-letter + position + optional second AA + fs
+    # Leu987fs, Leu987Profs, Leu987Profs*10, Leu987fsTer10
+    m = re.match(r'^([A-Z][a-z]{2})(\d+)(?:[A-Z][a-z]{2})?fs[\*X]?\d*$', v, re.IGNORECASE)
+    if m:
+        ref = AA_MAP_REVERSE.get(m.group(1).capitalize())
+        if ref:
+            return f"{ref}{m.group(2)}fsX"
+    
+    # Pattern 3: fsTer format (Leu987fsTer10, L987fsTer)
+    m = re.match(r'^([A-Za-z]|[A-Z][a-z]{2})(\d+)(?:[A-Za-z]{0,3})?fsTer\d*$', v, re.IGNORECASE)
+    if m:
+        ref_raw = m.group(1)
+        if len(ref_raw) == 1:
+            ref = ref_raw.upper()
+        else:
+            ref = AA_MAP_REVERSE.get(ref_raw.capitalize())
+        if ref:
+            return f"{ref}{m.group(2)}fsX"
+    
+    # Pattern 4: Position-only fs (987fs, fs987) - less reliable
+    m = re.match(r'^(\d+)fs[\*X]?\d*$', v, re.IGNORECASE)
+    if m:
+        return f"?{m.group(1)}fsX"  # Mark as ambiguous
+    
+    m = re.match(r'^fs(\d+)$', v, re.IGNORECASE)
+    if m:
+        return f"?{m.group(1)}fsX"  # Mark as ambiguous
+    
+    return None
+
+
+def normalize_nonsense(variant: str) -> Optional[str]:
+    """
+    Normalize nonsense/stop variants to standard form: REFposX
+    
+    Handles:
+    - W1001X, W1001*, p.Trp1001Ter, p.Trp1001* → W1001X
+    - R864stop, R864sp → R864X
+    
+    Args:
+        variant: Stop/nonsense variant in any notation
+        
+    Returns:
+        Normalized form (W1001X) or None if not a nonsense variant
+    """
+    if not variant:
+        return None
+    
+    v = variant.strip()
+    
+    # Remove p. prefix
+    if v.lower().startswith('p.'):
+        v = v[2:]
+    
+    # Pattern 1: Single letter + position + stop indicators
+    # W1001X, W1001*, R864X
+    m = re.match(r'^([A-Za-z])(\d+)[\*X]$', v, re.IGNORECASE)
+    if m:
+        return f"{m.group(1).upper()}{m.group(2)}X"
+    
+    # Pattern 2: Three-letter + position + Ter/*
+    # Trp1001Ter, Trp1001*, Arg864Ter
+    m = re.match(r'^([A-Z][a-z]{2})(\d+)(Ter|\*)$', v, re.IGNORECASE)
+    if m:
+        ref = AA_MAP_REVERSE.get(m.group(1).capitalize())
+        if ref:
+            return f"{ref}{m.group(2)}X"
+    
+    # Pattern 3: stop/sp suffix
+    # R864stop, R864sp
+    m = re.match(r'^([A-Za-z])(\d+)(stop|sp)$', v, re.IGNORECASE)
+    if m:
+        return f"{m.group(1).upper()}{m.group(2)}X"
+    
+    # Pattern 4: Three-letter with stop
+    m = re.match(r'^([A-Z][a-z]{2})(\d+)(stop|sp)$', v, re.IGNORECASE)
+    if m:
+        ref = AA_MAP_REVERSE.get(m.group(1).capitalize())
+        if ref:
+            return f"{ref}{m.group(2)}X"
+    
+    return None
+
+
+def normalize_deletion(variant: str) -> Optional[str]:
+    """
+    Normalize deletion variants to standard form: REFposdel
+    
+    Handles:
+    - del552, p.Leu552del, L552del → L552del
+    - L552_L555del → L552_L555del (range preserved)
+    
+    Args:
+        variant: Deletion variant in any notation
+        
+    Returns:
+        Normalized form (L552del) or None if not a deletion
+    """
+    if not variant:
+        return None
+    
+    v = variant.strip()
+    
+    # Remove p. prefix
+    if v.lower().startswith('p.'):
+        v = v[2:]
+    
+    # Pattern 1: Single letter + position + del
+    # L552del
+    m = re.match(r'^([A-Za-z])(\d+)del$', v, re.IGNORECASE)
+    if m:
+        return f"{m.group(1).upper()}{m.group(2)}del"
+    
+    # Pattern 2: Three-letter + position + del
+    # Leu552del
+    m = re.match(r'^([A-Z][a-z]{2})(\d+)del$', v, re.IGNORECASE)
+    if m:
+        ref = AA_MAP_REVERSE.get(m.group(1).capitalize())
+        if ref:
+            return f"{ref}{m.group(2)}del"
+    
+    # Pattern 3: Position-only del
+    # del552
+    m = re.match(r'^del(\d+)$', v, re.IGNORECASE)
+    if m:
+        return f"?{m.group(1)}del"  # Mark as ambiguous
+    
+    # Pattern 4: Range deletion (preserve range)
+    # L552_L555del, Leu552_Leu555del
+    m = re.match(r'^([A-Za-z]|[A-Z][a-z]{2})(\d+)_([A-Za-z]|[A-Z][a-z]{2})(\d+)del$', v, re.IGNORECASE)
+    if m:
+        ref1_raw, pos1, ref2_raw, pos2 = m.groups()
+        if len(ref1_raw) == 1:
+            ref1 = ref1_raw.upper()
+        else:
+            ref1 = AA_MAP_REVERSE.get(ref1_raw.capitalize(), ref1_raw[0].upper())
+        if len(ref2_raw) == 1:
+            ref2 = ref2_raw.upper()
+        else:
+            ref2 = AA_MAP_REVERSE.get(ref2_raw.capitalize(), ref2_raw[0].upper())
+        return f"{ref1}{pos1}_{ref2}{pos2}del"
+    
+    return None
+
+
+def normalize_duplication(variant: str) -> Optional[str]:
+    """
+    Normalize duplication variants to standard form: REFposdup
+    
+    Handles:
+    - dup552, p.Leu552dup, L552dup → L552dup
+    
+    Args:
+        variant: Duplication variant in any notation
+        
+    Returns:
+        Normalized form (L552dup) or None if not a duplication
+    """
+    if not variant:
+        return None
+    
+    v = variant.strip()
+    
+    # Remove p. prefix
+    if v.lower().startswith('p.'):
+        v = v[2:]
+    
+    # Pattern 1: Single letter + position + dup
+    m = re.match(r'^([A-Za-z])(\d+)dup$', v, re.IGNORECASE)
+    if m:
+        return f"{m.group(1).upper()}{m.group(2)}dup"
+    
+    # Pattern 2: Three-letter + position + dup
+    m = re.match(r'^([A-Z][a-z]{2})(\d+)dup$', v, re.IGNORECASE)
+    if m:
+        ref = AA_MAP_REVERSE.get(m.group(1).capitalize())
+        if ref:
+            return f"{ref}{m.group(2)}dup"
+    
+    # Pattern 3: Position-only dup
+    m = re.match(r'^dup(\d+)$', v, re.IGNORECASE)
+    if m:
+        return f"?{m.group(1)}dup"  # Mark as ambiguous
+    
+    # Pattern 4: Range duplication
+    m = re.match(r'^([A-Za-z]|[A-Z][a-z]{2})(\d+)_([A-Za-z]|[A-Z][a-z]{2})(\d+)dup$', v, re.IGNORECASE)
+    if m:
+        ref1_raw, pos1, ref2_raw, pos2 = m.groups()
+        if len(ref1_raw) == 1:
+            ref1 = ref1_raw.upper()
+        else:
+            ref1 = AA_MAP_REVERSE.get(ref1_raw.capitalize(), ref1_raw[0].upper())
+        if len(ref2_raw) == 1:
+            ref2 = ref2_raw.upper()
+        else:
+            ref2 = AA_MAP_REVERSE.get(ref2_raw.capitalize(), ref2_raw[0].upper())
+        return f"{ref1}{pos1}_{ref2}{pos2}dup"
+    
+    return None
+
+
+def get_variant_type(variant: str) -> str:
+    """
+    Determine the type of a protein variant.
+    
+    Returns one of: 'missense', 'nonsense', 'frameshift', 'deletion', 
+    'duplication', 'insertion', 'splice', 'unknown'
+    """
+    if not variant:
+        return 'unknown'
+    
+    v = variant.upper()
+    
+    if 'FS' in v:
+        return 'frameshift'
+    if v.endswith('X') or v.endswith('*') or 'TER' in v.upper() or 'STOP' in v.upper():
+        return 'nonsense'
+    if 'DEL' in v:
+        return 'deletion'
+    if 'DUP' in v:
+        return 'duplication'
+    if 'INS' in v:
+        return 'insertion'
+    if 'IVS' in v or '+' in v or '-' in v:
+        return 'splice'
+    
+    # Missense: single AA change
+    if re.match(r'^[A-Z]\d+[A-Z]$', v):
+        return 'missense'
+    
+    return 'unknown'
+
+
+def match_variants_fuzzy(
+    variant1: str,
+    variant2: str,
+    gene_symbol: str = 'KCNH2',
+    position_tolerance: int = 1
+) -> Tuple[bool, str]:
+    """
+    Check if two variants match using fuzzy matching rules.
+    
+    Tries in order:
+    1. Exact match after normalization
+    2. Type-specific matching (frameshift, nonsense, deletion, etc.)
+    3. Position-based matching with tolerance for same variant type
+    
+    Args:
+        variant1: First variant string
+        variant2: Second variant string  
+        gene_symbol: Gene context for normalization
+        position_tolerance: Position offset to allow (default ±1)
+        
+    Returns:
+        Tuple of (is_match, match_type) where match_type describes how they matched
+    """
+    if not variant1 or not variant2:
+        return False, 'no_input'
+    
+    normalizer = VariantNormalizer(gene_symbol)
+    
+    # Step 1: Try exact match after standard normalization
+    norm1 = normalize_variant(variant1, gene_symbol)
+    norm2 = normalize_variant(variant2, gene_symbol)
+    
+    if norm1 and norm2 and norm1 == norm2:
+        return True, 'exact_normalized'
+    
+    # Step 2: Type-specific normalization
+    type1 = get_variant_type(variant1)
+    type2 = get_variant_type(variant2)
+    
+    # Frameshift matching
+    if type1 == 'frameshift' or type2 == 'frameshift':
+        fs1 = normalize_frameshift(variant1)
+        fs2 = normalize_frameshift(variant2)
+        if fs1 and fs2:
+            # Remove ambiguous marker for comparison
+            fs1_clean = fs1.replace('?', '')
+            fs2_clean = fs2.replace('?', '')
+            if fs1_clean == fs2_clean:
+                return True, 'frameshift_normalized'
+    
+    # Nonsense matching
+    if type1 == 'nonsense' or type2 == 'nonsense':
+        ns1 = normalize_nonsense(variant1)
+        ns2 = normalize_nonsense(variant2)
+        if ns1 and ns2 and ns1 == ns2:
+            return True, 'nonsense_normalized'
+    
+    # Deletion matching
+    if type1 == 'deletion' or type2 == 'deletion':
+        del1 = normalize_deletion(variant1)
+        del2 = normalize_deletion(variant2)
+        if del1 and del2:
+            del1_clean = del1.replace('?', '')
+            del2_clean = del2.replace('?', '')
+            if del1_clean == del2_clean:
+                return True, 'deletion_normalized'
+    
+    # Duplication matching
+    if type1 == 'duplication' or type2 == 'duplication':
+        dup1 = normalize_duplication(variant1)
+        dup2 = normalize_duplication(variant2)
+        if dup1 and dup2:
+            dup1_clean = dup1.replace('?', '')
+            dup2_clean = dup2.replace('?', '')
+            if dup1_clean == dup2_clean:
+                return True, 'duplication_normalized'
+    
+    # Step 3: Position-based fuzzy matching (for same type)
+    if type1 == type2 and type1 != 'unknown':
+        pos1 = normalizer.extract_position(variant1)
+        pos2 = normalizer.extract_position(variant2)
+        
+        if pos1 and pos2 and abs(pos1 - pos2) <= position_tolerance:
+            # For missense, also check ref and alt amino acids
+            if type1 == 'missense':
+                single1 = normalizer.normalize_to_single_letter(variant1)
+                single2 = normalizer.normalize_to_single_letter(variant2)
+                if single1 and single2:
+                    m1 = re.match(r'^([A-Z])\d+([A-Z])$', single1)
+                    m2 = re.match(r'^([A-Z])\d+([A-Z])$', single2)
+                    if m1 and m2:
+                        ref1, alt1 = m1.groups()
+                        ref2, alt2 = m2.groups()
+                        if ref1 == ref2 and alt1 == alt2:
+                            return True, f'position_fuzzy_{pos1-pos2:+d}'
+            else:
+                # For non-missense types, position match is sufficient
+                return True, f'position_fuzzy_{pos1-pos2:+d}'
+    
+    return False, 'no_match'
+
+
 def match_variants_to_baseline(
     extracted: List[str],
     baseline: Set[str],
     gene_symbol: str = 'KCNH2',
-    fuzzy_position: bool = True
+    fuzzy_position: bool = True,
+    position_tolerance: int = 1
 ) -> Dict[str, Any]:
     """
     Match extracted variants to a baseline set with improved normalization.
     
     Supports exact matching, normalized matching, cDNA prefix matching,
-    and optional fuzzy position matching (±1 for off-by-one errors).
+    fuzzy position matching (±1 for off-by-one errors), and type-specific
+    normalization for frameshifts, nonsense, deletions, and duplications.
+    
+    ENHANCED (2026-02-10): Now uses match_variants_fuzzy() for comprehensive
+    variant matching including all frameshift conventions, nonsense variants,
+    deletions, and duplications.
     
     Args:
         extracted: List of extracted variant strings
         baseline: Set of baseline variant strings
         gene_symbol: Target gene symbol
         fuzzy_position: Allow ±1 position matching
+        position_tolerance: Position offset to allow (default 1)
     
     Returns:
         Dict with matches, unmatched, filtered_non_target, and stats
@@ -653,15 +1025,35 @@ def match_variants_to_baseline(
     # Build baseline position index for fuzzy matching
     baseline_by_pos = {}
     baseline_singles = set()
+    baseline_normalized = {}  # Map normalized form -> original
+    
     for v in baseline:
         single = normalizer.normalize_to_single_letter(v)
         if single:
             baseline_singles.add(single)
+            baseline_normalized[single] = v
             pos = normalizer.extract_position(v)
             if pos:
                 if pos not in baseline_by_pos:
                     baseline_by_pos[pos] = []
                 baseline_by_pos[pos].append(v)
+        
+        # Also store type-specific normalized forms
+        fs_norm = normalize_frameshift(v)
+        if fs_norm:
+            baseline_normalized[fs_norm.replace('?', '')] = v
+        
+        ns_norm = normalize_nonsense(v)
+        if ns_norm:
+            baseline_normalized[ns_norm] = v
+        
+        del_norm = normalize_deletion(v)
+        if del_norm:
+            baseline_normalized[del_norm.replace('?', '')] = v
+        
+        dup_norm = normalize_duplication(v)
+        if dup_norm:
+            baseline_normalized[dup_norm.replace('?', '')] = v
     
     # Also index cDNA forms
     baseline_cdna = set()
@@ -679,6 +1071,10 @@ def match_variants_to_baseline(
             'normalized_matches': 0,
             'fuzzy_matches': 0,
             'cdna_matches': 0,
+            'frameshift_matches': 0,
+            'nonsense_matches': 0,
+            'deletion_matches': 0,
+            'duplication_matches': 0,
             'filtered': 0,
             'unmatched': 0,
         }
@@ -705,13 +1101,48 @@ def match_variants_to_baseline(
         if not matched_to:
             single = normalizer.normalize_to_single_letter(v)
             if single and single in baseline_singles:
-                # Find the original baseline form
-                for bv in baseline:
-                    if normalizer.normalize_to_single_letter(bv) == single:
-                        matched_to = bv
-                        match_type = 'normalized'
-                        results['stats']['normalized_matches'] += 1
-                        break
+                matched_to = baseline_normalized.get(single, single)
+                match_type = 'normalized'
+                results['stats']['normalized_matches'] += 1
+        
+        # Try type-specific normalized match
+        if not matched_to:
+            # Frameshift
+            fs_norm = normalize_frameshift(v)
+            if fs_norm:
+                fs_key = fs_norm.replace('?', '')
+                if fs_key in baseline_normalized:
+                    matched_to = baseline_normalized[fs_key]
+                    match_type = 'frameshift_normalized'
+                    results['stats']['frameshift_matches'] += 1
+        
+        if not matched_to:
+            # Nonsense
+            ns_norm = normalize_nonsense(v)
+            if ns_norm and ns_norm in baseline_normalized:
+                matched_to = baseline_normalized[ns_norm]
+                match_type = 'nonsense_normalized'
+                results['stats']['nonsense_matches'] += 1
+        
+        if not matched_to:
+            # Deletion
+            del_norm = normalize_deletion(v)
+            if del_norm:
+                del_key = del_norm.replace('?', '')
+                if del_key in baseline_normalized:
+                    matched_to = baseline_normalized[del_key]
+                    match_type = 'deletion_normalized'
+                    results['stats']['deletion_matches'] += 1
+        
+        if not matched_to:
+            # Duplication
+            dup_norm = normalize_duplication(v)
+            if dup_norm:
+                dup_key = dup_norm.replace('?', '')
+                if dup_key in baseline_normalized:
+                    matched_to = baseline_normalized[dup_key]
+                    match_type = 'duplication_normalized'
+                    results['stats']['duplication_matches'] += 1
         
         # Try cDNA normalization
         if not matched_to:
@@ -721,19 +1152,28 @@ def match_variants_to_baseline(
                 match_type = 'cdna_prefix'
                 results['stats']['cdna_matches'] += 1
         
-        # Try fuzzy position matching (±1)
+        # Try fuzzy position matching (±tolerance)
         if not matched_to and fuzzy_position:
             pos = normalizer.extract_position(v)
             single = normalizer.normalize_to_single_letter(v)
+            var_type = get_variant_type(v)
+            
             if pos and single:
                 # Parse ref and alt from single
                 m = re.match(r'^([A-Z])(\d+)(.+)$', single)
                 if m:
                     ref, _, alt = m.groups()
-                    for delta in [-1, 1]:
+                    for delta in range(-position_tolerance, position_tolerance + 1):
+                        if delta == 0:
+                            continue
                         test_pos = pos + delta
                         if test_pos in baseline_by_pos:
                             for bv in baseline_by_pos[test_pos]:
+                                # Check type compatibility
+                                b_type = get_variant_type(bv)
+                                if var_type != b_type:
+                                    continue
+                                
                                 bsingle = normalizer.normalize_to_single_letter(bv)
                                 if bsingle:
                                     bm = re.match(r'^([A-Z])(\d+)(.+)$', bsingle)
