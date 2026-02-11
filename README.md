@@ -39,7 +39,7 @@ Validated on KCNH2 (Long QT Syndrome type 2) with manually curated gold standard
 | **Total carriers** | 71.3% |
 | **Affected individuals** | 67.6% |
 
-Version 2.1.0 improved recall from 19.4% → 54.6% through Springer API integration and enhanced table extraction.
+Version 2.1.0 improved recall from 19.4% → 59.1% through Springer API integration, enhanced table extraction, and scanner improvements.
 
 > **Note:** Performance varies by gene and literature availability. Cardiac genes (15 validated) have optimized configurations; other genes work generically but may have lower recall.
 

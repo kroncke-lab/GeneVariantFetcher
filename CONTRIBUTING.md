@@ -27,22 +27,22 @@ cp .env.example .env
 
 ## Adding a New Gene
 
-1. **Create gene configuration** in `config/genes/`:
+1. **Add gene configuration** to `config/gene_config.py`:
    ```python
-   # config/genes/YOUR_GENE.py
-   GENE_CONFIG = {
-       "symbol": "GENE",
-       "aliases": ["ALIAS1", "ALIAS2"],
-       "uniprot_id": "PXXXXX",
-       "reference_transcript": "NM_XXXXXXX.X",
-   }
+   # In config/gene_config.py, add to GENE_CONFIGS dict:
+   "YOUR_GENE": GeneConfig(
+       symbol="YOUR_GENE",
+       aliases=["ALIAS1", "ALIAS2"],
+       protein_length=1234,
+       # ... other config
+   ),
    ```
 
 2. **Add variant alias dictionary** (optional but recommended):
    ```
-   resources/variant_aliases/GENE_aliases.tsv
+   utils/{gene}_variant_aliases.json
    ```
-   Format: `alias\tcanonical_variant` (one per line)
+   Format: JSON mapping alias → canonical variant (see `utils/kcnh2_variant_aliases.json` for example)
 
 3. **Run discovery** to find papers:
    ```bash
@@ -134,14 +134,14 @@ Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 ```
 GeneVariantFetcher/
 ├── cli/              # CLI commands (Typer)
-├── config/           # Pydantic settings, gene configs
-├── gene_literature/  # PubMed/PMC discovery
+├── config/           # Settings, gene configs (gene_config.py)
+├── gene_literature/  # PMID discovery (PubMed, PubMind, Europe PMC)
 ├── gui/              # FastAPI web interface
-├── harvesting/       # Paper download, publisher APIs
-├── pipeline/         # Core extraction logic
-├── resources/        # Variant aliases, reference data
+├── harvesting/       # Paper download, publisher APIs, format conversion
+├── pipeline/         # Core extraction logic (filters, extraction, aggregation)
+├── scripts/          # Utility and analysis scripts
 ├── tests/            # Pytest test suite
-└── utils/            # Shared utilities
+└── utils/            # Shared utilities (normalizer, scanner, LLM utils)
 ```
 
 ## Questions?

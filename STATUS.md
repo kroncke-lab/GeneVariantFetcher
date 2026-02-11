@@ -1,1 +1,11 @@
-The Gene Variant Fetcher pipeline fails to extract variants from ~94.6% of papers. This module is a major bottleneck because most variant data is in supplementary files (Excel tables, PDFs), NOT the main article text.
+# GeneVariantFetcher Status
+
+**Current Performance (v2.1.0, 2026-02-11):**
+- **Unique Variant Recall:** 59.1% (289/489 variants)
+- **Carrier Recall:** 71.3%
+- **Affected Recall:** 67.6%
+- **Target:** 90%
+
+**Primary Bottleneck:** Paper coverage — many baseline papers are paywalled or lack PMC access.
+
+See `CLAUDE.md` for detailed status and `docs/VALIDATION.md` for methodology.

@@ -23,11 +23,14 @@ GeneVariantFetcher/
 ├── cli/                    # Command-line interface
 │   ├── extract.py          # Main extraction pipeline
 │   └── compare_variants.py # Validation against curated data
-├── harvesting/             # Paper discovery & download
-│   ├── orchestrator.py     # Main pipeline coordinator
+├── gene_literature/        # Paper discovery
 │   ├── pubmed_client.py    # PubMed search
+│   ├── pubmind_fetcher.py  # PubMind variant search
+│   └── synonym_finder.py   # Gene alias lookup
+├── harvesting/             # Paper download & conversion
+│   ├── orchestrator.py     # Main pipeline coordinator
 │   ├── supplement_scraper.py # Publisher handlers
-│   └── supplement_reference_parser.py # Reference extraction
+│   └── format_converters.py  # XML/PDF/Excel → Markdown
 ├── pipeline/               # LLM extraction pipeline
 │   ├── extraction.py       # Variant extraction from text
 │   └── steps.py            # Pipeline stages
