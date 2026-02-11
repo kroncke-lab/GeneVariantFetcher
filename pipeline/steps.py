@@ -496,9 +496,9 @@ def run_data_scout(
         )
 
     scout = GeneticDataScout(
-        model=settings.scout_model,
-        min_relevance=min_relevance,
-        extraction_focus=gene_symbol,
+        gene_symbol=gene_symbol,
+        min_relevance_score=min_relevance,
+        max_zones=settings.scout_max_zones if settings else 30,
     )
 
     scouted = 0
@@ -507,10 +507,12 @@ def run_data_scout(
     for md_file in files_to_scout:
         try:
             content = md_file.read_text(encoding="utf-8")
-            zones = scout.identify_high_value_zones(content)
+            # Extract PMID from filename (e.g., "12345678_FULL_CONTEXT.md" -> "12345678")
+            pmid = md_file.name.replace("_FULL_CONTEXT.md", "")
+            report = scout.scan(content, pmid=pmid)
 
-            if zones:
-                condensed = scout.extract_condensed_context(content, zones)
+            if report.zones_kept > 0:
+                condensed = scout.format_markdown(report, content)
                 output_file = md_file.with_name(
                     md_file.name.replace("_FULL_CONTEXT.md", "_DATA_ZONES.md")
                 )
