@@ -7,15 +7,15 @@ than main text - dense tables, appendix sections, figure legends, and methods.
 
 import logging
 import re
-from typing import List, Optional, Dict, Any
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-from utils.models import Paper
-from utils.llm_utils import BaseLLMCaller
 from pipeline.prompts import (
-    SUPPLEMENT_TABLE_PROMPT,
     SUPPLEMENT_APPENDIX_PROMPT,
+    SUPPLEMENT_TABLE_PROMPT,
 )
+from utils.llm_utils import BaseLLMCaller
+from utils.models import Paper
 
 logger = logging.getLogger(__name__)
 

@@ -5,9 +5,10 @@ import sys
 
 sys.path.insert(0, "/mnt/temp2/kronckbm/gitrepos/GeneVariantFetcher")
 
-import sqlite3
-import pandas as pd
 import re
+import sqlite3
+
+import pandas as pd
 
 
 def normalize_pmid(p):
@@ -64,7 +65,7 @@ for pmid in sorted(overlap)[:15]:
     total_sqlite_in_overlap += sqlite_count
     print(f"PMID {pmid}: Excel={excel_count}, SQLite={sqlite_count}")
 
-print(f"\n--- Summary for overlapping PMIDs ---")
+print("\n--- Summary for overlapping PMIDs ---")
 print(f"Total Excel entries in overlap: {total_excel_in_overlap}")
 print(f"Total SQLite variants in overlap: {total_sqlite_in_overlap}")
 
@@ -76,7 +77,7 @@ for pmid in overlap:
     full_sqlite += cursor.fetchone()[0]
     full_excel += len(df[df["PMID"].apply(normalize_pmid) == pmid])
 
-print(f"\nFull overlap analysis:")
+print("\nFull overlap analysis:")
 print(f"Total Excel entries for overlapping PMIDs: {full_excel}")
 print(f"Total SQLite variants for overlapping PMIDs: {full_sqlite}")
 

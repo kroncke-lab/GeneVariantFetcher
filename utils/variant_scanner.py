@@ -17,11 +17,11 @@ This scanner supplements LLM extraction by:
 CREATED: 2026-02-10
 """
 
-import re
 import logging
-from typing import List, Dict, Set, Optional, Tuple, Any
-from dataclasses import dataclass, field
+import re
 from collections import defaultdict
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -32,8 +32,8 @@ try:
         AA_MAP_REVERSE,
         PROTEIN_LENGTHS,
         VariantNormalizer,
-        normalize_variant,
         get_variant_type,
+        normalize_variant,
     )
 except ImportError:
     # Fallback for standalone testing
@@ -42,8 +42,8 @@ except ImportError:
         AA_MAP_REVERSE,
         PROTEIN_LENGTHS,
         VariantNormalizer,
-        normalize_variant,
         get_variant_type,
+        normalize_variant,
     )
 
 

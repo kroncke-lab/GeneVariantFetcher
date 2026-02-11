@@ -169,7 +169,7 @@ class PMCAPIClient:
         except Exception as e:
             # This can include HTTP errors from Entrez or parsing errors
             print(f"  NCBI E-utilities failed for {pmcid}: {e}")
-            print(f"  Trying Europe PMC fallback...")
+            print("  Trying Europe PMC fallback...")
 
         # Fallback to Europe PMC full-text API
         try:
@@ -185,9 +185,9 @@ class PMCAPIClient:
             if (
                 xml_string
                 and "<article" in xml_string.lower()
-                and not "<error>" in xml_string.lower()
+                and "<error>" not in xml_string.lower()
             ):
-                print(f"  ✓ Retrieved full-text from Europe PMC")
+                print("  ✓ Retrieved full-text from Europe PMC")
                 return xml_string
             else:
                 print(f"  Europe PMC returned invalid or empty response for {pmcid}")

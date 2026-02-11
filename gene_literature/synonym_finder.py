@@ -20,8 +20,8 @@ logger = logging.getLogger(__name__)
 
 try:
     from gene_literature.synonym_relevance_checker import (
-        SynonymRelevanceChecker,
         SynonymRelevance,
+        SynonymRelevanceChecker,
     )
 
     RELEVANCE_CHECKER_AVAILABLE = True

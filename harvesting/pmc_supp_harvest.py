@@ -8,16 +8,17 @@ text content.
 
 from __future__ import annotations
 
+import logging
 import os
 import subprocess
 import time
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 from urllib.parse import urljoin
-import logging
+
 import requests
-import xml.etree.ElementTree as ET
 
 
 @dataclass

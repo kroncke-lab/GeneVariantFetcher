@@ -9,7 +9,7 @@ Used to:
 """
 
 import re
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 
 def parse_supplement_references(text: str) -> Dict[str, Any]:

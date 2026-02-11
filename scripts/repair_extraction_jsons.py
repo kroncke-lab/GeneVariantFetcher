@@ -24,7 +24,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from utils.pmid_utils import extract_pmid_from_filename, extract_gene_from_filename
+from utils.pmid_utils import extract_gene_from_filename, extract_pmid_from_filename
 
 
 def validate_extraction_json(

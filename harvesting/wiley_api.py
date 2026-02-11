@@ -14,13 +14,14 @@ import tempfile
 import time
 from pathlib import Path
 from typing import Optional, Tuple
-from urllib.parse import urlparse, quote, unquote
+from urllib.parse import quote, unquote, urlparse
+from xml.etree import ElementTree as ET
 
 import requests
 from bs4 import BeautifulSoup
-from xml.etree import ElementTree as ET
 
 from utils.http_utils import BROWSER_HEADERS
+
 from .format_converters import FormatConverter
 
 logger = logging.getLogger(__name__)
@@ -709,14 +710,14 @@ class WileyAPIClient:
                     markdown = self._scrape_wiley_html(ft_response.text)
                     if markdown and len(markdown) > 2000:
                         logger.info(
-                            f"Successfully scraped Wiley article via full text link"
+                            "Successfully scraped Wiley article via full text link"
                         )
                         return markdown, None
 
             # Try to extract from the landing page itself (some old articles have inline text)
             markdown = self._scrape_wiley_html(html_content)
             if markdown and len(markdown) > 2000:
-                logger.info(f"Successfully scraped Wiley article from landing page")
+                logger.info("Successfully scraped Wiley article from landing page")
                 return markdown, None
 
             # Try PDF as final fallback

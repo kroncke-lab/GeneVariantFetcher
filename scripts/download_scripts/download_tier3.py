@@ -4,12 +4,13 @@ GVF Tier 3 Download - Process 70 papers from 2005-2010
 Batch downloads with PMC availability checking and alternatives
 """
 
-import sys
-import os
-import requests
 import json
-from pathlib import Path
+import os
+import sys
 from datetime import datetime
+from pathlib import Path
+
+import requests
 
 # Ensure paths setup
 gvf_repo = Path("/mnt/temp2/kronckbm/gitrepos/GeneVariantFetcher/")

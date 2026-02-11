@@ -2,10 +2,10 @@
 Resilience utilities for external API calls with circuit breaker pattern.
 """
 
-import time
 import logging
-from typing import Any, Callable, Optional
+import time
 from datetime import datetime, timedelta
+from typing import Any, Callable, Optional
 
 logger = logging.getLogger(__name__)
 

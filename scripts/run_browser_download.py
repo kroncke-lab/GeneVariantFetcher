@@ -9,8 +9,8 @@ Usage:
     python tests/run_browser_download.py [--max N] [--use-claude]
 """
 
-import sys
 import subprocess
+import sys
 from pathlib import Path
 
 # Paths

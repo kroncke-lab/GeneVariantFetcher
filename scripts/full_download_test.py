@@ -4,13 +4,13 @@ Full download test for all test PMIDs.
 Tries: Elsevier API → Wiley API → DOI Resolver → Browser Fetch (Playwright)
 """
 
+import json
 import os
 import sys
-import json
 import time
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from dataclasses import dataclass, field, asdict
-from typing import Optional, List
+from typing import List, Optional
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -20,8 +20,8 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 
 from config.settings import get_settings
 from harvesting.elsevier_api import ElsevierAPIClient
-from harvesting.wiley_api import WileyAPIClient
 from harvesting.pmc_api import PMCAPIClient
+from harvesting.wiley_api import WileyAPIClient
 
 # Playwright imports
 try:
@@ -224,7 +224,7 @@ def main():
                 continue
 
         # 3. Browser fetch (for everything else, including AHA)
-        print(f"    Trying browser fetch...")
+        print("    Trying browser fetch...")
         success, content, length = try_browser_fetch(result.doi, pmid)
         if success:
             result.success = True

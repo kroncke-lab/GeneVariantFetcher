@@ -6,8 +6,8 @@ Outputs a summary of what didn't work and why.
 
 import json
 import sys
-from pathlib import Path
 from collections import defaultdict
+from pathlib import Path
 
 
 def analyze_run(run_dir: Path):
@@ -84,18 +84,18 @@ def analyze_run(run_dir: Path):
     print(f"GVF RUN ANALYSIS: {run_dir.name}")
     print("=" * 80)
 
-    print(f"\n📊 SUMMARY:")
+    print("\n📊 SUMMARY:")
     print(f"  Discovered PMIDs:     {len(discovered)}")
     print(f"  Downloaded (any):     {len(downloaded)}")
     print(f"  Extracted:            {len(extracted)}")
     print(f"  With variants:        {len(extraction_successes)}")
 
-    print(f"\n❌ GAPS:")
+    print("\n❌ GAPS:")
     print(f"  Not downloaded:       {len(not_downloaded)}")
     print(f"  Downloaded, not extracted: {len(downloaded_not_extracted)}")
     print(f"  Extracted, no variants:    {len(extraction_failures)}")
 
-    print(f"\n📁 DOWNLOAD STATUS:")
+    print("\n📁 DOWNLOAD STATUS:")
     for status, pmids in download_status.items():
         print(f"  {status}: {len(pmids)}")
 
@@ -130,7 +130,7 @@ def analyze_run(run_dir: Path):
     # Top extractions by variant count
     if extraction_successes:
         top_10 = sorted(extraction_successes, key=lambda x: x[1], reverse=True)[:10]
-        print(f"\n🏆 TOP 10 EXTRACTIONS BY VARIANT COUNT:")
+        print("\n🏆 TOP 10 EXTRACTIONS BY VARIANT COUNT:")
         for pmid, count in top_10:
             print(f"  PMID {pmid}: {count} variants")
 

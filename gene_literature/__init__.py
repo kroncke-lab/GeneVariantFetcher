@@ -10,12 +10,12 @@ Public API:
     discover_pmids_for_gene - Combine PubMind with PubMed E-utilities discovery
 """
 
+from .discovery import discover_pmids_for_gene
 from .pubmind_fetcher import (
     PubMindFetcher,
     fetch_pmids_for_gene,
     fetch_pmids_for_variant,
 )
-from .discovery import discover_pmids_for_gene
 
 __all__ = [
     "PubMindFetcher",

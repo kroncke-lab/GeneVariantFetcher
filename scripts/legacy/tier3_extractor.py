@@ -5,10 +5,10 @@ KCNH2 Tier 3 Variant Extraction Script
 Extracts KCNH2/HERG variants from PMC XML files using pattern matching
 """
 
-import re
+import glob
 import json
 import os
-import glob
+import re
 from pathlib import Path
 from xml.dom import minidom
 

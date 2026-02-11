@@ -7,10 +7,10 @@ This module wraps the automated workflow to:
 3. Stream progress to connected clients
 """
 
+import csv
 import json
 import logging
 import os
-import csv
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
@@ -117,7 +117,7 @@ class PipelineWorker:
         self._stop_requested = False
 
         # Log job configuration for debugging
-        self._log(checkpoint, f"=== PIPELINE START ===")
+        self._log(checkpoint, "=== PIPELINE START ===")
         self._log(checkpoint, f"Job ID: {checkpoint.job_id}")
         self._log(checkpoint, f"Gene: {checkpoint.gene_symbol}")
         self._log(checkpoint, f"is_folder_job: {checkpoint.is_folder_job}")
@@ -260,7 +260,7 @@ class PipelineWorker:
 
             error_traceback = traceback.format_exc()
             logger.exception(f"Pipeline failed: {e}")
-            self._log(checkpoint, f"=== PIPELINE FAILED ===")
+            self._log(checkpoint, "=== PIPELINE FAILED ===")
             self._log(checkpoint, f"Error: {e}")
             self._log(checkpoint, f"Traceback: {error_traceback}")
             if checkpoint.current_step != PipelineStep.FAILED:
@@ -589,8 +589,8 @@ class PipelineWorker:
         self._log(checkpoint, "=== VARIANT EXTRACTION START ===")
         self._log(checkpoint, "Extracting variant data using AI...")
 
-        from utils.models import Paper
         from pipeline.extraction import ExpertExtractor
+        from utils.models import Paper
         from utils.pmid_utils import extract_pmid_from_filename
 
         # Determine directories based on job type
@@ -600,12 +600,12 @@ class PipelineWorker:
             if not harvest_dir.exists():
                 harvest_dir = base_path
             extraction_dir = base_path / "extractions"
-            self._log(checkpoint, f"Using folder job paths:")
+            self._log(checkpoint, "Using folder job paths:")
         else:
             base_path = checkpoint.output_path
             harvest_dir = base_path / "pmc_fulltext"
             extraction_dir = base_path / "extractions"
-            self._log(checkpoint, f"Using standard paths:")
+            self._log(checkpoint, "Using standard paths:")
 
         self._log(checkpoint, f"  base_path: {base_path}")
         self._log(checkpoint, f"  harvest_dir: {harvest_dir}")

@@ -14,7 +14,7 @@ Note: Free API keys only provide access to OpenAccess content.
 import logging
 import re
 import time
-from typing import Optional, Tuple, Dict, Any, List
+from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import quote
 from xml.etree import ElementTree as ET
 

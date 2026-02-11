@@ -10,9 +10,9 @@ Pipeline stages:
     3. Aggregation (DataAggregator) - Aggregate and validate results
 """
 
-from .filters import KeywordFilter, InternFilter, ClinicalDataTriageFilter
-from .extraction import ExpertExtractor
 from .aggregation import DataAggregator
+from .extraction import ExpertExtractor
+from .filters import ClinicalDataTriageFilter, InternFilter, KeywordFilter
 
 __all__ = [
     "KeywordFilter",

@@ -596,7 +596,7 @@ def convert_to_gvf_format(
             "population_frequency": None,
             "evidence_level": "table_extraction",
             "source_location": f"Table: {v.get('source_table')} from {Path(source_file).name}",
-            "additional_notes": f"Extracted via PDF/Excel table extraction",
+            "additional_notes": "Extracted via PDF/Excel table extraction",
             "key_quotes": [],
             "raw_row_data": v.get("row_data", {}),
         }

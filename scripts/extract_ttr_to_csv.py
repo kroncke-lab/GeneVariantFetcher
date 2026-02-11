@@ -11,11 +11,11 @@ Extracts:
 - Onset age (when available)
 """
 
-import sqlite3
+import argparse
 import csv
+import sqlite3
 import sys
 from pathlib import Path
-import argparse
 
 
 def extract_variants_to_csv(

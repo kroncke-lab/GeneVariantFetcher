@@ -15,10 +15,9 @@ import argparse
 import json
 import re
 from collections import Counter, defaultdict
-from pathlib import Path
-from typing import Dict, List, Any, Optional
 from datetime import datetime
-
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 # Common error patterns that indicate scraper/download failures
 ERROR_PATTERNS = {

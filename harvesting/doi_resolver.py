@@ -11,10 +11,11 @@ import logging
 import random
 import re
 import time
-import requests
-from typing import List, Dict, Optional, Tuple
-from urllib.parse import urlparse, quote
 from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+from urllib.parse import quote, urlparse
+
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -416,7 +417,7 @@ class DOIResolver:
                 f"  ✓ Extracted full text from publisher page ({len(markdown_content)} characters)"
             )
         else:
-            print(f"  ❌ Could not extract full text from publisher page")
+            print("  ❌ Could not extract full text from publisher page")
             self._log_paywalled(
                 pmid, "Full text extraction failed from publisher", final_url
             )

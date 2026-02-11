@@ -7,35 +7,37 @@ Main PMCHarvester class that coordinates all harvesting operations:
 - Creates unified markdown files for LLM processing
 """
 
-import os
-import re
-import time
 import csv
 import datetime
 import logging
-import requests
+import os
+import re
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlparse
 
-from .pmc_api import PMCAPIClient
-from .doi_resolver import DOIResolver
-from .supplement_scraper import SupplementScraper
-from .format_converters import FormatConverter
-from .elsevier_api import ElsevierAPIClient
-from .wiley_api import WileyAPIClient
-from .springer_api import SpringerAPIClient
-from .unpaywall_api import UnpaywallClient, get_unpaywall_client
-from .retry_manager import RetryManager, RetryConfig
-from .priority_queue import PriorityQueue, Priority, Status as QueueStatus
-from .core_api import COREAPIClient, get_core_client
-from .supplement_reference_parser import (
-    parse_supplement_references,
-    extract_supplement_urls_from_text,
-    check_supplement_gap,
-)
+import requests
+
 from utils.resilience import CircuitBreaker, ResilientAPIClient
 
+from .core_api import COREAPIClient, get_core_client
+from .doi_resolver import DOIResolver
+from .elsevier_api import ElsevierAPIClient
+from .format_converters import FormatConverter
+from .pmc_api import PMCAPIClient
+from .priority_queue import Priority, PriorityQueue
+from .priority_queue import Status as QueueStatus
+from .retry_manager import RetryConfig, RetryManager
+from .springer_api import SpringerAPIClient
+from .supplement_reference_parser import (
+    check_supplement_gap,
+    extract_supplement_urls_from_text,
+    parse_supplement_references,
+)
+from .supplement_scraper import SupplementScraper
+from .unpaywall_api import UnpaywallClient, get_unpaywall_client
+from .wiley_api import WileyAPIClient
 
 # Setup logging for circuit breaker monitoring
 logging.basicConfig(
@@ -170,8 +172,8 @@ def validate_harvest_inputs(pmids: List[str], output_dir: Path) -> List[str]:
 
 # Import scout components (with fallback for import errors)
 try:
-    from pipeline.data_scout import GeneticDataScout
     from config.settings import get_settings
+    from pipeline.data_scout import GeneticDataScout
 
     SCOUT_AVAILABLE = True
 except ImportError:
@@ -188,10 +190,10 @@ except ImportError:
     PedigreeExtractor = None
 
 # Import manifest utilities for tracking download outcomes
-from utils.manifest import Manifest, ManifestEntry, Status, Stage
-
 import json
 import logging
+
+from utils.manifest import Manifest, ManifestEntry, Stage, Status
 
 logger = logging.getLogger(__name__)
 
@@ -665,7 +667,7 @@ class PMCHarvester:
                 )
                 return summary
             else:
-                print(f"  - No pedigrees detected in figures")
+                print("  - No pedigrees detected in figures")
                 return None
 
         except Exception as e:
@@ -692,7 +694,7 @@ class PMCHarvester:
             return False
 
         if not self.gene_symbol:
-            print(f"  - Skipping data scout: no gene symbol provided")
+            print("  - Skipping data scout: no gene symbol provided")
             return False
 
         try:
@@ -1195,7 +1197,7 @@ class PMCHarvester:
 
         if not pmcid:
             # No PMCID - check if this is a free full text article via publisher
-            print(f"  - No PMCID found, checking for free full text via publisher...")
+            print("  - No PMCID found, checking for free full text via publisher...")
             return self._download_free_text_pmid(pmid, doi)
 
         print(f"  ✓ PMCID: {pmcid}")
@@ -1204,12 +1206,12 @@ class PMCHarvester:
         xml_content = self.pmc_api.get_fulltext_xml(pmcid)
 
         if not xml_content:
-            print(f"  ❌ Full-text not available from PMC")
+            print("  ❌ Full-text not available from PMC")
             pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
             self._log_paywalled(pmid, "Full-text not available", pmc_url)
             return False, "No full-text", None
 
-        print(f"  ✓ Full-text XML retrieved from PMC")
+        print("  ✓ Full-text XML retrieved from PMC")
 
         # Extract figures from the PMC article page
         self._extract_pmc_figures(pmcid, pmid)
@@ -1297,7 +1299,7 @@ class PMCHarvester:
 
         if not is_free:
             # Not marked as free - try Unpaywall as last resort
-            print(f"  - No PMCID and not marked as free, trying Unpaywall...")
+            print("  - No PMCID and not marked as free, trying Unpaywall...")
             if doi:
                 unpaywall_result, unpaywall_error = self.unpaywall.find_open_access(doi)
                 if unpaywall_result and unpaywall_result.get("pdf_url"):
@@ -1322,18 +1324,18 @@ class PMCHarvester:
                             free_url = pdf_url
                         else:
                             print(
-                                f"  - Unpaywall PDF conversion failed or content too short"
+                                "  - Unpaywall PDF conversion failed or content too short"
                             )
                     else:
                         print(f"  - Unpaywall download failed: {dl_error}")
                 elif unpaywall_result and unpaywall_result.get("landing_page"):
-                    print(f"  - Unpaywall found landing page but no direct PDF")
+                    print("  - Unpaywall found landing page but no direct PDF")
                 else:
                     print(f"  - Unpaywall: {unpaywall_error or 'No OA version found'}")
 
             if not is_free:
                 print(
-                    f"  ❌ No PMCID and not available via any method (likely paywalled)"
+                    "  ❌ No PMCID and not available via any method (likely paywalled)"
                 )
                 pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
                 self._log_paywalled(
@@ -1352,7 +1354,7 @@ class PMCHarvester:
                 )
                 return False, "No PMCID", None
 
-        print(f"  ✓ Article marked as free full text on PubMed")
+        print("  ✓ Article marked as free full text on PubMed")
 
         # Initialize variables for tracking content source
         main_markdown = None
@@ -1378,7 +1380,7 @@ class PMCHarvester:
             elif elsevier_error and "insufficient content" in elsevier_error.lower():
                 api_insufficient_content = True
                 print(
-                    f"  → Elsevier API returned abstract only, falling back to web scraping..."
+                    "  → Elsevier API returned abstract only, falling back to web scraping..."
                 )
 
         # Try Wiley API if this is a Wiley article and Elsevier didn't work
@@ -1395,7 +1397,7 @@ class PMCHarvester:
             elif wiley_error and "insufficient content" in wiley_error.lower():
                 api_insufficient_content = True
                 print(
-                    f"  → Wiley API returned abstract only, falling back to web scraping..."
+                    "  → Wiley API returned abstract only, falling back to web scraping..."
                 )
 
         # Try Springer API if this is a Springer/Nature/BMC article
@@ -1410,7 +1412,7 @@ class PMCHarvester:
                 )
             elif springer_error and "not openaccess" in springer_error.lower():
                 print(
-                    f"  → Springer API: article not OpenAccess, falling back to web scraping..."
+                    "  → Springer API: article not OpenAccess, falling back to web scraping..."
                 )
 
         # Fall back to DOI resolver if publisher APIs didn't work or returned insufficient content
@@ -1427,7 +1429,7 @@ class PMCHarvester:
                 )
                 if not is_valid:
                     print(f"  ⚠ DOI content validation failed: {reason}")
-                    print(f"  ❌ Skipping - does not contain valid full article text")
+                    print("  ❌ Skipping - does not contain valid full article text")
                     self._log_paywalled(
                         pmid,
                         f"DOI content validation failed: {reason}",
@@ -1536,7 +1538,7 @@ class PMCHarvester:
                     )
                     response.raise_for_status()
                     final_url = response.url
-                    print(f"  ✓ Retrieved free full text page")
+                    print("  ✓ Retrieved free full text page")
 
                     # Handle Elsevier linkinghub redirects
                     domain = urlparse(final_url).netloc
@@ -1577,7 +1579,7 @@ class PMCHarvester:
                         else:
                             print(f"  ⚠ Content validation failed: {reason}")
                             print(
-                                f"  ❌ Skipping this URL as it doesn't contain valid article content"
+                                "  ❌ Skipping this URL as it doesn't contain valid article content"
                             )
                             self._log_paywalled(
                                 pmid,
@@ -1586,7 +1588,7 @@ class PMCHarvester:
                             )
                             main_markdown = None  # Clear invalid content
                     else:
-                        print(f"  ❌ Could not extract full text from page")
+                        print("  ❌ Could not extract full text from page")
 
                     # Get supplements from the page
                     domain = urlparse(final_url).netloc
@@ -1616,9 +1618,9 @@ class PMCHarvester:
                     return False, "Free text fetch failed", None
         elif not main_markdown:
             # No DOI and no free URL - PubMed indicates "free" but lacks actionable links
-            print(f"  ❌ No DOI or free URL available to fetch full text")
+            print("  ❌ No DOI or free URL available to fetch full text")
             print(
-                f"     (PubMed metadata indicates free access but provides no usable link)"
+                "     (PubMed metadata indicates free access but provides no usable link)"
             )
             pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
             self._log_paywalled(
@@ -1629,7 +1631,7 @@ class PMCHarvester:
             return False, "No DOI or URL for free text", None
 
         if not main_markdown:
-            print(f"  ❌ Could not retrieve full text from publisher")
+            print("  ❌ Could not retrieve full text from publisher")
             fallback_url = final_url or (
                 f"https://doi.org/{doi}"
                 if doi
@@ -1810,7 +1812,7 @@ class PMCHarvester:
 
         print(f"\n{'=' * 60}")
         print(f"DATA SCOUT PHASE: {len(pmids)} papers")
-        print(f"(Identifying high-value data zones)")
+        print("(Identifying high-value data zones)")
         print(f"{'=' * 60}")
 
         successful = 0
@@ -1822,7 +1824,7 @@ class PMCHarvester:
             try:
                 output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
                 if not output_file.exists():
-                    print(f" ❌ File not found")
+                    print(" ❌ File not found")
                     failed += 1
                     continue
 
@@ -1958,12 +1960,12 @@ class PMCHarvester:
         no_indicators_count = len(pmids_with_figures) - len(pmids_likely_pedigree)
 
         print(f"\n{'=' * 60}")
-        print(f"PEDIGREE EXTRACTION PHASE")
+        print("PEDIGREE EXTRACTION PHASE")
         print(f"  {len(pmids_likely_pedigree)} papers likely have pedigrees")
         print(
             f"  (Skipped: {no_figures_count} no figures, {no_indicators_count} no pedigree keywords)"
         )
-        print(f"  (GPT-4o vision calls)")
+        print("  (GPT-4o vision calls)")
         print(f"{'=' * 60}")
 
         if not pmids_likely_pedigree:
@@ -2152,7 +2154,7 @@ class PMCHarvester:
                 return markdown, None
             elif metadata:
                 # Got metadata but no full text - article may not be open access
-                print(f"  - Springer API: Full text unavailable (not OpenAccess)")
+                print("  - Springer API: Full text unavailable (not OpenAccess)")
                 return None, "Article not available in OpenAccess"
             else:
                 print(f"  - Springer API: {error}")
@@ -2312,7 +2314,7 @@ class PMCHarvester:
         print(f"\n  📋 Manifest saved: {manifest_path}")
 
         print(f"\n{'=' * 60}")
-        print(f"Download phase complete!")
+        print("Download phase complete!")
         print(f"  ✅ Downloaded: {download_successful}")
         print(f"  ❌ Failed: {download_failed}")
         print(f"{'=' * 60}")
@@ -2325,16 +2327,16 @@ class PMCHarvester:
         if run_scout and downloaded_pmids:
             post_successful, post_failed = self.batch_post_process(downloaded_pmids)
         elif downloaded_pmids and not run_scout:
-            print(f"\n  ℹ️  Skipping post-processing (run_scout=False)")
+            print("\n  ℹ️  Skipping post-processing (run_scout=False)")
             print(
-                f"  To analyze downloaded papers, call batch_post_process() separately."
+                "  To analyze downloaded papers, call batch_post_process() separately."
             )
 
         # ============================================
         # FINAL SUMMARY
         # ============================================
         print(f"\n{'=' * 60}")
-        print(f"Harvest complete!")
+        print("Harvest complete!")
         print(f"  ✅ Successful: {download_successful}")
         print(f"  ❌ Failed: {download_failed}")
         print(f"  📊 Post-processed: {post_successful}/{len(downloaded_pmids)}")

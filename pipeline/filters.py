@@ -8,10 +8,11 @@ Tier 2: InternFilter - LLM-based classification (gpt-4o-mini)
 import logging
 import re
 from typing import List, Optional
-from utils.models import Paper, FilterResult, FilterDecision, FilterTier
-from utils.llm_utils import BaseLLMCaller
-from config.settings import get_settings
+
 from config.constants import FILTER_CLINICAL_KEYWORDS
+from config.settings import get_settings
+from utils.llm_utils import BaseLLMCaller
+from utils.models import FilterDecision, FilterResult, FilterTier, Paper
 
 logger = logging.getLogger(__name__)
 

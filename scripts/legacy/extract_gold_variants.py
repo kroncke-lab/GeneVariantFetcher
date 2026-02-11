@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Extract all unique variants from gold standard Excel."""
 
-import pandas as pd
 import json
 import re
+
+import pandas as pd
 
 # Read the gold standard Excel
 xls_path = "comparison_results/KCNH2 HeterozygoteDatabase-4-clinical_w_paris_japan_mayo_and_italycohort.xls"
@@ -32,7 +33,7 @@ for col in df.columns:
     ):
         variant_columns.append(col)
 
-print(f"=== POTENTIAL VARIANT COLUMNS ===")
+print("=== POTENTIAL VARIANT COLUMNS ===")
 print(variant_columns)
 
 # Get all unique values from these columns
@@ -43,7 +44,7 @@ for col in variant_columns:
         if isinstance(v, str) and len(v) > 0:
             all_variants.add(v.strip())
 
-print(f"\n=== ALL UNIQUE VARIANTS (first 50) ===")
+print("\n=== ALL UNIQUE VARIANTS (first 50) ===")
 sorted_variants = sorted(all_variants)
 for v in sorted_variants[:50]:
     print(f"  {v}")
@@ -52,7 +53,7 @@ print(f"\nTotal unique: {len(all_variants)}")
 # Also get the "Mutation" column specifically if it exists
 if "Mutation" in df.columns:
     mutations = df["Mutation"].dropna().unique()
-    print(f"\n=== UNIQUE FROM 'Mutation' COLUMN ===")
+    print("\n=== UNIQUE FROM 'Mutation' COLUMN ===")
     for m in sorted(mutations)[:30]:
         print(f"  {m}")
     print(f"Total: {len(mutations)}")
@@ -67,4 +68,4 @@ output = {
 with open("utils/gold_standard_variants.json", "w") as f:
     json.dump(output, f, indent=2)
 
-print(f"\n=== SAVED TO utils/gold_standard_variants.json ===")
+print("\n=== SAVED TO utils/gold_standard_variants.json ===")

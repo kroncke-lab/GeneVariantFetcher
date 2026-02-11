@@ -10,14 +10,14 @@ Task: Analyze text (or supplement chunk). Identify ANY section that contains spe
       patient-level data or variant lists for the target gene.
 """
 
-import re
 import json
 import logging
-from typing import Optional
+import re
 from dataclasses import dataclass
+from typing import Optional
 
-from utils.scout_models import DataZone, DataZoneReport
 from config.constants import SCOUT_CLINICAL_KEYWORDS
+from utils.scout_models import DataZone, DataZoneReport
 
 logger = logging.getLogger(__name__)
 

@@ -4,10 +4,10 @@ Phase 1: Download Verification Summary
 Run after batch download to validate results and provide final report
 """
 
-import json
 import csv
-from pathlib import Path
+import json
 from datetime import datetime
+from pathlib import Path
 
 
 def summarize_download_results():
@@ -108,7 +108,7 @@ def summarize_download_results():
                 f"Figures: {paper['has_figures']}, Supplements: {paper['has_supplements']}\n"
             )
 
-        f.write(f"\n## Summary:\n")
+        f.write("\n## Summary:\n")
         f.write(f"- **Total Processed**: {total_processed}\n")
         f.write(f"- **Successfully Downloaded**: {len(success_pmids)}\n")
         f.write(f"- **Failed Downloads**: {len(failed_pmids)}\n")

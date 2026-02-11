@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import Optional
 
 from pipeline.data_scout import GeneticDataScout
-from utils.manifest import Manifest, ManifestEntry, Status, Stage
+from utils.manifest import Manifest, ManifestEntry, Stage, Status
 
 # Setup logging
 logging.basicConfig(

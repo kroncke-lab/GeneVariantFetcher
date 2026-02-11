@@ -25,12 +25,12 @@ load_dotenv()
 
 from config.settings import get_settings
 from pipeline.steps import (
-    filter_papers,
+    aggregate_data,
     download_fulltext,
     extract_variants,
-    aggregate_data,
+    filter_papers,
 )
-from utils.logging_utils import setup_logging, get_logger
+from utils.logging_utils import get_logger, setup_logging
 
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)

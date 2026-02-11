@@ -17,8 +17,8 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from .base import SupplementFetcher, SupplementFile
-from .pmc_fetcher import PMCSupplementFetcher
 from .elsevier_fetcher import ElsevierSupplementFetcher
+from .pmc_fetcher import PMCSupplementFetcher
 
 logger = logging.getLogger(__name__)
 

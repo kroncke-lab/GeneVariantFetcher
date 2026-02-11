@@ -6,6 +6,7 @@ import sys
 sys.path.insert(0, "/mnt/temp2/kronckbm/gitrepos/GeneVariantFetcher")
 
 from pathlib import Path
+
 from harvesting.migrate_to_sqlite import (
     create_database_schema,
     migrate_extraction_directory,
@@ -22,7 +23,7 @@ conn = create_database_schema(db_path)
 print(f"Migrating from: {extraction_dir}")
 stats = migrate_extraction_directory(conn, extraction_dir)
 
-print(f"\nMigration complete!")
+print("\nMigration complete!")
 print(f"Total files: {stats['total_files']}")
 print(f"Successful: {stats['successful']}")
 print(f"Failed: {stats['failed']}")

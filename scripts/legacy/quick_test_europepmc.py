@@ -5,9 +5,9 @@ Quick Europe PMC Test
 Simple script to quickly test Europe PMC integration.
 """
 
+import json
 import sys
 from pathlib import Path
-import json
 
 # Add project root
 sys.path.insert(0, str(Path(__file__).parent))
@@ -52,7 +52,7 @@ def quick_test():
 
     # Test individual volunteer-test PMIDs
     test_pmids = ["30036649", "18808722", "9544837"]
-    print(f"\n3. Testing golden test PMIDs...")
+    print("\n3. Testing golden test PMIDs...")
 
     for pmid in test_pmids:
         metadata = client.get_paper_metadata(pmid)

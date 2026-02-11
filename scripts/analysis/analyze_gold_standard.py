@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Analyze gold standard Excel file for recall metrics."""
 
-import pandas as pd
-import os
 import glob
-import re
 import json
+import os
+import re
+
+import pandas as pd
 
 # Read gold standard Excel file
 xls_path = "comparison_results/KCNH2 HeterozygoteDatabase-4-clinical_w_paris_japan_mayo_and_italycohort.xls"
@@ -30,20 +31,20 @@ for col in df.columns:
     if "lqt" in col_lower or "affect" in col_lower or "phenotype" in col_lower:
         lqt_col = col
 
-print(f"\nIdentified columns:")
+print("\nIdentified columns:")
 print(f"  PMID column: {pmid_col}")
 print(f"  Variant column: {variant_col}")
 print(f"  LQT column: {lqt_col}")
 
 # Show sample data
-print(f"\n=== Sample Data (first 5 rows) ===")
+print("\n=== Sample Data (first 5 rows) ===")
 print(df.head())
 
 # Get unique PMIDs
 if pmid_col:
     # PMIDs might be in multiple columns - let's check for any column containing PMIDs
     pmid_values = df[pmid_col].dropna().unique()
-    print(f"\n=== PMID Statistics ===")
+    print("\n=== PMID Statistics ===")
     print(f"Unique PMIDs in '{pmid_col}': {len(pmid_values)}")
     print(f"Sample PMIDs: {list(pmid_values[:10])}")
 else:
@@ -56,13 +57,13 @@ else:
 # Count unique variants
 if variant_col:
     variants = df[variant_col].dropna().unique()
-    print(f"\n=== Variant Statistics ===")
+    print("\n=== Variant Statistics ===")
     print(f"Unique variants: {len(variants)}")
     print(f"Sample variants: {list(variants[:10])}")
 
 # Count LQT-affected
 if lqt_col:
-    print(f"\n=== LQT Status ===")
+    print("\n=== LQT Status ===")
     print(df[lqt_col].value_counts())
 
 # Get all downloaded PMIDs
@@ -75,7 +76,7 @@ for pdf in glob.glob(os.path.join(download_dir, "*.pdf")):
     if pmid.isdigit():
         downloaded_pmids.add(int(pmid))
 
-print(f"\n=== Downloaded Papers ===")
+print("\n=== Downloaded Papers ===")
 print(f"Total PDFs: {len(glob.glob(os.path.join(download_dir, '*.pdf')))}")
 print(f"Unique PMIDs: {len(downloaded_pmids)}")
 

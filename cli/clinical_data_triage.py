@@ -18,17 +18,17 @@ Usage:
 """
 
 import argparse
-import json
 import csv
-import sys
+import json
 import logging
+import sys
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
 from pipeline.filters import ClinicalDataTriageFilter
 
 # Configure logging using centralized utility
-from utils.logging_utils import setup_logging, get_logger
+from utils.logging_utils import get_logger, setup_logging
 
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)

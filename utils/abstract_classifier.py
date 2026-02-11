@@ -28,9 +28,9 @@ Author: GVF Pipeline
 Date: 2026-02-10
 """
 
-import re
 import math
-from typing import Dict, List, Optional, Tuple, Any
+import re
+from typing import Any, Dict, List, Optional, Tuple
 
 # Version for tracking model updates
 MODEL_VERSION = "1.0.0"
@@ -351,10 +351,10 @@ if __name__ == "__main__":
 
     result = classifier.score(title=demo_title, abstract=demo_abstract)
 
-    print(f"Demo Abstract Analysis:")
+    print("Demo Abstract Analysis:")
     print(f"  Probability: {result['probability']:.3f}")
     print(f"  Raw Score: {result['raw_score']:.1f}")
-    print(f"  Top matched terms:")
+    print("  Top matched terms:")
     sorted_terms = sorted(result["matched_terms"].items(), key=lambda x: -x[1])[:10]
     for term, score in sorted_terms:
         print(f"    - {term}: {score:.1f}")

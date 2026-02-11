@@ -1,4 +1,4 @@
-"""
+r"""
 Supplement Scraper Module
 ========================
 
@@ -161,11 +161,12 @@ Author: Gene Variant Fetcher Team
 Last audit: 2026-02-01
 """
 
-import re
 import json
-from typing import List, Dict, Optional, Tuple
+import re
 from pathlib import Path
-from urllib.parse import urlparse, urljoin
+from typing import Dict, List, Optional, Tuple
+from urllib.parse import urljoin, urlparse
+
 from bs4 import BeautifulSoup
 
 
@@ -975,7 +976,7 @@ class SupplementScraper:
         )
 
         for section in supp_sections:
-            print(f"    Found supplementary section")
+            print("    Found supplementary section")
             for link in section.find_all("a", href=True):
                 href = link["href"]
                 if any(

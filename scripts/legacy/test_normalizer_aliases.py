@@ -9,9 +9,9 @@ repo_root = Path(__file__).parent.parent
 sys.path.insert(0, str(repo_root))
 
 from utils.variant_normalizer import (
-    normalize_variant,
-    _lookup_alias,
     _KCNH2_COMPREHENSIVE_ALIASES,
+    _lookup_alias,
+    normalize_variant,
 )
 
 print("=== ALIAS DICTIONARY LOADED ===")

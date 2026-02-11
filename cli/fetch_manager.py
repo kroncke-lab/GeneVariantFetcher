@@ -31,14 +31,14 @@ Usage:
     python fetch_manager.py paywalled_missing.csv --convert --run-scout --gene SCN5A
 """
 
+import logging
+import shutil
 import sys
 import time
-import shutil
 import webbrowser
-import logging
-from pathlib import Path
 from datetime import datetime
-from typing import Optional, Set, List, Tuple
+from pathlib import Path
+from typing import List, Optional, Set, Tuple
 
 import pandas as pd
 
@@ -52,8 +52,8 @@ except ImportError:
     FormatConverter = None
 
 try:
-    from pipeline.data_scout import GeneticDataScout
     from config.settings import get_settings
+    from pipeline.data_scout import GeneticDataScout
 
     SCOUT_AVAILABLE = True
 except ImportError:

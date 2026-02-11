@@ -10,13 +10,13 @@ Usage:
     python download_springer_html.py [--all | --dois DOI1 DOI2 ...]
 """
 
+import argparse
 import os
+import re
 import sys
 import time
-import re
-import argparse
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # Add GVF to path
 sys.path.insert(0, "/mnt/temp2/kronckbm/gitrepos/GeneVariantFetcher")
@@ -28,6 +28,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import requests
+
 from harvesting.supplement_scraper import SupplementScraper
 
 # Configuration
@@ -191,12 +192,12 @@ def main():
                 old_jats = OUTPUT_DIR / f"DOI{safe_doi}__springer_jats.xml"
                 if old_jats.exists():
                     old_jats.unlink()
-                    log_message(f"  Removed old empty JATS file")
+                    log_message("  Removed old empty JATS file")
 
                 # Save markdown
                 md_file = OUTPUT_DIR / f"DOI{safe_doi}__springer_html.md"
                 with open(md_file, "w", encoding="utf-8") as f:
-                    f.write(f"# Source: SpringerLink HTML via institutional access\n")
+                    f.write("# Source: SpringerLink HTML via institutional access\n")
                     f.write(f"# DOI: {doi}\n")
                     f.write(f"# Downloaded: {datetime.now().isoformat()}\n\n")
                     f.write(content_or_error)

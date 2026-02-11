@@ -143,8 +143,8 @@ def fetch_pmids(
     Returns:
         StepResult with PMIDs in data["pmids"]
     """
-    from gene_literature.discovery import discover_pmids_for_gene
     from config.settings import get_settings
+    from gene_literature.discovery import discover_pmids_for_gene
 
     settings = get_settings()
     settings.use_pubmind = use_pubmind
@@ -260,8 +260,8 @@ def filter_papers(
     Returns:
         StepResult with filtered PMIDs in data["filtered_pmids"]
     """
-    from pipeline.filters import KeywordFilter, InternFilter, ClinicalDataTriageFilter
-    from utils.models import Paper, FilterDecision, FilterResult, FilterTier
+    from pipeline.filters import ClinicalDataTriageFilter, InternFilter, KeywordFilter
+    from utils.models import FilterDecision, FilterResult, FilterTier, Paper
 
     keyword_filter = KeywordFilter(min_keyword_matches=tier1_min_keywords)
     tier2_filter = (
@@ -390,8 +390,9 @@ def download_fulltext(
     Returns:
         StepResult with download stats
     """
-    from harvesting import PMCHarvester
     import pandas as pd
+
+    from harvesting import PMCHarvester
 
     harvest_dir = output_path / "pmc_fulltext"
     harvester = PMCHarvester(output_dir=str(harvest_dir), gene_symbol=gene_symbol)
@@ -465,8 +466,8 @@ def run_data_scout(
     Returns:
         StepResult with scouting stats
     """
-    from pipeline.data_scout import GeneticDataScout
     from config.settings import get_settings
+    from pipeline.data_scout import GeneticDataScout
 
     if not harvest_dir.exists():
         return StepResult(
@@ -559,8 +560,8 @@ def extract_variants(
     Returns:
         StepResult with extraction stats
     """
-    from utils.models import Paper
     from pipeline.extraction import ExpertExtractor
+    from utils.models import Paper
     from utils.pmid_utils import extract_pmid_from_filename
 
     extraction_dir.mkdir(exist_ok=True)

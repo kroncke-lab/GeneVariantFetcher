@@ -4,11 +4,11 @@ GVF Download Verification Test Suite
 Tests the validation framework on actual downloaded papers
 """
 
-import os
-import sys
 import json
-from pathlib import Path
+import os
 import subprocess
+import sys
+from pathlib import Path
 
 # Add project root
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -57,7 +57,7 @@ def run_validation_test():
                 if p["overall_status"] == "stub_or_metadata"
             ]
             if stubs:
-                print(f"\nFirst 5 stubs:")
+                print("\nFirst 5 stubs:")
                 for stub in stubs[:5]:
                     pmid = stub["pmid"]
                     if "pdf_validation" in stub and stub["pdf_validation"]:
@@ -73,7 +73,7 @@ def run_validation_test():
                 if p["overall_status"].startswith("complete")
             ]
             if valid:
-                print(f"\nFirst 3 valid papers:")
+                print("\nFirst 3 valid papers:")
                 for valid_pkg in valid[:3]:
                     pmid = valid_pkg["pmid"]
                     if "pdf_validation" in valid_pkg and valid_pkg["pdf_validation"]:

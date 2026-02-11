@@ -6,14 +6,14 @@ import sys
 sys.path.insert(0, "/mnt/temp2/kronckbm/gitrepos/GeneVariantFetcher")
 
 from utils.variant_normalizer import (
-    normalize_frameshift,
-    normalize_nonsense,
+    get_variant_type,
+    match_variants_fuzzy,
+    match_variants_to_baseline,
     normalize_deletion,
     normalize_duplication,
-    match_variants_fuzzy,
-    get_variant_type,
+    normalize_frameshift,
+    normalize_nonsense,
     normalize_variant,
-    match_variants_to_baseline,
 )
 
 

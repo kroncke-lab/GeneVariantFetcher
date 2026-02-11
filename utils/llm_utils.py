@@ -8,10 +8,10 @@ consistent error handling, retry logic, and JSON response parsing.
 import json
 import logging
 import time
-from typing import Dict, Any, Optional, List
-from litellm import completion
-import litellm
+from typing import Any, Dict, List, Optional
 
+import litellm
+from litellm import completion
 
 litellm.drop_params = True
 

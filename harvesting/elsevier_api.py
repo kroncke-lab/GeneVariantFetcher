@@ -12,7 +12,7 @@ import logging
 import re
 import time
 from typing import Optional, Tuple
-from urllib.parse import urlparse, quote
+from urllib.parse import quote, urlparse
 from xml.etree import ElementTree as ET
 
 import requests

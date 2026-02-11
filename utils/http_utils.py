@@ -5,8 +5,9 @@ This module provides standardized HTTP session configuration and headers
 to avoid duplication across harvesting and fetching modules.
 """
 
-import requests
 from typing import Dict
+
+import requests
 
 from config.constants import BROWSER_HEADERS
 

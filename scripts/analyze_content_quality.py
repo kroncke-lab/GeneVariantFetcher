@@ -4,10 +4,10 @@ Refined Metadata Detection - Distinguish real PDFs from XML stubs
 """
 
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
-import re
 
 
 def detect_real_pdf(filepath):
@@ -176,7 +176,7 @@ def main():
     # Run analysis
     venue_analysis, categories = analyze_venue_sources()
 
-    print(f"\nCategorization Results:")
+    print("\nCategorization Results:")
     print(f"Real PDFs: {len(categories['real_pdfs'])}")
     print(f"XML Stubs: {len(categories['xml_stubs'])}")
     print(
@@ -184,7 +184,7 @@ def main():
     )
     print(f"Other types: {len(categories['other'])}")
 
-    print(f"\nVenue Analysis:")
+    print("\nVenue Analysis:")
     for venue, counts in venue_analysis.items():
         total = sum(counts.values())
         real_rate = (counts["real"] / total * 100) if total > 0 else 0
@@ -194,14 +194,14 @@ def main():
 
     # Show examples
     if categories["real_pdfs"]:
-        print(f"\nFirst 3 real PDFs:")
+        print("\nFirst 3 real PDFs:")
         for pdf in categories["real_pdfs"][:3]:
             print(
                 f"  {Path(pdf['path']).name}: {pdf['pages']} pages, {pdf['file_size']} bytes"
             )
 
     if categories["xml_stubs"]:
-        print(f"\nFirst 3 XML stubs:")
+        print("\nFirst 3 XML stubs:")
         for stub in categories["xml_stubs"][:3]:
             print(f"  {Path(stub['path']).name}: {stub['file_size']} bytes")
 

@@ -1,5 +1,6 @@
-import requests
 import os
+
+import requests
 
 # Replace these with actual values or arguments
 pmids_file = "/mnt/temp2/kronckbm/gitrepos/GeneVariantFetcher/scripts/sample_pmids.txt"

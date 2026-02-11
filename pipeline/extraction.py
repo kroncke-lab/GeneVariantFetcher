@@ -11,12 +11,12 @@ import re
 from pathlib import Path
 from typing import List, Optional
 
-from config.settings import get_settings
 from config.constants import (
+    MIN_ALPHANUMERIC_RATIO,
     MIN_CONDENSED_SIZE,
     MIN_EXTRACTION_INPUT_SIZE,
-    MIN_ALPHANUMERIC_RATIO,
 )
+from config.settings import get_settings
 from pipeline.prompts import (
     COMPACT_EXTRACTION_PROMPT,
     CONTINUATION_PROMPT,
@@ -27,8 +27,8 @@ from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 from utils.models import ExtractionResult, Paper
 from utils.variant_scanner import (
     VariantScanner,
-    scan_document_for_variants,
     merge_scanner_results,
+    scan_document_for_variants,
 )
 
 logger = logging.getLogger(__name__)
@@ -713,7 +713,7 @@ class ExpertExtractor(BaseLLMCaller):
         Returns:
             Updated extracted_data with artifacts removed
         """
-        from utils.variant_normalizer import VariantNormalizer, PROTEIN_LENGTHS
+        from utils.variant_normalizer import PROTEIN_LENGTHS, VariantNormalizer
 
         variants = extracted_data.get("variants", [])
         if not variants:

@@ -9,13 +9,13 @@ Usage:
     python scripts/europepmc_download_supplements.py
 """
 
-import sys
-import os
-import json
-import time
 import io
-import zipfile
+import json
 import logging
+import os
+import sys
+import time
+import zipfile
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -151,7 +151,7 @@ def main():
                 result["error"]
             ):
                 stats["no_supplements"] += 1
-                logger.info(f"  -> No supplements available")
+                logger.info("  -> No supplements available")
             else:
                 stats["errors"] += 1
                 logger.warning(f"  -> Error: {result['error']}")

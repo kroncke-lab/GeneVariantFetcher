@@ -6,6 +6,7 @@ Run: 20260206_143433
 
 import sys
 from pathlib import Path
+
 from harvesting.orchestrator import PMCHarvester
 from utils.run_manifest import RunManifest
 from utils.variant_normalizer import VariantNormalizer, normalize_variant_list
@@ -70,7 +71,7 @@ def main():
     ]
 
     normalized, stats = normalize_variant_list(test_variants, "KCNH2")
-    print(f"\nNormalization stats:")
+    print("\nNormalization stats:")
     print(f"  Input: {stats['total_input']}")
     print(f"  Output: {stats['total_output']}")
     print(f"  Normalized: {stats['normalized']}")
@@ -87,7 +88,7 @@ def main():
         failed=len([r for r in results if r["status"] == "error"]),
     )
     manifest.finalize()
-    print(f"\n✓ Manifest finalized")
+    print("\n✓ Manifest finalized")
 
     # Summary
     print("\n" + "=" * 60)

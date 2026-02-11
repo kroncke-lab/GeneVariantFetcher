@@ -10,7 +10,6 @@ import sys
 from pathlib import Path
 from typing import Optional, Union
 
-
 # Standard log format used across the project
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 

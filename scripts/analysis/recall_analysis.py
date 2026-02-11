@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Comprehensive GVF Recall Analysis."""
 
-import pandas as pd
-import os
 import glob
-import re
 import json
+import os
+import re
 from collections import defaultdict
+
+import pandas as pd
 
 # Read gold standard Excel file
 xls_path = "comparison_results/KCNH2 HeterozygoteDatabase-4-clinical_w_paris_japan_mayo_and_italycohort.xls"
@@ -213,4 +214,4 @@ results = {
 with open("recall_analysis_results.json", "w") as f:
     json.dump(results, f, indent=2)
 
-print(f"\nDetailed results saved to recall_analysis_results.json")
+print("\nDetailed results saved to recall_analysis_results.json")

@@ -11,9 +11,10 @@ This script:
 
 import json
 import re
-import pandas as pd
-from pathlib import Path
 from collections import defaultdict
+from pathlib import Path
+
+import pandas as pd
 
 # Amino acid mappings
 AA_3_TO_1 = {
@@ -213,7 +214,7 @@ def main():
             if not found:
                 still_unmatched.append((ext, canonical))
 
-    print(f"\n" + "=" * 70)
+    print("\n" + "=" * 70)
     print("MATCHING RESULTS")
     print("=" * 70)
     print(f"Original matches (already working): {len(old_matches)}")
@@ -233,7 +234,7 @@ def main():
     original_recall = len(matched) / len(gold_variants) * 100
     new_recall = len(matched_gold) / len(gold_variants) * 100
 
-    print(f"\n" + "=" * 70)
+    print("\n" + "=" * 70)
     print("RECALL SUMMARY")
     print("=" * 70)
     print(
@@ -247,7 +248,7 @@ def main():
     )
 
     # Analyze what's still missed
-    print(f"\n" + "=" * 70)
+    print("\n" + "=" * 70)
     print("ANALYSIS OF STILL MISSED VARIANTS")
     print("=" * 70)
 
@@ -296,7 +297,7 @@ def main():
     with open("utils/matching_improvement_analysis.json", "w") as f:
         json.dump(output, f, indent=2)
 
-    print(f"\n=== Saved analysis to utils/matching_improvement_analysis.json ===")
+    print("\n=== Saved analysis to utils/matching_improvement_analysis.json ===")
 
 
 if __name__ == "__main__":

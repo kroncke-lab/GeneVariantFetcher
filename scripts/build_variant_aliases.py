@@ -10,10 +10,11 @@ Generates all possible naming forms for each gold standard variant:
 - Deletions: L552del, p.Leu552del, del552
 """
 
-import pandas as pd
 import json
 import re
 from pathlib import Path
+
+import pandas as pd
 
 # Amino acid mappings
 AA_3_TO_1 = {
@@ -347,7 +348,7 @@ def main():
     xls_path = "comparison_results/KCNH2 HeterozygoteDatabase-4-clinical_w_paris_japan_mayo_and_italycohort.xls"
     df = pd.read_excel(xls_path)
 
-    print(f"=== BUILDING KCNH2 VARIANT ALIAS DICTIONARY ===")
+    print("=== BUILDING KCNH2 VARIANT ALIAS DICTIONARY ===")
     print(f"Loaded {len(df)} rows from gold standard")
 
     # Get EXCLUDE column (filter to included only)

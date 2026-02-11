@@ -5,11 +5,11 @@ Vanderbilt Institutional Access Validator
 Validates all institutional API connections and generates access report.
 """
 
+import json
 import os
 import sys
-import json
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 
 def add_project_root():

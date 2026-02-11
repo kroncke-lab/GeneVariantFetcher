@@ -4,10 +4,11 @@ Tier 3 Finalization - Process remaining papers and generate full report
 """
 
 import os
-import requests
-from pathlib import Path
-from datetime import datetime
 import re
+from datetime import datetime
+from pathlib import Path
+
+import requests
 
 
 def count_downloaded_files(base_path):
@@ -255,7 +256,7 @@ if __name__ == "__main__":
     final_stats = generate_final_report()
 
     # Show completion summary
-    print(f"\nTier 3 download complete:")
+    print("\nTier 3 download complete:")
     print(f"  Total papers: {final_stats['total']}")
     print(
         f"  Downloaded: {final_stats['downloaded']} ({final_stats['success_rate']:.1f}%)"

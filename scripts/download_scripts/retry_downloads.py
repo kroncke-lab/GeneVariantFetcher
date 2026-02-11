@@ -97,7 +97,7 @@ def main():
             success, result, _ = harvester.download_pmid(pmid)
             if success:
                 successful += 1
-                print(f"  ✅ Success!")
+                print("  ✅ Success!")
             else:
                 failed += 1
                 print(f"  ❌ Failed: {result}")
@@ -109,7 +109,7 @@ def main():
         time.sleep(2)
 
     print(f"\n{'=' * 60}")
-    print(f"Retry complete!")
+    print("Retry complete!")
     print(f"  ✅ Successful: {successful}")
     print(f"  ❌ Failed: {failed}")
     print(f"{'=' * 60}")

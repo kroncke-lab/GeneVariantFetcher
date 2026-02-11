@@ -21,17 +21,17 @@ Quality Checks:
 Created: 2026-02-10 for GVF pipeline improvement
 """
 
-import sys
-import os
-import re
 import json
 import logging
+import os
+import re
 import shutil
-from pathlib import Path
-from typing import Optional, Dict, List, Tuple
+import sys
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import datetime
-import xml.etree.ElementTree as ET
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
 # Add GVF to path
 gvf_root = Path("/mnt/temp2/kronckbm/gitrepos/GeneVariantFetcher")

@@ -20,18 +20,23 @@ The new module provides additional features:
 """
 
 import warnings
-from typing import Optional, Tuple, List
+from typing import List, Optional, Tuple
+
+from utils.variant_normalizer import (
+    AA_MAP as AA_THREE_TO_ONE_NEW,
+)
+from utils.variant_normalizer import (
+    AA_MAP_REVERSE as AA_ONE_TO_THREE_NEW,
+)
 
 # Import everything from canonical module
 from utils.variant_normalizer import (
-    normalize_variant,
-    normalize_protein_variant,
-    normalize_cdna_variant,
-    variants_match,
-    find_matching_variants,
     VariantNormalizer,
-    AA_MAP as AA_THREE_TO_ONE_NEW,
-    AA_MAP_REVERSE as AA_ONE_TO_THREE_NEW,
+    find_matching_variants,
+    normalize_cdna_variant,
+    normalize_protein_variant,
+    normalize_variant,
+    variants_match,
 )
 
 # Preserve old constant names for backward compatibility

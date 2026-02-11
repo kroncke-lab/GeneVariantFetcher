@@ -18,11 +18,11 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
 from fastapi import (
+    BackgroundTasks,
     FastAPI,
     HTTPException,
     WebSocket,
     WebSocketDisconnect,
-    BackgroundTasks,
 )
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
@@ -42,8 +42,8 @@ from gui.models import (
     PmidPaywalledEntry,
     ResumeJobRequest,
 )
+from gui.routes import browser_router, settings_router
 from gui.worker import PipelineWorker, ProgressCallback, create_job
-from gui.routes import settings_router, browser_router
 
 # Import post-processing functions for browser fetch
 try:
@@ -1097,9 +1097,9 @@ def _run_browser_fetch(
     fallback_to_manual: bool = True,
 ):
     """Run browser fetch in a background thread with real-time log streaming."""
+    import re
     import subprocess
     import sys
-    import re
 
     # Initialize logs storage
     _browser_fetch_logs[task_id] = []
@@ -1416,6 +1416,7 @@ async def websocket_endpoint(websocket: WebSocket, job_id: str):
 def main():
     """Run the server."""
     import argparse
+
     import uvicorn
 
     parser = argparse.ArgumentParser(description="GeneVariantFetcher GUI Server")

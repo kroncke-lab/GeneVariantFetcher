@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Fast GVF extraction and recall calculation."""
 
-import os
-import json
 import glob
+import json
+import os
 import re
+from concurrent.futures import ProcessPoolExecutor, as_completed
+
 import pandas as pd
 import pdfplumber
-from concurrent.futures import ProcessPoolExecutor, as_completed
 
 # Configuration
 DOWNLOAD_DIR = "/mnt/temp2/kronckbm/gvf_output/verified_downloads_20260208"

@@ -9,18 +9,18 @@ import asyncio
 import logging
 import os
 import re
-from pathlib import Path
-from typing import Optional, Tuple, List, TYPE_CHECKING, Any
 from dataclasses import dataclass
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    from playwright.async_api import Page, Browser
+    from playwright.async_api import Browser, Page
 
 # Check if playwright is available
 try:
-    from playwright.async_api import async_playwright, Page, Browser
+    from playwright.async_api import Browser, Page, async_playwright
 
     PLAYWRIGHT_AVAILABLE = True
 except ImportError:

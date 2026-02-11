@@ -12,11 +12,11 @@ Usage:
     python scripts/europepmc_bulk_download.py
 """
 
-import sys
-import os
 import json
-import time
 import logging
+import os
+import sys
+import time
 from pathlib import Path
 
 # Add project root to path
@@ -25,6 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, "/home/kronckbm/.local/lib/python3.9/site-packages")
 
 import xlrd
+
 from gene_literature.europepmc_handler import EuropePMCClient
 
 logging.basicConfig(
@@ -177,7 +178,7 @@ def main():
                             f"  Full-text XML: Downloaded ({len(xml_content)} chars)"
                         )
                     else:
-                        logger.info(f"  Full-text XML: Not available")
+                        logger.info("  Full-text XML: Not available")
 
                     # Step 3: Get supplementary files
                     supplements = client.get_supplementary_files(pmcid)
@@ -217,10 +218,10 @@ def main():
                                     f"Supplement {supp_name}: {str(e)}"
                                 )
                     else:
-                        logger.info(f"  Supplements: None found")
+                        logger.info("  Supplements: None found")
                 else:
                     stats["metadata_only"] += 1
-                    logger.info(f"  No PMCID - metadata only (not in PMC)")
+                    logger.info("  No PMCID - metadata only (not in PMC)")
 
         except Exception as e:
             stats["errors"] += 1

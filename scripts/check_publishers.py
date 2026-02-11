@@ -9,8 +9,9 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from Bio import Entrez
 from pathlib import Path
+
+from Bio import Entrez
 
 Entrez.email = os.getenv("NCBI_EMAIL", "brett.kroncke@vumc.org")
 Entrez.api_key = os.getenv("NCBI_API_KEY")

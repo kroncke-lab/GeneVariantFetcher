@@ -5,7 +5,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import ClassVar, List, Optional, Union
 
-from pydantic import Field, model_validator, field_validator
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"

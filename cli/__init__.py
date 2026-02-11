@@ -8,10 +8,11 @@ This package contains standalone command-line utilities:
 - scout: Standalone Data Scout for identifying high-value data zones
 """
 
+import os
+from pathlib import Path
+
 import typer
 from typing_extensions import Annotated
-from pathlib import Path
-import os
 
 from cli.automated_workflow import automated_variant_extraction_workflow
 from cli.scout import run_scout
@@ -81,6 +82,7 @@ def extract_command(
 ):
     """Run the complete automated workflow from gene symbol to extracted variant data."""
     import logging
+
     from utils.logging_utils import setup_logging
 
     if verbose:

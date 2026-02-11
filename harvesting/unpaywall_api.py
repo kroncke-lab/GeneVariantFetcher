@@ -16,7 +16,7 @@ Usage:
 
 import logging
 import time
-from typing import Optional, Dict, Any, Tuple
+from typing import Any, Dict, Optional, Tuple
 
 import requests
 

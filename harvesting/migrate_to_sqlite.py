@@ -29,20 +29,20 @@ The script will automatically find JSON extraction files in:
 4. Nested timestamped subdirectories
 """
 
-import os
-import sqlite3
+import argparse
 import json
 import logging
+import os
 import shutil
+import sqlite3
 import zipfile
-import argparse
-from pathlib import Path
-from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 # Configure logging using centralized utility
-from utils.logging_utils import setup_logging, get_logger
-from utils.pmid_utils import extract_pmid_from_filename, extract_gene_from_filename
+from utils.logging_utils import get_logger, setup_logging
+from utils.pmid_utils import extract_gene_from_filename, extract_pmid_from_filename
 
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
@@ -1498,7 +1498,7 @@ def main():
 
 
 if __name__ == "__main__":
-    import sys
     import os
+    import sys
 
     sys.exit(main())

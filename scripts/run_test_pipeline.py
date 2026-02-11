@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import logging
+
 from gui.worker import PipelineWorker, create_job
 
 # Set up logging

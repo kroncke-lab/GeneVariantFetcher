@@ -30,7 +30,7 @@ from pathlib import Path
 from typing import Optional
 
 from pipeline.extraction import ExpertExtractor
-from utils.manifest import Manifest, ManifestEntry, Status, Stage
+from utils.manifest import Manifest, ManifestEntry, Stage, Status
 from utils.models import Paper
 
 # Setup logging

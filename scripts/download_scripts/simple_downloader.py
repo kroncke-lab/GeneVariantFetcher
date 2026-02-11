@@ -4,10 +4,10 @@ Institutional paper downloader - simplified GVF integration
 Explicit Vanderbilt institutional access via GVF APIs
 """
 
-import os
-import json
-import time
 import hashlib
+import json
+import os
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -95,7 +95,7 @@ def main():
                             f"| {datetime.now().strftime('%H:%M')} | SYSTEM | CHECKPOINT | PROGRESS | {success_count}/40 successful |\n"
                         )
             else:
-                print(f"  ✗ Failed - no content retrieved")
+                print("  ✗ Failed - no content retrieved")
                 with open(tracker_path, "a") as f:
                     f.write(
                         f"| {datetime.now().strftime('%H:%M')} | Elsevier | {pmid} | FAILED | No content from API |\n"
@@ -119,7 +119,7 @@ def main():
         f.write(f"**Total Downloads**: {success_count}\n")
         f.write(f"**Failures**: {failure_count}\n")
 
-    print(f"\nDownload complete!")
+    print("\nDownload complete!")
     print(f"Success: {success_count}")
     print(f"Failures: {failure_count}")
 

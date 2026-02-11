@@ -4,10 +4,11 @@ Europe PMC Checker for Failed Papers
 Checks Europe PMC for full text availability for specific PMIDs
 """
 
-import requests
 import json
 import os
 from datetime import datetime
+
+import requests
 
 
 def check_europe_pmc(pmid):

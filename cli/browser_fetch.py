@@ -26,15 +26,15 @@ Usage:
     python browser_fetch.py paywalled_missing.csv --pmids 12345678,87654321
 """
 
-import os
-import sys
-import time
 import json
 import logging
+import os
 import re
-from pathlib import Path
-from typing import Optional, List, Dict, Any
+import sys
+import time
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 import pandas as pd
 import requests
@@ -67,9 +67,11 @@ logger = logging.getLogger(__name__)
 # Try to import Playwright
 try:
     from playwright.sync_api import (
-        sync_playwright,
-        Page,
         Browser,
+        Page,
+        sync_playwright,
+    )
+    from playwright.sync_api import (
         TimeoutError as PlaywrightTimeout,
     )
 
@@ -859,10 +861,10 @@ class BrowserFetcher:
         logger.info("  MANUAL DOWNLOAD REQUIRED")
         logger.info("=" * 60)
         logger.info(f"  PMID: {pmid}")
-        logger.info(f"  The browser window is open - please download the PDF manually:")
-        logger.info(f"    1. Navigate to the PDF download link")
-        logger.info(f"    2. Click download (files go to your Downloads folder)")
-        logger.info(f"    3. Files will be auto-detected and organized")
+        logger.info("  The browser window is open - please download the PDF manually:")
+        logger.info("    1. Navigate to the PDF download link")
+        logger.info("    2. Click download (files go to your Downloads folder)")
+        logger.info("    3. Files will be auto-detected and organized")
         logger.info(f"  Waiting up to {timeout}s for downloads...")
         logger.info("=" * 60)
 
@@ -1026,7 +1028,7 @@ class BrowserFetcher:
                 logger.info(f"  [EmbeddedPDF] SUCCESS: {dest_path.name}")
                 return dest_path
 
-            logger.info(f"  [EmbeddedPDF] Response is not a valid PDF")
+            logger.info("  [EmbeddedPDF] Response is not a valid PDF")
 
         except Exception as e:
             logger.info(f"  [EmbeddedPDF] ERROR: {e}")
@@ -1125,7 +1127,7 @@ class BrowserFetcher:
                             f"  [Cloudflare] Stuck on challenge for {int(stuck_time)}s with no progress."
                         )
                         logger.info(
-                            f"  [Cloudflare] Early content capture exists - exiting to use that instead."
+                            "  [Cloudflare] Early content capture exists - exiting to use that instead."
                         )
                         self._cloudflare_loop_detected = True
                         return False
@@ -1166,17 +1168,17 @@ class BrowserFetcher:
                             f"({challenge_solve_count} cycles, {elapsed}s elapsed)"
                         )
                         logger.warning(
-                            f"  [Cloudflare] The site keeps re-challenging after CAPTCHA solve."
+                            "  [Cloudflare] The site keeps re-challenging after CAPTCHA solve."
                         )
-                        logger.warning(f"  [Cloudflare] This usually means:")
+                        logger.warning("  [Cloudflare] This usually means:")
                         logger.warning(
-                            f"  [Cloudflare]   1. The site blocks automated browsers"
-                        )
-                        logger.warning(
-                            f"  [Cloudflare]   2. Session cookies aren't persisting"
+                            "  [Cloudflare]   1. The site blocks automated browsers"
                         )
                         logger.warning(
-                            f"  [Cloudflare]   3. Will attempt manual download fallback..."
+                            "  [Cloudflare]   2. Session cookies aren't persisting"
+                        )
+                        logger.warning(
+                            "  [Cloudflare]   3. Will attempt manual download fallback..."
                         )
                         self._cloudflare_loop_detected = True
                         return False
@@ -1184,7 +1186,7 @@ class BrowserFetcher:
                         f"  [Cloudflare] Challenge REAPPEARED after solving! (cycle {challenge_solve_count}/2)"
                     )
                     logger.info(
-                        f"  [Cloudflare] If this keeps happening, the site may block automation"
+                        "  [Cloudflare] If this keeps happening, the site may block automation"
                     )
 
                 cloudflare_detected = True
@@ -1205,7 +1207,7 @@ class BrowserFetcher:
             if cloudflare_detected and any(content_indicators):
                 # Wait longer (5s instead of 3s) to catch reload loops
                 logger.info(
-                    f"  [Cloudflare] Content detected, verifying stability (5s)..."
+                    "  [Cloudflare] Content detected, verifying stability (5s)..."
                 )
                 time.sleep(5)
 
@@ -1233,14 +1235,14 @@ class BrowserFetcher:
                     ]
                     if any(recheck_indicators):
                         logger.warning(
-                            f"  [Cloudflare] Challenge reappeared after reload!"
+                            "  [Cloudflare] Challenge reappeared after reload!"
                         )
                         clear_count = 0
                         # This counts as a new challenge cycle
                         challenge_solve_count += 1
                         if challenge_solve_count >= 2:
                             logger.warning(
-                                f"  [Cloudflare] INFINITE LOOP - will try manual download."
+                                "  [Cloudflare] INFINITE LOOP - will try manual download."
                             )
                             self._cloudflare_loop_detected = True
                             return False
@@ -1249,7 +1251,7 @@ class BrowserFetcher:
                     pass
 
                 logger.info(
-                    f"  [Cloudflare] Challenge passed! Content loaded successfully."
+                    "  [Cloudflare] Challenge passed! Content loaded successfully."
                 )
                 return True
 
@@ -1259,7 +1261,7 @@ class BrowserFetcher:
                 if cloudflare_detected:
                     # Extra verification: wait and re-check one more time
                     logger.info(
-                        f"  [Cloudflare] Appears clear, final verification (5s)..."
+                        "  [Cloudflare] Appears clear, final verification (5s)..."
                     )
                     time.sleep(5)
                     try:
@@ -1285,13 +1287,13 @@ class BrowserFetcher:
                         ]
                         if any(final_indicators):
                             logger.warning(
-                                f"  [Cloudflare] Challenge reappeared on final check!"
+                                "  [Cloudflare] Challenge reappeared on final check!"
                             )
                             clear_count = 0
                             challenge_solve_count += 1
                             if challenge_solve_count >= 2:
                                 logger.warning(
-                                    f"  [Cloudflare] INFINITE LOOP - will try manual download."
+                                    "  [Cloudflare] INFINITE LOOP - will try manual download."
                                 )
                                 self._cloudflare_loop_detected = True
                                 return False
@@ -1300,7 +1302,7 @@ class BrowserFetcher:
                         pass
 
                 if check_count > 1:
-                    logger.info(f"  [Cloudflare] Passed or not present")
+                    logger.info("  [Cloudflare] Passed or not present")
                 self._cloudflare_loop_detected = False
                 return True
 
@@ -1907,7 +1909,7 @@ class BrowserFetcher:
             result = self._click_download_button(self.page, pmid)
             if result:
                 downloaded_files.append(str(result))
-                logger.info(f"  Downloaded main PDF via button click")
+                logger.info("  Downloaded main PDF via button click")
 
             # Method 2: Try heuristic PDF link detection (if no PDF yet)
             if not downloaded_files:
@@ -1920,7 +1922,7 @@ class BrowserFetcher:
                     result = self._try_download_link(self.page, link, pmid)
                     if result:
                         downloaded_files.append(str(result))
-                        logger.info(f"  Downloaded main PDF via heuristic")
+                        logger.info("  Downloaded main PDF via heuristic")
                         break
 
             # Method 3: Download supplement files (regardless of main PDF success)
@@ -2407,7 +2409,7 @@ def run_browser_fetch(
     failed = sum(1 for r in results if not r.success)
 
     print("\n" + "=" * 60)
-    print(f"Browser Fetch Complete")
+    print("Browser Fetch Complete")
     print(f"  Successful: {successful}/{total}")
     print(f"  Failed: {failed}/{total}")
     print(f"  Files saved to: {target_dir}")
@@ -2439,7 +2441,7 @@ def run_browser_fetch(
         paywalled = sum(1 for r in results if r.failure_type == "paywall")
         crashed = sum(1 for r in results if r.failure_type == "crash")
         other = failed - captcha_blocked - paywalled - crashed
-        print(f"\nFailure breakdown:")
+        print("\nFailure breakdown:")
         if captcha_blocked:
             print(f"  CAPTCHA blocked: {captcha_blocked}")
         if paywalled:

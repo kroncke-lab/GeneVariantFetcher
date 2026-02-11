@@ -5,15 +5,15 @@ Saves job state to disk after each major pipeline step, allowing resume
 after interruption (computer shutdown, crash, etc.).
 """
 
+import fcntl
 import json
 import logging
-from dataclasses import dataclass, field, asdict
+import os
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-import fcntl
-import os
 
 logger = logging.getLogger(__name__)
 

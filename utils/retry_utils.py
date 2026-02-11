@@ -5,15 +5,15 @@ This module provides standardized retry configurations used across the project
 for API calls, LLM requests, and web scraping operations.
 """
 
+from typing import Tuple, Type
+
+import requests
 from tenacity import (
     retry,
     retry_if_exception_type,
     stop_after_attempt,
     wait_exponential,
 )
-import requests
-from typing import Type, Tuple
-
 
 # Standard retry configuration used throughout the project
 # Retries up to 3 times with exponential backoff (1s, 2s, 4s)

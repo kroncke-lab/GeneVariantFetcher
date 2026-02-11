@@ -20,9 +20,9 @@ Usage:
         # Valid cDNA position
 """
 
-import re
 import logging
-from typing import Optional, Dict, Any
+import re
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 

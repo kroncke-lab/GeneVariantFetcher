@@ -9,12 +9,13 @@ Supports optional image extraction from PDFs for downstream vision analysis.
 
 import base64
 import logging
+import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-import xml.etree.ElementTree as ET
+
 import pandas as pd
 from bs4 import BeautifulSoup
-import re
 
 logger = logging.getLogger(__name__)
 
@@ -339,6 +340,7 @@ class FormatConverter:
         try:
             import subprocess
             import tempfile
+
             from bs4 import BeautifulSoup
 
             with tempfile.TemporaryDirectory() as tmpdir:

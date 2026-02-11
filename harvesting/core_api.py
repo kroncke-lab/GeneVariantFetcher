@@ -9,7 +9,7 @@ API Documentation: https://core.ac.uk/documentation/api
 
 import logging
 import time
-from typing import Optional, Dict, Any, Tuple, List
+from typing import Any, Dict, List, Optional, Tuple
 
 import requests
 

@@ -24,7 +24,7 @@ for f in extractions_dir.glob("*.json"):
     except Exception as e:
         pass
 
-print(f"BASELINE (regex enabled):")
+print("BASELINE (regex enabled):")
 print(f"  Papers: {paper_count}")
 print(f"  Total variants: {total_variants}")
 print(f"  Unique variants: {len(unique_variants)}")

@@ -14,8 +14,8 @@ Public API:
 """
 
 from .base import SupplementFetcher, SupplementFile
-from .pmc_fetcher import PMCSupplementFetcher
 from .elsevier_fetcher import ElsevierSupplementFetcher
+from .pmc_fetcher import PMCSupplementFetcher
 from .unified import UnifiedSupplementFetcher
 
 __all__ = [

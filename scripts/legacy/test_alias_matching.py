@@ -77,7 +77,7 @@ for novel in gvf_novel:
                 if canonical in missed_canonicals:
                     new_matches.append((novel, canonical))
 
-print(f"\n" + "=" * 60)
+print("\n" + "=" * 60)
 print("POTENTIAL NEW MATCHES VIA ALIASING")
 print("=" * 60)
 print(f"Found {len(new_matches)} potential new matches")
@@ -92,7 +92,7 @@ if len(new_matches) > 30:
 new_matched_count = len(gold_matched) + len(new_matches)
 new_recall = new_matched_count / len(gold_all) * 100
 
-print(f"\n" + "=" * 60)
+print("\n" + "=" * 60)
 print("RECALL IMPROVEMENT")
 print("=" * 60)
 print(
@@ -105,7 +105,7 @@ print(
 )
 
 # Also check: how many missed variants have aliases that weren't found?
-print(f"\n" + "=" * 60)
+print("\n" + "=" * 60)
 print("REMAINING MISSED ANALYSIS")
 print("=" * 60)
 
@@ -133,6 +133,6 @@ print(f"  IVS/splice: {len(ivs_missed)}")
 print(f"  Exon/large del: {len(exon_missed)}")
 print(f"  Other protein: {len(other_missed)}")
 
-print(f"\nOther missed (sample):")
+print("\nOther missed (sample):")
 for v in sorted(other_missed)[:20]:
     print(f"    {v}")

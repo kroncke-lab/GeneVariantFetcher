@@ -7,8 +7,9 @@ Tests Europe PMC API directly without GVF imports.
 
 import json
 import sys
-import requests
 from pathlib import Path
+
+import requests
 
 
 def test_direct_api():

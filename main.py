@@ -146,8 +146,9 @@ def run_gui_mode(args):
         print(f"{'=' * 60}\n")
 
     # Print startup info
-    import uvicorn
     import webbrowser
+
+    import uvicorn
 
     url = f"http://{args.host}:{args.port}"
     if args.host == "0.0.0.0":
@@ -191,6 +192,7 @@ def run_gui_mode(args):
 def run_cli_mode(args):
     """Run the pipeline in CLI mode (for automation/scripting)."""
     import os
+
     from dotenv import load_dotenv
 
     load_dotenv()

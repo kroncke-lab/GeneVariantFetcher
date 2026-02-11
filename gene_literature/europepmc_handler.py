@@ -7,10 +7,11 @@ Based on the official API documentation at: https://europepmc.org/RestfulWebServ
 
 import json
 import logging
-import requests
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from xml.etree import ElementTree as ET
+
+import requests
 
 from utils.retry_utils import api_retry
 

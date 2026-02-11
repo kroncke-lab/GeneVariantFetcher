@@ -6,14 +6,14 @@ This tests the full download pipeline for papers that aren't in PMC,
 using Elsevier API, Wiley API, DOI resolution, and web scraping.
 """
 
+import json
+import logging
 import os
 import sys
-import json
 import time
-import logging
-from pathlib import Path
 from dataclasses import dataclass, field
-from typing import Optional, List
+from pathlib import Path
+from typing import List, Optional
 
 # Add parent to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -24,10 +24,10 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent.parent / ".env")
 
 from config.settings import get_settings
-from harvesting.elsevier_api import ElsevierAPIClient
-from harvesting.wiley_api import WileyAPIClient
 from harvesting.doi_resolver import DOIResolver
+from harvesting.elsevier_api import ElsevierAPIClient
 from harvesting.supplement_scraper import SupplementScraper
+from harvesting.wiley_api import WileyAPIClient
 
 logging.basicConfig(
     level=logging.INFO,

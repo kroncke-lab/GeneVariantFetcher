@@ -9,11 +9,12 @@ This script:
 4. Calculates new recall metrics
 """
 
-import sys
-from pathlib import Path
 import json
-import pandas as pd
+import sys
 from collections import defaultdict
+from pathlib import Path
+
+import pandas as pd
 
 # Add the repo root to path
 repo_root = Path(__file__).parent.parent
@@ -211,7 +212,7 @@ def main():
     print(f"  Protein variants not extracted: {len(protein)}")
 
     if protein:
-        print(f"\n  Sample of missed protein variants:")
+        print("\n  Sample of missed protein variants:")
         for v in sorted(protein)[:30]:
             print(f"    {v}")
 

@@ -8,10 +8,11 @@ from pathlib import Path
 from typing import List, Optional, Sequence
 
 from config.settings import Settings, get_settings
+from utils.pubmed_utils import query_europepmc
+
 from .collector import build_gene_query
 from .pubmed_client import PubMedClient, PubMedError
 from .pubmind_fetcher import PubMindFetcher
-from utils.pubmed_utils import query_europepmc
 
 logger = logging.getLogger(__name__)
 

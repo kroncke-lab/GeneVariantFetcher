@@ -16,19 +16,19 @@ Usage:
     results = manager.download_papers(pmids, trackers=True)
 """
 
-import os
-import json
-import time
 import hashlib
-from pathlib import Path
-from typing import List, Dict, Optional, Tuple
-from datetime import datetime
-from dataclasses import dataclass
+import json
 import logging
+import os
+import time
+from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
 from harvesting.elsevier_api import ElsevierAPIClient
-from harvesting.wiley_api import WileyAPIClient
 from harvesting.springer_api import SpringerAPIClient
+from harvesting.wiley_api import WileyAPIClient
 
 # Configure logging for this module
 logger = logging.getLogger(__name__)
@@ -324,7 +324,7 @@ class InstitutionalAccessManager:
     def _initialize_tracker(self, tracker_path: Path, pmids: List[str]):
         """Initialize download tracker."""
         with open(tracker_path, "w") as f:
-            f.write(f"# Institutional Paper Acquisition Tracker\n")
+            f.write("# Institutional Paper Acquisition Tracker\n")
             f.write(f"**Started:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write(f"**Target Count:** {len(pmids)} papers\n\n")
 
@@ -367,12 +367,12 @@ class InstitutionalAccessManager:
 
         report_path = work_dir / "final_report.md"
         with open(report_path, "w") as f:
-            f.write(f"# Institutional Access Summary\n\n")
+            f.write("# Institutional Access Summary\n\n")
             f.write(
                 f"**Completed:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
             )
 
-            f.write(f"## Results Summary\n")
+            f.write("## Results Summary\n")
             f.write(f"- **Total Papers:** {len(results)}\n")
             f.write(
                 f"- **Successful:** {success_count} ({success_count / len(results) * 100:.1f}%)\n"

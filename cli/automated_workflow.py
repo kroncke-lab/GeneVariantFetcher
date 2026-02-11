@@ -18,17 +18,18 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
-from cli.scout import run_scout
 
 from dotenv import load_dotenv
+
+from cli.scout import run_scout
 
 # Load environment variables from .env file
 load_dotenv()
 
 # Configure logging using centralized utility
-from utils.logging_utils import setup_logging, get_logger
-from utils.run_manifest import RunManifestManager
 from gui.checkpoint import CheckpointManager, JobCheckpoint, PipelineStep
+from utils.logging_utils import get_logger, setup_logging
+from utils.run_manifest import RunManifestManager
 
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
@@ -63,13 +64,13 @@ def automated_variant_extraction_workflow(
     """
     from config.settings import get_settings
     from pipeline.steps import (
+        aggregate_data,
         discover_synonyms,
-        fetch_pmids,
-        fetch_abstracts,
-        filter_papers,
         download_fulltext,
         extract_variants,
-        aggregate_data,
+        fetch_abstracts,
+        fetch_pmids,
+        filter_papers,
         migrate_to_sqlite,
     )
 

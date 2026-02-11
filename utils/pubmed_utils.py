@@ -7,13 +7,15 @@ consolidating different query approaches into a single consistent interface.
 
 import logging
 from http.client import IncompleteRead
-from typing import Set, List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional, Set
 from urllib.error import URLError
+
+import requests
 from Bio import Entrez
 from Bio.Entrez.Parser import ValidationError
-import requests
 
 from config.settings import get_settings
+
 from .retry_utils import api_retry, get_standard_retry_decorator
 
 logger = logging.getLogger(__name__)

@@ -20,6 +20,7 @@ import requests
 from Bio import Entrez
 
 from utils.retry_utils import api_retry
+
 from .base import SupplementFetcher, SupplementFile
 
 logger = logging.getLogger(__name__)

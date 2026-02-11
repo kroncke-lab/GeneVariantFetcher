@@ -8,8 +8,8 @@ Usage:
     python tests/run_post_download.py
 """
 
-import sys
 import subprocess
+import sys
 from pathlib import Path
 
 # Paths

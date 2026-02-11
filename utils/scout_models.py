@@ -5,7 +5,8 @@ These models define the structure for identifying and tracking high-value
 data zones in biomedical literature for variant extraction.
 """
 
-from typing import Optional, Literal
+from typing import Literal, Optional
+
 from pydantic import BaseModel, Field
 
 

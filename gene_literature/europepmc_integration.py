@@ -6,12 +6,14 @@ Provides an alternative source for papers when regular PMC doesn't have full-tex
 """
 
 import logging
-import requests
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from .europepmc_handler import EuropePMCClient
+import requests
+
 from harvesting.format_converters import FormatConverter
+
+from .europepmc_handler import EuropePMCClient
 
 logger = logging.getLogger(__name__)
 
@@ -221,7 +223,7 @@ class EuropePMCHarvester:
         successful = [r for r in results if r["success"]]
         failed = [r for r in results if not r["success"]]
 
-        logger.info(f"Batch download complete:")
+        logger.info("Batch download complete:")
         logger.info(f"  ✅ Successful: {len(successful)}/{len(pmids)}")
         logger.info(f"  ❌ Failed: {len(failed)}/{len(pmids)}")
 

@@ -4,14 +4,14 @@ GVF Verification Framework - Full-text PDF Validation
 Validates that downloads contain actual papers vs metadata stubs
 """
 
-import os
-import re
 import hashlib
 import json
 import logging
-from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+import os
+import re
 import subprocess
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
 
 class DocumentValidator:
@@ -141,8 +141,8 @@ class DocumentValidator:
             # Check if it's a valid archive
             if archive_path.suffix.lower() in [".zip", ".gz"]:
                 # Unzip to check contents
-                import zipfile
                 import tarfile
+                import zipfile
 
                 if archive_path.suffix == ".zip":
                     with zipfile.ZipFile(archive_path, "r") as zip_file:
@@ -383,7 +383,7 @@ if __name__ == "__main__":
     with open(json_path, "w") as f:
         json.dump(results, f, indent=2)
 
-    print(f"Validation complete. Found:")
+    print("Validation complete. Found:")
     print(f"  Valid papers: {results['summary']['valid_papers']}")
     print(f"  Metadata stubs: {results['summary']['metadata_stubs']}")
     print(f"  Missing files: {results['summary']['missing_files']}")

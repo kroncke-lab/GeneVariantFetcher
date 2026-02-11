@@ -13,20 +13,20 @@ Usage:
     python scripts/integrate_browser_downloads.py [--dry-run]
 """
 
-import os
-import sys
-import shutil
 import argparse
-from pathlib import Path
+import os
+import shutil
+import sys
 from collections import defaultdict
+from pathlib import Path
 
 # Add project root
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
+from config.settings import get_settings
 from harvesting.format_converters import FormatConverter
 from pipeline.data_scout import GeneticDataScout
-from config.settings import get_settings
 
 
 def parse_browser_filename(filename):
@@ -203,10 +203,10 @@ def main():
                 print(f"  ✓ Added: {supp_file.name}")
 
     print(f"\n{'=' * 70}")
-    print(f"INTEGRATION COMPLETE")
+    print("INTEGRATION COMPLETE")
     print(f"  New FULL_CONTEXT.md files: {processed}")
     print(f"  Updated with supplements: {len(update_pmids)}")
-    print(f"\nNext step: Run Data Scout on new files")
+    print("\nNext step: Run Data Scout on new files")
     print(f"  python -m cli.scout {target} --gene {args.gene}")
     print(f"{'=' * 70}")
 

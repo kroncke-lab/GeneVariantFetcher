@@ -21,7 +21,7 @@ import logging
 import re
 import sqlite3
 import unicodedata
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Set, Tuple
 
@@ -1555,8 +1555,8 @@ def write_markdown_report(
         "",
         "## Match Summary",
         "",
-        f"| Metric | Count |",
-        f"|--------|-------|",
+        "| Metric | Count |",
+        "|--------|-------|",
         f"| Exact matches | {summary['matched_exact']} |",
         f"| Fuzzy matches | {summary['matched_fuzzy']} |",
         f"| Unmatched | {summary['unmatched']} |",

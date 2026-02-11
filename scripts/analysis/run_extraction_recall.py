@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Run GVF extraction on verified downloads and calculate recall against gold standard."""
 
-import os
-import sys
-import json
 import glob
+import json
+import os
 import re
+import sys
 from pathlib import Path
 
 # Add project to path
@@ -197,7 +197,7 @@ print(
 print(f"{'=' * 70}")
 
 # Sample matched variants
-print(f"\nSample matched variants (first 20):")
+print("\nSample matched variants (first 20):")
 for v in sorted(matches)[:20]:
     print(f"  {v}")
 

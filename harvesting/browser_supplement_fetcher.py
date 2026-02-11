@@ -8,11 +8,11 @@ Fallback when direct HTTP requests fail with 403.
 import asyncio
 import re
 from pathlib import Path
-from typing import List, Dict, Optional, Tuple
-from urllib.parse import urlparse, urljoin
+from typing import Dict, List, Optional, Tuple
+from urllib.parse import urljoin, urlparse
 
 try:
-    from playwright.async_api import async_playwright, Page, Browser
+    from playwright.async_api import Browser, Page, async_playwright
 
     PLAYWRIGHT_AVAILABLE = True
 except ImportError:

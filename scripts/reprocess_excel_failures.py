@@ -44,7 +44,7 @@ def reprocess_paper(pmid: str) -> int:
 
             if markdown and len(markdown) > 50:
                 # Find the error placeholder in content and replace
-                error_marker = f"# SUPPLEMENTAL FILE"
+                error_marker = "# SUPPLEMENTAL FILE"
                 filename = excel_file.name
 
                 # Build new section

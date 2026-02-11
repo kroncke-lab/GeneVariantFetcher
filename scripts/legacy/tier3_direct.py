@@ -4,13 +4,14 @@ SP Tier 3 - Direct API Download
 Process 70 papers manually using web APIs
 """
 
-import os
-import requests
 import json
-import urllib.parse
-from pathlib import Path
-from datetime import datetime
+import os
 import time
+import urllib.parse
+from datetime import datetime
+from pathlib import Path
+
+import requests
 
 tier3_pmids = [
     "19034806",
@@ -223,7 +224,7 @@ def main():
                             "title": pmc_info.get("title", ""),
                         }
                     )
-                    print(f"❓ Manual needed")
+                    print("❓ Manual needed")
 
         # Small delay
         time.sleep(2)

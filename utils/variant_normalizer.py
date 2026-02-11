@@ -28,9 +28,9 @@ Usage:
     result = norm.get_all_forms("A561V")
 """
 
-import re
 import logging
-from typing import Optional, Dict, Any, Tuple, Set, List
+import re
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -552,7 +552,7 @@ class VariantNormalizer:
         # Check hotspots (remove fsX suffix for comparison)
         check_var = re.sub(r"fsX$", "", single)
         if check_var in NON_TARGET_HOTSPOTS:
-            return True, f"Known hotspot in TP53/KRAS/BRAF/PIK3CA"
+            return True, "Known hotspot in TP53/KRAS/BRAF/PIK3CA"
 
         # Check position against protein length
         m = re.match(r"^[A-Z](\d+)", single)
