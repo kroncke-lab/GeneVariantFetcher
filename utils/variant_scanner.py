@@ -176,6 +176,18 @@ class VariantScanner:
         re.IGNORECASE
     )
     
+    # Concatenated gene+variant: HERGG604S, KCNH2A561T, hERGT613M, Kv11.1R534C
+    # Gene name prefix is consumed but not captured as part of the variant
+    CONCATENATED_GENE_VARIANT = re.compile(
+        r'\b(?:HERG|hERG|KCNH2|kcnh2|Kv11\.1)'
+        r'[-_]?'                                # Optional separator
+        r'([A-Z])'                              # Ref AA
+        r'(\d{2,4})'                            # Position
+        r'([A-Z]|fs[X\*]?\d*|del|dup|ins|\*|X)' # Alt AA or special
+        r'\b',
+        re.IGNORECASE
+    )
+    
     # Frameshift variants with various notations
     FRAMESHIFT_PATTERNS = re.compile(
         r'\b(?:p\.)?'
@@ -360,6 +372,10 @@ class VariantScanner:
         result.stats['gene'] = self.gene_symbol
         result.stats['text_length'] = len(text)
         result.stats['source'] = source
+        
+        # Pre-process: normalize Unicode arrows (→ to >) so cDNA patterns match
+        # Papers often use Unicode arrows: "1810G→A" instead of "1810G>A"
+        text = text.replace('\u2192', '>').replace('\u2190', '<').replace('\u21d2', '>')
         
         # Track what we've found to avoid duplicates
         seen_normalized: Set[str] = set()
@@ -606,6 +622,25 @@ class VariantScanner:
                 context=self._get_context(text, m.start(), m.end()),
                 confidence=0.85,
                 source='deletion',
+            ))
+        
+        # Concatenated gene+variant: HERGG604S, KCNH2A561T, hERGT613M
+        for m in self.CONCATENATED_GENE_VARIANT.finditer(text):
+            ref, pos, alt = m.group(1), m.group(2), m.group(3)
+            raw = m.group(0)
+            position = int(pos)
+            
+            normalized = f"{ref.upper()}{pos}{alt.upper()}"
+            
+            variants.append(ScannedVariant(
+                raw_text=raw,
+                normalized=normalized,
+                variant_type=self._classify_variant_type(alt),
+                notation_type='protein',
+                position=position,
+                context=self._get_context(text, m.start(), m.end()),
+                confidence=0.90,  # High confidence - gene name prefix confirms target gene
+                source='concatenated_gene_variant',
             ))
         
         return variants

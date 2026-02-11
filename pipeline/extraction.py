@@ -1292,6 +1292,12 @@ class ExpertExtractor(BaseLLMCaller):
                 model_used=model,
             )
 
+        # SCANNER TEXT: Always use the original full text for regex scanning
+        # and table extraction, even when the LLM gets condensed DATA_ZONES.
+        # The scanner is pure regex (no API cost), so it should see everything.
+        # This prevents table data from being lost during Scout condensation.
+        scanner_text = paper.full_text if paper.full_text else full_text
+
         # Assess input quality before sending to LLM
         is_usable, quality_reason = self._assess_input_quality(
             full_text, paper.gene_symbol
@@ -1309,13 +1315,14 @@ class ExpertExtractor(BaseLLMCaller):
             )
 
         # Estimate variant count if not provided
+        # Use scanner_text (original full text) for table row estimation
         if estimated_variants is None:
-            estimated_variants = self._estimate_table_rows(full_text)
+            estimated_variants = self._estimate_table_rows(scanner_text)
 
         # Fast path: deterministic table parser for very large tables to avoid slow LLM calls
         if estimated_variants >= 100:
             parsed_variants = self._parse_markdown_table_variants(
-                full_text, paper.gene_symbol
+                scanner_text, paper.gene_symbol
             )
             if len(parsed_variants) >= 50:
                 extracted_data = {
@@ -1344,8 +1351,9 @@ class ExpertExtractor(BaseLLMCaller):
         )
 
         # Pre-extract variants from tables BEFORE LLM call (provides hints to improve extraction)
+        # Use scanner_text (original full text) so we see tables even if condensed
         pre_extracted_variants = self._extract_variants_from_tables(
-            full_text, paper.gene_symbol
+            scanner_text, paper.gene_symbol
         )
         table_hints = self._format_table_hints(pre_extracted_variants)
         if pre_extracted_variants:
@@ -1356,9 +1364,10 @@ class ExpertExtractor(BaseLLMCaller):
                 f"Pre-extracted {len(pre_extracted_variants)} variant hints from tables"
             )
         
-        # NEW: Run comprehensive variant scanner on full text (catches narrative mentions)
+        # Run comprehensive variant scanner on ORIGINAL full text (catches narrative mentions + tables)
+        # Uses scanner_text to bypass condensation and see all content
         scanner_result = scan_document_for_variants(
-            full_text, gene_symbol=paper.gene_symbol or "UNKNOWN", source=f"PMID_{paper.pmid}"
+            scanner_text, gene_symbol=paper.gene_symbol or "UNKNOWN", source=f"PMID_{paper.pmid}"
         )
         scanner_hints = scanner_result.get_hints_for_prompt(max_hints=50)
         if scanner_result.variants:
@@ -1487,6 +1496,8 @@ class ExpertExtractor(BaseLLMCaller):
 
         best_successful_result: Optional[ExtractionResult] = None
         prepared_full_text = self._prepare_full_text(paper)
+        # Keep original full text for scanner (bypasses condensation)
+        scanner_full_text = paper.full_text if paper.full_text else prepared_full_text
 
         # Circuit breaker: Check input quality BEFORE attempting any model
         # This prevents wasting LLM calls on garbage/unusable input
@@ -1505,7 +1516,7 @@ class ExpertExtractor(BaseLLMCaller):
                 model_used=None,
             )
 
-        table_row_hint = self._estimate_table_rows(prepared_full_text)
+        table_row_hint = self._estimate_table_rows(scanner_full_text)
 
         # If we detect a large table, raise the bar so we try the next (stronger) model
         adaptive_threshold = self.tier_threshold
