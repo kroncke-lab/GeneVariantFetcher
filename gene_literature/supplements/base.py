@@ -29,7 +29,7 @@ class SupplementFile:
 
     url: str
     name: str
-    source: str = ""       # e.g. "pmc", "elsevier", "scraper"
+    source: str = ""  # e.g. "pmc", "elsevier", "scraper"
     pmid: str = ""
     pmcid: str = ""
     mime_type: str = ""
@@ -71,19 +71,45 @@ class SupplementFetcher(ABC):
     """
 
     VALID_EXTENSIONS = {
-        "pdf", "docx", "doc", "xlsx", "xls", "csv", "tsv",
-        "zip", "rar", "gz", "tar", "txt", "xml", "html",
-        "pptx", "ppt", "json", "rtf", "tiff", "tif", "png",
-        "jpg", "jpeg", "svg", "eps", "mp4", "avi", "mov",
+        "pdf",
+        "docx",
+        "doc",
+        "xlsx",
+        "xls",
+        "csv",
+        "tsv",
+        "zip",
+        "rar",
+        "gz",
+        "tar",
+        "txt",
+        "xml",
+        "html",
+        "pptx",
+        "ppt",
+        "json",
+        "rtf",
+        "tiff",
+        "tif",
+        "png",
+        "jpg",
+        "jpeg",
+        "svg",
+        "eps",
+        "mp4",
+        "avi",
+        "mov",
     }
 
     def __init__(self, timeout: int = 30):
         self.timeout = timeout
         self.session = requests.Session()
-        self.session.headers.update({
-            "User-Agent": "GeneVariantFetcher/1.0 (Bot for clinical variant extraction)",
-            "Accept": "*/*",
-        })
+        self.session.headers.update(
+            {
+                "User-Agent": "GeneVariantFetcher/1.0 (Bot for clinical variant extraction)",
+                "Accept": "*/*",
+            }
+        )
 
     @abstractmethod
     def fetch(self, pmid: str, doi: str = "") -> List[SupplementFile]:
@@ -131,7 +157,9 @@ class SupplementFetcher(ABC):
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
 
-            logger.info(f"Downloaded {filepath.name} ({filepath.stat().st_size:,} bytes)")
+            logger.info(
+                f"Downloaded {filepath.name} ({filepath.stat().st_size:,} bytes)"
+            )
             return filepath
 
         except Exception as e:

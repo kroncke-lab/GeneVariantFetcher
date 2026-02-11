@@ -48,7 +48,9 @@ class UnpaywallClient:
             time.sleep(self._min_request_interval - elapsed)
         self._last_request_time = time.time()
 
-    def find_open_access(self, doi: str) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
+    def find_open_access(
+        self, doi: str
+    ) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
         """
         Find open access version of a paper by DOI.
 
@@ -86,7 +88,7 @@ class UnpaywallClient:
 
             if response.status_code == 200:
                 data = response.json()
-                
+
                 # Extract useful info
                 result = {
                     "doi": data.get("doi"),
@@ -104,10 +106,12 @@ class UnpaywallClient:
                 if best_location:
                     result["best_oa_location"] = best_location
                     result["pdf_url"] = best_location.get("url_for_pdf")
-                    
+
                     # If no direct PDF, try landing page
                     if not result["pdf_url"]:
-                        result["landing_page"] = best_location.get("url_for_landing_page")
+                        result["landing_page"] = best_location.get(
+                            "url_for_landing_page"
+                        )
 
                 # Check all OA locations for PDFs
                 if not result["pdf_url"]:
@@ -118,7 +122,9 @@ class UnpaywallClient:
                             break
 
                 if result["is_oa"]:
-                    logger.info(f"Found OA version: {result.get('pdf_url') or result.get('landing_page')}")
+                    logger.info(
+                        f"Found OA version: {result.get('pdf_url') or result.get('landing_page')}"
+                    )
                 else:
                     logger.info(f"No OA version found for {doi}")
 
@@ -138,7 +144,9 @@ class UnpaywallClient:
         except Exception as e:
             return None, f"Unexpected error: {str(e)}"
 
-    def download_pdf(self, pdf_url: str, output_path: str) -> Tuple[bool, Optional[str]]:
+    def download_pdf(
+        self, pdf_url: str, output_path: str
+    ) -> Tuple[bool, Optional[str]]:
         """
         Download PDF from Unpaywall URL.
 
@@ -157,7 +165,11 @@ class UnpaywallClient:
             response = self.session.get(
                 pdf_url,
                 timeout=60,
-                headers={"User-Agent": "GeneVariantFetcher/1.0 (mailto:{})".format(self.email)}
+                headers={
+                    "User-Agent": "GeneVariantFetcher/1.0 (mailto:{})".format(
+                        self.email
+                    )
+                },
             )
 
             if response.status_code == 200:
@@ -168,7 +180,10 @@ class UnpaywallClient:
                     logger.info(f"PDF saved to: {output_path}")
                     return True, None
                 else:
-                    return False, f"Response was not a PDF (content-type: {content_type})"
+                    return (
+                        False,
+                        f"Response was not a PDF (content-type: {content_type})",
+                    )
             else:
                 return False, f"HTTP {response.status_code}"
 

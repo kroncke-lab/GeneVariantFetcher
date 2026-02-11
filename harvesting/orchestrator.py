@@ -39,8 +39,7 @@ from utils.resilience import CircuitBreaker, ResilientAPIClient
 
 # Setup logging for circuit breaker monitoring
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -262,33 +261,43 @@ class PMCHarvester:
         self.springer_api = SpringerAPIClient(
             api_key=springer_api_key, session=self.session
         )
-        
+
         # Initialize Unpaywall client (free service, uses NCBI_EMAIL)
         ncbi_email = os.environ.get("NCBI_EMAIL", "gvf@example.com")
         self.unpaywall = UnpaywallClient(email=ncbi_email, session=self.session)
-        
+
         # Initialize CORE API client (optional, uses CORE_API_KEY)
         core_api_key = os.environ.get("CORE_API_KEY")
         self.core_api = COREAPIClient(api_key=core_api_key, session=self.session)
-        
+
         # Initialize retry manager for transient failures
         self.retry_manager = RetryManager(
             config=RetryConfig(max_retries=3, base_delay=2.0),
-            log_file=self.output_dir / "retry_log.jsonl"
+            log_file=self.output_dir / "retry_log.jsonl",
         )
-        
+
         # Initialize circuit breakers for API resilience
-        self.elsevier_circuit = CircuitBreaker("elsevier", max_failures=5, reset_timeout=60)
+        self.elsevier_circuit = CircuitBreaker(
+            "elsevier", max_failures=5, reset_timeout=60
+        )
         self.wiley_circuit = CircuitBreaker("wiley", max_failures=5, reset_timeout=60)
-        self.springer_circuit = CircuitBreaker("springer", max_failures=5, reset_timeout=60)
-        
+        self.springer_circuit = CircuitBreaker(
+            "springer", max_failures=5, reset_timeout=60
+        )
+
         # Create resilient API clients with circuit breaker protection
-        self.elsevier_client = ResilientAPIClient(self.elsevier_api, self.elsevier_circuit)
+        self.elsevier_client = ResilientAPIClient(
+            self.elsevier_api, self.elsevier_circuit
+        )
         self.wiley_client = ResilientAPIClient(self.wiley_api, self.wiley_circuit)
-        self.springer_client = ResilientAPIClient(self.springer_api, self.springer_circuit)
-        
+        self.springer_client = ResilientAPIClient(
+            self.springer_api, self.springer_circuit
+        )
+
         # Initialize priority queue for manual acquisition
-        self.priority_queue = PriorityQueue(self.output_dir / "manual_acquisition_queue.json")
+        self.priority_queue = PriorityQueue(
+            self.output_dir / "manual_acquisition_queue.json"
+        )
 
         # Initialize log files with extended columns for carrier data
         with open(self.paywalled_log, "w", newline="") as f:
@@ -340,7 +349,7 @@ class PMCHarvester:
                     "",  # More_In_Fulltext_Probability, Priority_Score, Notes
                 ]
             )
-        
+
         # Also add to priority queue for manual acquisition
         try:
             self.priority_queue.add_paper(
@@ -352,7 +361,9 @@ class PMCHarvester:
         except Exception as e:
             logger.warning(f"Failed to add {pmid} to priority queue: {e}")
 
-    def _write_pmid_status(self, pmid: str, status: str, details: Dict[str, Any] = None) -> None:
+    def _write_pmid_status(
+        self, pmid: str, status: str, details: Dict[str, Any] = None
+    ) -> None:
         """
         Write the status of a PMID to a JSON file.
 
@@ -362,6 +373,7 @@ class PMCHarvester:
             details: Dictionary of details to write to the file
         """
         import json
+
         status_dir = self.output_dir / "pmid_status"
         status_dir.mkdir(exist_ok=True)
         status_file = status_dir / f"{pmid}.json"
@@ -369,8 +381,12 @@ class PMCHarvester:
         data = {
             "pmid": pmid,
             "status": status,
-            "download_timestamp": details.get("download_timestamp", datetime.datetime.now().isoformat()),
-            "extract_timestamp": details.get("extract_timestamp", datetime.datetime.now().isoformat()),
+            "download_timestamp": details.get(
+                "download_timestamp", datetime.datetime.now().isoformat()
+            ),
+            "extract_timestamp": details.get(
+                "extract_timestamp", datetime.datetime.now().isoformat()
+            ),
             "variant_count": details.get("variant_count", None),
             "failure_reason": details.get("failure_reason", None),
             "source": details.get("source", None),
@@ -378,7 +394,6 @@ class PMCHarvester:
 
         with open(status_file, "w") as f:
             json.dump(data, f, indent=2)
-
 
     # Patterns that indicate junk/non-article content
     JUNK_CONTENT_PATTERNS = [
@@ -1249,11 +1264,15 @@ class PMCHarvester:
             writer = csv.writer(f)
             writer.writerow([pmid, pmcid, downloaded_count])
 
-        self._write_pmid_status(pmid, "extracted", {
-            "download_timestamp": datetime.datetime.now().isoformat(),
-            "variant_count": 0, #FIXME: Add actual variant count
-            "source": "pmc"
-        })
+        self._write_pmid_status(
+            pmid,
+            "extracted",
+            {
+                "download_timestamp": datetime.datetime.now().isoformat(),
+                "variant_count": 0,  # FIXME: Add actual variant count
+                "source": "pmc",
+            },
+        )
 
         return True, str(output_file), unified_content
 
@@ -1282,37 +1301,55 @@ class PMCHarvester:
             if doi:
                 unpaywall_result, unpaywall_error = self.unpaywall.find_open_access(doi)
                 if unpaywall_result and unpaywall_result.get("pdf_url"):
-                    print(f"  ✓ Unpaywall found OA version: {unpaywall_result.get('oa_status')}")
+                    print(
+                        f"  ✓ Unpaywall found OA version: {unpaywall_result.get('oa_status')}"
+                    )
                     # Download the PDF and convert to markdown
                     pdf_url = unpaywall_result["pdf_url"]
                     pdf_path = self.output_dir / f"{pmid}_unpaywall.pdf"
-                    success, dl_error = self.unpaywall.download_pdf(pdf_url, str(pdf_path))
+                    success, dl_error = self.unpaywall.download_pdf(
+                        pdf_url, str(pdf_path)
+                    )
                     if success:
                         # Convert PDF to markdown
                         main_markdown = self.converter.pdf_to_markdown(str(pdf_path))
                         if main_markdown and len(main_markdown) > 500:
-                            print(f"  ✓ Retrieved via Unpaywall ({len(main_markdown)} chars)")
+                            print(
+                                f"  ✓ Retrieved via Unpaywall ({len(main_markdown)} chars)"
+                            )
                             # Continue with the rest of the flow
                             is_free = True
                             free_url = pdf_url
                         else:
-                            print(f"  - Unpaywall PDF conversion failed or content too short")
+                            print(
+                                f"  - Unpaywall PDF conversion failed or content too short"
+                            )
                     else:
                         print(f"  - Unpaywall download failed: {dl_error}")
                 elif unpaywall_result and unpaywall_result.get("landing_page"):
                     print(f"  - Unpaywall found landing page but no direct PDF")
                 else:
                     print(f"  - Unpaywall: {unpaywall_error or 'No OA version found'}")
-            
+
             if not is_free:
-                print(f"  ❌ No PMCID and not available via any method (likely paywalled)")
+                print(
+                    f"  ❌ No PMCID and not available via any method (likely paywalled)"
+                )
                 pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-                self._log_paywalled(pmid, "No PMCID found, not free full text, Unpaywall failed", pubmed_url)
-                self._write_pmid_status(pmid, "paywalled", {
-                    "download_timestamp": datetime.datetime.now().isoformat(),
-                    "failure_reason": "No PMCID found, not free full text, Unpaywall failed",
-                    "source": "unpaywall"
-                })
+                self._log_paywalled(
+                    pmid,
+                    "No PMCID found, not free full text, Unpaywall failed",
+                    pubmed_url,
+                )
+                self._write_pmid_status(
+                    pmid,
+                    "paywalled",
+                    {
+                        "download_timestamp": datetime.datetime.now().isoformat(),
+                        "failure_reason": "No PMCID found, not free full text, Unpaywall failed",
+                        "source": "unpaywall",
+                    },
+                )
                 return False, "No PMCID", None
 
         print(f"  ✓ Article marked as free full text on PubMed")
@@ -1417,7 +1454,9 @@ class PMCHarvester:
             ):
                 pii = self.elsevier_api.extract_pii_from_url(free_url)
                 if pii:
-                    print(f"  Trying Elsevier API (with circuit breaker) for PII: {pii}")
+                    print(
+                        f"  Trying Elsevier API (with circuit breaker) for PII: {pii}"
+                    )
                     try:
                         elsevier_markdown, elsevier_error = (
                             self.elsevier_client.fetch_fulltext(pii=pii)
@@ -1431,7 +1470,9 @@ class PMCHarvester:
                             )
                     except Exception as e:
                         if "circuit breaker" in str(e).lower():
-                            print(f"  ⚠ Circuit breaker protection activated for Elsevier: {e}")
+                            print(
+                                f"  ⚠ Circuit breaker protection activated for Elsevier: {e}"
+                            )
                         else:
                             print(f"  - Elsevier API failed: {e}")
                         # Get supplements via web scraping
@@ -1454,7 +1495,9 @@ class PMCHarvester:
             ):
                 extracted_doi = self.wiley_api.extract_doi_from_url(free_url)
                 if extracted_doi:
-                    print(f"  Trying Wiley API (with circuit breaker) for DOI: {extracted_doi}")
+                    print(
+                        f"  Trying Wiley API (with circuit breaker) for DOI: {extracted_doi}"
+                    )
                     try:
                         wiley_markdown, wiley_error = self.wiley_client.fetch_fulltext(
                             doi=extracted_doi
@@ -1468,7 +1511,9 @@ class PMCHarvester:
                             )
                     except Exception as e:
                         if "circuit breaker" in str(e).lower():
-                            print(f"  ⚠ Circuit breaker protection activated for Wiley: {e}")
+                            print(
+                                f"  ⚠ Circuit breaker protection activated for Wiley: {e}"
+                            )
                         else:
                             print(f"  - Wiley API failed: {e}")
                         # Get supplements via web scraping
@@ -2018,7 +2063,7 @@ class PMCHarvester:
             return None, "Not an Elsevier DOI"
 
         print(f"  Trying Elsevier API (with circuit breaker) for DOI: {doi}")
-        
+
         try:
             markdown, error = self.elsevier_client.fetch_fulltext(doi=doi)
 
@@ -2057,12 +2102,14 @@ class PMCHarvester:
             return None, "Not a Wiley DOI"
 
         print(f"  Trying Wiley API (with circuit breaker) for DOI: {doi}")
-        
+
         try:
             markdown, error = self.wiley_client.fetch_fulltext(doi=doi)
 
             if markdown:
-                print(f"  ✓ Full text retrieved via Wiley API ({len(markdown)} characters)")
+                print(
+                    f"  ✓ Full text retrieved via Wiley API ({len(markdown)} characters)"
+                )
                 return markdown, None
             else:
                 print(f"  - Wiley API: {error}")
@@ -2094,7 +2141,7 @@ class PMCHarvester:
             return None, "Not a Springer/Nature/BMC DOI"
 
         print(f"  Trying Springer OpenAccess API (with circuit breaker) for DOI: {doi}")
-        
+
         try:
             markdown, metadata, error = self.springer_client.fetch_article(doi)
 

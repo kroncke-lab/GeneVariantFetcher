@@ -26,6 +26,7 @@ from gene_literature.supplements import (
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture(scope="module")
 def pmc_fetcher():
     return PMCSupplementFetcher(timeout=30)
@@ -45,9 +46,12 @@ def unified_fetcher():
 # SupplementFile dataclass
 # ---------------------------------------------------------------------------
 
+
 class TestSupplementFile:
     def test_to_dict(self):
-        sf = SupplementFile(url="https://example.com/mmc1.pdf", name="mmc1.pdf", source="test")
+        sf = SupplementFile(
+            url="https://example.com/mmc1.pdf", name="mmc1.pdf", source="test"
+        )
         d = sf.to_dict()
         assert d == {"url": "https://example.com/mmc1.pdf", "name": "mmc1.pdf"}
 
@@ -73,6 +77,7 @@ class TestSupplementFile:
 # ---------------------------------------------------------------------------
 # PMC Fetcher (Tier 1)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.requires_network
 class TestPMCFetcher:
@@ -129,6 +134,7 @@ class TestPMCFetcher:
 # Elsevier Fetcher (Tier 2)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.requires_network
 class TestElsevierFetcher:
     """Test Elsevier supplement fetcher."""
@@ -145,15 +151,12 @@ class TestElsevierFetcher:
 
     @pytest.mark.skipif(
         not ElsevierSupplementFetcher().available,
-        reason="ELSEVIER_API_KEY not configured"
+        reason="ELSEVIER_API_KEY not configured",
     )
     def test_fetch_with_doi(self, elsevier_fetcher):
         """Test Elsevier fetch with a known Elsevier DOI."""
         # PMID 35443093 - Genetics in Medicine (Elsevier)
-        results = elsevier_fetcher.fetch(
-            "35443093",
-            doi="10.1016/j.gim.2022.03.014"
-        )
+        results = elsevier_fetcher.fetch("35443093", doi="10.1016/j.gim.2022.03.014")
         # May or may not find supplements depending on API access level
         assert isinstance(results, list)
         if results:
@@ -166,6 +169,7 @@ class TestElsevierFetcher:
 # ---------------------------------------------------------------------------
 # Unified Fetcher
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.requires_network
 class TestUnifiedFetcher:
@@ -182,7 +186,9 @@ class TestUnifiedFetcher:
         urls = [s.normalized_url for s in results]
         assert len(urls) == len(set(urls)), "Results should be deduplicated by URL"
 
-        print(f"\n  Unified fetcher found {len(results)} supplements for PMID 31983221:")
+        print(
+            f"\n  Unified fetcher found {len(results)} supplements for PMID 31983221:"
+        )
         for s in results:
             print(f"    [{s.source}] {s.name}: {s.url[:80]}...")
 
@@ -207,7 +213,9 @@ class TestUnifiedFetcher:
         results = unified_fetcher.fetch_tier1("31983221")
         assert isinstance(results, list)
         for s in results:
-            assert s.source.startswith("pmc"), f"Tier 1 result should be from PMC: {s.source}"
+            assert s.source.startswith("pmc"), (
+                f"Tier 1 result should be from PMC: {s.source}"
+            )
 
     def test_deduplication_across_tiers(self, unified_fetcher):
         """If the same supplement is found by multiple tiers, keep only one."""

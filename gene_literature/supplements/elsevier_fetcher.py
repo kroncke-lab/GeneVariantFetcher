@@ -39,16 +39,20 @@ class ElsevierSupplementFetcher(SupplementFetcher):
     SCIENCEDIRECT_BASE = "https://www.sciencedirect.com"
 
     # Common Elsevier supplement filename pattern
-    MMC_PATTERN = re.compile(r"mmc\d+\.(pdf|docx?|xlsx?|csv|pptx?|zip|txt)", re.IGNORECASE)
+    MMC_PATTERN = re.compile(
+        r"mmc\d+\.(pdf|docx?|xlsx?|csv|pptx?|zip|txt)", re.IGNORECASE
+    )
 
     def __init__(self, timeout: int = 30, api_key: str = ""):
         super().__init__(timeout=timeout)
         self.api_key = api_key or os.getenv("ELSEVIER_API_KEY", "")
         if self.api_key:
-            self.session.headers.update({
-                "X-ELS-APIKey": self.api_key,
-                "Accept": "application/json",
-            })
+            self.session.headers.update(
+                {
+                    "X-ELS-APIKey": self.api_key,
+                    "Accept": "application/json",
+                }
+            )
 
     @property
     def available(self) -> bool:
@@ -146,7 +150,9 @@ class ElsevierSupplementFetcher(SupplementFetcher):
                 continue
 
             # Only include actual supplement files
-            if not any(kw in href.lower() for kw in ("mmc", "suppl", "appendix", "si_")):
+            if not any(
+                kw in href.lower() for kw in ("mmc", "suppl", "appendix", "si_")
+            ):
                 continue
 
             if not href.startswith("http"):
@@ -158,14 +164,16 @@ class ElsevierSupplementFetcher(SupplementFetcher):
             seen_urls.add(normalized)
 
             filename = Path(urlparse(href).path).name or "supplement"
-            results.append(SupplementFile(
-                url=href,
-                name=self._clean_filename(filename),
-                source="elsevier_api",
-                pmid=pmid,
-                mime_type=obj.get("mime-type", ""),
-                description=obj.get("caption", ""),
-            ))
+            results.append(
+                SupplementFile(
+                    url=href,
+                    name=self._clean_filename(filename),
+                    source="elsevier_api",
+                    pmid=pmid,
+                    mime_type=obj.get("mime-type", ""),
+                    description=obj.get("caption", ""),
+                )
+            )
 
         # Also check for attachment references
         attachments = article.get("attachment", [])
@@ -185,14 +193,20 @@ class ElsevierSupplementFetcher(SupplementFetcher):
                 continue
             seen_urls.add(normalized)
 
-            filename = att.get("filename", "") or Path(urlparse(href).path).name or "supplement"
-            results.append(SupplementFile(
-                url=href,
-                name=self._clean_filename(filename),
-                source="elsevier_api",
-                pmid=pmid,
-                mime_type=att.get("mime-type", ""),
-            ))
+            filename = (
+                att.get("filename", "")
+                or Path(urlparse(href).path).name
+                or "supplement"
+            )
+            results.append(
+                SupplementFile(
+                    url=href,
+                    name=self._clean_filename(filename),
+                    source="elsevier_api",
+                    pmid=pmid,
+                    mime_type=att.get("mime-type", ""),
+                )
+            )
 
         return results
 
@@ -215,7 +229,9 @@ class ElsevierSupplementFetcher(SupplementFetcher):
 
             coredata = data.get("full-text-retrieval-response", {}).get("coredata", {})
             if not coredata:
-                coredata = data.get("abstracts-retrieval-response", {}).get("coredata", {})
+                coredata = data.get("abstracts-retrieval-response", {}).get(
+                    "coredata", {}
+                )
 
             return coredata.get("pii", None)
         except Exception as e:
@@ -243,12 +259,14 @@ class ElsevierSupplementFetcher(SupplementFetcher):
                 try:
                     resp = self.session.head(file_url, timeout=10, allow_redirects=True)
                     if resp.status_code == 200:
-                        results.append(SupplementFile(
-                            url=file_url,
-                            name=f"mmc{i}.{ext}",
-                            source="elsevier_mmc",
-                            pmid=pmid,
-                        ))
+                        results.append(
+                            SupplementFile(
+                                url=file_url,
+                                name=f"mmc{i}.{ext}",
+                                source="elsevier_mmc",
+                                pmid=pmid,
+                            )
+                        )
                         break  # Found this mmc number, try next
                 except Exception:
                     continue

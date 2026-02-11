@@ -21,7 +21,9 @@ from .retry_utils import llm_retry
 litellm.num_retries = (
     2  # Reduce from default 6 to 2 (our @llm_retry handles additional retries)
 )
-litellm.request_timeout = 1200  # 20 minute timeout for large extractions (increased from 600)
+litellm.request_timeout = (
+    1200  # 20 minute timeout for large extractions (increased from 600)
+)
 
 logger = logging.getLogger(__name__)
 

@@ -135,10 +135,12 @@ class DataAggregator:
 
         return warnings
 
-    def normalize_variant_key(self, variant: Dict[str, Any], gene_symbol: str = 'KCNH2') -> str:
+    def normalize_variant_key(
+        self, variant: Dict[str, Any], gene_symbol: str = "KCNH2"
+    ) -> str:
         """
         Create a normalized key for grouping variants.
-        
+
         Uses the consolidated variant normalizer to ensure variants in
         different notations (p.Arg534Cys vs R534C) are grouped together.
 
@@ -151,7 +153,7 @@ class DataAggregator:
         """
         # Use gene_symbol from variant if available
         gene = variant.get("gene_symbol", gene_symbol)
-        
+
         # Use the consolidated normalizer for proper key creation
         return create_variant_key(variant, gene)
 

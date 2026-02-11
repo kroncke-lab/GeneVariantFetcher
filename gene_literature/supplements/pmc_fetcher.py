@@ -47,9 +47,11 @@ class PMCSupplementFetcher(SupplementFetcher):
     def __init__(self, timeout: int = 30):
         super().__init__(timeout=timeout)
         # Europe PMC prefers JSON
-        self.session.headers.update({
-            "Accept": "application/json, application/xml, text/html",
-        })
+        self.session.headers.update(
+            {
+                "Accept": "application/json, application/xml, text/html",
+            }
+        )
 
     def fetch(self, pmid: str, doi: str = "") -> List[SupplementFile]:
         """Fetch supplement metadata from PMC sources.
@@ -64,7 +66,9 @@ class PMCSupplementFetcher(SupplementFetcher):
         # Tier 1a: Europe PMC supplementary files endpoint
         supplements = self._fetch_europepmc_supplements(pmcid)
         if supplements:
-            logger.info(f"Europe PMC returned {len(supplements)} supplements for {pmcid}")
+            logger.info(
+                f"Europe PMC returned {len(supplements)} supplements for {pmcid}"
+            )
             return supplements
 
         # Tier 1b: Parse PMC full-text XML for supplement links
@@ -76,7 +80,9 @@ class PMCSupplementFetcher(SupplementFetcher):
         # Tier 1c: OA service FTP links
         supplements = self._fetch_from_oa_service(pmcid)
         if supplements:
-            logger.info(f"OA service returned {len(supplements)} supplements for {pmcid}")
+            logger.info(
+                f"OA service returned {len(supplements)} supplements for {pmcid}"
+            )
             return supplements
 
         logger.info(f"No PMC supplements found for PMID {pmid} ({pmcid})")
@@ -144,26 +150,33 @@ class PMCSupplementFetcher(SupplementFetcher):
                 return []
             raise
         except Exception as e:
-            logger.warning(f"Europe PMC supplementary files request failed for {pmcid}: {e}")
+            logger.warning(
+                f"Europe PMC supplementary files request failed for {pmcid}: {e}"
+            )
             return []
 
         content_type = response.headers.get("Content-Type", "")
 
         # ZIP response means OA article with downloadable supplements
         if "application/zip" in content_type:
-            return [SupplementFile(
-                url=url,
-                name=f"{pmcid}_supplements.zip",
-                source="pmc_europepmc",
-                pmcid=pmcid,
-                mime_type="application/zip",
-                size_bytes=len(response.content),
-                description="Europe PMC supplementary files archive",
-            )]
+            return [
+                SupplementFile(
+                    url=url,
+                    name=f"{pmcid}_supplements.zip",
+                    source="pmc_europepmc",
+                    pmcid=pmcid,
+                    mime_type="application/zip",
+                    size_bytes=len(response.content),
+                    description="Europe PMC supplementary files archive",
+                )
+            ]
 
         # XML error response (non-OA article)
         if "xml" in content_type:
-            if "not open access" in response.text.lower() or "<error" in response.text.lower():
+            if (
+                "not open access" in response.text.lower()
+                or "<error" in response.text.lower()
+            ):
                 logger.debug(f"{pmcid} is not open access in Europe PMC")
                 return []
 
@@ -183,7 +196,11 @@ class PMCSupplementFetcher(SupplementFetcher):
 
         for entry in files_data:
             file_url = entry.get("url", "") or entry.get("downloadUrl", "")
-            filename = entry.get("fileName", "") or entry.get("name", "") or entry.get("label", "")
+            filename = (
+                entry.get("fileName", "")
+                or entry.get("name", "")
+                or entry.get("label", "")
+            )
 
             if not file_url:
                 continue
@@ -196,14 +213,16 @@ class PMCSupplementFetcher(SupplementFetcher):
             if not filename:
                 filename = Path(file_url).name or "supplement"
 
-            results.append(SupplementFile(
-                url=file_url,
-                name=self._clean_filename(filename),
-                source="pmc_europepmc",
-                pmcid=pmcid,
-                mime_type=entry.get("mimeType", ""),
-                description=entry.get("description", "") or entry.get("title", ""),
-            ))
+            results.append(
+                SupplementFile(
+                    url=file_url,
+                    name=self._clean_filename(filename),
+                    source="pmc_europepmc",
+                    pmcid=pmcid,
+                    mime_type=entry.get("mimeType", ""),
+                    description=entry.get("description", "") or entry.get("title", ""),
+                )
+            )
 
         return results
 
@@ -232,7 +251,9 @@ class PMCSupplementFetcher(SupplementFetcher):
 
         return self._parse_supplement_links_from_xml(xml_text, pmcid)
 
-    def _parse_supplement_links_from_xml(self, xml_text: str, pmcid: str) -> List[SupplementFile]:
+    def _parse_supplement_links_from_xml(
+        self, xml_text: str, pmcid: str
+    ) -> List[SupplementFile]:
         """Extract supplement URLs from PMC JATS XML.
 
         Handles two common patterns in JATS XML:
@@ -262,14 +283,18 @@ class PMCSupplementFetcher(SupplementFetcher):
             seen_urls.add(normalized)
 
             filename = Path(href).name or label or "supplement"
-            results.append(SupplementFile(
-                url=href,
-                name=self._clean_filename(filename),
-                source="pmc_xml",
-                pmcid=pmcid,
-                mime_type=mime,
-                description=f"{label}: {caption}".strip(": ") if (label or caption) else "",
-            ))
+            results.append(
+                SupplementFile(
+                    url=href,
+                    name=self._clean_filename(filename),
+                    source="pmc_xml",
+                    pmcid=pmcid,
+                    mime_type=mime,
+                    description=f"{label}: {caption}".strip(": ")
+                    if (label or caption)
+                    else "",
+                )
+            )
 
         for supp in root.iter("supplementary-material"):
             # Get label/caption from the supplementary-material element
@@ -314,7 +339,9 @@ class PMCSupplementFetcher(SupplementFetcher):
         }
 
         try:
-            response = self.session.get(self.PMC_OA_BASE, params=params, timeout=self.timeout)
+            response = self.session.get(
+                self.PMC_OA_BASE, params=params, timeout=self.timeout
+            )
             response.raise_for_status()
             data = response.json()
         except Exception as e:
@@ -341,12 +368,14 @@ class PMCSupplementFetcher(SupplementFetcher):
                 seen_urls.add(normalized)
 
                 filename = Path(link).name or f"{pmcid}_package"
-                results.append(SupplementFile(
-                    url=link,
-                    name=self._clean_filename(filename),
-                    source="pmc_oa_ftp",
-                    pmcid=pmcid,
-                    description="OA package (may contain supplements)",
-                ))
+                results.append(
+                    SupplementFile(
+                        url=link,
+                        name=self._clean_filename(filename),
+                        source="pmc_oa_ftp",
+                        pmcid=pmcid,
+                        description="OA package (may contain supplements)",
+                    )
+                )
 
         return results

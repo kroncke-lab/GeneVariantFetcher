@@ -55,7 +55,9 @@ class TestUnpaywallClient:
         assert url is None
 
     def test_is_open_access_bogus(self):
-        assert self.client.is_open_access("10.9999/this-doi-does-not-exist-xyz") is False
+        assert (
+            self.client.is_open_access("10.9999/this-doi-does-not-exist-xyz") is False
+        )
 
     def test_get_oa_locations_bogus(self):
         assert self.client.get_oa_locations("10.9999/this-doi-does-not-exist-xyz") == []

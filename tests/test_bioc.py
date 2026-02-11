@@ -20,6 +20,7 @@ def client():
 # Section classifier (offline, fast)
 # ------------------------------------------------------------------
 
+
 class TestClassifySection:
     def test_title(self):
         assert BioCClient.classify_section("TITLE") == "TITLE"
@@ -41,7 +42,9 @@ class TestClassifySection:
         assert BioCClient.classify_section("Results and Discussion") == "RESULTS"
         assert BioCClient.classify_section("Functional Characterization") == "RESULTS"
         assert BioCClient.classify_section("Electrophysiology Results") == "RESULTS"
-        assert BioCClient.classify_section("Genotype-Phenotype Correlations") == "RESULTS"
+        assert (
+            BioCClient.classify_section("Genotype-Phenotype Correlations") == "RESULTS"
+        )
 
     def test_table(self):
         assert BioCClient.classify_section("TABLE") == "TABLE"
@@ -61,6 +64,7 @@ class TestClassifySection:
 # ------------------------------------------------------------------
 # PubTator3 integration tests
 # ------------------------------------------------------------------
+
 
 @pytest.mark.requires_network
 class TestPubTator3:
@@ -105,6 +109,7 @@ class TestPubTator3:
 # ------------------------------------------------------------------
 # Variant-rich text
 # ------------------------------------------------------------------
+
 
 @pytest.mark.requires_network
 class TestVariantRichText:

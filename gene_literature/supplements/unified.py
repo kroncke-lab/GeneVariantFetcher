@@ -77,8 +77,7 @@ class UnifiedSupplementFetcher:
                 continue
 
         logger.info(
-            f"Unified fetch for PMID {pmid}: "
-            f"{len(all_supplements)} total supplements"
+            f"Unified fetch for PMID {pmid}: {len(all_supplements)} total supplements"
         )
         return all_supplements
 
@@ -105,7 +104,9 @@ class UnifiedSupplementFetcher:
 
         return results
 
-    def to_legacy_format(self, supplements: List[SupplementFile]) -> List[Dict[str, str]]:
+    def to_legacy_format(
+        self, supplements: List[SupplementFile]
+    ) -> List[Dict[str, str]]:
         """Convert SupplementFile list to legacy dict format.
 
         For compatibility with existing harvesting/supplement_scraper.py

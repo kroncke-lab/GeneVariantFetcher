@@ -24,7 +24,7 @@ import requests
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    format="%(asctime)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
 
@@ -48,9 +48,9 @@ def download_supplements_zip(session, pmcid: str, output_dir: Path) -> dict:
 
         resp.raise_for_status()
 
-        content_type = resp.headers.get('content-type', '')
+        content_type = resp.headers.get("content-type", "")
 
-        if 'zip' in content_type or resp.content[:2] == b'PK':
+        if "zip" in content_type or resp.content[:2] == b"PK":
             # It's a ZIP file
             try:
                 zf = zipfile.ZipFile(io.BytesIO(resp.content))
@@ -59,30 +59,32 @@ def download_supplements_zip(session, pmcid: str, output_dir: Path) -> dict:
 
                 for name in zf.namelist():
                     # Skip directory entries
-                    if name.endswith('/'):
+                    if name.endswith("/"):
                         continue
                     # Extract file
                     data = zf.read(name)
                     # Use just the filename, not the path
                     basename = Path(name).name
                     out_file = supp_dir / basename
-                    with open(out_file, 'wb') as f:
+                    with open(out_file, "wb") as f:
                         f.write(data)
                     result["files"].append(str(out_file))
 
-                logger.info(f"  Extracted {len(result['files'])} supplement files from ZIP")
+                logger.info(
+                    f"  Extracted {len(result['files'])} supplement files from ZIP"
+                )
             except zipfile.BadZipFile:
                 result["error"] = "Invalid ZIP file received"
-        elif 'xml' in content_type or 'html' in content_type:
+        elif "xml" in content_type or "html" in content_type:
             # Some endpoints return XML/HTML error pages
-            if '<error>' in resp.text.lower() or '404' in resp.text[:200]:
+            if "<error>" in resp.text.lower() or "404" in resp.text[:200]:
                 result["error"] = "No supplements (XML error response)"
             else:
                 # Save as-is
                 supp_dir = output_dir / "supplements"
                 supp_dir.mkdir(exist_ok=True)
                 out_file = supp_dir / f"{pmcid}_supplements.xml"
-                with open(out_file, 'w') as f:
+                with open(out_file, "w") as f:
                     f.write(resp.text)
                 result["files"].append(str(out_file))
         else:
@@ -109,13 +111,17 @@ def main():
         if pmcid:
             pmcid_papers.append((pmid, pmcid))
 
-    logger.info(f"Found {len(pmcid_papers)} papers with PMCIDs to check for supplements")
+    logger.info(
+        f"Found {len(pmcid_papers)} papers with PMCIDs to check for supplements"
+    )
 
     session = requests.Session()
-    session.headers.update({
-        'User-Agent': 'GeneVariantFetcher/1.0 (Bot for clinical variant extraction)',
-        'Accept': '*/*',
-    })
+    session.headers.update(
+        {
+            "User-Agent": "GeneVariantFetcher/1.0 (Bot for clinical variant extraction)",
+            "Accept": "*/*",
+        }
+    )
 
     stats = {
         "total": len(pmcid_papers),
@@ -141,7 +147,9 @@ def main():
             stats["total_files"] += len(result["files"])
             logger.info(f"  -> {len(result['files'])} files downloaded")
         elif result["error"]:
-            if "404" in str(result["error"]) or "No supplements" in str(result["error"]):
+            if "404" in str(result["error"]) or "No supplements" in str(
+                result["error"]
+            ):
                 stats["no_supplements"] += 1
                 logger.info(f"  -> No supplements available")
             else:
@@ -154,7 +162,7 @@ def main():
 
     # Save supplement results
     supp_summary = OUTPUT_DIR / "supplement_download_results.json"
-    with open(supp_summary, 'w') as f:
+    with open(supp_summary, "w") as f:
         json.dump({"stats": stats, "results": supplement_results}, f, indent=2)
 
     logger.info("\n" + "=" * 60)

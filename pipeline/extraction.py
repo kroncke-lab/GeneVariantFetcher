@@ -415,19 +415,23 @@ class ExpertExtractor(BaseLLMCaller):
         validates position against gene-specific protein length.
         """
         from utils.variant_normalizer import VariantNormalizer, normalize_variant
-        
+
         if not gene_symbol:
             return []
 
         # Create normalizer for validation
         normalizer = VariantNormalizer(gene_symbol)
-        
+
         variants = []
         seen_variants = set()
         filtered_count = 0
 
         # Pre-process: normalize Unicode arrows (same as variant_scanner)
-        full_text = full_text.replace('\u2192', '>').replace('\u2190', '<').replace('\u21d2', '>')
+        full_text = (
+            full_text.replace("\u2192", ">")
+            .replace("\u2190", "<")
+            .replace("\u21d2", ">")
+        )
 
         # Variant patterns to look for in table cells
         protein_pattern = re.compile(
@@ -453,14 +457,14 @@ class ExpertExtractor(BaseLLMCaller):
             for match in protein_pattern.finditer(line):
                 notation = f"p.{match.group(1)}"
                 normalized = normalize_variant(notation, gene_symbol)
-                
+
                 # Validate: skip non-target gene variants
                 is_non_target, reason = normalizer.is_non_target_variant(normalized)
                 if is_non_target:
                     filtered_count += 1
                     logger.debug(f"Table regex: filtered {notation} - {reason}")
                     continue
-                
+
                 if normalized not in seen_variants:
                     seen_variants.add(normalized)
                     variants.append(
@@ -490,16 +494,16 @@ class ExpertExtractor(BaseLLMCaller):
                 # Skip if it looks like a figure/table reference (e.g., "S1", "T1")
                 if len(notation) < 4:
                     continue
-                
+
                 normalized = normalize_variant(notation, gene_symbol)
-                
+
                 # Validate: skip non-target gene variants
                 is_non_target, reason = normalizer.is_non_target_variant(normalized)
                 if is_non_target:
                     filtered_count += 1
                     logger.debug(f"Table regex: filtered {notation} - {reason}")
                     continue
-                    
+
                 if normalized not in seen_variants:
                     seen_variants.add(normalized)
                     variants.append(
@@ -675,17 +679,17 @@ class ExpertExtractor(BaseLLMCaller):
 
     # Artifact patterns that indicate failed/invalid extraction
     ARTIFACT_PATTERNS = [
-        r'^p\.XXX$',           # Placeholder notation
-        r'^p\.unknown$',       # Unknown notation
-        r'^p\.null$',          # Null notation
-        r'^null$',             # Raw null
-        r'^unknown$',          # Raw unknown
-        r'^Splicesite$',       # Generic splice label (not actual notation)
-        r'^splice$',           # Generic splice label
-        r'^N/A$',              # Not applicable
-        r'^NA$',               # Not applicable variant
-        r'^-$',                # Dash placeholder
-        r'^\?$',               # Question mark placeholder
+        r"^p\.XXX$",  # Placeholder notation
+        r"^p\.unknown$",  # Unknown notation
+        r"^p\.null$",  # Null notation
+        r"^null$",  # Raw null
+        r"^unknown$",  # Raw unknown
+        r"^Splicesite$",  # Generic splice label (not actual notation)
+        r"^splice$",  # Generic splice label
+        r"^N/A$",  # Not applicable
+        r"^NA$",  # Not applicable variant
+        r"^-$",  # Dash placeholder
+        r"^\?$",  # Question mark placeholder
     ]
 
     def _filter_extraction_artifacts(
@@ -716,9 +720,7 @@ class ExpertExtractor(BaseLLMCaller):
             return extracted_data
 
         # Compile artifact patterns
-        artifact_re = re.compile(
-            '|'.join(self.ARTIFACT_PATTERNS), re.IGNORECASE
-        )
+        artifact_re = re.compile("|".join(self.ARTIFACT_PATTERNS), re.IGNORECASE)
 
         # Get protein length for position validation
         protein_length = PROTEIN_LENGTHS.get(target_gene.upper())
@@ -779,7 +781,9 @@ class ExpertExtractor(BaseLLMCaller):
                 extracted_data["extraction_metadata"]["total_variants_found"] = len(
                     filtered_variants
                 )
-                extracted_data["extraction_metadata"]["artifacts_filtered"] = artifact_count
+                extracted_data["extraction_metadata"]["artifacts_filtered"] = (
+                    artifact_count
+                )
                 extracted_data["extraction_metadata"]["position_invalid_filtered"] = (
                     position_invalid_count
                 )
@@ -790,37 +794,74 @@ class ExpertExtractor(BaseLLMCaller):
     # Header patterns for variant table detection - broadened to catch more table formats
     # Groups: cdna_headers, protein_headers, count_headers
     VARIANT_CDNA_HEADERS = {
-        'nucleotide', 'nucleotide change', 'cdna', 'c.', 'cdna change',
-        'cdna_change', 'hgvs cdna', 'hgvs_cdna', 'dna change', 'dna mutation',
-        'coding change', 'nt change', 'base change'
+        "nucleotide",
+        "nucleotide change",
+        "cdna",
+        "c.",
+        "cdna change",
+        "cdna_change",
+        "hgvs cdna",
+        "hgvs_cdna",
+        "dna change",
+        "dna mutation",
+        "coding change",
+        "nt change",
+        "base change",
     }
     VARIANT_PROTEIN_HEADERS = {
-        'variant', 'amino acid', 'protein', 'p.', 'aa change', 'aachange',
-        'protein change', 'aa', 'mutation', 'hgvs protein', 'hgvs_protein',
-        'amino acid change', 'protein mutation', 'missense', 'effect'
+        "variant",
+        "amino acid",
+        "protein",
+        "p.",
+        "aa change",
+        "aachange",
+        "protein change",
+        "aa",
+        "mutation",
+        "hgvs protein",
+        "hgvs_protein",
+        "amino acid change",
+        "protein mutation",
+        "missense",
+        "effect",
     }
     VARIANT_COUNT_HEADERS = {
-        'patient', 'patients', 'no. of patients', 'no. of patient', 'n',
-        'affected', 'carriers', 'probands', 'families', 'subjects',
-        'count', 'cases', 'individuals', 'number', 'freq', 'frequency'
+        "patient",
+        "patients",
+        "no. of patients",
+        "no. of patient",
+        "n",
+        "affected",
+        "carriers",
+        "probands",
+        "families",
+        "subjects",
+        "count",
+        "cases",
+        "individuals",
+        "number",
+        "freq",
+        "frequency",
     }
 
     def _is_variant_table_header(self, line: str) -> bool:
         """
         Check if a line looks like a variant table header row.
-        
+
         Requires at least one cDNA/protein-like header AND one count-like header,
         OR two different variant notation headers (cDNA + protein).
         """
         line_lower = line.lower()
-        
+
         has_cdna_header = any(h in line_lower for h in self.VARIANT_CDNA_HEADERS)
         has_protein_header = any(h in line_lower for h in self.VARIANT_PROTEIN_HEADERS)
         has_count_header = any(h in line_lower for h in self.VARIANT_COUNT_HEADERS)
-        
+
         # Accept: (cDNA OR protein) AND count
         # OR: cDNA AND protein (variant mapping table)
-        return (has_cdna_header or has_protein_header) and (has_count_header or (has_cdna_header and has_protein_header))
+        return (has_cdna_header or has_protein_header) and (
+            has_count_header or (has_cdna_header and has_protein_header)
+        )
 
     def _parse_markdown_table_variants(
         self, full_text: str, gene_symbol: Optional[str]
@@ -830,7 +871,7 @@ class ExpertExtractor(BaseLLMCaller):
 
         Returns a minimal variant list without calling the LLM. Intended for papers
         like PMID 19716085 where a single giant table lists hundreds of variants.
-        
+
         BROADENED (2026-02-10): Now recognizes many more header patterns:
         - cDNA: nucleotide, cDNA, c., HGVS cdna, etc.
         - Protein: variant, amino acid, protein, p., AAChange, mutation, etc.
@@ -853,15 +894,15 @@ class ExpertExtractor(BaseLLMCaller):
                     for idx, name in enumerate(parts):
                         name_lower = name.lower().strip()
                         header_idx[name_lower] = idx
-                        
+
                         # Map to standard keys for retrieval
                         if any(h in name_lower for h in self.VARIANT_CDNA_HEADERS):
-                            header_mapping['cdna'] = idx
+                            header_mapping["cdna"] = idx
                         if any(h in name_lower for h in self.VARIANT_PROTEIN_HEADERS):
-                            header_mapping['protein'] = idx
+                            header_mapping["protein"] = idx
                         if any(h in name_lower for h in self.VARIANT_COUNT_HEADERS):
-                            header_mapping['count'] = idx
-                    
+                            header_mapping["count"] = idx
+
                     table_started = True
                 continue
 
@@ -1366,11 +1407,13 @@ class ExpertExtractor(BaseLLMCaller):
             print(
                 f"Pre-extracted {len(pre_extracted_variants)} variant hints from tables"
             )
-        
+
         # Run comprehensive variant scanner on ORIGINAL full text (catches narrative mentions + tables)
         # Uses scanner_text to bypass condensation and see all content
         scanner_result = scan_document_for_variants(
-            scanner_text, gene_symbol=paper.gene_symbol or "UNKNOWN", source=f"PMID_{paper.pmid}"
+            scanner_text,
+            gene_symbol=paper.gene_symbol or "UNKNOWN",
+            source=f"PMID_{paper.pmid}",
         )
         scanner_hints = scanner_result.get_hints_for_prompt(max_hints=50)
         if scanner_result.variants:
@@ -1383,7 +1426,7 @@ class ExpertExtractor(BaseLLMCaller):
 
         # Combine all hints (table + scanner)
         all_hints = table_hints + scanner_hints
-        
+
         # Use compact mode for high-variant papers to avoid output truncation
         use_compact = estimated_variants >= HIGH_VARIANT_THRESHOLD
         if use_compact:
@@ -1443,12 +1486,14 @@ class ExpertExtractor(BaseLLMCaller):
                 extracted_data = self._merge_table_variants(
                     extracted_data, pre_extracted_variants
                 )
-            
+
             # NEW: Merge scanner-found variants (catches narrative mentions the LLM missed)
             if scanner_result.variants:
                 extracted_data = merge_scanner_results(
-                    extracted_data, scanner_result, paper.gene_symbol or "UNKNOWN",
-                    min_confidence=0.6  # Only merge reasonably confident scanner finds
+                    extracted_data,
+                    scanner_result,
+                    paper.gene_symbol or "UNKNOWN",
+                    min_confidence=0.6,  # Only merge reasonably confident scanner finds
                 )
 
             # Filter variants to only keep those matching the target gene

@@ -27,9 +27,11 @@ print()
 variant_columns = []
 for col in df.columns:
     col_lower = col.lower()
-    if any(term in col_lower for term in ['variant', 'mut', 'change', 'notation', 'allele']):
+    if any(
+        term in col_lower for term in ["variant", "mut", "change", "notation", "allele"]
+    ):
         variant_columns.append(col)
-        
+
 print(f"=== POTENTIAL VARIANT COLUMNS ===")
 print(variant_columns)
 
@@ -48,8 +50,8 @@ for v in sorted_variants[:50]:
 print(f"\nTotal unique: {len(all_variants)}")
 
 # Also get the "Mutation" column specifically if it exists
-if 'Mutation' in df.columns:
-    mutations = df['Mutation'].dropna().unique()
+if "Mutation" in df.columns:
+    mutations = df["Mutation"].dropna().unique()
     print(f"\n=== UNIQUE FROM 'Mutation' COLUMN ===")
     for m in sorted(mutations)[:30]:
         print(f"  {m}")
@@ -59,10 +61,10 @@ if 'Mutation' in df.columns:
 output = {
     "columns_found": variant_columns,
     "total_unique_variants": len(all_variants),
-    "variants": sorted(list(all_variants))
+    "variants": sorted(list(all_variants)),
 }
 
 with open("utils/gold_standard_variants.json", "w") as f:
     json.dump(output, f, indent=2)
-    
+
 print(f"\n=== SAVED TO utils/gold_standard_variants.json ===")

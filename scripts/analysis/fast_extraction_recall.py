@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Fast GVF extraction and recall calculation."""
+
 import os
 import json
 import glob
@@ -15,28 +16,29 @@ OUTPUT_DIR = "/mnt/temp2/kronckbm/gvf_output/extraction_results_20260208"
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+
 def extract_variants_from_text(text):
     """Extract variants from text."""
     variants = set()
     patterns = [
-        r'\b([ACDEFGHIKLMNPQRSTVWY])(\d{2,4})([ACDEFGHIKLMNPQRSTVWY*X])\b',
-        r'p\.([ACDEFGHIKLMNPQRSTVWY])(\d{2,4})([ACDEFGHIKLMNPQRSTVWY*X])\b',
-        r'\b([ACDEFGHIKLMNPQRSTVWY])(\d{2,4})(fs[X\d]*)\b',
-        r'\b([ACDEFGHIKLMNPQRSTVWY])(\d{2,4})(del)\b',
+        r"\b([ACDEFGHIKLMNPQRSTVWY])(\d{2,4})([ACDEFGHIKLMNPQRSTVWY*X])\b",
+        r"p\.([ACDEFGHIKLMNPQRSTVWY])(\d{2,4})([ACDEFGHIKLMNPQRSTVWY*X])\b",
+        r"\b([ACDEFGHIKLMNPQRSTVWY])(\d{2,4})(fs[X\d]*)\b",
+        r"\b([ACDEFGHIKLMNPQRSTVWY])(\d{2,4})(del)\b",
     ]
-    
+
     for pattern in patterns:
         for match in re.finditer(pattern, text, re.IGNORECASE):
             aa1 = match.group(1).upper()
             pos = match.group(2)
             aa2 = match.group(3).upper()
-            
-            aa2 = aa2.replace('*', 'X')
-            if 'FS' in aa2.upper():
-                aa2 = 'FSX'
-            if 'DEL' in aa2.upper():
-                aa2 = 'DEL'
-            
+
+            aa2 = aa2.replace("*", "X")
+            if "FS" in aa2.upper():
+                aa2 = "FSX"
+            if "DEL" in aa2.upper():
+                aa2 = "DEL"
+
             try:
                 pos_int = int(pos)
                 if 1 <= pos_int <= 1200:
@@ -44,6 +46,7 @@ def extract_variants_from_text(text):
             except ValueError:
                 pass
     return variants
+
 
 def process_pdf(pdf_path):
     """Process a single PDF."""
@@ -58,14 +61,15 @@ def process_pdf(pdf_path):
     except Exception as e:
         return set()
 
+
 # Load gold standard
 print("Loading gold standard...")
 df_gold = pd.read_excel(GOLD_STANDARD)
 gold_variants = set()
-for v in df_gold['Variant'].dropna():
+for v in df_gold["Variant"].dropna():
     v_norm = str(v).upper().strip()
-    v_norm = v_norm.replace('*', 'X')
-    v_norm = re.sub(r'FSX?\d*$', 'FSX', v_norm)
+    v_norm = v_norm.replace("*", "X")
+    v_norm = re.sub(r"FSX?\d*$", "FSX", v_norm)
     gold_variants.add(v_norm)
 
 print(f"Gold standard variants: {len(gold_variants)}")
@@ -80,7 +84,7 @@ errors = 0
 
 for i, pdf_path in enumerate(pdfs):
     if (i + 1) % 20 == 0:
-        print(f"  Progress: {i+1}/{len(pdfs)}")
+        print(f"  Progress: {i + 1}/{len(pdfs)}")
     try:
         variants = process_pdf(pdf_path)
         all_extracted.update(variants)
@@ -93,17 +97,19 @@ matches = gold_variants & all_extracted
 novel = all_extracted - gold_variants
 missed = gold_variants - all_extracted
 
-print(f"\n{'='*60}")
+print(f"\n{'=' * 60}")
 print("EXTRACTION RESULTS")
-print(f"{'='*60}")
+print(f"{'=' * 60}")
 print(f"PDFs processed: {processed}/{len(pdfs)} (errors: {errors})")
 print(f"Gold standard variants: {len(gold_variants)}")
 print(f"Extracted variants: {len(all_extracted)}")
 print(f"Matched: {len(matches)}")
 print(f"Novel: {len(novel)}")
 print(f"Missed: {len(missed)}")
-print(f"\nVARIANT EXTRACTION RECALL: {len(matches)}/{len(gold_variants)} = {100*len(matches)/len(gold_variants):.1f}%")
-print(f"{'='*60}")
+print(
+    f"\nVARIANT EXTRACTION RECALL: {len(matches)}/{len(gold_variants)} = {100 * len(matches) / len(gold_variants):.1f}%"
+)
+print(f"{'=' * 60}")
 
 # Save results
 results = {
@@ -111,10 +117,10 @@ results = {
     "gold_variants": len(gold_variants),
     "extracted_variants": len(all_extracted),
     "matched_variants": len(matches),
-    "recall_percent": round(100*len(matches)/len(gold_variants), 1),
+    "recall_percent": round(100 * len(matches) / len(gold_variants), 1),
     "matched_list": sorted(list(matches))[:50],
     "sample_novel": sorted(list(novel))[:30],
-    "sample_missed": sorted(list(missed))[:30]
+    "sample_missed": sorted(list(missed))[:30],
 }
 
 with open(os.path.join(OUTPUT_DIR, "extraction_recall_results.json"), "w") as f:

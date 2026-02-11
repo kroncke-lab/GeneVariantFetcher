@@ -52,14 +52,16 @@ print(f"  Sample: {list(missed_canonicals)[:10]}")
 # Now check each novel GVF variant
 for novel in gvf_novel:
     novel_upper = novel.upper()
-    
+
     # Check if this novel variant maps to a canonical form
     if novel_upper in aliases:
         canonical = aliases[novel_upper]
         # Check if this canonical is in the missed set
         if canonical in missed_canonicals:
             new_matches.append((novel, canonical))
-        elif canonical in gold_all or canonical.upper() in [g.upper() for g in gold_all]:
+        elif canonical in gold_all or canonical.upper() in [
+            g.upper() for g in gold_all
+        ]:
             # Already matched
             pass
         else:
@@ -93,10 +95,14 @@ new_recall = new_matched_count / len(gold_all) * 100
 print(f"\n" + "=" * 60)
 print("RECALL IMPROVEMENT")
 print("=" * 60)
-print(f"Original matched: {len(gold_matched)} / {len(gold_all)} = {len(gold_matched)/len(gold_all)*100:.1f}%")
+print(
+    f"Original matched: {len(gold_matched)} / {len(gold_all)} = {len(gold_matched) / len(gold_all) * 100:.1f}%"
+)
 print(f"New potential matches: {len(new_matches)}")
 print(f"New total matched: {new_matched_count} / {len(gold_all)} = {new_recall:.1f}%")
-print(f"Improvement: +{len(new_matches)} variants (+{len(new_matches)/len(gold_all)*100:.1f}%)")
+print(
+    f"Improvement: +{len(new_matches)} variants (+{len(new_matches) / len(gold_all) * 100:.1f}%)"
+)
 
 # Also check: how many missed variants have aliases that weren't found?
 print(f"\n" + "=" * 60)
@@ -104,15 +110,23 @@ print("REMAINING MISSED ANALYSIS")
 print("=" * 60)
 
 matched_canonicals = set(c for _, c in new_matches)
-remaining_missed = [v for v in gold_missed if v.upper() not in [c.upper() for c in matched_canonicals]]
+remaining_missed = [
+    v for v in gold_missed if v.upper() not in [c.upper() for c in matched_canonicals]
+]
 
 print(f"Still missed after aliasing: {len(remaining_missed)}")
 
 # Categorize remaining missed
-cdna_missed = [v for v in remaining_missed if v.startswith('c.')]
-ivs_missed = [v for v in remaining_missed if v.upper().startswith('IVS')]
-exon_missed = [v for v in remaining_missed if 'EXON' in v.upper() or 'EX' in v.upper() or 'DEL' in v.upper()]
-other_missed = [v for v in remaining_missed if v not in cdna_missed + ivs_missed + exon_missed]
+cdna_missed = [v for v in remaining_missed if v.startswith("c.")]
+ivs_missed = [v for v in remaining_missed if v.upper().startswith("IVS")]
+exon_missed = [
+    v
+    for v in remaining_missed
+    if "EXON" in v.upper() or "EX" in v.upper() or "DEL" in v.upper()
+]
+other_missed = [
+    v for v in remaining_missed if v not in cdna_missed + ivs_missed + exon_missed
+]
 
 print(f"  cDNA notation: {len(cdna_missed)}")
 print(f"  IVS/splice: {len(ivs_missed)}")

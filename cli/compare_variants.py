@@ -587,7 +587,7 @@ def normalize_unicode(s: str) -> str:
 def normalize_variant(variant: str) -> str:
     """
     Normalize a variant string for comparison.
-    
+
     NOTE: This is a simplified local normalizer for comparison purposes.
     For full variant normalization with gene-specific validation, use:
         from utils.variant_normalizer import normalize_variant as normalize_variant_full

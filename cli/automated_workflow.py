@@ -93,15 +93,15 @@ def automated_variant_extraction_workflow(
         use_clinical_triage=use_clinical_triage,
         auto_synonyms=auto_synonyms,
         synonyms=synonyms or [],
-        scout_first=scout_first
+        scout_first=scout_first,
     )
-    
+
     # Initialize checkpoint manager
     checkpoint_manager = CheckpointManager()
-    
+
     # Create unique job ID for this run
     job_id = run_manifest.run_id
-    
+
     # Create initial checkpoint
     checkpoint = JobCheckpoint(
         job_id=job_id,
@@ -113,9 +113,9 @@ def automated_variant_extraction_workflow(
         tier_threshold=tier_threshold,
         use_clinical_triage=use_clinical_triage,
         auto_synonyms=auto_synonyms,
-        synonyms=synonyms or []
+        synonyms=synonyms or [],
     )
-    
+
     # Save initial checkpoint and manifest
     checkpoint_manager.save(checkpoint)
     run_manifest.save()
@@ -159,17 +159,19 @@ def automated_variant_extraction_workflow(
             )
             if all_synonyms:
                 logger.info(f"✓ Total synonyms to use: {', '.join(all_synonyms)}")
-            
+
             # Update checkpoint with discovered synonyms
             checkpoint.synonyms = all_synonyms
             checkpoint.step_progress["did_synonyms"] = True
             checkpoint_manager.save(checkpoint)
-            
+
         else:
             logger.warning(f"Failed to discover synonyms: {synonym_result.error}")
             logger.warning("Continuing without synonym expansion")
-            run_manifest.add_warning(f"Synonym discovery failed: {synonym_result.error}")
-            
+            run_manifest.add_warning(
+                f"Synonym discovery failed: {synonym_result.error}"
+            )
+
     elif all_synonyms:
         logger.info(
             f"\n🔍 Using {len(all_synonyms)} manually specified synonyms: {', '.join(all_synonyms)}"
@@ -226,7 +228,7 @@ def automated_variant_extraction_workflow(
         return {"success": False, "error": "No PMIDs found"}
 
     workflow_stats["pmids_discovered"] = len(pmids)
-    
+
     # Update checkpoint and manifest with discovered PMIDs
     checkpoint.discovered_pmids = pmids
     checkpoint_manager.save(checkpoint)
@@ -296,13 +298,12 @@ def automated_variant_extraction_workflow(
 
     workflow_stats["pmids_filtered_out"] = len(dropped_pmids)
     workflow_stats["pmids_passed_filters"] = len(filtered_pmids)
-    
+
     # Update checkpoint and manifest with filtered results
     checkpoint.filtered_pmids = filtered_pmids
     checkpoint_manager.save(checkpoint)
     run_manifest.update_statistics(
-        pmids_filtered_out=len(dropped_pmids),
-        pmids_passed_filters=len(filtered_pmids)
+        pmids_filtered_out=len(dropped_pmids), pmids_passed_filters=len(filtered_pmids)
     )
 
     # =========================================================================
@@ -334,13 +335,13 @@ def automated_variant_extraction_workflow(
 
     workflow_stats["papers_downloaded"] = len(downloaded_pmids)
     workflow_stats["papers_download_failed"] = len(abstract_only_pmids)
-    
+
     # Update checkpoint and manifest
     checkpoint.downloaded_pmids = downloaded_pmids
     checkpoint_manager.save(checkpoint)
     run_manifest.update_statistics(
         papers_downloaded=len(downloaded_pmids),
-        papers_download_failed=len(abstract_only_pmids)
+        papers_download_failed=len(abstract_only_pmids),
     )
     run_manifest.update_output_locations(harvest_dir=str(harvest_dir))
 
@@ -349,11 +350,13 @@ def automated_variant_extraction_workflow(
     # =========================================================================
     scout_manifest_path = None
     if scout_first:
-        logger.info("\n🔍 STEP 2.5: Running Data Scout to identify high-value data zones...")
-        
+        logger.info(
+            "\n🔍 STEP 2.5: Running Data Scout to identify high-value data zones..."
+        )
+
         scout_output_dir = output_path / "scout_output"
         scout_output_dir.mkdir(parents=True, exist_ok=True)
-        
+
         try:
             scout_result = run_scout(
                 input_path=str(harvest_dir),
@@ -362,16 +365,22 @@ def automated_variant_extraction_workflow(
                 min_relevance=0.1,
                 max_zones=30,
             )
-            
+
             scout_manifest_path = scout_output_dir / "scout_manifest.json"
             if scout_manifest_path.exists():
-                logger.info(f"✓ Data Scout completed. Manifest saved to: {scout_manifest_path}")
-                run_manifest.update_output_locations(scout_manifest=str(scout_manifest_path))
+                logger.info(
+                    f"✓ Data Scout completed. Manifest saved to: {scout_manifest_path}"
+                )
+                run_manifest.update_output_locations(
+                    scout_manifest=str(scout_manifest_path)
+                )
             else:
                 logger.warning("Data Scout completed but no manifest generated")
-                
+
         except Exception as e:
-            logger.warning(f"Data Scout failed: {e}. Continuing with standard extraction.")
+            logger.warning(
+                f"Data Scout failed: {e}. Continuing with standard extraction."
+            )
             run_manifest.add_warning(f"Data Scout failed: {e}")
 
     # =========================================================================
@@ -409,11 +418,11 @@ def automated_variant_extraction_workflow(
     workflow_stats["total_variants_found"] = extract_result.stats.get(
         "total_variants", 0
     )
-    
+
     # Update checkpoint and manifest
-    checkpoint.extracted_pmids = [e.pmid for e in extractions if hasattr(e, 'pmid')]
+    checkpoint.extracted_pmids = [e.pmid for e in extractions if hasattr(e, "pmid")]
     checkpoint_manager.save(checkpoint)
-    
+
     # Count abstract vs fulltext extractions
     abstract_extraction_count = sum(
         1
@@ -421,13 +430,13 @@ def automated_variant_extraction_workflow(
         if e.extracted_data
         and e.extracted_data.get("extraction_metadata", {}).get("abstract_only")
     )
-    
+
     run_manifest.update_statistics(
         papers_extracted=len(extractions),
         papers_extraction_failed=len(extraction_failures),
         total_variants_found=extract_result.stats.get("total_variants", 0),
         papers_from_fulltext=len(extractions) - abstract_extraction_count,
-        papers_from_abstract_only=abstract_extraction_count
+        papers_from_abstract_only=abstract_extraction_count,
     )
     run_manifest.update_output_locations(extractions_dir=str(extraction_dir))
 
@@ -458,13 +467,17 @@ def automated_variant_extraction_workflow(
     workflow_stats["variants_with_penetrance"] = aggregate_result.stats.get(
         "variants_aggregated", 0
     )
-    
+
     # Update checkpoint and manifest
     checkpoint_manager.save(checkpoint)
     run_manifest.update_statistics(
-        variants_with_penetrance_data=aggregate_result.stats.get("variants_aggregated", 0)
+        variants_with_penetrance_data=aggregate_result.stats.get(
+            "variants_aggregated", 0
+        )
     )
-    run_manifest.update_output_locations(penetrance_summary=str(penetrance_summary_file))
+    run_manifest.update_output_locations(
+        penetrance_summary=str(penetrance_summary_file)
+    )
 
     # =========================================================================
     # STEP 5: Migrate to SQLite Database
@@ -491,7 +504,7 @@ def automated_variant_extraction_workflow(
 
     workflow_stats["migration_successful"] = migrate_result.stats.get("successful", 0)
     workflow_stats["migration_failed"] = migrate_result.stats.get("failed", 0)
-    
+
     # Update manifest with database location
     run_manifest.update_output_locations(sqlite_database=str(db_path))
 
@@ -579,17 +592,16 @@ def automated_variant_extraction_workflow(
     # Finalize checkpoint and run manifest
     checkpoint.mark_completed()
     checkpoint_manager.save(checkpoint)
-    
+
     # Final manifest updates
     run_manifest.update_statistics(
         **workflow_stats,
         success_rate=success_rate,
         total_carriers_observed=total_carriers,
-        total_affected_carriers=total_affected
+        total_affected_carriers=total_affected,
     )
     run_manifest.update_output_locations(
-        workflow_summary=str(summary_file),
-        workflow_log=str(log_file)
+        workflow_summary=str(summary_file), workflow_log=str(log_file)
     )
     manifest_file = run_manifest.finalize(success=True)
 

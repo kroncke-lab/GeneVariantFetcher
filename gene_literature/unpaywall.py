@@ -62,13 +62,21 @@ class UnpaywallClient:
 
         best = data.get("best_oa_location")
         if best:
-            url = best.get("url_for_pdf") or best.get("url_for_landing_page") or best.get("url")
+            url = (
+                best.get("url_for_pdf")
+                or best.get("url_for_landing_page")
+                or best.get("url")
+            )
             if url:
                 return url
 
         # Fallback: iterate oa_locations
         for loc in data.get("oa_locations", []):
-            url = loc.get("url_for_pdf") or loc.get("url_for_landing_page") or loc.get("url")
+            url = (
+                loc.get("url_for_pdf")
+                or loc.get("url_for_landing_page")
+                or loc.get("url")
+            )
             if url:
                 return url
 
@@ -120,7 +128,9 @@ class UnpaywallClient:
                 logger.debug("Unpaywall: DOI not found – %s", doi)
                 self._cache[doi] = None  # type: ignore[assignment]
                 return None
-            logger.warning("Unpaywall HTTP %s for DOI %s: %s", exc.code, doi, exc.reason)
+            logger.warning(
+                "Unpaywall HTTP %s for DOI %s: %s", exc.code, doi, exc.reason
+            )
             raise UnpaywallError(f"HTTP {exc.code}: {exc.reason}") from exc
         except urllib.error.URLError as exc:
             logger.warning("Unpaywall network error for DOI %s: %s", doi, exc.reason)

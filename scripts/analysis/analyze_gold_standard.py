@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Analyze gold standard Excel file for recall metrics."""
+
 import pandas as pd
 import os
 import glob
@@ -21,12 +22,12 @@ lqt_col = None
 
 for col in df.columns:
     col_lower = str(col).lower()
-    if 'pmid' in col_lower or 'pubmed' in col_lower:
+    if "pmid" in col_lower or "pubmed" in col_lower:
         pmid_col = col
-    if 'variant' in col_lower or 'mutation' in col_lower:
+    if "variant" in col_lower or "mutation" in col_lower:
         if variant_col is None:
             variant_col = col
-    if 'lqt' in col_lower or 'affect' in col_lower or 'phenotype' in col_lower:
+    if "lqt" in col_lower or "affect" in col_lower or "phenotype" in col_lower:
         lqt_col = col
 
 print(f"\nIdentified columns:")
@@ -68,9 +69,9 @@ if lqt_col:
 download_dir = "/mnt/temp2/kronckbm/gvf_output/verified_downloads_20260208"
 downloaded_pmids = set()
 for pdf in glob.glob(os.path.join(download_dir, "*.pdf")):
-    basename = os.path.basename(pdf).replace('.pdf', '')
+    basename = os.path.basename(pdf).replace(".pdf", "")
     # Extract PMID (might have suffixes like _supp)
-    pmid = re.split(r'[_-]', basename)[0]
+    pmid = re.split(r"[_-]", basename)[0]
     if pmid.isdigit():
         downloaded_pmids.add(int(pmid))
 
@@ -85,7 +86,7 @@ analysis = {
     "pmid_col": pmid_col,
     "variant_col": variant_col,
     "lqt_col": lqt_col,
-    "downloaded_pmids": len(downloaded_pmids)
+    "downloaded_pmids": len(downloaded_pmids),
 }
 
 with open("gold_standard_analysis.json", "w") as f:

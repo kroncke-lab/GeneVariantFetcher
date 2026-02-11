@@ -46,8 +46,10 @@ GOLD_DOIS = {
 # Helpers
 # ============================================================================
 
+
 class _ResultTracker:
     """Track individual test results for summary."""
+
     def __init__(self):
         self.results = []
 
@@ -57,12 +59,16 @@ class _ResultTracker:
     def summary(self) -> str:
         passed = sum(1 for r in self.results if r["passed"])
         total = len(self.results)
-        lines = [f"\n{'='*70}", f"INTEGRATION TEST SUMMARY: {passed}/{total} tests passed", f"{'='*70}"]
+        lines = [
+            f"\n{'=' * 70}",
+            f"INTEGRATION TEST SUMMARY: {passed}/{total} tests passed",
+            f"{'=' * 70}",
+        ]
         for r in self.results:
             status = "PASS" if r["passed"] else "FAIL"
             detail = f" - {r['detail']}" if r["detail"] else ""
             lines.append(f"  [{status}] {r['name']}{detail}")
-        lines.append(f"{'='*70}\n")
+        lines.append(f"{'=' * 70}\n")
         return "\n".join(lines)
 
 
@@ -74,6 +80,7 @@ _tracker = _ResultTracker()
 # Europe PMC Handler Tests
 # ============================================================================
 
+
 @pytest.mark.requires_network
 class TestEuropePMCHandler:
     """Test gene_literature.europepmc_handler.EuropePMCClient."""
@@ -81,6 +88,7 @@ class TestEuropePMCHandler:
     @pytest.fixture(autouse=True)
     def setup(self):
         from gene_literature.europepmc_handler import EuropePMCClient
+
         self.client = EuropePMCClient(timeout=30)
 
     def test_get_paper_metadata(self):
@@ -95,8 +103,11 @@ class TestEuropePMCHandler:
         assert metadata["pmcid"] is not None, "PMCID should be present"
         assert len(metadata["authors"]) > 0, "Should have authors"
 
-        _tracker.record("EuropePMC: get_paper_metadata(24667783)", True,
-                        f"title={metadata['title'][:60]}...")
+        _tracker.record(
+            "EuropePMC: get_paper_metadata(24667783)",
+            True,
+            f"title={metadata['title'][:60]}...",
+        )
         logger.info(f"Metadata OK: {metadata['title'][:80]}")
 
     def test_get_paper_metadata_all_gold_pmids(self):
@@ -116,8 +127,11 @@ class TestEuropePMCHandler:
         assert len(results) > 0, "Should find KCNH2 papers"
         assert len(results) <= 5, "Should respect max_results"
 
-        _tracker.record("EuropePMC: search_papers('KCNH2 variant')", True,
-                        f"found {len(results)} results")
+        _tracker.record(
+            "EuropePMC: search_papers('KCNH2 variant')",
+            True,
+            f"found {len(results)} results",
+        )
 
     def test_get_fulltext_xml(self):
         """Retrieve full-text XML for a PMC article with OA full text."""
@@ -130,11 +144,15 @@ class TestEuropePMCHandler:
         if xml is not None:
             assert len(xml) > 100, f"XML too short ({len(xml)} chars)"
             assert "<?xml" in xml or "<article" in xml, "Doesn't look like valid XML"
-            _tracker.record(f"EuropePMC: get_fulltext_xml({pmcid})", True,
-                            f"{len(xml)} chars")
+            _tracker.record(
+                f"EuropePMC: get_fulltext_xml({pmcid})", True, f"{len(xml)} chars"
+            )
         else:
-            _tracker.record(f"EuropePMC: get_fulltext_xml({pmcid})", True,
-                            "returned None (article not OA full-text in EuropePMC)")
+            _tracker.record(
+                f"EuropePMC: get_fulltext_xml({pmcid})",
+                True,
+                "returned None (article not OA full-text in EuropePMC)",
+            )
 
     def test_get_fulltext_xml_returns_none_for_non_oa(self):
         """Verify graceful None return when full-text XML is not available."""
@@ -154,8 +172,11 @@ class TestEuropePMCHandler:
 
         assert isinstance(files, list), "Should return a list"
 
-        _tracker.record(f"EuropePMC: get_supplementary_files({pmcid})", True,
-                        f"found {len(files)} files")
+        _tracker.record(
+            f"EuropePMC: get_supplementary_files({pmcid})",
+            True,
+            f"found {len(files)} files",
+        )
 
     def test_get_supplementary_files_empty_pmcid(self):
         """Empty PMCID should return empty list, not error."""
@@ -171,8 +192,9 @@ class TestEuropePMCHandler:
 
         assert isinstance(citations, list), "Should return a list"
 
-        _tracker.record(f"EuropePMC: get_citations({pmid})", True,
-                        f"{len(citations)} citations")
+        _tracker.record(
+            f"EuropePMC: get_citations({pmid})", True, f"{len(citations)} citations"
+        )
 
     def test_get_references(self):
         """Retrieve references for a paper."""
@@ -181,8 +203,9 @@ class TestEuropePMCHandler:
 
         assert isinstance(references, list), "Should return a list"
 
-        _tracker.record(f"EuropePMC: get_references({pmid})", True,
-                        f"{len(references)} references")
+        _tracker.record(
+            f"EuropePMC: get_references({pmid})", True, f"{len(references)} references"
+        )
 
     def test_nonexistent_pmid(self):
         """Non-existent PMID should return None, not raise."""
@@ -196,6 +219,7 @@ class TestEuropePMCHandler:
 # Europe PMC Integration (Harvester) Tests
 # ============================================================================
 
+
 @pytest.mark.requires_network
 class TestEuropePMCIntegration:
     """Test gene_literature.europepmc_integration.EuropePMCHarvester."""
@@ -203,6 +227,7 @@ class TestEuropePMCIntegration:
     @pytest.fixture(autouse=True)
     def setup(self, tmp_path):
         from gene_literature.europepmc_integration import EuropePMCHarvester
+
         self.harvester = EuropePMCHarvester(output_dir=tmp_path / "europepmc_test")
         self.tmp_path = tmp_path
 
@@ -211,7 +236,9 @@ class TestEuropePMCIntegration:
         for pmid in GOLD_PMIDS:
             result = self.harvester.is_article_available(pmid)
             assert result is not None, f"Should return a result dict for {pmid}"
-            assert "available" in result, f"Result should have 'available' key for {pmid}"
+            assert "available" in result, (
+                f"Result should have 'available' key for {pmid}"
+            )
             time.sleep(0.3)
 
         _tracker.record("EuropePMC Integration: is_article_available", True)
@@ -224,12 +251,18 @@ class TestEuropePMCIntegration:
 
         if result.get("available"):
             assert result.get("pmcid"), "Available article should have PMCID"
-            _tracker.record("EuropePMC Integration: available article has PMCID", True,
-                            f"pmcid={result.get('pmcid')}")
+            _tracker.record(
+                "EuropePMC Integration: available article has PMCID",
+                True,
+                f"pmcid={result.get('pmcid')}",
+            )
         else:
             # Article may not have OA full text even with PMCID
-            _tracker.record("EuropePMC Integration: available article has PMCID", True,
-                            f"not OA full-text: {result.get('reason', '')[:50]}")
+            _tracker.record(
+                "EuropePMC Integration: available article has PMCID",
+                True,
+                f"not OA full-text: {result.get('reason', '')[:50]}",
+            )
 
     def test_format_content_for_extraction(self):
         """Verify that format_content_for_extraction handles all cases."""
@@ -238,11 +271,17 @@ class TestEuropePMCIntegration:
 
         if content is not None:
             assert len(content) > 100, f"Content too short ({len(content)} chars)"
-            _tracker.record("EuropePMC Integration: format_content(30036649)", True,
-                            f"{len(content)} chars")
+            _tracker.record(
+                "EuropePMC Integration: format_content(30036649)",
+                True,
+                f"{len(content)} chars",
+            )
         else:
-            _tracker.record("EuropePMC Integration: format_content(30036649)", True,
-                            "returned None (full-text not available as OA)")
+            _tracker.record(
+                "EuropePMC Integration: format_content(30036649)",
+                True,
+                "returned None (full-text not available as OA)",
+            )
 
     def test_compare_with_pmc(self):
         """Compare Europe PMC and NCBI PMC availability."""
@@ -257,6 +296,7 @@ class TestEuropePMCIntegration:
 # PMC API Client Tests
 # ============================================================================
 
+
 @pytest.mark.requires_network
 class TestPMCAPIClient:
     """Test harvesting.pmc_api.PMCAPIClient."""
@@ -264,6 +304,7 @@ class TestPMCAPIClient:
     @pytest.fixture(autouse=True)
     def setup(self):
         from harvesting.pmc_api import PMCAPIClient
+
         self.client = PMCAPIClient()
 
     def test_pmid_to_pmcid(self):
@@ -280,8 +321,9 @@ class TestPMCAPIClient:
         for pmid, info in GOLD_PMIDS.items():
             if info["pmcid"]:
                 pmcid = self.client.pmid_to_pmcid(pmid)
-                assert pmcid == info["pmcid"], \
+                assert pmcid == info["pmcid"], (
                     f"PMID {pmid}: expected {info['pmcid']}, got {pmcid}"
+                )
                 time.sleep(0.4)
 
         _tracker.record("PMC API: pmid_to_pmcid for gold PMIDs", True)
@@ -298,8 +340,9 @@ class TestPMCAPIClient:
         doi = self.client.get_doi_from_pmid("24667783")
 
         assert doi is not None, "Should find DOI for 24667783"
-        assert doi == GOLD_DOIS["24667783"], \
+        assert doi == GOLD_DOIS["24667783"], (
             f"Expected {GOLD_DOIS['24667783']}, got {doi}"
+        )
 
         _tracker.record("PMC API: get_doi_from_pmid(24667783)", True, f"doi={doi}")
 
@@ -309,8 +352,9 @@ class TestPMCAPIClient:
             doi = self.client.get_doi_from_pmid(pmid)
             assert doi is not None, f"No DOI for PMID {pmid}"
             # Compare case-insensitively since DOIs can vary in case
-            assert doi.lower() == expected_doi.lower(), \
+            assert doi.lower() == expected_doi.lower(), (
                 f"PMID {pmid}: expected {expected_doi}, got {doi}"
+            )
             time.sleep(0.4)
 
         _tracker.record("PMC API: DOI retrieval for all gold PMIDs", True)
@@ -327,6 +371,7 @@ class TestPMCAPIClient:
 # Unpaywall API Tests
 # ============================================================================
 
+
 @pytest.mark.requires_network
 class TestUnpaywallAPI:
     """Test harvesting.unpaywall_api.UnpaywallClient."""
@@ -334,6 +379,7 @@ class TestUnpaywallAPI:
     @pytest.fixture(autouse=True)
     def setup(self):
         from harvesting.unpaywall_api import UnpaywallClient
+
         self.client = UnpaywallClient(email="brett.kroncke@gmail.com")
 
     def test_find_open_access(self):
@@ -347,22 +393,27 @@ class TestUnpaywallAPI:
         assert "is_oa" in result, "Result should have is_oa field"
         assert "oa_status" in result, "Result should have oa_status field"
 
-        _tracker.record("Unpaywall: find_open_access(24667783 DOI)", True,
-                        f"is_oa={result['is_oa']}, status={result['oa_status']}")
+        _tracker.record(
+            "Unpaywall: find_open_access(24667783 DOI)",
+            True,
+            f"is_oa={result['is_oa']}, status={result['oa_status']}",
+        )
 
     def test_find_open_access_all_gold(self):
         """Check Unpaywall for all gold standard DOIs."""
         oa_count = 0
         for pmid, doi in GOLD_DOIS.items():
             result, error = self.client.find_open_access(doi)
-            assert result is not None or error is not None, \
+            assert result is not None or error is not None, (
                 f"Should return either result or error for {doi}"
+            )
             if result and result.get("is_oa"):
                 oa_count += 1
             time.sleep(0.2)
 
-        _tracker.record("Unpaywall: OA check for all gold DOIs", True,
-                        f"{oa_count}/4 are OA")
+        _tracker.record(
+            "Unpaywall: OA check for all gold DOIs", True, f"{oa_count}/4 are OA"
+        )
 
     def test_doi_with_url_prefix(self):
         """Verify DOI cleaning handles https://doi.org/ prefix."""
@@ -379,8 +430,9 @@ class TestUnpaywallAPI:
         result, error = self.client.find_open_access("10.9999/nonexistent.fake.doi")
 
         # Should get None result or an error message, not an exception
-        assert result is None or error is not None or (result and not result.get("is_oa")), \
-            "Invalid DOI should not return a valid OA result"
+        assert (
+            result is None or error is not None or (result and not result.get("is_oa"))
+        ), "Invalid DOI should not return a valid OA result"
 
         _tracker.record("Unpaywall: invalid DOI handling", True)
 
@@ -398,6 +450,7 @@ class TestUnpaywallAPI:
 # Supplement Scraper Tests
 # ============================================================================
 
+
 @pytest.mark.requires_network
 class TestSupplementScraper:
     """Test harvesting.supplement_scraper.SupplementScraper."""
@@ -405,11 +458,13 @@ class TestSupplementScraper:
     @pytest.fixture(autouse=True)
     def setup(self):
         from harvesting.supplement_scraper import SupplementScraper
+
         self.scraper = SupplementScraper()
 
     def test_import_supplement_scraper(self):
         """Verify SupplementScraper class imports and instantiates."""
         from harvesting.supplement_scraper import SupplementScraper
+
         scraper = SupplementScraper()
         assert scraper is not None
 
@@ -429,13 +484,17 @@ class TestSupplementScraper:
         missing = [p for p in publishers if not hasattr(self.scraper, p)]
         assert not missing, f"Missing publisher methods: {missing}"
 
-        _tracker.record("Supplement Scraper: all publisher methods exist", True,
-                        f"{len(publishers)} methods verified")
+        _tracker.record(
+            "Supplement Scraper: all publisher methods exist",
+            True,
+            f"{len(publishers)} methods verified",
+        )
 
     def test_extract_fulltext(self):
         """Verify extract_fulltext method exists and is callable."""
-        assert hasattr(self.scraper, "extract_fulltext"), \
+        assert hasattr(self.scraper, "extract_fulltext"), (
             "Should have extract_fulltext method"
+        )
         assert callable(self.scraper.extract_fulltext)
 
         _tracker.record("Supplement Scraper: extract_fulltext method exists", True)
@@ -445,12 +504,18 @@ class TestSupplementScraper:
 # PMID Status Tracker Tests
 # ============================================================================
 
+
 class TestPMIDStatus:
     """Test utils.pmid_status module (local, no network needed)."""
 
     def test_import(self):
         """Verify pmid_status module imports."""
-        from utils.pmid_status import get_pmid_status, get_failed_pmids, get_stats_summary
+        from utils.pmid_status import (
+            get_pmid_status,
+            get_failed_pmids,
+            get_stats_summary,
+        )
+
         assert callable(get_pmid_status)
         assert callable(get_failed_pmids)
         assert callable(get_stats_summary)
@@ -460,6 +525,7 @@ class TestPMIDStatus:
     def test_get_pmid_status_missing(self):
         """Querying a non-existent status file should return None."""
         from utils.pmid_status import get_pmid_status
+
         result = get_pmid_status("/nonexistent/path", "99999")
         assert result is None, "Should return None for missing status"
 
@@ -469,6 +535,7 @@ class TestPMIDStatus:
 # ============================================================================
 # Cross-Module Integration Tests
 # ============================================================================
+
 
 @pytest.mark.requires_network
 @pytest.mark.slow
@@ -494,8 +561,11 @@ class TestCrossModuleIntegration:
         result, error = unpaywall.find_open_access(doi)
         assert result is not None, f"Unpaywall failed for DOI {doi}: {error}"
 
-        _tracker.record("Cross-module: PMID->DOI->Unpaywall pipeline", True,
-                        f"doi={doi}, is_oa={result.get('is_oa')}")
+        _tracker.record(
+            "Cross-module: PMID->DOI->Unpaywall pipeline",
+            True,
+            f"doi={doi}, is_oa={result.get('is_oa')}",
+        )
 
     def test_europepmc_vs_ncbi_pmc(self):
         """Compare PMCID from Europe PMC metadata vs NCBI PMC API."""
@@ -516,11 +586,15 @@ class TestCrossModuleIntegration:
 
         assert epmc_pmcid is not None, "Europe PMC should return PMCID"
         assert ncbi_pmcid is not None, "NCBI PMC should return PMCID"
-        assert epmc_pmcid == ncbi_pmcid, \
+        assert epmc_pmcid == ncbi_pmcid, (
             f"PMCIDs should match: EuropePMC={epmc_pmcid}, NCBI={ncbi_pmcid}"
+        )
 
-        _tracker.record("Cross-module: EuropePMC vs NCBI PMCID agreement", True,
-                        f"both returned {ncbi_pmcid}")
+        _tracker.record(
+            "Cross-module: EuropePMC vs NCBI PMCID agreement",
+            True,
+            f"both returned {ncbi_pmcid}",
+        )
 
     def test_full_paper_metadata_enrichment(self):
         """Enrich paper data from multiple sources for one PMID."""
@@ -561,8 +635,11 @@ class TestCrossModuleIntegration:
         assert enriched["doi"], "Should have DOI"
         assert enriched["pmcid"], "Should have PMCID"
 
-        _tracker.record("Cross-module: full metadata enrichment", True,
-                        f"title={enriched['title'][:50]}...")
+        _tracker.record(
+            "Cross-module: full metadata enrichment",
+            True,
+            f"title={enriched['title'][:50]}...",
+        )
 
     def test_doi_consistency_across_sources(self):
         """DOI from NCBI and Europe PMC should match (case-insensitive)."""
@@ -580,16 +657,19 @@ class TestCrossModuleIntegration:
 
         ncbi_doi = pmc.get_doi_from_pmid(pmid) or ""
 
-        assert epmc_doi.lower() == ncbi_doi.lower(), \
+        assert epmc_doi.lower() == ncbi_doi.lower(), (
             f"DOIs should match: EuropePMC={epmc_doi}, NCBI={ncbi_doi}"
+        )
 
-        _tracker.record("Cross-module: DOI consistency across sources", True,
-                        f"doi={ncbi_doi}")
+        _tracker.record(
+            "Cross-module: DOI consistency across sources", True, f"doi={ncbi_doi}"
+        )
 
 
 # ============================================================================
 # Summary fixture - prints results after all tests
 # ============================================================================
+
 
 @pytest.fixture(scope="session", autouse=True)
 def print_summary(request):
@@ -602,6 +682,7 @@ def print_summary(request):
 # Standalone runner
 # ============================================================================
 
+
 def run_standalone():
     """Run tests outside pytest for quick smoke testing.
 
@@ -609,47 +690,60 @@ def run_standalone():
     """
     tracker = _ResultTracker()
 
-    print(f"\n{'='*70}")
+    print(f"\n{'=' * 70}")
     print("GeneVariantFetcher Integration Test Suite (standalone)")
-    print(f"{'='*70}\n")
+    print(f"{'=' * 70}\n")
 
     # --- Europe PMC Handler ---
     print("[1/5] Europe PMC Handler...")
     try:
         from gene_literature.europepmc_handler import EuropePMCClient
+
         client = EuropePMCClient(timeout=30)
 
         # Metadata
         meta = client.get_paper_metadata("24667783")
         passed = meta is not None and meta.get("pmid") == "24667783"
-        tracker.record("EuropePMC: get_paper_metadata", passed,
-                       meta["title"][:50] if meta else "None")
+        tracker.record(
+            "EuropePMC: get_paper_metadata",
+            passed,
+            meta["title"][:50] if meta else "None",
+        )
 
         # Search
         time.sleep(0.3)
         results = client.search_papers("KCNH2 variant", max_results=5)
-        tracker.record("EuropePMC: search_papers", len(results) > 0,
-                       f"{len(results)} results")
+        tracker.record(
+            "EuropePMC: search_papers", len(results) > 0, f"{len(results)} results"
+        )
 
         # Full-text XML (may or may not be available)
         time.sleep(0.3)
         pmcid = GOLD_PMIDS["30036649"]["pmcid"]
         xml = client.get_fulltext_xml(pmcid)
-        tracker.record("EuropePMC: get_fulltext_xml",
-                       xml is None or (isinstance(xml, str) and len(xml) > 100),
-                       f"{len(xml)} chars" if xml else "None (not OA)")
+        tracker.record(
+            "EuropePMC: get_fulltext_xml",
+            xml is None or (isinstance(xml, str) and len(xml) > 100),
+            f"{len(xml)} chars" if xml else "None (not OA)",
+        )
 
         # Supplements
         time.sleep(0.3)
         supps = client.get_supplementary_files(pmcid)
-        tracker.record("EuropePMC: get_supplementary_files", isinstance(supps, list),
-                       f"{len(supps)} files")
+        tracker.record(
+            "EuropePMC: get_supplementary_files",
+            isinstance(supps, list),
+            f"{len(supps)} files",
+        )
 
         # Citations
         time.sleep(0.3)
         cites = client.get_citations("19841300")
-        tracker.record("EuropePMC: get_citations", isinstance(cites, list),
-                       f"{len(cites)} citations")
+        tracker.record(
+            "EuropePMC: get_citations",
+            isinstance(cites, list),
+            f"{len(cites)} citations",
+        )
 
     except Exception as e:
         tracker.record("EuropePMC: module load/test", False, str(e)[:80])
@@ -665,15 +759,19 @@ def run_standalone():
             harvester = EuropePMCHarvester(output_dir=Path(tmpdir))
 
             avail = harvester.is_article_available("30036649")
-            tracker.record("EuropePMC Integration: is_article_available",
-                           avail is not None and "available" in avail,
-                           f"available={avail.get('available')}" if avail else "None")
+            tracker.record(
+                "EuropePMC Integration: is_article_available",
+                avail is not None and "available" in avail,
+                f"available={avail.get('available')}" if avail else "None",
+            )
 
             time.sleep(0.3)
             content = harvester.format_content_for_extraction("30036649")
-            tracker.record("EuropePMC Integration: format_content",
-                           content is None or len(content) > 100,
-                           f"{len(content)} chars" if content else "None (not OA)")
+            tracker.record(
+                "EuropePMC Integration: format_content",
+                content is None or len(content) > 100,
+                f"{len(content)} chars" if content else "None (not OA)",
+            )
 
     except Exception as e:
         tracker.record("EuropePMC Integration: module load/test", False, str(e)[:80])
@@ -683,17 +781,19 @@ def run_standalone():
     print("[3/5] PMC API Client...")
     try:
         from harvesting.pmc_api import PMCAPIClient
+
         pmc = PMCAPIClient()
 
         pmcid = pmc.pmid_to_pmcid("24667783")
-        tracker.record("PMC API: pmid_to_pmcid", pmcid == "PMC4266740",
-                       f"got {pmcid}")
+        tracker.record("PMC API: pmid_to_pmcid", pmcid == "PMC4266740", f"got {pmcid}")
 
         time.sleep(0.4)
         doi = pmc.get_doi_from_pmid("24667783")
-        tracker.record("PMC API: get_doi_from_pmid",
-                       doi is not None and doi == GOLD_DOIS["24667783"],
-                       f"doi={doi}")
+        tracker.record(
+            "PMC API: get_doi_from_pmid",
+            doi is not None and doi == GOLD_DOIS["24667783"],
+            f"doi={doi}",
+        )
 
     except Exception as e:
         tracker.record("PMC API: module load/test", False, str(e)[:80])
@@ -703,18 +803,23 @@ def run_standalone():
     print("[4/5] Unpaywall API...")
     try:
         from harvesting.unpaywall_api import UnpaywallClient
+
         uw = UnpaywallClient(email="brett.kroncke@gmail.com")
 
         result, error = uw.find_open_access(GOLD_DOIS["24667783"])
-        tracker.record("Unpaywall: find_open_access",
-                       result is not None and error is None,
-                       f"is_oa={result.get('is_oa')}" if result else f"error={error}")
+        tracker.record(
+            "Unpaywall: find_open_access",
+            result is not None and error is None,
+            f"is_oa={result.get('is_oa')}" if result else f"error={error}",
+        )
 
         time.sleep(0.2)
         result2, error2 = uw.find_open_access("")
-        tracker.record("Unpaywall: empty DOI handling",
-                       result2 is None and error2 is not None,
-                       "correctly rejected")
+        tracker.record(
+            "Unpaywall: empty DOI handling",
+            result2 is None and error2 is not None,
+            "correctly rejected",
+        )
 
     except Exception as e:
         tracker.record("Unpaywall: module load/test", False, str(e)[:80])
@@ -724,6 +829,7 @@ def run_standalone():
     print("[5/5] PMID Status Tracker...")
     try:
         from utils.pmid_status import get_pmid_status
+
         result = get_pmid_status("/nonexistent", "99999")
         tracker.record("PMID Status: missing status returns None", result is None)
 

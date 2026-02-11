@@ -37,7 +37,7 @@ class COREAPIClient:
         self.session = session or requests.Session()
         self._last_request_time = 0
         self._min_request_interval = 1.0  # Rate limit: 1 req/sec for free tier
-        
+
         if api_key:
             self.session.headers.update({"Authorization": f"Bearer {api_key}"})
 
@@ -123,7 +123,10 @@ class COREAPIClient:
                 # Try download URL
                 download_url = data.get("downloadUrl")
                 if download_url:
-                    return None, f"Full text not available, but download URL: {download_url}"
+                    return (
+                        None,
+                        f"Full text not available, but download URL: {download_url}",
+                    )
                 return None, "No full text available"
             else:
                 return None, f"HTTP {response.status_code}"
@@ -159,7 +162,7 @@ class COREAPIClient:
                 "q": query,
                 "limit": limit,
             }
-            
+
             if fulltext_only:
                 params["q"] += " AND _exists_:fullText"
 

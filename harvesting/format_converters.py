@@ -362,39 +362,48 @@ class FormatConverter:
                         html = html_file.read_text(encoding="utf-8", errors="ignore")
                         if html.strip():
                             # Parse HTML and convert tables to markdown
-                            soup = BeautifulSoup(html, 'html.parser')
+                            soup = BeautifulSoup(html, "html.parser")
                             markdown_parts = []
-                            
+
                             # Extract all tables as markdown
-                            for table in soup.find_all('table'):
-                                rows = table.find_all('tr')
+                            for table in soup.find_all("table"):
+                                rows = table.find_all("tr")
                                 md_rows = []
                                 for row in rows:
-                                    cells = row.find_all(['td', 'th'])
-                                    cell_texts = [c.get_text(strip=True).replace('|', '/') for c in cells]
+                                    cells = row.find_all(["td", "th"])
+                                    cell_texts = [
+                                        c.get_text(strip=True).replace("|", "/")
+                                        for c in cells
+                                    ]
                                     if any(cell_texts):
-                                        md_rows.append('| ' + ' | '.join(cell_texts) + ' |')
-                                
+                                        md_rows.append(
+                                            "| " + " | ".join(cell_texts) + " |"
+                                        )
+
                                 if md_rows:
                                     # Add separator after header
                                     if len(md_rows) > 1:
-                                        num_cols = md_rows[0].count('|') - 1
-                                        separator = '|' + '---|' * num_cols
+                                        num_cols = md_rows[0].count("|") - 1
+                                        separator = "|" + "---|" * num_cols
                                         md_rows.insert(1, separator)
-                                    markdown_parts.append('\n'.join(md_rows))
-                            
+                                    markdown_parts.append("\n".join(md_rows))
+
                             # Also get non-table text
-                            for table in soup.find_all('table'):
+                            for table in soup.find_all("table"):
                                 table.decompose()
-                            body_text = soup.get_text(separator='\n', strip=True)
-                            
+                            body_text = soup.get_text(separator="\n", strip=True)
+
                             if markdown_parts:
-                                result_text = body_text + '\n\n' + '\n\n'.join(markdown_parts)
+                                result_text = (
+                                    body_text + "\n\n" + "\n\n".join(markdown_parts)
+                                )
                             else:
                                 result_text = body_text
-                            
+
                             if result_text.strip():
-                                print(f"    ✓ Extracted via LibreOffice HTML ({len(result_text)} chars, {len(markdown_parts)} tables)")
+                                print(
+                                    f"    ✓ Extracted via LibreOffice HTML ({len(result_text)} chars, {len(markdown_parts)} tables)"
+                                )
                                 return result_text + "\n\n"
         except ImportError:
             # BeautifulSoup not available, fall back to text conversion
@@ -422,14 +431,18 @@ class FormatConverter:
                         if txt_file.exists():
                             text = txt_file.read_text(encoding="utf-8", errors="ignore")
                             if text.strip():
-                                print(f"    ✓ Extracted text via LibreOffice ({len(text)} chars)")
+                                print(
+                                    f"    ✓ Extracted text via LibreOffice ({len(text)} chars)"
+                                )
                                 return text + "\n\n"
             except Exception:
                 pass
         except FileNotFoundError:
             pass  # LibreOffice not installed
         except Exception as e:
-            print(f"    Warning: LibreOffice conversion failed for {file_path.name}: {e}")
+            print(
+                f"    Warning: LibreOffice conversion failed for {file_path.name}: {e}"
+            )
 
         # Try antiword as fallback (if installed)
         # First try with -t flag for tab-delimited output (better for tables)

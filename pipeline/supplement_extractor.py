@@ -41,11 +41,14 @@ class SupplementExtractor:
         table_indicators = [
             "|",
             "\t",  # Tab-separated
-            ",",   # CSV
+            ",",  # CSV
         ]
-        table_lines = sum(1 for line in content.splitlines() 
-                         if any(indicator in line for indicator in table_indicators)
-                         and len(line.strip()) > 10)
+        table_lines = sum(
+            1
+            for line in content.splitlines()
+            if any(indicator in line for indicator in table_indicators)
+            and len(line.strip()) > 10
+        )
 
         # Table content with headers
         if content.count("|") > 10 and any(
@@ -63,8 +66,13 @@ class SupplementExtractor:
 
         # Methods/protocol descriptions
         methods_keywords = [
-            "methods", "protocol", "procedure", "experimental", 
-            "assay", "functional study", "in vitro"
+            "methods",
+            "protocol",
+            "procedure",
+            "experimental",
+            "assay",
+            "functional study",
+            "in vitro",
         ]
         if any(keyword in content_lower for keyword in methods_keywords):
             return "methods"
@@ -79,7 +87,7 @@ class SupplementExtractor:
     def extract_from_table(self, table_text: str, gene_symbol: str) -> List[dict]:
         """Extract variants from supplement tables (typically dense, structured)"""
         supplement_type = self.identify_supplement_type(table_text)
-        
+
         if supplement_type != "table":
             logger.info(f"Content type {supplement_type} requested table extraction")
             return []
@@ -92,8 +100,7 @@ class SupplementExtractor:
 
         # Use LLM for complex tables
         prompt = SUPPLEMENT_TABLE_PROMPT.format(
-            gene_symbol=gene_symbol,
-            table_content=table_text
+            gene_symbol=gene_symbol, table_content=table_text
         )
 
         try:
@@ -108,15 +115,14 @@ class SupplementExtractor:
     def extract_from_appendix(self, appendix_text: str, gene_symbol: str) -> List[dict]:
         """Extract variants from appendix sections (typically narrative)"""
         supplement_type = self.identify_supplement_type(appendix_text)
-        
+
         if supplement_type != "appendix":
             logger.info(f"Content type {supplement_type} requested appendix extraction")
             return []
 
         # Use appendix-specific prompt for narrative content
         prompt = SUPPLEMENT_APPENDIX_PROMPT.format(
-            gene_symbol=gene_symbol,
-            appendix_content=appendix_text
+            gene_symbol=gene_symbol, appendix_content=appendix_text
         )
 
         try:
@@ -133,29 +139,33 @@ class SupplementExtractor:
         # Methods sections typically contain variant creation/engineering info
         # but rarely contain patient data. Extract functional data instead.
         variants = []
-        
+
         # Parse functional assay data
         functional_patterns = [
             r"(p\.\w+\d+\w+|c\.\w+)",  # Protein/cDNA notation
             r"(?:functional|assay|current|trafficking)",  # Functional keywords
         ]
-        
+
         lines = methods_text.splitlines()
         for line in lines:
             variants.extend(self._extract_functional_variants(line, gene_symbol))
-            
+
         return variants
 
-    def extract_from_figure_legend(self, legend_text: str, gene_symbol: str) -> List[dict]:
+    def extract_from_figure_legend(
+        self, legend_text: str, gene_symbol: str
+    ) -> List[dict]:
         """Extract variants from figure legends (often contains supplementary data)"""
         # Check for supplementary table references in figure legends
         return []
 
-    def _parse_standard_supplement_table(self, table_text: str, gene_symbol: str) -> List[dict]:
+    def _parse_standard_supplement_table(
+        self, table_text: str, gene_symbol: str
+    ) -> List[dict]:
         """Parse standard supplement table formats"""
         variants = []
         lines = table_text.splitlines()
-        
+
         # Skip empty lines at start
         lines = [line for line in lines if line.strip()]
         if not lines:
@@ -178,7 +188,7 @@ class SupplementExtractor:
         # Parse header and get column mapping
         header_line = lines[header_row]
         header_cols = self._parse_columns(header_line)
-        
+
         if not header_cols:
             return variants
 
@@ -186,7 +196,7 @@ class SupplementExtractor:
         column_mapping = self._map_columns_to_fields(header_cols)
 
         # Parse data rows
-        for line in lines[header_row + 1:]:
+        for line in lines[header_row + 1 :]:
             line = line.strip()
             if not line or line.startswith("---") or line == "":
                 continue
@@ -212,14 +222,16 @@ class SupplementExtractor:
         if "," in header_line:
             parts = []
             for part in header_line.split(","):
-                part = part.strip().strip('"\'')
+                part = part.strip().strip("\"'")
                 parts.append(part)
             return parts
 
         # Clean up column names
         return [col.strip() for col in header_line.split() if col.strip()]
 
-    def _map_columns_to_fields(self, column_names: List[str]) -> Dict[str, Optional[int]]:
+    def _map_columns_to_fields(
+        self, column_names: List[str]
+    ) -> Dict[str, Optional[int]]:
         """Map detected column names to standard fields"""
         mapping = {
             "cdna_notation": None,
@@ -233,25 +245,35 @@ class SupplementExtractor:
 
         for idx, col_name in enumerate(column_names):
             col_lower = col_name.lower()
-            
-            if any(kw in col_lower for kw in ["nucleotide", "cDNA", "variant", "mutation"]):
+
+            if any(
+                kw in col_lower for kw in ["nucleotide", "cDNA", "variant", "mutation"]
+            ):
                 mapping["cdna_notation"] = idx
             elif any(kw in col_lower for kw in ["protein", "amino acid", "aa"]):
                 mapping["protein_notation"] = idx
             elif any(kw in col_lower for kw in ["patient", "case", "n", "count"]):
                 mapping["patient_count"] = idx
-            elif any(kw in col_lower for kw in ["phenotype", "clinical", "presentation"]):
+            elif any(
+                kw in col_lower for kw in ["phenotype", "clinical", "presentation"]
+            ):
                 mapping["phenotype"] = idx
-            elif any(kw in col_lower for kw in ["significance", "pathogenic", "benign"]):
+            elif any(
+                kw in col_lower for kw in ["significance", "pathogenic", "benign"]
+            ):
                 mapping["clinical_significance"] = idx
             elif any(kw in col_lower for kw in ["functional", "assay", "current"]):
                 mapping["functional_data"] = idx
-            elif any(kw in col_lower for kw in ["segregation", "family", "inheritance"]):
+            elif any(
+                kw in col_lower for kw in ["segregation", "family", "inheritance"]
+            ):
                 mapping["segregation"] = idx
 
         return mapping
 
-    def _parse_table_row(self, row_line: str, mapping: Dict[str, Optional[int]], gene_symbol: str) -> Optional[Dict]:
+    def _parse_table_row(
+        self, row_line: str, mapping: Dict[str, Optional[int]], gene_symbol: str
+    ) -> Optional[Dict]:
         """Parse a single table row into variant structure"""
         # Parse row based on delimiter
         if "|" in row_line:
@@ -265,11 +287,25 @@ class SupplementExtractor:
             return None
 
         # Extract variant data
-        cdna = None if mapping["cdna_notation"] is None else cells[mapping["cdna_notation"]]
-        protein = None if mapping["protein_notation"] is None else cells[mapping["protein_notation"]]
-        patient_count = None if mapping["patient_count"] is None else cells[mapping["patient_count"]]
-        phenotype = None if mapping["phenotype"] is None else cells[mapping["phenotype"]]
-        
+        cdna = (
+            None
+            if mapping["cdna_notation"] is None
+            else cells[mapping["cdna_notation"]]
+        )
+        protein = (
+            None
+            if mapping["protein_notation"] is None
+            else cells[mapping["protein_notation"]]
+        )
+        patient_count = (
+            None
+            if mapping["patient_count"] is None
+            else cells[mapping["patient_count"]]
+        )
+        phenotype = (
+            None if mapping["phenotype"] is None else cells[mapping["phenotype"]]
+        )
+
         # Clean and normalize data
         variant = {
             "gene_symbol": gene_symbol,
@@ -292,7 +328,9 @@ class SupplementExtractor:
                 count = int(patient_count.strip())
                 variant["patients"]["count"] = count
                 variant["penetrance_data"]["total_carriers_observed"] = count
-                variant["penetrance_data"]["affected_count"] = count  # Disease-associated
+                variant["penetrance_data"]["affected_count"] = (
+                    count  # Disease-associated
+                )
         except (ValueError, TypeError):
             pass
 
@@ -301,16 +339,18 @@ class SupplementExtractor:
 
         return variant
 
-    def _normalize_notation(self, notation: Optional[str], notation_type: str) -> Optional[str]:
+    def _normalize_notation(
+        self, notation: Optional[str], notation_type: str
+    ) -> Optional[str]:
         """Normalize variant notation"""
         if not notation or notation in ["—", "-", "NA", "n/a"]:
             return None
 
         notation = notation.strip()
-        
+
         if notation_type == "cdna" and not notation.startswith("c."):
             return f"c.{notation}"
-        
+
         if notation_type == "protein" and notation and not notation.startswith("p."):
             # Handle protein shorthand like "R123W"
             match = re.match(r"([A-Za-z]\d+[A-Za-z*]+)", notation)
@@ -326,50 +366,58 @@ class SupplementExtractor:
         parts = []
         current = ""
         in_quotes = False
-        
+
         for char in row + ",":
             if char == '"':
                 in_quotes = not in_quotes
-            elif char == ',' and not in_quotes:
+            elif char == "," and not in_quotes:
                 parts.append(current.strip())
                 current = ""
             else:
                 current += char
-        
+
         return [part.strip() for part in parts if part.strip()]
 
-    def _extract_functional_variants(self, text_line: str, gene_symbol: str) -> List[Dict]:
+    def _extract_functional_variants(
+        self, text_line: str, gene_symbol: str
+    ) -> List[Dict]:
         """Extract functional assay variants from methods text"""
         variants = []
-        
+
         # Find protein notation patterns
         protein_pattern = re.compile(r"p\.[A-Z][a-z]{2}\d+[A-Z][a-z]{2}")
         cdna_pattern = re.compile(r"c\.\d+\w+")
-        
+
         for match in protein_pattern.finditer(text_line):
-            variants.append({
-                "gene_symbol": gene_symbol,
-                "protein_notation": match.group(0),
-                "source_location": "Methods/Protocol"
-            })
-            
+            variants.append(
+                {
+                    "gene_symbol": gene_symbol,
+                    "protein_notation": match.group(0),
+                    "source_location": "Methods/Protocol",
+                }
+            )
+
         for match in cdna_pattern.finditer(text_line):
-            variants.append({
-                "gene_symbol": gene_symbol,
-                "cdna_notation": match.group(0),
-                "source_location": "Methods/Protocol"
-            })
+            variants.append(
+                {
+                    "gene_symbol": gene_symbol,
+                    "cdna_notation": match.group(0),
+                    "source_location": "Methods/Protocol",
+                }
+            )
 
         return variants
 
-    def merge_main_and_supplement(self, main_variants: List[Dict], supplement_variants: List[Dict]) -> List[Dict]:
+    def merge_main_and_supplement(
+        self, main_variants: List[Dict], supplement_variants: List[Dict]
+    ) -> List[Dict]:
         """Merge main text and supplement variants with deduplication"""
         from utils.variant_normalizer import normalize_variant
-        
+
         # Create normalized keys for deduplication
         all_variants = []
         seen_keys = set()
-        
+
         def get_variant_key(v):
             """Generate unique key for deduplication"""
             cdna = normalize_variant(v.get("cdna_notation", "") or "")
@@ -388,7 +436,7 @@ class SupplementExtractor:
         # Add supplement variants, enriching main variants when possible
         for variant in supplement_variants:
             key = get_variant_key(variant)
-            
+
             if key in seen_keys:
                 # Enrich existing variant with supplement data
                 existing = next(v for v in all_variants if get_variant_key(v) == key)
@@ -407,12 +455,14 @@ class SupplementExtractor:
         notes = existing.get("additional_notes", "") or ""
         if notes:
             notes += " | "
-        notes += f"Supplement: {supplement.get('source_location', 'supplementary data')}"
+        notes += (
+            f"Supplement: {supplement.get('source_location', 'supplementary data')}"
+        )
         existing["additional_notes"] = notes
 
         # Merge patient counts if supplement has higher resolution
         existing_patients = existing.get("patients", {})
         supplement_patients = supplement.get("patients", {})
-        
+
         if supplement_patients.get("count") and not existing_patients.get("count"):
             existing["patients"] = supplement_patients

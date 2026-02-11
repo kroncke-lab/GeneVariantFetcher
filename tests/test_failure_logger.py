@@ -23,9 +23,17 @@ def logger(failure_log_path):
 class TestFailureCode:
     def test_all_codes_exist(self):
         expected = [
-            "PAYWALL", "NO_FULL_TEXT", "XML_PARSE_ERROR", "SUPPLEMENT_MISSING",
-            "LLM_TIMEOUT", "NO_VARIANTS_FOUND", "LLM_INPUT_ERROR", "INCORRECT_JSON",
-            "TEXT_TOO_SHORT", "METADATA_ERROR", "HTML_GARBAGE",
+            "PAYWALL",
+            "NO_FULL_TEXT",
+            "XML_PARSE_ERROR",
+            "SUPPLEMENT_MISSING",
+            "LLM_TIMEOUT",
+            "NO_VARIANTS_FOUND",
+            "LLM_INPUT_ERROR",
+            "INCORRECT_JSON",
+            "TEXT_TOO_SHORT",
+            "METADATA_ERROR",
+            "HTML_GARBAGE",
         ]
         actual = [c.value for c in FailureCode]
         assert set(expected) == set(actual)

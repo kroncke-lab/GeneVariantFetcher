@@ -22,17 +22,17 @@ from pathlib import Path
 # Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # Add user site-packages for xlrd
-sys.path.insert(0, '/home/kronckbm/.local/lib/python3.9/site-packages')
+sys.path.insert(0, "/home/kronckbm/.local/lib/python3.9/site-packages")
 
 import xlrd
 from gene_literature.europepmc_handler import EuropePMCClient
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
         logging.StreamHandler(),
-    ]
+    ],
 )
 logger = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ def load_pmids_from_excel(excel_path: str) -> list:
                 val = str(int(val))
             else:
                 val = str(val).strip()
-            for part in val.replace(';', ',').split(','):
+            for part in val.replace(";", ",").split(","):
                 part = part.strip()
                 if part and part.isdigit() and len(part) >= 6:
                     pmids.add(part)
@@ -76,14 +76,13 @@ def main():
     # Load progress file to support resuming
     progress_file = OUTPUT_DIR / "download_progress.json"
     if progress_file.exists():
-        with open(progress_file, 'r') as f:
+        with open(progress_file, "r") as f:
             progress = json.load(f)
-        logger.info(f"Resuming from previous run: {len(progress['completed'])} already done")
+        logger.info(
+            f"Resuming from previous run: {len(progress['completed'])} already done"
+        )
     else:
-        progress = {
-            "completed": [],
-            "results": {}
-        }
+        progress = {"completed": [], "results": {}}
 
     # Initialize client
     client = EuropePMCClient(timeout=30)
@@ -152,7 +151,7 @@ def main():
                 pmid_dir.mkdir(exist_ok=True)
 
                 meta_file = pmid_dir / f"{pmid}_metadata.json"
-                with open(meta_file, 'w') as f:
+                with open(meta_file, "w") as f:
                     json.dump(metadata, f, indent=2)
                 result["files"].append(str(meta_file))
 
@@ -169,12 +168,14 @@ def main():
 
                     if xml_content:
                         xml_file = pmid_dir / f"{pmid}_fulltext.xml"
-                        with open(xml_file, 'w', encoding='utf-8') as f:
+                        with open(xml_file, "w", encoding="utf-8") as f:
                             f.write(xml_content)
                         result["fulltext_xml"] = True
                         result["files"].append(str(xml_file))
                         stats["fulltext_xml_downloaded"] += 1
-                        logger.info(f"  Full-text XML: Downloaded ({len(xml_content)} chars)")
+                        logger.info(
+                            f"  Full-text XML: Downloaded ({len(xml_content)} chars)"
+                        )
                     else:
                         logger.info(f"  Full-text XML: Not available")
 
@@ -191,8 +192,12 @@ def main():
                         supp_dir.mkdir(exist_ok=True)
 
                         for idx, supp in enumerate(supplements, 1):
-                            supp_url = supp.get('downloadUrl', '') or supp.get('url', '')
-                            supp_name = supp.get('filename', '') or supp.get('name', f"supplement_{idx}")
+                            supp_url = supp.get("downloadUrl", "") or supp.get(
+                                "url", ""
+                            )
+                            supp_name = supp.get("filename", "") or supp.get(
+                                "name", f"supplement_{idx}"
+                            )
 
                             if not supp_url:
                                 continue
@@ -201,14 +206,16 @@ def main():
                                 resp = client.session.get(supp_url, timeout=30)
                                 resp.raise_for_status()
                                 supp_file = supp_dir / supp_name
-                                with open(supp_file, 'wb') as f:
+                                with open(supp_file, "wb") as f:
                                     f.write(resp.content)
                                 result["supplements_downloaded"] += 1
                                 stats["supplements_downloaded"] += 1
                                 result["files"].append(str(supp_file))
                                 time.sleep(RATE_LIMIT_DELAY)
                             except Exception as e:
-                                result["errors"].append(f"Supplement {supp_name}: {str(e)}")
+                                result["errors"].append(
+                                    f"Supplement {supp_name}: {str(e)}"
+                                )
                     else:
                         logger.info(f"  Supplements: None found")
                 else:
@@ -226,17 +233,17 @@ def main():
 
         # Save progress every 10 papers
         if stats["processed"] % 10 == 0:
-            with open(progress_file, 'w') as f:
+            with open(progress_file, "w") as f:
                 json.dump(progress, f, indent=2)
             _print_stats(stats)
 
     # Final save
-    with open(progress_file, 'w') as f:
+    with open(progress_file, "w") as f:
         json.dump(progress, f, indent=2)
 
     # Save final summary
     summary_file = OUTPUT_DIR / "download_summary.json"
-    with open(summary_file, 'w') as f:
+    with open(summary_file, "w") as f:
         json.dump(stats, f, indent=2)
 
     logger.info("\n" + "=" * 60)
@@ -248,10 +255,18 @@ def main():
 def _print_stats(stats):
     total = stats["total"]
     logger.info(f"  Processed:           {stats['processed']}/{total}")
-    logger.info(f"  Found in Europe PMC: {stats['found_in_europepmc']}/{stats['processed']} ({100*stats['found_in_europepmc']/max(1,stats['processed']):.1f}%)")
-    logger.info(f"  Has PMCID:           {stats['has_pmcid']}/{stats['processed']} ({100*stats['has_pmcid']/max(1,stats['processed']):.1f}%)")
-    logger.info(f"  Full-text XML:       {stats['fulltext_xml_downloaded']}/{stats['processed']} ({100*stats['fulltext_xml_downloaded']/max(1,stats['processed']):.1f}%)")
-    logger.info(f"  With supplements:    {stats['supplements_found']}/{stats['processed']}")
+    logger.info(
+        f"  Found in Europe PMC: {stats['found_in_europepmc']}/{stats['processed']} ({100 * stats['found_in_europepmc'] / max(1, stats['processed']):.1f}%)"
+    )
+    logger.info(
+        f"  Has PMCID:           {stats['has_pmcid']}/{stats['processed']} ({100 * stats['has_pmcid'] / max(1, stats['processed']):.1f}%)"
+    )
+    logger.info(
+        f"  Full-text XML:       {stats['fulltext_xml_downloaded']}/{stats['processed']} ({100 * stats['fulltext_xml_downloaded'] / max(1, stats['processed']):.1f}%)"
+    )
+    logger.info(
+        f"  With supplements:    {stats['supplements_found']}/{stats['processed']}"
+    )
     logger.info(f"  Suppl files saved:   {stats['supplements_downloaded']}")
     logger.info(f"  Metadata only:       {stats['metadata_only']}")
     logger.info(f"  Not found:           {stats['not_found']}")

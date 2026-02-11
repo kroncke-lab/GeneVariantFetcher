@@ -7,7 +7,7 @@ All functions delegate to the canonical variant_normalizer module.
 Migration guide:
     # Old:
     from utils.variant_utils import normalize_variant
-    
+
     # New:
     from utils.variant_normalizer import normalize_variant
 
@@ -36,11 +36,29 @@ from utils.variant_normalizer import (
 
 # Preserve old constant names for backward compatibility
 AA_THREE_TO_ONE = {
-    "Ala": "A", "Arg": "R", "Asn": "N", "Asp": "D", "Cys": "C",
-    "Gln": "Q", "Glu": "E", "Gly": "G", "His": "H", "Ile": "I",
-    "Leu": "L", "Lys": "K", "Met": "M", "Phe": "F", "Pro": "P",
-    "Ser": "S", "Thr": "T", "Trp": "W", "Tyr": "Y", "Val": "V",
-    "Ter": "X", "Sec": "U", "Pyl": "O",
+    "Ala": "A",
+    "Arg": "R",
+    "Asn": "N",
+    "Asp": "D",
+    "Cys": "C",
+    "Gln": "Q",
+    "Glu": "E",
+    "Gly": "G",
+    "His": "H",
+    "Ile": "I",
+    "Leu": "L",
+    "Lys": "K",
+    "Met": "M",
+    "Phe": "F",
+    "Pro": "P",
+    "Ser": "S",
+    "Thr": "T",
+    "Trp": "W",
+    "Tyr": "Y",
+    "Val": "V",
+    "Ter": "X",
+    "Sec": "U",
+    "Pyl": "O",
 }
 AA_ONE_TO_THREE = {v: k for k, v in AA_THREE_TO_ONE.items()}
 
@@ -56,10 +74,11 @@ def extract_variant_components(variant: str) -> Optional[Tuple[str, int, str]]:
         Tuple of (ref_aa, position, alt_aa) or None if parsing fails
     """
     import re
+
     normalized = normalize_protein_variant(variant)
     if not normalized:
         return None
-    
+
     # Match pattern like A561V
     match = re.match(r"^([A-Z])(\d+)([A-Z]|FS|DEL|DUP|INS|X)$", normalized.upper())
     if match:
@@ -70,6 +89,7 @@ def extract_variant_components(variant: str) -> Optional[Tuple[str, int, str]]:
 def is_protein_variant(variant: str) -> bool:
     """Check if variant appears to be a protein-level notation."""
     import re
+
     if not variant:
         return False
     variant = variant.strip().lower()
@@ -85,6 +105,7 @@ def is_protein_variant(variant: str) -> bool:
 def is_cdna_variant(variant: str) -> bool:
     """Check if variant appears to be a cDNA-level notation."""
     import re
+
     if not variant:
         return False
     variant = variant.strip().lower()
@@ -97,14 +118,14 @@ def is_cdna_variant(variant: str) -> bool:
 
 # Export all public names
 __all__ = [
-    'normalize_variant',
-    'normalize_protein_variant', 
-    'normalize_cdna_variant',
-    'variants_match',
-    'find_matching_variants',
-    'extract_variant_components',
-    'is_protein_variant',
-    'is_cdna_variant',
-    'AA_THREE_TO_ONE',
-    'AA_ONE_TO_THREE',
+    "normalize_variant",
+    "normalize_protein_variant",
+    "normalize_cdna_variant",
+    "variants_match",
+    "find_matching_variants",
+    "extract_variant_components",
+    "is_protein_variant",
+    "is_cdna_variant",
+    "AA_THREE_TO_ONE",
+    "AA_ONE_TO_THREE",
 ]

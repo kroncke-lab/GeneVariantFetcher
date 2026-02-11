@@ -19,9 +19,7 @@ logger = logging.getLogger(__name__)
 _SECTION_PATTERNS = {
     "TITLE": re.compile(r"^(title|article.title)$", re.IGNORECASE),
     "ABSTRACT": re.compile(r"^(abstract|abs|summary)$", re.IGNORECASE),
-    "INTRODUCTION": re.compile(
-        r"(intro|background|significance)", re.IGNORECASE
-    ),
+    "INTRODUCTION": re.compile(r"(intro|background|significance)", re.IGNORECASE),
     "RESULTS": re.compile(
         r"(result|finding|observation|outcome|data|phenotyp|genotype.phenotype|"
         r"functional|electrophysiol|patch.clamp|voltage.clamp|characteriz)",
@@ -42,9 +40,7 @@ _SECTION_PATTERNS = {
 }
 
 # Sections most likely to contain variant data
-_VARIANT_RICH_SECTIONS = frozenset(
-    {"TITLE", "ABSTRACT", "RESULTS", "METHODS", "TABLE"}
-)
+_VARIANT_RICH_SECTIONS = frozenset({"TITLE", "ABSTRACT", "RESULTS", "METHODS", "TABLE"})
 
 
 class BioCClient:
@@ -58,9 +54,7 @@ class BioCClient:
         "https://www.ncbi.nlm.nih.gov/research/pubtator3-api/"
         "publications/export/biocxml"
     )
-    PMCOA_URL = (
-        "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi"
-    )
+    PMCOA_URL = "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi"
 
     def __init__(
         self,
@@ -104,9 +98,7 @@ class BioCClient:
         for attempt in range(self.max_retries):
             self._rate_limit()
             try:
-                resp = self.session.get(
-                    url, params=params, timeout=self.timeout
-                )
+                resp = self.session.get(url, params=params, timeout=self.timeout)
                 resp.raise_for_status()
                 return resp.text
             except requests.RequestException as exc:
@@ -119,10 +111,9 @@ class BioCClient:
                         url,
                     )
                     raise
-                delay = min(2 ** attempt, 30)
+                delay = min(2**attempt, 30)
                 logger.info(
-                    "BioC request attempt %d/%d failed (%s), "
-                    "retrying in %.1fs",
+                    "BioC request attempt %d/%d failed (%s), retrying in %.1fs",
                     attempt + 1,
                     self.max_retries,
                     exc,
@@ -145,9 +136,7 @@ class BioCClient:
                 type, text, start, end, identifiers
         """
         pmid = str(pmid).strip()
-        xml_text = self._request(
-            self.PUBTATOR3_URL, params={"pmids": pmid}
-        )
+        xml_text = self._request(self.PUBTATOR3_URL, params={"pmids": pmid})
         return self._parse_pubtator_xml(xml_text)
 
     def _parse_pubtator_xml(self, xml_text: str) -> Dict[str, Any]:
@@ -170,7 +159,9 @@ class BioCClient:
 
                 offset_el = passage.find("offset")
                 passage_offset = (
-                    int(offset_el.text) if offset_el is not None and offset_el.text else 0
+                    int(offset_el.text)
+                    if offset_el is not None and offset_el.text
+                    else 0
                 )
 
                 for ann in passage.iter("annotation"):
@@ -198,9 +189,7 @@ class BioCClient:
         identifiers: List[str] = []
         identifier = self._get_infon(ann, "identifier")
         if identifier:
-            identifiers = [
-                i.strip() for i in identifier.split(";") if i.strip()
-            ]
+            identifiers = [i.strip() for i in identifier.split(";") if i.strip()]
 
         loc = ann.find("location")
         start = end = 0
@@ -250,9 +239,7 @@ class BioCClient:
                 if not text:
                     continue
 
-                canonical = self.classify_section(
-                    section_name or section_type
-                )
+                canonical = self.classify_section(section_name or section_type)
                 sections.append(
                     {
                         "name": section_name,
@@ -347,9 +334,7 @@ class BioCClient:
                 return None
             return self.get_pmc_fulltext(pmcid)
         except Exception as exc:
-            logger.debug(
-                "PMC full text unavailable for PMID %s: %s", pmid, exc
-            )
+            logger.debug("PMC full text unavailable for PMID %s: %s", pmid, exc)
             return None
 
     def _pmid_to_pmcid(self, pmid: str) -> Optional[str]:
