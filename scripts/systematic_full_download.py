@@ -11,7 +11,6 @@ import sys
 import time
 from pathlib import Path
 from typing import List, Dict, Optional, Set
-import asyncio
 from datetime import datetime
 
 # Add project root to path

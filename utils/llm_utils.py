@@ -12,12 +12,6 @@ from typing import Dict, Any, Optional, List
 from litellm import completion
 import litellm
 
-import json
-import logging
-import time
-from typing import Dict, Any, Optional, List
-from litellm import completion
-import litellm
 
 litellm.drop_params = True
 

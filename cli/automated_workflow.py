@@ -18,6 +18,7 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
+from cli.scout import run_scout
 
 from dotenv import load_dotenv
 

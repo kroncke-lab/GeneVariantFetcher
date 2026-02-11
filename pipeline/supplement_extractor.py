@@ -415,4 +415,4 @@ class SupplementExtractor:
         supplement_patients = supplement.get("patients", {})
         
         if supplement_patients.get("count") and not existing_patients.get("count"):
-            existing["patients"] = supplement_patient
+            existing["patients"] = supplement_patients

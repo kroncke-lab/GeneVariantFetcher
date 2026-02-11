@@ -467,8 +467,8 @@ class SourceSelector:
         
         # Calculate metrics
         length = len(content)
-        lines = [l for l in content.split('\n') if l.strip()]
-        avg_line_length = sum(len(l) for l in lines) / max(len(lines), 1)
+        lines = [line for line in content.split('\n') if line.strip()]
+        avg_line_length = sum(len(line) for line in lines) / max(len(lines), 1)
         variant_mentions = self.count_variants(content)
         
         # Quality checks
