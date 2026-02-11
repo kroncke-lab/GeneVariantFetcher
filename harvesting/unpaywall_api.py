@@ -87,7 +87,12 @@ class UnpaywallClient:
             response = self.session.get(url, params=params, timeout=30)
 
             if response.status_code == 200:
-                data = response.json()
+                # Handle empty or invalid JSON responses
+                try:
+                    data = response.json()
+                except ValueError as e:
+                    logger.warning(f"Invalid JSON response from Unpaywall for {doi}: {e}")
+                    return None, f"Invalid JSON response: {str(e)}"
 
                 # Extract useful info
                 result = {

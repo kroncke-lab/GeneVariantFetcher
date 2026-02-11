@@ -1333,6 +1333,77 @@ class PMCHarvester:
                 else:
                     print(f"  - Unpaywall: {unpaywall_error or 'No OA version found'}")
 
+            # If Unpaywall failed but we have a DOI, try publisher APIs before giving up
+            if not is_free and doi:
+                print("  - Unpaywall failed, trying publisher APIs based on DOI prefix...")
+                
+                # Try publisher APIs based on DOI prefix
+                main_markdown = None
+                
+                # Try Elsevier API (10.1016/)
+                if doi.startswith("10.1016/") and self.elsevier_api.is_available:
+                    elsevier_markdown, elsevier_error = self._try_elsevier_api(doi, pmid)
+                    if elsevier_markdown:
+                        main_markdown = elsevier_markdown
+                        print("  ✓ Retrieved via Elsevier API fallback")
+                
+                # Try Springer API (10.1007/, 10.1038/, 10.1186/)
+                if not main_markdown and self.springer_api.is_available:
+                    if doi.startswith("10.1007/") or doi.startswith("10.1038/") or doi.startswith("10.1186/"):
+                        springer_markdown, springer_error = self._try_springer_api(doi, pmid)
+                        if springer_markdown:
+                            main_markdown = springer_markdown
+                            print("  ✓ Retrieved via Springer API fallback")
+                
+                # Try Wiley API (10.1111/, 10.1002/)
+                if not main_markdown and self.wiley_api.is_available:
+                    if doi.startswith("10.1111/") or doi.startswith("10.1002/"):
+                        wiley_markdown, wiley_error = self._try_wiley_api(doi, pmid)
+                        if wiley_markdown:
+                            main_markdown = wiley_markdown
+                            print("  ✓ Retrieved via Wiley API fallback")
+                
+                # If we got content from publisher API, process it
+                if main_markdown:
+                    # Get supplements via DOI resolver
+                    supp_files = self.doi_resolver.resolve_and_scrape_supplements(
+                        doi, pmid, self.scraper
+                    )
+                    
+                    # Process supplements
+                    supplement_markdown = ""
+                    for supp_file in supp_files:
+                        supp_path = Path(supp_file)
+                        if supp_path.suffix.lower() == ".pdf":
+                            supp_md = self.converter.pdf_to_markdown(str(supp_path))
+                            if supp_md:
+                                supplement_markdown += f"\n\n## Supplement: {supp_path.name}\n\n{supp_md}"
+                    
+                    # Create unified markdown
+                    unified_content = main_markdown + supplement_markdown
+                    output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
+                    with open(output_file, "w", encoding="utf-8") as f:
+                        f.write(unified_content)
+                    
+                    print(f"  ✅ Downloaded via publisher API: {output_file.name} ({len(supp_files)} supplements)")
+                    
+                    # Log success
+                    with open(self.success_log, "a", newline="") as f:
+                        writer = csv.writer(f)
+                        writer.writerow([pmid, "publisher-api", len(supp_files)])
+                    
+                    self._write_pmid_status(
+                        pmid,
+                        "extracted",
+                        {
+                            "download_timestamp": datetime.datetime.now().isoformat(),
+                            "variant_count": 0,
+                            "source": "publisher-api-fallback",
+                        },
+                    )
+                    
+                    return True, str(output_file), unified_content
+
             if not is_free:
                 print(
                     "  ❌ No PMCID and not available via any method (likely paywalled)"
@@ -1340,7 +1411,7 @@ class PMCHarvester:
                 pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
                 self._log_paywalled(
                     pmid,
-                    "No PMCID found, not free full text, Unpaywall failed",
+                    "No PMCID found, not free full text, Unpaywall failed, publisher APIs failed",
                     pubmed_url,
                 )
                 self._write_pmid_status(
@@ -1348,8 +1419,8 @@ class PMCHarvester:
                     "paywalled",
                     {
                         "download_timestamp": datetime.datetime.now().isoformat(),
-                        "failure_reason": "No PMCID found, not free full text, Unpaywall failed",
-                        "source": "unpaywall",
+                        "failure_reason": "No PMCID found, not free full text, all methods failed",
+                        "source": "none",
                     },
                 )
                 return False, "No PMCID", None
