@@ -63,8 +63,8 @@ def download_file(url, filename):
 def main():
     failed_pmids = [15840476, 10973849, 26496715, 11854117, 14661677, 29650123, 16922724, 23631430]
     
-    output_file = "/mnt/temp2/kronckbm/gvf_output/europepmc_attempt.md"
-    download_dir = "/mnt/temp2/kronckbm/gvf_output/europepmc_downloads"
+    output_file = "./output/europepmc_attempt.md"
+    download_dir = "./output/europepmc_downloads"
     
     # Create download directory
     os.makedirs(download_dir, exist_ok=True)

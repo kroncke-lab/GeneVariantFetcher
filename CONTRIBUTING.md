@@ -46,7 +46,7 @@ cp .env.example .env
 
 3. **Run discovery** to find papers:
    ```bash
-   gvf discover GENE --max-papers 500
+   gvf extract GENE --max-pmids 500 --max-downloads 0
    ```
 
 4. **Test extraction** on a few papers before full run:
@@ -60,16 +60,16 @@ The extraction pipeline lives in `pipeline/`:
 
 | Module | Purpose |
 |--------|---------|
-| `pipeline/extraction.py` | Main LLM extraction logic |
-| `pipeline/table_parser.py` | Table-specific regex extraction |
-| `pipeline/variant_normalizer.py` | Canonical normalizer (THE source of truth) |
-| `pipeline/filters.py` | Pre-extraction quality filters |
+| `pipeline/extraction.py` | Main LLM extraction + table regex |
+| `utils/variant_scanner.py` | Comprehensive regex variant scanner |
+| `utils/variant_normalizer.py` | Canonical normalizer (THE source of truth) |
+| `pipeline/data_scout.py` | Pre-extraction quality filters + data zones |
 | `pipeline/aggregation.py` | Post-extraction deduplication |
 
 To add a new extraction pattern:
-1. Add regex to `pipeline/table_parser.py` in `TABLE_HEADERS` or `VARIANT_PATTERNS`
+1. Add regex to `utils/variant_scanner.py` in the pattern definitions
 2. Test against sample papers in `tests/fixtures/`
-3. Ensure pattern output feeds into `variant_normalizer.normalize()`
+3. Ensure pattern output feeds into `variant_normalizer.normalize_variant()`
 
 ## Code Style
 

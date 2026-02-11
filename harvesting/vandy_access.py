@@ -49,7 +49,7 @@ class InstitutionalAccessManager:
     
     def __init__(self, output_dir: Optional[str] = None):
         """Initialize with institutional access configuration."""
-        self.output_dir = Path(output_dir or "/mnt/temp2/kronckbm/gvf_output/institutional_downloads")
+        self.output_dir = Path(output_dir or "./output/institutional_downloads")
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
         # Initialize API clients
