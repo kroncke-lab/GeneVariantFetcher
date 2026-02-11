@@ -1139,17 +1139,21 @@ def aggregate_excel_data(
         pmid = normalize_pmid(row[pmid_col])
         variant_raw = str(row[variant_col]) if pd.notna(row[variant_col]) else ""
         variant_norm = normalize_variant(variant_raw)
+        # Use canonical form as primary key for better cross-notation matching
+        # e.g., "p.Ala561Val" and "A561V" both canonicalize to "A561V"
+        canonical = to_canonical_form(variant_raw)
+        variant_key = canonical if canonical else variant_norm
 
-        if not pmid or not variant_norm:
+        if not pmid or not variant_key:
             continue
 
-        key = (pmid, variant_norm)
+        key = (pmid, variant_key)
 
         if key not in aggregated:
             aggregated[key] = {
                 "pmid": pmid,
                 "variant_raw": variant_raw,
-                "variant_norm": variant_norm,
+                "variant_norm": variant_key,
                 "carriers_total": 0,
                 "affected_count": 0,
                 "unaffected_count": 0,
@@ -1196,17 +1200,20 @@ def aggregate_sqlite_data(df: pd.DataFrame) -> Dict[Tuple[str, str], Dict[str, A
         pmid = normalize_pmid(row["pmid"])
         variant_raw = str(row["variant"]) if pd.notna(row["variant"]) else ""
         variant_norm = normalize_variant(variant_raw)
+        # Use canonical form as primary key (matches Excel aggregation)
+        canonical = to_canonical_form(variant_raw)
+        variant_key = canonical if canonical else variant_norm
 
-        if not pmid or not variant_norm:
+        if not pmid or not variant_key:
             continue
 
-        key = (pmid, variant_norm)
+        key = (pmid, variant_key)
 
         if key not in aggregated:
             aggregated[key] = {
                 "pmid": pmid,
                 "variant_raw": variant_raw,
-                "variant_norm": variant_norm,
+                "variant_norm": variant_key,
                 "carriers_total": 0,
                 "affected_count": 0,
                 "unaffected_count": 0,
