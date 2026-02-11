@@ -22,6 +22,7 @@ GeneVariantFetcher (GVF) is an end-to-end pipeline that discovers, downloads, an
 - 🤖 **Tiered LLM extraction** — Keyword filter → LLM triage → Expert extraction with model cascade
 - 📊 **Rich table extraction** — Excel, Word, and PDF tables parsed with comprehensive header recognition
 - 🔄 **Fuzzy variant matching** — Normalizes all frameshift/nonsense/deletion conventions for deduplication
+- 🔤 **Unicode normalization** — Handles arrow variants (→, ➔, ⟶), concatenated gene+variant patterns (HERGG604S)
 - 💾 **SQLite output** — Normalized relational database with penetrance, phenotypes, and functional data
 - ⏸️ **Checkpoint/resume** — Jobs survive interruption and resume from last completed step
 - 🖥️ **GUI + CLI** — Web interface for interactive use, CLI for automation and scripting
@@ -253,7 +254,9 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 │  STAGE 7: VARIANT EXTRACTION (Tier 3)                               │
 │    • Input: DATA_ZONES.md > FULL_CONTEXT.md > abstract             │
 │    • Model cascade: gpt-4o-mini → gpt-4o (if low yield)            │
-│    • Pre-scan with regex variant scanner                           │
+│    • Pre-scan: Regex scanner on FULL_CONTEXT.md (not condensed)    │
+│      - Supports concatenated patterns (e.g., HERGG604S, KCNH2A561V)│
+│      - Unicode arrow normalization (→, ➔, ⟶ → standard arrow)     │
 │    • Output: extractions/{gene}_PMID_{pmid}.json                   │
 └─────────────────────────────────────────────────────────────────────┘
          │

@@ -426,6 +426,9 @@ class ExpertExtractor(BaseLLMCaller):
         seen_variants = set()
         filtered_count = 0
 
+        # Pre-process: normalize Unicode arrows (same as variant_scanner)
+        full_text = full_text.replace('\u2192', '>').replace('\u2190', '<').replace('\u21d2', '>')
+
         # Variant patterns to look for in table cells
         protein_pattern = re.compile(
             r"p\.([A-Z][a-z]{2}\d+[A-Z][a-z]{2}|[A-Z]\d+[A-Z*]|[A-Z][a-z]{2}\d+(?:fs|del|dup|ins))",

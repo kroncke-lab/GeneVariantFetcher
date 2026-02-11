@@ -4,10 +4,18 @@
 Extract genetic variants from biomedical literature with **90% recall**.
 Part of the Kroncke Lab variant interpretation pipeline.
 
-## Current Status
-- **Recall:** 45.2% (on golden test set of 13 papers)
-- **Latest run:** 2370 variant mentions from 249 papers
+## Current Status (v2.1.0 — 2026-02-11)
+- **Unique Variant Recall:** 59.1% (289 of 489 variants)
+- **Carrier Recall:** 71.3%
+- **Affected Recall:** 67.6%
 - **Deadline:** June 2026 (R01 grant submission)
+
+### Recent Architecture Changes (2026-02-10)
+1. **Scanner decoupled** — Now runs on FULL_CONTEXT.md, not condensed DATA_ZONES
+2. **Concatenated gene+variant regex** — Detects HERGG604S, KCNH2A561V patterns
+3. **Unicode arrow normalization** — Handles →, ➔, ⟶ variants
+4. **Canonical form comparison** — Matching uses normalized keys for higher accuracy
+5. **Tier 3 model** — gpt-4o (upgraded from gemini-2.0-flash)
 
 ## Architecture
 ```
@@ -45,14 +53,14 @@ python -m harvesting.orchestrator --gene KCNH2 --use-synonyms
 |-----------|---------|-----|--------|
 | Nature | ✅ | - | Working |
 | Elsevier | ✅ | ✅ | Working |
-| Springer/BMC | ✅ | ❌ | Handler working, API needs registration |
+| Springer/BMC | ✅ | ✅ | Working (API active) |
 | Oxford Academic | ✅ | - | Working |
 | Wiley | ✅ | ✅ | Working |
+| PMC | ✅ | ✅ | Working (free) |
 | Karger | ❌ | - | Blocked by Cloudflare |
 
 ## Current Blockers
-1. **Springer API** - Brett needs to register with Vanderbilt credentials
-2. **Karger access** - Cloudflare blocking; TDM request drafted
+1. **Karger access** - Cloudflare blocking; TDM request drafted
 
 ## Related Repos
 - **VariantFeatures** - Aggregates features for extracted variants

@@ -146,7 +146,11 @@ p.Leu987PhefsTer10
 c.2959delC (p.L987fs)
 ```
 
-**Mitigation:** GVF includes fuzzy matching and normalization, but edge cases exist.
+**Mitigation:** GVF uses canonical form keys for comparison — all variants are normalized to a standard form before matching. This includes:
+- Three-letter to one-letter amino acid conversion
+- Frameshift notation standardization (fs, fsX, fsTer → canonical form)
+- Unicode arrow normalization (→, ➔, ⟶)
+- Concatenated gene+variant pattern parsing (HERGG604S → G604S)
 
 ### 2. Complex Variant Types
 
@@ -155,7 +159,7 @@ Harder to extract:
 - Large deletions: `exon6-14Del`
 - Structural variants: `7q34q36.2Del`
 
-**Mitigation:** Variant scanner pre-detects these patterns to improve LLM prompts.
+**Mitigation:** Variant scanner pre-detects these patterns on full text (not condensed DATA_ZONES) to improve LLM prompts. The scanner now supports concatenated patterns (HERGG604S) and Unicode arrow normalization.
 
 ### 3. Paywalled Papers
 

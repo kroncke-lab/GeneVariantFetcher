@@ -83,7 +83,7 @@ Papers downloaded successfully but supplements missed:
 Papers with content but low extraction yield:
 - Tables not parsed correctly
 - Supplement Excel files not processed
-- DATA_ZONES too aggressive
+- DATA_ZONES too aggressive (✅ Fixed 2026-02-10: scanner now runs on full text)
 
 ## Path to 30%+ Recall
 

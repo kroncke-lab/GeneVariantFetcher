@@ -71,6 +71,8 @@ Detection patterns:
 
 **Token reduction:** 60-80% (15,000 tokens → 3,000 tokens)
 
+**Note:** The variant scanner runs on FULL_CONTEXT.md (not DATA_ZONES), ensuring no variants are missed due to condensation.
+
 ### Stage 6: LLM Extraction
 **Module:** `pipeline/extraction.py`
 
@@ -89,6 +91,8 @@ Detection patterns:
 3. **HGVS notation standardization:**
    - Converts legacy formats: R412H → p.Arg412His
    - Handles frameshift: G24fs+34X → p.Gly24fs*58
+   - Unicode arrow normalization (→, ➔, ⟶ → standard)
+   - Concatenated gene+variant detection (HERGG604S → HERG G604S)
 
 **Model cascade:**
 - First try: gpt-4o-mini (fast, cheap)

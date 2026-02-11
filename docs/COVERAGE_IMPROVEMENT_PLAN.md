@@ -152,7 +152,7 @@ Papers have valid full-text but extraction is incomplete:
 
 1. **Table parsing failures** - Large tables with variant data not fully extracted
 2. **Supplementary data missed** - Variants in supplements not processed
-3. **DATA_ZONES too aggressive** - Condensation removes important sections
+3. **DATA_ZONES too aggressive** - Condensation removes important sections (✅ ADDRESSED: scanner now runs on full text)
 4. **Variant nomenclature** - Different formats not matched
 
 ### Solutions
@@ -196,6 +196,9 @@ def _process_supplements(self, pmid: str, supplement_files: List[Path]):
 ```
 
 #### C. Less Aggressive DATA_ZONES Condensation
+
+**✅ ADDRESSED (2026-02-10):** The variant scanner is now decoupled from DATA_ZONES condensation. Scanner runs on FULL_CONTEXT.md to ensure no variants are missed by condensation.
+
 ```python
 # In pipeline/data_scout.py
 # Increase minimum relevance threshold for KEEPING sections
@@ -281,7 +284,7 @@ def variants_match(v1: str, v2: str) -> bool:
 1. [ ] Add content validation to reject junk downloads
 2. [ ] Re-run download for 9 junk PMIDs with better validation
 3. [ ] Add variant normalization to comparison script
-4. [ ] Reduce DATA_ZONES min_relevance to 0.1
+4. [x] ~~Reduce DATA_ZONES min_relevance~~ — Scanner now decoupled from DATA_ZONES (runs on full text)
 
 ### Phase 2: Browser Fetching (2-3 days)
 1. [ ] Run browser_fetch.py for 16 paywalled PMIDs

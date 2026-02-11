@@ -66,7 +66,9 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 │ STEP 3: Variant Extraction (ExpertExtractor)                                     │
 │   • Input: DATA_ZONES.md > FULL_CONTEXT.md > abstract                            │
 │   • Model: gpt-4o-mini → gpt-4o (escalation if needed)                           │
-│   • Pre-scan: Regex variant detection for prompt enhancement                     │
+│   • Pre-scan: Regex scanner on FULL_CONTEXT.md (not condensed text)              │
+│     - Detects concatenated gene+variant (HERGG604S, KCNH2A561V)                  │
+│     - Unicode arrow normalization (→, ➔, ⟶)                                      │
 │   OUTPUT: extractions/{gene}_PMID_{pmid}.json                                    │
 └──────────────────────────────────────────────────────────────────────────────────┘
   │
@@ -140,7 +142,7 @@ FINAL OUTPUTS:
 | Module | Location | Responsibility |
 |--------|----------|----------------|
 | **Variant Normalizer** | `utils/variant_normalizer.py` | HGVS standardization |
-| **Variant Scanner** | `utils/variant_scanner.py` | Regex-based variant detection |
+| **Variant Scanner** | `utils/variant_scanner.py` | Regex-based variant detection (runs on full text, not condensed) |
 | **LLM Utils** | `utils/llm_utils.py` | OpenAI/LiteLLM interface |
 | **SQLite Migration** | `harvesting/migrate_to_sqlite.py` | JSON → SQLite conversion |
 
@@ -204,7 +206,8 @@ Filtered PMIDs
 {PMID}_FULL_CONTEXT.md
     │
     ├─→ Variant Scanner ──────→ Pre-detected variant patterns
-    │                           (enhances LLM prompt)
+    │   (runs on FULL text)      - Concatenated: HERGG604S, KCNH2A561V
+    │                            - Unicode arrows normalized (→, ➔, ⟶)
     │
     ├─→ Data Scout (optional)─→ {PMID}_DATA_ZONES.md
     │                           (condensed high-value sections)
