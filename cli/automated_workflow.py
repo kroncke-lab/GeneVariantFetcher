@@ -43,7 +43,7 @@ def automated_variant_extraction_workflow(
     max_papers_to_download: int = 50,
     tier_threshold: int = 1,
     use_clinical_triage: bool = False,
-    auto_synonyms: bool = False,
+    auto_synonyms: bool = True,
     synonyms: list[str] | None = None,
     scout_first: bool = False,
 ):
@@ -58,7 +58,7 @@ def automated_variant_extraction_workflow(
         max_papers_to_download: Maximum papers to download full-text (integer)
         tier_threshold: If the first model finds fewer variants than this, the next model is tried (integer).
         use_clinical_triage: Use ClinicalDataTriageFilter for Tier 2 instead of InternFilter.
-        auto_synonyms: Automatically discover and use gene synonyms from NCBI Gene database.
+        auto_synonyms: Automatically discover and use gene synonyms from NCBI Gene database (default: True).
         synonyms: List of manually specified gene synonyms to include in searches.
         scout_first: Run Data Scout before extraction to identify high-value data zones.
     """

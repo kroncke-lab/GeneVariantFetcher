@@ -60,9 +60,10 @@ def extract_command(
     auto_synonyms: Annotated[
         bool,
         typer.Option(
-            "--auto-synonyms", help="Automatically discover and use gene synonyms"
+            "--auto-synonyms/--no-auto-synonyms",
+            help="Automatically discover and use gene synonyms (default: on)",
         ),
-    ] = False,
+    ] = True,
     synonyms: Annotated[
         list[str],
         typer.Option(
