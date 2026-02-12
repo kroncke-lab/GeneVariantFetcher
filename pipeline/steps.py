@@ -270,21 +270,81 @@ def filter_papers(
         else InternFilter(confidence_threshold=tier2_confidence_threshold)
     )
 
-    filtered_pmids = []
-    dropped_pmids = []
+    # Persistent, resume-safe filtering output
+    pmid_status_dir = output_path / "pmid_status"
+    pmid_status_dir.mkdir(parents=True, exist_ok=True)
+
+    progress_file = pmid_status_dir / "filter_progress.jsonl"
+    filtered_pmids_file = pmid_status_dir / "filtered_pmids.txt"
+    filtered_out_file = pmid_status_dir / "filtered_out.csv"
+
+    filtered_pmids: List[str] = []
+    dropped_pmids: List[Tuple[str, str]] = []
+
+    processed_pmids: set[str] = set()
+
+    # Resume: load prior progress if present
+    if progress_file.exists():
+        try:
+            with open(progress_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        rec = json.loads(line)
+                    except Exception:
+                        continue
+
+                    pmid = str(rec.get("pmid", ""))
+                    if not pmid:
+                        continue
+
+                    processed_pmids.add(pmid)
+                    decision = str(rec.get("final_decision", "")).upper()
+                    reason = str(rec.get("reason", ""))
+                    if decision == "PASS":
+                        filtered_pmids.append(pmid)
+                    elif decision == "FAIL":
+                        dropped_pmids.append((pmid, reason))
+        except Exception as e:
+            logger.warning(f"Failed to load filter progress ({progress_file}): {e}")
+
+    # Append-only progress writer (flush each record so SIGKILL/OOM doesn't lose work)
+    progress_fh = open(progress_file, "a", encoding="utf-8")
+
+    def _write_progress(record: Dict[str, Any]) -> None:
+        progress_fh.write(json.dumps(record, ensure_ascii=False) + "\n")
+        progress_fh.flush()
 
     for pmid in pmids:
+        if pmid in processed_pmids:
+            continue
         record_path = abstract_records.get(pmid)
 
         if not record_path or not Path(record_path).exists():
-            dropped_pmids.append((pmid, "Missing abstract JSON"))
+            reason = "Missing abstract JSON"
+            dropped_pmids.append((pmid, reason))
+            _write_progress({
+                "pmid": pmid,
+                "final_decision": "FAIL",
+                "reason": reason,
+                "stage": "abstract_load",
+            })
             continue
 
         try:
             with open(record_path, "r", encoding="utf-8") as f:
                 record = json.load(f)
         except Exception as e:
-            dropped_pmids.append((pmid, f"Abstract JSON read error: {e}"))
+            reason = f"Abstract JSON read error: {e}"
+            dropped_pmids.append((pmid, reason))
+            _write_progress({
+                "pmid": pmid,
+                "final_decision": "FAIL",
+                "reason": reason,
+                "stage": "abstract_load",
+            })
             continue
 
         metadata = record.get("metadata", {})
@@ -300,10 +360,23 @@ def filter_papers(
         )
 
         # Tier 1: Keyword filter
+        tier1_result = None
         if enable_tier1:
             tier1_result = keyword_filter.filter(paper)
             if tier1_result.decision is not FilterDecision.PASS:
-                dropped_pmids.append((pmid, tier1_result.reason))
+                reason = tier1_result.reason
+                dropped_pmids.append((pmid, reason))
+                _write_progress({
+                    "pmid": pmid,
+                    "final_decision": "FAIL",
+                    "reason": reason,
+                    "stage": "tier1",
+                    "tier1": {
+                        "decision": tier1_result.decision.value,
+                        "reason": tier1_result.reason,
+                        "confidence": tier1_result.confidence,
+                    },
+                })
                 continue
 
         # Tier 2: LLM filter
@@ -337,30 +410,85 @@ def filter_papers(
                 tier2_result = tier2_filter.filter(paper)
 
             if tier2_result.decision is not FilterDecision.PASS:
-                dropped_pmids.append((pmid, tier2_result.reason))
+                reason = tier2_result.reason
+                dropped_pmids.append((pmid, reason))
+                _write_progress({
+                    "pmid": pmid,
+                    "final_decision": "FAIL",
+                    "reason": reason,
+                    "stage": "tier2",
+                    "tier1": (
+                        {
+                            "decision": tier1_result.decision.value,
+                            "reason": tier1_result.reason,
+                            "confidence": tier1_result.confidence,
+                        }
+                        if tier1_result is not None
+                        else None
+                    ),
+                    "tier2": {
+                        "decision": tier2_result.decision.value,
+                        "reason": tier2_result.reason,
+                        "confidence": tier2_result.confidence,
+                    },
+                })
                 continue
 
         filtered_pmids.append(pmid)
+        _write_progress({
+            "pmid": pmid,
+            "final_decision": "PASS",
+            "reason": "passed",
+            "stage": "done",
+            "tier1": (
+                {
+                    "decision": tier1_result.decision.value,
+                    "reason": tier1_result.reason,
+                    "confidence": tier1_result.confidence,
+                }
+                if tier1_result is not None
+                else None
+            ),
+            "tier2": (
+                {
+                    "decision": tier2_result.decision.value,
+                    "reason": tier2_result.reason,
+                    "confidence": tier2_result.confidence,
+                }
+                if enable_tier2
+                else None
+            ),
+        })
 
-    # Save dropped PMIDs
-    pmid_status_dir = output_path / "pmid_status"
-    pmid_status_dir.mkdir(parents=True, exist_ok=True)
-    filtered_out_file = pmid_status_dir / "filtered_out.csv"
+    # Close progress file handle (important when running long jobs)
+    try:
+        progress_fh.close()
+    except Exception:
+        pass
 
+    # Save final dropped PMIDs + passed PMIDs
     with open(filtered_out_file, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["PMID", "Reason"])
         writer.writerows(dropped_pmids)
+
+    with open(filtered_pmids_file, "w", encoding="utf-8") as f:
+        for pmid in filtered_pmids:
+            f.write(str(pmid) + "\n")
 
     return StepResult(
         success=True,
         stats={
             "passed_filter": len(filtered_pmids),
             "dropped": len(dropped_pmids),
+            "resumed_processed": len(processed_pmids),
         },
         data={
             "filtered_pmids": filtered_pmids,
             "dropped_pmids": dropped_pmids,
+            "progress_file": str(progress_file),
+            "filtered_pmids_file": str(filtered_pmids_file),
+            "filtered_out_file": str(filtered_out_file),
         },
     )
 
