@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     ncbi_api_key: Optional[str] = Field(default=None, env="NCBI_API_KEY")
     elsevier_api_key: Optional[str] = Field(default=None, env="ELSEVIER_API_KEY")
     wiley_api_key: Optional[str] = Field(default=None, env="WILEY_API_KEY")
+    springer_api_key: Optional[str] = Field(default=None, env="SPRINGER_API_KEY")
 
     # Model Configuration
     tier1_model: Optional[str] = Field(

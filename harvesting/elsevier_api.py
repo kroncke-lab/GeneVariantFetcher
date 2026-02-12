@@ -236,12 +236,20 @@ class ElsevierAPIClient:
             return None
 
         try:
-            # Remove XML namespace prefixes for easier parsing
-            xml_content = re.sub(r'xmlns[^=]*="[^"]*"', "", xml_content)
-            xml_content = re.sub(r"<([a-z]+):", r"<", xml_content)
-            xml_content = re.sub(r"</([a-z]+):", r"</", xml_content)
+            # Remove ALL XML namespace prefixes for easier parsing
+            # First strip xmlns declarations, then strip prefixes from tags
+            # Use case-insensitive match to catch all prefix styles (ce:, xocs:, etc.)
+            xml_content = re.sub(r'\s+xmlns[^=]*="[^"]*"', "", xml_content)
+            xml_content = re.sub(r"<([a-zA-Z][\w.-]*):", r"<", xml_content)
+            xml_content = re.sub(r"</([a-zA-Z][\w.-]*):", r"</", xml_content)
+            # Also strip stray namespace-prefixed attributes (e.g., xlink:href)
+            xml_content = re.sub(r'\s+[a-zA-Z][\w.-]*:[a-zA-Z][\w.-]*="[^"]*"', "", xml_content)
 
-            root = ET.fromstring(xml_content)
+            try:
+                root = ET.fromstring(xml_content)
+            except ET.ParseError:
+                # Last resort: wrap in a root element to handle fragments
+                root = ET.fromstring(f"<wrapper>{xml_content}</wrapper>")
             markdown = "# MAIN TEXT\n\n"
 
             # Extract title
