@@ -1371,13 +1371,25 @@ class PMCHarvester:
                     )
                     
                     # Process supplements
+                    # Note: supp_files may be dicts (with 'url'/'name' keys) or
+                    # strings (file paths), depending on the scraper
                     supplement_markdown = ""
                     for supp_file in supp_files:
-                        supp_path = Path(supp_file)
-                        if supp_path.suffix.lower() == ".pdf":
-                            supp_md = self.converter.pdf_to_markdown(str(supp_path))
-                            if supp_md:
-                                supplement_markdown += f"\n\n## Supplement: {supp_path.name}\n\n{supp_md}"
+                        try:
+                            # Handle dict results from DOI resolver
+                            if isinstance(supp_file, dict):
+                                supp_name = supp_file.get("name", "supplement")
+                                supp_url = supp_file.get("url", "")
+                                supplement_markdown += f"\n\n## Supplement: {supp_name}\n\n[Available at: {supp_url}]\n"
+                                continue
+                            supp_path = Path(supp_file)
+                            if supp_path.suffix.lower() == ".pdf":
+                                supp_md = self.converter.pdf_to_markdown(str(supp_path))
+                                if supp_md:
+                                    supplement_markdown += f"\n\n## Supplement: {supp_path.name}\n\n{supp_md}"
+                        except (TypeError, ValueError) as e:
+                            logger.warning(f"Skipping supplement for PMID {pmid}: {e}")
+                            continue
                     
                     # Create unified markdown
                     unified_content = main_markdown + supplement_markdown
@@ -2310,20 +2322,33 @@ class PMCHarvester:
             manifest_path = Path(manifest_path)
 
         # ============================================
-        # PHASE 1: DOWNLOAD ALL PAPERS
+        # PHASE 1: DOWNLOAD ALL PAPERS (with resume support)
         # ============================================
+        # Skip PMIDs that already have FULL_CONTEXT.md (enables resume after crash)
+        already_downloaded = set()
+        for f in self.output_dir.glob("*_FULL_CONTEXT.md"):
+            already_downloaded.add(f.name.replace("_FULL_CONTEXT.md", ""))
+
+        remaining_pmids = [p for p in pmids if str(p) not in already_downloaded]
+
         print(f"{'=' * 60}")
-        print(f"DOWNLOAD PHASE: {len(pmids)} papers")
+        print(f"DOWNLOAD PHASE: {len(pmids)} total, {len(already_downloaded)} already done, {len(remaining_pmids)} to download")
         print(f"{'=' * 60}")
 
-        downloaded_pmids = []
-        download_successful = 0
+        downloaded_pmids = list(already_downloaded)
+        download_successful = len(already_downloaded)
         download_failed = 0
 
-        for idx, pmid in enumerate(pmids, 1):
-            print(f"[{idx}/{len(pmids)}]", end=" ")
+        for idx, pmid in enumerate(remaining_pmids, 1):
+            print(f"[{idx}/{len(remaining_pmids)}]", end=" ")
 
-            success, result, content = self.download_pmid(pmid)
+            try:
+                success, result, content = self.download_pmid(pmid)
+            except Exception as e:
+                logger.error(f"Unexpected error downloading PMID {pmid}: {e}")
+                success = False
+                result = str(e)
+                content = None
 
             if success:
                 download_successful += 1
