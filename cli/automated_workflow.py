@@ -26,6 +26,14 @@ from cli.scout import run_scout
 # Load environment variables from .env file
 load_dotenv()
 
+# Also load xAI key from Boswell-Chief secrets if present (avoids duplicating keys in repo .env)
+if not os.getenv("XAI_API_KEY"):
+    from pathlib import Path as _Path
+
+    _grok_env = _Path("/mnt/temp2/kronckbm/Boswell-Chief/secrets/grok.env")
+    if _grok_env.exists():
+        load_dotenv(dotenv_path=_grok_env, override=False)
+
 # Configure logging using centralized utility
 from gui.checkpoint import CheckpointManager, JobCheckpoint, PipelineStep
 from utils.logging_utils import get_logger, setup_logging

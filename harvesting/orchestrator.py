@@ -24,6 +24,13 @@ from dotenv import load_dotenv
 # regardless of which entry point (CLI, standalone script) invokes us
 load_dotenv()
 
+# Also load xAI key from Boswell-Chief secrets if present (avoids duplicating keys in repo .env)
+# Only loads if XAI_API_KEY is not already set.
+if not os.getenv("XAI_API_KEY"):
+    _grok_env = Path("/mnt/temp2/kronckbm/Boswell-Chief/secrets/grok.env")
+    if _grok_env.exists():
+        load_dotenv(dotenv_path=_grok_env, override=False)
+
 from utils.resilience import CircuitBreaker, ResilientAPIClient
 
 from .core_api import COREAPIClient, get_core_client
@@ -40,6 +47,7 @@ from .supplement_reference_parser import (
     extract_supplement_urls_from_text,
     parse_supplement_references,
 )
+from gene_literature.supplements import UnifiedSupplementFetcher
 from .supplement_scraper import SupplementScraper
 from .unpaywall_api import UnpaywallClient, get_unpaywall_client
 from .wiley_api import WileyAPIClient
@@ -761,117 +769,35 @@ class PMCHarvester:
             List of supplement file dictionaries with 'url' and 'name' keys,
             plus 'base_url' and 'original_url' for PMC supplements
         """
-        pmc_base_url = (
-            f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/" if pmcid else None
-        )
+        all_supplements = []
 
-        # 1. First, try the EuropePMC API
-        api_url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/supplementaryFiles"
+        # 1+2. Unified fetcher: PMC (Europe PMC + XML + NCBI OA) + Elsevier API
         try:
-            response = self.session.get(api_url, timeout=30)
-            response.raise_for_status()
-
-            # Check if response body is not empty
-            if not response.text.strip():
-                raise ValueError("Empty response from API")
-
-            content_type = response.headers.get("Content-Type", "").lower()
-
-            # Try to parse as JSON first
-            if "application/json" in content_type:
-                data = response.json()
-                # The API can return a success response with an empty list of files
-                if data.get("result", {}).get("supplementaryFiles"):
-                    print("  ✓ Found supplemental files via EuropePMC API (JSON)")
-                    supp_files = data["result"]["supplementaryFiles"]
-                    # Add PMC base_url to enable URL variant generation
-                    if pmc_base_url:
-                        for f in supp_files:
-                            f["base_url"] = pmc_base_url
-                            f["original_url"] = f.get("url", "")
-                    return supp_files
-            # Try to parse as XML if JSON fails
-            elif "application/xml" in content_type or "text/xml" in content_type:
-                try:
-                    from xml.etree import ElementTree as ET
-
-                    root = ET.fromstring(response.text)
-                    # Look for supplementary file elements in the XML
-                    supp_files = []
-                    # Common XML paths for supplementary files
-                    for elem in root.iter():
-                        if (
-                            "supplement" in elem.tag.lower()
-                            or "supplementary" in elem.tag.lower()
-                        ):
-                            url = elem.get("url") or elem.get("href") or elem.text
-                            name = (
-                                elem.get("name")
-                                or elem.get("title")
-                                or elem.get("filename")
-                            )
-                            if url and name:
-                                file_info = {"url": url, "name": name}
-                                if pmc_base_url:
-                                    file_info["base_url"] = pmc_base_url
-                                    file_info["original_url"] = url
-                                supp_files.append(file_info)
-                    if supp_files:
-                        print(
-                            f"  ✓ Found {len(supp_files)} supplemental files via EuropePMC API (XML)"
-                        )
-                        return supp_files
-                    # If XML parsing succeeded but no files found, continue to fallback
-                except ET.ParseError as e:
-                    raise ValueError(f"Could not parse XML response: {e}")
-                # If we get here, XML was parsed but no files found - continue to fallback
-            else:
-                raise ValueError(
-                    f"Expected JSON or XML but got Content-Type: {content_type}"
+            unified = UnifiedSupplementFetcher(timeout=30)
+            supplements = unified.fetch_all(pmid, doi or "")
+            if supplements:
+                legacy = unified.to_legacy_format(supplements)
+                # Add PMC base_url for URL variant generation if available
+                if pmcid:
+                    pmc_base_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+                    for f in legacy:
+                        f["base_url"] = pmc_base_url
+                        f["original_url"] = f.get("url", "")
+                logger.info(
+                    f"Unified fetcher found {len(legacy)} supplements for PMID {pmid}"
                 )
-        except requests.exceptions.RequestException as e:
-            print(
-                f"  - EuropePMC supplemental files API request failed for {pmcid}: {e}"
-            )
-        except ValueError as e:
-            print(
-                f"  - EuropePMC supplemental files API returned invalid response for {pmcid}: {e}"
-            )
+                print(f"  ✓ Found {len(legacy)} supplemental files via unified fetcher")
+                all_supplements.extend(legacy)
         except Exception as e:
-            print(f"  - EuropePMC supplemental files API failed for {pmcid}: {e}")
+            logger.warning(f"Unified supplement fetcher failed for {pmid}: {e}")
 
-        # 2. If API fails, try scraping PMC page directly
-        if pmcid:
-            try:
-                pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
-                print(f"  - Trying to scrape PMC page directly: {pmc_url}")
-                pmc_response = self.session.get(
-                    pmc_url, timeout=30, allow_redirects=True
-                )
-                pmc_response.raise_for_status()
-
-                # Use the final URL after redirects as the base URL
-                final_pmc_url = pmc_response.url
-
-                # Use generic scraper for PMC pages
-                pmc_files = self.scraper.scrape_generic_supplements(
-                    pmc_response.text, final_pmc_url
-                )
-                if pmc_files:
-                    print(
-                        f"  ✓ Found {len(pmc_files)} supplemental files via PMC page scraping"
-                    )
-                    return pmc_files
-            except Exception as e:
-                print(f"  - PMC page scraping failed: {e}")
-
-        # 3. If PMC scraping fails, fall back to DOI-based scraping
-        if doi:
+        # 3. Fallback: DOI-based web scraping (existing logic)
+        if not all_supplements and doi:
             print(f"  - Falling back to DOI scraping for {doi}")
             return self.doi_resolver.resolve_and_scrape_supplements(
                 doi, pmid, self.scraper
             )
-        else:
+        elif not all_supplements:
             print("  - API failed and no DOI available. Cannot scrape.")
             pmc_url = (
                 f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
@@ -879,7 +805,8 @@ class PMCHarvester:
                 else "N/A"
             )
             self._log_paywalled(pmid, "Supplemental files API failed, no DOI", pmc_url)
-            return []
+
+        return all_supplements
 
     def download_supplement(
         self,
