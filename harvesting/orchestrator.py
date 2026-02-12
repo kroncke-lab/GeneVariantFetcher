@@ -18,6 +18,11 @@ from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlparse
 
 import requests
+from dotenv import load_dotenv
+
+# Load .env early so NCBI_EMAIL, API keys, etc. are available
+# regardless of which entry point (CLI, standalone script) invokes us
+load_dotenv()
 
 from utils.resilience import CircuitBreaker, ResilientAPIClient
 
@@ -2423,7 +2428,7 @@ class PMCHarvester:
                     )
                 )
 
-            if idx < len(pmids):
+            if idx < len(remaining_pmids):
                 time.sleep(delay)
 
         # Save manifest after download phase
