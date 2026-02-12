@@ -15,9 +15,10 @@ import typer
 from typing_extensions import Annotated
 
 from cli.automated_workflow import automated_variant_extraction_workflow
+from cli.audit_paywalls import run_paywall_audit
 from cli.scout import run_scout
 
-__all__ = ["automated_variant_extraction_workflow", "run_scout", "app"]
+__all__ = ["automated_variant_extraction_workflow", "run_scout", "run_paywall_audit", "app"]
 
 app = typer.Typer(
     help="GeneVariantFetcher CLI - Tools for extracting genetic variant data from literature"
@@ -115,6 +116,40 @@ def extract_command(
     except Exception as e:
         typer.echo(f"\n❌ Workflow failed with error: {e}", err=True)
         raise typer.Exit(1)
+
+
+@app.command("audit-paywalls")
+def audit_paywalls_command(
+    harvest_dir: Annotated[
+        str,
+        typer.Option(
+            "--harvest-dir",
+            help="Harvest directory containing paywalled_missing.csv (typically .../pmc_fulltext)",
+        ),
+    ],
+    out_dir: Annotated[
+        str,
+        typer.Option(
+            "--out-dir",
+            help="Output directory for audit report/json",
+        ),
+    ],
+    limit: Annotated[
+        int,
+        typer.Option("--limit", help="Optional limit for quick tests"),
+    ] = 0,
+):
+    """Audit paywalled_missing.csv to distinguish true paywalls from captcha/blocked or missed OA."""
+    paywalled_csv = Path(harvest_dir) / "paywalled_missing.csv"
+    out_base = Path(out_dir)
+    result = run_paywall_audit(
+        paywalled_csv=paywalled_csv,
+        out_json=out_base / "paywall_audit.json",
+        out_md=out_base / "paywall_audit.md",
+        limit=limit or None,
+    )
+    typer.echo(f"Wrote: {result['out_md']}")
+    typer.echo(f"Wrote: {result['out_json']}")
 
 
 @app.command("scout")
