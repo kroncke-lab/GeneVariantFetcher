@@ -370,15 +370,105 @@ def filter_papers(
 # =============================================================================
 
 
+def _consolidate_prior_downloads(
+    pmids: List[str],
+    harvest_dir: Path,
+    output_base: Path,
+) -> set:
+    """
+    Pre-download step: scan prior run directories for already-acquired
+    FULL_CONTEXT.md files and copy them into the current harvest directory.
+
+    This avoids re-downloading papers that were successfully fetched in
+    previous runs (PMC, publisher APIs, browser downloads, etc.).
+
+    Args:
+        pmids: List of PMIDs we need content for
+        harvest_dir: Current run's harvest directory (pmc_fulltext/)
+        output_base: The gvf_output base directory (parent of gene dirs)
+
+    Returns:
+        Set of PMIDs that were recovered from prior runs
+    """
+    import shutil
+
+    pmid_set = set(str(p) for p in pmids)
+    recovered = set()
+
+    # Already present in current harvest dir
+    already_present = set()
+    for f in harvest_dir.glob("*_FULL_CONTEXT.md"):
+        already_present.add(f.name.replace("_FULL_CONTEXT.md", ""))
+
+    needed = pmid_set - already_present
+    if not needed:
+        return recovered
+
+    # Scan all known prior output directories for FULL_CONTEXT.md files
+    # Walk the entire output base to find any prior downloads
+    prior_files = {}  # pmid -> (path, size)
+    for root, dirs, files in os.walk(str(output_base)):
+        # Skip the current harvest dir to avoid self-references
+        if str(harvest_dir) in root:
+            continue
+        for f in files:
+            if f.endswith("_FULL_CONTEXT.md"):
+                pmid = f.replace("_FULL_CONTEXT.md", "")
+                if pmid in needed:
+                    full_path = Path(root) / f
+                    size = full_path.stat().st_size
+                    # Keep the largest version (most complete)
+                    if pmid not in prior_files or size > prior_files[pmid][1]:
+                        prior_files[pmid] = (full_path, size)
+
+    # Copy recovered files and their associated directories (supplements, figures)
+    for pmid, (src_path, size) in prior_files.items():
+        if size < 500:
+            continue  # Skip near-empty files
+
+        dst_path = harvest_dir / f"{pmid}_FULL_CONTEXT.md"
+        try:
+            shutil.copy2(str(src_path), str(dst_path))
+            recovered.add(pmid)
+
+            # Also copy supplements and figures directories if they exist
+            src_dir = src_path.parent
+            for suffix in ["_supplements", "_figures"]:
+                src_assoc = src_dir / f"{pmid}{suffix}"
+                dst_assoc = harvest_dir / f"{pmid}{suffix}"
+                if src_assoc.is_dir() and not dst_assoc.exists():
+                    shutil.copytree(str(src_assoc), str(dst_assoc))
+
+        except Exception as e:
+            logger.warning(f"Failed to recover PMID {pmid} from {src_path}: {e}")
+
+    if recovered:
+        logger.info(
+            f"✓ Recovered {len(recovered)} papers from prior runs "
+            f"(skipping re-download)"
+        )
+        print(
+            f"\n📂 Pre-download consolidation: recovered {len(recovered)} papers "
+            f"from prior runs"
+        )
+
+    return recovered
+
+
 def download_fulltext(
     pmids: List[str],
     output_path: Path,
     gene_symbol: str,
     max_papers: Optional[int] = None,
     delay: float = 2.0,
+    prior_output_base: Optional[Path] = None,
 ) -> StepResult:
     """
-    Download full-text papers from PMC.
+    Download full-text papers from PMC, with prior-run consolidation.
+
+    Before downloading, scans prior run directories for already-acquired
+    FULL_CONTEXT.md files and copies them in. Only attempts fresh downloads
+    for truly missing PMIDs.
 
     Args:
         pmids: List of PMIDs to download
@@ -386,6 +476,8 @@ def download_fulltext(
         gene_symbol: Gene symbol for naming
         max_papers: Maximum papers to download (None = all)
         delay: Delay between downloads in seconds
+        prior_output_base: Base directory to scan for prior downloads.
+            If None, uses output_path's grandparent (typically gvf_output/).
 
     Returns:
         StepResult with download stats
@@ -398,16 +490,42 @@ def download_fulltext(
     harvester = PMCHarvester(output_dir=str(harvest_dir), gene_symbol=gene_symbol)
 
     pmids_to_download = pmids[:max_papers] if max_papers else pmids
-    harvester.harvest(pmids_to_download, delay=delay)
 
-    # Check results
+    # --- Pre-download consolidation: recover papers from prior runs ---
+    if prior_output_base is None:
+        # Default: walk up to the gvf_output directory
+        # output_path is typically gvf_output/GENE/TIMESTAMP/
+        # We want gvf_output/ as the scan root
+        prior_output_base = output_path.parent.parent
+        # Sanity check - make sure we're not scanning from /
+        if len(str(prior_output_base)) < 10:
+            prior_output_base = output_path
+
+    harvest_dir.mkdir(parents=True, exist_ok=True)
+    recovered_pmids = _consolidate_prior_downloads(
+        pmids_to_download, harvest_dir, prior_output_base
+    )
+
+    # Only send un-recovered PMIDs to the harvester
+    remaining_pmids = [
+        p for p in pmids_to_download if str(p) not in recovered_pmids
+    ]
+    logger.info(
+        f"Download plan: {len(recovered_pmids)} recovered, "
+        f"{len(remaining_pmids)} to download fresh"
+    )
+
+    if remaining_pmids:
+        harvester.harvest(remaining_pmids, delay=delay)
+
+    # Check results — include both freshly downloaded and recovered from prior runs
     success_log = harvest_dir / "successful_downloads.csv"
-    successfully_downloaded = set()
+    successfully_downloaded = set(recovered_pmids)  # Start with recovered
 
     if success_log.exists():
         try:
             df = pd.read_csv(success_log)
-            successfully_downloaded = set(str(p) for p in df["PMID"].tolist())
+            successfully_downloaded.update(str(p) for p in df["PMID"].tolist())
         except Exception as e:
             logger.warning(f"Could not read success log: {e}")
 
@@ -433,12 +551,15 @@ def download_fulltext(
         stats={
             "attempted": len(pmids_to_download),
             "downloaded": len(successfully_downloaded),
+            "recovered_from_prior": len(recovered_pmids),
+            "freshly_downloaded": len(successfully_downloaded) - len(recovered_pmids),
             "paywalled": len(paywalled_pmids),
             "abstract_only": len(abstract_only),
         },
         data={
             "harvest_dir": harvest_dir,
             "downloaded_pmids": list(successfully_downloaded),
+            "recovered_pmids": list(recovered_pmids),
             "abstract_only_pmids": abstract_only,
             "paywalled_pmids": paywalled_pmids,
         },

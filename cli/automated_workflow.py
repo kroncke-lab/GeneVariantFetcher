@@ -329,7 +329,13 @@ def automated_variant_extraction_workflow(
     downloaded_pmids = download_result.data.get("downloaded_pmids", [])
     abstract_only_pmids = download_result.data.get("abstract_only_pmids", [])
 
-    logger.info(f"✓ Successfully downloaded {len(downloaded_pmids)} full-text papers")
+    recovered_pmids = download_result.data.get("recovered_pmids", [])
+    logger.info(f"✓ Successfully obtained {len(downloaded_pmids)} full-text papers")
+    if recovered_pmids:
+        logger.info(
+            f"  ↳ {len(recovered_pmids)} recovered from prior runs, "
+            f"{len(downloaded_pmids) - len(recovered_pmids)} freshly downloaded"
+        )
     logger.info(
         f"✓ {len(abstract_only_pmids)} papers will use abstract-only extraction"
     )
