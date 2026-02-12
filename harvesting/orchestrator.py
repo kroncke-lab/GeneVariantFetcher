@@ -1206,10 +1206,15 @@ class PMCHarvester:
         xml_content = self.pmc_api.get_fulltext_xml(pmcid)
 
         if not xml_content:
-            print("  ❌ Full-text not available from PMC")
-            pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
-            self._log_paywalled(pmid, "Full-text not available", pmc_url)
-            return False, "No full-text", None
+            print("  - Full-text XML not available from PMC, trying publisher APIs...")
+            # Don't give up — try publisher APIs via DOI before marking paywalled
+            if doi:
+                return self._download_free_text_pmid(pmid, doi)
+            else:
+                print("  ❌ No DOI available for publisher API fallback")
+                pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+                self._log_paywalled(pmid, "Full-text not available from PMC and no DOI", pmc_url)
+                return False, "No full-text", None
 
         print("  ✓ Full-text XML retrieved from PMC")
 
@@ -1337,31 +1342,47 @@ class PMCHarvester:
             if not is_free and doi:
                 print("  - Unpaywall failed, trying publisher APIs based on DOI prefix...")
                 
-                # Try publisher APIs based on DOI prefix
+                # Try publisher APIs using proper DOI prefix detection
                 main_markdown = None
                 
-                # Try Elsevier API (10.1016/)
-                if doi.startswith("10.1016/") and self.elsevier_api.is_available:
+                # Try Elsevier API
+                if self.elsevier_api.is_available and self.elsevier_api.is_elsevier_doi(doi):
                     elsevier_markdown, elsevier_error = self._try_elsevier_api(doi, pmid)
                     if elsevier_markdown:
                         main_markdown = elsevier_markdown
                         print("  ✓ Retrieved via Elsevier API fallback")
                 
-                # Try Springer API (10.1007/, 10.1038/, 10.1186/)
-                if not main_markdown and self.springer_api.is_available:
-                    if doi.startswith("10.1007/") or doi.startswith("10.1038/") or doi.startswith("10.1186/"):
-                        springer_markdown, springer_error = self._try_springer_api(doi, pmid)
-                        if springer_markdown:
-                            main_markdown = springer_markdown
-                            print("  ✓ Retrieved via Springer API fallback")
+                # Try Springer API (uses full prefix list from SpringerAPIClient)
+                if not main_markdown and self.springer_api.is_available and self.springer_api.is_springer_doi(doi):
+                    springer_markdown, springer_error = self._try_springer_api(doi, pmid)
+                    if springer_markdown:
+                        main_markdown = springer_markdown
+                        print("  ✓ Retrieved via Springer API fallback")
                 
-                # Try Wiley API (10.1111/, 10.1002/)
-                if not main_markdown and self.wiley_api.is_available:
-                    if doi.startswith("10.1111/") or doi.startswith("10.1002/"):
-                        wiley_markdown, wiley_error = self._try_wiley_api(doi, pmid)
-                        if wiley_markdown:
-                            main_markdown = wiley_markdown
-                            print("  ✓ Retrieved via Wiley API fallback")
+                # Try Wiley API (uses full prefix list from WileyAPIClient)
+                if not main_markdown and self.wiley_api.is_available and self.wiley_api.is_wiley_doi(doi):
+                    wiley_markdown, wiley_error = self._try_wiley_api(doi, pmid)
+                    if wiley_markdown:
+                        main_markdown = wiley_markdown
+                        print("  ✓ Retrieved via Wiley API fallback")
+                
+                # Last resort: try ALL publisher APIs regardless of DOI prefix
+                # (some DOI prefixes aren't in our known lists)
+                if not main_markdown:
+                    for api_name, api, try_fn in [
+                        ("Elsevier", self.elsevier_api, self._try_elsevier_api),
+                        ("Springer", self.springer_api, self._try_springer_api),
+                        ("Wiley", self.wiley_api, self._try_wiley_api),
+                    ]:
+                        if api.is_available:
+                            try:
+                                md, err = try_fn(doi, pmid)
+                                if md:
+                                    main_markdown = md
+                                    print(f"  ✓ Retrieved via {api_name} API (unmatched DOI prefix)")
+                                    break
+                            except Exception:
+                                continue
                 
                 # If we got content from publisher API, process it
                 if main_markdown:
