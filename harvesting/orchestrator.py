@@ -26,6 +26,7 @@ from .core_api import COREAPIClient, get_core_client
 from .doi_resolver import DOIResolver
 from .elsevier_api import ElsevierAPIClient
 from .format_converters import FormatConverter
+from .free_text_flow import initialize_free_text_access
 from .pmc_api import PMCAPIClient
 from .content_validation import validate_content_quality
 from .persistence import (
@@ -34,7 +35,6 @@ from .persistence import (
     initialize_harvest_logs,
     write_pmid_status_file,
 )
-from .publisher_strategy import PublisherAttempt, build_publisher_attempt_plan
 from .priority_queue import Priority, PriorityQueue
 from .priority_queue import Status as QueueStatus
 from .retry_manager import RetryConfig, RetryManager
@@ -1061,182 +1061,32 @@ class PMCHarvester:
         Returns:
             Tuple of (success: bool, result: str, unified_content: Optional[str])
         """
-        # Check if article is marked as free full text
-        is_free, free_url = self.pmc_api.is_free_full_text(pmid)
+        init_state = initialize_free_text_access(
+            pmid=pmid,
+            doi=doi,
+            output_dir=self.output_dir,
+            success_log=self.success_log,
+            pmc_api=self.pmc_api,
+            unpaywall=self.unpaywall,
+            converter=self.converter,
+            elsevier_api=self.elsevier_api,
+            springer_api=self.springer_api,
+            wiley_api=self.wiley_api,
+            try_elsevier_api=self._try_elsevier_api,
+            try_springer_api=self._try_springer_api,
+            try_wiley_api=self._try_wiley_api,
+            doi_resolver=self.doi_resolver,
+            scraper=self.scraper,
+            write_pmid_status=self._write_pmid_status,
+            log_paywalled=self._log_paywalled,
+            logger=logger,
+        )
 
-        if not is_free:
-            # Not marked as free - try Unpaywall as last resort
-            print("  - No PMCID and not marked as free, trying Unpaywall...")
-            if doi:
-                unpaywall_result, unpaywall_error = self.unpaywall.find_open_access(doi)
-                if unpaywall_result and unpaywall_result.get("pdf_url"):
-                    print(
-                        f"  ✓ Unpaywall found OA version: {unpaywall_result.get('oa_status')}"
-                    )
-                    # Download the PDF and convert to markdown
-                    pdf_url = unpaywall_result["pdf_url"]
-                    pdf_path = self.output_dir / f"{pmid}_unpaywall.pdf"
-                    success, dl_error = self.unpaywall.download_pdf(
-                        pdf_url, str(pdf_path)
-                    )
-                    if success:
-                        # Convert PDF to markdown
-                        main_markdown = self.converter.pdf_to_markdown(str(pdf_path))
-                        if main_markdown and len(main_markdown) > 500:
-                            print(
-                                f"  ✓ Retrieved via Unpaywall ({len(main_markdown)} chars)"
-                            )
-                            # Continue with the rest of the flow
-                            is_free = True
-                            free_url = pdf_url
-                        else:
-                            print(
-                                "  - Unpaywall PDF conversion failed or content too short"
-                            )
-                    else:
-                        print(f"  - Unpaywall download failed: {dl_error}")
-                elif unpaywall_result and unpaywall_result.get("landing_page"):
-                    print("  - Unpaywall found landing page but no direct PDF")
-                else:
-                    print(f"  - Unpaywall: {unpaywall_error or 'No OA version found'}")
+        if init_state.early_result is not None:
+            return init_state.early_result
 
-            # If Unpaywall failed but we have a DOI, try publisher APIs before giving up
-            if not is_free and doi:
-                print("  - Unpaywall failed, trying publisher APIs based on DOI prefix...")
-
-                # Build ordered provider attempts: DOI-matched providers first,
-                # then available unmatched providers as a last resort.
-                provider_plan = build_publisher_attempt_plan(
-                    doi,
-                    [
-                        *(
-                            [
-                                PublisherAttempt(
-                                    name="Elsevier",
-                                    should_try=self.elsevier_api.is_elsevier_doi(doi),
-                                    try_fetch=self._try_elsevier_api,
-                                )
-                            ]
-                            if self.elsevier_api.is_available
-                            else []
-                        ),
-                        *(
-                            [
-                                PublisherAttempt(
-                                    name="Springer",
-                                    should_try=self.springer_api.is_springer_doi(doi),
-                                    try_fetch=self._try_springer_api,
-                                )
-                            ]
-                            if self.springer_api.is_available
-                            else []
-                        ),
-                        *(
-                            [
-                                PublisherAttempt(
-                                    name="Wiley",
-                                    should_try=self.wiley_api.is_wiley_doi(doi),
-                                    try_fetch=self._try_wiley_api,
-                                )
-                            ]
-                            if self.wiley_api.is_available
-                            else []
-                        ),
-                    ],
-                )
-
-                main_markdown = None
-
-                for provider in provider_plan:
-                    if main_markdown:
-                        break
-                    try:
-                        md, _ = provider.try_fetch(doi, pmid)
-                    except Exception:
-                        continue
-                    if md:
-                        main_markdown = md
-                        if provider.should_try:
-                            print(f"  ✓ Retrieved via {provider.name} API fallback")
-                        else:
-                            print(
-                                f"  ✓ Retrieved via {provider.name} API (unmatched DOI prefix)"
-                            )
-                        break
-                
-                # If we got content from publisher API, process it
-                if main_markdown:
-                    # Get supplements via DOI resolver
-                    supp_files = self.doi_resolver.resolve_and_scrape_supplements(
-                        doi, pmid, self.scraper
-                    )
-                    
-                    # Process supplements
-                    # Note: supp_files may be dicts (with 'url'/'name' keys) or
-                    # strings (file paths), depending on the scraper
-                    supplement_markdown = ""
-                    for supp_file in supp_files:
-                        try:
-                            # Handle dict results from DOI resolver
-                            if isinstance(supp_file, dict):
-                                supp_name = supp_file.get("name", "supplement")
-                                supp_url = supp_file.get("url", "")
-                                supplement_markdown += f"\n\n## Supplement: {supp_name}\n\n[Available at: {supp_url}]\n"
-                                continue
-                            supp_path = Path(supp_file)
-                            if supp_path.suffix.lower() == ".pdf":
-                                supp_md = self.converter.pdf_to_markdown(str(supp_path))
-                                if supp_md:
-                                    supplement_markdown += f"\n\n## Supplement: {supp_path.name}\n\n{supp_md}"
-                        except (TypeError, ValueError) as e:
-                            logger.warning(f"Skipping supplement for PMID {pmid}: {e}")
-                            continue
-                    
-                    # Create unified markdown
-                    unified_content = main_markdown + supplement_markdown
-                    output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
-                    with open(output_file, "w", encoding="utf-8") as f:
-                        f.write(unified_content)
-                    
-                    print(f"  ✅ Downloaded via publisher API: {output_file.name} ({len(supp_files)} supplements)")
-                    
-                    # Log success
-                    append_success_entry(
-                        self.success_log, pmid, "publisher-api", len(supp_files)
-                    )
-                    
-                    self._write_pmid_status(
-                        pmid,
-                        "extracted",
-                        {
-                            "download_timestamp": datetime.datetime.now().isoformat(),
-                            "variant_count": 0,
-                            "source": "publisher-api-fallback",
-                        },
-                    )
-                    
-                    return True, str(output_file), unified_content
-
-            if not is_free:
-                print(
-                    "  ❌ No PMCID and not available via any method (likely paywalled)"
-                )
-                pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-                self._log_paywalled(
-                    pmid,
-                    "No PMCID found, not free full text, Unpaywall failed, publisher APIs failed",
-                    pubmed_url,
-                )
-                self._write_pmid_status(
-                    pmid,
-                    "paywalled",
-                    {
-                        "download_timestamp": datetime.datetime.now().isoformat(),
-                        "failure_reason": "No PMCID found, not free full text, all methods failed",
-                        "source": "none",
-                    },
-                )
-                return False, "No PMCID", None
+        is_free = init_state.is_free
+        free_url = init_state.free_url
 
         print("  ✓ Article marked as free full text on PubMed")
 
