@@ -36,6 +36,7 @@ from .persistence import (
     initialize_harvest_logs,
     write_pmid_status_file,
 )
+from .supplement_processing_service import process_supplement_files
 from .priority_queue import Priority, PriorityQueue
 from .priority_queue import Status as QueueStatus
 from .retry_manager import RetryConfig, RetryManager
@@ -860,69 +861,31 @@ class PMCHarvester:
         supp_files = self.get_supplemental_files(pmcid, pmid, doi)
         print(f"  Found {len(supp_files)} supplemental files")
 
-        supplement_markdown = ""
-        downloaded_count = 0
-        total_figures_extracted = 0
+        result = process_supplement_files(
+            supp_files=supp_files,
+            supplements_dir=supplements_dir,
+            pmid=pmid,
+            converter=self.converter,
+            download_callback=lambda url, file_path, pmid, filename, supp: self.download_supplement(
+                url,
+                file_path,
+                pmid,
+                filename,
+                supp.get("base_url"),
+                supp.get("original_url"),
+            ),
+            extract_figures=extract_figures,
+            figures_dir=figures_dir,
+            logger=logger,
+            sleep_seconds=0.5,
+        )
 
-        for idx, supp in enumerate(supp_files, 1):
-            url = supp.get("url", "")
-            filename = supp.get("name", f"supplement_{idx}")
-            # Get PMC-specific URL info for trying multiple variants
-            base_url = supp.get("base_url")
-            original_url = supp.get("original_url")
-
-            if not url:
-                continue
-
-            file_path = supplements_dir / filename
-            print(f"    Downloading: {filename}")
-
-            if self.download_supplement(
-                url, file_path, pmid, filename, base_url, original_url
-            ):
-                downloaded_count += 1
-
-                ext = file_path.suffix.lower()
-                supplement_markdown += f"\n\n# SUPPLEMENTAL FILE {idx}: {filename}\n\n"
-
-                if ext in [".xlsx", ".xls"]:
-                    supplement_markdown += self.converter.excel_to_markdown(file_path)
-                elif ext == ".docx":
-                    supplement_markdown += self.converter.docx_to_markdown(file_path)
-                elif ext == ".doc":
-                    supplement_markdown += self.converter.doc_to_markdown(file_path)
-                elif ext == ".pdf":
-                    # Use image extraction if enabled
-                    if extract_figures and figures_dir:
-                        text, images = self.converter.pdf_to_markdown_with_images(
-                            file_path,
-                            output_dir=figures_dir,
-                        )
-                        supplement_markdown += text
-                        if images:
-                            total_figures_extracted += len(images)
-                            logger.info(
-                                f"Extracted {len(images)} figures from {filename}"
-                            )
-                    else:
-                        supplement_markdown += self.converter.pdf_to_markdown(file_path)
-                elif ext in [".txt", ".csv"]:
-                    try:
-                        text = file_path.read_text(encoding="utf-8", errors="ignore")
-                        supplement_markdown += text + "\n\n"
-                    except Exception as e:
-                        supplement_markdown += f"[Error reading text file: {e}]\n\n"
-                else:
-                    supplement_markdown += f"[File available at: {file_path}]\n\n"
-
-            time.sleep(0.5)
-
-        if total_figures_extracted > 0:
+        if result.total_figures_extracted > 0:
             print(
-                f"  ✓ Extracted {total_figures_extracted} figures from PDF supplements"
+                f"  ✓ Extracted {result.total_figures_extracted} figures from PDF supplements"
             )
 
-        return supplement_markdown, downloaded_count
+        return result.supplement_markdown, result.downloaded_count
 
     def download_pmid(self, pmid: str) -> Tuple[bool, str, Optional[str]]:
         """
@@ -1139,65 +1102,28 @@ class PMCHarvester:
             figures_dir.mkdir(exist_ok=True)
 
         print(f"  Found {len(supp_files)} supplemental files")
+        free_text_supp_result = process_supplement_files(
+            supp_files=supp_files,
+            supplements_dir=supplements_dir,
+            pmid=pmid,
+            converter=self.converter,
+            download_callback=lambda url, file_path, pmid, filename, supp: self.download_supplement(
+                url, file_path, pmid, filename
+            ),
+            extract_figures=extract_figures,
+            figures_dir=figures_dir,
+            logger=logger,
+            sleep_seconds=0.5,
+        )
 
-        supplement_markdown = ""
-        downloaded_count = 0
-        total_figures_extracted = 0
-
-        # Download and convert each supplement
-        for idx, supp in enumerate(supp_files, 1):
-            url = supp.get("url", "")
-            filename = supp.get("name", f"supplement_{idx}")
-
-            if not url:
-                continue
-
-            file_path = supplements_dir / filename
-            print(f"    Downloading: {filename}")
-
-            if self.download_supplement(url, file_path, pmid, filename):
-                downloaded_count += 1
-
-                ext = file_path.suffix.lower()
-
-                supplement_markdown += f"\n\n# SUPPLEMENTAL FILE {idx}: {filename}\n\n"
-
-                # Convert supplement to markdown based on file type
-                if ext in [".xlsx", ".xls"]:
-                    supplement_markdown += self.converter.excel_to_markdown(file_path)
-                elif ext == ".docx":
-                    supplement_markdown += self.converter.docx_to_markdown(file_path)
-                elif ext == ".doc":
-                    supplement_markdown += self.converter.doc_to_markdown(file_path)
-                elif ext == ".pdf":
-                    # Use image extraction if enabled
-                    if extract_figures and figures_dir:
-                        text, images = self.converter.pdf_to_markdown_with_images(
-                            file_path,
-                            output_dir=figures_dir,
-                        )
-                        supplement_markdown += text
-                        if images:
-                            total_figures_extracted += len(images)
-                    else:
-                        supplement_markdown += self.converter.pdf_to_markdown(file_path)
-                elif ext in [".txt", ".csv"]:
-                    try:
-                        text = file_path.read_text(encoding="utf-8", errors="ignore")
-                        supplement_markdown += text + "\n\n"
-                    except Exception as e:
-                        supplement_markdown += f"[Error reading text file: {e}]\n\n"
-                else:
-                    supplement_markdown += f"[File available at: {file_path}]\n\n"
-
-            time.sleep(0.5)
-
-        if total_figures_extracted > 0:
+        if free_text_supp_result.total_figures_extracted > 0:
             print(
-                f"  ✓ Extracted {total_figures_extracted} figures from PDF supplements"
+                f"  ✓ Extracted {free_text_supp_result.total_figures_extracted} figures from PDF supplements"
             )
 
         # Create unified markdown file (WITHOUT pedigree extraction)
+        supplement_markdown = free_text_supp_result.supplement_markdown
+        downloaded_count = free_text_supp_result.downloaded_count
         unified_content = main_markdown + supplement_markdown
 
         output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
