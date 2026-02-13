@@ -699,6 +699,97 @@ def download_fulltext(
 # =============================================================================
 
 
+def preprocess_papers(
+    harvest_dir: Path,
+    gene_symbol: str,
+    abstracts_dir: Optional[Path] = None,
+) -> StepResult:
+    """
+    Deterministic pre-processing step. Runs BEFORE Data Scout or LLM extraction.
+    
+    - Strips XML/HTML noise from FULL_CONTEXT.md files
+    - Removes reference sections, copyright boilerplate
+    - Injects PubMed abstracts as guaranteed baseline
+    - Classifies files (full_text, abstract_only, empty, etc.)
+    
+    Modifies files IN-PLACE to minimize token usage in downstream LLM steps.
+    No API calls — pure regex/string operations.
+    """
+    from gvf.preprocessor import PaperPreprocessor
+    
+    if not harvest_dir.exists():
+        return StepResult(
+            success=True,
+            stats={"skipped": True, "reason": "no_harvest_dir"},
+        )
+    
+    # Auto-detect abstracts directory
+    if abstracts_dir is None:
+        # Look for pubmed_abstracts in parent/sibling dirs
+        candidates = [
+            harvest_dir.parent / "pubmed_abstracts",
+            harvest_dir.parent.parent / "pubmed_abstracts",
+            harvest_dir.parent.parent / gene_symbol / "pubmed_abstracts",
+        ]
+        for c in candidates:
+            if c.exists():
+                abstracts_dir = c
+                break
+    
+    preprocessor = PaperPreprocessor(
+        abstracts_dir=str(abstracts_dir) if abstracts_dir else None
+    )
+    
+    files = list(harvest_dir.glob("*_FULL_CONTEXT.md"))
+    if not files:
+        return StepResult(
+            success=True,
+            stats={"skipped": True, "reason": "no_files"},
+        )
+    
+    processed = 0
+    classifications = {}
+    total_original = 0
+    total_cleaned = 0
+    
+    for f in files:
+        try:
+            pmid = f.name.replace("_FULL_CONTEXT.md", "").replace(f"KCNH2_PMID_", "").replace(f"{gene_symbol}_PMID_", "")
+            text = f.read_text(encoding="utf-8", errors="replace")
+            total_original += len(text)
+            
+            classification = preprocessor.classify(text)
+            classifications[classification] = classifications.get(classification, 0) + 1
+            
+            cleaned = preprocessor.clean(text)
+            cleaned = preprocessor.inject_abstract(cleaned, pmid)
+            total_cleaned += len(cleaned)
+            
+            # Write back in-place
+            f.write_text(cleaned, encoding="utf-8")
+            processed += 1
+        except Exception as e:
+            logger.warning(f"Preprocess error for {f.name}: {e}")
+    
+    token_savings_pct = round((1 - total_cleaned / max(1, total_original)) * 100, 1) if total_original > total_cleaned else 0
+    
+    logger.info(f"✓ Preprocessed {processed} papers")
+    logger.info(f"  Classifications: {classifications}")
+    if token_savings_pct > 0:
+        logger.info(f"  Token savings: ~{token_savings_pct}% reduction in text size")
+    
+    return StepResult(
+        success=True,
+        stats={
+            "processed": processed,
+            "classifications": classifications,
+            "original_bytes": total_original,
+            "cleaned_bytes": total_cleaned,
+            "token_savings_pct": token_savings_pct,
+        },
+    )
+
+
 def run_data_scout(
     harvest_dir: Path,
     gene_symbol: str,

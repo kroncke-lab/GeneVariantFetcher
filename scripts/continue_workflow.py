@@ -25,6 +25,7 @@ load_dotenv()
 
 from config.settings import get_settings
 from pipeline.steps import (
+    preprocess_papers,
     aggregate_data,
     download_fulltext,
     extract_variants,
@@ -166,6 +167,17 @@ def continue_workflow(
 
     logger.info(f"✓ Downloaded {len(downloaded_pmids)} full-text papers")
     logger.info(f"✓ {len(abstract_only_pmids)} papers will use abstract-only")
+
+    # Preprocess papers (deterministic cleanup before LLM)
+    logger.info("\n🧹 Preprocessing papers (stripping noise, injecting abstracts)...")
+    preprocess_result = preprocess_papers(
+        harvest_dir=harvest_dir,
+        gene_symbol=gene_symbol,
+    )
+    prep_stats = preprocess_result.stats
+    if not prep_stats.get("skipped"):
+        logger.info(f"✓ Preprocessed {prep_stats.get('processed', 0)} papers")
+        logger.info(f"  Classifications: {prep_stats.get('classifications', {})}")
 
     # Extract variants
     logger.info("\n🧬 Extracting variants...")
