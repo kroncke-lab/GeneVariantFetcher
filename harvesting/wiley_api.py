@@ -20,6 +20,7 @@ from xml.etree import ElementTree as ET
 import requests
 from bs4 import BeautifulSoup
 
+from config.constants import HTTP_TIMEOUT_DEFAULT
 from utils.http_utils import BROWSER_HEADERS
 
 from .format_converters import FormatConverter
@@ -223,7 +224,7 @@ class WileyAPIClient:
             logger.debug(f"TDM API URL: {target_url}")
             # Follow redirects (curl -L behavior) - this is critical per Wiley docs
             return self.session.get(
-                target_url, headers=headers, timeout=30, allow_redirects=True
+                target_url, headers=headers, timeout=HTTP_TIMEOUT_DEFAULT, allow_redirects=True
             )
 
         def _handle_response(
@@ -539,7 +540,7 @@ class WileyAPIClient:
             self._rate_limit()
             response = self.session.get(
                 full_text_url,
-                timeout=30,
+                timeout=HTTP_TIMEOUT_DEFAULT,
                 allow_redirects=True,
                 headers=self._get_wiley_headers(
                     referer="https://onlinelibrary.wiley.com/"
@@ -634,7 +635,7 @@ class WileyAPIClient:
 
         try:
             self._rate_limit()
-            response = self.session.get(doi_url, timeout=30, allow_redirects=True)
+            response = self.session.get(doi_url, timeout=HTTP_TIMEOUT_DEFAULT, allow_redirects=True)
 
             if (
                 response.status_code == 403
@@ -643,7 +644,7 @@ class WileyAPIClient:
             ):
                 response = self.session.get(
                     response.url,
-                    timeout=30,
+                    timeout=HTTP_TIMEOUT_DEFAULT,
                     allow_redirects=True,
                     headers=self._get_wiley_headers(referer="https://doi.org/"),
                 )
@@ -701,7 +702,7 @@ class WileyAPIClient:
                 self._rate_limit()
                 ft_response = self.session.get(
                     fulltext_link,
-                    timeout=30,
+                    timeout=HTTP_TIMEOUT_DEFAULT,
                     allow_redirects=True,
                     headers=self._get_wiley_headers(referer=final_url),
                 )
@@ -899,7 +900,7 @@ class WileyAPIClient:
                 self._rate_limit()
                 response = self.session.get(
                     pdf_url,
-                    timeout=30,
+                    timeout=HTTP_TIMEOUT_DEFAULT,
                     allow_redirects=True,
                     headers=self._get_wiley_headers(
                         referer="https://onlinelibrary.wiley.com/"

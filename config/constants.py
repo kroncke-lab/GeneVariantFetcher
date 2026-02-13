@@ -113,6 +113,47 @@ MIN_EXTRACTION_INPUT_SIZE: int = 500
 # Below this indicates garbage/placeholder text
 MIN_ALPHANUMERIC_RATIO: float = 0.3
 
+# Max characters to send to the LLM in a single extraction prompt
+TEXT_TRUNCATION_MAX_CHARS: int = 60_000
+
+# Lines of context to include around gene mentions during focused truncation
+GENE_CONTEXT_WINDOW_LINES: int = 80
+
+# Minimum number of pipe-delimited columns for a line to count as a table row
+TABLE_MIN_COLUMNS: int = 3
+
+# Table row count above which we try the deterministic parser
+LARGE_TABLE_ROW_THRESHOLD: int = 100
+
+# Deterministic parser minimum variant yield to bypass LLM
+DETERMINISTIC_PARSER_MIN_VARIANTS: int = 50
+
+# Minimum variant gap between extracted and expected to trigger continuation
+CONTINUATION_VARIANT_GAP: int = 5
+
+# Scanner merge minimum confidence threshold
+SCANNER_MERGE_MIN_CONFIDENCE: float = 0.6
+
+# Maximum number of scanner hints to include in the LLM prompt
+SCANNER_MAX_HINTS: int = 50
+
+# Table row hint threshold for raising the adaptive model-cascade bar
+ADAPTIVE_TABLE_THRESHOLD: int = 50
+
+# =============================================================================
+# HTTP Timeouts (seconds)
+# =============================================================================
+
+HTTP_TIMEOUT_DEFAULT: int = 30
+HTTP_TIMEOUT_CONVERSION: int = 120
+HTTP_TIMEOUT_SHORT: int = 10
+
+# =============================================================================
+# Concurrency
+# =============================================================================
+
+DEFAULT_MAX_WORKERS: int = 8
+
 # =============================================================================
 # HTTP Request Constants
 # =============================================================================

@@ -2,7 +2,12 @@
 
 ## Current Focus
 - Improve unique variant recall from 59% → 90%
-- Consolidate duplicate documentation (ARCHITECTURE.md vs GVF_architecture.md)
+
+## Completed
+- [x] Springer API integration (full-text retrieval working)
+- [x] Wire `gene_literature/supplements/` UnifiedSupplementFetcher into orchestrator
+- [x] Fix all test failures and collection errors (18 → 0)
+- [x] Canonical form comparison for variant matching
 
 ## Active Tasks
 - [ ] Browser fetch paywalled papers from top-10 missing PMIDs
@@ -13,6 +18,7 @@
 ## Backlog
 - [ ] Expand validation to SCN5A, KCNQ1
 - [ ] Create golden test sets for non-KCNH2 genes
-- [ ] Document gene_literature/ module
+- [ ] Re-run extraction with regex disabled to measure impact
+- [ ] Consolidate duplicate documentation (ARCHITECTURE.md vs GVF_architecture.md)
 
 See CLAUDE.md for current status and blockers.

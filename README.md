@@ -41,7 +41,7 @@ Validated on KCNH2 (Long QT Syndrome type 2) with manually curated gold standard
 
 Version 2.1.0 improved recall from 19.4% → 59.1% through Springer API integration, enhanced table extraction, and scanner improvements.
 
-> **Note:** Performance varies by gene and literature availability. Cardiac genes (15 validated) have optimized configurations; other genes work generically but may have lower recall.
+> **Note:** Performance varies by gene and literature availability. Cardiac genes (8 validated) have optimized configurations with known protein lengths; other genes work generically but may have lower recall.
 
 ---
 
@@ -113,7 +113,7 @@ pip install playwright && playwright install chromium
 
 ```bash
 gvf --help
-# Should show: extract, scout commands
+# Should show: extract, scout, audit-paywalls commands
 ```
 
 ---
@@ -230,13 +230,17 @@ INPUT: Gene Symbol (e.g., "KCNH2")
          │
          ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│  STAGE 5: FULL-TEXT DOWNLOAD                                        │
-│    Sources (priority order):                                        │
+│  STAGE 5: FULL-TEXT + SUPPLEMENT DOWNLOAD                            │
+│    Full-text sources (priority order):                              │
 │      1. PMC Open Access (BioC XML)                                  │
 │      2. Elsevier API (ScienceDirect)                               │
 │      3. Springer API (SpringerLink)                                │
 │      4. Wiley API                                                   │
 │      5. Unpaywall (OA PDF links)                                   │
+│    Supplement sources (UnifiedSupplementFetcher):                   │
+│      Tier 1: Europe PMC + NCBI OA (free)                           │
+│      Tier 2: Elsevier supplement API                               │
+│      Tier 3: DOI-based web scraping (publisher-specific)           │
 │    Conversion: XML/PDF/Excel/Word → Markdown                        │
 │    Output: pmc_fulltext/{PMID}_FULL_CONTEXT.md                     │
 └─────────────────────────────────────────────────────────────────────┘
@@ -397,20 +401,18 @@ MAX_RETRIES = 3                    # Retry attempts for failed downloads
 
 ### Validated (Cardiac Ion Channels)
 
-These 15 genes have optimized configurations and have been validated against curated datasets:
+These 8 genes have known protein lengths in `utils/variant_normalizer.py` for position validation:
 
-| Gene | Associated Condition |
-|------|---------------------|
-| KCNH2 | Long QT Syndrome Type 2 |
-| KCNQ1 | Long QT Syndrome Type 1 |
-| SCN5A | Brugada Syndrome, Long QT Type 3 |
-| KCNE1 | Long QT Syndrome Type 5 |
-| KCNE2 | Long QT Syndrome Type 6 |
-| KCNJ2 | Andersen-Tawil Syndrome |
-| CACNA1C | Timothy Syndrome |
-| SCN1B, SCN2B, SCN3B | Brugada Syndrome |
-| RYR2 | CPVT |
-| CALM1, CALM2, CALM3 | Calmodulinopathies |
+| Gene | Associated Condition | Protein Length |
+|------|---------------------|---------------|
+| KCNH2 | Long QT Syndrome Type 2 | 1159 aa |
+| KCNQ1 | Long QT Syndrome Type 1 | 676 aa |
+| SCN5A | Brugada Syndrome, Long QT Type 3 | 2016 aa |
+| KCNE1 | Long QT Syndrome Type 5 | 129 aa |
+| KCNE2 | Long QT Syndrome Type 6 | 123 aa |
+| KCNJ2 | Andersen-Tawil Syndrome | 427 aa |
+| CACNA1C | Timothy Syndrome | 2221 aa |
+| RYR2 | CPVT | 4967 aa |
 
 ### Generic Support
 
@@ -452,13 +454,12 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ### Adding Support for New Genes
 
-1. **Add gene config** in `config/gene_config.py`:
+1. **Add protein length** in `utils/variant_normalizer.py`:
    ```python
-   "NEW_GENE": GeneConfig(
-       symbol="NEW_GENE",
-       protein_length=1234,
-       aliases=["ALIAS1", "ALIAS2"],
-   )
+   PROTEIN_LENGTHS = {
+       ...
+       "NEW_GENE": 1234,  # Protein length in amino acids
+   }
    ```
 
 2. **Add variant aliases** (optional) in `utils/variant_normalizer.py`

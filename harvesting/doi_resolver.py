@@ -17,6 +17,8 @@ from urllib.parse import quote, urlparse
 
 import requests
 
+from config.constants import HTTP_TIMEOUT_DEFAULT
+
 logger = logging.getLogger(__name__)
 
 
@@ -147,7 +149,7 @@ class DOIResolver:
                     )
                     time.sleep(backoff)
 
-                response = self.session.get(url, allow_redirects=True, timeout=30)
+                response = self.session.get(url, allow_redirects=True, timeout=HTTP_TIMEOUT_DEFAULT)
                 response.raise_for_status()
                 return response
 
@@ -292,7 +294,7 @@ class DOIResolver:
                             f"  → Attempting to access ScienceDirect page: {sciencedirect_url}"
                         )
                         redirect_response = self.session.get(
-                            sciencedirect_url, allow_redirects=True, timeout=30
+                            sciencedirect_url, allow_redirects=True, timeout=HTTP_TIMEOUT_DEFAULT
                         )
                         redirect_response.raise_for_status()
                         if redirect_response.url != final_url:
@@ -302,7 +304,7 @@ class DOIResolver:
                     else:
                         # Fallback: try following redirect from linkinghub
                         redirect_response = self.session.get(
-                            final_url, allow_redirects=True, timeout=30
+                            final_url, allow_redirects=True, timeout=HTTP_TIMEOUT_DEFAULT
                         )
                         redirect_response.raise_for_status()
                         if redirect_response.url != final_url:
@@ -399,7 +401,7 @@ class DOIResolver:
                         f"  → Attempting to access ScienceDirect page: {sciencedirect_url}"
                     )
                     redirect_response = self.session.get(
-                        sciencedirect_url, allow_redirects=True, timeout=30
+                        sciencedirect_url, allow_redirects=True, timeout=HTTP_TIMEOUT_DEFAULT
                     )
                     redirect_response.raise_for_status()
                     final_url = redirect_response.url

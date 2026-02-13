@@ -18,6 +18,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
+from config.constants import DEFAULT_MAX_WORKERS
+
 logger = logging.getLogger(__name__)
 
 
@@ -242,7 +244,7 @@ def filter_papers(
     enable_tier2: bool = True,
     use_clinical_triage: bool = False,
     tier1_min_keywords: int = 1,
-    tier2_confidence_threshold: float = 0.5,
+    tier2_confidence_threshold: float = 0.3,
 ) -> StepResult:
     """
     Filter papers using tiered filtering.
@@ -614,6 +616,7 @@ def download_fulltext(
     import pandas as pd
 
     from harvesting import PMCHarvester
+    from harvesting.content_validation import validate_content_quality
 
     harvest_dir = output_path / "pmc_fulltext"
     harvester = PMCHarvester(output_dir=str(harvest_dir), gene_symbol=gene_symbol)
@@ -670,6 +673,35 @@ def download_fulltext(
         except Exception:
             pass
 
+    # Post-download content validation across all sources.
+    # This catches junk pages, partial content, and malformed outputs before extraction.
+    invalid_pmids = {}
+    for pmid in list(successfully_downloaded):
+        full_context_path = harvest_dir / f"{pmid}_FULL_CONTEXT.md"
+        if not full_context_path.exists():
+            invalid_pmids[str(pmid)] = "Missing FULL_CONTEXT.md after download"
+            successfully_downloaded.discard(str(pmid))
+            continue
+
+        try:
+            content = full_context_path.read_text(encoding="utf-8", errors="replace")
+            is_valid, reason = validate_content_quality(content)
+            if not is_valid:
+                invalid_pmids[str(pmid)] = reason
+                successfully_downloaded.discard(str(pmid))
+                logger.warning(
+                    "PMID %s failed post-download content validation: %s",
+                    pmid,
+                    reason,
+                )
+        except Exception as e:
+            invalid_pmids[str(pmid)] = f"Validation read error: {e}"
+            successfully_downloaded.discard(str(pmid))
+            logger.warning("PMID %s failed content validation read: %s", pmid, e)
+
+    if invalid_pmids:
+        paywalled_pmids.update(invalid_pmids)
+
     # Identify abstract-only PMIDs
     abstract_only = [
         p for p in pmids_to_download if str(p) not in successfully_downloaded
@@ -683,6 +715,7 @@ def download_fulltext(
             "recovered_from_prior": len(recovered_pmids),
             "freshly_downloaded": len(successfully_downloaded) - len(recovered_pmids),
             "paywalled": len(paywalled_pmids),
+            "post_validation_failed": len(invalid_pmids),
             "abstract_only": len(abstract_only),
         },
         data={
@@ -713,7 +746,7 @@ def preprocess_papers(
     - Injects PubMed abstracts as guaranteed baseline
     - Classifies files (full_text, abstract_only, empty, etc.)
     
-    Modifies files IN-PLACE to minimize token usage in downstream LLM steps.
+    Writes cleaned content to *_CLEANED.md files to avoid mutating source files.
     No API calls — pure regex/string operations.
     """
     from gvf.preprocessor import PaperPreprocessor
@@ -753,6 +786,7 @@ def preprocess_papers(
     total_original = 0
     total_cleaned = 0
     
+    written = 0
     for f in files:
         try:
             pmid = f.name.replace("_FULL_CONTEXT.md", "").replace(f"KCNH2_PMID_", "").replace(f"{gene_symbol}_PMID_", "")
@@ -765,9 +799,10 @@ def preprocess_papers(
             cleaned = preprocessor.clean(text)
             cleaned = preprocessor.inject_abstract(cleaned, pmid)
             total_cleaned += len(cleaned)
-            
-            # Write back in-place
-            f.write_text(cleaned, encoding="utf-8")
+
+            cleaned_path = f.with_name(f.name.replace("_FULL_CONTEXT.md", "_CLEANED.md"))
+            cleaned_path.write_text(cleaned, encoding="utf-8")
+            written += 1
             processed += 1
         except Exception as e:
             logger.warning(f"Preprocess error for {f.name}: {e}")
@@ -787,6 +822,7 @@ def preprocess_papers(
             "original_bytes": total_original,
             "cleaned_bytes": total_cleaned,
             "token_savings_pct": token_savings_pct,
+            "cleaned_files_written": written,
         },
     )
 
@@ -882,7 +918,7 @@ def extract_variants(
     abstract_records: Optional[Dict[str, str]] = None,
     abstract_only_pmids: Optional[List[str]] = None,
     tier_threshold: int = 1,
-    max_workers: int = 8,
+    max_workers: int = DEFAULT_MAX_WORKERS,
     progress_callback: Optional[Callable[[int, int], None]] = None,
 ) -> StepResult:
     """
@@ -907,10 +943,13 @@ def extract_variants(
 
     extraction_dir.mkdir(exist_ok=True)
 
-    # Find markdown files (prefer DATA_ZONES over FULL_CONTEXT)
+    # Find markdown files (prefer DATA_ZONES over CLEANED over FULL_CONTEXT)
     data_zones = {
         f.name.replace("_DATA_ZONES.md", ""): f
         for f in harvest_dir.glob("*_DATA_ZONES.md")
+    }
+    cleaned_context = {
+        f.name.replace("_CLEANED.md", ""): f for f in harvest_dir.glob("*_CLEANED.md")
     }
     full_context = {
         f.name.replace("_FULL_CONTEXT.md", ""): f
@@ -918,9 +957,11 @@ def extract_variants(
     }
 
     markdown_files = []
-    for pmid in set(data_zones.keys()) | set(full_context.keys()):
+    for pmid in set(data_zones.keys()) | set(cleaned_context.keys()) | set(full_context.keys()):
         if pmid in data_zones:
             markdown_files.append(data_zones[pmid])
+        elif pmid in cleaned_context:
+            markdown_files.append(cleaned_context[pmid])
         elif pmid in full_context:
             markdown_files.append(full_context[pmid])
 

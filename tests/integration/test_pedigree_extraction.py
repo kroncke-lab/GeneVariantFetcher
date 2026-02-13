@@ -25,7 +25,7 @@ from harvesting.format_converters import FormatConverter
 from pipeline.pedigree_extractor import PedigreeExtractor
 
 
-def test_pdf_extraction(pdf_path: Path, output_dir: Path):
+def _run_pdf_extraction(pdf_path: Path, output_dir: Path):
     """Test image extraction from a PDF."""
     print(f"\n{'=' * 60}")
     print(f"Testing PDF image extraction")
@@ -60,7 +60,7 @@ def test_pdf_extraction(pdf_path: Path, output_dir: Path):
     return images
 
 
-def test_pedigree_detection(figures_dir: Path, detect_only: bool = False):
+def _run_pedigree_detection(figures_dir: Path, detect_only: bool = False):
     """Test pedigree detection on a figures directory."""
     print(f"\n{'=' * 60}")
     print(f"Testing pedigree detection")
@@ -120,7 +120,7 @@ def test_pedigree_detection(figures_dir: Path, detect_only: bool = False):
     return results
 
 
-def test_full_pipeline(pmid: str, gene: str, output_dir: Path):
+def _run_full_pipeline(pmid: str, gene: str, output_dir: Path):
     """Test the full pipeline on a specific PMID."""
     print(f"\n{'=' * 60}")
     print(f"Testing full pipeline")
@@ -193,21 +193,21 @@ def main():
             return 1
 
         figures_dir = args.output / "figures"
-        images = test_pdf_extraction(args.pdf, figures_dir)
+        images = _run_pdf_extraction(args.pdf, figures_dir)
 
         if images:
             print("\n" + "-" * 60)
-            test_pedigree_detection(figures_dir, detect_only=args.detect_only)
+            _run_pedigree_detection(figures_dir, detect_only=args.detect_only)
 
     elif args.figures:
         if not args.figures.exists():
             print(f"Error: Figures directory not found: {args.figures}")
             return 1
 
-        test_pedigree_detection(args.figures, detect_only=args.detect_only)
+        _run_pedigree_detection(args.figures, detect_only=args.detect_only)
 
     elif args.pmid:
-        test_full_pipeline(args.pmid, args.gene, args.output)
+        _run_full_pipeline(args.pmid, args.gene, args.output)
 
     else:
         parser.print_help()

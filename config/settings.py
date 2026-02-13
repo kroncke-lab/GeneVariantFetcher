@@ -80,7 +80,7 @@ class Settings(BaseSettings):
         description="Max tokens for Tier 2 LLM response",
     )
     tier2_confidence_threshold: float = Field(
-        default=0.5,
+        default=0.3,
         env="TIER2_CONFIDENCE_THRESHOLD",
         description="Minimum confidence to pass Tier 2",
     )
@@ -147,6 +147,28 @@ class Settings(BaseSettings):
         default=True,
         env="SCOUT_USE_CONDENSED",
         description="Prefer DATA_ZONES.md over FULL_CONTEXT.md for extraction",
+    )
+
+    # Extraction Tuning
+    extraction_max_chars: int = Field(
+        default=60_000,
+        env="EXTRACTION_MAX_CHARS",
+        description="Max characters sent to LLM in a single extraction prompt",
+    )
+    scanner_merge_confidence: float = Field(
+        default=0.6,
+        env="SCANNER_MERGE_CONFIDENCE",
+        description="Minimum scanner confidence to merge into LLM results",
+    )
+    scanner_max_hints: int = Field(
+        default=50,
+        env="SCANNER_MAX_HINTS",
+        description="Maximum scanner hints to include in LLM prompt",
+    )
+    max_workers: int = Field(
+        default=8,
+        env="MAX_WORKERS",
+        description="Maximum parallel workers for extraction",
     )
 
     # Figure/Image Extraction Configuration

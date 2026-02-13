@@ -12,9 +12,18 @@ from pathlib import Path
 from typing import List, Optional
 
 from config.constants import (
+    ADAPTIVE_TABLE_THRESHOLD,
+    CONTINUATION_VARIANT_GAP,
+    DETERMINISTIC_PARSER_MIN_VARIANTS,
+    GENE_CONTEXT_WINDOW_LINES,
+    LARGE_TABLE_ROW_THRESHOLD,
     MIN_ALPHANUMERIC_RATIO,
     MIN_CONDENSED_SIZE,
     MIN_EXTRACTION_INPUT_SIZE,
+    SCANNER_MAX_HINTS,
+    SCANNER_MERGE_MIN_CONFIDENCE,
+    TABLE_MIN_COLUMNS,
+    TEXT_TRUNCATION_MAX_CHARS,
 )
 from config.settings import get_settings
 from pipeline.prompts import (
@@ -265,7 +274,7 @@ class ExpertExtractor(BaseLLMCaller):
         full_text: str,
         gene_symbol: Optional[str],
         max_chars: int,
-        context_window: int = 80,
+        context_window: int = GENE_CONTEXT_WINDOW_LINES,
     ) -> Optional[str]:
         """
         Prioritize slices that mention the target gene or contain gene-specific tables.
@@ -328,10 +337,10 @@ class ExpertExtractor(BaseLLMCaller):
         self,
         full_text: str,
         gene_symbol: Optional[str] = None,
-        max_chars: int = 60000,
+        max_chars: int = TEXT_TRUNCATION_MAX_CHARS,
     ) -> str:
         """
-        Keep three slices (head/mid/tail) so large supplemental tables aren’t dropped.
+        Keep three slices (head/mid/tail) so large supplemental tables aren't dropped.
         The middle slice is centered on the last table/supplement mention when found.
         """
         if len(full_text) <= max_chars:
@@ -395,7 +404,7 @@ class ExpertExtractor(BaseLLMCaller):
         for line in full_text.splitlines():
             stripped = line.strip()
             # Count lines that look like real table rows (multiple columns)
-            if stripped.startswith("|") and stripped.count("|") >= 3:
+            if stripped.startswith("|") and stripped.count("|") >= TABLE_MIN_COLUMNS:
                 count += 1
         return count
 
@@ -1044,7 +1053,7 @@ class ExpertExtractor(BaseLLMCaller):
         )
 
         # Only continue if we're missing a significant number of variants
-        if len(variants) >= expected_count or expected_count - len(variants) < 5:
+        if len(variants) >= expected_count or expected_count - len(variants) < CONTINUATION_VARIANT_GAP:
             return base_data
 
         logger.info(
@@ -1320,9 +1329,23 @@ class ExpertExtractor(BaseLLMCaller):
         Uses compact extraction mode for papers with many variants to avoid output truncation.
         """
         logger.info(f"PMID {paper.pmid} - Starting expert extraction with {model}")
-        self.model = model
-        self.max_tokens = self._clamp_max_tokens(model, self.requested_max_tokens)
+        saved_model, saved_max_tokens = self.model, self.max_tokens
+        try:
+            self.model = model
+            self.max_tokens = self._clamp_max_tokens(model, self.requested_max_tokens)
 
+            return self._do_attempt_extraction(paper, model, prepared_full_text, estimated_variants)
+        finally:
+            self.model, self.max_tokens = saved_model, saved_max_tokens
+
+    def _do_attempt_extraction(
+        self,
+        paper: Paper,
+        model: str,
+        prepared_full_text: Optional[str] = None,
+        estimated_variants: Optional[int] = None,
+    ) -> ExtractionResult:
+        """Inner extraction logic called with self.model/self.max_tokens already set."""
         full_text = (
             prepared_full_text
             if prepared_full_text is not None
@@ -1364,11 +1387,11 @@ class ExpertExtractor(BaseLLMCaller):
             estimated_variants = self._estimate_table_rows(scanner_text)
 
         # Fast path: deterministic table parser for very large tables to avoid slow LLM calls
-        if estimated_variants >= 100:
+        if estimated_variants >= LARGE_TABLE_ROW_THRESHOLD:
             parsed_variants = self._parse_markdown_table_variants(
                 scanner_text, paper.gene_symbol
             )
-            if len(parsed_variants) >= 50:
+            if len(parsed_variants) >= DETERMINISTIC_PARSER_MIN_VARIANTS:
                 extracted_data = {
                     "paper_metadata": {
                         "pmid": paper.pmid,
@@ -1415,7 +1438,7 @@ class ExpertExtractor(BaseLLMCaller):
             gene_symbol=paper.gene_symbol or "UNKNOWN",
             source=f"PMID_{paper.pmid}",
         )
-        scanner_hints = scanner_result.get_hints_for_prompt(max_hints=50)
+        scanner_hints = scanner_result.get_hints_for_prompt(max_hints=SCANNER_MAX_HINTS)
         if scanner_result.variants:
             logger.info(
                 f"PMID {paper.pmid} - Variant scanner found {len(scanner_result.variants)} candidates as LLM hints"
@@ -1493,7 +1516,7 @@ class ExpertExtractor(BaseLLMCaller):
                     extracted_data,
                     scanner_result,
                     paper.gene_symbol or "UNKNOWN",
-                    min_confidence=0.6,  # Only merge reasonably confident scanner finds
+                    min_confidence=SCANNER_MERGE_MIN_CONFIDENCE,
                 )
 
             # Filter variants to only keep those matching the target gene
@@ -1568,7 +1591,7 @@ class ExpertExtractor(BaseLLMCaller):
 
         # If we detect a large table, raise the bar so we try the next (stronger) model
         adaptive_threshold = self.tier_threshold
-        if table_row_hint >= 50:
+        if table_row_hint >= ADAPTIVE_TABLE_THRESHOLD:
             table_based_threshold = min(50, max(5, table_row_hint // 3))
             adaptive_threshold = max(self.tier_threshold, table_based_threshold)
             logger.info(

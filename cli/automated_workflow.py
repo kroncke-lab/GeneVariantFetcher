@@ -70,6 +70,7 @@ def automated_variant_extraction_workflow(
         fetch_pmids,
         filter_papers,
         migrate_to_sqlite,
+        preprocess_papers,
     )
 
     # Setup output directory
@@ -349,6 +350,28 @@ def automated_variant_extraction_workflow(
         papers_download_failed=len(abstract_only_pmids),
     )
     run_manifest.update_output_locations(harvest_dir=str(harvest_dir))
+
+    # =========================================================================
+    # STEP 2.2: Deterministic Preprocessing (Non-destructive)
+    # =========================================================================
+    logger.info("\n🧹 STEP 2.2: Preprocessing full-text into *_CLEANED.md files...")
+
+    preprocess_result = preprocess_papers(
+        harvest_dir=harvest_dir,
+        gene_symbol=gene_symbol,
+    )
+    pre_stats = preprocess_result.stats
+    if not pre_stats.get("skipped"):
+        logger.info(
+            "✓ Preprocessed %s papers (%s cleaned files)",
+            pre_stats.get("processed", 0),
+            pre_stats.get("cleaned_files_written", 0),
+        )
+        if pre_stats.get("token_savings_pct", 0) > 0:
+            logger.info(
+                "  ↳ token reduction estimate: %s%%",
+                pre_stats.get("token_savings_pct"),
+            )
 
     # =========================================================================
     # STEP 2.5 (Optional): Run Data Scout for Better Context

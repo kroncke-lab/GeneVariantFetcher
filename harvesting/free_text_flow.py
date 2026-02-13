@@ -7,7 +7,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Dict, Optional, Tuple
 
-from .persistence import append_success_entry
+from .free_text_output_service import (
+    publisher_api_fallback_source,
+    write_free_text_output,
+)
 from .publisher_strategy import PublisherAttempt, build_publisher_attempt_plan
 
 
@@ -162,22 +165,16 @@ def initialize_free_text_access(
             supplement_markdown = _build_supplement_markdown(
                 supp_files=supp_files, converter=converter, logger=logger, pmid=pmid
             )
-            unified_content = main_markdown + supplement_markdown
-            output_file = output_dir / f"{pmid}_FULL_CONTEXT.md"
-            output_file.write_text(unified_content, encoding="utf-8")
-            print(
-                f"  ✅ Downloaded via publisher API: {output_file.name} ({len(supp_files)} supplements)"
-            )
-
-            append_success_entry(success_log, pmid, "publisher-api", len(supp_files))
-            write_pmid_status(
-                pmid,
-                "extracted",
-                {
-                    "download_timestamp": datetime.datetime.now().isoformat(),
-                    "variant_count": 0,
-                    "source": "publisher-api-fallback",
-                },
+            output_file, unified_content = write_free_text_output(
+                output_dir=output_dir,
+                success_log=success_log,
+                pmid=pmid,
+                main_markdown=main_markdown,
+                supplement_markdown=supplement_markdown,
+                downloaded_count=len(supp_files),
+                source=publisher_api_fallback_source(),
+                write_pmid_status=write_pmid_status,
+                download_label="Downloaded via publisher API",
             )
             return FreeTextInitState(
                 is_free=False, free_url=None, early_result=(True, str(output_file), unified_content)

@@ -107,6 +107,31 @@ class FormatConverter:
 
         return "\n".join(md_lines)
 
+    def _pdfplumber_table_to_markdown(self, table: list) -> str:
+        """Normalize a pdfplumber table matrix and convert it to markdown."""
+        if not table:
+            return ""
+
+        normalized_rows = []
+        max_cols = 0
+        for row in table:
+            if row is None:
+                continue
+            cleaned = []
+            for cell in row:
+                text = str(cell).strip() if cell is not None else ""
+                text = re.sub(r"\s+", " ", text)
+                cleaned.append(text)
+            if any(cleaned):
+                max_cols = max(max_cols, len(cleaned))
+                normalized_rows.append(cleaned)
+
+        if not normalized_rows or max_cols < 2:
+            return ""
+
+        padded_rows = [row + [""] * (max_cols - len(row)) for row in normalized_rows]
+        return self._table_lines_to_markdown(padded_rows)
+
     def xml_to_markdown(self, xml_content: str) -> str:
         """
         Convert PubMed Central XML to markdown.
@@ -649,16 +674,32 @@ class FormatConverter:
         except Exception as e:
             print(f"    Warning: PyMuPDF fallback failed for {file_path.name}: {e}")
 
-        # Try pdfplumber as another fallback
+        # Try pdfplumber as another fallback, with table-aware extraction.
         try:
             import pdfplumber
 
             text_content = []
             with pdfplumber.open(str(file_path)) as pdf:
                 for page_num, page in enumerate(pdf.pages, 1):
+                    page_parts = [f"### Page {page_num}"]
                     text = page.extract_text()
                     if text and text.strip():
-                        text_content.append(f"### Page {page_num}\n\n{text.strip()}")
+                        page_parts.append(text.strip())
+
+                    try:
+                        tables = page.extract_tables() or []
+                    except Exception:
+                        tables = []
+
+                    if tables:
+                        for idx, table in enumerate(tables, 1):
+                            md_table = self._pdfplumber_table_to_markdown(table)
+                            if md_table:
+                                page_parts.append(f"#### Table {page_num}.{idx}\n")
+                                page_parts.append(md_table)
+
+                    if len(page_parts) > 1:
+                        text_content.append("\n\n".join(page_parts))
             if text_content:
                 return "\n\n".join(text_content) + "\n\n"
         except ImportError:

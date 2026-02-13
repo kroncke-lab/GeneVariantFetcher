@@ -210,8 +210,8 @@ class TestVariantNormalization:
         assert normalize_variant("P. Arg123His") == "p.Arg123His"
         assert normalize_variant("c. 368G>A") == "c.368G>A"
         assert (
-            normalize_variant("p.  Arg123His") == "p. Arg123His"
-        )  # collapses multiple spaces
+            normalize_variant("p.  Arg123His") == "p.Arg123His"
+        )  # collapses spaces
 
     def test_normalize_variant_none_handling(self):
         assert normalize_variant(None) == ""
@@ -346,7 +346,8 @@ class TestAggregation:
 
         assert len(aggregated) == 4
 
-        key = ("12345678", "p.Arg123His")
+        # Keys now use canonical form: p.Arg123His -> R123H
+        key = ("12345678", "R123H")
         assert key in aggregated
         assert aggregated[key]["carriers_total"] == 10
         assert aggregated[key]["affected_count"] == 7
@@ -361,8 +362,8 @@ class TestAggregation:
 
         assert len(aggregated) == 4
 
-        # Check specific entry
-        key = ("12345678", "p.Arg123His")
+        # Check specific entry - keys now use canonical form
+        key = ("12345678", "R123H")
         assert key in aggregated
         assert aggregated[key]["carriers_total"] == 10
         assert aggregated[key]["affected_count"] == 7
@@ -521,7 +522,7 @@ class TestIntegration:
         conn.close()
 
         # Now run comparison (simplified - just test loading works)
-        from compare_variants import load_excel_data
+        from cli.compare_variants import load_excel_data
 
         df, detected = load_excel_data(excel_path, None, None)
         assert len(df) == 2

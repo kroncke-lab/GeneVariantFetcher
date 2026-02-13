@@ -28,6 +28,7 @@ from .elsevier_api import ElsevierAPIClient
 from .format_converters import FormatConverter
 from .free_text_fetch_service import fetch_main_content_for_free_text
 from .free_text_flow import initialize_free_text_access
+from .free_text_output_service import source_from_free_text_flags, write_free_text_output
 from .pmc_api import PMCAPIClient
 from .content_validation import validate_content_quality
 from .persistence import (
@@ -1121,33 +1122,21 @@ class PMCHarvester:
                 f"  ✓ Extracted {free_text_supp_result.total_figures_extracted} figures from PDF supplements"
             )
 
-        # Create unified markdown file (WITHOUT pedigree extraction)
         supplement_markdown = free_text_supp_result.supplement_markdown
         downloaded_count = free_text_supp_result.downloaded_count
-        unified_content = main_markdown + supplement_markdown
-
-        output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
-        with open(output_file, "w", encoding="utf-8") as f:
-            f.write(unified_content)
-
-        if used_elsevier_api:
-            source_tag = "[via Elsevier API]"
-        elif used_wiley_api:
-            source_tag = "[via Wiley API]"
-        else:
-            source_tag = "[from publisher]"
-        print(
-            f"  ✅ Downloaded: {output_file.name} ({downloaded_count} supplements) {source_tag}"
+        source = source_from_free_text_flags(
+            used_elsevier_api=used_elsevier_api,
+            used_wiley_api=used_wiley_api,
         )
-
-        # Log success with special marker for publisher-sourced content
-        if used_elsevier_api:
-            source_marker = "ELSEVIER_API"
-        elif used_wiley_api:
-            source_marker = "WILEY_API"
-        else:
-            source_marker = "PUBLISHER_FREE"
-        append_success_entry(self.success_log, pmid, source_marker, downloaded_count)
+        output_file, unified_content = write_free_text_output(
+            output_dir=self.output_dir,
+            success_log=self.success_log,
+            pmid=pmid,
+            main_markdown=main_markdown,
+            supplement_markdown=supplement_markdown,
+            downloaded_count=downloaded_count,
+            source=source,
+        )
 
         return True, str(output_file), unified_content
 

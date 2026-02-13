@@ -3,12 +3,15 @@
 Test script to verify DOI resolution and supplemental file scraping.
 """
 
+import pytest
+
 from harvesting import PMCHarvester
 from pathlib import Path
 
 from tests.conftest import TEST_PMC_HARVEST_DIR
 
 
+@pytest.mark.requires_network
 def test_doi_resolution():
     """Test DOI resolution for various publishers."""
 

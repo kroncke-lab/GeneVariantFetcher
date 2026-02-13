@@ -187,7 +187,7 @@ def test_api_configuration():
     return client
 
 
-def test_doi(
+def _run_doi_test(
     client: WileyAPIClient, doi: str, description: str = "", verbose: bool = False
 ):
     """Test fetching a single DOI via TDM API only."""
@@ -236,7 +236,7 @@ def test_doi(
     return False
 
 
-def test_web_scraping(
+def _run_web_scraping(
     client: WileyAPIClient, doi: str, description: str = "", verbose: bool = False
 ):
     """Test fetching a DOI via web scraping (fallback method)."""
@@ -292,7 +292,7 @@ def test_web_scraping(
     return False
 
 
-def test_fetch_fulltext(
+def _run_fetch_fulltext(
     client: WileyAPIClient, doi: str, description: str = "", verbose: bool = False
 ):
     """Test the full fetch_fulltext method (API + web scraping fallback)."""
@@ -361,17 +361,17 @@ def main():
     if args.doi:
         if args.web_only:
             # Test web scraping only
-            success = test_web_scraping(
+            success = _run_web_scraping(
                 client, args.doi, "User-provided DOI", args.verbose
             )
         elif args.full:
             # Test full fetch with fallback
-            success = test_fetch_fulltext(
+            success = _run_fetch_fulltext(
                 client, args.doi, "User-provided DOI", args.verbose
             )
         else:
             # Test API only
-            success = test_doi(client, args.doi, "User-provided DOI", args.verbose)
+            success = _run_doi_test(client, args.doi, "User-provided DOI", args.verbose)
         sys.exit(0 if success else 1)
 
     if args.all or not args.doi:
@@ -388,11 +388,11 @@ def main():
         results = []
         for doi, description in TEST_DOIS:
             if args.web_only:
-                success = test_web_scraping(client, doi, description, args.verbose)
+                success = _run_web_scraping(client, doi, description, args.verbose)
             elif args.full:
-                success = test_fetch_fulltext(client, doi, description, args.verbose)
+                success = _run_fetch_fulltext(client, doi, description, args.verbose)
             else:
-                success = test_doi(client, doi, description, args.verbose)
+                success = _run_doi_test(client, doi, description, args.verbose)
             results.append((doi, success))
 
         # Summary
