@@ -18,18 +18,8 @@ from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlparse
 
 import requests
-from dotenv import load_dotenv
-
-# Load .env early so NCBI_EMAIL, API keys, etc. are available
-# regardless of which entry point (CLI, standalone script) invokes us
-load_dotenv()
-
-# Also load xAI key from Boswell-Chief secrets if present (avoids duplicating keys in repo .env)
-# Only loads if XAI_API_KEY is not already set.
-if not os.getenv("XAI_API_KEY"):
-    _grok_env = Path("/mnt/temp2/kronckbm/Boswell-Chief/secrets/grok.env")
-    if _grok_env.exists():
-        load_dotenv(dotenv_path=_grok_env, override=False)
+from utils.bootstrap import initialize_runtime
+from utils.logging_utils import get_logger
 
 from utils.resilience import CircuitBreaker, ResilientAPIClient
 
@@ -38,6 +28,7 @@ from .doi_resolver import DOIResolver
 from .elsevier_api import ElsevierAPIClient
 from .format_converters import FormatConverter
 from .pmc_api import PMCAPIClient
+from .publisher_strategy import PublisherAttempt, build_publisher_attempt_plan
 from .priority_queue import Priority, PriorityQueue
 from .priority_queue import Status as QueueStatus
 from .retry_manager import RetryConfig, RetryManager
@@ -52,11 +43,7 @@ from .supplement_scraper import SupplementScraper
 from .unpaywall_api import UnpaywallClient, get_unpaywall_client
 from .wiley_api import WileyAPIClient
 
-# Setup logging for circuit breaker monitoring
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 # =============================================================================
@@ -204,11 +191,8 @@ except ImportError:
 
 # Import manifest utilities for tracking download outcomes
 import json
-import logging
 
 from utils.manifest import Manifest, ManifestEntry, Stage, Status
-
-logger = logging.getLogger(__name__)
 
 
 class PMCHarvester:
@@ -224,6 +208,8 @@ class PMCHarvester:
             output_dir: Directory to save harvested files
             gene_symbol: Target gene symbol for data scout analysis
         """
+        initialize_runtime()
+
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
         self.paywalled_log = self.output_dir / "paywalled_missing.csv"
@@ -1273,48 +1259,66 @@ class PMCHarvester:
             # If Unpaywall failed but we have a DOI, try publisher APIs before giving up
             if not is_free and doi:
                 print("  - Unpaywall failed, trying publisher APIs based on DOI prefix...")
-                
-                # Try publisher APIs using proper DOI prefix detection
+
+                # Build ordered provider attempts: DOI-matched providers first,
+                # then available unmatched providers as a last resort.
+                provider_plan = build_publisher_attempt_plan(
+                    doi,
+                    [
+                        *(
+                            [
+                                PublisherAttempt(
+                                    name="Elsevier",
+                                    should_try=self.elsevier_api.is_elsevier_doi(doi),
+                                    try_fetch=self._try_elsevier_api,
+                                )
+                            ]
+                            if self.elsevier_api.is_available
+                            else []
+                        ),
+                        *(
+                            [
+                                PublisherAttempt(
+                                    name="Springer",
+                                    should_try=self.springer_api.is_springer_doi(doi),
+                                    try_fetch=self._try_springer_api,
+                                )
+                            ]
+                            if self.springer_api.is_available
+                            else []
+                        ),
+                        *(
+                            [
+                                PublisherAttempt(
+                                    name="Wiley",
+                                    should_try=self.wiley_api.is_wiley_doi(doi),
+                                    try_fetch=self._try_wiley_api,
+                                )
+                            ]
+                            if self.wiley_api.is_available
+                            else []
+                        ),
+                    ],
+                )
+
                 main_markdown = None
-                
-                # Try Elsevier API
-                if self.elsevier_api.is_available and self.elsevier_api.is_elsevier_doi(doi):
-                    elsevier_markdown, elsevier_error = self._try_elsevier_api(doi, pmid)
-                    if elsevier_markdown:
-                        main_markdown = elsevier_markdown
-                        print("  ✓ Retrieved via Elsevier API fallback")
-                
-                # Try Springer API (uses full prefix list from SpringerAPIClient)
-                if not main_markdown and self.springer_api.is_available and self.springer_api.is_springer_doi(doi):
-                    springer_markdown, springer_error = self._try_springer_api(doi, pmid)
-                    if springer_markdown:
-                        main_markdown = springer_markdown
-                        print("  ✓ Retrieved via Springer API fallback")
-                
-                # Try Wiley API (uses full prefix list from WileyAPIClient)
-                if not main_markdown and self.wiley_api.is_available and self.wiley_api.is_wiley_doi(doi):
-                    wiley_markdown, wiley_error = self._try_wiley_api(doi, pmid)
-                    if wiley_markdown:
-                        main_markdown = wiley_markdown
-                        print("  ✓ Retrieved via Wiley API fallback")
-                
-                # Last resort: try ALL publisher APIs regardless of DOI prefix
-                # (some DOI prefixes aren't in our known lists)
-                if not main_markdown:
-                    for api_name, api, try_fn in [
-                        ("Elsevier", self.elsevier_api, self._try_elsevier_api),
-                        ("Springer", self.springer_api, self._try_springer_api),
-                        ("Wiley", self.wiley_api, self._try_wiley_api),
-                    ]:
-                        if api.is_available:
-                            try:
-                                md, err = try_fn(doi, pmid)
-                                if md:
-                                    main_markdown = md
-                                    print(f"  ✓ Retrieved via {api_name} API (unmatched DOI prefix)")
-                                    break
-                            except Exception:
-                                continue
+
+                for provider in provider_plan:
+                    if main_markdown:
+                        break
+                    try:
+                        md, _ = provider.try_fetch(doi, pmid)
+                    except Exception:
+                        continue
+                    if md:
+                        main_markdown = md
+                        if provider.should_try:
+                            print(f"  ✓ Retrieved via {provider.name} API fallback")
+                        else:
+                            print(
+                                f"  ✓ Retrieved via {provider.name} API (unmatched DOI prefix)"
+                            )
+                        break
                 
                 # If we got content from publisher API, process it
                 if main_markdown:

@@ -44,3 +44,23 @@ jobs:
         env:
           NCBI_EMAIL: "ci@example.com"
           OPENAI_API_KEY: "sk-test-dummy"
+
+  integration-offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest
+      - name: Run offline integration tests
+        run: |
+          pytest -v \
+            tests/test_manifest.py \
+            tests/test_failure_logger.py \
+            tests/test_extract_cli.py

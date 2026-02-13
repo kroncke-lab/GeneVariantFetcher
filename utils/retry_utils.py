@@ -86,7 +86,6 @@ llm_retry = get_standard_retry_decorator(
         requests.exceptions.RequestException,
         ConnectionError,
         TimeoutError,
-        Exception,  # Catch broader exceptions for LLM errors
     ),
 )
 

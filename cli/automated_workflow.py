@@ -19,27 +19,14 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from dotenv import load_dotenv
-
 from cli.scout import run_scout
-
-# Load environment variables from .env file
-load_dotenv()
-
-# Also load xAI key from Boswell-Chief secrets if present (avoids duplicating keys in repo .env)
-if not os.getenv("XAI_API_KEY"):
-    from pathlib import Path as _Path
-
-    _grok_env = _Path("/mnt/temp2/kronckbm/Boswell-Chief/secrets/grok.env")
-    if _grok_env.exists():
-        load_dotenv(dotenv_path=_grok_env, override=False)
 
 # Configure logging using centralized utility
 from gui.checkpoint import CheckpointManager, JobCheckpoint, PipelineStep
+from utils.bootstrap import initialize_runtime
 from utils.logging_utils import get_logger, setup_logging
 from utils.run_manifest import RunManifestManager
 
-setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
 
 
@@ -70,6 +57,9 @@ def automated_variant_extraction_workflow(
         synonyms: List of manually specified gene synonyms to include in searches.
         scout_first: Run Data Scout before extraction to identify high-value data zones.
     """
+    initialize_runtime()
+    setup_logging(level=logging.INFO)
+
     from config.settings import get_settings
     from pipeline.steps import (
         aggregate_data,
@@ -670,6 +660,9 @@ def main():
     """
     Main entry point for automated workflow.
     """
+    initialize_runtime()
+    setup_logging(level=logging.INFO)
+
     import argparse
 
     parser = argparse.ArgumentParser(
