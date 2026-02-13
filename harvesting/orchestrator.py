@@ -9,7 +9,6 @@ Main PMCHarvester class that coordinates all harvesting operations:
 
 import csv
 import datetime
-import logging
 import os
 import re
 import time
@@ -28,6 +27,13 @@ from .doi_resolver import DOIResolver
 from .elsevier_api import ElsevierAPIClient
 from .format_converters import FormatConverter
 from .pmc_api import PMCAPIClient
+from .content_validation import validate_content_quality
+from .persistence import (
+    append_paywalled_entry,
+    append_success_entry,
+    initialize_harvest_logs,
+    write_pmid_status_file,
+)
 from .publisher_strategy import PublisherAttempt, build_publisher_attempt_plan
 from .priority_queue import Priority, PriorityQueue
 from .priority_queue import Status as QueueStatus
@@ -300,28 +306,7 @@ class PMCHarvester:
             self.output_dir / "manual_acquisition_queue.json"
         )
 
-        # Initialize log files with extended columns for carrier data
-        with open(self.paywalled_log, "w", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(
-                [
-                    "PMID",
-                    "Reason",
-                    "URL",
-                    "Abstract_Carriers",
-                    "Affected_Count",
-                    "Unaffected_Count",
-                    "Variants_Mentioned",
-                    "Extraction_Confidence",
-                    "More_In_Fulltext_Probability",
-                    "Priority_Score",
-                    "Notes",
-                ]
-            )
-
-        with open(self.success_log, "w", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(["PMID", "PMCID", "Supplements_Downloaded"])
+        initialize_harvest_logs(self.paywalled_log, self.success_log)
 
     def _log_paywalled(self, pmid: str, reason: str, url: str) -> None:
         """
@@ -332,24 +317,7 @@ class PMCHarvester:
             reason: Why the paper couldn't be downloaded
             url: URL attempted or PubMed URL
         """
-        with open(self.paywalled_log, "a", newline="") as f:
-            writer = csv.writer(f)
-            # Write with empty placeholders for carrier columns
-            writer.writerow(
-                [
-                    pmid,
-                    reason,
-                    url,
-                    "",
-                    "",
-                    "",  # Abstract_Carriers, Affected_Count, Unaffected_Count
-                    "",
-                    "",  # Variants_Mentioned, Extraction_Confidence
-                    "",
-                    "",
-                    "",  # More_In_Fulltext_Probability, Priority_Score, Notes
-                ]
-            )
+        append_paywalled_entry(self.paywalled_log, pmid, reason, url)
 
         # Also add to priority queue for manual acquisition
         try:
@@ -373,129 +341,7 @@ class PMCHarvester:
             status: Status of the PMID (downloaded, extracted, failed, paywalled, no_variants)
             details: Dictionary of details to write to the file
         """
-        import json
-
-        status_dir = self.output_dir / "pmid_status"
-        status_dir.mkdir(exist_ok=True)
-        status_file = status_dir / f"{pmid}.json"
-
-        data = {
-            "pmid": pmid,
-            "status": status,
-            "download_timestamp": details.get(
-                "download_timestamp", datetime.datetime.now().isoformat()
-            ),
-            "extract_timestamp": details.get(
-                "extract_timestamp", datetime.datetime.now().isoformat()
-            ),
-            "variant_count": details.get("variant_count", None),
-            "failure_reason": details.get("failure_reason", None),
-            "source": details.get("source", None),
-        }
-
-        with open(status_file, "w") as f:
-            json.dump(data, f, indent=2)
-
-    # Patterns that indicate junk/non-article content
-    JUNK_CONTENT_PATTERNS = [
-        "we've detected you are running an older version",
-        "browsehappy.com",
-        "phosphositeplus",
-        "uniprot database entry",
-        "sign in to access",
-        "subscribe to read",
-        "please enable javascript",
-        "your browser does not support",
-        "access denied",
-        "403 forbidden",
-        "404 not found",
-        "page not found",
-        "cookies must be enabled",
-        "this site requires javascript",
-    ]
-
-    # Domains that return non-article content
-    JUNK_CONTENT_DOMAINS = {
-        "assays.cancer.gov",
-        "antibodies.cancer.gov",
-        "biocyc.org",
-        "glygen.org",
-        "malacards.org",
-        "lens.org",
-        "clinicaltrials.gov",
-        "medlineplus.gov",
-    }
-
-    def _validate_content_quality(
-        self, content: str, source_url: str = None
-    ) -> Tuple[bool, str]:
-        """
-        Validate that extracted content is actual paper text, not junk.
-
-        Args:
-            content: The extracted markdown/text content
-            source_url: Optional URL the content came from
-
-        Returns:
-            Tuple of (is_valid, reason)
-        """
-        if not content:
-            return False, "Empty content"
-
-        content_lower = content.lower()
-
-        # Check for junk patterns
-        for pattern in self.JUNK_CONTENT_PATTERNS:
-            if pattern in content_lower:
-                return False, f"Junk content detected: '{pattern}'"
-
-        # Check source URL domain
-        if source_url:
-            try:
-                domain = urlparse(source_url).netloc.lower()
-                for junk_domain in self.JUNK_CONTENT_DOMAINS:
-                    if junk_domain in domain:
-                        return False, f"Content from non-article domain: {junk_domain}"
-            except Exception:
-                pass
-
-        # Check minimum length
-        if len(content) < 1500:
-            return False, f"Content too short ({len(content)} chars)"
-
-        # Check for paper-like structure (at least 2 of these indicators)
-        paper_indicators = [
-            "abstract",
-            "introduction",
-            "methods",
-            "results",
-            "discussion",
-            "conclusion",
-            "references",
-            "materials and methods",
-            "patients and methods",
-            "study population",
-        ]
-        indicator_count = sum(1 for ind in paper_indicators if ind in content_lower)
-        if indicator_count < 2:
-            # Also check for variant-related content as an alternative indicator
-            variant_patterns = [
-                r"[A-Z]\d{2,4}[A-Z]",  # A561V
-                r"p\.[A-Z][a-z]{2}\d+",  # p.Ala561
-                r"c\.\d+[ACGT]>[ACGT]",  # c.1234A>G
-                r"mutation",
-                r"variant",
-            ]
-            variant_matches = sum(
-                1 for pat in variant_patterns if re.search(pat, content, re.IGNORECASE)
-            )
-            if variant_matches < 2:
-                return (
-                    False,
-                    f"Missing paper structure (only {indicator_count} indicators) and no variant content",
-                )
-
-        return True, "Valid content"
+        write_pmid_status_file(self.output_dir, pmid, status, details)
 
     def _extract_pmc_figures(self, pmcid: str, pmid: str) -> int:
         """
@@ -1185,9 +1031,7 @@ class PMCHarvester:
                 logger.warning(f"PMID {pmid}: {warning}")
 
         # Log success
-        with open(self.success_log, "a", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow([pmid, pmcid, downloaded_count])
+        append_success_entry(self.success_log, pmid, pmcid, downloaded_count)
 
         self._write_pmid_status(
             pmid,
@@ -1357,9 +1201,9 @@ class PMCHarvester:
                     print(f"  ✅ Downloaded via publisher API: {output_file.name} ({len(supp_files)} supplements)")
                     
                     # Log success
-                    with open(self.success_log, "a", newline="") as f:
-                        writer = csv.writer(f)
-                        writer.writerow([pmid, "publisher-api", len(supp_files)])
+                    append_success_entry(
+                        self.success_log, pmid, "publisher-api", len(supp_files)
+                    )
                     
                     self._write_pmid_status(
                         pmid,
@@ -1464,7 +1308,7 @@ class PMCHarvester:
 
             # Validate content quality (not just length)
             if main_markdown:
-                is_valid, reason = self._validate_content_quality(
+                is_valid, reason = validate_content_quality(
                     main_markdown, f"https://doi.org/{doi}"
                 )
                 if not is_valid:
@@ -1609,7 +1453,7 @@ class PMCHarvester:
 
                     # Validate content quality (not just length, but actual paper content)
                     if main_markdown:
-                        is_valid, reason = self._validate_content_quality(
+                        is_valid, reason = validate_content_quality(
                             main_markdown, final_url
                         )
                         if is_valid:
@@ -1786,9 +1630,7 @@ class PMCHarvester:
             source_marker = "WILEY_API"
         else:
             source_marker = "PUBLISHER_FREE"
-        with open(self.success_log, "a", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow([pmid, source_marker, downloaded_count])
+        append_success_entry(self.success_log, pmid, source_marker, downloaded_count)
 
         return True, str(output_file), unified_content
 
