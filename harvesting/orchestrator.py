@@ -26,6 +26,7 @@ from .core_api import COREAPIClient, get_core_client
 from .doi_resolver import DOIResolver
 from .elsevier_api import ElsevierAPIClient
 from .format_converters import FormatConverter
+from .free_text_fetch_service import fetch_main_content_for_free_text
 from .free_text_flow import initialize_free_text_access
 from .pmc_api import PMCAPIClient
 from .content_validation import validate_content_quality
@@ -1090,293 +1091,33 @@ class PMCHarvester:
 
         print("  ✓ Article marked as free full text on PubMed")
 
-        # Initialize variables for tracking content source
-        main_markdown = None
-        final_url = None
-        supp_files = []
-        used_elsevier_api = False
-        used_wiley_api = False
-
-        # Track whether we need to try web scraping as fallback
-        api_insufficient_content = False
-
-        # Try Elsevier API first if this is an Elsevier article
-        if doi and self.elsevier_api.is_elsevier_doi(doi):
-            elsevier_markdown, elsevier_error = self._try_elsevier_api(doi, pmid)
-            if elsevier_markdown:
-                main_markdown = elsevier_markdown
-                final_url = f"https://doi.org/{doi}"
-                used_elsevier_api = True
-                # Still need to get supplements via scraping
-                supp_files = self.doi_resolver.resolve_and_scrape_supplements(
-                    doi, pmid, self.scraper
-                )
-            elif elsevier_error and "insufficient content" in elsevier_error.lower():
-                api_insufficient_content = True
-                print(
-                    "  → Elsevier API returned abstract only, falling back to web scraping..."
-                )
-
-        # Try Wiley API if this is a Wiley article and Elsevier didn't work
-        if not main_markdown and doi and self.wiley_api.is_wiley_doi(doi):
-            wiley_markdown, wiley_error = self._try_wiley_api(doi, pmid)
-            if wiley_markdown:
-                main_markdown = wiley_markdown
-                final_url = f"https://doi.org/{doi}"
-                used_wiley_api = True
-                # Still need to get supplements via scraping
-                supp_files = self.doi_resolver.resolve_and_scrape_supplements(
-                    doi, pmid, self.scraper
-                )
-            elif wiley_error and "insufficient content" in wiley_error.lower():
-                api_insufficient_content = True
-                print(
-                    "  → Wiley API returned abstract only, falling back to web scraping..."
-                )
-
-        # Try Springer API if this is a Springer/Nature/BMC article
-        if not main_markdown and doi and self.springer_api.is_springer_doi(doi):
-            springer_markdown, springer_error = self._try_springer_api(doi, pmid)
-            if springer_markdown:
-                main_markdown = springer_markdown
-                final_url = f"https://doi.org/{doi}"
-                # Still need to get supplements via scraping
-                supp_files = self.doi_resolver.resolve_and_scrape_supplements(
-                    doi, pmid, self.scraper
-                )
-            elif springer_error and "not openaccess" in springer_error.lower():
-                print(
-                    "  → Springer API: article not OpenAccess, falling back to web scraping..."
-                )
-
-        # Fall back to DOI resolver if publisher APIs didn't work or returned insufficient content
-        if not main_markdown and doi:
-            # Try to fetch full text and supplements from publisher using DOI
-            main_markdown, final_url, supp_files = (
-                self.doi_resolver.resolve_and_fetch_fulltext(doi, pmid, self.scraper)
-            )
-
-            # Validate content quality (not just length)
-            if main_markdown:
-                is_valid, reason = validate_content_quality(
-                    main_markdown, f"https://doi.org/{doi}"
-                )
-                if not is_valid:
-                    print(f"  ⚠ DOI content validation failed: {reason}")
-                    print("  ❌ Skipping - does not contain valid full article text")
-                    self._log_paywalled(
-                        pmid,
-                        f"DOI content validation failed: {reason}",
-                        f"https://doi.org/{doi}",
-                    )
-                    main_markdown = None  # Clear invalid content
-
-        # If no DOI or DOI-based methods failed, try free URL
-        if not main_markdown and free_url:
-            # No DOI, but we have a direct URL to the free full text
-            parsed_url = urlparse(free_url)
-            if parsed_url.netloc in self.SUSPICIOUS_FREE_URL_DOMAINS:
-                print(
-                    f"  - Skipping suspicious free URL on {parsed_url.netloc} (likely non-article content)"
-                )
-                self._log_paywalled(pmid, "Suspicious free URL skipped", free_url)
-                return False, "Suspicious free URL", None
-
-            print(f"  - No DOI, attempting to fetch from free URL: {free_url}")
-
-            # Check if this is an Elsevier URL and try API first
-            if self.elsevier_api.is_available and self.elsevier_api.is_elsevier_url(
-                free_url
-            ):
-                pii = self.elsevier_api.extract_pii_from_url(free_url)
-                if pii:
-                    print(
-                        f"  Trying Elsevier API (with circuit breaker) for PII: {pii}"
-                    )
-                    try:
-                        elsevier_markdown, elsevier_error = (
-                            self.elsevier_client.fetch_fulltext(pii=pii)
-                        )
-                        if elsevier_markdown:
-                            main_markdown = elsevier_markdown
-                            final_url = free_url
-                            used_elsevier_api = True
-                            print(
-                                f"  ✓ Full text retrieved via Elsevier API ({len(main_markdown)} characters)"
-                            )
-                    except Exception as e:
-                        if "circuit breaker" in str(e).lower():
-                            print(
-                                f"  ⚠ Circuit breaker protection activated for Elsevier: {e}"
-                            )
-                        else:
-                            print(f"  - Elsevier API failed: {e}")
-                        # Get supplements via web scraping
-                        try:
-                            response = self.session.get(
-                                free_url, allow_redirects=True, timeout=10
-                            )
-                            response.raise_for_status()
-                            supp_files = self.scraper.scrape_elsevier_supplements(
-                                response.text, response.url
-                            )
-                        except Exception:
-                            supp_files = []
-
-            # Check if this is a Wiley URL and try API
-            if (
-                not main_markdown
-                and self.wiley_api.is_available
-                and self.wiley_api.is_wiley_url(free_url)
-            ):
-                extracted_doi = self.wiley_api.extract_doi_from_url(free_url)
-                if extracted_doi:
-                    print(
-                        f"  Trying Wiley API (with circuit breaker) for DOI: {extracted_doi}"
-                    )
-                    try:
-                        wiley_markdown, wiley_error = self.wiley_client.fetch_fulltext(
-                            doi=extracted_doi
-                        )
-                        if wiley_markdown:
-                            main_markdown = wiley_markdown
-                            final_url = free_url
-                            used_wiley_api = True
-                            print(
-                                f"  ✓ Full text retrieved via Wiley API ({len(main_markdown)} characters)"
-                            )
-                    except Exception as e:
-                        if "circuit breaker" in str(e).lower():
-                            print(
-                                f"  ⚠ Circuit breaker protection activated for Wiley: {e}"
-                            )
-                        else:
-                            print(f"  - Wiley API failed: {e}")
-                        # Get supplements via web scraping
-                        try:
-                            response = self.session.get(
-                                free_url, allow_redirects=True, timeout=10
-                            )
-                            response.raise_for_status()
-                            supp_files = self.scraper.scrape_generic_supplements(
-                                response.text, response.url
-                            )
-                        except Exception:
-                            supp_files = []
-
-            # Fall back to web scraping if API didn't work
-            if not main_markdown:
-                try:
-                    response = self.session.get(
-                        free_url, allow_redirects=True, timeout=10
-                    )
-                    response.raise_for_status()
-                    final_url = response.url
-                    print("  ✓ Retrieved free full text page")
-
-                    # Handle Elsevier linkinghub redirects
-                    domain = urlparse(final_url).netloc
-                    if "linkinghub.elsevier.com" in domain:
-                        try:
-                            pii_match = re.search(r"/pii/([^/?]+)", final_url)
-                            if pii_match:
-                                pii = pii_match.group(1)
-                                sciencedirect_url = f"https://www.sciencedirect.com/science/article/pii/{pii}"
-                                print(
-                                    f"  → Attempting to access ScienceDirect page: {sciencedirect_url}"
-                                )
-                                redirect_response = self.session.get(
-                                    sciencedirect_url, allow_redirects=True, timeout=30
-                                )
-                                redirect_response.raise_for_status()
-                                final_url = redirect_response.url
-                                response = redirect_response
-                                domain = urlparse(final_url).netloc
-                        except Exception as e:
-                            print(f"  - Could not follow redirect from linkinghub: {e}")
-
-                    # Extract full text and supplements from the page
-                    html_content = response.text
-                    main_markdown, title = self.scraper.extract_fulltext(
-                        html_content, final_url
-                    )
-
-                    # Validate content quality (not just length, but actual paper content)
-                    if main_markdown:
-                        is_valid, reason = validate_content_quality(
-                            main_markdown, final_url
-                        )
-                        if is_valid:
-                            print(
-                                f"  ✓ Extracted full text ({len(main_markdown)} characters)"
-                            )
-                        else:
-                            print(f"  ⚠ Content validation failed: {reason}")
-                            print(
-                                "  ❌ Skipping this URL as it doesn't contain valid article content"
-                            )
-                            self._log_paywalled(
-                                pmid,
-                                f"Content validation failed: {reason}",
-                                free_url,
-                            )
-                            main_markdown = None  # Clear invalid content
-                    else:
-                        print("  ❌ Could not extract full text from page")
-
-                    # Get supplements from the page
-                    domain = urlparse(final_url).netloc
-
-                    # Route to domain-specific scraper
-                    if "nature.com" in domain:
-                        supp_files = self.scraper.scrape_nature_supplements(
-                            html_content, final_url
-                        )
-                    elif any(
-                        d in domain
-                        for d in ["gimjournal.org", "sciencedirect.com", "elsevier.com"]
-                    ):
-                        supp_files = self.scraper.scrape_elsevier_supplements(
-                            html_content, final_url
-                        )
-                    else:
-                        supp_files = self.scraper.scrape_generic_supplements(
-                            html_content, final_url
-                        )
-
-                except requests.exceptions.RequestException as e:
-                    print(f"  ❌ Failed to fetch free full text from {free_url}: {e}")
-                    self._log_paywalled(
-                        pmid, f"Free full text fetch failed: {e}", free_url
-                    )
-                    return False, "Free text fetch failed", None
-        elif not main_markdown:
-            # No DOI and no free URL - PubMed indicates "free" but lacks actionable links
-            print("  ❌ No DOI or free URL available to fetch full text")
-            print(
-                "     (PubMed metadata indicates free access but provides no usable link)"
-            )
-            pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-            self._log_paywalled(
-                pmid,
-                "Free full text indicated but no DOI or URL in PubMed metadata",
-                pubmed_url,
-            )
-            return False, "No DOI or URL for free text", None
-
-        if not main_markdown:
-            print("  ❌ Could not retrieve full text from publisher")
-            fallback_url = final_url or (
-                f"https://doi.org/{doi}"
-                if doi
-                else f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-            )
-            self._log_paywalled(pmid, "Free full text extraction failed", fallback_url)
-            return False, "Free text extraction failed", None
-
-        print(
-            f"  ✓ Full text retrieved from publisher ({len(main_markdown)} characters)"
+        content_result = fetch_main_content_for_free_text(
+            pmid=pmid,
+            doi=doi,
+            free_url=free_url,
+            suspicious_free_url_domains=self.SUSPICIOUS_FREE_URL_DOMAINS,
+            elsevier_api=self.elsevier_api,
+            springer_api=self.springer_api,
+            wiley_api=self.wiley_api,
+            elsevier_client=self.elsevier_client,
+            wiley_client=self.wiley_client,
+            session=self.session,
+            scraper=self.scraper,
+            doi_resolver=self.doi_resolver,
+            try_elsevier_api=self._try_elsevier_api,
+            try_wiley_api=self._try_wiley_api,
+            try_springer_api=self._try_springer_api,
+            validate_content_quality=validate_content_quality,
+            log_paywalled=self._log_paywalled,
         )
+        if content_result.early_result is not None:
+            return content_result.early_result
+
+        main_markdown = content_result.main_markdown
+        final_url = content_result.final_url
+        supp_files = content_result.supp_files
+        used_elsevier_api = content_result.used_elsevier_api
+        used_wiley_api = content_result.used_wiley_api
 
         # Create supplements directory
         supplements_dir = self.output_dir / f"{pmid}_supplements"
