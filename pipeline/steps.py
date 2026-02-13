@@ -12,6 +12,7 @@ import csv
 import json
 import logging
 import os
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -931,9 +932,17 @@ def extract_variants(
             if record_path and Path(record_path).exists():
                 abstract_papers.append((pmid, record_path))
 
-    extractor = ExpertExtractor(
-        tier_threshold=tier_threshold, fulltext_dir=str(harvest_dir)
-    )
+    extractor_local = threading.local()
+
+    def get_extractor() -> ExpertExtractor:
+        """Get a thread-local extractor to avoid shared mutable model state."""
+        extractor = getattr(extractor_local, "instance", None)
+        if extractor is None:
+            extractor = ExpertExtractor(
+                tier_threshold=tier_threshold, fulltext_dir=str(harvest_dir)
+            )
+            extractor_local.instance = extractor
+        return extractor
 
     extractions = []
     failures = []
@@ -954,7 +963,7 @@ def extract_variants(
                 gene_symbol=gene_symbol,
             )
 
-            result = extractor.extract(paper)
+            result = get_extractor().extract(paper)
 
             if result.success:
                 output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
@@ -986,7 +995,7 @@ def extract_variants(
                 gene_symbol=gene_symbol,
             )
 
-            result = extractor.extract(paper)
+            result = get_extractor().extract(paper)
 
             if result.success:
                 if result.extracted_data:

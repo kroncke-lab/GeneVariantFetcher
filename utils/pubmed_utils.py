@@ -6,6 +6,7 @@ consolidating different query approaches into a single consistent interface.
 """
 
 import logging
+import os
 from http.client import IncompleteRead
 from typing import Any, Dict, List, Optional, Set
 from urllib.error import URLError
@@ -13,8 +14,6 @@ from urllib.error import URLError
 import requests
 from Bio import Entrez
 from Bio.Entrez.Parser import ValidationError
-
-from config.settings import get_settings
 
 from .retry_utils import api_retry, get_standard_retry_decorator
 
@@ -34,12 +33,25 @@ _RETRYABLE_EXCEPTIONS = (
 def _set_entrez_email(custom_email: Optional[str] = None) -> str:
     """Set ``Entrez.email`` to the provided value or the configured default."""
 
-    email = custom_email or get_settings().ncbi_email
+    email = custom_email or os.getenv("NCBI_EMAIL")
+    if not email:
+        # Keep PubMed helpers usable in isolated tests/utilities without
+        # requiring full application settings initialization.
+        email = "gvf@example.org"
+        logger.warning(
+            "NCBI_EMAIL is not set; falling back to '%s' for Entrez requests.", email
+        )
     Entrez.email = email
     return email
 
 
-@api_retry
+_pubmed_retry = get_standard_retry_decorator(
+    max_attempts=3,
+    retry_exceptions=_RETRYABLE_EXCEPTIONS,
+)
+
+
+@_pubmed_retry
 def query_pubmed_with_entrez(
     query: str,
     max_results: int = 100,

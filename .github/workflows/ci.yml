@@ -40,14 +40,7 @@ jobs:
           pip install pytest pytest-cov
       - name: Run tests
         run: |
-          pytest tests/ -v \
-            --ignore=tests/test_compare_variants.py \
-            --ignore=tests/test_wiley_api.py \
-            --ignore=tests/test_with_pmids_file.py \
-            --ignore=tests/test_free_text_retrieval.py \
-            --ignore=tests/test_pmid_19716085.py \
-            --ignore=tests/test_35688148_functional_study.py \
-            || true  # Don't fail CI on test failures for now
+          pytest tests/unit -v
         env:
           NCBI_EMAIL: "ci@example.com"
           OPENAI_API_KEY: "sk-test-dummy"
