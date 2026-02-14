@@ -37,6 +37,7 @@ class Stage(str, Enum):
     SCOUT = "scout"
     EXTRACT = "extract"
     MIGRATE = "migrate"
+    REFETCH = "refetch"
 
 
 @dataclass

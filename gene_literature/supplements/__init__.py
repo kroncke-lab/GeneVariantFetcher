@@ -14,6 +14,7 @@ Public API:
 """
 
 from .base import SupplementFetcher, SupplementFile
+from .crossref_fetcher import CrossRefSupplementFetcher
 from .elsevier_fetcher import ElsevierSupplementFetcher
 from .pmc_fetcher import PMCSupplementFetcher
 from .unified import UnifiedSupplementFetcher
@@ -23,5 +24,6 @@ __all__ = [
     "SupplementFile",
     "PMCSupplementFetcher",
     "ElsevierSupplementFetcher",
+    "CrossRefSupplementFetcher",
     "UnifiedSupplementFetcher",
 ]

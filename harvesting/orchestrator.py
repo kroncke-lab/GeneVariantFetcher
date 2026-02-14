@@ -17,6 +17,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlparse
 
 import requests
+from bs4 import BeautifulSoup
 from utils.bootstrap import initialize_runtime
 from utils.logging_utils import get_logger
 
@@ -626,7 +627,22 @@ class PMCHarvester:
         except Exception as e:
             logger.warning(f"Unified supplement fetcher failed for {pmid}: {e}")
 
-        # 3. Fallback: DOI-based web scraping (existing logic)
+        # 3. Fallback: PMC HTML scraping for non-OA PMC articles
+        if not all_supplements and pmcid:
+            pmc_html_supps = self.scrape_pmc_html_supplements(pmcid)
+            if pmc_html_supps:
+                logger.info(
+                    "PMC HTML scraper found %s supplements for PMID %s (%s)",
+                    len(pmc_html_supps),
+                    pmid,
+                    pmcid,
+                )
+                print(
+                    f"  ✓ Found {len(pmc_html_supps)} supplemental files via PMC HTML"
+                )
+                all_supplements.extend(pmc_html_supps)
+
+        # 4. Fallback: DOI-based web scraping (existing logic)
         if not all_supplements and doi:
             print(f"  - Falling back to DOI scraping for {doi}")
             return self.doi_resolver.resolve_and_scrape_supplements(
@@ -642,6 +658,80 @@ class PMCHarvester:
             self._log_paywalled(pmid, "Supplemental files API failed, no DOI", pmc_url)
 
         return all_supplements
+
+    def scrape_pmc_html_supplements(self, pmcid: str) -> List[Dict[str, Any]]:
+        """
+        Scrape supplement links from PMC HTML when OA APIs return no files.
+
+        This targets public-access (non-OA) PMC pages where supplement links are
+        visible in HTML but not exposed by OA-specific supplement APIs.
+        """
+        if not pmcid:
+            return []
+
+        base_url = f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/"
+        found_files: List[Dict[str, Any]] = []
+        seen: set[str] = set()
+
+        try:
+            # NCBI guidance: keep requests at or below 3 req/s.
+            time.sleep(0.35)
+            response = self.session.get(base_url, timeout=30)
+            response.raise_for_status()
+        except Exception as exc:
+            logger.warning("PMC HTML supplement fetch failed for %s: %s", pmcid, exc)
+            return []
+
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        # Prefer supplementary sections, then fall back to all links.
+        candidate_links = []
+        selectors = [
+            "div#mc-supplementary-materials a[href]",
+            "div.supplementary-material a[href]",
+            "div.suppl-data a[href]",
+            'section[id*="supplement"] a[href]',
+        ]
+        for selector in selectors:
+            candidate_links.extend(soup.select(selector))
+        if not candidate_links:
+            candidate_links = soup.select("a[href]")
+
+        file_exts = (".xlsx", ".xls", ".csv", ".tsv", ".zip", ".pdf", ".doc", ".docx")
+        for link in candidate_links:
+            href = (link.get("href") or "").strip()
+            if not href:
+                continue
+
+            link_text = link.get_text(" ", strip=True).lower()
+            href_l = href.lower()
+            is_suppish = any(
+                token in (link_text + " " + href_l)
+                for token in ("supplement", "supplementary", "table s", "appendix", "/bin/")
+            )
+            if not is_suppish and not href_l.endswith(file_exts):
+                continue
+
+            normalized = self.scraper._normalize_pmc_url(href, base_url)
+            filename = Path(urlparse(normalized).path).name
+            if not filename:
+                continue
+            if filename.lower().startswith("pmc") and "." not in filename:
+                continue
+            if normalized in seen:
+                continue
+
+            seen.add(normalized)
+            found_files.append(
+                {
+                    "url": normalized,
+                    "name": filename,
+                    "base_url": base_url,
+                    "original_url": href,
+                }
+            )
+
+        return found_files
 
     def download_supplement(
         self,
@@ -841,9 +931,6 @@ class PMCHarvester:
         Returns:
             Tuple containing the combined supplement markdown and number of downloaded files
         """
-        supplements_dir = self.output_dir / f"{pmid}_supplements"
-        supplements_dir.mkdir(exist_ok=True)
-
         # Check if figure extraction is enabled
         extract_figures = False
         try:
@@ -859,8 +946,16 @@ class PMCHarvester:
             figures_dir = self.output_dir / f"{pmid}_figures"
             figures_dir.mkdir(exist_ok=True)
 
+        supplements_dir = self.output_dir / f"{pmid}_supplements"
         supp_files = self.get_supplemental_files(pmcid, pmid, doi)
         print(f"  Found {len(supp_files)} supplemental files")
+        if not supp_files:
+            self._log_paywalled(
+                pmid,
+                "SUPPLEMENT_NOT_FOUND: checked API + HTML/DOI fallbacks",
+                f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/" if pmcid else "",
+            )
+            return "", 0
 
         result = process_supplement_files(
             supp_files=supp_files,
@@ -1083,9 +1178,7 @@ class PMCHarvester:
         used_elsevier_api = content_result.used_elsevier_api
         used_wiley_api = content_result.used_wiley_api
 
-        # Create supplements directory
         supplements_dir = self.output_dir / f"{pmid}_supplements"
-        supplements_dir.mkdir(exist_ok=True)
 
         # Check if figure extraction is enabled
         extract_figures = False
@@ -1103,6 +1196,29 @@ class PMCHarvester:
             figures_dir.mkdir(exist_ok=True)
 
         print(f"  Found {len(supp_files)} supplemental files")
+        if not supp_files:
+            self._log_paywalled(
+                pmid,
+                "SUPPLEMENT_NOT_FOUND: checked publisher/API fallbacks",
+                final_url or free_url or f"https://doi.org/{doi}" if doi else "",
+            )
+            supplement_markdown = ""
+            downloaded_count = 0
+            source = source_from_free_text_flags(
+                used_elsevier_api=used_elsevier_api,
+                used_wiley_api=used_wiley_api,
+            )
+            output_file, unified_content = write_free_text_output(
+                output_dir=self.output_dir,
+                success_log=self.success_log,
+                pmid=pmid,
+                main_markdown=main_markdown,
+                supplement_markdown=supplement_markdown,
+                downloaded_count=downloaded_count,
+                source=source,
+            )
+            return True, str(output_file), unified_content
+
         free_text_supp_result = process_supplement_files(
             supp_files=supp_files,
             supplements_dir=supplements_dir,

@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from .base import SupplementFetcher, SupplementFile
+from .crossref_fetcher import CrossRefSupplementFetcher
 from .elsevier_fetcher import ElsevierSupplementFetcher
 from .pmc_fetcher import PMCSupplementFetcher
 
@@ -34,11 +35,13 @@ class UnifiedSupplementFetcher:
         self.timeout = timeout
         self.pmc_fetcher = PMCSupplementFetcher(timeout=timeout)
         self.elsevier_fetcher = ElsevierSupplementFetcher(timeout=timeout)
+        self.crossref_fetcher = CrossRefSupplementFetcher(timeout=timeout)
 
         # Ordered list of fetchers to try
         self._fetchers: List[SupplementFetcher] = [
             self.pmc_fetcher,
             self.elsevier_fetcher,
+            self.crossref_fetcher,
         ]
 
     def fetch_all(self, pmid: str, doi: str = "") -> List[SupplementFile]:
