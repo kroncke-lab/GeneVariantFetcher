@@ -55,10 +55,50 @@ VARIANT_PATTERNS = [
 ]
 
 
+def _is_binary_content(content: str) -> tuple[bool, str]:
+    """Check if content appears to be binary data rather than text.
+    
+    PDF conversion failures can produce files with raw binary data.
+    This catches those cases before they pollute FULL_CONTEXT.md files.
+    """
+    if not content:
+        return False, ""
+    
+    # Check for PDF magic bytes at start
+    if content.startswith('%PDF'):
+        return True, "Raw PDF binary (starts with %PDF)"
+    
+    # Check first 1000 chars for high ratio of non-printable characters
+    sample = content[:1000]
+    non_printable = sum(1 for c in sample if ord(c) < 32 and c not in '\n\r\t')
+    ratio = non_printable / len(sample) if sample else 0
+    
+    if ratio > 0.1:  # More than 10% non-printable = likely binary
+        return True, f"Binary content detected ({ratio:.1%} non-printable chars)"
+    
+    # Check for common binary patterns (null bytes, control chars)
+    if '\x00' in sample:
+        return True, "Contains null bytes (binary data)"
+    
+    # Check for excessive high-byte chars (common in corrupted PDF extraction)
+    high_bytes = sum(1 for c in sample if ord(c) > 127)
+    high_ratio = high_bytes / len(sample) if sample else 0
+    
+    if high_ratio > 0.3:  # More than 30% high-byte chars
+        return True, f"Likely binary/corrupted content ({high_ratio:.1%} high-byte chars)"
+    
+    return False, ""
+
+
 def validate_content_quality(content: str, source_url: str | None = None) -> tuple[bool, str]:
     """Validate harvested content is likely a real paper."""
     if not content:
         return False, "Empty content"
+
+    # Check for binary content first (PDF conversion failures)
+    is_binary, binary_reason = _is_binary_content(content)
+    if is_binary:
+        return False, binary_reason
 
     content_lower = content.lower()
 
