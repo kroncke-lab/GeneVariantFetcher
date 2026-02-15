@@ -147,7 +147,12 @@ class PaperPreprocessor:
         return text.strip()
     
     def inject_abstract(self, text, pmid):
-        """Inject PubMed abstract at the top if available."""
+        """Inject PubMed abstract at the top if available and not already present.
+        
+        Deduplication: Check if the abstract text is already in the document
+        (full-text papers often include their own abstract). Only inject if
+        the abstract content is NOT found in the existing text.
+        """
         if not self.abstracts_dir:
             return text
         
@@ -156,7 +161,19 @@ class PaperPreprocessor:
             return text
         
         with open(abs_file, 'r') as f:
-            abstract = f.read()
+            abstract = f.read().strip()
+        
+        if not abstract:
+            return text
+        
+        # Deduplication check: if the first 200 chars of abstract are already
+        # present in the text (fuzzy match), skip injection to avoid doubling
+        abstract_sample = abstract[:200].lower().replace('\n', ' ').replace('  ', ' ')
+        text_lower = text[:10000].lower().replace('\n', ' ').replace('  ', ' ')  # Check first 10K chars
+        
+        if abstract_sample in text_lower:
+            # Abstract already present in document
+            return text
         
         header = "## PUBMED ABSTRACT (Authoritative Source)\n\n"
         return header + abstract + "\n\n---\n\n## FULL TEXT CONTENT\n\n" + text
