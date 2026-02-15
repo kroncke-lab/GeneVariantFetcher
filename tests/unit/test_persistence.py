@@ -36,6 +36,18 @@ def test_append_entries_and_status_file(tmp_path):
     assert "123,reason,http://example.org" in paywalled_rows[1]
     assert success_rows[1] == "456,PMC456,2"
 
+    # Verify classification column is present in header
+    assert "Classification" in paywalled_rows[0]
+
+    # Test with classification parameter
+    append_paywalled_entry(
+        paywalled_log, "789", "blocked", "http://example.org",
+        classification="CAPTCHA_BLOCKED",
+    )
+    paywalled_rows = paywalled_log.read_text(encoding="utf-8").splitlines()
+    assert len(paywalled_rows) == 3
+    assert "CAPTCHA_BLOCKED" in paywalled_rows[2]
+
     status_file = write_pmid_status_file(
         output_dir=tmp_path,
         pmid="456",

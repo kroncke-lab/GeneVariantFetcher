@@ -210,6 +210,16 @@ class PMCHarvester:
 
     SUSPICIOUS_FREE_URL_DOMAINS = {"antibodies.cancer.gov"}
 
+    @property
+    def _should_extract_figures(self) -> bool:
+        """Check if figure extraction is enabled in settings."""
+        try:
+            if get_settings is not None:
+                return get_settings().extract_figures
+        except Exception:
+            return False
+        return False
+
     def __init__(self, output_dir: str = "pmc_harvest", gene_symbol: str = None):
         """
         Initialize PMC Harvester.
@@ -312,16 +322,22 @@ class PMCHarvester:
 
         initialize_harvest_logs(self.paywalled_log, self.success_log)
 
-    def _log_paywalled(self, pmid: str, reason: str, url: str) -> None:
+    def _log_paywalled(
+        self, pmid: str, reason: str, url: str, classification: str = ""
+    ) -> None:
         """
-        Log a paper to the paywalled/missing CSV with placeholder columns.
+        Log a paper to the paywalled/missing CSV.
 
         Args:
             pmid: PubMed ID
             reason: Why the paper couldn't be downloaded
             url: URL attempted or PubMed URL
+            classification: One of PAYWALLED, CAPTCHA_BLOCKED,
+                INSTITUTIONAL_ACCESS, SUPPLEMENT_ONLY, API_LIMIT, or empty.
         """
-        append_paywalled_entry(self.paywalled_log, pmid, reason, url)
+        append_paywalled_entry(
+            self.paywalled_log, pmid, reason, url, classification=classification
+        )
 
         # Also add to priority queue for manual acquisition
         try:
@@ -361,14 +377,8 @@ class PMCHarvester:
         Returns:
             Number of figures extracted
         """
-        # Check if figure extraction is enabled
-        try:
-            if get_settings is not None:
-                settings = get_settings()
-                if not settings.extract_figures:
-                    return 0
-        except Exception:
-            pass
+        if not self._should_extract_figures:
+            return 0
 
         if not pmcid:
             return 0
@@ -655,7 +665,10 @@ class PMCHarvester:
                 if pmcid
                 else "N/A"
             )
-            self._log_paywalled(pmid, "Supplemental files API failed, no DOI", pmc_url)
+            self._log_paywalled(
+                pmid, "Supplemental files API failed, no DOI", pmc_url,
+                classification="SUPPLEMENT_ONLY",
+            )
 
         return all_supplements
 
@@ -914,7 +927,10 @@ class PMCHarvester:
         # All URL variants failed
         print(f"    Error downloading {filename}: {last_error}")
         # Log failed supplemental download
-        self._log_paywalled(pmid, f"Supplemental file download failed: {filename}", url)
+        self._log_paywalled(
+            pmid, f"Supplemental file download failed: {filename}", url,
+            classification="SUPPLEMENT_ONLY",
+        )
         return False
 
     def _process_supplements(self, pmid: str, pmcid: str, doi: str) -> Tuple[str, int]:
@@ -931,14 +947,7 @@ class PMCHarvester:
         Returns:
             Tuple containing the combined supplement markdown and number of downloaded files
         """
-        # Check if figure extraction is enabled
-        extract_figures = False
-        try:
-            if get_settings is not None:
-                settings = get_settings()
-                extract_figures = settings.extract_figures
-        except Exception:
-            pass
+        extract_figures = self._should_extract_figures
 
         # Create figures directory if extracting
         figures_dir = None
@@ -954,6 +963,7 @@ class PMCHarvester:
                 pmid,
                 "SUPPLEMENT_NOT_FOUND: checked API + HTML/DOI fallbacks",
                 f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/" if pmcid else "",
+                classification="SUPPLEMENT_ONLY",
             )
             return "", 0
 
@@ -1037,7 +1047,10 @@ class PMCHarvester:
             else:
                 print("  ❌ No DOI available for publisher API fallback")
                 pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
-                self._log_paywalled(pmid, "Full-text not available from PMC and no DOI", pmc_url)
+                self._log_paywalled(
+                    pmid, "Full-text not available from PMC and no DOI", pmc_url,
+                    classification="PAYWALLED",
+                )
                 return False, "No full-text", None
 
         print("  ✓ Full-text XML retrieved from PMC")
@@ -1081,6 +1094,7 @@ class PMCHarvester:
                 pmid,
                 f"Content validation failed: {validation_reason}",
                 f"PMCID: {pmcid}",
+                classification="CONTENT_INVALID",
             )
             return False, f"Content validation failed: {validation_reason}", None
 
@@ -1191,14 +1205,7 @@ class PMCHarvester:
 
         supplements_dir = self.output_dir / f"{pmid}_supplements"
 
-        # Check if figure extraction is enabled
-        extract_figures = False
-        try:
-            if get_settings is not None:
-                settings = get_settings()
-                extract_figures = settings.extract_figures
-        except Exception:
-            pass
+        extract_figures = self._should_extract_figures
 
         # Create figures directory if extracting
         figures_dir = None
@@ -1212,6 +1219,7 @@ class PMCHarvester:
                 pmid,
                 "SUPPLEMENT_NOT_FOUND: checked publisher/API fallbacks",
                 final_url or free_url or f"https://doi.org/{doi}" if doi else "",
+                classification="SUPPLEMENT_ONLY",
             )
             supplement_markdown = ""
             downloaded_count = 0

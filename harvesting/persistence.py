@@ -18,6 +18,7 @@ def initialize_harvest_logs(paywalled_log: Path, success_log: Path) -> None:
                 "PMID",
                 "Reason",
                 "URL",
+                "Classification",
                 "Abstract_Carriers",
                 "Affected_Count",
                 "Unaffected_Count",
@@ -35,9 +36,22 @@ def initialize_harvest_logs(paywalled_log: Path, success_log: Path) -> None:
 
 
 def append_paywalled_entry(
-    paywalled_log: Path, pmid: str, reason: str, url: str
+    paywalled_log: Path,
+    pmid: str,
+    reason: str,
+    url: str,
+    classification: str = "",
 ) -> None:
-    """Append one paywalled/missing entry row."""
+    """Append one paywalled/missing entry row.
+
+    Args:
+        paywalled_log: Path to CSV log file.
+        pmid: PubMed ID.
+        reason: Why the paper couldn't be downloaded.
+        url: URL attempted.
+        classification: One of PAYWALLED, CAPTCHA_BLOCKED,
+            INSTITUTIONAL_ACCESS, SUPPLEMENT_ONLY, API_LIMIT, or empty.
+    """
     with open(paywalled_log, "a", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(
@@ -45,6 +59,7 @@ def append_paywalled_entry(
                 pmid,
                 reason,
                 url,
+                classification,
                 "",
                 "",
                 "",

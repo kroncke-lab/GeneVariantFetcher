@@ -1,122 +1,135 @@
 #!/usr/bin/env python3
 """
-Test script for improved variant normalizer.
-Tests against real KCNH2 data from missing_in_sqlite.csv
+Tests for variant normalization functions.
+
+Includes test cases migrated from test_tier2_fixes.py (root) covering:
+- Frameshift, nonsense, deletion, duplication normalization
+- Fuzzy variant matching
+- Baseline matching with normalization
 """
 
-import csv
-import os
-import sys
+import pytest
 
-# Add project root to path
-sys.path.insert(
-    0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.variant_normalizer import (
+    normalize_deletion,
+    normalize_duplication,
+    normalize_frameshift,
+    normalize_nonsense,
+    normalize_variant,
+    match_variants_fuzzy,
+    match_variants_to_baseline,
+    VariantNormalizer,
 )
 
-from utils.variant_normalizer import VariantNormalizer
+
+# ---------------------------------------------------------------------------
+# Frameshift normalization
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    "raw, expected",
+    [
+        ("L987fs", "L987fsX"),
+        ("L987fsX", "L987fsX"),
+        ("L987fsX10", "L987fsX"),
+        ("L987fs*10", "L987fsX"),
+        ("p.Leu987fs", "L987fsX"),
+        ("p.Leu987fsTer10", "L987fsX"),
+        ("p.Leu987Profs*10", "L987fsX"),
+        ("987fs", "?987fsX"),
+        ("fs987", "?987fsX"),
+    ],
+)
+def test_normalize_frameshift(raw, expected):
+    assert normalize_frameshift(raw) == expected
 
 
-def load_test_variants(csv_file):
-    """Load variants from CSV file for testing."""
-    variants = []
-    with open(csv_file, "r") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            if row["excel_variant_raw"] and row["missing_in_sqlite"] == "True":
-                variants.append(
-                    {
-                        "raw": row["excel_variant_raw"],
-                        "expected_normalized": row["excel_variant_norm"],
-                        "gene": "KCNH2",
-                    }
-                )
-    return variants
+# ---------------------------------------------------------------------------
+# Nonsense normalization
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    "raw, expected",
+    [
+        ("W1001X", "W1001X"),
+        ("W1001*", "W1001X"),
+        ("p.Trp1001Ter", "W1001X"),
+        ("p.Trp1001*", "W1001X"),
+        ("R864stop", "R864X"),
+        ("R864sp", "R864X"),
+    ],
+)
+def test_normalize_nonsense(raw, expected):
+    assert normalize_nonsense(raw) == expected
 
 
-def test_normalization_coverage():
-    """Test normalization coverage on real data."""
-    normalizer = VariantNormalizer("KCNH2")
+# ---------------------------------------------------------------------------
+# Deletion normalization
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    "raw, expected",
+    [
+        ("del552", "?552del"),
+        ("p.Leu552del", "L552del"),
+        ("L552del", "L552del"),
+        ("L552_L555del", "L552_L555del"),
+    ],
+)
+def test_normalize_deletion(raw, expected):
+    assert normalize_deletion(raw) == expected
 
-    # Get path to test data
-    test_file = "/mnt/temp2/kronckbm/gitrepos/GeneVariantFetcher/comparison_results/missing_in_sqlite.csv"
 
-    if not os.path.exists(test_file):
-        print("Test file not found, using synthetic test cases...")
-        test_cases = [
-            {"raw": "A561V", "expected": "p.Ala561Val"},
-            {"raw": "A561T", "expected": "p.Ala561Thr"},
-            {"raw": "A1017fsX", "expected": "p.Ala1017fs*"},
-            {"raw": "R752W", "expected": "p.Arg752Trp"},
-            {"raw": "D864sp", "expected": "p.Asp864*"},
-            {"raw": "G184Del", "expected": "p.Gly184del"},
-            {"raw": "G189Ins", "expected": "p.Gly189ins"},
-            {"raw": "p.Ala561Val", "expected": "p.Ala561Val"},  # Already correct
-            {"raw": "p.A561V", "expected": "p.Ala561Val"},  # Needs expansion
-        ]
-    else:
-        test_cases = load_test_variants(test_file)[:50]  # First 50 for testing
+# ---------------------------------------------------------------------------
+# Duplication normalization
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    "raw, expected",
+    [
+        ("L552dup", "L552dup"),
+        ("p.Leu552dup", "L552dup"),
+        ("dup552", "?552dup"),
+    ],
+)
+def test_normalize_duplication(raw, expected):
+    assert normalize_duplication(raw) == expected
 
-    # Track statistics
-    stats = {"total": len(test_cases), "normalized": 0, "failed": 0, "details": {}}
 
-    print("Testing Variant Normalizer Improvements")
-    print("=" * 50)
+# ---------------------------------------------------------------------------
+# Fuzzy matching
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    "v1, v2, expected_match",
+    [
+        ("L987fs", "L987fsX10", True),
+        ("p.Leu987fsTer10", "L987fs", True),
+        ("W1001X", "p.Trp1001*", True),
+        ("A561V", "A562V", True),  # Off by 1
+        ("A561V", "A563V", False),  # Off by 2 -> no match
+        ("A561V", "G561V", False),  # Different ref AA
+    ],
+)
+def test_match_variants_fuzzy(v1, v2, expected_match):
+    is_match, _match_type = match_variants_fuzzy(v1, v2)
+    assert is_match == expected_match
 
-    for test_case in test_cases:
-        raw = test_case["raw"]
-        expected = test_case["expected_normalized"]
-        normalized = normalizer.normalize_protein(raw)
 
-        success = normalized is not None
-        is_correct = normalized == expected
-
-        stats["details"][raw] = {
-            "raw": raw,
-            "normalized": normalized,
-            "expected": expected if "expected" in test_case else "N/A",
-            "success": success,
-            "correct": is_correct,
-        }
-
-        if success:
-            stats["normalized"] += 1
-            if not is_correct:
-                stats["failed"] += 1
-
-    # Print results
-    print(f"Total test cases: {stats['total']}")
-    print(
-        f"Successfully normalized: {stats['normalized']} ({100 * stats['normalized'] / stats['total']:.1f}%)"
-    )
-    print(f"Failed: {stats['failed']}")
-    print()
-
-    print("Sample results:")
-    for i, (raw, details) in enumerate(stats["details"].items()):
-        if i >= 10:  # Show first 10
-            print("...")
-            break
-        status = "✓" if details["success"] else "✗"
-        print(
-            f"{status} {details['raw']} → {details['normalized']} (expected: {details['expected']})"
-        )
-
-    # Print failed cases for debugging
-    failed_cases = [
-        d for d in stats["details"].values() if not d["success"] or not d["correct"]
+# ---------------------------------------------------------------------------
+# Baseline matching
+# ---------------------------------------------------------------------------
+def test_match_variants_to_baseline():
+    baseline = {"A561V", "G584S", "L987fsX", "W1001X", "L552del"}
+    extracted = [
+        "p.Ala561Val",  # -> A561V (normalized)
+        "L987fs*10",  # -> L987fsX (frameshift)
+        "p.Trp1001Ter",  # -> W1001X (nonsense)
+        "p.Leu552del",  # -> L552del (deletion)
+        "G585S",  # -> G584S (fuzzy +1)
+        "R248W",  # TP53 hotspot -> filtered
+        "unknown_variant",  # unmatched
     ]
-    if failed_cases:
-        print(f"\nFailed cases ({len(failed_cases)}):")
-        for case in failed_cases[:5]:  # Show first 5
-            print(
-                f"  {case['raw']} → {case['normalized']} (expected: {case['expected']})"
-            )
 
-    return stats
-
-
-if __name__ == "__main__":
-    results = test_normalization_coverage()
-    print(
-        f"\nOverall improvement: {100 * results['normalized'] / results['total']:.1f}% normalization rate"
+    results = match_variants_to_baseline(
+        extracted, baseline, "KCNH2", fuzzy_position=True
     )
+
+    assert len(results["matches"]) >= 4  # At least the exact-normalized ones
+    assert len(results["filtered_non_target"]) >= 1
+    assert len(results["unmatched"]) >= 1

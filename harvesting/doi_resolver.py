@@ -79,7 +79,9 @@ class DOIResolver:
         self.paywalled_log = paywalled_log
         self._user_agent_index = 0
 
-    def _log_paywalled(self, pmid: str, reason: str, url: str) -> None:
+    def _log_paywalled(
+        self, pmid: str, reason: str, url: str, classification: str = ""
+    ) -> None:
         """
         Log a paper to the paywalled/missing CSV with placeholder columns.
 
@@ -87,6 +89,8 @@ class DOIResolver:
             pmid: PubMed ID
             reason: Why the paper couldn't be downloaded
             url: URL attempted
+            classification: One of PAYWALLED, CAPTCHA_BLOCKED,
+                INSTITUTIONAL_ACCESS, SUPPLEMENT_ONLY, API_LIMIT, or empty.
         """
         with open(self.paywalled_log, "a", newline="") as f:
             writer = csv.writer(f)
@@ -96,6 +100,7 @@ class DOIResolver:
                     pmid,
                     reason,
                     url,
+                    classification,
                     "",
                     "",
                     "",  # Abstract_Carriers, Affected_Count, Unaffected_Count
@@ -226,7 +231,8 @@ class DOIResolver:
             if not response:
                 print(f"  ❌ DOI resolution failed for {doi}: No response received")
                 self._log_paywalled(
-                    pmid, f"DOI resolution failed: {doi}", f"https://doi.org/{doi}"
+                    pmid, f"DOI resolution failed: {doi}", f"https://doi.org/{doi}",
+                    classification="PAYWALLED"
                 )
                 return []
 
@@ -246,12 +252,14 @@ class DOIResolver:
                 pmid,
                 f"DOI resolution failed (HTTP {status_code}): {doi}",
                 f"https://doi.org/{doi}",
+                classification="CAPTCHA_BLOCKED" if status_code == 403 else "PAYWALLED"
             )
             return []
         except requests.exceptions.RequestException as e:
             print(f"  ❌ DOI resolution failed for {doi}: {e}")
             self._log_paywalled(
-                pmid, f"DOI resolution failed: {doi}", f"https://doi.org/{doi}"
+                pmid, f"DOI resolution failed: {doi}", f"https://doi.org/{doi}",
+                classification="PAYWALLED"
             )
             return []
 
@@ -358,6 +366,7 @@ class DOIResolver:
                     pmid,
                     f"DOI resolution failed (free text): {doi}",
                     f"https://doi.org/{doi}",
+                    classification="PAYWALLED"
                 )
                 return None, None, []
 
@@ -377,6 +386,7 @@ class DOIResolver:
                 pmid,
                 f"DOI resolution failed (free text, HTTP {status_code}): {doi}",
                 f"https://doi.org/{doi}",
+                classification="CAPTCHA_BLOCKED" if status_code == 403 else "PAYWALLED"
             )
             return None, None, []
         except requests.exceptions.RequestException as e:
@@ -385,6 +395,7 @@ class DOIResolver:
                 pmid,
                 f"DOI resolution failed (free text): {doi}",
                 f"https://doi.org/{doi}",
+                classification="PAYWALLED"
             )
             return None, None, []
 
@@ -421,7 +432,8 @@ class DOIResolver:
         else:
             print("  ❌ Could not extract full text from publisher page")
             self._log_paywalled(
-                pmid, "Full text extraction failed from publisher", final_url
+                pmid, "Full text extraction failed from publisher", final_url,
+                classification="PAYWALLED"
             )
 
         # Also get supplements
@@ -473,7 +485,8 @@ class DOIResolver:
             if not response:
                 print(f"  ❌ DOI resolution failed for {doi}: No response received")
                 self._log_paywalled(
-                    pmid, f"DOI resolution failed: {doi}", f"https://doi.org/{doi}"
+                    pmid, f"DOI resolution failed: {doi}", f"https://doi.org/{doi}",
+                    classification="PAYWALLED"
                 )
                 return None, None
 
@@ -489,11 +502,13 @@ class DOIResolver:
                 pmid,
                 f"DOI resolution failed (HTTP {status_code}): {doi}",
                 f"https://doi.org/{doi}",
+                classification="CAPTCHA_BLOCKED" if status_code == 403 else "PAYWALLED"
             )
             return None, None
         except requests.exceptions.RequestException as e:
             print(f"  ❌ DOI resolution failed for {doi}: {e}")
             self._log_paywalled(
-                pmid, f"DOI resolution failed: {doi}", f"https://doi.org/{doi}"
+                pmid, f"DOI resolution failed: {doi}", f"https://doi.org/{doi}",
+                classification="PAYWALLED"
             )
             return None, None

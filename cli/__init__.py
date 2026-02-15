@@ -16,9 +16,10 @@ from typing_extensions import Annotated
 
 from cli.automated_workflow import automated_variant_extraction_workflow
 from cli.audit_paywalls import run_paywall_audit
+from cli.extract import run_extraction
 from cli.scout import run_scout
 
-__all__ = ["automated_variant_extraction_workflow", "run_scout", "run_paywall_audit", "app"]
+__all__ = ["automated_variant_extraction_workflow", "run_scout", "run_paywall_audit", "run_extraction", "app"]
 
 app = typer.Typer(
     help="GeneVariantFetcher CLI - Tools for extracting genetic variant data from literature"
@@ -206,6 +207,83 @@ def scout_command(
             if all(e.status != Status.SUCCESS for e in manifest.entries):
                 raise typer.Exit(1)
 
+    except Exception as e:
+        typer.echo(f"Fatal error: {e}", err=True)
+        raise typer.Exit(1)
+
+
+@app.command("extract-folder")
+def extract_folder_command(
+    input_path: Annotated[
+        str,
+        typer.Argument(
+            help="Input directory with scout outputs or manifest.json file"
+        ),
+    ],
+    output_dir: Annotated[
+        str, typer.Argument(help="Output directory for extraction JSON files")
+    ],
+    gene: Annotated[str, typer.Argument(help="Gene symbol (e.g., KCNH2, BRCA1)")],
+    manifest_out: Annotated[
+        str,
+        typer.Option("--manifest-out", help="Custom path for output manifest"),
+    ] = None,
+    model: Annotated[
+        list[str],
+        typer.Option(
+            "--model",
+            help="Model for extraction (repeatable for tiered fallback)",
+        ),
+    ] = None,
+    tier_threshold: Annotated[
+        int,
+        typer.Option(
+            "--tier-threshold",
+            help="If first model finds fewer variants, try next model",
+        ),
+    ] = 1,
+    full_text: Annotated[
+        bool,
+        typer.Option(
+            "--full-text",
+            help="Use FULL_CONTEXT.md files instead of DATA_ZONES.md",
+        ),
+    ] = False,
+    verbose: Annotated[
+        bool, typer.Option("--verbose", "-v", help="Enable debug logging")
+    ] = False,
+):
+    """Extract variants from pre-downloaded papers (DATA_ZONES or FULL_CONTEXT files)."""
+    import logging
+
+    if verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.getLogger().setLevel(logging.INFO)
+
+    try:
+        from cli.extract import ValidationError
+
+        manifest = run_extraction(
+            input_path=Path(input_path),
+            output_dir=Path(output_dir),
+            gene=gene,
+            manifest_out=Path(manifest_out) if manifest_out else None,
+            models=model or None,
+            tier_threshold=tier_threshold,
+            use_full_text=full_text,
+        )
+
+        # Exit with error if all failed
+        if manifest.entries:
+            from utils.manifest import Status
+
+            if all(e.status != Status.SUCCESS for e in manifest.entries):
+                raise typer.Exit(1)
+
+    except ValidationError as e:
+        typer.echo(f"Input validation failed: {e}", err=True)
+        raise typer.Exit(2)
     except Exception as e:
         typer.echo(f"Fatal error: {e}", err=True)
         raise typer.Exit(1)
