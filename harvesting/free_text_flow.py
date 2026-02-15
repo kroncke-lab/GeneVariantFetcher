@@ -175,7 +175,13 @@ def initialize_free_text_access(
                 source=publisher_api_fallback_source(),
                 write_pmid_status=write_pmid_status,
                 download_label="Downloaded via publisher API",
+                log_paywalled=log_paywalled,
             )
+            # Handle validation failure (output_file is None)
+            if output_file is None:
+                return FreeTextInitState(
+                    is_free=False, free_url=None, early_result=(False, unified_content, None)
+                )
             return FreeTextInitState(
                 is_free=False, free_url=None, early_result=(True, str(output_file), unified_content)
             )

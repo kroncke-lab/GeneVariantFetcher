@@ -1073,6 +1073,17 @@ class PMCHarvester:
         # Create unified markdown file (WITHOUT pedigree extraction)
         unified_content = main_markdown + supplement_markdown
 
+        # Validate content quality before writing (catches binary/garbage content)
+        is_valid, validation_reason = validate_content_quality(unified_content)
+        if not is_valid:
+            print(f"  ❌ Content validation failed: {validation_reason}")
+            self._log_paywalled(
+                pmid,
+                f"Content validation failed: {validation_reason}",
+                f"PMCID: {pmcid}",
+            )
+            return False, f"Content validation failed: {validation_reason}", None
+
         output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
         with open(output_file, "w", encoding="utf-8") as f:
             f.write(unified_content)
@@ -1216,7 +1227,11 @@ class PMCHarvester:
                 supplement_markdown=supplement_markdown,
                 downloaded_count=downloaded_count,
                 source=source,
+                log_paywalled=self._log_paywalled,
             )
+            # Handle validation failure
+            if output_file is None:
+                return False, unified_content, None  # unified_content contains error message
             return True, str(output_file), unified_content
 
         free_text_supp_result = process_supplement_files(
@@ -1252,8 +1267,12 @@ class PMCHarvester:
             supplement_markdown=supplement_markdown,
             downloaded_count=downloaded_count,
             source=source,
+            log_paywalled=self._log_paywalled,
         )
 
+        # Handle validation failure
+        if output_file is None:
+            return False, unified_content, None  # unified_content contains error message
         return True, str(output_file), unified_content
 
     def run_post_processing(self, pmid: str, unified_content: str = None) -> bool:

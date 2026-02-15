@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Dict, Optional, Tuple
 
+from .content_validation import validate_content_quality
 from .persistence import append_success_entry
 
 
@@ -61,9 +62,27 @@ def write_free_text_output(
     source: FreeTextOutputSource,
     write_pmid_status: Optional[Callable[[str, str, Dict[str, object]], None]] = None,
     download_label: str = "Downloaded",
+    log_paywalled: Optional[Callable[[str, str, str], None]] = None,
 ) -> Tuple[Path, str]:
-    """Write unified markdown output and append success/status entries."""
+    """Write unified markdown output and append success/status entries.
+    
+    Returns (output_file, unified_content) on success.
+    Returns (None, error_message) if content validation fails.
+    """
     unified_content = main_markdown + supplement_markdown
+    
+    # Validate content quality before writing (catches binary/garbage content)
+    is_valid, validation_reason = validate_content_quality(unified_content)
+    if not is_valid:
+        print(f"  ❌ Content validation failed: {validation_reason}")
+        if log_paywalled:
+            log_paywalled(
+                pmid,
+                f"Content validation failed: {validation_reason}",
+                f"source: {source.status_source}",
+            )
+        return None, f"Content validation failed: {validation_reason}"
+    
     output_file = output_dir / f"{pmid}_FULL_CONTEXT.md"
     output_file.write_text(unified_content, encoding="utf-8")
 
