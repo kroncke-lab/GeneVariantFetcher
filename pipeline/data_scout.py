@@ -439,10 +439,17 @@ class GeneticDataScout:
             # Check for gene mentions
             gene_matches = len(self.gene_pattern.findall(para))
 
+            # Check for clinical outcome keywords (penetrance, affected, carrier, etc.)
+            para_lower = para.lower()
+            clinical_keyword_count = sum(1 for kw in self.CLINICAL_KEYWORDS if kw in para_lower)
+
             # If paragraph has strong signals, include it
+            # RELAXED: Also include paragraphs with multiple clinical keywords
+            # (catches penetrance prose like "50 carriers, 30 affected")
+            has_clinical_outcome_signal = clinical_keyword_count >= 3
             if individual_matches >= 2 or (
                 individual_matches >= 1 and (variant_matches >= 1 or gene_matches >= 1)
-            ):
+            ) or has_clinical_outcome_signal:
                 # Extend to include context (preceding header if any)
                 start_pos = char_pos
                 end_pos = char_pos + len(para)
@@ -584,13 +591,22 @@ class GeneticDataScout:
         keep = True
 
         # Only discard if aggregate data dominates AND no variant mentions
+        # RELAXED: Also keep if section has clinical outcome keywords (affected, penetrance)
+        # because aggregate penetrance data ("50 carriers, 30 affected") is valuable
+        # even without explicit variant nomenclature
+        has_clinical_outcome_keywords = clinical_keywords >= 2  # At least 2 clinical terms
         if aggregate_signals > individual_signals * 2 and variant_mentions == 0:
-            keep = False
+            if not has_clinical_outcome_keywords:
+                keep = False
+            # If clinical keywords present, keep the section but lower score
+            else:
+                score *= 0.8  # Slight penalty but don't discard
 
-        # Require SOME signal: gene OR variant OR individual mentions
-        # (relaxed from requiring all three)
+        # Require SOME signal: gene OR variant OR individual mentions OR clinical keywords
+        # (relaxed from requiring all three - clinical outcome sections are valuable)
         if individual_signals == 0 and gene_mentions == 0 and variant_mentions == 0:
-            keep = False
+            if clinical_keywords < 2:
+                keep = False
 
         # CRITICAL: Tables with variant mentions should ALWAYS be kept
         # (they likely contain the data we're looking for)
