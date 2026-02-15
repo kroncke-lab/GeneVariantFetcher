@@ -1044,7 +1044,20 @@ class WileyAPIClient:
         if self.is_available:
             content, api_error = self.get_fulltext_by_doi(doi)
             if content:
-                markdown = self.content_to_markdown(content)
+                # get_fulltext_by_doi returns already-converted markdown for PDF content
+                # and raw XML/HTML for text content. Detect which we have:
+                # PDF-converted content won't start with XML/HTML tags
+                is_raw_xml_html = (
+                    content.strip().startswith("<?xml") or
+                    content.strip().startswith("<") or
+                    content.strip().startswith("<!DOCTYPE")
+                )
+                if not is_raw_xml_html:
+                    # Already processed (from PDF conversion) - use as-is
+                    markdown = content
+                else:
+                    # Raw XML/HTML needs conversion
+                    markdown = self.content_to_markdown(content)
                 # Check for sufficient content - abstracts are typically 200-400 words
                 # Full articles should be at least 2000 characters (roughly 350+ words)
                 # Also check for section headings beyond just Abstract
