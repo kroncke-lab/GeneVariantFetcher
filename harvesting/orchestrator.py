@@ -1123,7 +1123,7 @@ class PMCHarvester:
             "extracted",
             {
                 "download_timestamp": datetime.datetime.now().isoformat(),
-                "variant_count": 0,  # FIXME: Add actual variant count
+                "variant_count": 0,  # Placeholder; extraction updates this later
                 "source": "pmc",
             },
         )
