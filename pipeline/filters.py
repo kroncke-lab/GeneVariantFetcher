@@ -246,14 +246,14 @@ Respond with a JSON object:
 
         except Exception as e:
             logger.error(f"PMID {paper.pmid} - Intern filter failed: {e}")
-            # On error, fail the paper to be conservative
+            # On error, fail-open (PASS) to avoid losing papers due to transient LLM issues
             return FilterResult(
-                decision=FilterDecision.FAIL,
+                decision=FilterDecision.PASS,
                 tier=FilterTier.TIER_2_INTERN,
-                reason=f"LLM classification error: {str(e)}",
+                reason=f"LLM error (fail-open): {str(e)}",
                 pmid=paper.pmid,
                 confidence=0.0,
-                metadata={"error": str(e)},
+                metadata={"error": str(e), "fail_open": True},
             )
 
 
@@ -414,13 +414,14 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
 
         except Exception as e:
             logger.error(f"Triage failed{f' for PMID {pmid}' if pmid else ''}: {e}")
-            # On error, drop the paper to be conservative
+            # On error, fail-open (KEEP) to avoid losing papers due to transient LLM issues
             return {
-                "decision": "DROP",
-                "reason": f"Triage error: {str(e)}",
+                "decision": "KEEP",
+                "reason": f"Triage error (fail-open): {str(e)}",
                 "confidence": 0.0,
                 "pmid": pmid,
                 "error": str(e),
+                "fail_open": True,
             }
 
     def triage_paper(self, paper: Paper, gene: Optional[str] = None) -> str:
