@@ -6,6 +6,13 @@ from typing import Dict, List
 def get_pmid_status(output_dir: str, pmid: str) -> Dict:
     """
     Returns the status of a PMID from its JSON file.
+    
+    Args:
+        output_dir: Directory containing pmid_status subdirectory.
+        pmid: PubMed ID to look up.
+        
+    Returns:
+        Dictionary containing status information if file exists, None otherwise.
     """
     status_dir = os.path.join(output_dir, "pmid_status")
     status_file = os.path.join(status_dir, f"{pmid}.json")
@@ -19,22 +26,42 @@ def get_pmid_status(output_dir: str, pmid: str) -> Dict:
 def get_failed_pmids(output_dir: str) -> List[str]:
     """
     Returns a list of failed PMIDs (includes 'failed' and 'paywalled' statuses).
+    
+    Args:
+        output_dir: Directory containing pmid_status subdirectory.
+        
+    Returns:
+        List of PMID strings with failed or paywalled status.
+        Empty list if status directory doesn't exist.
     """
     status_dir = os.path.join(output_dir, "pmid_status")
     failed_pmids = []
     failed_statuses = {"failed", "paywalled"}
-    for filename in os.listdir(status_dir):
-        if filename.endswith(".json"):
-            pmid = filename[:-5]  # Remove ".json"
-            status = get_pmid_status(output_dir, pmid)
-            if status and status.get("status") in failed_statuses:
-                failed_pmids.append(pmid)
+    
+    try:
+        for filename in os.listdir(status_dir):
+            if filename.endswith(".json"):
+                pmid = filename[:-5]  # Remove ".json"
+                status = get_pmid_status(output_dir, pmid)
+                if status and status.get("status") in failed_statuses:
+                    failed_pmids.append(pmid)
+    except FileNotFoundError:
+        # Return empty list if status directory doesn't exist yet
+        pass
+    
     return failed_pmids
 
 
 def get_stats_summary(output_dir: str) -> Dict[str, int]:
     """
     Returns a summary of the status counts.
+    
+    Args:
+        output_dir: Directory containing pmid_status subdirectory.
+        
+    Returns:
+        Dictionary mapping status names to counts.
+        Returns all zeros if status directory doesn't exist.
     """
     status_dir = os.path.join(output_dir, "pmid_status")
     status_counts = {
@@ -44,10 +71,16 @@ def get_stats_summary(output_dir: str) -> Dict[str, int]:
         "paywalled": 0,
         "no_variants": 0,
     }
-    for filename in os.listdir(status_dir):
-        if filename.endswith(".json"):
-            pmid = filename[:-5]  # Remove ".json"
-            status = get_pmid_status(output_dir, pmid)
-            if status:
-                status_counts[status["status"]] += 1
+    
+    try:
+        for filename in os.listdir(status_dir):
+            if filename.endswith(".json"):
+                pmid = filename[:-5]  # Remove ".json"
+                status = get_pmid_status(output_dir, pmid)
+                if status:
+                    status_counts[status["status"]] += 1
+    except FileNotFoundError:
+        # Return zero counts if status directory doesn't exist yet
+        pass
+    
     return status_counts
