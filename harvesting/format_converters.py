@@ -551,9 +551,9 @@ class FormatConverter:
                                 ):
                                     text_parts.append(cleaned)
                                     break
-                            except:
+                            except Exception:
                                 continue
-                    except:
+                    except Exception:
                         continue
 
                 ole.close()

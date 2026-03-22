@@ -77,19 +77,20 @@ These publishers fall through to the generic scraper, which often fails:
 
 GENERIC SCRAPER (scrape_generic_supplements)
 ============================================
-Keywords searched: "supplement", "supporting", "appendix", "additional file"
-Extensions matched: .pdf, .docx, .xlsx, .csv, .zip, .rar, .gz, .txt, .doc
+Keywords searched: "supplement", "supporting", "appendix", "additional file",
+    "electronic supplementary", "esm", "moesm", "supporting information", "extended data"
+URL patterns matched: /downloadSupplement, /MediaObjects/, /suppl/, mmc\d+, moesm\d+, etc.
+Extensions matched: .pdf, .docx, .xlsx, .csv, .zip, .rar, .gz, .txt, .doc, .xls, .pptx, .tsv
 
-CRITICAL LIMITATION: The generic scraper only finds supplements when:
-- Link text contains one of the keywords, OR
-- Link href ends with a known file extension
+A link matches if ANY of these conditions is true:
+1. Link text contains a supplement keyword
+2. Link href contains a known supplement URL pattern
+3. Link href path ends with a known file extension (query params stripped)
 
-This misses:
+Remaining limitations:
 - JavaScript-rendered supplement sections
 - Supplements on separate pages (requires navigation)
-- Downloads via API endpoints (e.g., /downloadSupplement?...)
-- Publisher-specific naming (ESM, MOESM, mmc, etc.)
-- Links with generic text like "Download" or just icons
+- Links with generic text like "Download" or just icons (and no URL pattern match)
 
 WHY KARGER FAILS
 ================
@@ -1253,36 +1254,81 @@ class SupplementScraper:
         print("    No specific Elsevier/GIM supplements found. Trying generic scan.")
         return self.scrape_generic_supplements(html, base_url)
 
+    # Shared constants for supplement detection
+    _SUPPLEMENT_KEYWORDS = [
+        "supplement",
+        "supporting",
+        "appendix",
+        "additional file",
+        "electronic supplementary",
+        "esm",
+        "moesm",
+        "supporting information",
+        "extended data",
+    ]
+
+    _SUPPLEMENT_URL_PATTERNS = [
+        r"/downloadsupplement",
+        r"/mediaobjects/",
+        r"/figures/",
+        r"/suppl/",
+        r"/doi/suppl/",
+        r"/action/downloadsupplement",
+        r"mmc\d+\.",
+        r"moesm\d+",
+        r"_supplementary",
+        r"_suppl\b",
+    ]
+
+    _FILE_EXTENSIONS = [
+        ".pdf",
+        ".docx",
+        ".xlsx",
+        ".csv",
+        ".zip",
+        ".rar",
+        ".gz",
+        ".txt",
+        ".doc",
+        ".xls",
+        ".pptx",
+        ".tsv",
+    ]
+
+    def _is_supplement_url(self, href: str) -> bool:
+        """Check if a URL contains patterns indicating a supplement file."""
+        href_lower = href.lower()
+        return any(
+            re.search(pattern, href_lower)
+            for pattern in self._SUPPLEMENT_URL_PATTERNS
+        )
+
+    def _has_file_extension(self, href: str) -> bool:
+        """Check if a URL or filename ends with a known file extension.
+
+        Handles query parameters by checking the path component.
+        """
+        # Strip query params and fragments before checking extension
+        path = urlparse(href).path.lower()
+        return any(path.endswith(ext) for ext in self._FILE_EXTENSIONS)
+
     def scrape_generic_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
         A best-effort generic scraper for supplemental files.
 
         This is the fallback for publishers without specific handlers.
 
-        CRITICAL LIMITATIONS (major contributor to 94.6% failure rate):
+        Matching logic (a link matches if ANY condition is true):
+        1. Link text contains a supplement keyword
+        2. Link href contains a known supplement URL pattern
+           (e.g. /downloadSupplement, /MediaObjects/, mmc\\d+)
+        3. Link href path ends with a known file extension
+           (query params are stripped before checking)
 
-        Current keywords: "supplement", "supporting", "appendix", "additional file"
-
-        MISSES these common patterns:
-        - "Electronic Supplementary Material" / "ESM" (Springer)
-        - "MOESM" file naming (Springer)
-        - /MediaObjects/ URLs (Springer)
-        - /downloadSupplement endpoint (Oxford, Wiley)
-        - Links with icon-only text (no keyword match)
+        Remaining limitations:
         - JavaScript-rendered supplement sections
         - Supplements on separate pages requiring navigation
-
-        MATCHING LOGIC:
-        - Link text contains keyword, OR
-        - Link href ends with known extension (.pdf, .xlsx, etc.)
-
-        This means a link like:
-          <a href="/downloadSupplement?file=data.xlsx">Download</a>
-        Will NOT match because:
-        - "Download" doesn't contain keywords
-        - href doesn't END with .xlsx (has query params)
-
-        TODO: Expand keywords and match URL patterns not just extensions.
+        - Links with icon-only text and no URL pattern match
 
         Args:
             html: HTML content of the publisher page
@@ -1296,19 +1342,6 @@ class SupplementScraper:
         soup = BeautifulSoup(html, "html.parser")
         found_files = []
 
-        keywords = ["supplement", "supporting", "appendix", "additional file"]
-        file_extensions = [
-            ".pdf",
-            ".docx",
-            ".xlsx",
-            ".csv",
-            ".zip",
-            ".rar",
-            ".gz",
-            ".txt",
-            ".doc",
-        ]
-
         # Check if this is a PMC page
         is_pmc_page = (
             "ncbi.nlm.nih.gov/pmc/articles/" in base_url
@@ -1317,47 +1350,59 @@ class SupplementScraper:
 
         for link in soup.find_all("a", href=True):
             link_text = link.get_text().lower()
-            href = link["href"].lower()
+            href = link["href"]
+            href_lower = href.lower()
 
-            # Check if link text or href contain any of the keywords or file extensions
-            is_supplement_link = any(keyword in link_text for keyword in keywords)
-            is_file_link = any(href.endswith(ext) for ext in file_extensions)
+            # Three-pronged matching: text keywords, URL patterns, or file extensions
+            is_supplement_link = any(
+                kw in link_text for kw in self._SUPPLEMENT_KEYWORDS
+            )
+            is_pattern_match = self._is_supplement_url(href_lower)
+            is_file_link = self._has_file_extension(href_lower)
 
-            if is_supplement_link or is_file_link:
-                try:
-                    original_url = urljoin(base_url, link["href"])
-                    # Normalize PMC URLs to use correct path format
-                    url = self._normalize_pmc_url(original_url, base_url)
-                    filename = Path(urlparse(url).path).name
+            if not (is_supplement_link or is_pattern_match or is_file_link):
+                continue
 
-                    # Skip invalid filenames
-                    if not filename:
-                        continue
+            try:
+                original_url = urljoin(base_url, href)
+                # Normalize PMC URLs to use correct path format
+                url = self._normalize_pmc_url(original_url, base_url)
+                filename = Path(urlparse(url).path).name
 
-                    # Skip entries that look like PMCIDs (e.g., "PMC3049907")
-                    if re.match(r"^PMC\d+$", filename, re.IGNORECASE):
-                        continue
+                # Skip invalid filenames
+                if not filename:
+                    continue
 
-                    # Skip entries that don't have a file extension and aren't actual files
+                # Skip entries that look like PMCIDs (e.g., "PMC3049907")
+                if re.match(r"^PMC\d+$", filename, re.IGNORECASE):
+                    continue
+
+                # For keyword-only matches (no URL pattern or extension), skip ID-like filenames
+                if (
+                    is_supplement_link
+                    and not is_pattern_match
+                    and not is_file_link
+                ):
                     has_extension = any(
-                        filename.lower().endswith(ext) for ext in file_extensions
+                        filename.lower().endswith(ext)
+                        for ext in self._FILE_EXTENSIONS
                     )
-                    if not has_extension and is_supplement_link:
-                        # Only skip non-extension links if they also look like IDs
-                        if re.match(r"^[A-Z]+\d+$", filename, re.IGNORECASE):
-                            continue
+                    if not has_extension and re.match(
+                        r"^[A-Z]+\d+$", filename, re.IGNORECASE
+                    ):
+                        continue
 
-                    # Basic filtering to avoid irrelevant links
-                    if not any(f["name"] == filename for f in found_files):
-                        file_info = {"url": url, "name": filename}
-                        # Store original URL and base URL for PMC pages to enable URL variant generation
-                        if is_pmc_page:
-                            file_info["original_url"] = original_url
-                            file_info["base_url"] = base_url
-                        found_files.append(file_info)
-                        print(f"    Found potential supplement: {filename}")
-                except Exception:
-                    continue  # Ignore malformed URLs
+                # Deduplicate by filename
+                if not any(f["name"] == filename for f in found_files):
+                    file_info = {"url": url, "name": filename}
+                    # Store original URL and base URL for PMC pages to enable URL variant generation
+                    if is_pmc_page:
+                        file_info["original_url"] = original_url
+                        file_info["base_url"] = base_url
+                    found_files.append(file_info)
+                    print(f"    Found potential supplement: {filename}")
+            except Exception:
+                continue  # Ignore malformed URLs
 
         return found_files
 
@@ -1805,76 +1850,13 @@ class SupplementScraper:
 
 
 # =============================================================================
-# TODO: REMAINING IMPLEMENTATIONS TO IMPROVE FAILURE RATE
+# REMAINING IMPROVEMENTS
 # =============================================================================
-#
-# PRIORITY 1: ✅ DONE - scrape_springer_supplements() implemented (2026-02-01)
-# See the actual implementation above in the SupplementScraper class.
-# Handles: link.springer.com, biomedcentral.com, springeropen.com
-# Tested with: 10.1186/s12864-019-6413-7 (found 5 MOESM PDFs)
-#
-# PRIORITY 2: Add scrape_oxford_supplements()
-# -------------------------------------------
-# Oxford Academic (academic.oup.com) is critical for genetics journals.
-#
-# def scrape_oxford_supplements(self, html: str, base_url: str) -> List[Dict]:
-#     """
-#     Scrape supplements from Oxford Academic (academic.oup.com)
-#
-#     Key patterns:
-#     - Section: "Supplementary data" tab/section
-#     - Link class: "supplementary-data" or similar
-#     - URL patterns:
-#       * /downloadSupplement?file=XXXXX_supplementary_data.xlsx
-#       * /article/XXXXX/XXXXX/supplementary-data
-#
-#     CHALLENGE: Often requires JavaScript to render supplement tab.
-#     May need to construct supplement URL from article URL pattern.
-#     """
-#     soup = BeautifulSoup(html, "html.parser")
-#     found_files = []
-#
-#     # 1. Look for direct download links
-#     for link in soup.find_all('a', href=re.compile(r'downloadSupplement')):
-#         href = link['href']
-#         url = urljoin(base_url, href)
-#         filename = link.get_text().strip() or 'supplement'
-#         found_files.append({'url': url, 'name': filename})
-#
-#     # 2. Look for supplementary-data section
-#     supp_section = soup.find(id='supplementary-data') or \
-#                    soup.find('section', class_=re.compile(r'supplementary'))
-#
-#     # 3. Try constructing supplement page URL from article URL
-#     # Oxford pattern: /article/doi/xxxxx -> /article/doi/xxxxx/supplementary-data
-#
-#     return found_files if found_files else self.scrape_generic_supplements(html, base_url)
-#
-#
-# PRIORITY 3: Improve scrape_generic_supplements()
-# ------------------------------------------------
-# Current keywords miss too much. Add:
-#   - Keywords: "ESM", "MOESM", "electronic supplementary", "supporting information"
-#   - URL patterns: /downloadSupplement, /MediaObjects/, /figures/, /suppl/
-#   - Don't require file extension if URL contains clear supplement indicators
-#
-#
-# PRIORITY 4: Add routing in doi_resolver.py
-# ------------------------------------------
-# Once handlers are implemented, add to resolve_and_scrape_supplements():
-#
-#     elif "springer.com" in domain or "biomedcentral.com" in domain:
-#         return scraper.scrape_springer_supplements(response.text, final_url)
-#     elif "academic.oup.com" in domain or "oup.com" in domain:
-#         return scraper.scrape_oxford_supplements(response.text, final_url)
-#
-#
-# PRIORITY 5: Browser fallback integration
-# ----------------------------------------
-# browser_supplement_fetcher.py has Karger implementation.
-# Need to:
-# 1. Integrate browser fallback into main pipeline (when HTTP fails)
-# 2. Add browser handlers for Oxford, Springer (similar to Karger)
-# 3. Consider making browser the default for known-problematic publishers
-#
+# ✅ DONE - scrape_springer_supplements() (2026-02-01)
+# ✅ DONE - scrape_generic_supplements() expanded with URL patterns + keywords
+# - Oxford dedicated handler (academic.oup.com) — generic now catches
+#   /downloadSupplement URLs but a dedicated handler could find JS-rendered tabs
+# - Wiley dedicated supplement handler
+# - Browser fallback integration (browser_supplement_fetcher.py has Karger impl)
+# - DOI resolver routing for Springer/Oxford once dedicated handlers exist
 # =============================================================================
