@@ -155,7 +155,7 @@ try:
     import json
     from pathlib import Path
 
-    _alias_path = Path(__file__).parent / "kcnh2_variant_aliases.json"
+    _alias_path = Path(__file__).parent.parent / "data" / "kcnh2_variant_aliases.json"
     if _alias_path.exists():
         with open(_alias_path) as f:
             _alias_data = json.load(f)

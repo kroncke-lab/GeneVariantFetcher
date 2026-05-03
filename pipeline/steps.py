@@ -328,12 +328,14 @@ def filter_papers(
         if not record_path or not Path(record_path).exists():
             reason = "Missing abstract JSON"
             dropped_pmids.append((pmid, reason))
-            _write_progress({
-                "pmid": pmid,
-                "final_decision": "FAIL",
-                "reason": reason,
-                "stage": "abstract_load",
-            })
+            _write_progress(
+                {
+                    "pmid": pmid,
+                    "final_decision": "FAIL",
+                    "reason": reason,
+                    "stage": "abstract_load",
+                }
+            )
             continue
 
         try:
@@ -342,12 +344,14 @@ def filter_papers(
         except Exception as e:
             reason = f"Abstract JSON read error: {e}"
             dropped_pmids.append((pmid, reason))
-            _write_progress({
-                "pmid": pmid,
-                "final_decision": "FAIL",
-                "reason": reason,
-                "stage": "abstract_load",
-            })
+            _write_progress(
+                {
+                    "pmid": pmid,
+                    "final_decision": "FAIL",
+                    "reason": reason,
+                    "stage": "abstract_load",
+                }
+            )
             continue
 
         metadata = record.get("metadata", {})
@@ -369,17 +373,19 @@ def filter_papers(
             if tier1_result.decision is not FilterDecision.PASS:
                 reason = tier1_result.reason
                 dropped_pmids.append((pmid, reason))
-                _write_progress({
-                    "pmid": pmid,
-                    "final_decision": "FAIL",
-                    "reason": reason,
-                    "stage": "tier1",
-                    "tier1": {
-                        "decision": tier1_result.decision.value,
-                        "reason": tier1_result.reason,
-                        "confidence": tier1_result.confidence,
-                    },
-                })
+                _write_progress(
+                    {
+                        "pmid": pmid,
+                        "final_decision": "FAIL",
+                        "reason": reason,
+                        "stage": "tier1",
+                        "tier1": {
+                            "decision": tier1_result.decision.value,
+                            "reason": tier1_result.reason,
+                            "confidence": tier1_result.confidence,
+                        },
+                    }
+                )
                 continue
 
         # Tier 2: LLM filter
@@ -415,53 +421,57 @@ def filter_papers(
             if tier2_result.decision is not FilterDecision.PASS:
                 reason = tier2_result.reason
                 dropped_pmids.append((pmid, reason))
-                _write_progress({
-                    "pmid": pmid,
-                    "final_decision": "FAIL",
-                    "reason": reason,
-                    "stage": "tier2",
-                    "tier1": (
-                        {
-                            "decision": tier1_result.decision.value,
-                            "reason": tier1_result.reason,
-                            "confidence": tier1_result.confidence,
-                        }
-                        if tier1_result is not None
-                        else None
-                    ),
-                    "tier2": {
-                        "decision": tier2_result.decision.value,
-                        "reason": tier2_result.reason,
-                        "confidence": tier2_result.confidence,
-                    },
-                })
+                _write_progress(
+                    {
+                        "pmid": pmid,
+                        "final_decision": "FAIL",
+                        "reason": reason,
+                        "stage": "tier2",
+                        "tier1": (
+                            {
+                                "decision": tier1_result.decision.value,
+                                "reason": tier1_result.reason,
+                                "confidence": tier1_result.confidence,
+                            }
+                            if tier1_result is not None
+                            else None
+                        ),
+                        "tier2": {
+                            "decision": tier2_result.decision.value,
+                            "reason": tier2_result.reason,
+                            "confidence": tier2_result.confidence,
+                        },
+                    }
+                )
                 continue
 
         filtered_pmids.append(pmid)
-        _write_progress({
-            "pmid": pmid,
-            "final_decision": "PASS",
-            "reason": "passed",
-            "stage": "done",
-            "tier1": (
-                {
-                    "decision": tier1_result.decision.value,
-                    "reason": tier1_result.reason,
-                    "confidence": tier1_result.confidence,
-                }
-                if tier1_result is not None
-                else None
-            ),
-            "tier2": (
-                {
-                    "decision": tier2_result.decision.value,
-                    "reason": tier2_result.reason,
-                    "confidence": tier2_result.confidence,
-                }
-                if enable_tier2
-                else None
-            ),
-        })
+        _write_progress(
+            {
+                "pmid": pmid,
+                "final_decision": "PASS",
+                "reason": "passed",
+                "stage": "done",
+                "tier1": (
+                    {
+                        "decision": tier1_result.decision.value,
+                        "reason": tier1_result.reason,
+                        "confidence": tier1_result.confidence,
+                    }
+                    if tier1_result is not None
+                    else None
+                ),
+                "tier2": (
+                    {
+                        "decision": tier2_result.decision.value,
+                        "reason": tier2_result.reason,
+                        "confidence": tier2_result.confidence,
+                    }
+                    if enable_tier2
+                    else None
+                ),
+            }
+        )
 
     # Close progress file handle (important when running long jobs)
     try:
@@ -639,9 +649,7 @@ def download_fulltext(
     )
 
     # Only send un-recovered PMIDs to the harvester
-    remaining_pmids = [
-        p for p in pmids_to_download if str(p) not in recovered_pmids
-    ]
+    remaining_pmids = [p for p in pmids_to_download if str(p) not in recovered_pmids]
     logger.info(
         f"Download plan: {len(recovered_pmids)} recovered, "
         f"{len(remaining_pmids)} to download fresh"
@@ -740,23 +748,23 @@ def preprocess_papers(
 ) -> StepResult:
     """
     Deterministic pre-processing step. Runs BEFORE Data Scout or LLM extraction.
-    
+
     - Strips XML/HTML noise from FULL_CONTEXT.md files
     - Removes reference sections, copyright boilerplate
     - Injects PubMed abstracts as guaranteed baseline
     - Classifies files (full_text, abstract_only, empty, etc.)
-    
+
     Writes cleaned content to *_CLEANED.md files to avoid mutating source files.
     No API calls — pure regex/string operations.
     """
-    from gvf.preprocessor import PaperPreprocessor
-    
+    from pipeline.preprocessor import PaperPreprocessor
+
     if not harvest_dir.exists():
         return StepResult(
             success=True,
             stats={"skipped": True, "reason": "no_harvest_dir"},
         )
-    
+
     # Auto-detect abstracts directory
     if abstracts_dir is None:
         # Look for pubmed_abstracts in parent/sibling dirs
@@ -769,51 +777,61 @@ def preprocess_papers(
             if c.exists():
                 abstracts_dir = c
                 break
-    
+
     preprocessor = PaperPreprocessor(
         abstracts_dir=str(abstracts_dir) if abstracts_dir else None
     )
-    
+
     files = list(harvest_dir.glob("*_FULL_CONTEXT.md"))
     if not files:
         return StepResult(
             success=True,
             stats={"skipped": True, "reason": "no_files"},
         )
-    
+
     processed = 0
     classifications = {}
     total_original = 0
     total_cleaned = 0
-    
+
     written = 0
     for f in files:
         try:
-            pmid = f.name.replace("_FULL_CONTEXT.md", "").replace(f"KCNH2_PMID_", "").replace(f"{gene_symbol}_PMID_", "")
+            pmid = (
+                f.name.replace("_FULL_CONTEXT.md", "")
+                .replace(f"KCNH2_PMID_", "")
+                .replace(f"{gene_symbol}_PMID_", "")
+            )
             text = f.read_text(encoding="utf-8", errors="replace")
             total_original += len(text)
-            
+
             classification = preprocessor.classify(text)
             classifications[classification] = classifications.get(classification, 0) + 1
-            
+
             cleaned = preprocessor.clean(text)
             cleaned = preprocessor.inject_abstract(cleaned, pmid)
             total_cleaned += len(cleaned)
 
-            cleaned_path = f.with_name(f.name.replace("_FULL_CONTEXT.md", "_CLEANED.md"))
+            cleaned_path = f.with_name(
+                f.name.replace("_FULL_CONTEXT.md", "_CLEANED.md")
+            )
             cleaned_path.write_text(cleaned, encoding="utf-8")
             written += 1
             processed += 1
         except Exception as e:
             logger.warning(f"Preprocess error for {f.name}: {e}")
-    
-    token_savings_pct = round((1 - total_cleaned / max(1, total_original)) * 100, 1) if total_original > total_cleaned else 0
-    
+
+    token_savings_pct = (
+        round((1 - total_cleaned / max(1, total_original)) * 100, 1)
+        if total_original > total_cleaned
+        else 0
+    )
+
     logger.info(f"✓ Preprocessed {processed} papers")
     logger.info(f"  Classifications: {classifications}")
     if token_savings_pct > 0:
         logger.info(f"  Token savings: ~{token_savings_pct}% reduction in text size")
-    
+
     return StepResult(
         success=True,
         stats={
@@ -957,7 +975,9 @@ def extract_variants(
     }
 
     markdown_files = []
-    for pmid in set(data_zones.keys()) | set(cleaned_context.keys()) | set(full_context.keys()):
+    for pmid in (
+        set(data_zones.keys()) | set(cleaned_context.keys()) | set(full_context.keys())
+    ):
         if pmid in data_zones:
             markdown_files.append(data_zones[pmid])
         elif pmid in cleaned_context:

@@ -35,7 +35,7 @@ SPECIFIC HANDLERS IMPLEMENTED (4 publishers):
      * Constructs supplement URL from DOI: karger.com/doi/suppl/10.1159/XXXXXX
      * Makes HTTP request to supplement page to find files
    - Coverage: POOR - See "Why Karger Fails" below
-   - Browser fallback: harvesting/browser_supplement_fetcher.py
+   - Browser fallback: cli/browser_fetch.py (general selector-based fetcher)
 
 4. SPRINGER/BMC (scrape_springer_supplements) - IMPLEMENTED 2026-02-01
    - Looks for:
@@ -134,7 +134,7 @@ RECOMMENDED FIXES (Priority Order)
 5. Consider Playwright for all publishers:
    - JavaScript rendering would solve most issues
    - Expensive in terms of time/resources
-   - browser_supplement_fetcher.py has Karger-specific implementation
+   - cli/browser_fetch.py provides general browser-based fetching
 
 FULL-TEXT EXTRACTORS
 ====================
@@ -155,7 +155,6 @@ FILE STRUCTURE
 
 Related files:
 - harvesting/doi_resolver.py - Routes DOIs to appropriate scrapers
-- harvesting/browser_supplement_fetcher.py - Playwright-based Karger fetcher
 - cli/browser_fetch.py - General browser-based PDF fetcher with selector patterns
 
 Author: Gene Variant Fetcher Team
@@ -953,9 +952,9 @@ class SupplementScraper:
         4. Returns empty list when HTTP fails, relies on browser fallback
            that isn't integrated into the main pipeline
 
-        BROWSER FALLBACK: harvesting/browser_supplement_fetcher.py has
-        fetch_karger_supplements_browser() but it's not called from the
-        main orchestrator.
+        BROWSER FALLBACK: cli/browser_fetch.py provides interactive
+        browser-based PDF fetching for paywalled/Cloudflare-protected
+        publishers like Karger.
 
         Args:
             html: HTML content of the publisher page
@@ -1299,8 +1298,7 @@ class SupplementScraper:
         """Check if a URL contains patterns indicating a supplement file."""
         href_lower = href.lower()
         return any(
-            re.search(pattern, href_lower)
-            for pattern in self._SUPPLEMENT_URL_PATTERNS
+            re.search(pattern, href_lower) for pattern in self._SUPPLEMENT_URL_PATTERNS
         )
 
     def _has_file_extension(self, href: str) -> bool:
@@ -1378,14 +1376,9 @@ class SupplementScraper:
                     continue
 
                 # For keyword-only matches (no URL pattern or extension), skip ID-like filenames
-                if (
-                    is_supplement_link
-                    and not is_pattern_match
-                    and not is_file_link
-                ):
+                if is_supplement_link and not is_pattern_match and not is_file_link:
                     has_extension = any(
-                        filename.lower().endswith(ext)
-                        for ext in self._FILE_EXTENSIONS
+                        filename.lower().endswith(ext) for ext in self._FILE_EXTENSIONS
                     )
                     if not has_extension and re.match(
                         r"^[A-Z]+\d+$", filename, re.IGNORECASE
@@ -1857,6 +1850,6 @@ class SupplementScraper:
 # - Oxford dedicated handler (academic.oup.com) — generic now catches
 #   /downloadSupplement URLs but a dedicated handler could find JS-rendered tabs
 # - Wiley dedicated supplement handler
-# - Browser fallback integration (browser_supplement_fetcher.py has Karger impl)
+# - Browser fallback integration (cli/browser_fetch.py provides interactive UI)
 # - DOI resolver routing for Springer/Oxford once dedicated handlers exist
 # =============================================================================
