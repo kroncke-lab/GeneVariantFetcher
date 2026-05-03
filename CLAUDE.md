@@ -18,6 +18,45 @@ Part of the Kroncke Lab variant interpretation pipeline.
 5. **Tier 3 model** — gpt-4o (upgraded from gemini-2.0-flash)
 6. **Unified supplement fetcher** — `gene_literature/supplements/` wired into orchestrator; tiered PMC + Elsevier API fetch with dedup, DOI scraping as fallback
 
+## Health Assessment (2026-05-02)
+
+**Status: behind schedule, but architecture is sound.**
+
+### Recall gap
+- 30.9 percentage points to close (59.1% → 90%) with ~8 weeks until June 2026 grant deadline.
+- 918 missing variant rows in `comparison_results/` cover 505 unique variants across 236 PMIDs.
+- Top-10 PMIDs account for **~389 missing entries (42% of the gap)** — large cohort/screening papers. PMID 15840476 alone accounts for 86 missing variants.
+
+### Variant-type breakdown of the gap
+- ~708 standard missense (`A123B`) — should be in regex+LLM range
+- ~156 frameshift/splice (`fsX`, `fs*`) — extractable with current pipeline
+- ~32 structural/CNV (`7q36.1q36.2Del`) — likely out of scope
+- The missense bulk is the red flag: if straightforward variants from known PMIDs aren't reaching the DB, the bottleneck is **upstream of extraction** (harvest, supplements, paywall) rather than LLM accuracy.
+
+### Velocity warning
+- Feb 12–16: 25+ commits, major architecture overhaul (preprocessor, concurrency, tier upgrade, supplement fetcher)
+- Mar–Apr: 5 commits total
+- May: 0 commits as of 2026-05-02
+- The comparison baseline (`comparison_results/summary.json`) references a SQLite DB from 2025-12-11. **Every Feb–Apr fix is currently unmeasured.**
+
+### Critical risks for June
+1. **No re-run since architecture changes.** The Feb work (scanner-on-FULL_CONTEXT, concatenated regex, gpt-4o tier 3, unified supplements) very likely improved recall — but with no re-extraction the trajectory is invisible.
+2. **Stale comparison.** Baseline DB is 5 months old. Recall could already be 70%+ and we wouldn't know.
+3. **pytest broken locally.** `python -m pytest` fails (no module installed in active env). CI gating exists but local validation loop is broken.
+4. **Top-10 PMIDs untouched.** April's "browser fetch from top-10 missing PMIDs" commit landed but the 918-row gap predates it; need to verify those papers are actually harvested + extracted.
+
+### Recommended priority order (next 2 weeks)
+1. **Re-run KCNH2 extraction end-to-end** with current main; regenerate `comparison_results/`. This closes the measurement loop and probably reveals 10–15 points of already-earned recall.
+2. **Triage top-10 missing PMIDs**: for each, confirm (a) harvested, (b) supplements fetched, (c) Data Scout reached the variant tables. A handful of large cohort papers can close most of the gap.
+3. **Fix local pytest env** so changes can be validated without a full extraction.
+4. **Set a weekly recall cadence** (Friday re-run + compare) — produces a trajectory chart for the grant.
+
+### What's working
+- Architecture is right: tiered extraction, modular supplements, canonical normalization
+- Test coverage exists for key modules (just needs an env to run in)
+- Tooling is mature: paywall audit, browser fetch workflow, comparison harness
+- The "is the bug technical or operational" answer is **operational** — the pipeline likely works better than the headline 59.1% reflects.
+
 ## Architecture
 ```
 GeneVariantFetcher/
