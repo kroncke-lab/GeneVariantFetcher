@@ -52,6 +52,10 @@ output_directory/
 automated_output/
 gvf_output/
 europepmc_downloads/
+results/
+
+# Claude Code session metadata (per-machine, do not commit)
+.claude/
 *.log
 pipeline.log
 *.db
