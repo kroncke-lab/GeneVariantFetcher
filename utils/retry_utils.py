@@ -15,6 +15,27 @@ from tenacity import (
     wait_exponential,
 )
 
+# Pull LiteLLM's transient error types so llm_retry can include them. These
+# are the standard exceptions LiteLLM raises across providers; we want to
+# retry rate-limit, timeout, and service-unavailable errors but NOT auth or
+# bad-request errors (those are programmer-side bugs that won't fix on retry).
+try:
+    from litellm import RateLimitError as _LiteLLMRateLimitError
+    from litellm import Timeout as _LiteLLMTimeout
+    from litellm import APIConnectionError as _LiteLLMAPIConnectionError
+    from litellm import ServiceUnavailableError as _LiteLLMServiceUnavailable
+    from litellm import InternalServerError as _LiteLLMInternalServerError
+
+    LITELLM_TRANSIENT_ERRORS: Tuple[Type[Exception], ...] = (
+        _LiteLLMRateLimitError,
+        _LiteLLMTimeout,
+        _LiteLLMAPIConnectionError,
+        _LiteLLMServiceUnavailable,
+        _LiteLLMInternalServerError,
+    )
+except ImportError:
+    LITELLM_TRANSIENT_ERRORS = ()
+
 # Standard retry configuration used throughout the project
 # Retries up to 3 times with exponential backoff (1s, 2s, 4s)
 standard_retry = retry(
@@ -76,16 +97,20 @@ api_retry = get_standard_retry_decorator(
     ),
 )
 
-# For LLM calls that may hit rate limits or transient errors
+# For LLM calls that may hit rate limits or transient errors. Includes
+# LiteLLM's rate-limit/timeout/connection/server-error types so a Tier 2/3
+# call doesn't immediately fail when an Azure deployment quota briefly
+# saturates from parallel workers.
 llm_retry = get_standard_retry_decorator(
-    max_attempts=3,
-    multiplier=2.0,  # Longer backoff for rate limits
+    max_attempts=5,  # rate-limit recoveries often need 3-4 backoffs
+    multiplier=2.0,  # exponential: 2s, 4s, 8s, 16s, 30s
     min_wait=2.0,
     max_wait=30.0,
     retry_exceptions=(
         requests.exceptions.RequestException,
         ConnectionError,
         TimeoutError,
+        *LITELLM_TRANSIENT_ERRORS,
     ),
 )
 
