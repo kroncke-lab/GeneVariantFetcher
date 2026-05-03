@@ -304,6 +304,6 @@ class TestStageEnum:
 
     def test_all_stages_exist(self):
         """Verify all expected stages exist."""
-        expected = {"download", "scout", "extract", "migrate"}
+        expected = {"download", "scout", "extract", "migrate", "refetch"}
         actual = {s.value for s in Stage}
         assert actual == expected

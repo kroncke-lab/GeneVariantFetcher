@@ -282,59 +282,50 @@ class DataAggregator:
         individual_records = variant_group["individual_records"]
         penetrance_points = variant_group["penetrance_data_points"]
 
-        # Count from individual records
-        total_from_records = len(individual_records)
-        affected_from_records = sum(
-            1
-            for r in individual_records
-            if (r.get("affected_status") or "").strip().lower() == "affected"
-        )
-        unaffected_from_records = sum(
-            1
-            for r in individual_records
-            if (r.get("affected_status") or "").strip().lower() == "unaffected"
-        )
-        uncertain_from_records = sum(
-            1
-            for r in individual_records
-            if (r.get("affected_status") or "").strip().lower() == "uncertain"
-        )
+        # Group both data sources by PMID so we can choose the better source per-PMID
+        # without discarding cohort data from OTHER PMIDs when one PMID happens to
+        # contribute individual records.
+        records_by_pmid: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+        for r in individual_records:
+            records_by_pmid[r.get("_source_pmid") or "UNKNOWN"].append(r)
 
-        # Aggregate from cohort-level penetrance data
-        total_from_cohorts = sum(
-            p.get("total_carriers_observed", 0) or 0 for p in penetrance_points
-        )
-        affected_from_cohorts = sum(
-            p.get("affected_count", 0) or 0 for p in penetrance_points
-        )
-        unaffected_from_cohorts = sum(
-            p.get("unaffected_count", 0) or 0 for p in penetrance_points
-        )
-        uncertain_from_cohorts = sum(
-            p.get("uncertain_count", 0) or 0 for p in penetrance_points
-        )
+        cohorts_by_pmid: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+        for p in penetrance_points:
+            cohorts_by_pmid[p.get("_source_pmid") or "UNKNOWN"].append(p)
 
-        # Combine (individual records take precedence, but add cohort data if no overlap)
-        # For now, use the larger of the two to avoid double-counting
-        # In practice, this could be refined based on source analysis
-        total_carriers = max(total_from_records, total_from_cohorts)
-        if total_from_records > 0:
-            # Use individual record counts if available
-            total_carriers = total_from_records
-            affected = affected_from_records
-            unaffected = unaffected_from_records
-            uncertain = uncertain_from_records
-        elif total_from_cohorts > 0:
-            # Use cohort counts
-            total_carriers = total_from_cohorts
-            affected = affected_from_cohorts
-            unaffected = unaffected_from_cohorts
-            uncertain = uncertain_from_cohorts
-        else:
-            total_carriers = 0
-            affected = 0
-            unaffected = 0
-            uncertain = 0
+        total_carriers = 0
+        affected = 0
+        unaffected = 0
+        uncertain = 0
+
+        all_pmids = set(records_by_pmid.keys()) | set(cohorts_by_pmid.keys())
+        for pmid in all_pmids:
+            pmid_records = records_by_pmid.get(pmid, [])
+            pmid_cohorts = cohorts_by_pmid.get(pmid, [])
+
+            # Cohort-level penetrance_data takes precedence: it usually
+            # describes the full carrier set in a paper (e.g. 14 carriers,
+            # 4 affected, 10 unaffected), while individual_records often
+            # detail a subset of that same cohort. Falling back to records
+            # only when no cohort data is present avoids double-counting
+            # while preserving counts for papers that only report
+            # patient-level details.
+            if pmid_cohorts:
+                for p in pmid_cohorts:
+                    total_carriers += p.get("total_carriers_observed", 0) or 0
+                    affected += p.get("affected_count", 0) or 0
+                    unaffected += p.get("unaffected_count", 0) or 0
+                    uncertain += p.get("uncertain_count", 0) or 0
+            else:
+                total_carriers += len(pmid_records)
+                for r in pmid_records:
+                    status = (r.get("affected_status") or "").strip().lower()
+                    if status == "affected":
+                        affected += 1
+                    elif status == "unaffected":
+                        unaffected += 1
+                    elif status == "uncertain":
+                        uncertain += 1
 
         # Calculate penetrance percentage
         penetrance_percentage = None
