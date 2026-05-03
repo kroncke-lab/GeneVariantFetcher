@@ -36,6 +36,11 @@ logger = logging.getLogger(__name__)
 # The safe_limit accounts for overhead and prevents edge-case failures.
 
 MODEL_TOKEN_LIMITS = {
+    # Azure AI Foundry deployments — match by deployment name suffix so they
+    # work regardless of the "azure_ai/" prefix LiteLLM expects.
+    "gpt-5.3-codex": (16384, 15000),  # OpenAI GPT-5.3 Codex via Azure
+    "kimi-k2": (16384, 15000),  # Moonshot Kimi K2 via Azure
+    "grok-4": (16384, 15000),  # xAI Grok-4 reasoning via Azure
     # OpenAI models - gpt-4o has 16384 completion limit
     "gpt-4o-mini": (16384, 15000),
     "gpt-4o": (16384, 15000),

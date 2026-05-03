@@ -30,6 +30,30 @@ class Settings(BaseSettings):
     wiley_api_key: Optional[str] = Field(default=None, env="WILEY_API_KEY")
     springer_api_key: Optional[str] = Field(default=None, env="SPRINGER_API_KEY")
 
+    # Azure AI Foundry — primary LLM provider. Single resource hosts multiple
+    # deployments accessed via LiteLLM model strings like "azure_ai/<deployment>".
+    # LiteLLM reads AZURE_AI_API_KEY / AZURE_AI_API_BASE from the process
+    # environment automatically; we expose them here so other modules can read
+    # them via Settings and so missing-key validation can include them.
+    azure_ai_api_key: Optional[str] = Field(default=None, env="AZURE_AI_API_KEY")
+    azure_ai_api_base: Optional[str] = Field(
+        default=None,
+        env="AZURE_AI_API_BASE",
+        description="Azure AI Foundry endpoint, e.g. https://<resource>.services.ai.azure.com",
+    )
+    azure_ai_api_version: Optional[str] = Field(
+        default="2024-08-01-preview", env="AZURE_AI_API_VERSION"
+    )
+    azure_deployment_gpt5_codex: Optional[str] = Field(
+        default=None, env="AZURE_DEPLOYMENT_GPT5_CODEX"
+    )
+    azure_deployment_kimi: Optional[str] = Field(
+        default=None, env="AZURE_DEPLOYMENT_KIMI"
+    )
+    azure_deployment_grok: Optional[str] = Field(
+        default=None, env="AZURE_DEPLOYMENT_GROK"
+    )
+
     # Model Configuration
     tier1_model: Optional[str] = Field(
         default=None,
@@ -230,21 +254,43 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def validate_required_settings(self):
-        required = {
+        # NCBI email is always required (PubMed compliance).
+        # An LLM provider is required, but either OPENAI_API_KEY or
+        # AZURE_AI_API_KEY satisfies it — the pipeline uses whichever
+        # the configured tier model strings point at.
+        always_required = {"ncbi_email": "NCBI_EMAIL"}
+        llm_provider_required = {
             "openai_api_key": "OPENAI_API_KEY",
-            "ncbi_email": "NCBI_EMAIL",
+            "azure_ai_api_key": "AZURE_AI_API_KEY",
         }
 
         missing = []
         placeholders = []
 
-        for field_name, env_var in required.items():
+        for field_name, env_var in always_required.items():
             value = getattr(self, field_name)
             if value is None or not str(value).strip():
                 missing.append(env_var)
                 continue
             if self._is_placeholder(str(value)):
                 placeholders.append(env_var)
+
+        # At least one LLM provider key must be set.
+        llm_provider_present = False
+        llm_placeholders = []
+        for field_name, env_var in llm_provider_required.items():
+            value = getattr(self, field_name)
+            if value is None or not str(value).strip():
+                continue
+            if self._is_placeholder(str(value)):
+                llm_placeholders.append(env_var)
+                continue
+            llm_provider_present = True
+        if not llm_provider_present:
+            if llm_placeholders:
+                placeholders.extend(llm_placeholders)
+            else:
+                missing.append(" or ".join(llm_provider_required.values()))
 
         error_parts = []
         if missing:
