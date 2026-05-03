@@ -19,7 +19,13 @@ from cli.audit_paywalls import run_paywall_audit
 from cli.extract import run_extraction
 from cli.scout import run_scout
 
-__all__ = ["automated_variant_extraction_workflow", "run_scout", "run_paywall_audit", "run_extraction", "app"]
+__all__ = [
+    "automated_variant_extraction_workflow",
+    "run_scout",
+    "run_paywall_audit",
+    "run_extraction",
+    "app",
+]
 
 app = typer.Typer(
     help="GeneVariantFetcher CLI - Tools for extracting genetic variant data from literature"
@@ -93,10 +99,14 @@ def extract_command(
     else:
         setup_logging(level=logging.INFO)
 
-    # Check for API keys
-    if not os.getenv("OPENAI_API_KEY"):
-        typer.echo("⚠️  ERROR: OPENAI_API_KEY not found in environment!", err=True)
-        typer.echo("Please set OPENAI_API_KEY in your .env file", err=True)
+    # Require at least one LLM provider key. OPENAI_API_KEY or AZURE_AI_API_KEY
+    # both satisfy this — the pipeline routes via TIER*_MODEL strings and
+    # LiteLLM picks up the matching provider's env vars automatically.
+    if not (os.getenv("OPENAI_API_KEY") or os.getenv("AZURE_AI_API_KEY")):
+        typer.echo("⚠️  ERROR: No LLM provider API key found in environment!", err=True)
+        typer.echo(
+            "Set OPENAI_API_KEY or AZURE_AI_API_KEY in your .env file.", err=True
+        )
         raise typer.Exit(1)
 
     try:
@@ -216,9 +226,7 @@ def scout_command(
 def extract_folder_command(
     input_path: Annotated[
         str,
-        typer.Argument(
-            help="Input directory with scout outputs or manifest.json file"
-        ),
+        typer.Argument(help="Input directory with scout outputs or manifest.json file"),
     ],
     output_dir: Annotated[
         str, typer.Argument(help="Output directory for extraction JSON files")

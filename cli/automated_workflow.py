@@ -763,10 +763,11 @@ Examples:
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
 
-    # Check for API keys
-    if not os.getenv("OPENAI_API_KEY"):
-        logger.error("⚠️  ERROR: OPENAI_API_KEY not found in environment!")
-        logger.error("Please set OPENAI_API_KEY in your .env file")
+    # Require at least one LLM provider key. OPENAI_API_KEY or AZURE_AI_API_KEY
+    # both satisfy this — the pipeline routes via TIER*_MODEL strings.
+    if not (os.getenv("OPENAI_API_KEY") or os.getenv("AZURE_AI_API_KEY")):
+        logger.error("⚠️  ERROR: No LLM provider API key found in environment!")
+        logger.error("Set OPENAI_API_KEY or AZURE_AI_API_KEY in your .env file.")
         sys.exit(1)
 
     # Get tier threshold from settings if not provided via CLI
