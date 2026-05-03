@@ -29,7 +29,10 @@ from .elsevier_api import ElsevierAPIClient
 from .format_converters import FormatConverter
 from .free_text_fetch_service import fetch_main_content_for_free_text
 from .free_text_flow import initialize_free_text_access
-from .free_text_output_service import source_from_free_text_flags, write_free_text_output
+from .free_text_output_service import (
+    source_from_free_text_flags,
+    write_free_text_output,
+)
 from .pmc_api import PMCAPIClient
 from .content_validation import validate_content_quality
 from .persistence import (
@@ -260,12 +263,14 @@ class PMCHarvester:
 
         # Initialize publisher API clients (optional - uses API keys from settings/env if available)
         elsevier_api_key = None
+        elsevier_insttoken = None
         wiley_api_key = None
         springer_api_key = None
         if get_settings is not None:
             try:
                 settings = get_settings()
                 elsevier_api_key = settings.elsevier_api_key
+                elsevier_insttoken = settings.elsevier_insttoken
                 wiley_api_key = settings.wiley_api_key
                 springer_api_key = getattr(settings, "springer_api_key", None)
             except Exception:
@@ -276,7 +281,9 @@ class PMCHarvester:
             springer_api_key = os.environ.get("SPRINGER_API_KEY")
 
         self.elsevier_api = ElsevierAPIClient(
-            api_key=elsevier_api_key, session=self.session
+            api_key=elsevier_api_key,
+            insttoken=elsevier_insttoken,
+            session=self.session,
         )
         self.wiley_api = WileyAPIClient(api_key=wiley_api_key, session=self.session)
         self.springer_api = SpringerAPIClient(
@@ -666,7 +673,9 @@ class PMCHarvester:
                 else "N/A"
             )
             self._log_paywalled(
-                pmid, "Supplemental files API failed, no DOI", pmc_url,
+                pmid,
+                "Supplemental files API failed, no DOI",
+                pmc_url,
                 classification="SUPPLEMENT_ONLY",
             )
 
@@ -720,7 +729,13 @@ class PMCHarvester:
             href_l = href.lower()
             is_suppish = any(
                 token in (link_text + " " + href_l)
-                for token in ("supplement", "supplementary", "table s", "appendix", "/bin/")
+                for token in (
+                    "supplement",
+                    "supplementary",
+                    "table s",
+                    "appendix",
+                    "/bin/",
+                )
             )
             if not is_suppish and not href_l.endswith(file_exts):
                 continue
@@ -928,7 +943,9 @@ class PMCHarvester:
         print(f"    Error downloading {filename}: {last_error}")
         # Log failed supplemental download
         self._log_paywalled(
-            pmid, f"Supplemental file download failed: {filename}", url,
+            pmid,
+            f"Supplemental file download failed: {filename}",
+            url,
             classification="SUPPLEMENT_ONLY",
         )
         return False
@@ -972,7 +989,11 @@ class PMCHarvester:
             supplements_dir=supplements_dir,
             pmid=pmid,
             converter=self.converter,
-            download_callback=lambda url, file_path, pmid, filename, supp: self.download_supplement(
+            download_callback=lambda url,
+            file_path,
+            pmid,
+            filename,
+            supp: self.download_supplement(
                 url,
                 file_path,
                 pmid,
@@ -1048,7 +1069,9 @@ class PMCHarvester:
                 print("  ❌ No DOI available for publisher API fallback")
                 pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
                 self._log_paywalled(
-                    pmid, "Full-text not available from PMC and no DOI", pmc_url,
+                    pmid,
+                    "Full-text not available from PMC and no DOI",
+                    pmc_url,
                     classification="PAYWALLED",
                 )
                 return False, "No full-text", None
@@ -1239,7 +1262,11 @@ class PMCHarvester:
             )
             # Handle validation failure
             if output_file is None:
-                return False, unified_content, None  # unified_content contains error message
+                return (
+                    False,
+                    unified_content,
+                    None,
+                )  # unified_content contains error message
             return True, str(output_file), unified_content
 
         free_text_supp_result = process_supplement_files(
@@ -1247,9 +1274,11 @@ class PMCHarvester:
             supplements_dir=supplements_dir,
             pmid=pmid,
             converter=self.converter,
-            download_callback=lambda url, file_path, pmid, filename, supp: self.download_supplement(
-                url, file_path, pmid, filename
-            ),
+            download_callback=lambda url,
+            file_path,
+            pmid,
+            filename,
+            supp: self.download_supplement(url, file_path, pmid, filename),
             extract_figures=extract_figures,
             figures_dir=figures_dir,
             logger=logger,
@@ -1280,7 +1309,11 @@ class PMCHarvester:
 
         # Handle validation failure
         if output_file is None:
-            return False, unified_content, None  # unified_content contains error message
+            return (
+                False,
+                unified_content,
+                None,
+            )  # unified_content contains error message
         return True, str(output_file), unified_content
 
     def run_post_processing(self, pmid: str, unified_content: str = None) -> bool:
@@ -1780,7 +1813,9 @@ class PMCHarvester:
         remaining_pmids = [p for p in pmids if str(p) not in already_downloaded]
 
         print(f"{'=' * 60}")
-        print(f"DOWNLOAD PHASE: {len(pmids)} total, {len(already_downloaded)} already done, {len(remaining_pmids)} to download")
+        print(
+            f"DOWNLOAD PHASE: {len(pmids)} total, {len(already_downloaded)} already done, {len(remaining_pmids)} to download"
+        )
         print(f"{'=' * 60}")
 
         downloaded_pmids = list(already_downloaded)

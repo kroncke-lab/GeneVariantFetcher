@@ -46,16 +46,21 @@ class ElsevierAPIClient:
     BASE_URL = "https://api.elsevier.com/content/article"
 
     def __init__(
-        self, api_key: Optional[str] = None, session: Optional[requests.Session] = None
+        self,
+        api_key: Optional[str] = None,
+        insttoken: Optional[str] = None,
+        session: Optional[requests.Session] = None,
     ):
         """
         Initialize the Elsevier API client.
 
         Args:
             api_key: Elsevier API key (from dev.elsevier.com)
+            insttoken: Elsevier institution token for subscription access
             session: Optional requests session to use (for connection pooling)
         """
         self.api_key = api_key
+        self.insttoken = insttoken
         self.session = session or requests.Session()
         self._last_request_time = 0
         self._min_request_interval = 0.2  # Rate limiting: max 5 req/sec
@@ -144,6 +149,8 @@ class ElsevierAPIClient:
             "X-ELS-APIKey": self.api_key,
             "Accept": "application/xml",
         }
+        if self.insttoken:
+            headers["X-ELS-Insttoken"] = self.insttoken
 
         try:
             logger.info(f"Fetching full text from Elsevier API for DOI: {doi}")
@@ -192,6 +199,8 @@ class ElsevierAPIClient:
             "X-ELS-APIKey": self.api_key,
             "Accept": "application/xml",
         }
+        if self.insttoken:
+            headers["X-ELS-Insttoken"] = self.insttoken
 
         try:
             logger.info(f"Fetching full text from Elsevier API for PII: {pii}")
@@ -243,7 +252,9 @@ class ElsevierAPIClient:
             xml_content = re.sub(r"<([a-zA-Z][\w.-]*):", r"<", xml_content)
             xml_content = re.sub(r"</([a-zA-Z][\w.-]*):", r"</", xml_content)
             # Also strip stray namespace-prefixed attributes (e.g., xlink:href)
-            xml_content = re.sub(r'\s+[a-zA-Z][\w.-]*:[a-zA-Z][\w.-]*="[^"]*"', "", xml_content)
+            xml_content = re.sub(
+                r'\s+[a-zA-Z][\w.-]*:[a-zA-Z][\w.-]*="[^"]*"', "", xml_content
+            )
 
             try:
                 root = ET.fromstring(xml_content)
