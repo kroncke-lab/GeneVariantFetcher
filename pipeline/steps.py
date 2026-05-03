@@ -245,6 +245,7 @@ def filter_papers(
     use_clinical_triage: bool = False,
     tier1_min_keywords: int = 1,
     tier2_confidence_threshold: float = 0.3,
+    filter_max_workers: int = 8,
 ) -> StepResult:
     """
     Filter papers using tiered filtering.
@@ -315,44 +316,51 @@ def filter_papers(
 
     # Append-only progress writer (flush each record so SIGKILL/OOM doesn't lose work)
     progress_fh = open(progress_file, "a", encoding="utf-8")
+    progress_lock = threading.Lock()
 
     def _write_progress(record: Dict[str, Any]) -> None:
-        progress_fh.write(json.dumps(record, ensure_ascii=False) + "\n")
-        progress_fh.flush()
+        # Single writer thread/lock — flush per-record for crash safety
+        line = json.dumps(record, ensure_ascii=False) + "\n"
+        with progress_lock:
+            progress_fh.write(line)
+            progress_fh.flush()
 
-    for pmid in pmids:
-        if pmid in processed_pmids:
-            continue
+    def _classify_pmid(pmid: str) -> Tuple[str, Optional[str], Dict[str, Any]]:
+        """
+        Run tier1/tier2 filters for a single PMID.
+
+        Returns (pmid, fail_reason_or_None_if_pass, progress_record).
+        Side-effect-free except for the LLM call inside tier2_filter.filter().
+        """
         record_path = abstract_records.get(pmid)
-
         if not record_path or not Path(record_path).exists():
             reason = "Missing abstract JSON"
-            dropped_pmids.append((pmid, reason))
-            _write_progress(
+            return (
+                pmid,
+                reason,
                 {
                     "pmid": pmid,
                     "final_decision": "FAIL",
                     "reason": reason,
                     "stage": "abstract_load",
-                }
+                },
             )
-            continue
 
         try:
             with open(record_path, "r", encoding="utf-8") as f:
                 record = json.load(f)
         except Exception as e:
             reason = f"Abstract JSON read error: {e}"
-            dropped_pmids.append((pmid, reason))
-            _write_progress(
+            return (
+                pmid,
+                reason,
                 {
                     "pmid": pmid,
                     "final_decision": "FAIL",
                     "reason": reason,
                     "stage": "abstract_load",
-                }
+                },
             )
-            continue
 
         metadata = record.get("metadata", {})
         paper = Paper(
@@ -366,14 +374,14 @@ def filter_papers(
             source="PubMed",
         )
 
-        # Tier 1: Keyword filter
         tier1_result = None
         if enable_tier1:
             tier1_result = keyword_filter.filter(paper)
             if tier1_result.decision is not FilterDecision.PASS:
                 reason = tier1_result.reason
-                dropped_pmids.append((pmid, reason))
-                _write_progress(
+                return (
+                    pmid,
+                    reason,
                     {
                         "pmid": pmid,
                         "final_decision": "FAIL",
@@ -384,11 +392,9 @@ def filter_papers(
                             "reason": tier1_result.reason,
                             "confidence": tier1_result.confidence,
                         },
-                    }
+                    },
                 )
-                continue
 
-        # Tier 2: LLM filter
         if enable_tier2:
             if use_clinical_triage:
                 triage_result = tier2_filter.triage_paper(paper, gene_symbol)
@@ -420,8 +426,9 @@ def filter_papers(
 
             if tier2_result.decision is not FilterDecision.PASS:
                 reason = tier2_result.reason
-                dropped_pmids.append((pmid, reason))
-                _write_progress(
+                return (
+                    pmid,
+                    reason,
                     {
                         "pmid": pmid,
                         "final_decision": "FAIL",
@@ -441,12 +448,12 @@ def filter_papers(
                             "reason": tier2_result.reason,
                             "confidence": tier2_result.confidence,
                         },
-                    }
+                    },
                 )
-                continue
 
-        filtered_pmids.append(pmid)
-        _write_progress(
+        return (
+            pmid,
+            None,
             {
                 "pmid": pmid,
                 "final_decision": "PASS",
@@ -470,8 +477,53 @@ def filter_papers(
                     if enable_tier2
                     else None
                 ),
-            }
+            },
         )
+
+    pending_pmids = [p for p in pmids if p not in processed_pmids]
+
+    # Tier 2 is LLM-bound; parallelize across PMIDs to cut filter wallclock
+    # from hours to minutes on large gene queries. Per-record progress writes
+    # remain atomic (lock-protected, flushed per record), so kill -9 mid-batch
+    # is safe and resume picks up where we left off.
+    max_workers = (
+        filter_max_workers if filter_max_workers and filter_max_workers > 0 else 8
+    )
+
+    if pending_pmids and enable_tier2:
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = {executor.submit(_classify_pmid, p): p for p in pending_pmids}
+            for fut in as_completed(futures):
+                pmid = futures[fut]
+                try:
+                    out_pmid, fail_reason, record = fut.result()
+                except Exception as e:
+                    reason = f"Filter exception: {e}"
+                    dropped_pmids.append((pmid, reason))
+                    _write_progress(
+                        {
+                            "pmid": pmid,
+                            "final_decision": "FAIL",
+                            "reason": reason,
+                            "stage": "exception",
+                        }
+                    )
+                    continue
+
+                if fail_reason is None:
+                    filtered_pmids.append(out_pmid)
+                else:
+                    dropped_pmids.append((out_pmid, fail_reason))
+                _write_progress(record)
+    else:
+        # Tier 1 only or empty pending list — keep the simple sequential path
+        for pmid in pending_pmids:
+            out_pmid, fail_reason, record = _classify_pmid(pmid)
+            if fail_reason is None:
+                filtered_pmids.append(out_pmid)
+            else:
+                dropped_pmids.append((out_pmid, fail_reason))
+            _write_progress(record)
 
     # Close progress file handle (important when running long jobs)
     try:
