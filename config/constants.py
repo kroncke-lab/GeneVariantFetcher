@@ -72,6 +72,26 @@ FILTER_CLINICAL_KEYWORDS: List[str] = [
 ]
 
 # =============================================================================
+# Atrial Fibrillation Disease Keywords
+# =============================================================================
+# Optional, additive keyword set used by the disease-aware discover command
+# and (when --disease is set on extract) Tier-2 filtering. NOT used by default;
+# FILTER_CLINICAL_KEYWORDS is unchanged.
+
+FILTER_AF_KEYWORDS: List[str] = [
+    "atrial fibrillation",
+    "AF",
+    "arrhythmia",
+    "cardiac arrhythmia",
+    "atrioventricular",
+    "AV block",
+    "lone AF",
+    "paroxysmal AF",
+    "persistent AF",
+    "familial atrial fibrillation",
+]
+
+# =============================================================================
 # Clinical Keywords for Data Scout Relevance Scoring
 # =============================================================================
 # Used by pipeline/data_scout.py for identifying high-value text zones

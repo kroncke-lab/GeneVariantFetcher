@@ -16,6 +16,7 @@ from typing_extensions import Annotated
 
 from cli.automated_workflow import automated_variant_extraction_workflow
 from cli.audit_paywalls import run_paywall_audit
+from cli.discover import discover_command, run_discover
 from cli.extract import run_extraction
 from cli.scout import run_scout
 
@@ -24,6 +25,7 @@ __all__ = [
     "run_scout",
     "run_paywall_audit",
     "run_extraction",
+    "run_discover",
     "app",
 ]
 
@@ -85,6 +87,19 @@ def extract_command(
             help="Run Data Scout before extraction to identify high-value data zones for better context",
         ),
     ] = False,
+    disease: Annotated[
+        str,
+        typer.Option(
+            "--disease",
+            "-d",
+            help=(
+                "Optional disease term (e.g. 'atrial fibrillation'). When set, "
+                "disease clause is appended to PubMed queries and Tier-2 filter "
+                "prompt prioritizes original patient/functional data. When omitted, "
+                "behavior is unchanged."
+            ),
+        ),
+    ] = None,
     verbose: Annotated[
         bool, typer.Option("--verbose", "-v", help="Enable verbose logging")
     ] = False,
@@ -121,6 +136,7 @@ def extract_command(
             auto_synonyms=auto_synonyms,
             synonyms=synonyms or [],
             scout_first=scout_first,
+            disease=disease,
         )
     except KeyboardInterrupt:
         typer.echo("\n⚠️  Workflow interrupted by user", err=True)
@@ -128,6 +144,9 @@ def extract_command(
     except Exception as e:
         typer.echo(f"\n❌ Workflow failed with error: {e}", err=True)
         raise typer.Exit(1)
+
+
+app.command("discover")(discover_command)
 
 
 @app.command("audit-paywalls")

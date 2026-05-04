@@ -131,7 +131,7 @@ Instructions:
 - PASS if the paper reports new genetic variant findings in patients
 - FAIL if it's a review, meta-analysis, or purely methodological
 - FAIL if it's basic science without clinical application
-
+{disease_clause}
 Respond with a JSON object:
 {{
     "decision": "PASS" or "FAIL",
@@ -139,12 +139,18 @@ Respond with a JSON object:
     "confidence": 0.0-1.0
 }}"""
 
+    DISEASE_PROMPT_ADDENDUM = (
+        "- PRIORITIZE papers reporting original patient or functional data for {disease}.\n"
+        "- FAIL papers that are pure reviews of {disease} genetics without new patient/functional data.\n"
+    )
+
     def __init__(
         self,
         model: Optional[str] = None,
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
         confidence_threshold: Optional[float] = None,
+        disease: Optional[str] = None,
     ):
         """
         Initialize the Intern filter.
@@ -154,6 +160,10 @@ Respond with a JSON object:
             temperature: Model temperature (lower = more deterministic). If None, uses config.
             max_tokens: Maximum tokens for response. If None, uses config.
             confidence_threshold: Minimum confidence to pass (0.0-1.0). If None, uses config.
+            disease: Optional disease term (e.g. "atrial fibrillation"). When set,
+                an addendum is added to the classification prompt prioritizing
+                original patient/functional data for that disease and rejecting
+                pure reviews. When None (default), the prompt is unchanged.
         """
         settings = get_settings()
 
@@ -168,11 +178,12 @@ Respond with a JSON object:
             if confidence_threshold is not None
             else settings.tier2_confidence_threshold
         )
+        self.disease = disease.strip() if disease and disease.strip() else None
 
         super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
 
         logger.debug(
-            f"InternFilter initialized with model={model}, temp={temperature}, confidence_threshold={self.confidence_threshold}"
+            f"InternFilter initialized with model={model}, temp={temperature}, confidence_threshold={self.confidence_threshold}, disease={self.disease!r}"
         )
 
     def filter(self, paper: Paper) -> FilterResult:
@@ -197,10 +208,16 @@ Respond with a JSON object:
                 confidence=1.0,
             )
 
-        # Construct prompt
+        # Construct prompt — disease clause is empty unless --disease was set
+        disease_clause = (
+            self.DISEASE_PROMPT_ADDENDUM.format(disease=self.disease)
+            if self.disease
+            else ""
+        )
         prompt = self.CLASSIFICATION_PROMPT.format(
             title=paper.title,
             abstract=paper.abstract[:2000],  # Truncate very long abstracts
+            disease_clause=disease_clause,
         )
 
         try:
@@ -294,7 +311,7 @@ Rules:
    - Functional study that *also* describes the patient phenotype
    - Clinical trial with patient-level data
    - Family study with clinical data
-
+{disease_clause}
 Key Question: Does this paper report NEW patient-level clinical data?
 
 Title: {title}
@@ -310,11 +327,18 @@ Output format: JSON only.
 
 Respond ONLY with valid JSON. Be conservative - when in doubt about borderline cases, use confidence < 0.5."""
 
+    DISEASE_PROMPT_ADDENDUM = (
+        "\n3. DISEASE-AWARE PRIORITIZATION (this run is filtering for {disease}):\n"
+        "   - PRIORITIZE original patient or functional data for {disease}.\n"
+        "   - REJECT papers that are pure reviews of {disease} genetics without new cases.\n"
+    )
+
     def __init__(
         self,
         model: Optional[str] = None,
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
+        disease: Optional[str] = None,
     ):
         """
         Initialize the Clinical Data Triage filter.
@@ -323,6 +347,9 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
             model: LiteLLM model identifier (default: uses TIER2_MODEL from config). If None, uses config.
             temperature: Model temperature (lower = more deterministic). If None, uses config.
             max_tokens: Maximum tokens for response. If None, uses config default (200).
+            disease: Optional disease term. When set, an addendum is added to
+                the triage prompt prioritizing original patient/functional data
+                for that disease. When None (default), the prompt is unchanged.
         """
         settings = get_settings()
 
@@ -334,9 +361,13 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
             max_tokens if max_tokens is not None else 200
         )  # Slightly higher than default for triage
 
+        self.disease = disease.strip() if disease and disease.strip() else None
+
         super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
 
-        logger.debug(f"ClinicalDataTriageFilter initialized with model={model}")
+        logger.debug(
+            f"ClinicalDataTriageFilter initialized with model={model}, disease={self.disease!r}"
+        )
 
     def triage(
         self,
@@ -372,11 +403,17 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
                 "pmid": pmid,
             }
 
-        # Construct prompt
+        # Construct prompt — disease clause is empty unless --disease was set
+        disease_clause = (
+            self.DISEASE_PROMPT_ADDENDUM.format(disease=self.disease)
+            if self.disease
+            else ""
+        )
         prompt = self.TRIAGE_PROMPT.format(
             gene=gene,
             title=title,
             abstract=abstract[:2500],  # Truncate very long abstracts
+            disease_clause=disease_clause,
         )
 
         try:

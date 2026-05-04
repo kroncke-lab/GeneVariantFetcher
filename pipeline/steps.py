@@ -128,6 +128,7 @@ def fetch_pmids(
     use_pubmed: bool = True,
     use_europepmc: bool = False,
     api_key: Optional[str] = None,
+    disease: Optional[str] = None,
 ) -> StepResult:
     """
     Fetch PMIDs from literature sources.
@@ -142,6 +143,9 @@ def fetch_pmids(
         use_pubmed: Enable PubMed source
         use_europepmc: Enable Europe PMC source
         api_key: Optional NCBI API key
+        disease: Optional disease term to scope PubMed queries (e.g.
+            "atrial fibrillation"). When None (default), behavior is identical
+            to the gene-only baseline.
 
     Returns:
         StepResult with PMIDs in data["pmids"]
@@ -169,6 +173,7 @@ def fetch_pmids(
             api_key=api_key or os.getenv("NCBI_API_KEY"),
             settings=settings,
             synonyms=synonyms,
+            disease=disease,
         )
 
         return StepResult(
@@ -246,6 +251,7 @@ def filter_papers(
     tier1_min_keywords: int = 1,
     tier2_confidence_threshold: float = 0.3,
     filter_max_workers: int = 8,
+    disease: Optional[str] = None,
 ) -> StepResult:
     """
     Filter papers using tiered filtering.
@@ -269,9 +275,11 @@ def filter_papers(
 
     keyword_filter = KeywordFilter(min_keyword_matches=tier1_min_keywords)
     tier2_filter = (
-        ClinicalDataTriageFilter()
+        ClinicalDataTriageFilter(disease=disease)
         if use_clinical_triage
-        else InternFilter(confidence_threshold=tier2_confidence_threshold)
+        else InternFilter(
+            confidence_threshold=tier2_confidence_threshold, disease=disease
+        )
     )
 
     # Persistent, resume-safe filtering output

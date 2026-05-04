@@ -76,6 +76,11 @@ PROTEIN_LENGTHS = {
     "KCNJ2": 427,
     "CACNA1C": 2221,
     "RYR2": 4967,
+    # Atrial fibrillation genes
+    "NPPA": 151,
+    "GJA5": 406,
+    "KCNA5": 507,
+    "PITX2": 305,
 }
 
 # Non-target gene hotspots (TP53, KRAS, BRAF, PIK3CA)

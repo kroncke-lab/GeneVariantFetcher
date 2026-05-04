@@ -41,6 +41,7 @@ def automated_variant_extraction_workflow(
     auto_synonyms: bool = True,
     synonyms: list[str] | None = None,
     scout_first: bool = False,
+    disease: str | None = None,
 ):
     """
     Complete automated workflow from gene symbol to extracted variant data.
@@ -56,6 +57,10 @@ def automated_variant_extraction_workflow(
         auto_synonyms: Automatically discover and use gene synonyms from NCBI Gene database (default: True).
         synonyms: List of manually specified gene synonyms to include in searches.
         scout_first: Run Data Scout before extraction to identify high-value data zones.
+        disease: Optional disease term (e.g. "atrial fibrillation"). When set,
+            disease clause is appended to PubMed queries and Tier-2 filter prompts
+            prioritize original patient/functional data. When None (default),
+            behavior is unchanged.
     """
     initialize_runtime()
     setup_logging(level=logging.INFO)
@@ -94,6 +99,7 @@ def automated_variant_extraction_workflow(
         auto_synonyms=auto_synonyms,
         synonyms=synonyms or [],
         scout_first=scout_first,
+        disease=disease,
     )
 
     # Initialize checkpoint manager
@@ -201,6 +207,7 @@ def automated_variant_extraction_workflow(
         use_pubmed=settings.use_pubmed and not settings.pubmind_only,
         use_europepmc=settings.use_europepmc,
         api_key=os.getenv("NCBI_API_KEY"),
+        disease=disease,
     )
 
     if not pmid_result.success:
@@ -286,6 +293,7 @@ def automated_variant_extraction_workflow(
         use_clinical_triage=use_clinical_triage,
         tier1_min_keywords=settings.tier1_min_keywords,
         tier2_confidence_threshold=settings.tier2_confidence_threshold,
+        disease=disease,
     )
 
     filtered_pmids = filter_result.data.get("filtered_pmids", [])

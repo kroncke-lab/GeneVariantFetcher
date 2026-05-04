@@ -31,12 +31,16 @@ class PMIDDiscoveryResult:
 def build_gene_keyword_queries(
     gene_symbol: str,
     synonyms: Optional[Sequence[str]] = None,
+    disease: Optional[str] = None,
 ) -> List[str]:
     """Return a set of PubMed queries focused on a gene and variant keywords.
 
     Args:
         gene_symbol: Primary gene symbol to search for
         synonyms: Optional list of gene synonyms to include in queries
+        disease: Optional disease term (e.g. "atrial fibrillation"). When set,
+            an additional disease clause is appended to every query. When None
+            (default), behavior is unchanged from the gene-only baseline.
 
     Returns:
         List of PubMed query strings
@@ -49,18 +53,26 @@ def build_gene_keyword_queries(
         "AND (case report OR cohort OR patient)",
     )
 
+    disease_clause = ""
+    if disease and disease.strip():
+        disease_clause = f' AND "{disease.strip()}"[Title/Abstract]'
+
     queries: List[str] = []
     for clause in keyword_clauses:
         query = f"{base_query} {clause}".strip()
+        if disease_clause:
+            query = f"{query}{disease_clause}"
         if query not in queries:
             queries.append(query)
 
     synonym_info = f" (+ {len(synonyms)} synonyms)" if synonyms else ""
+    disease_info = f" [disease: {disease}]" if disease else ""
     logger.debug(
-        "Built %d PubMed keyword queries for %s%s",
+        "Built %d PubMed keyword queries for %s%s%s",
         len(queries),
         gene_symbol,
         synonym_info,
+        disease_info,
     )
     return queries
 
@@ -76,6 +88,7 @@ def discover_pmids_for_gene(
     api_key: str | None = None,
     settings: Settings | None = None,
     synonyms: Sequence[str] | None = None,
+    disease: str | None = None,
 ) -> PMIDDiscoveryResult:
     """Fetch PMIDs from configured sources, merge, and persist them.
 
@@ -140,7 +153,7 @@ def discover_pmids_for_gene(
         pubmed_client = PubMedClient(api_key=api_key, email=effective_email)
         pubmed_pmids: set[str] = set()
         for query in build_gene_keyword_queries(
-            gene_symbol, synonyms=synonyms_list or None
+            gene_symbol, synonyms=synonyms_list or None, disease=disease
         ):
             try:
                 pubmed_pmids.update(
