@@ -116,26 +116,27 @@ class InternFilter(BaseLLMCaller):
     Classifies papers as "Original Clinical Data" vs "Review/Irrelevant".
     """
 
-    CLASSIFICATION_PROMPT = """You are a medical research classifier. Your job is to determine if a scientific paper contains ORIGINAL CLINICAL DATA about genetic variants.
+    CLASSIFICATION_PROMPT = """You are a medical research classifier. Your job is to determine if a scientific paper IDENTIFIES SPECIFIC GENETIC VARIANTS that downstream variant curation can extract.
 
 Classify the paper as ONE of:
-1. PASS - Contains original clinical data (case reports, patient cohorts, clinical studies with genetic variant data)
-2. FAIL - Review article, meta-analysis, methodology paper, or not clinically relevant
+1. PASS - Identifies one or more specific genetic variants (case reports, cohorts, screening studies, OR functional/in-vitro studies that name specific variants like p.Arg176Trp / G604S / c.2398+1G>C)
+2. FAIL - Review or meta-analysis with no new variants, methodology paper with no variant findings, or unrelated topic
 
 Title: {title}
 
 Abstract: {abstract}
 
 Instructions:
-- Look for original patient data, case reports, or clinical studies
-- PASS if the paper reports new genetic variant findings in patients
-- FAIL if it's a review, meta-analysis, or purely methodological
-- FAIL if it's basic science without clinical application
+- PASS if the paper reports NEW genetic variants in patients (clinical case reports, cohorts, screening)
+- PASS if the paper functionally characterizes one or more SPECIFIC NAMED variants in vitro / in cell lines / in iPSC models / in heterologous expression systems — these papers are still primary sources for variant data
+- PASS if the paper analyzes existing exome/sequencing data and reports specific variant identifiers
+- FAIL only if it is a pure review with no new variants, an unrelated methods paper, an animal-only study with no specific human variant, or off-topic
+- "In vitro" or "functional study" alone is NOT a reason to fail — check whether specific named variants appear
 {disease_clause}
 Respond with a JSON object:
 {{
     "decision": "PASS" or "FAIL",
-    "reason": "Brief explanation (1-2 sentences)",
+    "reason": "Brief explanation (1-2 sentences). If FAIL, state which exclusion rule applied.",
     "confidence": 0.0-1.0
 }}"""
 
@@ -289,30 +290,28 @@ class ClinicalDataTriageFilter(BaseLLMCaller):
     Output: JSON with "KEEP" or "DROP" decision, reason, and confidence score.
     """
 
-    TRIAGE_PROMPT = """You are a Triage Assistant for clinical genetic research papers.
+    TRIAGE_PROMPT = """You are a Triage Assistant for genetic variant curation. Your job is to decide whether the paper IDENTIFIES SPECIFIC NAMED VARIANTS in {gene} (or its protein) that downstream curation can extract.
 
-Task: Determine if the text contains ORIGINAL clinical data (case reports, cohort studies) for {gene}.
 Input: Abstract/Introduction.
 
 Rules:
 1. REJECT if:
-   - Review article
-   - Meta-analysis (unless individual patient data attached)
-   - Animal study (mouse, rat, zebrafish, etc.)
-   - Cell study only (in vitro, cell lines, no patients)
-   - Variant interpretation guidelines (without new cases)
-   - Purely computational/bioinformatics study
-   - Basic science without patient phenotypes
+   - Pure review or meta-analysis with NO new variant findings
+   - Animal-only study (mouse, rat, zebrafish) with NO specific human variant identified
+   - Variant interpretation guidelines / methodology paper with NO new cases or named variants
+   - Purely computational/bioinformatics study with NO specific variants reported
+   - Off-topic (unrelated to {gene})
 
 2. ACCEPT if:
-   - Case report (even single patient)
-   - Case series (multiple patients)
-   - Clinical cohort study
-   - Functional study that *also* describes the patient phenotype
-   - Clinical trial with patient-level data
-   - Family study with clinical data
+   - Case report (even single patient) with a named variant
+   - Case series, clinical cohort, screening study with variants
+   - Family study with clinical data and variants
+   - Clinical trial with patient-level variant data
+   - **Functional/in-vitro study (cell lines, iPSC, heterologous expression, electrophysiology) that names one or more SPECIFIC variants** (e.g. p.Arg176Trp, G604S, c.2398+1G>C). These are still primary sources for variant data.
+   - Re-analysis of public sequencing data (gnomAD, ESP, exome cohorts) reporting specific variants
 {disease_clause}
-Key Question: Does this paper report NEW patient-level clinical data?
+Key Question: Does the abstract name one or more SPECIFIC variants that a downstream curator could extract?
+"In vitro" or "functional study" alone is NOT a reason to drop — only drop if NO specific variants are identified.
 
 Title: {title}
 

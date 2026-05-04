@@ -395,8 +395,8 @@ def automated_variant_extraction_workflow(
 
         try:
             scout_result = run_scout(
-                input_path=str(harvest_dir),
-                output_dir=str(scout_output_dir),
+                input_path=Path(harvest_dir),
+                output_dir=Path(scout_output_dir),
                 gene=gene_symbol,
                 min_relevance=0.1,
                 max_zones=30,

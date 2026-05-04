@@ -157,8 +157,12 @@ SCANNER_MERGE_MIN_CONFIDENCE: float = 0.6
 # Maximum number of scanner hints to include in the LLM prompt
 SCANNER_MAX_HINTS: int = 50
 
-# Table row hint threshold for raising the adaptive model-cascade bar
-ADAPTIVE_TABLE_THRESHOLD: int = 50
+# Table row hint threshold for raising the adaptive model-cascade bar.
+# When the scanner detects this many table-like rows, the variant-count
+# threshold for "good enough" is raised dynamically (table_row_hint // 3),
+# which forces gpt-4o-mini → gpt-4o cascade on cohort/screening papers.
+# Lowered from 50 → 20 (2026-05-04) so moderate cohort tables also cascade.
+ADAPTIVE_TABLE_THRESHOLD: int = 20
 
 # =============================================================================
 # HTTP Timeouts (seconds)

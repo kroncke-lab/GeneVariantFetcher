@@ -17,6 +17,7 @@ Usage:
 import logging
 import time
 from typing import Any, Dict, Optional, Tuple
+from urllib.parse import quote
 
 import requests
 
@@ -79,19 +80,36 @@ class UnpaywallClient:
 
         self._rate_limit()
 
-        url = f"{self.BASE_URL}/{doi}"
+        # URL-encode the DOI path segment. Some legacy DOIs contain `<`, `>`,
+        # `:`, `(`, `)` which Unpaywall's edge sometimes rejects when sent
+        # literally (returning a non-JSON 200/4xx). `safe="/"` keeps the slash
+        # between registrant and suffix.
+        encoded_doi = quote(doi, safe="/")
+        url = f"{self.BASE_URL}/{encoded_doi}"
         params = {"email": self.email}
 
         try:
             logger.info(f"Checking Unpaywall for DOI: {doi}")
+
+            # Retry once on transient empty/invalid JSON. The Unpaywall edge
+            # occasionally returns an empty body during deploys; a single
+            # retry after a short backoff recovers most of these without
+            # mis-classifying the DOI as "not OA".
             response = self.session.get(url, params=params, timeout=30)
+            if response.status_code == 200 and not response.text.strip():
+                logger.info(f"Empty Unpaywall body for {doi}, retrying once...")
+                time.sleep(1.0)
+                response = self.session.get(url, params=params, timeout=30)
 
             if response.status_code == 200:
-                # Handle empty or invalid JSON responses
                 try:
                     data = response.json()
                 except ValueError as e:
-                    logger.warning(f"Invalid JSON response from Unpaywall for {doi}: {e}")
+                    snippet = response.text[:120].replace("\n", " ")
+                    logger.warning(
+                        f"Invalid JSON response from Unpaywall for {doi}: {e}; "
+                        f"ct={response.headers.get('content-type')} body[:120]={snippet!r}"
+                    )
                     return None, f"Invalid JSON response: {str(e)}"
 
                 # Extract useful info

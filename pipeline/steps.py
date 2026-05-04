@@ -1087,6 +1087,11 @@ def extract_variants(
             result = get_extractor().extract(paper)
 
             if result.success:
+                # Persist model_used into the saved JSON's extraction_metadata
+                # so cascading is auditable after the run finishes.
+                if result.extracted_data:
+                    md = result.extracted_data.setdefault("extraction_metadata", {})
+                    md["model_used"] = result.model_used
                 output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
                 with open(output_file, "w") as f:
                     json.dump(result.extracted_data, f, indent=2)
@@ -1120,9 +1125,9 @@ def extract_variants(
 
             if result.success:
                 if result.extracted_data:
-                    if "extraction_metadata" not in result.extracted_data:
-                        result.extracted_data["extraction_metadata"] = {}
-                    result.extracted_data["extraction_metadata"]["abstract_only"] = True
+                    md = result.extracted_data.setdefault("extraction_metadata", {})
+                    md["abstract_only"] = True
+                    md["model_used"] = result.model_used
 
                 output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
                 with open(output_file, "w") as f:
