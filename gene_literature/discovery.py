@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -161,6 +162,15 @@ def discover_pmids_for_gene(
                 )
             except PubMedError as exc:
                 logger.warning("PubMed query failed for '%s': %s", query, exc)
+            except json.JSONDecodeError as exc:
+                # NCBI occasionally returns malformed JSON (e.g. an unescaped
+                # newline inside an ERROR string). Skip the offending query
+                # rather than crashing the entire discovery run.
+                logger.warning(
+                    "PubMed returned malformed JSON for '%s': %s — skipping query",
+                    query,
+                    exc,
+                )
 
         pubmed_pmids_list = sorted(pubmed_pmids)[:effective_max_results]
         pmid_sets.append(set(pubmed_pmids_list))
