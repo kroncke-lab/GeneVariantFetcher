@@ -129,6 +129,25 @@ class Settings(BaseSettings):
         description="Try next model if first finds fewer variants than this (0 = only use first model)",
     )
 
+    # Table-router (router-first extraction): the LLM classifies which tables
+    # contain variant data; a deterministic parser then reads the cells. Falls
+    # back to the full-text Tier-3 path when no usable tables are detected.
+    enable_table_router: bool = Field(
+        default=True,
+        env="ENABLE_TABLE_ROUTER",
+        description="Try router-first table extraction before sending full text to Tier 3",
+    )
+    table_router_model: str = Field(
+        default="azure_ai/Kimi-K2.6-1",
+        env="TABLE_ROUTER_MODEL",
+        description="LLM used to classify tables and emit column mappings",
+    )
+    table_router_max_tokens: int = Field(
+        default=1024,
+        env="TABLE_ROUTER_MAX_TOKENS",
+        description="Max tokens for the table-router response",
+    )
+
     # Paper Sourcing Configuration
     use_pubmind: bool = Field(
         default=True,

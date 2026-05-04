@@ -1053,7 +1053,10 @@ class ExpertExtractor(BaseLLMCaller):
         )
 
         # Only continue if we're missing a significant number of variants
-        if len(variants) >= expected_count or expected_count - len(variants) < CONTINUATION_VARIANT_GAP:
+        if (
+            len(variants) >= expected_count
+            or expected_count - len(variants) < CONTINUATION_VARIANT_GAP
+        ):
             return base_data
 
         logger.info(
@@ -1317,6 +1320,87 @@ class ExpertExtractor(BaseLLMCaller):
 
         return True, "Text appears usable"
 
+    def _try_table_router(
+        self, paper: Paper, scanner_text: str
+    ) -> Optional[ExtractionResult]:
+        """Router-first extraction. Returns None to fall through to full-text Tier 3.
+
+        Caller is responsible for the feature flag + gene-symbol guard. We only
+        return a successful ExtractionResult if the router found ≥ 1 variant
+        across the routed tables — anything less means the paper is either
+        narrative-only or has tables the router rejected, and the existing
+        full-text path is a better answer.
+        """
+        from pipeline.table_router import extract_via_router
+
+        settings = get_settings()
+        try:
+            outcome = extract_via_router(
+                scanner_text,
+                paper.gene_symbol or "UNKNOWN",
+                model=settings.table_router_model,
+            )
+        except Exception as e:  # noqa: BLE001
+            logger.warning(
+                "PMID %s - Table router crashed (%s); falling back to full-text path",
+                paper.pmid,
+                e,
+            )
+            return None
+
+        variants = outcome.get("variants") or []
+        if outcome.get("error"):
+            logger.info(
+                "PMID %s - Router LLM error (%s); falling back",
+                paper.pmid,
+                outcome["error"],
+            )
+            return None
+        if not variants:
+            logger.info(
+                "PMID %s - Router found no usable variant tables (%d candidates routed); "
+                "falling back to full-text Tier 3",
+                paper.pmid,
+                len(outcome.get("routed", []) or []),
+            )
+            return None
+
+        routed = outcome.get("routed", []) or []
+        table_ids = ", ".join(r.table_id for r in routed)
+        logger.info(
+            "PMID %s - Router approved tables [%s]; deterministically parsed %d variants",
+            paper.pmid,
+            table_ids,
+            len(variants),
+        )
+
+        extracted_data = {
+            "paper_metadata": {
+                "pmid": paper.pmid,
+                "title": paper.title or "Unknown Title",
+                "extraction_summary": (
+                    f"Router+deterministic parse of {len(variants)} variants from "
+                    f"{len(routed)} routed table(s)"
+                ),
+            },
+            "variants": variants,
+            "extraction_metadata": {
+                "total_variants_found": len(variants),
+                "extraction_confidence": "medium",
+                "compact_mode": True,
+                "notes": (
+                    f"Router-first path: tables {table_ids} parsed deterministically "
+                    f"using {settings.table_router_model}"
+                ),
+            },
+        }
+        return ExtractionResult(
+            pmid=paper.pmid,
+            success=True,
+            extracted_data=extracted_data,
+            model_used=f"router+{settings.table_router_model}",
+        )
+
     def _attempt_extraction(
         self,
         paper: Paper,
@@ -1334,7 +1418,9 @@ class ExpertExtractor(BaseLLMCaller):
             self.model = model
             self.max_tokens = self._clamp_max_tokens(model, self.requested_max_tokens)
 
-            return self._do_attempt_extraction(paper, model, prepared_full_text, estimated_variants)
+            return self._do_attempt_extraction(
+                paper, model, prepared_full_text, estimated_variants
+            )
         finally:
             self.model, self.max_tokens = saved_model, saved_max_tokens
 
@@ -1412,6 +1498,16 @@ class ExpertExtractor(BaseLLMCaller):
                     extracted_data=extracted_data,
                     model_used="deterministic-table-parser",
                 )
+
+        # Router-first extraction: ask a cheap LLM to classify tables, then
+        # parse them deterministically. Cuts ~10× tokens per typical paper
+        # vs sending 60k chars of full text. Falls through to full-text Tier 3
+        # below if the router finds no usable tables OR the router LLM fails.
+        settings = get_settings()
+        if settings.enable_table_router and paper.gene_symbol and scanner_text:
+            router_outcome = self._try_table_router(paper, scanner_text)
+            if router_outcome is not None:
+                return router_outcome
 
         truncated_text = self._truncate_text_for_prompt(
             full_text, gene_symbol=paper.gene_symbol
