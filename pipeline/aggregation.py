@@ -19,6 +19,20 @@ from utils.variant_normalizer import create_variant_key, normalize_variant
 logger = logging.getLogger(__name__)
 
 
+def _safe_int(value: Any) -> int:
+    """Coerce a possibly-string penetrance count to int, defaulting to 0."""
+    if value is None or isinstance(value, bool):
+        return 0
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float):
+        return int(value)
+    try:
+        return int(str(value).strip())
+    except (TypeError, ValueError):
+        return 0
+
+
 class DataAggregator:
     """Aggregates penetrance data across multiple papers for the same variants."""
 
@@ -48,10 +62,25 @@ class DataAggregator:
         if not penetrance:
             return errors, warnings  # No penetrance data is okay (optional field)
 
-        total = penetrance.get("total_carriers_observed")
-        affected = penetrance.get("affected_count")
-        unaffected = penetrance.get("unaffected_count")
-        uncertain = penetrance.get("uncertain_count")
+        def _coerce_int(value: Any) -> Optional[int]:
+            # LLMs occasionally return prose like "multiple" or "≥5" in numeric
+            # fields. Treat anything we can't parse as None so downstream
+            # arithmetic doesn't blow up the whole aggregation.
+            if value is None or isinstance(value, bool):
+                return None
+            if isinstance(value, int):
+                return value
+            if isinstance(value, float):
+                return int(value)
+            try:
+                return int(str(value).strip())
+            except (TypeError, ValueError):
+                return None
+
+        total = _coerce_int(penetrance.get("total_carriers_observed"))
+        affected = _coerce_int(penetrance.get("affected_count"))
+        unaffected = _coerce_int(penetrance.get("unaffected_count"))
+        uncertain = _coerce_int(penetrance.get("uncertain_count"))
 
         # If we have counts, validate they add up
         if total is not None:
@@ -312,10 +341,10 @@ class DataAggregator:
             # patient-level details.
             if pmid_cohorts:
                 for p in pmid_cohorts:
-                    total_carriers += p.get("total_carriers_observed", 0) or 0
-                    affected += p.get("affected_count", 0) or 0
-                    unaffected += p.get("unaffected_count", 0) or 0
-                    uncertain += p.get("uncertain_count", 0) or 0
+                    total_carriers += _safe_int(p.get("total_carriers_observed"))
+                    affected += _safe_int(p.get("affected_count"))
+                    unaffected += _safe_int(p.get("unaffected_count"))
+                    uncertain += _safe_int(p.get("uncertain_count"))
             else:
                 total_carriers += len(pmid_records)
                 for r in pmid_records:
