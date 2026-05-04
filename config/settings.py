@@ -143,9 +143,15 @@ class Settings(BaseSettings):
         description="LLM used to classify tables and emit column mappings",
     )
     table_router_max_tokens: int = Field(
-        default=1024,
+        default=8192,
         env="TABLE_ROUTER_MAX_TOKENS",
-        description="Max tokens for the table-router response",
+        description=(
+            "Max tokens for the table-router response. Kimi-K2.6 is a reasoning"
+            " model that consumes the budget on hidden reasoning tokens before"
+            " emitting visible content; 1-2k is too small for any non-trivial"
+            " multi-table prompt and produces empty content with"
+            " finish_reason='length'. 8k gives reliable JSON output."
+        ),
     )
 
     # Paper Sourcing Configuration

@@ -37,6 +37,7 @@ logger = logging.getLogger(__name__)
 
 # Headers we accept in the column mapping — also used to validate router output.
 _KNOWN_FIELDS = {
+    "gene",
     "cdna",
     "protein",
     "patient_count",
@@ -62,16 +63,21 @@ class MarkdownTable:
     section: Optional[str] = None
 
     def header_preview(self, max_chars: int = 240) -> str:
-        h = self.header_line.strip()
+        # Render parsed cells with `|` separators and per-cell trimming so the
+        # router sees useful content even when the original markdown was padded
+        # with hundreds of spaces per cell (PMC-converted supplementary tables).
+        cells = [c.strip()[:60] for c in self.header_cells if c.strip()]
+        h = "| " + " | ".join(cells) + " |" if cells else self.header_line.strip()
         return h if len(h) <= max_chars else h[: max_chars - 1] + "…"
 
     def data_preview(self, n_rows: int = 2, max_chars: int = 240) -> List[str]:
         out: List[str] = []
         for row in self.data_lines[:n_rows]:
-            row = row.strip()
-            if len(row) > max_chars:
-                row = row[: max_chars - 1] + "…"
-            out.append(row)
+            cells = [c.strip()[:60] for c in _split_pipe_row(row)]
+            r = "| " + " | ".join(cells) + " |" if cells else row.strip()
+            if len(r) > max_chars:
+                r = r[: max_chars - 1] + "…"
+            out.append(r)
         return out
 
 
@@ -288,44 +294,58 @@ def enumerate_markdown_tables(
     return tables
 
 
-def build_router_prompt(tables: List[MarkdownTable], gene_symbol: str) -> str:
+def build_router_prompt(
+    tables: List[MarkdownTable],
+    gene_symbol: str,
+    *,
+    sample_rows: int = 3,
+    cell_chars: int = 60,
+) -> str:
     """Compact JSON-friendly inventory of every detected table.
 
-    The router only sees: caption, header, and 2 sample rows per table — plus the
-    gene we are extracting. It never sees the full paper text.
+    The router only sees: caption, header, and a few sample rows per table — plus
+    the gene we are extracting. It never sees the full paper text. Sample rows
+    are critical for tables exported from Excel/CSV where the markdown header is
+    just `Unnamed: 1 | Unnamed: 2 | ...` (a common PMC supplementary artifact);
+    the router then infers column types from the data values.
     """
     lines: List[str] = []
     for t in tables:
         block = [f"### {t.table_id}"]
         if t.caption:
-            block.append(f"caption: {t.caption.strip()[:200]}")
-        block.append(f"header: {t.header_preview()}")
-        previews = t.data_preview(n_rows=2)
+            block.append(f"caption: {t.caption.strip()[:240]}")
+        block.append(f"header: {t.header_preview(max_chars=320)}")
+        previews = t.data_preview(n_rows=sample_rows, max_chars=320)
         for k, row in enumerate(previews, 1):
             block.append(f"row{k}: {row}")
         lines.append("\n".join(block))
     inventory = "\n\n".join(lines)
 
     instructions = f"""You are routing markdown tables for downstream deterministic
-extraction of {gene_symbol} variant data. You will NOT extract any variants
-yourself. For each table that contains rows of {gene_symbol} carrier / variant /
-patient data, output its column→field mapping using 0-based column indices
-into the header row.
+extraction of variant data. You will NOT extract any variants yourself. The
+target gene of interest is {gene_symbol}, but multi-gene tables (LQTS panels,
+arrhythmia panels, supplementary variant lists across many genes) ALSO qualify
+as long as they have a "Gene" column — the parser will filter rows by gene.
+
+Output each qualifying table's column→field mapping using 0-based column
+indices into the header row.
 
 Allowed field names (omit a field if no column matches):
+  - gene              — column listing the gene symbol (KCNH2, SCN5A, etc.)
   - cdna              — column with c. or HGVS coding-DNA notation
   - protein           — column with p. or short-form amino acid notation
-  - patient_count     — total carriers in this row (a single integer)
+  - patient_count     — total carriers / "n detected" / "number of times" / "patients"
   - affected          — affected/symptomatic carrier count
   - unaffected        — unaffected/asymptomatic carrier count
   - uncertain         — equivocal/borderline carrier count
   - phenotype         — clinical phenotype text
   - clinical_significance — pathogenicity classification
 
-A table qualifies ONLY if it has at least one of {{cdna, protein}} AND at least
-one of {{patient_count, affected, unaffected}}. Tables that list functional
-assays, drug screens, primer sequences, or in silico predictions do NOT
-qualify — skip them.
+A table qualifies if it has at least one of {{cdna, protein}} AND at least one
+of {{patient_count, affected, unaffected}}. Multi-gene panel tables qualify
+even if the preview rows show non-{gene_symbol} variants. Tables that list
+functional assays, drug screens, primer sequences, or in silico predictions
+do NOT qualify — skip them.
 
 Return strict JSON. No prose. No markdown fences. Schema:
 
@@ -460,7 +480,7 @@ def route_tables(
     *,
     model: str,
     llm_caller: Optional[Any] = None,
-    max_tokens: int = 1024,
+    max_tokens: int = 8192,
     temperature: float = 0.0,
 ) -> RouterResult:
     """Run the full enumerate → LLM-route flow and return parsed routes.
@@ -521,6 +541,7 @@ def extract_via_router(
     *,
     model: str,
     llm_caller: Optional[Any] = None,
+    max_tokens: int = 8192,
 ) -> Dict[str, Any]:
     """End-to-end: route, then deterministically parse, returning a variant list.
 
@@ -530,7 +551,9 @@ def extract_via_router(
       - ``used_fallback`` (bool): True if no usable tables were found
       - ``error`` (str|None): set when the router LLM call failed
     """
-    result = route_tables(text, gene_symbol, model=model, llm_caller=llm_caller)
+    result = route_tables(
+        text, gene_symbol, model=model, llm_caller=llm_caller, max_tokens=max_tokens
+    )
     variants: List[Dict[str, Any]] = []
     for routed in result.routed_tables:
         if routed.table is None:
@@ -553,7 +576,13 @@ def parse_routed_table(
 
     The variant dict shape matches what `ExpertExtractor._parse_markdown_table_variants`
     produces, so downstream aggregation/SQLite paths don't need to change.
+
+    When the router supplied a `gene` column, rows whose gene cell does not
+    match `gene_symbol` (case-insensitive substring match against canonical
+    gene symbol) are skipped — multi-gene panel tables therefore contribute
+    only the relevant variants.
     """
+    gene_idx = mapping.get("gene")
     cdna_idx = mapping.get("cdna")
     protein_idx = mapping.get("protein")
     count_idx = mapping.get("patient_count")
@@ -565,6 +594,7 @@ def parse_routed_table(
 
     variants: List[Dict[str, Any]] = []
     seen_keys: set[str] = set()
+    target_gene_lower = gene_symbol.strip().lower() if gene_symbol else ""
 
     for row in table.data_lines:
         cells = _split_pipe_row(row)
@@ -577,6 +607,12 @@ def parse_routed_table(
             if idx is None or idx < 0 or idx >= len(cells):
                 return None
             return cells[idx]
+
+        # Gene-filter: skip rows that explicitly belong to a different gene.
+        if gene_idx is not None and target_gene_lower:
+            gene_cell = (cell(gene_idx) or "").strip().lower()
+            if gene_cell and target_gene_lower not in gene_cell:
+                continue
 
         cdna_raw = cell(cdna_idx)
         protein_raw = cell(protein_idx)

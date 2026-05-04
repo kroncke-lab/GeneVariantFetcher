@@ -1339,6 +1339,7 @@ class ExpertExtractor(BaseLLMCaller):
                 scanner_text,
                 paper.gene_symbol or "UNKNOWN",
                 model=settings.table_router_model,
+                max_tokens=settings.table_router_max_tokens,
             )
         except Exception as e:  # noqa: BLE001
             logger.warning(
