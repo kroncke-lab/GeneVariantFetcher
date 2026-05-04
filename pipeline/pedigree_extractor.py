@@ -10,16 +10,123 @@ shown as half-filled symbols).
 """
 
 import base64
+import json
 import logging
+import os
 from pathlib import Path
 from typing import Dict, List, Optional
 
+import requests
 from litellm import completion
 
 from config.settings import get_settings
 from utils.llm_utils import parse_llm_json_response
 
 logger = logging.getLogger(__name__)
+
+
+# Models that use the Azure AI Foundry Responses API rather than chat
+# completions. gpt-5 family deployments (gpt-5, gpt-5-codex, gpt-5.3-codex-1)
+# return "operation unsupported" on /chat/completions and must be called via
+# /openai/v1/responses.
+_RESPONSES_API_PREFIXES = (
+    "gpt-5",
+    "azure_ai/gpt-5",
+)
+
+
+def _uses_responses_api(model: str) -> bool:
+    name = model.lower()
+    return any(name.startswith(p) for p in _RESPONSES_API_PREFIXES)
+
+
+def _strip_provider_prefix(model: str) -> str:
+    """Drop a 'azure_ai/' prefix to get the bare deployment name."""
+    if model.startswith("azure_ai/"):
+        return model[len("azure_ai/") :]
+    return model
+
+
+def _call_azure_responses_api_vision(
+    *,
+    deployment: str,
+    prompt: str,
+    image_data_url: str,
+    max_output_tokens: int,
+) -> Optional[Dict]:
+    """Call Azure AI Foundry Responses API with a single image input.
+
+    Uses the api-version=v1 route since Azure-hosted gpt-5 deployments only
+    accept that version for the Responses API. Returns the parsed JSON the
+    model emitted, or None on transport / non-200 errors. Caller is
+    responsible for retry semantics.
+    """
+    base = os.environ.get("AZURE_AI_API_BASE", "").rstrip("/")
+    key = os.environ.get("AZURE_AI_API_KEY", "")
+    if not base or not key:
+        logger.error(
+            "Responses API call requires AZURE_AI_API_BASE and AZURE_AI_API_KEY"
+        )
+        return None
+
+    url = f"{base}/openai/v1/responses?api-version=v1"
+    body = {
+        "model": deployment,
+        "input": [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "input_text", "text": prompt},
+                    {"type": "input_image", "image_url": image_data_url},
+                ],
+            }
+        ],
+        "max_output_tokens": max_output_tokens,
+    }
+    try:
+        response = requests.post(
+            url,
+            headers={"api-key": key, "Content-Type": "application/json"},
+            json=body,
+            timeout=120,
+        )
+    except requests.RequestException as e:
+        logger.error(f"Responses API request failed: {e}")
+        return None
+
+    if response.status_code != 200:
+        logger.error(
+            f"Responses API returned {response.status_code}: {response.text[:300]}"
+        )
+        return None
+
+    try:
+        data = response.json()
+    except json.JSONDecodeError as e:
+        logger.error(
+            f"Responses API JSON parse failed: {e}; body={response.text[:300]}"
+        )
+        return None
+
+    # The Responses API returns an "output" array. Find the first output_text
+    # block inside the first message-shaped item.
+    text_payload: Optional[str] = None
+    for item in data.get("output", []) or []:
+        if item.get("type") == "message":
+            for content in item.get("content", []) or []:
+                if content.get("type") == "output_text":
+                    text_payload = content.get("text")
+                    break
+        if text_payload:
+            break
+
+    if text_payload is None:
+        logger.warning(
+            f"Responses API returned no output_text; keys={list(data.keys())}"
+        )
+        return None
+
+    return parse_llm_json_response(text_payload)
 
 
 # Prompt for detecting if an image is a pedigree diagram
@@ -149,6 +256,11 @@ class PedigreeExtractor:
         """
         Make a vision API call with an image.
 
+        Routes Azure gpt-5 family deployments through the Responses API
+        (`/openai/v1/responses?api-version=v1`) since chat completions returns
+        "operation unsupported" for those models. Other vision-capable models
+        continue to use the standard chat-completions path via LiteLLM.
+
         Args:
             prompt: Text prompt for the model
             image_path: Path to the image file
@@ -159,6 +271,16 @@ class PedigreeExtractor:
         """
         try:
             image_url = self._image_to_base64_url(image_path)
+
+            if _uses_responses_api(self.model):
+                return _call_azure_responses_api_vision(
+                    deployment=_strip_provider_prefix(self.model),
+                    prompt=prompt,
+                    image_data_url=image_url,
+                    # gpt-5 family uses reasoning tokens — give it a generous
+                    # budget so the visible output isn't pre-empted.
+                    max_output_tokens=max(max_tokens * 4, 4096),
+                )
 
             response = completion(
                 model=self.model,

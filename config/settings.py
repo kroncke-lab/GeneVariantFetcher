@@ -237,9 +237,14 @@ class Settings(BaseSettings):
         description="Run pedigree detection and extraction on extracted figures",
     )
     vision_model: str = Field(
-        default="gpt-4o",
+        default="azure_ai/gpt-5.3-codex-1",
         env="VISION_MODEL",
-        description="Vision-capable model for pedigree analysis (gpt-4o, gemini-1.5-pro, claude-3-5-sonnet)",
+        description=(
+            "Vision-capable model for pedigree analysis. Azure gpt-5 family"
+            " deployments (e.g. gpt-5.3-codex-1) are routed through the"
+            " Responses API automatically; other models go through the"
+            " standard chat-completions path."
+        ),
     )
     pedigree_confidence_threshold: float = Field(
         default=0.7,
