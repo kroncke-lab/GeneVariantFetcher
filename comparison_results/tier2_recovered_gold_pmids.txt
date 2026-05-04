@@ -1,0 +1,18 @@
+# Gold-standard PMIDs that the loosened Tier 2 filter now passes (first-run measurement, 2026-05-04)
+# Use: re-fetch + re-extract these for Phase 3.9 of the recall-gap fixes
+12354768
+18593567
+19490267
+21109023
+22052944
+22173492
+22378279
+22764740
+23134353
+23465283
+23864605
+23917959
+24623279
+26847485
+29957233
+30582453

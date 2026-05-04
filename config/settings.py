@@ -104,9 +104,9 @@ class Settings(BaseSettings):
         default=0.1, env="TIER2_TEMPERATURE", description="Temperature for Tier 2 LLM"
     )
     tier2_max_tokens: int = Field(
-        default=150,
+        default=300,
         env="TIER2_MAX_TOKENS",
-        description="Max tokens for Tier 2 LLM response",
+        description="Max tokens for Tier 2 LLM response (raised from 150 to 300 for the variant-aware prompt, which produces longer reasons that were getting truncated)",
     )
     tier2_confidence_threshold: float = Field(
         default=0.3,
