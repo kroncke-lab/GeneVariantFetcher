@@ -390,9 +390,15 @@ def find_best_data_source(table_info: Dict[str, TableInfo]) -> Tuple[str, TableI
     Find the best table for extracting variant-paper-count data.
 
     Priority:
-    1. Tables with pmid + variant + counts (penetrance_data joined with variants)
-    2. Tables with pmid + variant (variant_papers)
-    3. Individual records (for aggregation)
+    1. union_all — UNION of variant_papers + penetrance_data + individual_records
+       joined to variants. Preserves every (pmid, variant) link from any source
+       (variant_papers alone covers ~397 PMIDs / 2.9k links that penetrance_data
+       misses). Counts come from penetrance_data when present, else from
+       aggregated individual_records, else NULL.
+    2. penetrance_data (legacy single-table)
+    3. Combined pmid+variant+counts table
+    4. individual_records aggregation
+    5. variant_papers + variants join
 
     Args:
         table_info: Dict of TableInfo from introspection
@@ -400,32 +406,42 @@ def find_best_data_source(table_info: Dict[str, TableInfo]) -> Tuple[str, TableI
     Returns:
         Tuple of (strategy_name, primary_table_info)
     """
-    # Check for penetrance_data (ideal case)
+    # Preferred: UNION across all three sources when variants table exists
+    if "variants" in table_info and (
+        "variant_papers" in table_info
+        or "penetrance_data" in table_info
+        or "individual_records" in table_info
+    ):
+        logger.info(
+            "Using union_all strategy: variant_papers + penetrance_data + individual_records"
+        )
+        # Use whichever of the three exists as the "primary" reference
+        for candidate in ("variant_papers", "penetrance_data", "individual_records"):
+            if candidate in table_info:
+                return ("union_all", table_info[candidate])
+
+    # Legacy fallbacks (kept for non-GVF databases)
     if "penetrance_data" in table_info:
         info = table_info["penetrance_data"]
         if info.has_pmid and info.has_counts:
             logger.info("Using penetrance_data table as primary source")
             return ("penetrance_data", info)
 
-    # Check for tables with all three: pmid, variant, counts
     for name, info in table_info.items():
         if info.has_pmid and info.has_variant and info.has_counts:
             logger.info(f"Using table {name} with pmid+variant+counts")
             return ("combined", info)
 
-    # Check for individual_records (aggregate affected_status)
     if "individual_records" in table_info:
         info = table_info["individual_records"]
         if info.has_pmid:
             logger.info("Using individual_records table (will aggregate counts)")
             return ("individual_records", info)
 
-    # Fallback: variant_papers + variants
     if "variant_papers" in table_info and "variants" in table_info:
         logger.info("Using variant_papers + variants join strategy")
         return ("variant_papers_join", table_info["variant_papers"])
 
-    # No suitable source found
     raise ValueError(
         "Cannot find suitable tables for comparison.\n"
         f"Available tables: {list(table_info.keys())}\n"
@@ -449,7 +465,100 @@ def extract_sqlite_data(
     """
     strategy, primary_table = find_best_data_source(table_info)
 
-    if strategy == "penetrance_data":
+    if strategy == "union_all":
+        # Union every (pmid, variant_id) link from variant_papers, penetrance_data,
+        # and individual_records. Counts: prefer penetrance_data > aggregated
+        # individual_records > NULL. This recovers links that exist in
+        # variant_papers but never made it into a penetrance_data row.
+        union_parts = []
+        if "variant_papers" in table_info:
+            union_parts.append("SELECT pmid, variant_id FROM variant_papers")
+        if "penetrance_data" in table_info:
+            union_parts.append("SELECT pmid, variant_id FROM penetrance_data")
+        if "individual_records" in table_info:
+            union_parts.append("SELECT pmid, variant_id FROM individual_records")
+        union_sql = "\n  UNION\n  ".join(union_parts)
+
+        has_pd = "penetrance_data" in table_info
+        has_ir = "individual_records" in table_info
+
+        pd_join = (
+            "LEFT JOIN penetrance_data pd "
+            "ON pd.pmid = al.pmid AND pd.variant_id = al.variant_id"
+            if has_pd
+            else ""
+        )
+        ir_join = (
+            "LEFT JOIN ir_agg ir "
+            "ON ir.pmid = al.pmid AND ir.variant_id = al.variant_id"
+            if has_ir
+            else ""
+        )
+        ir_cte = (
+            """,
+        ir_agg AS (
+            SELECT
+                pmid,
+                variant_id,
+                COUNT(*) AS carriers_total,
+                SUM(CASE WHEN affected_status='affected' THEN 1 ELSE 0 END) AS affected_count,
+                SUM(CASE WHEN affected_status='unaffected' THEN 1 ELSE 0 END) AS unaffected_count,
+                SUM(CASE WHEN affected_status='uncertain' THEN 1 ELSE 0 END) AS uncertain_count
+            FROM individual_records
+            GROUP BY pmid, variant_id
+        )"""
+            if has_ir
+            else ""
+        )
+
+        carriers_expr = []
+        affected_expr = []
+        unaffected_expr = []
+        uncertain_expr = []
+        if has_pd:
+            carriers_expr.append("pd.total_carriers_observed")
+            affected_expr.append("pd.affected_count")
+            unaffected_expr.append("pd.unaffected_count")
+            uncertain_expr.append("pd.uncertain_count")
+        if has_ir:
+            carriers_expr.append("ir.carriers_total")
+            affected_expr.append("ir.affected_count")
+            unaffected_expr.append("ir.unaffected_count")
+            uncertain_expr.append("ir.uncertain_count")
+        carriers_expr.append("NULL")
+        affected_expr.append("NULL")
+        unaffected_expr.append("NULL")
+        uncertain_expr.append("NULL")
+
+        query = f"""
+        WITH all_links AS (
+            {union_sql}
+        ){ir_cte}
+        SELECT
+            al.pmid,
+            COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) AS variant,
+            v.protein_notation,
+            v.cdna_notation,
+            COALESCE({", ".join(carriers_expr)}) AS carriers_total,
+            COALESCE({", ".join(affected_expr)}) AS affected_count,
+            COALESCE({", ".join(unaffected_expr)}) AS unaffected_count,
+            COALESCE({", ".join(uncertain_expr)}) AS uncertain_count
+        FROM all_links al
+        JOIN variants v ON al.variant_id = v.variant_id
+        {pd_join}
+        {ir_join}
+        """
+        logger.info(
+            "Executing union_all query across variant_papers + penetrance_data + individual_records"
+        )
+        df = pd.read_sql_query(query, conn)
+        logger.info(
+            f"union_all: {len(df)} rows from "
+            f"{df['pmid'].nunique()} PMIDs, "
+            f"{df['variant'].nunique()} variants"
+        )
+
+    elif strategy == "penetrance_data":
         # Join penetrance_data with variants to get variant notation
         query = """
             SELECT

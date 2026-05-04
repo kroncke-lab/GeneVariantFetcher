@@ -549,15 +549,54 @@ def automated_variant_extraction_workflow(
     # =========================================================================
     logger.info("\n📊 STEP 6: Compiling results and statistics...")
 
-    # Calculate totals from penetrance summary
-    total_carriers = sum(
-        v.get("aggregated_penetrance", {}).get("total_carriers", 0) or 0
-        for v in penetrance_summary.get("variants", [])
-    )
-    total_affected = sum(
-        v.get("aggregated_penetrance", {}).get("affected", 0) or 0
-        for v in penetrance_summary.get("variants", [])
-    )
+    # Derive headline counts from the SQLite DB (canonical sink) instead of the
+    # in-memory aggregator output. The aggregator pass and the migrator pass
+    # are independent — when the aggregator returns 0 (e.g. variant-key
+    # mismatch) but the migrator wrote 478 penetrance rows, we want the
+    # workflow_summary to reflect what landed in the DB.
+    db_penetrance_variants = 0
+    db_total_carriers = 0
+    db_total_affected = 0
+    db_unique_pmids = 0
+    db_variant_paper_links = 0
+    try:
+        import sqlite3 as _sqlite3
+
+        with _sqlite3.connect(str(db_path)) as _dbconn:
+            _c = _dbconn.cursor()
+            _c.execute("SELECT COUNT(DISTINCT variant_id) FROM penetrance_data")
+            db_penetrance_variants = _c.fetchone()[0] or 0
+            _c.execute(
+                "SELECT COALESCE(SUM(total_carriers_observed), 0), "
+                "COALESCE(SUM(affected_count), 0) FROM penetrance_data"
+            )
+            row = _c.fetchone()
+            db_total_carriers, db_total_affected = int(row[0]), int(row[1])
+            _c.execute("SELECT COUNT(DISTINCT pmid) FROM variant_papers")
+            db_unique_pmids = _c.fetchone()[0] or 0
+            _c.execute("SELECT COUNT(*) FROM variant_papers")
+            db_variant_paper_links = _c.fetchone()[0] or 0
+    except Exception as _db_err:
+        logger.warning(
+            f"Could not derive headline counts from DB ({db_path}): {_db_err}. "
+            f"Falling back to in-memory aggregator totals."
+        )
+        db_penetrance_variants = sum(
+            1
+            for v in penetrance_summary.get("variants", [])
+            if v.get("aggregated_penetrance", {}).get("total_carriers")
+        )
+        db_total_carriers = sum(
+            v.get("aggregated_penetrance", {}).get("total_carriers", 0) or 0
+            for v in penetrance_summary.get("variants", [])
+        )
+        db_total_affected = sum(
+            v.get("aggregated_penetrance", {}).get("affected", 0) or 0
+            for v in penetrance_summary.get("variants", [])
+        )
+
+    total_carriers = db_total_carriers
+    total_affected = db_total_affected
 
     # Count abstract-only extractions
     abstract_extraction_count = sum(
@@ -582,11 +621,11 @@ def automated_variant_extraction_workflow(
             "papers_from_abstract_only": abstract_extraction_count,
             "papers_extraction_failed": workflow_stats.get("extraction_failures", 0),
             "total_variants_found": workflow_stats.get("total_variants_found", 0),
-            "variants_with_penetrance_data": workflow_stats.get(
-                "variants_with_penetrance", 0
-            ),
+            "variants_with_penetrance_data": db_penetrance_variants,
             "total_carriers_observed": total_carriers,
             "total_affected_carriers": total_affected,
+            "unique_pmids_with_variants": db_unique_pmids,
+            "variant_paper_links": db_variant_paper_links,
             "success_rate": f"{len(extractions) / len(pmids) * 100:.1f}%"
             if pmids
             else "0%",
