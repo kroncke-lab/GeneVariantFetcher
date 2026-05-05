@@ -73,6 +73,7 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 27353043,,,A498P,A498P,none,,,,,,,,,,,ALL,False,True,False
 27353043,,,A498fsX,A498fsX,none,,,,,,,,,,,ALL,False,True,False
 22104571,,,A558P,A558P,none,,,,,,,,,,,ALL,False,True,False
+29957233,,,A561T,A561T,none,,,,,,,,,,,ALL,False,True,False
 18071069,,,A572D,A572D,none,,,,,,,,,,,ALL,False,True,False
 20403459,,,A572D,A572D,none,,,,,,,,,,,ALL,False,True,False
 20875080,,,A572D,A572D,none,,,,,,,,,,,ALL,False,True,False
@@ -87,6 +88,7 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 31245483,,,A590W,A590W,none,,,,,,,,,,,ALL,False,True,False
 36303204,,,A592E,A592E,none,,,,,,,,,,,ALL,False,True,False
 33764691,,,A5T,A5T,none,,,,,,,,,,,ALL,False,True,False
+29957233,,,A614V,A614V,none,,,,,,,,,,,ALL,False,True,False
 32710294,,,A681T,A681T,none,,,,,,,,,,,ALL,False,True,False
 35932045,,,A70P,A70P,none,,,,,,,,,,,ALL,False,True,False
 20831043,,,A71G,A71G,none,,,,,,,,,,,ALL,False,True,False
@@ -211,6 +213,7 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 28749435,,,C66G,C66G,none,,,,,,,,,,,ALL,False,True,False
 27353043,,,C690R,C690R,none,,,,,,,,,,,ALL,False,True,False
 36303204,,,C727A,C727A,none,,,,,,,,,,,ALL,False,True,False
+23465283,,,C72W,C72W,none,,,,,,,,,,,ALL,False,True,False
 32386560,,,CA,CA,none,,,,,,,,,,,ALL,False,True,False
 32386560,,,CAATA,CAATA,none,,,,,,,,,,,ALL,False,True,False
 32386560,,,CAATT,CAATT,none,,,,,,,,,,,ALL,False,True,False
@@ -788,6 +791,7 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 27353043,,,L482fsX,L482fsX,none,,,,,,,,,,,ALL,False,True,False
 36303204,,,L503F,L503F,none,,,,,,,,,,,ALL,False,True,False
 20140874,,,L539FS,L539fsX,none,,,2.0,,,1.0,,,,,ALL,False,True,False
+26847485,,,L539FS,L539fsX,none,,,,,,,,,,,ALL,False,True,False
 27353043,,,L619F,L619F,none,,,,,,,,,,,ALL,False,True,False
 22949429,,,L619M,L619M,none,,,,,,,,,,,ALL,False,True,False
 35932045,,,L637R,L637R,none,,,,,,,,,,,ALL,False,True,False
@@ -946,6 +950,7 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 26230511,,,P817S,P817S,none,,,,,,,,,,,ALL,False,True,False
 31361068,,,P872FSX5,P872fsX,none,,,,,,,,,,,ALL,False,True,False
 38715010,,,P872FSX5,P872fsX,none,,,,,,,,,,,ALL,False,True,False
+18593567,,,P923F,P923F,none,,,,,,,,,,,ALL,False,True,False
 37449562,,,P968A,P968A,none,,,,,,,,,,,ALL,False,True,False
 30105468,,,PAM16,PAM16,none,,,,,,,,,,,ALL,False,True,False
 30105468,,,PCCA,PCCA,none,,,,,,,,,,,ALL,False,True,False
@@ -1049,6 +1054,7 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 29449639,,,R174C,R174C,none,,,,,,,,,,,ALL,False,True,False
 19716085,,,R174FS,R174fsX,none,,,,,,,,,,,ALL,False,True,False
 19716085,,,R176W,R176W,none,,,,,,,,,,,ALL,False,True,False
+29957233,,,R176W,R176W,none,,,,,,,,,,,ALL,False,True,False
 19716085,,,R179X,R179X,none,,,,,,,,,,,ALL,False,True,False
 32710294,,,R188W,R188W,none,,,,,,,,,,,ALL,False,True,False
 22402334,,,R190G,R190G,none,,,,,,,,,,,ALL,False,True,False
@@ -1163,7 +1169,6 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 23098067,,,R594X,R594X,none,,,,,,,,,,,ALL,False,True,False
 32686758,,,R594X,R594X,none,,,,,,,,,,,ALL,False,True,False
 37449562,,,R594X,R594X,none,,,,,,,,,,,ALL,False,True,False
-24667783,,,R620C,R620C,none,,,,,,,,,,,ALL,False,True,False
 37178278,,,R634W,R634W,none,,,,,,,,,,,ALL,False,True,False
 27353043,,,R642G,R642G,none,,,,,,,,,,,ALL,False,True,False
 26350513,,,R644C,R644C,none,,,,,,,,,,,ALL,False,True,False
@@ -1175,6 +1180,7 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 38229148,,,R70C,R70C,none,,,,,,,,,,,ALL,False,True,False
 29497013,,,R719W,R719W,none,,,,,,,,,,,ALL,False,True,False
 38370698,,,R721W,R721W,none,,,,,,,,,,,ALL,False,True,False
+18593567,,,R744F,R744F,none,,,,,,,,,,,ALL,False,True,False
 26118593,,,R744F,R744F,none,,,,,,,,,,,ALL,False,True,False
 17275752,,,R77W,R77W,none,,,,,,,,,,,ALL,False,True,False
 38370698,,,R79X,R79X,none,,,,,,,,,,,ALL,False,True,False
@@ -1224,11 +1230,13 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 29497013,,,S18fsX,S18fsX,none,,,,,,,,,,,ALL,False,True,False
 36305573,,,S207A,S207A,none,,,,,,,,,,,ALL,False,True,False
 26346102,,,S209P,S209P,none,,,,,,,,,,,ALL,False,True,False
-24667783,,,S216L,S216L,none,,,,,,,,,,,ALL,False,True,False
+22378279,,,S216L,S216L,none,,,,,,,,,,,ALL,False,True,False
+23465283,,,S216L,S216L,none,,,,,,,,,,,ALL,False,True,False
 22885918,,,S225L,S225L,none,,,,,,,,,,,ALL,False,True,False
 24552659,,,S227D,S227D,none,,,,,,,,,,,ALL,False,True,False
 24552659,,,S227DEL,S227Del,none,,,,,,,,,,,ALL,False,True,False
 35932045,,,S249P,S249P,none,,,,,,,,,,,ALL,False,True,False
+23864605,,,S25N,S25N,none,,,,,,,,,,,ALL,False,True,False
 12442276,,,S277L,S277L,none,,,,,,,,,,,ALL,False,True,False
 14527360,,,S277L,S277L,none,,,,,,,,,,,ALL,False,True,False
 21951015,,,S277L,S277L,none,,,,,,,,,,,ALL,False,True,False
@@ -1360,6 +1368,8 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 38370698,,,T621M,T621M,none,,,,,,,,,,,ALL,False,True,False
 32253972,,,T65P,T65P,none,,,,,,,,,,,ALL,False,True,False
 36303204,,,T774M,T774M,none,,,,,,,,,,,ALL,False,True,False
+22378279,,,T78M,T78M,none,,,,,,,,,,,ALL,False,True,False
+23465283,,,T78M,T78M,none,,,,,,,,,,,ALL,False,True,False
 24021552,,,T78M,T78M,none,,,,,,,,,,,ALL,False,True,False
 30704477,,,T78M,T78M,none,,,,,,,,,,,ALL,False,True,False
 34647107,,,T790M,T790M,none,,,,,,,,,,,ALL,False,True,False
@@ -1517,6 +1527,7 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 19668779,,,Y493X,Y493X,none,,,,,,,,,,,ALL,False,True,False
 26066609,,,Y522C,Y522C,none,,,,,,,,,,,ALL,False,True,False
 26066609,,,Y522S,Y522S,none,,,,,,,,,,,ALL,False,True,False
+23864605,,,Y652T,Y652T,none,,,,,,,,,,,ALL,False,True,False
 24606995,,,Y81C,Y81C,none,,,,,,,,,,,ALL,False,True,False
 30105468,,,YWHAE,YWHAE,none,,,,,,,,,,,ALL,False,True,False
 30105468,,,YWHAG,YWHAG,none,,,,,,,,,,,ALL,False,True,False
@@ -1533,9 +1544,11 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 15280442,,,p.Ala561Thr,A561T,none,,,,,,,,,,,ALL,False,True,False
 15120823,,,p.Ala561Val,A561V,none,,,,,,,,,,,ALL,False,True,False
 15280442,,,p.Ala561Val,A561V,none,,,,,,,,,,,ALL,False,True,False
+29957233,,,p.Ala561Val,A561V,none,,,1.0,,,1.0,,,,,ALL,False,True,False
 35989994,,,p.Ala561Val,A561V,none,,,1.0,,,1.0,,,,,ALL,False,True,False
 29330128,,,p.Ala57Pro,A57P,none,,,,,,,,,,,ALL,False,True,False
 19057127,,,p.Ala614Val,A614V,none,,,1.0,,,1.0,,,,,ALL,False,True,False
+22052944,,,p.Ala614Val,A614V,none,,,1.0,,,1.0,,,,,ALL,False,True,False
 35281812,,,p.Ala614Val,A614V,none,,,,,,,,,,,ALL,False,True,False
 15280551,,,p.Ala653Thr,A653T,none,,,,,,,,,,,ALL,False,True,False
 27761169,,,p.Ala78Gly,A78G,none,,,,,,,,,,,ALL,False,True,False
@@ -1595,12 +1608,14 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 25140878,,,p.Arg835Trp,R835W,none,,,,,,,,,,,ALL,False,True,False
 17576861,,,p.Arg863*,R863X,none,,,,,,,,,,,ALL,False,True,False
 34502138,,,p.Arg954Cys,R954C,none,,,1.0,,,,,,,,ALL,False,True,False
+23864605,,,p.Asn470Asp,N470D,none,,,,,,,,,,,ALL,False,True,False
 22949429,,,p.Asn588Asp,N588D,none,,,1.0,,,1.0,,,,,ALL,False,True,False
 17711440,,,p.Asn588Lys,N588K,none,,,2.0,,,2.0,,,,,ALL,False,True,False
 21130771,,,p.Asn588Lys,N588K,none,,,,,,,,,,,ALL,False,True,False
 24291113,,,p.Asn588Lys,N588K,none,,,1.0,,,1.0,,,,,ALL,False,True,False
 28491588,,,p.Asn588Lys,N588K,none,,,,,,,,,,,ALL,False,True,False
 34502138,,,p.Asn588Lys,N588K,none,,,,,,,,,,,ALL,False,True,False
+23864605,,,p.Asn629Asp,N629D,none,,,,,,,,,,,ALL,False,True,False
 38715010,,,p.Asp1122Alafs*147,D1122fsX,none,,,,,,,,,,,ALL,False,True,False
 34002542,,,p.Asp259Asn,D259N,none,,,1.0,,,,,,,,ALL,False,True,False
 35989994,,,p.Asp501Asn,D501N,none,,,1.0,,,1.0,,,,,ALL,False,True,False
@@ -1632,6 +1647,7 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 36927983,,,p.Gly584Ser,G584S,none,,,,,,,,,,,ALL,False,True,False
 10483966,,,p.Gly601Ser,G601S,none,,,,,,,,,,,ALL,False,True,False
 22949429,,,p.Gly601Ser,G601S,none,,,1.0,,,1.0,,,,,ALL,False,True,False
+26847485,,,p.Gly604Ser,G604S,none,,,,,,,,,,,ALL,False,True,False
 34002542,,,p.Gly749Ala,G749A,none,,,1.0,,,,,,,,ALL,False,True,False
 21350584,,,p.Gly785Val,G785V,none,,,47.0,,,47.0,,,,,ALL,False,True,False
 36269083,,,p.Gly816Val,G816V,none,,,,,,,,,,,ALL,False,True,False
@@ -1651,6 +1667,7 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 34502138,,,p.Leu1066Val,L1066V,none,,,,,,,,,,,ALL,False,True,False
 14527360,,,p.Leu413Pro,L413P,none,,,1.0,,,1.0,,,,,ALL,False,True,False
 14527360,,,p.Leu520Val,L520V,none,,,,,,,,,,,ALL,False,True,False
+23134353,,,p.Leu539fs*47,L539fsX,none,,,1.0,,,1.0,,,,,ALL,False,True,False
 10483966,,,p.Leu552Ser,L552S,none,,,,,,,,,,,ALL,False,True,False
 15120823,,,p.Leu552Ser,L552S,none,,,,,,,,,,,ALL,False,True,False
 15176425,,,p.Leu552Ser,L552S,none,,,,,,,,,,,ALL,False,True,False
@@ -1698,6 +1715,8 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 31522018,,,p.Lys897Thr,K897T,none,,,1.0,,,1.0,,,,,ALL,False,True,False
 34502138,,,p.Lys897Thr,K897T,none,,,,,,,,,,,ALL,False,True,False
 28235848,,,p.Phe29Leu,F29L,none,,,2.0,,,2.0,,,,,ALL,False,True,False
+26847485,,,p.Phe463Leu,F463L,none,,,,,,,,,,,ALL,False,True,False
+23864605,,,p.Phe805Cys,F805C,none,,,,,,,,,,,ALL,False,True,False
 22949429,,,p.Pro1093Leu,P1093L,none,,,1.0,,,1.0,,,,,ALL,False,True,False
 34502138,,,p.Pro1157Leu,P1157L,none,,,,,,,,,,,ALL,False,True,False
 22949429,,,p.Pro297Ser,P297S,none,,,1.0,,,1.0,,,,,ALL,False,True,False
@@ -1739,7 +1758,6 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 34316734,,,p.Val535Met,V535M,none,,,2.0,,,1.0,,,1.0,,ALL,False,True,False
 29449639,,,p.Val644Leu,V644L,none,,,,,,,,,,,ALL,False,True,False
 20403459,,,p.Val94Gly,V94G,none,,,1.0,,,1.0,,,,,ALL,False,True,False
-15973763,,,Exon9 IVS del (-12-->-2),Exon9 IVS del (-12-->-2),none,,,6.0,,,4.0,,,2.0,,ALL,False,True,False
 12442276,,,IVS11+18C>T,IVS11+18C>T,none,,,,,,,,,,,ALL,False,True,False
 24972929,,,IVS22+2T>C,IVS22+2T>C,none,,,,,,,,,,,ALL,False,True,False
 16754261,,,IVS7-2A>G,IVS7-2A>G,none,,,,,,,,,,,ALL,False,True,False
@@ -2230,7 +2248,6 @@ pmid,excel_variant_raw,excel_variant_norm,sqlite_variant_raw,sqlite_variant_norm
 38489124,,,VUSinGUS,VUSinGUS,none,,,,,,,,,,,ALL,False,True,False
 38489124,,,Likelybenign/benign,Likelybenign/benign,none,,,,,,,,,,,ALL,False,True,False
 38489124,,,nan,nan,none,,,,,,,,,,,ALL,False,True,False
-20167303,,,exon 6-4del,exon 6-4del,none,,,1.0,,,1.0,,,,,ALL,False,True,False
 19490382,,,rs1036145,rs1036145,none,,,297.0,,,,,,,,ALL,False,True,False
 19490382,,,rs1805120,rs1805120,none,,,297.0,,,,,,,,ALL,False,True,False
 18785031,,,rs1805123 A>C,rs1805123 A>C,none,,,,,,,,,,,ALL,False,True,False

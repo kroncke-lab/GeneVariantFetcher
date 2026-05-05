@@ -34,6 +34,35 @@ app = typer.Typer(
 )
 
 
+def _parse_pmid_arg(arg: str) -> list[str]:
+    """Parse a --pmids argument: '@path/to/file.txt' or 'pmid1,pmid2,...'.
+
+    Returns a deduplicated list preserving first-seen order. PMIDs are validated
+    as all-digit tokens; non-digit tokens are dropped with no warning so that
+    file headers and stray whitespace pass through cleanly.
+    """
+    raw_tokens: list[str] = []
+    if arg.startswith("@"):
+        path = Path(arg[1:]).expanduser()
+        if not path.exists():
+            raise typer.BadParameter(f"PMID list file not found: {path}")
+        for line in path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            raw_tokens.append(line)
+    else:
+        raw_tokens = [tok.strip() for tok in arg.split(",")]
+
+    seen: set[str] = set()
+    pmids: list[str] = []
+    for tok in raw_tokens:
+        if tok.isdigit() and tok not in seen:
+            seen.add(tok)
+            pmids.append(tok)
+    return pmids
+
+
 @app.command("extract")
 def extract_command(
     gene: Annotated[str, typer.Argument(help="Gene symbol (e.g., BRCA1, SCN5A, TP53)")],
@@ -100,6 +129,19 @@ def extract_command(
             ),
         ),
     ] = None,
+    pmids: Annotated[
+        str,
+        typer.Option(
+            "--pmids",
+            help=(
+                "Skip PubMed/PubMind/EuropePMC discovery and run the pipeline on "
+                "an explicit PMID list. Accepts a comma-separated list "
+                "(e.g. 12345,67890) or a file path prefixed with '@' "
+                "(e.g. @comparison_results/tier2_recovered_gold_pmids.txt). "
+                "In the file, lines starting with '#' and blank lines are ignored."
+            ),
+        ),
+    ] = None,
     verbose: Annotated[
         bool, typer.Option("--verbose", "-v", help="Enable verbose logging")
     ] = False,
@@ -124,6 +166,19 @@ def extract_command(
         )
         raise typer.Exit(1)
 
+    explicit_pmids: list[str] | None = None
+    if pmids:
+        explicit_pmids = _parse_pmid_arg(pmids)
+        if not explicit_pmids:
+            typer.echo(
+                f"⚠️  ERROR: --pmids was given but no PMIDs were parsed from {pmids!r}",
+                err=True,
+            )
+            raise typer.Exit(1)
+        typer.echo(
+            f"📋 Using {len(explicit_pmids)} explicit PMIDs; discovery will be skipped."
+        )
+
     try:
         automated_variant_extraction_workflow(
             gene_symbol=gene,
@@ -137,6 +192,7 @@ def extract_command(
             synonyms=synonyms or [],
             scout_first=scout_first,
             disease=disease,
+            pmids=explicit_pmids,
         )
     except KeyboardInterrupt:
         typer.echo("\n⚠️  Workflow interrupted by user", err=True)

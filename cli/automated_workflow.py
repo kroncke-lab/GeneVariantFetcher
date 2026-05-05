@@ -42,6 +42,7 @@ def automated_variant_extraction_workflow(
     synonyms: list[str] | None = None,
     scout_first: bool = False,
     disease: str | None = None,
+    pmids: list[str] | None = None,
 ):
     """
     Complete automated workflow from gene symbol to extracted variant data.
@@ -61,6 +62,9 @@ def automated_variant_extraction_workflow(
             disease clause is appended to PubMed queries and Tier-2 filter prompts
             prioritize original patient/functional data. When None (default),
             behavior is unchanged.
+        pmids: Optional explicit PMID list. When provided, skips synonym discovery
+            and PMID search (steps 0 and 1) and runs the rest of the pipeline on
+            this list directly. Useful for re-extracting a known set of papers.
     """
     initialize_runtime()
     setup_logging(level=logging.INFO)
@@ -148,6 +152,12 @@ def automated_variant_extraction_workflow(
     run_manifest.update_status("discovering_synonyms")
     run_manifest.save()
 
+    if pmids:
+        logger.info(
+            "\n⏭️  STEP 0: Skipping synonym discovery — explicit PMID list provided."
+        )
+        auto_synonyms = False
+
     if auto_synonyms:
         logger.info("\n🔍 STEP 0: Discovering gene synonyms from NCBI Gene database...")
 
@@ -193,38 +203,48 @@ def automated_variant_extraction_workflow(
     run_manifest.update_status("fetching_pmids")
     run_manifest.save()
 
-    logger.info(
-        "\n📚 STEP 1: Discovering relevant papers from PubMind, PubMed, and Europe PMC..."
-    )
+    if pmids:
+        logger.info(
+            "\n📚 STEP 1: Skipping discovery — using %d explicit PMIDs.",
+            len(pmids),
+        )
+        # Persist the list to the same combined-output path that fetch_pmids would
+        # have produced, so downstream tools that look at <gene>_pmids.txt still work.
+        combined_file = output_path / f"{gene_symbol}_pmids.txt"
+        combined_file.write_text("\n".join(pmids) + "\n", encoding="utf-8")
+    else:
+        logger.info(
+            "\n📚 STEP 1: Discovering relevant papers from PubMind, PubMed, and Europe PMC..."
+        )
 
-    pmid_result = fetch_pmids(
-        gene_symbol=gene_symbol,
-        email=email,
-        output_path=output_path,
-        max_results=max_pmids,
-        synonyms=all_synonyms if all_synonyms else None,
-        use_pubmind=settings.use_pubmind,
-        use_pubmed=settings.use_pubmed and not settings.pubmind_only,
-        use_europepmc=settings.use_europepmc,
-        api_key=os.getenv("NCBI_API_KEY"),
-        disease=disease,
-    )
+        pmid_result = fetch_pmids(
+            gene_symbol=gene_symbol,
+            email=email,
+            output_path=output_path,
+            max_results=max_pmids,
+            synonyms=all_synonyms if all_synonyms else None,
+            use_pubmind=settings.use_pubmind,
+            use_pubmed=settings.use_pubmed and not settings.pubmind_only,
+            use_europepmc=settings.use_europepmc,
+            api_key=os.getenv("NCBI_API_KEY"),
+            disease=disease,
+        )
 
-    if not pmid_result.success:
-        logger.error(f"PMID discovery failed: {pmid_result.error}")
-        checkpoint.mark_failed(pmid_result.error, PipelineStep.FETCHING_PMIDS)
-        checkpoint_manager.save(checkpoint)
-        run_manifest.add_error(f"PMID discovery failed: {pmid_result.error}")
-        run_manifest.finalize(success=False)
-        return {"success": False, "error": pmid_result.error}
+        if not pmid_result.success:
+            logger.error(f"PMID discovery failed: {pmid_result.error}")
+            checkpoint.mark_failed(pmid_result.error, PipelineStep.FETCHING_PMIDS)
+            checkpoint_manager.save(checkpoint)
+            run_manifest.add_error(f"PMID discovery failed: {pmid_result.error}")
+            run_manifest.finalize(success=False)
+            return {"success": False, "error": pmid_result.error}
 
-    pmids = pmid_result.data.get("pmids", [])
-    logger.info(
-        f"✓ Found {pmid_result.stats.get('pubmind_count', 0)} PubMind PMIDs, "
-        f"{pmid_result.stats.get('pubmed_count', 0)} PubMed PMIDs, "
-        f"and {pmid_result.stats.get('europepmc_count', 0)} Europe PMC PMIDs"
-    )
-    logger.info(f"✓ Using {len(pmids)} unique PMIDs after merging sources")
+        pmids = pmid_result.data.get("pmids", [])
+        logger.info(
+            f"✓ Found {pmid_result.stats.get('pubmind_count', 0)} PubMind PMIDs, "
+            f"{pmid_result.stats.get('pubmed_count', 0)} PubMed PMIDs, "
+            f"and {pmid_result.stats.get('europepmc_count', 0)} Europe PMC PMIDs"
+        )
+        logger.info(f"✓ Using {len(pmids)} unique PMIDs after merging sources")
 
     if not pmids:
         logger.warning(f"No PMIDs found for {gene_symbol}. Workflow terminated.")

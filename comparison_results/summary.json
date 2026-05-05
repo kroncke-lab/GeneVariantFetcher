@@ -1,15 +1,15 @@
 {
   "input_files": {
     "excel": "/Users/kronckbm/Desktop/KCNH2 HeterozygoteDatabase-4-clinical_w_paris_japan_mayo_and_italycohort.xls",
-    "sqlite": "/Users/kronckbm/Projects/GeneVariantFetcher/results/KCNH2/20260503_161203/KCNH2.db"
+    "sqlite": "results/KCNH2/20260505_071809/KCNH2_combined.db"
   },
-  "total_rows": 3230,
-  "matched_exact": 193,
-  "matched_fuzzy": 12,
-  "unmatched": 3024,
-  "missing_in_sqlite": 785,
-  "missing_in_excel": 2239,
-  "count_mismatches": 113,
+  "total_rows": 3247,
+  "matched_exact": 212,
+  "matched_fuzzy": 19,
+  "unmatched": 3015,
+  "missing_in_sqlite": 759,
+  "missing_in_excel": 2256,
+  "count_mismatches": 122,
   "unique_pmids": 499,
   "top_mismatches": [
     {
