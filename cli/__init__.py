@@ -142,6 +142,17 @@ def extract_command(
             ),
         ),
     ] = None,
+    browser_html_fallback: Annotated[
+        bool,
+        typer.Option(
+            "--browser-html-fallback",
+            help=(
+                "Enable Tier 3.5 browser-based HTML fallback (Playwright) for"
+                " papers that fail the publisher-API path but are freely"
+                " readable post-embargo. OFF by default."
+            ),
+        ),
+    ] = False,
     verbose: Annotated[
         bool, typer.Option("--verbose", "-v", help="Enable verbose logging")
     ] = False,
@@ -150,6 +161,16 @@ def extract_command(
     import logging
 
     from utils.logging_utils import setup_logging
+
+    if browser_html_fallback:
+        os.environ["ENABLE_BROWSER_HTML_FALLBACK"] = "true"
+        # Clear cached settings so the new env var is picked up.
+        try:
+            from config.settings import get_settings as _get_settings
+
+            _get_settings.cache_clear()
+        except Exception:
+            pass
 
     if verbose:
         setup_logging(level=logging.DEBUG)

@@ -252,6 +252,46 @@ class Settings(BaseSettings):
         description="Minimum confidence (0.0-1.0) to classify an image as a pedigree",
     )
 
+    # Tier 3.5: Browser-based HTML fallback for free-after-embargo papers.
+    # Sits between the publisher API tier and the manual login-required
+    # browser_fetch tier. Drives Playwright to fetch fully-rendered HTML
+    # from publishers that block requests-based access; reuses the existing
+    # SupplementScraper to parse the resulting DOM. OFF by default.
+    enable_browser_html_fallback: bool = Field(
+        default=False,
+        env="ENABLE_BROWSER_HTML_FALLBACK",
+        description="Enable Tier 3.5 browser-based HTML harvesting (Playwright)",
+    )
+    browser_html_publisher_allowlist: Union[str, List[str]] = Field(
+        default="aha,oxford,wiley,elsevier_open,generic",
+        env="BROWSER_HTML_PUBLISHER_ALLOWLIST",
+        description="Comma-separated strategy NAMEs to enable for Tier 3.5",
+    )
+    browser_html_min_embargo_months: Optional[int] = Field(
+        default=None,
+        env="BROWSER_HTML_MIN_EMBARGO_MONTHS",
+        description=(
+            "Optional global override for minimum embargo months. If unset"
+            " (default), each strategy uses its own EMBARGO_MONTHS. If set,"
+            " takes max(strategy_embargo, this value)."
+        ),
+    )
+    browser_html_headless: bool = Field(
+        default=True,
+        env="BROWSER_HTML_HEADLESS",
+        description="Run Tier 3.5 browser headless",
+    )
+    browser_html_max_per_run: int = Field(
+        default=50,
+        env="BROWSER_HTML_MAX_PER_RUN",
+        description="Hard cap on Tier 3.5 attempts per harvest run",
+    )
+    browser_html_per_paper_timeout_s: int = Field(
+        default=90,
+        env="BROWSER_HTML_PER_PAPER_TIMEOUT_S",
+        description="Per-paper timeout for Tier 3.5 attempts (seconds)",
+    )
+
     model_config = SettingsConfigDict(
         env_file=_ENV_PATH,
         env_file_encoding="utf-8",
@@ -266,6 +306,17 @@ class Settings(BaseSettings):
             if not v.strip():
                 return ["gpt-4o-mini", "gpt-4o"]
             return [item.strip() for item in v.split(",") if item.strip()]
+        return v
+
+    @field_validator("browser_html_publisher_allowlist", mode="after")
+    @classmethod
+    def split_browser_html_allowlist(cls, v):
+        if isinstance(v, str):
+            if not v.strip():
+                return ["aha", "oxford", "wiley", "elsevier_open", "generic"]
+            return [item.strip().lower() for item in v.split(",") if item.strip()]
+        if isinstance(v, list):
+            return [str(item).strip().lower() for item in v if str(item).strip()]
         return v
 
     _PLACEHOLDER_VALUES: ClassVar[set] = {

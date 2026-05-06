@@ -329,6 +329,25 @@ class PMCHarvester:
 
         initialize_harvest_logs(self.paywalled_log, self.success_log)
 
+        # Tier 3.5: Browser HTML fallback (lazy — no browser spawned until used).
+        # Disabled unless ENABLE_BROWSER_HTML_FALLBACK is true.
+        self.browser_html = None
+        try:
+            from .browser_html import BrowserHTMLFetcher
+
+            settings_obj = get_settings() if get_settings is not None else None
+            self.browser_html = BrowserHTMLFetcher(
+                scraper=self.scraper,
+                converter=self.converter,
+                session=self.session,
+                output_dir=self.output_dir,
+                settings=settings_obj,
+                validate_content_quality=validate_content_quality,
+            )
+        except Exception as e:
+            logger.debug(f"Browser HTML fallback not available: {e}")
+            self.browser_html = None
+
     def _log_paywalled(
         self, pmid: str, reason: str, url: str, classification: str = ""
     ) -> None:
@@ -1053,7 +1072,7 @@ class PMCHarvester:
         if not pmcid:
             # No PMCID - check if this is a free full text article via publisher
             print("  - No PMCID found, checking for free full text via publisher...")
-            return self._download_free_text_pmid(pmid, doi)
+            return self._download_with_tier35_fallback(pmid, doi)
 
         print(f"  ✓ PMCID: {pmcid}")
 
@@ -1064,7 +1083,7 @@ class PMCHarvester:
             print("  - Full-text XML not available from PMC, trying publisher APIs...")
             # Don't give up — try publisher APIs via DOI before marking paywalled
             if doi:
-                return self._download_free_text_pmid(pmid, doi)
+                return self._download_with_tier35_fallback(pmid, doi)
             else:
                 print("  ❌ No DOI available for publisher API fallback")
                 pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
@@ -1150,6 +1169,107 @@ class PMCHarvester:
                 "source": "pmc",
             },
         )
+
+        return True, str(output_file), unified_content
+
+    def _download_with_tier35_fallback(
+        self, pmid: str, doi: str
+    ) -> Tuple[bool, str, Optional[str]]:
+        """Run free-text download; if it fails and Tier 3.5 is enabled, retry via browser HTML.
+
+        Tier 3.5 (browser-based HTML) is a strict additive fallback. The
+        existing free-text path runs unchanged; only on failure do we attempt
+        the browser-driven path. Tier 3.5 successes/failures are logged to
+        a separate ``browser_html_log.csv`` so existing paywall metrics are
+        unaffected.
+        """
+        success, result, content = self._download_free_text_pmid(pmid, doi)
+        if success:
+            return success, result, content
+
+        if self.browser_html is None or not self.browser_html.is_enabled():
+            return success, result, content
+        if not doi:
+            return success, result, content
+
+        try:
+            from .browser_html import get_pub_date_from_pmid
+
+            pub_date = get_pub_date_from_pmid(pmid, self.pmc_api)
+        except Exception:
+            pub_date = None
+
+        print("  → Tier 3.5: trying browser-based HTML fallback...")
+        fr = self.browser_html.fetch(pmid=pmid, doi=doi, pub_date=pub_date)
+        if fr is None or not fr.is_usable():
+            return success, result, content
+
+        return self._finalize_browser_html(pmid, doi, fr)
+
+    def _finalize_browser_html(
+        self, pmid: str, doi: str, fr
+    ) -> Tuple[bool, str, Optional[str]]:
+        """Persist a successful Tier 3.5 fetch using existing free-text plumbing."""
+        from .browser_html import FetchResult  # for type clarity only
+
+        supp_files = list(fr.supp_files or [])
+        supplements_dir = self.output_dir / f"{pmid}_supplements"
+        extract_figures = self._should_extract_figures
+        figures_dir = None
+        if extract_figures:
+            figures_dir = self.output_dir / f"{pmid}_figures"
+            figures_dir.mkdir(exist_ok=True)
+
+        if supp_files:
+            supp_result = process_supplement_files(
+                supp_files=supp_files,
+                supplements_dir=supplements_dir,
+                pmid=pmid,
+                converter=self.converter,
+                download_callback=lambda url,
+                file_path,
+                pmid,
+                filename,
+                supp: self.download_supplement(
+                    url,
+                    file_path,
+                    pmid,
+                    filename,
+                    supp.get("base_url"),
+                    supp.get("original_url"),
+                ),
+                extract_figures=extract_figures,
+                figures_dir=figures_dir,
+                logger=logger,
+                sleep_seconds=0.5,
+            )
+            supplement_markdown = supp_result.supplement_markdown
+            downloaded_count = supp_result.downloaded_count
+        else:
+            supplement_markdown = ""
+            downloaded_count = 0
+
+        from .free_text_output_service import FreeTextOutputSource
+
+        source = FreeTextOutputSource(
+            success_marker="BROWSER_HTML",
+            status_source=f"browser-html-{fr.publisher or 'generic'}",
+            source_tag=f"[via browser HTML: {fr.publisher or 'generic'}]",
+        )
+
+        output_file, unified_content = write_free_text_output(
+            output_dir=self.output_dir,
+            success_log=self.success_log,
+            pmid=pmid,
+            main_markdown=fr.main_markdown,
+            supplement_markdown=supplement_markdown,
+            downloaded_count=downloaded_count,
+            source=source,
+            write_pmid_status=self._write_pmid_status,
+            log_paywalled=None,  # don't pollute the paywall log on Tier 3.5
+        )
+        if output_file is None:
+            return False, unified_content, None
 
         return True, str(output_file), unified_content
 
@@ -1911,6 +2031,13 @@ class PMCHarvester:
                 "  To analyze downloaded papers, call batch_post_process() separately."
             )
 
+        # Close Tier 3.5 browser pool if it was opened during this run.
+        if self.browser_html is not None:
+            try:
+                self.browser_html.close()
+            except Exception as e:
+                logger.debug(f"BrowserHTMLFetcher close failed: {e}")
+
         # ============================================
         # FINAL SUMMARY
         # ============================================
@@ -1922,6 +2049,11 @@ class PMCHarvester:
         print(f"  Output directory: {self.output_dir.absolute()}")
         print(f"  Success log: {self.success_log}")
         print(f"  Paywalled log: {self.paywalled_log}")
+        if self.browser_html is not None and self.browser_html.attempts_made > 0:
+            print(
+                f"  Tier 3.5 attempts: {self.browser_html.attempts_made}"
+                f" (log: {self.browser_html.log_path})"
+            )
         print(f"{'=' * 60}")
 
     # Backward-compatible methods for tests and legacy code
