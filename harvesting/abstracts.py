@@ -78,10 +78,29 @@ def fetch_and_save_abstracts(
 
     saved_files: Dict[str, Path] = {}
 
-    all_metadata = batch_fetch_metadata(pmids, email=email)
+    pmids_to_fetch: List[str] = []
+    for pmid in pmids:
+        cached = output_path / f"{pmid}.json"
+        if cached.exists() and cached.stat().st_size > 0:
+            saved_files[pmid] = cached
+        else:
+            pmids_to_fetch.append(pmid)
+
+    if not pmids_to_fetch:
+        logger.info("All %d abstracts already cached; skipping fetch.", len(pmids))
+        return saved_files
+
+    if len(saved_files):
+        logger.info(
+            "Reusing %d cached abstracts; fetching %d new.",
+            len(saved_files),
+            len(pmids_to_fetch),
+        )
+
+    all_metadata = batch_fetch_metadata(pmids_to_fetch, email=email)
     logger.info("Fetched metadata for %d PMIDs.", len(all_metadata))
 
-    for pmid in pmids:
+    for pmid in pmids_to_fetch:
         logger.info("Processing PMID %s", pmid)
 
         metadata = all_metadata.get(pmid, {})

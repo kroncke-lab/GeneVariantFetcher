@@ -102,10 +102,10 @@ api_retry = get_standard_retry_decorator(
 # call doesn't immediately fail when an Azure deployment quota briefly
 # saturates from parallel workers.
 llm_retry = get_standard_retry_decorator(
-    max_attempts=5,  # rate-limit recoveries often need 3-4 backoffs
-    multiplier=2.0,  # exponential: 2s, 4s, 8s, 16s, 30s
-    min_wait=2.0,
-    max_wait=30.0,
+    max_attempts=7,  # Azure RPM quota windows are 60s; need enough budget to ride them out
+    multiplier=2.0,  # exponential: 4s, 8s, 16s, 32s, 60s, 60s, 60s
+    min_wait=4.0,
+    max_wait=60.0,
     retry_exceptions=(
         requests.exceptions.RequestException,
         ConnectionError,

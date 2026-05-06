@@ -82,10 +82,18 @@ def automated_variant_extraction_workflow(
         preprocess_papers,
     )
 
-    # Setup output directory
-    output_path = (
-        Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
-    )
+    # Setup output directory.  GVF_RESUME_DIR lets you point a re-run at an
+    # existing timestamped run dir so cached abstracts / pmid_status / harvested
+    # papers are reused (resume semantics) instead of starting fresh.
+    import os as _os
+
+    resume_dir = _os.environ.get("GVF_RESUME_DIR")
+    if resume_dir:
+        output_path = Path(resume_dir)
+    else:
+        output_path = (
+            Path(output_dir) / gene_symbol / datetime.now().strftime("%Y%m%d_%H%M%S")
+        )
     output_path.mkdir(parents=True, exist_ok=True)
 
     # Set up file logging

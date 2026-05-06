@@ -494,9 +494,22 @@ def filter_papers(
     # from hours to minutes on large gene queries. Per-record progress writes
     # remain atomic (lock-protected, flushed per record), so kill -9 mid-batch
     # is safe and resume picks up where we left off.
-    max_workers = (
-        filter_max_workers if filter_max_workers and filter_max_workers > 0 else 8
-    )
+    # FILTER_MAX_WORKERS env var lets you ratchet down concurrency when the
+    # backing Azure deployment has tight per-minute quota.
+    env_workers = os.environ.get("FILTER_MAX_WORKERS")
+    if env_workers:
+        try:
+            max_workers = max(1, int(env_workers))
+        except ValueError:
+            max_workers = (
+                filter_max_workers
+                if filter_max_workers and filter_max_workers > 0
+                else 8
+            )
+    else:
+        max_workers = (
+            filter_max_workers if filter_max_workers and filter_max_workers > 0 else 8
+        )
 
     if pending_pmids and enable_tier2:
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
