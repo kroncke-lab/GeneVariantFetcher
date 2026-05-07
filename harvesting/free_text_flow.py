@@ -45,7 +45,9 @@ def _build_supplement_markdown(
             if supp_path.suffix.lower() == ".pdf":
                 supp_md = converter.pdf_to_markdown(str(supp_path))
                 if supp_md:
-                    supplement_markdown += f"\n\n## Supplement: {supp_path.name}\n\n{supp_md}"
+                    supplement_markdown += (
+                        f"\n\n## Supplement: {supp_path.name}\n\n{supp_md}"
+                    )
         except (TypeError, ValueError) as exc:
             logger.warning(f"Skipping supplement for PMID {pmid}: {exc}")
             continue
@@ -150,14 +152,22 @@ def initialize_free_text_access(
                 break
             try:
                 md, _ = provider.try_fetch(doi, pmid)
-            except Exception:
+            except Exception as exc:
+                logger.warning(
+                    "PMID %s: %s API fallback failed: %s",
+                    pmid,
+                    provider.name,
+                    exc,
+                )
                 continue
             if md:
                 main_markdown = md
                 if provider.should_try:
                     print(f"  ✓ Retrieved via {provider.name} API fallback")
                 else:
-                    print(f"  ✓ Retrieved via {provider.name} API (unmatched DOI prefix)")
+                    print(
+                        f"  ✓ Retrieved via {provider.name} API (unmatched DOI prefix)"
+                    )
                 break
 
         if main_markdown:
@@ -180,10 +190,14 @@ def initialize_free_text_access(
             # Handle validation failure (output_file is None)
             if output_file is None:
                 return FreeTextInitState(
-                    is_free=False, free_url=None, early_result=(False, unified_content, None)
+                    is_free=False,
+                    free_url=None,
+                    early_result=(False, unified_content, None),
                 )
             return FreeTextInitState(
-                is_free=False, free_url=None, early_result=(True, str(output_file), unified_content)
+                is_free=False,
+                free_url=None,
+                early_result=(True, str(output_file), unified_content),
             )
 
     print("  ❌ No PMCID and not available via any method (likely paywalled)")
@@ -202,4 +216,6 @@ def initialize_free_text_access(
             "source": "none",
         },
     )
-    return FreeTextInitState(is_free=False, free_url=None, early_result=(False, "No PMCID", None))
+    return FreeTextInitState(
+        is_free=False, free_url=None, early_result=(False, "No PMCID", None)
+    )

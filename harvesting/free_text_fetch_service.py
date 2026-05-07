@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import logging
 import re
 from dataclasses import dataclass, field
 from typing import Any, Callable, Optional, Tuple
 from urllib.parse import urlparse
 
 import requests
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -151,7 +154,15 @@ def fetch_main_content_for_free_text(
                         result.supp_files = scraper.scrape_elsevier_supplements(
                             response.text, response.url
                         )
-                    except Exception:
+                    except Exception as supp_exc:
+                        logger.warning(
+                            "PMID %s: Elsevier supplement scrape failed: %s",
+                            pmid,
+                            supp_exc,
+                        )
+                        print(
+                            f"  - Elsevier supplement scrape failed for PMID {pmid}: {supp_exc}"
+                        )
                         result.supp_files = []
 
         if (
@@ -188,7 +199,15 @@ def fetch_main_content_for_free_text(
                         result.supp_files = scraper.scrape_generic_supplements(
                             response.text, response.url
                         )
-                    except Exception:
+                    except Exception as supp_exc:
+                        logger.warning(
+                            "PMID %s: Wiley/generic supplement scrape failed: %s",
+                            pmid,
+                            supp_exc,
+                        )
+                        print(
+                            f"  - Wiley/generic supplement scrape failed for PMID {pmid}: {supp_exc}"
+                        )
                         result.supp_files = []
 
         if not result.main_markdown:
