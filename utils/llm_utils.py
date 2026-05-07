@@ -263,7 +263,23 @@ class BaseLLMCaller:
                 response_format={"type": "json_object"},
             )
             repaired_text = response.choices[0].message.content
-            return parse_llm_json_response(repaired_text)
+            repaired = parse_llm_json_response(repaired_text)
+            # Reasoning models (e.g. Kimi-K2.6) sometimes truncate the original
+            # output mid-prefix; repair then "succeeds" by emitting an empty
+            # `{}`. That looks like a successful parse to callers, but it's
+            # missing the entire schema. Treat empty objects (or empty
+            # lists/strings) as a failed repair so callers fall through to
+            # their JSONDecodeError handler / fail-open path instead of
+            # silently using default values for every key.
+            if isinstance(repaired, dict) and not repaired:
+                logger.warning(
+                    "JSON repair returned empty object — treating as failure."
+                )
+                return None
+            if isinstance(repaired, list) and not repaired:
+                logger.warning("JSON repair returned empty list — treating as failure.")
+                return None
+            return repaired
         except Exception as repair_exc:
             logger.error(f"JSON repair attempt failed: {repair_exc}")
             return None

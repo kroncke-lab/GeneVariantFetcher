@@ -17,6 +17,27 @@ from utils.models import FilterDecision, FilterResult, FilterTier, Paper
 logger = logging.getLogger(__name__)
 
 
+# Substrings that flag a model as a reasoning model (large hidden reasoning
+# pass before the visible response). These need a higher max_tokens floor or
+# they emit empty/truncated content. Match against the lower-cased model id.
+_REASONING_MODEL_HINTS = (
+    "kimi",
+    "grok-4",
+    "grok-reasoning",
+    "gpt-5",
+    "gpt5",
+    "o1",
+    "o3",
+)
+
+
+def _is_reasoning_model(model: Optional[str]) -> bool:
+    if not model:
+        return False
+    m = model.lower()
+    return any(hint in m for hint in _REASONING_MODEL_HINTS)
+
+
 class KeywordFilter:
     """
     Tier 1 Filter: Fast keyword-based filtering of abstracts.
@@ -116,29 +137,43 @@ class InternFilter(BaseLLMCaller):
     Classifies papers as "Original Clinical Data" vs "Review/Irrelevant".
     """
 
-    CLASSIFICATION_PROMPT = """You are a medical research classifier. Your job is to determine if a scientific paper IDENTIFIES SPECIFIC GENETIC VARIANTS that downstream variant curation can extract.
+    CLASSIFICATION_PROMPT = """You are a medical research classifier. Your job is to decide whether downstream variant curation could plausibly extract one or more genetic variants from this paper.
+
+Remember: you only see the abstract. The full text and tables are available downstream and almost always contain the specific HGVS identifiers when the abstract describes a clinical genotyped cohort, family study, or case report. Lean toward PASS when the abstract makes it likely the body has variants.
 
 Classify the paper as ONE of:
-1. PASS - Identifies one or more specific genetic variants (case reports, cohorts, screening studies, OR functional/in-vitro studies that name specific variants like p.Arg176Trp / G604S / c.2398+1G>C)
-2. FAIL - Review or meta-analysis with no new variants, methodology paper with no variant findings, or unrelated topic
+1. PASS - Likely contains extractable variants. This includes:
+   - Case reports, case series, family/pedigree studies, or clinical cohorts of genotyped patients (e.g. "we describe a family with an HERG mutation", "26 carriers of a HERG mutation", "patients with KCNH2 mutations")
+   - Studies that screen patients with the target disease (LQTS, BrS, AF, SQTS, channelopathy, sudden death, etc.) for variants — even if the abstract only names the gene/disease and not the specific HGVS
+   - Functional / in-vitro / iPSC / heterologous-expression studies that name one or more specific variants (p.Arg176Trp / G604S / c.2398+1G>C) OR reference patient-derived variants
+   - Pharmacogenomics or drug-induced phenotype papers in genotyped patients
+   - NGS panel / diagnostic-yield papers that report results from a patient cohort
+2. FAIL only if at least one of:
+   - Pure review or meta-analysis with no new patient/functional data
+   - Animal-only or non-human cell study with no specific human variant
+   - Bioinformatics/computational paper that does not report specific variants
+   - Methodology paper that explicitly does NOT include patient findings (e.g. assay-development only)
+   - Unrelated topic (gene/disease not relevant)
 
 Title: {title}
 
 Abstract: {abstract}
 
-Instructions:
-- PASS if the paper reports NEW genetic variants in patients (clinical case reports, cohorts, screening)
-- PASS if the paper functionally characterizes one or more SPECIFIC NAMED variants in vitro / in cell lines / in iPSC models / in heterologous expression systems — these papers are still primary sources for variant data
-- PASS if the paper analyzes existing exome/sequencing data and reports specific variant identifiers
-- FAIL only if it is a pure review with no new variants, an unrelated methods paper, an animal-only study with no specific human variant, or off-topic
-- "In vitro" or "functional study" alone is NOT a reason to fail — check whether specific named variants appear
+Decision rules:
+- "A mutation in HERG/KCNH2", "an LQT2 mutation", "carriers of a KCNH2 mutation" — PASS. The variant identifier is in the body.
+- "Patients with congenital LQTS were genotyped" — PASS. Specific variants will be in tables.
+- Family/pedigree, twins, postpartum, pregnancy, perinatal, fetal, infantile, pediatric, neonatal LQTS/SQTS/BrS — PASS when a genotyped patient is mentioned.
+- "In vitro" or "functional study" alone is NOT a reason to fail — check whether named variants or patient-derived variants appear.
+- When uncertain, prefer PASS. Cost of false-negative (lost gold variants) >> cost of false-positive (wasted Tier-3 call).
 {disease_clause}
-Respond with a JSON object:
+Respond with a JSON object containing exactly these keys:
 {{
     "decision": "PASS" or "FAIL",
     "reason": "Brief explanation (1-2 sentences). If FAIL, state which exclusion rule applied.",
     "confidence": 0.0-1.0
-}}"""
+}}
+
+Output the JSON object FIRST, before any reasoning. Keep the response under 200 tokens."""
 
     DISEASE_PROMPT_ADDENDUM = (
         "- PRIORITIZE papers reporting original patient or functional data for {disease}.\n"
@@ -174,6 +209,20 @@ Respond with a JSON object:
             temperature if temperature is not None else settings.tier2_temperature
         )
         max_tokens = max_tokens if max_tokens is not None else settings.tier2_max_tokens
+
+        # Reasoning models (Kimi-K2.6, grok-reasoning, gpt-5-codex) burn most
+        # of the token budget on hidden reasoning before emitting visible JSON.
+        # 2.5k is borderline and produces empty/truncated output ~10% of the
+        # time — the JSON-repair path saves the parse but yields an empty `{}`
+        # that bypasses the schema and silently fails papers. Lift the floor
+        # to 8192 for any reasoning model (matches the table-router baseline).
+        if max_tokens < 8192 and _is_reasoning_model(model):
+            logger.info(
+                f"InternFilter: bumping max_tokens {max_tokens} -> 8192 "
+                f"for reasoning model {model!r} (avoids empty-JSON truncation)"
+            )
+            max_tokens = 8192
+
         self.confidence_threshold = (
             confidence_threshold
             if confidence_threshold is not None
@@ -227,9 +276,40 @@ Respond with a JSON object:
             # Use shared LLM utility (includes retry logic)
             result_data = self.call_llm_json(prompt)
 
-            decision_str = result_data.get("decision", "FAIL").upper()
-            reason = result_data.get("reason", "No reason provided")
-            confidence = float(result_data.get("confidence", 0.5))
+            raw_decision = result_data.get("decision")
+            decision_str = (
+                raw_decision.strip().upper() if isinstance(raw_decision, str) else ""
+            )
+
+            # Reasoning models (e.g. Kimi-K2.6) sometimes burn the token budget on
+            # hidden reasoning and emit empty/keyless JSON that parses fine but is
+            # missing the schema. The previous default-to-FAIL behavior silently
+            # killed ~320 papers (incl. ~30 gold-standard variants) per KCNH2 run.
+            # Treat unrecognized output as inconclusive and fail-OPEN, matching the
+            # exception path's policy.
+            if decision_str not in {"PASS", "FAIL"}:
+                logger.warning(
+                    f"PMID {paper.pmid} - Intern filter: malformed/empty LLM "
+                    f"output (keys={list(result_data.keys())}); failing OPEN."
+                )
+                return FilterResult(
+                    decision=FilterDecision.PASS,
+                    tier=FilterTier.TIER_2_INTERN,
+                    reason="Inconclusive LLM output (missing/invalid decision key); fail-open",
+                    pmid=paper.pmid,
+                    confidence=0.0,
+                    metadata={
+                        "model": self.model,
+                        "fail_open": True,
+                        "raw_keys": list(result_data.keys()),
+                    },
+                )
+
+            reason = result_data.get("reason") or "No reason provided"
+            try:
+                confidence = float(result_data.get("confidence", 0.5))
+            except (TypeError, ValueError):
+                confidence = 0.5
 
             # Apply confidence threshold - if confidence is below threshold, fail the paper
             if decision_str == "PASS" and confidence < self.confidence_threshold:
