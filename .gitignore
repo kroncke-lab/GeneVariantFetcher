@@ -43,6 +43,14 @@ venv.bak/
 *~
 .DS_Store
 
+# R
+.Rhistory
+.RData
+.Ruserdata
+
+# Agent tooling (auto-regenerates duplicate of CLAUDE.md)
+AGENTS.md
+
 # Jupyter Notebook
 .ipynb_checkpoints
 
@@ -53,6 +61,7 @@ automated_output/
 gvf_output/
 europepmc_downloads/
 results/
+results_*/
 
 # Claude Code session metadata (per-machine, do not commit)
 .claude/
