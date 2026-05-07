@@ -214,13 +214,31 @@ class ExpertExtractor(BaseLLMCaller):
                     )
                     is_too_small = len(condensed_text) < self.MIN_CONDENSED_SIZE
 
-                    if has_no_zones or is_too_small:
+                    # Content-aware safety: reject DATA_ZONES that look "big
+                    # enough" but don't even mention the target gene. Without
+                    # this we can ship 600-byte zone files identifying
+                    # off-target receptors as "high-value" and never see the
+                    # real text. Skips when we can't determine the gene.
+                    gene = (paper.gene_symbol or "").strip()
+                    missing_gene = bool(
+                        gene and gene.lower() not in condensed_text.lower()
+                    )
+
+                    if has_no_zones or is_too_small or missing_gene:
+                        reason = (
+                            "no zones identified"
+                            if has_no_zones
+                            else "too small"
+                            if is_too_small
+                            else f"target gene {gene!r} not mentioned"
+                        )
                         logger.warning(
-                            f"PMID {paper.pmid} - DATA_ZONES.md too small or empty "
-                            f"({len(condensed_text)} chars), falling back to full text"
+                            f"PMID {paper.pmid} - DATA_ZONES.md unusable "
+                            f"({len(condensed_text)} chars, {reason}); "
+                            f"falling back to full text"
                         )
                         print(
-                            f"⚠ DATA_ZONES.md insufficient ({len(condensed_text)} chars) - using full text instead"
+                            f"⚠ DATA_ZONES.md insufficient ({len(condensed_text)} chars, {reason}) - using full text instead"
                         )
                         # Fall through to use full text
                     elif (

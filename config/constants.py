@@ -122,8 +122,14 @@ SCOUT_CLINICAL_KEYWORDS: List[str] = [
 # Extraction Thresholds
 # =============================================================================
 
-# Minimum size (chars) for DATA_ZONES.md to be used instead of FULL_CONTEXT.md
-MIN_CONDENSED_SIZE: int = 500
+# Minimum size (chars) for DATA_ZONES.md to be used instead of FULL_CONTEXT.md.
+# Set high enough that a DATA_ZONES file containing only header metadata + a
+# couple of low-relevance off-target zones (typical size: 500–2000 bytes) cannot
+# override a real 30–200 KB FULL_CONTEXT.md. Pre-2026-05 this was 500, which let
+# papers like PMID 12070109 (DATA_ZONES = 667 B of 5-HT1D/IP3R1 zone metadata,
+# FULL_CONTEXT = 114 KB of real KCNH2 text) be silently extracted from the
+# garbage condensation.
+MIN_CONDENSED_SIZE: int = 5000
 
 # Minimum size (chars) for extraction input to be considered usable
 # Below this threshold, LLM extraction is skipped (circuit breaker)
