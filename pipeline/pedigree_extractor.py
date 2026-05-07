@@ -218,7 +218,7 @@ class PedigreeExtractor:
                                            a pedigree (0.0-1.0).
         """
         settings = get_settings()
-        self.model = model or settings.vision_model
+        self.model = model or settings.get_vision_model()
         self.detection_threshold = detection_confidence_threshold
 
         logger.info(f"PedigreeExtractor initialized with model={self.model}")

@@ -1,6 +1,7 @@
 """Validated configuration for the Gene Variant Fetcher pipeline."""
 
 import logging
+import os
 from functools import lru_cache
 from pathlib import Path
 from typing import ClassVar, List, Optional, Union
@@ -10,6 +11,25 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 logger = logging.getLogger(__name__)
+
+
+# Default Anthropic model strings. Used by the get_*_model() helpers when
+# MODEL_PROVIDER=anthropic and the user has not set the per-tier env var.
+# All routed through LiteLLM, which understands the "anthropic/" prefix.
+ANTHROPIC_TIER2_DEFAULT = "anthropic/claude-haiku-4-5-20251001"
+ANTHROPIC_TIER3_DEFAULT = "anthropic/claude-sonnet-4-6,anthropic/claude-opus-4-7"
+ANTHROPIC_TABLE_ROUTER_DEFAULT = "anthropic/claude-haiku-4-5-20251001"
+ANTHROPIC_VISION_DEFAULT = "anthropic/claude-sonnet-4-6"
+
+# Tier-model env var names. Used to decide whether the user explicitly set
+# a tier model (in which case --model-provider does not override it) vs.
+# left it at the field default.
+_TIER_ENV_VARS = {
+    "tier2_model": "TIER2_MODEL",
+    "tier3_models": "TIER3_MODELS",
+    "table_router_model": "TABLE_ROUTER_MODEL",
+    "vision_model": "VISION_MODEL",
+}
 
 
 class Settings(BaseSettings):
@@ -54,6 +74,21 @@ class Settings(BaseSettings):
         default=None, env="AZURE_DEPLOYMENT_GROK"
     )
 
+    # Model provider selector. When set to "anthropic", per-tier model strings
+    # default to the ANTHROPIC_* values below — but only for tiers where the
+    # corresponding TIER*_MODEL env var is unset. Setting an explicit env var
+    # always wins, so each tier remains independently configurable. Default is
+    # "azure" to preserve existing behavior.
+    model_provider: str = Field(
+        default="azure",
+        env="MODEL_PROVIDER",
+        description=(
+            "LLM provider selector: 'azure' (default), 'anthropic', or 'openai'."
+            " 'anthropic' switches every tier to Claude defaults unless the"
+            " specific TIER*_MODEL env var is also set."
+        ),
+    )
+
     # Model Configuration
     tier1_model: Optional[str] = Field(
         default=None,
@@ -69,6 +104,30 @@ class Settings(BaseSettings):
         default="gpt-4o-mini,gpt-4o",
         env="TIER3_MODELS",
         description="Comma-separated list of models for Tier 3 extraction (e.g., 'gpt-4o-mini,gpt-4o')",
+    )
+
+    # Anthropic per-tier overrides. These take effect when MODEL_PROVIDER=anthropic
+    # AND the matching TIER*_MODEL env var is unset. Configurable independently
+    # via env so users can mix-and-match (e.g. Anthropic for Tier 3 only).
+    anthropic_tier2_model: str = Field(
+        default=ANTHROPIC_TIER2_DEFAULT,
+        env="ANTHROPIC_TIER2_MODEL",
+        description="Anthropic Tier 2 classifier model (used when MODEL_PROVIDER=anthropic)",
+    )
+    anthropic_tier3_models: str = Field(
+        default=ANTHROPIC_TIER3_DEFAULT,
+        env="ANTHROPIC_TIER3_MODELS",
+        description="Anthropic Tier 3 extraction cascade (used when MODEL_PROVIDER=anthropic)",
+    )
+    anthropic_table_router_model: str = Field(
+        default=ANTHROPIC_TABLE_ROUTER_DEFAULT,
+        env="ANTHROPIC_TABLE_ROUTER_MODEL",
+        description="Anthropic table-router model (used when MODEL_PROVIDER=anthropic)",
+    )
+    anthropic_vision_model: str = Field(
+        default=ANTHROPIC_VISION_DEFAULT,
+        env="ANTHROPIC_VISION_MODEL",
+        description="Anthropic vision model for figure/pedigree analysis (used when MODEL_PROVIDER=anthropic)",
     )
 
     # Legacy alias for backward compatibility
@@ -336,13 +395,15 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def validate_required_settings(self):
         # NCBI email is always required (PubMed compliance).
-        # An LLM provider is required, but either OPENAI_API_KEY or
-        # AZURE_AI_API_KEY satisfies it — the pipeline uses whichever
-        # the configured tier model strings point at.
+        # An LLM provider is required, but any of OPENAI_API_KEY,
+        # AZURE_AI_API_KEY, or ANTHROPIC_API_KEY satisfies it — the pipeline
+        # uses whichever the configured tier model strings point at and
+        # LiteLLM resolves credentials per-call.
         always_required = {"ncbi_email": "NCBI_EMAIL"}
         llm_provider_required = {
             "openai_api_key": "OPENAI_API_KEY",
             "azure_ai_api_key": "AZURE_AI_API_KEY",
+            "anthropic_api_key": "ANTHROPIC_API_KEY",
         }
 
         missing = []
@@ -421,8 +482,62 @@ class Settings(BaseSettings):
 
         return self
 
+    # ------------------------------------------------------------------
+    # Provider-aware model resolution
+    # ------------------------------------------------------------------
+    # The pipeline asks "which model should this tier use?" via these
+    # helpers. They prefer (1) an explicit TIER*_MODEL env var, then
+    # (2) the Anthropic default when MODEL_PROVIDER=anthropic, then
+    # (3) the original tier field default. This keeps every tier
+    # independently configurable while letting --model-provider switch
+    # them in bulk.
+
+    def _is_anthropic(self) -> bool:
+        return (self.model_provider or "").strip().lower() == "anthropic"
+
+    def _tier_env_set(self, field_name: str) -> bool:
+        env_var = _TIER_ENV_VARS.get(field_name)
+        if not env_var:
+            return False
+        value = os.getenv(env_var)
+        return value is not None and value.strip() != ""
+
+    def get_tier2_model(self) -> str:
+        if self._is_anthropic() and not self._tier_env_set("tier2_model"):
+            return self.anthropic_tier2_model
+        return self.tier2_model
+
+    def get_tier3_models(self) -> List[str]:
+        if self._is_anthropic() and not self._tier_env_set("tier3_models"):
+            value = self.anthropic_tier3_models
+            return [m.strip() for m in value.split(",") if m.strip()]
+        models = self.tier3_models
+        if isinstance(models, str):
+            return [m.strip() for m in models.split(",") if m.strip()]
+        return list(models)
+
+    def get_table_router_model(self) -> str:
+        if self._is_anthropic() and not self._tier_env_set("table_router_model"):
+            return self.anthropic_table_router_model
+        return self.table_router_model
+
+    def get_vision_model(self) -> str:
+        if self._is_anthropic() and not self._tier_env_set("vision_model"):
+            return self.anthropic_vision_model
+        return self.vision_model
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
     """Return a cached Settings instance so configuration is loaded once."""
     return Settings()
+
+
+def reset_settings_cache() -> None:
+    """Clear the cached Settings so the next get_settings() re-reads env vars.
+
+    Used by the CLI when --model-provider is supplied: the flag mutates
+    MODEL_PROVIDER in the process env and we need the next settings load to
+    pick that up rather than returning a stale cached instance.
+    """
+    get_settings.cache_clear()

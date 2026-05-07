@@ -169,7 +169,7 @@ Respond with a JSON object:
         settings = get_settings()
 
         # Use config defaults if not specified
-        model = model or settings.tier2_model or settings.intern_model
+        model = model or settings.get_tier2_model() or settings.intern_model
         temperature = (
             temperature if temperature is not None else settings.tier2_temperature
         )
@@ -352,7 +352,7 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
         """
         settings = get_settings()
 
-        model = model or settings.tier2_model or settings.intern_model
+        model = model or settings.get_tier2_model() or settings.intern_model
         temperature = (
             temperature if temperature is not None else settings.tier2_temperature
         )

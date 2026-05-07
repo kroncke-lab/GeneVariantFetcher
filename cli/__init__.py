@@ -153,6 +153,18 @@ def extract_command(
             ),
         ),
     ] = False,
+    model_provider: Annotated[
+        str,
+        typer.Option(
+            "--model-provider",
+            help=(
+                "LLM provider for all tiers: 'azure' (default), 'anthropic', or"
+                " 'openai'. 'anthropic' switches Tier 2/3, table router, and"
+                " vision to Claude defaults. Per-tier env vars (TIER2_MODEL,"
+                " TIER3_MODELS, TABLE_ROUTER_MODEL, VISION_MODEL) still win."
+            ),
+        ),
+    ] = None,
     verbose: Annotated[
         bool, typer.Option("--verbose", "-v", help="Enable verbose logging")
     ] = False,
@@ -177,13 +189,48 @@ def extract_command(
     else:
         setup_logging(level=logging.INFO)
 
-    # Require at least one LLM provider key. OPENAI_API_KEY or AZURE_AI_API_KEY
-    # both satisfy this — the pipeline routes via TIER*_MODEL strings and
-    # LiteLLM picks up the matching provider's env vars automatically.
-    if not (os.getenv("OPENAI_API_KEY") or os.getenv("AZURE_AI_API_KEY")):
+    # If --model-provider was supplied, push it into the env BEFORE the
+    # workflow runs so settings.get_*_model() picks the right tier defaults.
+    # Reset any cached Settings so the next get_settings() re-reads env.
+    if model_provider:
+        provider_normalized = model_provider.strip().lower()
+        valid_providers = {"azure", "anthropic", "openai"}
+        if provider_normalized not in valid_providers:
+            typer.echo(
+                f"⚠️  ERROR: --model-provider must be one of {sorted(valid_providers)},"
+                f" got '{model_provider}'",
+                err=True,
+            )
+            raise typer.Exit(1)
+        os.environ["MODEL_PROVIDER"] = provider_normalized
+        from config.settings import reset_settings_cache
+
+        reset_settings_cache()
+
+    # Require at least one LLM provider key. ANTHROPIC_API_KEY, OPENAI_API_KEY,
+    # or AZURE_AI_API_KEY all satisfy the pipeline since LiteLLM resolves
+    # credentials per-call based on the configured TIER*_MODEL strings.
+    selected_provider = (
+        (model_provider.strip().lower() if model_provider else None)
+        or os.getenv("MODEL_PROVIDER", "").strip().lower()
+        or "azure"
+    )
+    if selected_provider == "anthropic":
+        if not os.getenv("ANTHROPIC_API_KEY"):
+            typer.echo(
+                "⚠️  ERROR: --model-provider=anthropic requires ANTHROPIC_API_KEY in your .env file.",
+                err=True,
+            )
+            raise typer.Exit(1)
+    elif not (
+        os.getenv("OPENAI_API_KEY")
+        or os.getenv("AZURE_AI_API_KEY")
+        or os.getenv("ANTHROPIC_API_KEY")
+    ):
         typer.echo("⚠️  ERROR: No LLM provider API key found in environment!", err=True)
         typer.echo(
-            "Set OPENAI_API_KEY or AZURE_AI_API_KEY in your .env file.", err=True
+            "Set OPENAI_API_KEY, AZURE_AI_API_KEY, or ANTHROPIC_API_KEY in your .env file.",
+            err=True,
         )
         raise typer.Exit(1)
 

@@ -157,7 +157,7 @@ class ExpertExtractor(BaseLLMCaller):
         """
         settings = get_settings()
 
-        self.models = models or settings.tier3_models
+        self.models = models or settings.get_tier3_models()
         self.temperature = (
             temperature if temperature is not None else settings.tier3_temperature
         )
@@ -1334,11 +1334,12 @@ class ExpertExtractor(BaseLLMCaller):
         from pipeline.table_router import extract_via_router
 
         settings = get_settings()
+        router_model = settings.get_table_router_model()
         try:
             outcome = extract_via_router(
                 scanner_text,
                 paper.gene_symbol or "UNKNOWN",
-                model=settings.table_router_model,
+                model=router_model,
                 max_tokens=settings.table_router_max_tokens,
             )
         except Exception as e:  # noqa: BLE001
@@ -1391,7 +1392,7 @@ class ExpertExtractor(BaseLLMCaller):
                 "compact_mode": True,
                 "notes": (
                     f"Router-first path: tables {table_ids} parsed deterministically "
-                    f"using {settings.table_router_model}"
+                    f"using {router_model}"
                 ),
             },
         }
@@ -1399,7 +1400,7 @@ class ExpertExtractor(BaseLLMCaller):
             pmid=paper.pmid,
             success=True,
             extracted_data=extracted_data,
-            model_used=f"router+{settings.table_router_model}",
+            model_used=f"router+{router_model}",
         )
 
     def _attempt_extraction(

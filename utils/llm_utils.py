@@ -7,6 +7,7 @@ consistent error handling, retry logic, and JSON response parsing.
 
 import json
 import logging
+import os
 import time
 from typing import Any, Dict, List, Optional
 
@@ -48,11 +49,25 @@ MODEL_TOKEN_LIMITS = {
     "gpt-4-": (8192, 8000),  # Standard GPT-4 variants
     "gpt-3.5-turbo": (4096, 4000),
     "gpt-3.5": (4096, 4000),
-    # Anthropic Claude models
+    # Anthropic Claude models. Patterns are matched as substrings (case-insensitive)
+    # against the LiteLLM model string, so "anthropic/claude-sonnet-4-6" matches
+    # "claude-sonnet-4" and "claude-4-".
+    # Claude 4.x family — 64k output tokens for Sonnet/Opus, 32k for Haiku per
+    # Anthropic's published limits. Safe limits leave headroom for system overhead.
+    "claude-opus-4-7": (64000, 60000),
+    "claude-opus-4-6": (64000, 60000),
+    "claude-opus-4": (64000, 60000),
+    "claude-sonnet-4-6": (64000, 60000),
+    "claude-sonnet-4": (64000, 60000),
+    "claude-haiku-4-5": (32000, 30000),
+    "claude-haiku-4": (32000, 30000),
+    "claude-4": (64000, 60000),
+    # Claude 3.x family
     "claude-3-opus": (4096, 4000),
     "claude-3-sonnet": (4096, 4000),
     "claude-3-haiku": (4096, 4000),
     "claude-3.5-sonnet": (8192, 8000),
+    "claude-3-5-sonnet": (8192, 8000),
     "claude-3.5": (8192, 8000),
     "claude-2": (4096, 4000),
     # Google models
@@ -138,8 +153,27 @@ class RateLimiter:
         self.last_request_time = time.time()
 
 
-# Global rate limiter - 50 requests/minute is safe for most OpenAI tiers
-_rate_limiter = RateLimiter(requests_per_minute=50)
+# Global rate limiter. Default 50 RPM is safe for most OpenAI tiers; override
+# with LLM_REQUESTS_PER_MINUTE for higher-throughput providers like Anthropic
+# tier 4 (4000 RPM for Sonnet) where 50 RPM would needlessly bottleneck the
+# pipeline. The cap is shared across providers — set conservatively for the
+# slowest tier in your active model set.
+def _resolve_rpm_limit() -> int:
+    raw = os.getenv("LLM_REQUESTS_PER_MINUTE", "").strip()
+    if not raw:
+        return 50
+    try:
+        value = int(raw)
+        return value if value > 0 else 50
+    except ValueError:
+        logger.warning(
+            "LLM_REQUESTS_PER_MINUTE=%r is not a positive integer; using default 50",
+            raw,
+        )
+        return 50
+
+
+_rate_limiter = RateLimiter(requests_per_minute=_resolve_rpm_limit())
 
 
 class BaseLLMCaller:
