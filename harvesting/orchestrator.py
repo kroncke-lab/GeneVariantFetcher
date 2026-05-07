@@ -52,6 +52,15 @@ from .supplement_reference_parser import (
     parse_supplement_references,
 )
 from gene_literature.supplements import UnifiedSupplementFetcher
+from .artifacts_log import ArtifactsLog
+from .figure_extractor import (
+    CaptionExtractionResult,
+    extract_from_html as extract_captions_from_html,
+    extract_from_jats_xml as extract_captions_from_jats_xml,
+    merge_results as merge_caption_results,
+    render_captions_markdown,
+    save_captions_json,
+)
 from .supplement_scraper import SupplementScraper
 from .unpaywall_api import UnpaywallClient, get_unpaywall_client
 from .wiley_api import WileyAPIClient
@@ -389,61 +398,89 @@ class PMCHarvester:
         """
         write_pmid_status_file(self.output_dir, pmid, status, details)
 
-    def _extract_pmc_figures(self, pmcid: str, pmid: str) -> int:
+    def _extract_pmc_figures(
+        self,
+        pmcid: str,
+        pmid: str,
+        artifacts: Optional["ArtifactsLog"] = None,
+    ) -> Tuple[int, "CaptionExtractionResult"]:
         """
-        Extract figure images from a PMC article page.
+        Extract figure images and captions from a PMC article page.
 
-        PMC articles have figures embedded in the HTML, not as separate downloads.
-        This method scrapes the article page to find and download figure images.
+        PMC articles embed figures in the HTML rather than ship them as
+        separate downloads. We:
+          1. Fetch the article HTML once.
+          2. Pull every ``<figure>`` block via ``figure_extractor`` so we
+             have caption + image_url pairs.
+          3. Download each image (existing behaviour) and persist a
+             ``{PMID}_figures/captions.json`` mapping filenames to
+             captions for downstream auditability.
 
         Args:
             pmcid: PubMed Central ID
             pmid: PubMed ID (for output directory naming)
+            artifacts: Optional artifacts log to populate.
 
         Returns:
-            Number of figures extracted
+            Tuple of (downloaded_count, caption_extraction_result). The
+            caption result is empty when nothing usable was found.
         """
+        empty_captions = CaptionExtractionResult()
         if not self._should_extract_figures:
-            return 0
+            return 0, empty_captions
 
         if not pmcid:
-            return 0
+            return 0, empty_captions
 
         # Create figures directory
         figures_dir = self.output_dir / f"{pmid}_figures"
         figures_dir.mkdir(exist_ok=True)
 
         try:
-            from bs4 import BeautifulSoup
-
             # Fetch the PMC article page
             pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
             response = self.session.get(pmc_url, timeout=30)
             response.raise_for_status()
+            html_text = response.text
+        except Exception as e:
+            logger.warning(f"Failed to fetch PMC article HTML for {pmcid}: {e}")
+            return 0, empty_captions
 
-            soup = BeautifulSoup(response.text, "html.parser")
+        # Extract structured caption metadata from the page.
+        try:
+            captions_result = extract_captions_from_html(html_text)
+        except Exception as e:
+            logger.warning(f"Caption extraction failed for {pmcid}: {e}")
+            captions_result = CaptionExtractionResult()
 
-            # Find figure images - PMC uses cdn.ncbi.nlm.nih.gov URLs
-            figure_urls = []
+        # Map image_url -> caption (best effort) for filename pairing below.
+        caption_by_url: Dict[str, Any] = {}
+        for fig in captions_result.figures:
+            if fig.image_url:
+                caption_by_url[fig.image_url] = fig
+
+        try:
+            soup = BeautifulSoup(html_text, "html.parser")
+
+            figure_urls: List[str] = []
             for img in soup.find_all("img"):
                 src = img.get("src", "") or img.get("data-src", "")
                 if src and "cdn.ncbi.nlm.nih.gov/pmc" in src:
-                    # Skip logos and small images
                     if "logo" in src.lower() or "icon" in src.lower():
                         continue
-                    # Only keep figure images (usually .jpg or .png)
                     if src.endswith((".jpg", ".jpeg", ".png", ".gif")):
                         figure_urls.append(src)
 
             if not figure_urls:
                 logger.debug(f"No figures found in PMC article {pmcid}")
-                return 0
+                return 0, captions_result
 
-            # Download each figure
             downloaded = 0
+            captions_index: List[Dict[str, Any]] = []
+            ordered_captions = list(captions_result.figures)
+
             for i, url in enumerate(figure_urls, 1):
                 try:
-                    # Determine file extension
                     ext = ".jpg"
                     for e in [".png", ".gif", ".jpeg"]:
                         if e in url.lower():
@@ -453,42 +490,91 @@ class PMCHarvester:
                     filename = f"fig_pmc_{i}{ext}"
                     filepath = figures_dir / filename
 
-                    # Download the image
                     img_response = self.session.get(url, timeout=30)
                     img_response.raise_for_status()
 
-                    # Validate it's actually an image (not HTML error page)
                     content = img_response.content
-                    if content[:4] in (
-                        b"\x89PNG",
-                        b"\xff\xd8\xff\xe0",
-                        b"\xff\xd8\xff\xe1",
-                        b"GIF8",
-                    ):
-                        filepath.write_bytes(content)
-                        downloaded += 1
-                        logger.debug(
-                            f"Downloaded figure: {filename} ({len(content)} bytes)"
+                    valid = (
+                        content[:4]
+                        in (
+                            b"\x89PNG",
+                            b"\xff\xd8\xff\xe0",
+                            b"\xff\xd8\xff\xe1",
+                            b"GIF8",
                         )
-                    elif content[:4] == b"\xff\xd8\xff\xdb":  # Another JPEG variant
-                        filepath.write_bytes(content)
-                        downloaded += 1
-                    else:
+                        or content[:4] == b"\xff\xd8\xff\xdb"
+                    )
+
+                    if not valid:
                         logger.debug(f"Skipped non-image content from {url}")
+                        continue
+
+                    filepath.write_bytes(content)
+                    downloaded += 1
+                    logger.debug(
+                        f"Downloaded figure: {filename} ({len(content)} bytes)"
+                    )
+
+                    # Attach caption: prefer URL-keyed match; otherwise
+                    # use the i-th caption as a positional fallback.
+                    cap = caption_by_url.get(url)
+                    if cap is None and i - 1 < len(ordered_captions):
+                        cap = ordered_captions[i - 1]
+                    cap_label = cap.label if cap else None
+                    cap_title = cap.title if cap else None
+                    cap_text = cap.text if cap else None
+                    fig_id = cap.figure_id if cap else None
+
+                    captions_index.append(
+                        {
+                            "filename": filename,
+                            "label": cap_label,
+                            "title": cap_title,
+                            "text": cap_text,
+                            "figure_id": fig_id,
+                            "source_url": url,
+                        }
+                    )
+
+                    if artifacts is not None:
+                        artifacts.record_figure(
+                            ArtifactsLog.figure_artifact_from_path(
+                                filepath,
+                                source="pmc_html",
+                                source_url=url,
+                                caption_label=cap_label,
+                                caption_title=cap_title,
+                                caption_text=cap_text,
+                                figure_id=fig_id,
+                            )
+                        )
 
                 except Exception as e:
                     logger.warning(f"Failed to download figure from {url}: {e}")
                     continue
 
+            # Persist captions sidecar — gives a quick audit answer for
+            # "did we capture caption N for figure N?".
+            if captions_index:
+                try:
+                    captions_path = figures_dir / "captions.json"
+                    import json as _json
+
+                    captions_path.write_text(
+                        _json.dumps(captions_index, indent=2),
+                        encoding="utf-8",
+                    )
+                except Exception as e:
+                    logger.warning(f"Failed to write captions.json for {pmid}: {e}")
+
             if downloaded > 0:
                 print(f"  ✓ Extracted {downloaded} figures from PMC article")
                 logger.info(f"Extracted {downloaded} figures from PMC article {pmcid}")
 
-            return downloaded
-
+            return downloaded, captions_result
         except Exception as e:
             logger.warning(f"Failed to extract figures from PMC article {pmcid}: {e}")
-            return 0
+            return 0, captions_result
 
     def _run_pedigree_extraction(self, pmid: str) -> Optional[str]:
         """
@@ -969,7 +1055,9 @@ class PMCHarvester:
         )
         return False
 
-    def _process_supplements(self, pmid: str, pmcid: str, doi: str) -> Tuple[str, int]:
+    def _process_supplements(
+        self, pmid: str, pmcid: str, doi: str
+    ) -> Tuple[str, int, list]:
         """
         Download supplemental files and convert them to markdown.
 
@@ -981,7 +1069,9 @@ class PMCHarvester:
             doi: Digital Object Identifier for fallback scraping
 
         Returns:
-            Tuple containing the combined supplement markdown and number of downloaded files
+            Tuple of ``(supplement_markdown, downloaded_count, file_results)``.
+            ``file_results`` is a list of ``SupplementFileResult`` rows used to
+            populate the per-PMID artifacts audit log.
         """
         extract_figures = self._should_extract_figures
 
@@ -1001,7 +1091,7 @@ class PMCHarvester:
                 f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/" if pmcid else "",
                 classification="SUPPLEMENT_ONLY",
             )
-            return "", 0
+            return "", 0, []
 
         result = process_supplement_files(
             supp_files=supp_files,
@@ -1031,7 +1121,75 @@ class PMCHarvester:
                 f"  ✓ Extracted {result.total_figures_extracted} figures from PDF supplements"
             )
 
-        return result.supplement_markdown, result.downloaded_count
+        return (
+            result.supplement_markdown,
+            result.downloaded_count,
+            result.file_results,
+        )
+
+    # ------------------------------------------------------------------
+    # FULL_CONTEXT assembly + artifacts logging helpers
+    # ------------------------------------------------------------------
+
+    def _record_supplement_results(
+        self,
+        artifacts: "ArtifactsLog",
+        file_results: list,
+    ) -> None:
+        """Push per-supplement-file metadata into the artifacts log."""
+        for fr in file_results:
+            artifacts.record_supplement_dict(
+                filename=fr.filename,
+                path=fr.path,
+                url=fr.url,
+                size_bytes=fr.size_bytes,
+                source=fr.source,
+                description=fr.description or None,
+                converted=fr.converted_chars > 0,
+                converted_chars=fr.converted_chars,
+                figures_extracted=fr.figures_extracted,
+                nested_files=list(fr.nested_files),
+                error=fr.error,
+            )
+
+    def _record_html_figure_artifacts(
+        self,
+        artifacts: "ArtifactsLog",
+        captions: "CaptionExtractionResult",
+        source_label: str,
+    ) -> None:
+        """Record figure captions extracted from HTML when no images were downloaded.
+
+        These artifact rows have no on-disk filename — they are caption-only
+        records useful for audit purposes (we know the paper had figure N
+        with this caption, even if we didn't store the image).
+        """
+        for fig in captions.figures:
+            artifacts.record_figure_dict(
+                filename=fig.figure_id or fig.label,
+                path="",
+                size_bytes=0,
+                source_url=fig.image_url,
+                source=source_label,
+                caption_label=fig.label,
+                caption_title=fig.title,
+                caption_text=fig.text,
+                figure_id=fig.figure_id,
+            )
+
+    def _build_unified_content(
+        self,
+        main_markdown: str,
+        captions: "CaptionExtractionResult",
+        supplement_markdown: str,
+    ) -> str:
+        """Concatenate main text + caption block + supplement markdown.
+
+        Captions land between main text and supplements so the variant
+        scanner / LLM sees them in document order.
+        """
+        captions_md = render_captions_markdown(captions)
+        return (main_markdown or "") + (captions_md or "") + (supplement_markdown or "")
 
     def download_pmid(self, pmid: str) -> Tuple[bool, str, Optional[str]]:
         """
@@ -1097,11 +1255,32 @@ class PMCHarvester:
 
         print("  ✓ Full-text XML retrieved from PMC")
 
-        # Extract figures from the PMC article page
-        self._extract_pmc_figures(pmcid, pmid)
+        # Per-PMID artifact log built up across the rest of this method.
+        artifacts = ArtifactsLog(
+            pmid=pmid,
+            output_dir=self.output_dir,
+            pmcid=pmcid,
+            doi=doi,
+            gene_symbol=self.gene_symbol,
+        )
+
+        # Extract figures from the PMC article page (also yields caption metadata).
+        _, html_captions = self._extract_pmc_figures(pmcid, pmid, artifacts=artifacts)
 
         # Convert main text to markdown
         main_markdown = self.converter.xml_to_markdown(xml_content)
+        main_text_source = "pmc_xml"
+
+        # Pull caption-like content (figures, table-wraps, supplementary-material
+        # descriptions) from the JATS XML — these are silently dropped by
+        # xml_to_markdown which only walks <sec>/<p>.
+        try:
+            xml_captions = extract_captions_from_jats_xml(xml_content)
+        except Exception as e:
+            logger.warning(f"JATS caption extraction failed for {pmid}: {e}")
+            xml_captions = CaptionExtractionResult()
+
+        captions = merge_caption_results(xml_captions, html_captions)
 
         # Some PMC entries block XML full text (only abstract). Fall back to scraping
         # the PMC HTML page when the markdown looks incomplete.
@@ -1115,18 +1294,53 @@ class PMCHarvester:
                 html_markdown = self.converter.pmc_html_to_markdown(html_response.text)
                 if html_markdown and len(html_markdown) > len(main_markdown):
                     main_markdown = html_markdown
+                    main_text_source = "pmc_html"
                     print(
                         "  ✓ Recovered full text from PMC HTML (XML body unavailable)"
+                    )
+                # Even if XML markdown was longer, the HTML may carry
+                # additional <figure> blocks that the JATS extractor missed.
+                try:
+                    fallback_captions = extract_captions_from_html(html_response.text)
+                    captions = merge_caption_results(captions, fallback_captions)
+                except Exception as exc:
+                    logger.warning(
+                        f"PMC HTML caption extraction failed for {pmid}: {exc}"
                     )
             except Exception as e:
                 print(f"  - PMC HTML fallback failed: {e}")
 
-        supplement_markdown, downloaded_count = self._process_supplements(
-            pmid, pmcid, doi
+        (
+            supplement_markdown,
+            downloaded_count,
+            supp_results,
+        ) = self._process_supplements(pmid, pmcid, doi)
+        self._record_supplement_results(artifacts, supp_results)
+
+        # Persist a sidecar of the full caption set next to the figures dir.
+        try:
+            captions_path = self.output_dir / f"{pmid}_figures" / "captions_index.json"
+            if captions_path.parent.exists():
+                save_captions_json(captions, captions_path)
+        except Exception as e:
+            logger.warning(f"Failed to write captions_index.json for {pmid}: {e}")
+
+        # Create unified markdown file (WITHOUT pedigree extraction).
+        # Captions block lives between main text and supplements so it is
+        # contiguous with the article body for the scanner / LLM.
+        unified_content = self._build_unified_content(
+            main_markdown=main_markdown,
+            captions=captions,
+            supplement_markdown=supplement_markdown,
         )
 
-        # Create unified markdown file (WITHOUT pedigree extraction)
-        unified_content = main_markdown + supplement_markdown
+        artifacts.record_main_text(
+            source=main_text_source,
+            chars=len(main_markdown or ""),
+            figure_captions=len(captions.figures),
+            table_captions=len(captions.tables),
+            supplement_descriptions=len(captions.supplements),
+        )
 
         # Validate content quality before writing (catches binary/garbage content)
         is_valid, validation_reason = validate_content_quality(unified_content)
@@ -1138,11 +1352,14 @@ class PMCHarvester:
                 f"PMCID: {pmcid}",
                 classification="CONTENT_INVALID",
             )
+            artifacts.add_note(f"content_validation_failed: {validation_reason}")
+            artifacts.save()
             return False, f"Content validation failed: {validation_reason}", None
 
         output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
         with open(output_file, "w", encoding="utf-8") as f:
             f.write(unified_content)
+        artifacts.save()
 
         print(f"  ✅ Downloaded: {output_file.name} ({downloaded_count} supplements)")
 
@@ -1220,6 +1437,57 @@ class PMCHarvester:
             figures_dir = self.output_dir / f"{pmid}_figures"
             figures_dir.mkdir(exist_ok=True)
 
+        # Per-PMID artifact log for this Tier 3.5 fetch.
+        artifacts = ArtifactsLog(
+            pmid=pmid,
+            output_dir=self.output_dir,
+            pmcid=None,
+            doi=doi,
+            gene_symbol=self.gene_symbol,
+        )
+
+        # Pull captions from the rendered HTML when the strategy preserved it.
+        captions = CaptionExtractionResult()
+        raw_html = getattr(fr, "main_html", None)
+        if raw_html:
+            try:
+                captions = extract_captions_from_html(raw_html)
+            except Exception as exc:
+                logger.warning(f"Tier 3.5 caption extraction failed for {pmid}: {exc}")
+                captions = CaptionExtractionResult()
+        captions_md = render_captions_markdown(captions)
+
+        # Record any figure files Tier 3.5 already downloaded (best-effort
+        # caption pairing — list order is preserved by the strategies).
+        figure_paths = list(getattr(fr, "figure_paths", []) or [])
+        ordered_caps = list(captions.figures)
+        for i, fp in enumerate(figure_paths):
+            cap = ordered_caps[i] if i < len(ordered_caps) else None
+            artifacts.record_figure(
+                ArtifactsLog.figure_artifact_from_path(
+                    Path(fp),
+                    source=f"browser_html:{fr.publisher or 'generic'}",
+                    caption_label=cap.label if cap else None,
+                    caption_title=cap.title if cap else None,
+                    caption_text=cap.text if cap else None,
+                    figure_id=cap.figure_id if cap else None,
+                )
+            )
+        # Caption-only rows for figures we didn't (or couldn't) save.
+        if len(ordered_caps) > len(figure_paths):
+            for cap in ordered_caps[len(figure_paths) :]:
+                artifacts.record_figure_dict(
+                    filename=cap.figure_id or cap.label,
+                    path="",
+                    size_bytes=0,
+                    source_url=cap.image_url,
+                    source=f"browser_html:{fr.publisher or 'generic'}",
+                    caption_label=cap.label,
+                    caption_title=cap.title,
+                    caption_text=cap.text,
+                    figure_id=cap.figure_id,
+                )
+
         if supp_files:
             supp_result = process_supplement_files(
                 supp_files=supp_files,
@@ -1245,6 +1513,7 @@ class PMCHarvester:
             )
             supplement_markdown = supp_result.supplement_markdown
             downloaded_count = supp_result.downloaded_count
+            self._record_supplement_results(artifacts, supp_result.file_results)
         else:
             supplement_markdown = ""
             downloaded_count = 0
@@ -1257,6 +1526,14 @@ class PMCHarvester:
             source_tag=f"[via browser HTML: {fr.publisher or 'generic'}]",
         )
 
+        artifacts.record_main_text(
+            source=source.status_source,
+            chars=len(fr.main_markdown or ""),
+            figure_captions=len(captions.figures),
+            table_captions=len(captions.tables),
+            supplement_descriptions=len(captions.supplements),
+        )
+
         output_file, unified_content = write_free_text_output(
             output_dir=self.output_dir,
             success_log=self.success_log,
@@ -1267,10 +1544,14 @@ class PMCHarvester:
             source=source,
             write_pmid_status=self._write_pmid_status,
             log_paywalled=None,  # don't pollute the paywall log on Tier 3.5
+            captions_markdown=captions_md,
         )
         if output_file is None:
+            artifacts.add_note(f"content_validation_failed: {unified_content}")
+            artifacts.save()
             return False, unified_content, None
 
+        artifacts.save()
         return True, str(output_file), unified_content
 
     def _download_free_text_pmid(
@@ -1346,6 +1627,33 @@ class PMCHarvester:
         used_elsevier_api = content_result.used_elsevier_api
         used_wiley_api = content_result.used_wiley_api
 
+        # Per-PMID artifact log for the free-text path.
+        artifacts = ArtifactsLog(
+            pmid=pmid,
+            output_dir=self.output_dir,
+            pmcid=None,
+            doi=doi,
+            gene_symbol=self.gene_symbol,
+        )
+
+        # Pull captions from raw HTML if the scraper preserved it (the API
+        # branches return markdown directly so we have nothing to parse).
+        captions = CaptionExtractionResult()
+        if getattr(content_result, "raw_html", None):
+            try:
+                captions = extract_captions_from_html(content_result.raw_html)
+            except Exception as exc:
+                logger.warning(f"Free-text caption extraction failed for {pmid}: {exc}")
+                captions = CaptionExtractionResult()
+        captions_md = render_captions_markdown(captions)
+
+        # Even when no images were downloaded, log caption-only artifact rows
+        # so we have an audit trail for what the paper contained.
+        if captions.figures:
+            self._record_html_figure_artifacts(
+                artifacts, captions, source_label="publisher_html"
+            )
+
         supplements_dir = self.output_dir / f"{pmid}_supplements"
 
         extract_figures = self._should_extract_figures
@@ -1370,6 +1678,13 @@ class PMCHarvester:
                 used_elsevier_api=used_elsevier_api,
                 used_wiley_api=used_wiley_api,
             )
+            artifacts.record_main_text(
+                source=source.status_source,
+                chars=len(main_markdown or ""),
+                figure_captions=len(captions.figures),
+                table_captions=len(captions.tables),
+                supplement_descriptions=len(captions.supplements),
+            )
             output_file, unified_content = write_free_text_output(
                 output_dir=self.output_dir,
                 success_log=self.success_log,
@@ -1379,14 +1694,18 @@ class PMCHarvester:
                 downloaded_count=downloaded_count,
                 source=source,
                 log_paywalled=self._log_paywalled,
+                captions_markdown=captions_md,
             )
             # Handle validation failure
             if output_file is None:
+                artifacts.add_note(f"content_validation_failed: {unified_content}")
+                artifacts.save()
                 return (
                     False,
                     unified_content,
                     None,
                 )  # unified_content contains error message
+            artifacts.save()
             return True, str(output_file), unified_content
 
         free_text_supp_result = process_supplement_files(
@@ -1412,9 +1731,17 @@ class PMCHarvester:
 
         supplement_markdown = free_text_supp_result.supplement_markdown
         downloaded_count = free_text_supp_result.downloaded_count
+        self._record_supplement_results(artifacts, free_text_supp_result.file_results)
         source = source_from_free_text_flags(
             used_elsevier_api=used_elsevier_api,
             used_wiley_api=used_wiley_api,
+        )
+        artifacts.record_main_text(
+            source=source.status_source,
+            chars=len(main_markdown or ""),
+            figure_captions=len(captions.figures),
+            table_captions=len(captions.tables),
+            supplement_descriptions=len(captions.supplements),
         )
         output_file, unified_content = write_free_text_output(
             output_dir=self.output_dir,
@@ -1425,7 +1752,9 @@ class PMCHarvester:
             downloaded_count=downloaded_count,
             source=source,
             log_paywalled=self._log_paywalled,
+            captions_markdown=captions_md,
         )
+        artifacts.save()
 
         # Handle validation failure
         if output_file is None:

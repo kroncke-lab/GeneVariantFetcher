@@ -877,3 +877,204 @@ class FormatConverter:
         }.get(ext, "image/png")
 
         return f"data:{mime_type};base64,{b64}"
+
+    # ------------------------------------------------------------------
+    # Additional supplement formats
+    # ------------------------------------------------------------------
+
+    def tsv_to_markdown(self, file_path: Path) -> str:
+        """Convert a TSV file to markdown tables.
+
+        Treats the file as tab-separated CSV. Falls back to raw text if pandas
+        cannot parse it (e.g. ragged rows).
+        """
+        try:
+            df = pd.read_csv(file_path, sep="\t", dtype=str, on_bad_lines="skip")
+            if df.empty:
+                return file_path.read_text(encoding="utf-8", errors="ignore") + "\n\n"
+            if len(df) > 10000:
+                preface = (
+                    f"*Note: Showing first 10000 rows of {len(df)} total rows*\n\n"
+                )
+                df = df.head(10000)
+            else:
+                preface = ""
+            return preface + df.to_markdown(index=False) + "\n\n"
+        except Exception as exc:
+            logger.warning(
+                f"TSV conversion fell back to raw text for {file_path}: {exc}"
+            )
+            try:
+                return file_path.read_text(encoding="utf-8", errors="ignore") + "\n\n"
+            except Exception as inner:
+                return f"[Error reading TSV file: {inner}]\n\n"
+
+    def html_supplement_to_markdown(self, file_path: Path) -> str:
+        """Convert a standalone HTML supplement file to markdown.
+
+        These are typically large variant tables published as separate HTML
+        pages. We preserve table structure (markdown tables) and pull the
+        rest of the readable text. Inline scripts/styles are dropped.
+        """
+        try:
+            html = file_path.read_text(encoding="utf-8", errors="ignore")
+        except Exception as exc:
+            return f"[Error reading HTML supplement: {exc}]\n\n"
+
+        if not html.strip():
+            return ""
+
+        soup = BeautifulSoup(html, "html.parser")
+        for tag in soup(["script", "style", "noscript"]):
+            tag.decompose()
+
+        parts: List[str] = []
+
+        # Title / heading
+        title_elem = soup.find("title")
+        if title_elem:
+            title = title_elem.get_text(strip=True)
+            if title:
+                parts.append(f"#### {title}")
+
+        # Convert tables to markdown
+        for tbl_idx, table in enumerate(soup.find_all("table"), 1):
+            rows = []
+            for tr in table.find_all("tr"):
+                cells = [
+                    re.sub(r"\s+", " ", td.get_text(" ", strip=True)).replace(
+                        "|", "\\|"
+                    )
+                    for td in tr.find_all(["th", "td"])
+                ]
+                if any(cells):
+                    rows.append(cells)
+            if rows:
+                max_cols = max(len(r) for r in rows)
+                padded = [r + [""] * (max_cols - len(r)) for r in rows]
+                cap = table.find("caption")
+                cap_text = cap.get_text(" ", strip=True) if cap else ""
+                if cap_text:
+                    parts.append(f"##### Table {tbl_idx}: {cap_text}")
+                parts.append(self._table_lines_to_markdown(padded))
+            table.decompose()  # remove so it's not duplicated in body text below
+
+        # Remaining body text
+        body_text = soup.get_text("\n", strip=True)
+        if body_text:
+            parts.append(body_text)
+
+        return ("\n\n".join(parts) + "\n\n") if parts else ""
+
+    def xml_supplement_to_markdown(self, file_path: Path) -> str:
+        """Convert an arbitrary XML supplement to readable text.
+
+        Many publishers ship variant tables as XML (BioC, JATS, custom).
+        We strip tags and emit the text content. If the XML is malformed,
+        fall back to raw text.
+        """
+        try:
+            text = file_path.read_text(encoding="utf-8", errors="ignore")
+        except Exception as exc:
+            return f"[Error reading XML supplement: {exc}]\n\n"
+        if not text.strip():
+            return ""
+        try:
+            root = ET.fromstring(text)
+            cleaned = "\n".join(
+                line.strip()
+                for line in (" ".join(root.itertext())).splitlines()
+                if line.strip()
+            )
+            return re.sub(r"\s{2,}", " ", cleaned).strip() + "\n\n"
+        except ET.ParseError:
+            return text + "\n\n"
+
+    def extract_zip_supplement(
+        self,
+        file_path: Path,
+        dest_dir: Path,
+    ) -> Tuple[List[Path], str]:
+        """Extract a ZIP supplement and convert each contained file to markdown.
+
+        Args:
+            file_path: ZIP file to extract.
+            dest_dir: Directory to extract the contents into.
+
+        Returns:
+            Tuple of (list_of_extracted_paths, combined_markdown). The markdown
+            includes one section per usable nested file, in the same format as
+            top-level supplement processing.
+        """
+        import zipfile
+
+        extracted: List[Path] = []
+        combined: List[str] = []
+
+        try:
+            dest_dir.mkdir(parents=True, exist_ok=True)
+            with zipfile.ZipFile(file_path, "r") as zf:
+                # Defensive: skip absolute / parent-traversal paths.
+                safe_members = []
+                for member in zf.namelist():
+                    if member.endswith("/"):
+                        continue
+                    norm = Path(member).as_posix()
+                    if norm.startswith("/") or ".." in norm.split("/"):
+                        continue
+                    safe_members.append(member)
+                for member in safe_members:
+                    zf.extract(member, dest_dir)
+                    extracted.append((dest_dir / member).resolve())
+        except zipfile.BadZipFile as exc:
+            logger.warning(f"Bad ZIP supplement {file_path}: {exc}")
+            return [], f"[Bad ZIP file: {file_path.name}]\n\n"
+        except Exception as exc:
+            logger.warning(f"ZIP extract failed for {file_path}: {exc}")
+            return [], f"[ZIP extraction failed: {exc}]\n\n"
+
+        for nested in extracted:
+            try:
+                if not nested.is_file():
+                    continue
+                ext = nested.suffix.lower()
+                heading = f"##### Nested file: {nested.relative_to(dest_dir)}"
+                if ext in {".xlsx", ".xls"}:
+                    md = self.excel_to_markdown(nested)
+                elif ext == ".docx":
+                    md = self.docx_to_markdown(nested)
+                elif ext == ".doc":
+                    md = self.doc_to_markdown(nested)
+                elif ext == ".pdf":
+                    md = self.pdf_to_markdown(nested)
+                elif ext in {".csv"}:
+                    try:
+                        df = pd.read_csv(nested, dtype=str, on_bad_lines="skip")
+                        md = (
+                            (df.to_markdown(index=False) + "\n\n")
+                            if not df.empty
+                            else ""
+                        )
+                    except Exception:
+                        md = (
+                            nested.read_text(encoding="utf-8", errors="ignore") + "\n\n"
+                        )
+                elif ext in {".tsv"}:
+                    md = self.tsv_to_markdown(nested)
+                elif ext in {".txt"}:
+                    md = nested.read_text(encoding="utf-8", errors="ignore") + "\n\n"
+                elif ext in {".html", ".htm"}:
+                    md = self.html_supplement_to_markdown(nested)
+                elif ext in {".xml"}:
+                    md = self.xml_supplement_to_markdown(nested)
+                else:
+                    continue  # binary / unsupported nested file — skip
+                if md and md.strip():
+                    combined.append(heading + "\n\n" + md)
+            except Exception as exc:
+                logger.warning(f"Failed to convert nested {nested}: {exc}")
+                combined.append(
+                    f"##### Nested file: {nested.name}\n\n[conversion failed: {exc}]"
+                )
+
+        return extracted, ("\n\n".join(combined) + "\n\n") if combined else ""

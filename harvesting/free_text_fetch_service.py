@@ -20,6 +20,10 @@ class FreeTextContentResult:
     used_elsevier_api: bool = False
     used_wiley_api: bool = False
     early_result: Optional[Tuple[bool, str, Optional[str]]] = None
+    # Raw publisher HTML when we successfully scraped it (vs. an API). Lets the
+    # orchestrator pull figure / table / supplement captions without re-fetching.
+    raw_html: Optional[str] = None
+    raw_html_url: Optional[str] = None
 
 
 def fetch_main_content_for_free_text(
@@ -57,7 +61,9 @@ def fetch_main_content_for_free_text(
             )
         elif elsevier_error and "insufficient content" in elsevier_error.lower():
             api_insufficient_content = True
-            print("  → Elsevier API returned abstract only, falling back to web scraping...")
+            print(
+                "  → Elsevier API returned abstract only, falling back to web scraping..."
+            )
 
     if not result.main_markdown and doi and wiley_api.is_wiley_doi(doi):
         wiley_markdown, wiley_error = try_wiley_api(doi, pmid)
@@ -70,7 +76,9 @@ def fetch_main_content_for_free_text(
             )
         elif wiley_error and "insufficient content" in wiley_error.lower():
             api_insufficient_content = True
-            print("  → Wiley API returned abstract only, falling back to web scraping...")
+            print(
+                "  → Wiley API returned abstract only, falling back to web scraping..."
+            )
 
     if not result.main_markdown and doi and springer_api.is_springer_doi(doi):
         springer_markdown, springer_error = try_springer_api(doi, pmid)
@@ -81,7 +89,9 @@ def fetch_main_content_for_free_text(
                 doi, pmid, scraper
             )
         elif springer_error and "not openaccess" in springer_error.lower():
-            print("  → Springer API: article not OpenAccess, falling back to web scraping...")
+            print(
+                "  → Springer API: article not OpenAccess, falling back to web scraping..."
+            )
 
     if not result.main_markdown and doi:
         result.main_markdown, result.final_url, result.supp_files = (
@@ -134,7 +144,9 @@ def fetch_main_content_for_free_text(
                     else:
                         print(f"  - Elsevier API failed: {exc}")
                     try:
-                        response = session.get(free_url, allow_redirects=True, timeout=10)
+                        response = session.get(
+                            free_url, allow_redirects=True, timeout=10
+                        )
                         response.raise_for_status()
                         result.supp_files = scraper.scrape_elsevier_supplements(
                             response.text, response.url
@@ -169,7 +181,9 @@ def fetch_main_content_for_free_text(
                     else:
                         print(f"  - Wiley API failed: {exc}")
                     try:
-                        response = session.get(free_url, allow_redirects=True, timeout=10)
+                        response = session.get(
+                            free_url, allow_redirects=True, timeout=10
+                        )
                         response.raise_for_status()
                         result.supp_files = scraper.scrape_generic_supplements(
                             response.text, response.url
@@ -190,9 +204,7 @@ def fetch_main_content_for_free_text(
                         pii_match = re.search(r"/pii/([^/?]+)", result.final_url)
                         if pii_match:
                             pii = pii_match.group(1)
-                            sciencedirect_url = (
-                                f"https://www.sciencedirect.com/science/article/pii/{pii}"
-                            )
+                            sciencedirect_url = f"https://www.sciencedirect.com/science/article/pii/{pii}"
                             print(
                                 f"  → Attempting to access ScienceDirect page: {sciencedirect_url}"
                             )
@@ -207,6 +219,10 @@ def fetch_main_content_for_free_text(
                         print(f"  - Could not follow redirect from linkinghub: {exc}")
 
                 html_content = response.text
+                # Stash raw HTML so the orchestrator can extract figure /
+                # supplement captions without making a duplicate HTTP call.
+                result.raw_html = html_content
+                result.raw_html_url = result.final_url
                 result.main_markdown, _ = scraper.extract_fulltext(
                     html_content, result.final_url
                 )
@@ -255,7 +271,9 @@ def fetch_main_content_for_free_text(
                 return result
     elif not result.main_markdown:
         print("  ❌ No DOI or free URL available to fetch full text")
-        print("     (PubMed metadata indicates free access but provides no usable link)")
+        print(
+            "     (PubMed metadata indicates free access but provides no usable link)"
+        )
         pubmed_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
         log_paywalled(
             pmid,
@@ -268,7 +286,9 @@ def fetch_main_content_for_free_text(
     if not result.main_markdown:
         print("  ❌ Could not retrieve full text from publisher")
         fallback_url = result.final_url or (
-            f"https://doi.org/{doi}" if doi else f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
+            f"https://doi.org/{doi}"
+            if doi
+            else f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
         )
         log_paywalled(pmid, "Free full text extraction failed", fallback_url)
         result.early_result = (False, "Free text extraction failed", None)

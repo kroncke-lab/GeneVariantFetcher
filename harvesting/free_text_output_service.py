@@ -63,14 +63,22 @@ def write_free_text_output(
     write_pmid_status: Optional[Callable[[str, str, Dict[str, object]], None]] = None,
     download_label: str = "Downloaded",
     log_paywalled: Optional[Callable[[str, str, str], None]] = None,
+    captions_markdown: str = "",
 ) -> Tuple[Path, str]:
     """Write unified markdown output and append success/status entries.
-    
+
     Returns (output_file, unified_content) on success.
     Returns (None, error_message) if content validation fails.
+
+    ``captions_markdown`` is an optional block of figure / table / supplement
+    captions extracted from the source HTML; it is spliced between the main
+    article text and the supplement section so the variant scanner / LLM
+    sees captions in document order.
     """
-    unified_content = main_markdown + supplement_markdown
-    
+    unified_content = (
+        (main_markdown or "") + (captions_markdown or "") + (supplement_markdown or "")
+    )
+
     # Validate content quality before writing (catches binary/garbage content)
     is_valid, validation_reason = validate_content_quality(unified_content)
     if not is_valid:
@@ -82,7 +90,7 @@ def write_free_text_output(
                 f"source: {source.status_source}",
             )
         return None, f"Content validation failed: {validation_reason}"
-    
+
     output_file = output_dir / f"{pmid}_FULL_CONTEXT.md"
     output_file.write_text(unified_content, encoding="utf-8")
 
