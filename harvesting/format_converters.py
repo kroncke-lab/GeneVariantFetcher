@@ -1013,6 +1013,10 @@ class FormatConverter:
 
         try:
             dest_dir.mkdir(parents=True, exist_ok=True)
+            # Resolve to absolute path so that nested.relative_to(dest_dir) works
+            # even when the caller passes a path with unresolved symlinks
+            # (e.g. /tmp on macOS, which is a symlink to /private/tmp).
+            dest_dir = dest_dir.resolve()
             with zipfile.ZipFile(file_path, "r") as zf:
                 # Defensive: skip absolute / parent-traversal paths.
                 safe_members = []
