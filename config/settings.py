@@ -74,16 +74,17 @@ class Settings(BaseSettings):
         default=None, env="AZURE_DEPLOYMENT_GROK"
     )
 
-    # Model provider selector. When set to "anthropic", per-tier model strings
-    # default to the ANTHROPIC_* values below — but only for tiers where the
-    # corresponding TIER*_MODEL env var is unset. Setting an explicit env var
-    # always wins, so each tier remains independently configurable. Default is
-    # "azure" to preserve existing behavior.
+    # Model provider selector. When set to "anthropic" (default), per-tier
+    # model strings default to the ANTHROPIC_* values below — but only for
+    # tiers where the corresponding TIER*_MODEL env var is unset. Setting an
+    # explicit env var always wins, so each tier remains independently
+    # configurable. Set MODEL_PROVIDER=azure (or pass --model-provider azure)
+    # to fall back to the Azure AI Foundry deployments.
     model_provider: str = Field(
-        default="azure",
+        default="anthropic",
         env="MODEL_PROVIDER",
         description=(
-            "LLM provider selector: 'azure' (default), 'anthropic', or 'openai'."
+            "LLM provider selector: 'anthropic' (default), 'azure', or 'openai'."
             " 'anthropic' switches every tier to Claude defaults unless the"
             " specific TIER*_MODEL env var is also set."
         ),

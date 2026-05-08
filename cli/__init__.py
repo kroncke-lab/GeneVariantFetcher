@@ -161,10 +161,10 @@ def extract_command(
         typer.Option(
             "--model-provider",
             help=(
-                "LLM provider for all tiers: 'azure' (default), 'anthropic', or"
-                " 'openai'. 'anthropic' switches Tier 2/3, table router, and"
-                " vision to Claude defaults. Per-tier env vars (TIER2_MODEL,"
-                " TIER3_MODELS, TABLE_ROUTER_MODEL, VISION_MODEL) still win."
+                "LLM provider for all tiers: 'anthropic' (default), 'azure', or"
+                " 'openai'. Pass 'azure' to fall back to Azure AI Foundry"
+                " deployments. Per-tier env vars (TIER2_MODEL, TIER3_MODELS,"
+                " TABLE_ROUTER_MODEL, VISION_MODEL) still win."
             ),
         ),
     ] = None,
@@ -218,7 +218,7 @@ def extract_command(
     selected_provider = (
         (model_provider.strip().lower() if model_provider else None)
         or os.getenv("MODEL_PROVIDER", "").strip().lower()
-        or "azure"
+        or "anthropic"
     )
     if selected_provider == "anthropic":
         if not os.getenv("ANTHROPIC_API_KEY"):
