@@ -330,51 +330,69 @@ class PMCSupplementFetcher(SupplementFetcher):
 
     @api_retry
     def _fetch_from_oa_service(self, pmcid: str) -> List[SupplementFile]:
-        """Use NCBI OA service to find FTP download links for supplements."""
+        """Use NCBI OA service to find FTP download links for supplements.
+
+        NCBI's OA service (oa.fcgi) only emits XML; passing ``format=json``
+        triggers a ``cannotDisseminateFormat`` error. We parse the XML response
+        directly and pull ``<link href="...">`` elements out of each record.
+        """
         if not pmcid.startswith("PMC"):
             pmcid = f"PMC{pmcid}"
 
-        params = {
-            "id": pmcid,
-            "format": "json",
-        }
+        params = {"id": pmcid}
 
         try:
             response = self.session.get(
                 self.PMC_OA_BASE, params=params, timeout=self.timeout
             )
             response.raise_for_status()
-            data = response.json()
+            xml_text = response.text
         except Exception as e:
             logger.debug(f"OA service failed for {pmcid}: {e}")
             return []
 
-        records = data.get("records", [])
-        if not records:
+        if not xml_text:
             return []
 
-        results = []
-        seen_urls = set()
+        try:
+            root = ET.fromstring(xml_text)
+        except ET.ParseError as e:
+            logger.debug(f"OA service returned non-XML for {pmcid}: {e}")
+            return []
 
-        for record in records:
-            # OA service returns links to tar.gz packages containing supplements
-            for link_key in ("ftp", "https"):
-                link = record.get(link_key, "")
-                if not link:
+        # Surface explicit error responses so callers can distinguish "not OA"
+        # from network failure.
+        error_el = root.find(".//error")
+        if error_el is not None:
+            logger.debug(
+                f"OA service error for {pmcid}: "
+                f"{error_el.get('code', '')} {error_el.text or ''}"
+            )
+            return []
+
+        results: List[SupplementFile] = []
+        seen_urls: set = set()
+
+        for record in root.iter("record"):
+            for link in record.iter("link"):
+                href = link.get("href", "")
+                if not href:
                     continue
 
-                normalized = link.split("#")[0].rstrip("/")
+                normalized = href.split("#")[0].rstrip("/")
                 if normalized in seen_urls:
                     continue
                 seen_urls.add(normalized)
 
-                filename = Path(link).name or f"{pmcid}_package"
+                fmt = link.get("format", "")
+                filename = Path(href).name or f"{pmcid}_package"
                 results.append(
                     SupplementFile(
-                        url=link,
+                        url=href,
                         name=self._clean_filename(filename),
                         source="pmc_oa_ftp",
                         pmcid=pmcid,
+                        mime_type=f"application/{fmt}" if fmt else "",
                         description="OA package (may contain supplements)",
                     )
                 )
