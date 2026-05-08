@@ -10,6 +10,7 @@ This package contains standalone command-line utilities:
 
 import os
 from pathlib import Path
+from typing import Optional
 
 import typer
 from typing_extensions import Annotated
@@ -143,16 +144,18 @@ def extract_command(
         ),
     ] = None,
     browser_html_fallback: Annotated[
-        bool,
+        Optional[bool],
         typer.Option(
-            "--browser-html-fallback",
+            "--browser-html-fallback/--no-browser-html-fallback",
             help=(
-                "Enable Tier 3.5 browser-based HTML fallback (Playwright) for"
+                "Toggle Tier 3.5 browser-based HTML fallback (Playwright) for"
                 " papers that fail the publisher-API path but are freely"
-                " readable post-embargo. OFF by default."
+                " readable post-embargo. ON by default; pass"
+                " --no-browser-html-fallback to disable. When omitted, the"
+                " ENABLE_BROWSER_HTML_FALLBACK env var / settings default wins."
             ),
         ),
-    ] = False,
+    ] = None,
     model_provider: Annotated[
         str,
         typer.Option(
@@ -174,8 +177,10 @@ def extract_command(
 
     from utils.logging_utils import setup_logging
 
-    if browser_html_fallback:
-        os.environ["ENABLE_BROWSER_HTML_FALLBACK"] = "true"
+    if browser_html_fallback is not None:
+        os.environ["ENABLE_BROWSER_HTML_FALLBACK"] = (
+            "true" if browser_html_fallback else "false"
+        )
         # Clear cached settings so the new env var is picked up.
         try:
             from config.settings import get_settings as _get_settings

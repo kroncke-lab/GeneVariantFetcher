@@ -315,9 +315,12 @@ class Settings(BaseSettings):
     # Sits between the publisher API tier and the manual login-required
     # browser_fetch tier. Drives Playwright to fetch fully-rendered HTML
     # from publishers that block requests-based access; reuses the existing
-    # SupplementScraper to parse the resulting DOM. OFF by default.
+    # SupplementScraper to parse the resulting DOM. ON by default — every
+    # extraction run automatically attempts browser scraping for paywalled
+    # papers. Disable with --no-browser-html-fallback or
+    # ENABLE_BROWSER_HTML_FALLBACK=false.
     enable_browser_html_fallback: bool = Field(
-        default=False,
+        default=True,
         env="ENABLE_BROWSER_HTML_FALLBACK",
         description="Enable Tier 3.5 browser-based HTML harvesting (Playwright)",
     )
