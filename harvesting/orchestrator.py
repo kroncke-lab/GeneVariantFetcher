@@ -246,6 +246,7 @@ class PMCHarvester:
         self.output_dir.mkdir(exist_ok=True)
         self.paywalled_log = self.output_dir / "paywalled_missing.csv"
         self.success_log = self.output_dir / "successful_downloads.csv"
+        self.abstract_only_log = self.output_dir / "abstract_only_fallback.csv"
         self.gene_symbol = gene_symbol
 
         # Initialize session with browser-like headers
@@ -1191,6 +1192,139 @@ class PMCHarvester:
         captions_md = render_captions_markdown(captions)
         return (main_markdown or "") + (captions_md or "") + (supplement_markdown or "")
 
+    def _log_abstract_only(self, pmid: str, reason: str, output_path: str) -> None:
+        """Append a row to the abstract-only fallback log (creates header if missing)."""
+        log_path = self.abstract_only_log
+        write_header = not log_path.exists() or log_path.stat().st_size == 0
+        with open(log_path, "a", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            if write_header:
+                writer.writerow(["PMID", "Reason", "Output_Path", "Timestamp"])
+            writer.writerow(
+                [
+                    pmid,
+                    reason,
+                    output_path,
+                    datetime.datetime.now().isoformat(),
+                ]
+            )
+
+    def _build_abstract_only_fallback(
+        self, pmid: str, reason: str
+    ) -> Tuple[bool, str, Optional[str]]:
+        """Last-resort fallback: build a minimal FULL_CONTEXT.md from the abstract.
+
+        Called only after all full-text harvest paths (PMC XML, PMC HTML,
+        publisher APIs, Tier 3.5 browser fallback) have failed. The resulting
+        file is clearly marked as "ABSTRACT-ONLY FALLBACK" in its header so
+        downstream extraction can distinguish it from full-text successes.
+        Logs to ``abstract_only_fallback.csv`` and writes a pmid_status of
+        ``abstract_only`` for audit. Returns (False, reason, None) when even
+        the abstract is unavailable.
+        """
+        from utils.pubmed_utils import batch_fetch_metadata, fetch_paper_abstract
+
+        email = os.environ.get("NCBI_EMAIL") or "gvf@example.com"
+        try:
+            meta_dict = batch_fetch_metadata([pmid], email=email)
+        except Exception as e:
+            logger.warning(
+                f"Abstract-only fallback metadata fetch failed for {pmid}: {e}"
+            )
+            meta_dict = {}
+        metadata = meta_dict.get(pmid, {}) or {}
+
+        try:
+            abstract = fetch_paper_abstract(pmid, email=email)
+        except Exception as e:
+            logger.warning(
+                f"Abstract-only fallback abstract fetch failed for {pmid}: {e}"
+            )
+            abstract = None
+
+        if not abstract and not metadata:
+            return (
+                False,
+                "Abstract-only fallback: no abstract or metadata available",
+                None,
+            )
+
+        title = (metadata.get("Title") or "").strip()
+        journal = (
+            metadata.get("FullJournalName") or metadata.get("Source") or ""
+        ).strip()
+        pubdate = (metadata.get("PubDate") or "").strip()
+
+        authors: List[str] = []
+        for author in metadata.get("AuthorList") or []:
+            if isinstance(author, dict):
+                name = author.get("Name") or " ".join(
+                    p for p in [author.get("ForeName"), author.get("LastName")] if p
+                )
+                if name:
+                    authors.append(str(name))
+            elif author:
+                authors.append(str(author))
+
+        mesh_terms: List[str] = []
+        for m in metadata.get("MeshHeadingList") or []:
+            if isinstance(m, dict):
+                desc = m.get("DescriptorName") or m.get("Descriptor")
+                if desc:
+                    mesh_terms.append(str(desc))
+            elif m:
+                mesh_terms.append(str(m))
+
+        parts = [
+            "# ABSTRACT-ONLY FALLBACK",
+            "",
+            f"> **WARNING:** Full text could not be retrieved for PMID {pmid}.",
+            f"> Reason: {reason}",
+            ">",
+            "> This document contains only the PubMed abstract and metadata.",
+            "> Variants extracted here are lower-confidence than from full-text",
+            "> papers. Treat as preliminary and seek the full text when possible.",
+            "",
+        ]
+        if title:
+            parts += ["## Title", title, ""]
+        if authors:
+            parts += ["## Authors", ", ".join(authors), ""]
+        if journal or pubdate:
+            citation = " ".join(
+                p for p in [journal, f"({pubdate})" if pubdate else ""] if p
+            ).strip()
+            parts += ["## Citation", citation, ""]
+        if mesh_terms:
+            parts += ["## MeSH Terms", "; ".join(mesh_terms), ""]
+        if abstract:
+            parts += ["## Abstract", abstract.strip(), ""]
+
+        content = "\n".join(parts)
+
+        output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.write(content)
+
+        self._log_abstract_only(pmid, reason, str(output_file))
+
+        self._write_pmid_status(
+            pmid,
+            "abstract_only",
+            {
+                "download_timestamp": datetime.datetime.now().isoformat(),
+                "failure_reason": reason,
+                "source": "pubmed_abstract",
+            },
+        )
+
+        print(
+            f"  ⚠️  Abstract-only fallback: wrote {output_file.name} "
+            f"(no full text — {reason})"
+        )
+        logger.info(f"PMID {pmid}: abstract-only fallback used (reason: {reason})")
+        return True, str(output_file), content
+
     def download_pmid(self, pmid: str) -> Tuple[bool, str, Optional[str]]:
         """
         Download content for a single PMID and run cheap analysis.
@@ -1230,7 +1364,13 @@ class PMCHarvester:
         if not pmcid:
             # No PMCID - check if this is a free full text article via publisher
             print("  - No PMCID found, checking for free full text via publisher...")
-            return self._download_with_tier35_fallback(pmid, doi)
+            success, result, content = self._download_with_tier35_fallback(pmid, doi)
+            if success:
+                return success, result, content
+            return self._build_abstract_only_fallback(
+                pmid,
+                reason=f"No PMCID and free-text/Tier 3.5 fallback failed: {result}",
+            )
 
         print(f"  ✓ PMCID: {pmcid}")
 
@@ -1241,7 +1381,18 @@ class PMCHarvester:
             print("  - Full-text XML not available from PMC, trying publisher APIs...")
             # Don't give up — try publisher APIs via DOI before marking paywalled
             if doi:
-                return self._download_with_tier35_fallback(pmid, doi)
+                success, result, content = self._download_with_tier35_fallback(
+                    pmid, doi
+                )
+                if success:
+                    return success, result, content
+                return self._build_abstract_only_fallback(
+                    pmid,
+                    reason=(
+                        f"PMC XML unavailable and publisher/Tier 3.5 fallback "
+                        f"failed: {result}"
+                    ),
+                )
             else:
                 print("  ❌ No DOI available for publisher API fallback")
                 pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
@@ -1251,7 +1402,10 @@ class PMCHarvester:
                     pmc_url,
                     classification="PAYWALLED",
                 )
-                return False, "No full-text", None
+                return self._build_abstract_only_fallback(
+                    pmid,
+                    reason="Full-text not available from PMC and no DOI",
+                )
 
         print("  ✓ Full-text XML retrieved from PMC")
 
@@ -1354,7 +1508,10 @@ class PMCHarvester:
             )
             artifacts.add_note(f"content_validation_failed: {validation_reason}")
             artifacts.save()
-            return False, f"Content validation failed: {validation_reason}", None
+            return self._build_abstract_only_fallback(
+                pmid,
+                reason=f"Content validation failed: {validation_reason}",
+            )
 
         output_file = self.output_dir / f"{pmid}_FULL_CONTEXT.md"
         with open(output_file, "w", encoding="utf-8") as f:
