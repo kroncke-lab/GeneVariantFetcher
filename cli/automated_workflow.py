@@ -62,12 +62,17 @@ def automated_variant_extraction_workflow(
             disease clause is appended to PubMed queries and Tier-2 filter prompts
             prioritize original patient/functional data. When None (default),
             behavior is unchanged.
-        pmids: Optional explicit PMID list. When provided, skips synonym discovery
-            and PMID search (steps 0 and 1) and runs the rest of the pipeline on
-            this list directly. Useful for re-extracting a known set of papers.
+        pmids: Optional explicit PMID list. When provided, skips synonym discovery,
+            PMID search, AND Tier 1/Tier 2 relevance filtering — the list is fed
+            straight into harvest + extraction. Useful for measuring pure
+            extraction recall against a known gold-standard PMID set.
     """
     initialize_runtime()
     setup_logging(level=logging.INFO)
+
+    # Track whether the caller supplied an explicit PMID list. We need this
+    # later (after STEP 1 has reassigned `pmids`) to skip Tier 1/2 filtering.
+    explicit_pmids_provided = bool(pmids)
 
     from config.settings import get_settings
     from pipeline.steps import (
@@ -309,28 +314,37 @@ def automated_variant_extraction_workflow(
     run_manifest.update_status("filtering_papers")
     run_manifest.save()
 
-    logger.info("\n🧹 STEP 1.6: Filtering papers by relevance before download...")
+    if explicit_pmids_provided:
+        logger.info(
+            "\n⏭️  STEP 1.6: Skipping Tier 1/Tier 2 filtering — explicit PMID "
+            "list provided. All %d PMIDs go straight to harvest + extraction.",
+            len(pmids),
+        )
+        filtered_pmids = list(pmids)
+        dropped_pmids: list = []
+    else:
+        logger.info("\n🧹 STEP 1.6: Filtering papers by relevance before download...")
 
-    filter_result = filter_papers(
-        pmids=pmids,
-        abstract_records=abstract_records,
-        gene_symbol=gene_symbol,
-        output_path=output_path,
-        enable_tier1=settings.enable_tier1,
-        enable_tier2=settings.enable_tier2,
-        use_clinical_triage=use_clinical_triage,
-        tier1_min_keywords=settings.tier1_min_keywords,
-        tier2_confidence_threshold=settings.tier2_confidence_threshold,
-        disease=disease,
-    )
+        filter_result = filter_papers(
+            pmids=pmids,
+            abstract_records=abstract_records,
+            gene_symbol=gene_symbol,
+            output_path=output_path,
+            enable_tier1=settings.enable_tier1,
+            enable_tier2=settings.enable_tier2,
+            use_clinical_triage=use_clinical_triage,
+            tier1_min_keywords=settings.tier1_min_keywords,
+            tier2_confidence_threshold=settings.tier2_confidence_threshold,
+            disease=disease,
+        )
 
-    filtered_pmids = filter_result.data.get("filtered_pmids", [])
-    dropped_pmids = filter_result.data.get("dropped_pmids", [])
+        filtered_pmids = filter_result.data.get("filtered_pmids", [])
+        dropped_pmids = filter_result.data.get("dropped_pmids", [])
 
-    logger.info(
-        f"Filtering complete: {len(filtered_pmids)} passed filters, "
-        f"{len(dropped_pmids)} dropped before download"
-    )
+        logger.info(
+            f"Filtering complete: {len(filtered_pmids)} passed filters, "
+            f"{len(dropped_pmids)} dropped before download"
+        )
 
     workflow_stats["pmids_filtered_out"] = len(dropped_pmids)
     workflow_stats["pmids_passed_filters"] = len(filtered_pmids)

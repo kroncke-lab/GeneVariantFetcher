@@ -35,6 +35,22 @@ app = typer.Typer(
 )
 
 
+def _read_pmid_file(path: Path) -> list[str]:
+    """Read PMIDs from a file, one per line. '#' comments and blank lines ignored."""
+    if not path.exists():
+        raise typer.BadParameter(f"PMID list file not found: {path}")
+    tokens: list[str] = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        # Allow trailing comments after the PMID (e.g. "12345 # paper title")
+        token = line.split("#", 1)[0].strip()
+        if token:
+            tokens.append(token)
+    return tokens
+
+
 def _parse_pmid_arg(arg: str) -> list[str]:
     """Parse a --pmids argument: '@path/to/file.txt' or 'pmid1,pmid2,...'.
 
@@ -42,16 +58,8 @@ def _parse_pmid_arg(arg: str) -> list[str]:
     as all-digit tokens; non-digit tokens are dropped with no warning so that
     file headers and stray whitespace pass through cleanly.
     """
-    raw_tokens: list[str] = []
     if arg.startswith("@"):
-        path = Path(arg[1:]).expanduser()
-        if not path.exists():
-            raise typer.BadParameter(f"PMID list file not found: {path}")
-        for line in path.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            raw_tokens.append(line)
+        raw_tokens = _read_pmid_file(Path(arg[1:]).expanduser())
     else:
         raw_tokens = [tok.strip() for tok in arg.split(",")]
 
@@ -135,11 +143,23 @@ def extract_command(
         typer.Option(
             "--pmids",
             help=(
-                "Skip PubMed/PubMind/EuropePMC discovery and run the pipeline on "
-                "an explicit PMID list. Accepts a comma-separated list "
-                "(e.g. 12345,67890) or a file path prefixed with '@' "
-                "(e.g. @comparison_results/tier2_recovered_gold_pmids.txt). "
-                "In the file, lines starting with '#' and blank lines are ignored."
+                "Skip PubMed/PubMind/EuropePMC discovery AND Tier 1/2 filtering, "
+                "running the pipeline on an explicit PMID list. Accepts a "
+                "comma-separated list (e.g. 12345,67890) or a file path "
+                "prefixed with '@' (e.g. @comparison_results/gold_standard_pmids.txt). "
+                "Lines starting with '#' and blank lines are ignored in files."
+            ),
+        ),
+    ] = None,
+    pmid_file: Annotated[
+        Path,
+        typer.Option(
+            "--pmid-file",
+            help=(
+                "Same effect as '--pmids @file' but as a dedicated flag for "
+                "clarity. One PMID per line; lines starting with '#' and blank "
+                "lines are ignored. Trailing '# comment' is allowed on PMID "
+                "lines. May be combined with --pmids; the union (deduped) is used."
             ),
         ),
     ] = None,
@@ -240,16 +260,35 @@ def extract_command(
         raise typer.Exit(1)
 
     explicit_pmids: list[str] | None = None
-    if pmids:
-        explicit_pmids = _parse_pmid_arg(pmids)
+    if pmids or pmid_file:
+        merged: list[str] = []
+        seen: set[str] = set()
+        if pmids:
+            for p in _parse_pmid_arg(pmids):
+                if p not in seen:
+                    seen.add(p)
+                    merged.append(p)
+        if pmid_file:
+            for tok in _read_pmid_file(pmid_file.expanduser()):
+                if tok.isdigit() and tok not in seen:
+                    seen.add(tok)
+                    merged.append(tok)
+        explicit_pmids = merged
         if not explicit_pmids:
+            sources = []
+            if pmids:
+                sources.append(f"--pmids={pmids!r}")
+            if pmid_file:
+                sources.append(f"--pmid-file={str(pmid_file)!r}")
             typer.echo(
-                f"⚠️  ERROR: --pmids was given but no PMIDs were parsed from {pmids!r}",
+                f"⚠️  ERROR: explicit PMID list is empty after parsing "
+                f"{', '.join(sources)}",
                 err=True,
             )
             raise typer.Exit(1)
         typer.echo(
-            f"📋 Using {len(explicit_pmids)} explicit PMIDs; discovery will be skipped."
+            f"📋 Using {len(explicit_pmids)} explicit PMIDs; discovery and "
+            f"Tier 1/2 filtering will be skipped."
         )
 
     try:
