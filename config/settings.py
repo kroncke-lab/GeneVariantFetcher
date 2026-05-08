@@ -236,7 +236,7 @@ class Settings(BaseSettings):
         description="Use ONLY PubMind (ignore PubMed/EuropePMC)",
     )
     max_papers_per_source: int = Field(
-        default=100,
+        default=1500,
         env="MAX_PAPERS_PER_SOURCE",
         description="Max papers to fetch per source",
     )

@@ -122,7 +122,7 @@ def fetch_pmids(
     gene_symbol: str,
     email: str,
     output_path: Path,
-    max_results: int = 100,
+    max_results: int = 1500,
     synonyms: Optional[List[str]] = None,
     use_pubmind: bool = True,
     use_pubmed: bool = True,

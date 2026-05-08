@@ -78,7 +78,7 @@ def extract_command(
     ],
     max_pmids: Annotated[
         int, typer.Option("--max-pmids", help="Maximum PMIDs to fetch")
-    ] = 100,
+    ] = 1500,
     max_downloads: Annotated[
         int, typer.Option("--max-downloads", help="Maximum papers to download")
     ] = 50,

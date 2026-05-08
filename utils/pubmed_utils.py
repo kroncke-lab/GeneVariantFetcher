@@ -311,10 +311,12 @@ def query_europepmc(gene_symbol: str, max_results: int = 100) -> Set[str]:
     logger.info(f"Querying Europe PMC for gene symbol: {gene_symbol}")
 
     search_url = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
+    # Europe PMC caps pageSize at 1000; clamp before sending to avoid HTTP 400.
+    page_size = min(max_results, 1000)
     params = {
         "query": f"{gene_symbol}",
         "format": "json",
-        "pageSize": max_results,
+        "pageSize": page_size,
         "resultType": "core",
     }
 

@@ -34,7 +34,7 @@ def automated_variant_extraction_workflow(
     gene_symbol: str,
     email: str,
     output_dir: str,
-    max_pmids: int = 100,
+    max_pmids: int = 1500,
     max_papers_to_download: int = 50,
     tier_threshold: int = 1,
     use_clinical_triage: bool = False,
@@ -792,8 +792,8 @@ Examples:
     parser.add_argument(
         "--max-pmids",
         type=int,
-        default=100,
-        help="Maximum PMIDs to fetch (default: 100)",
+        default=1500,
+        help="Maximum PMIDs to fetch (default: 1500)",
     )
     parser.add_argument(
         "--max-downloads",
