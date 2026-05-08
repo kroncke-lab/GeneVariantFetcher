@@ -153,23 +153,35 @@ class RateLimiter:
         self.last_request_time = time.time()
 
 
-# Global rate limiter. Default 50 RPM is safe for most OpenAI tiers; override
-# with LLM_REQUESTS_PER_MINUTE for higher-throughput providers like Anthropic
-# tier 4 (4000 RPM for Sonnet) where 50 RPM would needlessly bottleneck the
-# pipeline. The cap is shared across providers — set conservatively for the
-# slowest tier in your active model set.
+# Global rate limiter. Resolution order:
+#   1. LLM_REQUESTS_PER_MINUTE env var (explicit override)
+#   2. Provider-aware default from Settings (200 for Anthropic, 50 for Azure)
+#   3. Hard fallback of 50 if Settings can't be loaded yet (e.g. import-time
+#      circular issues during early bootstrap or tests that stub the env).
+# The previous flat 50 RPM was the default for OpenAI tiers and bottlenecked
+# the pipeline once Anthropic became the default provider — its tier-4 RPM
+# budget is several hundred RPM for Sonnet/Haiku.
 def _resolve_rpm_limit() -> int:
     raw = os.getenv("LLM_REQUESTS_PER_MINUTE", "").strip()
-    if not raw:
-        return 50
+    if raw:
+        try:
+            value = int(raw)
+            if value > 0:
+                return value
+        except ValueError:
+            logger.warning(
+                "LLM_REQUESTS_PER_MINUTE=%r is not a positive integer; falling back to provider default",
+                raw,
+            )
+
+    # Defer import to avoid circular dependency at module load (utils.llm_utils
+    # is imported widely; config.settings imports nothing from utils).
     try:
-        value = int(raw)
-        return value if value > 0 else 50
-    except ValueError:
-        logger.warning(
-            "LLM_REQUESTS_PER_MINUTE=%r is not a positive integer; using default 50",
-            raw,
-        )
+        from config.settings import get_settings
+
+        return get_settings().get_requests_per_minute()
+    except Exception as exc:  # pragma: no cover — defensive fallback
+        logger.debug("Could not load Settings for RPM (%s); using 50", exc)
         return 50
 
 

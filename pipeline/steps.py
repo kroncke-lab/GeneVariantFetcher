@@ -23,6 +23,21 @@ from config.constants import DEFAULT_MAX_WORKERS
 logger = logging.getLogger(__name__)
 
 
+def _resolve_default_workers() -> int:
+    """Pick the provider-aware worker default (Anthropic 10, Azure 3).
+
+    Falls back to DEFAULT_MAX_WORKERS if Settings can't load (e.g. tests that
+    construct minimal env). Wrapped in a function so each call reflects the
+    current MODEL_PROVIDER — important when the CLI flips provider at runtime.
+    """
+    try:
+        from config.settings import get_settings
+
+        return get_settings().get_max_workers()
+    except Exception:
+        return DEFAULT_MAX_WORKERS
+
+
 # =============================================================================
 # Step Result Types
 # =============================================================================
@@ -250,7 +265,7 @@ def filter_papers(
     use_clinical_triage: bool = False,
     tier1_min_keywords: int = 1,
     tier2_confidence_threshold: float = 0.3,
-    filter_max_workers: int = 8,
+    filter_max_workers: Optional[int] = None,
     disease: Optional[str] = None,
 ) -> StepResult:
     """
@@ -495,7 +510,9 @@ def filter_papers(
     # remain atomic (lock-protected, flushed per record), so kill -9 mid-batch
     # is safe and resume picks up where we left off.
     # FILTER_MAX_WORKERS env var lets you ratchet down concurrency when the
-    # backing Azure deployment has tight per-minute quota.
+    # backing Azure deployment has tight per-minute quota. When neither the
+    # env var nor an explicit kwarg is supplied, we fall through to the
+    # provider-aware Settings default (10 for Anthropic, 3 for Azure).
     env_workers = os.environ.get("FILTER_MAX_WORKERS")
     if env_workers:
         try:
@@ -504,11 +521,13 @@ def filter_papers(
             max_workers = (
                 filter_max_workers
                 if filter_max_workers and filter_max_workers > 0
-                else 8
+                else _resolve_default_workers()
             )
     else:
         max_workers = (
-            filter_max_workers if filter_max_workers and filter_max_workers > 0 else 8
+            filter_max_workers
+            if filter_max_workers and filter_max_workers > 0
+            else _resolve_default_workers()
         )
 
     if pending_pmids and enable_tier2:
@@ -1009,7 +1028,7 @@ def extract_variants(
     abstract_records: Optional[Dict[str, str]] = None,
     abstract_only_pmids: Optional[List[str]] = None,
     tier_threshold: int = 1,
-    max_workers: int = DEFAULT_MAX_WORKERS,
+    max_workers: Optional[int] = None,
     progress_callback: Optional[Callable[[int, int], None]] = None,
 ) -> StepResult:
     """
@@ -1022,7 +1041,7 @@ def extract_variants(
         abstract_records: Dict mapping PMID to abstract JSON path
         abstract_only_pmids: PMIDs that need abstract-only extraction
         tier_threshold: Model cascade threshold
-        max_workers: Max parallel workers
+        max_workers: Max parallel workers (None → provider-aware default)
         progress_callback: Optional callback(completed, total)
 
     Returns:
@@ -1152,8 +1171,14 @@ def extract_variants(
         except Exception as e:
             return (None, (pmid, str(e)))
 
-    # Process in parallel
-    workers = min(max_workers, total) if total > 0 else 1
+    # Process in parallel. None / non-positive max_workers → fall back to the
+    # provider-aware default (Anthropic 10, Azure 3) so callers that don't
+    # care about tuning still benefit from the right default for their
+    # configured LLM provider.
+    effective_max = (
+        max_workers if max_workers and max_workers > 0 else _resolve_default_workers()
+    )
+    workers = min(effective_max, total) if total > 0 else 1
 
     with ThreadPoolExecutor(max_workers=workers) as executor:
         futures = {}

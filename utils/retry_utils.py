@@ -13,6 +13,7 @@ from tenacity import (
     retry_if_exception_type,
     stop_after_attempt,
     wait_exponential,
+    wait_exponential_jitter,
 )
 
 # Pull LiteLLM's transient error types so llm_retry can include them. These
@@ -101,17 +102,31 @@ api_retry = get_standard_retry_decorator(
 # LiteLLM's rate-limit/timeout/connection/server-error types so a Tier 2/3
 # call doesn't immediately fail when an Azure deployment quota briefly
 # saturates from parallel workers.
-llm_retry = get_standard_retry_decorator(
-    max_attempts=7,  # Azure RPM quota windows are 60s; need enough budget to ride them out
-    multiplier=2.0,  # exponential: 4s, 8s, 16s, 32s, 60s, 60s, 60s
-    min_wait=4.0,
-    max_wait=60.0,
-    retry_exceptions=(
-        requests.exceptions.RequestException,
-        ConnectionError,
-        TimeoutError,
-        *LITELLM_TRANSIENT_ERRORS,
-    ),
+#
+# Bumped to 8 attempts with jittered exponential backoff because:
+#   - Anthropic returns HTTP 429 (rate limit) and 529 (overloaded) under
+#     bursty load; both are LiteLLM RateLimitError / InternalServerError.
+#   - 529 (overloaded) means *all* Anthropic users are saturated, so it can
+#     persist for tens of seconds — needs longer total budget than 4-60s.
+#   - With 10 parallel workers, all retries fire on the same wall-clock
+#     boundary without jitter, producing thundering-herd retries that hit
+#     the rate limit again. wait_exponential_jitter spreads them out.
+_LLM_RETRY_EXCEPTIONS: Tuple[Type[Exception], ...] = (
+    requests.exceptions.RequestException,
+    ConnectionError,
+    TimeoutError,
+    *LITELLM_TRANSIENT_ERRORS,
+)
+
+llm_retry = retry(
+    stop=stop_after_attempt(8),
+    # Jittered exponential: nominal 4s, 8s, 16s, 32s, 60s, 60s, 60s with up to
+    # 10s additive jitter per attempt. Total budget ~5 minutes, enough to
+    # outlast a typical Anthropic 529 spike without burning all attempts in
+    # the first 30 seconds.
+    wait=wait_exponential_jitter(initial=4.0, max=60.0, exp_base=2.0, jitter=10.0),
+    retry=retry_if_exception_type(_LLM_RETRY_EXCEPTIONS),
+    reraise=True,
 )
 
 # For web scraping operations

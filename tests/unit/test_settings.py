@@ -49,3 +49,36 @@ def test_valid_settings_are_loaded(monkeypatch):
     assert settings.openai_api_key == "sk-openai"
     assert settings.ncbi_email == "user@example.org"
     assert settings.intern_model == "gpt-4o-mini"
+
+
+def _baseline_env(monkeypatch, provider: str):
+    """Set the minimum env vars required for Settings to load."""
+    monkeypatch.setenv("NCBI_EMAIL", "user@example.org")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-anthropic")
+    monkeypatch.setenv("MODEL_PROVIDER", provider)
+    # Clear any process-level overrides that would mask provider defaults
+    monkeypatch.delenv("LLM_REQUESTS_PER_MINUTE", raising=False)
+    monkeypatch.delenv("MAX_WORKERS", raising=False)
+
+
+def test_provider_aware_rpm_anthropic(monkeypatch):
+    _baseline_env(monkeypatch, "anthropic")
+    settings = get_settings()
+    assert settings.get_requests_per_minute() == 200
+    assert settings.get_max_workers() == 10
+
+
+def test_provider_aware_rpm_azure(monkeypatch):
+    _baseline_env(monkeypatch, "azure")
+    settings = get_settings()
+    assert settings.get_requests_per_minute() == 50
+    assert settings.get_max_workers() == 3
+
+
+def test_explicit_overrides_win_over_provider_defaults(monkeypatch):
+    _baseline_env(monkeypatch, "anthropic")
+    monkeypatch.setenv("LLM_REQUESTS_PER_MINUTE", "75")
+    monkeypatch.setenv("MAX_WORKERS", "5")
+    settings = get_settings()
+    assert settings.get_requests_per_minute() == 75
+    assert settings.get_max_workers() == 5

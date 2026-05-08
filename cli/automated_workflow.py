@@ -473,7 +473,9 @@ def automated_variant_extraction_workflow(
 
     extraction_dir = output_path / "extractions"
 
-    # If scout_first was used, pass the scout manifest for better context
+    # If scout_first was used, pass the scout manifest for better context.
+    # max_workers is intentionally omitted so extract_variants picks the
+    # provider-aware default (Anthropic 10, Azure 3) from Settings.
     extract_result = extract_variants(
         harvest_dir=harvest_dir,
         extraction_dir=extraction_dir,
@@ -481,7 +483,6 @@ def automated_variant_extraction_workflow(
         abstract_records=abstract_records,
         abstract_only_pmids=abstract_only_pmids,
         tier_threshold=tier_threshold,
-        max_workers=8,
     )
 
     extractions = extract_result.data.get("extractions", [])

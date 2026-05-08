@@ -282,7 +282,39 @@ class Settings(BaseSettings):
     max_workers: int = Field(
         default=8,
         env="MAX_WORKERS",
-        description="Maximum parallel workers for extraction",
+        description=(
+            "Explicit global override for parallel workers. When set via the"
+            " MAX_WORKERS env var it wins over the provider-aware defaults"
+            " (anthropic_max_workers / azure_max_workers); otherwise the"
+            " get_max_workers() helper picks by MODEL_PROVIDER."
+        ),
+    )
+
+    # Provider-aware rate limit & concurrency. Anthropic's tier-4 RPM headroom
+    # lets us push the pipeline harder than Azure's tighter per-deployment
+    # quota. Set via env (ANTHROPIC_RPM / AZURE_RPM / ANTHROPIC_MAX_WORKERS /
+    # AZURE_MAX_WORKERS) for runtime tuning. Explicit LLM_REQUESTS_PER_MINUTE
+    # / MAX_WORKERS / FILTER_MAX_WORKERS env vars still take precedence at the
+    # call sites that read them.
+    anthropic_rpm: int = Field(
+        default=200,
+        env="ANTHROPIC_RPM",
+        description="Default LLM requests-per-minute when MODEL_PROVIDER=anthropic",
+    )
+    azure_rpm: int = Field(
+        default=50,
+        env="AZURE_RPM",
+        description="Default LLM requests-per-minute when MODEL_PROVIDER=azure",
+    )
+    anthropic_max_workers: int = Field(
+        default=10,
+        env="ANTHROPIC_MAX_WORKERS",
+        description="Default parallel workers (filter + extraction) for Anthropic",
+    )
+    azure_max_workers: int = Field(
+        default=3,
+        env="AZURE_MAX_WORKERS",
+        description="Default parallel workers (filter + extraction) for Azure",
     )
 
     # Figure/Image Extraction Configuration
@@ -529,6 +561,47 @@ class Settings(BaseSettings):
         if self._is_anthropic() and not self._tier_env_set("vision_model"):
             return self.anthropic_vision_model
         return self.vision_model
+
+    # ------------------------------------------------------------------
+    # Provider-aware rate-limit / concurrency
+    # ------------------------------------------------------------------
+    # Anthropic's tier-4 RPM budget (200+ for Sonnet/Haiku) is wide enough
+    # that the previous global default of 50 RPM bottlenecked the pipeline.
+    # Azure deployments share a much tighter quota and need to stay at 3
+    # workers / 50 RPM to avoid 429 storms during filter sweeps. Callers
+    # should prefer these helpers over reading max_workers directly.
+
+    def get_requests_per_minute(self) -> int:
+        """Resolve the active LLM RPM cap.
+
+        Honors LLM_REQUESTS_PER_MINUTE as an explicit override (set in the
+        process env, not pydantic — we read it directly so test monkeypatches
+        and one-shot CLI invocations work without rebuilding Settings). When
+        unset, picks anthropic_rpm vs azure_rpm based on MODEL_PROVIDER.
+        """
+        raw = os.getenv("LLM_REQUESTS_PER_MINUTE", "").strip()
+        if raw:
+            try:
+                value = int(raw)
+                if value > 0:
+                    return value
+            except ValueError:
+                pass  # fall through to provider default
+        return self.anthropic_rpm if self._is_anthropic() else self.azure_rpm
+
+    def get_max_workers(self) -> int:
+        """Resolve the active parallel-worker cap.
+
+        MAX_WORKERS env var wins (explicit user override). Otherwise picks
+        anthropic_max_workers vs azure_max_workers based on MODEL_PROVIDER.
+        """
+        if os.getenv("MAX_WORKERS", "").strip():
+            return self.max_workers
+        return (
+            self.anthropic_max_workers
+            if self._is_anthropic()
+            else self.azure_max_workers
+        )
 
 
 @lru_cache(maxsize=1)
