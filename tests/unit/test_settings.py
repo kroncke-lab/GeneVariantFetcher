@@ -52,13 +52,26 @@ def test_valid_settings_are_loaded(monkeypatch):
 
 
 def _baseline_env(monkeypatch, provider: str):
-    """Set the minimum env vars required for Settings to load."""
+    """Set the minimum env vars required for Settings to load.
+
+    Settings reads `.env` directly via SettingsConfigDict(env_file=...),
+    so `monkeypatch.delenv` cannot mask values that live in the file.
+    To make the provider-default tests independent of the developer's
+    .env, we explicitly setenv the per-provider knobs to the documented
+    defaults — the tests are about the resolution logic, not the values.
+    """
     monkeypatch.setenv("NCBI_EMAIL", "user@example.org")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-anthropic")
     monkeypatch.setenv("MODEL_PROVIDER", provider)
-    # Clear any process-level overrides that would mask provider defaults
+    # Clear explicit overrides so provider-aware paths run.
     monkeypatch.delenv("LLM_REQUESTS_PER_MINUTE", raising=False)
     monkeypatch.delenv("MAX_WORKERS", raising=False)
+    # Pin provider knobs to their settings.py defaults so the test result
+    # is independent of the loaded .env (which can override these).
+    monkeypatch.setenv("AZURE_RPM", "50")
+    monkeypatch.setenv("ANTHROPIC_RPM", "200")
+    monkeypatch.setenv("AZURE_MAX_WORKERS", "3")
+    monkeypatch.setenv("ANTHROPIC_MAX_WORKERS", "10")
 
 
 def test_provider_aware_rpm_anthropic(monkeypatch):
