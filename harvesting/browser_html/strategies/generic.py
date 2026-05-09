@@ -51,6 +51,10 @@ class GenericStrategy(PublisherStrategy):
         markdown = self.extract_via_scraper(html, final_url, ctx)
         if markdown:
             result.main_markdown = markdown
+        else:
+            result.notes.append(
+                f"extract_via_scraper returned empty markdown for {final_url}"
+            )
 
         # Try the existing publisher supplement scrapers based on domain.
         try:

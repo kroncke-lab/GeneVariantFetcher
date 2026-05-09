@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, List, Optional
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -134,12 +137,26 @@ class PublisherStrategy(ABC):
     ) -> Optional[str]:
         """Run the existing publisher-aware scraper on rendered HTML.
 
-        Returns markdown or None if extraction failed.
+        Returns markdown or None if extraction failed. Logs the failure cause
+        so silent 0-byte FULL_CONTEXT.md outcomes (observed on cohort-paper
+        URLs whose page loads but body extraction fails) are visible.
         """
         try:
             markdown, _title = ctx.scraper.extract_fulltext(html, final_url)
+            if not markdown:
+                logger.info(
+                    "extract_via_scraper: PMID %s scraper returned empty markdown for %s",
+                    ctx.pmid,
+                    final_url,
+                )
             return markdown or None
-        except Exception:
+        except Exception as e:
+            logger.warning(
+                "extract_via_scraper: PMID %s exception for %s: %s",
+                ctx.pmid,
+                final_url,
+                e,
+            )
             return None
 
     def download_figures(

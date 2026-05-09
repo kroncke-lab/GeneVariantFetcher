@@ -79,6 +79,23 @@ RECOGNIZING IMPLICIT COUNTS (for CLINICAL studies only):
 - "an affected patient" / "a patient with [disease]" = 1 AFFECTED carrier
 - Disease-associated mutation tables: patient counts are typically AFFECTED carriers
 
+REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
+Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
+and genomic_position would be null. The variant identifier is load-bearing.
+
+REJECT examples:
+- "34 patients with pore-region mutations" (mutation class, not a variant)
+- "Subjects with N-terminal mutations, 4 affected" (region, not a variant)
+- Aggregating multiple variants by domain/class without naming each one
+
+ACCEPT examples (at least one identifier present):
+- protein_notation: "p.Arg176Trp" → emit
+- cdna_notation: "c.1234G>A" → emit
+- genomic_position: "chr7:150646404G>A" → emit
+
+If the paper describes a cohort by mutation class without listing the variants,
+return ZERO entries for that cohort description rather than a placeholder.
+
 OUTPUT FORMAT (compact):
 Return a JSON object with this structure:
 {{
@@ -255,6 +272,23 @@ CRITICAL REQUIREMENTS:
   * Extract patient count to BOTH patients.count AND penetrance_data.total_carriers_observed/affected_count
   * Example: Table shows "No. of patients: 1" for a pathogenic variant → patients.count=1, total_carriers_observed=1, affected_count=1
   * BUT: If table has "n (cells)" or assay metrics, it's a FUNCTIONAL study - do NOT use those numbers as patient counts
+
+REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
+Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
+and genomic_position would be null. The variant identifier is load-bearing.
+
+REJECT examples:
+- "34 patients with pore-region mutations" (mutation class, not a variant)
+- "Subjects with N-terminal mutations, 4 affected" (region, not a variant)
+- Aggregating multiple variants by domain/class without naming each one
+
+ACCEPT examples (at least one identifier present):
+- protein_notation: "p.Arg176Trp" → emit
+- cdna_notation: "c.1234G>A" → emit
+- genomic_position: "chr7:150646404G>A" → emit
+
+If the paper describes a cohort by mutation class without listing the variants,
+return ZERO entries for that cohort description rather than a placeholder.
 
 OUTPUT FORMAT:
 Return a JSON object with this structure:

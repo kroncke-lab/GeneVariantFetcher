@@ -162,6 +162,14 @@ class BrowserHTMLFetcher:
             )
             return None
 
+        # Surface the silent failure mode where the strategy "succeeded" but
+        # produced no markdown — observed on cohort-paper URLs whose page
+        # loaded but the publisher-aware scraper couldn't find body content.
+        if result.main_markdown is None and result.error is None:
+            result.notes.append(
+                "strategy returned empty main_markdown after extraction"
+            )
+
         # Optional content validation — refuse to count "404 page" content.
         if result.is_usable() and self._validate is not None:
             try:
