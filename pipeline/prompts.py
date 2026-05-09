@@ -96,6 +96,26 @@ ACCEPT examples (at least one identifier present):
 If the paper describes a cohort by mutation class without listing the variants,
 return ZERO entries for that cohort description rather than a placeholder.
 
+REQUIRED — REJECT TABLE-CELL ARTIFACTS (single letters, gene symbols, NaN):
+Do NOT emit a variant entry where the notation is a fragment of a table cell
+without enough structure to be a real variant. These come from genotype call
+columns, allele frequency tables, and SNP arrays — they are NOT variants.
+
+REJECT examples (all of these have appeared in past extractions):
+- protein_notation: "A" / "T" / "C" / "G" (single nucleotide letter)
+- protein_notation: "R" / "K" / "Y" (single amino acid code with no position)
+- protein_notation: "nan" / "NaN" / "NA" (parser/Python NaN literal — not a variant)
+- protein_notation: "KCNH2" or any gene symbol (the gene name is not a variant ID)
+- cdna_notation: "c.nan" / "c.KCNH2" (concatenation artifacts)
+- protein_notation: "Likelybenign/benign" / "pathogenic" (clinical_significance leaked
+  into the wrong field — put those values in clinical_significance, not in a notation
+  field)
+
+A valid protein_notation has the form `(p.)?<AA1-or-3-letter><pos>(_<AA><pos>)?<change>`.
+A valid cdna_notation starts with `c.` followed by a digit. A valid genomic_position
+contains a chromosome and a coordinate. If you cannot produce one of those forms, do
+NOT emit the entry — return zero entries for that row instead.
+
 OUTPUT FORMAT (compact):
 Return a JSON object with this structure:
 {{
@@ -289,6 +309,26 @@ ACCEPT examples (at least one identifier present):
 
 If the paper describes a cohort by mutation class without listing the variants,
 return ZERO entries for that cohort description rather than a placeholder.
+
+REQUIRED — REJECT TABLE-CELL ARTIFACTS (single letters, gene symbols, NaN):
+Do NOT emit a variant entry where the notation is a fragment of a table cell
+without enough structure to be a real variant. These come from genotype call
+columns, allele frequency tables, and SNP arrays — they are NOT variants.
+
+REJECT examples (all of these have appeared in past extractions):
+- protein_notation: "A" / "T" / "C" / "G" (single nucleotide letter)
+- protein_notation: "R" / "K" / "Y" (single amino acid code with no position)
+- protein_notation: "nan" / "NaN" / "NA" (parser/Python NaN literal — not a variant)
+- protein_notation: "KCNH2" or any gene symbol (the gene name is not a variant ID)
+- cdna_notation: "c.nan" / "c.KCNH2" (concatenation artifacts)
+- protein_notation: "Likelybenign/benign" / "pathogenic" (clinical_significance leaked
+  into the wrong field — put those values in clinical_significance, not in a notation
+  field)
+
+A valid protein_notation has the form `(p.)?<AA1-or-3-letter><pos>(_<AA><pos>)?<change>`.
+A valid cdna_notation starts with `c.` followed by a digit. A valid genomic_position
+contains a chromosome and a coordinate. If you cannot produce one of those forms, do
+NOT emit the entry — return zero entries for that row instead.
 
 OUTPUT FORMAT:
 Return a JSON object with this structure:
