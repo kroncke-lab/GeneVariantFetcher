@@ -45,6 +45,15 @@ DEFAULT_PUBLISHER_DOMAINS: tuple = (
     "nature.com",
     # Karger
     "karger.com",
+    # Sage / Mary Ann Liebert (DOI 10.1089 hosts on journals.sagepub.com
+    # despite the Liebert imprint — Sage acquired Liebert content delivery).
+    "sagepub.com",
+    "journals.sagepub.com",
+    "liebertpub.com",
+    # BMJ
+    "bmj.com",
+    # Lippincott Williams & Wilkins / Wolters Kluwer
+    "lww.com",
     # PMC (cookies aren't needed but harmless)
     "ncbi.nlm.nih.gov",
     "pmc.ncbi.nlm.nih.gov",
