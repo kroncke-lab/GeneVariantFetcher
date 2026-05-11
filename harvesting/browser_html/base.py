@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 import logging
+import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, List, Optional
+from urllib.parse import quote
+
+from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
 
@@ -132,8 +136,158 @@ class PublisherStrategy(ABC):
         except Exception:
             return False
 
+    @staticmethod
+    def encode_doi_for_path(doi: str) -> str:
+        """Percent-encode a DOI for publisher path URLs without escaping slashes."""
+        return quote((doi or "").strip(), safe="/:")
+
+    @staticmethod
+    def _clean_text(value: str) -> str:
+        text = re.sub(r"\s+", " ", value or "").strip()
+        return text.replace("|", "\\|")
+
+    def _table_to_markdown(self, table: Any) -> str:
+        """Convert an HTML table to markdown while preserving row/cell order."""
+        rows: List[List[str]] = []
+        for tr in table.find_all("tr"):
+            cells = [
+                self._clean_text(cell.get_text(" ", strip=True))
+                for cell in tr.find_all(["th", "td"])
+            ]
+            if any(cells):
+                rows.append(cells)
+        if not rows:
+            return ""
+
+        max_cols = max(len(row) for row in rows)
+        padded = [row + [""] * (max_cols - len(row)) for row in rows]
+        header = padded[0]
+        lines = [
+            "| " + " | ".join(header) + " |",
+            "| " + " | ".join(["---"] * max_cols) + " |",
+        ]
+        for row in padded[1:]:
+            lines.append("| " + " | ".join(row) + " |")
+        return "\n".join(lines)
+
+    def extract_readable_html(
+        self,
+        html: str,
+        selectors: Optional[List[str]] = None,
+    ) -> Optional[str]:
+        """Fallback HTML-to-markdown pass that keeps article tables.
+
+        The legacy publisher scrapers mainly preserve paragraphs. Cohort
+        papers often put the useful variants in HTML tables, so this pass
+        walks the rendered article container and emits headings, paragraphs,
+        lists, and tables in document order.
+        """
+        if not html:
+            return None
+
+        soup = BeautifulSoup(html, "html.parser")
+        for tag in soup(["script", "style", "noscript", "nav", "footer", "header"]):
+            tag.decompose()
+
+        title = ""
+        title_elem = soup.find("h1") or soup.find("title")
+        if title_elem:
+            title = self._clean_text(title_elem.get_text(" ", strip=True))
+
+        candidates = []
+        for selector in selectors or []:
+            try:
+                candidates.extend(soup.select(selector))
+            except Exception:
+                continue
+        for selector in (
+            "article",
+            "main",
+            "[role='main']",
+            ".article__body",
+            ".article-body",
+            ".article-section__full",
+            ".article-section__content",
+            ".hlFld-Fulltext",
+            ".widget-ArticleFulltext",
+            "#body",
+            ".Body",
+        ):
+            try:
+                candidates.extend(soup.select(selector))
+            except Exception:
+                continue
+        if not candidates and soup.body:
+            candidates = [soup.body]
+
+        if not candidates:
+            return None
+
+        def score(node: Any) -> int:
+            text_len = len(node.get_text(" ", strip=True))
+            table_bonus = 1200 * len(node.find_all("table"))
+            return text_len + table_bonus
+
+        root = max(candidates, key=score)
+        parts: List[str] = ["# MAIN TEXT"]
+        if title:
+            parts.append(f"## {title}")
+
+        skip_phrases = (
+            "cookie",
+            "privacy policy",
+            "sign in",
+            "log in",
+            "subscribe",
+            "register",
+            "your browser",
+            "javascript",
+            "advertisement",
+        )
+
+        for node in root.find_all(["h2", "h3", "h4", "h5", "h6", "p", "li", "table"]):
+            if node.find_parent("table") and node.name != "table":
+                continue
+            if node.name == "table":
+                caption = node.find("caption")
+                cap_text = (
+                    self._clean_text(caption.get_text(" ", strip=True))
+                    if caption
+                    else ""
+                )
+                table_md = self._table_to_markdown(node)
+                if table_md:
+                    if cap_text:
+                        parts.append(f"### Table: {cap_text}")
+                    parts.append(table_md)
+                continue
+
+            text = self._clean_text(node.get_text(" ", strip=True))
+            if not text:
+                continue
+            lower = text.lower()
+            if node.name == "p" and len(text) < 30:
+                continue
+            if any(phrase in lower for phrase in skip_phrases) and len(text) < 300:
+                continue
+            if node.name and node.name.startswith("h"):
+                if len(text) < 140:
+                    parts.append(f"### {text}")
+            elif node.name == "li":
+                if len(text) > 10:
+                    parts.append(f"- {text}")
+            else:
+                parts.append(text)
+
+        markdown = "\n\n".join(parts).strip() + "\n"
+        return markdown if len(markdown) > 300 else None
+
     def extract_via_scraper(
-        self, html: str, final_url: str, ctx: FetchContext
+        self,
+        html: str,
+        final_url: str,
+        ctx: FetchContext,
+        selectors: Optional[List[str]] = None,
     ) -> Optional[str]:
         """Run the existing publisher-aware scraper on rendered HTML.
 
@@ -141,6 +295,7 @@ class PublisherStrategy(ABC):
         so silent 0-byte FULL_CONTEXT.md outcomes (observed on cohort-paper
         URLs whose page loads but body extraction fails) are visible.
         """
+        fallback_markdown = self.extract_readable_html(html, selectors)
         try:
             markdown, _title = ctx.scraper.extract_fulltext(html, final_url)
             if not markdown:
@@ -149,7 +304,19 @@ class PublisherStrategy(ABC):
                     ctx.pmid,
                     final_url,
                 )
-            return markdown or None
+            if markdown and fallback_markdown:
+                if len(fallback_markdown) > max(
+                    len(markdown) * 1.2, len(markdown) + 1000
+                ):
+                    logger.info(
+                        "extract_via_scraper: PMID %s using table-preserving HTML fallback "
+                        "(%d chars vs %d scraper chars)",
+                        ctx.pmid,
+                        len(fallback_markdown),
+                        len(markdown),
+                    )
+                    return fallback_markdown
+            return markdown or fallback_markdown or None
         except Exception as e:
             logger.warning(
                 "extract_via_scraper: PMID %s exception for %s: %s",
@@ -157,7 +324,7 @@ class PublisherStrategy(ABC):
                 final_url,
                 e,
             )
-            return None
+            return fallback_markdown
 
     def download_figures(
         self,

@@ -92,6 +92,19 @@ def test_parse_router_response_handles_fenced_json():
     }
 
 
+def test_parse_router_response_skips_non_json_braced_preface():
+    raw = """I considered table {ID: T1}, then chose the strict schema.
+
+{"variant_tables":[
+  {"table_id":"T1",
+   "column_mapping":{"cdna":0,"protein":1,"patient_count":2},
+   "confidence":0.95}
+]}"""
+    routed = parse_router_response(raw)
+    assert len(routed) == 1
+    assert routed[0].table_id == "T1"
+
+
 def test_parse_router_response_drops_invalid_mappings():
     raw = json.dumps(
         {
@@ -132,6 +145,26 @@ def test_parse_routed_table_extracts_variants():
     assert pen["total_carriers_observed"] == 14
     assert pen["affected_count"] == 4
     assert pen["unaffected_count"] == 10
+
+
+def test_parse_routed_table_rejects_misrouted_gwas_allele_rows():
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. GWAS lead SNPs",
+        header_line="| Locus | SNV | AA | n |",
+        header_cells=["Locus", "SNV", "AA", "n"],
+        data_lines=[
+            "| KCNH2 | rs113843864 | A | 29762 |",
+            "| KCNH2 | rs2072412 | C | 31607149 |",
+        ],
+        char_start=0,
+        char_end=100,
+    )
+    mapping = {"gene": 0, "protein": 2, "patient_count": 3}
+
+    variants = parse_routed_table(table, mapping, "KCNH2")
+
+    assert variants == []
 
 
 def test_extract_via_router_end_to_end_with_stub():

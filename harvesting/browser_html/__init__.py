@@ -14,8 +14,9 @@ Usage::
     if result and result.main_markdown:
         ...
 
-The tier is OFF by default. Enable with ``ENABLE_BROWSER_HTML_FALLBACK=true``
-or ``--browser-html-fallback``. Strategies are auto-discovered from the
+The tier can reuse an institutional Chrome profile when
+``BROWSER_HTML_USE_PROFILE=true`` and ``BROWSER_HTML_PROFILE_PATH`` points at a
+dedicated logged-in profile. Strategies are auto-discovered from the
 ``strategies/`` package — adding a new publisher is just dropping in a file.
 """
 

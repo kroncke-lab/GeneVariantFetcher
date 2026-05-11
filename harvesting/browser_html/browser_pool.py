@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import logging
 from contextlib import contextmanager
+from pathlib import Path
 from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
@@ -36,9 +37,19 @@ class BrowserPool:
     callers should prefer ``page()`` which auto-starts.
     """
 
-    def __init__(self, headless: bool = True, slow_mo: int = 0):
+    def __init__(
+        self,
+        headless: bool = True,
+        slow_mo: int = 0,
+        use_profile: bool = False,
+        profile_path: Optional[str] = None,
+        channel: str = "chrome",
+    ):
         self.headless = headless
         self.slow_mo = slow_mo
+        self.use_profile = use_profile
+        self.profile_path = profile_path
+        self.channel = channel
         self._playwright = None
         self._browser = None
         self._context = None
@@ -70,26 +81,56 @@ class BrowserPool:
             "--no-default-browser-check",
             "--window-size=1920,1080",
         ]
-        self._browser = self._playwright.chromium.launch(
-            headless=self.headless,
-            slow_mo=self.slow_mo,
-            args=launch_args,
-        )
-        self._context = self._browser.new_context(
-            user_agent=(
+        context_kwargs = {
+            "user_agent": (
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                 "AppleWebKit/537.36 (KHTML, like Gecko) "
                 "Chrome/131.0.0.0 Safari/537.36"
             ),
-            viewport={"width": 1920, "height": 1080},
-            locale="en-US",
-            timezone_id="America/New_York",
-            color_scheme="light",
-        )
+            "viewport": {"width": 1920, "height": 1080},
+            "locale": "en-US",
+            "timezone_id": "America/New_York",
+            "color_scheme": "light",
+        }
+
+        if self.use_profile:
+            if self.profile_path:
+                user_data_dir = Path(self.profile_path).expanduser()
+            else:
+                user_data_dir = (
+                    Path.home() / "Library/Application Support/GVF-Chrome-Profile"
+                )
+            user_data_dir.mkdir(parents=True, exist_ok=True)
+            launch_kwargs = {
+                "headless": self.headless,
+                "slow_mo": self.slow_mo,
+                "args": launch_args,
+                **context_kwargs,
+            }
+            if self.channel:
+                launch_kwargs["channel"] = self.channel
+            self._context = self._playwright.chromium.launch_persistent_context(
+                str(user_data_dir),
+                **launch_kwargs,
+            )
+            self._browser = None
+            logger.info(
+                "BrowserPool started with persistent profile %s (headless=%s)",
+                user_data_dir,
+                self.headless,
+            )
+        else:
+            self._browser = self._playwright.chromium.launch(
+                headless=self.headless,
+                slow_mo=self.slow_mo,
+                args=launch_args,
+            )
+            self._context = self._browser.new_context(**context_kwargs)
         # Apply stealth patches to every new page automatically.
         self._context.add_init_script(_STEALTH_SCRIPT)
         self._started = True
-        logger.info("BrowserPool started (headless=%s)", self.headless)
+        if not self.use_profile:
+            logger.info("BrowserPool started (headless=%s)", self.headless)
 
     def new_page(self) -> Any:
         """Return a fresh Playwright Page. Auto-starts the pool if needed."""

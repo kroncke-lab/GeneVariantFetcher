@@ -67,6 +67,10 @@ class BrowserHTMLFetcher:
         self._headless = bool(getattr(settings, "browser_html_headless", True))
         self._max_per_run = int(getattr(settings, "browser_html_max_per_run", 50))
         self._timeout_s = int(getattr(settings, "browser_html_per_paper_timeout_s", 90))
+        self._use_profile = bool(getattr(settings, "browser_html_use_profile", False))
+        self._profile_path = getattr(settings, "browser_html_profile_path", None)
+        self._channel = getattr(settings, "browser_html_channel", "chrome")
+        self._slow_mo_ms = int(getattr(settings, "browser_html_slow_mo_ms", 0))
         # Optional global override; if set and >= a strategy's own embargo,
         # the global wins. None means "respect each strategy's own value."
         self._min_embargo_override: Optional[int] = getattr(
@@ -95,7 +99,7 @@ class BrowserHTMLFetcher:
         """Run Tier 3.5 for a single PMID. Returns None when ineligible."""
         if not self._enabled:
             return None
-        if self._attempts_made >= self._max_per_run:
+        if self._max_per_run > 0 and self._attempts_made >= self._max_per_run:
             self._log_row(pmid, doi, "", "skipped", "max_per_run cap reached", 0, 0, 0)
             return None
 
@@ -121,7 +125,13 @@ class BrowserHTMLFetcher:
             return None
 
         if self._pool is None:
-            self._pool = BrowserPool(headless=self._headless)
+            self._pool = BrowserPool(
+                headless=self._headless,
+                slow_mo=self._slow_mo_ms,
+                use_profile=self._use_profile,
+                profile_path=self._profile_path,
+                channel=self._channel,
+            )
 
         ctx = FetchContext(
             pmid=pmid,

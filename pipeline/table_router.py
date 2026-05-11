@@ -344,8 +344,11 @@ Allowed field names (omit a field if no column matches):
 A table qualifies if it has at least one of {{cdna, protein}} AND at least one
 of {{patient_count, affected, unaffected}}. Multi-gene panel tables qualify
 even if the preview rows show non-{gene_symbol} variants. Tables that list
-functional assays, drug screens, primer sequences, or in silico predictions
-do NOT qualify — skip them.
+functional assays, drug screens, primer sequences, in silico predictions,
+GWAS/association statistics, allele-frequency summaries, lead SNPs, or columns
+such as Locus/SNV/CHR/BP/EA/AA/EAF/beta/SE/p/n do NOT qualify — skip them.
+In those tables, AA usually means alternate allele and n is cohort size, not a
+patient/carrier count.
 
 Return strict JSON. No prose. No markdown fences. Schema:
 
@@ -389,17 +392,30 @@ def parse_router_response(raw: str) -> List[RoutedTable]:
     if text.startswith("```"):
         text = re.sub(r"^```[a-zA-Z0-9_]*\s*", "", text)
         text = re.sub(r"\s*```\s*$", "", text)
-    # Find the first { and last }
-    first = text.find("{")
-    last = text.rfind("}")
-    if first == -1 or last == -1 or last < first:
+    # Locate the first decodable JSON object so prose-prefixed responses work
+    # even when the prose itself contains braces. raw_decode ignores trailing
+    # prose after the object; rfind('}') was unsafe when trailing analysis
+    # embedded braces (e.g. "I picked table {ID: 5}").
+    candidate_starts = [idx for idx, char in enumerate(text) if char == "{"]
+    if not candidate_starts:
         return []
-    text = text[first : last + 1]
 
-    try:
-        data = json.loads(text)
-    except json.JSONDecodeError as e:
-        logger.warning("table_router: JSON parse failed: %s", e)
+    data = None
+    decoder = json.JSONDecoder()
+    last_error = None
+    for start in candidate_starts:
+        try:
+            parsed, _end = decoder.raw_decode(text[start:])
+        except json.JSONDecodeError as e:
+            last_error = e
+            continue
+        if isinstance(parsed, dict):
+            data = parsed
+            break
+
+    if data is None:
+        if last_error:
+            logger.warning("table_router: JSON parse failed: %s", last_error)
         return []
 
     items = data.get("variant_tables") or []
@@ -458,18 +474,37 @@ def _coerce_int(value: Any) -> Optional[int]:
             return None
 
 
+_PROTEIN_VARIANT_RE = re.compile(
+    r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
+    r"\d{1,4}"
+    r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X]|fs(?:X|\*)?\d*|del|dup|ins)",
+    re.IGNORECASE,
+)
+
+_CDNA_VARIANT_RE = re.compile(
+    r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
+    r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
+    r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$",
+    re.IGNORECASE,
+)
+
+
 def _normalize_cdna(value: str) -> Optional[str]:
     s = value.strip().replace(" ", "")
     if not s or s.lower() in {"-", "na", "n/a", "none", "."}:
         return None
     if not s.lower().startswith("c."):
         s = "c." + s
+    if not _CDNA_VARIANT_RE.match(s):
+        return None
     return s
 
 
 def _normalize_protein(value: str) -> Optional[str]:
     s = value.strip().replace(" ", "")
     if not s or s.lower() in {"-", "na", "n/a", "none", "."}:
+        return None
+    if not _PROTEIN_VARIANT_RE.match(s):
         return None
     return s
 
@@ -500,10 +535,12 @@ def route_tables(
     prompt = build_router_prompt(tables, gene_symbol)
 
     try:
+        from utils.llm_utils import wait_for_llm_rate_limit
         from utils.retry_utils import llm_retry
 
         @llm_retry
         def _call() -> Any:
+            wait_for_llm_rate_limit(model)
             return llm_caller(
                 model=model,
                 messages=[

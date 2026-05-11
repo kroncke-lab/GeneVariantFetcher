@@ -101,3 +101,41 @@ def test_aha_strategy_matches_url():
     strategy = AHAStrategy()
     assert strategy.matches("", "https://www.ahajournals.org/doi/abs/10.1161/...")
     assert not strategy.matches("", "https://onlinelibrary.wiley.com/doi/...")
+
+
+def test_strategy_encodes_legacy_doi_for_path_urls():
+    strategy = AHAStrategy()
+    doi = "10.1002/(SICI)1098-1004(1999)13:4<301::AID-HUMU7>3.0.CO;2-V"
+
+    encoded = strategy.encode_doi_for_path(doi)
+
+    assert "<" not in encoded
+    assert ">" not in encoded
+    assert "%3C301::AID-HUMU7%3E" in encoded
+
+
+def test_readable_html_fallback_preserves_article_tables():
+    strategy = AHAStrategy()
+    html = """
+    <html><body>
+      <div class="hlFld-Fulltext">
+        <h1>Mutation spectrum</h1>
+        <p>KCNH2 variants were found in affected carriers across a large
+        long QT syndrome cohort, and the article body includes a variant
+        carrier table that must survive HTML conversion for downstream
+        extraction.</p>
+        <table>
+          <caption>Summary of HERG mutations</caption>
+          <tr><th>Variant</th><th>Carriers</th></tr>
+          <tr><td>R176W</td><td>12</td></tr>
+        </table>
+      </div>
+    </body></html>
+    """
+
+    markdown = strategy.extract_readable_html(html, selectors=[".hlFld-Fulltext"])
+
+    assert markdown is not None
+    assert "Summary of HERG mutations" in markdown
+    assert "| Variant | Carriers |" in markdown
+    assert "| R176W | 12 |" in markdown

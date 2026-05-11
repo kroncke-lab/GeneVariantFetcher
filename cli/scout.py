@@ -265,10 +265,10 @@ def process_file(
 
 
 def run_scout(
-    input_path: Path,
-    output_dir: Path,
+    input_path: Path | str,
+    output_dir: Path | str,
     gene: str,
-    manifest_out: Optional[Path] = None,
+    manifest_out: Optional[Path | str] = None,
     min_relevance: float = 0.1,
     max_zones: int = 30,
 ) -> Manifest:
@@ -289,6 +289,10 @@ def run_scout(
     Raises:
         ValidationError: If input validation fails
     """
+    input_path = Path(input_path)
+    output_dir = Path(output_dir)
+    manifest_out = Path(manifest_out) if manifest_out is not None else None
+
     # Validate inputs before processing
     validate_scout_inputs(input_path, output_dir, gene)
 

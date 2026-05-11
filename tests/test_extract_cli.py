@@ -34,6 +34,15 @@ class TestExtractPmidFromFilename:
             == "PMC12345"
         )
 
+    def test_extract_from_legacy_browser_fetch_prefix(self):
+        """Browser fetch used to write PMID_{pmid}_FULL_CONTEXT.md files."""
+        assert (
+            extract_pmid_from_filename(
+                "PMID_12345678_FULL_CONTEXT.md", use_full_text=True
+            )
+            == "12345678"
+        )
+
     def test_wrong_suffix_returns_none(self):
         """Test that wrong suffix returns None."""
         assert (

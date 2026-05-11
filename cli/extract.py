@@ -259,10 +259,10 @@ def extract_pmid_from_filename(
     """Extract PMID from filename like '12345678_DATA_ZONES.md' or '12345678_FULL_CONTEXT.md'."""
     if use_full_text:
         if "_FULL_CONTEXT.md" in filename:
-            return filename.replace("_FULL_CONTEXT.md", "")
+            return filename.replace("_FULL_CONTEXT.md", "").removeprefix("PMID_")
     else:
         if "_DATA_ZONES.md" in filename:
-            return filename.replace("_DATA_ZONES.md", "")
+            return filename.replace("_DATA_ZONES.md", "").removeprefix("PMID_")
     return None
 
 

@@ -48,6 +48,13 @@ except ImportError:
     SCRAPER_AVAILABLE = False
     SupplementScraper = None
 
+try:
+    from harvesting.orchestrator import full_context_needs_retry
+except ImportError:
+
+    def full_context_needs_retry(full_context_path: Path, output_dir: Path) -> bool:
+        return False
+
 
 # Setup logging with immediate flush for real-time output
 class FlushingStreamHandler(logging.StreamHandler):
@@ -793,7 +800,7 @@ class BrowserFetcher:
             markdown_content += clean_text
 
             # Save to file
-            filename = f"PMID_{pmid}_FULL_CONTEXT.md"
+            filename = f"{pmid}_FULL_CONTEXT.md"
             dest_path = self.target_dir / filename
             dest_path.write_text(markdown_content, encoding="utf-8")
 
@@ -1021,7 +1028,7 @@ class BrowserFetcher:
                 if not filename.endswith(".pdf"):
                     filename = f"{pmid}_Main_Text.pdf"
                 else:
-                    filename = f"{pmid}_{filename}"
+                    filename = f"{pmid}_Main_Text_{filename}"
 
                 dest_path = self.target_dir / filename
                 dest_path.write_bytes(response.content)
@@ -1334,7 +1341,7 @@ class BrowserFetcher:
             if not suggested.endswith(".pdf"):
                 suggested = f"{pmid}_Main_Text.pdf"
             else:
-                suggested = f"{pmid}_{suggested}"
+                suggested = f"{pmid}_Main_Text_{suggested}"
 
             dest_path = self.target_dir / suggested
             download.save_as(str(dest_path))
@@ -1389,7 +1396,7 @@ class BrowserFetcher:
                 with open(new_file, "rb") as f:
                     header = f.read(4)
                 if header == b"%PDF":
-                    dest_path = self.target_dir / f"{pmid}_{new_file.name}"
+                    dest_path = self.target_dir / f"{pmid}_Main_Text_{new_file.name}"
                     new_file.rename(dest_path)
                     logger.info(f"  [Browser] SUCCESS: {dest_path.name}")
                     return dest_path
@@ -1430,7 +1437,7 @@ class BrowserFetcher:
                     if not filename.endswith(".pdf"):
                         filename = f"{pmid}_Main_Text.pdf"
                     else:
-                        filename = f"{pmid}_{filename}"
+                        filename = f"{pmid}_Main_Text_{filename}"
 
                     dest_path = self.target_dir / filename
                     with open(dest_path, "wb") as f:
@@ -1612,7 +1619,9 @@ class BrowserFetcher:
             download = download_info.value
 
             # Wait for download to complete
-            dest_path = self.target_dir / f"{pmid}_{download.suggested_filename}"
+            dest_path = (
+                self.target_dir / f"{pmid}_Main_Text_{download.suggested_filename}"
+            )
             download.save_as(str(dest_path))
             logger.info(f"  Downloaded: {dest_path.name}")
             return dest_path
@@ -1622,7 +1631,7 @@ class BrowserFetcher:
             new_file = self._wait_for_new_file(before_files, timeout=5)
             if new_file:
                 # Move to target
-                dest_path = self.target_dir / f"{pmid}_{new_file.name}"
+                dest_path = self.target_dir / f"{pmid}_Main_Text_{new_file.name}"
                 new_file.rename(dest_path)
                 return dest_path
             return None
@@ -1674,7 +1683,8 @@ class BrowserFetcher:
                             f"  [Button] Download started: {download.suggested_filename}"
                         )
                         dest_path = (
-                            self.target_dir / f"{pmid}_{download.suggested_filename}"
+                            self.target_dir
+                            / f"{pmid}_Main_Text_{download.suggested_filename}"
                         )
                         download.save_as(str(dest_path))
                         logger.info(f"  [Button] SUCCESS: {dest_path.name}")
@@ -1712,7 +1722,7 @@ class BrowserFetcher:
                             download = download_info.value
                             dest_path = (
                                 self.target_dir
-                                / f"{pmid}_{download.suggested_filename}"
+                                / f"{pmid}_Main_Text_{download.suggested_filename}"
                             )
                             download.save_as(str(dest_path))
                             logger.info(
@@ -1725,7 +1735,7 @@ class BrowserFetcher:
                 # Check for new files
                 new_file = self._wait_for_new_file(before_files, timeout=5)
                 if new_file:
-                    dest_path = self.target_dir / f"{pmid}_{new_file.name}"
+                    dest_path = self.target_dir / f"{pmid}_Main_Text_{new_file.name}"
                     new_file.rename(dest_path)
                     logger.info(f"  [Button] SUCCESS (late): {dest_path.name}")
                     return dest_path
@@ -1754,8 +1764,16 @@ class BrowserFetcher:
         downloaded_files = []
 
         # Check if we already have this paper from a previous run
-        existing_md = self.target_dir / f"PMID_{pmid}_FULL_CONTEXT.md"
-        if existing_md.exists() and existing_md.stat().st_size > 1000:
+        existing_md = self.target_dir / f"{pmid}_FULL_CONTEXT.md"
+        legacy_existing_md = self.target_dir / f"PMID_{pmid}_FULL_CONTEXT.md"
+        if not existing_md.exists() and legacy_existing_md.exists():
+            existing_md = legacy_existing_md
+        existing_is_complete = (
+            existing_md.exists()
+            and existing_md.stat().st_size > 1000
+            and not full_context_needs_retry(existing_md, self.target_dir)
+        )
+        if existing_is_complete:
             logger.info(
                 f">>> ALREADY EXISTS: {existing_md.name} ({existing_md.stat().st_size} bytes)"
             )
@@ -1765,6 +1783,11 @@ class BrowserFetcher:
                 success=True,
                 files_downloaded=[str(existing_md)],
                 method="already_exists",
+            )
+        if existing_md.exists():
+            logger.info(
+                f">>> RETRYING INCOMPLETE EXISTING FILE: {existing_md.name} "
+                f"({existing_md.stat().st_size} bytes)"
             )
 
         try:
@@ -2175,6 +2198,8 @@ def run_browser_fetch(
     use_profile: bool = False,
     profile_path: Optional[Path] = None,
     slow_mo: int = 0,
+    auto_process: bool = False,
+    gene_symbol: Optional[str] = None,
 ):
     """
     Run browser-based fetching for papers in a CSV file.
@@ -2193,6 +2218,8 @@ def run_browser_fetch(
         wait_for_captcha: Wait up to 5 minutes for manual CAPTCHA completion
         retry_failures_only: Only process papers with browser_failed status
         fallback_to_manual: Auto-switch to manual download when Cloudflare loops (default True)
+        auto_process: Convert successful downloads into {PMID}_FULL_CONTEXT.md.
+        gene_symbol: Optional gene symbol for Data Scout after auto-processing.
     """
     if not PLAYWRIGHT_AVAILABLE:
         logger.error(
@@ -2383,6 +2410,24 @@ def run_browser_fetch(
                 logger.info(
                     f"  SUCCESS: Downloaded {len(result.files_downloaded)} file(s)"
                 )
+                if auto_process:
+                    try:
+                        from cli.fetch_manager import (
+                            convert_to_markdown,
+                            run_data_scout,
+                        )
+
+                        full_context = target_dir / f"{pmid}_FULL_CONTEXT.md"
+                        if full_context.exists() and full_context.stat().st_size > 1000:
+                            converted = str(full_context)
+                        else:
+                            converted = convert_to_markdown(pmid, target_dir)
+                        if converted and gene_symbol:
+                            run_data_scout(pmid, target_dir, gene_symbol)
+                    except Exception as exc:
+                        logger.warning(
+                            "  Auto-process failed for PMID %s: %s", pmid, exc
+                        )
             else:
                 # Use granular status based on failure type
                 failure_type = result.failure_type or "unknown"
@@ -2472,6 +2517,9 @@ Examples:
   # Run headless (no visible browser, automated only)
   python browser_fetch.py paywalled_missing.csv --headless
 
+  # Convert recovered PDFs/supplementals into normal FULL_CONTEXT.md files
+  python browser_fetch.py paywalled_missing.csv --auto-process --gene KCNH2
+
   # Process specific PMIDs
   python browser_fetch.py paywalled_missing.csv -i --pmids 12345678,87654321
 
@@ -2558,6 +2606,17 @@ Status tracking (in CSV Status column):
         default=0,
         help="Slow down browser actions by N milliseconds (helps avoid detection)",
     )
+    parser.add_argument(
+        "--auto-process",
+        action="store_true",
+        help="Convert successful downloads into {PMID}_FULL_CONTEXT.md files",
+    )
+    parser.add_argument(
+        "--gene",
+        type=str,
+        default=None,
+        help="Gene symbol for Data Scout after --auto-process (optional)",
+    )
 
     args = parser.parse_args()
 
@@ -2591,6 +2650,8 @@ Status tracking (in CSV Status column):
         use_profile=args.use_profile,
         profile_path=args.profile_path,
         slow_mo=args.slow_mo,
+        auto_process=args.auto_process,
+        gene_symbol=args.gene,
     )
 
 

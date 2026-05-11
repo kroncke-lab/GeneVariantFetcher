@@ -35,7 +35,7 @@ class ElsevierOpenStrategy(PublisherStrategy):
             result.error = "no doi"
             return result
 
-        target = f"https://doi.org/{ctx.doi}"
+        target = f"https://doi.org/{self.encode_doi_for_path(ctx.doi)}"
         try:
             page.goto(target, wait_until="load", timeout=ctx.timeout_s * 1000)
         except Exception as e:
@@ -65,7 +65,9 @@ class ElsevierOpenStrategy(PublisherStrategy):
         result.main_html = html
         result.final_url = final_url
 
-        markdown = self.extract_via_scraper(html, final_url, ctx)
+        markdown = self.extract_via_scraper(
+            html, final_url, ctx, selectors=list(self.BODY_SELECTORS)
+        )
         if markdown:
             result.main_markdown = markdown
 

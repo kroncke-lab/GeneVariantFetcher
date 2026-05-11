@@ -9,6 +9,7 @@ Main PMCHarvester class that coordinates all harvesting operations:
 
 import csv
 import datetime
+import json
 import os
 import re
 import time
@@ -74,6 +75,20 @@ logger = get_logger(__name__)
 
 # PMID pattern: 1-8 digit numeric string
 PMID_PATTERN = re.compile(r"^\d{1,8}$")
+ABSTRACT_ONLY_FALLBACK_MARKER = "abstract-only fallback"
+THIN_FULL_CONTEXT_BYTES = 6_000
+PUBLISHER_SHELL_MARKERS = (
+    "eletters should relate to an article recently published",
+    "comments and feedback on aha/asa scientific statements",
+    "access through your institution",
+    "institutional sign in",
+    "please enable javascript",
+    "enable cookies",
+    "purchase access",
+    "rent this article",
+    "subscribe to this journal",
+    "sign in to view",
+)
 
 
 class ValidationError(Exception):
@@ -147,6 +162,51 @@ def validate_output_directory(output_dir: Path) -> None:
             )
 
 
+def full_context_needs_retry(full_context_path: Path, output_dir: Path) -> bool:
+    """Return True when an existing FULL_CONTEXT artifact is not usable full text."""
+    if not full_context_path.exists():
+        return True
+
+    try:
+        file_size = full_context_path.stat().st_size
+    except OSError:
+        return True
+
+    if file_size == 0:
+        return True
+
+    try:
+        with open(full_context_path, encoding="utf-8", errors="ignore") as f:
+            head = f.read(12_000)
+    except OSError:
+        return True
+
+    normalized = head.lower()
+    if ABSTRACT_ONLY_FALLBACK_MARKER in normalized:
+        return True
+
+    if any(marker in normalized for marker in PUBLISHER_SHELL_MARKERS):
+        return True
+
+    if file_size >= THIN_FULL_CONTEXT_BYTES:
+        return False
+
+    pmid = full_context_path.name.replace("_FULL_CONTEXT.md", "")
+    status_file = output_dir / "pmid_status" / f"{pmid}.json"
+    if status_file.exists():
+        try:
+            with open(status_file, encoding="utf-8") as f:
+                status_data = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            status_data = {}
+        status = str(status_data.get("status") or "").lower()
+        source = str(status_data.get("source") or "").lower()
+        if status == "abstract_only" or source == "pubmed_abstract":
+            return True
+
+    return False
+
+
 def validate_harvest_inputs(pmids: List[str], output_dir: Path) -> List[str]:
     """
     Validate all inputs for the harvest operation.
@@ -210,9 +270,6 @@ try:
 except ImportError:
     PEDIGREE_EXTRACTOR_AVAILABLE = False
     PedigreeExtractor = None
-
-# Import manifest utilities for tracking download outcomes
-import json
 
 from utils.manifest import Manifest, ManifestEntry, Stage, Status
 
@@ -2411,10 +2468,19 @@ class PMCHarvester:
         # ============================================
         # PHASE 1: DOWNLOAD ALL PAPERS (with resume support)
         # ============================================
-        # Skip PMIDs that already have FULL_CONTEXT.md (enables resume after crash)
+        # Skip PMIDs that already have usable FULL_CONTEXT.md (enables resume
+        # after crash), but retry abstract-only fallbacks and publisher shells.
+        requested_pmids = {str(p) for p in pmids}
         already_downloaded = set()
+        retryable_existing = set()
         for f in self.output_dir.glob("*_FULL_CONTEXT.md"):
-            already_downloaded.add(f.name.replace("_FULL_CONTEXT.md", ""))
+            existing_pmid = f.name.replace("_FULL_CONTEXT.md", "")
+            if existing_pmid not in requested_pmids:
+                continue
+            if full_context_needs_retry(f, self.output_dir):
+                retryable_existing.add(existing_pmid)
+            else:
+                already_downloaded.add(existing_pmid)
 
         remaining_pmids = [p for p in pmids if str(p) not in already_downloaded]
 
@@ -2422,6 +2488,10 @@ class PMCHarvester:
         print(
             f"DOWNLOAD PHASE: {len(pmids)} total, {len(already_downloaded)} already done, {len(remaining_pmids)} to download"
         )
+        if retryable_existing:
+            print(
+                f"Retrying {len(retryable_existing)} existing abstract-only/thin FULL_CONTEXT artifacts"
+            )
         print(f"{'=' * 60}")
 
         downloaded_pmids = list(already_downloaded)

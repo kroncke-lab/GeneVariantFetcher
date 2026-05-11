@@ -149,9 +149,9 @@ class Settings(BaseSettings):
 
     # Tier 1 Configuration
     tier1_min_keywords: int = Field(
-        default=2,
+        default=1,
         env="TIER1_MIN_KEYWORDS",
-        description="Minimum keyword matches for Tier 1 to pass",
+        description="Minimum keyword matches for Tier 1 to pass (lowered from 2 to 1 for fail-open recall)",
     )
     tier1_use_llm: bool = Field(
         default=False,
@@ -376,10 +376,42 @@ class Settings(BaseSettings):
         env="BROWSER_HTML_HEADLESS",
         description="Run Tier 3.5 browser headless",
     )
+    browser_html_use_profile: bool = Field(
+        default=False,
+        env="BROWSER_HTML_USE_PROFILE",
+        description=(
+            "Run Tier 3.5 in a persistent Chrome profile so institutional "
+            "SSO/OpenAthens cookies can be reused for paywalled publisher pages."
+        ),
+    )
+    browser_html_profile_path: Optional[str] = Field(
+        default=None,
+        env="BROWSER_HTML_PROFILE_PATH",
+        description=(
+            "Persistent Chrome user-data directory for Tier 3.5. Use a dedicated "
+            "GVF profile, not the daily Chrome profile that may be locked."
+        ),
+    )
+    browser_html_channel: str = Field(
+        default="chrome",
+        env="BROWSER_HTML_CHANNEL",
+        description=(
+            "Browser channel for persistent profile mode. 'chrome' uses the "
+            "installed Chrome with normal profile/cookie behavior."
+        ),
+    )
+    browser_html_slow_mo_ms: int = Field(
+        default=0,
+        env="BROWSER_HTML_SLOW_MO_MS",
+        description="Optional Playwright slow_mo delay for Tier 3.5 browser actions.",
+    )
     browser_html_max_per_run: int = Field(
-        default=50,
+        default=0,
         env="BROWSER_HTML_MAX_PER_RUN",
-        description="Hard cap on Tier 3.5 attempts per harvest run",
+        description=(
+            "Hard cap on Tier 3.5 attempts per harvest run. 0 means unlimited; "
+            "set a positive value for smoke tests or quota-limited runs."
+        ),
     )
     browser_html_per_paper_timeout_s: int = Field(
         default=90,

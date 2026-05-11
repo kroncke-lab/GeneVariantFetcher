@@ -79,6 +79,14 @@ RECOGNIZING IMPLICIT COUNTS (for CLINICAL studies only):
 - "an affected patient" / "a patient with [disease]" = 1 AFFECTED carrier
 - Disease-associated mutation tables: patient counts are typically AFFECTED carriers
 
+CRITICAL — COHORT/SCREENING TABLE CARRIER COUNTS:
+Large cohort or genetic screening papers often report the SAME variant across multiple
+tables, cohorts, or registries. Capture the TOTAL carrier count across all sources,
+not just the first table. If variant X appears in Table 1 with 50 carriers and Table 2
+with 78 carriers from a non-overlapping cohort, total = 128. "N patients" or "No. of
+patients" columns are CARRIER COUNTS. Frequency columns like "5/200" → 5 carriers.
+When same variant in multiple tables: SUM if independent, use LARGER if overlapping.
+
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
 Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
 and genomic_position would be null. The variant identifier is load-bearing.
@@ -292,6 +300,27 @@ CRITICAL REQUIREMENTS:
   * Extract patient count to BOTH patients.count AND penetrance_data.total_carriers_observed/affected_count
   * Example: Table shows "No. of patients: 1" for a pathogenic variant → patients.count=1, total_carriers_observed=1, affected_count=1
   * BUT: If table has "n (cells)" or assay metrics, it's a FUNCTIONAL study - do NOT use those numbers as patient counts
+
+CRITICAL — COHORT/SCREENING TABLE CARRIER COUNTS:
+Large cohort or genetic screening papers often report the SAME variant across multiple
+tables, cohorts, or registries. You MUST capture the TOTAL carrier count across all
+sources within the paper, not just the first table you encounter.
+
+Common patterns in cohort papers:
+- Table 1: "Discovery cohort" (e.g., 50 carriers of R176W)
+- Table 2: "Replication cohort" (e.g., 78 more carriers of R176W)
+- → Total: 128 carriers. Do NOT report just 50 from the first table.
+
+- "N patients" or "No. of patients" columns are CARRIER COUNTS, not replicates
+- "n" in clinical tables (not functional assays) = number of patients/carriers
+- Frequency columns (e.g., "5/200") give carrier counts: numerator = carriers, denominator = total screened
+- "Families" ≠ "carriers": if "3 families" are reported, look for how many total carriers across those families
+- If the paper says "identified in N individuals" or "found in N patients", that is the total carrier count
+
+When the same variant appears in multiple tables or sections:
+1. SUM the carrier counts if the cohorts are independent/non-overlapping
+2. Use the LARGER number if the cohorts overlap or one is a subset
+3. When in doubt, use the largest reported count (fail toward completeness)
 
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
 Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,

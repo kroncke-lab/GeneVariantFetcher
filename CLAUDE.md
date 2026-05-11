@@ -18,6 +18,13 @@ Part of the Kroncke Lab variant interpretation pipeline.
 5. **Tier 3 model** — gpt-4o (upgraded from gemini-2.0-flash)
 6. **Unified supplement fetcher** — `gene_literature/supplements/` wired into orchestrator; tiered PMC + Elsevier API fetch with dedup, DOI scraping as fallback
 
+### Recall Improvement Changes (2026-05-10)
+7. **Download cap removed** — `max_papers_to_download` default changed from 50 to None (uncapped). The 50-paper cap was silently discarding 350+ filtered PMIDs.
+8. **Fail-open Tier 1 filter** — `TIER1_MIN_KEYWORDS` lowered from 2 to 1; papers with no abstract now PASS through to Tier 2 instead of being dropped.
+9. **Source-completeness report** — New Step 3.5 emits `source_completeness.json` after extraction: abstract-only count, stub files, supplement coverage, zero-variant papers, single-carrier-only papers.
+10. **Zero-variant QA re-extraction** — Papers that pass Tier 2 but yield 0 variants are flagged. Set `GVF_QA_MODEL=anthropic/claude-opus-4-7` to re-extract them with a stronger model.
+11. **Cohort carrier count prompt** — Extraction prompts now explicitly handle cohort/screening tables where the same variant appears across multiple tables/cohorts, with instructions to SUM carrier counts.
+
 ## Health Assessment (2026-05-02)
 
 **Status: behind schedule, but architecture is sound.**

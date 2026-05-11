@@ -209,9 +209,7 @@ class TestVariantNormalization:
         assert normalize_variant("  p.Arg123His  ") == "p.Arg123His"
         assert normalize_variant("P. Arg123His") == "p.Arg123His"
         assert normalize_variant("c. 368G>A") == "c.368G>A"
-        assert (
-            normalize_variant("p.  Arg123His") == "p.Arg123His"
-        )  # collapses spaces
+        assert normalize_variant("p.  Arg123His") == "p.Arg123His"  # collapses spaces
 
     def test_normalize_variant_none_handling(self):
         assert normalize_variant(None) == ""
@@ -528,6 +526,334 @@ class TestIntegration:
         assert len(df) == 2
         assert detected["pmid"] == "PMID"
         assert detected["variant"] == "Variant"
+
+
+# =============================================================================
+# REGRESSION TESTS FOR v4 RECALL FIXES
+# (positional-digit guard, greedy 1-to-1, cDNA->protein bridge)
+# =============================================================================
+
+
+class TestPositionalDigitGuard:
+    """Fuzzy matcher must reject candidates at a different protein position."""
+
+    def test_rejects_different_position_missense(self):
+        # G572S vs G628S: Levenshtein on canonical strings reports ~0.82
+        # similarity. The guard must reject — different codon = different
+        # variant, regardless of string similarity.
+        match, score, match_type = find_best_match(
+            "p.Gly572Ser", ["p.Gly628Ser"], threshold=0.7
+        )
+        assert match is None
+        assert match_type == "none"
+
+    def test_rejects_different_position_frameshift(self):
+        # T152fsX vs T152H: same position but different variant type.
+        # Position guard does not reject this; threshold + similarity decide.
+        # The bigger concern is e.g. R582C vs R620C — different positions.
+        match, _, match_type = find_best_match(
+            "p.Arg582Cys", ["p.Arg620Cys"], threshold=0.7
+        )
+        assert match is None
+        assert match_type == "none"
+
+    def test_accepts_same_position_different_alt(self):
+        # D501N vs D501R: same position, different alt residue.
+        # Genuinely uncertain — the guard should not reject; threshold decides.
+        # Here similarity is high enough at 0.7 threshold to count as fuzzy.
+        match, score, match_type = find_best_match(
+            "p.Asp501Asn", ["p.Asp501Arg"], threshold=0.7
+        )
+        assert match == "p.Asp501Arg"
+        assert match_type == "fuzzy"
+        assert score >= 0.7
+
+    def test_accepts_same_position_aa_conversion(self):
+        # 1-letter <-> 3-letter notation at same position is exact, not fuzzy.
+        match, score, match_type = find_best_match(
+            "p.R123H", ["p.Arg123His"], threshold=0.7
+        )
+        assert match == "p.Arg123His"
+        assert match_type == "exact"
+        assert score == 1.0
+
+    def test_does_not_block_close_positions(self):
+        # Even adjacent codons must be rejected when positions differ. A 561V
+        # vs A562V are different variants; the matcher should not collapse them.
+        match, _, match_type = find_best_match(
+            "p.Ala561Val", ["p.Ala562Val"], threshold=0.7
+        )
+        assert match is None
+        assert match_type == "none"
+
+    def test_handles_unparseable_positions(self):
+        # IVS notation has no extractable protein position; the guard should
+        # fall through to similarity rather than reject blindly.
+        match, _, _ = find_best_match("IVS3-2A>G", ["IVS3-2A>T"], threshold=0.7)
+        # Both have position digits in the canonical/normalized form ("3", "2")
+        # so the guard sees them as matching — similarity then decides.
+        assert match == "IVS3-2A>T"
+
+
+class TestGreedyOneToOne:
+    """Each SQLite variant must be claimed by at most one Excel row."""
+
+    def _build_inputs(self, excel_rows, sqlite_rows):
+        excel_df = pd.DataFrame(excel_rows)
+        detected = {
+            "pmid": "PMID",
+            "variant": "protein_change",
+            "carriers_total": "carriers",
+            "affected_count": "affected",
+            "unaffected_count": "unaffected",
+            "phenotype": "phenotype",
+        }
+        excel_data = aggregate_excel_data(excel_df, detected)
+
+        sqlite_df = pd.DataFrame(sqlite_rows)
+        sqlite_data = aggregate_sqlite_data(sqlite_df)
+        return excel_data, sqlite_data
+
+    def test_one_sqlite_not_double_counted(self):
+        # Same PMID has gold G572S and G628S; SQLite has only G628S. Before the
+        # fix, G628S matched G628S exactly AND was fuzzy-claimed by G572S, so
+        # the same SQLite row counted as two matches. After: exactly one.
+        excel_data, sqlite_data = self._build_inputs(
+            excel_rows={
+                "PMID": ["29650123", "29650123"],
+                "protein_change": ["p.Gly572Ser", "p.Gly628Ser"],
+                "carriers": [1, 1],
+                "affected": [1, 1],
+                "unaffected": [0, 0],
+                "phenotype": ["LQT2", "LQT2"],
+            },
+            sqlite_rows={
+                "pmid": ["29650123"],
+                "variant": ["p.Gly628Ser"],
+                "protein_notation": ["p.Gly628Ser"],
+                "cdna_notation": [None],
+                "carriers_total": [1],
+                "affected_count": [1],
+                "unaffected_count": [0],
+                "uncertain_count": [0],
+            },
+        )
+
+        results = compare_data(excel_data, sqlite_data, "fuzzy", 0.70)
+        matched = [
+            r
+            for r in results
+            if r.match_type in ("exact", "fuzzy") and not r.missing_in_excel
+        ]
+        # Exactly one Excel row should match (G628S), the other should be
+        # missing-in-sqlite. No double-count.
+        assert len(matched) == 1
+        assert matched[0].excel_variant_norm == "G628S"
+
+        missing = [r for r in results if r.missing_in_sqlite]
+        assert len(missing) == 1
+        assert missing[0].excel_variant_norm == "G572S"
+
+    def test_exact_wins_over_fuzzy_for_same_candidate(self):
+        # Gold has both R123H (exact match in sqlite) and R123Q (fuzzy candidate
+        # against the same sqlite row). Pass-1 must claim the exact match first
+        # so the fuzzy attempt sees an empty pool.
+        excel_data, sqlite_data = self._build_inputs(
+            excel_rows={
+                "PMID": ["111", "111"],
+                "protein_change": ["p.Arg123Gln", "p.Arg123His"],
+                "carriers": [1, 1],
+                "affected": [1, 1],
+                "unaffected": [0, 0],
+                "phenotype": ["LQT2", "LQT2"],
+            },
+            sqlite_rows={
+                "pmid": ["111"],
+                "variant": ["p.Arg123His"],
+                "protein_notation": ["p.Arg123His"],
+                "cdna_notation": [None],
+                "carriers_total": [1],
+                "affected_count": [1],
+                "unaffected_count": [0],
+                "uncertain_count": [0],
+            },
+        )
+
+        results = compare_data(excel_data, sqlite_data, "fuzzy", 0.70)
+        # R123H matched exactly; R123Q has no remaining candidate → missing.
+        exact = [r for r in results if r.match_type == "exact"]
+        assert len(exact) == 1
+        assert exact[0].excel_variant_norm == "R123H"
+
+        missing = [r for r in results if r.missing_in_sqlite]
+        assert len(missing) == 1
+        assert missing[0].excel_variant_norm == "R123Q"
+
+
+class TestCDNAProteinBridge:
+    """Gold protein indels can bridge to SQLite-only cDNA notation."""
+
+    def _build_inputs(self, excel_rows, sqlite_rows):
+        excel_df = pd.DataFrame(excel_rows)
+        detected = {
+            "pmid": "PMID",
+            "variant": "protein_change",
+            "carriers_total": "carriers",
+            "affected_count": "affected",
+            "unaffected_count": "unaffected",
+            "phenotype": "phenotype",
+        }
+        excel_data = aggregate_excel_data(excel_df, detected)
+
+        sqlite_df = pd.DataFrame(sqlite_rows)
+        sqlite_data = aggregate_sqlite_data(sqlite_df)
+        return excel_data, sqlite_data
+
+    def test_bridges_frameshift_via_cdna_position(self):
+        # Gold: R281fsX (protein codon 281).
+        # SQLite: only c.842dupG stored — implies codon ceil(842/3) = 281.
+        # Bridge should match these even though the strings share nothing.
+        excel_data, sqlite_data = self._build_inputs(
+            excel_rows={
+                "PMID": ["29622001"],
+                "protein_change": ["R281fsX"],
+                "carriers": [1],
+                "affected": [1],
+                "unaffected": [0],
+                "phenotype": ["LQT2"],
+            },
+            sqlite_rows={
+                "pmid": ["29622001"],
+                # variant column falls back to cdna_notation when protein is NULL
+                "variant": ["c.842dupG"],
+                "protein_notation": [None],
+                "cdna_notation": ["c.842dupG"],
+                "carriers_total": [1],
+                "affected_count": [1],
+                "unaffected_count": [0],
+                "uncertain_count": [0],
+            },
+        )
+
+        results = compare_data(excel_data, sqlite_data, "fuzzy", 0.80)
+        matched = [r for r in results if r.match_type.endswith("cdna_bridge")]
+        assert len(matched) == 1
+        assert matched[0].excel_variant_norm == "R281fsX"
+        assert matched[0].sqlite_variant_raw == "c.842dupG"
+
+    def test_bridge_works_in_exact_mode(self):
+        excel_data, sqlite_data = self._build_inputs(
+            excel_rows={
+                "PMID": ["111"],
+                "protein_change": ["A121fsX"],
+                "carriers": [1],
+                "affected": [1],
+                "unaffected": [0],
+                "phenotype": ["LQT2"],
+            },
+            sqlite_rows={
+                "pmid": ["111"],
+                # codon 121 -> cdna 361-363
+                "variant": ["c.362delA"],
+                "protein_notation": [None],
+                "cdna_notation": ["c.362delA"],
+                "carriers_total": [1],
+                "affected_count": [1],
+                "unaffected_count": [0],
+                "uncertain_count": [0],
+            },
+        )
+
+        results = compare_data(excel_data, sqlite_data, "exact", 0.85)
+        matched = [r for r in results if r.match_type == "exact_cdna_bridge"]
+        assert len(matched) == 1
+
+    def test_bridge_rejects_wrong_codon(self):
+        # Gold codon 281; cDNA position 100 → codon 34. Must not bridge.
+        excel_data, sqlite_data = self._build_inputs(
+            excel_rows={
+                "PMID": ["111"],
+                "protein_change": ["R281fsX"],
+                "carriers": [1],
+                "affected": [1],
+                "unaffected": [0],
+                "phenotype": ["LQT2"],
+            },
+            sqlite_rows={
+                "pmid": ["111"],
+                "variant": ["c.100dupG"],
+                "protein_notation": [None],
+                "cdna_notation": ["c.100dupG"],
+                "carriers_total": [1],
+                "affected_count": [1],
+                "unaffected_count": [0],
+                "uncertain_count": [0],
+            },
+        )
+
+        results = compare_data(excel_data, sqlite_data, "fuzzy", 0.80)
+        bridged = [r for r in results if r.match_type.endswith("cdna_bridge")]
+        assert len(bridged) == 0
+        # R281fsX should be marked missing-in-sqlite
+        missing = [r for r in results if r.missing_in_sqlite]
+        assert any(r.excel_variant_norm == "R281fsX" for r in missing)
+
+    def test_bridge_skips_non_indel_cdna(self):
+        # Gold is an indel; SQLite cDNA is a substitution (c.XXXG>A). Bridge
+        # is for indel<->indel only — substitutions cause missense/nonsense,
+        # not frameshifts.
+        excel_data, sqlite_data = self._build_inputs(
+            excel_rows={
+                "PMID": ["111"],
+                "protein_change": ["R281fsX"],
+                "carriers": [1],
+                "affected": [1],
+                "unaffected": [0],
+                "phenotype": ["LQT2"],
+            },
+            sqlite_rows={
+                "pmid": ["111"],
+                "variant": ["c.842G>A"],
+                "protein_notation": [None],
+                "cdna_notation": ["c.842G>A"],
+                "carriers_total": [1],
+                "affected_count": [1],
+                "unaffected_count": [0],
+                "uncertain_count": [0],
+            },
+        )
+
+        results = compare_data(excel_data, sqlite_data, "fuzzy", 0.80)
+        bridged = [r for r in results if r.match_type.endswith("cdna_bridge")]
+        assert len(bridged) == 0
+
+    def test_bridge_does_not_fire_for_missense_gold(self):
+        # Gold A561V (missense) must not be bridged to any cDNA — only indel
+        # canonical forms (fsX, Del, Ins, dup) can use the bridge.
+        excel_data, sqlite_data = self._build_inputs(
+            excel_rows={
+                "PMID": ["111"],
+                "protein_change": ["A561V"],
+                "carriers": [1],
+                "affected": [1],
+                "unaffected": [0],
+                "phenotype": ["LQT2"],
+            },
+            sqlite_rows={
+                "pmid": ["111"],
+                "variant": ["c.1682delC"],
+                "protein_notation": [None],
+                "cdna_notation": ["c.1682delC"],
+                "carriers_total": [1],
+                "affected_count": [1],
+                "unaffected_count": [0],
+                "uncertain_count": [0],
+            },
+        )
+
+        results = compare_data(excel_data, sqlite_data, "fuzzy", 0.80)
+        bridged = [r for r in results if r.match_type.endswith("cdna_bridge")]
+        assert len(bridged) == 0
 
 
 if __name__ == "__main__":

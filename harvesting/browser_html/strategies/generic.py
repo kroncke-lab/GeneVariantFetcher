@@ -23,7 +23,9 @@ class GenericStrategy(PublisherStrategy):
     def fetch(self, page: Any, ctx: FetchContext) -> FetchResult:
         result = FetchResult(publisher=self.NAME)
 
-        target = f"https://doi.org/{ctx.doi}" if ctx.doi else None
+        target = (
+            f"https://doi.org/{self.encode_doi_for_path(ctx.doi)}" if ctx.doi else None
+        )
         if not target:
             result.error = "no doi"
             return result

@@ -33,6 +33,7 @@ import argparse
 import json
 import logging
 import os
+import re
 import shutil
 import sqlite3
 import zipfile
@@ -47,6 +48,23 @@ from utils.pmid_utils import extract_gene_from_filename, extract_pmid_from_filen
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
 
+PROTEIN_NOTATION_RE = re.compile(
+    r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
+    r"\d{1,4}"
+    # Optional second residue for HGVS range notations like p.Asp2_Arg135del
+    # or p.Lys100_Glu105delinsX. Without this, valid multi-residue dels/ins
+    # are silently dropped at migration.
+    r"(?:_(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])\d{1,4})?"
+    r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X]|fs(?:X|\*)?\d*|del|dup|ins)",
+    re.IGNORECASE,
+)
+CDNA_NOTATION_RE = re.compile(
+    r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
+    r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
+    r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$",
+    re.IGNORECASE,
+)
+
 
 # =============================================================================
 # INPUT VALIDATION
@@ -57,6 +75,28 @@ class ValidationError(Exception):
     """Raised when input validation fails."""
 
     pass
+
+
+def sanitize_variant_notation(variant_data: Dict[str, Any]) -> bool:
+    """
+    Drop malformed protein/cDNA notation before SQLite insertion.
+
+    Returns True if the variant still has at least one usable notation. This is
+    a migration-time backstop for older extraction JSON files that may contain
+    table artifacts such as single alleles (A/C/G/T), p-values, or cohort sizes.
+    """
+    protein = (variant_data.get("protein_notation") or "").strip().replace(" ", "")
+    cdna = (variant_data.get("cdna_notation") or "").strip().replace(" ", "")
+    genomic = (variant_data.get("genomic_position") or "").strip()
+
+    if protein and not PROTEIN_NOTATION_RE.match(protein):
+        variant_data["protein_notation"] = None
+        protein = ""
+    if cdna and not CDNA_NOTATION_RE.match(cdna):
+        variant_data["cdna_notation"] = None
+        cdna = ""
+
+    return bool(protein or cdna or genomic)
 
 
 def validate_input_directory(data_dir: Path) -> None:
@@ -560,7 +600,7 @@ def upgrade_database_schema(conn: sqlite3.Connection) -> None:
             "Upgrading schema: adding source_file column to extraction_metadata"
         )
         cursor.execute("""
-            ALTER TABLE extraction_metadata 
+            ALTER TABLE extraction_metadata
             ADD COLUMN source_file TEXT
         """)
         conn.commit()
@@ -662,7 +702,7 @@ def insert_paper_metadata(
 
 def insert_variant_data(
     cursor: sqlite3.Cursor, pmid: str, variant_data: Dict[str, Any]
-) -> int:
+) -> Optional[int]:
     """
     Insert variant and all associated data.
 
@@ -672,8 +712,30 @@ def insert_variant_data(
         variant_data: Variant data dictionary
 
     Returns:
-        variant_id
+        variant_id, or None if the variant had no usable notation
     """
+    original_notation = {
+        "protein_notation": variant_data.get("protein_notation"),
+        "cdna_notation": variant_data.get("cdna_notation"),
+        "genomic_position": variant_data.get("genomic_position"),
+    }
+    if not sanitize_variant_notation(variant_data):
+        # Promote to WARNING so cohort-summary hallucinations are visible in
+        # run summaries — Tier 3 sometimes emits group-level entries with
+        # all-null notation (e.g., "34 patients with pore-region mutations").
+        # The prompt rejects these but model drift can still produce them.
+        patients = variant_data.get("patients") or {}
+        logger.warning(
+            "Dropping variant with no usable notation in PMID %s "
+            "(gene=%s, patients.count=%s, clinical_significance=%s): %s",
+            pmid,
+            variant_data.get("gene_symbol"),
+            patients.get("count"),
+            variant_data.get("clinical_significance"),
+            original_notation,
+        )
+        return None
+
     # Get or create variant
     variant_id = get_or_create_variant(cursor, variant_data)
 

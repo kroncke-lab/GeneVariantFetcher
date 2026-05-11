@@ -563,7 +563,10 @@ class ExpertExtractor(BaseLLMCaller):
             if cdna and cdna in existing_keys:
                 continue
 
-            # Add to existing variants (minimal record)
+            # Add to existing variants. Router-produced table variants already
+            # carry patient / penetrance fields, while regex-only hints are
+            # intentionally sparse. Preserve rich fields when present and fill
+            # only the missing schema defaults.
             new_variant = {
                 "gene_symbol": tv.get("gene_symbol"),
                 "cdna_notation": tv.get("cdna_notation"),
@@ -578,6 +581,14 @@ class ExpertExtractor(BaseLLMCaller):
                 "functional_data": {"summary": "", "assays": []},
                 "key_quotes": [],
             }
+            for key, value in tv.items():
+                if value is not None:
+                    new_variant[key] = value
+            new_variant.setdefault("patients", {})
+            new_variant.setdefault("penetrance_data", {})
+            new_variant.setdefault("individual_records", [])
+            new_variant.setdefault("functional_data", {"summary": "", "assays": []})
+            new_variant.setdefault("key_quotes", [])
             existing_variants.append(new_variant)
             added_count += 1
 
@@ -700,6 +711,18 @@ class ExpertExtractor(BaseLLMCaller):
         r"^-$",  # Dash placeholder
         r"^\?$",  # Question mark placeholder
     ]
+    PROTEIN_NOTATION_RE = re.compile(
+        r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
+        r"\d{1,4}"
+        r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X]|fs(?:X|\*)?\d*|del|dup|ins)",
+        re.IGNORECASE,
+    )
+    CDNA_NOTATION_RE = re.compile(
+        r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
+        r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
+        r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$",
+        re.IGNORECASE,
+    )
 
     def _filter_extraction_artifacts(
         self, extracted_data: dict, target_gene: str
@@ -738,8 +761,10 @@ class ExpertExtractor(BaseLLMCaller):
         original_count = len(variants)
         filtered_variants = []
         artifact_count = 0
+        malformed_count = 0
         position_invalid_count = 0
         artifact_examples = []
+        malformed_examples = []
         position_examples = []
 
         for v in variants:
@@ -761,6 +786,25 @@ class ExpertExtractor(BaseLLMCaller):
                 artifact_count += 1
                 continue
 
+            # Malformed notation guard. Protein entries need an amino-acid
+            # position; cDNA entries need HGVS-like c. notation. This catches
+            # table-parser artifacts such as A/T/G/C, p-values, allele
+            # frequencies, and header fragments before they reach SQLite.
+            protein_clean = protein.strip().replace(" ", "")
+            cdna_clean = cdna.strip().replace(" ", "")
+            malformed = False
+            if protein_clean and not self.PROTEIN_NOTATION_RE.match(protein_clean):
+                malformed = True
+                if len(malformed_examples) < 5:
+                    malformed_examples.append(protein)
+            if cdna_clean and not self.CDNA_NOTATION_RE.match(cdna_clean):
+                malformed = True
+                if len(malformed_examples) < 5:
+                    malformed_examples.append(cdna)
+            if malformed:
+                malformed_count += 1
+                continue
+
             # Check position validity (for protein variants)
             if protein and protein_length:
                 position = normalizer.extract_position(protein)
@@ -778,10 +822,13 @@ class ExpertExtractor(BaseLLMCaller):
             logger.info(
                 f"Filtered out {removed_count} artifacts: "
                 f"{artifact_count} artifact patterns, "
+                f"{malformed_count} malformed notations, "
                 f"{position_invalid_count} invalid positions"
             )
             if artifact_examples:
                 logger.debug(f"Artifact examples: {artifact_examples}")
+            if malformed_examples:
+                logger.debug(f"Malformed examples: {malformed_examples}")
             if position_examples:
                 logger.debug(f"Position invalid examples: {position_examples}")
 
@@ -792,6 +839,9 @@ class ExpertExtractor(BaseLLMCaller):
                 )
                 extracted_data["extraction_metadata"]["artifacts_filtered"] = (
                     artifact_count
+                )
+                extracted_data["extraction_metadata"]["malformed_filtered"] = (
+                    malformed_count
                 )
                 extracted_data["extraction_metadata"]["position_invalid_filtered"] = (
                     position_invalid_count
@@ -825,22 +875,18 @@ class ExpertExtractor(BaseLLMCaller):
         "aa change",
         "aachange",
         "protein change",
-        "aa",
         "mutation",
         "hgvs protein",
         "hgvs_protein",
         "amino acid change",
         "protein mutation",
         "missense",
-        "effect",
     }
     VARIANT_COUNT_HEADERS = {
         "patient",
         "patients",
         "no. of patients",
         "no. of patient",
-        "n",
-        "affected",
         "carriers",
         "probands",
         "families",
@@ -849,9 +895,125 @@ class ExpertExtractor(BaseLLMCaller):
         "cases",
         "individuals",
         "number",
-        "freq",
-        "frequency",
     }
+    GWAS_ASSOCIATION_HEADERS = {
+        "locus",
+        "snv",
+        "snp",
+        "rsid",
+        "rs id",
+        "chr",
+        "chromosome",
+        "bp",
+        "position",
+        "ea",
+        "effect allele",
+        "aa",
+        "alternate allele",
+        "eaf",
+        "maf",
+        "beta",
+        "se",
+        "p",
+        "p value",
+        "p-value",
+        "or",
+        "odds ratio",
+    }
+
+    PROTEIN_TABLE_VALUE_RE = re.compile(
+        r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
+        r"\d{1,4}"
+        r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X]|fs(?:X|\*)?\d*|del|dup|ins)",
+        re.IGNORECASE,
+    )
+    CDNA_TABLE_VALUE_RE = re.compile(
+        r"^c\.\d+(?:[+-]\d+)?[ACGT]>[ACGT]$"
+        r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
+        r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$",
+        re.IGNORECASE,
+    )
+
+    def _header_matches(self, header: str, candidates: set[str]) -> bool:
+        """Match table headers without broad substring hits like `n` in `Unnamed`."""
+        normalized = re.sub(r"[^a-z0-9.+/-]+", " ", header.lower()).strip()
+        compact = normalized.replace(" ", "")
+        tokens = set(normalized.split())
+
+        for candidate in candidates:
+            cand = candidate.lower()
+            cand_compact = re.sub(r"[^a-z0-9.+/-]+", "", cand)
+
+            # Very short headers are dangerous as substrings. Require exact
+            # token/cell matches so GWAS columns like AA/n do not become
+            # protein/count columns.
+            if len(cand_compact) <= 2:
+                if normalized == cand or compact == cand_compact or cand in tokens:
+                    return True
+                continue
+
+            if cand in normalized or cand_compact in compact:
+                return True
+
+        return False
+
+    def _looks_like_gwas_header(self, cells: list[str]) -> bool:
+        """Identify association/GWAS summary tables, not clinical carrier tables."""
+        normalized_cells = [
+            re.sub(r"[^a-z0-9.+/-]+", " ", c.lower()).strip() for c in cells
+        ]
+        marker_count = 0
+        for cell in normalized_cells:
+            compact = cell.replace(" ", "")
+            if any(
+                cell == marker or compact == marker.replace(" ", "")
+                for marker in self.GWAS_ASSOCIATION_HEADERS
+            ):
+                marker_count += 1
+
+        clinical_count = sum(
+            1
+            for cell in normalized_cells
+            if any(
+                term in cell
+                for term in (
+                    "patient",
+                    "carrier",
+                    "affected",
+                    "unaffected",
+                    "proband",
+                    "case",
+                    "family",
+                )
+            )
+        )
+        return marker_count >= 4 and clinical_count == 0
+
+    def _clean_table_cell(self, value: Optional[str]) -> Optional[str]:
+        if value is None:
+            return None
+        cleaned = value.strip().replace(" ", "")
+        if not cleaned or cleaned.lower() in {"nan", "na", "n/a", "none", "-", "."}:
+            return None
+        return cleaned
+
+    def _valid_table_protein(self, value: Optional[str]) -> Optional[str]:
+        cleaned = self._clean_table_cell(value)
+        if not cleaned:
+            return None
+        if self.PROTEIN_TABLE_VALUE_RE.match(cleaned):
+            return cleaned
+        return None
+
+    def _valid_table_cdna(self, value: Optional[str]) -> Optional[str]:
+        cleaned = self._clean_table_cell(value)
+        if not cleaned:
+            return None
+        if not cleaned.lower().startswith("c."):
+            cleaned = "c." + cleaned
+        if self.CDNA_TABLE_VALUE_RE.match(cleaned):
+            return cleaned
+        return None
 
     def _is_variant_table_header(self, line: str) -> bool:
         """
@@ -860,11 +1022,19 @@ class ExpertExtractor(BaseLLMCaller):
         Requires at least one cDNA/protein-like header AND one count-like header,
         OR two different variant notation headers (cDNA + protein).
         """
-        line_lower = line.lower()
+        parts = [p.strip() for p in line.split("|") if p.strip()]
+        if self._looks_like_gwas_header(parts):
+            return False
 
-        has_cdna_header = any(h in line_lower for h in self.VARIANT_CDNA_HEADERS)
-        has_protein_header = any(h in line_lower for h in self.VARIANT_PROTEIN_HEADERS)
-        has_count_header = any(h in line_lower for h in self.VARIANT_COUNT_HEADERS)
+        has_cdna_header = any(
+            self._header_matches(part, self.VARIANT_CDNA_HEADERS) for part in parts
+        )
+        has_protein_header = any(
+            self._header_matches(part, self.VARIANT_PROTEIN_HEADERS) for part in parts
+        )
+        has_count_header = any(
+            self._header_matches(part, self.VARIANT_COUNT_HEADERS) for part in parts
+        )
 
         # Accept: (cDNA OR protein) AND count
         # OR: cDNA AND protein (variant mapping table)
@@ -900,16 +1070,21 @@ class ExpertExtractor(BaseLLMCaller):
                 # Detect header row using broadened patterns
                 if self._is_variant_table_header(line):
                     parts = [p.strip() for p in line.split("|") if p.strip()]
+                    if self._looks_like_gwas_header(parts):
+                        table_started = False
+                        header_mapping = {}
+                        header_idx = {}
+                        continue
                     for idx, name in enumerate(parts):
                         name_lower = name.lower().strip()
                         header_idx[name_lower] = idx
 
                         # Map to standard keys for retrieval
-                        if any(h in name_lower for h in self.VARIANT_CDNA_HEADERS):
+                        if self._header_matches(name, self.VARIANT_CDNA_HEADERS):
                             header_mapping["cdna"] = idx
-                        if any(h in name_lower for h in self.VARIANT_PROTEIN_HEADERS):
+                        if self._header_matches(name, self.VARIANT_PROTEIN_HEADERS):
                             header_mapping["protein"] = idx
-                        if any(h in name_lower for h in self.VARIANT_COUNT_HEADERS):
+                        if self._header_matches(name, self.VARIANT_COUNT_HEADERS):
                             header_mapping["count"] = idx
 
                     table_started = True
@@ -945,12 +1120,14 @@ class ExpertExtractor(BaseLLMCaller):
             protein = get_col("protein")
             patient_count_raw = get_col("count")
 
+            # Validate actual cell values. Header cues alone are not enough:
+            # GWAS tables use AA=alternate allele and n=participants, which
+            # previously produced fake variants like A/G/T/C with huge counts.
+            cdna = self._valid_table_cdna(cdna)
+            protein = self._valid_table_protein(protein)
+
             if not cdna and not protein:
                 continue
-
-            # Clean cdna/protein formatting
-            cdna = cdna.replace(" ", "") if cdna else None
-            protein = protein.replace(" ", "") if protein else None
 
             # Parse patient count
             patient_count = None
@@ -1506,10 +1683,20 @@ class ExpertExtractor(BaseLLMCaller):
         # vs sending 60k chars of full text. Falls through to full-text Tier 3
         # below if the router finds no usable tables OR the router LLM fails.
         settings = get_settings()
+        router_variants: List[dict] = []
         if settings.enable_table_router and paper.gene_symbol and scanner_text:
             router_outcome = self._try_table_router(paper, scanner_text)
             if router_outcome is not None:
-                return router_outcome
+                routed_data = router_outcome.extracted_data or {}
+                router_variants = routed_data.get("variants", []) or []
+                if len(router_variants) >= DETERMINISTIC_PARSER_MIN_VARIANTS:
+                    return router_outcome
+                logger.info(
+                    "PMID %s - Router parsed only %d variants; continuing with "
+                    "full-text extraction and using router output as merge hints",
+                    paper.pmid,
+                    len(router_variants),
+                )
 
         truncated_text = self._truncate_text_for_prompt(
             full_text, gene_symbol=paper.gene_symbol
@@ -1520,14 +1707,13 @@ class ExpertExtractor(BaseLLMCaller):
         pre_extracted_variants = self._extract_variants_from_tables(
             scanner_text, paper.gene_symbol
         )
-        table_hints = self._format_table_hints(pre_extracted_variants)
-        if pre_extracted_variants:
+        table_hint_variants = router_variants + pre_extracted_variants
+        table_hints = self._format_table_hints(table_hint_variants)
+        if table_hint_variants:
             logger.info(
-                f"PMID {paper.pmid} - Pre-extracted {len(pre_extracted_variants)} variants from tables as LLM hints"
+                f"PMID {paper.pmid} - Pre-extracted {len(table_hint_variants)} variants from tables as LLM hints"
             )
-            print(
-                f"Pre-extracted {len(pre_extracted_variants)} variant hints from tables"
-            )
+            print(f"Pre-extracted {len(table_hint_variants)} variant hints from tables")
 
         # Run comprehensive variant scanner on ORIGINAL full text (catches narrative mentions + tables)
         # Uses scanner_text to bypass condensation and see all content
@@ -1603,9 +1789,9 @@ class ExpertExtractor(BaseLLMCaller):
 
             # Merge pre-extracted table variants to catch any the LLM missed
             # (uses the already-extracted variants from before the LLM call)
-            if pre_extracted_variants:
+            if table_hint_variants:
                 extracted_data = self._merge_table_variants(
-                    extracted_data, pre_extracted_variants
+                    extracted_data, table_hint_variants
                 )
 
             # NEW: Merge scanner-found variants (catches narrative mentions the LLM missed)
@@ -1664,6 +1850,7 @@ class ExpertExtractor(BaseLLMCaller):
             )
 
         best_successful_result: Optional[ExtractionResult] = None
+        best_successful_count = -1
         prepared_full_text = self._prepare_full_text(paper)
         # Keep original full text for scanner (bypasses condensation)
         scanner_full_text = paper.full_text if paper.full_text else prepared_full_text
@@ -1720,14 +1907,14 @@ class ExpertExtractor(BaseLLMCaller):
                     return best_successful_result
                 return result
 
-            num_variants = result.extracted_data.get("extraction_metadata", {}).get(
-                "total_variants_found", 0
-            )
+            extracted_data = result.extracted_data or {}
+            variants = extracted_data.get("variants", [])
+            num_variants = len(variants) if isinstance(variants, list) else 0
+            if num_variants > best_successful_count:
+                best_successful_result = result
+                best_successful_count = num_variants
             threshold = adaptive_threshold
             if num_variants < threshold and idx + 1 < len(self.models):
-                # Store this successful result as a fallback in case next model fails
-                # Always update to the most recent successful result
-                best_successful_result = result
                 next_model = self.models[idx + 1]
                 logger.info(
                     f"PMID {paper.pmid} - Found {num_variants} variants with {model} "
@@ -1735,6 +1922,13 @@ class ExpertExtractor(BaseLLMCaller):
                 )
                 continue
 
+            if best_successful_result is not result:
+                logger.info(
+                    f"PMID {paper.pmid} - Keeping prior extraction from "
+                    f"{best_successful_result.model_used} with {best_successful_count} variants; "
+                    f"{model} found {num_variants}."
+                )
+                return best_successful_result
             return result
 
         # If we looped through all models and have a successful result, return it

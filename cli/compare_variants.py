@@ -1071,6 +1071,25 @@ def compute_similarity(s1: str, s2: str) -> float:
         return difflib.SequenceMatcher(None, s1, s2).ratio()
 
 
+def _positional_digits(variant: str) -> Optional[Tuple[str, ...]]:
+    """
+    Extract positional digit tokens from a variant for cross-position guards.
+
+    Uses the canonical form when available (e.g. p.Ala561Val -> A561V -> ("561",)).
+    Returns None if the variant has no positional digits to compare against —
+    which means the guard cannot rule the candidate out and the caller should
+    rely on similarity alone.
+    """
+    if not variant:
+        return None
+    canonical = to_canonical_form(variant)
+    source = canonical if canonical else normalize_variant(variant)
+    if not source:
+        return None
+    digits = tuple(re.findall(r"\d+", source))
+    return digits if digits else None
+
+
 def find_best_match(
     query_variant: str, candidates: List[str], threshold: float = 0.85
 ) -> Tuple[Optional[str], float, str]:
@@ -1084,6 +1103,12 @@ def find_best_match(
 
     Returns:
         Tuple of (best_match, score, match_type)
+
+    Fuzzy matches whose canonical positional digits disagree with the query
+    are rejected — Levenshtein on canonical strings happily calls G572S/G628S
+    an 81.8% match because position digits carry no semantic weight to the
+    distance metric. The guard is skipped when either side has no extractable
+    position (e.g. IVS notation).
     """
     query_norm = normalize_variant(query_variant)
     query_forms = get_variant_forms(query_variant)
@@ -1097,11 +1122,17 @@ def find_best_match(
             return (candidate, 1.0, "exact")
 
     # Fuzzy matching
+    query_positions = _positional_digits(query_variant)
     best_match = None
     best_score = 0.0
 
     for candidate in candidates:
-        candidate_norm = normalize_variant(candidate)
+        # Positional-digit guard: skip candidates at a different position.
+        # If either side lacks positions, fall through and let similarity decide.
+        if query_positions is not None:
+            cand_positions = _positional_digits(candidate)
+            if cand_positions is not None and cand_positions != query_positions:
+                continue
 
         # Compare all forms
         for q_form in query_forms:
@@ -1343,6 +1374,95 @@ def aggregate_sqlite_data(df: pd.DataFrame) -> Dict[Tuple[str, str], Dict[str, A
     return aggregated
 
 
+_INDEL_CANONICAL_RE = re.compile(r"^[A-Z]\d+(?:fsX|Del|Ins|dup)$", re.IGNORECASE)
+# Match indel tokens in cDNA notation. "dup", "del", "ins", and "fs" may be
+# followed immediately by a base letter (e.g. c.842dupG, c.362delA), so word
+# boundaries on the right side are wrong here — keep only the left boundary.
+_CDNA_INDEL_TOKEN_RE = re.compile(r"(?<![A-Za-z])(?:dup|del|ins|fs)", re.IGNORECASE)
+
+
+def _is_indel_canonical(canonical: Optional[str]) -> bool:
+    """Return True if a canonical form represents a protein indel/frameshift."""
+    if not canonical:
+        return False
+    return bool(_INDEL_CANONICAL_RE.match(canonical))
+
+
+def _cdna_implied_codon(cdna: Optional[str]) -> Optional[int]:
+    """
+    Map a cDNA position to its implied protein codon (1-indexed, ceil division).
+
+    Returns the codon of the first cDNA position cited. Returns None if the
+    string has no parseable cDNA position or is not an indel-type cDNA.
+    """
+    if not cdna:
+        return None
+    if not _CDNA_INDEL_TOKEN_RE.search(cdna):
+        return None
+    m = re.search(r"c\.?\s*(\d+)", cdna)
+    if not m:
+        m = re.search(r"(\d+)", cdna)
+    if not m:
+        return None
+    try:
+        cdna_pos = int(m.group(1))
+    except ValueError:
+        return None
+    if cdna_pos <= 0:
+        return None
+    return (cdna_pos + 2) // 3
+
+
+def _protein_codon_from_canonical(canonical: Optional[str]) -> Optional[int]:
+    """Extract the protein codon position from a canonical form like R281fsX."""
+    if not canonical:
+        return None
+    m = re.match(r"^[A-Z](\d+)", canonical)
+    if not m:
+        return None
+    try:
+        return int(m.group(1))
+    except ValueError:
+        return None
+
+
+def _find_cdna_protein_bridge(
+    excel_entry: Dict[str, Any],
+    available: List[Tuple[Tuple[str, str], Dict[str, Any]]],
+) -> Optional[Tuple[Tuple[str, str], Dict[str, Any]]]:
+    """
+    Find a SQLite candidate whose cDNA indel notation implies the same protein
+    codon as the gold protein indel.
+
+    Gold protein notation like R281fsX maps to codon 281; an LLM-extracted
+    cDNA dup/del/ins at base 841-843 maps to the same codon. The matcher
+    otherwise sees only the raw cDNA string and misses the equivalence.
+
+    Returns the matching (sqlite_key, sqlite_entry) or None.
+    """
+    excel_canonical = to_canonical_form(excel_entry.get("variant_raw", ""))
+    if not _is_indel_canonical(excel_canonical):
+        return None
+    target_codon = _protein_codon_from_canonical(excel_canonical)
+    if target_codon is None:
+        return None
+
+    for sqlite_key, entry in available:
+        cdna = entry.get("cdna_notation")
+        if not cdna or not isinstance(cdna, str):
+            continue
+        implied = _cdna_implied_codon(cdna)
+        if implied is None:
+            continue
+        # Exact codon match. A frameshift caused by a single-base indel at
+        # codon N starts at codon N; tolerate ±0 by default to keep precision
+        # high — the diagnosis only reports recoverable matches at the right
+        # codon.
+        if implied == target_codon:
+            return (sqlite_key, entry)
+    return None
+
+
 def compare_data(
     excel_data: Dict[Tuple[str, str], Dict[str, Any]],
     sqlite_data: Dict[Tuple[str, str], Dict[str, Any]],
@@ -1350,137 +1470,117 @@ def compare_data(
     fuzzy_threshold: float,
 ) -> List[ComparisonRow]:
     """
-    Compare Excel and SQLite data.
+    Compare Excel and SQLite data with greedy 1-to-1 assignment.
+
+    Two-pass matching ensures each SQLite variant is claimed by at most one
+    Excel row: pass 1 takes direct canonical-key matches (highest confidence);
+    pass 2 handles form-intersection, fuzzy, and cDNA->protein bridge matches
+    against the *remaining* SQLite candidates.
 
     Args:
-        excel_data: Aggregated Excel data
-        sqlite_data: Aggregated SQLite data
+        excel_data: Aggregated Excel data, keyed by (pmid, canonical_variant)
+        sqlite_data: Aggregated SQLite data, keyed by (pmid, canonical_variant)
         match_mode: 'exact' or 'fuzzy'
         fuzzy_threshold: Threshold for fuzzy matching
 
     Returns:
         List of ComparisonRow objects
     """
-    results = []
-    matched_sqlite_keys = set()
+    results: List[ComparisonRow] = []
+    consumed_sqlite_keys: Set[Tuple[str, str]] = set()
+    matched_excel_keys: Set[Tuple[str, str]] = set()
 
-    # Group SQLite variants by PMID for matching
-    # Include both protein and cDNA notations as candidates
-    sqlite_by_pmid: Dict[str, List[Tuple[str, str]]] = {}
-    sqlite_cdna_by_pmid: Dict[
-        str, Dict[str, str]
-    ] = {}  # Maps cDNA -> variant_norm for reverse lookup
-    for (pmid, variant_norm), data in sqlite_data.items():
-        if pmid not in sqlite_by_pmid:
-            sqlite_by_pmid[pmid] = []
-            sqlite_cdna_by_pmid[pmid] = {}
-        sqlite_by_pmid[pmid].append((variant_norm, data["variant_raw"]))
-        # Also index by cDNA notation if available
-        cdna = data.get("cdna_notation")
-        if cdna and pd.notna(cdna) and cdna.strip():
-            sqlite_cdna_by_pmid[pmid][normalize_variant(cdna)] = variant_norm
+    # Index SQLite entries by PMID for per-PMID candidate lookup
+    sqlite_by_pmid: Dict[str, List[Tuple[Tuple[str, str], Dict[str, Any]]]] = {}
+    for sqlite_key, entry in sqlite_data.items():
+        sqlite_by_pmid.setdefault(sqlite_key[0], []).append((sqlite_key, entry))
 
-    # Process Excel entries
-    for (excel_pmid, excel_variant_norm), excel_entry in excel_data.items():
-        # Get SQLite candidates for this PMID
-        sqlite_candidates = sqlite_by_pmid.get(excel_pmid, [])
-        candidate_variants = [raw for (norm, raw) in sqlite_candidates]
+    def _available_for(pmid: str) -> List[Tuple[Tuple[str, str], Dict[str, Any]]]:
+        return [
+            (sqlite_key, entry)
+            for (sqlite_key, entry) in sqlite_by_pmid.get(pmid, [])
+            if sqlite_key not in consumed_sqlite_keys
+        ]
 
-        # Try to match
-        if match_mode == "exact":
-            # Exact match only
-            match_key = (excel_pmid, excel_variant_norm)
-            if match_key in sqlite_data:
-                sqlite_entry = sqlite_data[match_key]
-                matched_sqlite_keys.add(match_key)
-
-                row = create_comparison_row(excel_entry, sqlite_entry, "exact", 1.0)
-            else:
-                # Try cDNA matching for exact mode
-                cdna_map = sqlite_cdna_by_pmid.get(excel_pmid, {})
-                cdna_match_norm = cdna_map.get(excel_variant_norm)
-                if cdna_match_norm:
-                    match_key = (excel_pmid, cdna_match_norm)
-                    if match_key in sqlite_data:
-                        sqlite_entry = sqlite_data[match_key]
-                        matched_sqlite_keys.add(match_key)
-                        row = create_comparison_row(
-                            excel_entry, sqlite_entry, "exact_cdna", 1.0
-                        )
-                    else:
-                        row = create_comparison_row(excel_entry, None, "none", None)
-                        row.missing_in_sqlite = True
-                else:
-                    row = create_comparison_row(excel_entry, None, "none", None)
-                    row.missing_in_sqlite = True
-        else:
-            # Fuzzy matching - first try protein notation
-            best_match, score, match_type = find_best_match(
-                excel_entry["variant_raw"], candidate_variants, fuzzy_threshold
+    # Pass 1: direct canonical-key exact matches.
+    # Both sides aggregate by canonical form (see aggregate_*_data), so an
+    # identical key on both sides is the strongest possible match.
+    for excel_key, excel_entry in excel_data.items():
+        if excel_key in sqlite_data and excel_key not in consumed_sqlite_keys:
+            sqlite_entry = sqlite_data[excel_key]
+            consumed_sqlite_keys.add(excel_key)
+            matched_excel_keys.add(excel_key)
+            results.append(
+                create_comparison_row(excel_entry, sqlite_entry, "exact", 1.0)
             )
 
-            # If protein matching failed or scored low, also try cDNA matching
-            if not best_match or score < fuzzy_threshold:
-                cdna_map = sqlite_cdna_by_pmid.get(excel_pmid, {})
-                cdna_candidates = list(cdna_map.keys())
-                if cdna_candidates:
-                    cdna_match, cdna_score, cdna_match_type = find_best_match(
-                        excel_entry["variant_raw"], cdna_candidates, fuzzy_threshold
-                    )
-                    # Use cDNA match if it's better than protein match
-                    if cdna_match and (not best_match or cdna_score > score):
-                        # Get the protein variant_norm from the cDNA mapping
-                        protein_norm = cdna_map.get(cdna_match)
-                        if protein_norm:
-                            match_key = (excel_pmid, protein_norm)
-                            if match_key in sqlite_data:
-                                sqlite_entry = sqlite_data[match_key]
-                                matched_sqlite_keys.add(match_key)
-                                # Mark as cDNA match
-                                row = create_comparison_row(
-                                    excel_entry,
-                                    sqlite_entry,
-                                    f"{cdna_match_type}_cdna",
-                                    cdna_score,
-                                )
-                                results.append(row)
-                                continue
+    # Pass 2: remaining excel items — form-intersection, fuzzy, or cDNA bridge
+    for excel_key, excel_entry in excel_data.items():
+        if excel_key in matched_excel_keys:
+            continue
+        excel_pmid, _ = excel_key
+        available = _available_for(excel_pmid)
 
-            if best_match:
-                # Find the sqlite entry for this match
-                best_norm = normalize_variant(best_match)
-                match_key = (excel_pmid, best_norm)
+        row: Optional[ComparisonRow] = None
 
-                # Try exact key first, then search
-                if match_key in sqlite_data:
-                    sqlite_entry = sqlite_data[match_key]
-                else:
-                    # Search for matching variant in this PMID
-                    sqlite_entry = None
-                    for (pmid, norm), entry in sqlite_data.items():
-                        if pmid == excel_pmid and entry["variant_raw"] == best_match:
-                            sqlite_entry = entry
-                            match_key = (pmid, norm)
-                            break
-
-                if sqlite_entry:
-                    matched_sqlite_keys.add(match_key)
+        if match_mode == "exact":
+            # Try form-intersection (e.g. 1-letter vs 3-letter notation that
+            # the canonicalizer couldn't reduce) against remaining candidates.
+            excel_forms = get_variant_forms(excel_entry["variant_raw"])
+            for sqlite_key, entry in available:
+                if excel_forms & get_variant_forms(entry["variant_raw"]):
+                    consumed_sqlite_keys.add(sqlite_key)
+                    matched_excel_keys.add(excel_key)
+                    row = create_comparison_row(excel_entry, entry, "exact", 1.0)
+                    break
+            if row is None:
+                bridge = _find_cdna_protein_bridge(excel_entry, available)
+                if bridge:
+                    sqlite_key, entry = bridge
+                    consumed_sqlite_keys.add(sqlite_key)
+                    matched_excel_keys.add(excel_key)
                     row = create_comparison_row(
-                        excel_entry, sqlite_entry, match_type, score
+                        excel_entry, entry, "exact_cdna_bridge", 1.0
                     )
-                else:
-                    row = create_comparison_row(excel_entry, None, "none", None)
-                    row.missing_in_sqlite = True
-            else:
-                row = create_comparison_row(excel_entry, None, "none", None)
-                row.missing_in_sqlite = True
+        else:
+            # Fuzzy mode: find_best_match handles exact-form-intersection
+            # plus position-guarded fuzzy similarity, against the remaining
+            # candidate pool only.
+            candidate_raws = [entry["variant_raw"] for (_, entry) in available]
+            best_match, score, match_type = find_best_match(
+                excel_entry["variant_raw"], candidate_raws, fuzzy_threshold
+            )
+            if best_match:
+                for sqlite_key, entry in available:
+                    if entry["variant_raw"] == best_match:
+                        consumed_sqlite_keys.add(sqlite_key)
+                        matched_excel_keys.add(excel_key)
+                        row = create_comparison_row(
+                            excel_entry, entry, match_type, score
+                        )
+                        break
+            if row is None:
+                bridge = _find_cdna_protein_bridge(excel_entry, available)
+                if bridge:
+                    sqlite_key, entry = bridge
+                    consumed_sqlite_keys.add(sqlite_key)
+                    matched_excel_keys.add(excel_key)
+                    row = create_comparison_row(
+                        excel_entry, entry, "fuzzy_cdna_bridge", 1.0
+                    )
+
+        if row is None:
+            row = create_comparison_row(excel_entry, None, "none", None)
+            row.missing_in_sqlite = True
 
         results.append(row)
 
-    # Add SQLite entries not matched
+    # Add SQLite entries not consumed by any Excel row
     for key, sqlite_entry in sqlite_data.items():
-        if key not in matched_sqlite_keys:
-            row = ComparisonRow(
+        if key in consumed_sqlite_keys:
+            continue
+        results.append(
+            ComparisonRow(
                 pmid=sqlite_entry["pmid"],
                 excel_variant_raw="",
                 excel_variant_norm="",
@@ -1499,7 +1599,7 @@ def compare_data(
                 unaffected_diff=None,
                 missing_in_excel=True,
             )
-            results.append(row)
+        )
 
     logger.info(f"Comparison complete: {len(results)} total rows")
     return results

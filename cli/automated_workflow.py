@@ -35,7 +35,7 @@ def automated_variant_extraction_workflow(
     email: str,
     output_dir: str,
     max_pmids: int = 1500,
-    max_papers_to_download: int = 50,
+    max_papers_to_download: int | None = None,
     tier_threshold: int = 1,
     use_clinical_triage: bool = False,
     auto_synonyms: bool = True,
@@ -518,6 +518,168 @@ def automated_variant_extraction_workflow(
         papers_from_abstract_only=abstract_extraction_count,
     )
     run_manifest.update_output_locations(extractions_dir=str(extraction_dir))
+
+    # =========================================================================
+    # STEP 3.5: Source-Completeness Report & Zero-Variant QA
+    # =========================================================================
+    logger.info("\n🔎 STEP 3.5: Generating source-completeness report...")
+
+    # --- Build completeness metrics ---
+    completeness = {
+        "total_pmids_discovered": workflow_stats.get("pmids_discovered", 0),
+        "pmids_filtered_out": workflow_stats.get("pmids_filtered_out", 0),
+        "pmids_passed_filters": workflow_stats.get("pmids_passed_filters", 0),
+        "papers_with_fulltext": len(downloaded_pmids),
+        "papers_abstract_only": len(abstract_only_pmids),
+        "abstract_only_pmids": abstract_only_pmids[:50],  # first 50 for reference
+    }
+
+    # Count stub/empty files (FULL_CONTEXT < 500 bytes)
+    stub_pmids = []
+    if harvest_dir and Path(harvest_dir).exists():
+        for fc_file in Path(harvest_dir).glob("*_FULL_CONTEXT.md"):
+            if fc_file.stat().st_size < 500:
+                pmid_stub = fc_file.name.replace("_FULL_CONTEXT.md", "")
+                stub_pmids.append(pmid_stub)
+    completeness["stub_files_count"] = len(stub_pmids)
+    completeness["stub_pmids"] = stub_pmids
+
+    # Count supplement coverage
+    supp_dirs = list(Path(harvest_dir).glob("*_supplements")) if harvest_dir else []
+    completeness["papers_with_supplements"] = len(supp_dirs)
+
+    # Identify zero-variant papers (passed Tier 2 but yielded 0 variants)
+    zero_variant_pmids = []
+    single_carrier_pmids = []
+    for ext in extractions:
+        if not ext.extracted_data:
+            continue
+        variants = ext.extracted_data.get("variants", [])
+        pmid = getattr(ext, "pmid", None) or ext.extracted_data.get(
+            "extraction_metadata", {}
+        ).get("pmid", "unknown")
+        if len(variants) == 0:
+            zero_variant_pmids.append(str(pmid))
+        else:
+            # Flag papers where every variant has carrier_count <= 1
+            # (likely missed cohort/screening table data)
+            all_single = all(
+                (v.get("carriers_total") or v.get("total_carriers") or 1) <= 1
+                for v in variants
+            )
+            if all_single and len(variants) >= 1:
+                single_carrier_pmids.append(str(pmid))
+
+    completeness["zero_variant_papers"] = len(zero_variant_pmids)
+    completeness["zero_variant_pmids"] = zero_variant_pmids
+    completeness["single_carrier_papers"] = len(single_carrier_pmids)
+    completeness["single_carrier_pmids"] = single_carrier_pmids[:30]
+
+    # Source coverage ratio
+    if completeness["pmids_passed_filters"] > 0:
+        completeness["fulltext_coverage_pct"] = round(
+            completeness["papers_with_fulltext"]
+            / completeness["pmids_passed_filters"]
+            * 100,
+            1,
+        )
+    else:
+        completeness["fulltext_coverage_pct"] = 0.0
+
+    # Save completeness report
+    completeness_file = output_path / "source_completeness.json"
+    with open(completeness_file, "w") as f:
+        json.dump(completeness, f, indent=2)
+
+    logger.info(f"✓ Source completeness report: {completeness_file}")
+    logger.info(f"  Full-text coverage: {completeness['fulltext_coverage_pct']}%")
+    logger.info(f"  Abstract-only: {completeness['papers_abstract_only']}")
+    logger.info(f"  Stub/empty files: {completeness['stub_files_count']}")
+    logger.info(f"  Zero-variant papers: {completeness['zero_variant_papers']}")
+    logger.info(
+        f"  Single-carrier-only papers: {completeness['single_carrier_papers']}"
+    )
+
+    if zero_variant_pmids:
+        logger.warning(
+            f"⚠ {len(zero_variant_pmids)} papers passed relevance filters but "
+            f"yielded ZERO variants — potential extraction failures"
+        )
+
+    run_manifest.update_output_locations(source_completeness=str(completeness_file))
+
+    # --- QA re-extraction for zero-variant papers ---
+    # Papers that passed Tier 2 relevance but yielded 0 variants are
+    # suspicious. Re-extract them with the QA model (typically Opus) to
+    # check if variants were missed.
+    qa_model = os.environ.get("GVF_QA_MODEL", "").strip()
+    qa_max = int(os.environ.get("GVF_QA_MAX_PAPERS", "20"))
+
+    if zero_variant_pmids and qa_model:
+        qa_targets = zero_variant_pmids[:qa_max]
+        logger.info(
+            f"\n🔍 STEP 3.6: QA re-extraction for {len(qa_targets)} zero-variant "
+            f"papers with {qa_model}..."
+        )
+
+        from pipeline.extraction import ExpertExtractor
+        from utils.models import Paper as PaperModel
+
+        qa_extractor = ExpertExtractor(
+            models=[qa_model],
+            fulltext_dir=str(harvest_dir),
+            tier_threshold=0,  # accept any result
+        )
+
+        qa_recovered = 0
+        for zv_pmid in qa_targets:
+            # Load the paper text
+            fc_path = Path(harvest_dir) / f"{zv_pmid}_FULL_CONTEXT.md"
+            if not fc_path.exists():
+                continue
+            text = fc_path.read_text(encoding="utf-8", errors="replace")
+            if len(text) < 200:
+                continue
+
+            paper_obj = PaperModel(
+                pmid=zv_pmid,
+                full_text=text,
+                gene_symbol=gene_symbol,
+            )
+
+            try:
+                qa_result = qa_extractor.extract(paper_obj, gene_symbol)
+                if qa_result and qa_result.extracted_data:
+                    qa_variants = qa_result.extracted_data.get("variants", [])
+                    if qa_variants:
+                        qa_recovered += 1
+                        # Save QA extraction alongside the original
+                        qa_output = extraction_dir / f"{zv_pmid}_qa_extraction.json"
+                        with open(qa_output, "w") as qf:
+                            json.dump(qa_result.extracted_data, qf, indent=2)
+                        # Also overwrite the original extraction file
+                        orig_output = extraction_dir / f"{zv_pmid}_extraction.json"
+                        with open(orig_output, "w") as of:
+                            json.dump(qa_result.extracted_data, of, indent=2)
+                        logger.info(
+                            f"  ✓ QA recovered {len(qa_variants)} variants from PMID {zv_pmid}"
+                        )
+            except Exception as e:
+                logger.warning(f"  QA extraction failed for {zv_pmid}: {e}")
+
+        completeness["qa_reextracted"] = len(qa_targets)
+        completeness["qa_recovered"] = qa_recovered
+        # Re-save completeness with QA data
+        with open(completeness_file, "w") as f:
+            json.dump(completeness, f, indent=2)
+        logger.info(
+            f"✓ QA re-extraction: recovered variants from {qa_recovered}/{len(qa_targets)} papers"
+        )
+    elif zero_variant_pmids:
+        logger.info(
+            "ℹ Set GVF_QA_MODEL=anthropic/claude-opus-4-7 to re-extract "
+            f"{len(zero_variant_pmids)} zero-variant papers with a stronger model"
+        )
 
     # =========================================================================
     # STEP 4: Aggregate Penetrance Data

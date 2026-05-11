@@ -8,6 +8,7 @@ consistent error handling, retry logic, and JSON response parsing.
 import json
 import logging
 import os
+import threading
 import time
 from typing import Any, Dict, List, Optional
 
@@ -141,27 +142,39 @@ class RateLimiter:
         self.requests_per_minute = requests_per_minute
         self.min_interval = 60.0 / requests_per_minute  # seconds between requests
         self.last_request_time = 0.0
+        self._lock = threading.Lock()
 
     def wait_if_needed(self):
         """Sleep if necessary to respect rate limit."""
-        current_time = time.time()
-        time_since_last = current_time - self.last_request_time
-        if time_since_last < self.min_interval:
-            sleep_time = self.min_interval - time_since_last
-            logger.debug(f"Rate limiting: sleeping {sleep_time:.2f}s")
-            time.sleep(sleep_time)
-        self.last_request_time = time.time()
+        with self._lock:
+            current_time = time.time()
+            time_since_last = current_time - self.last_request_time
+            if time_since_last < self.min_interval:
+                sleep_time = self.min_interval - time_since_last
+                logger.debug(f"Rate limiting: sleeping {sleep_time:.2f}s")
+                time.sleep(sleep_time)
+            self.last_request_time = time.time()
 
 
-# Global rate limiter. Resolution order:
+# Rate limiter resolution order:
 #   1. LLM_REQUESTS_PER_MINUTE env var (explicit override)
-#   2. Provider-aware default from Settings (200 for Anthropic, 50 for Azure)
-#   3. Hard fallback of 50 if Settings can't be loaded yet (e.g. import-time
+#   2. Model-provider default from Settings (200 for Anthropic, 50 for Azure)
+#   3. MODEL_PROVIDER-aware default from Settings when no model is available
+#   4. Hard fallback of 50 if Settings can't be loaded yet (e.g. import-time
 #      circular issues during early bootstrap or tests that stub the env).
 # The previous flat 50 RPM was the default for OpenAI tiers and bottlenecked
 # the pipeline once Anthropic became the default provider — its tier-4 RPM
 # budget is several hundred RPM for Sonnet/Haiku.
-def _resolve_rpm_limit() -> int:
+def _model_provider_hint(model: Optional[str]) -> Optional[str]:
+    m = (model or "").strip().lower()
+    if m.startswith("anthropic/") or "claude" in m:
+        return "anthropic"
+    if m.startswith("azure_ai/"):
+        return "azure"
+    return None
+
+
+def _resolve_rpm_limit(model: Optional[str] = None) -> int:
     raw = os.getenv("LLM_REQUESTS_PER_MINUTE", "").strip()
     if raw:
         try:
@@ -179,13 +192,35 @@ def _resolve_rpm_limit() -> int:
     try:
         from config.settings import get_settings
 
-        return get_settings().get_requests_per_minute()
+        settings = get_settings()
+        provider = _model_provider_hint(model)
+        if provider == "anthropic":
+            return settings.anthropic_rpm
+        if provider == "azure":
+            return settings.azure_rpm
+        return settings.get_requests_per_minute()
     except Exception as exc:  # pragma: no cover — defensive fallback
         logger.debug("Could not load Settings for RPM (%s); using 50", exc)
         return 50
 
 
-_rate_limiter = RateLimiter(requests_per_minute=_resolve_rpm_limit())
+_rate_limiters: Dict[int, RateLimiter] = {}
+_rate_limiters_lock = threading.Lock()
+
+
+def _get_rate_limiter(model: Optional[str] = None) -> RateLimiter:
+    rpm = _resolve_rpm_limit(model)
+    with _rate_limiters_lock:
+        limiter = _rate_limiters.get(rpm)
+        if limiter is None:
+            limiter = RateLimiter(requests_per_minute=rpm)
+            _rate_limiters[rpm] = limiter
+        return limiter
+
+
+def wait_for_llm_rate_limit(model: Optional[str] = None) -> None:
+    """Wait according to the throttle appropriate for the specific model."""
+    _get_rate_limiter(model).wait_if_needed()
 
 
 class BaseLLMCaller:
@@ -260,7 +295,7 @@ class BaseLLMCaller:
         repair_max_tokens = min(self.max_tokens, 16000)
 
         try:
-            _rate_limiter.wait_if_needed()
+            wait_for_llm_rate_limit(self.model)
             response = completion(
                 model=self.model,
                 messages=[
@@ -316,7 +351,7 @@ class BaseLLMCaller:
         if response_format is None:
             response_format = {"type": "json_object"}
 
-        _rate_limiter.wait_if_needed()
+        wait_for_llm_rate_limit(self.model)
         response = completion(
             model=self.model,
             messages=messages,
@@ -394,7 +429,7 @@ class BaseLLMCaller:
 
         try:
             # Make the LLM API call
-            _rate_limiter.wait_if_needed()
+            wait_for_llm_rate_limit(self.model)
             response = completion(
                 model=self.model,
                 messages=messages,
@@ -458,7 +493,7 @@ class BaseLLMCaller:
         logger.debug(f"Calling LLM for text response, prompt length={len(prompt)}")
 
         try:
-            _rate_limiter.wait_if_needed()
+            wait_for_llm_rate_limit(self.model)
             response = completion(
                 model=self.model,
                 messages=messages,
@@ -510,12 +545,32 @@ def parse_llm_json_response(response_text: str) -> Dict[str, Any]:
 
     cleaned_text = cleaned_text.strip()
 
+    # Try strict parse first — fast path when the model returns clean JSON.
     try:
         return json.loads(cleaned_text)
-    except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse JSON: {e}")
+    except json.JSONDecodeError as strict_err:
+        # Common failure mode: model emits valid JSON followed by reasoning
+        # prose ("Extra data: line 6 column 1"). Claude Haiku 4.5 does this
+        # frequently. raw_decode parses the first valid JSON value and
+        # returns the index where it stopped, so we can ignore trailing prose.
+        decoder = json.JSONDecoder()
+        candidate_starts = [
+            idx for idx, char in enumerate(cleaned_text) if char in "{["
+        ]
+        for start in candidate_starts:
+            try:
+                obj, _end = decoder.raw_decode(cleaned_text[start:])
+            except json.JSONDecodeError:
+                continue
+            if isinstance(obj, dict):
+                return obj
+            # Tolerate top-level lists by wrapping; callers expect dicts.
+            if isinstance(obj, list):
+                return {"items": obj}
+
+        logger.error(f"Failed to parse JSON: {strict_err}")
         logger.error(f"Response text (first 500 chars): {cleaned_text[:500]}")
-        raise
+        raise strict_err
 
 
 def create_structured_prompt(

@@ -89,14 +89,16 @@ class KeywordFilter:
             FilterResult with decision and reason.
         """
         if not paper.abstract:
-            logger.warning(f"PMID {paper.pmid} has no abstract, failing keyword filter")
+            logger.warning(
+                f"PMID {paper.pmid} has no abstract, passing through (fail-open)"
+            )
             return FilterResult(
-                decision=FilterDecision.FAIL,
+                decision=FilterDecision.PASS,
                 tier=FilterTier.TIER_1_KEYWORD,
-                reason="No abstract available",
+                reason="No abstract available — fail-open to Tier 2",
                 pmid=paper.pmid,
-                confidence=1.0,
-                metadata={"matched_keywords": []},
+                confidence=0.0,
+                metadata={"matched_keywords": [], "fail_open": True},
             )
 
         # Find all matching keywords in one pass (10x faster than individual searches)
@@ -137,15 +139,15 @@ class InternFilter(BaseLLMCaller):
     Classifies papers as "Original Clinical Data" vs "Review/Irrelevant".
     """
 
-    CLASSIFICATION_PROMPT = """You are a medical research classifier. Your job is to decide whether downstream variant curation could plausibly extract one or more genetic variants from this paper.
+    CLASSIFICATION_PROMPT = """You are a medical research classifier. Your job is to decide whether downstream variant curation could plausibly extract one or more genetic variants for {gene_clause} from this paper.
 
 Remember: you only see the abstract. The full text and tables are available downstream and almost always contain the specific HGVS identifiers when the abstract describes a clinical genotyped cohort, family study, or case report. Lean toward PASS when the abstract makes it likely the body has variants.
 
 Classify the paper as ONE of:
 1. PASS - Likely contains extractable variants. This includes:
-   - Case reports, case series, family/pedigree studies, or clinical cohorts of genotyped patients (e.g. "we describe a family with an HERG mutation", "26 carriers of a HERG mutation", "patients with KCNH2 mutations")
-   - Studies that screen patients with the target disease (LQTS, BrS, AF, SQTS, channelopathy, sudden death, etc.) for variants — even if the abstract only names the gene/disease and not the specific HGVS
-   - Functional / in-vitro / iPSC / heterologous-expression studies that name one or more specific variants (p.Arg176Trp / G604S / c.2398+1G>C) OR reference patient-derived variants
+   - Case reports, case series, family/pedigree studies, or clinical cohorts of genotyped patients (e.g. "we describe a family with a mutation in the target gene", "26 carriers of a target-gene mutation", "patients with variants in the target gene")
+   - Studies that screen patients with the target disease or phenotype for variants — even if the abstract only names the gene/disease/phenotype and not the specific HGVS
+   - Functional / in-vitro / iPSC / heterologous-expression studies that name one or more specific variants (p.Arg123Trp / R123W / c.1234A>G) OR reference patient-derived variants
    - Pharmacogenomics or drug-induced phenotype papers in genotyped patients
    - NGS panel / diagnostic-yield papers that report results from a patient cohort
 2. FAIL only if at least one of:
@@ -160,9 +162,9 @@ Title: {title}
 Abstract: {abstract}
 
 Decision rules:
-- "A mutation in HERG/KCNH2", "an LQT2 mutation", "carriers of a KCNH2 mutation" — PASS. The variant identifier is in the body.
-- "Patients with congenital LQTS were genotyped" — PASS. Specific variants will be in tables.
-- Family/pedigree, twins, postpartum, pregnancy, perinatal, fetal, infantile, pediatric, neonatal LQTS/SQTS/BrS — PASS when a genotyped patient is mentioned.
+- "A mutation in the target gene", "carriers of a target-gene mutation", "target-gene positive patients" — PASS. The variant identifier is often in the body or supplement.
+- "Patients with the target disease/phenotype were genotyped" — PASS. Specific variants may be in tables.
+- Family/pedigree, twins, pregnancy/perinatal, pediatric/neonatal, adult-onset, tumor, population, diagnostic-yield, or cohort studies — PASS when genotyped patients are mentioned and the topic is relevant to the target gene/disease.
 - "In vitro" or "functional study" alone is NOT a reason to fail — check whether named variants or patient-derived variants appear.
 - When uncertain, prefer PASS. Cost of false-negative (lost gold variants) >> cost of false-positive (wasted Tier-3 call).
 {disease_clause}
@@ -251,11 +253,16 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
                 f"PMID {paper.pmid} missing title/abstract for Intern filter"
             )
             return FilterResult(
-                decision=FilterDecision.FAIL,
+                decision=FilterDecision.PASS,
                 tier=FilterTier.TIER_2_INTERN,
-                reason="Missing title or abstract for LLM classification",
+                reason="Missing title or abstract for LLM classification; fail-open for recall",
                 pmid=paper.pmid,
-                confidence=1.0,
+                confidence=0.0,
+                metadata={
+                    "model": self.model,
+                    "fail_open": True,
+                    "missing_title_or_abstract": True,
+                },
             )
 
         # Construct prompt — disease clause is empty unless --disease was set
@@ -265,6 +272,7 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
             else ""
         )
         prompt = self.CLASSIFICATION_PROMPT.format(
+            gene_clause=paper.gene_symbol or "the target gene",
             title=paper.title,
             abstract=paper.abstract[:2000],  # Truncate very long abstracts
             disease_clause=disease_clause,
@@ -370,7 +378,7 @@ class ClinicalDataTriageFilter(BaseLLMCaller):
     Output: JSON with "KEEP" or "DROP" decision, reason, and confidence score.
     """
 
-    TRIAGE_PROMPT = """You are a Triage Assistant for genetic variant curation. Your job is to decide whether the paper IDENTIFIES SPECIFIC NAMED VARIANTS in {gene} (or its protein) that downstream curation can extract.
+    TRIAGE_PROMPT = """You are a Triage Assistant for genetic variant curation. Your job is to decide whether the paper could plausibly contain extractable patient, family, cohort, functional, or table/supplement variant data for {gene} (or its protein).
 
 Input: Abstract/Introduction.
 
@@ -378,20 +386,21 @@ Rules:
 1. REJECT if:
    - Pure review or meta-analysis with NO new variant findings
    - Animal-only study (mouse, rat, zebrafish) with NO specific human variant identified
-   - Variant interpretation guidelines / methodology paper with NO new cases or named variants
+   - Variant interpretation guidelines / methodology paper with NO new cases, cohorts, functional variant assays, or patient findings
    - Purely computational/bioinformatics study with NO specific variants reported
    - Off-topic (unrelated to {gene})
 
 2. ACCEPT if:
-   - Case report (even single patient) with a named variant
-   - Case series, clinical cohort, screening study with variants
-   - Family study with clinical data and variants
-   - Clinical trial with patient-level variant data
-   - **Functional/in-vitro study (cell lines, iPSC, heterologous expression, electrophysiology) that names one or more SPECIFIC variants** (e.g. p.Arg176Trp, G604S, c.2398+1G>C). These are still primary sources for variant data.
+   - Case report, even a single patient, with a named variant or clear genotyping
+   - Case series, clinical cohort, screening study, diagnostic-yield study, or panel-sequencing study likely to report variants in full text/tables
+   - Family study with clinical data and variant/genotype data
+   - Clinical trial or pharmacogenomic study with patient-level variant data
+   - **Functional/in-vitro study (cell lines, iPSC, heterologous expression, electrophysiology) that names one or more SPECIFIC variants** (e.g. p.Arg123Trp, R123W, c.1234A>G). These are still primary sources for variant data.
    - Re-analysis of public sequencing data (gnomAD, ESP, exome cohorts) reporting specific variants
 {disease_clause}
-Key Question: Does the abstract name one or more SPECIFIC variants that a downstream curator could extract?
-"In vitro" or "functional study" alone is NOT a reason to drop — only drop if NO specific variants are identified.
+Key Question: Should downstream full-text/supplement extraction spend effort on this paper?
+Do NOT require the abstract itself to name specific variants. Cohort and screening abstracts often hide variant lists in full-text tables or supplements.
+"In vitro" or "functional study" alone is NOT a reason to drop — only drop if no patient-derived or specific human variant data is likely.
 
 Title: {title}
 
@@ -404,7 +413,7 @@ Output format: JSON only.
   "confidence": 0.0-1.0
 }}
 
-Respond ONLY with valid JSON. Be conservative - when in doubt about borderline cases, use confidence < 0.5."""
+Respond ONLY with valid JSON. Be recall-biased: when in doubt, KEEP with low confidence rather than DROP."""
 
     DISEASE_PROMPT_ADDENDUM = (
         "\n3. DISEASE-AWARE PRIORITIZATION (this run is filtering for {disease}):\n"
@@ -476,10 +485,11 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
                 f"Missing title or abstract for triage{f' (PMID: {pmid})' if pmid else ''}"
             )
             return {
-                "decision": "DROP",
-                "reason": "Missing title or abstract",
-                "confidence": 1.0,
+                "decision": "KEEP",
+                "reason": "Missing title or abstract; fail-open for recall",
+                "confidence": 0.0,
                 "pmid": pmid,
+                "fail_open": True,
             }
 
         # Construct prompt — disease clause is empty unless --disease was set
@@ -506,8 +516,8 @@ Respond ONLY with valid JSON. Be conservative - when in doubt about borderline c
             # Validate and normalize decision
             decision = result_data.get("decision", "DROP").upper()
             if decision not in ["KEEP", "DROP"]:
-                logger.warning(f"Invalid decision '{decision}', defaulting to DROP")
-                decision = "DROP"
+                logger.warning(f"Invalid decision '{decision}', fail-opening to KEEP")
+                decision = "KEEP"
 
             reason = result_data.get("reason", "No reason provided")
             confidence = float(result_data.get("confidence", 0.5))
