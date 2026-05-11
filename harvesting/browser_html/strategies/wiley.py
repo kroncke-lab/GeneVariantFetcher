@@ -1,8 +1,8 @@
 """Wiley Online Library — DOI prefixes 10.1002, 10.1111.
 
 Some Wiley titles (notably Human Mutation under 10.1002) are open access
-with no embargo; others gate by subscription. We try and let the content
-validator decide.
+with no embargo; others gate by subscription. Wiley fronts content with
+Cloudflare, so we run the same CF wait/reload loop the AHA strategy uses.
 """
 
 from __future__ import annotations
@@ -10,6 +10,12 @@ from __future__ import annotations
 from typing import Any
 
 from ..base import FetchContext, FetchResult, PublisherStrategy
+from ..dom_extract import (
+    extract_body_markdown,
+    looks_like_cloudflare_challenge,
+    looks_like_paywall_stub,
+    pick_better_markdown,
+)
 from . import register
 
 
@@ -24,6 +30,7 @@ class WileyStrategy(PublisherStrategy):
         ".article-section__full",
         "section.article__body",
         "article",
+        "main",
     )
 
     def fetch(self, page: Any, ctx: FetchContext) -> FetchResult:
@@ -42,6 +49,31 @@ class WileyStrategy(PublisherStrategy):
             result.error = f"navigation failed: {e}"
             return result
 
+        # Cloudflare interstitial loop (Wiley uses CF aggressively).
+        for cycle in range(4):
+            try:
+                html_probe = page.content()
+            except Exception:
+                html_probe = ""
+            if not looks_like_cloudflare_challenge(html_probe):
+                break
+            page.wait_for_timeout(5000)
+            try:
+                page.wait_for_selector(
+                    ".article-section__full, section.article__body, article",
+                    timeout=8000,
+                )
+            except Exception:
+                if cycle in (1, 2):
+                    try:
+                        page.goto(
+                            target,
+                            wait_until="domcontentloaded",
+                            timeout=ctx.timeout_s * 1000,
+                        )
+                    except Exception:
+                        pass
+
         self.accept_cookies(page)
 
         for sel in self.BODY_SELECTORS:
@@ -58,11 +90,19 @@ class WileyStrategy(PublisherStrategy):
         result.main_html = html
         result.final_url = final_url
 
-        markdown = self.extract_via_scraper(
+        # CF + paywall signals (retry sweep keys on "cloudflare").
+        if looks_like_cloudflare_challenge(html):
+            result.notes.append("cloudflare challenge unresolved")
+            return result
+        if looks_like_paywall_stub(html):
+            result.notes.append("paywall stub detected")
+
+        # Dual extraction: legacy publisher-aware path + DOM walker.
+        primary_md = self.extract_via_scraper(
             html, final_url, ctx, selectors=list(self.BODY_SELECTORS)
         )
-        if markdown:
-            result.main_markdown = markdown
+        dom_md = extract_body_markdown(html, self.BODY_SELECTORS)
+        result.main_markdown = pick_better_markdown(primary_md, dom_md)
 
         try:
             result.supp_files = ctx.scraper.scrape_wiley_supplements(html, final_url)

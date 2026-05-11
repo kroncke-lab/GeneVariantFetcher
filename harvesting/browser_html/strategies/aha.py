@@ -1,8 +1,14 @@
 """AHA Journals (Circulation, JAHA, Stroke, etc.) — DOI prefix 10.1161.
 
-AHA HTML is freely readable 12 months after publication. Body text lives in
-``.hlFld-Fulltext``; supplements are linked under ``/doi/suppl/10.1161/...``
-and not exposed via any AHA API.
+AHA HTML is freely readable 12 months after publication. The body has lived
+in ``#bodymatter`` since AHA's 2024 redesign — the historical
+``.hlFld-Fulltext`` wrapper now contains only the eLetters block (~8 chars).
+Supplements are linked under ``/doi/suppl/10.1161/...`` and not exposed via
+any AHA API.
+
+AHA fronts content with Cloudflare, which fires a JS interstitial when it
+sees rapid same-session requests. This strategy polls for the body
+container across multiple cycles and reloads when the challenge sticks.
 """
 
 from __future__ import annotations
@@ -14,6 +20,12 @@ from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 
 from ..base import FetchContext, FetchResult, PublisherStrategy
+from ..dom_extract import (
+    extract_body_markdown,
+    looks_like_cloudflare_challenge,
+    looks_like_paywall_stub,
+    pick_better_markdown,
+)
 from . import register
 
 logger = logging.getLogger(__name__)
@@ -26,7 +38,20 @@ class AHAStrategy(PublisherStrategy):
     DOMAINS = ("ahajournals.org",)
     EMBARGO_MONTHS = 12
 
-    BODY_SELECTORS = (".hlFld-Fulltext", ".article__body", "article")
+    # Current AHA selector is ``#bodymatter``; the legacy wrappers are kept
+    # as fallbacks for older article variants. ``article`` / ``main`` are
+    # last-resort generic containers that the DOM walker can still mine.
+    BODY_SELECTORS = (
+        "#bodymatter",
+        ".article__body",
+        ".hlFld-Fulltext",
+        "article",
+        "main",
+    )
+
+    # Subset used as wait-for hints. We only need one of these to appear
+    # before we trust that the CF challenge cleared and the page has DOM.
+    WAIT_SELECTORS = ("#bodymatter", "article", ".article__body")
 
     def fetch(self, page: Any, ctx: FetchContext) -> FetchResult:
         result = FetchResult(publisher=self.NAME)
@@ -41,14 +66,51 @@ class AHAStrategy(PublisherStrategy):
             result.error = f"navigation failed: {e}"
             return result
 
+        # Cloudflare interstitial loop. CF's JS challenge clears itself by
+        # running JS, setting cookies, and reloading. We poll for the body
+        # container and reissue the navigation on cycles 1 and 2 — that
+        # covers the common case where CF expects a fresh GET after the JS
+        # challenge sets its clearance cookie.
+        for cycle in range(4):
+            try:
+                html_probe = page.content()
+            except Exception:
+                html_probe = ""
+            if not looks_like_cloudflare_challenge(html_probe):
+                break
+            page.wait_for_timeout(5000)
+            try:
+                page.wait_for_selector(
+                    "#bodymatter, article, .article__body", timeout=8000
+                )
+            except Exception:
+                if cycle in (1, 2):
+                    try:
+                        page.goto(
+                            target,
+                            wait_until="domcontentloaded",
+                            timeout=ctx.timeout_s * 1000,
+                        )
+                    except Exception:
+                        pass
+
         self.accept_cookies(page)
 
-        # Wait for any of the known body selectors. Don't fail if missing —
-        # some article variants render outside the standard wrapper and the
-        # generic extractor can still recover text.
-        for sel in self.BODY_SELECTORS:
+        # Wait for any of the body selectors. Don't fail if missing —
+        # the DOM extractor still has wider fallbacks below.
+        for sel in self.WAIT_SELECTORS:
             if self.wait_for_body(page, sel, timeout_ms=8000):
                 break
+
+        # AHA lazy-loads figures and section anchors. A short scroll
+        # triggers deferred renders before we snapshot HTML.
+        try:
+            for _ in range(2):
+                page.evaluate("window.scrollBy(0, document.body.scrollHeight)")
+                page.wait_for_timeout(500)
+            page.evaluate("window.scrollTo(0, 0)")
+        except Exception:
+            pass
 
         try:
             html = page.content()
@@ -60,11 +122,25 @@ class AHAStrategy(PublisherStrategy):
         result.main_html = html
         result.final_url = final_url
 
-        markdown = self.extract_via_scraper(
+        # Surface CF and paywall signals before extraction so the caller's
+        # retry sweep can route on the reason string (it looks for the
+        # literal substring "cloudflare").
+        if looks_like_cloudflare_challenge(html):
+            result.notes.append("cloudflare challenge unresolved")
+            return result
+        if looks_like_paywall_stub(html):
+            result.notes.append("paywall stub detected")
+            # Continue — the page may still carry an abstract we want to
+            # preserve for downstream debugging.
+
+        # Dual extraction: legacy publisher-aware path + DOM walker.
+        # ``pick_better_markdown`` prefers DOM when the legacy path's
+        # class-name targets have rotted (the AHA 2024 redesign case).
+        primary_md = self.extract_via_scraper(
             html, final_url, ctx, selectors=list(self.BODY_SELECTORS)
         )
-        if markdown:
-            result.main_markdown = markdown
+        dom_md = extract_body_markdown(html, self.BODY_SELECTORS)
+        result.main_markdown = pick_better_markdown(primary_md, dom_md)
 
         result.supp_files = self._scrape_aha_supplements(html, final_url)
 

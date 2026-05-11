@@ -185,6 +185,34 @@ def extract_body_markdown(
     return "\n".join(parts).strip()
 
 
+def pick_better_markdown(
+    primary: Optional[str],
+    dom: Optional[str],
+    threshold: float = 0.80,
+) -> Optional[str]:
+    """Choose between two markdown extractions of the same page.
+
+    Strategies typically have two extraction paths: the legacy
+    publisher-aware ``SupplementScraper.extract_fulltext`` chain (high
+    quality when its class-name targets match the current HTML, broken when
+    they don't), and the DOM-walker ``extract_body_markdown`` (selector-
+    agnostic, sometimes pulls duplicate citation lists or nav residue).
+
+    Picking the longer string indiscriminately is wrong — primary's chrome-
+    stripping is often better. But when primary returns substantially less
+    text than DOM, the legacy selectors have rotted and DOM is the only
+    path that recovered the article body. Default threshold: prefer DOM
+    when primary is under 80% of DOM's length.
+    """
+    if not primary:
+        return dom
+    if not dom:
+        return primary
+    if len(primary) < threshold * len(dom):
+        return dom
+    return primary
+
+
 def looks_like_cloudflare_challenge(html: str) -> bool:
     """Quick check whether the page is the CF JS-challenge interstitial."""
     if not html:
