@@ -48,12 +48,125 @@ from harvesting.browser_html import (  # noqa: E402
     load_chrome_cookies,
     validate_article_content,
 )
+from harvesting.browser_html.dom_extract import extract_body_markdown  # noqa: E402
 from harvesting.browser_html.strategies import (  # noqa: E402
     find_strategy,
     registered_names,
 )
 from harvesting.format_converters import FormatConverter  # noqa: E402
 from harvesting.supplement_scraper import SupplementScraper  # noqa: E402
+
+
+# Body selectors used by the PMC HTML fallback. PMC articles render the
+# body inside <article>, <main>, or a #mc/.tsec container depending on the
+# theme.
+_PMC_BODY_SELECTORS = (
+    "article",
+    "main",
+    "div.tsec",
+    "#mc",
+    "div#maincontent",
+    "div.article-page",
+    "body",
+)
+
+
+def europepmc_lookup_pmcid(pmid: str, session: requests.Session) -> Optional[str]:
+    """Return PMCID for a PMID if Europe PMC has one, else None.
+
+    Europe PMC's search API returns the PMCID directly when an article has
+    been deposited in PMC. NIH-funded papers usually do; subscription papers
+    usually don't.
+    """
+    url = (
+        "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
+        f"?query=EXT_ID:{pmid}%20AND%20SRC:MED&format=json&resultType=lite"
+    )
+    try:
+        r = session.get(url, timeout=20)
+        if r.status_code != 200:
+            return None
+        results = r.json().get("resultList", {}).get("result", [])
+        if not results:
+            return None
+        pmcid = results[0].get("pmcid")
+        if pmcid and not pmcid.startswith("PMC"):
+            pmcid = f"PMC{pmcid}"
+        return pmcid
+    except Exception:
+        return None
+
+
+def try_pmc_fallback(
+    pmid: str,
+    output_dir: Path,
+    session: requests.Session,
+) -> Optional[Dict]:
+    """Attempt to recover a stub via the PMC HTML deposit.
+
+    Many subscription papers (especially NIH-funded ones) have a PMC version
+    that's free to read after the embargo. We look up the PMCID via Europe
+    PMC, fetch the PMC HTML, and run our DOM extractor on it.
+
+    Returns a result row dict on success, or None if no PMC version exists
+    or the extraction failed quality gates. On success the row's ``path``
+    points at the rewritten FULL_CONTEXT.md.
+    """
+    pmcid = europepmc_lookup_pmcid(pmid, session)
+    if not pmcid:
+        return None
+
+    pmc_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/"
+    try:
+        r = session.get(
+            pmc_url,
+            timeout=30,
+            headers={
+                "User-Agent": (
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+                ),
+                "Accept": "text/html,application/xhtml+xml",
+            },
+        )
+    except Exception as e:
+        LOG.warning("PMC fallback fetch failed for PMID %s: %s", pmid, e)
+        return None
+    if not r.ok or len(r.content) < 5000:
+        return None
+
+    html = r.text
+    markdown = extract_body_markdown(html, _PMC_BODY_SELECTORS)
+    if not markdown:
+        return None
+
+    ok, reason = validate_article_content(markdown)
+    if not ok:
+        # PMC content didn't pass the gate either — could be an abstract-
+        # only PMC record. Don't overwrite the stub from Tier 3.5.
+        LOG.info("PMC fallback for %s extracted but failed gate: %s", pmid, reason)
+        return None
+
+    # Write a PMC FULL_CONTEXT.md and source marker.
+    pmid_dir = output_dir / pmid
+    pmid_dir.mkdir(parents=True, exist_ok=True)
+    (pmid_dir / "FULL_CONTEXT.md").write_text(markdown, encoding="utf-8")
+    (pmid_dir / "page.html").write_text(html, encoding="utf-8")
+    (pmid_dir / "source.txt").write_text(
+        f"Recovered via PMC fallback: {pmc_url}\n", encoding="utf-8"
+    )
+    return {
+        "pmid": pmid,
+        "strategy": "pmc_fallback",
+        "outcome": "success",
+        "reason": reason,
+        "chars": len(markdown),
+        "supp_files": 0,
+        "final_url": pmc_url,
+        "path": str(pmid_dir / "FULL_CONTEXT.md"),
+        "pmcid": pmcid,
+    }
+
 
 LOG = logging.getLogger("fetch_paywalled")
 
@@ -171,8 +284,14 @@ def fetch_one(
     pmid: str,
     doi: Optional[str],
     output_dir: Path,
+    pmc_session: Optional[requests.Session] = None,
 ) -> Dict:
-    """Run Tier 3.5 for a single PMID; return a result row."""
+    """Run Tier 3.5 for a single PMID; return a result row.
+
+    On stub/empty outcomes from Tier 3.5, attempt the PMC fallback (Europe
+    PMC PMCID lookup + PMC HTML fetch) so subscription papers with NIH PMC
+    deposits are recovered automatically.
+    """
     row: Dict = {
         "pmid": pmid,
         "doi": doi or "",
@@ -222,6 +341,25 @@ def fetch_one(
     else:
         row["outcome"] = "success"
         row["reason"] = reason
+
+    # PMC fallback. If Tier 3.5 left us with a stub or empty body, try the
+    # Europe PMC route — many NIH-funded subscription papers have a free
+    # PMC deposit. The fallback overwrites FULL_CONTEXT.md only when its
+    # extraction passes the quality gate, so a failed PMC attempt doesn't
+    # mask the Tier 3.5 stub for diagnostics.
+    if row["outcome"] in ("paywall_or_stub", "empty") and pmc_session is not None:
+        pmc_row = try_pmc_fallback(pmid, output_dir, pmc_session)
+        if pmc_row is not None:
+            print(
+                f"  PMC fallback succeeded: {pmc_row['pmcid']} -> {pmc_row['chars']} chars"
+            )
+            row["outcome"] = "success_via_pmc"
+            row["strategy"] = f"{row['strategy']}+pmc_fallback"
+            row["reason"] = f"PMC fallback ({pmc_row['pmcid']}): {pmc_row['reason']}"
+            row["chars"] = pmc_row["chars"]
+            row["final_url"] = pmc_row["final_url"]
+            row["path"] = pmc_row["path"]
+            row["pmcid"] = pmc_row["pmcid"]
 
     return row
 
@@ -394,7 +532,7 @@ def main() -> int:
         if wait_for > 0 and last_domain_at:
             print(f"  pacing: sleeping {wait_for:.1f}s before {dom}")
             _t.sleep(wait_for)
-        r = fetch_one(fetcher, pmid, doi_map[pmid], output_dir)
+        r = fetch_one(fetcher, pmid, doi_map[pmid], output_dir, pmc_session=session)
         last_domain_at[dom] = _t.time()
         return r
 
