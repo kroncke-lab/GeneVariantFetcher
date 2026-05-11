@@ -47,6 +47,9 @@ class BrowserHTMLFetcher:
         output_dir: Path,
         settings: Optional[Any] = None,
         validate_content_quality: Optional[Any] = None,
+        pool: Optional[Any] = None,
+        bypass_embargo: bool = False,
+        enabled_override: Optional[bool] = None,
     ):
         self.scraper = scraper
         self.converter = converter
@@ -56,7 +59,12 @@ class BrowserHTMLFetcher:
         self.settings = settings
         self._validate = validate_content_quality
 
-        self._enabled = bool(getattr(settings, "enable_browser_html_fallback", False))
+        if enabled_override is not None:
+            self._enabled = bool(enabled_override)
+        else:
+            self._enabled = bool(
+                getattr(settings, "enable_browser_html_fallback", False)
+            )
         self._allowlist = list(
             getattr(
                 settings,
@@ -76,8 +84,16 @@ class BrowserHTMLFetcher:
         self._min_embargo_override: Optional[int] = getattr(
             settings, "browser_html_min_embargo_months", None
         )
+        # Authenticated callers (logged-in publisher sessions) have access to
+        # subscription content regardless of public embargo policy. Skip the
+        # gate when the caller tells us to.
+        self._bypass_embargo = bool(bypass_embargo)
 
-        self._pool: Optional[BrowserPool] = None
+        # When the caller supplies a pre-built pool (e.g. an
+        # AuthenticatedBrowserPool already loaded with Chrome cookies),
+        # use it as-is and don't try to manage its lifecycle on close().
+        self._pool: Optional[Any] = pool
+        self._owns_pool: bool = pool is None
         self._embargo = EmbargoChecker()
         self._attempts_made = 0
         self.log_path = self.output_dir / "browser_html_log.csv"
@@ -108,21 +124,25 @@ class BrowserHTMLFetcher:
             self._log_row(pmid, doi, "", "skipped", "no strategy matched", 0, 0, 0)
             return None
 
-        # Embargo gate
-        embargo_months = self._effective_embargo_months(strategy)
-        eligible, embargo_reason = self._embargo.is_eligible(pub_date, embargo_months)
-        if not eligible:
-            self._log_row(
-                pmid,
-                doi,
-                strategy.NAME,
-                "skipped",
-                f"embargo: {embargo_reason}",
-                0,
-                0,
-                0,
+        # Embargo gate (skipped in authenticated mode — institutional access
+        # bypasses public embargo periods).
+        if not self._bypass_embargo:
+            embargo_months = self._effective_embargo_months(strategy)
+            eligible, embargo_reason = self._embargo.is_eligible(
+                pub_date, embargo_months
             )
-            return None
+            if not eligible:
+                self._log_row(
+                    pmid,
+                    doi,
+                    strategy.NAME,
+                    "skipped",
+                    f"embargo: {embargo_reason}",
+                    0,
+                    0,
+                    0,
+                )
+                return None
 
         if self._pool is None:
             self._pool = BrowserPool(
@@ -132,6 +152,7 @@ class BrowserHTMLFetcher:
                 profile_path=self._profile_path,
                 channel=self._channel,
             )
+            self._owns_pool = True
 
         ctx = FetchContext(
             pmid=pmid,
@@ -204,13 +225,17 @@ class BrowserHTMLFetcher:
         return result
 
     def close(self) -> None:
-        """Shut the browser down. Safe to call multiple times."""
-        if self._pool is not None:
+        """Shut the browser down. Safe to call multiple times.
+
+        Only closes pools the fetcher allocated itself — externally-supplied
+        pools are the caller's responsibility.
+        """
+        if self._pool is not None and self._owns_pool:
             try:
                 self._pool.close()
             except Exception:
                 pass
-            self._pool = None
+        self._pool = None
 
     # ------------------------------------------------------------------
     # Diagnostics

@@ -20,15 +20,29 @@ dedicated logged-in profile. Strategies are auto-discovered from the
 ``strategies/`` package — adding a new publisher is just dropping in a file.
 """
 
+from .authenticated_pool import AuthenticatedBrowserPool
 from .base import FetchContext, FetchResult, PublisherStrategy
+from .browser_pool import BrowserPool
+from .content_quality import validate_article_content
+from .cookie_loader import (
+    DEFAULT_PUBLISHER_DOMAINS,
+    cookie_domain_summary,
+    load_chrome_cookies,
+)
 from .embargo import EmbargoChecker, get_pub_date_from_pmid
 from .fetcher import BrowserHTMLFetcher
 
 __all__ = [
     "BrowserHTMLFetcher",
+    "BrowserPool",
+    "AuthenticatedBrowserPool",
     "PublisherStrategy",
     "FetchResult",
     "FetchContext",
     "EmbargoChecker",
     "get_pub_date_from_pmid",
+    "load_chrome_cookies",
+    "cookie_domain_summary",
+    "DEFAULT_PUBLISHER_DOMAINS",
+    "validate_article_content",
 ]
