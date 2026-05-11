@@ -1071,72 +1071,92 @@ def compute_similarity(s1: str, s2: str) -> float:
         return difflib.SequenceMatcher(None, s1, s2).ratio()
 
 
-def _positional_digits(variant: str) -> Optional[Tuple[str, ...]]:
+def _positional_digits(variant: str) -> Tuple[int, ...]:
     """
-    Extract positional digit tokens from a variant for cross-position guards.
+    Extract every run of digits from a variant string, as a tuple of ints.
 
-    Uses the canonical form when available (e.g. p.Ala561Val -> A561V -> ("561",)).
-    Returns None if the variant has no positional digits to compare against —
-    which means the guard cannot rule the candidate out and the caller should
-    rely on similarity alone.
+    Two variants whose digit tuples differ refer to different positions
+    (G572S = (572,) vs G628S = (628,)) and must never be fuzzy-matched.
+    Returns an empty tuple for variants with no extractable digits.
     """
-    if not variant:
-        return None
-    canonical = to_canonical_form(variant)
-    source = canonical if canonical else normalize_variant(variant)
-    if not source:
-        return None
-    digits = tuple(re.findall(r"\d+", source))
-    return digits if digits else None
+    return tuple(int(d) for d in re.findall(r"\d+", str(variant or "")))
+
+
+def _positions_compatible(a: str, b: str) -> bool:
+    """
+    True if the position-digit tuples of ``a`` and ``b`` overlap as subsets.
+
+    Used as a guard on fuzzy matches:
+
+    - Same-position variants: G572S = (572,), G572R = (572,) → compatible.
+    - Different-position variants: G572S = (572,), G628S = (628,) →
+      incompatible. (Levenshtein happily calls these 81.8% similar
+      because position digits carry no semantic weight to the distance
+      metric.)
+    - Frameshift with offset: p.Pro926AlafsTer14 = (926, 14) vs P926fsX
+      = (926,). The smaller set is a subset of the larger, so the guard
+      allows the match. This is the cross-notation case the bridge needs.
+    - Either side with no digits (IVS splice notation): return True and
+      defer to similarity scoring.
+    """
+    da, db = _positional_digits(a), _positional_digits(b)
+    if not da or not db:
+        return True
+    sa, sb = set(da), set(db)
+    if len(sa) <= len(sb):
+        return sa.issubset(sb)
+    return sb.issubset(sa)
 
 
 def find_best_match(
-    query_variant: str, candidates: List[str], threshold: float = 0.85
+    query_variant: str,
+    candidates: List[str],
+    threshold: float = 0.85,
+    consumed: Optional[Set[str]] = None,
 ) -> Tuple[Optional[str], float, str]:
     """
     Find the best matching variant from candidates.
 
     Args:
-        query_variant: Variant to match
-        candidates: List of candidate variants
-        threshold: Minimum similarity threshold
+        query_variant: Variant to match.
+        candidates: List of candidate variants (raw strings).
+        threshold: Minimum similarity threshold for fuzzy matches.
+        consumed: Optional set of candidate raw strings already claimed by
+            an earlier query in this PMID — those are skipped to enforce
+            1-to-1 assignment (prevents one sqlite variant matching
+            multiple gold rows).
 
     Returns:
-        Tuple of (best_match, score, match_type)
-
-    Fuzzy matches whose canonical positional digits disagree with the query
-    are rejected — Levenshtein on canonical strings happily calls G572S/G628S
-    an 81.8% match because position digits carry no semantic weight to the
-    distance metric. The guard is skipped when either side has no extractable
-    position (e.g. IVS notation).
+        Tuple of (best_match, score, match_type).
     """
-    query_norm = normalize_variant(query_variant)
+    consumed = consumed or set()
     query_forms = get_variant_forms(query_variant)
 
-    # First try exact match on any form
+    # First try exact match on any form.
     for candidate in candidates:
-        candidate_norm = normalize_variant(candidate)
+        if candidate in consumed:
+            continue
         candidate_forms = get_variant_forms(candidate)
-
-        if query_forms & candidate_forms:  # Intersection
+        if query_forms & candidate_forms:
             return (candidate, 1.0, "exact")
 
-    # Fuzzy matching
-    query_positions = _positional_digits(query_variant)
+    # Fuzzy matching with a positional-digit guard. Only consider candidates
+    # whose position digits overlap with the query — this prevents
+    # Levenshtein from declaring G572S ≈ G628S as 81.8% similar.
     best_match = None
     best_score = 0.0
 
     for candidate in candidates:
-        # Positional-digit guard: skip candidates at a different position.
-        # If either side lacks positions, fall through and let similarity decide.
-        if query_positions is not None:
-            cand_positions = _positional_digits(candidate)
-            if cand_positions is not None and cand_positions != query_positions:
-                continue
+        if candidate in consumed:
+            continue
+        if not _positions_compatible(query_variant, candidate):
+            continue
 
-        # Compare all forms
+        cand_forms = get_variant_forms(candidate)
         for q_form in query_forms:
-            for c_form in get_variant_forms(candidate):
+            for c_form in cand_forms:
+                if not _positions_compatible(q_form, c_form):
+                    continue
                 score = compute_similarity(q_form, c_form)
                 if score > best_score:
                     best_score = score
@@ -1146,6 +1166,69 @@ def find_best_match(
         return (best_match, best_score, "fuzzy")
 
     return (None, best_score, "none")
+
+
+def _cdna_indel_protein_positions(cdna: str) -> Optional[Tuple[int, int]]:
+    """
+    From a cDNA indel notation, compute the (start, end) protein-aa positions
+    in 1-based amino-acid coordinates via standard codon math (aa = (nt-1)//3 + 1).
+
+    Examples:
+        c.842dupG          → (281, 281)
+        c.1631_1632delAG   → (544, 544)
+        c.221_242del       → (74, 81)
+        c.547_553delGGCGG  → (183, 185)
+
+    Returns None for non-indel cDNA notations (e.g. ``c.1558-1G>C`` splice
+    sites) where there's no clean protein-position equivalent.
+    """
+    if not cdna or not isinstance(cdna, str):
+        return None
+    m = re.match(
+        r"^c\.(\d+)(?:[+\-]\d+)?(?:_(\d+)(?:[+\-]\d+)?)?\s*(del|dup|ins)",
+        cdna.strip(),
+        re.IGNORECASE,
+    )
+    if not m:
+        return None
+    start = int(m.group(1))
+    end = int(m.group(2)) if m.group(2) else start
+    aa_start = (start - 1) // 3 + 1
+    aa_end = (end - 1) // 3 + 1
+    return (aa_start, aa_end)
+
+
+def _protein_indel_position(variant: str) -> Optional[Tuple[str, int, str]]:
+    """
+    From a protein-level indel/frameshift/stop canonical form, return
+    ``(ref_aa, position, op)`` where ``op`` is one of: ``"fs"``, ``"del"``,
+    ``"ins"``, ``"X"``.
+
+    Examples:
+        R281fsX  → ('R', 281, 'fs')
+        T74fsX   → ('T', 74, 'fs')
+        V215X    → ('V', 215, 'X')
+        G628Del  → ('G', 628, 'del')
+
+    Returns None when the variant isn't a recognisable protein-level
+    indel/stop form.
+    """
+    if not variant:
+        return None
+    m = re.match(r"^([A-Z])(\d+)(fsX\d*|fs|Del|Ins|X)$", str(variant).strip())
+    if not m:
+        return None
+    aa, pos, op_raw = m.group(1), int(m.group(2)), m.group(3)
+    op = op_raw.lower()
+    if op.startswith("fs"):
+        op = "fs"
+    elif op == "del":
+        op = "del"
+    elif op == "ins":
+        op = "ins"
+    elif op == "x":
+        op = "X"
+    return (aa, pos, op)
 
 
 # =============================================================================
