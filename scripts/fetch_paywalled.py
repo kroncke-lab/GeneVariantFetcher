@@ -591,14 +591,14 @@ def main() -> int:
     for r in rows:
         p = r["strategy"] or "(none)"
         by_publisher.setdefault(p, {"success": 0, "fail": 0})
-        if r["outcome"] == "success":
+        if r["outcome"] in ("success", "success_via_pmc"):
             by_publisher[p]["success"] += 1
         else:
             by_publisher[p]["fail"] += 1
     for p, c in sorted(by_publisher.items()):
         print(f"  {p:14s}  success={c['success']}  fail={c['fail']}")
 
-    success = sum(1 for r in rows if r["outcome"] == "success")
+    success = sum(1 for r in rows if r["outcome"] in ("success", "success_via_pmc"))
     print(f"\nOverall: {success}/{len(rows)} PMIDs succeeded.")
 
     # Persist a CSV-ish JSON for downstream inspection.
