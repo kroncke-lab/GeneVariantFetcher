@@ -82,11 +82,11 @@ To add a new extraction pattern:
 ```python
 def normalize_variant(raw: str, gene: str = "KCNH2") -> str | None:
     """Normalize a variant string to canonical form.
-    
+
     Args:
         raw: Raw variant string (e.g., "p.A561V", "Ala561Val")
         gene: Gene symbol for context
-        
+
     Returns:
         Canonical form (e.g., "p.Ala561Val") or None if unparseable
     """

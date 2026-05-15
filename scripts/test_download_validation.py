@@ -282,7 +282,7 @@ Generated on: {results["test_timestamp"]}
 
 ## Summary
 This report summarizes the results of comprehensive validation testing
-of downloaded papers to ensure they are full-text PDFs rather than 
+of downloaded papers to ensure they are full-text PDFs rather than
 metadata stubs.
 
 {chr(10).join(summary)}

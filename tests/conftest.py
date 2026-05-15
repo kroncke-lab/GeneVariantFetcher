@@ -57,9 +57,13 @@ def pytest_configure(config):
 
 def pytest_collection_modifyitems(config, items):
     """Auto-skip tests that require network access unless explicitly selected."""
-    if config.getoption("-m", default=None) and "requires_network" in config.getoption("-m"):
+    if config.getoption("-m", default=None) and "requires_network" in config.getoption(
+        "-m"
+    ):
         return  # User explicitly selected network tests
-    skip_network = pytest.mark.skip(reason="requires network access (run with -m 'requires_network')")
+    skip_network = pytest.mark.skip(
+        reason="requires network access (run with -m 'requires_network')"
+    )
     for item in items:
         if "requires_network" in item.keywords:
             item.add_marker(skip_network)

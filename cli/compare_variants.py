@@ -254,7 +254,10 @@ def detect_columns(
             for norm_col, orig_col in normalized_cols.items():
                 for synonym in synonyms:
                     norm_syn = normalize_column_name(synonym)
-                    if norm_syn in norm_col or norm_col in norm_syn:
+                    # Only allow the synonym to be contained in a longer
+                    # column name. The reverse direction mis-maps affected as
+                    # unaffected, and short synonyms like "rs" match carriers.
+                    if len(norm_syn) >= 4 and norm_syn in norm_col:
                         detected[field] = orig_col
                         logger.info(f"Partial match column: {field} -> {orig_col}")
                         break
@@ -489,8 +492,7 @@ def extract_sqlite_data(
             else ""
         )
         ir_join = (
-            "LEFT JOIN ir_agg ir "
-            "ON ir.pmid = al.pmid AND ir.variant_id = al.variant_id"
+            "LEFT JOIN ir_agg ir ON ir.pmid = al.pmid AND ir.variant_id = al.variant_id"
             if has_ir
             else ""
         )
@@ -762,7 +764,7 @@ def to_canonical_form(variant: str) -> Optional[str]:
     v = str(variant).strip()
 
     # Strip p. prefix
-    if v.startswith("p."):
+    if v.lower().startswith("p."):
         v = v[2:]
 
     # --- Three-letter missense with trailing *: Ala429Pro* -> A429P ---
@@ -781,17 +783,32 @@ def to_canonical_form(variant: str) -> Optional[str]:
         if ref and alt:
             return f"{ref}{m.group(2)}{alt}"
 
-    # --- Three-letter frameshift: Ala121Leufs*12 -> A121fsX ---
-    m = re.match(r"^([A-Z][a-z]{2})(\d+)(?:[A-Z][a-z]{2})?fs[\*]?\d*$", v)
+    # --- Three-letter frameshift: Ala121Leufs*12, Pro926AlafsTer14 -> A121fsX ---
+    m = re.match(
+        r"^([A-Z][a-z]{2})(\d+)(?:[A-Z][a-z]{2})?"
+        r"fs(?:Ter\d*|[/+]\*?\d+|[\*X]?\d*)$",
+        v,
+    )
     if m:
         ref = AA_3_TO_1.get(m.group(1))
         if ref:
             return f"{ref}{m.group(2)}fsX"
 
-    # --- Single-letter frameshift: A282fs, A282fs*, A282fsX, A282fsX339 -> A282fsX ---
-    m = re.match(r"^([A-Z])(\d+)fs[\*X]?\d*$", v, re.IGNORECASE)
+    # --- Single-letter frameshift: A282fs, V131fs/185, K897fs+*49 -> A282fsX ---
+    m = re.match(
+        r"^([A-Z])(\d+)fs(?:[/+]\*?\d+|[\*X]?\d*)$",
+        v,
+        re.IGNORECASE,
+    )
     if m:
-        return f"{m.group(1)}{m.group(2)}fsX"
+        return f"{m.group(1).upper()}{m.group(2)}fsX"
+
+    # --- Malformed frameshift: Pro926AlaX14 -> P926fsX ---
+    m = re.match(r"^([A-Z][a-z]{2})(\d+)[A-Z][a-z]{2}X\d+$", v)
+    if m:
+        ref = AA_3_TO_1.get(m.group(1))
+        if ref:
+            return f"{ref}{m.group(2)}fsX"
 
     # --- Three-letter stop: Glu807Ter, Arg1014* -> E807X ---
     m = re.match(r"^([A-Z][a-z]{2})(\d+)(?:Ter|\*|Stop)$", v)
@@ -823,6 +840,11 @@ def to_canonical_form(variant: str) -> Optional[str]:
         ref = AA_3_TO_1.get(m.group(1))
         if ref:
             return f"{ref}{m.group(2)}dup"
+
+    # --- Single-letter dup: I82dup -> I82dup ---
+    m = re.match(r"^([A-Z])(\d+)(dup)$", v, re.IGNORECASE)
+    if m:
+        return f"{m.group(1).upper()}{m.group(2)}dup"
 
     # --- Three-letter ins: Gly189ins -> G189Ins ---
     m = re.match(r"^([A-Z][a-z]{2})(\d+)(ins)$", v, re.IGNORECASE)
@@ -1290,35 +1312,39 @@ def load_excel_data(
     column_mapping: Optional[Dict[str, str]],
 ) -> Tuple[pd.DataFrame, Dict[str, Any]]:
     """
-    Load and parse Excel data.
+    Load and parse curated gold-standard data.
 
     Returns:
         Tuple of (DataFrame, detected_columns)
     """
-    logger.info(f"Loading Excel file: {excel_path}")
+    logger.info(f"Loading gold-standard file: {excel_path}")
 
-    # Select engine based on file suffix so legacy .xls files are supported
-    engine = "xlrd" if excel_path.suffix.lower() == ".xls" else "openpyxl"
+    suffix = excel_path.suffix.lower()
 
     try:
-        # If sheet_name is None, default to first sheet (index 0)
-        read_sheet = sheet_name if sheet_name is not None else 0
-        df = pd.read_excel(excel_path, sheet_name=read_sheet, engine=engine)
-        # Handle case where read_excel returns a dict (when sheet_name is a list or None with multiple sheets)
-        if isinstance(df, dict):
-            # Get the first sheet
-            first_sheet = list(df.keys())[0]
-            logger.info(f"Multiple sheets found, using first sheet: {first_sheet}")
-            df = df[first_sheet]
+        if suffix == ".csv":
+            df = pd.read_csv(excel_path)
+        else:
+            # Select engine based on file suffix so legacy .xls files are supported
+            engine = "xlrd" if suffix == ".xls" else "openpyxl"
+            # If sheet_name is None, default to first sheet (index 0)
+            read_sheet = sheet_name if sheet_name is not None else 0
+            df = pd.read_excel(excel_path, sheet_name=read_sheet, engine=engine)
+            # Handle case where read_excel returns a dict (when sheet_name is a list or None with multiple sheets)
+            if isinstance(df, dict):
+                # Get the first sheet
+                first_sheet = list(df.keys())[0]
+                logger.info(f"Multiple sheets found, using first sheet: {first_sheet}")
+                df = df[first_sheet]
     except ImportError as exc:
-        if engine == "xlrd":
+        if suffix == ".xls":
             raise ImportError(
                 "Reading .xls files requires the optional dependency xlrd. "
                 "Install it (e.g., `pip install xlrd`) or convert the file to "
                 ".xlsx/.csv before retrying."
             ) from exc
         raise
-    logger.info(f"Loaded {len(df)} rows from Excel")
+    logger.info(f"Loaded {len(df)} rows from gold-standard file")
     logger.info(f"Columns: {list(df.columns)}")
 
     detected = detect_columns(df, column_mapping)
@@ -1534,6 +1560,12 @@ def _find_cdna_protein_bridge(
         cdna = entry.get("cdna_notation")
         if not cdna or not isinstance(cdna, str):
             continue
+        protein_range = _cdna_indel_protein_positions(cdna)
+        if protein_range:
+            start, end = protein_range
+            if start <= target_codon <= end:
+                return (sqlite_key, entry)
+
         implied = _cdna_implied_codon(cdna)
         if implied is None:
             continue
@@ -1751,6 +1783,86 @@ def create_comparison_row(
     )
 
 
+def _ratio(numerator: int, denominator: int) -> Optional[float]:
+    if denominator == 0:
+        return None
+    return numerator / denominator
+
+
+def _counted_value(*values: Optional[int]) -> int:
+    return sum(v for v in values if v is not None)
+
+
+def _row_carrier_count(row: ComparisonRow) -> Optional[int]:
+    if row.excel_carriers_total is not None:
+        return row.excel_carriers_total
+    if row.excel_affected is not None or row.excel_unaffected is not None:
+        return _counted_value(row.excel_affected, row.excel_unaffected)
+    return None
+
+
+def compute_recall_summary(results: List[ComparisonRow]) -> Dict[str, Any]:
+    """Compute gold-side recall metrics from comparison rows.
+
+    The denominator is the curated/Excel side. Extra SQLite-only rows are
+    precision findings and do not contribute to recall denominators.
+    """
+    gold_rows = [r for r in results if not r.missing_in_excel]
+    matched_rows = [
+        r for r in gold_rows if not r.missing_in_sqlite and r.match_type != "none"
+    ]
+
+    gold_pmids = {r.pmid for r in gold_rows if r.pmid}
+    matched_pmids = {r.pmid for r in matched_rows if r.pmid}
+
+    gold_variants = {r.excel_variant_norm for r in gold_rows if r.excel_variant_norm}
+    matched_variants = {
+        r.excel_variant_norm for r in matched_rows if r.excel_variant_norm
+    }
+
+    gold_carriers = _counted_value(*(_row_carrier_count(r) for r in gold_rows))
+    matched_carriers = _counted_value(*(_row_carrier_count(r) for r in matched_rows))
+
+    gold_affected = _counted_value(*(r.excel_affected for r in gold_rows))
+    matched_affected = _counted_value(*(r.excel_affected for r in matched_rows))
+
+    gold_unaffected = _counted_value(*(r.excel_unaffected for r in gold_rows))
+    matched_unaffected = _counted_value(*(r.excel_unaffected for r in matched_rows))
+
+    return {
+        "pmids": {
+            "matched": len(matched_pmids),
+            "gold": len(gold_pmids),
+            "recall": _ratio(len(matched_pmids), len(gold_pmids)),
+        },
+        "variant_rows": {
+            "matched": len(matched_rows),
+            "gold": len(gold_rows),
+            "recall": _ratio(len(matched_rows), len(gold_rows)),
+        },
+        "unique_variants": {
+            "matched": len(matched_variants),
+            "gold": len(gold_variants),
+            "recall": _ratio(len(matched_variants), len(gold_variants)),
+        },
+        "patients": {
+            "matched": matched_carriers,
+            "gold": gold_carriers,
+            "recall": _ratio(matched_carriers, gold_carriers),
+        },
+        "affected": {
+            "matched": matched_affected,
+            "gold": gold_affected,
+            "recall": _ratio(matched_affected, gold_affected),
+        },
+        "unaffected": {
+            "matched": matched_unaffected,
+            "gold": gold_unaffected,
+            "recall": _ratio(matched_unaffected, gold_unaffected),
+        },
+    }
+
+
 # =============================================================================
 # OUTPUT GENERATION
 # =============================================================================
@@ -1782,11 +1894,15 @@ def generate_outputs(
         "total_rows": len(results),
         "matched_exact": sum(1 for r in results if r.match_type == "exact"),
         "matched_fuzzy": sum(1 for r in results if r.match_type == "fuzzy"),
+        "matched_cdna_bridge": sum(
+            1 for r in results if r.match_type.endswith("_cdna_bridge")
+        ),
         "unmatched": sum(1 for r in results if r.match_type == "none"),
         "missing_in_sqlite": sum(1 for r in results if r.missing_in_sqlite),
         "missing_in_excel": sum(1 for r in results if r.missing_in_excel),
         "count_mismatches": sum(1 for r in results if r.count_mismatch),
         "unique_pmids": len(set(r.pmid for r in results)),
+        "recall": compute_recall_summary(results),
         "top_mismatches": [],
     }
 
@@ -1835,6 +1951,11 @@ def write_markdown_report(
 ) -> None:
     """Write a human-readable markdown report."""
 
+    def fmt_recall(metric: Dict[str, Any]) -> str:
+        recall = metric.get("recall")
+        recall_text = "n/a" if recall is None else f"{recall:.1%}"
+        return f"{metric.get('matched', 0)}/{metric.get('gold', 0)} ({recall_text})"
+
     lines = [
         "# Variant Comparison Report",
         "",
@@ -1851,12 +1972,31 @@ def write_markdown_report(
         "|--------|-------|",
         f"| Exact matches | {summary['matched_exact']} |",
         f"| Fuzzy matches | {summary['matched_fuzzy']} |",
+        f"| cDNA/protein bridge matches | {summary.get('matched_cdna_bridge', 0)} |",
         f"| Unmatched | {summary['unmatched']} |",
         f"| Missing in SQLite | {summary['missing_in_sqlite']} |",
         f"| Missing in Excel | {summary['missing_in_excel']} |",
         f"| Count mismatches | {summary['count_mismatches']} |",
         "",
     ]
+
+    recall = summary.get("recall", {})
+    if recall:
+        lines.extend(
+            [
+                "## Recall",
+                "",
+                "| Dimension | Matched / Gold |",
+                "|-----------|----------------|",
+                f"| PMIDs | {fmt_recall(recall.get('pmids', {}))} |",
+                f"| Variant rows | {fmt_recall(recall.get('variant_rows', {}))} |",
+                f"| Unique variants | {fmt_recall(recall.get('unique_variants', {}))} |",
+                f"| Patients/carriers | {fmt_recall(recall.get('patients', {}))} |",
+                f"| Affected | {fmt_recall(recall.get('affected', {}))} |",
+                f"| Unaffected | {fmt_recall(recall.get('unaffected', {}))} |",
+                "",
+            ]
+        )
 
     # Top mismatches table
     if summary["count_mismatches"] > 0:
@@ -1947,12 +2087,16 @@ def load_mapping_file(mapping_path: Path) -> Dict[str, str]:
 def main():
     """Main CLI entrypoint."""
     parser = argparse.ArgumentParser(
-        description="Compare variant data between Excel curation and SQLite database",
+        description="Compare curated gold-standard variants against a GVF SQLite database",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   # Basic comparison
   python compare_variants.py --excel curated.xlsx --sqlite KCNH2.db
+
+  # Normalized recall CSVs are also supported
+  python compare_variants.py --excel gene_variant_fetcher_gold_standard/normalized/KCNQ1_recall_input.csv \\
+      --sqlite KCNQ1.db
 
   # Fuzzy matching with lower threshold
   python compare_variants.py --excel curated.xlsx --sqlite KCNH2.db \\
@@ -1973,7 +2117,7 @@ Examples:
         "-e",
         type=Path,
         required=True,
-        help="Path to Excel file with curated variant data",
+        help="Path to Excel/CSV file with curated variant data",
     )
 
     parser.add_argument(

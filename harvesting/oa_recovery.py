@@ -244,7 +244,10 @@ class OARecoveryClient:
         url = f"https://europepmc.org/articles/{pmcid.lower()}?pdf=render"
         r = self.session.get(url, timeout=45, allow_redirects=True)
         if r.status_code != 200 or not r.content.startswith(b"%PDF-"):
-            return None, f"HTTP {r.status_code}, ct={r.headers.get('Content-Type','?')}"
+            return (
+                None,
+                f"HTTP {r.status_code}, ct={r.headers.get('Content-Type', '?')}",
+            )
         return self._pdf_bytes_to_markdown(r.content, f"EPMC-render {pmcid}")
 
     def _try_unpaywall_pdf(self, doi: str) -> tuple[Optional[str], str]:

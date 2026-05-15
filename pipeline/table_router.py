@@ -48,6 +48,8 @@ _KNOWN_FIELDS = {
     "clinical_significance",
 }
 
+_INFER_ROW_PATIENT_COUNT = -1
+
 
 @dataclass
 class MarkdownTable:
@@ -177,6 +179,119 @@ _TABLE_CONTENT_KEYWORDS = (
     "c.",
 )
 
+_GWAS_OR_ASSAY_HEADERS = {
+    "chr",
+    "chromosome",
+    "bp",
+    "position",
+    "snp",
+    "snv",
+    "rsid",
+    "locus",
+    "ea",
+    "eaf",
+    "beta",
+    "se",
+    "p",
+    "pvalue",
+    "construct",
+    "current",
+    "activation",
+    "tailcurrent",
+}
+
+_HEADER_FIELD_KEYWORDS = {
+    "gene": ("gene", "symbol"),
+    "cdna": ("cdna", "codingdna", "nucleotide", "dna", "ntchange", "cdnachange"),
+    "protein": (
+        "protein",
+        "aminoacid",
+        "aachange",
+        "proteinchange",
+        "mutation",
+        "variant",
+    ),
+    "patient_count": (
+        "carrier",
+        "patient",
+        "proband",
+        "subject",
+        "individual",
+        "family",
+        "kindred",
+        "ncarrier",
+        "number",
+        "count",
+        "total",
+    ),
+    "affected": (
+        "affected",
+        "symptomatic",
+        "case",
+        "lqt",
+        "cpvt",
+        "brs",
+        "disease",
+    ),
+    "unaffected": (
+        "unaffected",
+        "asymptomatic",
+        "control",
+        "healthy",
+        "normal",
+        "nonaffected",
+    ),
+    "uncertain": ("uncertain", "unknown", "equivocal", "borderline", "ambiguous"),
+    "phenotype": ("phenotype", "diagnosis", "clinical", "symptom"),
+    "clinical_significance": (
+        "pathogenic",
+        "classification",
+        "significance",
+        "interpretation",
+    ),
+}
+
+_ROW_LEVEL_SUBJECT_KEYWORDS = (
+    "patient",
+    "proband",
+    "subject",
+    "caseid",
+    "case",
+    "family",
+    "kindred",
+    "individual",
+    "participant",
+    "pedigree",
+    "member",
+)
+
+_CLINICAL_CONTEXT_KEYWORDS = (
+    "age",
+    "sex",
+    "gender",
+    "phenotype",
+    "diagnosis",
+    "clinical",
+    "symptom",
+    "syncope",
+    "qtc",
+    "qtinterval",
+    "ecg",
+    "arrhythmia",
+    "onset",
+    "sudden",
+    "death",
+    "therapy",
+    "treatment",
+    "schwartz",
+    "score",
+)
+
+_UNAFFECTED_TEXT_RE = re.compile(
+    r"\b(unaffected|asymptomatic|control|healthy|normal|no symptoms?)\b",
+    re.IGNORECASE,
+)
+
 # Caption can also be embedded as the first cell of the header row, e.g.
 #   | Table S3: rare variants ... | ... |
 _EMBEDDED_TABLE_LABEL_RE = re.compile(
@@ -200,6 +315,159 @@ def _looks_like_variant_table(table: "MarkdownTable") -> bool:
     if _EMBEDDED_TABLE_LABEL_RE.search(header_text):
         return True
     return any(kw in header_text for kw in _TABLE_CONTENT_KEYWORDS)
+
+
+def _normalize_header(value: str) -> str:
+    """Normalize a header cell for deterministic field matching."""
+    return re.sub(r"[^a-z0-9]+", "", (value or "").lower())
+
+
+def _column_values(table: MarkdownTable, idx: int, limit: int = 8) -> List[str]:
+    values: List[str] = []
+    for row in table.data_lines[:limit]:
+        cells = _split_pipe_row(row)
+        if 0 <= idx < len(cells):
+            values.append(cells[idx].strip())
+    return values
+
+
+def _looks_numeric_column(values: List[str]) -> bool:
+    non_empty = [v for v in values if v and v not in {"-", "–", "—"}]
+    if not non_empty:
+        return False
+    numeric = sum(1 for value in non_empty if _coerce_int(value) is not None)
+    return numeric >= max(1, len(non_empty) // 2)
+
+
+def _has_header_keyword(headers: List[str], keywords: tuple[str, ...]) -> bool:
+    return any(any(kw in header for kw in keywords) for header in headers)
+
+
+def _looks_like_row_level_clinical_list(
+    table: MarkdownTable, mapping: Dict[str, int], has_assay_or_gwas_cue: bool
+) -> bool:
+    """Detect clinical mutation-list tables where each row is one carrier.
+
+    Many curated clinical papers list one proband/patient/family per row with
+    mutation + phenotype columns but no explicit ``n`` column. In that shape,
+    the row itself is the carrier count. Keep the rule conservative so variant
+    definition tables, assay tables, and GWAS summaries do not become fake
+    patient counts.
+    """
+    if not any(k in mapping for k in ("cdna", "protein")):
+        return False
+    if any(k in mapping for k in ("patient_count", "affected", "unaffected")):
+        return False
+
+    headers = [_normalize_header(c) for c in table.header_cells]
+    caption = _normalize_header(table.caption or "")
+    subject_cue = _has_header_keyword(headers, _ROW_LEVEL_SUBJECT_KEYWORDS)
+    clinical_cue = _has_header_keyword(headers, _CLINICAL_CONTEXT_KEYWORDS) or any(
+        kw in caption for kw in _CLINICAL_CONTEXT_KEYWORDS
+    )
+
+    if has_assay_or_gwas_cue and not subject_cue:
+        return False
+    return subject_cue or clinical_cue
+
+
+def _infer_column_mapping_from_headers(
+    table: MarkdownTable,
+) -> Optional[Dict[str, int]]:
+    """Infer a table mapping without an LLM when headers/data are unambiguous."""
+    mapping: Dict[str, int] = {}
+    normalized_headers = [_normalize_header(c) for c in table.header_cells]
+
+    # Avoid obvious GWAS/assay tables unless their data columns contain actual
+    # HGVS-like variant notation. This keeps "AA/n" allele-frequency tables out.
+    has_assay_or_gwas_cue = any(h in _GWAS_OR_ASSAY_HEADERS for h in normalized_headers)
+
+    for idx, header in enumerate(normalized_headers):
+        values = _column_values(table, idx)
+        protein_by_data = any(_normalize_protein(v) for v in values)
+        cdna_by_data = any(_normalize_cdna(v) for v in values)
+
+        if "gene" not in mapping and any(
+            kw in header for kw in _HEADER_FIELD_KEYWORDS["gene"]
+        ):
+            mapping["gene"] = idx
+
+        if "unaffected" not in mapping and any(
+            kw in header for kw in _HEADER_FIELD_KEYWORDS["unaffected"]
+        ):
+            mapping["unaffected"] = idx
+            continue
+
+        if "affected" not in mapping and any(
+            kw in header for kw in _HEADER_FIELD_KEYWORDS["affected"]
+        ):
+            mapping["affected"] = idx
+            continue
+
+        if "cdna" not in mapping and (
+            any(kw in header for kw in _HEADER_FIELD_KEYWORDS["cdna"]) or cdna_by_data
+        ):
+            mapping["cdna"] = idx
+            continue
+
+        if "protein" not in mapping and (
+            any(kw in header for kw in _HEADER_FIELD_KEYWORDS["protein"])
+            or protein_by_data
+        ):
+            mapping["protein"] = idx
+            continue
+
+        if "uncertain" not in mapping and any(
+            kw in header for kw in _HEADER_FIELD_KEYWORDS["uncertain"]
+        ):
+            mapping["uncertain"] = idx
+            continue
+
+        if "phenotype" not in mapping and any(
+            kw in header for kw in _HEADER_FIELD_KEYWORDS["phenotype"]
+        ):
+            mapping["phenotype"] = idx
+            continue
+
+        if "clinical_significance" not in mapping and any(
+            kw in header for kw in _HEADER_FIELD_KEYWORDS["clinical_significance"]
+        ):
+            mapping["clinical_significance"] = idx
+            continue
+
+        if "patient_count" not in mapping and any(
+            kw in header for kw in _HEADER_FIELD_KEYWORDS["patient_count"]
+        ):
+            if _looks_numeric_column(values):
+                mapping["patient_count"] = idx
+
+    # If a notation column has a generic "mutation/variant" header, data decides
+    # whether it is cDNA or protein. Prefer explicit cDNA/protein when present.
+    for idx, _header in enumerate(normalized_headers):
+        if "cdna" in mapping and "protein" in mapping:
+            break
+        values = _column_values(table, idx)
+        if "cdna" not in mapping and any(_normalize_cdna(v) for v in values):
+            mapping["cdna"] = idx
+        if "protein" not in mapping and any(_normalize_protein(v) for v in values):
+            mapping["protein"] = idx
+
+    if _looks_like_row_level_clinical_list(table, mapping, has_assay_or_gwas_cue):
+        mapping["patient_count"] = _INFER_ROW_PATIENT_COUNT
+
+    has_notation = any(k in mapping for k in ("cdna", "protein"))
+    has_count = any(k in mapping for k in ("patient_count", "affected", "unaffected"))
+    if not (has_notation and has_count):
+        return None
+    if has_assay_or_gwas_cue and not any(
+        any(
+            _normalize_cdna(v) or _normalize_protein(v)
+            for v in _column_values(table, i)
+        )
+        for i in range(len(table.header_cells))
+    ):
+        return None
+    return mapping
 
 
 def enumerate_markdown_tables(
@@ -342,9 +610,12 @@ Allowed field names (omit a field if no column matches):
   - clinical_significance — pathogenicity classification
 
 A table qualifies if it has at least one of {{cdna, protein}} AND at least one
-of {{patient_count, affected, unaffected}}. Multi-gene panel tables qualify
-even if the preview rows show non-{gene_symbol} variants. Tables that list
-functional assays, drug screens, primer sequences, in silico predictions,
+of {{patient_count, affected, unaffected}}. A clinical mutation-list table with
+one patient/proband/family/subject/case per row also qualifies even if it has no
+explicit count column; in that case set "patient_count": -1 to tell the parser
+to count one carrier per row. Multi-gene panel tables qualify even if the
+preview rows show non-{gene_symbol} variants. Tables that list functional
+assays, drug screens, primer sequences, in silico predictions,
 GWAS/association statistics, allele-frequency summaries, lead SNPs, or columns
 such as Locus/SNV/CHR/BP/EA/AA/EAF/beta/SE/p/n do NOT qualify — skip them.
 In those tables, AA usually means alternate allele and n is cohort size, not a
@@ -430,9 +701,14 @@ def parse_router_response(raw: str) -> List[RoutedTable]:
             if field_name not in _KNOWN_FIELDS:
                 continue
             try:
-                clean[field_name] = int(idx)
+                parsed_idx = int(idx)
             except (TypeError, ValueError):
                 continue
+            if parsed_idx < 0 and not (
+                field_name == "patient_count" and parsed_idx == _INFER_ROW_PATIENT_COUNT
+            ):
+                continue
+            clean[field_name] = parsed_idx
         if not clean:
             continue
         # Must have at least one notation column AND one count column
@@ -529,10 +805,35 @@ def route_tables(
     if not tables:
         return RouterResult(routed_tables=[], used_fallback=True)
 
+    deterministic: List[RoutedTable] = []
+    llm_candidates: List[MarkdownTable] = []
+    for table in tables:
+        mapping = _infer_column_mapping_from_headers(table)
+        if mapping:
+            deterministic.append(
+                RoutedTable(
+                    table_id=table.table_id,
+                    column_mapping=mapping,
+                    confidence=1.0,
+                    notes="deterministic header/data mapping",
+                    table=table,
+                )
+            )
+        else:
+            llm_candidates.append(table)
+
+    if deterministic and not llm_candidates:
+        return RouterResult(routed_tables=deterministic, used_fallback=False)
+
+    if not llm_candidates:
+        return RouterResult(
+            routed_tables=deterministic, used_fallback=not deterministic
+        )
+
     if llm_caller is None:
         from litellm import completion as llm_caller  # type: ignore
 
-    prompt = build_router_prompt(tables, gene_symbol)
+    prompt = build_router_prompt(llm_candidates, gene_symbol)
 
     try:
         from utils.llm_utils import wait_for_llm_rate_limit
@@ -561,15 +862,19 @@ def route_tables(
         raw = response.choices[0].message.content or ""
     except Exception as e:  # noqa: BLE001
         logger.warning("table_router: LLM call failed: %s", e)
-        return RouterResult(error=str(e), used_fallback=True)
+        return RouterResult(
+            routed_tables=deterministic,
+            error=str(e),
+            used_fallback=not deterministic,
+        )
 
     routed = parse_router_response(raw)
     # Attach the corresponding MarkdownTable for downstream parsing
-    by_id = {t.table_id: t for t in tables}
+    by_id = {t.table_id: t for t in llm_candidates}
     for r in routed:
         r.table = by_id.get(r.table_id)
     routed = [r for r in routed if r.table is not None]
-    return RouterResult(routed_tables=routed, raw_response=raw)
+    return RouterResult(routed_tables=deterministic + routed, raw_response=raw)
 
 
 def extract_via_router(
@@ -665,7 +970,8 @@ def parse_routed_table(
             continue
         seen_keys.add(dedup_key)
 
-        total = _coerce_int(cell(count_idx))
+        infer_one_carrier = count_idx == _INFER_ROW_PATIENT_COUNT
+        total = 1 if infer_one_carrier else _coerce_int(cell(count_idx))
         affected = _coerce_int(cell(aff_idx))
         unaffected = _coerce_int(cell(unaff_idx))
         uncertain = _coerce_int(cell(unc_idx))
@@ -673,8 +979,13 @@ def parse_routed_table(
         # If only patient_count exists, treat all carriers as affected (matches
         # the assumption already used by _parse_markdown_table_variants).
         if total is not None and affected is None and unaffected is None:
-            affected = total
-            unaffected = 0
+            row_text = " ".join(cells)
+            if infer_one_carrier and _UNAFFECTED_TEXT_RE.search(row_text):
+                affected = 0
+                unaffected = total
+            else:
+                affected = total
+                unaffected = 0
 
         # If we have affected + unaffected but no total, derive it.
         if total is None and (affected is not None or unaffected is not None):

@@ -146,14 +146,20 @@ def print_audit(results: dict):
     print("GOLD STANDARD PIPELINE FUNNEL")
     print("=" * 65)
     print(f"  Total gold PMIDs:                       {total:4d}")
-    print(f"  1. Not discovered (not in search):       {nd:4d}  ({nd/total*100:.1f}%)")
-    print(f"  2. Failed Tier 1 filter:                 {ff:4d}  ({ff/total*100:.1f}%)")
     print(
-        f"  3. Passed filter, NO full text:          {pnf:4d}  ({pnf/total*100:.1f}%)"
+        f"  1. Not discovered (not in search):       {nd:4d}  ({nd / total * 100:.1f}%)"
     )
-    print(f"  4. Has full text (download success):     {hf:4d}  ({hf/total*100:.1f}%)")
+    print(
+        f"  2. Failed Tier 1 filter:                 {ff:4d}  ({ff / total * 100:.1f}%)"
+    )
+    print(
+        f"  3. Passed filter, NO full text:          {pnf:4d}  ({pnf / total * 100:.1f}%)"
+    )
+    print(
+        f"  4. Has full text (download success):     {hf:4d}  ({hf / total * 100:.1f}%)"
+    )
     print(f"  ─────────────────────────────────────────────")
-    print(f"  Download rate:  {hf}/{total} = {hf/total*100:.1f}%")
+    print(f"  Download rate:  {hf}/{total} = {hf / total * 100:.1f}%")
     print(
         f"  Total fulltext files (all PMIDs):        {results['total_fulltext_files']}"
     )
@@ -196,7 +202,7 @@ def print_audit(results: dict):
         for p in no_reason[:20]:
             print(f"    PMID {p}")
         if len(no_reason) > 20:
-            print(f"    ... and {len(no_reason)-20} more")
+            print(f"    ... and {len(no_reason) - 20} more")
 
     return results
 
@@ -283,7 +289,7 @@ def main():
             "failed_filter": results["failed_filter"],
             "passed_no_fulltext": results["passed_no_fulltext"],
             "has_fulltext_count": len(results["has_fulltext"]),
-            "download_rate": f"{len(results['has_fulltext'])/results['total_gold']*100:.1f}%",
+            "download_rate": f"{len(results['has_fulltext']) / results['total_gold'] * 100:.1f}%",
         }
         with open(report_path, "w") as f:
             json.dump(report, f, indent=2)
@@ -315,7 +321,7 @@ def main():
     after = len(results2["has_fulltext"])
     print(f"\n  Improvement: {before} → {after} gold PMIDs with full text")
     print(
-        f"  Download rate: {before/len(gold_pmids)*100:.1f}% → {after/len(gold_pmids)*100:.1f}%"
+        f"  Download rate: {before / len(gold_pmids) * 100:.1f}% → {after / len(gold_pmids) * 100:.1f}%"
     )
 
 

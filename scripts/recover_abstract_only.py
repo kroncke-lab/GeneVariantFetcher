@@ -323,7 +323,7 @@ def biorxiv_pdf_url(record: dict) -> Optional[str]:
     if not doi or not server:
         return None
     return (
-        f"https://www.{server}.org/content/{doi}v{record.get('version','1')}.full.pdf"
+        f"https://www.{server}.org/content/{doi}v{record.get('version', '1')}.full.pdf"
     )
 
 

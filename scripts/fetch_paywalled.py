@@ -15,24 +15,35 @@ Usage::
     python -m scripts.fetch_paywalled --pmid 15840476 --pmid 10973849 \\
         --output ./out --no-headless
 
+    # Pipeline recovery CSV.
+    python -m scripts.fetch_paywalled --input results/KCNH2/run/pmc_fulltext/paywalled_missing.csv \\
+        --output results/KCNH2/run/pmc_fulltext
+
     # Pre-resolved DOI (skips the NCBI roundtrip).
     python -m scripts.fetch_paywalled --pmid-doi 15840476=10.1161/01.CIR.0000164255.06478.96 \\
         --output ./out
 
-The script writes one ``{PMID}/FULL_CONTEXT.md`` per success, mirroring what
-the main extraction pipeline expects to find. A summary line per PMID is
-printed at the end (publisher / chars / paywall-marker count / outcome).
+The script writes per-PMID artifacts under ``{output_dir}/{PMID}/`` (page
+HTML, result.json, FULL_CONTEXT.md) *and* a canonical flat mirror at
+``{output_dir}/{PMID}_FULL_CONTEXT.md`` so the main extraction discovery
+path (``cli.extract.find_input_files`` with ``--full-text``) finds it
+without per-PMID-dir glob plumbing. The two files always share content
+(enriched unified markdown when available, body-only otherwise). A summary
+line per PMID is printed at the end (publisher / chars / paywall-marker
+count / outcome).
 """
 
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import logging
 import os
 import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+from urllib.parse import urlparse
 
 # Path bootstrap so `python scripts/fetch_paywalled.py` works without -m.
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -54,6 +65,11 @@ from harvesting.browser_html.strategies import (  # noqa: E402
     registered_names,
 )
 from harvesting.format_converters import FormatConverter  # noqa: E402
+from harvesting.paywall_context_enrichment import (  # noqa: E402
+    EnrichmentResult,
+    enrich_paywall_full_context,
+)
+from harvesting.scholar_pdf_fallback import try_scholar_pdf  # noqa: E402
 from harvesting.supplement_scraper import SupplementScraper  # noqa: E402
 
 
@@ -69,6 +85,24 @@ _PMC_BODY_SELECTORS = (
     "div.article-page",
     "body",
 )
+
+
+def _canonical_full_context_path(output_dir: Path, pmid: str) -> Path:
+    """Path to the flat mirror that ``cli.extract`` discovers via glob."""
+    return output_dir / f"{pmid}_FULL_CONTEXT.md"
+
+
+def write_canonical_mirror(output_dir: Path, pmid: str, content: str) -> Path:
+    """Write ``{output_dir}/{pmid}_FULL_CONTEXT.md`` and return its path.
+
+    The flat layout matches ``cli.extract.find_input_files`` so the rescued
+    paper is picked up by ``gvf extract --full-text`` without any per-PMID-
+    directory awareness.
+    """
+    canonical = _canonical_full_context_path(output_dir, pmid)
+    canonical.parent.mkdir(parents=True, exist_ok=True)
+    canonical.write_text(content, encoding="utf-8")
+    return canonical
 
 
 def europepmc_lookup_pmcid(pmid: str, session: requests.Session) -> Optional[str]:
@@ -101,12 +135,16 @@ def try_pmc_fallback(
     pmid: str,
     output_dir: Path,
     session: requests.Session,
+    converter: Optional[FormatConverter] = None,
+    scraper: Optional[SupplementScraper] = None,
 ) -> Optional[Dict]:
     """Attempt to recover a stub via the PMC HTML deposit.
 
     Many subscription papers (especially NIH-funded ones) have a PMC version
     that's free to read after the embargo. We look up the PMCID via Europe
-    PMC, fetch the PMC HTML, and run our DOM extractor on it.
+    PMC, fetch the PMC HTML, run our DOM extractor on it, and pull supplement
+    links from the same HTML so captions AND downloadable supplements both
+    land in the rescued FULL_CONTEXT.md.
 
     Returns a result row dict on success, or None if no PMC version exists
     or the extraction failed quality gates. On success the row's ``path``
@@ -150,22 +188,111 @@ def try_pmc_fallback(
     # Write a PMC FULL_CONTEXT.md and source marker.
     pmid_dir = output_dir / pmid
     pmid_dir.mkdir(parents=True, exist_ok=True)
-    (pmid_dir / "FULL_CONTEXT.md").write_text(markdown, encoding="utf-8")
     (pmid_dir / "page.html").write_text(html, encoding="utf-8")
     (pmid_dir / "source.txt").write_text(
         f"Recovered via PMC fallback: {pmc_url}\n", encoding="utf-8"
     )
+
+    # Scrape supplement links directly from the PMC HTML so the enricher can
+    # download convertible PMC supplements (xlsx/pdf/docx variant tables) into
+    # the rescued FULL_CONTEXT.md. The orchestrator's PMC path normally does
+    # this; in fallback mode we replicate it here rather than ship a body-
+    # only context that silently drops supplement variants.
+    scraper = scraper or SupplementScraper()
+    try:
+        supp_files = scraper.scrape_generic_supplements(html, pmc_url) or []
+    except Exception as exc:
+        LOG.info("PMC supplement scrape failed for %s: %s", pmid, exc)
+        supp_files = []
+
+    enrichment = enrich_paywall_full_context(
+        body_markdown=markdown,
+        html=html,
+        supp_files=supp_files,
+        pmid=pmid,
+        output_dir=output_dir,
+        converter=converter or FormatConverter(),
+        session=session,
+        download_supplements=True,
+        source_url=pmc_url,
+    )
+    unified = enrichment.unified_markdown or markdown
+    per_pmid_full_ctx = pmid_dir / "FULL_CONTEXT.md"
+    per_pmid_full_ctx.write_text(unified, encoding="utf-8")
+    canonical_path = write_canonical_mirror(output_dir, pmid, unified)
+
     return {
         "pmid": pmid,
         "strategy": "pmc_fallback",
         "outcome": "success",
         "reason": reason,
-        "chars": len(markdown),
-        "supp_files": 0,
+        "chars": len(unified),
+        "supp_files": len(supp_files),
         "final_url": pmc_url,
-        "path": str(pmid_dir / "FULL_CONTEXT.md"),
+        "path": str(canonical_path),
+        "canonical_path": str(canonical_path),
+        "per_pmid_path": str(per_pmid_full_ctx),
         "pmcid": pmcid,
+        "figure_captions": enrichment.figure_caption_count,
+        "table_captions": enrichment.table_caption_count,
+        "supplements_downloaded": enrichment.supplement_count,
     }
+
+
+def try_scholar_pdf_fallback(
+    pmid: str,
+    output_dir: Path,
+    session: requests.Session,
+    converter: Optional[FormatConverter] = None,
+) -> Optional[Dict]:
+    """Try Google Scholar title search for an author/lab-hosted PDF."""
+    result = try_scholar_pdf(
+        title=None,
+        pmid=pmid,
+        session=session,
+        converter=converter or FormatConverter(),
+        quality_gate=validate_article_content,
+        email=_ncbi_email(),
+    )
+    if not result.success or not result.markdown:
+        return None
+
+    pmid_dir = output_dir / pmid
+    pmid_dir.mkdir(parents=True, exist_ok=True)
+    per_pmid_full_ctx = pmid_dir / "FULL_CONTEXT.md"
+    per_pmid_full_ctx.write_text(result.markdown, encoding="utf-8")
+    canonical_path = write_canonical_mirror(output_dir, pmid, result.markdown)
+    (pmid_dir / "source.txt").write_text(
+        f"Recovered via Google Scholar PDF: {result.source_url}\n",
+        encoding="utf-8",
+    )
+
+    return {
+        "reason": f"Google Scholar PDF ({result.title or 'title lookup'}): {result.detail}",
+        "chars": len(result.markdown),
+        "final_url": result.source_url or "",
+        "path": str(canonical_path),
+        "canonical_path": str(canonical_path),
+        "per_pmid_path": str(per_pmid_full_ctx),
+    }
+
+
+def mark_scholar_pdf_success(row: Dict, scholar_row: Dict) -> None:
+    """Merge a successful Scholar PDF fallback into a summary row."""
+    base_strategy = row.get("strategy") or ""
+    row["outcome"] = "success_via_scholar_pdf"
+    row["strategy"] = (
+        f"{base_strategy}+google_scholar_pdf"
+        if base_strategy and base_strategy != "(none)"
+        else "google_scholar_pdf"
+    )
+    row["reason"] = scholar_row["reason"]
+    row["chars"] = scholar_row["chars"]
+    row["final_url"] = scholar_row["final_url"]
+    row["path"] = scholar_row["path"]
+    row["canonical_path"] = scholar_row["canonical_path"]
+    row["per_pmid_path"] = scholar_row["per_pmid_path"]
+    row["supp_files"] = 0
 
 
 LOG = logging.getLogger("fetch_paywalled")
@@ -238,6 +365,39 @@ def make_session() -> requests.Session:
     return s
 
 
+def hydrate_session_with_browser_cookies(
+    session: requests.Session, cookies: List[dict]
+) -> int:
+    """Copy Playwright-format browser cookies into a requests session.
+
+    The Playwright browser pool uses these cookies for publisher page access,
+    but supplement downloads run through ``requests`` in the enrichment step.
+    Mirroring the same cookie jar lets authenticated supplement files use the
+    same institutional session as the rendered article page.
+    """
+    added = 0
+    for cookie in cookies or []:
+        name = cookie.get("name")
+        value = cookie.get("value")
+        if not name or value is None:
+            continue
+
+        domain = cookie.get("domain") or ""
+        if not domain and cookie.get("url"):
+            domain = urlparse(str(cookie["url"])).hostname or ""
+        if not domain:
+            continue
+
+        session.cookies.set(
+            str(name),
+            str(value),
+            domain=str(domain),
+            path=str(cookie.get("path") or "/"),
+        )
+        added += 1
+    return added
+
+
 def parse_pmid_doi_overrides(raw: List[str]) -> Dict[str, str]:
     out: Dict[str, str] = {}
     for entry in raw or []:
@@ -250,17 +410,93 @@ def parse_pmid_doi_overrides(raw: List[str]) -> Dict[str, str]:
     return out
 
 
-def write_outputs(pmid: str, result, output_dir: Path) -> Tuple[Path, Optional[str]]:
-    """Write FULL_CONTEXT.md + raw HTML; return (path, body_text_for_validation)."""
+def read_pmid_csv(path: Path) -> Tuple[List[str], Dict[str, str]]:
+    """Read PMID and optional DOI columns from a recovery CSV."""
+    pmids: List[str] = []
+    doi_overrides: Dict[str, str] = {}
+    with path.open(newline="", encoding="utf-8-sig") as f:
+        reader = csv.DictReader(f)
+        if not reader.fieldnames:
+            return pmids, doi_overrides
+        lower_to_field = {name.strip().lower(): name for name in reader.fieldnames}
+        pmid_col = None
+        for candidate in ("pmid", "pubmed_id", "pubmed", "id"):
+            if candidate in lower_to_field:
+                pmid_col = lower_to_field[candidate]
+                break
+        if pmid_col is None:
+            raise ValueError(
+                f"No PMID column found in {path}; columns={reader.fieldnames}"
+            )
+        doi_col = None
+        for candidate in ("doi", "article_doi"):
+            if candidate in lower_to_field:
+                doi_col = lower_to_field[candidate]
+                break
+        for row in reader:
+            pmid = (row.get(pmid_col) or "").strip()
+            if not pmid:
+                continue
+            pmids.append(pmid)
+            doi = (row.get(doi_col) or "").strip() if doi_col else ""
+            if doi:
+                doi_overrides[pmid] = doi
+    return pmids, doi_overrides
+
+
+def write_outputs(
+    pmid: str,
+    result,
+    output_dir: Path,
+    converter: Optional[FormatConverter] = None,
+    session: Optional[requests.Session] = None,
+    enrich: bool = True,
+) -> Tuple[Path, Path, Optional[str], Optional[EnrichmentResult]]:
+    """Write FULL_CONTEXT.md (per-PMID dir + flat canonical mirror) + raw HTML.
+
+    Returns ``(canonical_path, per_pmid_path, body_for_gating, enrichment)``.
+    The canonical path is the flat mirror ``{output_dir}/{pmid}_FULL_CONTEXT.md``
+    that ``cli.extract.find_input_files`` discovers; the per-PMID path is the
+    artifact-bundle copy under ``{output_dir}/{pmid}/FULL_CONTEXT.md``.
+
+    The body returned for gating is the *un-enriched* article text — that's
+    what the quality validator should judge. Captions and supplements are
+    appended afterward, so the gate's verdict isn't polluted by figure
+    legends or supplement padding.
+    """
     pmid_dir = output_dir / pmid
     pmid_dir.mkdir(parents=True, exist_ok=True)
 
     body = result.main_markdown or ""
-    full_ctx = pmid_dir / "FULL_CONTEXT.md"
-    full_ctx.write_text(body, encoding="utf-8")
 
     if result.main_html:
         (pmid_dir / "page.html").write_text(result.main_html, encoding="utf-8")
+
+    enrichment: Optional[EnrichmentResult] = None
+    if enrich and body:
+        try:
+            enrichment = enrich_paywall_full_context(
+                body_markdown=body,
+                html=result.main_html or "",
+                supp_files=list(result.supp_files or []),
+                pmid=pmid,
+                output_dir=output_dir,
+                converter=converter or FormatConverter(),
+                session=session,
+                source_url=result.final_url,
+            )
+        except Exception as exc:
+            LOG.warning("Enrichment failed for PMID %s: %s", pmid, exc)
+            enrichment = None
+
+    if enrichment is not None and enrichment.unified_markdown:
+        full_text = enrichment.unified_markdown
+    else:
+        full_text = body
+
+    per_pmid_full_ctx = pmid_dir / "FULL_CONTEXT.md"
+    per_pmid_full_ctx.write_text(full_text, encoding="utf-8")
+    canonical_path = write_canonical_mirror(output_dir, pmid, full_text)
 
     meta = {
         "pmid": pmid,
@@ -271,12 +507,19 @@ def write_outputs(pmid: str, result, output_dir: Path) -> Tuple[Path, Optional[s
         "notes": result.notes,
         "error": result.error,
         "markdown_chars": len(body),
+        "canonical_full_context_path": str(canonical_path),
+        "per_pmid_full_context_path": str(per_pmid_full_ctx),
     }
+    if enrichment is not None:
+        meta["unified_chars"] = len(enrichment.unified_markdown or "")
+        meta["figure_captions"] = enrichment.figure_caption_count
+        meta["table_captions"] = enrichment.table_caption_count
+        meta["supplements_downloaded"] = enrichment.supplement_count
     (pmid_dir / "result.json").write_text(
         json.dumps(meta, indent=2, default=str), encoding="utf-8"
     )
 
-    return full_ctx, (body or None)
+    return canonical_path, per_pmid_full_ctx, (body or None), enrichment
 
 
 def fetch_one(
@@ -302,8 +545,24 @@ def fetch_one(
         "supp_files": 0,
         "final_url": "",
     }
+    recovery_session = pmc_session or getattr(fetcher, "session", None)
+
+    def run_scholar_fallback() -> Optional[Dict]:
+        if recovery_session is None:
+            return None
+        scholar_row = try_scholar_pdf_fallback(
+            pmid,
+            output_dir,
+            recovery_session,
+            converter=fetcher.converter,
+        )
+        if scholar_row is not None:
+            mark_scholar_pdf_success(row, scholar_row)
+        return scholar_row
+
     if not doi:
         row["reason"] = "no DOI"
+        run_scholar_fallback()
         return row
 
     # Tell the user which strategy will run, before we burn time on the fetch.
@@ -311,20 +570,38 @@ def fetch_one(
     row["strategy"] = strategy.NAME if strategy else "(none)"
     if strategy is None:
         row["reason"] = "no matching strategy"
+        run_scholar_fallback()
         return row
 
     result = fetcher.fetch(pmid=pmid, doi=doi, pub_date=None)
     if result is None:
         row["outcome"] = "skipped"
         row["reason"] = "fetcher returned None"
+        run_scholar_fallback()
         return row
 
     row["final_url"] = result.final_url or ""
     row["supp_files"] = len(result.supp_files or [])
 
-    full_ctx_path, body = write_outputs(pmid, result, output_dir)
-    row["chars"] = len(body or "")
-    row["path"] = str(full_ctx_path)
+    canonical_path, per_pmid_path, body, enrichment = write_outputs(
+        pmid, result, output_dir, session=pmc_session
+    )
+    # The gate validates only the body, but the chars we report should
+    # reflect what actually landed in FULL_CONTEXT.md so downstream
+    # observers see whether captions/supplements were appended.
+    if enrichment is not None and enrichment.unified_markdown:
+        row["chars"] = len(enrichment.unified_markdown)
+        row["figure_captions"] = enrichment.figure_caption_count
+        row["table_captions"] = enrichment.table_caption_count
+        row["supplements_downloaded"] = enrichment.supplement_count
+    else:
+        row["chars"] = len(body or "")
+    # ``path`` is the canonical flat mirror — that's the file
+    # ``cli.extract.find_input_files`` discovers via glob. ``per_pmid_path``
+    # is preserved for diagnostics so summary.json carries both locations.
+    row["path"] = str(canonical_path)
+    row["canonical_path"] = str(canonical_path)
+    row["per_pmid_path"] = str(per_pmid_path)
 
     # Apply quality gate (the fetcher itself also runs the validator, but we
     # surface the reason here for the per-PMID summary table).
@@ -347,8 +624,17 @@ def fetch_one(
     # PMC deposit. The fallback overwrites FULL_CONTEXT.md only when its
     # extraction passes the quality gate, so a failed PMC attempt doesn't
     # mask the Tier 3.5 stub for diagnostics.
-    if row["outcome"] in ("paywall_or_stub", "empty") and pmc_session is not None:
-        pmc_row = try_pmc_fallback(pmid, output_dir, pmc_session)
+    if (
+        row["outcome"] in ("paywall_or_stub", "empty", "error")
+        and recovery_session is not None
+    ):
+        pmc_row = try_pmc_fallback(
+            pmid,
+            output_dir,
+            recovery_session,
+            converter=fetcher.converter,
+            scraper=fetcher.scraper,
+        )
         if pmc_row is not None:
             print(
                 f"  PMC fallback succeeded: {pmc_row['pmcid']} -> {pmc_row['chars']} chars"
@@ -359,7 +645,23 @@ def fetch_one(
             row["chars"] = pmc_row["chars"]
             row["final_url"] = pmc_row["final_url"]
             row["path"] = pmc_row["path"]
+            row["canonical_path"] = pmc_row.get("canonical_path", pmc_row["path"])
+            row["per_pmid_path"] = pmc_row.get("per_pmid_path", pmc_row["path"])
             row["pmcid"] = pmc_row["pmcid"]
+            row["supp_files"] = pmc_row.get("supp_files", 0)
+            row["figure_captions"] = pmc_row.get("figure_captions", 0)
+            row["table_captions"] = pmc_row.get("table_captions", 0)
+            row["supplements_downloaded"] = pmc_row.get("supplements_downloaded", 0)
+
+    if (
+        row["outcome"] in ("paywall_or_stub", "empty", "error")
+        and recovery_session is not None
+    ):
+        scholar_row = run_scholar_fallback()
+        if scholar_row is not None:
+            print(
+                f"  Google Scholar PDF fallback succeeded: {scholar_row['chars']} chars"
+            )
 
     return row
 
@@ -375,6 +677,12 @@ def main() -> int:
         help="PMID to fetch (repeat for multiple). Defaults to the 4 top-value test PMIDs.",
     )
     parser.add_argument(
+        "--input",
+        type=Path,
+        default=None,
+        help="CSV with a PMID column and optional DOI column, e.g. paywalled_missing.csv.",
+    )
+    parser.add_argument(
         "--pmid-doi",
         action="append",
         default=[],
@@ -386,6 +694,12 @@ def main() -> int:
         type=Path,
         default=Path("./paywall_test"),
         help="Output directory (default: ./paywall_test)",
+    )
+    parser.add_argument(
+        "--output-dir",
+        dest="output",
+        type=Path,
+        help="Alias for --output.",
     )
     parser.add_argument(
         "--profile",
@@ -435,8 +749,21 @@ def main() -> int:
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
 
-    pmids: List[str] = list(args.pmid) if args.pmid else list(DEFAULT_PMIDS)
+    input_pmids: List[str] = []
+    input_overrides: Dict[str, str] = {}
+    if args.input:
+        input_pmids, input_overrides = read_pmid_csv(args.input.expanduser())
+
+    pmids: List[str] = []
+    pmids.extend(input_pmids)
+    if args.pmid:
+        pmids.extend(args.pmid)
+    if not pmids:
+        pmids = list(DEFAULT_PMIDS)
+    pmids = list(dict.fromkeys(str(p).strip() for p in pmids if str(p).strip()))
+
     overrides = parse_pmid_doi_overrides(args.pmid_doi)
+    overrides = {**input_overrides, **overrides}
     output_dir: Path = args.output.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -474,6 +801,9 @@ def main() -> int:
     scraper = SupplementScraper()
     converter = FormatConverter()
     session = make_session()
+    session_cookie_count = hydrate_session_with_browser_cookies(session, cookies)
+    print(f"Hydrated requests session with {session_cookie_count} browser cookies.")
+    print()
 
     fetcher = BrowserHTMLFetcher(
         scraper=scraper,
@@ -514,12 +844,16 @@ def main() -> int:
             return "ahajournals.org"
         if doi.startswith("10.1016"):
             return "sciencedirect.com"
+        if doi.startswith("10.4065"):
+            return "mayoclinicproceedings.org"
         if doi.startswith("10.1093"):
             return "academic.oup.com"
         if doi.startswith("10.1002") or doi.startswith("10.1111"):
             return "onlinelibrary.wiley.com"
         if doi.startswith("10.1159"):
             return "karger.com"
+        if doi.startswith("10.1212"):
+            return "neurology.org"
         return "other"
 
     last_domain_at: Dict[str, float] = {}
@@ -591,14 +925,18 @@ def main() -> int:
     for r in rows:
         p = r["strategy"] or "(none)"
         by_publisher.setdefault(p, {"success": 0, "fail": 0})
-        if r["outcome"] in ("success", "success_via_pmc"):
+        if r["outcome"] in ("success", "success_via_pmc", "success_via_scholar_pdf"):
             by_publisher[p]["success"] += 1
         else:
             by_publisher[p]["fail"] += 1
     for p, c in sorted(by_publisher.items()):
         print(f"  {p:14s}  success={c['success']}  fail={c['fail']}")
 
-    success = sum(1 for r in rows if r["outcome"] in ("success", "success_via_pmc"))
+    success = sum(
+        1
+        for r in rows
+        if r["outcome"] in ("success", "success_via_pmc", "success_via_scholar_pdf")
+    )
     print(f"\nOverall: {success}/{len(rows)} PMIDs succeeded.")
 
     # Persist a CSV-ish JSON for downstream inspection.

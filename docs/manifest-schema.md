@@ -181,7 +181,7 @@ paywalled = manifest.get_by_status(Status.PAYWALL)
 download_manifest = Manifest.load("output/BRCA1/download_manifest.json")
 
 # Scout stage consumes successful downloads
-successful_pmids = [e.pmid for e in download_manifest.entries 
+successful_pmids = [e.pmid for e in download_manifest.entries
                    if e.status == Status.SUCCESS]
 ```
 

@@ -1,5 +1,7 @@
 """Shared fixtures for GVF recall tests."""
 
+import os
+
 import pytest
 import pandas as pd
 import re
@@ -7,13 +9,23 @@ import glob
 from pathlib import Path
 from collections import defaultdict
 
-GOLD_STANDARD_PATH = Path(
-    "/mnt/temp2/kronckbm/gitrepos/GeneVariantFetcher/comparison_results/"
-    "KCNH2 HeterozygoteDatabase-4-clinical_w_paris_japan_mayo_and_italycohort.xls"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+DEFAULT_GOLD_STANDARD_PATH = (
+    REPO_ROOT
+    / "comparison_results"
+    / "KCNH2 HeterozygoteDatabase-4-clinical_w_paris_japan_mayo_and_italycohort.xls"
 )
 
-DOWNLOAD_DIR = Path("/mnt/temp2/kronckbm/gvf_output/verified_downloads_20260208")
-OUTPUT_DIR = Path("/mnt/temp2/kronckbm/gvf_output")
+GOLD_STANDARD_PATH = Path(
+    os.environ.get("GVF_GOLD_STANDARD_PATH", str(DEFAULT_GOLD_STANDARD_PATH))
+).expanduser()
+DOWNLOAD_DIR = Path(
+    os.environ.get("GVF_RECALL_DOWNLOAD_DIR", str(REPO_ROOT / "results"))
+).expanduser()
+OUTPUT_DIR = Path(
+    os.environ.get("GVF_RECALL_OUTPUT_DIR", str(REPO_ROOT / "results"))
+).expanduser()
 
 
 def normalize_variant(v):
@@ -35,6 +47,11 @@ def normalize_variant(v):
 @pytest.fixture(scope="session")
 def gold_standard():
     """Load and normalize gold standard data."""
+    if not GOLD_STANDARD_PATH.exists():
+        pytest.skip(
+            "Gold standard workbook not found; set GVF_GOLD_STANDARD_PATH "
+            "to run recall tests."
+        )
     df = pd.read_excel(GOLD_STANDARD_PATH)
 
     # Normalize PMIDs
@@ -62,7 +79,17 @@ def gold_standard():
 @pytest.fixture(scope="session")
 def downloaded_pmids():
     """Get set of downloaded PMIDs from PDF filenames."""
+    if not DOWNLOAD_DIR.exists():
+        pytest.skip(
+            "Recall download directory not found; set GVF_RECALL_DOWNLOAD_DIR "
+            "to run recall tests."
+        )
     pdfs = glob.glob(str(DOWNLOAD_DIR / "*.pdf"))
+    if not pdfs:
+        pytest.skip(
+            "No recall download PDFs found; set GVF_RECALL_DOWNLOAD_DIR "
+            "to a populated verified download directory."
+        )
     pmids = set()
 
     for pdf in pdfs:
@@ -78,9 +105,19 @@ def downloaded_pmids():
 @pytest.fixture(scope="session")
 def downloaded_papers():
     """Get detailed info about downloaded papers."""
+    if not DOWNLOAD_DIR.exists():
+        pytest.skip(
+            "Recall download directory not found; set GVF_RECALL_DOWNLOAD_DIR "
+            "to run recall tests."
+        )
     pdfs = glob.glob(str(DOWNLOAD_DIR / "*.pdf")) + glob.glob(
         str(DOWNLOAD_DIR / "*.txt")
     )
+    if not pdfs:
+        pytest.skip(
+            "No recall download files found; set GVF_RECALL_DOWNLOAD_DIR "
+            "to a populated verified download directory."
+        )
 
     pmid_files = defaultdict(list)
     for f in pdfs:
@@ -96,6 +133,11 @@ def downloaded_papers():
                     "is_fulltext": not is_supp,  # Simplified assumption
                 }
             )
+    if not pmid_files:
+        pytest.skip(
+            "No PMID-prefixed recall download files found; set "
+            "GVF_RECALL_DOWNLOAD_DIR to a populated verified download directory."
+        )
 
     papers = []
     for pmid, files in pmid_files.items():
@@ -114,6 +156,11 @@ def downloaded_papers():
 @pytest.fixture(scope="session")
 def extraction_results():
     """Load current GVF extraction results."""
+    if not OUTPUT_DIR.exists():
+        pytest.skip(
+            "Recall output directory not found; set GVF_RECALL_OUTPUT_DIR "
+            "to run recall tests."
+        )
     # Auto-detect latest extraction file
     candidates = sorted(OUTPUT_DIR.glob("kcnh2_variant_scan_*.tsv"))
     if not candidates:

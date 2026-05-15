@@ -27,7 +27,7 @@ from . import register
 @register
 class ElsevierOpenStrategy(PublisherStrategy):
     NAME = "elsevier_open"
-    DOI_PREFIXES = ("10.1016",)
+    DOI_PREFIXES = ("10.1016", "10.4065")
     DOMAINS = (
         "sciencedirect.com",
         "linkinghub.elsevier.com",
@@ -35,6 +35,7 @@ class ElsevierOpenStrategy(PublisherStrategy):
         "jacc.org",
         "cell.com",
         "thelancet.com",
+        "mayoclinicproceedings.org",
     )
     # Open Archive policies vary by journal — leave embargo unset so the
     # strategy attempts and bails out fast on access denial.

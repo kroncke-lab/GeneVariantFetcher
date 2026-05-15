@@ -1156,7 +1156,8 @@ def _run_browser_fetch(
         cmd = [
             sys.executable,
             "-u",
-            "browser_fetch.py",
+            "-m",
+            "cli.browser_fetch",
             csv_path,
         ]  # -u for unbuffered output
         if headless:

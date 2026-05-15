@@ -57,6 +57,7 @@ class TableCaption:
     title: str
     text: str
     table_id: Optional[str] = None
+    image_url: Optional[str] = None
 
 
 @dataclass
@@ -407,6 +408,45 @@ def _extract_table_captions_from_html(soup: BeautifulSoup) -> List[TableCaption]
                 table_id=tbl.get("id"),
             )
         )
+
+    # PMC's current HTML often renders tables as image-only ``section.tw``
+    # blocks with a caption div and an <img> rather than as text tables.
+    # Those image URLs are valuable input for the optional figure OCR pass.
+    seen_keys = {((tbl.table_id or "").lower(), tbl.text[:120].lower()) for tbl in out}
+    image_table_sections = soup.select(
+        "section.tw, section.table-wrap, div.table-wrap, div[class*='table-wrap']"
+    )
+    for idx, section in enumerate(image_table_sections, len(out) + 1):
+        cap_elem = (
+            section.find(class_=re.compile(r"caption", re.IGNORECASE))
+            or section.find("caption")
+            or section.find(["figcaption"])
+        )
+        body = _html_text(cap_elem) if cap_elem else ""
+        if not body:
+            continue
+        key = ((section.get("id") or "").lower(), body[:120].lower())
+        if key in seen_keys:
+            continue
+        seen_keys.add(key)
+
+        label_node = cap_elem.find(["strong", "b"]) if cap_elem else None
+        label = _html_text(label_node) if label_node else ""
+        if not label:
+            head = body.split(".", 1)[0]
+            label = head.strip() if _TABLE_LABEL_RE.match(head) else f"Table {idx}"
+
+        img = section.find("img")
+        href = _resolve_image_url(img) if img else None
+        out.append(
+            TableCaption(
+                label=label,
+                title=_first_sentence(body),
+                text=body,
+                table_id=section.get("id"),
+                image_url=href,
+            )
+        )
     return out
 
 
@@ -507,6 +547,8 @@ def _format_table_caption_md(tbl: TableCaption) -> str:
         parts.append(f"**{tbl.title}**")
     if tbl.text and tbl.text not in (tbl.title, tbl.label):
         parts.append(tbl.text)
+    if tbl.image_url:
+        parts.append(f"_image_: {tbl.image_url}")
     return "\n\n".join(parts)
 
 

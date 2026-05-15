@@ -38,6 +38,56 @@ Table 1. KCNH2 variant carriers
     assert by_protein["p.Lys897Thr"]["penetrance_data"]["total_carriers_observed"] == 7
 
 
+def test_deterministic_parser_preserves_affected_unaffected_counts():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 1. KCNH2 affected and unaffected carriers
+
+| protein | affected | unaffected |
+|---------|----------|------------|
+| p.Lys897Thr | 3 | 4 |
+| p.Arg1047Leu | 4 | 10 |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "KCNH2")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    pen = by_protein["p.Lys897Thr"]["penetrance_data"]
+    assert pen["total_carriers_observed"] == 7
+    assert pen["affected_count"] == 3
+    assert pen["unaffected_count"] == 4
+
+    pen = by_protein["p.Arg1047Leu"]["penetrance_data"]
+    assert pen["total_carriers_observed"] == 14
+    assert pen["affected_count"] == 4
+    assert pen["unaffected_count"] == 10
+
+
+def test_deterministic_parser_infers_one_carrier_per_patient_row_without_count():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 1. KCNH2 mutation-positive patients
+
+| Patient | Mutation | QTc | Phenotype |
+|---------|----------|-----|-----------|
+| P1 | p.Arg176Trp | 510 | syncope |
+| P2 | p.Asn629Ser | 430 | unaffected |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "KCNH2")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {"p.Arg176Trp", "p.Asn629Ser"}
+    pen = by_protein["p.Arg176Trp"]["penetrance_data"]
+    assert pen["total_carriers_observed"] == 1
+    assert pen["affected_count"] == 1
+    assert pen["unaffected_count"] == 0
+    pen = by_protein["p.Asn629Ser"]["penetrance_data"]
+    assert pen["total_carriers_observed"] == 1
+    assert pen["affected_count"] == 0
+    assert pen["unaffected_count"] == 1
+
+
 def test_artifact_filter_removes_malformed_protein_notations():
     extractor = ExpertExtractor(models=["gpt-4"])
     data = {

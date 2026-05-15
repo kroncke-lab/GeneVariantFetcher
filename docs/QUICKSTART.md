@@ -37,7 +37,7 @@ OPENAI_API_KEY=sk-your-openai-key-here
 
 # Optional: Publisher APIs for better paper coverage
 ELSEVIER_API_KEY=your-elsevier-key
-SPRINGER_API_KEY=your-springer-key  
+SPRINGER_API_KEY=your-springer-key
 WILEY_API_KEY=your-wiley-key
 
 # Optional: Higher rate limits with NCBI API key
@@ -134,8 +134,8 @@ sqlite3 ./output/KCNH2/20260210_143022/KCNH2.db
 sqlite> SELECT COUNT(*) FROM variants;
 
 # List pathogenic variants
-sqlite> SELECT protein_notation, clinical_significance 
-        FROM variants 
+sqlite> SELECT protein_notation, clinical_significance
+        FROM variants
         WHERE clinical_significance = 'pathogenic';
 
 # Get penetrance data
@@ -187,7 +187,7 @@ For comprehensive coverage, obtain at least Elsevier and Springer keys (both fre
 ## Next Steps
 
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** — Understand the pipeline
-- **[API_KEYS.md](API_KEYS.md)** — Get publisher API keys  
+- **[API_KEYS.md](API_KEYS.md)** — Get publisher API keys
 - **[OUTPUT_FORMAT.md](OUTPUT_FORMAT.md)** — Work with results
 - **[VALIDATION.md](VALIDATION.md)** — Understand recall metrics
 

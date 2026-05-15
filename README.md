@@ -31,15 +31,22 @@ GeneVariantFetcher (GVF) is an end-to-end pipeline that discovers, downloads, an
 
 ## Performance
 
-Validated on KCNH2 (Long QT Syndrome type 2) with manually curated gold standard:
+Current measured KCNH2 performance against the normalized 2026 gold input
+(`gene_variant_fetcher_gold_standard/normalized/KCNH2_recall_input.csv`) and the
+manual-recovery v12 database scored on 2026-05-15:
 
 | Metric | Recall |
 |--------|--------|
-| **Unique variants** | 59.1% |
-| **Total carriers** | 71.3% |
-| **Affected individuals** | 67.6% |
+| **PMIDs** | 184/262 (70.2%) |
+| **Variant rows** | 542/991 (54.7%) |
+| **Unique variants** | 323/530 (60.9%) |
+| **Patients/carriers** | 1758/2674 (65.7%) |
+| **Affected individuals** | 1095/1635 (67.0%) |
 
-Version 2.1.0 improved recall from 19.4% → 59.1% through Springer API integration, enhanced table extraction, and scanner improvements.
+The older 59.1% number from the 2025-12-11 KCNH2 baseline is historical. The
+current branch adds multi-gene recall inputs, authenticated paywall recovery,
+clinical mutation-list table handling, and matcher improvements; source access
+is now the main limiter for KCNH2 recall.
 
 > **Note:** Performance varies by gene and literature availability. Cardiac genes (8 validated) have optimized configurations with known protein lengths; other genes work generically but may have lower recall.
 
@@ -51,7 +58,7 @@ Version 2.1.0 improved recall from 19.4% → 59.1% through Springer API integrat
 # 1. Clone and install
 git clone https://github.com/your-org/GeneVariantFetcher.git
 cd GeneVariantFetcher
-python -m venv venv && source venv/bin/activate
+python -m venv .venv && source .venv/bin/activate
 pip install -e .
 
 # 2. Configure API keys (create .env file)
@@ -95,9 +102,9 @@ sudo dnf install poppler-utils
 
 ```bash
 # Create virtual environment
-python3.11 -m venv venv
-source venv/bin/activate  # Linux/macOS
-# or: venv\Scripts\activate  # Windows
+python3.11 -m venv .venv
+source .venv/bin/activate  # Linux/macOS
+# or: .venv\Scripts\activate  # Windows
 
 # Install GVF
 pip install -e .
@@ -368,7 +375,7 @@ NCBI_API_KEY=...                   # 10x rate limits
 
 # Optional (publisher access)
 ELSEVIER_API_KEY=...               # ScienceDirect
-SPRINGER_API_KEY=...               # SpringerLink  
+SPRINGER_API_KEY=...               # SpringerLink
 WILEY_API_KEY=...                  # Wiley Online
 
 # Alternative LLM providers
@@ -385,7 +392,7 @@ Key tunable parameters:
 TIER1_MIN_KEYWORD_MATCHES = 2      # Keywords required to pass Tier 1
 TIER2_CONFIDENCE_THRESHOLD = 0.5   # LLM confidence for Tier 2
 
-# Extraction  
+# Extraction
 TIER3_MODELS = ["gpt-4o-mini", "gpt-4o"]  # Model cascade
 TIER3_MAX_TOKENS = 16000           # Max tokens for extraction
 TIER3_TEMPERATURE = 0.1            # LLM temperature
@@ -427,7 +434,7 @@ Any gene symbol works with the pipeline. However:
 
 | Issue | Solution |
 |-------|----------|
-| "No papers downloaded" | Check `paywalled_missing.csv`; add publisher API keys or use `browser_fetch` |
+| "No papers downloaded" | Check `paywalled_missing.csv`; add publisher API keys or use `scripts/fetch_paywalled.py` |
 | "Extraction failed" | Check `extraction_failures.csv`; increase `TIER3_MAX_TOKENS` |
 | "All papers filtered out" | Lower `TIER2_CONFIDENCE_THRESHOLD` or use `--tier-threshold 0` |
 | Rate limiting errors | Set `NCBI_API_KEY` for higher limits; increase `DOWNLOAD_DELAY` |
@@ -439,12 +446,17 @@ Any gene symbol works with the pipeline. However:
 For papers that couldn't be auto-downloaded:
 
 ```bash
-# Option 1: Browser automation (recommended)
-python -m cli.browser_fetch results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv --interactive
+# Canonical recovery path: authenticated browser HTML plus quality gate plus PMC fallback
+python scripts/fetch_paywalled.py \
+  --input results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv \
+  --output-dir results/GENE/TIMESTAMP/pmc_fulltext
 
-# Option 2: Manual workflow
+# Manual fallback for papers that remain hard-blocked
 python -m cli.fetch_manager results/GENE/TIMESTAMP/pmc_fulltext/paywalled_missing.csv
 ```
+
+Validated recovery artifacts should be copied into the canonical run's
+`pmc_fulltext/` directory and then re-extracted before running recall scoring.
 
 ---
 
@@ -479,6 +491,9 @@ pip install -e ".[dev]"
 
 # Run tests
 pytest tests/
+
+# Run live network/institutional tests explicitly
+GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests pytest -m requires_network tests/integration
 
 # Run with coverage
 pytest --cov=. tests/

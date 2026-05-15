@@ -51,6 +51,12 @@ def test_elsevier_doi_matches_elsevier_open_strategy():
     assert s.EMBARGO_MONTHS is None
 
 
+def test_mayo_clinic_proceedings_doi_matches_elsevier_open_strategy():
+    s = find_strategy("10.4065/78.12.1479")
+    assert s is not None
+    assert s.NAME == "elsevier_open"
+
+
 def test_unknown_doi_falls_back_to_generic():
     s = find_strategy("10.9999/unknown.publisher.123")
     assert s is not None

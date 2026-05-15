@@ -91,11 +91,20 @@ def _convert_supplement(
         return converter.xml_supplement_to_markdown(file_path), 0, nested_files
     if ext == ".zip":
         zip_dest = file_path.parent / file_path.stem
-        extracted_paths, md = converter.extract_zip_supplement(
-            file_path, dest_dir=zip_dest
-        )
+        kwargs: dict[str, Any] = {"dest_dir": zip_dest}
+        if extract_figures and figures_dir is not None:
+            kwargs["figures_dir"] = figures_dir
+            kwargs["extract_images"] = True
+        result = converter.extract_zip_supplement(file_path, **kwargs)
+        # extract_zip_supplement may return (paths, md) or (paths, md, figures)
+        if len(result) == 3:
+            extracted_paths, md, zip_figs = result
+            figs_count = len(zip_figs) if zip_figs else 0
+        else:
+            extracted_paths, md = result
+            figs_count = 0
         nested_files = [str(p) for p in extracted_paths]
-        return md, 0, nested_files
+        return md, figs_count, nested_files
 
     # Unknown / binary extension — record path but no markdown content.
     return f"[File available at: {file_path}]\n\n", 0, nested_files

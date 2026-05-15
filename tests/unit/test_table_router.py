@@ -147,6 +147,79 @@ def test_parse_routed_table_extracts_variants():
     assert pen["unaffected_count"] == 10
 
 
+def test_parse_routed_table_filters_multigene_and_derives_total():
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. Arrhythmia panel carriers",
+        header_line="| Gene | Protein | Affected | Unaffected |",
+        header_cells=["Gene", "Protein", "Affected", "Unaffected"],
+        data_lines=[
+            "| KCNQ1 | p.Gly148Arg | 2 | 3 |",
+            "| SCN5A | p.Ala226Asp | 9 | 0 |",
+        ],
+        char_start=0,
+        char_end=160,
+    )
+    mapping = {"gene": 0, "protein": 1, "affected": 2, "unaffected": 3}
+
+    variants = parse_routed_table(table, mapping, "KCNQ1")
+
+    assert len(variants) == 1
+    assert variants[0]["protein_notation"] == "p.Gly148Arg"
+    pen = variants[0]["penetrance_data"]
+    assert pen["total_carriers_observed"] == 5
+    assert pen["affected_count"] == 2
+    assert pen["unaffected_count"] == 3
+
+
+def test_extract_via_router_infers_one_carrier_per_clinical_row_without_count():
+    def stub(**_):
+        raise AssertionError("LLM router should not run for row-level clinical tables")
+
+    paper = """Table 1. KCNH2 mutation-positive probands
+
+| Patient | Mutation | QTc | Phenotype |
+|---------|----------|-----|-----------|
+| P1 | p.Arg176Trp | 510 | syncope |
+| P2 | p.Asn629Ser | 430 | unaffected |
+"""
+
+    result = extract_via_router(
+        paper, "KCNH2", model="azure_ai/Kimi-K2.6-1", llm_caller=stub
+    )
+
+    assert result["used_fallback"] is False
+    assert len(result["variants"]) == 2
+    by_protein = {v["protein_notation"]: v for v in result["variants"]}
+    affected = by_protein["p.Arg176Trp"]["penetrance_data"]
+    unaffected = by_protein["p.Asn629Ser"]["penetrance_data"]
+    assert affected["total_carriers_observed"] == 1
+    assert affected["affected_count"] == 1
+    assert affected["unaffected_count"] == 0
+    assert unaffected["total_carriers_observed"] == 1
+    assert unaffected["affected_count"] == 0
+    assert unaffected["unaffected_count"] == 1
+
+
+def test_row_level_inference_requires_clinical_context():
+    def stub(**_):
+        return _stub_response(json.dumps({"variant_tables": []}))
+
+    paper = """Table 1. Protein nomenclature reference
+
+| Variant | Domain |
+|---------|--------|
+| p.Arg176Trp | N terminus |
+| p.Asn629Ser | pore |
+"""
+
+    result = extract_via_router(
+        paper, "KCNH2", model="azure_ai/Kimi-K2.6-1", llm_caller=stub
+    )
+
+    assert result["variants"] == []
+
+
 def test_parse_routed_table_rejects_misrouted_gwas_allele_rows():
     table = MarkdownTable(
         table_id="T1",
@@ -198,13 +271,33 @@ def test_extract_via_router_end_to_end_with_stub():
         SAMPLE_PAPER, "KCNH2", model="azure_ai/Kimi-K2.6-1", llm_caller=stub
     )
     assert captured["model"] == "azure_ai/Kimi-K2.6-1"
-    assert "T1" in captured["prompt"]
-    # The assay table is offered to the router (since it has a "Table N."
-    # caption); the stub picks only T1, so only those variants come through.
+    # T1 is deterministically mapped and therefore not sent to the LLM router.
+    assert "Variant carriers in the cohort" not in captured["prompt"]
+    # The assay table is still offered to the router because it has a caption.
     assert "Functional assays" in captured["prompt"]
     assert len(result["variants"]) == 2
     assert result["used_fallback"] is False
     assert result["error"] is None
+
+
+def test_extract_via_router_skips_llm_for_unambiguous_clinical_table():
+    def stub(**_):
+        raise AssertionError("LLM router should not run for unambiguous headers")
+
+    paper = """Table 1. KCNH2 clinical carriers
+
+| Gene | Protein | Affected | Unaffected |
+|------|---------|----------|------------|
+| KCNH2 | p.Gly572Ser | 2 | 1 |
+"""
+
+    result = extract_via_router(
+        paper, "KCNH2", model="azure_ai/Kimi-K2.6-1", llm_caller=stub
+    )
+
+    assert result["used_fallback"] is False
+    assert len(result["variants"]) == 1
+    assert result["variants"][0]["protein_notation"] == "p.Gly572Ser"
 
 
 def test_extract_via_router_falls_back_when_no_tables():
@@ -225,8 +318,16 @@ def test_extract_via_router_falls_back_when_router_returns_empty():
     def stub(**_):
         return _stub_response('{"variant_tables": []}')
 
+    paper = """Table 1. Functional assays
+
+| construct | tail current | activation V1/2 |
+|-----------|--------------|-----------------|
+| WT | 100% | -32 |
+| K897T | 95% | -30 |
+"""
+
     result = extract_via_router(
-        SAMPLE_PAPER, "KCNH2", model="azure_ai/Kimi-K2.6-1", llm_caller=stub
+        paper, "KCNH2", model="azure_ai/Kimi-K2.6-1", llm_caller=stub
     )
     assert result["used_fallback"] is True
     assert result["variants"] == []

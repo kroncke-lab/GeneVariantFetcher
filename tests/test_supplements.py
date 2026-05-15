@@ -94,9 +94,9 @@ class TestPMCFetcher:
         results = pmc_fetcher.fetch("31983221")
 
         assert isinstance(results, list), "Should return a list"
-        assert len(results) > 0, (
-            "PMID 31983221 should have at least one supplement in PMC"
-        )
+        assert (
+            len(results) > 0
+        ), "PMID 31983221 should have at least one supplement in PMC"
 
         # Validate structure
         first = results[0]
@@ -213,9 +213,9 @@ class TestUnifiedFetcher:
         results = unified_fetcher.fetch_tier1("31983221")
         assert isinstance(results, list)
         for s in results:
-            assert s.source.startswith("pmc"), (
-                f"Tier 1 result should be from PMC: {s.source}"
-            )
+            assert s.source.startswith(
+                "pmc"
+            ), f"Tier 1 result should be from PMC: {s.source}"
 
     def test_deduplication_across_tiers(self, unified_fetcher):
         """If the same supplement is found by multiple tiers, keep only one."""

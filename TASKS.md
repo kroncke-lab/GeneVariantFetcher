@@ -1,8 +1,10 @@
 # GVF Tasks
 
 ## Current Focus
-- Improve unique variant recall from 59% (2025-12-11 baseline) → 90% by June 2026 grant deadline.
-- **Measurement loop is broken — re-run KCNH2 end-to-end is the single most important next action.**
+- Improve KCNH2 recall from the 2026-05-15 measured baseline to 90% by June 2026 grant deadline.
+  - Current KCNH2 unique-variant recall: 323/530 (60.9%).
+  - Current KCNH2 variant-row recall: 542/991 (54.7%).
+- **Measurement loop is multi-gene now** — score KCNH2, KCNQ1, and SCN5A from `gene_variant_fetcher_gold_standard/normalized/*_recall_input.csv`; RYR2 still needs a per-PMID clinical source before recall can be scored.
 
 ## Completed
 - [x] Springer API integration (full-text retrieval working)
@@ -28,16 +30,33 @@
   - [x] `_cdna_indel_protein_positions(cdna)` codon math (c.842dupG → aa 281)
   - [x] `_protein_indel_position(variant)` protein indel parser
   - [x] `find_best_match(..., consumed: Set[str])` for 1-to-1 enforcement at match time
+  - [x] cDNA/protein bridge pass wired into greedy 1-to-1 matcher
 - [x] Cherry-picked from heuristic-chatelet worktree
   - [x] Scanner: parenthesized HGVS pattern `p.(Arg176Trp)` (commit `f6307da`)
   - [x] Harvest: log silent supplement-scrape failures with PMID context (commit `d3a639f`)
   - [x] Extraction: reject DATA_ZONES that override full text with garbage (commit `e6daa24`)
+- [x] **Clinical mutation-list table extraction (2026-05-14)**
+  - [x] Deterministically infer one carrier per row for clinical mutation-list tables with variant/proband/family/patient context but no explicit count column
+  - [x] Preserve affected vs unaffected counts when the row text indicates asymptomatic/control/unaffected status
+  - [x] Keep pure nomenclature/list tables out of extraction unless clinical row context is present
+- [x] **Bulk KCNH2 stale-context reharvest (2026-05-14)**
+  - [x] Reharvested all 213 stale/missed KCNH2 FULL_CONTEXT files in `results/KCNH2/20260506_102238/pmc_fulltext/`
+  - [x] Recovered 17 real contexts; 196 still require paywall/manual/source access
+  - [x] Wrote audit artifacts under `results/KCNH2/20260506_102238/reharvest_out_20260514/`
+- [x] **KCNH2 v12 manual-recovery score + matcher patch (2026-05-15)**
+  - [x] Scored `KCNH2_v12_manual_recovery_20260515.db`: PMIDs 184/262 (70.2%), variant rows 542/991 (54.7%), unique variants 323/530 (60.9%), patients 1758/2674 (65.7%)
+  - [x] Added frameshift canonicalization for extraction spellings like `fsTer`, `fs/185`, `fs+*49`, and malformed `AlaX14`
+  - [x] Extended cDNA/protein bridge matching to multi-base cDNA indel ranges; recovered `P926fsX` (PMID 26496715) and `P1034fsX` (PMID 29622001)
 
 ## Active Tasks
-- [ ] **Re-run KCNH2 extraction end-to-end** with patched pipeline; regenerate `comparison_results/`. This is the highest-leverage measurement task.
-- [ ] **Obtain Elsevier INSTTOKEN** from Vanderbilt E-resources (eresources@vanderbilt.edu). Unlocks PMID 15840476 (86 gold variants).
-- [ ] **Wire codon-math bridge into the matcher loop** — `_cdna_indel_protein_positions` and `_protein_indel_position` are now in `cli/compare_variants.py` but not yet called by the comparison logic. Need to add a pass that maps cDNA indels to protein positions and bridges remaining unmatched pairs.
-- [ ] **Manual PDF download for the 5 stub PMIDs** (15840476 Tester, 26496715 Karger, 16922724 Wiley CG, 12402336 Wiley HM, 23631430 Sage). Feed through `harvesting/format_converters.py`.
+- [ ] **Close KCNH2 source/extraction gap to >90%**. Current post-patch gap is 350 variant rows to 90% against `KCNH2_v12_manual_recovery_20260515.db`; top remaining blockers are PMID 15840476 (86 rows, Elsevier INSTTOKEN), 14661677 (24), 29650123 (21), 24667783 (20), 16922724 (20), 23098067 (16), and 23631430 (12).
+- [ ] **Investigate `count_mismatches=117`** from the latest recall summary. Many top mismatches look like SQLite over-counting patient/carrier totals from cohort tables, which is separate from missing-row recall.
+- [ ] **Re-run extraction end-to-end for KCNQ1 and SCN5A** with patched table/full-context pipeline; score with `scripts/run_recall_suite.py`.
+- [ ] **Create or import RYR2 per-PMID gold input**. Variant_Browser currently exposes only aggregate RYR2 variant counts, so RYR2 is documented but not recall-scorable.
+- [ ] **Obtain Elsevier INSTTOKEN** from Vanderbilt E-resources (eresources@vanderbilt.edu). Unlocks PMID 15840476 (86 gold variants). Local OneDrive files named `15840476.pdf` and `26496715.pdf` were checked on 2026-05-14 and are zero-filled placeholders, not usable PDFs.
+- [ ] **Run fresh KCNQ1 and SCN5A extraction DBs.** The 2026-05-14 recall runner can score these genes, but current local `results/` has no KCNQ1/SCN5A SQLite DBs yet.
+- [ ] **Integrate valid paywall recovery artifacts into canonical runs** before re-extraction; known high-value recovered KCNH2 artifacts are PMIDs 10973849, 11854117, 19038855, 23098067, and 19996378.
+- [ ] **Manual PDF download for hard-blocked/stub PMIDs** (15840476 Tester, 26496715 Karger, 16922724 Wiley CG, 12402336 Wiley HM, 23631430 Sage). Feed real downloaded PDFs through `harvesting/format_converters.py`; avoid OneDrive on-demand placeholders.
 - [ ] Set weekly recall cadence (Friday re-run + compare) — produces trajectory chart for grant.
 
 ## Blocked

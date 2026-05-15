@@ -132,8 +132,7 @@ def validate_has_extraction_files(extraction_dir: Path) -> int:
     Raises:
         ValidationError: If no extraction files found
     """
-    json_files = list(extraction_dir.glob("*_PMID_*.json"))
-    json_files.extend(extraction_dir.glob("*_extraction.json"))
+    json_files = find_extraction_json_files(extraction_dir)
 
     if not json_files:
         raise ValidationError(
@@ -142,6 +141,29 @@ def validate_has_extraction_files(extraction_dir: Path) -> int:
         )
 
     return len(json_files)
+
+
+_EXTRACTION_JSON_NAME_RE = re.compile(
+    r"^(?:[A-Za-z0-9_-]+_PMID_\d+|[A-Za-z0-9_-]+_PMID_FULL|\d+_extraction)\.json$"
+)
+
+
+def is_extraction_json_file(path: Path) -> bool:
+    """Return True for canonical extraction JSON filenames only."""
+    return bool(_EXTRACTION_JSON_NAME_RE.match(path.name))
+
+
+def find_extraction_json_files(extraction_dir: Path) -> List[Path]:
+    """Return extraction JSON files in all supported GVF naming schemes.
+
+    Keep this intentionally stricter than ``*_PMID_*.json`` so timestamped
+    backups such as ``KCNH2_PMID_123.20260514_pre.json`` are not migrated as
+    duplicate papers.
+    """
+    return sorted(
+        (p for p in extraction_dir.glob("*.json") if is_extraction_json_file(p)),
+        key=lambda p: p.name,
+    )
 
 
 def validate_db_path_writable(db_path: str) -> None:
@@ -1004,8 +1026,7 @@ def migrate_extraction_directory(
     logger.info(f"Migrating extraction files from: {extraction_dir}")
 
     # Find all JSON files matching extraction pattern
-    json_files = list(extraction_dir.glob("*_PMID_*.json"))
-    json_files.extend(extraction_dir.glob("*_PMID_FULL.json"))
+    json_files = find_extraction_json_files(extraction_dir)
 
     if not json_files:
         logger.warning(f"No extraction JSON files found in {extraction_dir}")
@@ -1297,7 +1318,7 @@ def determine_database_name(
 
     # Strategy 2: Try to extract from JSON file
     if extraction_dir:
-        json_files = list(extraction_dir.glob("*_PMID_*.json"))
+        json_files = find_extraction_json_files(extraction_dir)
         if json_files:
             gene = extract_gene_from_json(json_files[0])
             if gene:
@@ -1319,7 +1340,11 @@ def main():
         "--data-dir",
         type=Path,
         required=True,
-        help="Path to data directory. Can point to parent dir with extractions/ subdir, or directly to dir containing *_PMID_*.json files",
+        help=(
+            "Path to data directory. Can point to parent dir with extractions/ "
+            "subdir, or directly to dir containing *_PMID_*.json or "
+            "*_extraction.json files"
+        ),
     )
 
     parser.add_argument(
@@ -1374,7 +1399,7 @@ def main():
     extraction_dir = None
 
     # Strategy 1: Check if data_dir itself contains JSON files
-    json_files_in_data_dir = list(data_dir.glob("*_PMID_*.json"))
+    json_files_in_data_dir = find_extraction_json_files(data_dir)
     if json_files_in_data_dir:
         extraction_dir = data_dir
         logger.info(
@@ -1384,7 +1409,7 @@ def main():
         # Strategy 2: Check specified extractions subdirectory
         extraction_subdir = data_dir / args.extractions_subdir
         if extraction_subdir.exists() and extraction_subdir.is_dir():
-            json_files_in_subdir = list(extraction_subdir.glob("*_PMID_*.json"))
+            json_files_in_subdir = find_extraction_json_files(extraction_subdir)
             if json_files_in_subdir:
                 extraction_dir = extraction_subdir
                 logger.info(
@@ -1408,7 +1433,7 @@ def main():
                     # Check timestamped subdirectories (e.g., 20251125_151454)
                     for potential_dir in [subdir] + list(subdir.iterdir()):
                         if potential_dir.is_dir():
-                            json_files = list(potential_dir.glob("*_PMID_*.json"))
+                            json_files = find_extraction_json_files(potential_dir)
                             if json_files:
                                 extraction_dir = potential_dir
                                 logger.info(
@@ -1423,7 +1448,7 @@ def main():
                 for alt in alternatives:
                     alt_dir = data_dir / alt
                     if alt_dir.exists() and alt_dir.is_dir():
-                        json_files_in_alt = list(alt_dir.glob("*_PMID_*.json"))
+                        json_files_in_alt = find_extraction_json_files(alt_dir)
                         if json_files_in_alt:
                             extraction_dir = alt_dir
                             logger.info(
@@ -1436,7 +1461,9 @@ def main():
         logger.error(
             f"No extraction JSON files found in {data_dir} or its subdirectories"
         )
-        logger.error("Expected files matching pattern: *_PMID_*.json")
+        logger.error(
+            "Expected files matching pattern: *_PMID_*.json or *_extraction.json"
+        )
         return 1
 
     # ========================================================================

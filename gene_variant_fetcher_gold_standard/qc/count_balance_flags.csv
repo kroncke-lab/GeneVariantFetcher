@@ -1,0 +1,5 @@
+gene,source_table,source_row_id,variant_raw,pmid,total_stated,carriers_total_computed,count_balance_delta
+SCN5A,[SCN5A].[SCN5A_papers],31,p.M741_T742delinsI,29997009,3,2,1
+SCN5A,[SCN5A].[SCN5A_papers],167,V1340L,29781517,5,2,3
+SCN5A,[SCN5A].[SCN5A_papers],2835,F2004L,29672598,2,3,-1
+SCN5A,[SCN5A].[SCN5A_papers],3068,T1304M,29764897,1,0,1

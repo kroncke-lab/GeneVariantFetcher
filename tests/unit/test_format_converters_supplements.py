@@ -9,6 +9,7 @@ from __future__ import annotations
 import textwrap
 import zipfile
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
@@ -59,6 +60,65 @@ def test_html_supplement_to_markdown_extracts_table_rows(converter, tmp_path: Pa
     assert "drop me" not in md  # script removed
     assert "heterozygous" in md
     assert "|" in md  # contains markdown table syntax
+
+
+def test_xml_to_markdown_preserves_jats_table_wrap_rows(converter):
+    xml = textwrap.dedent("""\
+        <article>
+          <front>
+            <article-meta>
+              <title-group><article-title>KCNH2 cohort</article-title></title-group>
+              <abstract><p>Clinical cohort with KCNH2 variants.</p></abstract>
+            </article-meta>
+          </front>
+          <body>
+            <sec>
+              <title>Results</title>
+              <p>Variants are listed in Table 1.</p>
+              <table-wrap id="t1">
+                <label>Table 1</label>
+                <caption><title>KCNH2 variants in affected probands</title></caption>
+                <table>
+                  <thead>
+                    <tr><th>Variant</th><th>Affected</th><th>Unaffected</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>p.Arg176Trp</td><td>4</td><td>1</td></tr>
+                    <tr><td>p.Asn629Ser</td><td>2</td><td>0</td></tr>
+                  </tbody>
+                </table>
+              </table-wrap>
+            </sec>
+          </body>
+        </article>
+        """)
+    md = converter.xml_to_markdown(xml)
+    assert "Table 1" in md
+    assert "KCNH2 variants in affected probands" in md
+    assert "| Variant | Affected | Unaffected |" in md
+    assert "p.Arg176Trp" in md
+    assert "p.Asn629Ser" in md
+
+
+def test_pmc_html_to_markdown_preserves_article_table_rows(converter):
+    html = textwrap.dedent("""\
+        <html><body>
+          <h1>KCNH2 cohort</h1>
+          <section class="body main-article-body">
+            <section>
+              <h2>Results</h2>
+              <p>Variants are listed in the table.</p>
+              <table>
+                <tr><th>Variant</th><th>Carriers</th></tr>
+                <tr><td>p.Ala561Val</td><td>6</td></tr>
+              </table>
+            </section>
+          </section>
+        </body></html>
+        """)
+    md = converter.pmc_html_to_markdown(html)
+    assert "p.Ala561Val" in md
+    assert "| Variant | Carriers |" in md
 
 
 def test_xml_supplement_to_markdown_strips_tags(converter, tmp_path: Path):
@@ -120,3 +180,91 @@ def test_extract_zip_supplement_handles_bad_zip(converter, tmp_path: Path):
     extracted, md = converter.extract_zip_supplement(p, dest_dir=tmp_path / "out")
     assert extracted == []
     assert "Bad ZIP" in md or "ZIP" in md
+
+
+def test_extract_zip_supplement_nested_pdf_figures_in_extracted(
+    converter, tmp_path: Path
+):
+    """Nested PDF figure paths must appear in the returned extracted list."""
+    zip_path = tmp_path / "bundle.zip"
+    # Write a minimal valid PDF stub — real extraction is mocked below.
+    fake_pdf_bytes = b"%PDF-1.4 stub"
+    with zipfile.ZipFile(zip_path, "w") as zf:
+        zf.writestr("supp1.pdf", fake_pdf_bytes)
+
+    figures_dir = tmp_path / "figs"
+    fake_img_path = figures_dir / "fig_p1_0.png"
+
+    fake_md = "### Page 1\n\nSome text.\n\n[Figure 1 from page 1: fig_p1_0.png (200x200px)]\n\n"
+    fake_images = [
+        {
+            "page": 1,
+            "index": 0,
+            "width": 200,
+            "height": 200,
+            "size_bytes": 5000,
+            "ext": "png",
+            "filename": "fig_p1_0.png",
+            "path": fake_img_path,
+        }
+    ]
+
+    with patch.object(
+        converter, "pdf_to_markdown_with_images", return_value=(fake_md, fake_images)
+    ) as mock_pdf:
+        extracted, md = converter.extract_zip_supplement(
+            zip_path,
+            dest_dir=tmp_path / "bundle",
+            figures_dir=figures_dir,
+            extract_images=True,
+        )
+
+    mock_pdf.assert_called_once()
+    # The PDF itself and the extracted image path should both be in extracted.
+    assert fake_img_path in extracted
+    # Markdown should carry the figure placeholder from the nested PDF.
+    assert "[Figure 1 from page 1" in md
+    assert "supp1.pdf" in md or "fig_p1_0.png" in md
+
+
+def test_pdf_to_markdown_with_images_creates_nested_output_dir(
+    converter, tmp_path: Path
+):
+    """output_dir whose parent does not yet exist must be created without error."""
+    deep_dir = tmp_path / "run" / "pmid_123" / "supplements"
+    # deep_dir and its parents do NOT exist yet.
+    assert not deep_dir.exists()
+
+    # Provide a minimal valid PDF so the header check passes, then mock fitz.
+    pdf_path = tmp_path / "test.pdf"
+    pdf_path.write_bytes(b"%PDF-1.4\n%%EOF\n")
+
+    fake_md = "### Page 1\n\nContent.\n\n"
+
+    class FakePage:
+        def get_text(self):
+            return "Content."
+
+        def get_images(self, full=True):
+            return []
+
+    class FakeDoc:
+        def __iter__(self):
+            return iter([FakePage()])
+
+        def close(self):
+            pass
+
+    def fake_open(path):
+        return FakeDoc()
+
+    try:
+        import fitz
+
+        with patch.object(fitz, "open", side_effect=fake_open):
+            md, images = converter.pdf_to_markdown_with_images(
+                pdf_path, output_dir=deep_dir, extract_images=True
+            )
+        assert deep_dir.exists() or (deep_dir / "figures").exists()
+    except ImportError:
+        pytest.skip("PyMuPDF not installed")

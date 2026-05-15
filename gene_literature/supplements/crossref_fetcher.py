@@ -26,9 +26,20 @@ logger = logging.getLogger(__name__)
 
 # URL path keywords that indicate supplementary material
 _SUPPLEMENT_KEYWORDS = {
-    "supplement", "supplementary", "suppl", "supp",
-    "mmc", "appendix", "additional", "supporting",
-    "si_", "s1_", "s2_", "s3_", "table_s", "figure_s",
+    "supplement",
+    "supplementary",
+    "suppl",
+    "supp",
+    "mmc",
+    "appendix",
+    "additional",
+    "supporting",
+    "si_",
+    "s1_",
+    "s2_",
+    "s3_",
+    "table_s",
+    "figure_s",
 }
 
 # Intended-application values to skip (not supplement files)

@@ -24,15 +24,19 @@ from cli.compare_variants import (
     convert_aa_3_to_1,
     convert_aa_1_to_3,
     get_variant_forms,
+    to_canonical_form,
     compute_similarity,
     find_best_match,
     safe_int,
     compute_diff,
+    load_excel_data,
     aggregate_excel_data,
     aggregate_sqlite_data,
     compare_data,
     introspect_sqlite,
     extract_sqlite_data,
+    compute_recall_summary,
+    generate_outputs,
     ComparisonRow,
 )
 
@@ -192,6 +196,38 @@ class TestColumnDetection:
         assert detected["affected_count"] == "cases"
         assert detected["unaffected_count"] == "controls"
 
+    def test_detect_columns_does_not_invent_unaffected_from_affected(self):
+        df = pd.DataFrame(
+            {
+                "variant": ["G148R"],
+                "pmid": ["34135346"],
+                "carriers": [1],
+                "affected": [0],
+            }
+        )
+        detected = detect_columns(df)
+
+        assert detected["affected_count"] == "affected"
+        assert detected["unaffected_count"] is None
+        assert detected["rsid"] is None
+
+    def test_load_csv_recall_input(self, tmp_path):
+        csv_path = tmp_path / "KCNQ1_recall_input.csv"
+        csv_path.write_text(
+            "variant,pmid,carriers,affected\nG148R,34135346,1,0\nD202N,34135346,2,2\n",
+            encoding="utf-8",
+        )
+
+        df, detected = load_excel_data(csv_path, None, None)
+        aggregated = aggregate_excel_data(df, detected)
+
+        assert detected["pmid"] == "pmid"
+        assert detected["variant"] == "variant"
+        assert detected["carriers_total"] == "carriers"
+        assert detected["affected_count"] == "affected"
+        assert ("34135346", "G148R") in aggregated
+        assert aggregated[("34135346", "D202N")]["carriers_total"] == 2
+
 
 # =============================================================================
 # VARIANT NORMALIZATION TESTS
@@ -244,6 +280,21 @@ class TestVariantNormalization:
         forms = get_variant_forms("p.R123H")
         assert "p.R123H" in forms
         assert "p.Arg123His" in forms
+
+    @pytest.mark.parametrize(
+        ("raw", "expected"),
+        [
+            ("p.Pro926AlafsTer14", "P926fsX"),
+            ("p.Pro926AlaX14", "P926fsX"),
+            ("p.V131fs/185", "V131fsX"),
+            ("p.K897fs+*49", "K897fsX"),
+            ("I82dup", "I82dup"),
+        ],
+    )
+    def test_to_canonical_form_frameshift_variants_seen_in_extractions(
+        self, raw, expected
+    ):
+        assert to_canonical_form(raw) == expected
 
 
 # =============================================================================
@@ -468,6 +519,62 @@ class TestComparison:
         assert len(r123h_result) == 1
         assert r123h_result[0].match_type == "exact"  # AA conversion counts as exact
         assert r123h_result[0].sqlite_variant_raw == "p.Arg123His"
+
+    def test_recall_summary_counts_gold_dimensions(
+        self, sample_excel_df, sample_sqlite_db
+    ):
+        detected = {
+            "pmid": "PMID",
+            "variant": "protein_change",
+            "carriers_total": "carriers",
+            "affected_count": "affected",
+            "unaffected_count": "unaffected",
+            "phenotype": "phenotype",
+        }
+        excel_data = aggregate_excel_data(sample_excel_df, detected)
+        table_info = introspect_sqlite(sample_sqlite_db)
+        sqlite_df = extract_sqlite_data(sample_sqlite_db, table_info)
+        sqlite_data = aggregate_sqlite_data(sqlite_df)
+
+        results = compare_data(excel_data, sqlite_data, "exact", 0.85)
+        recall = compute_recall_summary(results)
+
+        assert recall["pmids"] == {"matched": 2, "gold": 3, "recall": 2 / 3}
+        assert recall["variant_rows"] == {"matched": 3, "gold": 4, "recall": 0.75}
+        assert recall["unique_variants"] == {"matched": 3, "gold": 4, "recall": 0.75}
+        assert recall["patients"] == {"matched": 23, "gold": 26, "recall": 23 / 26}
+        assert recall["affected"] == {"matched": 16, "gold": 18, "recall": 16 / 18}
+        assert recall["unaffected"] == {"matched": 7, "gold": 8, "recall": 7 / 8}
+
+    def test_generate_outputs_writes_recall_metrics(
+        self, sample_excel_df, sample_sqlite_db, tmp_path
+    ):
+        detected = {
+            "pmid": "PMID",
+            "variant": "protein_change",
+            "carriers_total": "carriers",
+            "affected_count": "affected",
+            "unaffected_count": "unaffected",
+            "phenotype": "phenotype",
+        }
+        excel_data = aggregate_excel_data(sample_excel_df, detected)
+        table_info = introspect_sqlite(sample_sqlite_db)
+        sqlite_df = extract_sqlite_data(sample_sqlite_db, table_info)
+        sqlite_data = aggregate_sqlite_data(sqlite_df)
+        results = compare_data(excel_data, sqlite_data, "exact", 0.85)
+
+        summary = generate_outputs(
+            results,
+            tmp_path,
+            Path("gold.xlsx"),
+            Path("gvf.db"),
+        )
+
+        assert summary["recall"]["unique_variants"]["matched"] == 3
+        assert summary["recall"]["patients"]["gold"] == 26
+        report = (tmp_path / "report.md").read_text(encoding="utf-8")
+        assert "## Recall" in report
+        assert "| Affected | 16/18 (88.9%) |" in report
 
 
 # =============================================================================
@@ -767,6 +874,34 @@ class TestCDNAProteinBridge:
         results = compare_data(excel_data, sqlite_data, "exact", 0.85)
         matched = [r for r in results if r.match_type == "exact_cdna_bridge"]
         assert len(matched) == 1
+
+    def test_bridge_matches_protein_position_inside_cdna_indel_range(self):
+        excel_data, sqlite_data = self._build_inputs(
+            excel_rows={
+                "PMID": ["29622001"],
+                "protein_change": ["P1034fsX"],
+                "carriers": [1],
+                "affected": [1],
+                "unaffected": [0],
+                "phenotype": ["LQT2"],
+            },
+            sqlite_rows={
+                "pmid": ["29622001"],
+                # c.3093_3106 spans protein positions 1031-1036.
+                "variant": ["c.3093_3106del"],
+                "protein_notation": [None],
+                "cdna_notation": ["c.3093_3106del"],
+                "carriers_total": [1],
+                "affected_count": [1],
+                "unaffected_count": [0],
+                "uncertain_count": [0],
+            },
+        )
+
+        results = compare_data(excel_data, sqlite_data, "exact", 0.85)
+        matched = [r for r in results if r.match_type == "exact_cdna_bridge"]
+        assert len(matched) == 1
+        assert matched[0].sqlite_variant_raw == "c.3093_3106del"
 
     def test_bridge_rejects_wrong_codon(self):
         # Gold codon 281; cDNA position 100 → codon 34. Must not bridge.

@@ -8,7 +8,8 @@ fresh set of OA-friendly sources to recover real body text:
     1. Europe PMC fullTextXML       (independent index, often has BMC/Wellcome/etc.)
     2. NCBI ELink → PMC OA          (find PMCID even when PubMed metadata hides it)
     3. Unpaywall OA HTML landing    (preprint / accepted-MS HTML hosted by author/archive)
-    4. Unpaywall OA PDF             (last resort — PDF → markdown via FormatConverter)
+    4. Unpaywall OA PDF             (PDF → markdown via FormatConverter)
+    5. Google Scholar PDF by title  (last resort; clean miss on captcha/block)
 
 Each candidate is gated by `is_acceptable_body()`:
     - ≥ MIN_BODY_LINES non-heading lines
@@ -34,6 +35,7 @@ import requests
 
 from harvesting.format_converters import FormatConverter
 from harvesting.pmc_api import PMCAPIClient
+from harvesting.scholar_pdf_fallback import try_scholar_pdf
 from harvesting.supplement_scraper import SupplementScraper
 from harvesting.unpaywall_api import UnpaywallClient
 
@@ -248,6 +250,22 @@ class HtmlBodyFetcher:
             attempts.append(("unpaywall_html", "skip", "no DOI"))
             attempts.append(("unpaywall_pdf", "skip", "no DOI"))
 
+        # Source 5: Google Scholar PDF search by title (last resort).
+        md, detail = self._try_scholar_pdf(pmid)
+        attempts.append(("scholar_pdf", "ok" if md else "miss", detail))
+        ok, reason = is_acceptable_body(md)
+        if ok:
+            return FetchResult(
+                success=True,
+                markdown=md,
+                source="scholar_pdf",
+                n_body_lines=count_body_lines(md),
+                n_chars=len(md),
+                attempts=attempts,
+            )
+        elif md:
+            attempts[-1] = ("scholar_pdf", f"rejected: {reason}", detail)
+
         return FetchResult(
             success=False, attempts=attempts, error="no source produced acceptable body"
         )
@@ -279,12 +297,6 @@ class HtmlBodyFetcher:
 
         src = rec.get("source")
         pmcid = rec.get("pmcid")
-        has_xml = (
-            rec.get("hasTextMinedTerms") == "Y"
-            or rec.get("inEPMC") == "Y"
-            or rec.get("isOpenAccess") == "Y"
-        )
-
         # Decide which id Europe PMC will accept for fullTextXML
         # For PMC-hosted articles: src=PMC, id=PMCID (numeric)
         # For preprints: src=PPR, id=full id
@@ -508,6 +520,25 @@ class HtmlBodyFetcher:
             return None, "pdf_to_markdown empty/short"
         except Exception as exc:
             return None, f"pdf fetch/convert error: {exc}"
+
+    # -------------------------------------------------------------------------
+    # Source 5: Google Scholar PDF search by title
+    # -------------------------------------------------------------------------
+    def _try_scholar_pdf(self, pmid: str) -> tuple[Optional[str], str]:
+        """Last-resort: search Scholar by article title for an OA PDF."""
+        self._rate_limit()
+        result = try_scholar_pdf(
+            title=None,
+            pmid=pmid,
+            session=self.session,
+            converter=self.converter,
+            quality_gate=is_acceptable_body,
+            email=self.email,
+            api_key=self.ncbi_api_key,
+        )
+        if result.success and result.markdown:
+            return result.markdown, f"{result.detail} ({len(result.markdown)} chars)"
+        return None, result.detail
 
 
 # -----------------------------------------------------------------------------

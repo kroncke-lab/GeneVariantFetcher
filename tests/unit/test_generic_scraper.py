@@ -16,9 +16,7 @@ def scraper():
 
 def _make_html(links: list[tuple[str, str]]) -> str:
     """Build minimal HTML with <a> tags from (href, text) pairs."""
-    anchors = "\n".join(
-        f'<a href="{href}">{text}</a>' for href, text in links
-    )
+    anchors = "\n".join(f'<a href="{href}">{text}</a>' for href, text in links)
     return f"<html><body>{anchors}</body></html>"
 
 
@@ -62,40 +60,61 @@ class TestURLPatternMatching:
 
     def test_download_supplement_endpoint(self, scraper):
         """Oxford/Wiley downloadSupplement pattern — previously missed."""
-        html = _make_html([
-            ("/downloadSupplement?file=data.xlsx", "Download"),
-        ])
-        result = scraper.scrape_generic_supplements(html, "https://academic.oup.com/article")
+        html = _make_html(
+            [
+                ("/downloadSupplement?file=data.xlsx", "Download"),
+            ]
+        )
+        result = scraper.scrape_generic_supplements(
+            html, "https://academic.oup.com/article"
+        )
         assert len(result) == 1
 
     def test_media_objects_url(self, scraper):
         """Springer /MediaObjects/ pattern."""
-        html = _make_html([
-            ("/article/10.1038/s001/MediaObjects/12345_2020_1_MOESM1_ESM.pdf", "Download"),
-        ])
-        result = scraper.scrape_generic_supplements(html, "https://link.springer.com/article")
+        html = _make_html(
+            [
+                (
+                    "/article/10.1038/s001/MediaObjects/12345_2020_1_MOESM1_ESM.pdf",
+                    "Download",
+                ),
+            ]
+        )
+        result = scraper.scrape_generic_supplements(
+            html, "https://link.springer.com/article"
+        )
         assert len(result) == 1
         assert "MOESM1" in result[0]["name"]
 
     def test_mmc_pattern_in_url(self, scraper):
         """Elsevier mmc pattern detected via URL even without keyword text."""
-        html = _make_html([
-            ("/science/article/pii/S00029297/mmc1.xlsx", "Table S1"),
-        ])
-        result = scraper.scrape_generic_supplements(html, "https://www.sciencedirect.com")
+        html = _make_html(
+            [
+                ("/science/article/pii/S00029297/mmc1.xlsx", "Table S1"),
+            ]
+        )
+        result = scraper.scrape_generic_supplements(
+            html, "https://www.sciencedirect.com"
+        )
         assert len(result) == 1
 
     def test_suppl_path_segment(self, scraper):
-        html = _make_html([
-            ("/doi/suppl/10.1161/CIR.123/suppl_file/data.pdf", "Click here"),
-        ])
-        result = scraper.scrape_generic_supplements(html, "https://ahajournals.org/article")
+        html = _make_html(
+            [
+                ("/doi/suppl/10.1161/CIR.123/suppl_file/data.pdf", "Click here"),
+            ]
+        )
+        result = scraper.scrape_generic_supplements(
+            html, "https://ahajournals.org/article"
+        )
         assert len(result) == 1
 
     def test_supplementary_suffix_in_url(self, scraper):
-        html = _make_html([
-            ("/articles/supplementary_data.xlsx", "Data"),
-        ])
+        html = _make_html(
+            [
+                ("/articles/supplementary_data.xlsx", "Data"),
+            ]
+        )
         result = scraper.scrape_generic_supplements(html, "https://example.com")
         assert len(result) == 1
 
@@ -110,9 +129,11 @@ class TestFileExtensionMatching:
 
     def test_extension_with_query_params(self, scraper):
         """Previously missed: extension hidden behind query params."""
-        html = _make_html([
-            ("/files/table.xlsx?token=abc123", "Download table"),
-        ])
+        html = _make_html(
+            [
+                ("/files/table.xlsx?token=abc123", "Download table"),
+            ]
+        )
         result = scraper.scrape_generic_supplements(html, "https://example.com")
         assert len(result) == 1
         assert result[0]["name"] == "table.xlsx"
@@ -132,10 +153,12 @@ class TestFiltering:
     """Deduplication and ID-like filename filtering."""
 
     def test_deduplicates_by_filename(self, scraper):
-        html = _make_html([
-            ("/path1/data.xlsx", "Supplement 1"),
-            ("/path2/data.xlsx", "Supplement 2"),
-        ])
+        html = _make_html(
+            [
+                ("/path1/data.xlsx", "Supplement 1"),
+                ("/path2/data.xlsx", "Supplement 2"),
+            ]
+        )
         result = scraper.scrape_generic_supplements(html, "https://example.com")
         assert len(result) == 1
 
@@ -153,6 +176,91 @@ class TestFiltering:
         html = _make_html([("/about", "About this journal")])
         result = scraper.scrape_generic_supplements(html, "https://example.com")
         assert len(result) == 0
+
+    def test_skips_javascript_pseudo_links(self, scraper):
+        html = _make_html([("javascript:;", "Supplementary material")])
+        result = scraper.scrape_generic_supplements(html, "https://example.com")
+        assert result == []
+
+
+class TestFigshareExpansion:
+    """Figshare landing pages should become direct downloadable files."""
+
+    def test_generic_figshare_landing_expands_to_files(self, scraper, monkeypatch):
+        monkeypatch.setattr(
+            scraper,
+            "_fetch_figshare_article",
+            lambda article_id: {
+                "files": [
+                    {
+                        "id": 6568608,
+                        "name": "Extanded tables.doc",
+                        "size": 162304,
+                        "download_url": "https://ndownloader.figshare.com/files/6568608",
+                        "mimetype": "application/msword",
+                    }
+                ]
+            },
+        )
+        html = _make_html(
+            [
+                (
+                    "https://figshare.com/articles/dataset/Supplementary_Material/4056510",
+                    "Supplementary Material",
+                )
+            ]
+        )
+
+        result = scraper.scrape_generic_supplements(html, "https://karger.com/article")
+
+        assert result == [
+            {
+                "url": "https://ndownloader.figshare.com/files/6568608",
+                "name": "Extanded tables.doc",
+                "figshare_article_id": "4056510",
+                "figshare_file_id": 6568608,
+                "size": 162304,
+                "mimetype": "application/msword",
+            }
+        ]
+
+    def test_karger_figshare_landing_expands_and_skips_javascript(
+        self, scraper, monkeypatch
+    ):
+        monkeypatch.setattr(
+            scraper,
+            "_fetch_figshare_article",
+            lambda article_id: {
+                "files": [
+                    {
+                        "id": 1,
+                        "name": "variant-table.doc",
+                        "download_url": "https://ndownloader.figshare.com/files/1",
+                    },
+                    {
+                        "id": 2,
+                        "name": "participants.doc",
+                        "download_url": "https://ndownloader.figshare.com/files/2",
+                    },
+                ]
+            },
+        )
+        html = _make_html(
+            [
+                ("javascript:;", "Supplementary Material"),
+                (
+                    "https://figshare.com/articles/dataset/Supplementary_Material/4056510",
+                    "Supplementary Material",
+                ),
+            ]
+        )
+
+        result = scraper.scrape_karger_supplements(html, "https://karger.com/article")
+
+        assert [r["name"] for r in result] == [
+            "variant-table.doc",
+            "participants.doc",
+        ]
 
 
 class TestPMCPages:
