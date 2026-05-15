@@ -1,0 +1,86 @@
+{
+  "generated_at_utc": "2026-05-14T16:00:51.015898+00:00",
+  "generator_script": "scripts/build_gold_standard_from_varbrowser.py",
+  "gvf_repo_path": ".",
+  "gvf_git_commit": "dc174b57ffd35057d4e20a5252edad06090570b7",
+  "gvf_git_branch": "main",
+  "source_db_server": "sandboxtest.database.windows.net",
+  "source_db_name": "sandboxtest",
+  "source_db_driver": "ODBC Driver 17 for SQL Server",
+  "kcnh2_browser_isoform_filter": "isoform='A'",
+  "genes": {
+    "KCNH2": {
+      "source_table": "[dbo].[KCNH2_clinical]",
+      "raw_row_count": 1571,
+      "independent_count_query": 1571,
+      "normalized_row_count": 1571,
+      "recall_input_row_count": 1001,
+      "source_type_breakdown": {
+        "pubmed": 1001,
+        "cohort": 559,
+        "blank": 9,
+        "personal_communication": 2
+      },
+      "browser_table_fqn": "[dbo].[all_vars_annotated]",
+      "browser_filter": "isoform = 'A'",
+      "browser_row_count": 7997,
+      "browser_normalized_keys": 15290
+    },
+    "KCNQ1": {
+      "source_table": "[dbo].[KCNQ1_clinical_v10]",
+      "raw_row_count": 2189,
+      "independent_count_query": 2189,
+      "normalized_row_count": 2189,
+      "recall_input_row_count": 1753,
+      "source_type_breakdown": {
+        "pubmed": 1753,
+        "cohort": 109,
+        "blank": 327
+      },
+      "browser_table_fqn": "[dbo].[KCNQ1_browser_main]",
+      "browser_filter": null,
+      "browser_row_count": 4392,
+      "browser_normalized_keys": 8384
+    },
+    "SCN5A": {
+      "source_table": "[SCN5A].[SCN5A_papers]",
+      "raw_row_count": 3204,
+      "independent_count_query": 3204,
+      "normalized_row_count": 3204,
+      "recall_input_row_count": 3204,
+      "source_type_breakdown": {
+        "pubmed": 3204
+      },
+      "browser_table_fqn": "[dbo].[scn5a_dataset]",
+      "browser_filter": null,
+      "browser_row_count": 13739,
+      "browser_normalized_keys": 25916
+    },
+    "RYR2": {
+      "source_kind": "xlsx",
+      "source_path": "RYR2_20241129.xlsx",
+      "source_filename": "RYR2_20241129.xlsx",
+      "source_mtime_utc": "2025-03-01T14:54:51+00:00",
+      "source_size_bytes": 495186,
+      "sheet_name": "Sheet1",
+      "raw_row_count_total": 6109,
+      "raw_row_count_literature": 1015,
+      "raw_row_count_gnomad_only": 5094,
+      "normalized_row_count": 1015,
+      "recall_input_row_count": 1015,
+      "source_type_breakdown": {
+        "pubmed": 1015,
+        "blank": 5094
+      },
+      "unique_pmid_count": 178,
+      "browser_table_fqn": null,
+      "browser_filter": null,
+      "note": "Loaded from a hand-curated OneDrive xlsx (RYR2_20241129.xlsx). No Variant_Browser per-PMID table exists for RYR2. The xlsx ships rich per-disease columns (CPVT, ARVC, CA, syncope, seizure, VF, VT, neural phenotype, epilepsy, ADHD, developmental delay) preserved in the per-gene RYR2_clinical_counts.csv (suffix columns); only the subset that fits the unified long-format schema is propagated to clinical_counts_long.csv. Population-only rows (no PMID, ~5094 gnomAD entries) are stashed in raw/RYR2_gnomad_rows.csv.",
+      "exporter": "scripts/build_ryr2_gold_standard_from_xlsx.py",
+      "exporter_run_at_utc": "2026-05-14T19:56:27.851812+00:00",
+      "exporter_git_commit": "dc174b57ffd35057d4e20a5252edad06090570b7",
+      "exporter_git_branch": "codex/multigene-recall-improvement"
+    }
+  },
+  "output_root": "gene_variant_fetcher_gold_standard"
+}

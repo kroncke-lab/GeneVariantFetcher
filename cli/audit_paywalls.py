@@ -95,7 +95,9 @@ def pubmed_get_doi(sess: requests.Session, pmid: str) -> Optional[str]:
     return None
 
 
-def unpaywall_check(sess: requests.Session, doi: Optional[str], email: str) -> Dict[str, Any]:
+def unpaywall_check(
+    sess: requests.Session, doi: Optional[str], email: str
+) -> Dict[str, Any]:
     if not doi:
         return {}
     try:
@@ -164,7 +166,9 @@ def doi_landing_check(sess: requests.Session, doi: Optional[str]) -> Dict[str, A
         return {"error": str(e)}
 
 
-def classify(unpaywall: Dict[str, Any], europepmc: Dict[str, Any], landing: Dict[str, Any]) -> str:
+def classify(
+    unpaywall: Dict[str, Any], europepmc: Dict[str, Any], landing: Dict[str, Any]
+) -> str:
     if unpaywall.get("is_oa"):
         return "FREE_BUT_BLOCKED" if landing.get("has_captcha") else "FREE_BUT_MISSED"
 
@@ -247,7 +251,12 @@ def run_paywall_audit(
         "| Category | Count |",
         "|---|---:|",
     ]
-    for k in ["TRULY_PAYWALLED", "LIKELY_PAYWALLED", "FREE_BUT_BLOCKED", "FREE_BUT_MISSED"]:
+    for k in [
+        "TRULY_PAYWALLED",
+        "LIKELY_PAYWALLED",
+        "FREE_BUT_BLOCKED",
+        "FREE_BUT_MISSED",
+    ]:
         md.append(f"| {k} | {counts.get(k, 0)} |")
 
     md += [
@@ -258,7 +267,7 @@ def run_paywall_audit(
     ]
     for r in free_missed:
         md.append(
-            f"| {r.pmid} | {r.doi or ''} | {r.unpaywall.get('best_oa_url','') if r.unpaywall else ''} |"
+            f"| {r.pmid} | {r.doi or ''} | {r.unpaywall.get('best_oa_url', '') if r.unpaywall else ''} |"
         )
 
     md += [
@@ -268,7 +277,9 @@ def run_paywall_audit(
         "|---|---|---|",
     ]
     for r in free_blocked:
-        md.append(f"| {r.pmid} | {r.doi or ''} | {r.doi_landing.get('final_url','') if r.doi_landing else ''} |")
+        md.append(
+            f"| {r.pmid} | {r.doi or ''} | {r.doi_landing.get('final_url', '') if r.doi_landing else ''} |"
+        )
 
     out_md.parent.mkdir(parents=True, exist_ok=True)
     out_md.write_text("\n".join(md) + "\n", encoding="utf-8")

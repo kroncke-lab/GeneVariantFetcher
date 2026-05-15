@@ -1,0 +1,1575 @@
+Variant,AA,AA#,Replaced,CAR,UNK,AMB,UNA,AMB+UNA,LQT,HOM,SMPT,ASD,SCD,DRG,Other DIAG,Patient Locations,Patient ethnic background,COMMENT,Notes1,PMID,Journal,Author,Year,clinical_papers_id
+R62Q,R,62,Q,2,,,,0,,,,,2,,,Norway,,,,29881912,Forensic Sci Med Pathol,Tuveng,2018,1
+G572S,G,572,S,1,,,,0,1,,1,,,,,Spain,,(1714G>R Gly>Ser),,21216356,Rev Esp Cardiol,Jimenez-Jaimez,2011,2
+G628R,G,628,R,1,,,,0,1,,1,,,,,Spain,,(1882G>S Gly>Arg),,21216356,Rev Esp Cardiol,Jimenez-Jaimez,2011,3
+E637G,E,637,G,1,,,,0,1,1,1,,,,,Spain,,(1910A>G Glu>Gly) HOMO,,21216356,Rev Esp Cardiol,Jimenez-Jaimez,2011,4
+V115M,V,115,M,1,,,,0,1,,1,,,,,Spain,,(343G>R Val>Met),,21216356,Rev Esp Cardiol,Jimenez-Jaimez,2011,5
+A193T,A,193,T,1,,,,0,1,,1,,,,,Spain,,(541C>Y Arg>Trp) (577G>R Al>Thr) (62G>R Gly>Asp),patient with 3 muts,21216356,Rev Esp Cardiol,Jimenez-Jaimez,2011,6
+G21D,G,21,D,1,,,,0,1,,1,,,,,Spain,,(541C>Y Arg>Trp) (577G>R Al>Thr) (62G>R Gly>Asp),patient with 3 muts,21216356,Rev Esp Cardiol,Jimenez-Jaimez,2011,7
+R181W,R,181,W,1,,,,0,1,,1,,,,,Spain,,(541C>Y Arg>Trp) (577G>R Al>Thr) (62G>R Gly>Asp),patient with 3 muts,21216356,Rev Esp Cardiol,Jimenez-Jaimez,2011,8
+S1028Del,S,1028,DELETION,1,,1,,1,,,,,,,,Spain,,(del3079–3124),"asymptomatic, they gave him a 3.5, I disagree",21216356,Rev Esp Cardiol,Jimenez-Jaimez,2011,9
+R1047L,R,1074,L,5,5,,,0,,,,,5,,,Rochester Minnesota,white,1  baby also had G294V,,15913580,Cardiovascular Research,Tester,2005,10
+G601S,G,601,S,4,,,,0,4,,,,,,,"Munster, Germany",German,2 unseqenced family deaths under 30,,16969682,Nervenarzt,Betge,2006,11
+R25W,R,25,W,2,1,1,,1,,,,,1,,in utero death,,,aborted pregnancy,,23571586,JAMA,Crotti,2013,12
+A1017fsX,A,1017,FRAMESHIFT,1,,,,0,1,,,,,,,,Chinese,Ala1017ProfsX40,,26496715,Cardiology,Gao,2015,13
+A57P,A,57,P,1,,,,0,1,,,,,,Seizures,,,Ala57Pro,,24103226,Heart Rhythm,Anderson,2014,14
+K897T,K,897,T,7,,1,4,5,2,,3,,,,,North America,,also carried A490T on same allele,,18808722,BMC medical genetics,Zhang,2008,15
+A490T,A,490,T,7,,1,4,5,2,,3,,,,,North America,,also carried K897T on same allele,,18808722,BMC medical genetics,Zhang,2008,16
+T983I,T,983,I,1,,,1,1,,,,,,,,USA,,also had D1243N in SCN5A,roden paper,26746457,JAMA,Van Driest,2016,17
+E58K,E,58,K,1,,,,0,,,,,,,,Japan,,also had D85N,,19695459,Journal of the American College of Cardiology,Nishio,2009,18
+G745fsX,G,745,FRAMESHIFT,1,,,,0,,,,,,,,Japan,,also had D85N,,19695459,Journal of the American College of Cardiology,Nishio,2009,19
+R823W,R,823,W,1,,,,0,,,,,,,,Japan,,also had D85N,,19695459,Journal of the American College of Cardiology,Nishio,2009,20
+R948S,R,948,S,1,,,,0,,,,,,,,Japan,,also had D85N,,19695459,Journal of the American College of Cardiology,Nishio,2009,21
+S320L,S,320,L,1,,,,0,,,,,,,,Japan,,also had D85N,,19695459,Journal of the American College of Cardiology,Nishio,2009,22
+S706F,S,706,F,1,,,,0,,,,,,,,Japan,,also had D85N,,19695459,Journal of the American College of Cardiology,Nishio,2009,23
+C44W,C,44,W,1,,,,0,1,,,,,,,Japan,,also had H429Y,,27816319,Journal of Cardiology,Fujii,2017,24
+E1126fsX,G,1126,FRAMESHIFT,2,,,,0,2,,,,,,,Japan,,also had H429Y,,27816319,Journal of Cardiology,Fujii,2017,25
+K897T,K,897,T,1,,,1,1,,,,,,1,,,,also had H558R in SCNA5A and P448R in KCNQ1,,21779290,Korean circulation journal,Song,2011,26
+T618I,T,618,I,3,,,,0,,,3,,,,Short QT,,,also had K897T,,28491588,Heart rhythm,Giustetto,2015,27
+C108Y,C,108,Y,4,,,1,1,3,,3,,,,,Italy,,also had other mutations,,28749435,International Journal of Molecular Sciences,Zullo,2017,28
+K897T,K,897,T,2,,,1,1,1,,1,,,,,Italy,,also had other mutations,,28749435,International Journal of Molecular Sciences,Zullo,2017,29
+K897T,K,897,T,3,,,,0,,1,3,,,,Short QT,,,also had T618I,,28491588,Heart rhythm,Giustetto,2015,30
+K897T,K,897,T,1,,,,0,1,,1,,,,,,,also had V110I in KCNQ1,,21164565,Canadian journal of physiology and pharmacology,Cordeiro,2010,31
+P926fsX,P,926,FRAMESHIFT,1,,,,0,1,,1,,,,seizures,,,also has Gly188Glu in SCN1A,,29739726,J Clin Neurosci,Zarroli,2018,32
+R1047L,R,1047,L,1,,,,0,,,,,1,,seizures before unresponsive,,Maori,also have R1193Q in SCN5A,,24596401,Archives of disease in childhood,Glengarry,2014,33
+T618I,T,618,I,18,,,,0,,,,,,,Short QT,,,also includes previously reported patients,,29759541,JACC Clin Electrophysiol,Hu,2017,34
+G603D,G,603,D,2,,1,,1,1,,1,,,,,Japan,,also iPSC cardioomyocytes generated,,23917959,Journal of medical and dental sciences,Okata,2013,35
+N45D,N,45,D,3,,,1,1,2,,1,,,,seizures,Japan,,"also mutants in A1428S SCN5A and D85N in KCNE1, affected brother also has KCNE1",,23237912,Heart Rhythm,Yoshikane,2013,36
+M124T,M,124,T,6,,,1,1,5,,,,,2,,Kanazawa University Hospital,Japanese,also published elsewhere,probucol induced symptoms,19371231,Clinical science (London,Hayashi,2009,37
+E50D,E,50,D,2,,,,0,,,,,,,Short QT,,,also reported before,,29759541,JACC Clin Electrophysiol,Hu,2017,38
+I560T,I,560,T,1,,,,0,,,,,,,Short QT,,,also reported before,,29759541,JACC Clin Electrophysiol,Hu,2017,39
+N588K,N,588,K,16,,,,0,,,,,,,Short QT,,,also reported before,,29759541,JACC Clin Electrophysiol,Hu,2017,40
+R1135H,R,1135,H,3,,,,0,,,,,,,Short QT,,,also reported before,,29759541,JACC Clin Electrophysiol,Hu,2017,41
+F627L,F,627,L,2,,,,0,2,,,,,,,,,also SCN5A R43Q,also previously described,18848812,Heart rhythm,Lin,2008,42
+R744X,R,744,X,4,,,3,3,1,,1,,,,,,,also studied elsewhere by Schwartz,,22338672,Heart rhythm,Crotti,2012,43
+R835W,R,835,W,1,,,,0,1,,,,,,,Paris,French,and other mutations,neonates,14998625,Journal of the American College of Cardiology,,,44
+R1032fsX,R,1032,FRAMESHIFT,2,,,,0,2,,,,,,,,Chinese,Arg1032AlafsX86,,26496715,Cardiology,Gao,2015,45
+R823W,R,823,W,1,1,,,0,,,,,,,,,,"Arg823Trp, also mutant in KCNE2",,23631430,Genetic Testing and Molecular Biomarkers,Lieve,2013,46
+R920Q,R,920,Q,1,1,,,0,,,,,,,,,,"Arg920Gln Ser620Asn, both must",,23631430,Genetic Testing and Molecular Biomarkers,Lieve,2013,47
+S620N,S,620,N,1,1,,,0,,,,,,,,,,"Arg920Gln Ser620Asn, both muts",,23631430,Genetic Testing and Molecular Biomarkers,Lieve,2013,48
+D896fsX,D,896,FRAMESHIFT,2,,,,0,2,,,,,,,,Chinese,Asp896ArgfsX77,,26496715,Cardiology,Gao,2015,49
+F463L,F,463,L,1,,,,0,1,,,,,,,,Chinese,assumption from abstract,,19065538,Zhonghua yi xue yi chuan xue za zhi = Zhonghua yixue yichuanxue zazhi = Chinese,Yang,2008,50
+R1047L,R,1047,L,2,,,,0,,,,,1,,1 SIDS,France,,"aveolar hemmorhagex1 non sids, pulmonary viral diseasex1, sids",,19322600,Pediatric Cardiology,Millat,2009,51
+R176W,R,176,W,112,,,,0,112,,18,,,,,,,based off the 112 database,,19160088,Annals of medicine,Marjamaa,2009,52
+R1047L,R,1047,L,4,,2,2,4,0,,,,,,bidirectional ventricular tachycardia,"South Carolina, USA",,BVT,,14556882,The American journal of cardiology,Laohakunakorn,2003,53
+c.1129-58_1320Del,in,NOPE,,1,,,,0,1,,,,,,,,Finnish,c.1129-58_1320del,deletion/splice site,29622001,BMC Medical Genetics,Koponen,2018,54
+S428fsX,S,428,FRAMESHIFT,1,,,,0,1,,,,,,,,"Danish, Caucasian","c.1286delC, Previously Studied in a paper about Dannish people",patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,55
+D460fsX,D,460,FRAMESHIFT,1,,,,0,1,,,,,,,,Finnish,c.1379delA,,29622001,BMC Medical Genetics,Koponen,2018,56
+c.1558-1G>C,in,NOPE,,1,,,,0,1,,,,,,,,Finnish,c.1558-1G>C,splice site,29622001,BMC Medical Genetics,Koponen,2018,57
+E544fsX,E,544,FRAMESHIFT,4,,,,0,4,,,,,,,,Finnish,c.1631_1632delAG,,29622001,BMC Medical Genetics,Koponen,2018,58
+W585fsX,W,585,FRAMESHIFT,2,2,,,0,,,,,,,Congential Heart Disease,,,c.1755delG,110 patients with down syndrome,30105468,Pediatr Cardiol,Alharbi,2018,59
+W705fsX,W,705,FRAMESHIFT,1,,,,0,1,,,,,,,,"Danish, Caucasian",c.2111_2114dup,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,60
+Q725fsX,Q,725,FRAMESHIFT,1,,,,0,1,,,,,,,,Finnish,c.2173_2196del,,29622001,BMC Medical Genetics,Koponen,2018,61
+T74fsX,T,74,FRAMESHIFT,1,,,,0,1,,,,,,,,Finnish,c.221_242del,,29622001,BMC Medical Genetics,Koponen,2018,62
+R744fsX,R,744,FRAMESHIFT,1,,,,0,1,,1,,,,,,Taiwanese,c.2229_2230delC - from supp tables,also H558R in SCN5A,26118593,International Heart Journal,Chang,2015,63
+A83fsX,A,83,FRAMESHIFT,1,,,,0,1,,,,,,,,"Danish, Caucasian",c.234_241dupTGCCGCGC,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,64
+R835fsX,R,835,FRAMESHIFT,1,,,1,1,,,,,,,dialated cardiomyopathy,USA,,c.2503delC,,26937396,Molecular Genetics and Metabolism Reports,Sacoto,2015,65
+P923fsX,P,923,FRAMESHIFT,1,,,,0,1,,,,,,,,"Danish, Caucasian","c.2768delC, Previously Studied in a paper about Dannish people",patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,66
+L987fsX,L,987,FRAMESHIFT,1,,,,0,1,,,,,,,,Finnish,c.2959_2960delCT,,29622001,BMC Medical Genetics,Koponen,2018,67
+G1006fsX,G,1006,FRAMESHIFT,1,,,,0,1,,,,,,,,Finnish,c.3017delG,,29622001,BMC Medical Genetics,Koponen,2018,68
+L1012fsX,L,1012,FRAMESHIFT,1,,,,0,1,,1,,,,,Germany,,c.3035_3045delTCCCTCGATGC,iPSC paper,27345990,Stem Cell Research,Fatima,2016,69
+S1029fsX,S,1029,FRAMESHIFT,1,,,,0,1,,,,,,,,"Danish, Caucasian",c.3090-3102del,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,70
+P1034fsX,P,1034,FRAMESHIFT,1,,,,0,1,,,,,,,,Finnish,c.3093_3106del,,29622001,BMC Medical Genetics,Koponen,2018,71
+c.3152+1G>A,in,NOPE,,3,,,,0,3,,,,,,,,Finnish,c.3152+1G>A,splice site,29622001,BMC Medical Genetics,Koponen,2018,72
+T1054fsX,T,1054,FRAMESHIFT,1,,,,0,1,,,,,,,,Finnish,c.3160dupA,,29622001,BMC Medical Genetics,Koponen,2018,73
+R148fsX,R,148,FRAMESHIFT,1,,,,0,1,,,,,,,,"Danish, Caucasian",c.446insC,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,74
+T152fsX,T,152,FRAMESHIFT,24,,,,0,0,,,,,,,,Finnish,c.453delC,,29622001,BMC Medical Genetics,Koponen,2018,75
+P151fsX,P,151,FRAMESHIFT,1,,,,0,1,,,,,,,,"Danish, Caucasian","c.453delC, Previously Studied in a paper about Dannish people",patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,76
+V215X,V,215,X,1,,,,0,1,,,,,,,,Finnish,c.643delG,,29622001,BMC Medical Genetics,Koponen,2018,77
+R281fsX,R,282,FRAMESHIFT,2,,,,0,2,,,,,,,,Finnish,c.842dupG,,29622001,BMC Medical Genetics,Koponen,2018,78
+A285fsX,A,285,FRAMESHIFT,3,,,,0,3,,,,,,,,Finnish,c.853_859dupGCCGACG,,29622001,BMC Medical Genetics,Koponen,2018,79
+R534C,R,534,C,4,,,,0,4,,3,,,,,Brazil,,C1600T,,21308345,Arq Bras Cardiol,Curty,2010,80
+K897T,K,897,T,19,,,,0,,,,,11,,11 SIDS,France,,common polymorphism,,19322600,Pediatric Cardiology,Millat,2009,81
+K897T,K,897,T,3,,,2,2,1,,,,,,,"Pavia, Italy",italian,common variant,,16116052,Circulation,Crotti,2005,82
+G186fsX,G,186,FRAMESHIFT,4,,,2,2,2,2,,,,,,,Mediterranean,consanguinous parents,homozygous in affected child,10491368,Circulation,Hoorntje,1999,83
+Q1070X,Q,1070,X,5,,,3,3,2,2,,,,,,"Amsterdam, Netherlands",Arabian,"consanguinous, 2 still births, third cooking",,18362022,Heart rhythm,Bhuiyan,2008,84
+A561T,A,561,T,1,,,,0,1,,1,,,,,Saudi Arabia,,consanguity paper,,28438721,Heart Rhythm,Al-Hassnan,2017,85
+I593R,I,593,R,3,,,3,3,,,,,,,,Saudi Arabia,,consanguity paper,,28438721,Heart Rhythm,Al-Hassnan,2017,86
+S428L,S,428,L,4,,,4,4,,,,,,,,Saudi Arabia,,consanguity paper,,28438721,Heart Rhythm,Al-Hassnan,2017,87
+P926fsX,P,926,FRAMESHIFT,4,,4,,4,,,,,2,1,"not LQTS2, but have LQT",,Finnish,coupled with K897T,no syncope,20181576,Circulation. Cardiovascular genetics,,,88
+K897T,K,897,T,3,,2,1,3,,,,,2,,"not LQTS2, but have LQT",,Finnish,coupled with P926Afs14X,no syncope,20181576,Circulation. Cardiovascular genetics,Nof,2010,89
+C984fsX,C,984,FRAMESHIFT,2,,,,0,2,,,,,,,,Chinese,Cys984ThrfsX75,,26496715,Cardiology,Gao,2015,90
+A561V,A,561,V,6,,,2,2,4,,,,,,,Spain,,data from figure,,24667783,European Journal of Human Genetics,Riuro,2015,91
+T613M,T,613,M,1,,,,0,1,,,,,,,Spain,,data from figure,,24667783,European Journal of Human Genetics,Riuro,2015,92
+G262fsX,G,262,FRAMESHIFT,1,,,,0,1,,,,,,,Spain,,data from supplement,,24667783,European Journal of Human Genetics,Riuro,2015,93
+G785fsX,G,785,FRAMESHIFT,1,,,,0,1,,,,,,,Spain,,data from supplement,,24667783,European Journal of Human Genetics,Riuro,2015,94
+L559H,L,559,H,1,,,,0,1,,,,,,,Spain,,data from supplement,,24667783,European Journal of Human Genetics,Riuro,2015,95
+M645V,M,645,V,1,,,,0,1,,,,,,,Spain,,data from supplement,,24667783,European Journal of Human Genetics,Riuro,2015,96
+N629S,N,629,S,1,,,,0,1,,,,,,,Spain,,data from supplement,,24667783,European Journal of Human Genetics,Riuro,2015,97
+P596L,P,596,L,1,,,,0,1,,,,,,,Spain,,data from supplement,,24667783,European Journal of Human Genetics,Riuro,2015,98
+P72R,P,72,R,1,,,,0,1,,,,,,,Spain,,data from supplement,,24667783,European Journal of Human Genetics,Riuro,2015,99
+R176W,R,176,W,1,,,,0,1,,,,,,,Spain,,data from supplement,,24667783,European Journal of Human Genetics,Riuro,2015,100
+R534C,R,534,C,1,,,,0,1,,,,,,,Spain,,data from supplement,,24667783,European Journal of Human Genetics,Riuro,2015,101
+R582C,R,582,C,1,,,,0,1,,,,,,,Spain,,data from supplement,,24667783,European Journal of Human Genetics,Riuro,2015,102
+S428X,S,428,X,1,,,,0,1,,,,,,,Spain,,data from supplement,,24667783,European Journal of Human Genetics,Riuro,2015,103
+S818L,S,818,L,1,,,,0,1,,,,,,,Spain,,data from supplement,,24667783,European Journal of Human Genetics,Riuro,2015,104
+A80V,A,80,V,1,,,,0,,,,,1,,,,,data in supplement,,18508782,European heart journal,Behr,2008,105
+E544fsX,E,544,FRAMESHIFT,5,,,2,2,2,,2,,1,,,,,data in supplement,,18508782,European heart journal,Behr,2008,106
+Q376sp,Q,376,SPLICE,2,,,1,1,,,,,1,,,,Seizures,data in supplement,,18508782,European heart journal,Behr,2008,107
+S55L,S,55,L,4,,,2,2,2,,1,,,,,,,data in supplement,No DNA from proband (sudden death),18508782,European heart journal,Behr,2008,108
+E95G,E,95,G,1,,,,0,1,,,,,,,Sweden,,de novo mutant,,23098067,BMC Cardiovascular Disorders,Stattin,2012,109
+Q61R,Q,61,R,1,,,,0,1,,,,,,,Sweden,,de novo mutant,,23098067,BMC Cardiovascular Disorders,Stattin,2012,110
+T613M,T,613,M,1,,,,0,,,,,,,in utero demise,UK,,"de novo, fetal demise",,19731233,Ultrasound in obstetrics & gynecology : the official journal of the International,Simpson,2009,111
+A915fsX,A,915,FRAMESHIFT,5,,3,,3,2,,2,,,,,,,described previously,,18984536,Heart rhythm,Christe,2008,112
+A228V,A,228,V,1,,,,0,1,,,,,,,,,"didn't provide more details, included LQTS probands",,22727609,Journal of electrocardiology,Andrsova,2012,113
+A448T,A,448,T,1,,,,0,1,,,,,,,,,"didn't provide more details, included LQTS probands",,22727609,Journal of electrocardiology,Andrsova,2012,114
+F640Del,F,640,DELETION,1,,,,0,1,,,,,,,,,"didn't provide more details, included LQTS probands",,22727609,Journal of electrocardiology,Andrsova,2012,115
+G572S,G,572,S,1,,,,0,1,,,,,,,,,"didn't provide more details, included LQTS probands",,22727609,Journal of electrocardiology,Andrsova,2012,116
+P632S,P,632,S,1,,,,0,1,,,,,,,,,"didn't provide more details, included LQTS probands",,22727609,Journal of electrocardiology,Andrsova,2012,117
+R1047L,R,1047,L,1,,,,0,1,,,,,,,,,"didn't provide more details, included LQTS probands",,22727609,Journal of electrocardiology,Andrsova,2012,118
+R534C,R,534,C,1,,,,0,1,,,,,,,,,"didn't provide more details, included LQTS probands",,22727609,Journal of electrocardiology,Andrsova,2012,119
+T1054fsX,T,1054,FRAMESHIFT,1,,,,0,1,,,,,,,,,"didn't provide more details, included LQTS probands",,22727609,Journal of electrocardiology,Andrsova,2012,120
+"exon5,6,7Xdup",ex,NOPE,,5,,,1,1,4,,,,,,,,Dutch,"DNA sequencing of this junction fragment revealed that the heterozygous duplication consisted of a
+tandem duplication of 3,682 bp (from position c.1129–2543) and included 2.5 kb of intron 5, exon 6 (429 bp), intron 6 (589 bp), and the first 121 bp of exon 7 (Figure 2C). Therefore, the duplication disrupts exon 7.",exon 6 (plus intron and some of exon 7) duplication,16399053,Heart rhythm,Koopmann,2006,121
+K28E,K,28,E,14,,,12,12,2,,2,2,,,,"Maastricht, Netherlands",Dutch,Don't need to ask Ben.,"Ask Ben: 15 H2+, 3 LQT-, 2 LQT+, paper implies 15 LQT+",15699249,Circulation,Rossenbacker,2005,122
+R1047L,R,1047,L,2,,,,0,,,,,2,,,,,drowning,,21964171,Mayo Clinic proceedings,Tester,2011,123
+T613M,T,613,M,1,,,,0,1,,,1,,,,Rochester Minnesota,Unknown,drowning,,15466642,Circulation,Choi,2004,124
+V131fsX,V,131,FRAMESHIFT,1,,,,0,1,,,1,,,,Rochester Minnesota,Unknown,drowning,,15466642,Circulation,Choi,2004,125
+A614V,A,614,V,1,,,1,1,,,,,,1,,Japan,,drug induced syncope,reported elsewhere as well,19843919,,Itoh,2009,126
+D342V,D,342,V,1,,,1,1,,,,,,1,,Japan,,drug induced TdP,,19843919,,Itoh,2009,127
+H492Y,H,492,Y,1,,1,,1,,,,,,1,,Japan,,drug induced TdP,,19843919,,Itoh,2009,128
+M756V,M,756,V,1,,,1,1,,,,,,1,Wolff-Parkinson-White,Japan,,drug induced TdP,,19843919,,Itoh,2009,129
+S706F,S,706,F,1,,,1,1,,,,,,1,,Japan,,drug induced TdP,,19843919,,Itoh,2009,130
+K897T,K,897,T,2,,,1,1,1,1,,,,,LQT3,NY/Canada,,F1473C in SCN5A,,23277474,The Journal of general physiology,Terrenoire,2013,131
+Y493X,Y,493,X,1,,,,0,,,,,,,,,Japanese,fam76,,9600240,Human Genetics,Itoh,1998,132
+R534C,R,534,C,5,,,,0,,,,,,,,,Japanese,fam80,,9600240,Human Genetics,Itoh,1998,133
+E876fsX,E,876,FRAMESHIFT,1,,,1,1,,,,,,,,"Bron, France",French or Spanish,"family history sudden death, no sympot (no diagnosis)",,16922724,Clin Genet,Millat,2006,134
+V1038fsX,V,1038,FRAMESHIFT,4,2,,,0,2,,,,,,,"Hamburg, Germany; New York, NY; Paris, France",,father had 480,,16923798,Human molecular genetics,Choe,2006,135
+L552S,L,552,S,77,,13,,13,,,,,,,,"Helsinki, finland",Finnish,FinA,Not sure we should include these data,16754261,Annals of medicine,Fodstad,2006,136
+R176W,R,176,W,75,,12,,12,,,,,,,,"Helsinki, finland",Finnish,FinB,Not sure we should include these data,16754261,Annals of medicine,Fodstad,2006,137
+L552S,L,552,S,73,51,,,0,22,1,,,,,,,Finnish,Finnish Founder Gene,,29622001,BMC Medical Genetics,Koponen,2018,138
+R176W,R,176,W,86,64,,,0,22,,,,,,,,Finnish,Finnish Founder Gene,,29622001,BMC Medical Genetics,Koponen,2018,139
+c.76+2_3DelTG,,NA,_,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,140
+I82Ins,,NA,,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,141
+A1061P,A,1061,,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,142
+A1144T,A,1144,,2,,,,2,0,,,,,,,,,,,Japan Cohort,,,2020,143
+A175fsX,A,175,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,144
+A193fsX,A,193,fsX,3,,,,2,1,,,,,,,,,,,Japan Cohort,,,2020,145
+A282fsX,A,282,fsX,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,146
+A34fsX,A,34,,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,147
+A382T,A,382,T,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,148
+A490T,A,490,T,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,149
+A504V,A,504,V,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,150
+A536fsX,A,536,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,151
+A561T,A,561,T,6,,,,0,6,,,,,,,,,,,Japan Cohort,,,2020,152
+A561V,A,561,V,9,,,,2,7,,,,,,,,,,,Japan Cohort,,,2020,153
+A614T,A,614,T,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,154
+A614V,A,614,V,11,,,,1,10,,,,,,,,,,,Japan Cohort,,,2020,155
+A715A,A,715,A,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,156
+A78T,A,78,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,157
+A83P,A,83,NA,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,158
+A907fsX,A,907,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,159
+A915fsX,A,915,RfsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,160
+c.Del2690AInsCGACAC,c.del,NA,,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,161
+c.IVS6+2t/gsplicimgError,c.IVS,NA,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,162
+C276X,C,276,X,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,163
+C49G,C,49,NA,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,164
+C566F,C,566,F,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,165
+C66R,C,66,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,166
+C750X,C,750,X,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,167
+C977S,C,977,S,3,,,,1,2,,,,,,,,,,,Japan Cohort,,,2020,168
+C977Y,C,977,Y,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,169
+D111V,D,111,V,3,,,,2,1,,,,,,,,,,,Japan Cohort,,,2020,170
+D197Y,D,197,Y,4,,,,1,3,,,,,,,,,,,Japan Cohort,,,2020,171
+D286fsX,D,286,RfsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,172
+D342V,D,342,V,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,173
+D466E,D,466,E,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,174
+D501N,D,501,N,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,175
+D774fsX,D,774,TfsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,176
+D837N,D,837,N,3,,,,3,0,,,,,,,,,,,Japan Cohort,,,2020,177
+D864G,D,864,G,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,178
+E1039X,E,1039,,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,179
+E118fsX,E,118,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,180
+E130K,E,130,K,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,181
+E50fsX,E,50,,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,182
+E58K,E,58,NA,6,,,,3,3,,,,,,,,,,,Japan Cohort,,,2020,183
+E637fsX,E,637,fsX,3,,,,1,2,,,,,,,,,,,Japan Cohort,,,2020,184
+E904fsX,E,904,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,185
+E978X,E,978,X,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,186
+F106L,F,106,L,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,187
+F106V,F,106,V,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,188
+F22Y,F,22,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,189
+F431L,F,431,L,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,190
+F471fsX,F,471,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,191
+F617L,F,617,L,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,192
+F627fsX,F,627,fsX,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,193
+F640Del,F,640,del,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,194
+F68L,F,68,NA,4,,,,0,4,,,,,,,,,,,Japan Cohort,,,2020,195
+G1031fsX,G,1031,,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,196
+G1031fsX,G,1031,,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,197
+G1031fsX,G,1031,,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,198
+G1031fsX,G,1031,,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,199
+G187Del,G,NA,#NAME?,3,,,,2,1,,,,,,,,,,,Japan Cohort,,,2020,200
+S239fsX,G,239,fsX,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,201
+Q391X,G,391,X,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,202
+G47C,G,47,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,203
+G53S,G,53,C,6,,,,2,4,,,,,,,,,,,Japan Cohort,,,2020,204
+G572C,G,572,C,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,205
+G572D,G,572,D,3,,,,1,2,,,,,,,,,,,Japan Cohort,,,2020,206
+G572S,G,572,S,12,,,,1,11,,,,,,,,,,,Japan Cohort,,,2020,207
+G584C,G,584,C,4,,,,0,4,,,,,,,,,,,Japan Cohort,,,2020,208
+G590D,G,590,D,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,209
+G590V,G,590,V,3,,,,3,0,,,,,,,,,,,Japan Cohort,,,2020,210
+G601S,G,601,S,6,,,,2,4,,,,,,,,,,,Japan Cohort,,,2020,211
+G603D,G,603,D,3,,,,1,2,,,,,,,,,,,Japan Cohort,,,2020,212
+G604D,G,604,D,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,213
+G604S,G,604,S,6,,,,2,4,,,,,,,,,,,Japan Cohort,,,2020,214
+G628S,G,628,S,5,,,,1,4,,,,,,,,,,,Japan Cohort,,,2020,215
+G628V,G,628,V,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,216
+G657S,G,657,S,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,217
+G657V,G,657,V,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,218
+G71R,G,71,NA,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,219
+G745fsX,G,745,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,220
+G785D,G,785,D,4,,,,1,3,,,,,,,,,,,Japan Cohort,,,2020,221
+G785S,G,785,S,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,222
+G873fsX,G,873,fsX,4,,,,2,2,,,,,,,,,,,Japan Cohort,,,2020,223
+G909fsX,G,909,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,224
+G911fsX,G,911,fsX,4,,,,0,4,,,,,,,,,,,Japan Cohort,,,2020,225
+G924fsX,G,NA,+,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,226
+G924fsX,G,924,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,227
+G925fsX,G,925,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,228
+G965fsX,G,965,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,229
+T152fsX,H,152,fsX,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,230
+H254fsX,H,254,fsX,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,231
+H302fsX,H,302,fsX,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,232
+H402R,H,402,R,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,233
+H485fsX,H,485,fsX,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,234
+H492Y,H,492,Y,14,,,,8,6,,,,,,,,,,,Japan Cohort,,,2020,235
+H562Q,H,562,Q,2,,,,2,0,,,,,,,,,,,Japan Cohort,,,2020,236
+H562R,H,562,R,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,237
+H70Q,H,70,NA,3,,,,2,1,,,,,,,,,,,Japan Cohort,,,2020,238
+H731R,H,731,R,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,239
+I363fsX,I,NA,+,4,,,,1,3,,,,,,,,,,,Japan Cohort,,,2020,240
+I489F,I,489,F,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,241
+I489I,I,489,I,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,242
+I593M,I,593,M,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,243
+I593V,I,593,V,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,244
+I639N,I,639,N,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,245
+I96V,I,96,NA,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,246
+I997fsX,I,997,fs,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,247
+IVS11+1g/t,IVS,NA,g/t,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,248
+IVS11-2A>T,IVS,NA,A>T,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,249
+IVS12+1_IVS12+10DelGTATCCCGGG,IVS,NA,_IVS,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,250
+IVS12-2a/t,IVS,NA,a/t,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,251
+IVS8+1G>T,IVS,NA,NA,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,252
+IVS9+1G>A,IVS,NA,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,253
+IVS9+2T>G,IVS,NA,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,254
+K364fsX,K,364,fsX,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,255
+K495fsX,K,495,fsX,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,256
+K595E,K,595,E,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,257
+K595N,K,595,N,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,258
+K638Del,K,638,del,6,,,,1,5,,,,,,,,,,,Japan Cohort,,,2020,259
+L1064fsX,L,1064,,4,,,,3,1,,,,,,,,,,,Japan Cohort,,,2020,260
+L324L,L,324,L,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,261
+L468fsX,L,468,fsX,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,262
+L468R,L,468,R,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,263
+L564L,L,564,L,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,264
+L615F,L,615,F,3,,,,2,1,,,,,,,,,,,Japan Cohort,,,2020,265
+L622F,L,622,F,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,266
+L650+3X,L,NA,+,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,267
+L69Del,L,NA,,4,,,,2,2,,,,,,,,,,,Japan Cohort,,,2020,268
+L697fsX,L,697,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,269
+L717P,L,717,P,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,270
+L724fsX,L,724,fsX,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,271
+L737P,L,737,P,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,272
+L973fsX,L,973,fs,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,273
+L987fsX,L,987,fsX,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,274
+L987fsX,L,987,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,275
+M574V,M,574,V,5,,,,2,3,,,,,,,,,,,Japan Cohort,,,2020,276
+M579T,M,579,T,5,,,,3,2,,,,,,,,,,,Japan Cohort,,,2020,277
+M60T,M,60,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,278
+M645I,M,645,I,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,279
+M645V,M,645,V,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,280
+M651K,M,651,K,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,281
+M756V,M,756,V,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,282
+N146fsX,N,146,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,283
+N629K,N,629,K,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,284
+N629S,N,629,S,4,,,,0,4,,,,,,,,,,,Japan Cohort,,,2020,285
+N629T,N,629,T,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,286
+N633I,N,633,I,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,287
+N633S,N,633,S,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,288
+N866fsX,N,866,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,289
+N985fsX,N,985,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,290
+N996fsX,N,996,QfsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,291
+P1030fsX,P,1030,,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,292
+P1030fsX,P,1030,,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,293
+P1084fsX,P,1084,,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,294
+P1093L,P,1093,,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,295
+P1125fs,P,1125,,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,296
+P114S,P,114,S,8,,,,2,6,,,,,,,,,,,Japan Cohort,,,2020,297
+P151fsX,P,151,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,298
+P151fsX,P,151,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,299
+P310fsX,P,310,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,300
+P334L,P,334,L,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,301
+P347S,P,347,S,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,302
+P426H,P,426,H,3,,,,1,2,,,,,,,,,,,Japan Cohort,,,2020,303
+P507L,P,507,L,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,304
+P605L,P,605,L,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,305
+P632S,P,632,S,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,306
+P72Q,P,72,NA,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,307
+P72S,P,72,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,308
+P846T,P,846,T,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,309
+P923L,P,923,L,5,,,,4,1,,,,,,,,,,,Japan Cohort,,,2020,310
+P926fsX,P,926,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,311
+P946R,P,946,R,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,312
+P961fsX,P,961,RfsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,313
+P964fsX,P,964,fsX,2,,,,2,0,,,,,,,,,,,Japan Cohort,,,2020,314
+P967fsX,P,967,fsX,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,315
+Q335X,Q,335,X,3,,,,2,1,,,,,,,,,,,Japan Cohort,,,2020,316
+Q391X,Q,391,X,4,,,,2,2,,,,,,,,,,,Japan Cohort,,,2020,317
+Q592fsX,Q,592,fsX,6,,,,4,2,,,,,,,,,,,Japan Cohort,,,2020,318
+Q664X,Q,664,X,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,319
+Q676X,Q,676,X,3,,,,1,2,,,,,,,,,,,Japan Cohort,,,2020,320
+Q738X,Q,738,X,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,321
+Q81H,Q,81,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,322
+Q81P,Q,81,NA,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,323
+R100G,R,100,G,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,324
+R1014X,R,1014,,6,,,,0,6,,,,,,,,,,,Japan Cohort,,,2020,325
+R1032fsX,R,1032,,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,326
+R1032fsX,R,1032,,3,,,,2,1,,,,,,,,,,,Japan Cohort,,,2020,327
+R1032fsX,R,1032,,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,328
+R1035fs×1057,R,1035,,3,,,,1,2,,,,,,,,,,,Japan Cohort,,,2020,329
+R1035fsX,R,1035,,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,330
+R1035fsX,R,1035,,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,331
+R1035fsX,R,1035,,6,,,,2,4,,,,,,,,,,,Japan Cohort,,,2020,332
+R1035fsX,R,1035,,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,333
+R15W,R,15,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,334
+R176fsX,R,176,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,335
+R176W,R,176,W,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,336
+R20G,R,20,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,337
+R20L,R,20,NA,3,,,,2,1,,,,,,,,,,,Japan Cohort,,,2020,338
+R242fsX,R,242,fsX,4,,,,2,2,,,,,,,,,,,Japan Cohort,,,2020,339
+R242fsX,R,242,PfsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,340
+R243H,R,243,H,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,341
+R27P,R,27,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,342
+R312Del,R,NA,-,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,343
+R312C,R,312,C,3,,,,1,2,,,,,,,,,,,Japan Cohort,,,2020,344
+R312Del,R,NA,#NAME?,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,345
+R328C,R,328,C,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,346
+R366X,R,366,X,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,347
+R397fsX,R,397,fsX,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,348
+R397fsX,R,397,fsX,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,349
+R397fsX,R,397,fsX,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,350
+R397fsX,R,397,fsX,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,351
+R397fsX,R,397,fsX,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,352
+R397fsX,R,397,LfsX,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,353
+R472fsX,R,472,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,354
+R528W,R,528,W,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,355
+R534C,R,534,C,9,,,,2,7,,,,,,,,,,,Japan Cohort,,,2020,356
+R582C,R,582,C,7,,,,2,5,,,,,,,,,,,Japan Cohort,,,2020,357
+R582L,R,582,L,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,358
+R685P,R,685,P,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,359
+R744X,R,744,X,5,,,,2,3,,,,,,,,,,,Japan Cohort,,,2020,360
+R752W,R,752,W,2,,,,2,0,,,,,,,,,,,Japan Cohort,,,2020,361
+R744X,R,774,X,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,362
+R823W,R,823,W,6,,,,0,6,,,,,,,,,,,Japan Cohort,,,2020,363
+R863X,R,863,X,5,,,,1,4,,,,,,,,,,,Japan Cohort,,,2020,364
+R894fsX,R,894,fsX,3,,,,3,0,,,,,,,,,,,Japan Cohort,,,2020,365
+R912fsX,R,912,fsX,4,,,,2,2,,,,,,,,,,,Japan Cohort,,,2020,366
+R912fsX,R,912,fsX,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,367
+T983fsX,R,983,fsX,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,368
+S239fsX,S,239,fsX,13,,,,7,6,,,,,,,,,,,Japan Cohort,,,2020,369
+S243fsX,S,243,fsX,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,370
+S320L,S,320,L,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,371
+S428L,S,428,L,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,372
+S55L,S,55,NA,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,373
+S606P,S,606,P,4,,,,0,4,,,,,,,,,,,Japan Cohort,,,2020,374
+S631F,S,631,F,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,375
+S641F,S,641,F,3,,,,1,2,,,,,,,,,,,Japan Cohort,,,2020,376
+S641P,S,641,P,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,377
+S706F,S,706,F,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,378
+S818L,S,818,L,6,,,,0,6,,,,,,,,,,,Japan Cohort,,,2020,379
+S871fsX,S,871,fs,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,380
+splicing error,splicing error,NA,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,381
+T152fsX,T,152,fsX,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,382
+T152I,T,152,I,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,383
+T162fsX,T,162,fsX,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,384
+T319T,T,319,T,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,385
+T474I,T,474,I,4,,,,1,3,,,,,,,,,,,Japan Cohort,,,2020,386
+T613M,T,613,M,9,,,,1,8,,,,,,,,,,,Japan Cohort,,,2020,387
+T618S,T,618,S,6,,,,3,3,,,,,,,,,,,Japan Cohort,,,2020,388
+T623I,T,623,I,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,389
+T634S,T,634,S,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,390
+T65P,T,65,NA,6,,,,2,4,,,,,,,,,,,Japan Cohort,,,2020,391
+T826A,T,826,A,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,392
+T826I,T,826,I,4,,,,1,3,,,,,,,,,,,Japan Cohort,,,2020,393
+T875fsX,T,875,fsX,2,,,,1,1,,,,,,,,,,,Japan Cohort,,,2020,394
+T895M,T,895,M,5,,,,3,2,,,,,,,,,,,Japan Cohort,,,2020,395
+T899fsX,T,899,fsX,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,396
+V115M,V,115,M,2,,,,2,0,,,,,,,,,,,Japan Cohort,,,2020,397
+V41A,V,41,NA,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,398
+V644F,V,644,F,6,,,,0,6,,,,,,,,,,,Japan Cohort,,,2020,399
+V796Del,V,796,del,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,400
+V94A,V,94,NA,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,401
+W1001fsX,W,1001,,6,,,,2,4,,,,,,,,,,,Japan Cohort,,,2020,402
+W398X,W,398,X,3,,,,1,2,,,,,,,,,,,Japan Cohort,,,2020,403
+W497X,W,497,X,3,,,,1,2,,,,,,,,,,,Japan Cohort,,,2020,404
+W563C,W,563,C,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,405
+W563G,W,563,G,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,406
+W853fsX,W,853,fsX,1,,,,1,0,,,,,,,,,,,Japan Cohort,,,2020,407
+W853fsX,W,853,fsx,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,408
+W927X,W,927,X,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,409
+Y1009X,Y,1009,,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,410
+Y427C,Y,427,C,2,,,,2,0,,,,,,,,,,,Japan Cohort,,,2020,411
+Y43D,Y,43,NA,3,,,,1,2,,,,,,,,,,,Japan Cohort,,,2020,412
+Y493C,Y,493,C,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,413
+Y569fsX,Y,569,CfsX,2,,,,0,2,,,,,,,,,,,Japan Cohort,,,2020,414
+Y597C,Y,597,C,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,415
+Y611D,Y,611,D,1,,,,0,1,,,,,,,,,,,Japan Cohort,,,2020,416
+Y616S,Y,616,S,3,,,,0,3,,,,,,,,,,,Japan Cohort,,,2020,417
+A561T,A,561,T,2,,,,0,2,,,,,,,"Utah, Alaska, and Kentucky",Unknown,FROM OTHER REFERENCE,Oral potassium improves Ikr,14642689,Journal of the American College of Cardiology,,,418
+A614V,A,614,V,1,,,,0,1,,,,,,,"Utah, Alaska, and Kentucky",Unknown,FROM OTHER REFERENCE,Oral potassium improves Ikr,14642690,Journal of the American College of Cardiology,,,419
+N470D,N,470,D,1,,,,0,1,,,,,,,"Utah, Alaska, and Kentucky",Unknown,FROM OTHER REFERENCE,Oral potassium improves Ikr,14642687,Journal of the American College of Cardiology,Etheridge,2003,420
+R1014X,R,1014,X,2,,,,0,2,,,,,,,"Utah, Alaska, and Kentucky",Unknown,FROM OTHER REFERENCE,Oral potassium improves Ikr,14642691,Journal of the American College of Cardiology,,,421
+G572S,G,572,S,5,,,1,1,4,,1,,,,,Brazil,,G1714A,,21308345,Arq Bras Cardiol,Curty,2010,422
+T1083fsX,T,1083,FRAMESHIFT,1,,,,0,1,,1,,,1,,Japan,,garenoxacin aggravatged,,26022375,Heart Vessels,,,423
+L552S,L,552,S,2,,,,0,2,2,2,1,1,,,,,girl died due to aspiration,,26063740,,,,424
+V1038fsX,V,1038,FRAMESHIFT,1,,,,0,1,,,,,,Seizures,,,Gly1038fs/81X,,24103226,Heart Rhythm,Anderson,2014,425
+G47D,G,47,D,1,1,,,0,,,,,,,,,,"Gly47Asp, also mutant in cav3 val82Ile",,23631430,Genetic Testing and Molecular Biomarkers,Lieve,2013,426
+G53R,G,53,R,1,,,,0,1,,,,,,Seizures,,,Gly52Arg,"Gly53, most likely",24103226,Heart Rhythm,Anderson,2014,427
+G604S,G,604,S,1,,,,0,1,,,,,,Seizures,,,Gly604Ser,,24103226,Heart Rhythm,Anderson,2014,428
+G71E,G,71,E,1,1,,,0,,,,,,,,,,"Gly71Glu, also mutant in SCN5! ICS8+5 G>A",,23631430,Genetic Testing and Molecular Biomarkers,Lieve,2013,429
+G873fsX,G,873,FRAMESHIFT,1,,,,0,1,,,,,,,,Chinese,Gly873AlafsX5,,26496715,Cardiology,Gao,2015,430
+A8V,A,8,V,1,,,,0,1,,,1,,,,,Caucasian,good hERG 1a vs 1b study,,18776039,Circ Res,Sale,2009,431
+P1086fsX,P,1086,FRAMESHIFT,2,,,,0,2,,,1,,,,,,good paper,brother has everything but symptoms,21483829,PLOS One,Mihic,2011,432
+A490P,A,490,P,9,,,1,1,8,,,2,,,,,,had assumed 100% penetrance…,,17560885,,,,433
+A80P,A,80,P,1,,,,0,1,,1,,,,,Switzerland,caucasian,had codon not protein previously,,21496174,Annals of noninvasive electrocardiology : the official journal of the,Grilo,2011,434
+7q34q36.2Del,ch,NOPE,,2,,,,0,2,,,,,,"mental retardation, growth retardation, microcephaly, hypermetropia, squint, bulbous nasal tip, sensori-neural hearing imparment, low set ears",,,het chromosomal herg KO,twins,16470702,American Journal of Medical Genetics,Bisgaard,2006,435
+7q36.1q36.2Del,ch,NOPE,,1,,,,0,1,,,,,,"mental retardation, unusual facial features, renal hypoplasia",Italy,,"het, chromosomal herg KO","consanguinous parents, mom took anticonvulsants during pregnancy",18348270,American Journal of Medical Genetics,Caselli,2007,436
+H703fsX,H,703,FRAMESHIFT,1,1,,,0,,,,,,,,,,"His703ProfsX11, also mutant in KCNE2 thr10met",,23631430,Genetic Testing and Molecular Biomarkers,Lieve,2013,437
+c.2592+1G->A,in,NOPE,,5,1,,0,0,4,,,,,,,Belgium,Belgian,HOW TO NOTE THIS?!,,10086972,Circulation,Berthet,2000,438
+G189Ins,G,189,INSERTION,1,,1,,1,,,,,,,LQT3,,,how to note?,also has A572D in SCN5A,18452873,Heart rhythm,Johnson,2008,439
+G601S,G,601,S,1,,,,0,1,,1,,1,,Seizures,Poland,Polish,I can read Polish,,19169982,Kardiologia polska,Zienciuk,2008,440
+I571V,I,571,V,1,,,,0,1,,,,,,Seizures,,,Ile571Val,,24103226,Heart Rhythm,Anderson,2014,441
+A913V,A,913,V,1,1,,,0,,,,,,,,Denmark,,in patients with Turners Syndrome,,23936059,PLOS One,Trolle,2013,442
+R1047L,R,1047,L,5,5,,,0,,,,,,,,Denmark,,in patients with Turners Syndrome,,23936059,PLOS One,Trolle,2013,443
+A172V,A,172,V,1,,,,0,1,,,,,,,Spain,,in table,,24667783,European Journal of Human Genetics,Riuro,2015,444
+E807X,E,807,X,1,,,,0,1,,,,,,,Spain,,in table,,24667783,European Journal of Human Genetics,Riuro,2015,445
+G238R,G,238,R,1,,,,0,1,,,,,,,Spain,,in table,,24667783,European Journal of Human Genetics,Riuro,2015,446
+G880V,G,880,V,4,,,3,3,1,,,,,,,Spain,,in table,,24667783,European Journal of Human Genetics,Riuro,2015,447
+L343fsX,L,343,FRAMESHIFT,1,,,,0,1,,,,,,,Spain,,in table,,24667783,European Journal of Human Genetics,Riuro,2015,448
+R356H,R,356,H,1,,,,0,1,,,,,,,Spain,,in table,,24667783,European Journal of Human Genetics,Riuro,2015,449
+S855R,S,855,R,1,,,,0,1,,,,,,,Spain,,in table,,24667783,European Journal of Human Genetics,Riuro,2015,450
+S890C,S,890,C,1,,,,0,1,1,,,,,,Spain,,in table,,24667783,European Journal of Human Genetics,Riuro,2015,451
+W705fsX,W,705,FRAMESHIFT,1,,,,0,1,,,,,,,Spain,,in table,,24667783,European Journal of Human Genetics,Riuro,2015,452
+N588K,N,588,K,7,,,,0,,,,1,2,,short QT syndrome,"Utica NY, USA","White, European",increased tail speed,loss of inward rectification,14676148,Circulation,Brugada,2004,453
+IVS9-28A/G,in,NOPE,,9,,,,0,9,,2,,,,,Italy,,"intronic mutation, not sure how to note","heterozygous A-to-G substitution in
+intron 9 of KCNH2, located 28 nucleotides upstream of the
+acceptor splice site",19187913,Heart Rythmn Society,Crotti,2009,454
+A561V,A,561,V,1,,,,0,1,,,,,,,,,iPSC EP,,24623279,Cardiovascular research,Mehta,2014,455
+T983I,T,983,I,1,,,1,1,,,,,,,,,,iPSC paper,only had long QT and vague pre-syncope,29957233,J Am Coll Cardiol,Garg,2018,456
+N588K,N,588,K,1,,,,0,,,,,,,short QT,,,iPSC work as well,,29574456,J Am Heart Assoc,El-Battrawy,2018,457
+R752W,R,752,W,26,,23,,23,3,,,,,,,Cleveland,,iPSC work as well,"it is the large family, supplement has clinical data - only 3 severely affected",29431731,The Journal of Clinical Investigation,Chai,2018,458
+D609G,D,609,G,1,,,,0,,,,,1,,Fibromuscular dysplasia,"Kosice, Slovic Republic",Slav,is this sudden death? Is a cardiac arrest.,,30844837,Am J Forensic Med Pathol,,,459
+c.1945+6T>C,,NA,,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,460
+c.1946-1G>A,,NA,,4,,,,3,1,,,,,,,,,,,Italy Cohort,,,2020,461
+c.2399-28A>G,,NA,,11,,,,1,10,,,,,,,,,,,Italy Cohort,,,2020,462
+c.2400-3480Del,,NA,,3,,,,0,3,,,,,,,,,,,Italy Cohort,,,2020,463
+c.472+1G>C,,NA,+,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,464
+A1116V,A,1116,V,9,,,,6,3,,,,,,,,,,,Italy Cohort,,,2020,465
+A190T,A,190,T,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,466
+A228fsX,A,228,RfsX,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,467
+A268fsX,A,268,GfsX,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,468
+A490P,A,490,P,5,,,,0,5,,,,,,,,,,,Italy Cohort,,,2020,469
+A490T,A,490,T,3,,,,0,3,,,,,,,,,,,Italy Cohort,,,2020,470
+A561V,A,561,V,5,,,,0,5,,,,,,,,,,,Italy Cohort,,,2020,471
+A614T,A,614,T,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,472
+A614V,A,614,V,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,473
+A746fsX,A,746,PfsX,3,,,,1,2,,,,,,,,,,,Italy Cohort,,,2020,474
+A78P,A,78,NA,3,,,,1,2,,,,,,,,,,,Italy Cohort,,,2020,475
+A79Del,A,NA,del,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,476
+A79S,A,79,S,3,,,,2,1,,,,,,,,,,,Italy Cohort,,,2020,477
+A913V,A,913,V,4,,,,3,1,,,,,,,,,,,Italy Cohort,,,2020,478
+C64R,C,64,R,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,479
+D102V,D,102,V,4,,,,2,2,,,,,,,,,,,Italy Cohort,,,2020,480
+D323E,D,323,E,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,481
+D342fsX,D,342,EfsX,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,482
+D501Y,D,501,Y,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,483
+D767fsX,D,767,TfsX,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,484
+D803X,D,803,X,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,485
+E274fsX,E,274,KfsX,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,486
+E50X,E,50,X,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,487
+E58D,E,58,D,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,488
+E978X,E,978,X,3,,,,2,1,,,,,,,,,,,Italy Cohort,,,2020,489
+F22Y,F,22,Y,4,,,,0,4,,,,,,,,,,,Italy Cohort,,,2020,490
+F29S,F,29,S,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,491
+F29V,F,29,V,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,492
+F617L,F,617,L,3,,,,2,1,,,,,,,,,,,Italy Cohort,,,2020,493
+F805S,F,805,S,6,,,,1,5,,,,,,,,,,,Italy Cohort,,,2020,494
+G1085fsX,G,1085,,11,,,,2,9,,,,,,,,,,,Italy Cohort,,,2020,495
+G262fsX,G,262,AfsX,6,,,,3,3,,,,,,,,,,,Italy Cohort,,,2020,496
+G601S,G,601,S,3,,,,2,1,,,,,,,,,,,Italy Cohort,,,2020,497
+G604S,G,604,S,5,,,,0,5,,,,,,,,,,,Italy Cohort,,,2020,498
+G626A,G,626,A,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,499
+G628S,G,628,S,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,500
+G71E,G,71,E,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,501
+G71W,G,71,W,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,502
+G806R,G,806,R,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,503
+G873fsX,G,873,AfsX,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,504
+G873fsX,G,873,RfsX,2,,,,1,1,,,,,,,,,,,Italy Cohort,,,2020,505
+G903R,G,903,R,2,,,,2,0,,,,,,,,,,,Italy Cohort,,,2020,506
+I567T,I,567,T,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,507
+I583V,I,583,V,9,,,,8,1,,,,,,,,,,,Italy Cohort,,,2020,508
+K638Del,K,638,del,10,,,,4,6,,,,,,,,,,,Italy Cohort,,,2020,509
+K638R,K,638,R,4,,,,1,3,,,,,,,,,,,Italy Cohort,,,2020,510
+L1045F,L,1045,F,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,511
+L109fsX,L,109,WfsX,12,,,,2,10,,,,,,,,,,,Italy Cohort,,,2020,512
+L170dup,L,NA,dup,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,513
+L380fsX,L,380,RfsX,18,,,,4,14,,,,,,,,,,,Italy Cohort,,,2020,514
+L586M,L,586,M,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,515
+L589P,L,589,P,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,516
+L693fsX,L,693,CfsX,3,,,,0,3,,,,,,,,,,,Italy Cohort,,,2020,517
+L776P,L,776,P,4,,,,0,4,,,,,,,,,,,Italy Cohort,,,2020,518
+L838R,L,838,R,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,519
+L862P,L,862,P,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,520
+L987fsX,L,987,VfsX,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,521
+N629S,N,629,S,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,522
+N633S,N,633,S,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,523
+N861H,N,861,H,3,,,,0,3,,,,,,,,,,,Italy Cohort,,,2020,524
+P1030fsX,P,1030,X,4,,,,2,2,,,,,,,,,,,Italy Cohort,,,2020,525
+P1034fsX,P,1034,X,2,,,,1,1,,,,,,,,,,,Italy Cohort,,,2020,526
+P1084L,P,1084,L,15,,,,12,3,,,,,,,,,,,Italy Cohort,,,2020,527
+P347S,P,347,S,2,,,,2,0,,,,,,,,,,,Italy Cohort,,,2020,528
+P632A,P,632,A,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,529
+P72R,P,72,R,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,530
+P910L,P,910,L,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,531
+P917L,P,917,L,6,,,,5,1,,,,,,,,,,,Italy Cohort,,,2020,532
+P926fsX,P,926,AfsX,3,,,,0,3,,,,,,,,,,,Italy Cohort,,,2020,533
+P926fsX,P,926,RfsX,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,534
+P986T,P,986,T,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,535
+Q1068R,Q,1068,R,5,,,,5,0,,,,,,,,,,,Italy Cohort,,,2020,536
+Q376R,Q,376,R,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,537
+R100P,R,100,P,3,,,,0,3,,,,,,,,,,,Italy Cohort,,,2020,538
+R1014fsX,R,1014,X,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,539
+R1014X,R,1014,X,7,,,,2,5,,,,,,,,,,,Italy Cohort,,,2020,540
+R1032fsX,R,1032,X,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,541
+R1032P,R,1032,P,5,,,,2,3,,,,,,,,,,,Italy Cohort,,,2020,542
+R1033fsX,R,1033,X,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,543
+R1035fsX,R,1035,X,2,,,,2,0,,,,,,,,,,,Italy Cohort,,,2020,544
+R1035fsX,R,1035,X,3,,,,1,2,,,,,,,,,,,Italy Cohort,,,2020,545
+R1047C,R,1047,C,2,,,,1,1,,,,,,,,,,,Italy Cohort,,,2020,546
+R148W,R,148,W,7,,,,5,2,,,,,,,,,,,Italy Cohort,,,2020,547
+R176W,R,176,W,21,,,,13,8,,,,,,,,,,,Italy Cohort,,,2020,548
+R273Q,R,273,Q,5,,,,5,0,,,,,,,,,,,Italy Cohort,,,2020,549
+R366X,R,366,X,10,,,,3,7,,,,,,,,,,,Italy Cohort,,,2020,550
+R528W,R,528,W,3,,,,2,1,,,,,,,,,,,Italy Cohort,,,2020,551
+R534C,R,534,C,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,552
+R734H,R,734,H,3,,,,2,1,,,,,,,,,,,Italy Cohort,,,2020,553
+R73G,R,73,G,2,,,,1,1,,,,,,,,,,,Italy Cohort,,,2020,554
+R744X,R,744,X,19,,,,8,11,,,,,,,,,,,Italy Cohort,,,2020,555
+R752W,R,752,W,3,,,,0,3,,,,,,,,,,,Italy Cohort,,,2020,556
+R77S,R,77,S,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,557
+R791W,R,791,W,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,558
+R823W,R,823,W,5,,,,1,4,,,,,,,,,,,Italy Cohort,,,2020,559
+R863P,R,863,P,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,560
+R863X,R,863,X,6,,,,1,5,,,,,,,,,,,Italy Cohort,,,2020,561
+R894fsX,R,894,PfsX,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,562
+R922W,R,922,W,4,,,,3,1,,,,,,,,,,,Italy Cohort,,,2020,563
+S261fsX,S,261,AfsX,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,564
+S331N,S,331,N,3,,,,3,0,,,,,,,,,,,Italy Cohort,,,2020,565
+S351L,S,351,L,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,566
+S428fsX,S,428,WfsX,8,,,,1,7,,,,,,,,,,,Italy Cohort,,,2020,567
+S428X,S,428,X,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,568
+S641F,S,641,F,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,569
+S660L,S,660,L,5,,,,3,2,,,,,,,,,,,Italy Cohort,,,2020,570
+S818L,S,818,L,2,,,,1,1,,,,,,,,,,,Italy Cohort,,,2020,571
+T152fsX,T,152,HfsX,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,572
+T152fsX,T,152,PfsX,4,,,,1,3,,,,,,,,,,,Italy Cohort,,,2020,573
+T436M,T,436,M,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,574
+T613M,T,613,M,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,575
+T634I,T,634,I,3,,,,1,2,,,,,,,,,,,Italy Cohort,,,2020,576
+T875M,T,875,M,8,,,,8,0,,,,,,,,,,,Italy Cohort,,,2020,577
+T875fsX,T,875,RfsX,8,,,,2,6,,,,,,,,,,,Italy Cohort,,,2020,578
+V113Del,V,NA,del,3,,,,1,2,,,,,,,,,,,Italy Cohort,,,2020,579
+V194M,V,194,M,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,580
+V36fsX,V,36,X,3,,,,0,3,,,,,,,,,,,Italy Cohort,,,2020,581
+V482A,V,482,A,2,,,,1,1,,,,,,,,,,,Italy Cohort,,,2020,582
+V535M,V,535,M,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,583
+V612A,V,612,A,4,,,,0,4,,,,,,,,,,,Italy Cohort,,,2020,584
+V644F,V,644,F,3,,,,0,3,,,,,,,,,,,Italy Cohort,,,2020,585
+V841L,V,841,L,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,586
+V94L,V,94,L,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,587
+W1001X,W,1001,X,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,588
+W410X,W,410,X,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,589
+W412X,W,412,X,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,590
+W497L,W,497,L,4,,,,1,3,,,,,,,,,,,Italy Cohort,,,2020,591
+W568C,W,568,C,2,,,,0,2,,,,,,,,,,,Italy Cohort,,,2020,592
+W927X,W,927,X,6,,,,2,4,,,,,,,,,,,Italy Cohort,,,2020,593
+Y43C,Y,43,C,3,,,,2,1,,,,,,,,,,,Italy Cohort,,,2020,594
+Y447X,Y,447,X,1,,,,1,0,,,,,,,,,,,Italy Cohort,,,2020,595
+Y493C,Y,493,C,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,596
+Y493dup,Y,493,dup,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,597
+Y54N,Y,54,N,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,598
+Y54fsX,Y,54,X,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,599
+Y99N,Y,99,N,1,,,,0,1,,,,,,,,,,,Italy Cohort,,,2020,600
+IVS9+5g>t,in,NOPE,,1,,,,0,1,,,,,,Seizures,,,IVS9+5g>t,,24103226,Heart Rhythm,Anderson,2014,601
+S55L,S,55,L,4,,,,0,4,,,1,,,,Nashville,,Kroncke!,,29330128,Heart Rhythm,Kroncke,2018,602
+L1064fsX,L,1064,FRAMESHIFT,1,,,,0,,,,,,,congenital LQT,,,L1064fsX1068,fetal study,24218437,Circulation,Cuneo,2013,603
+L987fsX,L,987,FRAMESHIFT,3,,,,0,3,,,,,,,,Chinese,Leu987Valfs131X,,26496715,Cardiology,Gao,2015,604
+R954C,R,954,C,1,,,,0,,,,,1,,SIDS,southeastern Norway,,linked with K897T,,17210839,,,,605
+K897T,K,897,T,1,,,,0,,,,,1,,SIDS,southeastern Norway,,linked with R954C,,17210839,,,,606
+G628S,G,628,S,,,,,0,1,,1,,,,,,"Mexican (Spanish), German, English, and Danish",loss of K selectivity,,7889573,Cell Press,Curran,1995,607
+K801T,K,801,T,4,3,,,0,1,,,,,,,,Chinese,lots of dead family members in the night,,30481776,Cell Physiol Biochem,Cheng,2018,608
+R176W,R,176,W,1,,1,,1,,,1,,,,,Rochester Minnesota,Unknown,low QTc,,16818214,Heart rhythm,Tester,2006,609
+A558P,A,558,P,2,,,,0,2,,,,,,,Netherlands,,may be reported elsewhere,,20390067,Neatherlands Heart Journal,Amin,2010,610
+T613M,T,613,M,2,,1,,1,1,,1,,,,,"Boston, USA",Unknown,mother has mutation and ICD implant,,16379539,Circulation,Han Shim,2005,611
+P926fsX,P,926,FRAMESHIFT,19,,,,0,19,,7,2,,,,,,NMD study (G925fs/13),3 childern of an obligate carrier (not included) experienced Sudden Death,21419236,Heart Rhythm,Zarraga,2011,612
+A561T,A,561,T,2,1,,,0,1,,,,,,,,,No pedigree,,20197117,Heart Rhythm,Aziz,2010,613
+G572S,G,572,S,4,2,,,0,2,,,,,,,,,No pedigree,,20197117,Heart Rhythm,Aziz,2010,614
+T613M,T,613,M,2,1,,,0,1,,,,,,,,,No pedigree,,20197117,Heart Rhythm,Aziz,2010,615
+P923fsX,P,923,FRAMESHIFT,1,,,,0,1,,,,,,,Taiwan,Taiwanese,nomenclature was wrong,,16155735,Journal of human genetics,Lai,2005,616
+E876X,E,876,X,4,,,4,4,,,,,,,,Frankfurt,,"not LQTS2, no one has long enough QTc interval",,29214556,International Journal of Legal Medicine,Jenewein,2018,617
+A561T,A,561,T,2,,,,0,2,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,618
+A561V,A,561,V,6,,,,0,6,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,619
+A614V,A,614,V,3,,,,0,3,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,620
+A78P,A,78,P,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,621
+A83fsX,A,83,FRAMESHIFT,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,622
+C44X,C,44,X,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,623
+C66G,C,66,G,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,624
+D609N,D,609,N,5,,,,0,5,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,625
+F29L,F,29,L,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,626
+F627L,F,627,L,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,627
+F805C,F,805,C,11,,,,0,11,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,628
+G47V,G,47,V,8,,,,0,8,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,629
+G604S,G,604,S,2,,,,0,2,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,630
+G628S,G,628,S,2,,,,0,2,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,631
+G925fsX,G,925,FRAMESHIFT,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,632
+H70R,H,70,R,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,633
+I593X,I,593,X,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,634
+K638E,K,638,E,3,,,,0,3,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,635
+L552S,L,552,S,4,,,,0,4,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,636
+L799sp,L,799,SPLICE,5,,,,0,5,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,637
+L86R,L,86,R,7,,,,0,7,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,638
+M124R,M,124,R,17,,,,0,17,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,639
+N33T,N,33,T,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,640
+N629S,N,629,S,2,,,,0,2,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,641
+N861I,N,861,I,3,,,,0,3,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,642
+P596L,P,596,L,2,,,,0,2,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,643
+P72Q,P,72,Q,7,,,,0,7,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,644
+P917L,P,917,L,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,645
+P968fsX,P,968,FRAMESHIFT,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,646
+Q376sp,Q,376,SPLICE,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,647
+R56Q,R,56,Q,8,,,,0,8,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,648
+R744X,R,744,X,2,,,,0,2,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,649
+R752W,R,752,W,33,,,,0,33,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,650
+R823W,R,823,W,8,,,,0,8,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,651
+R920fsX,R,920,FRAMESHIFT,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,652
+S26I,S,26,I,2,,,,0,2,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,653
+S428L,S,428,L,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,654
+S428X,S,428,X,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,655
+T436M,T,436,M,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,656
+T613M,T,613,M,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,657
+V295fsX,V,295,FRAMESHIFT,2,,,,0,2,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,658
+V630A,V,630,A,1,,,,0,1,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,659
+V822M,V,822,M,18,,,,0,18,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,660
+W1001X,W,1001,X,20,,,,0,20,,,,,,,International Long-QT Syndrome Registry,,not sure if should trust,"LQTS diagnosis claimed, looks like duplicate with 11844290",11854117,Circulation,Moss,2002,661
+G572C,G,572,C,1,,,,0,1,,,,,,,"Utah, Alaska, and Kentucky",Unknown,number was wrong last time,Oral potassium improves Ikr,14642687,Journal of the American College of Cardiology,Etheridge,2003,662
+G628S,G,628,S,2,,,,0,2,,,,,,,,,one case previously reported,,19996378,Circ Arrhytm Electrophysiol,Horigome,2009,663
+E229X,E,229,X,2,,1,,1,1,,2,,,,,Rochester Minnesota,Unknown,one patient without QTc,,16818214,Heart rhythm,Tester,2006,664
+H302fsX,H,302,FRAMESHIFT,3,,,1,1,2,,2,1,,,,Japan,,only patients with compound mutants had LQTS2,,24057343,Heart Vessels,Bando,2014,665
+H492Y,H,492,Y,4,,,2,2,2,,2,1,,,,Japan,,only patients with compound mutants had LQTS2,,24057343,Heart Vessels,Bando,2014,666
+R176W,R,176,W,16,,,16,16,,,,,,,,,Finnish,own a huge database on 112 of these patients,,19160088,Annals of medicine,Marjamaa,2009,667
+P191fsX,P,191,FRAMESHIFT,1,,,,0,1,,,,,,,,Chinese,p.Pro191ArgX10,,26496715,Cardiology,Gao,2015,668
+T443fsX,T,443,FRAMESHIFT,1,,,,0,1,,,,,,,,Chinese,p.Thr443ArgfsX77,,26496715,Cardiology,Gao,2015,669
+T443fsX,T,443,FRAMESHIFT,1,,,,0,1,,,,,,,,Chinese,p.Thr443ProfsX78,,26496715,Cardiology,Gao,2015,670
+E177X,E,177,X,1,,,1,1,,,,,,,,Portugal,,palpilatations with stress…. Not LQTS2,,23351921,Portuguese Journal of Cardiology,Silva,2012,671
+A422T,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,672
+A561T,,,,9,,,,2,7,,,,,,,,,,,France Cohort,,,2020,673
+A561V,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,674
+A915X,,,,3,,,,0,3,,,,,,,,,,,France Cohort,,,2020,675
+c.1129-1556,,,,3,,,,0,3,,,,,,,,,,,France Cohort,,,2020,676
+c.1129-1G>C,,,,17,,,,13,4,,,,,,,,,,,France Cohort,,,2020,677
+c.1946?-c.3330?,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,678
+c.2146-2A>G,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,679
+c.2592+1G>A,,,,5,,,,1,4,,,,,,,,,,,France Cohort,,,2020,680
+c.2959C>T,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,681
+c.473-1G>T,,,,4,,,,3,1,,,,,,,,,,,France Cohort,,,2020,682
+c.473-2A>T,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,683
+C44F,,,,5,,,,3,2,,,,,,,,,,,France Cohort,,,2020,684
+C49R,,,,7,,,,3,4,,,,,,,,,,,France Cohort,,,2020,685
+C566S,,,,6,,,,5,1,,,,,,,,,,,France Cohort,,,2020,686
+C66Y,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,687
+D102X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,688
+D1037X,,,,4,,,,3,1,,,,,,,,,,,France Cohort,,,2020,689
+D259X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,690
+D286X,,,,1,,,,1,0,,,,,,,,,,,France Cohort,,,2020,691
+D501N,,,,8,,,,3,5,,,,,,,,,,,France Cohort,,,2020,692
+D609N,,,,5,,,,1,4,,,,,,,,,,,France Cohort,,,2020,693
+D837N,,,,10,,,,6,4,,,,,,,,,,,France Cohort,,,2020,694
+E134X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,695
+E214X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,696
+E435X,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,697
+E58K,,,,4,,,,1,3,,,,,,,,,,,France Cohort,,,2020,698
+E857X,,,,1,,,,1,0,,,,,,,,,,,France Cohort,,,2020,699
+E900X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,700
+F129C,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,701
+F463L,,,,5,,,,0,5,,,,,,,,,,,France Cohort,,,2020,702
+G572S,,,,3,,,,0,3,,,,,,,,,,,France Cohort,,,2020,703
+G584S,,,,5,,,,4,1,,,,,,,,,,,France Cohort,,,2020,704
+G601S,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,705
+G604S,,,,9,,,,1,8,,,,,,,,,,,France Cohort,,,2020,706
+G626S,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,707
+G628S,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,708
+G648A,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,709
+G669X,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,710
+G806R,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,711
+G965X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,712
+G969X,,,,1,,,,1,0,,,,,,,,,,,France Cohort,,,2020,713
+H1151X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,714
+H1153P,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,715
+H402R,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,716
+H771R,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,717
+I19F,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,718
+I639F,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,719
+I464X,,,,3,,,,1,2,,,,,,,,,,,France Cohort,,,2020,720
+I593T,,,,4,,,,1,3,,,,,,,,,,,France Cohort,,,2020,721
+I642V,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,722
+I96T,,,,4,,,,3,1,,,,,,,,,,,France Cohort,,,2020,723
+K638D,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,724
+K93X,,,,1,,,,1,0,,,,,,,,,,,France Cohort,,,2020,725
+K98R,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,726
+L553V,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,727
+L602X,,,,3,,,,2,1,,,,,,,,,,,France Cohort,,,2020,728
+L622F,,,,4,,,,1,3,,,,,,,,,,,France Cohort,,,2020,729
+L717P,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,730
+L776P,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,731
+M124R,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,732
+M124T,,,,5,,,,1,4,,,,,,,,,,,France Cohort,,,2020,733
+M1T,,,,3,,,,3,0,,,,,,,,,,,France Cohort,,,2020,734
+M462Ins,,,,11,,,,7,4,,,,,,,,,,,France Cohort,,,2020,735
+M645I,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,736
+M645V,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,737
+N45K,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,738
+N633S,,,,8,,,,2,6,,,,,,,,,,,France Cohort,,,2020,739
+P1084X,,,,7,,,,6,1,,,,,,,,,,,France Cohort,,,2020,740
+P114S,,,,10,,,,5,5,,,,,,,,,,,France Cohort,,,2020,741
+P157X,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,742
+P297S,,,,1,,,,1,0,,,,,,,,,,,France Cohort,,,2020,743
+P334L,,,,3,,,,1,2,,,,,,,,,,,France Cohort,,,2020,744
+P347S,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,745
+P386X,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,746
+P507S,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,747
+P596S,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,748
+P596T,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,749
+P605L,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,750
+P721L,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,751
+P923X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,752
+P926X,,,,4,,,,2,2,,,,,,,,,,,France Cohort,,,2020,753
+P917L,,,,2,,,,2,0,,,,,,,,,,,France Cohort,,,2020,754
+Q1068X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,755
+Q11H,,,,1,,,,1,0,,,,,,,,,,,France Cohort,,,2020,756
+Q664X,,,,3,,,,2,1,,,,,,,,,,,France Cohort,,,2020,757
+Q75X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,758
+R100G,,,,1,,,,1,0,,,,,,,,,,,France Cohort,,,2020,759
+R1014X,,,,9,,,,3,6,,,,,,,,,,,France Cohort,,,2020,760
+R1032X,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,761
+R1033X,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,762
+R1035X,,,,3,,,,1,2,,,,,,,,,,,France Cohort,,,2020,763
+R148W,,,,12,,,,10,2,,,,,,,,,,,France Cohort,,,2020,764
+R148Y,,,,2,,,,2,0,,,,,,,,,,,France Cohort,,,2020,765
+R151X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,766
+R176W,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,767
+R27X,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,768
+R281X,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,769
+R328C,,,,1,,,,1,0,,,,,,,,,,,France Cohort,,,2020,770
+R366X,,,,4,,,,2,2,,,,,,,,,,,France Cohort,,,2020,771
+R531W,,,,4,,,,2,2,,,,,,,,,,,France Cohort,,,2020,772
+R534C,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,773
+R582C,,,,4,,,,2,2,,,,,,,,,,,France Cohort,,,2020,774
+R582L,,,,1,,,,1,0,,,,,,,,,,,France Cohort,,,2020,775
+R582P,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,776
+R744P,,,,4,,,,3,1,,,,,,,,,,,France Cohort,,,2020,777
+R823Q,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,778
+R823W,,,,4,,,,2,2,,,,,,,,,,,France Cohort,,,2020,779
+R863X,,,,3,,,,1,2,,,,,,,,,,,France Cohort,,,2020,780
+R883X,,,,4,,,,4,0,,,,,,,,,,,France Cohort,,,2020,781
+R885X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,782
+R893X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,783
+S207X,,,,4,,,,1,3,,,,,,,,,,,France Cohort,,,2020,784
+S239P,,,,3,,,,1,2,,,,,,,,,,,France Cohort,,,2020,785
+S284X,,,,4,,,,2,2,,,,,,,,,,,France Cohort,,,2020,786
+S351L,,,,1,,,,1,0,,,,,,,,,,,France Cohort,,,2020,787
+S606Del,,,,3,,,,1,2,,,,,,,,,,,France Cohort,,,2020,788
+S606F,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,789
+S621N,,,,3,,,,0,3,,,,,,,,,,,France Cohort,,,2020,790
+S660L,,,,2,,,,2,0,,,,,,,,,,,France Cohort,,,2020,791
+S783P,,,,3,,,,1,2,,,,,,,,,,,France Cohort,,,2020,792
+S818L,,,,2,,,,1,1,,,,,,,,,,,France Cohort,,,2020,793
+S960N,,,,1,,,,1,0,,,,,,,,,,,France Cohort,,,2020,794
+S981X,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,795
+T13N,,,,4,,,,3,1,,,,,,,,,,,France Cohort,,,2020,796
+T152X,,,,6,,,,3,3,,,,,,,,,,,France Cohort,,,2020,797
+T337X,,,,8,,,,5,3,,,,,,,,,,,France Cohort,,,2020,798
+T613M,,,,9,,,,3,6,,,,,,,,,,,France Cohort,,,2020,799
+T634A,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,800
+V1038X,,,,5,,,,0,5,,,,,,,,,,,France Cohort,,,2020,801
+V822M,,,,5,,,,2,3,,,,,,,,,,,France Cohort,,,2020,802
+W1001X,,,,1,,,,1,0,,,,,,,,,,,France Cohort,,,2020,803
+W563X,,,,3,,,,0,3,,,,,,,,,,,France Cohort,,,2020,804
+W568C,,,,3,,,,0,3,,,,,,,,,,,France Cohort,,,2020,805
+W705X,,,,4,,,,4,0,,,,,,,,,,,France Cohort,,,2020,806
+W927X,,,,2,,,,0,2,,,,,,,,,,,France Cohort,,,2020,807
+Y475C,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,808
+Y493C,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,809
+Y493H,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,810
+Y597H,,,,1,,,,0,1,,,,,,,,,,,France Cohort,,,2020,811
+F29L,F,29,L,33,,1,6,7,26,,24,3,,,,Denmark,Danish,people not with LQT2 not added to symptomatic,,26403377,Scandinavian journal of clinical and laboratory investigation,Kanters,2015,812
+A429P,A,429,P,3,,,1,1,2,,1,,,1,,Swiss/Canadian/USA,,phenytoin,,19668779,The Canadian journal of cardiology,Keller,2009,813
+G628S,G,628,S,1,,,,0,1,,,,,,,,,prenatal diagnosis,,23995044,Circ Arrhytm electrophysiol,Cuneo,2013,814
+T613L,T,613,L,1,,,,0,1,,,,,,,,,prenatal diagnosis,,23995044,Circ Arrhytm electrophysiol,Cuneo,2013,815
+c.2398+1G>C,in,NOPE,,7,,3,,3,4,,,1,,,,,,previously reported,"splicing variant, reported elsewhere, recorded here",18272172,J Mol Cell Cardio,Gong,2008,816
+N633D,N,633,D,1,,,,0,1,,1,,,,,,Taiwanese,previously reported,,18593567,Biochemical and biophysical research communications,Hsueh,2008,817
+A561V,A,561,V,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,818
+A913V,A,913,V,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,819
+F29L,F,29,L,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,820
+G572R,G,572,R,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,821
+G584S,G,584,S,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,822
+I400N,I,400,N,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,823
+I96T,I,96,T,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,824
+K101E,K,101,E,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,825
+N629S,N,629,S,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,826
+N633S,N,633,S,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,827
+R176W,R,176,W,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,828
+R366X,R,366,X,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,829
+S428L,S,428,L,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,830
+S621N,S,621,N,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,831
+T74M,T,74,M,1,,,,0,1,,,,,,,,"Danish, Caucasian",Previously Studied in a paper about Dannish people,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,832
+P1034fsX,P,1034,FRAMESHIFT,3,,,,0,3,,,,,,,,Chinese,Pro1034ArgfsX20,,26496715,Cardiology,Gao,2015,833
+P1122R,P,1122,R,1,1,,,0,,,,,,,,,,"Pro1122Arg, also mutant KCNQ1 thr513ser",,23631430,Genetic Testing and Molecular Biomarkers,Lieve,2013,834
+P1132A,P,1132,A,1,1,,,0,,,,,,,,,,"Pro1132Ala, also mutant in asp317asn KCNQ1",,23631430,Genetic Testing and Molecular Biomarkers,Lieve,2013,835
+P926fsX,P,926,FRAMESHIFT,4,,,,0,4,,,,,,,,Chinese,Pro926AlaX14,,26496715,Cardiology,Gao,2015,836
+P946fsX,P,946,FRAMESHIFT,1,,,,0,1,,,,,,Seizures,,,Pro946fs/8X,,24103226,Heart Rhythm,Anderson,2014,837
+E1039X,E,1039,X,9,,,3,3,3,,5,,,,,,,proband also had R174C in KCNQ1 and E428K in SCN5A,,29449639,Scientific Reports,Wu,2018,838
+D219V,D,219,V,1,,,,0,1,,1,,,,,,Southeast Asian,protein number was wrong,,25914329,Human Mutation,,,839
+A121fsX,A,121,FRAMESHIFT,1,,,,0,1,,,1,,,,"Dordrecht, The Netherlands",caucasian,pulseless after orgasm,,31020140,European Heart Journal,Boiten,2018,840
+G965fsX,G,965,FRAMESHIFT,1,,1,,1,,,,,,,potential seizures,,,"QTc of 550, post seizure symptoms described…",,29497013,Hong Kong Medical Journal,Mak,2018,841
+K897T,K,897,T,1,,,,0,1,,,,,,,Canada,,"QTc used was pre-TdP, otherwise unaffected",,20386770,Canadian Journal of Cardiology,Subbiah,2008,842
+P1075L,P,1075,L,1,,,,0,1,,,,,,,Canada,,"QTc used was pre-TdP, otherwise unaffected",,20386770,Canadian Journal of Cardiology,Subbiah,2008,843
+R273X,R,273,X,4,,,,0,4,,,,,,,,Finnish,R273Ter,,29622001,BMC Medical Genetics,Koponen,2018,844
+R894fsX,R,894,FRAMESHIFT,1,,,,0,1,,1,,,,,Japan,,R894fsX920 - is my coding correct?,,22382559,Japanese Society of Internal Medicine,Nishimoto,2011,845
+I31S,I,31,S,1,,,,0,1,,1,1,,,,Rochester Minnesota,Unknown,"REPEAT, better data","QTc not reported, only keeping those with cardiac events",15851119,Heart rhythm,Khositseth,2004,846
+P910fsX,P,910,FRAMESHIFT,1,,,,0,1,,1,,,,,Rochester Minnesota,Unknown,"REPEAT, better data","QTc not reported, only keeping those with cardiac events",15851119,Heart rhythm,Khositseth,2004,847
+R1005fsX,R,1005,FRAMESHIFT,1,,,,0,1,,1,1,,,,Rochester Minnesota,Unknown,"REPEAT, better data","QTc not reported, only keeping those with cardiac events",15851119,Heart rhythm,Khositseth,2004,848
+R920fsX,R,920,FRAMESHIFT,1,,,,0,1,,1,,,,,Rochester Minnesota,Unknown,"REPEAT, better data","QTc not reported, only keeping those with cardiac events",15851119,Heart rhythm,Khositseth,2004,849
+Q1070X,Q,1070,X,4,,,2,2,2,2,2,,1,,1 baby died in utero,,Saudi Arabian,replicate,,19184172,,,,850
+R752W,R,752,W,26,,9,8,17,9,,4,,,,,"Cleveland, USA",,"SAME FAMILY, HAS BETTER INFO",Heterogeneity in clinical presentation!,11332568,JOURNAL OF CARDIOVASCULAR ELECTROPHYSIOLOGY,Kaufman,2001,851
+R752W,R,752,W,26,,5,12,17,9,,,,,,,"Jerusalem Israel, Rochester USA, Cleveland USA, Houston USA, New York USA, Tel-Aviv Israel",,"SAME FAMILY, litte worse DATA",greater than 550ms or 440-550ms w/ events,11844290,A N E,Benhorin,2002,852
+R56Q,R,56,Q,3,,,,0,3,,2,1,,,,Japan,,"SCN5A mutation, IVS4-1 c/t, has proband also",,30533098,Journal of Cardiology Cases,Ito,2012,853
+A193fsX,A,193,FRAMESHIFT,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,854
+A558P,A,558,P,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,855
+C64Y,C,64,Y,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,856
+D456Y,D,456,Y,1,,,,0,1,,,,,,Seizure,Mayo,,seizure chart review,,19038855,Neurology,Johnson,2009,857
+D501H,D,501,H,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,858
+E698X,E,698,X,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,859
+E876X,E,876,X,1,,,,0,1,,,,,,Seizure,Mayo,,seizure chart review,,19038855,Neurology,Johnson,2009,860
+F640L,F,640,L,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,861
+G1036fsX,G,1036,FRAMESHIFT,1,,,,0,1,,,,,,Seizure,Mayo,,seizure chart review,,19038855,Neurology,Johnson,2009,862
+G306W,G,306,W,1,,,,0,1,,,,,,Seizure,Mayo,,seizure chart review,,19038855,Neurology,Johnson,2009,863
+G572S,G,572,S,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,864
+G925fsX,G,925,FRAMESHIFT,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,865
+I30T,I,30,T,1,,,,0,1,,,,,,Seizure,Mayo,,seizure chart review,,19038855,Neurology,Johnson,2009,866
+I560fsX,I,560,FRAMESHIFT,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,867
+I642Del,I,642,DELETION,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,868
+M645L,M,645,L,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,869
+N629I,N,629,I,1,,,,0,1,,,,,,Seizure,Mayo,,seizure chart review,,19038855,Neurology,Johnson,2009,870
+P241L,P,241,L,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,871
+P872fsX,P,872,FRAMESHIFT,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,872
+Q676fsX,Q,676,FRAMESHIFT,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,873
+R176W,R,176,W,1,,,,0,1,,,,,,Seizure,Mayo,,seizure chart review,,19038855,Neurology,Johnson,2009,874
+R252fsX,R,252,FRAMESHIFT,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,875
+R366X,R,366,X,1,,,,0,1,,,,,,Seizure,Mayo,,seizure chart review,,19038855,Neurology,Johnson,2009,876
+R534C,R,534,C,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,877
+R582C,R,582,C,2,,,,0,2,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,878
+R73fsX,R,73,FRAMESHIFT,1,,,,0,1,,,,,,Seizure,Mayo,,seizure chart review,,19038855,Neurology,Johnson,2009,879
+T613M,T,613,M,2,,,,0,2,,,,,,Seizure,"Mayo, AMC",,seizure chart review,,19038855,Neurology,Johnson,2009,880
+Y99S,Y,99,S,1,,,,0,1,,,,,,Seizure,AMC,,seizure chart review,,19038855,Neurology,Johnson,2009,881
+S937N,S,937,N,1,1,,,0,,,,,,,,,,"Ser937Asn, also mutant in snc5a flu178lys",,23631430,Genetic Testing and Molecular Biomarkers,Lieve,2013,882
+S988fsX,S,988,FRAMESHIFT,1,1,,,0,,,,,,,,,,"Ser988ProfsX71, also mut in ar190gln kcnq1",,23631430,Genetic Testing and Molecular Biomarkers,Lieve,2013,883
+R1014fsX,R,1014,FRAMESHIFT,12,,,5,5,7,,,,,,,"Hamburg, Germany; New York, NY; Paris, France",German,some don’t get to 3.5 points,,16923798,Human molecular genetics,Choe,2006,884
+c.917-3T>C,in,NOPE,,1,,,,0,,,,,,,congenital LQT,,,something happens to splicing,no clinical information past QTc and the cLQTS designation,24217263,Cardiovasc J Afr,Hedley,2013,885
+c.1557+1G>A,in,NOPE,,1,,,,0,1,,,,,,,,Chinese,splice site,,26496715,Cardiology,Gao,2015,886
+G262fsX,G,262,FRAMESHIFT,1,,,,0,1,,1,,,,,Portugal,,"stop codon is on 359th position, they say Gly262AlafsX98… there's 96 AA b/w 262 and the stop codon",also has R1023H in SCN5A,25935074,Portuguese Journal of Cardiology,Fernandes,2015,887
+W563X,W,563,X,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Berge,,23098067,BMC Cardiovascular Disorders,Stattin,2012,888
+D1037fsX,D,1037,FRAMESHIFT,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Berthet,,23098067,BMC Cardiovascular Disorders,Stattin,2012,889
+S818L,S,818,L,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Berthet,,23098067,BMC Cardiovascular Disorders,Stattin,2012,890
+I82dup,I,82,DUPLICATION,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Larsen,,23098067,BMC Cardiovascular Disorders,Stattin,2012,891
+G53S,G,53,S,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Nagaoka,,23098067,BMC Cardiovascular Disorders,Stattin,2012,892
+Y43C,Y,43,C,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Napolitano,,23098067,BMC Cardiovascular Disorders,Stattin,2012,893
+L987fsX,L,987,FRAMESHIFT,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Splawski,,23098067,BMC Cardiovascular Disorders,Stattin,2012,894
+R752W,R,752,W,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Splawski,,23098067,BMC Cardiovascular Disorders,Stattin,2012,895
+G584S,G,584,S,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Swan,,23098067,BMC Cardiovascular Disorders,Stattin,2012,896
+L552S,L,552,S,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Swan,,23098067,BMC Cardiovascular Disorders,Stattin,2012,897
+R176W,R,176,W,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Swan,,23098067,BMC Cardiovascular Disorders,Stattin,2012,898
+T152fsX,T,152,FRAMESHIFT,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Swan,,23098067,BMC Cardiovascular Disorders,Stattin,2012,899
+R328C,R,328,C,1,,,,0,1,,,,,,,Sweden,,Studied preiously by Tester,,23098067,BMC Cardiovascular Disorders,Stattin,2012,900
+A558P,A,558,P,3,,,0,0,3,,3,,,,,,Dutch,symptom = syncope after acoustic,,10220144,Human mutation,Jongbloed,1999,901
+F640L,F,640,L,1,,,0,0,1,,1,,,,,,Dutch,symptom = syncope after acoustic,,10220144,Human mutation,Jongbloed,1999,902
+G604S,G,604,S,1,,,0,0,1,,1,,,,,,Dutch,symptom = syncope after acoustic,,10220144,Human mutation,Jongbloed,1999,903
+R582C,R,582,C,10,,,6,6,10,,10,,,,,,Dutch (2 families),symptom = syncope after acoustic,,10220144,Human mutation,Jongbloed,1999,904
+T613M,T,613,M,1,,,0,0,1,,1,,,,,,Dutch,symptom = syncope after acoustic,,10220144,Human mutation,Jongbloed,1999,905
+R35W,R,35,W,1,,,,0,1,,1,1,,,,,,symptomatic with low K,,26066609,Scientific reports,Steffensen,2015,906
+Q1068R,Q,1068,R,4,,,3,3,1,,1,,,,,,,the 1 LQTS person also had T152fs178X,,28049825,PNAS,Caballero,2016,907
+R148W,R,148,W,2,,,1,1,,,,,1,,SIDS,France,,"the father was also mutant, but not affected - gathered from paper #24334129","baby had K897T, R34c in SCN5A, H558R in SCN5A, and KCNe1 with G38S",19322600,Pediatric Cardiology,Millat,2009,908
+A78T,A,78,T,1,,,1,1,,,,,,,,Japan,,"the kid only had long QTc, nothing else of note…",,27761169,Journal of Arrhythmia,Kondo,2016,909
+R148W,R,148,W,14,,,12,12,2,,1,1,1,,1 was baby with SIDS,France,,"the other SIDS male reported in this paper as result #2 was not included here (reported by Millat et al), but the family and Polish woman were",,24334129,Gene,Mechakra,2014,910
+D540fsX,D,540,FRAMESHIFT,3,,,1,1,2,,1,,,,,,Chinese,"they note L539fs/18, explain it weird","sort of a double hit, L539fs/18 turns into L539fs/47!!",23134353,Clinical and Experimental Pharmacology and Physiology,Zhang,2013,911
+R744fsX,R,744,FRAMESHIFT,1,,,,0,1,,1,,,,,,Taiwanese,they've got weird nomenclature in the paper,,18593567,Biochemical and biophysical research communications,Hsueh,2008,912
+P923fsX,P,923,FRAMESHIFT,1,,,,0,1,,1,,,,,,Taiwanese,"they've got weird nomenclature in the paper, previously reported",,18593567,Biochemical and biophysical research communications,Hsueh,2008,913
+R148W,R,148,W,1,1,,,0,,,,,,,,,,"Thr474Ile Arg148Trp, both muts",,23631430,Genetic Testing and Molecular Biomarkers,Lieve,2013,914
+T474I,T,474,I,1,1,,,0,,,,,,,,,,"Thr474Ile Arg148Trp, both muts",,23631430,Genetic Testing and Molecular Biomarkers,Lieve,2013,915
+A614V,A,614,V,25,25,,,0,,,14,,,,,,,too little info,,23864605,American journal of physiology. Cell physiology,Smith,2013,916
+G601S,G,601,S,9,9,,,0,,,3,,,,,,,too little info,,23864605,American journal of physiology. Cell physiology,Smith,2013,917
+F805C,F,805,C,7,,2,0,2,5,,,,,,,"Jerusalem Israel, Rochester USA, Cleveland USA, Houston USA, New York USA, Tel-Aviv Israel",,used the graph to perfect,greater than 550ms or 440-550ms w/ events,11844290,A N E,Benhorin,2002,918
+M124R,M,124,R,14,,3,2,5,9,,,,,,,"Jerusalem Israel, Rochester USA, Cleveland USA, Houston USA, New York USA, Tel-Aviv Israel",,used the graph to perfect,greater than 550ms or 440-550ms w/ events,11844290,A N E,Benhorin,2002,919
+V822M,V,822,M,21,,4,9,13,8,,,,,,,"Jerusalem Israel, Rochester USA, Cleveland USA, Houston USA, New York USA, Tel-Aviv Israel",,used the graph to perfect,greater than 550ms or 440-550ms w/ events,11844290,A N E,Benhorin,2002,920
+W1001X,W,1001,X,18,,3,3,6,12,,,,,,,"Jerusalem Israel, Rochester USA, Cleveland USA, Houston USA, New York USA, Tel-Aviv Israel",,used the graph to perfect,greater than 550ms or 440-550ms w/ events,11844290,A N E,Benhorin,2002,921
+P963T,P,963,T,4,,,2,2,,,,,2,,2 children with SIDS,Canada,,"very sick family, like 10 SIDS cases",,29331839,Forensic Science International,Sergeev,2018,922
+W1001X,W,1001,X,1,,,,0,1,,,,,,,,Finnish,W1001Ter,,29622001,BMC Medical Genetics,Koponen,2018,923
+W497X,W,497,X,1,,,,0,1,,,,,,,,Finnish,W497Ter,,29622001,BMC Medical Genetics,Koponen,2018,924
+c.1945+6T>C,in,NOPE,,20,,,,0,20,,,1,,,,Salt Lake City,Unknown,WHAT IS MY CODE,"Just after exon 7, includes next intron -> no current",15364333,Journal of the American College of Cardiology,Zhang,2004,925
+P926fsX,P,926,FRAMESHIFT,1,,,,0,1,,1,,,,,"Bron, France",French or Spanish,WRONG AA LAST TIME,,16922724,Clin Genet,Millat,2006,926
+A1058E,A,1058,E,1,,,1,1,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,927
+A1116V,A,1116,V,4,,,3,3,1,,,1,,,,"Pavia, Italy",italian,,,16116052,Circulation,Crotti,2005,928
+A169G,A,169,G,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,929
+A190T,A,190,T,1,,,1,1,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,930
+A190T,A,190,T,1,1,,,0,,,,,1,,,Rochester Minnesota,black,,,15913580,Cardiovascular Research,Tester,2005,931
+A190T,A,190,T,2,,,,0,,,,,2,,SIDS,Schwartz patient,Black and white,,,29752375,Circ Arrhythm Electrophysiol,Smith,2018,932
+A193V,A,193,V,1,,,,0,1,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,933
+A203T,A,203,T,1,,,1,1,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,934
+A32T,A,32,T,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,935
+A422T,A,422,T,2,1,,,0,1,,1,,,,,"California, USA, I think",Chinese,,,15242738,Journal of Molecular and Cellular Cardiology,Sharma,2004,936
+A422T,A,422,T,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,937
+A490T,A,490,T,1,,,,0,1,,1,,,,,Japan,Japanese,,,11170080,American journal of medical genetics,Yoshida,2001,938
+A490T,A,490,T,1,,,,0,1,,1,,,,,Japan,,,,20975234,Circulation journal,Oka,2010,939
+A558E,A,558,E,3,,,,0,3,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,940
+A558P,A,558,P,3,,1,,1,2,,2,,,,,,European,,,18551196,The Journal of clinical investigation,Amin,2008,941
+A561P,A,561,P,3,,,,0,1,,1,,,1,,,,,,15280442,Molecular Pharmacology,Bellocq,2004,942
+A561T,A,561,T,5,,,2,2,3,,2,1,,,,France,,,,8877771,Journal of molecular and cellular cardiology,Dausse,1996,943
+A561T,A,561,T,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,944
+A561T,A,561,T,2,2,,,0,,2,,,2,,,Minnesota,,,,15120823,Journal of the American College of Cardiology,Chugh,2004,945
+A561T,A,561,T,1,,,,0,1,,1,,,,,"Boston, USA",Unknown,,,16379539,Circulation,Han Shim,2005,946
+A561T,A,561,T,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,947
+A561T,A,561,T,1,,,,0,1,,,,,,,North America,,,,18808722,BMC medical genetics,Zhang,2008,948
+A561T,A,561,T,4,,,,0,4,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,949
+A561T,A,561,T,1,,,,0,1,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,950
+A561V,A,561,V,4,0,,,0,4,,4,,2,,,,"Mexican (Spanish), German, English, and Danish",,,7889573,Cell Press,Curran,1995,951
+A561V,A,561,V,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,952
+A561V,A,561,V,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,953
+A561V,A,561,V,1,,,,0,1,,1,,,,,"Cincinnati, USA",European,,,17595376,AMERICAN JOURNAL OF CRITICAL CARE,Beery,2007,954
+A561V,A,561,V,1,,,,0,1,,1,,,,,,Taiwanese,,,18593567,Biochemical and biophysical research communications,Hsueh,2008,955
+A561V,A,561,V,1,,,,0,1,,,,,,,,,,,19996378,Circ Arrhytm Electrophysiol,Horigome,2009,956
+A561V,A,561,V,1,,,,0,1,,,,,,isolated non-compaction of the ventricular myocardium,Japan,,,,19352046,Circulation Journal,Ogawa,2009,957
+A561V,A,561,V,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,958
+A561V,A,561,V,1,,,,0,1,,1,,,,,,Chinese,,,26847485,Molecular medicine reports,Li,2016,959
+A561V,A,561,V,1,,,,0,1,,,1,,,,Japan,,,,26823142,Circulation Journal,Ozawa,2016,960
+A561V,A,561,V,2,,,,0,2,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,961
+A561V,A,561,V,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,962
+A561V,A,561,V,2,,,,0,2,,1,,,,,,chinese and caucasian,,,29020304,European Heart Journal,Mehta,2018,963
+A561V,A,561,V,1,,,,0,1,,1,,,,,South Korea,,,,30246897,Pacing Clin Electrophysiol,Song,2018,964
+A561V,A,561,V,1,,,,0,1,,1,,,,,,Finnish,,,26063740,,,,965
+A614V,A,614,V,4,,,0,0,4,,3,1,,,,,"English, Irish, French, Filipino. Czech (2 families)",,,9544837,Human genetics,Satler,1998,966
+A614V,A,614,V,10,,,0,0,10,,,,,,,"Salt Lake City, Detriot",Unknown (2 families),,,9693036,Genomics,Splawski,1998,967
+A614V,A,614,V,2,,,,0,2,,,,,,,"Sasebo, Japan",Japanese,,,15090700,Japanese Heart Journal,Thu-Thuy,2004,968
+A614V,A,614,V,2,,,,0,2,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,969
+A614V,A,614,V,9,,,,0,9,,,1,,,,Israel,Israeli,,,19070294,Isr Med Assoc J,Tenenbaum,2008,970
+A614V,A,614,V,1,,,,0,1,,,,,,,North America,,,,18808722,BMC medical genetics,Zhang,2008,971
+A614V,A,614,V,1,,,,0,1,,,,,,,,,,,19996378,Circ Arrhytm Electrophysiol,Horigome,2009,972
+A614V,A,614,V,1,,,,0,,,,,,,congenital LQT,,,,fetal study,24218437,Circulation,Cuneo,2013,973
+A614V,A,614,V,9,,,,0,9,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,974
+A614V,A,614,V,1,,,,0,1,,1,1,,1,,Japan,,,sevoflurane associated Tdp,27555138,Journal of Clinical Anesthesia,Kumakura,2016,975
+A614V,A,614,V,,,,,0,1,,1,,,,,,,,Ask Egly about these,,,,,976
+A671Del,A,671,DELETION,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,977
+A715sp,A,715,s,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,978
+A78P,A,78,P,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,979
+A78P,A,78,P,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,980
+A79fsX,A,79,FRAMESHIFT,1,,,,0,1,,,,,,,Sweden,,,,23098067,BMC Cardiovascular Disorders,Stattin,2012,981
+A83fsX,A,83,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,982
+A85P,A,85,P,2,,,,0,2,,2,,1,,,"Ottawa, Canada",Unknown,,,17876385,Can J Cardiol,Rutberg,2007,983
+A85V,A,85,V,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,984
+A913V,A,913,V,2,,,,0,2,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,985
+A913V,A,913,V,2,,,2,2,,,,,,,,USA,,,roden paper,26746457,JAMA,Van Driest,2016,986
+A913V,A,913,V,1,,,,0,1,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,987
+A915fsX,A,915,FRAMESHIFT,1,,,,0,1,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,988
+A915V,A,915,V,6,,,6,6,,,,,,,,Rochester Minnesota,Asian,,,14661677,Mayo Clinic proceedings,Ackerman,2003,989
+c.Exon9 IVS Del (?12??2),ex,NOPE,,6,,,2,2,4,,,,,,,Hangzhou,Chinese,,,15973763,Journal of Zhejiang University SCIENCE,Yun-peng,2005,990
+C1117fsX,C,1117,FRAMESHIFT,4,,,2,2,2,,1,,,,,Spain,Spanish,,,10086971,Circulation,Berthet,1999,991
+C39X,C,39,X,3,,,,0,3,,,,,,,"Helsinki, finland",finnish,,,15176425,Annals of Medicine,Fodstad,2004,992
+C39X,C,39,X,3,,,,0,3,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,993
+C44X,C,44,X,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,994
+C49Y,C,49,Y,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,995
+C566G,C,566,G,2,,,,0,2,,1,,,,,Spain,,,,21499742,Int J Legal Med,Allegue,2011,996
+C566R,C,566,R,1,,,1,1,,,,,,,Tetralogy of Fallot,South Korea,,,,30246897,Pacing Clin Electrophysiol,Song,2018,997
+C66G,C,66,G,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,998
+C723R,C,723,R,1,,,1,1,,,,,,,,Rochester Minnesota,White,,,14661677,Mayo Clinic proceedings,Ackerman,2003,999
+D102H,D,102,H,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1000
+D1037fsX,D,1037,FRAMESHIFT,1,,,,0,1,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1001
+D111V,D,111,V,1,,,,0,1,,1,,,,,Japan,,,,20975234,Circulation journal,Oka,2010,1002
+D119H,D,119,H,1,,,1,1,,,1,,,,Nodal Disease,USA,,,roden paper,26746457,JAMA,Van Driest,2016,1003
+D287fsX,D,287,FRAMESHIFT,1,,,,0,1,,,,,,,Sweden,,,,23098067,BMC Cardiovascular Disorders,Stattin,2012,1004
+D456Y,D,456,Y,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1005
+D460fsX,D,460,FRAMESHIFT,1,,,,0,1,,,,,,,"Helsinki, finland",finnish,,,15176425,Annals of Medicine,Fodstad,2004,1006
+D46Y,D,46,Y,3,,,,0,3,,2,1,,,,,Polish,,,30244407,J Appl Genet,Szperl,2018,1007
+D501N,D,501,N,1,,,,0,1,,,,,,,"Maastricht, Netherlands",Dutch (#30) and Belgian (#2) families,,only including 1 as estimation of affected count,12402336,,Jongbloed,2002,1008
+D501N,D,501,N,1,,,,0,1,,,,,,,Paris,French,,neonates,14998624,Journal of the American College of Cardiology,Lupoglazoff,2004,1009
+D501N,D,501,N,1,,,,0,1,,,,,,"isolated non-compaction of the ventricular myocardium, seizure",Japan,,,,19352046,Circulation Journal,Ogawa,2009,1010
+D591N,D,591,N,1,,,1,1,,,,,,,,USA,,,roden paper,26746457,JAMA,Van Driest,2016,1011
+D609G,D,609,G,1,,,,0,1,,,,,,,Kanazawa Japan,Japanese,,also had KCNQ1 D611Y,15500450,Clinical science (London,Yamaguchi,2005,1012
+D609G,D,609,G,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1013
+D609N,D,609,N,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1014
+D609N,D,609,N,1,,,,0,1,,,,,,,North America,,,,18808722,BMC medical genetics,Zhang,2008,1015
+D774Y,D,774,Y,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1016
+D774Y,D,774,Y,3,,,,0,3,,3,1,,,,"Auckland, New Zealand",European and Maori,,,17905336,Heart rhythm,Chung,2007,1017
+D774Y,D,774,Y,3,,,,0,3,,,,,,,Canada,,,,22429796,,,,1018
+D803Y,D,803,Y,2,,,1,1,1,,1,,,,,,Polish,,,30244407,J Appl Genet,Szperl,2018,1019
+D837G,D,837,G,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1020
+D837Y,D,837,Y,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1021
+D864sp,D,864,SPLICE,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1022
+D864sp,D,864,SPLICE,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1023
+Del(7)(q32qter),ch,NOPE,,1,,,,0,1,,,,,,,,,,,19996378,Circ Arrhytm Electrophysiol,Horigome,2009,1024
+E1053fsX,E,1053,FRAMESHIFT,1,,,,0,1,,,,,,,"Helsinki, finland",finnish,,,15176425,Annals of Medicine,Fodstad,2004,1025
+E1053X,E,1053,X,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1026
+E130K,E,130,K,1,,,,0,1,,,,,,,"Sasebo, Japan",Japanese,,,15090700,Japanese Heart Journal,Thu-Thuy,2004,1027
+E229X,E,229,X,2,,,,0,2,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1028
+E365G,E,365,G,1,,,,0,1,,,,,,,Sweden,,,,23098067,BMC Cardiovascular Disorders,Stattin,2012,1029
+E444D,E,444,D,2,,,,0,2,,2,,,,,People's Hospital of Peking University,Chinese,,,12442276,Human mutation,Liu,2002,1030
+E480V,E,480,V,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1031
+E544A,E,544,A,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1032
+E575K,E,575,K,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1033
+E637G,E,637,G,3,,,,0,3,,1,1,,,,,,,,21109023,Heart rhythm,Amoros,2011,1034
+E637K,E,637,K,3,,,,0,3,,1,,,,,,Japanese,,,12062363,Cardiovascular research,Hayashi,2002,1035
+E637K,E,637,K,,,,,0,1,,,,,,,Kanazawa Japan,Japanese,,only including 1 as estimation of affected count,12808265,Circulation journal,Inoue,2003,1036
+E682X,E,682,X,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1037
+E682X,E,682,X,1,,,,0,1,,,,,,,"Utah, Alaska, and Kentucky",Unknown,,Oral potassium improves Ikr,14642688,Journal of the American College of Cardiology,,,1038
+E698X,E,698,X,1,,,,0,1,,,,,,,"Maastricht, Netherlands",Dutch (#30) and Belgian (#2) families,,only including 1 as estimation of affected count,12402336,,Jongbloed,2002,1039
+E698X,E,698,X,3,2,,,0,1,,1,,,,,Netherlands,,,,19127321,Netherlands Heart Journal,Meregalli,2008,1040
+E788D,E,788,D,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1041
+E788K,E,788,K,2,,,1,1,1,,1,,,,,,Saudi Arabian,,,19184172,,,,1042
+E876X,E,876,X,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1043
+E90K,E,90,K,1,,,,0,,,,,1,,SIDS,Schwartz patient,White,,,29752375,Circ Arrhythm Electrophysiol,Smith,2018,1044
+ex6-14Del,ex,NOPE,,2,,,,0,2,,1,,1,,,UK,European,,,18774102,Heart Rythmn Society,Eddy,2008,1045
+ex9-14dup,ex,NOPE,,2,,,,0,2,,,,,,,UK,,,,18774102,Heart Rythmn Society,Eddy,2008,1046
+exon1-14Del,ex,NOPE,,3,,,2,2,1,,1,,,,,France,,,,21185499,Journal of the American College of Cardiology,Barc,2010,1047
+exon2dup,ex,NOPE,,1,,,,0,1,,,,,,,Sweden,,,,23098067,BMC Cardiovascular Disorders,Stattin,2012,1048
+exon4-14Del,ex,NOPE,,7,,,1,1,6,,1,1,,,,France,,,,21185499,Journal of the American College of Cardiology,Barc,2010,1049
+exon6-14Del,ex,NOPE,,2,1,,,0,1,,,,1,,LQTS and seizures,,,,,20167303,Heart rhythm,,,1050
+exon9-10Del,ex,NOPE,,1,,,,0,1,,,,,,,Sweden,,,,23098067,BMC Cardiovascular Disorders,Stattin,2012,1051
+F22S,F,22,S,1,,,,0,1,,,,,,,,"Danish, Caucasian",,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,1052
+F29L,F,29,L,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1053
+F29L,F,29,L,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1054
+F29L,F,29,L,9,6,,3,3,,,,1,3,,,,,,,22882672,Journal of cardiovascular electrophysiology,Winkel,2012,1055
+F463L,F,463,L,3,,,1,1,2,,1,,,,,,Chinese,,,19215240,Clinical and experimental pharmacology & physiology,Yang,2009,1056
+F494Del,F,494,DELETION,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1057
+F617fsX,F,617,FRAMESHIFT,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1058
+F617V,F,617,V,2,,,,0,2,,1,,,,,Poland,Polish,,,25987402,Kardiologia polska,Biernacka,2015,1059
+F617V,F,617,V,2,,,,0,2,,1,,,,,,Polish,,,30244407,J Appl Genet,Szperl,2018,1060
+F627fsX,F,627,FRAMESHIFT,1,,,,0,1,,1,1,,,,"Auckland, New Zealand",Chinese,,,17905336,Heart rhythm,Chung,2007,1061
+F627L,F,627,L,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1062
+F627L,F,627,L,1,,,,0,,,,,,,congenital LQT,,,,no clinical information past QTc and the cLQTS designation,24217263,Cardiovasc J Afr,Hedley,2013,1063
+F640Del,F,640,DELETION,1,,,,0,1,,,,,,,Japan,,,,26823142,Circulation Journal,Ozawa,2016,1064
+F640V,F,640,V,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1065
+F656L,F,656,L,4,,,2,2,2,,2,1,,,,,Polish,,,30244407,J Appl Genet,Szperl,2018,1066
+F68L,F,68,L,1,,,,0,1,,1,,,,,Greece,Greek,,,21063070,Journal of Applied Genetics,Kotta,2010,1067
+F805C,F,805,C,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1068
+F805C,F,805,C,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1069
+F805S,F,805,S,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1070
+F805S,F,805,S,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1071
+F991fsX,F,991,FRAMESHIFT,1,,,,0,1,,,,,,,Republic of Korea,,,,27871843,Clinica Chimica Acta,Chae,2017,1072
+G1006fsX,G,1006,FRAMESHIFT,3,,,,0,3,,,,,,,Rochester Minnesota,,,,12877697,PACE,Nemec,2003,1073
+G1031fsX,G,1031,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1074
+G1031fsX,G,1031,FRAMESHIFT,1,,,,0,1,,1,,,,,"Auckland, New Zealand",European,,,17905336,Heart rhythm,Chung,2007,1075
+G1036D,G,1036,D,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1076
+G1036D,G,1036,D,3,,,2,2,1,,1,1,,,,,German,,,18675227,Heart rhythm,Biliczki,2008,1077
+G1036D,G,1036,D,1,,,,0,1,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,1078
+G1036Del,G,1036,DELETION,1,,,,0,1,,,,,,,San Diego,,,,28532774,The American journal of cardiology,Ebrahim,2017,1079
+G184Del,G,184,DELETION,1,,,,0,1,,,,,,,,"Danish, Caucasian",,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,1080
+G183fsX,G,183,FRAMESHIFT,1,,1,,1,,,,,,,,Kanazawa University Hospital,Japanese,,"labeled ""G185 in paper",19371231,Clinical science (London,Hayashi,2009,1081
+G187Del,G,187,DELETION,3,,,3,3,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1082
+G187Del,G,187,DELETION,1,,,,0,,,,1,,,VF at Cardiac Arrest,"South Moravia, Czech Republic",caucasian,,,21410720,Pacing and clinical electrophysiology : PACE,Novotny,2011,1083
+G187S,G,187,S,1,,,1,1,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1084
+G189Ins,G,189,INSERTION,1,,,1,1,0,,0,,,,,,,,,10790218,Human mutation,Paulussen,2000,1085
+G192fsX,G,192,FRAMESHIFT,1,,,,0,1,,,,,,,"Maastricht, Netherlands",Dutch (#30) and Belgian (#2) families,,only including 1 as estimation of affected count,12402336,,Jongbloed,2002,1086
+G238S,G,238,S,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1087
+G294V,G,294,V,1,1,,,0,,,,,1,,,Rochester Minnesota,white,,,15913580,Cardiovascular Research,Tester,2005,1088
+G294V,G,294,V,1,,,,0,,,,,1,,SIDS,Schwartz patient,White,,,29752375,Circ Arrhythm Electrophysiol,Smith,2018,1089
+G306W,G,306,W,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1090
+G47V,G,47,V,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1091
+G487R,G,487,R,3,,,3,3,,,,,,,,,Japanese,,,22764740,Journal of cardiovascular electrophysiology,Kinoshita,2012,1092
+G487S,G,487,S,1,,,1,1,,,,,,,,USA,,,roden paper,26746457,JAMA,Van Driest,2016,1093
+G53R,G,53,R,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1094
+G53R,G,53,R,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1095
+G572C,G,572,C,2,,,0,0,2,,,,,,,"Salt Lake City, Detriot",Unknown,,,9693036,Genomics,Splawski,1998,1096
+G572R,G,572,R,4,,,,0,4,,2,1,1,,,"Rigshospitalet, Copenhagen, Denmark",,,,10735633,Clinical genetics,Larsen,2000,1097
+G572S,G,572,S,2,,,,0,2,,,,,,,"Helsinki, finland",finnish,,,15176425,Annals of Medicine,Fodstad,2004,1098
+G572S,G,572,S,2,,,,0,2,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1099
+G572S,G,572,S,1,,,,0,1,,1,,,,,"Auckland, New Zealand",Pacific,,,17905336,Heart rhythm,Chung,2007,1100
+G572S,G,572,S,1,,,,0,1,,,,,,,Japan,,,,19996378,Circ Arrhytm Electrophysiol,Horigome,2009,1101
+G572S,G,572,S,3,,,,0,3,,,,,,,Japan,,,,19306396,Human Mutation,Ohno,2009,1102
+G572S,G,572,S,1,,,,0,1,,1,,,,,,French Polynesian,,,19490267,Journal of cardiovascular electrophysiology,Zhao,2009,1103
+G572S,G,572,S,1,,,,0,1,,,,,,,Greece,Greek,,,21063070,Journal of Applied Genetics,Kotta,2010,1104
+G572S,G,572,S,1,,,,0,,,,,,,congenital LQT,,,,no clinical information past QTc and the cLQTS designation,24217263,Cardiovasc J Afr,Hedley,2013,1105
+G572S,G,572,S,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1106
+G572S,G,572,S,1,,,,0,1,,,,,,,Republic of Korea,,,,27871843,Clinica Chimica Acta,Chae,2017,1107
+G572S,G,572,S,1,,,,0,1,,1,,,,,San Diego,,,,28532774,The American journal of cardiology,Ebrahim,2017,1108
+G572S,G,572,S,2,,,,0,2,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,1109
+G572S,G,572,S,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1110
+G572S,G,572,S,,,,,0,1,,1,,,,,,,,Ask Egly about these,,,,,1111
+G584R,G,584,R,1,,,1,1,,,,,,,,,,,,29497013,Hong Kong Medical Journal,Mak,2018,1112
+G584S,G,584,S,10,,,6,6,4,,4,,,,,Finland,Finnish,,,10862094,Human mutation,Laitinen,2000,1113
+G584S,G,584,S,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1114
+G584S,G,584,S,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1115
+G584S,G,584,S,19,,3,13,16,3,,6,1,,,,,,,,19490267,Journal of cardiovascular electrophysiology,Zhao,2009,1116
+G584S,G,584,S,10,,,,0,10,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,1117
+G601S,G,601,S,3,,,,0,3,,3,,,,,Japan,Japanese,,,9452080,Human mutation,Akimoto,1998,1118
+G601S,G,601,S,3,,,2,2,1,,1,,,,,Finland,Finnish,,,10862094,Human mutation,Laitinen,2000,1119
+G601S,G,601,S,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1120
+G601S,G,601,S,2,,,,0,2,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,1121
+G604C,G,604,C,2,,,,0,2,,1,,,,,,Chinese,,,29037423,Journal of Electrocardiology,Yin,2018,1122
+G604S,G,604,S,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1123
+G604S,G,604,S,1,,,,0,1,,,,,,,Paris,French,,neonates,14998624,Journal of the American College of Cardiology,Lupoglazoff,2004,1124
+G604S,G,604,S,4,,,,0,4,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1125
+G604S,G,604,S,10,,,1,1,9,,7,,,,,China,Chinese,,,17171344,European journal of pediatrics,Zhang,2007,1126
+G604S,G,604,S,1,,,,0,1,,1,,,,,Russia,Russian,,,22402334,Journal of electrocardiology,Ildarova,2012,1127
+G604S,G,604,S,,,,,0,1,,1,,,,,,Chinese,,,22821100,Internal medicine (Tokyo,Sato,2012,1128
+G604S,G,604,S,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1129
+G626S,G,626,S,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1130
+G626S,G,626,S,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1131
+G626V,G,626,V,4,,1,,1,3,,1,,,,,,German,,,10862104,Human mutation,Jahr,2000,1132
+G628A,G,628,A,1,,,,0,1,,,,,,,,,,,19996378,Circ Arrhytm Electrophysiol,Horigome,2009,1133
+G628A,G,628,A,,,,,0,1,,1,,,,,,,,Ask Egly about these,,,,,1134
+G628D,G,628,D,1,,,,0,1,,1,,,,,Japan,,,,24112685,Journal of cardiovascular electrophysiology,Kato,2014,1135
+G628Del,G,628,DELETION,1,,,,0,1,,,,,,,Thailand,,,,30036649,Indian Pacing Electrophysiol J,Saprungruang,2018,1136
+G628S,G,628,S,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1137
+G628S,G,628,S,1,,,,0,1,,,,,,,Paris,French,,neonates,14998624,Journal of the American College of Cardiology,Lupoglazoff,2004,1138
+G628S,G,628,S,1,,,,0,1,,1,,,,,"Boston, USA",Unknown,,,16379539,Circulation,Han Shim,2005,1139
+G628S,G,628,S,2,,,,0,2,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1140
+G628S,G,628,S,1,,,,0,1,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1141
+G628S,G,628,S,1,,,,0,1,,,,,,congenital LQT,,,,fetal study,24218437,Circulation,Cuneo,2013,1142
+G628S,G,628,S,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1143
+G628S,G,628,S,1,,,,0,1,,1,,,,,University of Maryland School of Medicine,,,,27492745,Journal of clinical ultrasound : JCU,Crimmins,2016,1144
+G628S,G,628,S,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1145
+G628S,G,628,S,,,,,0,2,,2,,,,,,,,Ask Egly about these,,,,,1146
+G628V,G,628,V,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1147
+G628V,G,628,V,1,,,,0,1,,,,,,,,,,,29497013,Hong Kong Medical Journal,Mak,2018,1148
+G71W,G,71,W,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1149
+G71W,G,71,W,1,,,,0,1,,1,,,,,,,,,29497013,Hong Kong Medical Journal,Mak,2018,1150
+G745A,G,745,A,1,,,1,1,,,,,,,,USA,,,roden paper,26746457,JAMA,Van Driest,2016,1151
+G785D,G,785,D,3,,,2,2,1,,1,,,,,Japan,,,,29146210,Journal of Cardiology,Fukumoto,2018,1152
+G816V,G,816,V,3,,,3,3,,,,,1,,,New York,white,,,21951015,Pacing and clinical electrophysiology : PACE,Krishnan,2012,1153
+G820R,G,820,R,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1154
+G873S,G,873,S,1,,,1,1,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1155
+G873S,G,873,S,1,,,,0,,,,,,,brugada,Germany Netharlands,Chinese,,,16043162,Cardiovascular research,Verkerk,2005,1156
+G911fsX,G,911,FRAMESHIFT,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1157
+G924W,G,924,W,1,,,,0,1,,,,,,,USA,,,roden paper,26746457,JAMA,Van Driest,2016,1158
+G925fsX,G,925,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1159
+G925R,G,925,R,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1160
+G925R,G,925,R,1,,,,0,1,,1,,,,,Mayo,,,,22885918,Heart rhythm,Medlock,2012,1161
+G928fsX,G,928,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1162
+G965X,G,965,X,1,,,,0,1,,,,,,,"Hamburg, Germany; New York, NY; Paris, France",,,,16923798,Human molecular genetics,Choe,2006,1163
+H254Q,H,254,Q,1,,,1,1,,,,,,,,Rochester Minnesota,White,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1164
+H402R,H,402,R,2,,,,0,2,,1,,,,,,Spanish,,,19136169,International journal of cardiology,Zamorano-Leon,2010,1165
+H402R,H,402,R,1,,,,0,1,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,1166
+H492Y,H,492,Y,1,,,,0,1,,,,,,,Kanazawa Japan,Japanese,,only including 1 as estimation of affected count,12808265,Circulation journal,Inoue,2003,1167
+H492Y,H,492,Y,14,,,3,3,11,,3,,,,,Japan,,,,27816319,Journal of Cardiology,Fujii,2017,1168
+H562P,H,562,P,3,,,1,1,2,,1,,,,,"California, USA, I think",Chinese,,,15242738,Journal of Molecular and Cellular Cardiology,Sharma,2004,1169
+H562P,H,562,P,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1170
+H562R,H,562,R,2,,,,0,2,,2,1,,,,Spain,,,,21499742,Int J Legal Med,Allegue,2011,1171
+H562R,H,562,R,13,,,4,4,9,,5,1,1,,,Spain,,,,25819988,Revista espanola de cardiologia (English ed.),Munoz-Esparza,2015,1172
+H562R,H,562,R,2,,,1,1,1,,,1,,,,"Jena, Germany",German,,,30929919,Biochemical and Biophysical Research Communications,Gessner,2019,1173
+H674fsX,H,674,FRAMESHIFT,1,,,,0,1,,1,,,,,North America,,,,18808722,BMC medical genetics,Zhang,2008,1174
+H70R,H,70,R,2,,,,0,2,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1175
+H70R,H,70,R,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1176
+H70R,H,70,R,1,,,,0,1,,1,,,,,Mayo,,,,22885918,Heart rhythm,Medlock,2012,1177
+H739fsX,H,739,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1178
+H771fsX,H,771,FRAMESHIFT,3,,,1,1,2,,,,,,,Kanazawa University Hospital,Japanese,,,19371231,Clinical science (London,Hayashi,2009,1179
+H771R,H,771,R,1,,,,0,1,,,,,,,Sweden,,,,23098067,BMC Cardiovascular Disorders,Stattin,2012,1180
+I30Del,I,30,DELETION,1,,,,0,1,,,,,,,,"Danish, Caucasian",,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,1181
+I31S,I,31,S,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1182
+I400N,I,400,N,10,2,,1,1,7,,6,1,,,,Denmark and UK,,,,24021552,Circulation. Cardiovascular genetics,Hedley,2013,1183
+I414fsX,I,414,FRAMESHIFT,6,,,,0,6,,1,,,,,,Chinese,,,23981618,Chin Med J,Ying,2013,1184
+I42N,I,42,N,1,,,,0,1,,1,1,,,,"Auckland, New Zealand",maori,,,17905336,Heart rhythm,Chung,2007,1185
+I500Del,I,500,DELETION,11,6,,,0,5,,5,,,,,,"Mexican (Spanish), German, English, and Danish",,,7889573,Cell Press,Curran,1995,1186
+I560T,I,560,T,1,,,,0,,,1,,,,Short QT,,Japanese,,,25974115,International journal of cardiology,Harrell,2015,1187
+I571L,I,571,L,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1188
+I593R,I,593,R,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1189
+I593R,I,593,R,1,,,,0,1,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1190
+I711V,I,711,V,1,,,,0,1,,,,,,,USA,,,roden paper,26746457,JAMA,Van Driest,2016,1191
+I782fsX,I,782,FRAMESHIFT,2,,,1,1,1,,1,1,,,,,Saudi Arabian,,,19184172,,,,1192
+I782N,I,782,N,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1193
+I798fsX,I,798,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1194
+I798fsX,I,798,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1195
+I82T,I,82,T,2,,,,0,2,,,,1,,seizures,Europe,,,,23899126,Epilepsia,Partemi,2013,1196
+I858T,I,858,T,1,,,,0,1,,,,,,,,"Danish, Caucasian",,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,1197
+IVS13+1G>A,in,NOPE,,4,,,,0,4,,,,,,,"Helsinki, finland",finnish,,,15176425,Annals of Medicine,Fodstad,2004,1198
+IVS9-28A/G,in,NOPE,,1,,,,0,1,,1,,,,,,caucasian,,,29020304,European Heart Journal,Mehta,2018,1199
+K101E,K,101,E,1,,,,0,1,,,,1,,,"Copenhagen, Denmark",Danish,,,15670565,The American journal of cardiology,Christiansen,2005,1200
+K525N,K,525,N,1,,1,,1,,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1201
+K638Del,K,638,DELETION,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1202
+K638Del,K,638,DELETION,3,,,,0,3,,3,,,,seizures,Japan,Japanese,,,26831020,International Medicine,Ichikawa,2015,1203
+K638Del,K,638,DELETION,1,,,,0,1,,,1,,,,Japan,,,,26823142,Circulation Journal,Ozawa,2016,1204
+K638E,K,638,E,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1205
+K638E,K,638,E,1,1,,,0,,,,,,,,,,,,22378279,European journal of human genetics : EJHG,,,1206
+K886fsX,K,886,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1207
+K897fsX,K,897,FRAMESHIFT,1,,,,0,1,,,1,,,,Japan,,,,26823142,Circulation Journal,Ozawa,2016,1208
+K897T,K,897,T,62,,,62,62,,,,,,,,Rochester Minnesota,White,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1209
+K897T,K,897,T,25,,,25,25,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1210
+K897T,K,897,T,10,,,10,10,,,,,,,,Rochester Minnesota,Asian,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1211
+K897T,K,897,T,8,,,8,8,,,,,,,,Rochester Minnesota,Hispanic,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1212
+K897T,K,897,T,1,,1,,1,,1,,,,,,,Mongolian,,,20636320,The journal of physiology,Sung,2010,1213
+K897T,K,897,T,1,,1,,1,,,,,1,,,,,,,22407026,Human Genetics,Chiu,2012,1214
+K897T,K,897,T,9,,,,0,,,,,,,TdP,,,,,22338672,Heart rhythm,Crotti,2012,1215
+K897T,K,897,T,1,,,,0,1,,,,,,,Republic of Korea,,,,27871843,Clinica Chimica Acta,Chae,2017,1216
+K897T,K,897,T,1,1,,,0,,,,,,,ICD implantation after repair of Tetralogy of Fallot,Taiwan,,,,29121719,International Journal of Cardiology,Chiu,2017,1217
+K897T,K,897,T,5,,,5,5,,,,,,,,Frankfurt,,,,29214556,International Journal of Legal Medicine,Jenewein,2018,1218
+K897T,K,897,T,63,,,58,58,5,,,,,,,,,,common polymorphism,10862095,Human mutation,,,1219
+L1023Del,L,1023,DELETION,1,,,1,1,,,,,,,,Rochester Minnesota,White,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1220
+L1045F,L,1045,F,1,,,,0,1,,1,,,,,Russia,Russian,,,22402334,Journal of electrocardiology,Ildarova,2012,1221
+L1056fsX,L,1056,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1222
+L109fsX,L,109,FRAMESHIFT,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1223
+L109P,L,109,P,1,,,,0,1,,,,,,,,"Danish, Caucasian",,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,1224
+L171Ins,L,171,INSERTION,1,,,,0,1,,1,,,,,"Auckland, New Zealand",european,,,17905336,Heart rhythm,Chung,2007,1225
+L234Del,L,234,DELETION,3,,1,,1,2,,,,,,Seizures,Swiss/Canadian/USA,,,,19668779,The Canadian journal of cardiology,Keller,2009,1226
+L296fsX,L,296,FRAMESHIFT,6,1,,2,2,3,,,,,,,Berlin,German,,"2 carriers had long-ish QTc, but asymtomatic",14508592,Z. Kardiol,Witzenbichler,2003,1227
+L413P,L,413,P,2,,,,0,2,,1,,,,,People's Hospital of Peking University,Chinese,,,12442276,Human mutation,Liu,2002,1228
+L413P,L,413,P,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1229
+L457P,L,457,P,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1230
+L552S,L,552,S,42,5,,25,25,12,2,12,,1,,,Finland (University of Helsinki),"Finnish, Lapland origin",,two of the affected individuals were homozygous,10841244,Journal of the American College of Cardiology,Piippo,2000,1231
+L552S,L,552,S,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1232
+L552S,L,552,S,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1233
+L552S,L,552,S,2,,,2,2,,,,,,,,,Finnish,,,19160088,Annals of medicine,,,1234
+L559H,L,559,H,2,,,,0,2,,1,,,,,People's Hospital of Peking University,Chinese,,,12442276,Human mutation,Liu,2002,1235
+L559H,L,559,H,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1236
+L586M,L,586,M,1,,,,0,1,,1,,,,,Russia,Russian,,,22402334,Journal of electrocardiology,Ildarova,2012,1237
+L615V,L,615,V,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1238
+L622F,L,622,F,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1239
+L69P,L,69,P,1,,,,0,1,,,,,,,Germany,German,,,32253972,,Jenewein,2020,1240
+L776P,L,776,P,1,,,,0,1,,,,,,,Thailand,,,,30036649,Indian Pacing Electrophysiol J,Saprungruang,2018,1241
+L779P,L,779,P,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1242
+L799sp,L,799,SPLICE,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1243
+L799sp,L,799,SPLICE,3,,,,0,3,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1244
+L799sp,L,799,SPLICE,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1245
+L86R,L,86,R,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1246
+L87P,L,87,P,1,,,,0,1,,,,,,,"Maastricht, Netherlands",Dutch (#30) and Belgian (#2) families,,only including 1 as estimation of affected count,12402336,,Jongbloed,2002,1247
+L908fsX,L,908,FRAMESHIFT,1,,,,0,1,,,,,,,Japan,,,,26823142,Circulation Journal,Ozawa,2016,1248
+L955V,L,955,V,2,,,2,2,,,1,,,,,,German,,,18675227,Heart rhythm,Biliczki,2008,1249
+L987fsX,L,987,FRAMESHIFT,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1250
+M124R,M,124,R,16,,7,,7,9,,8,2,1,,,Jerusalem,Iranian-Jewish,,"All carriers have longer QT interval, but only 8 have symptoms",16029385,Annals of noninvasive electrocardiology : the official journal of the,Shushi,2005,1251
+M124T,M,124,T,4,,,1,1,3,,,,,1,,Kanazawa Japan,Japanese,,,15043509,Clinical science (London,Hayashi,2004,1252
+M579fsX,M,579,FRAMESHIFT,1,,,,0,,,,,1,,,Japan,,,,23546179,Int J Legal Med,Hata,2014,1253
+M645I,M,645,I,1,,,,0,1,,,,,1,seizures,,,,on levetiracetam,26076856,Seizure,Issa,2015,1254
+M645L,M,645,L,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1255
+M645R,M,645,R,1,,1,,1,,,,,,,,,,,,22407026,Human Genetics,Chiu,2012,1256
+M645R,M,645,R,1,1,,,0,,,,,,,ICD implantation after repair of Tetralogy of Fallot,Taiwan,,,,29121719,International Journal of Cardiology,Chiu,2017,1257
+M645V,M,645,V,1,,,,0,1,,,,,,,Paris,French,,neonates,14998624,Journal of the American College of Cardiology,Lupoglazoff,2004,1258
+N257H,N,257,H,1,,,1,1,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1259
+N33T,N,33,T,2,,,,0,2,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1260
+N33T,N,33,T,1,,,1,1,,,,,,,,Rochester Minnesota,White,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1261
+N470D,N,470,D,4,1,,,0,3,,3,,,,,,"Mexican (Spanish), German, English, and Danish",,,7889573,Cell Press,Curran,1995,1262
+N588D,N,588,D,7,,,0,0,7,,,,,,,"Salt Lake City, Detriot",Unknown,,,9693036,Genomics,Splawski,1998,1263
+N588D,N,588,D,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1264
+N588K,N,588,K,1,,1,,1,,,,,,,Short QT,Japan,,,,25335996,Pediatrics international : official journal of the Japan Pediatric Society,Suzuki,2014,1265
+N588K,N,588,K,1,,,,0,,,1,,,,Short QT,,,,,29016797,Europace,Akdis,2018,1266
+N629D,N,629,D,,,,0,0,3,,3,2,,,,,"German, Irish, Native American",,,9544837,Human genetics,Satler,1998,1267
+N629K,N,629,K,1,,,,0,1,,1,,,,,Japan,,,,10517660,Journal of cardiovascular electrophysiology,Yoshida,1999,1268
+N629S,N,629,S,,,,0,0,3,,1,1,,,,,Unknown,,,9544837,Human genetics,Satler,1998,1269
+N629S,N,629,S,1,,,,0,1,,,,,,,North America,,,,18808722,BMC medical genetics,Zhang,2008,1270
+N629S,N,629,S,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1271
+N629S,N,629,S,1,,,,0,1,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,1272
+N629T,N,629,T,1,,,,0,1,,,,,,,"Auckland, New Zealand",european,,,17905336,Heart rhythm,Chung,2007,1273
+N633D,N,633,D,1,,,,0,1,,,,,,,Taiwan,Taiwanese,,,16155735,Journal of human genetics,Lai,2005,1274
+N633S,N,633,S,,,,0,0,2,,1,,,,,,English,,,9544837,Human genetics,Satler,1998,1275
+N633S,N,633,S,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1276
+N633S,N,633,S,1,,,,0,1,,,,,,,,,,,19996378,Circ Arrhytm Electrophysiol,Horigome,2009,1277
+N633S,N,633,S,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1278
+N633S,N,633,S,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1279
+N633S,N,633,S,1,,,,0,1,,,,,,,Rochester Minnesota,,,previously reported by same lab,,,,,1280
+N633S,N,633,S,,,,,0,1,,1,,,,,,,,Ask Egly about these,,,,,1281
+N635I,N,635,I,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1282
+N861I,N,861,I,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1283
+N985S,N,985,S,1,,,,0,,,,,,,brugada,Germany Netharlands,Caucasian,,,16043162,Cardiovascular research,Verkerk,2005,1284
+N996I,N,996,I,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1285
+P1034fsX,P,1034,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1286
+P1075L,P,1075,L,1,,,,0,1,,1,1,,,,"Auckland, New Zealand",european,,,17905336,Heart rhythm,Chung,2007,1287
+P1101fsX,P,1101,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1288
+P1122fsX,P,1122,FRAMESHIFT,1,,,,0,1,,,,,,,Republic of Korea,,,,27871843,Clinica Chimica Acta,Chae,2017,1289
+P1122fsX,P,1122,FRAMESHIFT,1,,,,0,1,,,,,,,"Tokyo, Japan",Japanese,,,15572050,Journal of Molecular and Cellular Cardiology,Sasano,2004,1290
+P114S,P,114,S,1,,,1,1,,,,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1291
+P1157L,P,1157,L,1,1,,,0,,,,,1,,SIDS,Denmark,White,,,23465283,The Canadian journal of cardiology,,,1292
+P141fsX,P,141,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1293
+P151fsX,P,151,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1294
+P151fsX,P,151,FRAMESHIFT,5,,,1,1,4,,1,,,,,,Korean,,,24015048,J Korean Med Sci,Park,2013,1295
+P151fsX,P,151,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1296
+P151fsX,P,151,FRAMESHIFT,2,,,,0,2,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1297
+P151fsX,P,151,FRAMESHIFT,2,,,,0,2,,,,,,,Rochester Minnesota,,,previously reported by same lab,,,,,1298
+P151fsX,P,151,FRAMESHIFT,1,,,,0,1,,,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1299
+P151fsX,P,151,FRAMESHIFT,19,,,15,15,4,,,,,,,Finland,Finnish,,,10862094,Human mutation,,,1300
+P241fsX,P,241,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1301
+P251A,P,251,A,1,,,1,1,,,,,,,,Rochester Minnesota,Hispanic,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1302
+P297S,P,297,S,1,,1,,1,,,,,1,,,,,,,22882672,Journal of cardiovascular electrophysiology,Winkel,2012,1303
+P347S,P,347,S,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1304
+P347S,P,347,S,1,,,,0,1,,,,,,,"Maastricht, Netherlands",Dutch (#30) and Belgian (#2) families,,only including 1 as estimation of affected count,12402336,,Jongbloed,2002,1305
+P347S,P,347,S,1,,,1,1,,,,,,,,Rochester Minnesota,White,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1306
+P347S,P,347,S,9,,,7,7,2,,,,,,,"Antwerp, Belgium; Maastricht, The Netherlands",Canadian Caucasian,,,17531263,Journal of Molecular and Cellular Cardiology,Saenen,2007,1307
+P347S,P,347,S,1,,,,0,,,,1,,,VF at Cardiac Arrest,"South Moravia, Czech Republic",caucasian,,,21410720,Pacing and clinical electrophysiology : PACE,Novotny,2011,1308
+P347S,P,347,S,1,1,,,0,,,,,,,,,,,,22378279,European journal of human genetics : EJHG,Refsgaard,2012,1309
+P408A,P,408,A,1,,,,0,,,,,1,,SIDS,France,,,,19322600,Pediatric Cardiology,Millat,2009,1310
+P451L,P,451,L,4,,,2,2,2,,2,,,,,Finland,Finnish,,,10862094,Human mutation,Laitinen,2000,1311
+P451L,P,451,L,2,,,,0,2,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,1312
+P596R,P,596,R,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1313
+P596S,P,596,S,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1314
+P632S,P,632,S,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1315
+P721L,P,721,L,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1316
+P72Q,P,72,Q,2,,,,0,2,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1317
+P72T,P,72,T,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1318
+P846S,P,846,S,1,,,,0,1,,,,,,,San Diego,,,,28532774,The American journal of cardiology,Ebrahim,2017,1319
+P846T,P,846,T,1,,,,0,1,,1,,,,,Japan,,,,20975234,Circulation journal,Oka,2010,1320
+P872fsX,P,872,FRAMESHIFT,1,,,,0,1,,,,,,,"Maastricht, Netherlands",Dutch (#30) and Belgian (#2) families,,only including 1 as estimation of affected count,12402336,,Jongbloed,2002,1321
+P872fsX,P,872,FRAMESHIFT,11,,2,2,4,7,,,1,,,,"Amsterdam, Netherlands",Dutch,,,15958262,Cardiovascular Research,Paulussen,2005,1322
+P910fsX,P,910,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1323
+P910L,P,910,L,1,,,1,1,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1324
+P917L,P,917,L,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1325
+P917L,P,917,L,3,,,3,3,,,,,,,,Rochester Minnesota,White,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1326
+P926S,P,926,S,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1327
+P967L,P,967,L,1,,,1,1,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1328
+P967L,P,967,L,1,1,,,0,,,,,1,,,Rochester Minnesota,black,,,15913580,Cardiovascular Research,Tester,2005,1329
+P967L,P,967,L,1,,,,0,,,,,1,,SIDS,Schwartz patient,Black,,,29752375,Circ Arrhythm Electrophysiol,Smith,2018,1330
+P968fsX,P,968,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1331
+P968L,P,968,L,2,1,,1,1,,,,,1,,,,,,,21070882,Heart rhythm,Skinner,2011,1332
+P986fsX,P,986,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1333
+Q1046X,Q,1046,X,1,,,,0,1,,1,,,,,Greece,Greek,,,21063070,Journal of Applied Genetics,Kotta,2010,1334
+Q1046X,Q,1046,X,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1335
+Q1068R,Q,1068,R,1,,,1,1,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1336
+Q1068R,Q,1068,R,1,1,,,0,,,,,1,,,Rochester Minnesota,black,,,15913580,Cardiovascular Research,Tester,2005,1337
+Q1068R,Q,1068,R,1,,,,0,,,,,1,,SIDS,Schwartz patient,Black,,,29752375,Circ Arrhythm Electrophysiol,Smith,2018,1338
+Q1068X,Q,1068,X,1,,,,0,1,,,,,,,"New York, NY, USA",Asian,,,30582040,Heliyon,Dong,2018,1339
+Q247X,Q,247,X,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1340
+Q376sp,Q,376,SPLICE,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1341
+Q376sp,Q,376,SPLICE,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1342
+Q376sp,Q,376,SPLICE,2,,,,0,2,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1343
+Q738X,Q,738,X,3,,,,0,3,,,,,,,Japan,,,,19157587,International journal of cardiology,Yasuda,2010,1344
+Q81H,Q,81,H,2,1,,1,1,,,,,1,,seizure?,,,,,20167303,Heart rhythm,Gladding,2010,1345
+Q81X,Q,81,X,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1346
+Q901fsX,Q,901,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1347
+R1005fsX,R,1005,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1348
+R1005W,R,1005,W,1,,,,0,,,,,1,,SIDS,Schwartz patient,White,,,29752375,Circ Arrhythm Electrophysiol,Smith,2018,1349
+R1007H,R,1007,H,2,,,1,1,1,,,,,,,Canada,,,,22429796,,,,1350
+R100G,R,100,G,1,,,,0,1,,,1,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1351
+R100Q,R,100,Q,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1352
+R1014X,R,1014,X,2,,,,0,2,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1353
+R1014X,R,1014,X,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1354
+R1014X,R,1014,X,9,,,9,9,0,,,,,1,,,,,,17576861,Circulation,Gong,2007,1355
+R1032fsX,R,1032,FRAMESHIFT,1,,,,0,1,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1356
+R1033fsX,R,1033,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1357
+R1033fsX,R,1033,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1358
+R1035fsX,R,1035,FRAMESHIFT,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1359
+R1035fsX,R,1035,FRAMESHIFT,1,,,,0,1,,,,,,,Greece,Greek,,,21063070,Journal of Applied Genetics,Kotta,2010,1360
+R1035W,R,1035,W,1,,,1,1,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1361
+R1047L,R,1047,L,7,,,7,7,,,,,,,,Rochester Minnesota,White,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1362
+R1047L,R,1047,L,1,,,1,1,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1363
+R1047L,R,1047,L,1,,,,0,1,,,,1,,,,,,,20167303,Heart rhythm,Gladding,2010,1364
+R1047L,R,1047,L,3,3,,,0,0,,,,3,,in utero death,,,,,23571586,JAMA,Crotti,2013,1365
+R1047L,R,1047,L,3,,,3,3,,,2,,,,2 people with epilepsy,,Polish,,,26412604,Cardiology Journal,Sanecka,2016,1366
+R1135H,R,1135,H,3,,,2,2,,,,,,,1 had short QT,Japan,,,,18692916,International journal of cardiology,Itoh,2009,1367
+R1135H,R,1135,H,1,,,,0,,,,,,,BrS and SHORT QT,Japan,,,,24400717,Journal of cardiovascular electrophysiology,Wang,2014,1368
+R1135H,R,1135,H,1,,,,0,1,,,,,,,Republic of Korea,,,,27871843,Clinica Chimica Acta,Chae,2017,1369
+R148W,R,148,W,1,,,,0,,,,1,,,VF at Cardiac Arrest,"South Moravia, Czech Republic",caucasian,,,21410720,Pacing and clinical electrophysiology : PACE,Novotny,2011,1370
+R148W,R,148,W,1,1,,,0,,,,,1,,SIDS,Denmark,White,,,23465283,The Canadian journal of cardiology,Andreasen,2013,1371
+R148W,R,148,W,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1372
+R164C,R,164,C,1,,,,0,,,,,,,BrS and SHORT QT,Japan,,,,24400717,Journal of cardiovascular electrophysiology,Wang,2014,1373
+R164H,R,164,H,2,,,1,1,1,,,,,,,Canada,,,,22429796,,,,1374
+R176W,R,176,W,6,,,2,2,4,,2,,,,,Finland,Finnish,,,10862094,Human mutation,Laitinen,2000,1375
+R176W,R,176,W,1,,,1,1,,,,,,,,Rochester Minnesota,White,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1376
+R176W,R,176,W,1,,,,0,1,,1,1,,,,Germany,,,,22067087,Cardiology in the young,Donner,2012,1377
+R176W,R,176,W,2,,,1,1,1,,1,,1,,,Finland,,,,22052944,Disease models & mechanisms,Lahti,2012,1378
+R176W,R,176,W,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1379
+R176W,R,176,W,3,,,,0,3,,,,,,,Canada,,,,22429796,,,,1380
+R176W,R,176,W,1,,,1,1,,,,,,,,,Finnish,,,26063740,,,,1381
+R181fsX,R,181,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1382
+R181Q,R,181,Q,4,,,4,4,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1383
+R181Q,R,181,Q,1,1,,,0,,,,,1,,,Rochester Minnesota,black,,,15913580,Cardiovascular Research,Tester,2005,1384
+R181Q,R,181,Q,1,,,,0,,,,,1,,SIDS,Schwartz patient,Black,,,29752375,Circ Arrhythm Electrophysiol,Smith,2018,1385
+R25W,R,25,W,7,,,7,7,,,,,,,,,,,,25626866,Physiological Reports,Saber,2014,1386
+R273Q,R,273,Q,1,,,,0,,,,,1,,SIDS,southeastern Norway,,,,17210839,,,,1387
+R273X,R,273,X,1,,,,0,1,,,,,,,"Helsinki, finland",finnish,,,15176425,Annals of Medicine,Fodstad,2004,1388
+R312C,R,312,C,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1389
+R312C,R,312,C,1,,,,0,1,,,,,,,South Korea,,,,30246897,Pacing Clin Electrophysiol,Song,2018,1390
+R326fsX,R,326,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1391
+R328C,R,328,C,2,,,1,1,1,,,1,,,,"London, UK and Denmark",Brittish,,,16253915,Heart rhythm,Grunnet,2005,1392
+R328C,R,328,C,2,,,,0,2,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1393
+R328C,R,328,C,3,,,,0,3,,3,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1394
+R328C,R,328,C,1,,,,0,,,,,,,congenital LQT,,,,no clinical information past QTc and the cLQTS designation,24217263,Cardiovasc J Afr,Hedley,2013,1395
+R328C,R,328,C,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1396
+R328fsX,R,328,FRAMESHIFT,1,,,,0,1,,1,1,,,,"Auckland, New Zealand",Pacific,,,17905336,Heart rhythm,Chung,2007,1397
+R366X,R,366,X,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1398
+R366X,R,366,X,1,,,,0,1,,1,,,,,North America,,,,18808722,BMC medical genetics,Zhang,2008,1399
+R366X,R,366,X,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1400
+R366X,R,366,X,1,,,,0,1,,1,,,,,,caucasian,,,29020304,European Heart Journal,Mehta,2018,1401
+R528P,R,528,P,1,,1,,1,,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1402
+R531Del,R,531,DELETION,1,,,,0,1,,,,,,,,"Danish, Caucasian",,patient population described in 23969902,24606995,BMC medical genetics,Christiansen,2014,1403
+R531Q,R,531,Q,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1404
+R531W,R,531,W,1,,,,0,1,,,,,,,San Diego,,,,28532774,The American journal of cardiology,Ebrahim,2017,1405
+R534C,R,534,C,3,,,1,1,2,,1,,,,,,Japanese,,,10987356,Jpn Heart J,Hayashi,2000,1406
+R534C,R,534,C,,,,,0,1,,,,,,,Kanazawa Japan,Japanese,,only including 1 as estimation of affected count,12808265,Circulation journal,Inoue,2003,1407
+R534C,R,534,C,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1408
+R534C,R,534,C,1,,,,0,1,,1,,,,,"Auckland, New Zealand",Chinese,,,17905336,Heart rhythm,Chung,2007,1409
+R534C,R,534,C,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1410
+R534C,R,534,C,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1411
+R537W,R,537,W,2,,,1,1,1,,1,1,,,,,Saudi Arabian,,,19184172,,,,1412
+R56Q,R,56,Q,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1413
+R582C,R,582,C,2,,,,0,2,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1414
+R582C,R,582,C,1,,,,0,1,,,,,,,Rochester Minnesota,,,previously reported by same lab,,,,,1415
+R694H,R,694,H,1,,,1,1,,,,,,1,,Japan,,,,23207121,Internal medicine (Tokyo,Sato,2012,1416
+R696C,R,696,C,1,,,,0,1,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1417
+R696C,R,696,C,1,,,,0,1,,,,,,,Thailand,,,,30036649,Indian Pacing Electrophysiol J,Saprungruang,2018,1418
+R73fsX,R,73,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1419
+R73fsX,R,73,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1420
+R744P,R,744,P,1,,,,0,1,,1,1,,,,Germany,German,,,22314138,Biochemical and biophysical research communications,Aidery,2012,1421
+R744Q,R,744,Q,1,,,,0,1,,,,,,,USA,,,roden paper,26746457,JAMA,Van Driest,2016,1422
+R744X,R,744,X,6,,2,0,2,4,,,,,,,Chang Gung Memorial Hospital - Taiwan,Taiwanese,,"LQTS diagnosis as QTc>470ms, not great, adjusted to 480+",11802537,Journal of the Formosan Medical Association = Taiwan yi zhi,Ko,2001,1423
+R744X,R,744,X,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1424
+R752P,R,752,P,20,,,20,20,,,,2,,,,,German,,,26271031,European Heart Journal,Anneken,2016,1425
+R752Q,R,752,Q,4,,,3,3,1,1,,,,,,,,,homozygous in affected child,12621127,Pediatric research,Johnson,2003,1426
+R752W,R,752,W,27,,17,3,20,7,,7,,1,,,"Cleveland, USA",,,,11009462,American journal of physiology. Heart and circulatory physiology,Ficker,2000,1427
+R752W,R,752,W,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1428
+R784W,R,784,W,1,,1,,1,,,,,,,,,,,"aLQTS, annotated as unaffected",11997281,Circulation,Yang,2002,1429
+R784W,R,784,W,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1430
+R791W,R,791,W,1,,,,0,,,,,1,,SIDS,Schwartz patient,Black,,,29752375,Circ Arrhythm Electrophysiol,Smith,2018,1431
+A797T,R,797,T,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1432
+R823fsX,R,823,FRAMESHIFT,1,,,,0,1,,,,,,,"Maastricht, Netherlands",Dutch (#30) and Belgian (#2) families,,only including 1 as estimation of affected count,12402336,,Jongbloed,2002,1433
+R823T,R,823,T,1,,,,0,1,,,,,,,Republic of Korea,,,,27871843,Clinica Chimica Acta,Chae,2017,1434
+R823W,R,823,W,2,,,,0,2,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1435
+R823W,R,823,W,3,,,,0,3,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1436
+R823W,R,823,W,1,,,,0,1,,,,,,,Republic of Korea,,,,27871843,Clinica Chimica Acta,Chae,2017,1437
+R835Q,R,835,Q,3,,,2,2,1,1,1,,,,,,Turkish,,,25140878,PloS one,Schweigmann,2014,1438
+R863X,R,863,X,7,,1,,1,6,,,,,,,Beijing,Chinese,,,14714110,J Mol Med,Teng,2004,1439
+R863X,R,863,X,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1440
+R863X,R,863,X,1,,,,0,1,,1,,,,seizure,Spain,,,,22515331,Journal of neurogenetics,Zamorano-Leon,2012,1441
+R863X,R,863,X,3,,,,0,3,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1442
+R883W,R,883,W,1,,,1,1,,,,,,,,USA,,,roden paper,26746457,JAMA,Van Driest,2016,1443
+R885C,R,885,C,1,,,,0,,,,,1,,SIDS,southeastern Norway,,,,17210839,,,,1444
+R885C,R,885,C,1,1,,,0,,,,,,,,,,,,22378279,European journal of human genetics : EJHG,,,1445
+R885C,R,885,C,1,1,,,0,,,,,1,,SIDS,Denmark,,,,23465283,The Canadian journal of cardiology,,,1446
+R887H,R,887,H,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1447
+R887H,R,887,H,1,1,,,0,,,,,,,,,,,,22378279,European journal of human genetics : EJHG,,,1448
+R892fsX,R,892,FRAMESHIFT,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1449
+R894C,R,894,C,1,,,,0,1,,,,,,,San Diego,,,,28532774,The American journal of cardiology,Ebrahim,2017,1450
+R912W,R,912,W,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1451
+R920fsX,R,920,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1452
+R920fsX,R,920,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1453
+R922fsX,R,922,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1454
+R922W,R,922,W,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1455
+R92C,R,92,C,1,1,,,0,,,,,,,ICD implantation after repair of Tetralogy of Fallot,Taiwan,,,,29121719,International Journal of Cardiology,Chiu,2017,1456
+R948C,R,948,C,1,,,,0,1,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1457
+R954C,R,954,C,2,,,2,2,,,,,,1,,,German,,,18675227,Heart rhythm,Biliczki,2008,1458
+S1021fsX,S,1021,FRAMESHIFT,1,,,,0,1,,,,,,,Republic of Korea,,,,27871843,Clinica Chimica Acta,Chae,2017,1459
+S1040G,S,1040,G,1,,,,0,,,,,1,,SIDS,southeastern Norway,,,,17210839,,,,1460
+S1057fsX,S,1057,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1461
+S182X,S,182,X,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1462
+S24fsX,S,24,FRAMESHIFT,1,,,1,1,,,,,,,,,,,,19996378,Circ Arrhytm Electrophysiol,Horigome,2009,1463
+S26I,S,26,I,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1464
+S320L,S,320,L,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1465
+S320X,S,320,X,1,,,,0,1,,,1,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1466
+S428X,S,428,X,1,,,,0,1,,1,1,,,,,caucasian,,,29020304,European Heart Journal,Mehta,2018,1467
+S543fsX,S,543,FRAMESHIFT,1,,,,0,1,,,,,,,Finland,Finnish,,,10862094,Human mutation,Laitinen,2000,1468
+S55L,S,55,L,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1469
+S606F,S,606,F,1,,,,0,1,,1,,,,epilepsy,Portugal,Black,,,22104571,Revista portuguesa de cardiologia : orgao oficial da Sociedade Portuguesa de,Jorge,2011,1470
+S620G,S,620,G,1,,,,0,1,,1,,,,,,,,,26066609,Scientific reports,Steffensen,2015,1471
+S620I,S,620,I,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1472
+S621N,S,621,N,1,,,,0,1,,,,,,,Paris,French,,neonates,14998624,Journal of the American College of Cardiology,Lupoglazoff,2004,1473
+S621R,S,621,R,2,,1,,1,1,,,,1,,,,,,,20167303,Heart rhythm,Gladding,2010,1474
+S624R,S,624,R,1,,,,0,1,,,,,,,,,,,29766883,JACC Clin Electrophysiol,Miyazaki,2016,1475
+S631A,S,631,A,3,,,,0,,,1,,,,Short QT,,,,,29016797,Europace,Akdis,2018,1476
+S641F,S,641,F,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1477
+S660L,S,660,L,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1478
+S706C,S,706,C,3,,,,0,3,,,,,,,"Shinga, Japan",Japanese,,all carriers also have KCNQ1 A341V,15028050,Journal of cardiovascular electrophysiology,Kobori,2004,1479
+S735L,S,735,L,2,,,2,2,,,,,,,,"Boston, USA",Unknown,,,16379539,Circulation,Han Shim,2005,1480
+S818L,S,818,L,2,,,1,1,1,,1,,,,,France,French,,,10086971,Circulation,Berthet,1999,1481
+S818L,S,818,L,3,,,,0,3,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1482
+S818P,S,818,P,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1483
+S818W,S,818,W,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1484
+S818W,S,818,W,1,,,,0,1,,,,,,,Thailand,,,,30036649,Indian Pacing Electrophysiol J,Saprungruang,2018,1485
+S871fsX,S,871,FRAMESHIFT,1,,,,0,1,,,,,,,Japan,,,,26823142,Circulation Journal,Ozawa,2016,1486
+T152fsX,T,152,FRAMESHIFT,3,,,,0,3,,2,,,,,,,,,28049825,PNAS,Caballero,2016,1487
+T152I,T,152,I,1,,,,0,,,,,,,BrS,Japan,,,,24400717,Journal of cardiovascular electrophysiology,Wang,2014,1488
+T353S,T,353,S,1,,,1,1,,,,,,,>1 year post MI,,,,,29396286,Indian Pacing and Electrophysiology Journal,Rangaraju,2018,1489
+T367S,T,367,S,1,,,1,1,,,,,,,,Rochester Minnesota,Black,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1490
+T421fsX,T,421,FRAMESHIFT,4,1,,,0,3,,3,,,,,,"Mexican (Spanish), German, English, and Danish",,,7889573,Cell Press,Curran,1995,1491
+T421M,T,421,M,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1492
+T436M,T,436,M,1,,,1,1,,,,,,,atrial fibrillation,Japan,,,,26129877,Circ Arrhythm Electrophysiol,Hayashi,2015,1493
+T473P,T,473,P,2,,,,0,2,,1,1,,1,,,Japanese,,,23010577,Heart rhythm,Liu,2013,1494
+T613A,T,613,A,3,,,,0,2,,2,,1,,,,Lebanese,,,26173150,Pacing and clinical electrophysiology : PACE,Poulsen,2015,1495
+T613K,T,613,K,1,,,,0,1,,,,,,congenital LQT,,,,fetal study,24218437,Circulation,Cuneo,2013,1496
+T613M,T,613,M,1,,,,0,1,,1,,,,,Finland,Finnish,,,10862094,Human mutation,Laitinen,2000,1497
+T613M,T,613,M,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1498
+T613M,T,613,M,1,,,,0,1,,,,,,,Nagasaki Japan,Japanese,,,14720170,PACE,Komiya,2004,1499
+T613M,T,613,M,2,,,,0,2,,,,,,,Paris,French,,neonates,14998624,Journal of the American College of Cardiology,Lupoglazoff,2004,1500
+T613M,T,613,M,1,,,,0,1,,,,,,,"Sasebo, Japan",Japanese,,,15090700,Japanese Heart Journal,Thu-Thuy,2004,1501
+T613M,T,613,M,6,,,,0,6,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1502
+T613M,T,613,M,1,,,,0,1,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1503
+T613M,T,613,M,2,,,,0,2,,,,,,,,,,,19996378,Circ Arrhytm Electrophysiol,Horigome,2009,1504
+T613M,T,613,M,1,,,,0,1,,1,,,,,Russia,Russian,,,22402334,Journal of electrocardiology,Ildarova,2012,1505
+T613M,T,613,M,2,,,1,1,1,,1,,,,,California,Hispanic,,,24973560,Heart Rhythm,Priest,2014,1506
+T613M,T,613,M,8,,,,0,8,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1507
+T613M,T,613,M,3,,,1,1,2,,,,,,,,,,,29766883,JACC Clin Electrophysiol,Miyazaki,2016,1508
+T613M,T,613,M,1,,,,0,1,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,1509
+T613M,T,613,M,1,,,,0,1,,,,,,,Thailand,,,,30036649,Indian Pacing Electrophysiol J,Saprungruang,2018,1510
+T613M,T,613,M,,,,,0,1,,1,,,,,,,,Ask Egly about these,,,,,1511
+T618I,T,618,I,4,,,,0,,,4,,,,"Short QT, all 4",,Chinese,,,21130771,Journal of molecular and cellular cardiology,Sun,2011,1512
+T618I,T,618,I,1,,,,0,,,,,,,Short QT,China,,,,30582453,Circulation research,Guo,2018,1513
+T618I,T,618,I,1,,,,0,,,1,1,,,Short QT,,,,,25974115,International journal of cardiology,,,1514
+T623I,T,623,I,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1515
+T623I,T,623,I,2,,,1,1,1,,,,,,,,,,,29766883,JACC Clin Electrophysiol,Miyazaki,2016,1516
+T634P,T,634,P,2,,,,0,2,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1517
+T65P,T,65,P,5,,,2,2,3,,,,,,,Netherlands,Caucasian,,,12354768,The Journal of biological chemistry,Paulussen,2002,1518
+T65P,T,65,P,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1519
+T65P,T,65,P,1,,1,,1,,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1520
+T65P,T,65,P,2,,,2,2,,,,,,,,,,,,29766883,JACC Clin Electrophysiol,Miyazaki,2016,1521
+T826I,T,826,I,2,,,,0,2,,2,,,,,Japan,,,,29146210,Journal of Cardiology,Fukumoto,2018,1522
+T895M,T,895,M,1,,,,0,,,,,,,SIDS,,Japanese,,,18596570,Pediatric research,Otagiri,2008,1523
+T895M,T,895,M,3,,,3,3,,,,,,,atrial fibrillation,Japan,,,,26129877,Circ Arrhythm Electrophysiol,Hayashi,2015,1524
+T983I,T,983,I,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1525
+T983I,T,983,I,1,1,,,0,,,,,,,,,,,,22378279,European journal of human genetics : EJHG,,,1526
+V1038fsX,V,1038,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1527
+V131fsX,V,131,FRAMESHIFT,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1528
+V215G,V,215,G,1,,,1,1,,,,,,,,Rochester Minnesota,White,,,14661677,Mayo Clinic proceedings,Ackerman,2003,1529
+V279M,V,279,M,1,,,,0,,,,,1,,SIDS,southeastern Norway,,,,17210839,,,,1530
+V295fsX,V,295,FRAMESHIFT,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1531
+V491I,V,491,I,1,,1,,1,,,,,,,,,,,,26066609,Scientific reports,Steffensen,2015,1532
+V535M,V,535,M,2,,,2,2,,,,,,,,,Chinese,,,22173492,Journal of Huazhong University of Science and Technology. Medical sciences = Hua,Shao,2011,1533
+V612L,V,612,L,3,,1,0,1,2,,1,,,,,,"Irish, Italian, Dutch",,,9544837,Human genetics,Satler,1998,1534
+V625E,V,625,E,2,,,,0,2,,1,1,,,,Netherlands,,,,19127321,Netherlands Heart Journal,Meregalli,2008,1535
+V630A,V,630,A,1,,,0,0,1,,,,,,,"Salt Lake City, Detriot",Unknown,,,9693036,Genomics,Splawski,1998,1536
+V630A,V,630,A,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1537
+V630T,V,630,T,1,,,,0,1,,,,,,,Republic of Korea,,,,27871843,Clinica Chimica Acta,Chae,2017,1538
+V716G,V,716,G,1,,,,0,1,,,,,,,San Diego,,,,28532774,The American journal of cardiology,Ebrahim,2017,1539
+V822L,V,822,L,4,,,,0,4,,1,1,,,,,Polish,,,30244407,J Appl Genet,Szperl,2018,1540
+V822M,V,822,M,30,14,,0,0,16,,9,2,,,,Children's Hospital Boston,Irish,,,8914737,American journal of medical genetics,Satler,1996,1541
+V822M,V,822,M,4,,,2,2,2,,1,,,,,France,French,,,10086971,Circulation,Berthet,1999,1542
+V822M,V,822,M,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1543
+W1001X,W,1001,X,1,,,,0,,,,,,,congenital LQT,,,,fetal study,24218437,Circulation,Cuneo,2013,1544
+W154X,W,154,X,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1545
+W412X,W,412,X,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1546
+W497X,W,497,X,1,,,,0,1,,,,,,,"Helsinki, finland",finnish,,,15176425,Annals of Medicine,Fodstad,2004,1547
+W497X,W,497,X,1,,,,0,1,,,,,,,,,,,26063740,,,,1548
+W563C,W,563,C,2,,,2,2,,,,,,,,,,,,29766883,JACC Clin Electrophysiol,Miyazaki,2016,1549
+W563G,W,563,G,1,,,,0,1,,1,,,,,Japan,,,,19306396,Human Mutation,Ohno,2009,1550
+W568C,W,568,C,1,,,1,1,,,,,,,,"Auckland, New Zealand",European,,,17905336,Heart rhythm,Chung,2007,1551
+W585C,W,585,C,1,,,,0,1,,,,,,,USA and Europe,,,only probands in families (so n=1 or 2),10973849,Circulation,Splawski,2000,1552
+W705X,W,705,X,1,,,,0,1,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1553
+W927G,W,927,G,1,,,,0,,,1,,,,BrS and SHORT QT,Japan,,,,24400717,Journal of cardiovascular electrophysiology,Wang,2014,1554
+Y420C,Y,420,C,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1555
+Y427H,Y,427,H,1,,,,0,1,,1,,,,,"Bron, France",French or Spanish,,,16922724,Clin Genet,Millat,2006,1556
+Y427S,Y,427,S,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1557
+Y43C,Y,43,C,1,1,,,0,,,,,,,,Famous clinics worldwide,,,,29650123,Journal of the American College of Cardiology,Mazzanti,2018,1558
+Y447X,Y,447,X,1,,,,0,1,,,,,,,"Maastricht, Netherlands",Dutch (#30) and Belgian (#2) families,,only including 1 as estimation of affected count,12402336,,Jongbloed,2002,1559
+Y475C,Y,475,C,1,,,,0,1,,,,,,,,Chinese,,,26496715,Cardiology,Gao,2015,1560
+Y475Del,Y,475,DELETION,1,,,,0,1,,,,,,,Rochester Minnesota,Unknown,,,15840476,Heart rhythm,Tester,2005,1561
+Y493C,Y,493,C,1,,,,0,1,,,,,,,Paris,French,,neonates,14998624,Journal of the American College of Cardiology,Lupoglazoff,2004,1562
+Y493F,Y,493,F,2,,,,0,2,,1,,,,Seizures,Swiss/Canadian/USA,,,,19668779,The Canadian journal of cardiology,Keller,2009,1563
+Y569C,Y,569,C,1,,,,0,1,,,,,,,Sweden,,,,23098067,BMC Cardiovascular Disorders,Stattin,2012,1564
+Y569H,Y,569,H,1,,,,0,1,,1,,,,,Finland,Finnish,,,10862094,Human mutation,Laitinen,2000,1565
+Y569H,Y,569,H,1,,,,0,1,,,,,,,,Finnish,,,29622001,BMC Medical Genetics,Koponen,2018,1566
+Y652X,Y,652,X,6,,,,0,6,,1,,,,,,,,,19034806,Scandinavian cardiovascular journal : SCJ,Sun,2009,1567
+Y667X,Y,667,X,2,,,2,2,0,,0,,,,,,,,,10790218,Human mutation,Paulussen,2000,1568
+Y99S,Y,99,S,1,,,,0,1,,,,,,,"Maastricht, Netherlands",Dutch (#30) and Belgian (#2) families,,only including 1 as estimation of affected count,12402336,,Jongbloed,2002,1569
+G53R,G,53,R,6,5,,,0,1,,,,,,Seizures,,,Gly52Arg,,Personal Communication,,,2022,1570
+A614V,A,614,V,1,,,,0,1,,1,,,,,Personal Communication,,,,Personal Communication,,,,1571

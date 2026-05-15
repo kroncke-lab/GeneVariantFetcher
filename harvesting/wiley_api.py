@@ -224,7 +224,10 @@ class WileyAPIClient:
             logger.debug(f"TDM API URL: {target_url}")
             # Follow redirects (curl -L behavior) - this is critical per Wiley docs
             return self.session.get(
-                target_url, headers=headers, timeout=HTTP_TIMEOUT_DEFAULT, allow_redirects=True
+                target_url,
+                headers=headers,
+                timeout=HTTP_TIMEOUT_DEFAULT,
+                allow_redirects=True,
             )
 
         def _handle_response(
@@ -635,7 +638,9 @@ class WileyAPIClient:
 
         try:
             self._rate_limit()
-            response = self.session.get(doi_url, timeout=HTTP_TIMEOUT_DEFAULT, allow_redirects=True)
+            response = self.session.get(
+                doi_url, timeout=HTTP_TIMEOUT_DEFAULT, allow_redirects=True
+            )
 
             if (
                 response.status_code == 403
@@ -1048,9 +1053,9 @@ class WileyAPIClient:
                 # and raw XML/HTML for text content. Detect which we have:
                 # PDF-converted content won't start with XML/HTML tags
                 is_raw_xml_html = (
-                    content.strip().startswith("<?xml") or
-                    content.strip().startswith("<") or
-                    content.strip().startswith("<!DOCTYPE")
+                    content.strip().startswith("<?xml")
+                    or content.strip().startswith("<")
+                    or content.strip().startswith("<!DOCTYPE")
                 )
                 if not is_raw_xml_html:
                     # Already processed (from PDF conversion) - use as-is

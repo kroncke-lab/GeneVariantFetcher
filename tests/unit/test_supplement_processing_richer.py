@@ -206,3 +206,47 @@ def test_real_zip_extracted_through_format_converter(tmp_path: Path):
     assert zip_result.nested_files
     # Real conversion should surface the variant text from the inner CSV.
     assert "G604S" in result.supplement_markdown
+
+
+def test_zip_with_extract_figures_passes_kwargs(tmp_path: Path):
+    """When extract_figures=True, extract_zip_supplement receives figures_dir and extract_images."""
+
+    class _ZipConverter(_StubConverter):
+        def __init__(self):
+            super().__init__()
+            self.zip_kwargs: dict = {}
+            self.zip_figures = [{"path": "/tmp/fig1.png"}, {"path": "/tmp/fig2.png"}]
+
+        def extract_zip_supplement(self, p: Path, **kwargs):
+            self.calls.append(f"zip:{p.name}")
+            self.zip_kwargs = dict(kwargs)
+            dest_dir = kwargs["dest_dir"]
+            dest_dir.mkdir(parents=True, exist_ok=True)
+            nested = dest_dir / "inner.txt"
+            nested.write_text("inner")
+            return [nested], "# zip body\n", self.zip_figures
+
+    converter = _ZipConverter()
+    supplements_dir = tmp_path / "supps"
+    figures_dir = tmp_path / "figs"
+    files = [{"url": "http://x/bundle.zip", "name": "bundle.zip"}]
+
+    result = process_supplement_files(
+        supp_files=files,
+        supplements_dir=supplements_dir,
+        pmid="1",
+        converter=converter,
+        download_callback=_touch_callback,
+        extract_figures=True,
+        figures_dir=figures_dir,
+        sleep_fn=lambda _s: None,
+    )
+
+    # kwargs were forwarded
+    assert converter.zip_kwargs.get("figures_dir") == figures_dir
+    assert converter.zip_kwargs.get("extract_images") is True
+    # figure count surfaced in result
+    assert result.total_figures_extracted == 2
+    [zip_result] = result.file_results
+    assert zip_result.figures_extracted == 2
+    assert zip_result.nested_files

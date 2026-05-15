@@ -234,7 +234,7 @@ def check_supplement_gap(
 if __name__ == "__main__":
     # Test with example text
     test_text = """
-    We identified 54 KCNH2 mutations (online suppl. table 1, 
+    We identified 54 KCNH2 mutations (online suppl. table 1,
     www.karger.com/doi/10.1159/000440608 for all online material).
     The mutation spectrum is shown in supplementary figure S1.
     See also Table S2 for detailed phenotype data.

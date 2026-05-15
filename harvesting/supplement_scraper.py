@@ -173,6 +173,95 @@ from bs4 import BeautifulSoup
 class SupplementScraper:
     """Scrapes supplemental files from various publisher websites."""
 
+    _BAD_LINK_SCHEMES = {"javascript", "mailto", "tel"}
+
+    def _is_usable_link(self, href: str) -> bool:
+        """Reject navigation-only links that can never download a supplement."""
+        href = (href or "").strip()
+        if not href or href == "#":
+            return False
+        parsed = urlparse(href)
+        return parsed.scheme.lower() not in self._BAD_LINK_SCHEMES
+
+    def _already_seen(self, found_files: List[Dict], *, url: str, name: str) -> bool:
+        """Deduplicate supplement entries by resolved URL or filename."""
+        return any(f.get("url") == url or f.get("name") == name for f in found_files)
+
+    def _add_supplement(
+        self,
+        found_files: List[Dict],
+        *,
+        url: str,
+        name: str,
+        **metadata,
+    ) -> bool:
+        """Append one supplement if it is usable and not already present."""
+        if not self._is_usable_link(url):
+            return False
+        name = (name or Path(urlparse(url).path).name or "").strip()
+        if not name or self._already_seen(found_files, url=url, name=name):
+            return False
+        entry = {"url": url, "name": name}
+        entry.update({k: v for k, v in metadata.items() if v is not None})
+        found_files.append(entry)
+        return True
+
+    def _figshare_article_id(self, url: str) -> Optional[str]:
+        """Extract a Figshare article id from a landing URL, if present."""
+        parsed = urlparse(url)
+        if "figshare.com" not in parsed.netloc.lower():
+            return None
+        match = re.search(r"/articles/(?:[^/]+/)?[^/]+/(\d+)", parsed.path)
+        if match:
+            return match.group(1)
+        match = re.search(r"/articles/(?:[^/]+/)?(\d+)", parsed.path)
+        if match:
+            return match.group(1)
+        return None
+
+    def _fetch_figshare_article(self, article_id: str) -> Optional[Dict]:
+        """Fetch public Figshare article metadata. Split out for test mocking."""
+        try:
+            import requests
+
+            response = requests.get(
+                f"https://api.figshare.com/v2/articles/{article_id}",
+                headers={"User-Agent": "GVF-SupplementScraper/1.0"},
+                timeout=20,
+            )
+            if response.status_code != 200:
+                return None
+            return response.json()
+        except Exception:
+            return None
+
+    def _expand_figshare_supplement(self, url: str) -> List[Dict]:
+        """Return direct downloadable files for a Figshare landing page."""
+        article_id = self._figshare_article_id(url)
+        if not article_id:
+            return []
+        metadata = self._fetch_figshare_article(article_id)
+        if not metadata:
+            return []
+
+        files = []
+        for item in metadata.get("files") or []:
+            download_url = item.get("download_url")
+            name = item.get("name")
+            if not download_url or not name:
+                continue
+            files.append(
+                {
+                    "url": download_url,
+                    "name": name,
+                    "figshare_article_id": article_id,
+                    "figshare_file_id": item.get("id"),
+                    "size": item.get("size"),
+                    "mimetype": item.get("mimetype"),
+                }
+            )
+        return files
+
     def _normalize_pmc_url(self, url: str, base_url: str) -> str:
         """
         Normalize PMC supplement URLs to use the correct path format.
@@ -979,27 +1068,35 @@ class SupplementScraper:
             print("    Found supplementary section")
             for link in section.find_all("a", href=True):
                 href = link["href"]
+                if not self._is_usable_link(href):
+                    continue
                 if any(
                     ext in href.lower()
                     for ext in [".pdf", ".doc", ".xls", ".csv", ".zip"]
                 ):
                     url = urljoin(base_url, href)
                     filename = Path(urlparse(url).path).name or link.get_text().strip()
-                    if filename and not any(f["name"] == filename for f in found_files):
-                        found_files.append({"url": url, "name": filename})
+                    if self._add_supplement(found_files, url=url, name=filename):
                         print(f"      Found supplement: {filename}")
 
         # 2. Look for explicit supplement links with common Karger patterns
         for link in soup.find_all("a", href=True):
             href = link["href"]
+            if not self._is_usable_link(href):
+                continue
             link_text = link.get_text().lower()
 
             # Check for supplement-related links
             if "suppl" in href.lower() or "suppl" in link_text:
                 url = urljoin(base_url, href)
                 filename = Path(urlparse(url).path).name or "supplement"
-                if filename and not any(f["name"] == filename for f in found_files):
-                    found_files.append({"url": url, "name": filename})
+                expanded = self._expand_figshare_supplement(url)
+                if expanded:
+                    for item in expanded:
+                        if self._add_supplement(found_files, **item):
+                            print(f"      Found Figshare supplement: {item['name']}")
+                    continue
+                if self._add_supplement(found_files, url=url, name=filename):
                     print(f"      Found supplement link: {filename}")
 
         # 3. Try to construct the supplement URL from DOI
@@ -1032,6 +1129,8 @@ class SupplementScraper:
                     # Find all downloadable files on the supplement page
                     for link in supp_soup.find_all("a", href=True):
                         href = link["href"]
+                        if not self._is_usable_link(href):
+                            continue
                         # Look for file downloads
                         if any(
                             ext in href.lower()
@@ -1039,10 +1138,9 @@ class SupplementScraper:
                         ):
                             file_url = urljoin(supp_url, href)
                             filename = Path(urlparse(file_url).path).name
-                            if filename and not any(
-                                f["name"] == filename for f in found_files
+                            if self._add_supplement(
+                                found_files, url=file_url, name=filename
                             ):
-                                found_files.append({"url": file_url, "name": filename})
                                 print(
                                     f"      Found supplement from DOI page: {filename}"
                                 )
@@ -1349,6 +1447,9 @@ class SupplementScraper:
         for link in soup.find_all("a", href=True):
             link_text = link.get_text().lower()
             href = link["href"]
+            if not self._is_usable_link(href):
+                continue
+
             href_lower = href.lower()
 
             # Three-pronged matching: text keywords, URL patterns, or file extensions
@@ -1363,6 +1464,13 @@ class SupplementScraper:
 
             try:
                 original_url = urljoin(base_url, href)
+                expanded = self._expand_figshare_supplement(original_url)
+                if expanded:
+                    for item in expanded:
+                        if self._add_supplement(found_files, **item):
+                            print(f"    Found Figshare supplement: {item['name']}")
+                    continue
+
                 # Normalize PMC URLs to use correct path format
                 url = self._normalize_pmc_url(original_url, base_url)
                 filename = Path(urlparse(url).path).name
@@ -1385,14 +1493,14 @@ class SupplementScraper:
                     ):
                         continue
 
-                # Deduplicate by filename
-                if not any(f["name"] == filename for f in found_files):
-                    file_info = {"url": url, "name": filename}
-                    # Store original URL and base URL for PMC pages to enable URL variant generation
-                    if is_pmc_page:
-                        file_info["original_url"] = original_url
-                        file_info["base_url"] = base_url
-                    found_files.append(file_info)
+                file_info = {}
+                # Store original URL and base URL for PMC pages to enable URL variant generation
+                if is_pmc_page:
+                    file_info["original_url"] = original_url
+                    file_info["base_url"] = base_url
+                if self._add_supplement(
+                    found_files, url=url, name=filename, **file_info
+                ):
                     print(f"    Found potential supplement: {filename}")
             except Exception:
                 continue  # Ignore malformed URLs

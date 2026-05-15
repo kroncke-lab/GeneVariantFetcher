@@ -229,9 +229,7 @@ def refetch_one_paper(
 
     # 2. Run full supplement cascade
     try:
-        supp_files = harvester.get_supplemental_files(
-            cand.pmcid, pmid, cand.doi
-        )
+        supp_files = harvester.get_supplemental_files(cand.pmcid, pmid, cand.doi)
     except Exception as e:
         return Status.FAILED, f"get_supplemental_files error: {e}", 0
 
@@ -282,7 +280,11 @@ def refetch_one_paper(
         except Exception as e:
             logger.error("Failed to append to FULL_CONTEXT: %s", e)
 
-    return Status.SUCCESS, f"Downloaded {result.downloaded_count} files", result.downloaded_count
+    return (
+        Status.SUCCESS,
+        f"Downloaded {result.downloaded_count} files",
+        result.downloaded_count,
+    )
 
 
 # =============================================================================
@@ -305,9 +307,7 @@ def load_or_create_manifest(pmc_dir: Path, gene: str) -> Manifest:
 def get_already_processed(manifest: Manifest) -> set:
     """Get PMIDs already processed (SUCCESS or SKIPPED)."""
     return {
-        e.pmid
-        for e in manifest.entries
-        if e.status in (Status.SUCCESS, Status.SKIPPED)
+        e.pmid for e in manifest.entries if e.status in (Status.SUCCESS, Status.SKIPPED)
     }
 
 
@@ -400,7 +400,9 @@ def main():
         print(f"\nTotal: {len(candidates)} candidates")
         total_refs = sum(c.supplement_ref_count for c in candidates)
         with_refs = sum(1 for c in candidates if c.supplement_ref_count > 0)
-        print(f"  {with_refs} reference supplements in main text ({total_refs} total refs)")
+        print(
+            f"  {with_refs} reference supplements in main text ({total_refs} total refs)"
+        )
         sys.exit(0)
 
     # Phase 2: ID Resolution
@@ -430,7 +432,9 @@ def main():
     total_files = 0
 
     for i, cand in enumerate(candidates, 1):
-        print(f"\n[{i}/{len(candidates)}] PMID {cand.pmid} (PMCID={cand.pmcid or '?'}, DOI={cand.doi or '?'})")
+        print(
+            f"\n[{i}/{len(candidates)}] PMID {cand.pmid} (PMCID={cand.pmcid or '?'}, DOI={cand.doi or '?'})"
+        )
 
         status, msg, file_count = refetch_one_paper(cand, harvester, converter)
 
@@ -439,7 +443,9 @@ def main():
             pmid=cand.pmid,
             status=status,
             error_message=msg if status != Status.SUCCESS else None,
-            files_created=[str(cand.supplements_dir)] if status == Status.SUCCESS else [],
+            files_created=[str(cand.supplements_dir)]
+            if status == Status.SUCCESS
+            else [],
         )
         manifest.add_entry(entry)
 

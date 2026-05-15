@@ -132,6 +132,81 @@ class FormatConverter:
         padded_rows = [row + [""] * (max_cols - len(row)) for row in normalized_rows]
         return self._table_lines_to_markdown(padded_rows)
 
+    @staticmethod
+    def _xml_local_name(tag: str) -> str:
+        """Return the local XML tag name, ignoring namespaces."""
+        return tag.split("}")[-1] if tag else ""
+
+    @staticmethod
+    def _clean_cell_text(text: str) -> str:
+        """Collapse table-cell whitespace while preserving readable content."""
+        return re.sub(r"\s+", " ", text or "").strip()
+
+    def _xml_table_to_markdown(self, table_elem: ET.Element) -> str:
+        """Convert a JATS/XML ``<table>`` element to a markdown table."""
+        rows: List[List[str]] = []
+        for tr in table_elem.iter():
+            if self._xml_local_name(tr.tag) != "tr":
+                continue
+            cells: List[str] = []
+            for cell in list(tr):
+                if self._xml_local_name(cell.tag) not in {"th", "td"}:
+                    continue
+                text = self._clean_cell_text("".join(cell.itertext()))
+                colspan = 1
+                try:
+                    colspan = max(1, int(cell.attrib.get("colspan", "1")))
+                except ValueError:
+                    colspan = 1
+                cells.append(text)
+                cells.extend([""] * (colspan - 1))
+            if any(cells):
+                rows.append(cells)
+        return self._table_lines_to_markdown(rows)
+
+    def _jats_table_wrap_to_markdown(self, table_wrap: ET.Element) -> str:
+        """Render a JATS ``<table-wrap>`` label/caption/body as markdown."""
+        parts: List[str] = []
+
+        label = ""
+        caption = ""
+        for child in list(table_wrap):
+            local = self._xml_local_name(child.tag)
+            if local == "label":
+                label = self._clean_cell_text("".join(child.itertext()))
+            elif local == "caption":
+                caption = self._clean_cell_text("".join(child.itertext()))
+
+        if label:
+            parts.append(f"### {label}")
+        if caption:
+            parts.append(caption)
+
+        for elem in table_wrap.iter():
+            if self._xml_local_name(elem.tag) != "table":
+                continue
+            table_md = self._xml_table_to_markdown(elem)
+            if table_md:
+                parts.append(table_md)
+
+        if not parts:
+            return ""
+        return "\n\n".join(parts) + "\n\n"
+
+    def _html_table_to_markdown(self, table) -> str:
+        """Convert a BeautifulSoup ``<table>`` node to markdown."""
+        rows: List[List[str]] = []
+        for tr in table.find_all("tr"):
+            cells = tr.find_all(["th", "td"], recursive=False)
+            if not cells:
+                cells = tr.find_all(["th", "td"])
+            row = [
+                self._clean_cell_text(cell.get_text(" ", strip=True)) for cell in cells
+            ]
+            if any(row):
+                rows.append(row)
+        return self._table_lines_to_markdown(rows)
+
     def xml_to_markdown(self, xml_content: str) -> str:
         """
         Convert PubMed Central XML to markdown.
@@ -168,11 +243,15 @@ class FormatConverter:
                     markdown += f"{'#' * level} {sec_title}\n\n"
 
                 for child in sec:
-                    tag = child.tag.split("}")[-1]  # Handle optional namespaces
+                    tag = self._xml_local_name(child.tag)
                     if tag == "p":
                         para_text = "".join(child.itertext()).strip()
                         if para_text:
                             markdown += f"{para_text}\n\n"
+                    elif tag == "table-wrap":
+                        table_md = self._jats_table_wrap_to_markdown(child)
+                        if table_md:
+                            markdown += table_md
                     elif tag == "sec":
                         process_section(child, min(level + 1, 6))
 
@@ -185,10 +264,29 @@ class FormatConverter:
                         process_section(sec)
                 else:
                     # Some PMC XML files use <p> directly under <body> without <sec> wrappers
-                    for p in body_elem.findall(".//p"):
-                        para_text = "".join(p.itertext()).strip()
-                        if para_text:
-                            markdown += f"{para_text}\n\n"
+                    for child in list(body_elem):
+                        tag = self._xml_local_name(child.tag)
+                        if tag == "p":
+                            para_text = "".join(child.itertext()).strip()
+                            if para_text:
+                                markdown += f"{para_text}\n\n"
+                        elif tag == "table-wrap":
+                            table_md = self._jats_table_wrap_to_markdown(child)
+                            if table_md:
+                                markdown += table_md
+                        else:
+                            for elem in child.iter():
+                                if elem is child:
+                                    continue
+                                elem_tag = self._xml_local_name(elem.tag)
+                                if elem_tag == "p":
+                                    para_text = "".join(elem.itertext()).strip()
+                                    if para_text:
+                                        markdown += f"{para_text}\n\n"
+                                elif elem_tag == "table-wrap":
+                                    table_md = self._jats_table_wrap_to_markdown(elem)
+                                    if table_md:
+                                        markdown += table_md
 
             return markdown
         except Exception as e:
@@ -246,6 +344,15 @@ class FormatConverter:
                         if text:
                             markdown += f"- {text}\n"
                     markdown += "\n"
+                elif tag == "table":
+                    table_md = self._html_table_to_markdown(child)
+                    if table_md:
+                        markdown += f"{table_md}\n\n"
+                elif tag in {"div", "figure"}:
+                    for table in child.find_all("table", recursive=False):
+                        table_md = self._html_table_to_markdown(table)
+                        if table_md:
+                            markdown += f"{table_md}\n\n"
                 elif tag == "section":
                     process_section(child, min(level + 1, 6))
 
@@ -761,11 +868,18 @@ class FormatConverter:
             doc = fitz.open(str(file_path))
             text_content = []
 
-            # Create figures directory if extracting images
+            # Create figures directory if extracting images. parents=True so
+            # callers may hand us an output_dir whose parent doesn't yet
+            # exist (e.g. nested supplement bundles unpacked into a fresh
+            # per-PMID run directory).
             figures_dir = None
             if extract_images and output_dir:
-                figures_dir = output_dir / "figures"
-                figures_dir.mkdir(exist_ok=True)
+                figures_dir = (
+                    output_dir
+                    if output_dir.name == "figures"
+                    else output_dir / "figures"
+                )
+                figures_dir.mkdir(parents=True, exist_ok=True)
 
             for page_num, page in enumerate(doc, 1):
                 # Extract text
@@ -994,25 +1108,43 @@ class FormatConverter:
         self,
         file_path: Path,
         dest_dir: Path,
+        figures_dir: Optional[Path] = None,
+        extract_images: bool = False,
     ) -> Tuple[List[Path], str]:
         """Extract a ZIP supplement and convert each contained file to markdown.
 
         Args:
             file_path: ZIP file to extract.
-            dest_dir: Directory to extract the contents into.
+            dest_dir: Directory to extract the contents into. Parent directories
+                are created automatically.
+            figures_dir: Optional directory where embedded images from nested
+                PDFs are written. When ``extract_images`` is True the nested
+                PDFs go through ``pdf_to_markdown_with_images`` so figure/table
+                bitmaps land alongside top-level paper figures, available for
+                downstream vision-text extraction.
+            extract_images: Pull embedded images out of nested PDFs.
 
         Returns:
             Tuple of (list_of_extracted_paths, combined_markdown). The markdown
             includes one section per usable nested file, in the same format as
-            top-level supplement processing.
+            top-level supplement processing. When ``extract_images`` is on,
+            each nested PDF section also carries inline ``[Figure ...]``
+            placeholders pointing at the saved bitmaps.
         """
         import zipfile
 
         extracted: List[Path] = []
         combined: List[str] = []
+        nested_image_paths: List[Path] = []
 
         try:
+            # parents=True so callers can hand us a path whose parent doesn't
+            # exist yet (e.g. a fresh <output>/<pmid>_supplements/bundle path
+            # when the run dir was just created). Without parents=True a
+            # missing intermediate dir crashes the entire enrichment pass.
             dest_dir.mkdir(parents=True, exist_ok=True)
+            if figures_dir is not None and extract_images:
+                figures_dir.mkdir(parents=True, exist_ok=True)
             # Resolve to absolute path so that nested.relative_to(dest_dir) works
             # even when the caller passes a path with unresolved symlinks
             # (e.g. /tmp on macOS, which is a symlink to /private/tmp).
@@ -1050,7 +1182,24 @@ class FormatConverter:
                 elif ext == ".doc":
                     md = self.doc_to_markdown(nested)
                 elif ext == ".pdf":
-                    md = self.pdf_to_markdown(nested)
+                    if extract_images and figures_dir is not None:
+                        md, images = self.pdf_to_markdown_with_images(
+                            nested,
+                            output_dir=figures_dir,
+                            extract_images=True,
+                        )
+                        if images:
+                            logger.info(
+                                "Extracted %d image(s) from nested PDF %s into %s",
+                                len(images),
+                                nested.name,
+                                figures_dir,
+                            )
+                            for img_meta in images:
+                                if "path" in img_meta:
+                                    nested_image_paths.append(img_meta["path"])
+                    else:
+                        md = self.pdf_to_markdown(nested)
                 elif ext in {".csv"}:
                     try:
                         df = pd.read_csv(nested, dtype=str, on_bad_lines="skip")
@@ -1081,4 +1230,6 @@ class FormatConverter:
                     f"##### Nested file: {nested.name}\n\n[conversion failed: {exc}]"
                 )
 
-        return extracted, ("\n\n".join(combined) + "\n\n") if combined else ""
+        return extracted + nested_image_paths, (
+            "\n\n".join(combined) + "\n\n"
+        ) if combined else ""

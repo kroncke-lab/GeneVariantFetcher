@@ -154,7 +154,9 @@ class DOIResolver:
                     )
                     time.sleep(backoff)
 
-                response = self.session.get(url, allow_redirects=True, timeout=HTTP_TIMEOUT_DEFAULT)
+                response = self.session.get(
+                    url, allow_redirects=True, timeout=HTTP_TIMEOUT_DEFAULT
+                )
                 response.raise_for_status()
                 return response
 
@@ -231,8 +233,10 @@ class DOIResolver:
             if not response:
                 print(f"  ❌ DOI resolution failed for {doi}: No response received")
                 self._log_paywalled(
-                    pmid, f"DOI resolution failed: {doi}", f"https://doi.org/{doi}",
-                    classification="PAYWALLED"
+                    pmid,
+                    f"DOI resolution failed: {doi}",
+                    f"https://doi.org/{doi}",
+                    classification="PAYWALLED",
                 )
                 return []
 
@@ -252,14 +256,16 @@ class DOIResolver:
                 pmid,
                 f"DOI resolution failed (HTTP {status_code}): {doi}",
                 f"https://doi.org/{doi}",
-                classification="CAPTCHA_BLOCKED" if status_code == 403 else "PAYWALLED"
+                classification="CAPTCHA_BLOCKED" if status_code == 403 else "PAYWALLED",
             )
             return []
         except requests.exceptions.RequestException as e:
             print(f"  ❌ DOI resolution failed for {doi}: {e}")
             self._log_paywalled(
-                pmid, f"DOI resolution failed: {doi}", f"https://doi.org/{doi}",
-                classification="PAYWALLED"
+                pmid,
+                f"DOI resolution failed: {doi}",
+                f"https://doi.org/{doi}",
+                classification="PAYWALLED",
             )
             return []
 
@@ -302,7 +308,9 @@ class DOIResolver:
                             f"  → Attempting to access ScienceDirect page: {sciencedirect_url}"
                         )
                         redirect_response = self.session.get(
-                            sciencedirect_url, allow_redirects=True, timeout=HTTP_TIMEOUT_DEFAULT
+                            sciencedirect_url,
+                            allow_redirects=True,
+                            timeout=HTTP_TIMEOUT_DEFAULT,
                         )
                         redirect_response.raise_for_status()
                         if redirect_response.url != final_url:
@@ -312,7 +320,9 @@ class DOIResolver:
                     else:
                         # Fallback: try following redirect from linkinghub
                         redirect_response = self.session.get(
-                            final_url, allow_redirects=True, timeout=HTTP_TIMEOUT_DEFAULT
+                            final_url,
+                            allow_redirects=True,
+                            timeout=HTTP_TIMEOUT_DEFAULT,
                         )
                         redirect_response.raise_for_status()
                         if redirect_response.url != final_url:
@@ -366,7 +376,7 @@ class DOIResolver:
                     pmid,
                     f"DOI resolution failed (free text): {doi}",
                     f"https://doi.org/{doi}",
-                    classification="PAYWALLED"
+                    classification="PAYWALLED",
                 )
                 return None, None, []
 
@@ -386,7 +396,7 @@ class DOIResolver:
                 pmid,
                 f"DOI resolution failed (free text, HTTP {status_code}): {doi}",
                 f"https://doi.org/{doi}",
-                classification="CAPTCHA_BLOCKED" if status_code == 403 else "PAYWALLED"
+                classification="CAPTCHA_BLOCKED" if status_code == 403 else "PAYWALLED",
             )
             return None, None, []
         except requests.exceptions.RequestException as e:
@@ -395,7 +405,7 @@ class DOIResolver:
                 pmid,
                 f"DOI resolution failed (free text): {doi}",
                 f"https://doi.org/{doi}",
-                classification="PAYWALLED"
+                classification="PAYWALLED",
             )
             return None, None, []
 
@@ -412,7 +422,9 @@ class DOIResolver:
                         f"  → Attempting to access ScienceDirect page: {sciencedirect_url}"
                     )
                     redirect_response = self.session.get(
-                        sciencedirect_url, allow_redirects=True, timeout=HTTP_TIMEOUT_DEFAULT
+                        sciencedirect_url,
+                        allow_redirects=True,
+                        timeout=HTTP_TIMEOUT_DEFAULT,
                     )
                     redirect_response.raise_for_status()
                     final_url = redirect_response.url
@@ -432,8 +444,10 @@ class DOIResolver:
         else:
             print("  ❌ Could not extract full text from publisher page")
             self._log_paywalled(
-                pmid, "Full text extraction failed from publisher", final_url,
-                classification="PAYWALLED"
+                pmid,
+                "Full text extraction failed from publisher",
+                final_url,
+                classification="PAYWALLED",
             )
 
         # Also get supplements
@@ -485,8 +499,10 @@ class DOIResolver:
             if not response:
                 print(f"  ❌ DOI resolution failed for {doi}: No response received")
                 self._log_paywalled(
-                    pmid, f"DOI resolution failed: {doi}", f"https://doi.org/{doi}",
-                    classification="PAYWALLED"
+                    pmid,
+                    f"DOI resolution failed: {doi}",
+                    f"https://doi.org/{doi}",
+                    classification="PAYWALLED",
                 )
                 return None, None
 
@@ -502,13 +518,15 @@ class DOIResolver:
                 pmid,
                 f"DOI resolution failed (HTTP {status_code}): {doi}",
                 f"https://doi.org/{doi}",
-                classification="CAPTCHA_BLOCKED" if status_code == 403 else "PAYWALLED"
+                classification="CAPTCHA_BLOCKED" if status_code == 403 else "PAYWALLED",
             )
             return None, None
         except requests.exceptions.RequestException as e:
             print(f"  ❌ DOI resolution failed for {doi}: {e}")
             self._log_paywalled(
-                pmid, f"DOI resolution failed: {doi}", f"https://doi.org/{doi}",
-                classification="PAYWALLED"
+                pmid,
+                f"DOI resolution failed: {doi}",
+                f"https://doi.org/{doi}",
+                classification="PAYWALLED",
             )
             return None, None

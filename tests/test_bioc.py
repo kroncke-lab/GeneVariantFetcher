@@ -95,9 +95,10 @@ class TestPubTator3:
         """
         result = client.get_pubtator_annotations("24667783")
         ann_types = {a["type"] for a in result["annotations"]}
-        assert ann_types & {"Gene", "Disease"}, (
-            f"Expected Gene or Disease annotations, got types: {ann_types}"
-        )
+        assert ann_types & {
+            "Gene",
+            "Disease",
+        }, f"Expected Gene or Disease annotations, got types: {ann_types}"
 
     @pytest.mark.parametrize("pmid", TEST_PMIDS)
     def test_multiple_pmids(self, client, pmid):
@@ -124,6 +125,6 @@ class TestVariantRichText:
     def test_annotations_are_mutations_only(self, client):
         result = client.get_variant_rich_text("24667783")
         for ann in result["annotations"]:
-            assert "mut" in ann["type"].lower() or "variant" in ann["type"].lower(), (
-                f"Expected only mutation annotations, got {ann['type']}"
-            )
+            assert (
+                "mut" in ann["type"].lower() or "variant" in ann["type"].lower()
+            ), f"Expected only mutation annotations, got {ann['type']}"

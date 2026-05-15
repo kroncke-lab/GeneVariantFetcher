@@ -914,6 +914,59 @@ class ExpertExtractor(BaseLLMCaller):
         "individuals",
         "number",
     }
+    VARIANT_AFFECTED_HEADERS = {
+        "affected",
+        "affected carriers",
+        "affected_count",
+        "naffected",
+        "n affected",
+        "no. affected",
+        "symptomatic",
+        "symptomatic carriers",
+        "cases",
+    }
+    VARIANT_UNAFFECTED_HEADERS = {
+        "unaffected",
+        "unaffected carriers",
+        "unaffected_count",
+        "nunaffected",
+        "n unaffected",
+        "no. unaffected",
+        "asymptomatic",
+        "asymptomatic carriers",
+        "controls",
+    }
+    VARIANT_ROW_LEVEL_HEADERS = {
+        "patient",
+        "patient id",
+        "proband",
+        "subject",
+        "case",
+        "family",
+        "kindred",
+        "individual",
+        "participant",
+        "pedigree",
+    }
+    VARIANT_CLINICAL_CONTEXT_HEADERS = {
+        "age",
+        "sex",
+        "gender",
+        "phenotype",
+        "diagnosis",
+        "clinical",
+        "symptom",
+        "syncope",
+        "qtc",
+        "qt interval",
+        "ecg",
+        "arrhythmia",
+        "onset",
+        "sudden death",
+        "therapy",
+        "treatment",
+        "schwartz score",
+    }
     GWAS_ASSOCIATION_HEADERS = {
         "locus",
         "snv",
@@ -1007,6 +1060,21 @@ class ExpertExtractor(BaseLLMCaller):
         )
         return marker_count >= 4 and clinical_count == 0
 
+    def _looks_like_row_level_clinical_header(self, cells: list[str]) -> bool:
+        """Detect patient/proband-level mutation lists without count columns."""
+        normalized_cells = [
+            re.sub(r"[^a-z0-9.+/-]+", " ", c.lower()).strip() for c in cells
+        ]
+        has_row_subject = any(
+            any(term in cell for term in self.VARIANT_ROW_LEVEL_HEADERS)
+            for cell in normalized_cells
+        )
+        has_clinical_context = any(
+            any(term in cell for term in self.VARIANT_CLINICAL_CONTEXT_HEADERS)
+            for cell in normalized_cells
+        )
+        return has_row_subject or has_clinical_context
+
     def _clean_table_cell(self, value: Optional[str]) -> Optional[str]:
         if value is None:
             return None
@@ -1053,11 +1121,29 @@ class ExpertExtractor(BaseLLMCaller):
         has_count_header = any(
             self._header_matches(part, self.VARIANT_COUNT_HEADERS) for part in parts
         )
+        has_unaffected_header = any(
+            self._header_matches(part, self.VARIANT_UNAFFECTED_HEADERS)
+            for part in parts
+        )
+        has_affected_header = any(
+            self._header_matches(part, self.VARIANT_AFFECTED_HEADERS)
+            and not self._header_matches(part, self.VARIANT_UNAFFECTED_HEADERS)
+            for part in parts
+        )
+        has_clinical_count_header = (
+            has_count_header or has_affected_header or has_unaffected_header
+        )
+        has_row_level_clinical_header = self._looks_like_row_level_clinical_header(
+            parts
+        )
 
         # Accept: (cDNA OR protein) AND count
+        # OR: row-level clinical mutation list where each row is one carrier
         # OR: cDNA AND protein (variant mapping table)
         return (has_cdna_header or has_protein_header) and (
-            has_count_header or (has_cdna_header and has_protein_header)
+            has_clinical_count_header
+            or has_row_level_clinical_header
+            or (has_cdna_header and has_protein_header)
         )
 
     def _parse_markdown_table_variants(
@@ -1082,6 +1168,7 @@ class ExpertExtractor(BaseLLMCaller):
         variants = []
         header_idx = {}
         header_mapping = {}  # Maps our standard keys to actual column indices
+        row_level_clinical_table = False
 
         for line in lines:
             if not table_started:
@@ -1092,7 +1179,11 @@ class ExpertExtractor(BaseLLMCaller):
                         table_started = False
                         header_mapping = {}
                         header_idx = {}
+                        row_level_clinical_table = False
                         continue
+                    row_level_clinical_table = (
+                        self._looks_like_row_level_clinical_header(parts)
+                    )
                     for idx, name in enumerate(parts):
                         name_lower = name.lower().strip()
                         header_idx[name_lower] = idx
@@ -1104,6 +1195,15 @@ class ExpertExtractor(BaseLLMCaller):
                             header_mapping["protein"] = idx
                         if self._header_matches(name, self.VARIANT_COUNT_HEADERS):
                             header_mapping["count"] = idx
+                        if self._header_matches(name, self.VARIANT_ROW_LEVEL_HEADERS):
+                            header_mapping["row_subject"] = idx
+                        is_unaffected_header = self._header_matches(
+                            name, self.VARIANT_UNAFFECTED_HEADERS
+                        )
+                        if is_unaffected_header:
+                            header_mapping["unaffected"] = idx
+                        elif self._header_matches(name, self.VARIANT_AFFECTED_HEADERS):
+                            header_mapping["affected"] = idx
 
                     table_started = True
                 continue
@@ -1115,6 +1215,7 @@ class ExpertExtractor(BaseLLMCaller):
                 else:
                     table_started = False
                     header_mapping = {}
+                    row_level_clinical_table = False
                     continue
 
             # Skip separator rows
@@ -1137,6 +1238,9 @@ class ExpertExtractor(BaseLLMCaller):
             cdna = get_col("cdna")
             protein = get_col("protein")
             patient_count_raw = get_col("count")
+            affected_raw = get_col("affected")
+            unaffected_raw = get_col("unaffected")
+            row_subject_raw = get_col("row_subject")
 
             # Validate actual cell values. Header cues alone are not enough:
             # GWAS tables use AA=alternate allele and n=participants, which
@@ -1147,18 +1251,65 @@ class ExpertExtractor(BaseLLMCaller):
             if not cdna and not protein:
                 continue
 
-            # Parse patient count
-            patient_count = None
-            if patient_count_raw:
-                try:
-                    patient_count = int(patient_count_raw)
-                except ValueError:
-                    patient_count = None
+            def parse_count(value: Optional[str]) -> Optional[int]:
+                if not value:
+                    return None
+                cleaned = value.strip().replace(",", "")
+                if cleaned.isdigit():
+                    return int(cleaned)
+                return None
+
+            patient_count = parse_count(patient_count_raw)
+            affected_count = parse_count(affected_raw)
+            unaffected_count = parse_count(unaffected_raw)
+
             # Fallback: use last cell if it looks numeric
-            if patient_count is None and cells:
+            if (
+                patient_count is None
+                and affected_count is None
+                and unaffected_count is None
+                and patient_count_raw is None
+                and row_subject_raw is None
+                and cells
+            ):
                 tail = cells[-1]
                 if tail.isdigit():
                     patient_count = int(tail)
+
+            if (
+                patient_count is None
+                and affected_count is None
+                and unaffected_count is None
+                and row_level_clinical_table
+            ):
+                patient_count = 1
+                row_text = " ".join(cells)
+                if re.search(
+                    r"\b(unaffected|asymptomatic|control|healthy|normal|no symptoms?)\b",
+                    row_text,
+                    re.IGNORECASE,
+                ):
+                    affected_count = 0
+                    unaffected_count = 1
+                else:
+                    affected_count = 1
+                    unaffected_count = 0
+
+            if patient_count is None and (
+                affected_count is not None or unaffected_count is not None
+            ):
+                patient_count = (affected_count or 0) + (unaffected_count or 0)
+
+            if patient_count is not None:
+                if affected_count is None and unaffected_count is None:
+                    affected_count = patient_count
+                    unaffected_count = 0
+                elif affected_count is None and unaffected_count is not None:
+                    remainder = patient_count - unaffected_count
+                    affected_count = remainder if remainder >= 0 else None
+                elif unaffected_count is None and affected_count is not None:
+                    remainder = patient_count - affected_count
+                    unaffected_count = remainder if remainder >= 0 else None
 
             variant = {
                 "gene_symbol": gene_symbol,
@@ -1170,8 +1321,8 @@ class ExpertExtractor(BaseLLMCaller):
                 "patients": {"count": patient_count, "phenotype": "LQT2"},
                 "penetrance_data": {
                     "total_carriers_observed": patient_count,
-                    "affected_count": patient_count,
-                    "unaffected_count": 0 if patient_count is not None else None,
+                    "affected_count": affected_count,
+                    "unaffected_count": unaffected_count,
                 },
                 "individual_records": [],
                 "functional_data": {"summary": "", "assays": []},

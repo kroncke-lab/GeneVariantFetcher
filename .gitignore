@@ -48,8 +48,14 @@ venv.bak/
 .RData
 .Ruserdata
 
-# Agent tooling (auto-regenerates duplicate of CLAUDE.md)
+# Agent tooling and local scratch files
 AGENTS.md
+HEARTBEAT.md
+IDENTITY.md
+SOUL.md
+TOOLS.md
+USER.md
+.openclaw/
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -98,6 +104,11 @@ tests/fixtures/**/*.xlsx
 # Comparison/analysis output
 comparison_results/
 comparison_results_*/
+recall_metrics/
+
+# Ad-hoc local recall debugging helpers
+scripts/_analyze_missing.py
+scripts/_inspect_missing.py
 
 # MyPy
 .mypy_cache/

@@ -9,6 +9,7 @@ Uses normalized variant keys to ensure variants in different notations
 
 import json
 import logging
+import re
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
@@ -17,6 +18,10 @@ from typing import Any, Dict, List, Optional, Tuple
 from utils.variant_normalizer import create_variant_key, normalize_variant
 
 logger = logging.getLogger(__name__)
+
+_EXTRACTION_JSON_NAME_RE = re.compile(
+    r"^(?:[A-Za-z0-9_-]+_PMID_\d+|[A-Za-z0-9_-]+_PMID_FULL|\d+_extraction)\.json$"
+)
 
 
 def _safe_int(value: Any) -> int:
@@ -196,8 +201,16 @@ class DataAggregator:
         Returns:
             List of extraction data dictionaries
         """
-        extraction_files = list(extraction_dir.glob("*_PMID_*.json"))
-        extraction_files.extend(extraction_dir.glob("*_PMID_FULL.json"))
+        # Strict filename matching avoids importing timestamped backup JSON
+        # files as duplicate papers.
+        extraction_files = sorted(
+            (
+                p
+                for p in extraction_dir.glob("*.json")
+                if _EXTRACTION_JSON_NAME_RE.match(p.name)
+            ),
+            key=lambda p: p.name,
+        )
 
         extractions = []
         for file_path in extraction_files:

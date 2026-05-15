@@ -441,15 +441,22 @@ class GeneticDataScout:
 
             # Check for clinical outcome keywords (penetrance, affected, carrier, etc.)
             para_lower = para.lower()
-            clinical_keyword_count = sum(1 for kw in self.CLINICAL_KEYWORDS if kw in para_lower)
+            clinical_keyword_count = sum(
+                1 for kw in self.CLINICAL_KEYWORDS if kw in para_lower
+            )
 
             # If paragraph has strong signals, include it
             # RELAXED: Also include paragraphs with multiple clinical keywords
             # (catches penetrance prose like "50 carriers, 30 affected")
             has_clinical_outcome_signal = clinical_keyword_count >= 3
-            if individual_matches >= 2 or (
-                individual_matches >= 1 and (variant_matches >= 1 or gene_matches >= 1)
-            ) or has_clinical_outcome_signal:
+            if (
+                individual_matches >= 2
+                or (
+                    individual_matches >= 1
+                    and (variant_matches >= 1 or gene_matches >= 1)
+                )
+                or has_clinical_outcome_signal
+            ):
                 # Extend to include context (preceding header if any)
                 start_pos = char_pos
                 end_pos = char_pos + len(para)
@@ -594,7 +601,9 @@ class GeneticDataScout:
         # RELAXED: Also keep if section has clinical outcome keywords (affected, penetrance)
         # because aggregate penetrance data ("50 carriers, 30 affected") is valuable
         # even without explicit variant nomenclature
-        has_clinical_outcome_keywords = clinical_keywords >= 2  # At least 2 clinical terms
+        has_clinical_outcome_keywords = (
+            clinical_keywords >= 2
+        )  # At least 2 clinical terms
         if aggregate_signals > individual_signals * 2 and variant_mentions == 0:
             if not has_clinical_outcome_keywords:
                 keep = False

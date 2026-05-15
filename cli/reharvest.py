@@ -270,7 +270,7 @@ def reharvest_command(
     typer.echo("")
     typer.echo("=" * 60)
     typer.echo(
-        f"Done. Recovered: {len(recovered)} / {len(candidates)} ({len(recovered)/len(candidates)*100:.1f}%)"
+        f"Done. Recovered: {len(recovered)} / {len(candidates)} ({len(recovered) / len(candidates) * 100:.1f}%)"
     )
     typer.echo(f"  recovered list: {recovered_path}")
     typer.echo(f"  failed list:    {failed_path}")

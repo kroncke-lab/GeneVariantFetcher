@@ -236,9 +236,9 @@ class TestEuropePMCIntegration:
         for pmid in GOLD_PMIDS:
             result = self.harvester.is_article_available(pmid)
             assert result is not None, f"Should return a result dict for {pmid}"
-            assert "available" in result, (
-                f"Result should have 'available' key for {pmid}"
-            )
+            assert (
+                "available" in result
+            ), f"Result should have 'available' key for {pmid}"
             time.sleep(0.3)
 
         _tracker.record("EuropePMC Integration: is_article_available", True)
@@ -321,9 +321,9 @@ class TestPMCAPIClient:
         for pmid, info in GOLD_PMIDS.items():
             if info["pmcid"]:
                 pmcid = self.client.pmid_to_pmcid(pmid)
-                assert pmcid == info["pmcid"], (
-                    f"PMID {pmid}: expected {info['pmcid']}, got {pmcid}"
-                )
+                assert (
+                    pmcid == info["pmcid"]
+                ), f"PMID {pmid}: expected {info['pmcid']}, got {pmcid}"
                 time.sleep(0.4)
 
         _tracker.record("PMC API: pmid_to_pmcid for gold PMIDs", True)
@@ -340,9 +340,9 @@ class TestPMCAPIClient:
         doi = self.client.get_doi_from_pmid("24667783")
 
         assert doi is not None, "Should find DOI for 24667783"
-        assert doi == GOLD_DOIS["24667783"], (
-            f"Expected {GOLD_DOIS['24667783']}, got {doi}"
-        )
+        assert (
+            doi == GOLD_DOIS["24667783"]
+        ), f"Expected {GOLD_DOIS['24667783']}, got {doi}"
 
         _tracker.record("PMC API: get_doi_from_pmid(24667783)", True, f"doi={doi}")
 
@@ -352,9 +352,9 @@ class TestPMCAPIClient:
             doi = self.client.get_doi_from_pmid(pmid)
             assert doi is not None, f"No DOI for PMID {pmid}"
             # Compare case-insensitively since DOIs can vary in case
-            assert doi.lower() == expected_doi.lower(), (
-                f"PMID {pmid}: expected {expected_doi}, got {doi}"
-            )
+            assert (
+                doi.lower() == expected_doi.lower()
+            ), f"PMID {pmid}: expected {expected_doi}, got {doi}"
             time.sleep(0.4)
 
         _tracker.record("PMC API: DOI retrieval for all gold PMIDs", True)
@@ -404,9 +404,9 @@ class TestUnpaywallAPI:
         oa_count = 0
         for pmid, doi in GOLD_DOIS.items():
             result, error = self.client.find_open_access(doi)
-            assert result is not None or error is not None, (
-                f"Should return either result or error for {doi}"
-            )
+            assert (
+                result is not None or error is not None
+            ), f"Should return either result or error for {doi}"
             if result and result.get("is_oa"):
                 oa_count += 1
             time.sleep(0.2)
@@ -492,9 +492,9 @@ class TestSupplementScraper:
 
     def test_extract_fulltext(self):
         """Verify extract_fulltext method exists and is callable."""
-        assert hasattr(self.scraper, "extract_fulltext"), (
-            "Should have extract_fulltext method"
-        )
+        assert hasattr(
+            self.scraper, "extract_fulltext"
+        ), "Should have extract_fulltext method"
         assert callable(self.scraper.extract_fulltext)
 
         _tracker.record("Supplement Scraper: extract_fulltext method exists", True)
@@ -586,9 +586,9 @@ class TestCrossModuleIntegration:
 
         assert epmc_pmcid is not None, "Europe PMC should return PMCID"
         assert ncbi_pmcid is not None, "NCBI PMC should return PMCID"
-        assert epmc_pmcid == ncbi_pmcid, (
-            f"PMCIDs should match: EuropePMC={epmc_pmcid}, NCBI={ncbi_pmcid}"
-        )
+        assert (
+            epmc_pmcid == ncbi_pmcid
+        ), f"PMCIDs should match: EuropePMC={epmc_pmcid}, NCBI={ncbi_pmcid}"
 
         _tracker.record(
             "Cross-module: EuropePMC vs NCBI PMCID agreement",
@@ -657,9 +657,9 @@ class TestCrossModuleIntegration:
 
         ncbi_doi = pmc.get_doi_from_pmid(pmid) or ""
 
-        assert epmc_doi.lower() == ncbi_doi.lower(), (
-            f"DOIs should match: EuropePMC={epmc_doi}, NCBI={ncbi_doi}"
-        )
+        assert (
+            epmc_doi.lower() == ncbi_doi.lower()
+        ), f"DOIs should match: EuropePMC={epmc_doi}, NCBI={ncbi_doi}"
 
         _tracker.record(
             "Cross-module: DOI consistency across sources", True, f"doi={ncbi_doi}"

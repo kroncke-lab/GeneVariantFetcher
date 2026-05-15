@@ -103,8 +103,12 @@ class TestScanResult:
     def test_hints_format(self):
         result = ScanResult()
         result.variants = [
-            ScannedVariant("R534C", "R534C", "missense", "protein", 534, "", 0.95, "test"),
-            ScannedVariant("A561V", "A561V", "missense", "protein", 561, "", 0.70, "test"),
+            ScannedVariant(
+                "R534C", "R534C", "missense", "protein", 534, "", 0.95, "test"
+            ),
+            ScannedVariant(
+                "A561V", "A561V", "missense", "protein", 561, "", 0.70, "test"
+            ),
         ]
         result.stats["gene"] = "KCNH2"
         hints = result.get_hints_for_prompt()
@@ -121,8 +125,14 @@ class TestScanResult:
         for i in range(60):
             result.variants.append(
                 ScannedVariant(
-                    f"A{100+i}V", f"A{100+i}V", "missense", "protein",
-                    100 + i, "", 0.70, "test",
+                    f"A{100 + i}V",
+                    f"A{100 + i}V",
+                    "missense",
+                    "protein",
+                    100 + i,
+                    "",
+                    0.70,
+                    "test",
                 )
             )
         hints = result.get_hints_for_prompt(max_hints=10)
@@ -135,7 +145,9 @@ class TestScanResult:
         result.stats["gene"] = "KCNH2"
         result.variants = [
             ScannedVariant("R534C", "R534C", "missense", "protein", 534, "", 0.95, "a"),
-            ScannedVariant("p.R534C", "R534C", "missense", "protein", 534, "", 0.90, "b"),
+            ScannedVariant(
+                "p.R534C", "R534C", "missense", "protein", 534, "", 0.90, "b"
+            ),
         ]
         hints = result.get_hints_for_prompt()
         # After dedup, only 1 unique R534C should appear in the list
@@ -145,8 +157,12 @@ class TestScanResult:
     def test_to_variant_dicts(self):
         result = ScanResult()
         result.variants = [
-            ScannedVariant("R534C", "R534C", "missense", "protein", 534, "", 0.95, "test"),
-            ScannedVariant("c.1600C>T", "c.1600C>T", "substitution", "cdna", 1600, "", 0.95, "test"),
+            ScannedVariant(
+                "R534C", "R534C", "missense", "protein", 534, "", 0.95, "test"
+            ),
+            ScannedVariant(
+                "c.1600C>T", "c.1600C>T", "substitution", "cdna", 1600, "", 0.95, "test"
+            ),
         ]
         dicts = result.to_variant_dicts("KCNH2")
         assert len(dicts) == 2
@@ -161,7 +177,9 @@ class TestScanResult:
         result = ScanResult()
         result.variants = [
             ScannedVariant("R534C", "R534C", "missense", "protein", 534, "", 0.95, "a"),
-            ScannedVariant("p.R534C", "R534C", "missense", "protein", 534, "", 0.90, "b"),
+            ScannedVariant(
+                "p.R534C", "R534C", "missense", "protein", 534, "", 0.90, "b"
+            ),
         ]
         dicts = result.to_variant_dicts("KCNH2")
         assert len(dicts) == 1
@@ -438,7 +456,14 @@ class TestNonTargetHotspotFiltering:
     @pytest.mark.parametrize(
         "variant",
         ["R175H", "R248W", "G12D", "G12V", "V600E", "E545K"],
-        ids=["TP53_R175H", "TP53_R248W", "KRAS_G12D", "KRAS_G12V", "BRAF_V600E", "PIK3CA_E545K"],
+        ids=[
+            "TP53_R175H",
+            "TP53_R248W",
+            "KRAS_G12D",
+            "KRAS_G12V",
+            "BRAF_V600E",
+            "PIK3CA_E545K",
+        ],
     )
     def test_hotspots_filtered(self, scanner, variant):
         result = scanner.scan(f"the {variant} mutation was identified")
@@ -510,16 +535,24 @@ class TestMergeScannerResults:
     def test_adds_new_variants(self):
         extracted = {
             "variants": [
-                {"gene_symbol": "KCNH2", "protein_notation": "R534C", "cdna_notation": None},
+                {
+                    "gene_symbol": "KCNH2",
+                    "protein_notation": "R534C",
+                    "cdna_notation": None,
+                },
             ],
             "extraction_metadata": {"total_variants_found": 1},
         }
         scan_result = ScanResult()
         scan_result.variants = [
-            ScannedVariant("A561V", "A561V", "missense", "protein", 561, "", 0.80, "test"),
+            ScannedVariant(
+                "A561V", "A561V", "missense", "protein", 561, "", 0.80, "test"
+            ),
         ]
 
-        merged = merge_scanner_results(extracted, scan_result, "KCNH2", min_confidence=0.5)
+        merged = merge_scanner_results(
+            extracted, scan_result, "KCNH2", min_confidence=0.5
+        )
         protein_notations = [v.get("protein_notation") for v in merged["variants"]]
         assert "A561V" in protein_notations
         assert len(merged["variants"]) == 2
@@ -527,16 +560,24 @@ class TestMergeScannerResults:
     def test_skips_existing_variants(self):
         extracted = {
             "variants": [
-                {"gene_symbol": "KCNH2", "protein_notation": "R534C", "cdna_notation": None},
+                {
+                    "gene_symbol": "KCNH2",
+                    "protein_notation": "R534C",
+                    "cdna_notation": None,
+                },
             ],
             "extraction_metadata": {"total_variants_found": 1},
         }
         scan_result = ScanResult()
         scan_result.variants = [
-            ScannedVariant("R534C", "R534C", "missense", "protein", 534, "", 0.95, "test"),
+            ScannedVariant(
+                "R534C", "R534C", "missense", "protein", 534, "", 0.95, "test"
+            ),
         ]
 
-        merged = merge_scanner_results(extracted, scan_result, "KCNH2", min_confidence=0.5)
+        merged = merge_scanner_results(
+            extracted, scan_result, "KCNH2", min_confidence=0.5
+        )
         assert len(merged["variants"]) == 1
 
     def test_respects_min_confidence(self):
@@ -546,10 +587,14 @@ class TestMergeScannerResults:
         }
         scan_result = ScanResult()
         scan_result.variants = [
-            ScannedVariant("A561V", "A561V", "missense", "protein", 561, "", 0.30, "test"),
+            ScannedVariant(
+                "A561V", "A561V", "missense", "protein", 561, "", 0.30, "test"
+            ),
         ]
 
-        merged = merge_scanner_results(extracted, scan_result, "KCNH2", min_confidence=0.5)
+        merged = merge_scanner_results(
+            extracted, scan_result, "KCNH2", min_confidence=0.5
+        )
         assert len(merged["variants"]) == 0
 
     def test_updates_metadata(self):
@@ -559,10 +604,14 @@ class TestMergeScannerResults:
         }
         scan_result = ScanResult()
         scan_result.variants = [
-            ScannedVariant("A561V", "A561V", "missense", "protein", 561, "", 0.80, "test"),
+            ScannedVariant(
+                "A561V", "A561V", "missense", "protein", 561, "", 0.80, "test"
+            ),
         ]
 
-        merged = merge_scanner_results(extracted, scan_result, "KCNH2", min_confidence=0.5)
+        merged = merge_scanner_results(
+            extracted, scan_result, "KCNH2", min_confidence=0.5
+        )
         assert merged["extraction_metadata"]["scanner_added"] == 1
         assert merged["extraction_metadata"]["total_variants_found"] == 1
 
@@ -596,7 +645,9 @@ class TestScanDocumentConvenience:
         assert result.stats["unique_variants"] > 0
 
     def test_custom_source_label(self):
-        result = scan_document_for_variants("A561V mutation", "KCNH2", source="supplement")
+        result = scan_document_for_variants(
+            "A561V mutation", "KCNH2", source="supplement"
+        )
         assert result.stats.get("source") == "supplement"
 
     def test_different_gene(self):

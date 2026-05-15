@@ -41,38 +41,38 @@ def test_write_free_text_output_writes_file_log_and_status(tmp_path):
 
 ## Abstract
 
-This is a test paper about KCNH2 variants and their role in Long QT syndrome. We identified 
-the R534C mutation in 12 patients from our multicenter cohort study. The goal of this 
+This is a test paper about KCNH2 variants and their role in Long QT syndrome. We identified
+the R534C mutation in 12 patients from our multicenter cohort study. The goal of this
 research was to characterize the clinical phenotype of carriers and determine penetrance.
 Our findings have important implications for genetic counseling and risk stratification.
 
 ## Introduction
 
-Long QT syndrome (LQTS) is a cardiac channelopathy characterized by prolonged ventricular 
-repolarization. The HERG gene (KCNH2) encodes the alpha subunit of the rapid delayed 
-rectifier potassium channel (IKr). Mutations in KCNH2 cause LQT2, which accounts for 
-approximately 30-40% of all LQTS cases. Understanding genotype-phenotype correlations 
+Long QT syndrome (LQTS) is a cardiac channelopathy characterized by prolonged ventricular
+repolarization. The HERG gene (KCNH2) encodes the alpha subunit of the rapid delayed
+rectifier potassium channel (IKr). Mutations in KCNH2 cause LQT2, which accounts for
+approximately 30-40% of all LQTS cases. Understanding genotype-phenotype correlations
 is essential for clinical management of affected individuals and their families.
 
 ## Methods
 
-Genetic testing was performed using next-generation sequencing panels. Variants were 
-classified according to ACMG guidelines. Clinical data including ECG parameters, symptoms, 
-and family history were collected from all participants. Statistical analysis was 
+Genetic testing was performed using next-generation sequencing panels. Variants were
+classified according to ACMG guidelines. Clinical data including ECG parameters, symptoms,
+and family history were collected from all participants. Statistical analysis was
 performed using R software version 4.0.
 
 ## Results
 
-Among 50 carriers of pathogenic variants, 30 (60%) experienced breakthrough cardiac events 
-before age 40. The R534C variant was associated with a hazard ratio of 1.32 for cardiac 
+Among 50 carriers of pathogenic variants, 30 (60%) experienced breakthrough cardiac events
+before age 40. The R534C variant was associated with a hazard ratio of 1.32 for cardiac
 events compared to other KCNH2 variants. QTc prolongation was observed in 85% of carriers.
 Penetrance was estimated at 60% by age 40 and 75% by age 60.
 
 ## Discussion
 
-Our findings support the pathogenicity of these KCNH2 variants and highlight the importance 
-of early intervention in affected individuals. The high penetrance observed underscores 
-the need for cascade genetic testing in families. Future studies should focus on 
+Our findings support the pathogenicity of these KCNH2 variants and highlight the importance
+of early intervention in affected individuals. The high penetrance observed underscores
+the need for cascade genetic testing in families. Future studies should focus on
 identifying modifiers of disease expression.
 
 ## References
@@ -80,8 +80,9 @@ identifying modifiers of disease expression.
 1. Test reference one
 2. Test reference two
 """
+    captions_markdown = "\n\n## FIGURE CAPTIONS\n\nFigure 1: KCNH2 G604S pedigree."
     supplement_markdown = "\n\n## Supplement\n\nAdditional data here."
-    expected_content = main_markdown + supplement_markdown
+    expected_content = main_markdown + captions_markdown + supplement_markdown
 
     status_calls = []
     source = publisher_api_fallback_source()
@@ -93,6 +94,7 @@ identifying modifiers of disease expression.
         supplement_markdown=supplement_markdown,
         downloaded_count=2,
         source=source,
+        captions_markdown=captions_markdown,
         write_pmid_status=lambda pmid, status, details: status_calls.append(
             (pmid, status, details)
         ),

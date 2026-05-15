@@ -3,7 +3,9 @@
 You're working on **GeneVariantFetcher (GVF)** — a pipeline that extracts
 genetic variants from biomedical literature for the Kroncke Lab variant
 interpretation toolkit. Goal: **90% unique-variant recall by June 2026**
-(R01 grant submission). Current measured baseline: **59.1%** (2025-12-11).
+(R01 grant submission). Current measured KCNH2 baseline: **60.9%**
+unique-variant recall and **54.7%** variant-row recall (2026-05-15 v12
+manual-recovery DB).
 
 ## Read these first (in this order)
 
@@ -63,6 +65,6 @@ interpretation toolkit. Goal: **90% unique-variant recall by June 2026**
   ("brutally honest" is a direct quote). Don't sugar-coat recovery rates.
 - If you can't recover a paper, say so plainly and document why in
   `CLAUDE.md` / `TASKS.md` under blockers.
-- Re-running KCNH2 extraction end-to-end (and regenerating
-  `comparison_results/`) is the single most important unblocking action.
-  Almost any other task is downstream of that measurement loop.
+- The KCNH2 measurement loop is working. The current bottleneck is recovering
+  or re-extracting the highest-loss PMIDs, especially PMID 15840476 behind
+  Elsevier institutional access.

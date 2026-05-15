@@ -19,6 +19,7 @@ from cli.automated_workflow import automated_variant_extraction_workflow
 from cli.audit_paywalls import run_paywall_audit
 from cli.discover import discover_command, run_discover
 from cli.extract import run_extraction
+from cli.reharvest import reharvest_command
 from cli.scout import run_scout
 
 __all__ = [
@@ -27,6 +28,7 @@ __all__ = [
     "run_paywall_audit",
     "run_extraction",
     "run_discover",
+    "reharvest_command",
     "app",
 ]
 
@@ -319,6 +321,7 @@ def extract_command(
 
 
 app.command("discover")(discover_command)
+app.command("reharvest")(reharvest_command)
 
 
 @app.command("audit-paywalls")

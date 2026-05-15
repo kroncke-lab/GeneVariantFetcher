@@ -32,6 +32,7 @@ DEFAULT_PUBLISHER_DOMAINS: tuple = (
     "jacc.org",
     "cell.com",
     "thelancet.com",
+    "mayoclinicproceedings.org",
     # Wiley (Human Mutation, etc.)
     "onlinelibrary.wiley.com",
     "wiley.com",
@@ -52,6 +53,8 @@ DEFAULT_PUBLISHER_DOMAINS: tuple = (
     "liebertpub.com",
     # BMJ
     "bmj.com",
+    # Wolters Kluwer / Neurology journals (e.g. DOI 10.1212 supplements)
+    "neurology.org",
     # Lippincott Williams & Wilkins / Wolters Kluwer
     "lww.com",
     # PMC (cookies aren't needed but harmless)

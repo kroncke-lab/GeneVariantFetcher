@@ -1,351 +1,116 @@
-# GeneVariantFetcher — Validation & Recall Metrics
+# Validation And Recall Metrics
 
-How GVF measures extraction quality, current performance numbers, and how to run your own validation.
+GVF is optimized for high recall: finding as many true variants and carrier
+counts as possible, then letting downstream review filter false positives.
 
-## Validation Philosophy
+## Current KCNH2 Baseline
 
-GVF is designed for **high recall** (finding as many variants as possible) rather than perfect precision. In clinical genetics research, missing a variant is often worse than having a false positive that can be filtered later.
+Latest measured KCNH2 score: 2026-05-15, using the v12 manual-recovery SQLite
+database and `gene_variant_fetcher_gold_standard/normalized/KCNH2_recall_input.csv`.
 
-**Key trade-off:** We accept some noise in exchange for not missing real variants.
+| Metric | Matched / gold | Recall |
+|---|---:|---:|
+| PMIDs | 184 / 262 | 70.2% |
+| Variant rows | 542 / 991 | 54.7% |
+| Unique variants | 323 / 530 | 60.9% |
+| Patients/carriers | 1758 / 2674 | 65.7% |
+| Affected | 1095 / 1635 | 67.0% |
+| Unaffected | 461 / 749 | 61.5% |
 
----
+The older 59.1% KCNH2 result from the 2025-12-11 database is historical only.
+Use the table above as the current project baseline.
 
-## Gold Standard Methodology
+## Gold Inputs
 
-### What Is a Gold Standard?
+Normalized recall inputs live in:
 
-A gold standard is a manually curated set of variants that we know exist in a set of papers. We compare GVF's extractions against this truth to measure recall.
-
-### KCNH2 Gold Standard
-
-Our primary validation uses a curated KCNH2 dataset:
-
-| Metric | Count |
-|--------|-------|
-| **Unique variants** | 489 |
-| **Total carriers** | 780 |
-| **Affected individuals** | 413 |
-| **Source papers (PMIDs)** | 236 |
-
-This gold standard was created by:
-1. Systematic literature review by domain experts
-2. Manual extraction from each paper
-3. Variant name normalization
-4. Cross-validation by multiple reviewers
-
-### Limitations of Our Gold Standard
-
-1. **Single gene**: Only validated on KCNH2 (cardiac)
-2. **Historical data**: May miss very recent publications
-3. **Interpretation variability**: Some edge cases have ambiguous classification
-4. **Incomplete for rare variants**: Low-frequency variants may be underrepresented
-
----
-
-## Metrics Definitions
-
-### 1. Unique Variant Recall
-
-**What it measures:** Did GVF find each distinct variant?
-
-```
-Unique Variant Recall = (Variants found by GVF ∩ Gold standard variants) / Gold standard variants
+```text
+gene_variant_fetcher_gold_standard/normalized/
 ```
 
-**Example:**
-- Gold standard has 489 unique variants
-- GVF extracts 289 of them
-- Recall = 289/489 = **59.1%**
+Current files include:
 
-**Why it matters:** This is the primary metric for variant discovery use cases.
+- `KCNH2_recall_input.csv`
+- `KCNQ1_recall_input.csv`
+- `SCN5A_recall_input.csv`
+- `RYR2_recall_input.csv`
 
-### 2. Carrier Recall
+The first three are exported from Variant_Browser with
+`scripts/build_gold_standard_from_varbrowser.py`. RYR2 is imported from the
+lab-maintained spreadsheet with `scripts/build_ryr2_gold_standard_from_xlsx.py`.
 
-**What it measures:** Did GVF identify the correct number of carriers?
+## Metric Definitions
 
-```
-Carrier Recall = (Carriers found by GVF) / (Total carriers in gold standard)
-```
+- PMIDs: fraction of gold PMIDs with at least one matched variant row.
+- Variant rows: fraction of gold `(pmid, variant)` rows matched in SQLite.
+- Unique variants: fraction of distinct gold variants matched anywhere.
+- Patients/carriers: sum of gold carrier counts on matched rows divided by all
+  gold carrier counts.
+- Affected and unaffected: same as patient recall, but for phenotype-specific
+  columns.
 
-**Example:**
-- Gold standard has 780 total carriers
-- GVF identifies 556 carriers
-- Recall = 556/780 = **71.3%**
+SQLite-only rows are precision findings and do not contribute to recall
+denominators.
 
-**Why it matters:** Important for penetrance calculations that require accurate counts.
+## Running Recall
 
-### 3. Affected Individual Recall
-
-**What it measures:** Did GVF correctly identify affected carriers?
-
-```
-Affected Recall = (Affected found by GVF) / (Total affected in gold standard)
-```
-
-**Example:**
-- Gold standard has 413 affected individuals
-- GVF identifies 279 affected
-- Recall = 279/413 = **67.6%**
-
-**Why it matters:** Critical for understanding phenotype-genotype relationships.
-
----
-
-## Current Performance (KCNH2)
-
-As of version 2.1.0 (February 2026):
-
-| Metric | Recall | Notes |
-|--------|--------|-------|
-| **Unique variants** | 59.1% | 289 of 489 variants found |
-| **Carriers** | 71.3% | 556 of 780 carriers identified |
-| **Affected** | 67.6% | 279 of 413 affected found |
-
-### Historical Progression
-
-| Version | Date | Unique Recall | Key Changes |
-|---------|------|---------------|-------------|
-| Baseline | 2026-01-28 | 19.4% | Initial extraction |
-| v2 | 2026-02-04 | 29.4% | Basic normalization fixes |
-| v3 | 2026-02-06 | 54.6% | Springer API, table extraction |
-| v6 | 2026-02-10 | 50.3% | Tier 1 + Tier 2 fixes |
-| **v8** | **2026-02-10** | **59.1%** | **Complete rebuild + scanner** |
-
-### Recall Ceiling Analysis
-
-Not all gold standard variants can be found:
-
-| Category | Variants | Percentage |
-|----------|----------|------------|
-| In downloaded papers | 480 | 98.2% |
-| In papers we couldn't access | 9 | 1.8% |
-
-**Theoretical maximum recall: 98.2%** (if extraction were perfect)
-
-The ~40% gap between current recall (59.1%) and theoretical maximum (98.2%) represents:
-- LLM extraction errors
-- Variant notation mismatches
-- Complex/unusual variant formats
-- Tables that don't parse cleanly
-
----
-
-## Why Some Variants Are Missed
-
-### 1. Notation Mismatches
-
-Gold standard might have:
-```
-p.Leu987fs
-```
-
-But the paper contains:
-```
-L987fsX10
-p.Leu987PhefsTer10
-c.2959delC (p.L987fs)
-```
-
-**Mitigation:** GVF uses canonical form keys for comparison — all variants are normalized to a standard form before matching. This includes:
-- Three-letter to one-letter amino acid conversion
-- Frameshift notation standardization (fs, fsX, fsTer → canonical form)
-- Unicode arrow normalization (→, ➔, ⟶)
-- Concatenated gene+variant pattern parsing (HERGG604S → G604S)
-
-### 2. Complex Variant Types
-
-Harder to extract:
-- Splice site variants: `c.1558-1G>C`
-- Large deletions: `exon6-14Del`
-- Structural variants: `7q34q36.2Del`
-
-**Mitigation:** Variant scanner pre-detects these patterns on full text (not condensed DATA_ZONES) to improve LLM prompts. The scanner now supports concatenated patterns (HERGG604S) and Unicode arrow normalization.
-
-### 3. Paywalled Papers
-
-Some high-value papers aren't accessible:
-- No PMC version
-- No publisher API key
-- Institutional access required
-
-**Mitigation:** Obtain publisher API keys; consider institutional VPN.
-
-### 4. Table Extraction Failures
-
-Supplemental Excel files sometimes:
-- Have merged cells that break parsing
-- Use non-standard variant columns
-- Are scanned images, not text
-
-**Mitigation:** Manual review of `paywalled_missing.csv` for critical papers.
-
----
-
-## Running Your Own Validation
-
-### Step 1: Create a Gold Standard File
-
-Create a CSV with known variants:
-
-```csv
-variant,pmid,carriers,affected
-p.Gly628Ser,12345678,5,3
-p.Ala561Val,23456789,12,8
-p.Arg534Cys,34567890,3,2
-```
-
-### Step 2: Run GVF Extraction
+Score an existing DB:
 
 ```bash
-gvf extract YOUR_GENE --email you@example.com --output ./validation_output
+.venv/bin/python scripts/run_recall_suite.py --score --genes KCNH2 \
+  --db KCNH2=results/KCNH2/20260506_102238/end_to_end_20260515_manual_recovery/KCNH2_v12_manual_recovery_20260515.db \
+  --outdir recall_metrics/kcnh2_manual_recovery_after_matchfix_20260515
 ```
 
-### Step 3: Compare Results
-
-Use the provided validation script:
+Score multiple genes once DBs exist:
 
 ```bash
-python scripts/analysis/recall_analysis.py \
-    --gold-standard your_gold_standard.csv \
-    --extractions ./validation_output/YOUR_GENE/*/extractions/ \
-    --output recall_results.json
+.venv/bin/python scripts/run_recall_suite.py --score \
+  --genes KCNH2,KCNQ1,SCN5A \
+  --db KCNH2=path/to/KCNH2.db \
+  --db KCNQ1=path/to/KCNQ1.db \
+  --db SCN5A=path/to/SCN5A.db \
+  --outdir recall_metrics/multigene_YYYYMMDD
 ```
 
-### Step 4: Interpret Results
+Generated `recall_metrics/` outputs are local artifacts and are intentionally
+gitignored. Preserve the headline numbers in `CLAUDE.md` and `TASKS.md`.
 
-```python
-import json
+## Interpreting Gaps
 
-with open('recall_results.json') as f:
-    results = json.load(f)
+Use the generated `missing_in_sqlite.csv` and `discrepancies.csv` files to split
+misses into failure modes:
 
-print(f"Unique Variant Recall: {results['recall_metrics']['unique_variants']['percentage']:.1f}%")
-print(f"Carrier Recall: {results['recall_metrics']['carriers']['percentage']:.1f}%")
-print(f"Matched Variants: {results['recall_metrics']['unique_variants']['matched']}")
-print(f"Missed Variants: {len(results['variants']['missed'])}")
+- Missing source: no usable full text or supplements.
+- Extraction miss: source exists, but the LLM/table path missed the row.
+- Migration/sanitizer drop: extraction JSON has the variant but SQLite does not.
+- Matcher miss: SQLite has an equivalent variant, but comparison did not match
+  it.
+- Count mismatch: the variant matched, but carrier/phenotype counts differ.
 
-# Review missed variants
-for v in results['variants']['missed'][:10]:
-    print(f"  - {v}")
-```
+Current KCNH2 status after the 2026-05-15 matcher patch:
 
-### Step 5: Gap Analysis
-
-Identify why variants were missed:
-
-```python
-# Check if missed variants are in downloaded papers
-gap = results.get('gap_analysis', {})
-print(f"Missed in downloaded papers: {gap.get('missed_in_downloaded', 'N/A')}")
-print(f"Missed in inaccessible papers: {gap.get('missed_in_undownloaded', 'N/A')}")
-
-# Top missed variants
-for item in gap.get('top_missed_in_downloaded', [])[:5]:
-    print(f"  {item['variant']}: {item['carriers']} carriers in PMIDs {item['pmids_have']}")
-```
-
----
+- 449 missing variant rows across 107 PMIDs.
+- 350 variant rows still needed to reach 90% variant-row recall.
+- Top remaining source/extraction losses: 15840476, 14661677, 29650123,
+  24667783, 16922724, 23098067, 23631430.
+- 117 count mismatches remain; many top mismatches look like SQLite
+  over-counting cohort tables and should be investigated separately from recall.
 
 ## Improving Recall
 
-### For Your Own Runs
+Highest-value actions:
 
-1. **Add publisher API keys** — More papers = more variants found
-2. **Use `--scout-first`** — Better context for complex papers
-3. **Check paywalled_missing.csv** — Manually obtain critical papers
-4. **Review extraction_failures.csv** — Re-run failed papers individually
+1. Run paywall recovery from a Vanderbilt VPN or institutional network.
+2. Add `ELSEVIER_INSTTOKEN` to unlock Elsevier subscription XML, especially PMID
+   15840476.
+3. Re-extract the highest-loss PMIDs that already have full-ish context:
+   29650123, 24667783, 23098067, and 17905336.
+4. Audit count mismatches for cohort-total bleed into per-variant carrier counts.
+5. Build fresh KCNQ1 and SCN5A DBs so multi-gene recall can be measured.
 
-### Common Issues and Fixes
+## Related Docs
 
-| Issue | Symptom | Solution |
-|-------|---------|----------|
-| Low paper coverage | <50 papers downloaded | Add Elsevier/Springer keys |
-| Notation mismatches | Variants found but not matching | Check variant normalizer |
-| Table extraction | Data in tables missed | Review FULL_CONTEXT.md manually |
-| Timeout errors | Papers fail extraction | Increase LLM timeout in settings |
-
-### Contributing Improvements
-
-If you improve recall:
-1. Document your changes
-2. Run validation before/after
-3. Submit a pull request with metrics
-
----
-
-## Precision Considerations
-
-While GVF optimizes for recall, precision matters too:
-
-### Expected False Positives
-
-| Category | Frequency | Notes |
-|----------|-----------|-------|
-| LLM hallucination | ~5% | Made-up variants |
-| Wrong gene | ~2% | Variant from different gene |
-| Misread notation | ~3% | c.123G>A vs c.132G>A |
-
-### Validation Recommendations
-
-For clinical or publication use:
-1. **Spot-check high-impact variants** against source papers
-2. **Verify penetrance counts** manually for key findings
-3. **Cross-reference** with ClinVar/gnomAD
-4. **Review key_quotes** field for supporting evidence
-
----
-
-## Comparison with Other Tools
-
-| Tool | Approach | Typical Recall | Notes |
-|------|----------|----------------|-------|
-| **GVF** | LLM extraction | 55-60% | Automated, scalable |
-| Manual curation | Expert review | 90-95% | Gold standard |
-| PubTator | NER-based | 30-40% | Fast but misses context |
-| tmVar | ML-based | 40-50% | Good for mentions, not clinical data |
-
-GVF's advantage: Extracts **structured clinical data** (penetrance, affected counts), not just variant mentions.
-
----
-
-## Interpreting Results for Your Gene
-
-### What to Expect
-
-| Gene Type | Expected Recall | Reasoning |
-|-----------|-----------------|-----------|
-| Well-studied cardiac (KCNH2, SCN5A) | 55-65% | Best optimization |
-| Other cardiac (KCNQ1, RYR2) | 45-55% | Good transfer |
-| Non-cardiac (BRCA1, TP53) | 35-50% | Less tuning |
-| Rare disease genes | 25-40% | Limited validation |
-
-### Why Cardiac Genes Perform Better
-
-1. **Keyword filters** optimized for cardiac terms
-2. **Variant normalizer** tested on cardiac variants
-3. **Gold standard** validation only for KCNH2
-4. **LLM prompts** include cardiac-specific context
-
-### For Non-Cardiac Genes
-
-Consider:
-- Adjusting keyword filters in `config/constants.py`
-- Creating gene-specific alias dictionaries
-- Building your own gold standard for validation
-
----
-
-## Next Steps
-
-- [OUTPUT_FORMAT.md](OUTPUT_FORMAT.md) — Understanding extraction output
-- [ARCHITECTURE.md](ARCHITECTURE.md) — How extraction works
-- [QUICKSTART.md](QUICKSTART.md) — Run your first extraction
-
----
-
-## References
-
-For methodology background:
-- HGVS variant nomenclature: [varnomen.hgvs.org](https://varnomen.hgvs.org/)
-- ClinVar variant interpretation: [ncbi.nlm.nih.gov/clinvar](https://www.ncbi.nlm.nih.gov/clinvar/)
-- ACMG variant classification guidelines
+- [OUTPUT_FORMAT.md](OUTPUT_FORMAT.md)
+- [ARCHITECTURE.md](ARCHITECTURE.md)
+- [QUICKSTART.md](QUICKSTART.md)

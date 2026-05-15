@@ -78,8 +78,9 @@ def test_enabled_fetcher_with_no_doi_skips(settings_enabled, fetcher_args):
     # Generic doesn't gate by DOI but its fetch needs one. We expect it to
     # attempt and the strategy itself returns an error.
     fake_strategy = _FakeStrategy(name="generic", embargo_months=None)
-    with _replace_strategies({"generic": _FakeStrategy}), _stub_pool_returning(
-        FetchResult(publisher="generic", error="no doi")
+    with (
+        _replace_strategies({"generic": _FakeStrategy}),
+        _stub_pool_returning(FetchResult(publisher="generic", error="no doi")),
     ):
         result = fetcher.fetch(pmid="1", doi="")
 
@@ -117,8 +118,9 @@ def test_embargo_passes_old_aha_paper(settings_enabled, fetcher_args):
         publisher="aha",
         final_url="https://www.ahajournals.org/doi/...",
     )
-    with _replace_strategies({"aha": _FakeAHAStrategy}), _stub_pool_returning(
-        expected_result
+    with (
+        _replace_strategies({"aha": _FakeAHAStrategy}),
+        _stub_pool_returning(expected_result),
     ):
         result = fetcher.fetch(
             pmid="1", doi="10.1161/CIRCRESAHA.118.999", pub_date=two_years_ago

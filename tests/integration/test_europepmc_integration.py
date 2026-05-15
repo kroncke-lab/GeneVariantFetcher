@@ -8,9 +8,13 @@ Validates both functionality and integration with existing systems.
 
 import json
 import logging
+import os
 import sys
+import tempfile
 from pathlib import Path
 from datetime import datetime
+
+import pytest
 
 # Add the project root to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -19,16 +23,31 @@ from gene_literature.europepmc_handler import EuropePMCClient
 from gene_literature.europepmc_integration import EuropePMCHarvester
 from harvesting.pmc_api import PMCAPIClient
 
+pytestmark = pytest.mark.requires_network
+
+
+def _test_output_dir() -> Path:
+    output_dir = Path(
+        os.environ.get(
+            "GVF_TEST_OUTPUT_DIR",
+            Path(tempfile.gettempdir()) / "genevariantfetcher_tests",
+        )
+    )
+    output_dir.mkdir(parents=True, exist_ok=True)
+    return output_dir
+
 
 def setup_logging():
     """Configure logging for test output."""
+    output_dir = _test_output_dir()
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         handlers=[
-            logging.FileHandler("/mnt/temp2/kronckbm/gvf_output/europepmc_test.log"),
+            logging.FileHandler(output_dir / "europepmc_test.log"),
             logging.StreamHandler(sys.stdout),
         ],
+        force=True,
     )
     return logging.getLogger(__name__)
 
@@ -116,9 +135,7 @@ def test_integration_download():
     logger = setup_logging()
     logger.info("=== Testing Integration Download ===")
 
-    harvester = EuropePMCHarvester(
-        output_dir=Path("/mnt/temp2/kronckbm/gvf_output/europepmc_test")
-    )
+    harvester = EuropePMCHarvester(output_dir=_test_output_dir() / "europepmc_test")
 
     # Use golden test set PMIDs
     golden_pmids = [
@@ -277,8 +294,8 @@ def run_comprehensive_test():
         "test_start_time": datetime.now().isoformat(),
         "test_suite_name": "Europe PMC Integration Test",
         "environment": {
-            "output_path": "/mnt/temp2/kronckbm/gvf_output",
-            "test_directory": "/mnt/temp2/kronckbm/gvf_output/europepmc_test",
+            "output_path": str(_test_output_dir()),
+            "test_directory": str(_test_output_dir() / "europepmc_test"),
         },
     }
 
@@ -311,9 +328,7 @@ def run_comprehensive_test():
     }
 
     # Save results
-    results_file = Path(
-        "/mnt/temp2/kronckbm/gvf_output/europepmc_integration_test_results.json"
-    )
+    results_file = _test_output_dir() / "europepmc_integration_test_results.json"
     with open(results_file, "w", encoding="utf-8") as f:
         json.dump(comprehensive_result, f, indent=2, ensure_ascii=False)
 
@@ -337,7 +352,7 @@ if __name__ == "__main__":
     print(f"Integration complete: {summary['integration_complete']}")
 
     print(
-        f"\nTest results saved to: /mnt/temp2/kronckbm/gvf_output/europepmc_integration_test_results.json"
+        f"\nTest results saved to: {_test_output_dir() / 'europepmc_integration_test_results.json'}"
     )
 
     # Exit with appropriate code

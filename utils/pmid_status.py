@@ -6,11 +6,11 @@ from typing import Dict, List
 def get_pmid_status(output_dir: str, pmid: str) -> Dict:
     """
     Returns the status of a PMID from its JSON file.
-    
+
     Args:
         output_dir: Directory containing pmid_status subdirectory.
         pmid: PubMed ID to look up.
-        
+
     Returns:
         Dictionary containing status information if file exists, None otherwise.
     """
@@ -26,10 +26,10 @@ def get_pmid_status(output_dir: str, pmid: str) -> Dict:
 def get_failed_pmids(output_dir: str) -> List[str]:
     """
     Returns a list of failed PMIDs (includes 'failed' and 'paywalled' statuses).
-    
+
     Args:
         output_dir: Directory containing pmid_status subdirectory.
-        
+
     Returns:
         List of PMID strings with failed or paywalled status.
         Empty list if status directory doesn't exist.
@@ -37,7 +37,7 @@ def get_failed_pmids(output_dir: str) -> List[str]:
     status_dir = os.path.join(output_dir, "pmid_status")
     failed_pmids = []
     failed_statuses = {"failed", "paywalled"}
-    
+
     try:
         for filename in os.listdir(status_dir):
             if filename.endswith(".json"):
@@ -48,17 +48,17 @@ def get_failed_pmids(output_dir: str) -> List[str]:
     except FileNotFoundError:
         # Return empty list if status directory doesn't exist yet
         pass
-    
+
     return failed_pmids
 
 
 def get_stats_summary(output_dir: str) -> Dict[str, int]:
     """
     Returns a summary of the status counts.
-    
+
     Args:
         output_dir: Directory containing pmid_status subdirectory.
-        
+
     Returns:
         Dictionary mapping status names to counts.
         Returns all zeros if status directory doesn't exist.
@@ -71,7 +71,7 @@ def get_stats_summary(output_dir: str) -> Dict[str, int]:
         "paywalled": 0,
         "no_variants": 0,
     }
-    
+
     try:
         for filename in os.listdir(status_dir):
             if filename.endswith(".json"):
@@ -82,5 +82,5 @@ def get_stats_summary(output_dir: str) -> Dict[str, int]:
     except FileNotFoundError:
         # Return zero counts if status directory doesn't exist yet
         pass
-    
+
     return status_counts

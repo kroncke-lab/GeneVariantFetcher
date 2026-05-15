@@ -132,6 +132,10 @@ class GenericStrategy(PublisherStrategy):
                 result.supp_files = ctx.scraper.scrape_elsevier_supplements(
                     html, final_url
                 )
+            elif "mayoclinicproceedings.org" in domain:
+                result.supp_files = ctx.scraper.scrape_elsevier_supplements(
+                    html, final_url
+                )
             elif "wiley.com" in domain or "onlinelibrary.wiley.com" in domain:
                 result.supp_files = ctx.scraper.scrape_wiley_supplements(
                     html, final_url
@@ -145,6 +149,10 @@ class GenericStrategy(PublisherStrategy):
                 for d in ("link.springer.com", "biomedcentral.com", "springeropen.com")
             ):
                 result.supp_files = ctx.scraper.scrape_springer_supplements(
+                    html, final_url
+                )
+            elif "karger.com" in domain:
+                result.supp_files = ctx.scraper.scrape_karger_supplements(
                     html, final_url
                 )
             else:

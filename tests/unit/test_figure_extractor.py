@@ -116,6 +116,14 @@ HTML_FIXTURE = textwrap.dedent("""\
         <tr><th>Variant</th><th>Carriers</th></tr>
         <tr><td>p.G604S</td><td>5</td></tr>
       </table>
+      <section class="tw xbox" id="t3-6124">
+        <div class="caption p">
+          <p><strong>Table 3</strong> Mutations visible only in a PMC table image.</p>
+        </div>
+        <p class="img-box">
+          <img class="graphic" src="https://cdn.example.com/T3-6124.jpg"/>
+        </p>
+      </section>
       <section id="supplementary-information">
         <h2>Supplementary Information</h2>
         <p><strong>Supplementary Table S2</strong>: Extended list of 90 missense variants.
@@ -139,11 +147,19 @@ def test_extract_from_html_finds_figure():
 
 def test_extract_from_html_finds_table_caption():
     res = extract_from_html(HTML_FIXTURE)
-    assert len(res.tables) == 1
+    assert len(res.tables) == 2
     tbl = res.tables[0]
     assert "G604S" not in tbl.text  # caption only, not body cells
     assert "cohort" in tbl.text
     assert tbl.label.startswith("Table") or tbl.label.lower().startswith("table")
+
+
+def test_extract_from_html_finds_pmc_image_table_caption_and_image():
+    res = extract_from_html(HTML_FIXTURE)
+    image_table = next(t for t in res.tables if t.table_id == "t3-6124")
+    assert "PMC table image" in image_table.text
+    assert image_table.label == "Table 3"
+    assert image_table.image_url == "https://cdn.example.com/T3-6124.jpg"
 
 
 def test_extract_from_html_finds_supplement_descriptions():
@@ -197,5 +213,5 @@ def test_merge_results_preserves_distinct_items():
     merged = merge_results(xml_res, html_res)
     # Distinct sources should accumulate.
     assert len(merged.figures) >= 2
-    assert len(merged.tables) >= 2
+    assert len(merged.tables) >= 3
     assert len(merged.supplements) >= 2

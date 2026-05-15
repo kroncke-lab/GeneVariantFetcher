@@ -1156,17 +1156,15 @@ class PMCHarvester:
             supplements_dir=supplements_dir,
             pmid=pmid,
             converter=self.converter,
-            download_callback=lambda url,
-            file_path,
-            pmid,
-            filename,
-            supp: self.download_supplement(
-                url,
-                file_path,
-                pmid,
-                filename,
-                supp.get("base_url"),
-                supp.get("original_url"),
+            download_callback=lambda url, file_path, pmid, filename, supp: (
+                self.download_supplement(
+                    url,
+                    file_path,
+                    pmid,
+                    filename,
+                    supp.get("base_url"),
+                    supp.get("original_url"),
+                )
             ),
             extract_figures=extract_figures,
             figures_dir=figures_dir,
@@ -1708,17 +1706,15 @@ class PMCHarvester:
                 supplements_dir=supplements_dir,
                 pmid=pmid,
                 converter=self.converter,
-                download_callback=lambda url,
-                file_path,
-                pmid,
-                filename,
-                supp: self.download_supplement(
-                    url,
-                    file_path,
-                    pmid,
-                    filename,
-                    supp.get("base_url"),
-                    supp.get("original_url"),
+                download_callback=lambda url, file_path, pmid, filename, supp: (
+                    self.download_supplement(
+                        url,
+                        file_path,
+                        pmid,
+                        filename,
+                        supp.get("base_url"),
+                        supp.get("original_url"),
+                    )
                 ),
                 extract_figures=extract_figures,
                 figures_dir=figures_dir,
@@ -1927,11 +1923,9 @@ class PMCHarvester:
             supplements_dir=supplements_dir,
             pmid=pmid,
             converter=self.converter,
-            download_callback=lambda url,
-            file_path,
-            pmid,
-            filename,
-            supp: self.download_supplement(url, file_path, pmid, filename),
+            download_callback=lambda url, file_path, pmid, filename, supp: (
+                self.download_supplement(url, file_path, pmid, filename)
+            ),
             extract_figures=extract_figures,
             figures_dir=figures_dir,
             logger=logger,

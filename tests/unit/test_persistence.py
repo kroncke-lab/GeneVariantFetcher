@@ -41,7 +41,10 @@ def test_append_entries_and_status_file(tmp_path):
 
     # Test with classification parameter
     append_paywalled_entry(
-        paywalled_log, "789", "blocked", "http://example.org",
+        paywalled_log,
+        "789",
+        "blocked",
+        "http://example.org",
         classification="CAPTCHA_BLOCKED",
     )
     paywalled_rows = paywalled_log.read_text(encoding="utf-8").splitlines()

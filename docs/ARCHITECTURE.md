@@ -319,7 +319,7 @@ Checkpoints are stored in `~/.gvf_jobs/{job_id}/checkpoint.json` with atomic wri
        def can_handle(self, doi: str) -> bool:
            """Return True if this publisher can handle the DOI."""
            pass
-       
+
        def download(self, doi: str, output_dir: Path) -> Optional[Path]:
            """Download and return path to content, or None on failure."""
            pass

@@ -41,7 +41,7 @@ pmid,title,publisher,doi
 
 **Supported proxies (Vanderbilt):**
 - Wiley
-- Elsevier  
+- Elsevier
 - Springer
 - Oxford
 - Nature

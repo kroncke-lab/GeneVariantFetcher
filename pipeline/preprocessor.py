@@ -248,13 +248,13 @@ class PaperPreprocessor:
             classifications[cls] = classifications.get(cls, 0) + 1
 
             if (i + 1) % 100 == 0:
-                print(f"  {i+1}/{len(files)} processed...")
+                print(f"  {i + 1}/{len(files)} processed...")
 
         # Summary
         print(f"\n=== PREPROCESSING SUMMARY ===")
         print(f"Total files: {len(files)}")
         for cls, count in sorted(classifications.items(), key=lambda x: -x[1]):
-            print(f"  {cls}: {count} ({count*100//len(files)}%)")
+            print(f"  {cls}: {count} ({count * 100 // len(files)}%)")
 
         avg_reduction = sum(s["reduction_pct"] for s in all_stats) / max(
             1, len(all_stats)
