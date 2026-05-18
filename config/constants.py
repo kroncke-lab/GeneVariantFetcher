@@ -135,6 +135,20 @@ MIN_CONDENSED_SIZE: int = 5000
 # Below this threshold, LLM extraction is skipped (circuit breaker)
 MIN_EXTRACTION_INPUT_SIZE: int = 500
 
+# Reuse threshold for prior-run FULL_CONTEXT.md files.
+# When pre-download consolidation or the orchestrator's thin-context check
+# evaluates an existing FULL_CONTEXT.md, anything at or above this size is
+# treated as reusable; anything smaller is re-fetched.
+#
+# Pre-2026-05-18 this was set to 500 in pipeline/steps.py (consolidate)
+# but 6000 in harvesting/orchestrator.py (thin-context gate). That mismatch
+# caused 500-byte abstract stubs to be copied across runs by consolidation
+# and then immediately re-fetched by the orchestrator, defeating the cache.
+# Unified to 5 KB based on observed file size distribution: abstract-only
+# fallbacks cluster ~2-4 KB; real full text starts ~10 KB; 5 KB is a clean
+# divider.
+REUSE_FULL_CONTEXT_BYTES: int = 5_000
+
 # Minimum ratio of alphanumeric content to total content
 # Below this indicates garbage/placeholder text
 MIN_ALPHANUMERIC_RATIO: float = 0.3

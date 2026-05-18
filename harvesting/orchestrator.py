@@ -19,6 +19,7 @@ from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
+from config.constants import REUSE_FULL_CONTEXT_BYTES
 from utils.bootstrap import initialize_runtime
 from utils.logging_utils import get_logger
 
@@ -76,7 +77,12 @@ logger = get_logger(__name__)
 # PMID pattern: 1-8 digit numeric string
 PMID_PATTERN = re.compile(r"^\d{1,8}$")
 ABSTRACT_ONLY_FALLBACK_MARKER = "abstract-only fallback"
-THIN_FULL_CONTEXT_BYTES = 6_000
+# Aliased from config.constants so the consolidate-prior-downloads path in
+# pipeline/steps.py and this thin-context gate stay in lockstep. Allow an
+# env-var override (GVF_REUSE_FULL_CONTEXT_BYTES) for one-off tuning.
+THIN_FULL_CONTEXT_BYTES = int(
+    os.environ.get("GVF_REUSE_FULL_CONTEXT_BYTES", REUSE_FULL_CONTEXT_BYTES)
+)
 PUBLISHER_SHELL_MARKERS = (
     "eletters should relate to an article recently published",
     "comments and feedback on aha/asa scientific statements",

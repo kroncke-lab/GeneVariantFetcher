@@ -654,10 +654,20 @@ def _consolidate_prior_downloads(
                     if pmid not in prior_files or size > prior_files[pmid][1]:
                         prior_files[pmid] = (full_path, size)
 
-    # Copy recovered files and their associated directories (supplements, figures)
+    # Copy recovered files and their associated directories (supplements, figures).
+    # Uses config.constants.REUSE_FULL_CONTEXT_BYTES (5 KB) — same threshold the
+    # orchestrator's is_thin_full_context() check applies, so consolidation
+    # and the thin-context gate stay in lockstep. Pre-2026-05-18 this was 500
+    # bytes; that mismatch caused abstract stubs to be copied across runs and
+    # then immediately re-fetched, defeating the cache.
+    from config.constants import REUSE_FULL_CONTEXT_BYTES
+
+    reuse_threshold = int(
+        os.environ.get("GVF_REUSE_FULL_CONTEXT_BYTES", REUSE_FULL_CONTEXT_BYTES)
+    )
     for pmid, (src_path, size) in prior_files.items():
-        if size < 500:
-            continue  # Skip near-empty files
+        if size < reuse_threshold:
+            continue  # Skip thin / abstract-only files
 
         dst_path = harvest_dir / f"{pmid}_FULL_CONTEXT.md"
         try:
