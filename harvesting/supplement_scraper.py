@@ -1395,6 +1395,12 @@ class SupplementScraper:
         ".tsv",
     ]
 
+    _NON_SUPPLEMENT_FILENAME_PATTERNS = [
+        r"^media[-_ ]?pack[-_ ]?\d{4}\.pdf$",
+        r"^journal[-_ ]?catalog\d{4}\.pdf$",
+        r"^journal[-_ ]?catalog[-_ ]?\d{4}\.pdf$",
+    ]
+
     def _is_supplement_url(self, href: str) -> bool:
         """Check if a URL contains patterns indicating a supplement file."""
         href_lower = href.lower()
@@ -1410,6 +1416,13 @@ class SupplementScraper:
         # Strip query params and fragments before checking extension
         path = urlparse(href).path.lower()
         return any(path.endswith(ext) for ext in self._FILE_EXTENSIONS)
+
+    def _is_known_non_supplement_file(self, filename: str) -> bool:
+        name = (filename or "").strip().lower()
+        return any(
+            re.search(pattern, name)
+            for pattern in self._NON_SUPPLEMENT_FILENAME_PATTERNS
+        )
 
     def scrape_generic_supplements(self, html: str, base_url: str) -> List[Dict]:
         """
@@ -1480,6 +1493,9 @@ class SupplementScraper:
 
                 # Skip invalid filenames
                 if not filename:
+                    continue
+
+                if self._is_known_non_supplement_file(filename):
                     continue
 
                 # Skip entries that look like PMCIDs (e.g., "PMC3049907")

@@ -264,6 +264,21 @@ class TestFiltering:
         result = scraper.scrape_generic_supplements(html, "https://example.com")
         assert len(result) == 0
 
+    def test_skips_publisher_catalog_and_media_pack_pdfs(self, scraper):
+        html = _make_html(
+            [
+                ("/images/pdf/Media-Pack-2024.pdf", "Media Pack"),
+                ("/images/pdf/JournalCatalog2026.pdf", "Journal catalog"),
+                ("/files/supplementary-table-1.xlsx", "Supplementary Table 1"),
+            ]
+        )
+
+        result = scraper.scrape_generic_supplements(
+            html, "https://www.eurekaselect.com/article"
+        )
+
+        assert [item["name"] for item in result] == ["supplementary-table-1.xlsx"]
+
     def test_skips_javascript_pseudo_links(self, scraper):
         html = _make_html([("javascript:;", "Supplementary material")])
         result = scraper.scrape_generic_supplements(html, "https://example.com")
