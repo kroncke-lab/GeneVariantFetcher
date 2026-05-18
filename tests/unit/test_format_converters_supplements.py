@@ -38,6 +38,15 @@ def test_tsv_to_markdown_falls_back_to_raw_text_for_ragged(tmp_path: Path):
     assert "foo" in md and "bar" in md
 
 
+def test_pdf_to_markdown_accepts_string_path(tmp_path: Path):
+    p = tmp_path / "not_a_pdf.pdf"
+    p.write_text("not a pdf", encoding="utf-8")
+
+    md = FormatConverter().pdf_to_markdown(str(p))
+
+    assert "[Invalid PDF file: not_a_pdf.pdf]" in md
+
+
 def test_html_supplement_to_markdown_extracts_table_rows(converter, tmp_path: Path):
     html = textwrap.dedent("""\
         <html><head><title>Supplementary Table S2</title></head>

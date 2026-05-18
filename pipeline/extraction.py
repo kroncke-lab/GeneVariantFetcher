@@ -732,7 +732,7 @@ class ExpertExtractor(BaseLLMCaller):
     PROTEIN_NOTATION_RE = re.compile(
         r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
         r"\d{1,4}"
-        r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X]|fs(?:X|\*)?\d*|del|dup|ins)",
+        r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del|dup|ins)",
         re.IGNORECASE,
     )
     CDNA_NOTATION_RE = re.compile(
@@ -873,6 +873,7 @@ class ExpertExtractor(BaseLLMCaller):
     VARIANT_CDNA_HEADERS = {
         "nucleotide",
         "nucleotide change",
+        "cds",
         "cdna",
         "c.",
         "cdna change",
@@ -899,6 +900,12 @@ class ExpertExtractor(BaseLLMCaller):
         "amino acid change",
         "protein mutation",
         "missense",
+    }
+    VARIANT_GENE_HEADERS = {
+        "gene",
+        "gene symbol",
+        "genesymbol",
+        "symbol",
     }
     VARIANT_COUNT_HEADERS = {
         "patient",
@@ -995,7 +1002,7 @@ class ExpertExtractor(BaseLLMCaller):
     PROTEIN_TABLE_VALUE_RE = re.compile(
         r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
         r"\d{1,4}"
-        r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X]|fs(?:X|\*)?\d*|del|dup|ins)",
+        r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del|dup|ins)",
         re.IGNORECASE,
     )
     CDNA_TABLE_VALUE_RE = re.compile(
@@ -1112,6 +1119,16 @@ class ExpertExtractor(BaseLLMCaller):
         if self._looks_like_gwas_header(parts):
             return False
 
+        normalized_parts = [
+            re.sub(r"[^a-z0-9.+/-]+", " ", p.lower()).strip() for p in parts
+        ]
+        unnamed_count = sum(p.startswith("unnamed") for p in normalized_parts)
+        if unnamed_count and (
+            unnamed_count >= max(2, len(parts) // 2)
+            or any(p.startswith("table ") for p in normalized_parts)
+        ):
+            return False
+
         has_cdna_header = any(
             self._header_matches(part, self.VARIANT_CDNA_HEADERS) for part in parts
         )
@@ -1168,6 +1185,7 @@ class ExpertExtractor(BaseLLMCaller):
         variants = []
         header_idx = {}
         header_mapping = {}  # Maps our standard keys to actual column indices
+        header_multi = {"count": [], "affected": [], "unaffected": []}
         row_level_clinical_table = False
 
         for line in lines:
@@ -1179,6 +1197,7 @@ class ExpertExtractor(BaseLLMCaller):
                         table_started = False
                         header_mapping = {}
                         header_idx = {}
+                        header_multi = {"count": [], "affected": [], "unaffected": []}
                         row_level_clinical_table = False
                         continue
                     row_level_clinical_table = (
@@ -1193,8 +1212,11 @@ class ExpertExtractor(BaseLLMCaller):
                             header_mapping["cdna"] = idx
                         if self._header_matches(name, self.VARIANT_PROTEIN_HEADERS):
                             header_mapping["protein"] = idx
+                        if self._header_matches(name, self.VARIANT_GENE_HEADERS):
+                            header_mapping["gene"] = idx
                         if self._header_matches(name, self.VARIANT_COUNT_HEADERS):
                             header_mapping["count"] = idx
+                            header_multi["count"].append(idx)
                         if self._header_matches(name, self.VARIANT_ROW_LEVEL_HEADERS):
                             header_mapping["row_subject"] = idx
                         is_unaffected_header = self._header_matches(
@@ -1202,8 +1224,10 @@ class ExpertExtractor(BaseLLMCaller):
                         )
                         if is_unaffected_header:
                             header_mapping["unaffected"] = idx
+                            header_multi["unaffected"].append(idx)
                         elif self._header_matches(name, self.VARIANT_AFFECTED_HEADERS):
                             header_mapping["affected"] = idx
+                            header_multi["affected"].append(idx)
 
                     table_started = True
                 continue
@@ -1215,6 +1239,7 @@ class ExpertExtractor(BaseLLMCaller):
                 else:
                     table_started = False
                     header_mapping = {}
+                    header_multi = {"count": [], "affected": [], "unaffected": []}
                     row_level_clinical_table = False
                     continue
 
@@ -1235,12 +1260,27 @@ class ExpertExtractor(BaseLLMCaller):
                         return None
                 return cells[idx] or None
 
+            def get_cols(key: str) -> List[str]:
+                values = []
+                for idx in header_multi.get(key, []):
+                    if idx < len(cells) and cells[idx]:
+                        values.append(cells[idx])
+                if not values:
+                    value = get_col(key)
+                    if value:
+                        values.append(value)
+                return values
+
             cdna = get_col("cdna")
             protein = get_col("protein")
+            row_gene = get_col("gene")
             patient_count_raw = get_col("count")
             affected_raw = get_col("affected")
             unaffected_raw = get_col("unaffected")
             row_subject_raw = get_col("row_subject")
+
+            if row_gene and row_gene.strip().upper() != gene_symbol.upper():
+                continue
 
             # Validate actual cell values. Header cues alone are not enough:
             # GWAS tables use AA=alternate allele and n=participants, which
@@ -1259,9 +1299,22 @@ class ExpertExtractor(BaseLLMCaller):
                     return int(cleaned)
                 return None
 
-            patient_count = parse_count(patient_count_raw)
-            affected_count = parse_count(affected_raw)
-            unaffected_count = parse_count(unaffected_raw)
+            def parse_count_sum(values: List[str]) -> Optional[int]:
+                parsed = [parse_count(value) for value in values]
+                parsed = [value for value in parsed if value is not None]
+                if not parsed:
+                    return None
+                return sum(parsed)
+
+            patient_count = parse_count_sum(get_cols("count")) or parse_count(
+                patient_count_raw
+            )
+            affected_count = parse_count_sum(get_cols("affected")) or parse_count(
+                affected_raw
+            )
+            unaffected_count = parse_count_sum(get_cols("unaffected")) or parse_count(
+                unaffected_raw
+            )
 
             # Fallback: use last cell if it looks numeric
             if (

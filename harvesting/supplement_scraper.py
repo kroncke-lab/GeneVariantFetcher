@@ -278,6 +278,9 @@ class SupplementScraper:
         Returns:
             Normalized URL
         """
+        if base_url:
+            url = urljoin(base_url, url)
+
         # Check if this is a PMC page and if the URL needs fixing
         if (
             "ncbi.nlm.nih.gov/pmc/articles/" in base_url

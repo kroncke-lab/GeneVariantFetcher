@@ -49,6 +49,14 @@ class UnpaywallClient:
             time.sleep(self._min_request_interval - elapsed)
         self._last_request_time = time.time()
 
+    def _api_headers(self) -> Dict[str, str]:
+        """Use API-specific headers even when sharing a browser-like session."""
+        return {
+            "User-Agent": f"GeneVariantFetcher/1.0 (mailto:{self.email})",
+            "Accept": "application/json",
+            "Accept-Encoding": "identity",
+        }
+
     def find_open_access(
         self, doi: str
     ) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
@@ -95,11 +103,15 @@ class UnpaywallClient:
             # occasionally returns an empty body during deploys; a single
             # retry after a short backoff recovers most of these without
             # mis-classifying the DOI as "not OA".
-            response = self.session.get(url, params=params, timeout=30)
+            response = self.session.get(
+                url, params=params, timeout=30, headers=self._api_headers()
+            )
             if response.status_code == 200 and not response.text.strip():
                 logger.info(f"Empty Unpaywall body for {doi}, retrying once...")
                 time.sleep(1.0)
-                response = self.session.get(url, params=params, timeout=30)
+                response = self.session.get(
+                    url, params=params, timeout=30, headers=self._api_headers()
+                )
 
             if response.status_code == 200:
                 try:

@@ -753,7 +753,7 @@ def _coerce_int(value: Any) -> Optional[int]:
 _PROTEIN_VARIANT_RE = re.compile(
     r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
     r"\d{1,4}"
-    r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X]|fs(?:X|\*)?\d*|del|dup|ins)",
+    r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del|dup|ins)",
     re.IGNORECASE,
 )
 

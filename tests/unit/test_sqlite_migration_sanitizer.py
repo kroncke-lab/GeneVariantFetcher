@@ -74,6 +74,32 @@ def test_migration_keeps_valid_variant_notation(tmp_path):
     conn.close()
 
 
+def test_migration_keeps_uncertain_start_loss_notation(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+
+    extraction_data = {
+        "paper_metadata": {"pmid": "32893267", "title": "Supplemental table"},
+        "variants": [{"gene_symbol": "KCNQ1"}],
+    }
+    insert_paper_metadata(cursor, extraction_data)
+
+    variant_id = insert_variant_data(
+        cursor,
+        "32893267",
+        {
+            "gene_symbol": "KCNQ1",
+            "protein_notation": "p.Met1?",
+        },
+    )
+    conn.commit()
+
+    assert variant_id is not None
+    assert cursor.execute("SELECT COUNT(*) FROM variants").fetchone()[0] == 1
+    conn.close()
+
+
 def test_migration_keeps_multi_residue_deletion(tmp_path):
     """Range HGVS like p.Asp2_Arg135del must survive sanitization.
 

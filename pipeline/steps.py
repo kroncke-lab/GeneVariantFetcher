@@ -1048,7 +1048,7 @@ def extract_variants(
         StepResult with extraction stats
     """
     from pipeline.extraction import ExpertExtractor
-    from utils.models import Paper
+    from utils.models import ExtractionResult, Paper
     from utils.pmid_utils import extract_pmid_from_filename
 
     extraction_dir.mkdir(exist_ok=True)
@@ -1097,6 +1097,32 @@ def extract_variants(
             extractor_local.instance = extractor
         return extractor
 
+    def load_existing_extraction(
+        output_file: Path, pmid: str
+    ) -> Optional[ExtractionResult]:
+        """Return a successful result for an already-written extraction JSON."""
+        if not output_file.exists():
+            return None
+        try:
+            with open(output_file, "r", encoding="utf-8") as f:
+                extracted_data = json.load(f)
+            metadata = (
+                extracted_data.get("extraction_metadata", {})
+                if isinstance(extracted_data, dict)
+                else {}
+            )
+            return ExtractionResult(
+                pmid=pmid,
+                success=True,
+                extracted_data=extracted_data,
+                model_used=metadata.get("model_used"),
+            )
+        except Exception as e:
+            logger.warning(
+                "Could not reuse existing extraction for PMID %s: %s", pmid, e
+            )
+            return None
+
     extractions = []
     failures = []
     total = len(markdown_files) + len(abstract_papers)
@@ -1108,6 +1134,11 @@ def extract_variants(
             return (None, (md_file.name, "Could not extract PMID"))
 
         try:
+            output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
+            existing = load_existing_extraction(output_file, pmid)
+            if existing is not None:
+                return (existing, None)
+
             content = md_file.read_text(encoding="utf-8")
             paper = Paper(
                 pmid=pmid,
@@ -1124,7 +1155,6 @@ def extract_variants(
                 if result.extracted_data:
                     md = result.extracted_data.setdefault("extraction_metadata", {})
                     md["model_used"] = result.model_used
-                output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
                 with open(output_file, "w") as f:
                     json.dump(result.extracted_data, f, indent=2)
                 return (result, None)
@@ -1138,6 +1168,11 @@ def extract_variants(
         pmid: str, record_path: str
     ) -> Tuple[Any, Optional[Tuple[str, str]]]:
         try:
+            output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
+            existing = load_existing_extraction(output_file, pmid)
+            if existing is not None:
+                return (existing, None)
+
             with open(record_path, "r", encoding="utf-8") as f:
                 record = json.load(f)
 
@@ -1161,7 +1196,6 @@ def extract_variants(
                     md["abstract_only"] = True
                     md["model_used"] = result.model_used
 
-                output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
                 with open(output_file, "w") as f:
                     json.dump(result.extracted_data, f, indent=2)
                 return (result, None)

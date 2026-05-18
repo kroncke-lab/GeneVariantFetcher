@@ -722,6 +722,8 @@ class FormatConverter:
         Returns:
             Markdown formatted text or placeholder
         """
+        file_path = Path(file_path)
+
         # First verify the file is a valid PDF
         try:
             with open(file_path, "rb") as f:
@@ -849,6 +851,7 @@ class FormatConverter:
             - base64: Base64-encoded image data (if no output_dir)
         """
         extracted_images: List[Dict] = []
+        file_path = Path(file_path)
 
         # First verify the file is a valid PDF
         try:

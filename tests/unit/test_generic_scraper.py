@@ -6,6 +6,7 @@ without requiring network access.
 
 import pytest
 
+from harvesting.orchestrator import PMCHarvester
 from harvesting.supplement_scraper import SupplementScraper
 
 
@@ -117,6 +118,92 @@ class TestURLPatternMatching:
         )
         result = scraper.scrape_generic_supplements(html, "https://example.com")
         assert len(result) == 1
+
+    def test_pmc_relative_pdf_link_is_normalized(self, scraper):
+        base = "https://pmc.ncbi.nlm.nih.gov/articles/PMC3566559/"
+
+        result = scraper._normalize_pmc_url("pdf/nihms372211.pdf", base)
+
+        assert result == (
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3566559/pdf/nihms372211.pdf"
+        )
+
+    def test_ncbi_ftp_supplement_urls_use_https(self, tmp_path):
+        class Response:
+            def raise_for_status(self):
+                return None
+
+            def iter_content(self, chunk_size=8192):
+                yield b"%PDF-1.4\n%%EOF\n"
+
+        class Session:
+            def __init__(self):
+                self.urls = []
+
+            def get(self, url, **kwargs):
+                self.urls.append(url)
+                return Response()
+
+        harvester = PMCHarvester(output_dir=tmp_path, gene_symbol="KCNH2")
+        harvester.session = Session()
+
+        ok = harvester.download_supplement(
+            "ftp://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_pdf/64/67/test.pdf",
+            tmp_path / "test.pdf",
+            "24596401",
+            "test.pdf",
+        )
+
+        assert ok is True
+        assert harvester.session.urls == [
+            "https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_pdf/64/67/test.pdf"
+        ]
+
+    def test_pmc_relative_supplement_variants_are_normalized_for_download(
+        self, tmp_path
+    ):
+        class Response:
+            def __init__(self, body):
+                self.body = body
+
+            def raise_for_status(self):
+                return None
+
+            def iter_content(self, chunk_size=8192):
+                yield self.body
+
+        class Session:
+            def __init__(self):
+                self.urls = []
+
+            def get(self, url, **kwargs):
+                self.urls.append(url)
+                assert url.startswith("https://")
+                if len(self.urls) == 1:
+                    return Response(b"<html>expired PMC redirect</html>")
+                return Response(b"%PDF-1.4\n%%EOF\n")
+
+        base_url = "https://pmc.ncbi.nlm.nih.gov/articles/PMC5970051/"
+        harvester = PMCHarvester(output_dir=tmp_path, gene_symbol="SCN5A")
+        harvester.session = Session()
+        harvester.scraper.get_pmc_supplement_url_variants = lambda url, base: [
+            "/articles/instance/5970051/bin/test.pdf"
+        ]
+
+        ok = harvester.download_supplement(
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC5970051/bin/test.pdf",
+            tmp_path / "test.pdf",
+            "29514831",
+            "test.pdf",
+            base_url=base_url,
+            original_url="/articles/instance/5970051/bin/test.pdf",
+        )
+
+        assert ok is True
+        assert harvester.session.urls == [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC5970051/bin/test.pdf",
+            "https://pmc.ncbi.nlm.nih.gov/articles/instance/5970051/bin/test.pdf",
+        ]
 
 
 class TestFileExtensionMatching:

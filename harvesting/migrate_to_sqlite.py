@@ -55,7 +55,7 @@ PROTEIN_NOTATION_RE = re.compile(
     # or p.Lys100_Glu105delinsX. Without this, valid multi-residue dels/ins
     # are silently dropped at migration.
     r"(?:_(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])\d{1,4})?"
-    r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X]|fs(?:X|\*)?\d*|del|dup|ins)",
+    r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del|dup|ins)",
     re.IGNORECASE,
 )
 CDNA_NOTATION_RE = re.compile(

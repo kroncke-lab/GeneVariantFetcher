@@ -63,6 +63,39 @@ Table 1. KCNH2 affected and unaffected carriers
     assert pen["unaffected_count"] == 10
 
 
+def test_deterministic_parser_skips_caption_unnamed_header_and_sums_case_columns():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+#### Sheet: S3
+
+| Gene | CDS | Protein | Vartype | Cases-Europe | Cases-Japan |
+|---|---|---|---|---|---|
+| SCN5A | c.3G>A | p.Met1? | start_lost | 99 | 99 |
+
+#### Sheet: S4
+
+| Table S4: List of rare protein altering variants in KCNQ1 cases | Unnamed: 1 | Unnamed: 2 | Unnamed: 3 | Unnamed: 4 | Unnamed: 5 |
+|---|---|---|---|---|---|
+| nan | nan | nan | nan | nan | nan |
+| Gene | CDS | Protein | Vartype | Cases-Europe | Cases-Japan |
+| KCNQ1 | c.2T>C | p.Met1? | start_lost | 1 | 2 |
+| KCNQ1 | c.502G>A | p.Gly168Arg | missense | 9 | 1 |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "KCNQ1")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {"p.Met1?", "p.Gly168Arg"}
+    pen = by_protein["p.Met1?"]["penetrance_data"]
+    assert pen["total_carriers_observed"] == 3
+    assert pen["affected_count"] == 3
+    assert pen["unaffected_count"] == 0
+    pen = by_protein["p.Gly168Arg"]["penetrance_data"]
+    assert pen["total_carriers_observed"] == 10
+    assert pen["affected_count"] == 10
+    assert pen["unaffected_count"] == 0
+
+
 def test_deterministic_parser_infers_one_carrier_per_patient_row_without_count():
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """

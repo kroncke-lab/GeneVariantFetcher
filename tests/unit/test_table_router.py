@@ -154,7 +154,7 @@ def test_parse_routed_table_filters_multigene_and_derives_total():
         header_line="| Gene | Protein | Affected | Unaffected |",
         header_cells=["Gene", "Protein", "Affected", "Unaffected"],
         data_lines=[
-            "| KCNQ1 | p.Gly148Arg | 2 | 3 |",
+            "| KCNQ1 | p.Met1? | 2 | 3 |",
             "| SCN5A | p.Ala226Asp | 9 | 0 |",
         ],
         char_start=0,
@@ -165,7 +165,7 @@ def test_parse_routed_table_filters_multigene_and_derives_total():
     variants = parse_routed_table(table, mapping, "KCNQ1")
 
     assert len(variants) == 1
-    assert variants[0]["protein_notation"] == "p.Gly148Arg"
+    assert variants[0]["protein_notation"] == "p.Met1?"
     pen = variants[0]["penetrance_data"]
     assert pen["total_carriers_observed"] == 5
     assert pen["affected_count"] == 2

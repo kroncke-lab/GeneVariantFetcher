@@ -44,12 +44,16 @@ class UnifiedSupplementFetcher:
             self.crossref_fetcher,
         ]
 
-    def fetch_all(self, pmid: str, doi: str = "") -> List[SupplementFile]:
+    def fetch_all(
+        self, pmid: str, doi: str = "", pmcid: Optional[str] = None
+    ) -> List[SupplementFile]:
         """Fetch supplements from all available tiers, deduplicated.
 
         Args:
             pmid: PubMed ID
             doi: Digital Object Identifier (optional)
+            pmcid: PubMed Central ID when already known by the caller. This
+                avoids a redundant PMID->PMCID lookup in the PMC tier.
 
         Returns:
             Deduplicated list of SupplementFile objects from all sources
@@ -60,7 +64,10 @@ class UnifiedSupplementFetcher:
         for fetcher in self._fetchers:
             fetcher_name = fetcher.__class__.__name__
             try:
-                results = fetcher.fetch(pmid, doi)
+                if isinstance(fetcher, PMCSupplementFetcher):
+                    results = fetcher.fetch(pmid, doi, pmcid=pmcid)
+                else:
+                    results = fetcher.fetch(pmid, doi)
                 new_count = 0
                 for supp in results:
                     norm_url = supp.normalized_url
@@ -84,9 +91,11 @@ class UnifiedSupplementFetcher:
         )
         return all_supplements
 
-    def fetch_tier1(self, pmid: str, doi: str = "") -> List[SupplementFile]:
+    def fetch_tier1(
+        self, pmid: str, doi: str = "", pmcid: Optional[str] = None
+    ) -> List[SupplementFile]:
         """Fetch from PMC only (free tier)."""
-        return self.pmc_fetcher.fetch(pmid, doi)
+        return self.pmc_fetcher.fetch(pmid, doi, pmcid=pmcid)
 
     def fetch_tier2(self, pmid: str, doi: str = "") -> List[SupplementFile]:
         """Fetch from publisher APIs only."""

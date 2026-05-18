@@ -1,0 +1,69 @@
+{
+  "generated_at_utc": "2026-05-15T13:09:53.965286+00:00",
+  "generator_script": "scripts/build_gold_standard_pilots.py",
+  "source_gold_dir": "/Users/kronckbm/GitRepos/GeneVariantFetcher/gene_variant_fetcher_gold_standard",
+  "source_manifest_generated_at_utc": "2026-05-14T16:00:51.015898+00:00",
+  "source_manifest_commit": "dc174b57ffd35057d4e20a5252edad06090570b7",
+  "pmids_per_gene_requested": 10,
+  "genes": {
+    "KCNH2": {
+      "source_recall_input": "normalized/KCNH2_recall_input.csv",
+      "source_clinical_counts": "normalized/KCNH2_clinical_counts.csv",
+      "selected_pmid_count": 10,
+      "pilot_recall_row_count": 346,
+      "pilot_pmids": [
+        "15840476",
+        "19160088",
+        "14661677",
+        "10862095",
+        "29752375",
+        "24667783",
+        "10973849",
+        "26496715",
+        "11854117",
+        "29622001"
+      ]
+    },
+    "KCNQ1": {
+      "source_recall_input": "normalized/KCNQ1_recall_input.csv",
+      "source_clinical_counts": "normalized/KCNQ1_clinical_counts.csv",
+      "selected_pmid_count": 10,
+      "pilot_recall_row_count": 786,
+      "pilot_pmids": [
+        "32893267",
+        "30758498",
+        "17016049",
+        "21129503",
+        "20421371",
+        "24667783",
+        "19716085",
+        "19841300",
+        "22949429",
+        "23631430"
+      ]
+    },
+    "SCN5A": {
+      "source_recall_input": "normalized/SCN5A_recall_input.csv",
+      "source_clinical_counts": "normalized/SCN5A_clinical_counts.csv",
+      "selected_pmid_count": 10,
+      "pilot_recall_row_count": 985,
+      "pilot_pmids": [
+        "20129283",
+        "26669661",
+        "27681629",
+        "20470418",
+        "32533946",
+        "24667783",
+        "30059973",
+        "19716085",
+        "29325976",
+        "28341781"
+      ]
+    }
+  },
+  "notes": [
+    "Recall pilot files are PubMed-only scoring subsets.",
+    "Clinical-count source files remain in the parent gold-standard package.",
+    "RYR2 is excluded by default because its source is xlsx-derived, not Variant_Browser per-PMID SQL."
+  ]
+}

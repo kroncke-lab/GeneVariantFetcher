@@ -15,7 +15,7 @@ import re
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -790,7 +790,7 @@ class PMCHarvester:
         # 1+2. Unified fetcher: PMC (Europe PMC + XML + NCBI OA) + Elsevier API
         try:
             unified = UnifiedSupplementFetcher(timeout=30)
-            supplements = unified.fetch_all(pmid, doi or "")
+            supplements = unified.fetch_all(pmid, doi or "", pmcid=pmcid)
             if supplements:
                 legacy = unified.to_legacy_format(supplements)
                 # Add PMC base_url for URL variant generation if available
@@ -959,6 +959,20 @@ class PMCHarvester:
             )
             # Put primary URL first, then add unique variants
             urls_to_try = [url] + [v for v in variants if v != url]
+
+        normalized_urls_to_try = []
+        for candidate_url in urls_to_try:
+            if base_url:
+                candidate_url = self.scraper._normalize_pmc_url(candidate_url, base_url)
+                candidate_url = urljoin(base_url, candidate_url)
+            if candidate_url.startswith("ftp://ftp.ncbi.nlm.nih.gov/"):
+                normalized_urls_to_try.append(
+                    "https://ftp.ncbi.nlm.nih.gov/"
+                    + candidate_url.removeprefix("ftp://ftp.ncbi.nlm.nih.gov/")
+                )
+                continue
+            normalized_urls_to_try.append(candidate_url)
+        urls_to_try = list(dict.fromkeys(normalized_urls_to_try))
 
         last_error = None
         for try_url in urls_to_try:
@@ -1924,7 +1938,14 @@ class PMCHarvester:
             pmid=pmid,
             converter=self.converter,
             download_callback=lambda url, file_path, pmid, filename, supp: (
-                self.download_supplement(url, file_path, pmid, filename)
+                self.download_supplement(
+                    url,
+                    file_path,
+                    pmid,
+                    filename,
+                    supp.get("base_url"),
+                    supp.get("original_url"),
+                )
             ),
             extract_figures=extract_figures,
             figures_dir=figures_dir,

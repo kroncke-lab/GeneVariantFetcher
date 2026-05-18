@@ -23,14 +23,15 @@ gene_variant_fetcher_gold_standard/
 | KCNH2 | `[dbo].[KCNH2_clinical]`              | yes       |
 | KCNQ1 | `[dbo].[KCNQ1_clinical_v10]`          | yes       |
 | SCN5A | `[SCN5A].[SCN5A_papers]`              | yes       |
-| RYR2  | none — only aggregate variant table exists | **no** |
+| RYR2  | `RYR2_20241129.xlsx` hand-curated literature subset | yes, xlsx-derived |
 
-RYR2's per-paper carrier counts are **not** stored in Variant_Browser. Only the
-aggregate variant-level table `[RyR2].[sub_tmp_AM_REVEL_againstALL_2_adj]` exists,
-which holds pre-summed `total_carriers` / `cpvt` / `unaff` columns. There is no
-RYR2 clinical paper / per-PMID table to export. RYR2 is documented in
-`manifest.json` for transparency but produces no `raw/`, `normalized/`, or
-`recall_input` outputs.
+RYR2's per-paper carrier counts are **not** stored in Variant_Browser. Only an
+aggregate variant-level browser table exists there. The shipped RYR2 gold
+standard is therefore xlsx-derived: the literature rows produce
+`normalized/RYR2_clinical_counts.csv` and `normalized/RYR2_recall_input.csv`,
+while population-only gnomAD rows are preserved separately in
+`raw/RYR2_gnomad_rows.csv`. Treat RYR2 as an edge-case pilot rather than the
+clean Variant_Browser SQL baseline used for KCNH2/KCNQ1/SCN5A.
 
 ## Regeneration command
 

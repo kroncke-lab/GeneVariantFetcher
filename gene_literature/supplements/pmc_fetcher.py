@@ -54,15 +54,19 @@ class PMCSupplementFetcher(SupplementFetcher):
             }
         )
 
-    def fetch(self, pmid: str, doi: str = "") -> List[SupplementFile]:
+    def fetch(
+        self, pmid: str, doi: str = "", pmcid: Optional[str] = None
+    ) -> List[SupplementFile]:
         """Fetch supplement metadata from PMC sources.
 
         Tries Europe PMC API first, then falls back to XML parsing.
         """
-        pmcid = self._resolve_pmcid(pmid)
+        pmcid = pmcid or self._resolve_pmcid(pmid)
         if not pmcid:
             logger.info(f"PMID {pmid} has no PMCID - not in PMC")
             return []
+        if not pmcid.startswith("PMC"):
+            pmcid = f"PMC{pmcid}"
 
         # Tier 1a: Europe PMC supplementary files endpoint
         supplements = self._fetch_europepmc_supplements(pmcid)
@@ -89,9 +93,11 @@ class PMCSupplementFetcher(SupplementFetcher):
         logger.info(f"No PMC supplements found for PMID {pmid} ({pmcid})")
         return []
 
-    def list_supplements(self, pmid: str, doi: str = "") -> List[SupplementFile]:
+    def list_supplements(
+        self, pmid: str, doi: str = "", pmcid: Optional[str] = None
+    ) -> List[SupplementFile]:
         """Alias for fetch()."""
-        return self.fetch(pmid, doi)
+        return self.fetch(pmid, doi, pmcid=pmcid)
 
     # ------------------------------------------------------------------
     # PMID -> PMCID resolution
