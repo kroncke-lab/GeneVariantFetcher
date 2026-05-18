@@ -324,6 +324,80 @@ app.command("discover")(discover_command)
 app.command("reharvest")(reharvest_command)
 
 
+@app.command("gvf-run")
+def gvf_run_command(
+    gene: Annotated[str, typer.Argument(help="Gene symbol (e.g., KCNQ1, SCN5A)")],
+    email: Annotated[
+        str, typer.Option("--email", "-e", help="Your email for NCBI E-utilities")
+    ],
+    output: Annotated[
+        str,
+        typer.Option(
+            "--output", "-o", help="Output root (gene subdir will be created)"
+        ),
+    ],
+    pmid_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--pmid-file",
+            help=(
+                "Optional explicit PMID list (calibrated mode). When set, skips "
+                "discovery + Tier 1/2 filtering and runs the pipeline against "
+                "exactly these PMIDs. Useful when measuring against a known "
+                "gold standard."
+            ),
+        ),
+    ] = None,
+    max_pmids: Annotated[
+        int,
+        typer.Option(
+            "--max-pmids",
+            help="Per-source PMID cap during comprehensive discovery (ignored when --pmid-file is set)",
+        ),
+    ] = 1500,
+    resume_dir: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--resume-dir",
+            help=(
+                "Resume an existing timestamped run dir (sets GVF_RESUME_DIR). "
+                "Reuses pmc_fulltext + extractions already on disk; only "
+                "missing PMIDs get re-fetched."
+            ),
+        ),
+    ] = None,
+    skip: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--skip",
+            help=(
+                "Skip a pipeline step. Composable: --skip doctor, --skip extract, "
+                "--skip layers, --skip report."
+            ),
+        ),
+    ] = None,
+):
+    """One-shot end-to-end driver: cold start → scored variant DB.
+
+    Wraps extract → migrate → recovery layers → scoring + report into one
+    command. Auto-detects gold standard CSV and KCNH2 v12 baseline DB.
+    See cli/gvf_run.py for the per-step breakdown.
+    """
+    from cli.gvf_run import run_gvf_pipeline
+
+    exit_code = run_gvf_pipeline(
+        gene=gene,
+        email=email,
+        output=Path(output),
+        pmid_file=pmid_file,
+        max_pmids=max_pmids,
+        resume_dir=resume_dir,
+        skip=list(skip) if skip else None,
+    )
+    if exit_code != 0:
+        raise typer.Exit(exit_code)
+
+
 @app.command("audit-paywalls")
 def audit_paywalls_command(
     harvest_dir: Annotated[

@@ -284,3 +284,46 @@ def test_run_all_layers_help():
     assert result.returncode == 0
     assert "--with-v12" in result.stdout, "with-v12 flag missing from CLI"
     assert "--gene" in result.stdout
+
+
+# ---------------------------------------------------------------------------
+# gvf-run wiring tests
+# ---------------------------------------------------------------------------
+
+
+def test_gvf_run_help():
+    """The cli gvf-run command parses --help cleanly."""
+    result = subprocess.run(
+        [sys.executable, "-m", "cli", "gvf-run", "--help"],
+        capture_output=True,
+        text=True,
+        cwd=str(REPO_ROOT),
+    )
+    assert result.returncode == 0
+    assert "--pmid-file" in result.stdout
+    assert "--resume-dir" in result.stdout
+    assert "--skip" in result.stdout
+
+
+def test_gvf_run_helpers_resolve_paths(tmp_path: Path):
+    """gvf-run's auto-detect helpers behave correctly on a synthetic layout."""
+    from cli.gvf_run import _find_db, _find_gold, _find_v12_db
+
+    # _find_db picks the gene-named DB when present
+    run_dir = tmp_path / "RUN"
+    run_dir.mkdir()
+    (run_dir / "FOO.db").write_bytes(b"")
+    assert _find_db(run_dir, "FOO") == run_dir / "FOO.db"
+
+    # _find_db falls back to latest *.db when no gene-named DB
+    (run_dir / "FOO.db").unlink()
+    (run_dir / "other.db").write_bytes(b"")
+    assert _find_db(run_dir, "FOO") == run_dir / "other.db"
+
+    # _find_db returns None when no DB at all
+    (run_dir / "other.db").unlink()
+    assert _find_db(run_dir, "FOO") is None
+
+    # _find_v12_db refuses non-KCNH2 genes
+    assert _find_v12_db("KCNQ1") is None
+    assert _find_v12_db("RYR2") is None
