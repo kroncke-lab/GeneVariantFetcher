@@ -148,46 +148,65 @@ KCNH2_VARIANT_ALIASES = {
     "c.1129-1G>A": ["c.1129-1G>A", "IVS5-1G>A"],
 }
 
-# Build reverse lookup for aliases from hardcoded dict
+# Build reverse lookup for KCNH2 aliases from hardcoded dict
 _KCNH2_ALIAS_LOOKUP = {}
 for canonical, aliases in KCNH2_VARIANT_ALIASES.items():
     for alias in aliases:
         _KCNH2_ALIAS_LOOKUP[alias.upper()] = canonical
 
-# Load comprehensive alias dictionary from JSON if available
-_KCNH2_COMPREHENSIVE_ALIASES = {}
-try:
-    import json
-    from pathlib import Path
 
-    _alias_path = Path(__file__).parent.parent / "data" / "kcnh2_variant_aliases.json"
-    if _alias_path.exists():
-        with open(_alias_path) as f:
-            _alias_data = json.load(f)
-            _KCNH2_COMPREHENSIVE_ALIASES = _alias_data.get("aliases", {})
-            logger.debug(
-                f"Loaded {len(_KCNH2_COMPREHENSIVE_ALIASES)} KCNH2 aliases from JSON"
-            )
-except Exception as e:
-    logger.warning(f"Could not load KCNH2 alias dictionary: {e}")
+# Per-gene comprehensive alias dictionary loader.
+# Reads ``data/{gene_lower}_variant_aliases.json`` on first use, caches result.
+# JSON shape: ``{"aliases": {"ALIAS_UPPER": "canonical", ...}}``.
+# Returns an empty dict for genes without an alias file — never raises.
+_DATA_DIR = None
+_alias_cache: dict[str, dict[str, str]] = {}
+
+
+def _load_gene_aliases(gene: str) -> dict[str, str]:
+    """Load the per-gene alias map. Returns {} when the JSON is absent."""
+    global _DATA_DIR
+    gene_upper = gene.upper()
+    if gene_upper in _alias_cache:
+        return _alias_cache[gene_upper]
+    try:
+        import json
+        from pathlib import Path
+
+        if _DATA_DIR is None:
+            _DATA_DIR = Path(__file__).parent.parent / "data"
+        path = _DATA_DIR / f"{gene.lower()}_variant_aliases.json"
+        if path.exists():
+            with open(path) as f:
+                payload = json.load(f)
+            aliases = payload.get("aliases", {})
+            logger.debug("Loaded %d %s aliases from %s", len(aliases), gene_upper, path)
+            _alias_cache[gene_upper] = aliases
+            return aliases
+    except Exception as exc:
+        logger.warning("Alias file load failed for %s: %s", gene_upper, exc)
+    _alias_cache[gene_upper] = {}
+    return {}
 
 
 def _lookup_alias(variant: str, gene: str = "KCNH2") -> Optional[str]:
-    """
-    Look up a variant in the comprehensive alias dictionary.
-    Returns the canonical form if found, None otherwise.
-    """
-    if gene.upper() != "KCNH2":
-        return None
+    """Look up *variant* in the alias dictionary for *gene*.
 
+    Returns the canonical form if found, else ``None``. For KCNH2 the
+    hardcoded ``KCNH2_VARIANT_ALIASES`` falls in as a second tier; for any
+    other gene the result depends solely on the per-gene JSON alias file
+    (absent file → no aliases, which is fine for cold-start genes).
+    """
     v_upper = variant.upper().strip()
+    gene_upper = gene.upper()
 
-    # Try comprehensive aliases first (from JSON)
-    if v_upper in _KCNH2_COMPREHENSIVE_ALIASES:
-        return _KCNH2_COMPREHENSIVE_ALIASES[v_upper]
+    # Primary: per-gene JSON aliases (gene-agnostic; loads any gene's file)
+    per_gene = _load_gene_aliases(gene_upper)
+    if v_upper in per_gene:
+        return per_gene[v_upper]
 
-    # Fall back to hardcoded aliases
-    if v_upper in _KCNH2_ALIAS_LOOKUP:
+    # Secondary: legacy hardcoded KCNH2 aliases — only consulted for KCNH2
+    if gene_upper == "KCNH2" and v_upper in _KCNH2_ALIAS_LOOKUP:
         return _KCNH2_ALIAS_LOOKUP[v_upper]
 
     return None
@@ -1414,12 +1433,13 @@ def normalize_variant(variant: str, gene_symbol: str = "KCNH2") -> str:
     )
     if ivs_match:
         ivs_num, offset, ref, alt = ivs_match.groups()
-        # Try to convert to c. notation using gene-specific map
+        # Try to convert to c. notation using gene-specific map. KCNH2 has a
+        # hardcoded map; other genes get raw IVS notation back (still a
+        # well-formed canonical form for comparison).
         if gene_symbol.upper() == "KCNH2":
             base_pos = KCNH2_IVS_MAP.get(f"IVS{ivs_num}")
             if base_pos:
                 return f"{base_pos}{offset}{ref.upper()}>{alt.upper()}"
-        # If no mapping, return cleaned up IVS notation
         return f"IVS{ivs_num}{offset}{ref.upper()}>{alt.upper()}"
 
     # === RULE 4: Protein variant detection ===

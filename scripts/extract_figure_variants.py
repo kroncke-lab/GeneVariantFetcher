@@ -46,7 +46,24 @@ from harvesting.figure_variant_reader import (  # noqa: E402
 logger = logging.getLogger("extract_figure_variants")
 
 
-def _load_pmid_list(args: argparse.Namespace) -> List[str]:
+def _discover_pmids_with_figures(pmc_dir: Path) -> List[str]:
+    """Find every PMID under *pmc_dir* whose ``{PMID}_figures/`` has images."""
+    from harvesting.figure_variant_reader import is_image_path  # noqa: E402
+
+    pmids: List[str] = []
+    if not pmc_dir.is_dir():
+        return pmids
+    for fig_dir in sorted(pmc_dir.glob("*_figures")):
+        if not fig_dir.is_dir():
+            continue
+        if any(is_image_path(p) for p in fig_dir.iterdir() if p.is_file()):
+            pmid = fig_dir.name.replace("_figures", "")
+            if pmid.isdigit():
+                pmids.append(pmid)
+    return pmids
+
+
+def _load_pmid_list(args: argparse.Namespace, pmc_dir: Path) -> List[str]:
     pmids: List[str] = list(args.pmid or [])
     if args.pmid_file:
         for line in Path(args.pmid_file).read_text().splitlines():
@@ -63,8 +80,13 @@ def _load_pmid_list(args: argparse.Namespace) -> List[str]:
                 if pid and pid not in seen:
                     seen.add(pid)
                     pmids.append(pid)
+    if args.auto_pmids:
+        pmids.extend(_discover_pmids_with_figures(pmc_dir))
     if not pmids:
-        sys.exit("No PMIDs provided. Use --pmid, --pmid-file, or --missing-csv.")
+        sys.exit(
+            "No PMIDs provided. Use --pmid, --pmid-file, --missing-csv, "
+            "or --auto-pmids to walk the pmc-dir for any PMID with figures."
+        )
     seen = set()
     out: List[str] = []
     for p in pmids:
@@ -108,19 +130,38 @@ def ingest_report(
     """Write extracted variants to *db_path*. Returns number of new variant_papers rows."""
     if not report.distinct_variants:
         return 0
+    return ingest_cached_variants(
+        pmid=report.pmid,
+        gene=report.gene,
+        distinct=report.distinct_variants,
+        db_path=db_path,
+        source_tag=source_tag,
+    )
+
+
+def ingest_cached_variants(
+    pmid: str,
+    gene: str,
+    distinct: list,
+    db_path: Path,
+    source_tag: str = "figure-reader (cached)",
+) -> int:
+    """Write a pre-deduped variant list into *db_path*."""
+    if not distinct:
+        return 0
     con = sqlite3.connect(str(db_path))
     try:
-        _ensure_paper(con, report.pmid, report.gene)
+        _ensure_paper(con, pmid, gene)
         added = 0
-        for v in report.distinct_variants:
+        for v in distinct:
             cdna = (v.get("cdna") or "").strip() or None
             protein = (v.get("protein") or "").strip() or None
             if not (cdna or protein):
                 continue
-            vid = _ensure_variant(con, report.gene, cdna, protein)
+            vid = _ensure_variant(con, gene, cdna, protein)
             exists = con.execute(
                 "SELECT 1 FROM variant_papers WHERE variant_id=? AND pmid=?",
-                (vid, report.pmid),
+                (vid, pmid),
             ).fetchone()
             if exists:
                 continue
@@ -131,7 +172,7 @@ def ingest_report(
                 """INSERT INTO variant_papers
                    (variant_id, pmid, source_location, additional_notes, key_quotes)
                    VALUES (?, ?, ?, ?, ?)""",
-                (vid, report.pmid, source_tag, note, "[]"),
+                (vid, pmid, source_tag, note, "[]"),
             )
             added += 1
         con.commit()
@@ -141,10 +182,10 @@ def ingest_report(
 
 
 def run(args: argparse.Namespace) -> int:
-    pmids = _load_pmid_list(args)
+    pmc_dir = Path(args.pmc_dir).expanduser()
+    pmids = _load_pmid_list(args, pmc_dir)
     out_dir = Path(args.out).expanduser()
     out_dir.mkdir(parents=True, exist_ok=True)
-    pmc_dir = Path(args.pmc_dir).expanduser()
 
     summary = {
         "gene": args.gene,
@@ -155,17 +196,69 @@ def run(args: argparse.Namespace) -> int:
 
     total_variants = 0
     total_db_added = 0
+    cached_pmids = 0
     for pmid in pmids:
         images = find_pmid_figures(pmc_dir, pmid)
         if not images:
             logger.warning("PMID %s: no figures on disk under %s", pmid, pmc_dir)
             summary["pmids"].append(
-                {"pmid": pmid, "figures": 0, "variants": 0, "db_added": 0}
+                {
+                    "pmid": pmid,
+                    "figures": 0,
+                    "variants": 0,
+                    "db_added": 0,
+                    "cached": False,
+                }
             )
             continue
 
         if args.max_images is not None:
             images = images[: args.max_images]
+
+        report_file = out_dir / f"{pmid}.json"
+        if report_file.exists() and not args.force:
+            try:
+                cached = json.loads(report_file.read_text())
+                logger.info(
+                    "PMID %s: cached report at %s, skipping (use --force to re-run)",
+                    pmid,
+                    report_file,
+                )
+                cached_pmids += 1
+                variants = cached.get("distinct_variants", [])
+                total_variants += len(variants)
+                db_added = 0
+                if args.db and variants:
+                    # Rebuild a minimal report object for ingestion
+                    report = PMIDFigureReport(
+                        pmid=cached.get("pmid", pmid),
+                        gene=cached.get("gene", args.gene),
+                    )
+                    # We only need distinct_variants on the report for ingest
+                    report.per_figure = []  # not needed for ingest
+                    # Inject the deduped variant list directly
+                    setattr(report, "_cached_distinct", variants)
+                    db_added = ingest_cached_variants(
+                        pmid=cached.get("pmid", pmid),
+                        gene=cached.get("gene", args.gene),
+                        distinct=variants,
+                        db_path=Path(args.db),
+                    )
+                    total_db_added += db_added
+                summary["pmids"].append(
+                    {
+                        "pmid": pmid,
+                        "figures": len(images),
+                        "variants": len(variants),
+                        "db_added": db_added,
+                        "cached": True,
+                    }
+                )
+                continue
+            except Exception as exc:
+                logger.warning(
+                    "PMID %s: cached read failed (%s); re-running", pmid, exc
+                )
 
         logger.info("PMID %s: reading %d figure(s)", pmid, len(images))
         report = read_figures_for_pmid(
@@ -176,7 +269,6 @@ def run(args: argparse.Namespace) -> int:
             max_images=args.max_images,
         )
 
-        report_file = out_dir / f"{pmid}.json"
         report_file.write_text(json.dumps(report.to_dict(), indent=2))
         variants = report.distinct_variants
         total_variants += len(variants)
@@ -196,8 +288,10 @@ def run(args: argparse.Namespace) -> int:
                 "figures": len(images),
                 "variants": len(variants),
                 "db_added": db_added,
+                "cached": False,
             }
         )
+    summary["cached_pmids"] = cached_pmids
 
     summary["total_variants"] = total_variants
     summary["total_db_added"] = total_db_added
@@ -232,6 +326,19 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--missing-csv",
         help="CSV with a 'pmid' column (e.g. recall missing_in_sqlite.csv)",
+    )
+    p.add_argument(
+        "--auto-pmids",
+        action="store_true",
+        help="Auto-discover PMIDs by walking pmc-dir for any {PMID}_figures/ "
+        "subdirectory with at least one image file. Composable with the other "
+        "PMID sources.",
+    )
+    p.add_argument(
+        "--force",
+        action="store_true",
+        help="Re-run the vision LLM even when a cached per-PMID report exists "
+        "at {out}/{PMID}.json. Default: skip cached PMIDs.",
     )
     p.add_argument(
         "--db",

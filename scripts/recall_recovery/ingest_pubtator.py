@@ -1,122 +1,276 @@
-import requests
-import time
-import json
-import sqlite3
+#!/usr/bin/env python3
+"""Ingest PubTator3 text-mined mutations for each gold-standard PMID.
+
+For each PMID in the gold-standard CSV, query NCBI PubTator3 for mutation
+annotations, filter to the target gene by NCBI Gene ID, and insert any
+new (PMID, variant) pairs into the recall DB as ``variant_papers`` rows
+tagged ``PubTator3 (text-mined)``.
+
+Gene-agnostic: pass ``--gene`` and the matching gold CSV; the script
+auto-resolves the NCBI Gene ID for filtering PubTator annotations.
+
+Usage::
+
+    python scripts/recall_recovery/ingest_pubtator.py \\
+        --gene KCNQ1 \\
+        --db results/KCNQ1/<timestamp>/KCNQ1.db \\
+        --gold gene_variant_fetcher_gold_standard/normalized/KCNQ1_recall_input.csv
+"""
+
+from __future__ import annotations
+
+import argparse
 import csv
+import json
+import logging
+import os
 import re
+import sqlite3
+import sys
+import time
 from collections import defaultdict
+from pathlib import Path
+from typing import Optional
 
-# Load gold PMIDs
-gold_pmids = set()
-with open("gene_variant_fetcher_gold_standard/normalized/KCNH2_recall_input.csv") as f:
-    for r in csv.DictReader(f):
-        gold_pmids.add(r["pmid"])
-print(f"Gold PMIDs: {len(gold_pmids)}")
+import requests
+from dotenv import load_dotenv
 
-# Batch PubTator queries (100 PMIDs per request)
-all_muts = defaultdict(list)
-pmid_list = sorted(gold_pmids)
-for i in range(0, len(pmid_list), 50):
-    batch = pmid_list[i : i + 50]
-    url = f"https://www.ncbi.nlm.nih.gov/research/pubtator-api/publications/export/biocjson?pmids={','.join(batch)}"
+logger = logging.getLogger("ingest_pubtator")
+
+NCBI_ESEARCH = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
+PUBTATOR_EXPORT = (
+    "https://www.ncbi.nlm.nih.gov/research/pubtator-api/publications/export/biocjson"
+)
+
+
+# ---------------------------------------------------------------------------
+# Gene-ID resolution (reused pattern from ingest_clinvar.py)
+# ---------------------------------------------------------------------------
+
+
+def resolve_gene_id(gene: str, email: str, api_key: str) -> Optional[str]:
+    params = {
+        "db": "gene",
+        "term": f"{gene}[Gene Symbol] AND human[Organism]",
+        "retmode": "json",
+        "retmax": 5,
+        "tool": "GVF",
+        "email": email,
+    }
+    if api_key:
+        params["api_key"] = api_key
     try:
-        r = requests.get(url, timeout=120)
-        if r.status_code != 200:
-            print(f"Batch {i}: status {r.status_code}")
+        r = requests.get(NCBI_ESEARCH, params=params, timeout=30)
+    except Exception as exc:
+        logger.warning("Gene ID lookup failed for %s: %s", gene, exc)
+        return None
+    if r.status_code != 200:
+        return None
+    ids = r.json().get("esearchresult", {}).get("idlist", [])
+    return ids[0] if ids else None
+
+
+# ---------------------------------------------------------------------------
+# PubTator client
+# ---------------------------------------------------------------------------
+
+
+def fetch_pubtator_mutations(
+    pmids: list[str], gene_id: str, batch_size: int = 50
+) -> dict[str, list[tuple[str, str]]]:
+    """Return ``{pmid: [(text, hgvs), ...]}`` for *gene_id* across *pmids*."""
+    out: dict[str, list[tuple[str, str]]] = defaultdict(list)
+    gene_marker = f"CorrespondingGene:{gene_id}"
+    for i in range(0, len(pmids), batch_size):
+        batch = pmids[i : i + batch_size]
+        url = f"{PUBTATOR_EXPORT}?pmids={','.join(batch)}"
+        try:
+            r = requests.get(url, timeout=120)
+        except Exception as exc:
+            logger.warning("Batch %d: %s", i, exc)
             continue
-        data = json.loads(r.text)
+        if r.status_code != 200:
+            logger.warning("Batch %d: status %d", i, r.status_code)
+            continue
+        try:
+            data = json.loads(r.text)
+        except json.JSONDecodeError:
+            continue
         for doc in data.get("PubTator3", []):
             pmid = doc.get("id")
             for passage in doc.get("passages", []):
                 for ann in passage.get("annotations", []):
                     t = ann.get("infons", {}).get("type", "")
-                    if t in (
+                    if t not in {
                         "Mutation",
                         "DNAMutation",
                         "ProteinMutation",
                         "SNP",
                         "Variant",
-                    ):
-                        text = ann.get("text", "")
-                        identifier = ann.get("infons", {}).get("identifier", "")
-                        # Only KCNH2 mutations (gene 3757)
-                        if "CorrespondingGene:3757" in identifier:
-                            # Extract HGVS form
-                            hgvs_m = re.search(r"HGVS:([pc]\.[^;]+)", identifier)
-                            hgvs = hgvs_m.group(1) if hgvs_m else text
-                            all_muts[pmid].append((text, hgvs))
+                    }:
+                        continue
+                    text = ann.get("text", "")
+                    identifier = ann.get("infons", {}).get("identifier", "")
+                    if gene_marker not in identifier:
+                        continue
+                    hgvs_m = re.search(r"HGVS:([pc]\.[^;]+)", identifier)
+                    hgvs = hgvs_m.group(1) if hgvs_m else text
+                    out[pmid].append((text, hgvs))
         time.sleep(0.5)
-    except Exception as e:
-        print(f"Batch {i}: {e}")
-    if i % 200 == 0:
-        print(f"  Progress: {i}/{len(pmid_list)}")
-
-print(f"\nTotal PMIDs with KCNH2 mutations: {len(all_muts)}")
-total = sum(len(v) for v in all_muts.values())
-print(f"Total mutations: {total}")
-
-# Now ingest
-DB = "results/KCNH2/20260517_074737/KCNH2.db"
-con = sqlite3.connect(DB)
-con.row_factory = sqlite3.Row
+        if i % 200 == 0:
+            logger.info("  progress: %d / %d", i, len(pmids))
+    return out
 
 
-def ensure_paper(pmid):
-    if not con.execute("SELECT 1 FROM papers WHERE pmid=?", (pmid,)).fetchone():
-        con.execute(
-            "INSERT OR IGNORE INTO papers (pmid, gene_symbol, extraction_summary) VALUES (?, 'KCNH2', 'PubTator stub')",
-            (pmid,),
-        )
+# ---------------------------------------------------------------------------
+# DB inserts
+# ---------------------------------------------------------------------------
 
 
-def parse_hgvs(hgvs):
+def ensure_paper(con: sqlite3.Connection, pmid: str, gene: str) -> None:
+    if con.execute("SELECT 1 FROM papers WHERE pmid=?", (pmid,)).fetchone():
+        return
+    con.execute(
+        "INSERT OR IGNORE INTO papers (pmid, gene_symbol, extraction_summary) "
+        "VALUES (?, ?, 'PubTator stub')",
+        (pmid, gene),
+    )
+
+
+def parse_hgvs(hgvs: str) -> tuple[Optional[str], Optional[str]]:
     if hgvs.startswith("p."):
         return None, hgvs
-    elif hgvs.startswith("c."):
+    if hgvs.startswith("c."):
         return hgvs, None
     return None, None
 
 
-def ensure_variant(cdna, protein):
+def ensure_variant(
+    con: sqlite3.Connection, gene: str, cdna: Optional[str], protein: Optional[str]
+) -> int:
     row = con.execute(
         """SELECT variant_id FROM variants
-                          WHERE gene_symbol='KCNH2' AND cdna_notation IS ?
-                            AND protein_notation IS ? AND genomic_position IS NULL""",
-        (cdna, protein),
+           WHERE gene_symbol=? AND cdna_notation IS ?
+             AND protein_notation IS ? AND genomic_position IS NULL""",
+        (gene, cdna, protein),
     ).fetchone()
     if row:
-        return row[0]
-    return con.execute(
-        "INSERT INTO variants (gene_symbol, cdna_notation, protein_notation) VALUES ('KCNH2', ?, ?)",
-        (cdna, protein),
-    ).lastrowid
+        return int(row[0])
+    cur = con.execute(
+        "INSERT INTO variants (gene_symbol, cdna_notation, protein_notation) VALUES (?, ?, ?)",
+        (gene, cdna, protein),
+    )
+    return int(cur.lastrowid)
 
 
-added = 0
-con.execute("BEGIN")
-for pmid, muts in all_muts.items():
-    if pmid not in gold_pmids:
-        continue
-    ensure_paper(pmid)
-    for text, hgvs in muts:
-        cdna, protein = parse_hgvs(hgvs)
-        if not (cdna or protein):
-            # Fall back: try parsing text
-            text_clean = text.replace("p.", "")
-            if re.match(r"^[A-Z]\d+[A-Z*X]+$", text_clean):
-                protein = f"p.{text_clean}"
-            elif text_clean.startswith("c."):
-                cdna = text_clean
-        if not (cdna or protein):
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
+
+
+def build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    p.add_argument("--gene", required=True, help="Gene symbol (e.g. KCNH2, KCNQ1)")
+    p.add_argument("--db", required=True, help="Path to the recall SQLite DB")
+    p.add_argument("--gold", required=True, help="Path to the gold-standard recall CSV")
+    p.add_argument(
+        "--gene-id",
+        default=None,
+        help="Override NCBI Gene ID (else auto-resolved from --gene)",
+    )
+    p.add_argument(
+        "--email", default=None, help="Override NCBI email (else NCBI_EMAIL env var)"
+    )
+    p.add_argument("--verbose", "-v", action="store_true")
+    return p
+
+
+def main() -> int:
+    args = build_parser().parse_args()
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.INFO,
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    )
+    load_dotenv()
+
+    gene = args.gene.upper()
+    db_path = Path(args.db)
+    gold_path = Path(args.gold)
+    email = args.email or os.environ.get("NCBI_EMAIL")
+    api_key = os.environ.get("NCBI_API_KEY", "")
+
+    if not db_path.exists():
+        sys.exit(f"DB not found: {db_path}")
+    if not gold_path.exists():
+        sys.exit(f"Gold CSV not found: {gold_path}")
+    if not email:
+        sys.exit("NCBI_EMAIL not set (export it or pass --email)")
+
+    gene_id = args.gene_id or resolve_gene_id(gene, email, api_key)
+    if not gene_id:
+        sys.exit(
+            f"Could not resolve NCBI Gene ID for {gene}; pass --gene-id explicitly"
+        )
+    logger.info("Gene %s → NCBI Gene ID %s", gene, gene_id)
+
+    gold_pmids: set[str] = set()
+    with gold_path.open() as f:
+        for r in csv.DictReader(f):
+            if r.get("pmid"):
+                gold_pmids.add(r["pmid"])
+    logger.info("Gold PMIDs: %d", len(gold_pmids))
+
+    pmid_list = sorted(gold_pmids)
+    all_muts = fetch_pubtator_mutations(pmid_list, gene_id)
+    logger.info(
+        "PMIDs with %s mutations: %d (total annotations: %d)",
+        gene,
+        len(all_muts),
+        sum(len(v) for v in all_muts.values()),
+    )
+
+    con = sqlite3.connect(str(db_path))
+    con.row_factory = sqlite3.Row
+
+    added = 0
+    con.execute("BEGIN")
+    for pmid, muts in all_muts.items():
+        if pmid not in gold_pmids:
             continue
-        vid = ensure_variant(cdna, protein)
-        if not con.execute(
-            "SELECT 1 FROM variant_papers WHERE variant_id=? AND pmid=?", (vid, pmid)
-        ).fetchone():
-            con.execute(
-                "INSERT INTO variant_papers (variant_id, pmid, source_location, additional_notes) VALUES (?, ?, ?, ?)",
-                (vid, pmid, "PubTator3 (text-mined)", text),
-            )
-            added += 1
-con.commit()
-print(f"Added {added} variant_papers from PubTator3")
+        ensure_paper(con, pmid, gene)
+        for text, hgvs in muts:
+            cdna, protein = parse_hgvs(hgvs)
+            if not (cdna or protein):
+                text_clean = text.replace("p.", "")
+                if re.match(r"^[A-Z]\d+[A-Z*X]+$", text_clean):
+                    protein = f"p.{text_clean}"
+                elif text_clean.startswith("c."):
+                    cdna = text_clean
+            if not (cdna or protein):
+                continue
+            vid = ensure_variant(con, gene, cdna, protein)
+            if not con.execute(
+                "SELECT 1 FROM variant_papers WHERE variant_id=? AND pmid=?",
+                (vid, pmid),
+            ).fetchone():
+                con.execute(
+                    """INSERT INTO variant_papers
+                       (variant_id, pmid, source_location, additional_notes)
+                       VALUES (?, ?, 'PubTator3 (text-mined)', ?)""",
+                    (vid, pmid, text),
+                )
+                added += 1
+    con.commit()
+    logger.info("Added %d variant_papers from PubTator3", added)
+    print(
+        json.dumps(
+            {"gene": gene, "gene_id": gene_id, "added": added, "pmids": len(gold_pmids)}
+        )
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
