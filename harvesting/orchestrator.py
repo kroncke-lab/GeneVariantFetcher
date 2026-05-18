@@ -828,6 +828,14 @@ class PMCHarvester:
                 )
                 all_supplements.extend(pmc_html_supps)
 
+        all_supplements = [
+            f
+            for f in all_supplements
+            if not self.scraper._is_known_non_supplement_file(
+                f.get("name") or Path(urlparse(f.get("url", "")).path).name
+            )
+        ]
+
         # 4. Fallback: DOI-based web scraping (existing logic)
         if not all_supplements and doi:
             print(f"  - Falling back to DOI scraping for {doi}")
@@ -912,6 +920,8 @@ class PMCHarvester:
             normalized = self.scraper._normalize_pmc_url(href, base_url)
             filename = Path(urlparse(normalized).path).name
             if not filename:
+                continue
+            if self.scraper._is_known_non_supplement_file(filename):
                 continue
             if filename.lower().startswith("pmc") and "." not in filename:
                 continue

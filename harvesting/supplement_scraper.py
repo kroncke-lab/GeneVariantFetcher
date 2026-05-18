@@ -1399,6 +1399,7 @@ class SupplementScraper:
         r"^media[-_ ]?pack[-_ ]?\d{4}\.pdf$",
         r"^journal[-_ ]?catalog\d{4}\.pdf$",
         r"^journal[-_ ]?catalog[-_ ]?\d{4}\.pdf$",
+        r"(?:electronic[-_ ]?)?(?:copyright|disclosure)[-_ ]?form.*\.pdf$",
     ]
 
     def _is_supplement_url(self, href: str) -> bool:

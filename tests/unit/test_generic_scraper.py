@@ -269,6 +269,16 @@ class TestFiltering:
             [
                 ("/images/pdf/Media-Pack-2024.pdf", "Media Pack"),
                 ("/images/pdf/JournalCatalog2026.pdf", "Journal catalog"),
+                (
+                    "/articles/instance/3989843/bin/"
+                    "NIHMS571079-supplement-Electronic_Copyright_Form_for_Author.pdf",
+                    "Supplementary PDF",
+                ),
+                (
+                    "/articles/instance/4114079/bin/"
+                    "NIHMS592263-supplement-Electronic_Disclosure_Form_for_Author.pdf",
+                    "Supplementary PDF",
+                ),
                 ("/files/supplementary-table-1.xlsx", "Supplementary Table 1"),
             ]
         )
@@ -278,6 +288,44 @@ class TestFiltering:
         )
 
         assert [item["name"] for item in result] == ["supplementary-table-1.xlsx"]
+
+    def test_pmc_html_scraper_skips_administrative_forms(self, tmp_path):
+        class Response:
+            text = _make_html(
+                [
+                    (
+                        "/articles/instance/4114079/bin/"
+                        "NIHMS592263-supplement-Electronic_Copyright_Form_for_Author.pdf",
+                        "Supplementary PDF",
+                    ),
+                    (
+                        "/articles/instance/4114079/bin/"
+                        "NIHMS592263-supplement-Electronic_Disclosure_Form_for_Author.pdf",
+                        "Supplementary PDF",
+                    ),
+                    (
+                        "/articles/instance/4114079/bin/"
+                        "NIHMS592263-supplement-000480_-_Supplemental_Material.pdf",
+                        "Supplemental Material",
+                    ),
+                ]
+            )
+
+            def raise_for_status(self):
+                return None
+
+        class Session:
+            def get(self, url, **kwargs):
+                return Response()
+
+        harvester = PMCHarvester(output_dir=tmp_path, gene_symbol="SCN5A")
+        harvester.session = Session()
+
+        result = harvester.scrape_pmc_html_supplements("PMC4114079")
+
+        assert [item["name"] for item in result] == [
+            "NIHMS592263-supplement-000480_-_Supplemental_Material.pdf"
+        ]
 
     def test_skips_javascript_pseudo_links(self, scraper):
         html = _make_html([("javascript:;", "Supplementary material")])
