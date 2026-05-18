@@ -26,9 +26,9 @@ FIXTURES_DIR = TESTS_DIR / "fixtures"
 # Fixture subdirectories
 PMIDS_DIR = FIXTURES_DIR / "pmids"
 HARVEST_DATA_DIR = FIXTURES_DIR / "harvest_data"
-COMPARISON_DATA_DIR = FIXTURES_DIR / "comparison_data"
 
-# Specific test data directories
+# Specific test data directories (paths only — tests skip themselves
+# at runtime when these directories aren't present locally)
 KCNH2_19716085_DIR = HARVEST_DATA_DIR / "test_kcnh2_19716085"
 TEST_HARVEST_DIR = HARVEST_DATA_DIR / "test_harvest"
 TEST_PMC_HARVEST_DIR = HARVEST_DATA_DIR / "test_pmc_harvest"
@@ -87,27 +87,9 @@ def pmids_dir():
 
 
 @pytest.fixture
-def harvest_data_dir():
-    """Return the path to the harvest data fixtures directory."""
-    return HARVEST_DATA_DIR
-
-
-@pytest.fixture
-def comparison_data_dir():
-    """Return the path to the comparison data fixtures directory."""
-    return COMPARISON_DATA_DIR
-
-
-@pytest.fixture
 def test_pmids_file():
     """Return the path to the test PMIDs file."""
     return PMIDS_DIR / "test_pmids.txt"
-
-
-@pytest.fixture
-def kcnh2_19716085_dir():
-    """Return the path to the KCNH2 19716085 test data directory."""
-    return KCNH2_19716085_DIR
 
 
 @pytest.fixture
