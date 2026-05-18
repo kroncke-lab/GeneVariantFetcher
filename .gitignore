@@ -106,6 +106,9 @@ comparison_results/
 comparison_results_*/
 recall_metrics/
 
+# Validation framework run artifacts (multi-GB snapshots, never commit)
+validation_runs/
+
 # Ad-hoc local recall debugging helpers
 scripts/_analyze_missing.py
 scripts/_inspect_missing.py
