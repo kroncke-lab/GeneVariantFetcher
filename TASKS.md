@@ -65,14 +65,9 @@
 - [ ] **Sage/Liebert (PMID 23631430)** — Sage's CF instance refuses Playwright fingerprint even with the right cookies.
 
 ## Backlog
-- [ ] Expand validation to SCN5A, KCNQ1
-- [ ] Create golden test sets for non-KCNH2 genes
-- [ ] Re-run extraction with regex disabled to measure regex vs LLM contribution
-- [ ] Consolidate duplicate documentation (ARCHITECTURE.md vs GVF_architecture.md)
-- [ ] Audit remaining unmerged worktrees:
-  - [ ] `youthful-lederberg-029a0d` — `harvesting/tier4_html_fallback.py` (513 lines, possibly worth comparing against current Tier 3.5 stack)
-  - [ ] `strange-hopper-e72c59` — `harvesting/full_context_rebuilder.py` + `utils/table_variant_extractor.py` (table-targeted variant extraction)
-  - [ ] `busy-mahavira-f60eeb` — `harvesting/browser_sso_fetcher.py` (uncommitted; earlier authenticated-pool prototype, may have ideas not in current `authenticated_pool.py`)
-- [ ] Expand quality gate test set beyond the 10 audit files
+- [ ] Create golden test sets for non-KCNH2 genes (RYR2 still needs per-PMID source reconciliation; KCNQ1/SCN5A need fresh extraction DBs scored locally).
+- [ ] Re-run extraction with regex disabled to measure regex vs LLM contribution.
+- [ ] Expand quality gate test set beyond the 10 audit files.
+- [ ] Parameterize `scripts/recall_recovery/ingest_clinvar.py` and `ingest_pubtator.py` so cold-start genes can run the same recovery layers KCNH2 uses.
 
 See CLAUDE.md for current status, recovery architecture, the Elsevier INSTTOKEN unblock path, and blocker details.

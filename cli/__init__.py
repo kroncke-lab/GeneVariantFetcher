@@ -1,11 +1,13 @@
 """
 CLI tools for GeneVariantFetcher.
 
-This package contains standalone command-line utilities:
-- automated_workflow: Full pipeline CLI
-- fetch_manager: Semi-manual download helper for paywalled papers
-- browser_fetch: Browser-automated download with Cloudflare/CAPTCHA handling
-- scout: Standalone Data Scout for identifying high-value data zones
+Typer commands registered below: extract, discover, reharvest, gvf-run,
+audit-paywalls, scout, extract-folder. Run `gvf --help` for full usage.
+
+Internal helpers (not exposed as Typer commands):
+- automated_workflow: Full pipeline runner used by `extract` and `gvf-run`.
+- fetch_manager: Post-fetch markdown conversion + Data Scout, used by the GUI
+  and as `python -m cli.fetch_manager <paywalled_missing.csv>` for manual work.
 """
 
 import os

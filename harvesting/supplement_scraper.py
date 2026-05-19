@@ -35,7 +35,7 @@ SPECIFIC HANDLERS IMPLEMENTED (4 publishers):
      * Constructs supplement URL from DOI: karger.com/doi/suppl/10.1159/XXXXXX
      * Makes HTTP request to supplement page to find files
    - Coverage: POOR - See "Why Karger Fails" below
-   - Browser fallback: cli/browser_fetch.py (general selector-based fetcher)
+   - Browser fallback: harvesting/browser_html/ (authenticated Playwright pool)
 
 4. SPRINGER/BMC (scrape_springer_supplements) - IMPLEMENTED 2026-02-01
    - Looks for:
@@ -134,7 +134,7 @@ RECOMMENDED FIXES (Priority Order)
 5. Consider Playwright for all publishers:
    - JavaScript rendering would solve most issues
    - Expensive in terms of time/resources
-   - cli/browser_fetch.py provides general browser-based fetching
+   - harvesting/browser_html/ provides the authenticated Playwright fallback
 
 FULL-TEXT EXTRACTORS
 ====================
@@ -155,7 +155,7 @@ FILE STRUCTURE
 
 Related files:
 - harvesting/doi_resolver.py - Routes DOIs to appropriate scrapers
-- cli/browser_fetch.py - General browser-based PDF fetcher with selector patterns
+- harvesting/browser_html/ - Authenticated Playwright fallback for paywalled HTML
 
 Author: Gene Variant Fetcher Team
 Last audit: 2026-02-01
@@ -1044,9 +1044,8 @@ class SupplementScraper:
         4. Returns empty list when HTTP fails, relies on browser fallback
            that isn't integrated into the main pipeline
 
-        BROWSER FALLBACK: cli/browser_fetch.py provides interactive
-        browser-based PDF fetching for paywalled/Cloudflare-protected
-        publishers like Karger.
+        BROWSER FALLBACK: harvesting/browser_html/ (authenticated Playwright
+        pool) handles paywalled/Cloudflare-protected publishers like Karger.
 
         Args:
             html: HTML content of the publisher page
@@ -1978,6 +1977,6 @@ class SupplementScraper:
 # - Oxford dedicated handler (academic.oup.com) — generic now catches
 #   /downloadSupplement URLs but a dedicated handler could find JS-rendered tabs
 # - Wiley dedicated supplement handler
-# - Browser fallback integration (cli/browser_fetch.py provides interactive UI)
+# - Browser fallback integration (harvesting/browser_html/ Playwright pool)
 # - DOI resolver routing for Springer/Oxford once dedicated handlers exist
 # =============================================================================

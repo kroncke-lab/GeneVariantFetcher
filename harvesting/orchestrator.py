@@ -25,7 +25,6 @@ from utils.logging_utils import get_logger
 
 from utils.resilience import CircuitBreaker, ResilientAPIClient
 
-from .core_api import COREAPIClient, get_core_client
 from .doi_resolver import DOIResolver
 from .elsevier_api import ElsevierAPIClient
 from .format_converters import FormatConverter
@@ -45,8 +44,6 @@ from .persistence import (
 )
 from .supplement_processing_service import process_supplement_files
 from .priority_queue import Priority, PriorityQueue
-from .priority_queue import Status as QueueStatus
-from .retry_manager import RetryConfig, RetryManager
 from .springer_api import SpringerAPIClient
 from .supplement_reference_parser import (
     check_supplement_gap,
@@ -366,16 +363,6 @@ class PMCHarvester:
         # Initialize Unpaywall client (free service, uses NCBI_EMAIL)
         ncbi_email = os.environ.get("NCBI_EMAIL", "gvf@example.com")
         self.unpaywall = UnpaywallClient(email=ncbi_email, session=self.session)
-
-        # Initialize CORE API client (optional, uses CORE_API_KEY)
-        core_api_key = os.environ.get("CORE_API_KEY")
-        self.core_api = COREAPIClient(api_key=core_api_key, session=self.session)
-
-        # Initialize retry manager for transient failures
-        self.retry_manager = RetryManager(
-            config=RetryConfig(max_retries=3, base_delay=2.0),
-            log_file=self.output_dir / "retry_log.jsonl",
-        )
 
         # Initialize circuit breakers for API resilience
         self.elsevier_circuit = CircuitBreaker(

@@ -19,7 +19,7 @@ from requests.adapters import HTTPAdapter, Retry
 logger = logging.getLogger(__name__)
 
 try:
-    from gene_literature.synonym_relevance_checker import (
+    from gene_literature.llm_relevance import (
         SynonymRelevance,
         SynonymRelevanceChecker,
     )

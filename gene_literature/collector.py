@@ -10,7 +10,7 @@ from .pubmed_client import ArticleMetadata, PubMedClient
 logger = logging.getLogger(__name__)
 
 try:
-    from .relevance_checker import RelevanceChecker
+    from .llm_relevance import RelevanceChecker
 
     RELEVANCE_CHECKER_AVAILABLE = True
 except ImportError:

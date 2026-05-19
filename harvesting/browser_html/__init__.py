@@ -1,9 +1,8 @@
 """Tier 3.5 — Browser-based HTML harvester for free-after-embargo papers.
 
-Sits between the requests-based publisher API tier and the manual-login
-browser_fetch tier. Drives a real Playwright browser to fetch publisher HTML
-that requires JavaScript or stricter fingerprinting than `requests` provides,
-then delegates parsing back to the existing `SupplementScraper`.
+Drives a real Playwright browser to fetch publisher HTML that requires
+JavaScript or stricter fingerprinting than `requests` provides, then delegates
+parsing back to the existing `SupplementScraper`.
 
 Usage::
 

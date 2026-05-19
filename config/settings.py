@@ -345,13 +345,11 @@ class Settings(BaseSettings):
     )
 
     # Tier 3.5: Browser-based HTML fallback for free-after-embargo papers.
-    # Sits between the publisher API tier and the manual login-required
-    # browser_fetch tier. Drives Playwright to fetch fully-rendered HTML
-    # from publishers that block requests-based access; reuses the existing
-    # SupplementScraper to parse the resulting DOM. ON by default — every
-    # extraction run automatically attempts browser scraping for paywalled
-    # papers. Disable with --no-browser-html-fallback or
-    # ENABLE_BROWSER_HTML_FALLBACK=false.
+    # Drives Playwright to fetch fully-rendered HTML from publishers that block
+    # requests-based access; reuses the existing SupplementScraper to parse the
+    # resulting DOM. ON by default — every extraction run automatically attempts
+    # browser scraping for paywalled papers. Disable with
+    # --no-browser-html-fallback or ENABLE_BROWSER_HTML_FALLBACK=false.
     enable_browser_html_fallback: bool = Field(
         default=True,
         env="ENABLE_BROWSER_HTML_FALLBACK",
