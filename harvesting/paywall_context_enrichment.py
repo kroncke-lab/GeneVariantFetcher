@@ -42,6 +42,7 @@ from .figure_extractor import (
     save_captions_json,
 )
 from .figure_text_extractor import extract_images_to_markdown, is_image_path
+from .pmc_pow import attach_pmc_pow_cookie, is_pmc_pow_challenge
 from .supplement_processing_service import (
     SupplementFileResult,
     process_supplement_files,
@@ -204,26 +205,36 @@ def _default_download(
                     "Supplement download non-200: %s -> %s", url, resp.status_code
                 )
                 return False
-            total = 0
-            file_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(file_path, "wb") as fh:
-                for chunk in resp.iter_content(chunk_size=64 * 1024):
-                    if not chunk:
-                        continue
-                    total += len(chunk)
-                    if total > size_limit_bytes:
-                        logger.info(
-                            "Supplement exceeded size limit %d bytes: %s",
-                            size_limit_bytes,
-                            url,
-                        )
-                        try:
-                            file_path.unlink(missing_ok=True)
-                        except OSError:
-                            pass
-                        return False
-                    fh.write(chunk)
-            return total > 0
+            content = _read_limited_response(resp, url, size_limit_bytes)
+
+        if content is not None and is_pmc_pow_challenge(content):
+            solved = attach_pmc_pow_cookie(
+                session,
+                html=content.decode("utf-8", errors="ignore"),
+                url=url,
+            )
+            if not solved:
+                logger.info("Supplement download POW challenge unsolved: %s", url)
+                return False
+            with session.get(url, stream=True, timeout=timeout_s) as resp:
+                if resp.status_code != 200:
+                    logger.info(
+                        "Supplement download non-200 after POW: %s -> %s",
+                        url,
+                        resp.status_code,
+                    )
+                    return False
+                content = _read_limited_response(resp, url, size_limit_bytes)
+            if content is not None and is_pmc_pow_challenge(content):
+                logger.info("Supplement download still returned POW challenge: %s", url)
+                return False
+
+        if not content:
+            return False
+
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        file_path.write_bytes(content)
+        return True
     except Exception as exc:
         logger.info("Supplement download error for %s: %s", url, exc)
         try:
@@ -231,6 +242,24 @@ def _default_download(
         except OSError:
             pass
         return False
+
+
+def _read_limited_response(resp: Any, url: str, size_limit_bytes: int) -> bytes | None:
+    total = 0
+    chunks: list[bytes] = []
+    for chunk in resp.iter_content(chunk_size=64 * 1024):
+        if not chunk:
+            continue
+        total += len(chunk)
+        if total > size_limit_bytes:
+            logger.info(
+                "Supplement exceeded size limit %d bytes: %s",
+                size_limit_bytes,
+                url,
+            )
+            return None
+        chunks.append(chunk)
+    return b"".join(chunks)
 
 
 def enrich_paywall_full_context(

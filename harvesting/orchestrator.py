@@ -34,7 +34,8 @@ from .free_text_output_service import (
     source_from_free_text_flags,
     write_free_text_output,
 )
-from .pmc_api import PMCAPIClient
+from .pmc_api import NON_ARTICLE_LINKOUT_DOMAINS, PMCAPIClient
+from .pmc_pow import attach_pmc_pow_cookie, is_pmc_pow_challenge
 from .content_validation import validate_content_quality
 from .persistence import (
     append_paywalled_entry,
@@ -74,6 +75,7 @@ logger = get_logger(__name__)
 # PMID pattern: 1-8 digit numeric string
 PMID_PATTERN = re.compile(r"^\d{1,8}$")
 ABSTRACT_ONLY_FALLBACK_MARKER = "abstract-only fallback"
+SUPPLEMENT_DOWNLOAD_ATTEMPTS = 3
 # Aliased from config.constants so the consolidate-prior-downloads path in
 # pipeline/steps.py and this thin-context gate stay in lockstep. Allow an
 # env-var override (GVF_REUSE_FULL_CONTEXT_BYTES) for one-off tuning.
@@ -280,7 +282,7 @@ from utils.manifest import Manifest, ManifestEntry, Stage, Status
 class PMCHarvester:
     """Harvests full-text and supplemental materials from PubMed Central."""
 
-    SUSPICIOUS_FREE_URL_DOMAINS = {"antibodies.cancer.gov"}
+    SUSPICIOUS_FREE_URL_DOMAINS = NON_ARTICLE_LINKOUT_DOMAINS
 
     @property
     def _should_extract_figures(self) -> bool:
@@ -979,20 +981,38 @@ class PMCHarvester:
 
         last_error = None
         for try_url in urls_to_try:
+            content = None
+            for attempt in range(1, SUPPLEMENT_DOWNLOAD_ATTEMPTS + 1):
+                try:
+                    # Use the session to download, which includes our headers
+                    response = self.session.get(
+                        try_url, timeout=60, stream=True, allow_redirects=True
+                    )
+                    response.raise_for_status()
+
+                    # Collect content to validate before writing
+                    content_chunks = []
+                    for chunk in response.iter_content(chunk_size=8192):
+                        content_chunks.append(chunk)
+
+                    content = b"".join(content_chunks)
+                    break
+
+                except Exception as e:
+                    last_error = str(e)
+                    if attempt < SUPPLEMENT_DOWNLOAD_ATTEMPTS:
+                        print(
+                            f"    Retrying {filename} after download error "
+                            f"({attempt}/{SUPPLEMENT_DOWNLOAD_ATTEMPTS}): {last_error}"
+                        )
+                        time.sleep(1.0 * attempt)
+                        continue
+                    break
+
+            if content is None:
+                continue
+
             try:
-                # Use the session to download, which includes our headers
-                response = self.session.get(
-                    try_url, timeout=60, stream=True, allow_redirects=True
-                )
-                response.raise_for_status()
-
-                # Collect content to validate before writing
-                content_chunks = []
-                for chunk in response.iter_content(chunk_size=8192):
-                    content_chunks.append(chunk)
-
-                content = b"".join(content_chunks)
-
                 # Validate the downloaded content
                 ext = output_path.suffix.lower()
 
@@ -1046,6 +1066,54 @@ class PMCHarvester:
                     pattern in content_start for pattern in access_denied_patterns
                 )
 
+                browser_challenge_patterns = [
+                    b"preparing to download",
+                    b"cloudpmc-viewer-pow",
+                    b"pow_challenge",
+                    b"checking your browser",
+                    b"recaptcha",
+                    b"cf-mitigated",
+                    b"challenges.cloudflare.com",
+                ]
+                is_browser_challenge = is_html_page and any(
+                    pattern in content_start for pattern in browser_challenge_patterns
+                )
+                if is_browser_challenge and is_pmc_pow_challenge(content):
+                    solved = attach_pmc_pow_cookie(
+                        self.session,
+                        html=content.decode("utf-8", errors="ignore"),
+                        url=try_url,
+                    )
+                    if solved:
+                        response = self.session.get(
+                            try_url, timeout=60, stream=True, allow_redirects=True
+                        )
+                        response.raise_for_status()
+                        content = b"".join(
+                            chunk for chunk in response.iter_content(chunk_size=8192)
+                        )
+                        content_start = (
+                            content[:4096].lower()
+                            if len(content) >= 4096
+                            else content.lower()
+                        )
+                        is_html_page = (
+                            content_start.startswith(b"<!doctype")
+                            or content_start.startswith(b"<html")
+                            or b"<!doctype html" in content_start
+                            or b"<html" in content_start[:500]
+                            or b"<?xml" in content_start[:100]
+                            and b"<html" in content_start[:500]
+                        )
+                        is_browser_challenge = is_html_page and any(
+                            pattern in content_start
+                            for pattern in browser_challenge_patterns
+                        )
+                    else:
+                        last_error = f"{filename}: PMC POW challenge unsolved"
+                        print(f"    ⚠ {filename}: PMC POW challenge unsolved")
+                        continue
+
                 # Check for specific publisher error page signatures
                 is_publisher_error = is_html_page and (
                     b"error" in content_start[:200]
@@ -1056,6 +1124,16 @@ class PMCHarvester:
                 # PDF validation: PDFs should start with %PDF
                 if ext == ".pdf":
                     if not content.startswith(b"%PDF"):
+                        if is_browser_challenge:
+                            last_error = (
+                                f"{filename}: browser challenge page received "
+                                "instead of PDF"
+                            )
+                            print(
+                                f"    ⚠ {filename}: Browser challenge page received "
+                                "instead of PDF"
+                            )
+                            continue  # Try next URL variant
                         if is_access_denied:
                             last_error = (
                                 f"{filename}: ACCESS DENIED (paywall/login required)"
@@ -1090,6 +1168,16 @@ class PMCHarvester:
 
                 # For other file types, check if we got an HTML error page
                 elif ext in [".docx", ".xlsx", ".xls", ".doc", ".zip"]:
+                    if is_browser_challenge:
+                        last_error = (
+                            f"{filename}: browser challenge page received "
+                            f"instead of {ext} file"
+                        )
+                        print(
+                            f"    ⚠ {filename}: Browser challenge page received "
+                            f"instead of {ext} file"
+                        )
+                        continue  # Try next URL variant
                     if is_access_denied:
                         last_error = (
                             f"{filename}: ACCESS DENIED - file appears paywalled"

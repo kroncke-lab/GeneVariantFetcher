@@ -30,6 +30,7 @@ try:
     from utils.variant_normalizer import (
         AA_MAP,
         AA_MAP_REVERSE,
+        NON_TARGET_HOTSPOT_GENES,
         PROTEIN_LENGTHS,
         VariantNormalizer,
         get_variant_type,
@@ -40,6 +41,7 @@ except ImportError:
     from variant_normalizer import (
         AA_MAP,
         AA_MAP_REVERSE,
+        NON_TARGET_HOTSPOT_GENES,
         PROTEIN_LENGTHS,
         VariantNormalizer,
         get_variant_type,
@@ -351,54 +353,6 @@ class VariantScanner:
         re.compile(r"^\d+[xX]$"),  # Magnification: 10x, 100X
     ]
 
-    # ==========================================================================
-    # NON-TARGET GENE HOTSPOTS (from variant_normalizer)
-    # ==========================================================================
-
-    NON_TARGET_HOTSPOTS = {
-        # TP53 (most common cancer gene mutations)
-        "R175H",
-        "R248W",
-        "R248Q",
-        "R249S",
-        "R273H",
-        "R273C",
-        "R282W",
-        "G245S",
-        "G245D",
-        "Y220C",
-        "C176F",
-        "C176Y",
-        "C242F",
-        "C242S",
-        "H179R",
-        "H179Y",
-        "M237I",
-        "S241F",
-        "S241C",
-        "C277F",
-        "Y163C",
-        # KRAS
-        "G12D",
-        "G12V",
-        "G12C",
-        "G12R",
-        "G12A",
-        "G12S",
-        "G13D",
-        "Q61H",
-        "Q61L",
-        "Q61R",
-        "Q61G",
-        # BRAF
-        "V600E",
-        "V600K",
-        # PIK3CA
-        "E545K",
-        "H1047R",
-        "H1047L",
-    }
-
     def __init__(self, gene_symbol: str = "KCNH2"):
         """
         Initialize the variant scanner.
@@ -452,8 +406,9 @@ class VariantScanner:
                 filtered_count += 1
                 continue
 
-            # Skip non-target hotspots
-            if v.normalized.upper() in self.NON_TARGET_HOTSPOTS:
+            # Skip common comparator hotspots only when they are not the target gene.
+            hotspot_genes = NON_TARGET_HOTSPOT_GENES.get(v.normalized.upper())
+            if hotspot_genes and self.gene_symbol not in hotspot_genes:
                 filtered_count += 1
                 logger.debug(f"Scanner: filtered non-target hotspot {v.raw_text}")
                 continue

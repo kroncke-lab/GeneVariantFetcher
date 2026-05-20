@@ -109,6 +109,49 @@ def test_xml_to_markdown_preserves_jats_table_wrap_rows(converter):
     assert "p.Asn629Ser" in md
 
 
+def test_xml_to_markdown_preserves_back_matter_table_wrap_rows(converter):
+    xml = textwrap.dedent("""\
+        <article>
+          <front>
+            <article-meta>
+              <title-group><article-title>SCN5A compendium</article-title></title-group>
+            </article-meta>
+          </front>
+          <body>
+            <sec>
+              <title>Results</title>
+              <p>The compendium is listed in Table 4.</p>
+            </sec>
+          </body>
+          <back>
+            <sec>
+              <table-wrap id="T4">
+                <label>Table 4</label>
+                <caption><title>Compendium of SCN5A mutations</title></caption>
+                <table>
+                  <thead>
+                    <tr><th>Exon</th><th>Nucleotide</th><th>Mutation</th><th>N</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Exon 28</td><td>5350 G&gt;A</td><td>E1784K</td><td>14</td></tr>
+                    <tr><td>Exon 12</td><td>2582delT</td><td>F861WfsX90</td><td>11</td></tr>
+                  </tbody>
+                </table>
+              </table-wrap>
+            </sec>
+          </back>
+        </article>
+        """)
+
+    md = converter.xml_to_markdown(xml)
+
+    assert "Table 4" in md
+    assert "Compendium of SCN5A mutations" in md
+    assert "| Exon | Nucleotide | Mutation | N |" in md
+    assert "E1784K" in md
+    assert "F861WfsX90" in md
+
+
 def test_pmc_html_to_markdown_preserves_article_table_rows(converter):
     html = textwrap.dedent("""\
         <html><body>

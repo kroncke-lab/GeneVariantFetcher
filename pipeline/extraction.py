@@ -898,6 +898,7 @@ class ExpertExtractor(BaseLLMCaller):
         "hgvs protein",
         "hgvs_protein",
         "amino acid change",
+        "coding effect",
         "protein mutation",
         "missense",
     }
@@ -998,11 +999,92 @@ class ExpertExtractor(BaseLLMCaller):
         "or",
         "odds ratio",
     }
+    TABLE_LABEL_GENE_RE = re.compile(r"\b[A-Z][A-Z0-9]{1,11}\b")
+    TABLE_LABEL_GENE_STOPWORDS = {
+        "AA",
+        "AF",
+        "ALL",
+        "AND",
+        "BASIC",
+        "BRS",
+        "CASES",
+        "CANCER",
+        "CARRIER",
+        "CARRIERS",
+        "CDNA",
+        "CHR",
+        "CLINICAL",
+        "CONTROL",
+        "CONTROLS",
+        "CPVT",
+        "DNA",
+        "EFFECT",
+        "EXON",
+        "EXONS",
+        "FIG",
+        "FIGURE",
+        "FUNCTIONAL",
+        "GENE",
+        "GENES",
+        "HGVS",
+        "HUMAN",
+        "HEREDITARY",
+        "IDENTIFIED",
+        "IN",
+        "INDEL",
+        "INCLUDED",
+        "LIST",
+        "LQTS",
+        "MAF",
+        "MISSENSE",
+        "MUTATION",
+        "MUTATIONS",
+        "NO",
+        "NON",
+        "NONSYNONYMOUS",
+        "NSSNV",
+        "NSSNVS",
+        "OF",
+        "OBSERVED",
+        "PATIENT",
+        "PATIENTS",
+        "PMID",
+        "PROBAND",
+        "PROBANDS",
+        "PROTEIN",
+        "RARE",
+        "RNA",
+        "SNV",
+        "SNVS",
+        "SNP",
+        "SNPS",
+        "SUPP",
+        "SUPPLEMENT",
+        "SUPPLEMENTAL",
+        "SUPPLEMENTARY",
+        "TABLE",
+        "THE",
+        "VARIANT",
+        "VARIANTS",
+        "WES",
+        "WT",
+    }
 
     PROTEIN_TABLE_VALUE_RE = re.compile(
-        r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
+        r"^(?:p\.)?(?:"
+        r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
         r"\d{1,4}"
-        r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del|dup|ins)",
+        r"(?:_(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])\d{1,4})?"
+        r"(?:"
+        r"(?:(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY]))?fs(?:Ter|X|\*)?\d*"
+        r"|(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
+        r"|[ACDEFGHIKLMNPQRSTVWY*X?]"
+        r"|del\d*"
+        r"|dup"
+        r"|ins(?:(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])+)?"
+        r")"
+        r"|\d{1,4}_\d{1,4}ins(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY]+)"
+        r")$",
         re.IGNORECASE,
     )
     CDNA_TABLE_VALUE_RE = re.compile(
@@ -1094,6 +1176,22 @@ class ExpertExtractor(BaseLLMCaller):
         cleaned = self._clean_table_cell(value)
         if not cleaned:
             return None
+        if (
+            cleaned.lower().startswith("p")
+            and not cleaned.lower().startswith("p.")
+            and len(cleaned) > 1
+            and cleaned[1].isalpha()
+        ):
+            cleaned = f"p.{cleaned[1:]}"
+        deletion_prefix = re.match(
+            r"^del(\d{1,4})([ACDEFGHIKLMNPQRSTVWY])$", cleaned, re.IGNORECASE
+        )
+        if deletion_prefix:
+            cleaned = f"{deletion_prefix.group(2).upper()}{deletion_prefix.group(1)}del"
+        if cleaned.endswith("*"):
+            without_footnote = cleaned[:-1]
+            if without_footnote and self.PROTEIN_TABLE_VALUE_RE.match(without_footnote):
+                cleaned = without_footnote
         if self.PROTEIN_TABLE_VALUE_RE.match(cleaned):
             return cleaned
         return None
@@ -1103,7 +1201,10 @@ class ExpertExtractor(BaseLLMCaller):
         if not cleaned:
             return None
         if not cleaned.lower().startswith("c."):
-            cleaned = "c." + cleaned
+            if cleaned.lower().startswith("c"):
+                cleaned = "c." + cleaned[1:]
+            else:
+                cleaned = "c." + cleaned
         if self.CDNA_TABLE_VALUE_RE.match(cleaned):
             return cleaned
         return None
@@ -1115,6 +1216,9 @@ class ExpertExtractor(BaseLLMCaller):
         Requires at least one cDNA/protein-like header AND one count-like header,
         OR two different variant notation headers (cDNA + protein).
         """
+        if "|" not in line:
+            return False
+
         parts = [p.strip() for p in line.split("|") if p.strip()]
         if self._looks_like_gwas_header(parts):
             return False
@@ -1163,6 +1267,32 @@ class ExpertExtractor(BaseLLMCaller):
             or (has_cdna_header and has_protein_header)
         )
 
+    def _gene_symbols_in_table_label(self, label: str) -> set[str]:
+        """Return likely gene symbols mentioned in a table title/caption."""
+        if not label:
+            return set()
+
+        symbols: set[str] = set()
+        for match in self.TABLE_LABEL_GENE_RE.finditer(label.upper()):
+            token = match.group(0)
+            if token in self.TABLE_LABEL_GENE_STOPWORDS:
+                continue
+            if re.fullmatch(r"[A-Z]\d+", token):
+                continue
+            if len(token) <= 3 and token not in {
+                "TTN",
+                "APC",
+                "RET",
+                "VHL",
+                "NF1",
+                "NF2",
+            }:
+                continue
+            if token.startswith("LQT") or token.startswith("SQT"):
+                continue
+            symbols.add(token)
+        return symbols
+
     def _parse_markdown_table_variants(
         self, full_text: str, gene_symbol: Optional[str]
     ) -> List[dict]:
@@ -1187,9 +1317,26 @@ class ExpertExtractor(BaseLLMCaller):
         header_mapping = {}  # Maps our standard keys to actual column indices
         header_multi = {"count": [], "affected": [], "unaffected": []}
         row_level_clinical_table = False
+        current_table_label = ""
+        active_table_label = ""
+
+        def update_table_label(text: str) -> None:
+            nonlocal current_table_label
+            heading = text.lstrip("#").strip()
+            if re.match(r"^Table\s+\w+(?:[\.:]|\s|$)", heading, re.IGNORECASE):
+                current_table_label = heading
+
+        def table_label_matches_target(label: str) -> bool:
+            if not label:
+                return True
+            mentioned = self._gene_symbols_in_table_label(label)
+            return not mentioned or gene_symbol.upper() in mentioned
 
         for line in lines:
+            stripped_line = line.strip()
             if not table_started:
+                update_table_label(stripped_line)
+
                 # Detect header row using broadened patterns
                 if self._is_variant_table_header(line):
                     parts = [p.strip() for p in line.split("|") if p.strip()]
@@ -1203,6 +1350,7 @@ class ExpertExtractor(BaseLLMCaller):
                     row_level_clinical_table = (
                         self._looks_like_row_level_clinical_header(parts)
                     )
+                    active_table_label = current_table_label
                     for idx, name in enumerate(parts):
                         name_lower = name.lower().strip()
                         header_idx[name_lower] = idx
@@ -1210,7 +1358,10 @@ class ExpertExtractor(BaseLLMCaller):
                         # Map to standard keys for retrieval
                         if self._header_matches(name, self.VARIANT_CDNA_HEADERS):
                             header_mapping["cdna"] = idx
-                        if self._header_matches(name, self.VARIANT_PROTEIN_HEADERS):
+                        if (
+                            self._header_matches(name, self.VARIANT_PROTEIN_HEADERS)
+                            and "type" not in name_lower
+                        ):
                             header_mapping["protein"] = idx
                         if self._header_matches(name, self.VARIANT_GENE_HEADERS):
                             header_mapping["gene"] = idx
@@ -1233,15 +1384,14 @@ class ExpertExtractor(BaseLLMCaller):
                 continue
 
             # Stop when table ends
-            if not line.strip().startswith("|"):
-                if variants:
-                    break
-                else:
-                    table_started = False
-                    header_mapping = {}
-                    header_multi = {"count": [], "affected": [], "unaffected": []}
-                    row_level_clinical_table = False
-                    continue
+            if not stripped_line.startswith("|"):
+                table_started = False
+                header_mapping = {}
+                header_idx = {}
+                header_multi = {"count": [], "affected": [], "unaffected": []}
+                row_level_clinical_table = False
+                active_table_label = ""
+                continue
 
             # Skip separator rows
             if set(line.strip()) <= {"|", "-", " ", ":"}:
@@ -1281,6 +1431,17 @@ class ExpertExtractor(BaseLLMCaller):
 
             if row_gene and row_gene.strip().upper() != gene_symbol.upper():
                 continue
+
+            row_text = " ".join(cells)
+            if not table_label_matches_target(active_table_label):
+                continue
+            row_control_like = bool(
+                re.search(
+                    r"\b(rare control|common polymorphism|polymorphism|control variant)\b",
+                    row_text,
+                    re.IGNORECASE,
+                )
+            )
 
             # Validate actual cell values. Header cues alone are not enough:
             # GWAS tables use AA=alternate allele and n=participants, which
@@ -1353,7 +1514,10 @@ class ExpertExtractor(BaseLLMCaller):
             ):
                 patient_count = (affected_count or 0) + (unaffected_count or 0)
 
-            if patient_count is not None:
+            if row_control_like and patient_count is not None:
+                affected_count = 0
+                unaffected_count = patient_count
+            elif patient_count is not None:
                 if affected_count is None and unaffected_count is None:
                     affected_count = patient_count
                     unaffected_count = 0
@@ -1370,8 +1534,13 @@ class ExpertExtractor(BaseLLMCaller):
                 if cdna and not cdna.startswith("c.")
                 else cdna,
                 "protein_notation": protein,
-                "clinical_significance": "pathogenic",  # table is disease-associated
-                "patients": {"count": patient_count, "phenotype": "LQT2"},
+                "clinical_significance": "benign" if row_control_like else "pathogenic",
+                "patients": {
+                    "count": patient_count,
+                    "phenotype": "unaffected control"
+                    if row_control_like
+                    else f"{gene_symbol}-associated disease",
+                },
                 "penetrance_data": {
                     "total_carriers_observed": patient_count,
                     "affected_count": affected_count,
@@ -1382,7 +1551,7 @@ class ExpertExtractor(BaseLLMCaller):
                 "segregation_data": None,
                 "population_frequency": None,
                 "evidence_level": "medium",
-                "source_location": "Table 2",
+                "source_location": active_table_label or "Markdown table",
                 "additional_notes": "Parsed via deterministic table parser",
                 "key_quotes": [],
             }
@@ -1391,6 +1560,451 @@ class ExpertExtractor(BaseLLMCaller):
         if variants:
             logger.info(
                 f"Parsed {len(variants)} variants via deterministic markdown table parser"
+            )
+        return variants
+
+    def _parse_fixed_width_table_variants(
+        self, full_text: str, gene_symbol: Optional[str]
+    ) -> List[dict]:
+        """
+        Parse pdftotext -layout style variant tables.
+
+        Some recovered publisher/manuscript PDFs preserve tables as fixed-width
+        rows rather than markdown pipes, e.g.:
+
+            c5350G>A  28  pGlu1784Lys  Gain of function  69
+
+        This keeps large supplement tables on the deterministic path instead of
+        asking the LLM to reconstruct hundreds of row-aligned variants.
+        """
+        if not gene_symbol:
+            return []
+
+        variants: List[dict] = []
+        seen = set()
+        current_table_label = ""
+        protein_count_table = False
+        nssnv_case_control_table = False
+        functional_status_table = False
+        clinical_mutation_table = False
+        target_gene_lower = gene_symbol.lower()
+        effect_phrases = [
+            ("Gain", "and", "loss"),
+            ("Loss", "of", "function"),
+            ("Gain", "of", "function"),
+        ]
+
+        for line in full_text.splitlines():
+            stripped = line.strip()
+            if re.match(
+                r"^(?:Supplementary|Supplemental)?\s*Table\s+\w+",
+                stripped,
+                re.IGNORECASE,
+            ):
+                current_table_label = stripped
+                label_lower = current_table_label.lower()
+                if "continued" not in label_lower:
+                    protein_count_table = (
+                        "list of mutations by coding effect" in label_lower
+                        and "frequency" in label_lower
+                    )
+                    label_mentions_target = target_gene_lower in label_lower
+                    nssnv_case_control_table = (
+                        label_mentions_target
+                        and "nssnv" in label_lower
+                        and ("properties" in label_lower or "variant" in label_lower)
+                    )
+                    functional_status_table = (
+                        label_mentions_target
+                        and "functionally characterized" in label_lower
+                    )
+                    clinical_mutation_table = (
+                        label_mentions_target
+                        and "mutation" in label_lower
+                        and "variant" in label_lower
+                    )
+
+            lower = stripped.lower()
+            if protein_count_table and lower.startswith("total"):
+                protein_count_table = False
+                continue
+            if (
+                current_table_label
+                and "list of mutations by coding effect" in current_table_label.lower()
+                and "coding effect" in lower
+                and "count" in lower
+            ):
+                protein_count_table = True
+                continue
+            if "nucleotide" in lower and "coding effect" in lower:
+                clinical_mutation_table = True
+                continue
+            if (
+                "status" in lower
+                and "variant" in lower
+                and "control" in lower
+                and ("case" in lower or "brs" in lower or "lqt" in lower)
+            ):
+                nssnv_case_control_table = True
+                continue
+
+            tokens = line.strip().split()
+            if protein_count_table and len(tokens) >= 3 and tokens[-1].isdigit():
+                protein = self._valid_table_protein(tokens[0])
+                if not protein:
+                    continue
+                count = int(tokens[-1])
+                key = ("", protein)
+                if key in seen:
+                    continue
+                seen.add(key)
+                variants.append(
+                    {
+                        "gene_symbol": gene_symbol,
+                        "cdna_notation": None,
+                        "protein_notation": protein,
+                        "clinical_significance": "pathogenic",
+                        "patients": {
+                            "count": count,
+                            "phenotype": f"{gene_symbol}-associated disease",
+                        },
+                        "penetrance_data": {
+                            "total_carriers_observed": count,
+                            "affected_count": count,
+                            "unaffected_count": 0,
+                        },
+                        "individual_records": [],
+                        "functional_data": {"summary": "", "assays": []},
+                        "segregation_data": None,
+                        "population_frequency": None,
+                        "evidence_level": "medium",
+                        "source_location": current_table_label
+                        or "Supplemental coding-effect count table",
+                        "additional_notes": "Parsed via deterministic fixed-width coding-effect count table parser",
+                        "key_quotes": [],
+                    }
+                )
+                continue
+
+            if clinical_mutation_table:
+                match = re.match(
+                    r"^(?P<cdna>(?:\d+(?:_\d+)?\s*(?:[ACGT]>[ACGT]|del[ACGT]+|dup[ACGT]+|ins[ACGT]+)|IVS\d+[+-]\d+\s*(?:[ACGT]>[ACGT]|del[ACGT]+)))"
+                    r"\s+(?P<protein>\S+)?"
+                    r"(?:\s+\((?P<count>\d+)\))?\b",
+                    stripped,
+                    re.IGNORECASE,
+                )
+                if match:
+                    cdna_raw = re.sub(r"\s+", "", match.group("cdna"))
+                    protein_raw = match.group("protein")
+                    count_match = None
+                    if protein_raw:
+                        count_match = re.match(
+                            r"\s+\((\d+)\)", stripped[match.end("protein") :]
+                        )
+                    count = int(
+                        count_match.group(1)
+                        if count_match
+                        else match.group("count") or "1"
+                    )
+                    cdna = (
+                        f"c.{cdna_raw}"
+                        if not cdna_raw.upper().startswith("IVS")
+                        else cdna_raw
+                    )
+                    if not cdna.upper().startswith("IVS"):
+                        cdna = self._valid_table_cdna(cdna)
+                    protein = self._valid_table_protein(protein_raw)
+                    if not cdna and not protein:
+                        continue
+                    key = (cdna or "", protein or "")
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    variants.append(
+                        {
+                            "gene_symbol": gene_symbol,
+                            "cdna_notation": cdna,
+                            "protein_notation": protein,
+                            "clinical_significance": "pathogenic",
+                            "patients": {
+                                "count": count,
+                                "phenotype": f"{gene_symbol}-associated disease",
+                            },
+                            "penetrance_data": {
+                                "total_carriers_observed": count,
+                                "affected_count": count,
+                                "unaffected_count": 0,
+                            },
+                            "individual_records": [],
+                            "functional_data": {"summary": "", "assays": []},
+                            "segregation_data": None,
+                            "population_frequency": None,
+                            "evidence_level": "medium",
+                            "source_location": current_table_label
+                            or "Fixed-width clinical mutation table",
+                            "additional_notes": "Parsed via deterministic fixed-width clinical mutation table parser",
+                            "key_quotes": [],
+                        }
+                    )
+                    continue
+
+            if nssnv_case_control_table:
+                match = re.match(
+                    r"^(case\s+nsSNV|control\s+nsSNV|Polymorphism)\s+"
+                    r"(\d+)\s+([ACGT]>[ACGT])\s+(\S+)\s+\S+\s+"
+                    r"(\d+)\s+(\d+)\s+(\d+)\b",
+                    stripped,
+                    re.IGNORECASE,
+                )
+                if match:
+                    status, pos, change, protein_raw, brs, lqt, control = match.groups()
+                    protein = self._valid_table_protein(protein_raw)
+                    if not protein:
+                        continue
+                    cdna = self._valid_table_cdna(f"{pos}{change}")
+                    affected_count = int(brs) + int(lqt)
+                    unaffected_count = int(control)
+                    patient_count = affected_count + unaffected_count
+                    key = (cdna or "", protein)
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    variants.append(
+                        {
+                            "gene_symbol": gene_symbol,
+                            "cdna_notation": cdna,
+                            "protein_notation": protein,
+                            "clinical_significance": "pathogenic"
+                            if affected_count
+                            else "benign",
+                            "patients": {
+                                "count": patient_count,
+                                "phenotype": f"{gene_symbol} nsSNV carrier",
+                            },
+                            "penetrance_data": {
+                                "total_carriers_observed": patient_count,
+                                "affected_count": affected_count,
+                                "unaffected_count": unaffected_count,
+                            },
+                            "individual_records": [],
+                            "functional_data": {"summary": "", "assays": []},
+                            "segregation_data": None,
+                            "population_frequency": None,
+                            "evidence_level": "medium",
+                            "source_location": current_table_label
+                            or f"Supplemental {gene_symbol} nsSNV table",
+                            "additional_notes": f"Parsed via deterministic fixed-width nsSNV table parser; status={status}",
+                            "key_quotes": [],
+                        }
+                    )
+                    continue
+
+            if functional_status_table:
+                match = re.match(
+                    r"^((?:p\.)?[A-Z][a-z]{0,2}\d+[A-Z][a-z]{0,2})\s+"
+                    r"\d+(?:\.\d+)?%\s+"
+                    r"(Wildtype|Abnormal|Conflicting(?:\s+Data)?)\b",
+                    stripped,
+                    re.IGNORECASE,
+                )
+                if match:
+                    protein_raw, ep_status = match.groups()
+                    protein = self._valid_table_protein(protein_raw)
+                    if not protein:
+                        continue
+                    if any(existing_protein == protein for _, existing_protein in seen):
+                        continue
+                    key = ("", protein)
+                    seen.add(key)
+                    ep_status_clean = re.sub(r"\s+", " ", ep_status).lower()
+                    significance = {
+                        "abnormal": "pathogenic",
+                        "wildtype": "benign",
+                    }.get(ep_status_clean, "unknown")
+                    variants.append(
+                        {
+                            "gene_symbol": gene_symbol,
+                            "cdna_notation": None,
+                            "protein_notation": protein,
+                            "clinical_significance": significance,
+                            "patients": {
+                                "count": None,
+                                "phenotype": f"{gene_symbol} functionally characterized nsSNV",
+                            },
+                            "penetrance_data": {
+                                "total_carriers_observed": None,
+                                "affected_count": None,
+                                "unaffected_count": None,
+                            },
+                            "individual_records": [],
+                            "functional_data": {
+                                "summary": ep_status_clean,
+                                "assays": [],
+                            },
+                            "segregation_data": None,
+                            "population_frequency": None,
+                            "evidence_level": "low",
+                            "source_location": current_table_label
+                            or f"Supplemental {gene_symbol} functional variant table",
+                            "additional_notes": "Parsed via deterministic fixed-width functional-status table parser",
+                            "key_quotes": [],
+                        }
+                    )
+                    continue
+
+            if (
+                current_table_label
+                and gene_symbol.upper() in current_table_label.upper()
+                and len(tokens) >= 3
+                and tokens[0].startswith("#")
+            ):
+                protein = self._valid_table_protein(tokens[1])
+                if not protein:
+                    continue
+                key = ("", protein)
+                if key in seen:
+                    continue
+                seen.add(key)
+                variants.append(
+                    {
+                        "gene_symbol": gene_symbol,
+                        "cdna_notation": None,
+                        "protein_notation": protein,
+                        "clinical_significance": "pathogenic",
+                        "patients": {
+                            "count": 1,
+                            "phenotype": f"{gene_symbol}-associated disease",
+                        },
+                        "penetrance_data": {
+                            "total_carriers_observed": 1,
+                            "affected_count": 1,
+                            "unaffected_count": 0,
+                        },
+                        "individual_records": [],
+                        "functional_data": {"summary": "", "assays": []},
+                        "segregation_data": None,
+                        "population_frequency": None,
+                        "evidence_level": "medium",
+                        "source_location": current_table_label,
+                        "additional_notes": "Parsed via deterministic fixed-width patient table parser",
+                        "key_quotes": [],
+                    }
+                )
+                continue
+
+            if len(tokens) >= 8 and tokens[0].startswith("Chr") and ":" in tokens[0]:
+                if tokens[3].upper() != gene_symbol.upper():
+                    continue
+                location = tokens[4]
+                cdna_idx = 6 if location.lower() == "exon" else 5
+                if cdna_idx >= len(tokens):
+                    continue
+                cdna_raw = tokens[cdna_idx]
+                protein_raw = (
+                    tokens[cdna_idx + 1] if cdna_idx + 1 < len(tokens) else None
+                )
+                cdna = self._valid_table_cdna(cdna_raw)
+                protein = self._valid_table_protein(protein_raw)
+                if not cdna and not protein:
+                    continue
+
+                key = (cdna or "", protein or "")
+                if key in seen:
+                    continue
+                seen.add(key)
+                variants.append(
+                    {
+                        "gene_symbol": gene_symbol,
+                        "cdna_notation": cdna,
+                        "protein_notation": protein,
+                        "clinical_significance": "unknown",
+                        "patients": {
+                            "count": 1,
+                            "phenotype": f"{gene_symbol} variant carrier",
+                        },
+                        "penetrance_data": {
+                            "total_carriers_observed": 1,
+                            "affected_count": 1,
+                            "unaffected_count": 0,
+                        },
+                        "individual_records": [],
+                        "functional_data": {"summary": "", "assays": []},
+                        "segregation_data": None,
+                        "population_frequency": None,
+                        "evidence_level": "medium",
+                        "source_location": "Supplemental Table 1",
+                        "additional_notes": "Parsed via deterministic fixed-width WES table parser",
+                        "key_quotes": [],
+                    }
+                )
+                continue
+
+            if len(tokens) < 4 or not tokens[0].lower().startswith("c"):
+                continue
+            if not tokens[-1].isdigit():
+                continue
+
+            exon_idx = None
+            for idx in range(1, min(len(tokens), 5)):
+                if tokens[idx].isdigit():
+                    exon_idx = idx
+                    break
+            if exon_idx is None:
+                continue
+
+            cdna_raw = " ".join(tokens[:exon_idx])
+            count = int(tokens[-1])
+            middle = tokens[exon_idx + 1 : -1]
+
+            for phrase in effect_phrases:
+                if (
+                    len(middle) >= len(phrase)
+                    and tuple(middle[-len(phrase) :]) == phrase
+                ):
+                    middle = middle[: -len(phrase)]
+                    break
+
+            protein_raw = middle[0] if middle else None
+            cdna = self._valid_table_cdna(cdna_raw) or self._valid_table_cdna(tokens[0])
+            protein = self._valid_table_protein(protein_raw)
+            if not cdna and not protein:
+                continue
+
+            key = (cdna or "", protein or "")
+            if key in seen:
+                continue
+            seen.add(key)
+
+            variants.append(
+                {
+                    "gene_symbol": gene_symbol,
+                    "cdna_notation": cdna,
+                    "protein_notation": protein,
+                    "clinical_significance": "pathogenic",
+                    "patients": {
+                        "count": count,
+                        "phenotype": f"{gene_symbol}-associated disease",
+                    },
+                    "penetrance_data": {
+                        "total_carriers_observed": count,
+                        "affected_count": count,
+                        "unaffected_count": 0,
+                    },
+                    "individual_records": [],
+                    "functional_data": {"summary": "", "assays": []},
+                    "segregation_data": None,
+                    "population_frequency": None,
+                    "evidence_level": "medium",
+                    "source_location": "Fixed-width table",
+                    "additional_notes": "Parsed via deterministic fixed-width table parser",
+                    "key_quotes": [],
+                }
+            )
+
+        if variants:
+            logger.info(
+                f"Parsed {len(variants)} variants via deterministic fixed-width table parser"
             )
         return variants
 
@@ -1874,11 +2488,14 @@ class ExpertExtractor(BaseLLMCaller):
             estimated_variants = self._estimate_table_rows(scanner_text)
 
         # Fast path: deterministic table parser for very large tables to avoid slow LLM calls
+        deterministic_min_variants = (
+            1 if self.tier_threshold <= 0 else DETERMINISTIC_PARSER_MIN_VARIANTS
+        )
         if estimated_variants >= LARGE_TABLE_ROW_THRESHOLD:
             parsed_variants = self._parse_markdown_table_variants(
                 scanner_text, paper.gene_symbol
             )
-            if len(parsed_variants) >= DETERMINISTIC_PARSER_MIN_VARIANTS:
+            if len(parsed_variants) >= deterministic_min_variants:
                 extracted_data = {
                     "paper_metadata": {
                         "pmid": paper.pmid,
@@ -1900,6 +2517,36 @@ class ExpertExtractor(BaseLLMCaller):
                     model_used="deterministic-table-parser",
                 )
 
+        fixed_width_min_variants = (
+            1
+            if self.tier_threshold <= 0
+            else min(DETERMINISTIC_PARSER_MIN_VARIANTS, 20)
+        )
+        fixed_width_variants = self._parse_fixed_width_table_variants(
+            scanner_text, paper.gene_symbol
+        )
+        if len(fixed_width_variants) >= fixed_width_min_variants:
+            extracted_data = {
+                "paper_metadata": {
+                    "pmid": paper.pmid,
+                    "title": paper.title or "Unknown Title",
+                    "extraction_summary": f"Deterministic fixed-width table parse of {len(fixed_width_variants)} variants",
+                },
+                "variants": fixed_width_variants,
+                "extraction_metadata": {
+                    "total_variants_found": len(fixed_width_variants),
+                    "extraction_confidence": "medium",
+                    "compact_mode": True,
+                    "notes": "Bypassed LLM using fixed-width table parser for large PDF table",
+                },
+            }
+            return ExtractionResult(
+                pmid=paper.pmid,
+                success=True,
+                extracted_data=extracted_data,
+                model_used="deterministic-fixed-width-table-parser",
+            )
+
         # Router-first extraction: ask a cheap LLM to classify tables, then
         # parse them deterministically. Cuts ~10× tokens per typical paper
         # vs sending 60k chars of full text. Falls through to full-text Tier 3
@@ -1911,7 +2558,7 @@ class ExpertExtractor(BaseLLMCaller):
             if router_outcome is not None:
                 routed_data = router_outcome.extracted_data or {}
                 router_variants = routed_data.get("variants", []) or []
-                if len(router_variants) >= DETERMINISTIC_PARSER_MIN_VARIANTS:
+                if len(router_variants) >= deterministic_min_variants:
                     return router_outcome
                 logger.info(
                     "PMID %s - Router parsed only %d variants; continuing with "

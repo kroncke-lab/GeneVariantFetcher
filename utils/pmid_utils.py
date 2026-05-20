@@ -16,6 +16,7 @@ def extract_pmid_from_filename(filename: Union[str, Path]) -> Optional[str]:
 
     Supported filename formats:
         - PMID_12345678_FULL_CONTEXT.md (legacy format)
+        - KCNH2_PMID_12345678.json (extraction JSON format)
         - 12345678_FULL_CONTEXT.md (current harvester output)
         - 12345678_DATA_ZONES.md (condensed high-value zones)
         - Any filename starting with a valid PMID
@@ -43,7 +44,10 @@ def extract_pmid_from_filename(filename: Union[str, Path]) -> Optional[str]:
 
     parts = stem.split("_")
 
-    if len(parts) > 1 and parts[0].upper() == "PMID":
+    gene_pmid_match = re.match(r"^[A-Za-z0-9-]+_PMID_(\d{1,8})$", stem)
+    if gene_pmid_match:
+        candidate = gene_pmid_match.group(1)
+    elif len(parts) > 1 and parts[0].upper() == "PMID":
         # Format: PMID_12345678_...
         candidate = parts[1]
     else:

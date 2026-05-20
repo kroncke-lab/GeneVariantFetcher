@@ -83,51 +83,54 @@ PROTEIN_LENGTHS = {
     "PITX2": 305,
 }
 
-# Non-target gene hotspots (TP53, KRAS, BRAF, PIK3CA)
-# These are commonly extracted by mistake when searching for cardiac gene variants
-NON_TARGET_HOTSPOTS = {
-    # TP53 (most common cancer gene mutations)
-    "R175H",
-    "R248W",
-    "R248Q",
-    "R249S",
-    "R273H",
-    "R273C",
-    "R282W",
-    "G245S",
-    "G245D",
-    "Y220C",
-    "C176F",
-    "C176Y",
-    "C242F",
-    "C242S",
-    "H179R",
-    "H179Y",
-    "M237I",
-    "S241F",
-    "S241C",
-    "C277F",
-    "Y163C",
-    # KRAS
-    "G12D",
-    "G12V",
-    "G12C",
-    "G12R",
-    "G12A",
-    "G12S",
-    "G13D",
-    "Q61H",
-    "Q61L",
-    "Q61R",
-    "Q61G",
-    # BRAF
-    "V600E",
-    "V600K",
-    # PIK3CA
-    "E545K",
-    "H1047R",
-    "H1047L",
+# Hotspot variants that are frequently mentioned as comparator/background
+# oncology examples. They should only be filtered when they are not the target
+# gene; otherwise TP53/KRAS/BRAF/PIK3CA runs would lose true positives.
+NON_TARGET_HOTSPOTS_BY_GENE: Dict[str, Set[str]] = {
+    "TP53": {
+        "R175H",
+        "R248W",
+        "R248Q",
+        "R249S",
+        "R273H",
+        "R273C",
+        "R282W",
+        "G245S",
+        "G245D",
+        "Y220C",
+        "C176F",
+        "C176Y",
+        "C242F",
+        "C242S",
+        "H179R",
+        "H179Y",
+        "M237I",
+        "S241F",
+        "S241C",
+        "C277F",
+        "Y163C",
+    },
+    "KRAS": {
+        "G12D",
+        "G12V",
+        "G12C",
+        "G12R",
+        "G12A",
+        "G12S",
+        "G13D",
+        "Q61H",
+        "Q61L",
+        "Q61R",
+        "Q61G",
+    },
+    "BRAF": {"V600E", "V600K"},
+    "PIK3CA": {"E545K", "H1047R", "H1047L"},
 }
+NON_TARGET_HOTSPOT_GENES: Dict[str, Set[str]] = {}
+for _gene_symbol, _hotspots in NON_TARGET_HOTSPOTS_BY_GENE.items():
+    for _hotspot in _hotspots:
+        NON_TARGET_HOTSPOT_GENES.setdefault(_hotspot, set()).add(_gene_symbol)
+NON_TARGET_HOTSPOTS = set(NON_TARGET_HOTSPOT_GENES)
 
 # KCNH2 variant aliases from ClinVar - maps alternative names to canonical form
 # Key: canonical single-letter form, Values: alternative representations
@@ -575,8 +578,10 @@ class VariantNormalizer:
 
         # Check hotspots (remove fsX suffix for comparison)
         check_var = re.sub(r"fsX$", "", single)
-        if check_var in NON_TARGET_HOTSPOTS:
-            return True, "Known hotspot in TP53/KRAS/BRAF/PIK3CA"
+        hotspot_genes = NON_TARGET_HOTSPOT_GENES.get(check_var)
+        if hotspot_genes and self.gene_symbol not in hotspot_genes:
+            gene_list = "/".join(sorted(hotspot_genes))
+            return True, f"Known hotspot in non-target gene(s): {gene_list}"
 
         # Check position against protein length
         m = re.match(r"^[A-Z](\d+)", single)

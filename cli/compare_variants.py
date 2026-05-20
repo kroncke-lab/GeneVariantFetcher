@@ -767,6 +767,33 @@ def to_canonical_form(variant: str) -> Optional[str]:
     if v.lower().startswith("p."):
         v = v[2:]
 
+    # --- Three-letter range deletion: Gln1507_Pro1509del -> Q1507_P1509Del ---
+    m = re.match(
+        r"^([A-Z][a-z]{2})(\d+)_([A-Z][a-z]{2})(\d+)del\d*$",
+        v,
+        re.IGNORECASE,
+    )
+    if m:
+        ref1 = AA_3_TO_1.get(m.group(1).title())
+        ref2 = AA_3_TO_1.get(m.group(3).title())
+        if ref1 and ref2:
+            return f"{ref1}{m.group(2)}_{ref2}{m.group(4)}Del"
+
+    # --- Single-letter range deletion: K1505_Q1507DEL -> K1505_Q1507Del ---
+    m = re.match(r"^([A-Z])(\d+)_([A-Z])(\d+)del\d*$", v, re.IGNORECASE)
+    if m:
+        return f"{m.group(1).upper()}{m.group(2)}_{m.group(3).upper()}{m.group(4)}Del"
+
+    # --- Numeric protein insertion: 4944_4945INSH -> 4944_4945InsH ---
+    m = re.match(r"^(\d+)_(\d+)ins([A-Z][A-Za-z]{0,2})$", v, re.IGNORECASE)
+    if m:
+        inserted = m.group(3)
+        if len(inserted) == 3 and inserted.title() in AA_3_TO_1:
+            inserted = AA_3_TO_1[inserted.title()]
+        else:
+            inserted = inserted.upper()
+        return f"{m.group(1)}_{m.group(2)}Ins{inserted}"
+
     # --- Three-letter missense with trailing *: Ala429Pro* -> A429P ---
     m = re.match(r"^([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2})\*$", v)
     if m:
@@ -796,7 +823,7 @@ def to_canonical_form(variant: str) -> Optional[str]:
 
     # --- Single-letter frameshift: A282fs, V131fs/185, K897fs+*49 -> A282fsX ---
     m = re.match(
-        r"^([A-Z])(\d+)fs(?:[/+]\*?\d+|[\*X]?\d*)$",
+        r"^([A-Z])(\d+)[A-Z]?fs(?:Ter\d*|[/+]\*?\d+|[\*X]?\d*)$",
         v,
         re.IGNORECASE,
     )
@@ -901,7 +928,17 @@ def convert_aa_3_to_1(variant: str) -> Optional[str]:
     result = variant[:2]  # Keep "p."
     remaining = variant[2:]
 
-    # Pattern 1: 3-letter AA, position, 3-letter AA (with optional fs, del, etc.)
+    # Pattern 1: Handle range deletions like p.Arg123_Lys130del before the
+    # generic single-position pattern can consume only p.Arg123.
+    range_pattern = r"([A-Z][a-z]{2})(\d+)_([A-Z][a-z]{2})(\d+)(.*)"
+    range_match = re.match(range_pattern, remaining)
+    if range_match:
+        aa1, pos1, aa2, pos2, rest = range_match.groups()
+        aa1_short = AA_3_TO_1.get(aa1, aa1)
+        aa2_short = AA_3_TO_1.get(aa2, aa2)
+        return f"p.{aa1_short}{pos1}_{aa2_short}{pos2}{rest}"
+
+    # Pattern 2: 3-letter AA, position, 3-letter AA (with optional fs, del, etc.)
     pattern = r"([A-Z][a-z]{2})(\d+)([A-Z][a-z]{2})?(.*)$"
     match = re.match(pattern, remaining)
 
@@ -911,15 +948,6 @@ def convert_aa_3_to_1(variant: str) -> Optional[str]:
         aa2_short = AA_3_TO_1.get(aa2, aa2) if aa2 else ""
         result = f"p.{aa1_short}{pos}{aa2_short}{rest or ''}"
         return result
-
-    # Pattern 2: Handle range deletions like p.Arg123_Lys130del
-    range_pattern = r"([A-Z][a-z]{2})(\d+)_([A-Z][a-z]{2})(\d+)(.*)"
-    range_match = re.match(range_pattern, remaining)
-    if range_match:
-        aa1, pos1, aa2, pos2, rest = range_match.groups()
-        aa1_short = AA_3_TO_1.get(aa1, aa1)
-        aa2_short = AA_3_TO_1.get(aa2, aa2)
-        return f"p.{aa1_short}{pos1}_{aa2_short}{pos2}{rest}"
 
     return None
 
@@ -944,7 +972,17 @@ def convert_aa_1_to_3(variant: str) -> Optional[str]:
     if not variant or not variant.lower().startswith("p."):
         return None
 
-    # Pattern: single letter AA, position, single letter AA (with optional suffix)
+    # Pattern 1: Handle range deletions like p.R123_K130del before the generic
+    # single-position pattern can consume only p.R123.
+    range_pattern = r"^p\.([A-Z\*])(\d+)_([A-Z\*])(\d+)(.*)$"
+    range_match = re.match(range_pattern, variant)
+    if range_match:
+        aa1, pos1, aa2, pos2, rest = range_match.groups()
+        aa1_long = AA_1_TO_3.get(aa1, aa1)
+        aa2_long = AA_1_TO_3.get(aa2, aa2)
+        return f"p.{aa1_long}{pos1}_{aa2_long}{pos2}{rest}"
+
+    # Pattern 2: single letter AA, position, single letter AA (with optional suffix)
     pattern = r"^p\.([A-Z\*])(\d+)([A-Z\*])?(.*)$"
     match = re.match(pattern, variant)
 
@@ -954,15 +992,6 @@ def convert_aa_1_to_3(variant: str) -> Optional[str]:
         aa2_long = AA_1_TO_3.get(aa2, aa2) if aa2 else ""
         result = f"p.{aa1_long}{pos}{aa2_long}{rest or ''}"
         return result
-
-    # Pattern 2: Handle range deletions like p.R123_K130del
-    range_pattern = r"^p\.([A-Z\*])(\d+)_([A-Z\*])(\d+)(.*)$"
-    range_match = re.match(range_pattern, variant)
-    if range_match:
-        aa1, pos1, aa2, pos2, rest = range_match.groups()
-        aa1_long = AA_1_TO_3.get(aa1, aa1)
-        aa2_long = AA_1_TO_3.get(aa2, aa2)
-        return f"p.{aa1_long}{pos1}_{aa2_long}{pos2}{rest}"
 
     return None
 
@@ -983,7 +1012,12 @@ def add_p_prefix(variant: str) -> Optional[str]:
     # - Three letter + number + three letter (Ala123Val)
     # - Single/three letter + number + fs* (A123fs*)
     # - Single/three letter + number + * (A123*)
-    protein_pattern = r"^[A-Z][a-z]{0,2}\d+([A-Z][a-z]{0,2}|fs\*?\d*|\*\d*)$"
+    aa = r"(?:[A-Z][a-z]{2}|[A-Z])"
+    protein_pattern = (
+        rf"^(?:{aa}\d+(?:_{aa}\d+)?"
+        rf"(?:{aa}|fs\*?\d*|\*\d*|del\d*|dup|ins{aa}*)"
+        rf"|\d+_\d+ins{aa}+)$"
+    )
     if re.match(protein_pattern, variant, re.IGNORECASE):
         return f"p.{variant}"
 
@@ -1124,6 +1158,14 @@ def _positions_compatible(a: str, b: str) -> bool:
     da, db = _positional_digits(a), _positional_digits(b)
     if not da or not db:
         return True
+    # cDNA coordinates carry intronic offsets and ranges where subset matching
+    # is unsafe: c.1890+5G>A and c.1890G>A share 1890 but are different
+    # variants. Cross-notation indel recovery is handled by the explicit
+    # cDNA/protein bridge instead of fuzzy matching.
+    a_is_cdna = str(a or "").strip().lower().startswith("c.")
+    b_is_cdna = str(b or "").strip().lower().startswith("c.")
+    if a_is_cdna or b_is_cdna:
+        return da == db
     sa, sb = set(da), set(db)
     if len(sa) <= len(sb):
         return sa.issubset(sb)
@@ -1237,7 +1279,10 @@ def _protein_indel_position(variant: str) -> Optional[Tuple[str, int, str]]:
     """
     if not variant:
         return None
-    m = re.match(r"^([A-Z])(\d+)(fsX\d*|fs|Del|Ins|X)$", str(variant).strip())
+    m = re.match(
+        r"^([A-Z])(\d+)(?:_[A-Z]\d+)?(fsX\d*|fs|Del|Ins|X)$",
+        str(variant).strip(),
+    )
     if not m:
         return None
     aa, pos, op_raw = m.group(1), int(m.group(2)), m.group(3)
@@ -1483,7 +1528,10 @@ def aggregate_sqlite_data(df: pd.DataFrame) -> Dict[Tuple[str, str], Dict[str, A
     return aggregated
 
 
-_INDEL_CANONICAL_RE = re.compile(r"^[A-Z]\d+(?:fsX|Del|Ins|dup)$", re.IGNORECASE)
+_INDEL_CANONICAL_RE = re.compile(
+    r"^(?:[A-Z]\d+(?:_[A-Z]\d+)?(?:fsX|Del|Ins|dup)|\d+_\d+Ins[A-Z]+)$",
+    re.IGNORECASE,
+)
 # Match indel tokens in cDNA notation. "dup", "del", "ins", and "fs" may be
 # followed immediately by a base letter (e.g. c.842dupG, c.362delA), so word
 # boundaries on the right side are wrong here — keep only the left boundary.
@@ -1549,33 +1597,70 @@ def _find_cdna_protein_bridge(
 
     Returns the matching (sqlite_key, sqlite_entry) or None.
     """
-    excel_canonical = to_canonical_form(excel_entry.get("variant_raw", ""))
-    if not _is_indel_canonical(excel_canonical):
-        return None
-    target_codon = _protein_codon_from_canonical(excel_canonical)
-    if target_codon is None:
-        return None
+    excel_raw = excel_entry.get("variant_raw", "")
+    excel_canonical = to_canonical_form(excel_raw)
 
+    # Protein gold -> cDNA SQLite bridge.
+    target_codon = None
+    if _is_indel_canonical(excel_canonical):
+        target_codon = _protein_codon_from_canonical(excel_canonical)
+
+        if target_codon is not None:
+            for sqlite_key, entry in available:
+                cdna = entry.get("cdna_notation")
+                if not cdna or not isinstance(cdna, str):
+                    continue
+                protein_range = _cdna_indel_protein_positions(cdna)
+                if protein_range:
+                    start, end = protein_range
+                    if start <= target_codon <= end:
+                        return (sqlite_key, entry)
+
+                implied = _cdna_implied_codon(cdna)
+                if implied is None:
+                    continue
+                # Exact codon match. A frameshift caused by a single-base indel at
+                # codon N starts at codon N; tolerate ±0 by default to keep precision
+                # high — the diagnosis only reports recoverable matches at the right
+                # codon.
+                if implied == target_codon:
+                    return (sqlite_key, entry)
+
+    # cDNA gold -> protein SQLite bridge. This is the reverse case: SQLite may
+    # prefer protein_notation as its display key even though the stored cDNA
+    # notation, or an equivalent protein frameshift, is what the gold row uses.
+    excel_range = _cdna_indel_protein_positions(str(excel_raw))
+    if not excel_range:
+        return None
+    start, end = excel_range
     for sqlite_key, entry in available:
-        cdna = entry.get("cdna_notation")
-        if not cdna or not isinstance(cdna, str):
-            continue
-        protein_range = _cdna_indel_protein_positions(cdna)
-        if protein_range:
-            start, end = protein_range
-            if start <= target_codon <= end:
+        for protein in (entry.get("protein_notation"), entry.get("variant_raw")):
+            protein_canonical = to_canonical_form(str(protein or ""))
+            protein_info = _protein_indel_position(protein_canonical or "")
+            if not protein_info:
+                continue
+            _, protein_pos, _ = protein_info
+            # HGVS protein frameshift positions can be one codon before the
+            # first changed cDNA codon when the nucleotide event falls at a
+            # codon boundary. Keep this narrow to avoid cross-position matches.
+            if start - 1 <= protein_pos <= end + 1:
                 return (sqlite_key, entry)
-
-        implied = _cdna_implied_codon(cdna)
-        if implied is None:
-            continue
-        # Exact codon match. A frameshift caused by a single-base indel at
-        # codon N starts at codon N; tolerate ±0 by default to keep precision
-        # high — the diagnosis only reports recoverable matches at the right
-        # codon.
-        if implied == target_codon:
-            return (sqlite_key, entry)
     return None
+
+
+def _entry_variant_forms(entry: Dict[str, Any]) -> Set[str]:
+    """Return every comparable variant form stored on a SQLite aggregate row."""
+
+    forms: Set[str] = set()
+    for variant_field in ("variant_raw", "protein_notation", "cdna_notation"):
+        value = entry.get(variant_field)
+        if value is None or pd.isna(value):
+            continue
+        text = str(value).strip()
+        if not text:
+            continue
+        forms.update(get_variant_forms(text))
+    return forms
 
 
 def compare_data(
@@ -1637,30 +1722,88 @@ def compare_data(
         available = _available_for(excel_pmid)
 
         row: Optional[ComparisonRow] = None
+        excel_forms = get_variant_forms(excel_entry["variant_raw"])
 
-        if match_mode == "exact":
-            # Try form-intersection (e.g. 1-letter vs 3-letter notation that
-            # the canonicalizer couldn't reduce) against remaining candidates.
-            excel_forms = get_variant_forms(excel_entry["variant_raw"])
+        # Exact form-intersection against all notations carried by the SQLite
+        # row. The aggregate display key prefers protein_notation, but a row can
+        # also carry an exact cDNA match that would otherwise be hidden.
+        for sqlite_key, entry in available:
+            if excel_forms & _entry_variant_forms(entry):
+                consumed_sqlite_keys.add(sqlite_key)
+                matched_excel_keys.add(excel_key)
+                row = create_comparison_row(excel_entry, entry, "exact", 1.0)
+                break
+
+        if row is None:
+            bridge = _find_cdna_protein_bridge(excel_entry, available)
+            if bridge:
+                sqlite_key, entry = bridge
+                consumed_sqlite_keys.add(sqlite_key)
+                matched_excel_keys.add(excel_key)
+                row = create_comparison_row(
+                    excel_entry,
+                    entry,
+                    (
+                        "fuzzy_cdna_bridge"
+                        if match_mode == "fuzzy"
+                        else "exact_cdna_bridge"
+                    ),
+                    1.0,
+                )
+
+        if row is None and match_mode == "fuzzy":
+            # Fuzzy mode: compare every form stored on each available SQLite
+            # row, not just the preferred display variant. This preserves the
+            # positional guard while allowing cDNA/protein alternate notations
+            # from the same row to participate in matching.
+            best_key: Optional[Tuple[str, str]] = None
+            best_entry: Optional[Dict[str, Any]] = None
+            best_score = 0.0
             for sqlite_key, entry in available:
-                if excel_forms & get_variant_forms(entry["variant_raw"]):
-                    consumed_sqlite_keys.add(sqlite_key)
-                    matched_excel_keys.add(excel_key)
-                    row = create_comparison_row(excel_entry, entry, "exact", 1.0)
-                    break
+                for q_form in excel_forms:
+                    for c_form in _entry_variant_forms(entry):
+                        if not _positions_compatible(q_form, c_form):
+                            continue
+                        score = compute_similarity(q_form, c_form)
+                        if score > best_score:
+                            best_score = score
+                            best_key = sqlite_key
+                            best_entry = entry
+            if (
+                best_entry is not None
+                and best_key is not None
+                and best_score >= fuzzy_threshold
+            ):
+                consumed_sqlite_keys.add(best_key)
+                matched_excel_keys.add(excel_key)
+                row = create_comparison_row(
+                    excel_entry, best_entry, "fuzzy", best_score
+                )
+
+            # Retain the legacy raw-string matcher as a fallback in case a
+            # caller relies on its exact return semantics for unusual inputs.
             if row is None:
-                bridge = _find_cdna_protein_bridge(excel_entry, available)
-                if bridge:
-                    sqlite_key, entry = bridge
-                    consumed_sqlite_keys.add(sqlite_key)
-                    matched_excel_keys.add(excel_key)
-                    row = create_comparison_row(
-                        excel_entry, entry, "exact_cdna_bridge", 1.0
-                    )
-        else:
-            # Fuzzy mode: find_best_match handles exact-form-intersection
-            # plus position-guarded fuzzy similarity, against the remaining
-            # candidate pool only.
+                candidate_raws = [entry["variant_raw"] for (_, entry) in available]
+                best_match, score, match_type = find_best_match(
+                    excel_entry["variant_raw"], candidate_raws, fuzzy_threshold
+                )
+                if best_match:
+                    for sqlite_key, entry in available:
+                        if entry["variant_raw"] == best_match:
+                            consumed_sqlite_keys.add(sqlite_key)
+                            matched_excel_keys.add(excel_key)
+                            row = create_comparison_row(
+                                excel_entry, entry, match_type, score
+                            )
+                            break
+
+        if row is None and match_mode == "exact":
+            # No further exact-only work needed; form and cDNA bridge attempts
+            # already ran above.
+            pass
+        elif row is None and match_mode != "fuzzy":
+            # Preserve future non-fuzzy modes by falling back to the legacy
+            # exact raw-string helper.
             candidate_raws = [entry["variant_raw"] for (_, entry) in available]
             best_match, score, match_type = find_best_match(
                 excel_entry["variant_raw"], candidate_raws, fuzzy_threshold
@@ -1674,15 +1817,6 @@ def compare_data(
                             excel_entry, entry, match_type, score
                         )
                         break
-            if row is None:
-                bridge = _find_cdna_protein_bridge(excel_entry, available)
-                if bridge:
-                    sqlite_key, entry = bridge
-                    consumed_sqlite_keys.add(sqlite_key)
-                    matched_excel_keys.add(excel_key)
-                    row = create_comparison_row(
-                        excel_entry, entry, "fuzzy_cdna_bridge", 1.0
-                    )
 
         if row is None:
             row = create_comparison_row(excel_entry, None, "none", None)

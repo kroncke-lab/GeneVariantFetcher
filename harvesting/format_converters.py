@@ -288,6 +288,25 @@ class FormatConverter:
                                     if table_md:
                                         markdown += table_md
 
+            # Some NIH Author Manuscript JATS deposits place full article
+            # tables in <back> rather than inline in <body>. Keep those rows in
+            # the canonical text; caption-only extraction is not enough for
+            # variant compendia tables.
+            back_elem = root.find(".//back")
+            if back_elem is not None:
+                emitted_table_ids = set()
+                for table_wrap in back_elem.iter():
+                    if self._xml_local_name(table_wrap.tag) != "table-wrap":
+                        continue
+                    table_id = table_wrap.attrib.get("id")
+                    if table_id and table_id in emitted_table_ids:
+                        continue
+                    table_md = self._jats_table_wrap_to_markdown(table_wrap)
+                    if table_md:
+                        markdown += table_md
+                        if table_id:
+                            emitted_table_ids.add(table_id)
+
             return markdown
         except Exception as e:
             print(f"  Error parsing XML: {e}")

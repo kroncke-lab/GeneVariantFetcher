@@ -38,6 +38,95 @@ Table 1. KCNH2 variant carriers
     assert by_protein["p.Lys897Thr"]["penetrance_data"]["total_carriers_observed"] == 7
 
 
+def test_deterministic_parser_uses_plain_table_titles_to_filter_gene():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 1. Summary of putative LQT1-associated mutations in KCNQ1
+| Region | Nucleotide | Variant | Mutation Type | Location | No. of patients |
+|---|---|---|---|---|---|
+| Exon 1 | 5 C>T | A2V | Missense | N-Terminal | 1 |
+
+Table 2. Summary of putative LQT2-associated mutations in KCNH2
+| Region | Nucleotide | Variant | Mutation Type | Location | No. of patients |
+|---|---|---|---|---|---|
+| Exon 1 | 47 A>C | D16A* | Missense | N-Terminal | 1 |
+
+Table 3. Summary of putative LQT3-associated mutations in SCN5A
+| Region | Nucleotide | Variant | Mutation Type | Location | No. of patients |
+|---|---|---|---|---|---|
+| Exon 2 | 155 C>A | P52H | Missense | N-Terminal | 1 |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "SCN5A")
+
+    assert [v["protein_notation"] for v in variants] == ["P52H"]
+    assert variants[0]["source_location"].startswith("Table 3.")
+    assert variants[0]["penetrance_data"]["total_carriers_observed"] == 1
+
+
+def test_deterministic_parser_filters_generic_noncardiac_table_titles():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 1. BRCA1 variants observed in hereditary cancer probands
+| Nucleotide | Variant | No. of patients |
+|---|---|---|
+| 181 T>G | C61G | 3 |
+
+Table 2. TP53 variants observed in hereditary cancer probands
+| Nucleotide | Variant | No. of patients |
+|---|---|---|
+| 743 G>A | R248Q | 5 |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "TP53")
+
+    assert [v["protein_notation"] for v in variants] == ["R248Q"]
+    assert variants[0]["cdna_notation"] == "c.743G>A"
+    assert variants[0]["source_location"].startswith("Table 2.")
+
+
+def test_deterministic_parser_marks_controls_unaffected_and_continues_to_later_table():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+### Table 2
+
+Control variants found in reference alleles
+
+| Exon | Nucleotide change | Variant | Mutation type | Number | Status |
+|---|---|---|---|---|---|
+| 2 | 52 C>T | R18W | Missense | 1 | Rare control |
+| 2 | 100 C>T | R34C | Missense | 44 | Polymorphism |
+
+### Table 4
+
+Compendium of Brugada syndrome-associated SCN5A mutations
+
+| Exon | Nucleotide change | Coding effect | Mutation type | Number | Center |
+|---|---|---|---|---|---|
+| Exon 28 | 5350 G>A | E1784K* | Missense | 14 | 1, 2, 5, 6, 7 |
+| Exon 12 | 2582_2583delTT | F861WfsX90* | Frame shift | 11 | 3, 7 |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "SCN5A")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {"R18W", "R34C", "E1784K", "F861WfsX90"}
+    assert by_protein["R18W"]["clinical_significance"] == "benign"
+    assert by_protein["R18W"]["penetrance_data"] == {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+    }
+    assert by_protein["R34C"]["penetrance_data"] == {
+        "total_carriers_observed": 44,
+        "affected_count": 0,
+        "unaffected_count": 44,
+    }
+    assert by_protein["E1784K"]["cdna_notation"] == "c.5350G>A"
+    assert by_protein["E1784K"]["penetrance_data"]["total_carriers_observed"] == 14
+    assert by_protein["F861WfsX90"]["source_location"] == "Table 4"
+
+
 def test_deterministic_parser_preserves_affected_unaffected_counts():
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """
@@ -61,6 +150,226 @@ Table 1. KCNH2 affected and unaffected carriers
     assert pen["total_carriers_observed"] == 14
     assert pen["affected_count"] == 4
     assert pen["unaffected_count"] == 10
+
+
+def test_fixed_width_parser_reads_pdftotext_layout_rows():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 5: SCN5A mutations (442 patients, 445 mutations, 185 unique mutations)
+
+SCN5A mutation (c.)            exon              Mutant (p.)    Functional effect   n
+Truncation mutations [n=81 mutations, 44 distinct mutations]
+c127C>T                       2         pArg43*                Loss of function     1
+c393-1C>T                     4                                Loss of function     1
+c5350G>A                      28        pGlu1784Lys            Gain of function     69
+c4519-4527del                 26        pGln1507_Pro1509del                        9
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "SCN5A")
+
+    by_variant = {v["protein_notation"] or v["cdna_notation"]: v for v in variants}
+    assert set(by_variant) == {
+        "p.Arg43*",
+        "c.393-1C>T",
+        "p.Glu1784Lys",
+        "p.Gln1507_Pro1509del",
+    }
+    assert by_variant["p.Glu1784Lys"]["cdna_notation"] == "c.5350G>A"
+    assert (
+        by_variant["p.Glu1784Lys"]["penetrance_data"]["total_carriers_observed"] == 69
+    )
+    assert by_variant["c.393-1C>T"]["penetrance_data"]["affected_count"] == 1
+
+
+def test_fixed_width_parser_reads_wes_gene_column_rows():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Supplemental Table 1: Compendium of variants identified by WES testing
+
+Position          Desig   Gene    Location   Nucleotide         Amino Acid       Zygosity
+Chr1: 116311152   VUS     CASQ2   Exon 1     c.11C>T            p.T4I            Het
+Chr1: 237433824   VUS     RYR2    Exon 2     c.76G>A            p.A26T           Het
+Chr1: 237608827   VUS     RYR2    IVS        c.1292+5T>C        N/A              Het
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "RYR2")
+
+    by_variant = {v["protein_notation"] or v["cdna_notation"]: v for v in variants}
+    assert set(by_variant) == {"p.A26T", "c.1292+5T>C"}
+    assert by_variant["p.A26T"]["cdna_notation"] == "c.76G>A"
+    assert by_variant["p.A26T"]["source_location"] == "Supplemental Table 1"
+    assert by_variant["c.1292+5T>C"]["penetrance_data"]["affected_count"] == 1
+
+
+def test_fixed_width_parser_reads_patient_mutation_rows_under_gene_table_title():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Supplementary Table 2. RyR2 mutations in CPVT patients.
+
+  # Patient   RyR2 Mutation   Blood glucose (mg/dl) 2h
+        #1       P2404T                 187
+        #2       K4392R                 147
+        #3       L2534V                 192
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "RYR2")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {"P2404T", "K4392R", "L2534V"}
+    assert by_protein["P2404T"]["source_location"].startswith("Supplementary Table 2.")
+    assert by_protein["P2404T"]["penetrance_data"]["total_carriers_observed"] == 1
+
+
+def test_fixed_width_parser_reads_coding_effect_count_table():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table S1: List of Mutations by Coding Effect, Location, and Frequency in 406
+LQT3 Patients.
+
+                      Coding Effect    Location        COUNT
+                      V125L            N-term              1
+                      K1505_Q1507del   DIII/DIV            9
+                      Q1507_P1509del   DIII/DIV           55
+                      F1617del         DIV-S3/S4           5
+TOTAL                       406
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "SCN5A")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {
+        "V125L",
+        "K1505_Q1507del",
+        "Q1507_P1509del",
+        "F1617del",
+    }
+    assert by_protein["Q1507_P1509del"]["penetrance_data"] == {
+        "total_carriers_observed": 55,
+        "affected_count": 55,
+        "unaffected_count": 0,
+    }
+
+
+def test_fixed_width_parser_reads_scn5a_nssnv_case_control_table():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Supplemental Table 1: Properties of SCN5A nsSNVs
+                Nucleotid                         BrS      LQT     Control
+     Status      e Change    Variant    Region   (2111)   (2888)   (8975)
+case nsSNV      2249 A>G   Q750R   DII-S2     0   1   0   Benign
+control nsSNV   553 G>A    A185T   DI-S2/3    0   0   1   Benign
+Polymorphism    2074 C>A   Q692K   DI/DII     0   0   5   Benign
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "SCN5A")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {"Q750R", "A185T", "Q692K"}
+    assert by_protein["Q750R"]["cdna_notation"] == "c.2249A>G"
+    assert by_protein["Q750R"]["penetrance_data"] == {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+    }
+    assert by_protein["A185T"]["penetrance_data"] == {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+    }
+    assert by_protein["Q692K"]["penetrance_data"]["unaffected_count"] == 5
+
+
+def test_fixed_width_parser_reads_scn5a_functional_table_missing_from_case_table():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Supplemental Table 1: Properties of SCN5A nsSNVs
+                Nucleotid                         BrS      LQT     Control
+     Status      e Change    Variant    Region   (2111)   (2888)   (8975)
+case nsSNV      2249 A>G   Q750R   DII-S2     0   1   0   Benign
+
+Supplemental Table 4: Functionally Characterized SCN5A nsSNVs
+              Control
+Mutation   Frequency (%)    EP Status                              Electrophysiology Reference
+Q750R    0.00%   Abnormal      This study
+R800L    0.00%   Abnormal      This study
+M1320V   0.00%    Wildtype     This study
+A1330T   0.00%   Abnormal      PMID: 16039271
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "SCN5A")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {"Q750R", "R800L", "M1320V", "A1330T"}
+    assert by_protein["Q750R"]["cdna_notation"] == "c.2249A>G"
+    assert by_protein["R800L"]["clinical_significance"] == "pathogenic"
+    assert by_protein["M1320V"]["clinical_significance"] == "benign"
+    assert by_protein["A1330T"]["source_location"].startswith("Supplemental Table 4")
+
+
+def test_fixed_width_parser_reads_clinical_mutation_table_with_coding_effect():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 2. Included SCN5A Mutations and Variants
+Nucleotide Change              Coding Effect            Region
+163C>T                         Q55X                     N-terminal
+407T>C                         L136P (2)                DI-S1
+1537delC                       R513VfsTer8              NA
+4140_4142 delCAA               del1380N                 NA
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "SCN5A")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {"Q55X", "L136P", "R513VfsTer8", "N1380del"}
+    assert by_protein["Q55X"]["cdna_notation"] == "c.163C>T"
+    assert by_protein["L136P"]["penetrance_data"] == {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+    }
+    assert by_protein["N1380del"]["cdna_notation"] == "c.4140_4142delCAA"
+
+
+def test_fixed_width_clinical_table_short_circuits_without_gold_standard():
+    extractor = ExpertExtractor(models=["test-model"], tier_threshold=1)
+    rows = "\n".join(
+        f"{100 + idx}A>G                         A{idx + 1}G                    Region"
+        for idx in range(20)
+    )
+    text = f"""
+Table 2. Included KCNH2 Mutations and Variants
+Nucleotide Change              Coding Effect            Region
+{rows}
+"""
+
+    result = extractor._attempt_extraction(
+        Paper(pmid="123", title="KCNH2 table", gene_symbol="KCNH2", full_text=text),
+        "test-model",
+        text,
+        estimated_variants=20,
+    )
+
+    assert result.success
+    assert result.model_used == "deterministic-fixed-width-table-parser"
+    assert len(result.extracted_data["variants"]) == 20
+
+
+def test_fixed_width_parser_reads_target_gene_functional_table_without_scn5a_name():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Supplemental Table 2: Functionally Characterized KCNH2 Variants
+Mutation   Frequency (%)    EP Status                              Electrophysiology Reference
+R56Q    0.00%   Abnormal      This study
+K897T   0.10%   Wildtype      PMID: 12345678
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "KCNH2")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {"R56Q", "K897T"}
+    assert by_protein["R56Q"]["clinical_significance"] == "pathogenic"
+    assert by_protein["K897T"]["clinical_significance"] == "benign"
+    assert "KCNH2" in by_protein["R56Q"]["source_location"]
 
 
 def test_deterministic_parser_skips_caption_unnamed_header_and_sums_case_columns():

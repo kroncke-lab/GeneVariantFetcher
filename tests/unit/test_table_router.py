@@ -172,6 +172,41 @@ def test_parse_routed_table_filters_multigene_and_derives_total():
     assert pen["unaffected_count"] == 3
 
 
+def test_parse_routed_table_splits_parallel_pairs_and_sums_duplicate_rows():
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. Clinical and genetic summaries of probands.",
+        header_line="| Patient | Nucleotide | Amino Acids | Symptom |",
+        header_cells=["Patient", "Nucleotide", "Amino Acids", "Symptom"],
+        data_lines=[
+            "| 1 | exon 3 deletion | N57_G91del35 | Syncope |",
+            "| 32 | 14311g>a | V4771I | Syncope |",
+            "| 33 | 14311g>a | V4771I | CPA |",
+            "| 35 | 14834_14835insTCA | 4944_4945insH | CPA |",
+            "| 36 | 9910c>g, 14222c>t | Q3304E, A4741V | CPA |",
+        ],
+        char_start=0,
+        char_end=300,
+    )
+    mapping = {"cdna": 1, "protein": 2, "patient_count": -1, "phenotype": 3}
+
+    variants = parse_routed_table(table, mapping, "RYR2")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {
+        "N57_G91del35",
+        "V4771I",
+        "4944_4945insH",
+        "Q3304E",
+        "A4741V",
+    }
+    assert by_protein["N57_G91del35"]["cdna_notation"] is None
+    assert by_protein["V4771I"]["penetrance_data"]["total_carriers_observed"] == 2
+    assert by_protein["4944_4945insH"]["cdna_notation"] == "c.14834_14835insTCA"
+    assert by_protein["Q3304E"]["cdna_notation"] == "c.9910c>g"
+    assert by_protein["A4741V"]["cdna_notation"] == "c.14222c>t"
+
+
 def test_extract_via_router_infers_one_carrier_per_clinical_row_without_count():
     def stub(**_):
         raise AssertionError("LLM router should not run for row-level clinical tables")

@@ -750,10 +750,21 @@ def _coerce_int(value: Any) -> Optional[int]:
             return None
 
 
+_AA_TOKEN = r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
 _PROTEIN_VARIANT_RE = re.compile(
-    r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
-    r"\d{1,4}"
-    r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del|dup|ins)",
+    r"^(?:p\.)?(?:"
+    rf"{_AA_TOKEN}\d{{1,4}}"
+    rf"(?:_{_AA_TOKEN}\d{{1,4}})?"
+    r"(?:"
+    rf"(?:{_AA_TOKEN}|[ACDEFGHIKLMNPQRSTVWY])?fs(?:X|\*)?\d*"
+    rf"|{_AA_TOKEN}"
+    r"|[ACDEFGHIKLMNPQRSTVWY*X?]"
+    r"|del\d*"
+    r"|dup"
+    rf"|ins(?:{_AA_TOKEN}|[ACDEFGHIKLMNPQRSTVWY]+)?"
+    r")"
+    r"|\d{1,4}_\d{1,4}ins(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY]+)"
+    r")$",
     re.IGNORECASE,
 )
 
@@ -780,9 +791,46 @@ def _normalize_protein(value: str) -> Optional[str]:
     s = value.strip().replace(" ", "")
     if not s or s.lower() in {"-", "na", "n/a", "none", "."}:
         return None
+    if s.endswith("*"):
+        without_footnote = s[:-1]
+        if without_footnote and _PROTEIN_VARIANT_RE.match(without_footnote):
+            s = without_footnote
     if not _PROTEIN_VARIANT_RE.match(s):
         return None
     return s
+
+
+def _split_variant_cell(value: Optional[str]) -> List[str]:
+    """Split cells that list parallel cDNA/protein pairs."""
+    if not value:
+        return []
+    return [
+        part.strip()
+        for part in re.split(r"\s*(?:,|;)\s*", value)
+        if part and part.strip()
+    ]
+
+
+def _normalize_cdna_values(value: Optional[str]) -> List[str]:
+    return [
+        normalized
+        for part in _split_variant_cell(value)
+        if (normalized := _normalize_cdna(part))
+    ]
+
+
+def _normalize_protein_values(value: Optional[str]) -> List[str]:
+    return [
+        normalized
+        for part in _split_variant_cell(value)
+        if (normalized := _normalize_protein(part))
+    ]
+
+
+def _sum_optional_int(a: Optional[int], b: Optional[int]) -> Optional[int]:
+    if a is None and b is None:
+        return None
+    return (a or 0) + (b or 0)
 
 
 def route_tables(
@@ -935,7 +983,7 @@ def parse_routed_table(
     clin_idx = mapping.get("clinical_significance")
 
     variants: List[Dict[str, Any]] = []
-    seen_keys: set[str] = set()
+    by_key: Dict[tuple[str, str], Dict[str, Any]] = {}
     target_gene_lower = gene_symbol.strip().lower() if gene_symbol else ""
 
     for row in table.data_lines:
@@ -956,19 +1004,11 @@ def parse_routed_table(
             if gene_cell and target_gene_lower not in gene_cell:
                 continue
 
-        cdna_raw = cell(cdna_idx)
-        protein_raw = cell(protein_idx)
-        cdna = _normalize_cdna(cdna_raw) if cdna_raw else None
-        protein = _normalize_protein(protein_raw) if protein_raw else None
+        cdna_values = _normalize_cdna_values(cell(cdna_idx))
+        protein_values = _normalize_protein_values(cell(protein_idx))
 
-        if not cdna and not protein:
+        if not cdna_values and not protein_values:
             continue
-
-        # Dedup by the most stable key available
-        dedup_key = (cdna or protein or "").lower()
-        if not dedup_key or dedup_key in seen_keys:
-            continue
-        seen_keys.add(dedup_key)
 
         infer_one_carrier = count_idx == _INFER_ROW_PATIENT_COUNT
         total = 1 if infer_one_carrier else _coerce_int(cell(count_idx))
@@ -996,8 +1036,48 @@ def parse_routed_table(
         phenotype = cell(pheno_idx)
         clinical = cell(clin_idx)
 
-        variants.append(
-            {
+        n_variants = max(len(cdna_values), len(protein_values), 1)
+        for variant_idx in range(n_variants):
+            cdna = (
+                cdna_values[variant_idx]
+                if variant_idx < len(cdna_values)
+                else cdna_values[0]
+                if len(cdna_values) == 1
+                else None
+            )
+            protein = (
+                protein_values[variant_idx]
+                if variant_idx < len(protein_values)
+                else protein_values[0]
+                if len(protein_values) == 1
+                else None
+            )
+
+            if not cdna and not protein:
+                continue
+
+            dedup_key = ((cdna or "").lower(), (protein or "").lower())
+            if dedup_key in by_key:
+                existing = by_key[dedup_key]
+                existing["patients"]["count"] = _sum_optional_int(
+                    existing["patients"].get("count"), total
+                )
+                pen = existing["penetrance_data"]
+                pen["total_carriers_observed"] = _sum_optional_int(
+                    pen.get("total_carriers_observed"), total
+                )
+                pen["affected_count"] = _sum_optional_int(
+                    pen.get("affected_count"), affected
+                )
+                pen["unaffected_count"] = _sum_optional_int(
+                    pen.get("unaffected_count"), unaffected
+                )
+                pen["uncertain_count"] = _sum_optional_int(
+                    pen.get("uncertain_count"), uncertain
+                )
+                continue
+
+            variant = {
                 "gene_symbol": gene_symbol,
                 "cdna_notation": cdna,
                 "protein_notation": protein,
@@ -1030,6 +1110,7 @@ def parse_routed_table(
                 ),
                 "key_quotes": [],
             }
-        )
+            by_key[dedup_key] = variant
+            variants.append(variant)
 
     return variants

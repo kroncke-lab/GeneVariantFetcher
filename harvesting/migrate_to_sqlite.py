@@ -99,6 +99,40 @@ def sanitize_variant_notation(variant_data: Dict[str, Any]) -> bool:
     return bool(protein or cdna or genomic)
 
 
+def normalize_affected_status(status: Any) -> Optional[str]:
+    """Normalize extracted individual status values to the SQLite enum."""
+
+    if status is None:
+        return None
+    text = str(status).strip().lower()
+    if not text:
+        return None
+    if text in {"affected", "case", "symptomatic", "diseased", "patient"}:
+        return "affected"
+    if text in {
+        "unaffected",
+        "control",
+        "asymptomatic",
+        "healthy",
+        "normal",
+        "nonaffected",
+        "non-affected",
+    }:
+        return "unaffected"
+    if text in {
+        "uncertain",
+        "unknown",
+        "ambiguous",
+        "carrier",
+        "carrier only",
+        "not reported",
+        "na",
+        "n/a",
+    }:
+        return "uncertain"
+    return "uncertain"
+
+
 def validate_input_directory(data_dir: Path) -> None:
     """
     Validate that input directory exists and is readable.
@@ -311,7 +345,11 @@ def repair_extraction_data(
 
     # Ensure paper_metadata exists
     if "paper_metadata" not in data:
-        data["paper_metadata"] = {}
+        data["paper_metadata"] = {
+            k: data[k]
+            for k in ("pmid", "title", "extraction_summary")
+            if data.get(k) is not None
+        }
         repairs.append("Created missing paper_metadata section")
 
     paper_meta = data["paper_metadata"]
@@ -342,10 +380,37 @@ def repair_extraction_data(
             repairs.append(f"Variant {i}: set gene_symbol to '{gene}'")
 
         # Ensure individuals have affected_status
+        repaired_individuals = []
         for j, ind in enumerate(variant.get("individuals", [])):
+            if not isinstance(ind, dict):
+                repairs.append(f"Variant {i}, Individual {j}: dropped non-object")
+                continue
             if not ind.get("affected_status"):
-                ind["affected_status"] = "Ambiguous"
+                ind["affected_status"] = "uncertain"
                 repairs.append(f"Variant {i}, Individual {j}: set affected_status")
+            else:
+                normalized = normalize_affected_status(ind.get("affected_status"))
+                if normalized != ind.get("affected_status"):
+                    repairs.append(
+                        f"Variant {i}, Individual {j}: normalized affected_status"
+                    )
+                ind["affected_status"] = normalized
+            repaired_individuals.append(ind)
+        if len(repaired_individuals) != len(variant.get("individuals", [])):
+            variant["individuals"] = repaired_individuals
+
+        repaired_records = []
+        for j, record in enumerate(variant.get("individual_records", [])):
+            if not isinstance(record, dict):
+                repairs.append(f"Variant {i}, Record {j}: dropped non-object")
+                continue
+            normalized = normalize_affected_status(record.get("affected_status"))
+            if normalized != record.get("affected_status"):
+                repairs.append(f"Variant {i}, Record {j}: normalized affected_status")
+            record["affected_status"] = normalized or "uncertain"
+            repaired_records.append(record)
+        if len(repaired_records) != len(variant.get("individual_records", [])):
+            variant["individual_records"] = repaired_records
 
     # Mark as repaired
     if repairs:
@@ -688,7 +753,9 @@ def get_or_create_variant(cursor: sqlite3.Cursor, variant_data: Dict[str, Any]) 
 
 
 def insert_paper_metadata(
-    cursor: sqlite3.Cursor, extraction_data: Dict[str, Any]
+    cursor: sqlite3.Cursor,
+    extraction_data: Dict[str, Any],
+    replace_existing: bool = True,
 ) -> None:
     """
     Insert or update paper metadata.
@@ -696,6 +763,8 @@ def insert_paper_metadata(
     Args:
         cursor: Database cursor
         extraction_data: Extraction JSON data
+        replace_existing: If True, use the legacy replace behavior. If False,
+            upsert metadata without deleting existing PMID-linked evidence.
     """
     paper_meta = extraction_data.get("paper_metadata", {})
     pmid = paper_meta.get("pmid")
@@ -704,26 +773,53 @@ def insert_paper_metadata(
         logger.warning("No PMID found in extraction data")
         return
 
+    gene_symbol = (
+        extraction_data.get("variants", [{}])[0].get("gene_symbol")
+        if extraction_data.get("variants")
+        else None
+    )
+    values = (
+        pmid,
+        paper_meta.get("title"),
+        gene_symbol,
+        paper_meta.get("extraction_summary"),
+        datetime.now().isoformat(),
+    )
+
+    if replace_existing:
+        cursor.execute(
+            """
+            INSERT OR REPLACE INTO papers (
+                pmid, title, gene_symbol, extraction_summary, extraction_timestamp
+            ) VALUES (?, ?, ?, ?, ?)
+        """,
+            values,
+        )
+        return
+
     cursor.execute(
         """
-        INSERT OR REPLACE INTO papers (
+        INSERT INTO papers (
             pmid, title, gene_symbol, extraction_summary, extraction_timestamp
         ) VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT(pmid) DO UPDATE SET
+            title = COALESCE(excluded.title, papers.title),
+            gene_symbol = COALESCE(papers.gene_symbol, excluded.gene_symbol),
+            extraction_summary = COALESCE(
+                excluded.extraction_summary,
+                papers.extraction_summary
+            ),
+            extraction_timestamp = excluded.extraction_timestamp
     """,
-        (
-            pmid,
-            paper_meta.get("title"),
-            extraction_data.get("variants", [{}])[0].get("gene_symbol")
-            if extraction_data.get("variants")
-            else None,
-            paper_meta.get("extraction_summary"),
-            datetime.now().isoformat(),
-        ),
+        values,
     )
 
 
 def insert_variant_data(
-    cursor: sqlite3.Cursor, pmid: str, variant_data: Dict[str, Any]
+    cursor: sqlite3.Cursor,
+    pmid: str,
+    variant_data: Dict[str, Any],
+    preserve_existing_evidence: bool = False,
 ) -> Optional[int]:
     """
     Insert variant and all associated data.
@@ -732,6 +828,8 @@ def insert_variant_data(
         cursor: Database cursor
         pmid: Paper PMID
         variant_data: Variant data dictionary
+        preserve_existing_evidence: If True, do not duplicate existing
+            penetrance or individual rows for the same PMID/variant.
 
     Returns:
         variant_id, or None if the variant had no usable notation
@@ -783,46 +881,114 @@ def insert_variant_data(
         penetrance.get(k) is not None
         for k in ["total_carriers_observed", "affected_count", "unaffected_count"]
     ):
-        cursor.execute(
-            """
-            INSERT INTO penetrance_data (
-                variant_id, pmid, total_carriers_observed, affected_count,
-                unaffected_count, uncertain_count, penetrance_percentage
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
-        """,
-            (
-                variant_id,
-                pmid,
-                penetrance.get("total_carriers_observed"),
-                penetrance.get("affected_count"),
-                penetrance.get("unaffected_count"),
-                penetrance.get("uncertain_count"),
-                penetrance.get("penetrance_percentage"),
-            ),
+        penetrance_values = (
+            variant_id,
+            pmid,
+            penetrance.get("total_carriers_observed"),
+            penetrance.get("affected_count"),
+            penetrance.get("unaffected_count"),
+            penetrance.get("uncertain_count"),
+            penetrance.get("penetrance_percentage"),
         )
+        existing_penetrance = None
+        if preserve_existing_evidence:
+            existing_penetrance = cursor.execute(
+                """
+                SELECT penetrance_id, total_carriers_observed, affected_count,
+                       unaffected_count, uncertain_count, penetrance_percentage
+                FROM penetrance_data
+                WHERE variant_id = ? AND pmid = ?
+                ORDER BY penetrance_id
+                LIMIT 1
+                """,
+                (variant_id, pmid),
+            ).fetchone()
 
-        penetrance_id = cursor.lastrowid
-
-        # Insert age-dependent penetrance
-        for age_dep in penetrance.get("age_dependent_penetrance", []):
+        if existing_penetrance:
+            penetrance_id = existing_penetrance[0]
+            current_values = existing_penetrance[1:]
+            incoming_values = penetrance_values[2:]
+            merged_values = tuple(
+                incoming if current is None and incoming is not None else current
+                for current, incoming in zip(current_values, incoming_values)
+            )
+            if merged_values != current_values:
+                cursor.execute(
+                    """
+                    UPDATE penetrance_data
+                    SET total_carriers_observed = ?,
+                        affected_count = ?,
+                        unaffected_count = ?,
+                        uncertain_count = ?,
+                        penetrance_percentage = ?
+                    WHERE penetrance_id = ?
+                    """,
+                    (*merged_values, penetrance_id),
+                )
+        else:
             cursor.execute(
                 """
-                INSERT INTO age_dependent_penetrance (
-                    penetrance_id, age_range, penetrance_percentage,
-                    carriers_in_range, affected_in_range
-                ) VALUES (?, ?, ?, ?, ?)
+                INSERT INTO penetrance_data (
+                    variant_id, pmid, total_carriers_observed, affected_count,
+                    unaffected_count, uncertain_count, penetrance_percentage
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
-                (
-                    penetrance_id,
-                    age_dep.get("age_range"),
-                    age_dep.get("penetrance_percentage"),
-                    age_dep.get("carriers_in_range"),
-                    age_dep.get("affected_in_range"),
-                ),
+                penetrance_values,
             )
+
+            penetrance_id = cursor.lastrowid
+
+            # Insert age-dependent penetrance only for a newly inserted parent
+            # row. Existing parent rows are kept intact in preserve mode.
+            for age_dep in penetrance.get("age_dependent_penetrance", []):
+                cursor.execute(
+                    """
+                    INSERT INTO age_dependent_penetrance (
+                        penetrance_id, age_range, penetrance_percentage,
+                        carriers_in_range, affected_in_range
+                    ) VALUES (?, ?, ?, ?, ?)
+                """,
+                    (
+                        penetrance_id,
+                        age_dep.get("age_range"),
+                        age_dep.get("penetrance_percentage"),
+                        age_dep.get("carriers_in_range"),
+                        age_dep.get("affected_in_range"),
+                    ),
+                )
 
     # Insert individual records
     for record in variant_data.get("individual_records", []):
+        if not isinstance(record, dict):
+            logger.warning(
+                "Skipping non-object individual_record for PMID %s variant_id %s",
+                pmid,
+                variant_id,
+            )
+            continue
+        affected_status = normalize_affected_status(record.get("affected_status"))
+        individual_id = record.get("individual_id")
+        if preserve_existing_evidence:
+            if individual_id:
+                existing_record = cursor.execute(
+                    """
+                    SELECT 1 FROM individual_records
+                    WHERE variant_id = ? AND pmid = ? AND individual_id = ?
+                    LIMIT 1
+                    """,
+                    (variant_id, pmid, individual_id),
+                ).fetchone()
+            else:
+                existing_record = cursor.execute(
+                    """
+                    SELECT 1 FROM individual_records
+                    WHERE variant_id = ? AND pmid = ?
+                    LIMIT 1
+                    """,
+                    (variant_id, pmid),
+                ).fetchone()
+            if existing_record:
+                continue
         cursor.execute(
             """
             INSERT INTO individual_records (
@@ -834,12 +1000,12 @@ def insert_variant_data(
             (
                 variant_id,
                 pmid,
-                record.get("individual_id"),
+                individual_id,
                 record.get("age_at_evaluation"),
                 record.get("age_at_onset"),
                 record.get("age_at_diagnosis"),
                 record.get("sex"),
-                record.get("affected_status"),
+                affected_status,
                 record.get("phenotype_details"),
                 record.get("evidence_sentence"),
             ),
@@ -900,7 +1066,10 @@ def insert_variant_data(
 
 
 def migrate_extraction_file(
-    cursor: sqlite3.Cursor, json_file: Path, auto_repair: bool = True
+    cursor: sqlite3.Cursor,
+    json_file: Path,
+    auto_repair: bool = True,
+    replace_existing_paper: bool = True,
 ) -> Tuple[bool, str]:
     """
     Migrate a single extraction JSON file to the database.
@@ -909,6 +1078,8 @@ def migrate_extraction_file(
         cursor: Database cursor
         json_file: Path to JSON file
         auto_repair: If True, attempt to repair common issues before migration
+        replace_existing_paper: If True, use the legacy paper replace behavior.
+            If False, preserve existing PMID-linked evidence and add new data.
 
     Returns:
         Tuple of (success, message)
@@ -945,14 +1116,21 @@ def migrate_extraction_file(
             return False, f"Validation failed for {json_file.name}: {errors}"
 
         # Insert paper metadata
-        insert_paper_metadata(cursor, extraction_data)
+        insert_paper_metadata(
+            cursor, extraction_data, replace_existing=replace_existing_paper
+        )
 
         pmid = extraction_data.get("paper_metadata", {}).get("pmid", "UNKNOWN")
 
         # Insert variants
         variants = extraction_data.get("variants", [])
         for variant in variants:
-            insert_variant_data(cursor, pmid, variant)
+            insert_variant_data(
+                cursor,
+                pmid,
+                variant,
+                preserve_existing_evidence=not replace_existing_paper,
+            )
 
         # Insert extraction metadata
         extraction_meta = extraction_data.get("extraction_metadata", {})
@@ -1011,7 +1189,9 @@ def migrate_extraction_file(
 
 
 def migrate_extraction_directory(
-    conn: sqlite3.Connection, extraction_dir: Path
+    conn: sqlite3.Connection,
+    extraction_dir: Path,
+    replace_existing_paper: bool = True,
 ) -> Dict[str, Any]:
     """
     Migrate all extraction JSON files from a directory.
@@ -1019,6 +1199,8 @@ def migrate_extraction_directory(
     Args:
         conn: Database connection
         extraction_dir: Directory containing extraction JSON files
+        replace_existing_paper: If True, use the legacy paper replace behavior.
+            If False, preserve existing PMID-linked evidence and add new data.
 
     Returns:
         Migration statistics
@@ -1040,7 +1222,11 @@ def migrate_extraction_directory(
     errors = []
 
     for json_file in json_files:
-        success, message = migrate_extraction_file(cursor, json_file)
+        success, message = migrate_extraction_file(
+            cursor,
+            json_file,
+            replace_existing_paper=replace_existing_paper,
+        )
         if success:
             successful += 1
             logger.info(f"✓ [{successful}/{len(json_files)}] {message}")
@@ -1373,6 +1559,15 @@ def main():
     )
 
     parser.add_argument(
+        "--preserve-existing-paper",
+        action="store_true",
+        help=(
+            "Do not replace an existing paper row during migration. Use this "
+            "when importing targeted recovery extractions into an existing DB."
+        ),
+    )
+
+    parser.add_argument(
         "--extractions-subdir",
         type=str,
         default="extractions",
@@ -1491,6 +1686,7 @@ def main():
     logger.info(f"Database: {db_path}")
     logger.info(f"Cleanup: {args.cleanup}")
     logger.info(f"Dry run: {args.dry_run}")
+    logger.info(f"Preserve existing paper evidence: {args.preserve_existing_paper}")
     logger.info("=" * 80)
 
     # ========================================================================
@@ -1506,7 +1702,11 @@ def main():
     # STEP 4: Migrate extraction data
     # ========================================================================
     if not args.dry_run:
-        migration_stats = migrate_extraction_directory(conn, extraction_dir)
+        migration_stats = migrate_extraction_directory(
+            conn,
+            extraction_dir,
+            replace_existing_paper=not args.preserve_existing_paper,
+        )
 
         logger.info("\n" + "=" * 80)
         logger.info("MIGRATION STATISTICS")

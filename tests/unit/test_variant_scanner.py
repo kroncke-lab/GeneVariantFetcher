@@ -470,6 +470,16 @@ class TestNonTargetHotspotFiltering:
         norms = {v.normalized for v in result.variants}
         assert variant not in norms
 
+    @pytest.mark.parametrize(
+        ("gene", "variant"),
+        [("TP53", "R248Q"), ("KRAS", "G12D"), ("BRAF", "V600E"), ("PIK3CA", "H1047R")],
+    )
+    def test_hotspots_kept_when_their_gene_is_target(self, gene, variant):
+        scanner = VariantScanner(gene)
+        result = scanner.scan(f"the {variant} mutation was identified")
+        norms = {v.normalized for v in result.variants}
+        assert variant in norms
+
 
 # =============================================================================
 # TestPositionValidation

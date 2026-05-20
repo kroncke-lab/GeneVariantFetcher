@@ -287,14 +287,33 @@ class TestVariantNormalization:
             ("p.Pro926AlafsTer14", "P926fsX"),
             ("p.Pro926AlaX14", "P926fsX"),
             ("p.V131fs/185", "V131fsX"),
+            ("R513VfsTer8", "R513fsX"),
             ("p.K897fs+*49", "K897fsX"),
             ("I82dup", "I82dup"),
+            ("p.K1505_Q1507DEL", "K1505_Q1507Del"),
+            ("K1505_Q1507del", "K1505_Q1507Del"),
+            ("p.Gln1507_Pro1509del", "Q1507_P1509Del"),
+            ("4944_4945INSH", "4944_4945InsH"),
         ],
     )
     def test_to_canonical_form_frameshift_variants_seen_in_extractions(
         self, raw, expected
     ):
         assert to_canonical_form(raw) == expected
+
+    def test_range_indel_forms_match_case_and_prefix_variants(self):
+        forms = get_variant_forms("p.K1505_Q1507DEL")
+
+        assert "K1505_Q1507Del" in forms
+        assert "p.K1505_Q1507Del" in forms
+        assert "p.Lys1505_Gln1507DEL" in forms
+
+        match, score, match_type = find_best_match(
+            "p.K1505_Q1507DEL", ["K1505_Q1507del"]
+        )
+        assert match == "K1505_Q1507del"
+        assert score == 1.0
+        assert match_type == "exact"
 
 
 # =============================================================================
@@ -701,6 +720,16 @@ class TestPositionalDigitGuard:
         # so the guard sees them as matching — similarity then decides.
         assert match == "IVS3-2A>T"
 
+    def test_rejects_cdna_intronic_offset_subset_match(self):
+        # c.1890+5G>A and c.1890G>A share the genomic base prefix but are not
+        # the same cDNA coordinate. Subset positional matching is only safe for
+        # protein frameshift suffixes, not cDNA offsets.
+        match, _, match_type = find_best_match(
+            "c.1890+5G>A", ["c.1890G>A"], threshold=0.7
+        )
+        assert match is None
+        assert match_type == "none"
+
 
 class TestGreedyOneToOne:
     """Each SQLite variant must be claimed by at most one Excel row."""
@@ -815,6 +844,67 @@ class TestCDNAProteinBridge:
         sqlite_df = pd.DataFrame(sqlite_rows)
         sqlite_data = aggregate_sqlite_data(sqlite_df)
         return excel_data, sqlite_data
+
+    def test_matches_cdna_notation_hidden_by_sqlite_protein_display_key(self):
+        # SQLite aggregation uses protein_notation as the display variant when
+        # both protein and cDNA are present. The comparison still needs to see
+        # the stored cDNA notation so gold cDNA rows do not become false misses.
+        excel_data, sqlite_data = self._build_inputs(
+            excel_rows={
+                "PMID": ["19279983"],
+                "protein_change": ["c.3480delT"],
+                "carriers": [3],
+                "affected": [2],
+                "unaffected": [1],
+                "phenotype": ["BrS"],
+            },
+            sqlite_rows={
+                "pmid": ["19279983"],
+                "variant": ["p.Phe1160Leufs*"],
+                "protein_notation": ["p.Phe1160Leufs*"],
+                "cdna_notation": ["c.3480delT"],
+                "carriers_total": [3],
+                "affected_count": [2],
+                "unaffected_count": [1],
+                "uncertain_count": [0],
+            },
+        )
+
+        results = compare_data(excel_data, sqlite_data, "fuzzy", 0.80)
+        matched = [r for r in results if r.match_type == "exact"]
+        assert len(matched) == 1
+        assert matched[0].excel_variant_raw == "c.3480delT"
+        assert matched[0].sqlite_variant_raw == "p.Phe1160Leufs*"
+
+    def test_bridges_gold_cdna_to_sqlite_protein_frameshift(self):
+        # Gold cDNA c.5464_5467delTCTG maps to the Leu1821/1822 frameshift
+        # boundary. SQLite may only expose the protein notation as its primary
+        # variant display key.
+        excel_data, sqlite_data = self._build_inputs(
+            excel_rows={
+                "PMID": ["17897635"],
+                "protein_change": ["c.5464_5467delTCTG"],
+                "carriers": [1],
+                "affected": [1],
+                "unaffected": [0],
+                "phenotype": ["BrS"],
+            },
+            sqlite_rows={
+                "pmid": ["17897635"],
+                "variant": ["p.Leu1821fs*10"],
+                "protein_notation": ["p.Leu1821fs*10"],
+                "cdna_notation": [None],
+                "carriers_total": [1],
+                "affected_count": [1],
+                "unaffected_count": [0],
+                "uncertain_count": [0],
+            },
+        )
+
+        results = compare_data(excel_data, sqlite_data, "exact", 0.85)
+        bridged = [r for r in results if r.match_type == "exact_cdna_bridge"]
+        assert len(bridged) == 1
+        assert bridged[0].sqlite_variant_raw == "p.Leu1821fs*10"
 
     def test_bridges_frameshift_via_cdna_position(self):
         # Gold: R281fsX (protein codon 281).

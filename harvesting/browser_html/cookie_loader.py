@@ -11,6 +11,9 @@ conflicts when Chrome is open.
 from __future__ import annotations
 
 import logging
+import multiprocessing
+import os
+import queue
 from typing import Iterable, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -69,6 +72,20 @@ DEFAULT_PUBLISHER_DOMAINS: tuple = (
     "okta.com",
     "shibboleth.net",
 )
+
+
+def _env_cookie_domains() -> list[str]:
+    """Return user-configured cookie domains for institution-specific SSO."""
+    raw = os.environ.get("GVF_COOKIE_DOMAINS") or os.environ.get(
+        "GVF_SSO_COOKIE_DOMAINS"
+    )
+    if not raw:
+        return []
+    return [d.strip() for d in _split_cookie_domains(raw) if d.strip()]
+
+
+def _split_cookie_domains(raw: str) -> list[str]:
+    return [part for part in raw.replace(",", " ").split(" ") if part]
 
 
 def _coerce_same_site(rest: dict) -> Optional[str]:
@@ -132,9 +149,41 @@ def chrome_cookie_to_playwright(cookie) -> Optional[dict]:
     return out
 
 
+def _load_domain_cookie_dicts(
+    domain: str,
+    profile_name: Optional[str],
+) -> List[dict]:
+    """Load and convert cookies for one domain.
+
+    Kept at module scope so it can run in a short-lived child process. Chrome
+    cookie decryption can hang indefinitely on macOS when Keychain is locked or
+    denying non-interactive access; isolating one domain lets the caller kill
+    that attempt without losing the entire recovery run.
+    """
+    import browser_cookie3 as bc
+
+    if profile_name:
+        jar = bc.chrome(domain_name=domain, profile=profile_name)
+    else:
+        jar = bc.chrome(domain_name=domain)
+    return [pw for c in jar if (pw := chrome_cookie_to_playwright(c)) is not None]
+
+
+def _load_domain_cookie_dicts_worker(
+    domain: str,
+    profile_name: Optional[str],
+    out_queue,
+) -> None:
+    try:
+        out_queue.put({"cookies": _load_domain_cookie_dicts(domain, profile_name)})
+    except Exception as exc:  # pragma: no cover - exercised through parent process
+        out_queue.put({"error": str(exc)})
+
+
 def load_chrome_cookies(
     domains: Optional[Iterable[str]] = None,
     profile_name: Optional[str] = None,
+    timeout_seconds: Optional[float] = None,
 ) -> List[dict]:
     """Load Chrome cookies for the given domains, in Playwright format.
 
@@ -145,6 +194,9 @@ def load_chrome_cookies(
             ``"Profile 1"``). When omitted, browser_cookie3 walks all profiles
             and merges results — that's usually what we want, since a user may
             be signed into the publisher in any profile.
+        timeout_seconds: optional per-domain timeout. When set, each domain is
+            loaded in an isolated child process so a stuck macOS Keychain
+            lookup can be terminated instead of hanging the full long run.
 
     Returns:
         List of cookie dicts ready for ``BrowserContext.add_cookies()``.
@@ -159,27 +211,52 @@ def load_chrome_cookies(
             "Install with `pip install browser-cookie3`."
         ) from e
 
-    domains_iter = (
-        list(domains) if domains is not None else list(DEFAULT_PUBLISHER_DOMAINS)
-    )
+    if domains is not None:
+        domains_iter = list(domains)
+    else:
+        domains_iter = list(
+            dict.fromkeys((*DEFAULT_PUBLISHER_DOMAINS, *_env_cookie_domains()))
+        )
     seen_keys: set = set()
     out: List[dict] = []
 
     for d in domains_iter:
         try:
-            if profile_name:
-                jar = bc.chrome(domain_name=d, profile=profile_name)
+            if timeout_seconds and timeout_seconds > 0:
+                ctx = multiprocessing.get_context("spawn")
+                q = ctx.Queue()
+                proc = ctx.Process(
+                    target=_load_domain_cookie_dicts_worker,
+                    args=(d, profile_name, q),
+                )
+                proc.start()
+                proc.join(timeout_seconds)
+                if proc.is_alive():
+                    proc.terminate()
+                    proc.join(timeout=2)
+                    logger.warning(
+                        "cookie load timed out for %s after %.1fs",
+                        d,
+                        timeout_seconds,
+                    )
+                    continue
+                try:
+                    payload = q.get_nowait()
+                except queue.Empty:
+                    logger.warning("cookie load failed for %s: no child result", d)
+                    continue
+                if payload.get("error"):
+                    logger.warning("cookie load failed for %s: %s", d, payload["error"])
+                    continue
+                cookie_dicts = payload.get("cookies") or []
             else:
-                jar = bc.chrome(domain_name=d)
+                cookie_dicts = _load_domain_cookie_dicts(d, profile_name)
         except Exception as e:
             logger.warning("cookie load failed for %s: %s", d, e)
             continue
 
         count_before = len(out)
-        for c in jar:
-            pw = chrome_cookie_to_playwright(c)
-            if pw is None:
-                continue
+        for pw in cookie_dicts:
             # Dedup across overlapping domain queries (e.g. wiley.com vs
             # onlinelibrary.wiley.com both pulling the same cookie).
             key = (pw["name"], pw["domain"], pw["path"])

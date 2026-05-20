@@ -8,9 +8,6 @@ text instead of a paywall stub.
 
 Usage::
 
-    # Test on the four hardest paywalled PMIDs from our missing-variants gap.
-    python -m scripts.fetch_paywalled --output ./paywall_test
-
     # Custom PMID list.
     python -m scripts.fetch_paywalled --pmid 15840476 --pmid 10973849 \\
         --output ./out --no-headless
@@ -297,24 +294,12 @@ def mark_scholar_pdf_success(row: Dict, scholar_row: Dict) -> None:
 
 LOG = logging.getLogger("fetch_paywalled")
 
-# Highest-value paywalled PMIDs from the May 2026 gap analysis.
-DEFAULT_PMIDS: Tuple[str, ...] = (
-    "15840476",  # Tester 2005, Circulation — 86 gold variants
-    "10973849",  # Splawski 2000, Circulation — 59 variants
-    "26496715",  # Heart Rhythm 2015 — 53 variants
-    "11854117",  # Splawski 2002, Circulation — 44 variants
-)
-
-# Override map for PMIDs whose DOI we already know (avoids an NCBI lookup).
-# Filled in lazily by parse_pmid_doi_overrides() from CLI args.
-
 
 def _ncbi_email() -> str:
-    return (
-        os.environ.get("ENTREZ_EMAIL")
-        or os.environ.get("NCBI_EMAIL")
-        or "brett.kroncke@gmail.com"
-    )
+    email = os.environ.get("ENTREZ_EMAIL") or os.environ.get("NCBI_EMAIL")
+    if not email:
+        raise RuntimeError("Set ENTREZ_EMAIL or NCBI_EMAIL before querying NCBI.")
+    return email
 
 
 def pubmed_resolve_doi(
@@ -468,15 +453,21 @@ def write_outputs(
     pmid_dir.mkdir(parents=True, exist_ok=True)
 
     body = result.main_markdown or ""
+    body_for_enrichment = body
+    if not body and result.supp_files:
+        body_for_enrichment = (
+            "# MAIN TEXT\n\n"
+            "[No usable article body recovered; supplement-only recovery.]\n\n"
+        )
 
     if result.main_html:
         (pmid_dir / "page.html").write_text(result.main_html, encoding="utf-8")
 
     enrichment: Optional[EnrichmentResult] = None
-    if enrich and body:
+    if enrich and body_for_enrichment:
         try:
             enrichment = enrich_paywall_full_context(
-                body_markdown=body,
+                body_markdown=body_for_enrichment,
                 html=result.main_html or "",
                 supp_files=list(result.supp_files or []),
                 pmid=pmid,
@@ -619,6 +610,18 @@ def fetch_one(
         row["outcome"] = "success"
         row["reason"] = reason
 
+    if (
+        row["outcome"] in ("empty", "paywall_or_stub")
+        and enrichment is not None
+        and enrichment.supplement_count > 0
+        and enrichment.unified_markdown
+    ):
+        row["outcome"] = "success_supplement_only"
+        row["reason"] = (
+            f"supplement-only recovery: downloaded "
+            f"{enrichment.supplement_count} supplement(s)"
+        )
+
     # PMC fallback. If Tier 3.5 left us with a stub or empty body, try the
     # Europe PMC route — many NIH-funded subscription papers have a free
     # PMC deposit. The fallback overwrites FULL_CONTEXT.md only when its
@@ -707,6 +710,17 @@ def main() -> int:
         help="Chrome profile name (e.g. 'Default'). Default: merge all profiles.",
     )
     parser.add_argument(
+        "--no-cookies",
+        action="store_true",
+        help="Skip Chrome cookie loading. Useful when macOS Keychain is locked; publisher SSO may not work.",
+    )
+    parser.add_argument(
+        "--cookie-timeout-s",
+        type=float,
+        default=8.0,
+        help="Per-domain Chrome cookie loading timeout in seconds (default: 8).",
+    )
+    parser.add_argument(
         "--headless",
         dest="headless",
         action="store_true",
@@ -759,7 +773,7 @@ def main() -> int:
     if args.pmid:
         pmids.extend(args.pmid)
     if not pmids:
-        pmids = list(DEFAULT_PMIDS)
+        parser.error("Provide at least one PMID via --input or --pmid.")
     pmids = list(dict.fromkeys(str(p).strip() for p in pmids if str(p).strip()))
 
     overrides = parse_pmid_doi_overrides(args.pmid_doi)
@@ -775,7 +789,14 @@ def main() -> int:
 
     # ---- 1. Load cookies from local Chrome ----
     print("Loading Chrome cookies…")
-    cookies = load_chrome_cookies(profile_name=args.profile)
+    if args.no_cookies:
+        cookies = []
+        print("  skipped by --no-cookies")
+    else:
+        cookies = load_chrome_cookies(
+            profile_name=args.profile,
+            timeout_seconds=args.cookie_timeout_s,
+        )
     summary = cookie_domain_summary(cookies)
     print(f"  total cookies: {len(cookies)}")
     for d, n in list(summary.items())[:20]:
@@ -925,7 +946,12 @@ def main() -> int:
     for r in rows:
         p = r["strategy"] or "(none)"
         by_publisher.setdefault(p, {"success": 0, "fail": 0})
-        if r["outcome"] in ("success", "success_via_pmc", "success_via_scholar_pdf"):
+        if r["outcome"] in (
+            "success",
+            "success_via_pmc",
+            "success_via_scholar_pdf",
+            "success_supplement_only",
+        ):
             by_publisher[p]["success"] += 1
         else:
             by_publisher[p]["fail"] += 1
@@ -936,6 +962,7 @@ def main() -> int:
         1
         for r in rows
         if r["outcome"] in ("success", "success_via_pmc", "success_via_scholar_pdf")
+        or r["outcome"] == "success_supplement_only"
     )
     print(f"\nOverall: {success}/{len(rows)} PMIDs succeeded.")
 
