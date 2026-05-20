@@ -10,6 +10,8 @@ from urllib.parse import urlparse
 
 import requests
 
+from harvesting.pmc_api import is_non_article_linkout_url
+
 logger = logging.getLogger(__name__)
 
 
@@ -116,7 +118,10 @@ def fetch_main_content_for_free_text(
 
     if not result.main_markdown and free_url:
         parsed_url = urlparse(free_url)
-        if parsed_url.netloc in suspicious_free_url_domains:
+        if (
+            parsed_url.netloc in suspicious_free_url_domains
+            or is_non_article_linkout_url(free_url)
+        ):
             print(
                 f"  - Skipping suspicious free URL on {parsed_url.netloc} (likely non-article content)"
             )

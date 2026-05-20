@@ -10,8 +10,8 @@ git clone https://github.com/your-org/GeneVariantFetcher.git
 cd GeneVariantFetcher
 
 # Create virtual environment (Python 3.11+ required)
-python3.11 -m venv venv
-source venv/bin/activate
+python3.11 -m venv .venv
+source .venv/bin/activate
 
 # Install in development mode
 pip install -e .
@@ -22,7 +22,8 @@ pip install pre-commit && pre-commit install
 
 # Copy environment template and add your API keys
 cp .env.example .env
-# Edit .env with your Elsevier, Springer, Wiley API keys
+# Edit .env with your LLM, NCBI, Elsevier/Springer/Wiley keys.
+# For current recall work, include ELSEVIER_INSTTOKEN when institutionally available.
 ```
 
 ## Adding a New Gene
@@ -96,7 +97,7 @@ def normalize_variant(raw: str, gene: str = "KCNH2") -> str | None:
 
 ```bash
 # Run all tests
-pytest tests/ -v
+pytest tests/unit tests/recall -q
 
 # Run specific test file
 pytest tests/test_normalizer.py -v
@@ -105,8 +106,8 @@ pytest tests/test_normalizer.py -v
 pytest tests/ --cov=pipeline --cov=harvesting --cov-report=term-missing
 
 # Run linting
-ruff check .
-ruff format --check .
+.venv/bin/python -m ruff check .
+.venv/bin/python -m ruff format --check .
 ```
 
 ## Commit Messages

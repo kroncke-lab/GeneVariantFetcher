@@ -5,6 +5,35 @@ All notable changes to GeneVariantFetcher will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-05-20
+
+### Added
+- `gvf gvf-run` turnkey driver for doctor checks, extraction, deterministic
+  recovery layers, and recall/report handoff.
+- `gvf audit-paywalls` for acquisition blocker review.
+- Deterministic recall-recovery layers under `scripts/recall_recovery/` for
+  ClinVar, PubTator, paywall/OA recovery, and historical KCNH2 v12 merging.
+- Current recall source of truth:
+  `docs/RECALL_STATUS.md`.
+- Recall-audit scripts under `scripts/recall_audit/` for PMID side-by-side
+  review, failure taxonomy, gene-leakage checks, study-wide N detection,
+  multi-cohort collapse review, PMID replay, and acquisition status summaries.
+
+### Changed
+- Browser/Playwright paywall recovery is now part of the documented acquisition
+  stack.
+- Elsevier documentation now distinguishes `ELSEVIER_API_KEY` from the
+  institutional `ELSEVIER_INSTTOKEN`, the current highest-yield missing
+  credential.
+- Recall docs now defer live metrics to `docs/RECALL_STATUS.md` instead of
+  repeating potentially stale extraction-statistics artifacts.
+
+### Fixed
+- Table-router parsing now drops rows that explicitly name an off-target gene
+  when the router forgot to map the gene column.
+- Extraction artifact filtering has test coverage for bare numeric variant
+  names such as `378`.
+
 ## [2.1.0] - 2026-02-10
 
 ### Added

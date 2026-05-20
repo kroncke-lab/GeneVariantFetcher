@@ -272,6 +272,7 @@ def process_file(
     output_dir: Path,
     gene_symbol: str,
     extractor: ExpertExtractor,
+    disease: Optional[str] = None,
     use_full_text: bool = False,
 ) -> tuple[ManifestEntry, Optional[dict]]:
     """
@@ -283,6 +284,7 @@ def process_file(
         output_dir: Directory for output files
         gene_symbol: Target gene symbol
         extractor: Configured ExpertExtractor instance
+        disease: Optional disease term used to interpret affected/unaffected counts
         use_full_text: Whether input is FULL_CONTEXT vs DATA_ZONES
 
     Returns:
@@ -305,6 +307,7 @@ def process_file(
         paper = Paper(
             pmid=pmid,
             gene_symbol=gene_symbol,
+            disease=disease,
             title=f"Paper {pmid}",  # We don't have title metadata here
             full_text=text,
         )
@@ -366,6 +369,7 @@ def run_extraction(
     manifest_out: Optional[Path] = None,
     models: Optional[list[str]] = None,
     tier_threshold: int = 1,
+    disease: Optional[str] = None,
     use_full_text: bool = False,
 ) -> Manifest:
     """
@@ -378,6 +382,7 @@ def run_extraction(
         manifest_out: Optional custom manifest output path
         models: Optional list of models to use (overrides config)
         tier_threshold: Variant threshold for trying next model
+        disease: Optional disease term used to interpret affected/unaffected counts
         use_full_text: If True, use FULL_CONTEXT.md instead of DATA_ZONES.md
 
     Returns:
@@ -455,6 +460,7 @@ def run_extraction(
             output_dir=output_dir,
             gene_symbol=gene,
             extractor=extractor,
+            disease=disease,
             use_full_text=use_full_text,
         )
         output_manifest.add_entry(entry)
@@ -558,6 +564,13 @@ Examples:
         help="If first model finds fewer variants, try next model (default: 1)",
     )
     parser.add_argument(
+        "--disease",
+        "-d",
+        type=str,
+        default=None,
+        help="Optional disease term used to interpret affected/unaffected counts",
+    )
+    parser.add_argument(
         "--full-text",
         action="store_true",
         help="Use FULL_CONTEXT.md files instead of DATA_ZONES.md",
@@ -582,6 +595,7 @@ Examples:
             manifest_out=args.manifest_out,
             models=args.models,
             tier_threshold=args.tier_threshold,
+            disease=args.disease,
             use_full_text=args.full_text,
         )
 

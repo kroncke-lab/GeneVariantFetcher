@@ -94,6 +94,29 @@ def test_returns_error_for_suspicious_free_url():
     assert result.early_result == (False, "Suspicious free URL", None)
 
 
+def test_returns_error_for_non_article_linkout_free_url():
+    result = fetch_main_content_for_free_text(
+        pmid="22",
+        doi=None,
+        free_url="https://scite.ai/reports/27225049",
+        suspicious_free_url_domains=set(),
+        elsevier_api=_Provider(),
+        springer_api=_Provider(),
+        wiley_api=_Provider(),
+        elsevier_client=object(),
+        wiley_client=object(),
+        session=_Session(),
+        scraper=_Scraper(),
+        doi_resolver=_DOIResolver(),
+        try_elsevier_api=lambda doi, pmid: (None, None),
+        try_wiley_api=lambda doi, pmid: (None, None),
+        try_springer_api=lambda doi, pmid: (None, None),
+        validate_content_quality=lambda text, url: (True, "ok"),
+        log_paywalled=lambda pmid, reason, url: None,
+    )
+    assert result.early_result == (False, "Suspicious free URL", None)
+
+
 def test_uses_doi_resolver_when_content_available():
     result = fetch_main_content_for_free_text(
         pmid="3",

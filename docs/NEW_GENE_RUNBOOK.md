@@ -92,7 +92,7 @@ Use internal signals instead of recall:
 
 For a genuinely new gene with no manual recovery DB, expect article/source
 coverage to be better than variant-row and count recall. The current validation
-status is summarized in `docs/CURRENT_RECALL_STATUS_2026-05-20.md`, but do not
+status is summarized in `docs/RECALL_STATUS.md`, but do not
 use those scored genes as hard expectations for a new disease area.
 
 For no-gold runs, judge progress by internal QC: source completeness, supplement

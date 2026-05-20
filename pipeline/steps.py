@@ -964,7 +964,7 @@ def run_data_scout(
         StepResult with scouting stats
     """
     from config.settings import get_settings
-    from pipeline.data_scout import GeneticDataScout
+    from pipeline.data_scout import GeneticDataScout, select_scout_source_path
 
     if not harvest_dir.exists():
         return StepResult(
@@ -1004,7 +1004,8 @@ def run_data_scout(
 
     for md_file in files_to_scout:
         try:
-            content = md_file.read_text(encoding="utf-8")
+            source_file = select_scout_source_path(md_file)
+            content = source_file.read_text(encoding="utf-8")
             # Extract PMID from filename (e.g., "12345678_FULL_CONTEXT.md" -> "12345678")
             pmid = md_file.name.replace("_FULL_CONTEXT.md", "")
             report = scout.scan(content, pmid=pmid)
@@ -1035,6 +1036,7 @@ def extract_variants(
     harvest_dir: Path,
     extraction_dir: Path,
     gene_symbol: str,
+    disease: Optional[str] = None,
     abstract_records: Optional[Dict[str, str]] = None,
     abstract_only_pmids: Optional[List[str]] = None,
     tier_threshold: int = 1,
@@ -1048,6 +1050,7 @@ def extract_variants(
         harvest_dir: Directory with markdown files
         extraction_dir: Directory to save extractions
         gene_symbol: Gene symbol
+        disease: Optional disease term used to interpret affected/unaffected counts
         abstract_records: Dict mapping PMID to abstract JSON path
         abstract_only_pmids: PMIDs that need abstract-only extraction
         tier_threshold: Model cascade threshold
@@ -1155,6 +1158,7 @@ def extract_variants(
                 title=f"Paper {pmid}",
                 full_text=content,
                 gene_symbol=gene_symbol,
+                disease=disease,
             )
 
             result = get_extractor().extract(paper)
@@ -1196,6 +1200,7 @@ def extract_variants(
                 title=metadata.get("title", f"Paper {pmid}"),
                 abstract=abstract_text,
                 gene_symbol=gene_symbol,
+                disease=disease,
             )
 
             result = get_extractor().extract(paper)

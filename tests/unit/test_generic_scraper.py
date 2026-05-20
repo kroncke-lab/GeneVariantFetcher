@@ -159,6 +159,43 @@ class TestURLPatternMatching:
             "https://ftp.ncbi.nlm.nih.gov/pub/pmc/oa_pdf/64/67/test.pdf"
         ]
 
+    def test_supplement_download_retries_transient_connection_error(
+        self, tmp_path, monkeypatch
+    ):
+        class Response:
+            def raise_for_status(self):
+                return None
+
+            def iter_content(self, chunk_size=8192):
+                yield b"%PDF-1.4\n%%EOF\n"
+
+        class Session:
+            def __init__(self):
+                self.urls = []
+
+            def get(self, url, **kwargs):
+                self.urls.append(url)
+                if len(self.urls) == 1:
+                    raise RuntimeError("Remote end closed connection without response")
+                return Response()
+
+        harvester = PMCHarvester(output_dir=tmp_path, gene_symbol="KCNH2")
+        harvester.session = Session()
+        monkeypatch.setattr("harvesting.orchestrator.time.sleep", lambda seconds: None)
+
+        ok = harvester.download_supplement(
+            "https://pmc.ncbi.nlm.nih.gov/articles/instance/8671492/bin/test.pdf",
+            tmp_path / "test.pdf",
+            "34907346",
+            "test.pdf",
+        )
+
+        assert ok is True
+        assert harvester.session.urls == [
+            "https://pmc.ncbi.nlm.nih.gov/articles/instance/8671492/bin/test.pdf",
+            "https://pmc.ncbi.nlm.nih.gov/articles/instance/8671492/bin/test.pdf",
+        ]
+
     def test_pmc_relative_supplement_variants_are_normalized_for_download(
         self, tmp_path
     ):
@@ -204,6 +241,36 @@ class TestURLPatternMatching:
             "https://pmc.ncbi.nlm.nih.gov/articles/PMC5970051/bin/test.pdf",
             "https://pmc.ncbi.nlm.nih.gov/articles/instance/5970051/bin/test.pdf",
         ]
+
+    def test_browser_challenge_page_is_reported_for_supplement_download(
+        self, tmp_path, capsys
+    ):
+        class Response:
+            def raise_for_status(self):
+                return None
+
+            def iter_content(self, chunk_size=8192):
+                yield b"<html><title>Checking your browser - reCAPTCHA</title></html>"
+
+        class Session:
+            def get(self, url, **kwargs):
+                return Response()
+
+        harvester = PMCHarvester(output_dir=tmp_path, gene_symbol="RYR2")
+        harvester.session = Session()
+
+        ok = harvester.download_supplement(
+            "https://pmc.ncbi.nlm.nih.gov/articles/instance/5391872/bin/test.pdf",
+            tmp_path / "test.pdf",
+            "28404607",
+            "test.pdf",
+        )
+
+        assert ok is False
+        assert (
+            "Browser challenge page received instead of PDF" in capsys.readouterr().out
+        )
+        assert not (tmp_path / "test.pdf").exists()
 
 
 class TestFileExtensionMatching:

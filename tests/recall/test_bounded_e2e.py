@@ -292,7 +292,7 @@ def test_run_all_layers_help():
 
 
 def test_gvf_run_help():
-    """The cli gvf-run command parses --help cleanly."""
+    """The gvf-run command parses --help cleanly."""
     result = subprocess.run(
         [sys.executable, "-m", "cli", "gvf-run", "--help"],
         capture_output=True,

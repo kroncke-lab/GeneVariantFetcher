@@ -1,4 +1,6 @@
-# Current Recall Status - 2026-05-20
+# Recall Status
+
+Last updated: 2026-05-20.
 
 This note records the post-`19ae63f` state of the recall/generalization push so
 the next run can resume from the same baseline without relying on chat history.
@@ -6,10 +8,10 @@ the next run can resume from the same baseline without relying on chat history.
 ## Source Of Truth
 
 Use this file as the current issue/status tracker for the recall push. Other
-top-level handoff docs (`README.md`, `CLAUDE.md`, `CODEX.md`, `TASKS.md`, and
-`docs/NEXT_STEPS.md`) should link here instead of carrying independent live
-metric tables. If a metric conflicts with this file, treat this file and the
-scored artifact below as authoritative.
+top-level handoff docs (`README.md`, `CLAUDE.md`, `CODEX.md`, and `TASKS.md`)
+should link here instead of carrying independent live metric tables. If a metric
+conflicts with this file, treat this file and the scored artifact below as
+authoritative.
 
 Historical recovery docs and scripts are still useful for debugging, but they
 are not cold-start evidence unless they explicitly avoid gold-PMID-conditioned
@@ -46,6 +48,55 @@ Aggregate recall from that score:
 
 The target remains greater than 90% across the metrics that matter. The current
 state is improved and more general, but not solved.
+
+This scored baseline covers KCNH2, RYR2, and SCN5A. KCNE1 extraction completed
+in the four-gene run, but KCNE1 recall should not be claimed until a normalized
+per-PMID gold input exists.
+
+## 2026-05-20 Structure Probe
+
+I rescored a four-gene probe with explicit DB paths for KCNH2, KCNQ1, RYR2, and
+SCN5A under `validation_runs/structure_probe_20260520/`. KCNE1 remains excluded
+from recall metrics because there is no normalized KCNE1 gold input.
+
+The first KCNQ1 probe using `validation_runs/closeout_20260518_124343/dbs/KCNQ1_base.db`
+was rejected because `multicohort_collapse_detector.py` surfaced a large SCN5A
+leakage block in KCNQ1 PMID `32893267`. The usable four-gene probe instead uses
+`validation_runs/20260517_203904/results/KCNQ1/20260517_204424/KCNQ1_after_32893267_gene_filter_patch.db`.
+
+| Variant matching | PMIDs | Variant rows | Unique variants | Patients | Affected | Unaffected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Exact | 1127 / 1502 (75.0%) | 4123 / 6833 (60.3%) | 2148 / 3013 (71.3%) | 12160 / 18719 (65.0%) | 7799 / 12475 (62.5%) | 2943 / 3951 (74.5%) |
+| Fuzzy | 1136 / 1502 (75.6%) | 4178 / 6833 (61.1%) | 2186 / 3013 (72.6%) | 12299 / 18719 (65.7%) | 7890 / 12475 (63.2%) | 2959 / 3951 (74.9%) |
+
+The exact-to-fuzzy gain is only about one percentage point for variant rows, so
+the remaining deficit is not mainly notation matching. The next structure should
+collect and score evidence in separate layers:
+
+1. Per-PMID source acquisition status: not attempted, abstract-only, paywall
+   stub, recovered full text, recovered browser text, supplement-only, and
+   table-body-missing.
+2. Paper-level disagreement summary: gold rows, matched rows, missing rows,
+   count-mismatch rows, source status, table-reference count, and table-body
+   count.
+3. Row-level extraction claims: variant identifier, source location, raw count
+   fields, derived total/affected/unaffected counts, and whether the count came
+   from deterministic table parsing or LLM inference.
+4. Small evidence-card claim verification for high-risk count fields, not broad
+   second-pass full-paper extraction.
+5. No-gold QC for new genes: variant-rich source with zero rows, missing
+   supplements, suspicious study-wide count reuse, many null counts, and
+   neighboring-gene leakage.
+
+The refreshed paper-disagreement report shows the highest-yield blockers remain
+source acquisition and missing table bodies, especially KCNQ1 `19716085`,
+KCNQ1 `30758498`, KCNQ1 `19841300`, SCN5A `29325976`, SCN5A `26746457`,
+RYR2 `19398665`, RYR2 `30170228`, KCNH2 `29650123`, KCNH2 `15840476`, and
+KCNH2/SCN5A `24667783`. Existing claim-verification pilots show the useful
+pattern is field-level validation: it fixed KCNH2 `19160088`
+affected/unaffected direction when the card included the local table evidence,
+while broader count-semantic cases often needed the verifier to withhold
+autopopulation rather than invent a corrected value.
 
 ## Highest-Yield Remaining Missing PMIDs
 
@@ -135,6 +186,12 @@ remaining extraction problems are general, not PMID-specific:
      gene mentioned plus no variants, supplement referenced but not downloaded,
      variant-rich full text but zero extracted rows, paywall marker present,
      many variants with null counts, and likely study-wide counts reused per row.
+
+7. Oversized source contexts need bounded deterministic cleanup.
+   - Data Scout now prefers an existing `*_CLEANED.md` sibling when raw
+     `*_FULL_CONTEXT.md` exceeds the configured size guard.
+   - Keep that preference in the no-gold path so large source artifacts do not
+     waste model budget or bury useful tables.
 
 ## Generalization Audit
 

@@ -27,6 +27,7 @@ ANTHROPIC_VISION_DEFAULT = "anthropic/claude-sonnet-4-6"
 _TIER_ENV_VARS = {
     "tier2_model": "TIER2_MODEL",
     "tier3_models": "TIER3_MODELS",
+    "tier3_adjudicator_models": "TIER3_ADJUDICATOR_MODELS",
     "table_router_model": "TABLE_ROUTER_MODEL",
     "vision_model": "VISION_MODEL",
 }
@@ -187,6 +188,42 @@ class Settings(BaseSettings):
         default=1,
         env="TIER3_THRESHOLD",
         description="Try next model if first finds fewer variants than this (0 = only use first model)",
+    )
+    enable_tier3_ensemble_qa: bool = Field(
+        default=True,
+        env="ENABLE_TIER3_ENSEMBLE_QA",
+        description=(
+            "Run a compact second-model adjudication pass for high-risk "
+            "extractions instead of sending every full paper to every model."
+        ),
+    )
+    tier3_adjudicator_models: Union[str, List[str]] = Field(
+        default="anthropic/claude-sonnet-4-6",
+        env="TIER3_ADJUDICATOR_MODELS",
+        description=(
+            "Comma-separated adjudicator models used for high-risk Tier 3 "
+            "outputs. These models see compact evidence packets, not full papers."
+        ),
+    )
+    tier3_adjudication_risk_threshold: int = Field(
+        default=2,
+        env="TIER3_ADJUDICATION_RISK_THRESHOLD",
+        description="Minimum extraction risk score required to trigger adjudication.",
+    )
+    tier3_evidence_packet_max_chars: int = Field(
+        default=24000,
+        env="TIER3_EVIDENCE_PACKET_MAX_CHARS",
+        description="Maximum characters sent to adjudicator evidence packets.",
+    )
+    tier3_adjudication_max_tokens: int = Field(
+        default=12000,
+        env="TIER3_ADJUDICATION_MAX_TOKENS",
+        description="Maximum output tokens for Tier 3 adjudicator responses.",
+    )
+    tier3_max_verifier_cards: int = Field(
+        default=20,
+        env="TIER3_MAX_VERIFIER_CARDS",
+        description="Maximum per-variant evidence cards to verify in one extraction.",
     )
 
     # Table-router (router-first extraction): the LLM classifies which tables
@@ -433,6 +470,13 @@ class Settings(BaseSettings):
             return [item.strip() for item in v.split(",") if item.strip()]
         return v
 
+    @field_validator("tier3_adjudicator_models", mode="after")
+    @classmethod
+    def split_adjudicator_models(cls, v):
+        if isinstance(v, str):
+            return [item.strip() for item in v.split(",") if item.strip()]
+        return v
+
     @field_validator("browser_html_publisher_allowlist", mode="after")
     @classmethod
     def split_browser_html_allowlist(cls, v):
@@ -566,7 +610,16 @@ class Settings(BaseSettings):
         if not env_var:
             return False
         value = os.getenv(env_var)
-        return value is not None and value.strip() != ""
+        if value is not None:
+            return value.strip() != ""
+        if field_name in self.model_fields_set:
+            configured = getattr(self, field_name, None)
+            if isinstance(configured, str):
+                return configured.strip() != ""
+            if isinstance(configured, list):
+                return bool(configured)
+            return configured is not None
+        return False
 
     def get_tier2_model(self) -> str:
         if self._is_anthropic() and not self._tier_env_set("tier2_model"):
@@ -578,6 +631,12 @@ class Settings(BaseSettings):
             value = self.anthropic_tier3_models
             return [m.strip() for m in value.split(",") if m.strip()]
         models = self.tier3_models
+        if isinstance(models, str):
+            return [m.strip() for m in models.split(",") if m.strip()]
+        return list(models)
+
+    def get_tier3_adjudicator_models(self) -> List[str]:
+        models = self.tier3_adjudicator_models
         if isinstance(models, str):
             return [m.strip() for m in models.split(",") if m.strip()]
         return list(models)

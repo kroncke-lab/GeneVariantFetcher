@@ -6,7 +6,7 @@
 # Use to measure pure extraction recall, bypassing PubMed/PubMind discovery and
 # Tier 1/2 relevance filtering:
 #   gvf extract KCNH2 --email you@x.com --output ./out \
-#       --pmid-file comparison_results/gold_standard_pmids.txt
+#       --pmid-file tests/fixtures/pmids/kcnh2_gold_pmids.txt
 #
 7889573
 8877771

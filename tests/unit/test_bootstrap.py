@@ -29,3 +29,13 @@ def test_initialize_runtime_is_idempotent(monkeypatch, tmp_path):
     bootstrap.initialize_runtime()
 
     assert bootstrap.os.getenv("GVF_BOOTSTRAP_IDEMPOTENT") == "first"
+
+
+def test_llm_provider_key_status_accepts_anthropic(monkeypatch):
+    for key in bootstrap.LLM_PROVIDER_KEY_ENV_VARS:
+        monkeypatch.delenv(key, raising=False)
+
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant")
+
+    assert bootstrap.has_llm_provider_key()
+    assert bootstrap.llm_provider_key_status()["ANTHROPIC_API_KEY"] is True

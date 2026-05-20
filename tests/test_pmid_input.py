@@ -3,12 +3,11 @@
 Covers:
 - `_parse_pmid_arg` (comma-separated and `@file` syntax)
 - `_read_pmid_file` (one-per-line files with `#` comments)
-- The shipped `comparison_results/gold_standard_pmids.txt` fixture
+- The shipped KCNH2 gold PMID fixture
 """
 
 from __future__ import annotations
 
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -69,15 +68,14 @@ class TestReadPmidFile:
 
 
 class TestGoldStandardFixture:
-    """The shipped comparison_results/gold_standard_pmids.txt is consumed
-    directly by the recall measurement workflow — keep it valid."""
+    """The shipped KCNH2 PMID fixture stays valid for explicit-PMID smoke tests."""
 
-    GOLD_PATH = Path("comparison_results/gold_standard_pmids.txt")
+    GOLD_PATH = Path("tests/fixtures/pmids/kcnh2_gold_pmids.txt")
 
     def test_file_exists(self):
         assert self.GOLD_PATH.exists(), (
-            "comparison_results/gold_standard_pmids.txt is shipped in-repo "
-            "as a reusable input for measuring extraction recall."
+            "tests/fixtures/pmids/kcnh2_gold_pmids.txt is shipped in-repo "
+            "as a reusable explicit-PMID input fixture."
         )
 
     def test_parses_to_nonempty_pmid_list(self):
@@ -89,7 +87,7 @@ class TestGoldStandardFixture:
     def test_count_matches_expected_baseline(self):
         # 262 distinct PMIDs derived from the curated KCNH2 Excel database
         # (rows where excel_variant_raw is non-empty in discrepancies.csv).
-        # If this number changes, regenerate the file from comparison_results
-        # CSVs and update this test deliberately.
+        # If this number changes, regenerate the fixture from the normalized
+        # KCNH2 gold input or scored discrepancy artifacts and update this test.
         pmids = _parse_pmid_arg(f"@{self.GOLD_PATH}")
         assert len(pmids) == 262

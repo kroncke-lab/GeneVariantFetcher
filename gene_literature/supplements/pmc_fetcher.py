@@ -11,6 +11,7 @@ PMID 24667783 is a known good test case (multiple supplements).
 import logging
 import os
 import re
+import time
 from pathlib import Path
 from typing import Dict, List, Optional
 from urllib.parse import urljoin
@@ -113,22 +114,29 @@ class PMCSupplementFetcher(SupplementFetcher):
             "tool": "GeneVariantFetcher",
             "email": os.getenv("NCBI_EMAIL", ""),
         }
-        try:
-            response = self.session.get(url, params=params, timeout=self.timeout)
-            response.raise_for_status()
-            data = response.json()
+        last_error: Exception | None = None
+        for attempt in range(1, 4):
+            try:
+                response = self.session.get(url, params=params, timeout=self.timeout)
+                response.raise_for_status()
+                data = response.json()
 
-            records = data.get("records", [])
-            if records:
-                pmcid = records[0].get("pmcid", "")
-                if pmcid:
-                    logger.debug(f"PMID {pmid} -> {pmcid}")
-                    return pmcid
+                records = data.get("records", [])
+                if records:
+                    pmcid = records[0].get("pmcid", "")
+                    if pmcid:
+                        logger.debug(f"PMID {pmid} -> {pmcid}")
+                        return pmcid
 
-            return None
-        except Exception as e:
-            logger.warning(f"PMCID resolution failed for PMID {pmid}: {e}")
-            return None
+                return None
+            except Exception as e:
+                last_error = e
+                if attempt < 3:
+                    time.sleep(2**attempt)
+                    continue
+
+        logger.warning(f"PMCID resolution failed for PMID {pmid}: {last_error}")
+        return None
 
     # ------------------------------------------------------------------
     # Europe PMC supplementary files
@@ -148,17 +156,29 @@ class PMCSupplementFetcher(SupplementFetcher):
 
         url = f"{self.EUROPEPMC_BASE}/{pmcid}/supplementaryFiles"
 
-        try:
-            response = self.session.get(url, timeout=self.timeout)
-            response.raise_for_status()
-        except requests.exceptions.HTTPError as e:
-            if e.response is not None and e.response.status_code == 404:
-                logger.debug(f"No Europe PMC supplements for {pmcid}")
-                return []
-            raise
-        except Exception as e:
+        last_error: Exception | None = None
+        for attempt in range(1, 4):
+            try:
+                response = self.session.get(url, timeout=self.timeout)
+                response.raise_for_status()
+                break
+            except requests.exceptions.HTTPError as e:
+                if e.response is not None and e.response.status_code == 404:
+                    logger.debug(f"No Europe PMC supplements for {pmcid}")
+                    return []
+                last_error = e
+            except Exception as e:
+                last_error = e
+
+            if attempt < 3:
+                time.sleep(2**attempt)
+                continue
+
             logger.warning(
-                f"Europe PMC supplementary files request failed for {pmcid}: {e}"
+                "Europe PMC supplementary files request failed for %s after "
+                "retries: %s",
+                pmcid,
+                last_error,
             )
             return []
 

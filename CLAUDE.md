@@ -1,5 +1,16 @@
 # GeneVariantFetcher Handoff
 
+## Active Main Checkout
+
+The active main working directory is:
+
+`/Users/kronckbm/GitRepos/GeneVariantFetcher`
+
+Use that path for current GVF work unless Brett explicitly says otherwise.
+Do not treat `.claude/worktrees/`, `.codex/worktrees/`, old `Projects/`, or
+remote `/mnt/temp4/` copies as authoritative. They are historical side
+worktrees or scratch checkouts and can lag behind `main`.
+
 GVF extracts genetic variants, carrier counts, and phenotype data from
 biomedical literature for the Kroncke Lab variant interpretation pipeline. The
 grant target is 90% unique-variant recall by June 2026.
@@ -9,7 +20,7 @@ grant target is 90% unique-variant recall by June 2026.
 Current live metrics, the scored baseline artifact, highest-yield remaining
 PMIDs, and the next-run plan are consolidated in:
 
-`docs/CURRENT_RECALL_STATUS_2026-05-20.md`
+`docs/RECALL_STATUS.md`
 
 Treat that file as authoritative. Older KCNH2-only and 2026-05-18 closeout
 numbers are historical debugging baselines. Gold-PMID-conditioned enrichment
@@ -46,7 +57,7 @@ They are not "assigned to a human" by code; they are papers GVF could not fetch
 with the currently available credentials and network position.
 
 Current high-yield missing PMIDs are listed in
-`docs/CURRENT_RECALL_STATUS_2026-05-20.md`. Keep PMID rankings there so this
+`docs/RECALL_STATUS.md`. Keep PMID rankings there so this
 handoff file does not drift.
 
 ## Highest ROI Blocker
@@ -123,7 +134,7 @@ Then rerun extraction/migration and score:
 ## Active Work
 
 Current active work is tracked in
-`docs/CURRENT_RECALL_STATUS_2026-05-20.md`. Do not duplicate metric gaps here.
+`docs/RECALL_STATUS.md`. Do not duplicate metric gaps here.
 The short version is: unlock Elsevier/ScienceDirect source acquisition, fix
 general count/affected-status extraction issues, rescore from the recorded
 baseline, and keep no-gold QC prominent for new genes.

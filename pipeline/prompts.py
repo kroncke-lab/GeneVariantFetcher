@@ -87,6 +87,13 @@ with 78 carriers from a non-overlapping cohort, total = 128. "N patients" or "No
 patients" columns are CARRIER COUNTS. Frequency columns like "5/200" → 5 carriers.
 When same variant in multiple tables: SUM if independent, use LARGER if overlapping.
 
+CRITICAL — DO NOT COPY STUDY-WIDE TOTALS ONTO EACH VARIANT:
+If the paper states an aggregate such as "43 carriers, 28 affected and 15 unaffected"
+for the whole study, cohort, family set, domain, or mutation class, do NOT assign
+43/28/15 to every variant. Use counts only when the row, sentence, or table cell is
+variant-specific. If only aggregate counts are available, leave variant-level counts
+null and put the aggregate in additional_notes.
+
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
 Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
 and genomic_position would be null. The variant identifier is load-bearing.
@@ -321,6 +328,13 @@ When the same variant appears in multiple tables or sections:
 1. SUM the carrier counts if the cohorts are independent/non-overlapping
 2. Use the LARGER number if the cohorts overlap or one is a subset
 3. When in doubt, use the largest reported count (fail toward completeness)
+
+CRITICAL — DO NOT COPY STUDY-WIDE TOTALS ONTO EACH VARIANT:
+If the paper states an aggregate such as "43 carriers, 28 affected and 15 unaffected"
+for the whole study, cohort, family set, domain, or mutation class, do NOT assign
+43/28/15 to every variant. Use counts only when the row, sentence, or table cell is
+variant-specific. If only aggregate counts are available, leave variant-level counts
+null and put the aggregate in additional_notes.
 
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
 Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,

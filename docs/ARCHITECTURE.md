@@ -397,5 +397,5 @@ def export_to_csv(db_path: Path, output_dir: Path):
 ## Further Reading
 
 - [OUTPUT_FORMAT.md](OUTPUT_FORMAT.md) — Database schema and file formats
-- [VALIDATION.md](VALIDATION.md) — Recall measurement methodology
+- [RECALL_STATUS.md](RECALL_STATUS.md) — Current recall baseline and blockers
 - [API_KEYS.md](API_KEYS.md) — Obtaining API credentials

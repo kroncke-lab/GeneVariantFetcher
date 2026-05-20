@@ -29,7 +29,7 @@ After the main extraction pipeline produces a base SQLite DB, layer in:
 ## Current ceiling
 
 Do not maintain live recall ceilings in this README. Current missing-PMID and
-gap rankings live in `docs/CURRENT_RECALL_STATUS_2026-05-20.md`. In general,
+gap rankings live in `docs/RECALL_STATUS.md`. In general,
 the ceiling is set by source acquisition first: missing Elsevier/ScienceDirect,
 Wiley, Karger, Sage/Liebert, or supplement artifacts must become real
 `FULL_CONTEXT.md` content before extraction fixes can help.

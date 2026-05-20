@@ -13,6 +13,7 @@ import os
 import threading
 import time
 from typing import List, Optional, Tuple
+from urllib.parse import urlparse
 
 import requests
 from Bio import Entrez
@@ -35,6 +36,92 @@ RATE_LIMIT_DELAY = 0.11 if Entrez.api_key else 0.34
 # Thread-safe rate limiting
 _rate_limit_lock = threading.Lock()
 _last_request_time = 0
+
+
+NON_ARTICLE_LINKOUT_DOMAINS = {
+    "antibodies.cancer.gov",
+    "antibodies-online.com",
+    "assays.cancer.gov",
+    "biocyc.org",
+    "clinicaltrials.gov",
+    "disgenet.org",
+    "genecards.org",
+    "glygen.org",
+    "hgmd.cf.ac.uk",
+    "lens.org",
+    "lovd.nl",
+    "malacards.org",
+    "medlineplus.gov",
+    "ncbi.nlm.nih.gov/clinvar",
+    "ncbi.nlm.nih.gov/gene",
+    "ncbi.nlm.nih.gov/nuccore",
+    "ncbi.nlm.nih.gov/protein",
+    "omim.org",
+    "orphanet.org",
+    "proteinatlas.org",
+    "scite.ai",
+    "uniprot.org",
+}
+
+PUBLISHER_LINKOUT_DOMAINS = {
+    "academic.oup.com",
+    "ahajournals.org",
+    "biomedcentral.com",
+    "bmj.com",
+    "cell.com",
+    "frontiersin.org",
+    "gimjournal.org",
+    "hindawi.com",
+    "jamanetwork.com",
+    "journals.lww.com",
+    "karger.com",
+    "mdpi.com",
+    "nature.com",
+    "nejm.org",
+    "onlinelibrary.wiley.com",
+    "plos.org",
+    "pnas.org",
+    "science.org",
+    "sciencedirect.com",
+    "springer.com",
+    "tandfonline.com",
+    "thelancet.com",
+    "wiley.com",
+}
+
+
+def _host_and_path(url: str) -> tuple[str, str]:
+    parsed = urlparse(url)
+    host = parsed.netloc.lower()
+    if host.startswith("www."):
+        host = host[4:]
+    return host, parsed.path.lower()
+
+
+def _domain_rule_matches(url: str, rule: str) -> bool:
+    host, path = _host_and_path(url)
+    rule = rule.lower()
+    if "/" in rule:
+        rule_host, rule_path = rule.split("/", 1)
+        rule_path = "/" + rule_path
+        return (
+            host == rule_host or host.endswith(f".{rule_host}")
+        ) and path.startswith(rule_path)
+    return host == rule or host.endswith(f".{rule}")
+
+
+def is_non_article_linkout_url(url: str) -> bool:
+    """Return True for PubMed LinkOuts that are databases/tools, not papers."""
+    return any(
+        _domain_rule_matches(url, domain) for domain in NON_ARTICLE_LINKOUT_DOMAINS
+    )
+
+
+def is_publisher_linkout_url(url: str) -> bool:
+    """Return True for LinkOut URLs that are likely publisher article pages."""
+    return any(
+        _domain_rule_matches(url, domain) for domain in PUBLISHER_LINKOUT_DOMAINS
+    )
 
 
 class PMCAPIClient:
@@ -73,24 +160,37 @@ class PMCAPIClient:
         Returns:
             PMCID string (e.g., "PMC1234567") or None if not found
         """
-        try:
-            self._rate_limit()
-            handle = Entrez.elink(
-                dbfrom="pubmed", db="pmc", id=pmid, linkname="pubmed_pmc"
-            )
-            record = Entrez.read(handle)
-            handle.close()
+        last_error: Exception | None = None
+        for attempt in range(1, 4):
+            handle = None
+            try:
+                self._rate_limit()
+                handle = Entrez.elink(
+                    dbfrom="pubmed", db="pmc", id=pmid, linkname="pubmed_pmc"
+                )
+                record = Entrez.read(handle)
 
-            if record[0]["LinkSetDb"]:
-                pmc_ids = record[0]["LinkSetDb"][0]["Link"]
-                if pmc_ids:
-                    pmcid = pmc_ids[0]["Id"]
-                    return f"PMC{pmcid}"
+                if record[0]["LinkSetDb"]:
+                    pmc_ids = record[0]["LinkSetDb"][0]["Link"]
+                    if pmc_ids:
+                        pmcid = pmc_ids[0]["Id"]
+                        return f"PMC{pmcid}"
 
-            return None
-        except Exception as e:
-            print(f"  Error converting PMID {pmid} to PMCID: {e}")
-            return None
+                return None
+            except Exception as e:
+                last_error = e
+                if attempt < 3:
+                    time.sleep(2**attempt)
+                    continue
+            finally:
+                if handle is not None:
+                    try:
+                        handle.close()
+                    except Exception:
+                        pass
+
+        print(f"  Error converting PMID {pmid} to PMCID after retries: {last_error}")
+        return None
 
     @api_retry
     def get_doi_from_pmid(self, pmid: str) -> Optional[str]:
@@ -214,56 +314,6 @@ class PMCAPIClient:
             - is_free: True if article is marked as free full text
             - publisher_url: Direct URL to free full text if available
         """
-        # Domains to skip - these are typically databases, tools, or other non-article resources
-        IRRELEVANT_DOMAINS = [
-            "antibodies.cancer.gov",  # Antibody database
-            "www.antibodies-online.com",  # Antibody catalog
-            "www.uniprot.org",  # Protein database
-            "www.ncbi.nlm.nih.gov/protein",  # NCBI Protein database
-            "www.ncbi.nlm.nih.gov/gene",  # NCBI Gene database
-            "www.ncbi.nlm.nih.gov/nuccore",  # NCBI Nucleotide database
-            "www.ncbi.nlm.nih.gov/clinvar",  # ClinVar database
-            "www.omim.org",  # OMIM database
-            "www.genecards.org",  # GeneCards database
-            "www.proteinatlas.org",  # Human Protein Atlas
-            "biocyc.org",  # BioCyc metabolic pathway database
-            "glygen.org",  # GlyGen landing pages (not full text)
-            "malacards.org",  # MalaCards disease database (not article full text)
-            "www.malacards.org",  # MalaCards disease database
-            "www.disgenet.org",  # DisGeNET disease-gene associations
-            "www.orphanet.org",  # Orphanet rare disease database
-            "www.hgmd.cf.ac.uk",  # Human Gene Mutation Database (requires subscription)
-            "www.lovd.nl",  # Leiden Open Variation Database
-            "databases.lovd.nl",  # LOVD database instances
-        ]
-
-        # Known publisher domains - prioritize these
-        PUBLISHER_DOMAINS = [
-            "sciencedirect.com",
-            "nature.com",
-            "springer.com",
-            "wiley.com",
-            "onlinelibrary.wiley.com",
-            "academic.oup.com",
-            "journals.lww.com",
-            "tandfonline.com",
-            "karger.com",
-            "ahajournals.org",
-            "jamanetwork.com",
-            "nejm.org",
-            "thelancet.com",
-            "bmj.com",
-            "cell.com",
-            "science.org",
-            "pnas.org",
-            "frontiersin.org",
-            "mdpi.com",
-            "hindawi.com",
-            "plos.org",
-            "biomedcentral.com",
-            "gimjournal.org",
-        ]
-
         try:
             self._rate_limit()
 
@@ -318,20 +368,14 @@ class PMCAPIClient:
                                     url_str = str(url)
 
                                     # Skip irrelevant domains
-                                    if any(
-                                        domain in url_str.lower()
-                                        for domain in IRRELEVANT_DOMAINS
-                                    ):
+                                    if is_non_article_linkout_url(url_str):
                                         print(
                                             f"  - Skipping irrelevant LinkOut URL: {url_str}"
                                         )
                                         continue
 
                                     # Prioritize known publisher domains
-                                    if any(
-                                        domain in url_str.lower()
-                                        for domain in PUBLISHER_DOMAINS
-                                    ):
+                                    if is_publisher_linkout_url(url_str):
                                         if not prioritized_url:
                                             prioritized_url = url_str
                                             print(f"  ✓ Found publisher URL: {url_str}")

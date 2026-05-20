@@ -1,15 +1,26 @@
 # Codex / AI Agent Onboarding
 
+## Active Main Checkout
+
+The active main working directory is:
+
+`/Users/kronckbm/GitRepos/GeneVariantFetcher`
+
+Use that path for current GVF work unless Brett explicitly says otherwise.
+Do not treat `.claude/worktrees/`, `.codex/worktrees/`, old `Projects/`, or
+remote `/mnt/temp4/` copies as authoritative. They are historical side
+worktrees or scratch checkouts and can lag behind `main`.
+
 You're working on **GeneVariantFetcher (GVF)** — a pipeline that extracts
 genetic variants from biomedical literature for the Kroncke Lab variant
 interpretation toolkit. Goal: **90% unique-variant recall by June 2026**
 (R01 grant submission). Current metrics, blockers, and next actions live in
-`docs/CURRENT_RECALL_STATUS_2026-05-20.md`; treat that file as the source of
+`docs/RECALL_STATUS.md`; treat that file as the source of
 truth and do not duplicate live recall tables here.
 
 ## Read these first (in this order)
 
-1. **`docs/CURRENT_RECALL_STATUS_2026-05-20.md`** — current measured baseline,
+1. **`docs/RECALL_STATUS.md`** — current measured baseline,
    blockers, stale/bloat audit, and next run plan. **Start here.**
 2. **`CLAUDE.md`** — project architecture, paywall recovery context, and
    handoff notes. Historical metrics inside it defer to the current-status doc.

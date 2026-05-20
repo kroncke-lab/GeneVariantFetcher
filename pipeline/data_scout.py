@@ -14,12 +14,48 @@ import json
 import logging
 import re
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Optional
 
-from config.constants import SCOUT_CLINICAL_KEYWORDS
+from config.constants import SCOUT_CLINICAL_KEYWORDS, SCOUT_PREFER_CLEANED_ABOVE_CHARS
 from utils.scout_models import DataZone, DataZoneReport
 
 logger = logging.getLogger(__name__)
+
+
+def select_scout_source_path(
+    full_context_path: Path,
+    prefer_cleaned_above_chars: int = SCOUT_PREFER_CLEANED_ABOVE_CHARS,
+) -> Path:
+    """Return the best text source for scouting a FULL_CONTEXT artifact.
+
+    The raw FULL_CONTEXT file remains the canonical audit artifact, but the
+    scout stage can safely use an existing CLEANED sibling when the raw file is
+    very large. Preprocessing is deterministic and non-destructive.
+    """
+
+    if full_context_path.stat().st_size <= prefer_cleaned_above_chars:
+        return full_context_path
+
+    cleaned_path = full_context_path.with_name(
+        full_context_path.name.replace("_FULL_CONTEXT.md", "_CLEANED.md")
+    )
+    if cleaned_path.exists() and cleaned_path.stat().st_size > 0:
+        logger.warning(
+            "Using cleaned scout source for oversized context %s "
+            "(raw %.1f MB, cleaned %.1f MB)",
+            full_context_path.name,
+            full_context_path.stat().st_size / 1_000_000,
+            cleaned_path.stat().st_size / 1_000_000,
+        )
+        return cleaned_path
+
+    logger.warning(
+        "Oversized context %s has no cleaned sibling; scouting raw %.1f MB file",
+        full_context_path.name,
+        full_context_path.stat().st_size / 1_000_000,
+    )
+    return full_context_path
 
 
 @dataclass

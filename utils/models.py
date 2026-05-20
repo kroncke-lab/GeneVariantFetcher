@@ -35,6 +35,7 @@ class Paper(BaseModel):
     publication_date: Optional[str] = None
     doi: Optional[str] = None
     pmc_id: Optional[str] = None
+    disease: Optional[str] = None
 
     # Metadata tracking
     source: Optional[str] = Field(

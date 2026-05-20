@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
-"""Ingest ClinVar variants citing each gold-standard PMID into a recall DB.
+"""Ingest ClinVar variants citing PMIDs already present in a recall DB.
 
-For each PMID in the gold-standard CSV, query ClinVar via E-Utils for
+For each PMID already present in the SQLite DB, query ClinVar via E-Utils for
 variants in the target gene that cite that PMID. Insert anything new
 into the DB as ``variant_papers`` rows tagged ``ClinVar (PMID citation)``.
 
-Gene-agnostic: pass ``--gene`` and the matching gold CSV; the script
-resolves the NCBI Gene ID automatically and uses it for filtering.
+Gene-agnostic: pass ``--gene`` and the matching DB. Gold-PMID mode still exists
+as an explicit evaluation/debug option, but it is intentionally not the default
+because using the recall target to choose enrichment PMIDs leaks gold-set
+knowledge into the scored DB.
 
 Usage::
 
     python scripts/recall_recovery/ingest_clinvar.py \\
         --gene KCNQ1 \\
-        --db results/KCNQ1/<timestamp>/KCNQ1.db \\
-        --gold gene_variant_fetcher_gold_standard/normalized/KCNQ1_recall_input.csv
+        --db results/KCNQ1/<timestamp>/KCNQ1.db
 """
 
 from __future__ import annotations
@@ -160,14 +161,19 @@ def variants_for_pmid(
 # ---------------------------------------------------------------------------
 
 
-def ensure_paper(con: sqlite3.Connection, pmid: str, gene: str) -> None:
+def ensure_paper(
+    con: sqlite3.Connection, pmid: str, gene: str, *, allow_stub: bool
+) -> bool:
     if con.execute("SELECT 1 FROM papers WHERE pmid=?", (pmid,)).fetchone():
-        return
+        return True
+    if not allow_stub:
+        return False
     con.execute(
         "INSERT OR IGNORE INTO papers (pmid, gene_symbol, extraction_summary) "
         "VALUES (?, ?, 'ClinVar-only stub')",
         (pmid, gene),
     )
+    return True
 
 
 def ensure_variant(
@@ -188,6 +194,39 @@ def ensure_variant(
     return int(cur.lastrowid)
 
 
+def load_gold_pmids(gold_path: Path) -> set[str]:
+    gold_pmids: set[str] = set()
+    with gold_path.open() as f:
+        for r in csv.DictReader(f):
+            if r.get("pmid"):
+                gold_pmids.add(r["pmid"])
+    return gold_pmids
+
+
+def load_db_pmids(con: sqlite3.Connection, gene: str) -> set[str]:
+    """Return PMIDs the extraction DB already knows about for this gene."""
+
+    try:
+        rows = con.execute(
+            """SELECT DISTINCT pmid FROM papers
+               WHERE pmid IS NOT NULL AND TRIM(pmid) != ''
+                 AND (gene_symbol IS NULL OR UPPER(gene_symbol)=?)""",
+            (gene,),
+        ).fetchall()
+    except sqlite3.OperationalError:
+        rows = []
+    pmids = {str(r[0]) for r in rows if str(r[0]).isdigit()}
+    if pmids:
+        return pmids
+    try:
+        rows = con.execute(
+            "SELECT DISTINCT pmid FROM variant_papers WHERE pmid IS NOT NULL"
+        ).fetchall()
+    except sqlite3.OperationalError:
+        rows = []
+    return {str(r[0]) for r in rows if str(r[0]).isdigit()}
+
+
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
@@ -199,7 +238,26 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("--gene", required=True, help="Gene symbol (e.g. KCNH2, KCNQ1)")
     p.add_argument("--db", required=True, help="Path to the recall SQLite DB")
-    p.add_argument("--gold", required=True, help="Path to the gold-standard recall CSV")
+    p.add_argument(
+        "--gold",
+        default=None,
+        help="Path to the gold-standard recall CSV. Required only with --pmid-source gold.",
+    )
+    p.add_argument(
+        "--pmid-source",
+        choices=("db", "gold"),
+        default="db",
+        help=(
+            "Which PMID set to query. Default 'db' enriches only papers already "
+            "observed by the extraction DB. 'gold' is evaluation-aided and should "
+            "not be used for cold-start recall claims."
+        ),
+    )
+    p.add_argument(
+        "--allow-stub-papers",
+        action="store_true",
+        help="Allow inserting paper rows for PMIDs absent from the DB.",
+    )
     p.add_argument(
         "--email", default=None, help="Override NCBI email (else NCBI_EMAIL env var)"
     )
@@ -217,13 +275,15 @@ def main() -> int:
 
     gene = args.gene.upper()
     db_path = Path(args.db)
-    gold_path = Path(args.gold)
+    gold_path = Path(args.gold) if args.gold else None
     email = args.email or os.environ.get("NCBI_EMAIL")
     api_key = os.environ.get("NCBI_API_KEY", "")
 
     if not db_path.exists():
         sys.exit(f"DB not found: {db_path}")
-    if not gold_path.exists():
+    if args.pmid_source == "gold" and not gold_path:
+        sys.exit("--gold is required when --pmid-source=gold")
+    if gold_path and not gold_path.exists():
         sys.exit(f"Gold CSV not found: {gold_path}")
     if not email:
         sys.exit("NCBI_EMAIL not set (export it or pass --email)")
@@ -232,25 +292,26 @@ def main() -> int:
     gene_id = resolve_gene_id(gene, email, api_key)
     logger.info("Gene %s → NCBI Gene ID %s", gene, gene_id or "(unresolved)")
 
-    gold_pmids: set[str] = set()
-    with gold_path.open() as f:
-        for r in csv.DictReader(f):
-            if r.get("pmid"):
-                gold_pmids.add(r["pmid"])
-    logger.info("Gold PMIDs: %d", len(gold_pmids))
-
     con = sqlite3.connect(str(db_path))
     con.row_factory = sqlite3.Row
 
+    pmids = (
+        load_gold_pmids(gold_path)
+        if args.pmid_source == "gold" and gold_path
+        else load_db_pmids(con, gene)
+    )
+    logger.info("%s PMIDs: %d", args.pmid_source.upper(), len(pmids))
+
     added = 0
     con.execute("BEGIN")
-    for i, pmid in enumerate(sorted(gold_pmids), 1):
+    for i, pmid in enumerate(sorted(pmids), 1):
         if i % 30 == 0:
-            logger.info("  progress: %d / %d", i, len(gold_pmids))
+            logger.info("  progress: %d / %d", i, len(pmids))
         res = variants_for_pmid(pmid, gene, email, api_key)
         if not res:
             continue
-        ensure_paper(con, pmid, gene)
+        if not ensure_paper(con, pmid, gene, allow_stub=args.allow_stub_papers):
+            continue
         for cdna, protein, title in res:
             vid = ensure_variant(con, gene, cdna, protein)
             if not con.execute(
@@ -265,8 +326,17 @@ def main() -> int:
                 )
                 added += 1
     con.commit()
-    logger.info("Added %d variant_papers across %d PMIDs", added, len(gold_pmids))
-    print(json.dumps({"gene": gene, "added": added, "pmids": len(gold_pmids)}))
+    logger.info("Added %d variant_papers across %d PMIDs", added, len(pmids))
+    print(
+        json.dumps(
+            {
+                "gene": gene,
+                "added": added,
+                "pmids": len(pmids),
+                "pmid_source": args.pmid_source,
+            }
+        )
+    )
     return 0
 
 

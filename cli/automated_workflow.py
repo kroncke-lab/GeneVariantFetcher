@@ -23,7 +23,7 @@ from cli.scout import run_scout
 
 # Configure logging using centralized utility
 from gui.checkpoint import CheckpointManager, JobCheckpoint, PipelineStep
-from utils.bootstrap import initialize_runtime
+from utils.bootstrap import has_llm_provider_key, initialize_runtime
 from utils.logging_utils import get_logger, setup_logging
 from utils.run_manifest import RunManifestManager
 
@@ -480,6 +480,7 @@ def automated_variant_extraction_workflow(
         harvest_dir=harvest_dir,
         extraction_dir=extraction_dir,
         gene_symbol=gene_symbol,
+        disease=disease,
         abstract_records=abstract_records,
         abstract_only_pmids=abstract_only_pmids,
         tier_threshold=tier_threshold,
@@ -1015,11 +1016,13 @@ Examples:
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
 
-    # Require at least one LLM provider key. OPENAI_API_KEY or AZURE_AI_API_KEY
-    # both satisfy this — the pipeline routes via TIER*_MODEL strings.
-    if not (os.getenv("OPENAI_API_KEY") or os.getenv("AZURE_AI_API_KEY")):
+    # Require at least one LLM provider key. The pipeline routes via
+    # TIER*_MODEL strings and Settings resolves the current provider.
+    if not has_llm_provider_key():
         logger.error("⚠️  ERROR: No LLM provider API key found in environment!")
-        logger.error("Set OPENAI_API_KEY or AZURE_AI_API_KEY in your .env file.")
+        logger.error(
+            "Set OPENAI_API_KEY, AZURE_AI_API_KEY, or ANTHROPIC_API_KEY in your .env file."
+        )
         sys.exit(1)
 
     # Get tier threshold from settings if not provided via CLI

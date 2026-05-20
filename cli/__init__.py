@@ -23,6 +23,7 @@ from cli.discover import discover_command, run_discover
 from cli.extract import run_extraction
 from cli.reharvest import reharvest_command
 from cli.scout import run_scout
+from utils.bootstrap import has_llm_provider_key, initialize_runtime
 
 __all__ = [
     "automated_variant_extraction_workflow",
@@ -154,7 +155,7 @@ def extract_command(
                 "Skip PubMed/PubMind/EuropePMC discovery AND Tier 1/2 filtering, "
                 "running the pipeline on an explicit PMID list. Accepts a "
                 "comma-separated list (e.g. 12345,67890) or a file path "
-                "prefixed with '@' (e.g. @comparison_results/gold_standard_pmids.txt). "
+                "prefixed with '@' (e.g. @tests/fixtures/pmids/example_pmids.txt). "
                 "Lines starting with '#' and blank lines are ignored in files."
             ),
         ),
@@ -204,6 +205,8 @@ def extract_command(
     import logging
 
     from utils.logging_utils import setup_logging
+
+    initialize_runtime()
 
     if browser_html_fallback is not None:
         os.environ["ENABLE_BROWSER_HTML_FALLBACK"] = (
@@ -255,11 +258,7 @@ def extract_command(
                 err=True,
             )
             raise typer.Exit(1)
-    elif not (
-        os.getenv("OPENAI_API_KEY")
-        or os.getenv("AZURE_AI_API_KEY")
-        or os.getenv("ANTHROPIC_API_KEY")
-    ):
+    elif not (has_llm_provider_key()):
         typer.echo("⚠️  ERROR: No LLM provider API key found in environment!", err=True)
         typer.echo(
             "Set OPENAI_API_KEY, AZURE_AI_API_KEY, or ANTHROPIC_API_KEY in your .env file.",
@@ -378,11 +377,22 @@ def gvf_run_command(
             ),
         ),
     ] = None,
+    with_v12: Annotated[
+        bool,
+        typer.Option(
+            "--with-v12/--no-with-v12",
+            help=(
+                "KCNH2 only: merge the old manually recovered v12 DB during "
+                "scoring. Off by default because it is not cold-start behavior."
+            ),
+        ),
+    ] = False,
 ):
     """One-shot end-to-end driver: cold start → scored variant DB.
 
     Wraps extract → migrate → recovery layers → scoring + report into one
-    command. Auto-detects gold standard CSV and KCNH2 v12 baseline DB.
+    command. Auto-detects gold standard CSVs; KCNH2 v12 baseline merging is
+    available only when explicitly requested with `--with-v12`.
     See cli/gvf_run.py for the per-step breakdown.
     """
     from cli.gvf_run import run_gvf_pipeline
@@ -394,6 +404,7 @@ def gvf_run_command(
         pmid_file=pmid_file,
         max_pmids=max_pmids,
         resume_dir=resume_dir,
+        include_v12=with_v12,
         skip=list(skip) if skip else None,
     )
     if exit_code != 0:

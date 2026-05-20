@@ -420,14 +420,71 @@ Table 1. KCNH2 mutation-positive patients
 
     by_protein = {v["protein_notation"]: v for v in variants}
     assert set(by_protein) == {"p.Arg176Trp", "p.Asn629Ser"}
-    pen = by_protein["p.Arg176Trp"]["penetrance_data"]
-    assert pen["total_carriers_observed"] == 1
-    assert pen["affected_count"] == 1
-    assert pen["unaffected_count"] == 0
-    pen = by_protein["p.Asn629Ser"]["penetrance_data"]
-    assert pen["total_carriers_observed"] == 1
-    assert pen["affected_count"] == 0
-    assert pen["unaffected_count"] == 1
+    assert by_protein["p.Arg176Trp"]["penetrance_data"] == {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+    }
+    assert by_protein["p.Asn629Ser"]["penetrance_data"] == {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+    }
+
+
+def test_suppresses_repeated_study_wide_counts_from_llm_variants():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    data = {
+        "variants": [
+            {
+                "protein_notation": f"p.Arg{i}Trp",
+                "patients": {"count": 43},
+                "penetrance_data": {
+                    "total_carriers_observed": 43,
+                    "affected_count": 28,
+                    "unaffected_count": 15,
+                },
+                "additional_notes": "LLM extraction from cohort summary",
+            }
+            for i in range(1, 5)
+        ],
+        "extraction_metadata": {},
+    }
+
+    cleaned = extractor._suppress_repeated_study_wide_counts(data)
+
+    assert cleaned["extraction_metadata"]["study_wide_count_suppressed"] == 4
+    for variant in cleaned["variants"]:
+        assert variant["patients"]["count"] is None
+        assert variant["penetrance_data"]["total_carriers_observed"] is None
+        assert variant["penetrance_data"]["affected_count"] is None
+        assert variant["penetrance_data"]["unaffected_count"] is None
+        assert "Cleared repeated cohort-wide count tuple" in variant["additional_notes"]
+
+
+def test_does_not_suppress_deterministic_table_counts():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    data = {
+        "variants": [
+            {
+                "protein_notation": f"p.Arg{i}Trp",
+                "patients": {"count": 43},
+                "penetrance_data": {
+                    "total_carriers_observed": 43,
+                    "affected_count": 43,
+                    "unaffected_count": 0,
+                },
+                "additional_notes": "Parsed via deterministic fixed-width table parser",
+            }
+            for i in range(1, 5)
+        ],
+        "extraction_metadata": {},
+    }
+
+    cleaned = extractor._suppress_repeated_study_wide_counts(data)
+
+    assert "study_wide_count_suppressed" not in cleaned["extraction_metadata"]
+    assert all(v["patients"]["count"] == 43 for v in cleaned["variants"])
 
 
 def test_artifact_filter_removes_malformed_protein_notations():
@@ -437,6 +494,7 @@ def test_artifact_filter_removes_malformed_protein_notations():
         "variants": [
             {"gene_symbol": "KCNH2", "protein_notation": "A"},
             {"gene_symbol": "KCNH2", "protein_notation": "0.734027"},
+            {"gene_symbol": "KCNH2", "protein_notation": "378"},
             {"gene_symbol": "KCNH2", "protein_notation": "p.Lys897Thr"},
             {"gene_symbol": "KCNH2", "cdna_notation": "c.2398+1G>A"},
         ],
@@ -449,7 +507,7 @@ def test_artifact_filter_removes_malformed_protein_notations():
         for v in filtered["variants"]
     }
     assert remaining == {"p.Lys897Thr", "c.2398+1G>A"}
-    assert filtered["extraction_metadata"]["malformed_filtered"] == 2
+    assert filtered["extraction_metadata"]["malformed_filtered"] == 3
 
 
 def test_low_yield_router_result_does_not_short_circuit_full_text(monkeypatch):

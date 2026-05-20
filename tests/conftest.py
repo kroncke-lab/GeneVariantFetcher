@@ -124,9 +124,17 @@ def clear_settings_cache():
 # =============================================================================
 
 
+def has_llm_provider_key():
+    """Check if at least one supported LLM provider key is available."""
+    return any(
+        bool(os.getenv(env_var))
+        for env_var in ("ANTHROPIC_API_KEY", "OPENAI_API_KEY", "AZURE_AI_API_KEY")
+    )
+
+
 def has_openai_key():
-    """Check if OpenAI API key is available."""
-    return bool(os.getenv("OPENAI_API_KEY"))
+    """Backward-compatible alias for older tests."""
+    return has_llm_provider_key()
 
 
 def has_ncbi_email():
@@ -134,8 +142,10 @@ def has_ncbi_email():
     return bool(os.getenv("NCBI_EMAIL"))
 
 
-requires_openai = pytest.mark.skipif(
-    not has_openai_key(), reason="OPENAI_API_KEY not set"
+requires_llm = pytest.mark.skipif(
+    not has_llm_provider_key(),
+    reason="no LLM provider key set (ANTHROPIC_API_KEY, OPENAI_API_KEY, or AZURE_AI_API_KEY)",
 )
+requires_openai = requires_llm
 
 requires_ncbi = pytest.mark.skipif(not has_ncbi_email(), reason="NCBI_EMAIL not set")

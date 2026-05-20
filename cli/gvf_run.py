@@ -13,19 +13,19 @@ Order of operations:
      migrate). Auto-resumes via GVF_RESUME_DIR when --resume-dir given.
   3. layers — runs scripts/recall_recovery/run_all_layers.py against
      the resulting DB. Auto-detects gold standard CSV under
-     gene_variant_fetcher_gold_standard/normalized/ and the KCNH2 v12
-     manual-recovery DB when --gene KCNH2.
+     gene_variant_fetcher_gold_standard/normalized/. The old KCNH2 v12
+     manual-recovery DB is opt-in only because it is not cold-start behavior.
   4. report — writes RUN_REPORT.md summarizing what happened, what
      scored, and what's gated on credentials.
 
 Cold-start invocation (one command, no flags beyond gene + email):
 
-    cli gvf-run --gene KCNQ1 --email me@uni.edu --output results/
+    gvf gvf-run KCNQ1 --email me@uni.edu --output results/
 
 Skip the LLM-bound extract step and just score an existing DB through
 the recovery layers:
 
-    cli gvf-run --gene KCNQ1 --email me@uni.edu --output results/ --skip extract
+    gvf gvf-run KCNQ1 --email me@uni.edu --output results/ --skip extract
 """
 
 from __future__ import annotations
@@ -41,6 +41,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
+from utils.bootstrap import (
+    has_llm_provider_key,
+    initialize_runtime,
+    llm_provider_key_status,
+)
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 logger = logging.getLogger("gvf_run")
@@ -54,7 +60,6 @@ logger = logging.getLogger("gvf_run")
 REQUIRED_ENV = ("NCBI_EMAIL",)
 RECOMMENDED_ENV = (
     "NCBI_API_KEY",
-    "OPENAI_API_KEY",  # or anthropic / azure_ai
     "ELSEVIER_API_KEY",
     "WILEY_API_KEY",
     "SPRINGER_API_KEY",
@@ -70,12 +75,25 @@ def doctor() -> dict:
     Doesn't raise — just reports what's available so the caller can decide
     whether to proceed.
     """
-    status: dict = {"required": {}, "recommended": {}, "unlocks": {}, "ok": True}
+    initialize_runtime()
+
+    status: dict = {
+        "required": {},
+        "llm_providers": {},
+        "recommended": {},
+        "unlocks": {},
+        "ok": True,
+    }
     for k in REQUIRED_ENV:
         present = bool(os.environ.get(k))
         status["required"][k] = present
         if not present:
             status["ok"] = False
+    provider_status = llm_provider_key_status()
+    status["llm_providers"] = provider_status
+    status["required"]["LLM provider key"] = has_llm_provider_key()
+    if not has_llm_provider_key():
+        status["ok"] = False
     for k in RECOMMENDED_ENV + CREDENTIAL_UNLOCKS:
         bucket = "unlocks" if k in CREDENTIAL_UNLOCKS else "recommended"
         status[bucket][k] = bool(os.environ.get(k))
@@ -217,6 +235,7 @@ def step_layers(
         str(run_dir / "pmc_fulltext"),
         "--outdir",
         str(outdir),
+        "--backup",
     ]
     if with_v12:
         cmd.extend(["--with-v12", str(with_v12)])
@@ -259,6 +278,9 @@ def step_report(
         lines.append(f"  - {k}: {'✓' if v else '✗'}")
     lines.append("Recommended:")
     for k, v in doctor_status.get("recommended", {}).items():
+        lines.append(f"  - {k}: {'✓' if v else '–'}")
+    lines.append("LLM provider keys:")
+    for k, v in doctor_status.get("llm_providers", {}).items():
         lines.append(f"  - {k}: {'✓' if v else '–'}")
     lines.append("Subscription unlocks (not required, but lift recall):")
     for k, v in doctor_status.get("unlocks", {}).items():
@@ -328,11 +350,10 @@ def step_report(
             "typically lifts variant_rows by ~30-50 pp for cardiac channel genes "
             "because Heart Rhythm / JACC / Eur Heart J unlock."
         )
-    if doctor_status.get("recommended", {}).get("OPENAI_API_KEY") is False:
+    if not any(doctor_status.get("llm_providers", {}).values()):
         lines.append(
-            "- OPENAI_API_KEY is unset. The extractor falls back to other "
-            "providers when configured; without any LLM credential the "
-            "extract step degrades to abstract-only."
+            "- No LLM provider key is set. Add OPENAI_API_KEY, AZURE_AI_API_KEY, "
+            "or ANTHROPIC_API_KEY before running extraction."
         )
     if layer_outdir:
         lines.append(f"- Inspect per-layer outputs under `{layer_outdir}`.")
@@ -361,9 +382,12 @@ def run_gvf_pipeline(
     pmid_file: Optional[Path] = None,
     max_pmids: int = 1500,
     resume_dir: Optional[Path] = None,
+    include_v12: bool = False,
     skip: Optional[list[str]] = None,
 ) -> int:
     """Execute the full pipeline. Returns exit code."""
+    initialize_runtime()
+
     skip = {s.lower() for s in (skip or [])}
     started = time.time()
 
@@ -385,6 +409,10 @@ def run_gvf_pipeline(
         for k, v in status["required"].items():
             if not v:
                 logger.error("  missing: %s", k)
+        if not any(status.get("llm_providers", {}).values()):
+            logger.error(
+                "  missing: one of OPENAI_API_KEY, AZURE_AI_API_KEY, ANTHROPIC_API_KEY"
+            )
         return 2
 
     # Step 2: extract (unless skipped)
@@ -430,7 +458,7 @@ def run_gvf_pipeline(
     if "layers" not in skip:
         logger.info("🧬 Step 3: recovery layers")
         gold = _find_gold(gene)
-        v12 = _find_v12_db(gene)
+        v12 = _find_v12_db(gene) if include_v12 else None
         layer_outdir = run_dir / "layers"
         step_layers(
             gene=gene,

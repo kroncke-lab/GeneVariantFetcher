@@ -27,7 +27,7 @@ from typing import Optional
 import typer
 from typing_extensions import Annotated
 
-from utils.bootstrap import initialize_runtime
+from utils.bootstrap import has_llm_provider_key, initialize_runtime
 from utils.logging_utils import get_logger, setup_logging
 
 logger = get_logger(__name__)
@@ -322,15 +322,18 @@ def discover_command(
     ] = False,
 ):
     """Run the upstream discovery half of the pipeline (no full-text, no extraction)."""
+    initialize_runtime()
+
     if verbose:
         setup_logging(level=logging.DEBUG)
     else:
         setup_logging(level=logging.INFO)
 
-    if not (os.getenv("OPENAI_API_KEY") or os.getenv("AZURE_AI_API_KEY")):
+    if not has_llm_provider_key():
         typer.echo("⚠️  ERROR: No LLM provider API key found in environment!", err=True)
         typer.echo(
-            "Set OPENAI_API_KEY or AZURE_AI_API_KEY in your .env file.", err=True
+            "Set OPENAI_API_KEY, AZURE_AI_API_KEY, or ANTHROPIC_API_KEY in your .env file.",
+            err=True,
         )
         raise typer.Exit(1)
 

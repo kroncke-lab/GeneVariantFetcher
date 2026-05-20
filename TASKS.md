@@ -2,7 +2,7 @@
 
 ## Current Focus
 - Improve honest cold-start recall for KCNH2, RYR2, and SCN5A to 90% across PMIDs, variant rows, unique variants, patients, affected, and unaffected counts.
-  - Current metrics, highest-yield PMIDs, and next run plan are in `docs/CURRENT_RECALL_STATUS_2026-05-20.md`.
+  - Current metrics, highest-yield PMIDs, and next run plan are in `docs/RECALL_STATUS.md`.
   - Do not duplicate live recall tables here; this file is only a short task checklist.
 - **Measurement loop is multi-gene now** — score KCNH2, RYR2, and SCN5A from `gene_variant_fetcher_gold_standard/normalized/*_recall_input.csv`; KCNQ1 scoring remains available when its gold input is in scope.
 - **KCNE1 is extraction-only until a gold input exists.** There is no `KCNE1_recall_input.csv` in the current gold-standard package, so KCNE1 recall cannot be claimed yet.
@@ -60,11 +60,11 @@
   - [x] Removed default KCNH2 v12 auto-merge, removed gold-PMID leakage from default recovery, added DB backups, broadened LLM provider checks, filtered non-article LinkOuts, added retry/challenge handling, and guarded Data Scout against oversized raw contexts.
 
 ## Active Tasks
-- [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in `docs/CURRENT_RECALL_STATUS_2026-05-20.md`.
+- [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in `docs/RECALL_STATUS.md`.
 - [ ] **Investigate count semantics and cohort-table over-counting**. Preserve raw count columns and classify study-wide counts versus per-variant carriers before writing patient/affected/unaffected totals.
 - [ ] **Create or import KCNE1 per-PMID gold input** before making KCNE1 recall claims.
-- [ ] **Obtain Elsevier INSTTOKEN** from Vanderbilt E-resources (eresources@vanderbilt.edu). Exact missing-PMID ranks live in `docs/CURRENT_RECALL_STATUS_2026-05-20.md`; do not carry older per-PMID gap counts here.
-- [ ] **Integrate valid paywall recovery artifacts into canonical runs** before re-extraction. Keep paper-specific recovery lists in validation artifacts or `docs/CURRENT_RECALL_STATUS_2026-05-20.md`, not in this checklist.
+- [ ] **Obtain Elsevier INSTTOKEN** from Vanderbilt E-resources (eresources@vanderbilt.edu). Exact missing-PMID ranks live in `docs/RECALL_STATUS.md`; do not carry older per-PMID gap counts here.
+- [ ] **Integrate valid paywall recovery artifacts into canonical runs** before re-extraction. Keep paper-specific recovery lists in validation artifacts or `docs/RECALL_STATUS.md`, not in this checklist.
 - [ ] **Manual PDF download for hard-blocked/stub PMIDs** only after the current-status source audit confirms the artifact is still missing. Feed real downloaded PDFs through `harvesting/format_converters.py`; avoid OneDrive on-demand placeholders.
 - [ ] Set weekly recall cadence (Friday re-run + compare) — produces trajectory chart for grant.
 
@@ -79,5 +79,5 @@
 - [ ] Expand quality gate test set beyond the 10 audit files.
 - [x] Parameterize `scripts/recall_recovery/ingest_clinvar.py` and `ingest_pubtator.py` so cold-start genes can run the same recovery layers KCNH2 uses.
 
-See `docs/CURRENT_RECALL_STATUS_2026-05-20.md` for current status and `CLAUDE.md`
+See `docs/RECALL_STATUS.md` for current status and `CLAUDE.md`
 for recovery architecture and handoff details.

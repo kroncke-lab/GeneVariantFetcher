@@ -6,11 +6,12 @@ Get GVF running in 5 minutes and extract genetic variants from the literature.
 
 - **Python 3.11+** (required)
 - **pip** (Python package manager)
-- **OpenAI API key** (required for extraction)
+- **LLM provider API key** (Anthropic, OpenAI, or Azure AI; required for extraction)
 - **Email address** (required for NCBI API compliance)
 
 Optional but recommended:
-- Publisher API keys (Elsevier, Springer, Wiley) for expanded paper access
+- Publisher credentials for expanded paper access, especially
+  `ELSEVIER_API_KEY` plus `ELSEVIER_INSTTOKEN`
 
 ## Installation
 
@@ -20,8 +21,8 @@ git clone https://github.com/your-org/GeneVariantFetcher.git
 cd GeneVariantFetcher
 
 # Create and activate a virtual environment
-python3.11 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+python3.11 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install GVF in development mode
 pip install -e .
@@ -33,10 +34,16 @@ Create a `.env` file in the repository root:
 
 ```bash
 # Required
-OPENAI_API_KEY=sk-your-openai-key-here
+NCBI_EMAIL=you@example.com
+
+# Required: at least one LLM provider key
+ANTHROPIC_API_KEY=your-anthropic-key
+# OPENAI_API_KEY=sk-your-openai-key-here
+# AZURE_AI_API_KEY=your-azure-ai-key
 
 # Optional: Publisher APIs for better paper coverage
 ELSEVIER_API_KEY=your-elsevier-key
+ELSEVIER_INSTTOKEN=your-elsevier-insttoken
 SPRINGER_API_KEY=your-springer-key
 WILEY_API_KEY=your-wiley-key
 
@@ -54,11 +61,17 @@ Extract KCNH2 variants (a well-studied cardiac gene):
 gvf extract KCNH2 --email you@example.com --output ./output
 ```
 
+For a recall-oriented cold-start run with recovery layers and reporting:
+
+```bash
+gvf gvf-run KCNH2 --email you@example.com --output ./validation_runs/my_run
+```
+
 ### What This Does
 
 1. **Discovers papers** — Searches PubMind and PubMed for KCNH2-related literature
 2. **Downloads full-text** — Retrieves papers from PMC and publisher APIs
-3. **Extracts variants** — Uses GPT-4 to identify genetic variants and patient data
+3. **Extracts variants** — Uses the configured LLM provider to identify genetic variants and patient data
 4. **Aggregates results** — Combines findings across papers
 5. **Creates database** — Migrates everything to a queryable SQLite database
 
@@ -72,7 +85,7 @@ gvf extract KCNH2 --email you@example.com --max-pmids 20 --max-downloads 10
 gvf extract KCNH2 --email you@example.com --verbose
 
 # Custom output directory
-gvf extract BRCA1 --email you@example.com --output /path/to/results
+gvf extract KCNH2 --email you@example.com --output /path/to/results
 ```
 
 ## What to Expect
@@ -169,9 +182,9 @@ For comprehensive coverage, obtain at least Elsevier and Springer keys (both fre
 - Verify the gene symbol is correct
 - Some rare genes have limited literature
 
-### "OpenAI API error"
-- Verify your API key: `echo $OPENAI_API_KEY`
-- Check your OpenAI account has credits
+### "LLM API error"
+- Verify one provider key is present, for example `echo $ANTHROPIC_API_KEY`
+- Check the selected provider account has credits or quota
 - Rate limits may require waiting
 
 ### "Few papers downloaded"
@@ -180,7 +193,7 @@ For comprehensive coverage, obtain at least Elsevier and Springer keys (both fre
 - Check `pmc_fulltext/paywalled_missing.csv` for inaccessible papers
 
 ### Extraction seems slow
-- GPT-4 calls take time; this is normal
+- LLM calls take time; this is normal
 - Use `--max-downloads 10` for testing
 - Check `--verbose` output for progress
 
@@ -189,7 +202,7 @@ For comprehensive coverage, obtain at least Elsevier and Springer keys (both fre
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** — Understand the pipeline
 - **[API_KEYS.md](API_KEYS.md)** — Get publisher API keys
 - **[OUTPUT_FORMAT.md](OUTPUT_FORMAT.md)** — Work with results
-- **[VALIDATION.md](VALIDATION.md)** — Understand recall metrics
+- **[RECALL_STATUS.md](RECALL_STATUS.md)** — Current recall metrics and blockers
 
 ## Getting Help
 

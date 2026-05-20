@@ -26,7 +26,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from pipeline.data_scout import GeneticDataScout
+from pipeline.data_scout import GeneticDataScout, select_scout_source_path
 from utils.manifest import Manifest, ManifestEntry, Stage, Status
 
 # Setup logging
@@ -216,8 +216,10 @@ def process_file(
     logger.info(f"Processing PMID {pmid}...")
 
     try:
-        # Read the full context markdown
-        text = file_path.read_text(encoding="utf-8")
+        # Read the best available scout source. For oversized raw contexts,
+        # this prefers the deterministic *_CLEANED.md sibling when present.
+        source_path = select_scout_source_path(file_path)
+        text = source_path.read_text(encoding="utf-8")
 
         if not text.strip():
             return ManifestEntry(

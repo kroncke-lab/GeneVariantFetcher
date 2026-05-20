@@ -827,6 +827,90 @@ def _normalize_protein_values(value: Optional[str]) -> List[str]:
     ]
 
 
+_GENE_SYMBOL_CELL_RE = re.compile(r"^[A-Z][A-Z0-9-]{2,11}$")
+_GENE_TOKEN_PROTEIN_LIKE_RE = re.compile(
+    r"^(?:p\.)?(?:(?:Ala|Arg|Asn|Asp|Cys|Gln|Glu|Gly|His|Ile|Leu|Lys|Met|"
+    r"Phe|Pro|Ser|Thr|Trp|Tyr|Val)|[ACDEFGHIKLMNPQRSTVWY])\d{1,5}"
+    r"(?:[A-Z*?]|[a-z]{2}|fs|del|dup|ins)",
+    re.IGNORECASE,
+)
+_GENE_SYMBOL_IGNORE = {
+    "ALL",
+    "DNA",
+    "RNA",
+    "ECG",
+    "QT",
+    "QTC",
+    "LQT",
+    "LQTS",
+    "CPVT",
+    "SCD",
+    "WT",
+    "NA",
+    "PMID",
+    "EXON",
+    "INTRON",
+    "DELETION",
+    "DUPLICATION",
+    "INSERTION",
+    "GRCH37",
+    "GRCH38",
+    "HG19",
+    "HG38",
+}
+_TARGET_GENE_ALIASES = {
+    "KCNH2": {"KCNH2", "HERG", "HERG1", "ERG", "ERG1", "H-ERG"},
+    "KCNQ1": {"KCNQ1", "KVLQT1"},
+    "SCN5A": {"SCN5A", "NAV1.5"},
+    "RYR2": {"RYR2", "RYR-2"},
+}
+
+
+def _target_gene_tokens(gene_symbol: str) -> set[str]:
+    gene = (gene_symbol or "").strip().upper()
+    return _TARGET_GENE_ALIASES.get(gene, {gene})
+
+
+def _gene_symbol_tokens(value: Optional[str]) -> set[str]:
+    """Return gene-looking tokens from a cell, excluding variant notation."""
+    if not value:
+        return set()
+    out: set[str] = set()
+    for part in re.split(r"[\s,;/()]+", str(value)):
+        token = part.strip().strip("[]{}:.'\"").upper()
+        if not token or token in _GENE_SYMBOL_IGNORE:
+            continue
+        if (
+            re.match(r"^[A-Z]\d", token)
+            or _GENE_TOKEN_PROTEIN_LIKE_RE.match(token)
+            or _normalize_cdna(token)
+        ):
+            continue
+        if _GENE_SYMBOL_CELL_RE.match(token) and sum(ch.isalpha() for ch in token) >= 2:
+            out.add(token)
+    return out
+
+
+def _row_has_off_target_gene_without_target(cells: List[str], gene_symbol: str) -> bool:
+    """Detect rows with an explicit non-target gene token but no target token.
+
+    This is deliberately narrower than "row must mention the target gene".
+    Single-gene clinical tables often list only variant notations per row, so a
+    hard positive target mention would destroy true positives. The guard only
+    drops rows that visibly name another gene, covering misrouted panel tables
+    whose gene column was not mapped by the router.
+    """
+    target_tokens = _target_gene_tokens(gene_symbol)
+    row_tokens: set[str] = set()
+    for cell in cells:
+        row_tokens.update(_gene_symbol_tokens(cell))
+    if not row_tokens:
+        return False
+    if row_tokens & target_tokens:
+        return False
+    return bool(row_tokens - target_tokens)
+
+
 def _sum_optional_int(a: Optional[int], b: Optional[int]) -> Optional[int]:
     if a is None and b is None:
         return None
@@ -1001,7 +1085,27 @@ def parse_routed_table(
         # Gene-filter: skip rows that explicitly belong to a different gene.
         if gene_idx is not None and target_gene_lower:
             gene_cell = (cell(gene_idx) or "").strip().lower()
-            if gene_cell and target_gene_lower not in gene_cell:
+            gene_tokens = _gene_symbol_tokens(gene_cell.upper())
+            if (
+                gene_cell
+                and target_gene_lower not in gene_cell
+                and not (gene_tokens & _target_gene_tokens(gene_symbol))
+            ):
+                continue
+        elif target_gene_lower:
+            non_gene_context_indices = {
+                idx
+                for idx in (count_idx, aff_idx, unaff_idx, unc_idx, pheno_idx, clin_idx)
+                if idx is not None and idx >= 0
+            }
+            cells_for_gene_guard = [
+                value
+                for idx, value in enumerate(cells)
+                if idx not in non_gene_context_indices
+            ]
+            if _row_has_off_target_gene_without_target(
+                cells_for_gene_guard, gene_symbol
+            ):
                 continue
 
         cdna_values = _normalize_cdna_values(cell(cdna_idx))

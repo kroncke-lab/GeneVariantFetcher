@@ -172,6 +172,46 @@ def test_parse_routed_table_filters_multigene_and_derives_total():
     assert pen["unaffected_count"] == 3
 
 
+def test_parse_routed_table_drops_off_target_gene_cell_even_when_gene_unmapped():
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. Large sequencing panel",
+        header_line="| Gene | Protein | Carriers |",
+        header_cells=["Gene", "Protein", "Carriers"],
+        data_lines=[
+            "| PIK3CA | p.Gly1049Arg | 40 |",
+            "| KCNH2 | p.Arg176Trp | 2 |",
+            "| RPS3A | p.Ala538Val | 12 |",
+        ],
+        char_start=0,
+        char_end=220,
+    )
+    # Simulates a router response that forgot to map the Gene column.
+    mapping = {"protein": 1, "patient_count": 2}
+
+    variants = parse_routed_table(table, mapping, "KCNH2")
+
+    assert [v["protein_notation"] for v in variants] == ["p.Arg176Trp"]
+
+
+def test_parse_routed_table_accepts_target_gene_alias_in_gene_column():
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. HERG carriers",
+        header_line="| Gene | Protein | Carriers |",
+        header_cells=["Gene", "Protein", "Carriers"],
+        data_lines=["| HERG | p.Gly572Ser | 3 |"],
+        char_start=0,
+        char_end=120,
+    )
+    mapping = {"gene": 0, "protein": 1, "patient_count": 2}
+
+    variants = parse_routed_table(table, mapping, "KCNH2")
+
+    assert len(variants) == 1
+    assert variants[0]["protein_notation"] == "p.Gly572Ser"
+
+
 def test_parse_routed_table_splits_parallel_pairs_and_sums_duplicate_rows():
     table = MarkdownTable(
         table_id="T1",

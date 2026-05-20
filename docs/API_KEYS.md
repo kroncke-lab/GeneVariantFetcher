@@ -6,34 +6,39 @@ How to obtain API keys for each service GVF uses, and what works without them.
 
 | API | Required? | Free? | Coverage Impact |
 |-----|-----------|-------|-----------------|
-| **OpenAI** | ✅ Yes | No (pay-per-use) | Required for extraction |
+| **LLM provider** | ✅ Yes | Varies | Anthropic, OpenAI, or Azure AI is required for extraction |
+| **Anthropic** | One LLM option | No (pay-per-use) | Claude extraction and vision-capable tiers |
+| **OpenAI** | One LLM option | No (pay-per-use) | OpenAI extraction tiers |
+| **Azure AI** | One LLM option | Varies | Azure-hosted model deployments |
 | **NCBI (Email)** | ✅ Yes | Yes | Required for PubMed |
 | **NCBI API Key** | Optional | Yes | 3x faster rate limits |
-| **Elsevier** | Optional | Yes | +15-20% paper coverage |
+| **Elsevier API key** | Optional | Yes | Metadata/API access for ScienceDirect |
+| **Elsevier Insttoken** | Recommended | Institutional | Highest-leverage unlock for subscription full text |
 | **Springer** | Optional | Yes | +10-15% paper coverage |
 | **Wiley** | Optional | Yes (TDM) | +5-10% paper coverage |
 | **PMC** | No key needed | Yes | ~30% of papers |
 
-## Required: OpenAI API Key
+## Required: One LLM Provider Key
 
-**Purpose:** Powers LLM-based variant extraction (the core of GVF)
+**Purpose:** Powers LLM-based variant extraction (the core of GVF).
+GVF accepts Anthropic, OpenAI, or Azure AI credentials through LiteLLM.
 
-### How to Get It
+### Common Options
 
-1. Go to [platform.openai.com](https://platform.openai.com/)
-2. Sign up or log in
-3. Navigate to **API Keys** in the left sidebar
-4. Click **Create new secret key**
-5. Copy the key (starts with `sk-`)
+- Anthropic: create an API key in the Anthropic console and set `ANTHROPIC_API_KEY`.
+- OpenAI: create an API key at [platform.openai.com](https://platform.openai.com/) and set `OPENAI_API_KEY`.
+- Azure AI: configure your Azure AI Foundry endpoint and key with `AZURE_AI_API_KEY` and `AZURE_AI_API_BASE`.
 
 ### Configuration
 
 ```bash
 # In your .env file
-OPENAI_API_KEY=sk-your-key-here
+ANTHROPIC_API_KEY=your-anthropic-key
+# or OPENAI_API_KEY=sk-your-key-here
+# or AZURE_AI_API_KEY=your-azure-ai-key
 
 # Or as environment variable
-export OPENAI_API_KEY=sk-your-key-here
+export ANTHROPIC_API_KEY=your-anthropic-key
 ```
 
 ### Cost Estimate
@@ -44,7 +49,7 @@ export OPENAI_API_KEY=sk-your-key-here
 | Medium (100 papers) | ~60 | $2.00-8.00 |
 | Large (300 papers) | ~150 | $5.00-20.00 |
 
-*Costs vary based on paper length and extraction complexity. Uses gpt-4o-mini by default.*
+*Costs vary based on paper length, provider, and extraction complexity.*
 
 ---
 
@@ -84,7 +89,7 @@ NCBI_API_KEY=your-ncbi-api-key
 
 ---
 
-## Recommended: Elsevier API Key
+## Recommended: Elsevier API Key + Insttoken
 
 **Purpose:** Access ScienceDirect content (Cell, Lancet, many journals)
 
@@ -104,16 +109,27 @@ NCBI_API_KEY=your-ncbi-api-key
 - Use limited to non-commercial research
 - Must comply with their [Text and Data Mining policy](https://www.elsevier.com/about/policies/text-and-data-mining)
 
+### Insttoken
+
+The API key alone does not unlock many Vanderbilt-subscribed ScienceDirect
+articles. The current recall blocker is the institutional `X-ELS-Insttoken`
+header value, configured as `ELSEVIER_INSTTOKEN`.
+
+Obtain it through Vanderbilt library/e-resources support or an approved
+ScienceDirect TDM workflow. Treat it like a credential.
+
 ### Configuration
 
 ```bash
 # In your .env file
 ELSEVIER_API_KEY=your-elsevier-key
+ELSEVIER_INSTTOKEN=your-x-els-insttoken
 ```
 
 ### Coverage
 
-Elsevier publishes ~20% of biomedical literature. With this key, expect:
+Elsevier publishes ~20% of biomedical literature. With the API key plus
+institutional token, expect:
 - +15-20% more papers downloaded
 - Access to Cell, Lancet, American Journal of Human Genetics, many more
 
@@ -231,7 +247,7 @@ Without any publisher keys, GVF still:
 
 For best results, obtain at least:
 1. **OpenAI** (required)
-2. **Elsevier** (free, biggest impact)
+2. **Elsevier API key + `ELSEVIER_INSTTOKEN`** (biggest current impact)
 3. **Springer** (free, good coverage)
 
 ---
@@ -242,11 +258,17 @@ Create a `.env` file in your GeneVariantFetcher directory:
 
 ```bash
 # === REQUIRED ===
-OPENAI_API_KEY=sk-your-openai-key
+NCBI_EMAIL=your-email@example.org
+
+# === REQUIRED: one LLM provider ===
+ANTHROPIC_API_KEY=your-anthropic-key
+# OPENAI_API_KEY=sk-your-openai-key
+# AZURE_AI_API_KEY=your-azure-ai-key
 
 # === RECOMMENDED ===
 NCBI_API_KEY=your-ncbi-key
 ELSEVIER_API_KEY=your-elsevier-key
+ELSEVIER_INSTTOKEN=your-elsevier-insttoken
 SPRINGER_API_KEY=your-springer-key
 
 # === OPTIONAL ===
@@ -288,13 +310,13 @@ CORE_API_KEY=your-core-key
 
 | Configuration | Paper Coverage | Est. Cost/Gene |
 |--------------|----------------|----------------|
-| OpenAI only | ~30% | $2-10 |
+| LLM key only | ~30% | $2-10 |
 | + Elsevier | ~50% | $2-10 |
 | + Springer | ~60% | $2-10 |
 | + Wiley | ~65% | $2-10 |
 | Full setup | ~70% | $2-10 |
 
-*Paper coverage varies by gene. Cost is primarily OpenAI usage.*
+*Paper coverage varies by gene. Cost is primarily LLM usage.*
 
 ---
 

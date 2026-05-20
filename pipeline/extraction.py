@@ -5,11 +5,12 @@ The heavy lifter that processes full-text papers and extracts structured
 genetic variant data using advanced LLM prompting.
 """
 
+import copy
 import json
 import logging
 import re
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, List, Optional
 
 from config.constants import (
     ADAPTIVE_TABLE_THRESHOLD,
@@ -171,6 +172,12 @@ class ExpertExtractor(BaseLLMCaller):
         self.tier_threshold = tier_threshold
         self.fulltext_dir = fulltext_dir
         self.use_condensed = settings.scout_use_condensed
+        self.enable_ensemble_qa = settings.enable_tier3_ensemble_qa
+        self.adjudicator_models = settings.get_tier3_adjudicator_models()
+        self.adjudication_risk_threshold = settings.tier3_adjudication_risk_threshold
+        self.evidence_packet_max_chars = settings.tier3_evidence_packet_max_chars
+        self.adjudication_max_tokens = settings.tier3_adjudication_max_tokens
+        self.max_verifier_cards = settings.tier3_max_verifier_cards
 
         super().__init__(
             model=self.models[0],
@@ -2228,6 +2235,611 @@ class ExpertExtractor(BaseLLMCaller):
 
         return extracted_data
 
+    @staticmethod
+    def _coerce_count(value) -> int | None:
+        if value is None or value == "":
+            return None
+        if isinstance(value, bool):
+            return None
+        if isinstance(value, (int, float)):
+            return int(value)
+        match = re.search(r"\d+", str(value))
+        return int(match.group()) if match else None
+
+    @staticmethod
+    def _count_source_is_deterministic(variant: dict) -> bool:
+        text = " ".join(
+            str(variant.get(key) or "")
+            for key in ("additional_notes", "source_location", "extraction_source")
+        ).lower()
+        return any(
+            marker in text
+            for marker in (
+                "deterministic",
+                "table regex",
+                "fixed-width",
+                "router-first",
+            )
+        )
+
+    def _suppress_repeated_study_wide_counts(self, extracted_data: dict) -> dict:
+        """
+        Clear likely cohort-wide totals copied onto every variant by the LLM.
+
+        A recurring recall failure is an abstract/table statement such as
+        "43 carriers: 28 affected, 15 unaffected" getting repeated on each
+        variant in the paper. Row-level deterministic parsers are protected;
+        this only acts on non-deterministic variants with the same moderate/large
+        count tuple repeated across several variants.
+        """
+        groups: dict[tuple[int, int | None, int | None], list[dict]] = {}
+        for variant in extracted_data.get("variants", []):
+            if self._count_source_is_deterministic(variant):
+                continue
+            patients = variant.get("patients") or {}
+            pdata = variant.get("penetrance_data") or {}
+            total = self._coerce_count(
+                pdata.get("total_carriers_observed", patients.get("count"))
+            )
+            affected = self._coerce_count(pdata.get("affected_count"))
+            unaffected = self._coerce_count(pdata.get("unaffected_count"))
+            if total is None or total < 10:
+                continue
+            groups.setdefault((total, affected, unaffected), []).append(variant)
+
+        suppressed = 0
+        for (total, affected, unaffected), variants in groups.items():
+            if len(variants) < 3 or total < len(variants) * 2:
+                continue
+            for variant in variants:
+                patients = variant.setdefault("patients", {})
+                pdata = variant.setdefault("penetrance_data", {})
+                if self._coerce_count(patients.get("count")) == total:
+                    patients["count"] = None
+                if self._coerce_count(pdata.get("total_carriers_observed")) == total:
+                    pdata["total_carriers_observed"] = None
+                if (
+                    affected is not None
+                    and self._coerce_count(pdata.get("affected_count")) == affected
+                ):
+                    pdata["affected_count"] = None
+                if (
+                    unaffected is not None
+                    and self._coerce_count(pdata.get("unaffected_count")) == unaffected
+                ):
+                    pdata["unaffected_count"] = None
+                if self._coerce_count(pdata.get("uncertain_count")) == total:
+                    pdata["uncertain_count"] = None
+                notes = variant.get("additional_notes", "") or ""
+                if notes:
+                    notes += " "
+                notes += (
+                    "[Cleared repeated cohort-wide count tuple copied across "
+                    f"{len(variants)} variants: total={total}, affected={affected}, "
+                    f"unaffected={unaffected}]"
+                )
+                variant["additional_notes"] = notes
+                suppressed += 1
+
+        if suppressed and "extraction_metadata" in extracted_data:
+            extracted_data["extraction_metadata"]["study_wide_count_suppressed"] = (
+                suppressed
+            )
+        return extracted_data
+
+    @staticmethod
+    def _source_has_missing_table_bodies(text: str) -> bool:
+        table_refs = len(re.findall(r"\bTables?\s+\d+(?:\s*(?:and|,|-)\s*\d+)?", text))
+        table_body_markers = len(
+            re.findall(r"(?m)^\s*\|.+\|\s*$", text)
+            + re.findall(r"(?m)^\s*(?:#{1,6}\s*)?(?:Table|TABLE)\s+\d+[.:]", text)
+            + re.findall(r"(?i)<table\b", text)
+        )
+        return table_refs >= 3 and table_body_markers == 0 and len(text) > 5_000
+
+    @staticmethod
+    def _compact_variant_for_evidence(variant: dict) -> dict[str, Any]:
+        return {
+            "gene_symbol": variant.get("gene_symbol"),
+            "cdna_notation": variant.get("cdna_notation"),
+            "protein_notation": variant.get("protein_notation"),
+            "genomic_position": variant.get("genomic_position"),
+            "clinical_significance": variant.get("clinical_significance"),
+            "patients": variant.get("patients"),
+            "penetrance_data": variant.get("penetrance_data"),
+            "source_location": variant.get("source_location"),
+            "additional_notes": variant.get("additional_notes"),
+        }
+
+    def _count_tuple(
+        self, variant: dict
+    ) -> tuple[int | None, int | None, int | None, int | None]:
+        patients = variant.get("patients") or {}
+        pdata = variant.get("penetrance_data") or {}
+        total = self._coerce_count(
+            pdata.get("total_carriers_observed", patients.get("count"))
+        )
+        affected = self._coerce_count(pdata.get("affected_count"))
+        unaffected = self._coerce_count(pdata.get("unaffected_count"))
+        uncertain = self._coerce_count(pdata.get("uncertain_count"))
+        return total, affected, unaffected, uncertain
+
+    def _assess_extraction_risk(
+        self,
+        *,
+        extracted_data: dict,
+        source_text: str,
+        estimated_variants: int | None = None,
+        scanner_variant_count: int = 0,
+    ) -> dict[str, Any]:
+        """Score whether an extraction should get second-model adjudication."""
+        variants = extracted_data.get("variants") or []
+        if not isinstance(variants, list):
+            variants = []
+
+        reasons: list[str] = []
+        source_blockers: list[str] = []
+        score = 0
+
+        if self._source_has_missing_table_bodies(source_text):
+            source_blockers.append("source_mentions_tables_but_no_table_bodies")
+
+        if estimated_variants and estimated_variants >= 8:
+            if len(variants) < max(2, estimated_variants // 4):
+                score += 2
+                reasons.append(
+                    f"low_variant_yield_vs_table_hint:{len(variants)}/{estimated_variants}"
+                )
+
+        if scanner_variant_count >= 5 and len(variants) < max(
+            2, scanner_variant_count // 2
+        ):
+            score += 1
+            reasons.append(
+                f"low_variant_yield_vs_scanner:{len(variants)}/{scanner_variant_count}"
+            )
+
+        repeated_groups: dict[tuple[int, int | None, int | None], int] = {}
+        arithmetic_mismatches = 0
+        variants_with_counts = 0
+        for variant in variants:
+            total, affected, unaffected, uncertain = self._count_tuple(variant)
+            if any(
+                value is not None for value in (total, affected, unaffected, uncertain)
+            ):
+                variants_with_counts += 1
+            if (
+                total is not None
+                and affected is not None
+                and unaffected is not None
+                and affected + unaffected + (uncertain or 0) != total
+            ):
+                arithmetic_mismatches += 1
+            if (
+                total is not None
+                and total >= 10
+                and not self._count_source_is_deterministic(variant)
+            ):
+                repeated_groups[(total, affected, unaffected)] = (
+                    repeated_groups.get((total, affected, unaffected), 0) + 1
+                )
+
+        repeated = [
+            (count_tuple, count)
+            for count_tuple, count in repeated_groups.items()
+            if count >= 3 and count_tuple[0] >= count * 2
+        ]
+        if repeated:
+            score += 2
+            reasons.append(
+                "repeated_large_count_tuple:"
+                + ";".join(
+                    f"{count_tuple}x{count}" for count_tuple, count in repeated[:3]
+                )
+            )
+
+        if arithmetic_mismatches:
+            score += 2
+            reasons.append(f"count_arithmetic_mismatch:{arithmetic_mismatches}")
+
+        meta = extracted_data.get("extraction_metadata") or {}
+        if meta.get("study_wide_count_suppressed"):
+            score += 2
+            reasons.append(
+                f"study_wide_count_suppressed:{meta['study_wide_count_suppressed']}"
+            )
+
+        if len(variants) >= 5 and variants_with_counts <= len(variants) // 3:
+            score += 1
+            reasons.append(
+                f"many_variants_missing_counts:{variants_with_counts}/{len(variants)}"
+            )
+
+        return {
+            "score": score,
+            "reasons": reasons,
+            "source_blockers": source_blockers,
+            "estimated_variants": estimated_variants,
+            "scanner_variant_count": scanner_variant_count,
+            "variant_count": len(variants),
+            "requires_adjudication": score >= self.adjudication_risk_threshold,
+        }
+
+    def _select_evidence_lines(
+        self,
+        *,
+        source_text: str,
+        gene_symbol: str | None,
+        variants: list[dict],
+        max_chars: int,
+    ) -> str:
+        variant_terms = set()
+        for variant in variants:
+            for key in ("protein_notation", "cdna_notation", "genomic_position"):
+                value = str(variant.get(key) or "").strip()
+                if value:
+                    variant_terms.add(value)
+                    if value.startswith("p."):
+                        variant_terms.add(value[2:])
+
+        gene = (gene_symbol or "").strip().lower()
+        count_terms = (
+            "carrier",
+            "carriers",
+            "affected",
+            "unaffected",
+            "asymptomatic",
+            "symptomatic",
+            "patient",
+            "patients",
+            "proband",
+            "probands",
+            "control",
+            "controls",
+            "table",
+            "mutation",
+            "variant",
+        )
+        selected: list[str] = []
+        seen: set[int] = set()
+        lines = source_text.splitlines()
+        for idx, line in enumerate(lines):
+            lower = line.lower()
+            hit = (gene and gene in lower) or any(
+                term.lower() in lower for term in variant_terms
+            )
+            hit = hit or any(term in lower for term in count_terms)
+            if not hit:
+                continue
+            for nearby in range(max(0, idx - 1), min(len(lines), idx + 2)):
+                if nearby in seen:
+                    continue
+                seen.add(nearby)
+                selected.append(f"L{nearby + 1}: {lines[nearby][:500]}")
+            if sum(len(item) + 1 for item in selected) >= max_chars:
+                break
+        return "\n".join(selected)[:max_chars]
+
+    def _build_adjudication_prompt(
+        self,
+        *,
+        paper: Paper,
+        primary_model: str,
+        extracted_data: dict,
+        source_text: str,
+        risk: dict[str, Any],
+    ) -> str:
+        variants = extracted_data.get("variants") or []
+        compact_variants = [
+            self._compact_variant_for_evidence(variant)
+            for variant in variants[:150]
+            if isinstance(variant, dict)
+        ]
+        primary_json = json.dumps(compact_variants, ensure_ascii=False, indent=2)
+        evidence_budget = max(
+            4_000,
+            self.evidence_packet_max_chars - min(len(primary_json), 12_000) - 4_000,
+        )
+        evidence_lines = self._select_evidence_lines(
+            source_text=source_text,
+            gene_symbol=paper.gene_symbol,
+            variants=variants,
+            max_chars=evidence_budget,
+        )
+
+        prompt = f"""You are a careful biomedical variant-extraction adjudicator.
+
+You receive a compact evidence packet, not the full paper. Your job is to correct
+the primary extraction only when the provided evidence supports the correction.
+Do not invent counts. Do not copy study-wide totals onto each variant. If a count
+is aggregate for the whole study, family set, table, domain, or mutation class,
+set the variant-level count fields to null and explain that in additional_notes.
+
+Target gene: {paper.gene_symbol or "UNKNOWN"}
+PMID: {paper.pmid}
+Title: {paper.title or "Unknown Title"}
+Primary extraction model: {primary_model}
+Risk assessment: {json.dumps(risk, ensure_ascii=False)}
+
+Primary extracted variants:
+{primary_json[:12000]}
+
+Evidence snippets:
+{evidence_lines}
+
+Return strict JSON with this schema:
+{{
+  "variants": [
+    {{
+      "gene_symbol": "{paper.gene_symbol or "UNKNOWN"}",
+      "cdna_notation": "string or null",
+      "protein_notation": "string or null",
+      "genomic_position": "string or null",
+      "clinical_significance": "string or null",
+      "patients": {{"count": "integer or null", "phenotype": "string or null", "demographics": "string or null"}},
+      "penetrance_data": {{
+        "total_carriers_observed": "integer or null",
+        "affected_count": "integer or null",
+        "unaffected_count": "integer or null",
+        "uncertain_count": "integer or null",
+        "penetrance_percentage": "float or null",
+        "age_dependent_penetrance": []
+      }},
+      "source_location": "specific table/line/section if supported",
+      "additional_notes": "brief evidence rationale, including why counts are null"
+    }}
+  ],
+  "extraction_metadata": {{
+    "adjudication_confidence": "high/medium/low",
+    "adjudication_notes": "brief summary of changes and unresolved evidence gaps"
+  }}
+}}
+"""
+        return prompt[: self.evidence_packet_max_chars]
+
+    def _adjudicator_candidates(self, primary_model: str) -> list[str]:
+        seen = {primary_model}
+        out: list[str] = []
+        for model in [*self.adjudicator_models, *self.models]:
+            if not model or model in seen:
+                continue
+            out.append(model)
+            seen.add(model)
+        return out
+
+    def _call_adjudicator(self, model: str, prompt: str) -> dict[str, Any]:
+        saved_model, saved_max_tokens, saved_temperature = (
+            self.model,
+            self.max_tokens,
+            self.temperature,
+        )
+        try:
+            self.model = model
+            self.max_tokens = self._clamp_max_tokens(
+                model, self.adjudication_max_tokens
+            )
+            self.temperature = 0.0
+            return self.call_llm_json(prompt)
+        finally:
+            self.model = saved_model
+            self.max_tokens = saved_max_tokens
+            self.temperature = saved_temperature
+
+    def _merge_adjudicated_extraction(
+        self,
+        *,
+        extracted_data: dict,
+        adjudicated_data: dict[str, Any],
+        adjudicator_model: str,
+        risk: dict[str, Any],
+    ) -> dict:
+        adjudicated_variants = adjudicated_data.get("variants")
+        if not isinstance(adjudicated_variants, list) or not adjudicated_variants:
+            raise ValueError("Adjudicator returned no variants")
+
+        merged = copy.deepcopy(extracted_data)
+        merged["variants"] = adjudicated_variants
+        metadata = merged.setdefault("extraction_metadata", {})
+        metadata.update(adjudicated_data.get("extraction_metadata") or {})
+        metadata["total_variants_found"] = len(adjudicated_variants)
+        metadata["adjudication_applied"] = True
+        metadata["adjudication_model"] = adjudicator_model
+        metadata["adjudication_risk"] = risk
+        return merged
+
+    @staticmethod
+    def _result_model_label(primary_model: str, extracted_data: dict) -> str:
+        metadata = extracted_data.get("extraction_metadata", {})
+        if metadata.get("claim_verification_applied"):
+            return (
+                f"{primary_model}+verified:"
+                f"{metadata.get('claim_verification_model')}"
+            )
+        if not metadata.get("adjudication_applied"):
+            return primary_model
+        return f"{primary_model}+adjudicated:{metadata.get('adjudication_model')}"
+
+    def _verify_claim_cards_for_extraction(
+        self,
+        *,
+        paper: Paper,
+        primary_model: str,
+        extracted_data: dict,
+        source_text: str,
+        verifier_model: str,
+    ) -> dict:
+        from pipeline.claim_verifier import (
+            VariantClaimVerifier,
+            apply_verification_to_variant,
+            build_claim_card,
+        )
+
+        variants = extracted_data.get("variants") or []
+        if not isinstance(variants, list) or not variants:
+            raise ValueError("No variants available for claim verification")
+
+        verifier = VariantClaimVerifier(
+            model=verifier_model,
+            max_tokens=min(self.adjudication_max_tokens, 2500),
+        )
+        updated_variants: list[dict] = []
+        verification_results: list[dict[str, Any]] = []
+        field_changes: list[dict[str, Any]] = []
+        verified_count = 0
+
+        for idx, variant in enumerate(variants):
+            if verified_count >= self.max_verifier_cards:
+                updated_variants.append(variant)
+                continue
+            card = build_claim_card(
+                source_text=source_text,
+                gene=paper.gene_symbol or variant.get("gene_symbol") or "UNKNOWN",
+                disease=paper.disease,
+                pmid=paper.pmid,
+                title=paper.title,
+                variant=variant,
+                max_evidence_chars=max(2_000, self.evidence_packet_max_chars // 6),
+            )
+            if card is None or not card.evidence.strip():
+                updated = dict(variant)
+                updated["claim_verification"] = {
+                    "verdict": "source_missing",
+                    "field_verdicts": {
+                        "variant": "ambiguous",
+                        "total_carriers": "source_missing",
+                        "affected": "source_missing",
+                        "unaffected": "source_missing",
+                    },
+                    "corrected_values": {
+                        "total_carriers": None,
+                        "affected": None,
+                        "unaffected": None,
+                    },
+                    "reason": "No compact evidence lines found for this claim.",
+                    "evidence_quote": "",
+                }
+                updated_variants.append(updated)
+                continue
+
+            verification = verifier.verify(card)
+            updated, changes = apply_verification_to_variant(variant, verification)
+            updated_variants.append(updated)
+            verified_count += 1
+            verification_results.append(
+                {
+                    "variant_index": idx,
+                    "variant": card.variant,
+                    "extracted": card.extracted,
+                    "verification": verification,
+                }
+            )
+            if changes:
+                field_changes.append(
+                    {
+                        "variant_index": idx,
+                        "variant": card.variant,
+                        "changes": changes,
+                    }
+                )
+
+        merged = copy.deepcopy(extracted_data)
+        merged["variants"] = updated_variants
+        metadata = merged.setdefault("extraction_metadata", {})
+        metadata["claim_verification_applied"] = True
+        metadata["claim_verification_model"] = verifier_model
+        metadata["claim_verification_primary_model"] = primary_model
+        metadata["claim_verification_cards"] = verified_count
+        metadata["claim_verification_field_changes"] = field_changes
+        metadata["claim_verification_results"] = verification_results[
+            : self.max_verifier_cards
+        ]
+        return merged
+
+    def _maybe_adjudicate_extraction(
+        self,
+        *,
+        paper: Paper,
+        primary_model: str,
+        extracted_data: dict,
+        source_text: str,
+        estimated_variants: int | None,
+        scanner_variant_count: int,
+    ) -> dict:
+        risk = self._assess_extraction_risk(
+            extracted_data=extracted_data,
+            source_text=source_text,
+            estimated_variants=estimated_variants,
+            scanner_variant_count=scanner_variant_count,
+        )
+        metadata = extracted_data.setdefault("extraction_metadata", {})
+        metadata["extraction_risk"] = risk
+
+        if not self.enable_ensemble_qa:
+            metadata["adjudication_skipped_reason"] = "ensemble_qa_disabled"
+            return extracted_data
+        if not risk["requires_adjudication"]:
+            metadata["adjudication_skipped_reason"] = "risk_below_threshold"
+            return extracted_data
+        if risk["source_blockers"] and not risk["reasons"]:
+            metadata["adjudication_skipped_reason"] = (
+                "source_blocker_without_extraction_risk"
+            )
+            return extracted_data
+
+        candidates = self._adjudicator_candidates(primary_model)
+        if not candidates:
+            metadata["adjudication_skipped_reason"] = "no_adjudicator_model_available"
+            return extracted_data
+
+        claim_errors: list[str] = []
+        for verifier_model in candidates[:1]:
+            try:
+                return self._verify_claim_cards_for_extraction(
+                    paper=paper,
+                    primary_model=primary_model,
+                    extracted_data=extracted_data,
+                    source_text=source_text,
+                    verifier_model=verifier_model,
+                )
+            except Exception as exc:  # noqa: BLE001
+                claim_errors.append(f"{verifier_model}: {exc}")
+                logger.warning(
+                    "PMID %s - claim verification with %s failed: %s",
+                    paper.pmid,
+                    verifier_model,
+                    exc,
+                )
+
+        prompt = self._build_adjudication_prompt(
+            paper=paper,
+            primary_model=primary_model,
+            extracted_data=extracted_data,
+            source_text=source_text,
+            risk=risk,
+        )
+        errors: list[str] = []
+        for adjudicator_model in candidates[:1]:
+            try:
+                adjudicated = self._call_adjudicator(adjudicator_model, prompt)
+                return self._merge_adjudicated_extraction(
+                    extracted_data=extracted_data,
+                    adjudicated_data=adjudicated,
+                    adjudicator_model=adjudicator_model,
+                    risk=risk,
+                )
+            except Exception as exc:  # noqa: BLE001
+                errors.append(f"{adjudicator_model}: {exc}")
+                logger.warning(
+                    "PMID %s - adjudication with %s failed: %s",
+                    paper.pmid,
+                    adjudicator_model,
+                    exc,
+                )
+
+        metadata["adjudication_skipped_reason"] = "adjudication_failed"
+        metadata["adjudication_errors"] = [*claim_errors, *errors]
+        return extracted_data
+
     # Patterns that indicate failed content extraction
     FAILED_EXTRACTION_PATTERNS = [
         "[PDF file available at:",
@@ -2672,6 +3284,8 @@ class ExpertExtractor(BaseLLMCaller):
                     min_confidence=SCANNER_MERGE_MIN_CONFIDENCE,
                 )
 
+            extracted_data = self._suppress_repeated_study_wide_counts(extracted_data)
+
             # Filter variants to only keep those matching the target gene
             if paper.gene_symbol:
                 extracted_data = self._filter_by_gene(extracted_data, paper.gene_symbol)
@@ -2679,6 +3293,16 @@ class ExpertExtractor(BaseLLMCaller):
                 extracted_data = self._filter_extraction_artifacts(
                     extracted_data, paper.gene_symbol
                 )
+
+            extracted_data = self._maybe_adjudicate_extraction(
+                paper=paper,
+                primary_model=model,
+                extracted_data=extracted_data,
+                source_text=scanner_text,
+                estimated_variants=estimated_variants,
+                scanner_variant_count=len(scanner_result.variants),
+            )
+            extracted_data = self._suppress_repeated_study_wide_counts(extracted_data)
 
             num_variants = len(extracted_data.get("variants", []))
             logger.info(
@@ -2688,7 +3312,7 @@ class ExpertExtractor(BaseLLMCaller):
                 pmid=paper.pmid,
                 success=True,
                 extracted_data=extracted_data,
-                model_used=model,
+                model_used=self._result_model_label(model, extracted_data),
             )
         except json.JSONDecodeError as e:
             logger.error(f"PMID {paper.pmid} - JSON parsing error with {model}: {e}")

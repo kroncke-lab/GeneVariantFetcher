@@ -4,8 +4,8 @@
 Layers (each scored against the gold standard so per-layer yield is visible):
 
   0. baseline    — score the DB as-is (after main extraction + migration)
-  1. clinvar     — ingest ClinVar variants citing each gold PMID
-  2. pubtator    — ingest NCBI PubTator3 text-mined mutations
+  1. clinvar     — ingest ClinVar variants citing PMIDs already in the DB
+  2. pubtator    — ingest NCBI PubTator3 mutations for PMIDs already in the DB
   3. figures     — vision-LLM figure reader over every PMID with images on disk
   4. v12_merge   — OPT-IN ONLY (``--with-v12 PATH``): copy variants from an
                    older manually-curated DB. Refuses by default because the
@@ -100,7 +100,7 @@ def score_layer(
 # ---------------------------------------------------------------------------
 
 
-def run_clinvar(gene: str, db: Path, gold: Path) -> dict:
+def run_clinvar(gene: str, db: Path, gold: Path, pmid_source: str) -> dict:
     cmd = [
         sys.executable,
         str(REPO_ROOT / "scripts" / "recall_recovery" / "ingest_clinvar.py"),
@@ -110,6 +110,8 @@ def run_clinvar(gene: str, db: Path, gold: Path) -> dict:
         str(db),
         "--gold",
         str(gold),
+        "--pmid-source",
+        pmid_source,
     ]
     logger.info("clinvar → %s", " ".join(cmd))
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -122,7 +124,7 @@ def run_clinvar(gene: str, db: Path, gold: Path) -> dict:
         return {"added": None}
 
 
-def run_pubtator(gene: str, db: Path, gold: Path) -> dict:
+def run_pubtator(gene: str, db: Path, gold: Path, pmid_source: str) -> dict:
     cmd = [
         sys.executable,
         str(REPO_ROOT / "scripts" / "recall_recovery" / "ingest_pubtator.py"),
@@ -132,6 +134,8 @@ def run_pubtator(gene: str, db: Path, gold: Path) -> dict:
         str(db),
         "--gold",
         str(gold),
+        "--pmid-source",
+        pmid_source,
     ]
     logger.info("pubtator → %s", " ".join(cmd))
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -204,6 +208,7 @@ def run_v12_merge(gene: str, db: Path, gold: Path, v12_db: Path) -> dict:
     ]
     logger.info("v12_merge → %s", " ".join(cmd))
     result = subprocess.run(cmd, capture_output=True, text=True)
+    Path(gold_pmids_path).unlink(missing_ok=True)
     if result.returncode != 0:
         logger.error("merge_v12_db failed: %s", result.stderr[-400:])
     return {"stdout_tail": result.stdout[-400:]}
@@ -250,6 +255,14 @@ def build_parser() -> argparse.ArgumentParser:
         default=[],
         help="Layer to skip: clinvar, pubtator, figures",
     )
+    p.add_argument(
+        "--allow-gold-pmid-enrichment",
+        action="store_true",
+        help=(
+            "Use gold PMIDs as the ClinVar/PubTator query set. This is "
+            "evaluation-aided and should not be used for cold-start recall claims."
+        ),
+    )
     p.add_argument("--verbose", "-v", action="store_true")
     return p
 
@@ -267,6 +280,7 @@ def main() -> int:
     pmc_dir = Path(args.pmc_dir) if args.pmc_dir else None
     v12 = Path(args.with_v12) if args.with_v12 else None
     skip = {s.lower() for s in args.skip}
+    pmid_source = "gold" if args.allow_gold_pmid_enrichment else "db"
 
     if not db.exists():
         sys.exit(f"DB not found: {db}")
@@ -277,6 +291,11 @@ def main() -> int:
         backup = db.with_suffix(db.suffix + ".before_layers.db")
         shutil.copy2(db, backup)
         logger.info("Backed up DB → %s", backup)
+    else:
+        logger.warning(
+            "Mutating %s in place without a backup. Pass --backup for turnkey runs.",
+            db,
+        )
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     outdir = (
@@ -313,10 +332,10 @@ def main() -> int:
     record("0_baseline")
 
     if "clinvar" not in skip:
-        info = run_clinvar(gene, db, gold)
+        info = run_clinvar(gene, db, gold, pmid_source)
         record("1_clinvar", extra={"clinvar_added": info.get("added")})
     if "pubtator" not in skip:
-        info = run_pubtator(gene, db, gold)
+        info = run_pubtator(gene, db, gold, pmid_source)
         record("2_pubtator", extra={"pubtator_added": info.get("added")})
     if "figures" not in skip:
         info = run_figures(gene, db, pmc_dir, outdir / "figure_reads")
@@ -332,6 +351,7 @@ def main() -> int:
         "pmc_dir": str(pmc_dir) if pmc_dir else None,
         "v12_db": str(v12) if v12 else None,
         "skipped": sorted(skip),
+        "enrichment_pmid_source": pmid_source,
         "progression": progression,
     }
     (outdir / "progression.json").write_text(json.dumps(summary, indent=2))
@@ -346,6 +366,9 @@ def main() -> int:
             "patients",
             "affected",
             "unaffected",
+            "clinvar_added",
+            "pubtator_added",
+            "figures_added",
         ]
         w = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         w.writeheader()

@@ -32,12 +32,8 @@ GeneVariantFetcher (GVF) is an end-to-end pipeline that discovers, downloads, an
 ## Performance
 
 Current recall status is tracked in
-[`docs/CURRENT_RECALL_STATUS_2026-05-20.md`](docs/CURRENT_RECALL_STATUS_2026-05-20.md).
-That file is the source of truth for live metrics, blockers, and next actions.
-
-Latest scored aggregate across KCNH2, RYR2, and SCN5A is still below target:
-PMID recall 74.4%, variant-row recall 67.8%, unique-variant recall 75.5%,
-patients/carriers 73.7%, affected 71.8%, and unaffected 78.8%.
+[`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md). That file is the source of
+truth for live metrics, blockers, and next actions.
 
 Older KCNH2-only recovery scores and the 2026-05-18 closeout are historical
 debugging baselines. Gold-PMID-conditioned enrichment and KCNH2 v12 manual
@@ -60,16 +56,19 @@ pip install -e .
 cat > .env << 'EOF'
 ANTHROPIC_API_KEY=...
 NCBI_EMAIL=your@email.com
+ELSEVIER_API_KEY=...
+# Optional but high-leverage for ScienceDirect subscription full text:
+# ELSEVIER_INSTTOKEN=...
 EOF
 
 # 3. Run your first extraction
-gvf extract BRCA1 --email your@email.com --output ./results
+gvf extract KCNH2 --email your@email.com --output ./results
 
 # Or launch the GUI
 python main.py
 ```
 
-Your results will be in `./results/BRCA1/{timestamp}/BRCA1.db`
+Your results will be in `./results/KCNH2/{timestamp}/KCNH2.db`
 
 ---
 
@@ -115,7 +114,8 @@ pip install playwright && playwright install chromium
 
 ```bash
 gvf --help
-# Should show: extract, scout, audit-paywalls commands
+# Should show: extract, discover, reharvest, gvf-run, audit-paywalls,
+# scout, and extract-folder commands
 ```
 
 ---
@@ -131,7 +131,7 @@ gvf extract GENE --email EMAIL --output DIR
 ```
 
 **Required arguments:**
-- `GENE` — Gene symbol (e.g., KCNH2, BRCA1, SCN5A)
+- `GENE` — Gene symbol (e.g., KCNH2, RYR2, SCN5A)
 - `--email` — Your email for NCBI API access
 - `--output` — Directory for results
 
@@ -178,6 +178,26 @@ Run the Data Scout on existing downloaded papers:
 ```bash
 gvf scout ./results/KCNH2/20260210_143000/pmc_fulltext --gene KCNH2
 ```
+
+#### Turnkey Recall-Oriented Run
+
+`gvf-run` is the cold-start driver: it runs doctor checks, extraction, recovery
+layers, and scoring/report handoff around one gene.
+
+```bash
+gvf gvf-run KCNH2 --email you@email.com --output ./validation_runs/my_run
+```
+
+Use `--skip extract` to re-run recovery/scoring layers against an existing run.
+
+#### Paywall Audit
+
+```bash
+gvf audit-paywalls ./results/KCNH2/20260210_143000
+```
+
+This summarizes blocked full-text and supplement acquisition, including papers
+that may be unlocked by `ELSEVIER_INSTTOKEN`.
 
 ### GUI Mode
 

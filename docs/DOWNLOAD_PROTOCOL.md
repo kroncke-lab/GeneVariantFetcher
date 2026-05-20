@@ -1,7 +1,9 @@
 # GVF Paper Download Protocol
 
-**Last updated:** 2026-02-12
-**Summary of all fixes and learnings from Feb 2026 optimization sprint.**
+**Last updated:** 2026-05-20
+**Summary:** Current acquisition flow after the May recall push. The Feb 2026
+API path still matters, but authenticated browser recovery, paywall auditing,
+and the Elsevier institutional token are now first-class parts of the stack.
 
 ## Download Pipeline Flow
 
@@ -11,6 +13,8 @@ PMID → PMCID lookup → PMC XML → Markdown
                     Publisher API fallback (Elsevier/Springer/Wiley)
                     ↓ (fail)
                     Unpaywall OA lookup → PDF → Markdown
+                    ↓ (fail)
+                    Authenticated browser HTML/PDF recovery (Playwright)
                     ↓ (fail)
                     DOI resolver → Web scraping
                     ↓ (fail)
@@ -36,7 +40,7 @@ When PMC has a PMCID but XML is unavailable (restricted, rate-limited, or embarg
 
 | API | DOI Prefixes | Config Key | Notes |
 |-----|-------------|------------|-------|
-| **Elsevier** | `10.1016/` + others | `ELSEVIER_API_KEY` | XML namespace stripping fixed (case-insensitive regex) |
+| **Elsevier** | `10.1016/` + others | `ELSEVIER_API_KEY`, `ELSEVIER_INSTTOKEN` | API key plus institutional token for subscription full text |
 | **Springer** | `10.1007/`, `10.1038/`, `10.1186/` + others | `SPRINGER_API_KEY` | Key was missing from settings.py until Feb 12 fix |
 | **Wiley** | `10.1111/`, `10.1002/` + others | `WILEY_API_KEY` | TDM API + web scraping fallback |
 
@@ -57,10 +61,19 @@ When PMC has a PMCID but XML is unavailable (restricted, rate-limited, or embarg
 - Only PMC papers get standalone figure image files — publisher papers rely on text descriptions
 - Pedigree analysis requires GPT-4o vision (post-processing step, not part of download)
 
+### 7. Authenticated Browser Recovery
+- Browser recovery lives under `harvesting/browser_html/` and is called by the
+  current `gvf-run`/recovery workflow.
+- It can use institutional browser sessions for publisher HTML/PDF pages when
+  API access is blocked.
+- Challenge pages, reCAPTCHA, and Cloudflare downloads are detected as failed
+  artifacts rather than treated as usable full text.
+
 ## Configuration (`.env`)
 
 ```
 ELSEVIER_API_KEY=your_key
+ELSEVIER_INSTTOKEN=your_x_els_insttoken
 WILEY_API_KEY=your_key
 SPRINGER_API_KEY=your_key
 NCBI_EMAIL=your_email
@@ -68,7 +81,7 @@ EXTRACT_FIGURES=true
 EXTRACT_PEDIGREES=true
 ```
 
-## Commits (Feb 12, 2026)
+## Historical Commits (Feb 12, 2026)
 
 | Commit | Description |
 |--------|-------------|
@@ -87,8 +100,12 @@ EXTRACT_PEDIGREES=true
 
 ## Known Limitations
 
-1. **Unpaywall** returns invalid JSON for ~95% of queries (likely rate-limited or blocked)
-2. **Wiley TDM** fails for many older articles ("article not found")
-3. **~230 papers** remain genuinely paywalled (no open access path via any API)
-4. **Figure extraction** only works for PMC-sourced papers (publisher figures require different approach)
-5. **OOM risk** on large batches with figure extraction enabled — disable `EXTRACT_FIGURES` for bulk runs
+1. `ELSEVIER_API_KEY` without `ELSEVIER_INSTTOKEN` is not enough for many
+   ScienceDirect papers in the current recall gap.
+2. Browser challenge artifacts can prove a link was tried, but they are not
+   source data; audit `pmc_fulltext/paywalled_missing.csv` and
+   `gvf audit-paywalls` output before treating a PMID as extracted.
+3. Wiley TDM still fails for many older articles ("article not found").
+4. Publisher figure extraction remains weaker than PMC figure extraction.
+5. OOM risk remains on large batches with figure extraction enabled; disable
+   `EXTRACT_FIGURES` for bulk runs unless figures are the active target.

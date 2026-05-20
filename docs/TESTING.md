@@ -19,7 +19,8 @@ gold standard.
 >    `python3.11 -m venv .venv && .venv/bin/pip install -e ".[dev]"`.
 > 2. Confirm required env vars: `NCBI_EMAIL`, `NCBI_API_KEY`, one LLM
 >    provider key (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, or Azure
->    AI/OpenAI credentials), `ELSEVIER_API_KEY`, and `WILEY_API_KEY`.
+>    AI/OpenAI credentials), `ELSEVIER_API_KEY`, `ELSEVIER_INSTTOKEN`, and
+>    `WILEY_API_KEY`.
 >    Report missing ones.
 > 3. Run linters: `.venv/bin/python -m ruff check . --no-fix` and
 >    `.venv/bin/python -m ruff format --check .`. Report any issues.
@@ -46,7 +47,8 @@ gold standard.
 > Run a bounded e2e to confirm the pipeline produces a valid DB. Use
 > `--max-pmids 25` so it finishes in minutes, not hours:
 > ```bash
-> .venv/bin/python main.py --gene KCNH2 --max-pmids 25 --output results/test_kcnh2
+> .venv/bin/python -m cli gvf-run KCNH2 --email "$NCBI_EMAIL" \
+>   --output results/test_kcnh2 --max-pmids 25
 > ```
 > Expect `results/test_kcnh2/KCNH2/<timestamp>/KCNH2.db` with non-zero
 > papers and variants. Print the row counts.
@@ -81,7 +83,7 @@ gold standard.
 >   --outdir recall_metrics/test_$(date +%Y%m%d_%H%M%S)
 > ```
 > Compare against the current baseline recorded in
-> `docs/CURRENT_RECALL_STATUS_2026-05-20.md`. Do not copy metric tables into
+> `docs/RECALL_STATUS.md`. Do not copy metric tables into
 > this test prompt; they drift quickly. Anything materially below the current
 > baseline is a regression for cold-start turnkey behavior.
 >

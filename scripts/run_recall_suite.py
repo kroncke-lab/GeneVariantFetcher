@@ -27,6 +27,13 @@ from cli.compare_variants import (  # noqa: E402
     introspect_sqlite,
     load_excel_data,
 )
+from scripts.recall_audit.common import write_csv_rows  # noqa: E402
+from scripts.recall_audit.paper_disagreement_report import (  # noqa: E402
+    REPORT_FIELDS,
+    build_paper_disagreement_rows,
+    select_regression_cases,
+    write_markdown as write_regression_cases_markdown,
+)
 
 DEFAULT_GOLD_DIR = BASE_DIR / "gene_variant_fetcher_gold_standard"
 DEFAULT_RESULTS_DIR = BASE_DIR / "results"
@@ -203,6 +210,46 @@ def write_run_summary(summary: dict[str, Any], outdir: Path) -> None:
     write_markdown_summary(summary, outdir / "report.md")
 
 
+def write_disagreement_artifacts(
+    *,
+    outdir: Path,
+    gene_results: list[dict[str, Any]],
+    results_dir: Path,
+    gold_dir: Path,
+) -> dict[str, Any]:
+    """Write paper-level disagreement artifacts used to choose replay fixtures."""
+    db_paths = {
+        str(item["gene"]).upper(): Path(item["db_path"])
+        for item in gene_results
+        if item.get("status") == "scored" and item.get("db_path")
+    }
+    rows = build_paper_disagreement_rows(
+        recall_score=outdir,
+        db_paths_by_gene=db_paths,
+        gold_dir=gold_dir / "normalized",
+        results_dir=results_dir,
+    )
+    report_path = outdir / "paper_disagreement_report.csv"
+    selected_path = outdir / "extraction_regression_cases.csv"
+    markdown_path = outdir / "extraction_regression_cases.md"
+    selected = select_regression_cases(rows)
+
+    write_csv_rows(rows, REPORT_FIELDS, report_path)
+    write_csv_rows(selected, REPORT_FIELDS, selected_path)
+    write_regression_cases_markdown(
+        selected,
+        markdown_path,
+        title="Available-Source Extraction Regression Cases",
+    )
+    return {
+        "paper_disagreement_report": str(report_path),
+        "extraction_regression_cases": str(selected_path),
+        "extraction_regression_cases_markdown": str(markdown_path),
+        "paper_disagreement_rows": len(rows),
+        "selected_regression_cases": len(selected),
+    }
+
+
 def _format_pct(value: float | None) -> str:
     return "n/a" if value is None else f"{value:.1%}"
 
@@ -243,6 +290,29 @@ def write_markdown_summary(summary: dict[str, Any], output_path: Path) -> None:
             f"- `{gene}`: scored from `{item.get('db_path')}`; " + ", ".join(parts)
         )
     lines.append("")
+
+    artifacts = summary.get("disagreement_artifacts")
+    if artifacts:
+        lines.extend(
+            [
+                "## Paper-Level Disagreement",
+                "",
+                f"- Full report: `{artifacts.get('paper_disagreement_report')}`",
+                f"- Regression cases: `{artifacts.get('extraction_regression_cases')}`",
+                f"- Markdown review table: `{artifacts.get('extraction_regression_cases_markdown')}`",
+                f"- Selected cases: `{artifacts.get('selected_regression_cases')}`",
+                "",
+            ]
+        )
+    elif summary.get("disagreement_artifacts_error"):
+        lines.extend(
+            [
+                "## Paper-Level Disagreement",
+                "",
+                f"- Report generation failed: `{summary['disagreement_artifacts_error']}`",
+                "",
+            ]
+        )
 
     with output_path.open("w") as f:
         f.write("\n".join(lines))
@@ -488,6 +558,16 @@ def main() -> int:
         manifest=manifest,
         target=args.target,
     )
+    try:
+        summary["disagreement_artifacts"] = write_disagreement_artifacts(
+            outdir=outdir,
+            gene_results=gene_results,
+            results_dir=results_dir,
+            gold_dir=gold_dir,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.exception("Paper-level disagreement report generation failed")
+        summary["disagreement_artifacts_error"] = str(exc)
     write_run_summary(summary, outdir)
     print_scorecard(summary)
 

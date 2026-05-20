@@ -557,6 +557,6 @@ output/KCNH2/20260215_091500/
 
 ## Next Steps
 
-- [VALIDATION.md](VALIDATION.md) — Understand recall metrics
+- [RECALL_STATUS.md](RECALL_STATUS.md) — Current recall metrics and blockers
 - [ARCHITECTURE.md](ARCHITECTURE.md) — Technical deep-dive
 - [QUICKSTART.md](QUICKSTART.md) — Get running

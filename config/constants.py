@@ -149,6 +149,13 @@ MIN_EXTRACTION_INPUT_SIZE: int = 500
 # divider.
 REUSE_FULL_CONTEXT_BYTES: int = 5_000
 
+# Data Scout should prefer the preprocessed *_CLEANED.md source when the raw
+# FULL_CONTEXT file is huge. Some PMC/package fallbacks can preserve duplicated
+# raw payloads in FULL_CONTEXT while preprocessing writes a much smaller cleaned
+# text file for the same PMID. Keeping the raw file is useful for audit, but
+# scouting it directly can spend minutes on repeated boilerplate.
+SCOUT_PREFER_CLEANED_ABOVE_CHARS: int = 5_000_000
+
 # Minimum ratio of alphanumeric content to total content
 # Below this indicates garbage/placeholder text
 MIN_ALPHANUMERIC_RATIO: float = 0.3

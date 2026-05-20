@@ -30,6 +30,45 @@ _REASONING_MODEL_HINTS = (
     "o3",
 )
 
+TARGET_GENE_ALIASES = {
+    "KCNH2": ("KCNH2", "HERG", "KVLQT2", "LQT2"),
+    "KCNQ1": ("KCNQ1", "KVLQT1", "LQT1"),
+    "SCN5A": ("SCN5A", "NAV1.5", "LQT3", "BRUGADA"),
+    "RYR2": ("RYR2", "CPVT1", "CPVT"),
+}
+
+GENOTYPED_COHORT_SIGNALS = (
+    "MUTATION",
+    "MUTATIONS",
+    "VARIANT",
+    "VARIANTS",
+    "CARRIER",
+    "CARRIERS",
+    "GENOTYP",
+    "SEQUENC",
+    "SCREEN",
+    "SCREENED",
+    "SCREENING",
+    "IDENTIFIED",
+    "FOUND IN",
+    "PROBAND",
+    "PROBANDS",
+    "FAMILY",
+    "FAMILIES",
+    "PATIENT",
+    "PATIENTS",
+    "COHORT",
+    "REGISTRY",
+)
+
+REVIEW_ONLY_SIGNALS = (
+    "REVIEW",
+    "META-ANALYSIS",
+    "SYSTEMATIC REVIEW",
+    "GUIDELINE",
+    "CONSENSUS",
+)
+
 
 def _is_reasoning_model(model: Optional[str]) -> bool:
     if not model:
@@ -238,6 +277,35 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
             f"InternFilter initialized with model={model}, temp={temperature}, confidence_threshold={self.confidence_threshold}, disease={self.disease!r}"
         )
 
+    @staticmethod
+    def _contains_alias(text: str, alias: str) -> bool:
+        pattern = rf"(?<![A-Z0-9]){re.escape(alias.upper())}(?![A-Z0-9])"
+        return re.search(pattern, text) is not None
+
+    def _target_gene_or_alias_mentioned(self, paper: Paper) -> bool:
+        gene = (paper.gene_symbol or "").strip().upper()
+        if not gene:
+            return False
+        text = f"{paper.title or ''}\n{paper.abstract or ''}".upper()
+        aliases = TARGET_GENE_ALIASES.get(gene, (gene,))
+        return any(self._contains_alias(text, alias) for alias in aliases)
+
+    def _should_fail_open_target_gene_abstract(self, paper: Paper) -> bool:
+        """Recover papers the LLM labels FAIL despite target-gene cohort signals."""
+        text = f"{paper.title or ''}\n{paper.abstract or ''}".upper()
+        if not self._target_gene_or_alias_mentioned(paper):
+            return False
+        if not any(signal in text for signal in GENOTYPED_COHORT_SIGNALS):
+            return False
+        if (
+            any(signal in text for signal in REVIEW_ONLY_SIGNALS)
+            and "CASE" not in text
+            and "IDENTIFIED" not in text
+            and "PATIENT" not in text
+        ):
+            return False
+        return True
+
     def filter(self, paper: Paper) -> FilterResult:
         """
         Apply LLM-based filter to classify the paper.
@@ -333,6 +401,19 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
                     else FilterDecision.FAIL
                 )
 
+            fail_open_target_gene_signal = False
+            if (
+                decision == FilterDecision.FAIL
+                and self._should_fail_open_target_gene_abstract(paper)
+            ):
+                fail_open_target_gene_signal = True
+                decision = FilterDecision.PASS
+                reason = (
+                    "Fail-open override: abstract/title explicitly mention the "
+                    f"target gene or alias for {paper.gene_symbol} plus genotyped "
+                    f"cohort/variant signals. Original classifier reason: {reason}"
+                )
+
             logger.info(
                 f"PMID {paper.pmid} - Intern filter: {decision.value} "
                 f"(confidence: {confidence:.2f}) - {reason}"
@@ -347,6 +428,7 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
                 metadata={
                     "model": self.model,
                     "confidence_threshold": self.confidence_threshold,
+                    "fail_open_target_gene_signal": fail_open_target_gene_signal,
                 },
             )
 
