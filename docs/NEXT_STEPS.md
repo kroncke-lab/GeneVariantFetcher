@@ -1,73 +1,54 @@
 # What's Left to Hit 90% on Every Metric
 
-## Current state (2026-05-17 evening, after 4 parallel agents)
+## Current State
 
-| Metric | Recall | Gap | Why |
-|---|---:|---:|---|
-| pmids | **90.8%** | ✓ over target | done |
-| affected | 87.5% | 41 | needs paywall full text |
-| patients | 86.0% | 107 | needs paywall full text |
-| unique_variants | 83.2% | 36 | needs paywall full text |
-| variant_rows | 82.8% | 71 | needs paywall full text |
-| unaffected | 81.8% | 62 | needs paywall full text |
+Current live metrics and the authoritative baseline artifact are in
+`docs/CURRENT_RECALL_STATUS_2026-05-20.md`.
 
-## What the agent sweep proved
+Do not maintain a second recall table here. This page is a short interpretation
+of the current blocker classes.
 
-After spawning 3 parallel agents on top of the manual recovery work:
-- **Agent A** (paywall figure downloader) — recovered Figure 1 of PMID 29650123
-  via `ars.els-cdn.com`, +5 matched variants. Other publishers (Wiley, Sage,
-  Tandfonline, JACC.org, Oxford, ScienceDirect.com) all Cloudflare-block.
-- **Agent B** (alternate paywall routes) — tried Crossref TDM, NIHMS
-  manuscripts, OpenAIRE, BASE, Wayback Machine, DOAJ, bioRxiv against the
-  top-15 paywalled PMIDs. **0 recoveries**. Snapshots that exist are
-  React SPA shells, not rendered article bodies. These DOIs genuinely
-  have no public OA copy.
-- **Agent C** (carrier count enrichment, 2 rounds, 350+250 LLM calls) —
-  +208 records total, but most landed on already-matched variants where
-  another row already had counts, OR on duplicate variant entries
-  (`p.Tyr43Cys` vs `p.Y43C` — same canonical form, different `variant_id`).
-  Net recall delta: +5 variant_rows matches.
+## What The Long Run Proved
 
-## Hard ceiling without credentials
+The pipeline is now turnkey enough to run all four requested genes from one
+command, survive VPN churn, score genes with gold inputs, and produce per-gene
+reports. It is not yet close to the recall target.
 
-The remaining gap is concentrated in **paywalled tables and figures we
-cannot reach without one of:**
+The recovery layers are now honest cold-start layers: ClinVar and PubTator use
+PMIDs already observed in the DB by default. Gold-PMID enrichment remains only
+as an explicit diagnostic mode.
 
-1. `ELSEVIER_INSTTOKEN` set in `.env` (Heart Rhythm / JACC / Mayo Clin Proc
-   / Clin Chim Acta / Eur Heart J via Elsevier API). Reaches roughly
-   30–40 missing variants.
-2. Working Chrome SSO cookies for `scripts/fetch_paywalled.py` — the
-   current macOS keychain decryption failure blocks this in headless mode.
-3. Wiley TDM key with broader entitlement (current key returns 403 on
-   `humu.10131` and similar). Reaches Hum Mutat / J Cardiovasc Electrophysiol.
+KCNH2 degraded relative to the older closeout baseline because this run did not
+auto-merge the KCNH2 v12 manual-recovery DB and did not use gold-PMID-conditioned
+recovery. That is the right behavior for turnkey claims.
 
-Without these, we're at the ceiling.
+RYR2 and SCN5A are dominated by source/table coverage gaps. ClinVar helped both,
+but PubTator and figure reads did not recover enough variant rows or carrier
+counts to approach 90%.
 
-## What still moves without credentials
+## Highest ROI Blockers
 
-1. **More figure downloads via the figure-reader API** — Agent A had a 1/15
-   hit rate because most non-Elsevier publishers Cloudflare-block. The
-   yield-per-call ratio is poor, but every additional Elsevier paper
-   processed via `ars.els-cdn.com` adds ~3-5 variants on average.
-2. **Better deduplication before count enrichment** — round 2 of agent C
-   produced 143 records that should have moved patient/affected/unaffected
-   by ~10pp. They didn't because we have duplicate `variants` rows (e.g.
-   `p.Y43C` and `p.Tyr43Cys` as separate entries). The dedupe pass we
-   tried merged them at the cost of one matched PMID; a more conservative
-   "canonical-form lookup at insert time" path in `ingest_clinvar.py` and
-   `ingest_pubtator.py` would prevent the duplicates in the first place.
-3. **Cross-link individual_records counts** — the recall scorer reads
-   counts from `penetrance_data` *and* aggregates from `individual_records`.
-   A handful of papers have `individual_records` populated but no
-   `penetrance_data` row, so the counts never surface. A small migration
-   to backfill `penetrance_data` from `individual_records` aggregation
-   would land another ~10-20 patient credits.
+1. `ELSEVIER_INSTTOKEN` is still unset. Elsevier API key alone is not enough for
+   Heart Rhythm, JACC, Mayo Clinic Proceedings, Clinica Chimica Acta, and
+   European Heart Journal full text.
+2. Several supplemental files are present only as failed/challenge artifacts.
+   The harvester now detects Cloudflare/reCAPTCHA/browser-challenge downloads,
+   but the missing source data still has to be acquired.
+3. KCNE1 needs a normalized per-PMID gold input before recall can be claimed.
+4. SCN5A count extraction is inflated. The run reported 27,692,860 carriers in
+   extraction statistics, which points to cohort/table parsing inflation that
+   should be separated from missing-row recall work.
+5. Oversized raw contexts can waste model time. Data Scout now prefers an
+   existing deterministic `*_CLEANED.md` sibling when raw `*_FULL_CONTEXT.md`
+   exceeds the configured size guard.
 
-## Path to >90% on the count metrics
+## Next Work
 
-If we drop the strict "need full text to recover counts" rule and accept
-**ClinVar carrier counts** (when the ClinVar entry is from a per-family
-submission), we could backfill counts for variants we already match.
-ClinVar's `ObservedIn` block has `NumberOfIndividuals` for many entries.
-Worth a 1-shot agent that hits ClinVar's full XML and writes the
-`(pmid, variant) → (affected, unaffected)` map.
+1. Get `ELSEVIER_INSTTOKEN` or manually acquire real PDFs/supplements for the
+   largest KCNH2/RyR2/SCN5A missing-row PMIDs.
+2. Audit top `missing_in_sqlite.csv` rows per gene from the current-status
+   baseline path.
+3. Fix cohort/table count semantics before trusting patient-level totals.
+4. Build or import `gene_variant_fetcher_gold_standard/normalized/KCNE1_recall_input.csv`.
+5. Add focused source-specific recovery for browser-challenge supplemental PDFs
+   instead of retrying the same blocked LinkOut URLs.

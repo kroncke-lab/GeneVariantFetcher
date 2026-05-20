@@ -1,10 +1,11 @@
 # GVF Tasks
 
 ## Current Focus
-- Improve KCNH2 recall from the 2026-05-15 measured baseline to 90% by June 2026 grant deadline.
-  - Current KCNH2 unique-variant recall: 323/530 (60.9%).
-  - Current KCNH2 variant-row recall: 542/991 (54.7%).
-- **Measurement loop is multi-gene now** — score KCNH2, KCNQ1, and SCN5A from `gene_variant_fetcher_gold_standard/normalized/*_recall_input.csv`; RYR2 still needs a per-PMID clinical source before recall can be scored.
+- Improve honest cold-start recall for KCNH2, RYR2, and SCN5A to 90% across PMIDs, variant rows, unique variants, patients, affected, and unaffected counts.
+  - Current metrics, highest-yield PMIDs, and next run plan are in `docs/CURRENT_RECALL_STATUS_2026-05-20.md`.
+  - Do not duplicate live recall tables here; this file is only a short task checklist.
+- **Measurement loop is multi-gene now** — score KCNH2, RYR2, and SCN5A from `gene_variant_fetcher_gold_standard/normalized/*_recall_input.csv`; KCNQ1 scoring remains available when its gold input is in scope.
+- **KCNE1 is extraction-only until a gold input exists.** There is no `KCNE1_recall_input.csv` in the current gold-standard package, so KCNE1 recall cannot be claimed yet.
 
 ## Completed
 - [x] Springer API integration (full-text retrieval working)
@@ -47,16 +48,24 @@
   - [x] Scored `KCNH2_v12_manual_recovery_20260515.db`: PMIDs 184/262 (70.2%), variant rows 542/991 (54.7%), unique variants 323/530 (60.9%), patients 1758/2674 (65.7%)
   - [x] Added frameshift canonicalization for extraction spellings like `fsTer`, `fs/185`, `fs+*49`, and malformed `AlaX14`
   - [x] Extended cDNA/protein bridge matching to multi-base cDNA indel ranges; recovered `P926fsX` (PMID 26496715) and `P1034fsX` (PMID 29622001)
+- [x] **Turnkey closeout and honest enrichment cleanup (2026-05-18)**
+  - [x] Added `gvf gvf-run` as the one-command doctor -> extract -> recovery layers -> report path.
+  - [x] Scored KCNH2/KCNQ1/RYR2/SCN5A under `validation_runs/closeout_20260518_124343/`.
+  - [x] Changed ClinVar/PubTator recovery layers to default to DB-observed PMIDs instead of gold PMIDs; gold-PMID enrichment is now explicit diagnostic mode.
+  - [x] Turnkey recovery layers now back up the SQLite DB before mutation.
+- [x] **Four-gene turnkey long run and cleanup pass (2026-05-19)**
+  - [x] Ran KCNH2, KCNE1, RYR2, and SCN5A end to end under `validation_runs/turnkey_e2e_20260518_213934/`.
+  - [x] Confirmed KCNH2, RYR2, and SCN5A remain below 90% on all scored recall metrics except RYR2 unaffected.
+  - [x] Confirmed KCNE1 extraction completes but cannot be scored without a gold recall input.
+  - [x] Removed default KCNH2 v12 auto-merge, removed gold-PMID leakage from default recovery, added DB backups, broadened LLM provider checks, filtered non-article LinkOuts, added retry/challenge handling, and guarded Data Scout against oversized raw contexts.
 
 ## Active Tasks
-- [ ] **Close KCNH2 source/extraction gap to >90%**. Current post-patch gap is 350 variant rows to 90% against `KCNH2_v12_manual_recovery_20260515.db`; top remaining blockers are PMID 15840476 (86 rows, Elsevier INSTTOKEN), 14661677 (24), 29650123 (21), 24667783 (20), 16922724 (20), 23098067 (16), and 23631430 (12).
-- [ ] **Investigate `count_mismatches=117`** from the latest recall summary. Many top mismatches look like SQLite over-counting patient/carrier totals from cohort tables, which is separate from missing-row recall.
-- [ ] **Re-run extraction end-to-end for KCNQ1 and SCN5A** with patched table/full-context pipeline; score with `scripts/run_recall_suite.py`.
-- [ ] **Create or import RYR2 per-PMID gold input**. Variant_Browser currently exposes only aggregate RYR2 variant counts, so RYR2 is documented but not recall-scorable.
-- [ ] **Obtain Elsevier INSTTOKEN** from Vanderbilt E-resources (eresources@vanderbilt.edu). Unlocks PMID 15840476 (86 gold variants). Local OneDrive files named `15840476.pdf` and `26496715.pdf` were checked on 2026-05-14 and are zero-filled placeholders, not usable PDFs.
-- [ ] **Run fresh KCNQ1 and SCN5A extraction DBs.** The 2026-05-14 recall runner can score these genes, but current local `results/` has no KCNQ1/SCN5A SQLite DBs yet.
-- [ ] **Integrate valid paywall recovery artifacts into canonical runs** before re-extraction; known high-value recovered KCNH2 artifacts are PMIDs 10973849, 11854117, 19038855, 23098067, and 19996378.
-- [ ] **Manual PDF download for hard-blocked/stub PMIDs** (15840476 Tester, 26496715 Karger, 16922724 Wiley CG, 12402336 Wiley HM, 23631430 Sage). Feed real downloaded PDFs through `harvesting/format_converters.py`; avoid OneDrive on-demand placeholders.
+- [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in `docs/CURRENT_RECALL_STATUS_2026-05-20.md`.
+- [ ] **Investigate count semantics and cohort-table over-counting**. Preserve raw count columns and classify study-wide counts versus per-variant carriers before writing patient/affected/unaffected totals.
+- [ ] **Create or import KCNE1 per-PMID gold input** before making KCNE1 recall claims.
+- [ ] **Obtain Elsevier INSTTOKEN** from Vanderbilt E-resources (eresources@vanderbilt.edu). Exact missing-PMID ranks live in `docs/CURRENT_RECALL_STATUS_2026-05-20.md`; do not carry older per-PMID gap counts here.
+- [ ] **Integrate valid paywall recovery artifacts into canonical runs** before re-extraction. Keep paper-specific recovery lists in validation artifacts or `docs/CURRENT_RECALL_STATUS_2026-05-20.md`, not in this checklist.
+- [ ] **Manual PDF download for hard-blocked/stub PMIDs** only after the current-status source audit confirms the artifact is still missing. Feed real downloaded PDFs through `harvesting/format_converters.py`; avoid OneDrive on-demand placeholders.
 - [ ] Set weekly recall cadence (Friday re-run + compare) — produces trajectory chart for grant.
 
 ## Blocked
@@ -65,9 +74,10 @@
 - [ ] **Sage/Liebert (PMID 23631430)** — Sage's CF instance refuses Playwright fingerprint even with the right cookies.
 
 ## Backlog
-- [ ] Create golden test sets for non-KCNH2 genes (RYR2 still needs per-PMID source reconciliation; KCNQ1/SCN5A need fresh extraction DBs scored locally).
+- [ ] Create a KCNE1 gold test set and keep all non-KCNH2 gold inputs source-reconciled.
 - [ ] Re-run extraction with regex disabled to measure regex vs LLM contribution.
 - [ ] Expand quality gate test set beyond the 10 audit files.
-- [ ] Parameterize `scripts/recall_recovery/ingest_clinvar.py` and `ingest_pubtator.py` so cold-start genes can run the same recovery layers KCNH2 uses.
+- [x] Parameterize `scripts/recall_recovery/ingest_clinvar.py` and `ingest_pubtator.py` so cold-start genes can run the same recovery layers KCNH2 uses.
 
-See CLAUDE.md for current status, recovery architecture, the Elsevier INSTTOKEN unblock path, and blocker details.
+See `docs/CURRENT_RECALL_STATUS_2026-05-20.md` for current status and `CLAUDE.md`
+for recovery architecture and handoff details.

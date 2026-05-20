@@ -166,7 +166,7 @@ Decision rules:
 - "Patients with the target disease/phenotype were genotyped" — PASS. Specific variants may be in tables.
 - Family/pedigree, twins, pregnancy/perinatal, pediatric/neonatal, adult-onset, tumor, population, diagnostic-yield, or cohort studies — PASS when genotyped patients are mentioned and the topic is relevant to the target gene/disease.
 - "In vitro" or "functional study" alone is NOT a reason to fail — check whether named variants or patient-derived variants appear.
-- When uncertain, prefer PASS. Cost of false-negative (lost gold variants) >> cost of false-positive (wasted Tier-3 call).
+- When uncertain, prefer PASS. Cost of false-negative (lost relevant variant-bearing papers) >> cost of false-positive (wasted Tier-3 call).
 {disease_clause}
 Respond with a JSON object containing exactly these keys:
 {{

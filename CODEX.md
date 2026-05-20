@@ -3,19 +3,19 @@
 You're working on **GeneVariantFetcher (GVF)** — a pipeline that extracts
 genetic variants from biomedical literature for the Kroncke Lab variant
 interpretation toolkit. Goal: **90% unique-variant recall by June 2026**
-(R01 grant submission). Current measured KCNH2 baseline: **60.9%**
-unique-variant recall and **54.7%** variant-row recall (2026-05-15 v12
-manual-recovery DB).
+(R01 grant submission). Current metrics, blockers, and next actions live in
+`docs/CURRENT_RECALL_STATUS_2026-05-20.md`; treat that file as the source of
+truth and do not duplicate live recall tables here.
 
 ## Read these first (in this order)
 
-1. **`CLAUDE.md`** — comprehensive project status, architecture, paywall
-   recovery pipeline, the Elsevier INSTTOKEN unblock path, publisher
-   coverage matrix, next steps. Has an "Notes for AI Agents Picking This
-   Up" section at the bottom. **Start here.**
-2. **`TASKS.md`** — what's done, what's active, what's blocked, what's
+1. **`docs/CURRENT_RECALL_STATUS_2026-05-20.md`** — current measured baseline,
+   blockers, stale/bloat audit, and next run plan. **Start here.**
+2. **`CLAUDE.md`** — project architecture, paywall recovery context, and
+   handoff notes. Historical metrics inside it defer to the current-status doc.
+3. **`TASKS.md`** — what's done, what's active, what's blocked, what's
    backlog. The "Active Tasks" section is what's open right now.
-3. `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md` — standard project docs.
+4. `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md` — standard project docs.
 
 ## Hot files you'll touch most often
 
@@ -65,6 +65,10 @@ manual-recovery DB).
   ("brutally honest" is a direct quote). Don't sugar-coat recovery rates.
 - If you can't recover a paper, say so plainly and document why in
   `CLAUDE.md` / `TASKS.md` under blockers.
-- The KCNH2 measurement loop is working. The current bottleneck is recovering
-  or re-extracting the highest-loss PMIDs, especially PMID 15840476 behind
-  Elsevier institutional access.
+- The multi-gene measurement loop is working, but older recovery metrics used
+  gold-PMID-conditioned enrichment layers. Current code defaults ClinVar and
+  PubTator enrichment to DB-observed PMIDs only; use gold-PMID enrichment only
+  as an explicitly labeled diagnostic.
+- The current bottleneck is source/table coverage: missing supplements,
+  paywalled publisher tables, browser challenges, and incomplete extraction of
+  high-loss PMIDs such as KCNH2 PMID 15840476.

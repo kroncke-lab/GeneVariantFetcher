@@ -6,24 +6,15 @@ grant target is 90% unique-variant recall by June 2026.
 
 ## Current Measured State
 
-Latest scored KCNH2 run: 2026-05-15 manual-recovery v12.
+Current live metrics, the scored baseline artifact, highest-yield remaining
+PMIDs, and the next-run plan are consolidated in:
 
-| Metric | Matched / gold | Recall |
-|---|---:|---:|
-| PMIDs | 184 / 262 | 70.2% |
-| Variant rows | 542 / 991 | 54.7% |
-| Unique variants | 323 / 530 | 60.9% |
-| Patients/carriers | 1758 / 2674 | 65.7% |
-| Affected | 1095 / 1635 | 67.0% |
-| Unaffected | 461 / 749 | 61.5% |
+`docs/CURRENT_RECALL_STATUS_2026-05-20.md`
 
-Local artifacts:
-- DB: `results/KCNH2/20260506_102238/end_to_end_20260515_manual_recovery/KCNH2_v12_manual_recovery_20260515.db`
-- Recall output: `recall_metrics/kcnh2_manual_recovery_after_matchfix_20260515/`
-- Gold input: `gene_variant_fetcher_gold_standard/normalized/KCNH2_recall_input.csv`
-
-The old 59.1% KCNH2 number from 2025-12-11 is now historical only. Use the
-2026-05-15 score above as the current local baseline.
+Treat that file as authoritative. Older KCNH2-only and 2026-05-18 closeout
+numbers are historical debugging baselines. Gold-PMID-conditioned enrichment
+and KCNH2 v12 manual recovery are diagnostic/manual recovery paths, not
+cold-start capability.
 
 ## What Changed In This Branch
 
@@ -37,6 +28,9 @@ The old 59.1% KCNH2 number from 2025-12-11 is now historical only. Use the
   explicit count column.
 - Recall runner: `scripts/run_recall_suite.py` scores normalized per-gene
   recall inputs from `gene_variant_fetcher_gold_standard/normalized/`.
+- Turnkey driver: `gvf gvf-run <GENE> --email <email> --output <dir>` runs
+  doctor -> extraction -> DB-observed recovery layers -> report. It backs up the
+  DB before recovery-layer mutation. `--with-v12` is KCNH2-only and opt-in.
 - Matcher: `cli/compare_variants.py` has positional-digit guards, greedy
   one-to-one assignment, cDNA/protein bridging, and 2026-05-15 fixes for
   frameshift spellings such as `fsTer`, `fs/185`, `fs+*49`, and malformed
@@ -51,31 +45,13 @@ usable assembled full text after the automatic harvesters and fallback routes.
 They are not "assigned to a human" by code; they are papers GVF could not fetch
 with the currently available credentials and network position.
 
-Current local KCNH2 status:
-- 170 PMIDs were in the manual-queue subset.
-- 18 were recovered and integrated into the v12 DB.
-- 152 still lack usable full context.
-- Current missing-in-SQLite gap after the matcher patch: 449 variant rows across
-  107 PMIDs. The top 10 PMIDs account for 227 rows.
-
-Top current KCNH2 losses:
-
-| PMID | Missing rows | Main blocker |
-|---|---:|---|
-| 15840476 | 86 | Elsevier/Heart Rhythm subscription full text |
-| 14661677 | 24 | Source/extraction coverage |
-| 29650123 | 21 | Full-ish context, extraction miss |
-| 24667783 | 20 | Supplement/table detail not fully present |
-| 16922724 | 20 | Wiley subscription/Cloudflare |
-| 23098067 | 16 | Open access body, extraction/table miss |
-| 23631430 | 12 | Sage/Liebert Cloudflare |
-| 17905336 | 10 | Extraction miss |
-| 12402336 | 9 | Wiley Human Mutation |
-| 27871843 | 9 | Source/extraction coverage |
+Current high-yield missing PMIDs are listed in
+`docs/CURRENT_RECALL_STATUS_2026-05-20.md`. Keep PMID rankings there so this
+handoff file does not drift.
 
 ## Highest ROI Blocker
 
-PMID 15840476 is still the largest single blocker. Elsevier full-text retrieval
+Elsevier full-text retrieval for ScienceDirect/Heart Rhythm/JACC-style blockers
 needs both headers:
 
 ```text
@@ -83,12 +59,9 @@ X-ELS-APIKey:    <ELSEVIER_API_KEY>
 X-ELS-Insttoken: <ELSEVIER_INSTTOKEN>
 ```
 
-`.env` already supports `ELSEVIER_INSTTOKEN` through the Elsevier API client.
-The API key alone returns metadata/abstract only. On a Vanderbilt VPN or
-institutional machine, first try `scripts/fetch_paywalled.py`; if the API still
-does not unlock the article, manually download a real PDF in the browser and
-feed it through `harvesting/format_converters.py`. Do not use OneDrive
-on-demand placeholders; they were checked on 2026-05-14 and were invalid PDFs.
+`.env` supports `ELSEVIER_INSTTOKEN` through the Elsevier API client. The API
+key alone can return metadata/abstract only. After the token is available, rerun
+targeted recovery and rescore from the current-status baseline.
 
 ## Run On Another Computer Or VPN
 
@@ -105,7 +78,10 @@ python -m playwright install chromium
 Create `.env` with at least:
 
 ```bash
-OPENAI_API_KEY=...
+# One LLM provider key:
+ANTHROPIC_API_KEY=...
+# or OPENAI_API_KEY=...
+# or AZURE_AI_API_KEY=...
 NCBI_EMAIL=...
 NCBI_API_KEY=...
 ELSEVIER_API_KEY=...
@@ -146,17 +122,11 @@ Then rerun extraction/migration and score:
 
 ## Active Work
 
-1. Close KCNH2 source/extraction coverage to 90% recall. The current
-   variant-row gap to 90% is 350 rows.
-2. Unblock PMID 15840476 with `ELSEVIER_INSTTOKEN`, VPN/IP access, or a valid
-   manual PDF.
-3. Re-run focused extraction for top missing-but-present sources, especially
-   29650123, 24667783, 23098067, and 17905336.
-4. Investigate `count_mismatches=117`; many top mismatches look like SQLite
-   over-counting carrier totals from cohort tables, separate from recall.
-5. Run fresh KCNQ1 and SCN5A extraction DBs so the multi-gene recall runner can
-   score them locally. RYR2 has normalized gold input but still needs source
-   reconciliation before treating per-PMID recall as final.
+Current active work is tracked in
+`docs/CURRENT_RECALL_STATUS_2026-05-20.md`. Do not duplicate metric gaps here.
+The short version is: unlock Elsevier/ScienceDirect source acquisition, fix
+general count/affected-status extraction issues, rescore from the recorded
+baseline, and keep no-gold QC prominent for new genes.
 
 ## Files To Know
 

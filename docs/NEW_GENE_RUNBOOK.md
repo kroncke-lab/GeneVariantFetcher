@@ -13,7 +13,8 @@ source .venv/bin/activate
 Recommended credentials:
 
 - `NCBI_EMAIL` and `NCBI_API_KEY`: higher rate limits for PubMed, ClinVar, and metadata calls.
-- `OPENAI_API_KEY` or Anthropic vision-model credentials: table/figure extraction and Tier 2 triage.
+- One LLM provider key (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, or Azure AI/OpenAI credentials):
+  table/figure extraction and Tier 2 triage.
 - `ELSEVIER_INSTTOKEN`: major gain for Elsevier-hosted full text and figures when institutional access is allowed.
 - `WILEY_API_KEY` and `SPRINGER_API_KEY`: improves publisher full-text and supplement recovery.
 
@@ -65,9 +66,12 @@ Check that the DB has non-zero `papers`, `variants`, `variant_papers`, and, for 
 
 Run only layers that are gene-agnostic:
 
-1. ClinVar PMID-citation recovery, after the script accepts `--gene`, `--db`, and auto-resolves the NCBI gene id.
-2. PubTator recovery, after the script accepts `--gene`, `--db`, and auto-resolves `CorrespondingGene`.
+1. ClinVar PMID-citation recovery with `--gene`, `--db`, and the default `--pmid-source db`.
+2. PubTator recovery with `--gene`, `--db`, and the default `--pmid-source db`; override `--gene-id` only if auto-resolution is wrong.
 3. Figure reader on every PMID with a `*_figures/` directory, after the CLI gains `--auto-pmids`.
+
+Do not use `--pmid-source gold` for cold-start claims. That mode is diagnostic
+only because it uses the target answer set to choose enrichment PMIDs.
 
 Do not apply KCNH2's v12 manual recovery DB to a new gene. That layer is a curated KCNH2 artifact, not turn-key pipeline behavior.
 
@@ -84,6 +88,14 @@ Use internal signals instead of recall:
 - Source mix: distinguish PMC, publisher-free, API, abstract-only, and paywalled records.
 - DB integrity: no duplicate canonical variants for the same gene/PMID; `variant_papers` rows should connect to valid `papers` and `variants`.
 
-## 8. Expected First-Pass Recall
+## 8. Expected First-Pass Behavior
 
-For a genuinely new cardiac channel gene with no manual recovery DB, expect article coverage to be better than variant-row recall. Based on the current multi-gene validation, first-pass variant-row recall is likely around 30-45% without the recovery stack and could plausibly reach 40-60% after gene-agnostic ClinVar, PubTator, and figure layers. KCNH2's 82%+ result should not be treated as cold-start performance because it includes KCNH2-specific manual recovery.
+For a genuinely new gene with no manual recovery DB, expect article/source
+coverage to be better than variant-row and count recall. The current validation
+status is summarized in `docs/CURRENT_RECALL_STATUS_2026-05-20.md`, but do not
+use those scored genes as hard expectations for a new disease area.
+
+For no-gold runs, judge progress by internal QC: source completeness, supplement
+coverage, zero-variant full-text papers, variant density, count plausibility,
+and whether high-priority paywalled papers are represented by real full text
+rather than abstract/paywall stubs.

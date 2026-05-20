@@ -17,15 +17,17 @@ gold standard.
 > ### 1. Environment + static checks
 > 1. Verify `.venv/` exists and is Python 3.11+; if missing, recreate with
 >    `python3.11 -m venv .venv && .venv/bin/pip install -e ".[dev]"`.
-> 2. Confirm required env vars: `NCBI_EMAIL`, `NCBI_API_KEY`,
->    `OPENAI_API_KEY` *or* `AZURE_AI_API_KEY`+`AZURE_AI_API_BASE`,
->    `ELSEVIER_API_KEY`, `WILEY_API_KEY`. Report missing ones.
+> 2. Confirm required env vars: `NCBI_EMAIL`, `NCBI_API_KEY`, one LLM
+>    provider key (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, or Azure
+>    AI/OpenAI credentials), `ELSEVIER_API_KEY`, and `WILEY_API_KEY`.
+>    Report missing ones.
 > 3. Run linters: `.venv/bin/python -m ruff check . --no-fix` and
 >    `.venv/bin/python -m ruff format --check .`. Report any issues.
 >
 > ### 2. Unit tests
-> Run `.venv/bin/python -m pytest tests/unit -q`. Expect 390+ passing,
-> at most 1 skipped. Capture the count and any failures.
+> Run `.venv/bin/python -m pytest tests/unit -q`. Expect 400+ passing;
+> skips depend on optional external credentials and local tools. Capture
+> the count and any failures.
 >
 > ### 3. Module-import smoke
 > Verify every importable module loads cleanly:
@@ -78,18 +80,10 @@ gold standard.
 >   --db KCNH2=results/KCNH2/20260517_074737/KCNH2.db \
 >   --outdir recall_metrics/test_$(date +%Y%m%d_%H%M%S)
 > ```
-> The current baseline (post-cleanup, post-figure-reader) is:
->
-> | Metric | Recall | Target |
-> |---|---|---|
-> | pmids | 90.8% | 90% ✓ |
-> | variant_rows | 82.2% | 90% |
-> | unique_variants | 83.0% | 90% |
-> | patients | 85.8% | 90% |
-> | affected | 87.5% | 90% |
-> | unaffected | 81.8% | 90% |
->
-> Anything materially below this is a regression; investigate.
+> Compare against the current baseline recorded in
+> `docs/CURRENT_RECALL_STATUS_2026-05-20.md`. Do not copy metric tables into
+> this test prompt; they drift quickly. Anything materially below the current
+> baseline is a regression for cold-start turnkey behavior.
 >
 > ### 8. Report
 > Produce a single-page summary:

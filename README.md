@@ -31,22 +31,17 @@ GeneVariantFetcher (GVF) is an end-to-end pipeline that discovers, downloads, an
 
 ## Performance
 
-Current measured KCNH2 performance against the normalized 2026 gold input
-(`gene_variant_fetcher_gold_standard/normalized/KCNH2_recall_input.csv`) and the
-manual-recovery v12 database scored on 2026-05-15:
+Current recall status is tracked in
+[`docs/CURRENT_RECALL_STATUS_2026-05-20.md`](docs/CURRENT_RECALL_STATUS_2026-05-20.md).
+That file is the source of truth for live metrics, blockers, and next actions.
 
-| Metric | Recall |
-|--------|--------|
-| **PMIDs** | 184/262 (70.2%) |
-| **Variant rows** | 542/991 (54.7%) |
-| **Unique variants** | 323/530 (60.9%) |
-| **Patients/carriers** | 1758/2674 (65.7%) |
-| **Affected individuals** | 1095/1635 (67.0%) |
+Latest scored aggregate across KCNH2, RYR2, and SCN5A is still below target:
+PMID recall 74.4%, variant-row recall 67.8%, unique-variant recall 75.5%,
+patients/carriers 73.7%, affected 71.8%, and unaffected 78.8%.
 
-The older 59.1% number from the 2025-12-11 KCNH2 baseline is historical. The
-current branch adds multi-gene recall inputs, authenticated paywall recovery,
-clinical mutation-list table handling, and matcher improvements; source access
-is now the main limiter for KCNH2 recall.
+Older KCNH2-only recovery scores and the 2026-05-18 closeout are historical
+debugging baselines. Gold-PMID-conditioned enrichment and KCNH2 v12 manual
+recovery are not cold-start behavior.
 
 > **Note:** Performance varies by gene and literature availability. Cardiac genes (8 validated) have optimized configurations with known protein lengths; other genes work generically but may have lower recall.
 
@@ -63,7 +58,7 @@ pip install -e .
 
 # 2. Configure API keys (create .env file)
 cat > .env << 'EOF'
-OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=...
 NCBI_EMAIL=your@email.com
 EOF
 
@@ -367,8 +362,12 @@ Create a `.env` file in the project root:
 
 ```bash
 # Required
-OPENAI_API_KEY=sk-...              # For LLM extraction
 NCBI_EMAIL=your@email.com          # For PubMed API
+
+# Required: at least one LLM provider key
+ANTHROPIC_API_KEY=...              # Claude via LiteLLM
+# OPENAI_API_KEY=sk-...            # OpenAI alternative
+# AZURE_AI_API_KEY=...             # Azure AI Foundry alternative
 
 # Recommended
 NCBI_API_KEY=...                   # 10x rate limits
@@ -378,9 +377,8 @@ ELSEVIER_API_KEY=...               # ScienceDirect
 SPRINGER_API_KEY=...               # SpringerLink
 WILEY_API_KEY=...                  # Wiley Online
 
-# Alternative LLM providers
-ANTHROPIC_API_KEY=...              # For Claude
-GEMINI_API_KEY=...                 # For Gemini
+# Optional additional LLM provider
+GEMINI_API_KEY=...                 # Gemini, when configured in model strings
 ```
 
 ### Pipeline Settings (config/settings.py)

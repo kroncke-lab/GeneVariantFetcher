@@ -380,7 +380,7 @@ class TestUnpaywallAPI:
     def setup(self):
         from harvesting.unpaywall_api import UnpaywallClient
 
-        self.client = UnpaywallClient(email="brett.kroncke@gmail.com")
+        self.client = UnpaywallClient(email="user@example.org")
 
     def test_find_open_access(self):
         """Look up a known paper by DOI."""
@@ -548,7 +548,7 @@ class TestCrossModuleIntegration:
         from harvesting.unpaywall_api import UnpaywallClient
 
         pmc = PMCAPIClient()
-        unpaywall = UnpaywallClient(email="brett.kroncke@gmail.com")
+        unpaywall = UnpaywallClient(email="user@example.org")
 
         pmid = "24667783"
 
@@ -604,7 +604,7 @@ class TestCrossModuleIntegration:
 
         epmc = EuropePMCClient()
         pmc = PMCAPIClient()
-        unpaywall = UnpaywallClient(email="brett.kroncke@gmail.com")
+        unpaywall = UnpaywallClient(email="user@example.org")
 
         pmid = "19841300"
 
@@ -804,7 +804,7 @@ def run_standalone():
     try:
         from harvesting.unpaywall_api import UnpaywallClient
 
-        uw = UnpaywallClient(email="brett.kroncke@gmail.com")
+        uw = UnpaywallClient(email="user@example.org")
 
         result, error = uw.find_open_access(GOLD_DOIS["24667783"])
         tracker.record(

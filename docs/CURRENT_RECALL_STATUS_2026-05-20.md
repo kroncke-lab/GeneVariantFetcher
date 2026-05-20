@@ -3,15 +3,29 @@
 This note records the post-`19ae63f` state of the recall/generalization push so
 the next run can resume from the same baseline without relying on chat history.
 
+## Source Of Truth
+
+Use this file as the current issue/status tracker for the recall push. Other
+top-level handoff docs (`README.md`, `CLAUDE.md`, `CODEX.md`, `TASKS.md`, and
+`docs/NEXT_STEPS.md`) should link here instead of carrying independent live
+metric tables. If a metric conflicts with this file, treat this file and the
+scored artifact below as authoritative.
+
+Historical recovery docs and scripts are still useful for debugging, but they
+are not cold-start evidence unless they explicitly avoid gold-PMID-conditioned
+inputs and KCNH2-only manual recovery.
+
 ## Current Git State
 
-- Current pushed head: `19ae63f Improve deterministic variant recovery`
+- Baseline-producing implementation commit: `19ae63f Improve deterministic variant recovery`
+- Status-note commit before this cleanup pass: `4b69f50 docs: record current recall status`
 - Branch: `main`
 - Remote: `origin/main`
-- Latest committed changes were intentionally scoped to deterministic extraction,
-  acquisition recovery, comparison/normalization, migration safety, and tests.
+- Recent committed changes were intentionally scoped to deterministic extraction,
+  acquisition recovery, comparison/normalization, migration safety, status docs,
+  and tests.
 - There are unrelated local dirty files in this checkout. Do not assume they are
-  part of `19ae63f` unless they are explicitly staged/committed later.
+  part of this cleanup unless they are explicitly staged/committed later.
 
 ## Current Scored Baseline
 
@@ -146,6 +160,39 @@ The key generalization fixes already committed:
   `GVF_SSO_COOKIE_DOMAINS`.
 - PMC proof-of-work supplement gates fail explicitly if unsolved rather than
   silently saving challenge HTML as source content.
+
+## Bloat/Stale Audit
+
+Current tracking surface to keep:
+
+- This file: current metrics, current blockers, current next run plan.
+- `docs/NEW_GENE_RUNBOOK.md`: no-gold workflow and QC expectations.
+- `scripts/run_recall_suite.py` and `cli/compare_variants.py`: scored validation
+  and gold-standard comparison entrypoints.
+- `gvf gvf-run`, `scripts/fetch_paywalled.py`, `harvesting/pmc_pow.py`,
+  `pipeline/extraction.py`, and `pipeline/table_router.py`: current recovery
+  and extraction surfaces.
+
+Historical or diagnostic surfaces:
+
+- `scripts/recall_recovery/merge_v12_db.py`: KCNH2-only manual rescue; never
+  cold-start evidence.
+- `scripts/recall_recovery/ingest_clinvar.py` and `ingest_pubtator.py`: current
+  only when run with DB-observed PMIDs. Gold-PMID enrichment is diagnostic only.
+- `scripts/recall_recovery/recover_paywall_oa.py`: source-acquisition helper,
+  now generalized to explicit input/output paths; not a default pipeline layer.
+- `docs/TESTING.md`: reusable test prompt, not a current metrics source.
+- `validation_runs/`, `results/`, `recall_metrics/`, and Python `__pycache__/`
+  trees: generated/local artifacts and intentionally not the source of record
+  unless a path is referenced from this file.
+
+Already-addressed items that should not remain open:
+
+- Default LQTS PMID list in `scripts/fetch_paywalled.py`.
+- Personal fallback NCBI email in `scripts/fetch_paywalled.py`.
+- Fixed cardiac-only table-title gene filter in `pipeline/extraction.py`.
+- Target-gene hotspot filtering that dropped true TP53/KRAS/BRAF/PIK3CA variants.
+- PMC proof-of-work challenge pages being treated as usable supplement content.
 
 ## Next Run Plan
 
