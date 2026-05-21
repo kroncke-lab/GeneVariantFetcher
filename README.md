@@ -52,7 +52,8 @@ cd GeneVariantFetcher
 python -m venv .venv && source .venv/bin/activate
 pip install -e .
 
-# 2. Configure API keys (create .env file)
+# 2. Configure API keys
+cp .env.example .env
 cat > .env << 'EOF'
 ANTHROPIC_API_KEY=...
 NCBI_EMAIL=your@email.com
@@ -189,6 +190,9 @@ gvf gvf-run KCNH2 --email you@email.com --output ./validation_runs/my_run
 ```
 
 Use `--skip extract` to re-run recovery/scoring layers against an existing run.
+For portable end-to-end recall commands, including how to reuse copied full-text
+artifacts without committing them, see
+[`docs/END_TO_END_RECALL_RUN.md`](docs/END_TO_END_RECALL_RUN.md).
 
 #### Paywall Audit
 
