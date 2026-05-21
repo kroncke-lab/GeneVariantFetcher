@@ -104,6 +104,39 @@ use `scripts/run_insttoken_reextract_experiment.py`; add `--full-reextract`
 when you want to back up and regenerate every extraction JSON from the full text
 that is already on disk.
 
+## Full-Text Acquisition Only
+
+To audit or extend the full-text corpus without running extraction, scoring, or
+DB migration:
+
+```bash
+.venv/bin/python scripts/fulltext_acquisition_pass.py --target gold
+```
+
+Copy already-downloaded usable full text from prior local runs into the current
+canonical recall directories:
+
+```bash
+.venv/bin/python scripts/fulltext_acquisition_pass.py \
+  --target gold \
+  --consolidate
+```
+
+Use the current `.env` publisher credentials, including `ELSEVIER_INSTTOKEN`, to
+try downloading the remaining missing or weak full-text files:
+
+```bash
+.venv/bin/python scripts/fulltext_acquisition_pass.py \
+  --target gold \
+  --consolidate \
+  --harvest \
+  --max-pmids 50
+```
+
+For all discovered PMIDs rather than just gold-standard PMIDs, use
+`--target discovered`. That can mean thousands of network attempts, so combine
+it with `--max-pmids` for bounded passes.
+
 ## Scoring and Comparison
 
 The re-extract driver runs scoring automatically. Manual scoring is:
