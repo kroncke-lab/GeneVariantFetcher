@@ -11,6 +11,11 @@ Do not treat `.claude/worktrees/`, `.codex/worktrees/`, old `Projects/`, or
 remote `/mnt/temp4/` copies as authoritative. They are historical side
 worktrees or scratch checkouts and can lag behind `main`.
 
+Coordination rule: side folders/worktrees are fine for experiments, but useful
+work should be merged into this checkout and pushed to `origin/main` before any
+agent calls it the current implementation. If `main` is dirty, either commit and
+push the coherent change set or state exactly what remains uncommitted.
+
 You're working on **GeneVariantFetcher (GVF)** — a pipeline that extracts
 genetic variants from biomedical literature for the Kroncke Lab variant
 interpretation toolkit. Goal: **90% unique-variant recall by June 2026**
@@ -80,6 +85,11 @@ truth and do not duplicate live recall tables here.
   gold-PMID-conditioned enrichment layers. Current code defaults ClinVar and
   PubTator enrichment to DB-observed PMIDs only; use gold-PMID enrichment only
   as an explicitly labeled diagnostic.
-- The current bottleneck is source/table coverage: missing supplements,
-  paywalled publisher tables, browser challenges, and incomplete extraction of
-  high-loss PMIDs such as KCNH2 PMID 15840476.
+- As of 2026-05-21 the Elsevier institutional token (`X-ELS-Insttoken`) is
+  active and 242/246 (98.4%) previously-paywalled Elsevier candidates across
+  KCNH2/KCNQ1/RYR2/SCN5A/KCNE1 now return full text. KCNH2 PMID 15840476
+  (`10.1016/j.hrthm.2005.01.020`, Tester et al. 2005) is among the unlocked
+  set. The current bottleneck has shifted to re-extraction against the saved
+  `_FULL_CONTEXT.md` files plus residual non-Elsevier paywalls (Wiley revoked
+  key, Karger Cloudflare, Sage CF fingerprint). See `docs/RECALL_STATUS.md` for
+  the 2026-05-21 activation details and the next-run plan.

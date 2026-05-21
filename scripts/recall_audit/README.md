@@ -17,6 +17,27 @@ The run directory must contain `dbs/{GENE}.db` and `recall_score/`.
 .venv/bin/python scripts/recall_audit/acquisition_status_per_pmid.py --gene SCN5A --summary
 ```
 
+Claim-verification pilots compare against adjudicated `gold_v2_*` columns when
+present and otherwise fall back to the original gold values. Use
+`--gold-value-set original` to reproduce the original-gold comparison. The
+escalation-queue builder can also consume direct verification records so
+high-risk trusted-consensus cases are queued even when debate agrees:
+
+```bash
+.venv/bin/python scripts/recall_audit/rescore_claim_verification_records.py \
+  --records-jsonl /path/to/claim_verification_records.jsonl \
+  --out-dir /tmp/claim_verify_rescore_v2 \
+  --gold-value-set v2
+.venv/bin/python scripts/recall_audit/rescore_claim_debate_records.py \
+  --records-jsonl /path/to/claim_debate_records.jsonl \
+  --out-dir /tmp/claim_debate_rescore_v2 \
+  --gold-value-set v2
+.venv/bin/python scripts/recall_audit/build_claim_debate_escalation_queue.py \
+  --debate-records /path/to/claim_debate_records.jsonl \
+  --verification-records /path/to/claim_verification_records.jsonl \
+  --out-csv /tmp/escalation_queue.csv
+```
+
 `end_to_end_pmid_replay.py` makes a real LLM call and should be used only for a
 targeted PMID after a prompt/parser change:
 

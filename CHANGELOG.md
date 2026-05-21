@@ -5,7 +5,27 @@ All notable changes to GeneVariantFetcher will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2026-05-20
+## [Unreleased] - 2026-05-21
+
+### Added
+- `scripts/test_insttoken_unlock.py` probes paywalled Elsevier DOIs through
+  `ElsevierAPIClient` with the institutional token and writes unlocked bodies
+  as `{PMID}_FULL_CONTEXT.md` into each run's existing `pmc_fulltext/`
+  directory. Pre-existing stub files preserved as `*.pre_insttoken_bak`.
+
+### Changed
+- `ELSEVIER_INSTTOKEN` is now active in `.env` (issued 2026-05-21 by Elsevier
+  Data Support against the Vanderbilt-registered API key). Unlock probe across
+  KCNH2/KCNQ1/RYR2/SCN5A/KCNE1 paywalled lists: **242/246 (98.4%) full text**.
+- `docs/RECALL_STATUS.md` adds a "2026-05-21 Elsevier Insttoken Activation"
+  section with the probe table, file-landing inventory, and a measured
+  pre-re-extraction PMID-recall baseline (KCNH2 87.8%, KCNQ1 80.3%, RYR2 68.0%,
+  SCN5A 70.9%, aggregate 75.4%). The "Next Run Plan" now leads with
+  re-extraction rather than acquisition.
+- `docs/vanderbilt_api_access.md`, `CLAUDE.md`, and `TASKS.md` updated to
+  reflect the insttoken activation and the new highest-ROI step (re-extraction).
+
+## [Pre-insttoken] - 2026-05-20
 
 ### Added
 - `gvf gvf-run` turnkey driver for doctor checks, extraction, deterministic

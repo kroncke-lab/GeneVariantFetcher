@@ -62,6 +62,11 @@ GOLD_FIELD_MAP = {
     "affected": "affected",
     "unaffected": "unaffected",
 }
+GOLD_V2_FIELD_MAP = {
+    "total_carriers": "gold_v2_carriers",
+    "affected": "gold_v2_affected",
+    "unaffected": "gold_v2_unaffected",
+}
 
 DEFAULT_GENE_DISEASES = {
     "KCNH2": "Long QT syndrome type 2, Short QT syndrome",
@@ -116,6 +121,8 @@ def evaluate_field(
     field: str,
     db_value: int | None,
     gold_value: int | None,
+    original_gold_value: int | None,
+    gold_value_source: str,
     verification: dict[str, Any],
 ) -> dict[str, Any]:
     trusted = trusted_value(field, db_value, verification)
@@ -135,6 +142,9 @@ def evaluate_field(
         "field": field,
         "db_value": db_value,
         "gold_value": gold_value,
+        "original_gold_value": original_gold_value,
+        "gold_value_source": gold_value_source,
+        "gold_changed_from_original": gold_value != original_gold_value,
         "trusted_value": trusted,
         "before_wrong": before_wrong,
         "before_correct": before_correct,
@@ -167,9 +177,30 @@ def values_from_row(row: dict[str, Any]) -> dict[str, int | None]:
     return {field: parse_int(row.get(DB_FIELD_MAP[field])) for field in FIELDS}
 
 
+def has_adjudicated_gold(row: dict[str, Any]) -> bool:
+    """Return true when a row carries an explicit v2/adjudicated gold decision."""
+    return bool(str(row.get("gold_v2_status") or "").strip())
+
+
+def gold_value(
+    row: dict[str, Any], field: str, *, gold_value_set: str = "v2"
+) -> int | None:
+    if gold_value_set == "v2" and has_adjudicated_gold(row):
+        return parse_int(row.get(GOLD_V2_FIELD_MAP[field]))
+    return parse_int(row.get(GOLD_FIELD_MAP[field]))
+
+
+def gold_value_source(row: dict[str, Any], *, gold_value_set: str = "v2") -> str:
+    if gold_value_set == "v2" and has_adjudicated_gold(row):
+        return "gold_v2"
+    return "original"
+
+
 def best_gold_row(
     gold_rows: list[dict[str, Any]],
     values: dict[str, int | None],
+    *,
+    gold_value_set: str = "v2",
 ) -> dict[str, Any]:
     if not gold_rows:
         return {}
@@ -179,13 +210,17 @@ def best_gold_row(
         distance = 0
         for field, gold_field in GOLD_FIELD_MAP.items():
             value = values.get(field)
-            gold_value = parse_int(row.get(gold_field))
-            if value is None or gold_value is None:
+            expected = (
+                gold_value(row, field, gold_value_set=gold_value_set)
+                if gold_value_set == "v2"
+                else parse_int(row.get(gold_field))
+            )
+            if value is None or expected is None:
                 continue
-            if value == gold_value:
+            if value == expected:
                 exact += 1
             else:
-                distance += abs(value - gold_value)
+                distance += abs(value - expected)
         return exact, -distance
 
     return max(gold_rows, key=score)
@@ -200,6 +235,7 @@ def run_for_case(
     disease: str | None,
     max_cards_per_paper: int,
     dry_run: bool,
+    gold_value_set: str,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     gene = case["gene"].upper()
     pmid = case["pmid"]
@@ -273,12 +309,17 @@ def run_for_case(
             verification = normalize_verification(verification)
 
         gold_rows = gold.get(canonical_variant(display), [])
-        gold_row = best_gold_row(gold_rows, values_from_row(row))
+        gold_row = best_gold_row(
+            gold_rows, values_from_row(row), gold_value_set=gold_value_set
+        )
+        value_source = gold_value_source(gold_row, gold_value_set=gold_value_set)
         field_evals = [
             evaluate_field(
                 field=field,
                 db_value=parse_int(row.get(DB_FIELD_MAP[field])),
-                gold_value=parse_int(gold_row.get(GOLD_FIELD_MAP[field])),
+                gold_value=gold_value(gold_row, field, gold_value_set=gold_value_set),
+                original_gold_value=parse_int(gold_row.get(GOLD_FIELD_MAP[field])),
+                gold_value_source=value_source,
                 verification=verification,
             )
             for field in FIELDS
@@ -293,6 +334,8 @@ def run_for_case(
                 "in_gold": bool(gold_rows),
                 "gold_candidate_rows": len(gold_rows),
                 "matched_gold_row": gold_row,
+                "gold_value_set": gold_value_set,
+                "gold_value_source": value_source,
                 "source_context": str(contexts[0]),
                 "card": card.__dict__,
                 "verification": verification,
@@ -404,6 +447,14 @@ def main() -> int:
     parser.add_argument("--results-dir", default=str(DEFAULT_RESULTS_DIR))
     parser.add_argument("--out-dir", required=True)
     parser.add_argument("--model", action="append", dest="models")
+    parser.add_argument(
+        "--experimental-azure-models",
+        action="store_true",
+        help=(
+            "Append opt-in Azure deployments from GPT54_DEPLOYMENT and "
+            "DEEPSEEK_DEPLOYMENT."
+        ),
+    )
     parser.add_argument("--pmid", action="append", dest="pmids")
     parser.add_argument(
         "--disease",
@@ -418,6 +469,16 @@ def main() -> int:
         help="Select cases round-robin by gene instead of taking the CSV prefix.",
     )
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--gold-value-set",
+        choices=["v2", "original"],
+        default="v2",
+        help=(
+            "Gold columns used for field scoring. v2 uses populated "
+            "gold_v2_* adjudication columns and falls back to original "
+            "carriers/affected/unaffected."
+        ),
+    )
     args = parser.parse_args()
 
     cases = read_csv_rows(repo_path(args.cases_csv))
@@ -429,7 +490,12 @@ def main() -> int:
         cases = [case for case in cases if case.get("pmid") in wanted_pmids]
     cases = select_cases(cases, limit=args.limit_papers, balanced=args.balanced)
 
-    models = args.models or get_settings().get_tier3_adjudicator_models()
+    settings = get_settings()
+    models = args.models or settings.get_tier3_adjudicator_models()
+    if args.experimental_azure_models:
+        for model in settings.get_experimental_azure_models():
+            if model not in models:
+                models.append(model)
     out_dir = repo_path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -445,6 +511,7 @@ def main() -> int:
                 disease=args.disease,
                 max_cards_per_paper=args.max_cards_per_paper,
                 dry_run=args.dry_run,
+                gold_value_set=args.gold_value_set,
             )
             records.extend(case_records)
             errors.extend(case_errors)
@@ -474,6 +541,7 @@ def main() -> int:
         out_dir / "run_summary.json",
         {
             "models": models,
+            "gold_value_set": args.gold_value_set,
             "cases": len(cases),
             "records": len(records),
             "errors": len(errors),

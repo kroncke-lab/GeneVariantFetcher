@@ -100,10 +100,27 @@ for recall scoring. It carries one row per (variant, PMID) pair restricted to
 | `carriers` | Carrier total used for matching. Sum of all affected/unaffected/ambiguous/unknown counts. |
 | `affected` | Affected carriers only (sum across all disease-affected columns). |
 | `unaffected` | Unaffected/asymptomatic carriers from the source clinical table. |
+| `gold_v2_carriers` | Optional manually adjudicated carrier total. Original `carriers` is preserved. |
+| `gold_v2_affected` | Optional manually adjudicated affected-carrier count. |
+| `gold_v2_unaffected` | Optional manually adjudicated unaffected-carrier count; blank means explicit null when `gold_v2_status` is populated. |
+| `gold_v2_status` | Populated only for rows that received manual adjudication or confirmation. |
+| `gold_v2_note` | Short rationale for the v2 value. |
+| `gold_v2_source` | Local adjudication artifact path. |
 
 Cohort, personal-communication, and blank-PMID rows are dropped here on purpose
 — GVF's literature-extraction recall is measured only against PubMed-indexed
 sources.
+
+Claim-verification audits default to the v2 value set when `gold_v2_status` is
+populated, and otherwise fall back to the original gold columns. Use
+`--gold-value-set original` in `scripts/recall_audit/run_claim_verification_pilot.py`
+to reproduce original-gold scoring.
+
+Current adjudication semantics:
+
+- `carriers` means variant-positive people, not everyone enrolled, sampled, sequenced, or screened.
+- `affected` means variant carriers meeting the paper's disease/phenotype definition, including ECG/QTc-defined affection when the paper defines it that way.
+- `unaffected` means explicit unaffected/asymptomatic carriers. When v2 has a populated status and blank `gold_v2_unaffected`, the adjudicated value is intentionally null rather than the original unaffected count.
 
 ## Audit / QC outputs
 

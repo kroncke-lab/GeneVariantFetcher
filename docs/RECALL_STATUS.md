@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-05-20.
+Last updated: 2026-05-21.
 
 This note records the post-`19ae63f` state of the recall/generalization push so
 the next run can resume from the same baseline without relying on chat history.
@@ -98,6 +98,80 @@ affected/unaffected direction when the card included the local table evidence,
 while broader count-semantic cases often needed the verifier to withhold
 autopopulation rather than invent a corrected value.
 
+## 2026-05-21 Elsevier Insttoken Activation
+
+Vanderbilt's institutional Elsevier token (`X-ELS-Insttoken`) was issued by
+Elsevier Data Support (Jun Bautista) and installed into `.env` as
+`ELSEVIER_INSTTOKEN`. File permissions on `.env` were tightened to user-only
+(`chmod 600`). The token is sent only as a header in `harvesting/elsevier_api.py`
+(never in URLs), and `.env` is gitignored.
+
+### Unlock probe results (`scripts/test_insttoken_unlock.py`)
+
+Probed every Elsevier-DOI row in each gene's `paywalled_missing.csv` from the
+2026-05-18 turnkey run (plus the 2026-05-17 KCNQ1 run) by calling
+`ElsevierAPIClient.fetch_fulltext()` and writing successful bodies to
+`{PMID}_FULL_CONTEXT.md` directly inside the existing per-run
+`pmc_fulltext/` directory. Pre-existing stub files were preserved as
+`*.pre_insttoken_bak`.
+
+| Gene | Probed | Full text | Metadata-only | Error | Saved |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| KCNH2 | 70 | 69 | 0 | 1 | 69 |
+| SCN5A | 78 | 75 | 1 | 2 | 75 |
+| RYR2 | 51 | 51 | 0 | 0 | 51 |
+| KCNE1 | 22 | 22 | 0 | 0 | 22 |
+| KCNQ1 | 25 | 25 | 0 | 0 | 25 |
+| **Total** | **246** | **242 (98.4%)** | **1** | **3** | **242** |
+
+The four non-200 rows are not token failures:
+
+- SCN5A PMIDs 15913580 and 17368591: `10.1016/j.cardiores.*` — *Cardiovascular
+  Research* migrated from Elsevier to Oxford University Press in 2014. Old DOIs
+  keep the `10.1016/` registrant prefix but the articles are now served by OUP
+  and unreachable via the Elsevier API.
+- SCN5A PMID 35577255: `10.1016/j.jogc.2022.04.013` — *Journal of Obstetrics
+  and Gynaecology Canada*; likely outside Vanderbilt's ScienceDirect package.
+- KCNH2: 1 unresolved candidate; see per-gene unlock CSV.
+
+### Where the unlocked bodies live
+
+All saved into the run's existing `pmc_fulltext/` (no separate subdirs), so the
+standard extraction discovery path picks them up without per-PMID-dir plumbing:
+
+- `validation_runs/turnkey_e2e_20260518_213934/results/KCNH2/20260518_213938/pmc_fulltext/*_FULL_CONTEXT.md`
+- `validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/pmc_fulltext/*_FULL_CONTEXT.md`
+- `validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938/pmc_fulltext/*_FULL_CONTEXT.md`
+- `validation_runs/turnkey_e2e_20260518_213934/results/KCNE1/20260518_213938/pmc_fulltext/*_FULL_CONTEXT.md`
+- `validation_runs/20260517_203904/results/KCNQ1/20260517_204424/pmc_fulltext/*_FULL_CONTEXT.md`
+
+Each directory also contains an `insttoken_unlock_results.csv` with the
+per-PMID outcome.
+
+### Post-token PMID recall (no re-extraction yet)
+
+The scoring path computes PMID recall as `matched_pmids / gold_pmids` where a
+gold PMID counts as matched only if the SQLite DB has at least one extracted
+variant row that matches a gold variant on that PMID (see
+`cli/compare_variants.py:1949-1970`). Saving 242 full-text files into
+`pmc_fulltext/` therefore does not move PMID recall on its own — a re-extraction
+pass is required to convert the new text into DB rows.
+
+The honest measurement against the current DBs is below
+(`recall_metrics/post_insttoken_20260521/`):
+
+| Gene | PMIDs (matched/gold) | PMID recall | vs 90% target |
+| --- | ---: | ---: | ---: |
+| KCNH2 | 230/262 | 87.8% | -2.2 |
+| KCNQ1 | 90/112 | 80.3% | -9.7 |
+| RYR2 | 345/508 | 68.0% | -22.0 |
+| SCN5A | 752/1060 | 70.9% | -19.1 |
+| **Aggregate (4-gene)** | **1133/1502** | **75.4%** | **-14.6** |
+
+So the token unlock landed and 242 bodies are on disk, but the recall lift will
+not be realized until a re-extraction pass consumes them. That is now the
+single highest-leverage next step — see "Next Run Plan" below.
+
 ## Highest-Yield Remaining Missing PMIDs
 
 These are diagnostic targets from the gold-standard score. Do not hard-code them
@@ -132,19 +206,28 @@ into production logic.
 
 ## Current Main Barrier
 
-The dominant blocker is still acquisition of the right source material, especially
-full text and supplements from paywalled publisher pages. The Elsevier
-institution token is likely high leverage:
+As of 2026-05-21, the Elsevier insttoken unblock has landed (see
+"2026-05-21 Elsevier Insttoken Activation" above). The dominant remaining
+barrier shifts from *acquisition* to *converting the now-available source into
+DB rows*:
 
-- `ELSEVIER_API_KEY` is for API access.
-- `ELSEVIER_INSTTOKEN` is the institutional entitlement token that should unlock
-  subscription full text/supplements where Vanderbilt has access.
-- After setting `ELSEVIER_INSTTOKEN`, rerun targeted paywall/supplement recovery
-  first, then re-extract and rescore from the recovered `FULL_CONTEXT.md` files.
+1. **Re-extraction pass** for KCNH2, KCNQ1, RYR2, and SCN5A so the 242 newly
+   saved `_FULL_CONTEXT.md` files actually flow into the SQLite databases.
+   Without this, PMID recall is stuck at the 2026-05-18 baseline.
+2. **Non-Elsevier paywalls still outstanding**:
+   - Wiley: `WILEY_API_KEY` in `.env` is revoked. Human Mutation
+     (`10.1002/humu.*`) is unreachable until reissued.
+   - Karger: no institutional agreement and Cloudflare blocks the Playwright
+     stack. TDM request status unknown.
+   - Sage/Liebert (PMID 23631430): Cloudflare fingerprint rejection.
+3. **Extraction-side issues that recall still depends on** (unchanged from
+   the 2026-05-20 audit below): count semantics, affected/unaffected direction,
+   cDNA-only normalization, multi-gene supplement filtering, no-gold QC.
 
-This is particularly important for ScienceDirect/Elsevier papers where we saw
-paywall stubs, Cloudflare/403 behavior, or accepted manuscripts missing the
-supplement.
+For ScienceDirect/Elsevier papers, paywall stubs / 403 / accepted-manuscripts
+issues should now resolve at the API tier (Tier 2) instead of falling through
+to Tier 3.5 browser scraping. The browser stack remains useful for
+non-Elsevier paywalled sources.
 
 ## Downstream Extraction Issues Still Worth Fixing
 
@@ -253,15 +336,27 @@ Already-addressed items that should not remain open:
 
 ## Next Run Plan
 
-1. Set `ELSEVIER_API_KEY` and `ELSEVIER_INSTTOKEN`.
-2. Run a targeted Elsevier recovery pass for the highest-yield missing
-   ScienceDirect/Elsevier PMIDs, starting with SCN5A `29325976` and then the
-   next highest-yield SCN5A/KCNH2 entries.
-3. Confirm the recovered files are real article/supplement content, not paywall
-   stubs. Use content-quality checks and inspect variant/table density.
-4. Re-extract only the recovered PMIDs first.
-5. Merge into a copied DB using preserve/targeted migration mode.
-6. Rescore against the current baseline.
-7. Promote only general parser/acquisition fixes to code. Keep per-PMID recovery
+1. **DONE 2026-05-21:** `ELSEVIER_API_KEY` + `ELSEVIER_INSTTOKEN` set in
+   `.env`; 242/246 paywalled Elsevier candidates unlocked and saved as
+   `_FULL_CONTEXT.md` into each gene's `pmc_fulltext/`. See
+   "2026-05-21 Elsevier Insttoken Activation".
+2. **Next:** Re-extract each gene against the consolidated `pmc_fulltext/`
+   directories so the new bodies become SQLite rows. Recommended:
+   `gvf gvf-run KCNH2 --email brett.m.kroncke.1@vanderbilt.edu --output <ts>`
+   (and analogously for KCNQ1, RYR2, SCN5A). Honor existing `*_FULL_CONTEXT.md`
+   files; do not redownload.
+3. Rescore PMID/variant-row recall after each gene's re-extraction
+   (`scripts/run_recall_suite.py --score --genes <GENE> --db <GENE>=...`).
+   Expected: PMID recall rises substantially toward the 90% target, especially
+   for SCN5A (currently 70.9%) and RYR2 (currently 68.0%) where the unlocked
+   set is largest relative to gold PMID counts.
+4. Confirm the recovered files are real article/supplement content, not paywall
+   stubs. Use content-quality checks and inspect variant/table density. The
+   `*.pre_insttoken_bak` companion files preserve the pre-token stubs for
+   before/after comparison.
+5. Address the residual non-Elsevier paywalls
+   (Wiley key reissue, Karger TDM agreement, Sage CF) as smaller follow-up
+   unblocks.
+6. Promote only general parser/acquisition fixes to code. Keep per-PMID recovery
    artifacts in validation runs, not production branches.
-8. Add no-gold QC output before using the pipeline for new gene-disease runs.
+7. Add no-gold QC output before using the pipeline for new gene-disease runs.

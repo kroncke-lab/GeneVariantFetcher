@@ -388,6 +388,10 @@ NCBI_EMAIL=your@email.com          # For PubMed API
 ANTHROPIC_API_KEY=...              # Claude via LiteLLM
 # OPENAI_API_KEY=sk-...            # OpenAI alternative
 # AZURE_AI_API_KEY=...             # Azure AI Foundry alternative
+# GPT54_DEPLOYMENT=gpt-5.4         # Optional Azure side-by-side probe
+# DEEPSEEK_DEPLOYMENT=DeepSeek-V4-Pro
+# EARLY_DEBATE_MODELS=azure_ai/gpt-5.4,azure_ai/DeepSeek-V4-Pro
+# DEEPSEEK_RPM=4                   # Safe default for 20k tokens/minute quota
 
 # Recommended
 NCBI_API_KEY=...                   # 10x rate limits

@@ -40,7 +40,9 @@ logger = logging.getLogger(__name__)
 MODEL_TOKEN_LIMITS = {
     # Azure AI Foundry deployments — match by deployment name suffix so they
     # work regardless of the "azure_ai/" prefix LiteLLM expects.
+    "deepseek-v4-pro": (16384, 15000),  # DeepSeek V4 Pro via Azure
     "gpt-5.3-codex": (16384, 15000),  # OpenAI GPT-5.3 Codex via Azure
+    "gpt-5.4": (16384, 15000),  # OpenAI GPT-5.4 via Azure
     "kimi-k2": (16384, 15000),  # Moonshot Kimi K2 via Azure
     "grok-4": (16384, 15000),  # xAI Grok-4 reasoning via Azure
     # OpenAI models - gpt-4o has 16384 completion limit
@@ -169,6 +171,8 @@ def _model_provider_hint(model: Optional[str]) -> Optional[str]:
     m = (model or "").strip().lower()
     if m.startswith("anthropic/") or "claude" in m:
         return "anthropic"
+    if "deepseek" in m:
+        return "deepseek"
     if m.startswith("azure_ai/"):
         return "azure"
     return None
@@ -196,6 +200,8 @@ def _resolve_rpm_limit(model: Optional[str] = None) -> int:
         provider = _model_provider_hint(model)
         if provider == "anthropic":
             return settings.anthropic_rpm
+        if provider == "deepseek":
+            return settings.deepseek_rpm
         if provider == "azure":
             return settings.azure_rpm
         return settings.get_requests_per_minute()

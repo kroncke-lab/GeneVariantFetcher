@@ -11,6 +11,11 @@ Do not treat `.claude/worktrees/`, `.codex/worktrees/`, old `Projects/`, or
 remote `/mnt/temp4/` copies as authoritative. They are historical side
 worktrees or scratch checkouts and can lag behind `main`.
 
+Coordination rule: side folders/worktrees are fine for experiments, but useful
+work should be merged into this checkout and pushed to `origin/main` before any
+agent calls it the current implementation. If `main` is dirty, either commit and
+push the coherent change set or state exactly what remains uncommitted.
+
 GVF extracts genetic variants, carrier counts, and phenotype data from
 biomedical literature for the Kroncke Lab variant interpretation pipeline. The
 grant target is 90% unique-variant recall by June 2026.
@@ -62,17 +67,20 @@ handoff file does not drift.
 
 ## Highest ROI Blocker
 
-Elsevier full-text retrieval for ScienceDirect/Heart Rhythm/JACC-style blockers
-needs both headers:
+**As of 2026-05-21, the Elsevier insttoken unblock has landed.** Vanderbilt's
+institutional `X-ELS-Insttoken` is installed in `.env` and 242 of 246
+previously-paywalled Elsevier articles across KCNH2/SCN5A/RYR2/KCNE1/KCNQ1 now
+return full text via `harvesting/elsevier_api.py`. The unlocked bodies were
+saved as `{PMID}_FULL_CONTEXT.md` into each run's existing `pmc_fulltext/`
+directory; pre-token stub files were preserved as `*.pre_insttoken_bak`.
 
-```text
-X-ELS-APIKey:    <ELSEVIER_API_KEY>
-X-ELS-Insttoken: <ELSEVIER_INSTTOKEN>
-```
+The new ROI blocker is **re-extraction**: the saved full-text files do not
+affect PMID recall until the SQLite DBs are rebuilt against them. After
+re-extraction, expect PMID recall to lift substantially (currently
+KCNH2 87.8%, KCNQ1 80.3%, RYR2 68.0%, SCN5A 70.9%, aggregate 75.4%; target 90%).
 
-`.env` supports `ELSEVIER_INSTTOKEN` through the Elsevier API client. The API
-key alone can return metadata/abstract only. After the token is available, rerun
-targeted recovery and rescore from the current-status baseline.
+Residual non-Elsevier paywalls (Wiley revoked key, Karger Cloudflare,
+Sage CF fingerprint) remain in `TASKS.md` Blocked.
 
 ## Run On Another Computer Or VPN
 
@@ -135,9 +143,12 @@ Then rerun extraction/migration and score:
 
 Current active work is tracked in
 `docs/RECALL_STATUS.md`. Do not duplicate metric gaps here.
-The short version is: unlock Elsevier/ScienceDirect source acquisition, fix
-general count/affected-status extraction issues, rescore from the recorded
-baseline, and keep no-gold QC prominent for new genes.
+The short version (as of 2026-05-21): Elsevier source acquisition is unblocked;
+the next-highest leverage step is re-extracting KCNH2/KCNQ1/RYR2/SCN5A against
+the consolidated `pmc_fulltext/` directories so the unlocked bodies become DB
+rows. Beyond that: fix general count/affected-status extraction issues, address
+the remaining Wiley/Karger/Sage paywalls, and keep no-gold QC prominent for new
+genes.
 
 ## Files To Know
 

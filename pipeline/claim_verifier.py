@@ -222,7 +222,14 @@ final corrected value you return, not necessarily the original extracted value:
 - source_missing: the evidence says the relevant table/supplement is missing or absent.
 
 Important rules:
+- Count variant-positive people, not everyone enrolled, sampled, sequenced, or
+  screened in the cohort. If a paper says 39 cases and 46 controls were
+  sampled, but only 17 cases and 9 controls were heterozygous for the variant,
+  then total_carriers=26, affected=17, unaffected=9 for that variant.
 - Do not copy study-wide, family-set, domain, or mutation-class totals onto a variant.
+- Do not copy aggregate carrier counts across several variants/families onto
+  one variant unless a row, pedigree, or sentence gives that variant-specific
+  count.
 - If the original extracted value is wrong but the evidence supports a concrete
   replacement, mark that field directly_supported or inferred_supported and put
   the replacement integer in corrected_values.
@@ -248,6 +255,9 @@ Important rules:
 - Background/prior-literature, population-database, or referenced-study counts
   should not be treated as the present paper's primary cohort unless the claim
   explicitly describes that cohort.
+- If counts are in a pedigree, figure, or table that is referenced but missing
+  from the evidence packet, return null for the count fields rather than using
+  a nearby family/haplotype aggregate.
 - Return null for corrected count values unless the evidence supports a concrete integer.
 - The variant can be supported even when total/affected/unaffected are unsupported.
 

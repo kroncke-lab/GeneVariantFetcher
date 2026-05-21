@@ -6,7 +6,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import ClassVar, List, Optional, Union
 
-from pydantic import Field, field_validator, model_validator
+from pydantic import AliasChoices, Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
@@ -73,6 +73,18 @@ class Settings(BaseSettings):
     )
     azure_deployment_grok: Optional[str] = Field(
         default=None, env="AZURE_DEPLOYMENT_GROK"
+    )
+    azure_deployment_gpt54: Optional[str] = Field(
+        default=None,
+        validation_alias=AliasChoices("GPT54_DEPLOYMENT", "AZURE_DEPLOYMENT_GPT54"),
+        description="Azure AI Foundry GPT-5.4 deployment name",
+    )
+    azure_deployment_deepseek: Optional[str] = Field(
+        default=None,
+        validation_alias=AliasChoices(
+            "DEEPSEEK_DEPLOYMENT", "AZURE_DEPLOYMENT_DEEPSEEK"
+        ),
+        description="Azure AI Foundry DeepSeek deployment name",
     )
 
     # Model provider selector. When set to "anthropic" (default), per-tier
@@ -225,6 +237,14 @@ class Settings(BaseSettings):
         env="TIER3_MAX_VERIFIER_CARDS",
         description="Maximum per-variant evidence cards to verify in one extraction.",
     )
+    early_debate_models: Union[str, List[str]] = Field(
+        default="",
+        env="EARLY_DEBATE_MODELS",
+        description=(
+            "Comma-separated early debate critic models. If unset, defaults to "
+            "GPT54_DEPLOYMENT and DEEPSEEK_DEPLOYMENT via Azure."
+        ),
+    )
 
     # Table-router (router-first extraction): the LLM classifies which tables
     # contain variant data; a deterministic parser then reads the cells. Falls
@@ -343,6 +363,15 @@ class Settings(BaseSettings):
         env="AZURE_RPM",
         description="Default LLM requests-per-minute when MODEL_PROVIDER=azure",
     )
+    deepseek_rpm: int = Field(
+        default=4,
+        env="DEEPSEEK_RPM",
+        description=(
+            "DeepSeek deployment RPM cap. DeepSeek-V4-Pro is constrained by a "
+            "20k tokens/minute quota, so this stays below the 20 requests/minute "
+            "request cap for evidence-card prompts."
+        ),
+    )
     anthropic_max_workers: int = Field(
         default=10,
         env="ANTHROPIC_MAX_WORKERS",
@@ -458,6 +487,7 @@ class Settings(BaseSettings):
         env_file=_ENV_PATH,
         env_file_encoding="utf-8",
         extra="ignore",
+        populate_by_name=True,
     )
 
     @field_validator("tier3_models", mode="after")
@@ -473,6 +503,13 @@ class Settings(BaseSettings):
     @field_validator("tier3_adjudicator_models", mode="after")
     @classmethod
     def split_adjudicator_models(cls, v):
+        if isinstance(v, str):
+            return [item.strip() for item in v.split(",") if item.strip()]
+        return v
+
+    @field_validator("early_debate_models", mode="after")
+    @classmethod
+    def split_early_debate_models(cls, v):
         if isinstance(v, str):
             return [item.strip() for item in v.split(",") if item.strip()]
         return v
@@ -650,6 +687,45 @@ class Settings(BaseSettings):
         if self._is_anthropic() and not self._tier_env_set("vision_model"):
             return self.anthropic_vision_model
         return self.vision_model
+
+    @staticmethod
+    def _azure_model_string(deployment: str | None) -> str | None:
+        if deployment is None:
+            return None
+        value = deployment.strip()
+        if not value:
+            return None
+        if value.startswith("azure_ai/"):
+            return value
+        return f"azure_ai/{value}"
+
+    def get_experimental_azure_models(self) -> List[str]:
+        """Return opt-in Azure deployments for side-by-side model probes."""
+        models = [
+            self._azure_model_string(self.azure_deployment_gpt54),
+            self._azure_model_string(self.azure_deployment_deepseek),
+        ]
+        return [model for model in models if model]
+
+    def get_early_debate_models(self) -> List[str]:
+        """Return models used for the cheap reciprocal debate tier."""
+        if isinstance(self.early_debate_models, str):
+            configured = [
+                item.strip()
+                for item in self.early_debate_models.split(",")
+                if item.strip()
+            ]
+        else:
+            configured = list(self.early_debate_models)
+        if configured:
+            return configured
+        defaults = [
+            self._azure_model_string(self.azure_deployment_gpt54 or "gpt-5.4"),
+            self._azure_model_string(
+                self.azure_deployment_deepseek or "DeepSeek-V4-Pro"
+            ),
+        ]
+        return [model for model in defaults if model]
 
     # ------------------------------------------------------------------
     # Provider-aware rate-limit / concurrency
