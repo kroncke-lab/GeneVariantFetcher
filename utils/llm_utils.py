@@ -147,15 +147,22 @@ class RateLimiter:
         self._lock = threading.Lock()
 
     def wait_if_needed(self):
-        """Sleep if necessary to respect rate limit."""
+        """Sleep if necessary to respect rate limit.
+
+        Claim the next slot under the lock (so concurrent workers each get a
+        distinct slot), then release the lock before sleeping. The prior
+        implementation slept *inside* the lock, which serialized N workers
+        through ~min_interval each and collapsed effective parallelism — a
+        10-worker filter run with RPM=200 ran at ~21 RPM instead of ~200.
+        """
         with self._lock:
             current_time = time.time()
-            time_since_last = current_time - self.last_request_time
-            if time_since_last < self.min_interval:
-                sleep_time = self.min_interval - time_since_last
-                logger.debug(f"Rate limiting: sleeping {sleep_time:.2f}s")
-                time.sleep(sleep_time)
-            self.last_request_time = time.time()
+            next_slot = max(current_time, self.last_request_time + self.min_interval)
+            sleep_time = next_slot - current_time
+            self.last_request_time = next_slot
+        if sleep_time > 0:
+            logger.debug(f"Rate limiting: sleeping {sleep_time:.2f}s")
+            time.sleep(sleep_time)
 
 
 # Rate limiter resolution order:

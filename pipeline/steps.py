@@ -38,6 +38,23 @@ def _resolve_default_workers() -> int:
         return DEFAULT_MAX_WORKERS
 
 
+def _resolve_filter_workers() -> int:
+    """Pick the worker count for the Tier-2 LLM filter stage.
+
+    Reads Settings.filter_max_workers directly so the filter stage gets a
+    higher default (typically 20) independent of MAX_WORKERS, which users
+    legitimately set low (e.g. MAX_WORKERS=1) for extraction reasons. Filter
+    calls are small per-request and Anthropic comfortably handles 20+
+    concurrent abstract-classification prompts.
+    """
+    try:
+        from config.settings import get_settings
+
+        return get_settings().filter_max_workers
+    except Exception:
+        return DEFAULT_MAX_WORKERS
+
+
 # =============================================================================
 # Step Result Types
 # =============================================================================
@@ -512,7 +529,10 @@ def filter_papers(
     # FILTER_MAX_WORKERS env var lets you ratchet down concurrency when the
     # backing Azure deployment has tight per-minute quota. When neither the
     # env var nor an explicit kwarg is supplied, we fall through to the
-    # provider-aware Settings default (10 for Anthropic, 3 for Azure).
+    # filter-specific Settings default (Settings.filter_max_workers, typically
+    # 20 for Anthropic). This is independent of MAX_WORKERS, which extraction
+    # uses and which users often pin to 1 — at MAX_WORKERS=1 the filter would
+    # otherwise serialize to ~21 RPM despite Anthropic having spare capacity.
     env_workers = os.environ.get("FILTER_MAX_WORKERS")
     if env_workers:
         try:
@@ -521,13 +541,13 @@ def filter_papers(
             max_workers = (
                 filter_max_workers
                 if filter_max_workers and filter_max_workers > 0
-                else _resolve_default_workers()
+                else _resolve_filter_workers()
             )
     else:
         max_workers = (
             filter_max_workers
             if filter_max_workers and filter_max_workers > 0
-            else _resolve_default_workers()
+            else _resolve_filter_workers()
         )
 
     if pending_pmids and enable_tier2:

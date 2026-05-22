@@ -354,7 +354,7 @@ class Settings(BaseSettings):
     # / MAX_WORKERS / FILTER_MAX_WORKERS env vars still take precedence at the
     # call sites that read them.
     anthropic_rpm: int = Field(
-        default=200,
+        default=1000,
         env="ANTHROPIC_RPM",
         description="Default LLM requests-per-minute when MODEL_PROVIDER=anthropic",
     )
@@ -373,14 +373,29 @@ class Settings(BaseSettings):
         ),
     )
     anthropic_max_workers: int = Field(
-        default=10,
+        default=20,
         env="ANTHROPIC_MAX_WORKERS",
-        description="Default parallel workers (filter + extraction) for Anthropic",
+        description="Default parallel workers (extraction) for Anthropic",
     )
     azure_max_workers: int = Field(
         default=3,
         env="AZURE_MAX_WORKERS",
-        description="Default parallel workers (filter + extraction) for Azure",
+        description="Default parallel workers (extraction) for Azure",
+    )
+    # Filter-stage workers default higher than extraction. Tier-2 LLM filter
+    # calls are small (single abstract + 200-token JSON response) so Anthropic
+    # comfortably handles 20+ concurrent. Extraction calls are 10–100× larger
+    # and benefit from MAX_WORKERS=1–4. Keeping filter concurrency independent
+    # means the filter stage hits ~200+ RPM even when the user sets
+    # MAX_WORKERS=1 for extraction reasons.
+    filter_max_workers: int = Field(
+        default=20,
+        env="FILTER_MAX_WORKERS",
+        description=(
+            "Default parallel workers for the Tier-2 LLM filter (cli/discover, "
+            "filter step of extract). Independent of MAX_WORKERS used for "
+            "extraction. Anthropic recommended: 20+."
+        ),
     )
 
     # Figure/Image Extraction Configuration

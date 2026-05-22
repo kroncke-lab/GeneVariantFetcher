@@ -5,7 +5,40 @@ All notable changes to GeneVariantFetcher will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2026-05-21
+## [Unreleased] - 2026-05-22
+
+### Added
+- `scripts/discover_recall.py` — PMID-level recall harness comparing the
+  Tier-1 keyword filter + Tier-2 LLM filter against the gold-standard PMID
+  list. Auto-discovers the most-complete `filter_progress.jsonl` per gene,
+  or accepts explicit `--filter-progress GENE=PATH` overrides. Emits
+  per-gene JSON + an aggregate Markdown summary that breaks losses into
+  search-coverage / Tier-1 drops / Tier-2 drops.
+- `Settings.filter_max_workers` (env `FILTER_MAX_WORKERS`, default 20).
+  Separates filter-stage concurrency from extraction concurrency so the
+  Tier-2 LLM filter runs fast even when `MAX_WORKERS=1` is set for
+  extraction-side reasons.
+
+### Fixed
+- **`utils/llm_utils.RateLimiter.wait_if_needed`**: sleep now happens outside
+  the lock. The prior implementation slept *inside* `self._lock`, which
+  forced N parallel workers to serialize through ~`min_interval` each and
+  collapsed effective throughput.
+- **Filter-stage concurrency default**: at default `ANTHROPIC_MAX_WORKERS=10`
+  the Tier-2 filter hit a sustained ~21 RPM ceiling (Anthropic
+  burst→sustained throttle). Filter step now uses `filter_max_workers`
+  (default 20) → measured **354 RPM** on the same 100-PMID workload
+  (16.9× speedup at defaults; KCNQ1 full universe drops from ~3.7 hr to
+  ~15 min).
+
+### Removed
+- `docs/DOWNLOAD_PROTOCOL.md` (no incoming references; superseded by
+  Elsevier insttoken + Playwright recovery stack).
+- `docs/vanderbilt_api_access.md` (overlapping with `docs/API_KEYS.md`).
+- `CODEX.md` now mirrors `CLAUDE.md` verbatim so Codex and Claude agents
+  share a single handoff source.
+
+## [Prior Unreleased] - 2026-05-21
 
 ### Added
 - `scripts/test_insttoken_unlock.py` probes paywalled Elsevier DOIs through
