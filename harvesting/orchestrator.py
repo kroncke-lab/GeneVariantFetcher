@@ -1013,6 +1013,11 @@ class PMCHarvester:
                 continue
 
             try:
+                if len(content) == 0:
+                    last_error = f"{filename}: empty response body"
+                    print(f"    ⚠ {filename}: Empty response body")
+                    continue
+
                 # Validate the downloaded content
                 ext = output_path.suffix.lower()
 

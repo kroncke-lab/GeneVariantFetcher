@@ -50,6 +50,10 @@ class GeneRun:
         return self.run_dir / f"{self.gene}_pmids.txt"
 
     @property
+    def filter_progress_file(self) -> Path:
+        return self.run_dir / "pmid_status" / "filter_progress.jsonl"
+
+    @property
     def gold_pmids_file(self) -> Path:
         return (
             REPO_ROOT
@@ -142,7 +146,80 @@ def _read_gold_pmids(path: Path) -> list[str]:
     return pmids
 
 
-def target_pmids(run: GeneRun, target: str, pmid_file: Path | None) -> list[str]:
+def _read_tier2_pass_pmids(path: Path) -> list[str]:
+    """Return PMIDs whose final_decision in filter_progress.jsonl is PASS."""
+    pmids: list[str] = []
+    seen: set[str] = set()
+    if not path.exists():
+        return pmids
+    with path.open("r", encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if (rec.get("final_decision") or "").upper() != "PASS":
+                continue
+            pmid = str(rec.get("pmid") or "").strip()
+            if pmid.isdigit() and pmid not in seen:
+                seen.add(pmid)
+                pmids.append(pmid)
+    return pmids
+
+
+def _autodiscover_filter_progress(gene: str) -> Path | None:
+    """Find the most complete filter_progress.jsonl available for a gene.
+
+    Mirrors discover_recall.find_default_filter_progress: scans recall_metrics/,
+    validation_runs/, and results/, then picks the file with the most records
+    (newest wins on ties).
+    """
+    candidates: list[Path] = []
+    for root in (
+        REPO_ROOT / "recall_metrics",
+        REPO_ROOT / "validation_runs",
+        REPO_ROOT / "results",
+    ):
+        if not root.exists():
+            continue
+        candidates.extend(root.glob(f"**/{gene}/**/pmid_status/filter_progress.jsonl"))
+        candidates.extend(
+            root.glob(f"**/results/{gene}/**/pmid_status/filter_progress.jsonl")
+        )
+    if not candidates:
+        return None
+    candidates = list({c.resolve() for c in candidates})
+
+    def score(p: Path) -> tuple[int, float]:
+        try:
+            n = sum(1 for _ in p.open())
+        except OSError:
+            n = 0
+        return (n, p.stat().st_mtime)
+
+    candidates.sort(key=score, reverse=True)
+    return candidates[0]
+
+
+def resolve_filter_progress(run: GeneRun, overrides: dict[str, Path]) -> Path | None:
+    override = overrides.get(run.gene.upper())
+    if override:
+        return override
+    in_run = run.filter_progress_file
+    if in_run.exists():
+        return in_run
+    return _autodiscover_filter_progress(run.gene)
+
+
+def target_pmids(
+    run: GeneRun,
+    target: str,
+    pmid_file: Path | None,
+    filter_progress_overrides: dict[str, Path] | None = None,
+) -> list[str]:
     if target == "gold":
         return _read_gold_pmids(run.gold_pmids_file)
     if target == "discovered":
@@ -156,6 +233,15 @@ def target_pmids(run: GeneRun, target: str, pmid_file: Path | None) -> list[str]
         if pmid_file is None:
             raise ValueError("--target pmid-file requires --pmid-file")
         return _read_pmid_lines(pmid_file)
+    if target == "tier2-pass":
+        progress = resolve_filter_progress(run, filter_progress_overrides or {})
+        if progress is None:
+            raise FileNotFoundError(
+                f"No filter_progress.jsonl found for {run.gene}. Pass "
+                f"--filter-progress {run.gene}=<path> to override."
+            )
+        LOG.info("%s: tier2-pass source = %s", run.gene, _rel(progress))
+        return _read_tier2_pass_pmids(progress)
     raise ValueError(f"Unknown target: {target}")
 
 
@@ -199,6 +285,8 @@ def build_context_index(scan_roots: Iterable[Path]) -> dict[str, list[Path]]:
             LOG.warning("scan root does not exist: %s", root)
             continue
         for path in root.glob("**/*_FULL_CONTEXT.md"):
+            if not path.is_file():
+                continue
             pmid = _pmid_from_context_path(path)
             if pmid.isdigit():
                 index.setdefault(pmid, []).append(path)
@@ -365,14 +453,29 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--target",
-        choices=["gold", "discovered", "existing", "pmid-file"],
+        choices=["gold", "discovered", "existing", "pmid-file", "tier2-pass"],
         default="gold",
-        help="Which PMIDs to audit/acquire for each gene.",
+        help=(
+            "Which PMIDs to audit/acquire for each gene. 'tier2-pass' reads "
+            "pmid_status/filter_progress.jsonl and selects records with "
+            "final_decision=PASS (i.e., everything triage queued for download)."
+        ),
     )
     parser.add_argument(
         "--pmid-file",
         type=Path,
         help="PMID list used when --target pmid-file.",
+    )
+    parser.add_argument(
+        "--filter-progress",
+        action="append",
+        default=[],
+        metavar="GENE=PATH",
+        help=(
+            "Override the filter_progress.jsonl location for a gene when "
+            "--target tier2-pass. Repeatable. Genes without an override use "
+            "the run dir's pmid_status/, then auto-discovery."
+        ),
     )
     parser.add_argument(
         "--scan-root",
@@ -445,13 +548,25 @@ def main() -> int:
 
     index = build_context_index(path.expanduser().resolve() for path in args.scan_root)
 
+    filter_progress_overrides: dict[str, Path] = {}
+    for spec in args.filter_progress:
+        if "=" not in spec:
+            LOG.warning("--filter-progress %r missing '='; skipping", spec)
+            continue
+        gene_key, _, path_str = spec.partition("=")
+        filter_progress_overrides[gene_key.strip().upper()] = Path(
+            path_str.strip()
+        ).expanduser()
+
     before: list[dict] = []
     after: list[dict] = []
     copy_actions: list[CopyAction] = []
     harvest_reports: list[dict] = []
 
     for run in runs:
-        pmids = target_pmids(run, args.target, args.pmid_file)
+        pmids = target_pmids(
+            run, args.target, args.pmid_file, filter_progress_overrides
+        )
         before_audit = audit_run(run, pmids)
         before.append(before_audit)
 

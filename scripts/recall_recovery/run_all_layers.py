@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """One-shot driver: apply every gene-agnostic recall recovery layer in order.
 
-Layers (each scored against the gold standard so per-layer yield is visible):
+Layers run from DB-observed PMIDs by default. If ``--gold`` is supplied, each
+layer is scored so per-layer yield is visible; without gold, recovery still
+runs and writes progression/QC artifacts.
 
   0. baseline    — score the DB as-is (after main extraction + migration)
   1. clinvar     — ingest ClinVar variants citing PMIDs already in the DB
@@ -22,12 +24,11 @@ Usage::
         --pmc-dir results/KCNH2/20260517_074737/pmc_fulltext \\
         --with-v12 results/KCNH2/20260506_102238/end_to_end_20260515_manual_recovery/KCNH2_v12_manual_recovery_20260515.db
 
-    # Cold-start gene — no v12 path, just runs the gene-agnostic layers
+    # Cold-start/no-gold gene — no v12 path, just runs gene-agnostic layers
     python scripts/recall_recovery/run_all_layers.py \\
-        --gene KCNQ1 \\
-        --db results/KCNQ1/<timestamp>/KCNQ1.db \\
-        --gold gene_variant_fetcher_gold_standard/normalized/KCNQ1_recall_input.csv \\
-        --pmc-dir results/KCNQ1/<timestamp>/pmc_fulltext
+        --gene MYGENE \\
+        --db results/MYGENE/<timestamp>/MYGENE.db \\
+        --pmc-dir results/MYGENE/<timestamp>/pmc_fulltext
 """
 
 from __future__ import annotations
@@ -100,7 +101,7 @@ def score_layer(
 # ---------------------------------------------------------------------------
 
 
-def run_clinvar(gene: str, db: Path, gold: Path, pmid_source: str) -> dict:
+def run_clinvar(gene: str, db: Path, gold: Optional[Path], pmid_source: str) -> dict:
     cmd = [
         sys.executable,
         str(REPO_ROOT / "scripts" / "recall_recovery" / "ingest_clinvar.py"),
@@ -108,11 +109,11 @@ def run_clinvar(gene: str, db: Path, gold: Path, pmid_source: str) -> dict:
         gene,
         "--db",
         str(db),
-        "--gold",
-        str(gold),
         "--pmid-source",
         pmid_source,
     ]
+    if gold:
+        cmd.extend(["--gold", str(gold)])
     logger.info("clinvar → %s", " ".join(cmd))
     result = subprocess.run(cmd, capture_output=True, text=True)
     logger.debug("stdout: %s", result.stdout)
@@ -124,7 +125,7 @@ def run_clinvar(gene: str, db: Path, gold: Path, pmid_source: str) -> dict:
         return {"added": None}
 
 
-def run_pubtator(gene: str, db: Path, gold: Path, pmid_source: str) -> dict:
+def run_pubtator(gene: str, db: Path, gold: Optional[Path], pmid_source: str) -> dict:
     cmd = [
         sys.executable,
         str(REPO_ROOT / "scripts" / "recall_recovery" / "ingest_pubtator.py"),
@@ -132,11 +133,11 @@ def run_pubtator(gene: str, db: Path, gold: Path, pmid_source: str) -> dict:
         gene,
         "--db",
         str(db),
-        "--gold",
-        str(gold),
         "--pmid-source",
         pmid_source,
     ]
+    if gold:
+        cmd.extend(["--gold", str(gold)])
     logger.info("pubtator → %s", " ".join(cmd))
     result = subprocess.run(cmd, capture_output=True, text=True)
     logger.debug("stdout: %s", result.stdout)
@@ -225,7 +226,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("--gene", required=True, help="Gene symbol (e.g. KCNH2, KCNQ1)")
     p.add_argument("--db", required=True, help="Path to the recall SQLite DB")
-    p.add_argument("--gold", required=True, help="Path to the gold-standard recall CSV")
+    p.add_argument(
+        "--gold",
+        default=None,
+        help=(
+            "Path to the gold-standard recall CSV. Optional in DB-PMID mode; "
+            "when omitted, recovery layers run but per-layer recall scoring is skipped."
+        ),
+    )
     p.add_argument(
         "--pmc-dir",
         default=None,
@@ -263,6 +271,11 @@ def build_parser() -> argparse.ArgumentParser:
             "evaluation-aided and should not be used for cold-start recall claims."
         ),
     )
+    p.add_argument(
+        "--no-score",
+        action="store_true",
+        help="Skip per-layer recall scoring even when --gold is supplied.",
+    )
     p.add_argument("--verbose", "-v", action="store_true")
     return p
 
@@ -276,7 +289,7 @@ def main() -> int:
 
     gene = args.gene.upper()
     db = Path(args.db)
-    gold = Path(args.gold)
+    gold = Path(args.gold) if args.gold else None
     pmc_dir = Path(args.pmc_dir) if args.pmc_dir else None
     v12 = Path(args.with_v12) if args.with_v12 else None
     skip = {s.lower() for s in args.skip}
@@ -284,8 +297,11 @@ def main() -> int:
 
     if not db.exists():
         sys.exit(f"DB not found: {db}")
-    if not gold.exists():
+    if args.allow_gold_pmid_enrichment and not gold:
+        sys.exit("--gold is required with --allow-gold-pmid-enrichment")
+    if gold and not gold.exists():
         sys.exit(f"Gold CSV not found: {gold}")
+    scoring_enabled = bool(gold and not args.no_score)
 
     if args.backup:
         backup = db.with_suffix(db.suffix + ".before_layers.db")
@@ -308,7 +324,11 @@ def main() -> int:
     progression: list[dict] = []
 
     def record(label: str, extra: Optional[dict] = None) -> None:
-        recall = score_layer(gene, db, gold, outdir / f"score_{label}")
+        recall = (
+            score_layer(gene, db, gold, outdir / f"score_{label}")
+            if scoring_enabled and gold
+            else {}
+        )
         row = {
             "layer": label,
             **{
@@ -341,17 +361,21 @@ def main() -> int:
         info = run_figures(gene, db, pmc_dir, outdir / "figure_reads")
         record("3_figures", extra={"figures_added": info.get("total_db_added")})
     if v12:
-        info = run_v12_merge(gene, db, gold, v12)
-        record("4_v12_merge", extra={"v12": str(v12)})
+        if not gold:
+            logger.error("Skipping v12 merge because --gold is required for gold PMIDs")
+        else:
+            info = run_v12_merge(gene, db, gold, v12)
+            record("4_v12_merge", extra={"v12": str(v12)})
 
     summary = {
         "gene": gene,
         "db": str(db),
-        "gold": str(gold),
+        "gold": str(gold) if gold else None,
         "pmc_dir": str(pmc_dir) if pmc_dir else None,
         "v12_db": str(v12) if v12 else None,
         "skipped": sorted(skip),
         "enrichment_pmid_source": pmid_source,
+        "scoring_enabled": scoring_enabled,
         "progression": progression,
     }
     (outdir / "progression.json").write_text(json.dumps(summary, indent=2))

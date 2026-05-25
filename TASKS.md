@@ -58,6 +58,10 @@
   - [x] Confirmed KCNH2, RYR2, and SCN5A remain below 90% on all scored recall metrics except RYR2 unaffected.
   - [x] Confirmed KCNE1 extraction completes but cannot be scored without a gold recall input.
   - [x] Removed default KCNH2 v12 auto-merge, removed gold-PMID leakage from default recovery, added DB backups, broadened LLM provider checks, filtered non-article LinkOuts, added retry/challenge handling, and guarded Data Scout against oversized raw contexts.
+- [x] **Source-driven DB refresh path (2026-05-25)**
+  - [x] Added `scripts/refresh_run_db.py` as the safe alternative to SQLite row patching: select stale/under-counted source artifacts, rewrite canonical extraction JSON, rebuild the DB, then run recovery layers.
+  - [x] Made recovery layers run in DB-PMID mode without requiring a gold standard, so no-gold genes still get ClinVar, PubTator, and figure recovery plus internal QC artifacts.
+  - [x] Added source fingerprints and abstract-only fallback guards so reruns skip already-refreshed JSON unless the source changes.
 
 ## Active Tasks
 - [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in `docs/RECALL_STATUS.md`.

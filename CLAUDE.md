@@ -65,7 +65,7 @@ Current high-yield missing PMIDs are listed in
 `docs/RECALL_STATUS.md`. Keep PMID rankings there so this
 handoff file does not drift.
 
-## Highest ROI Blocker
+## Current Recovery Path
 
 **As of 2026-05-21, the Elsevier insttoken unblock has landed.** Vanderbilt's
 institutional `X-ELS-Insttoken` is installed in `.env` and 242 of 246
@@ -74,10 +74,12 @@ return full text via `harvesting/elsevier_api.py`. The unlocked bodies were
 saved as `{PMID}_FULL_CONTEXT.md` into each run's existing `pmc_fulltext/`
 directory; pre-token stub files were preserved as `*.pre_insttoken_bak`.
 
-The new ROI blocker is **re-extraction**: the saved full-text files do not
-affect PMID recall until the SQLite DBs are rebuilt against them. After
-re-extraction, expect PMID recall to lift substantially (currently
-KCNH2 87.8%, KCNQ1 80.3%, RYR2 68.0%, SCN5A 70.9%, aggregate 75.4%; target 90%).
+Do not patch SQLite rows directly to consume newly recovered sources. Use
+`scripts/refresh_run_db.py` for existing runs: it selects stale or under-counted
+PMIDs from source artifacts, rewrites canonical extraction JSON, rebuilds a
+fresh DB from the full extraction directory, and then runs DB-observed recovery
+layers. Gold standards are optional; without gold, the same recovery layers run
+and scoring is skipped.
 
 Residual non-Elsevier paywalls (Wiley revoked key, Karger Cloudflare,
 Sage CF fingerprint) remain in `TASKS.md` Blocked.
@@ -143,17 +145,21 @@ Then rerun extraction/migration and score:
 
 Current active work is tracked in
 `docs/RECALL_STATUS.md`. Do not duplicate metric gaps here.
-The short version (as of 2026-05-21): Elsevier source acquisition is unblocked;
-the next-highest leverage step is re-extracting KCNH2/KCNQ1/RYR2/SCN5A against
-the consolidated `pmc_fulltext/` directories so the unlocked bodies become DB
-rows. Beyond that: fix general count/affected-status extraction issues, address
-the remaining Wiley/Karger/Sage paywalls, and keep no-gold QC prominent for new
+The short version: source acquisition improved after the Elsevier insttoken
+unblock, and the refresh/rebuild path now exists for converting recovered
+source artifacts into DB rows without gold-standard-dependent logic. Beyond
+that: fix general count/affected-status extraction issues, address the
+remaining Wiley/Karger/Sage paywalls, and keep no-gold QC prominent for new
 genes.
 
 ## Files To Know
 
 - `cli/compare_variants.py` - gold-standard matcher and recall summary.
 - `scripts/run_recall_suite.py` - multi-gene recall scoring.
+- `scripts/refresh_run_db.py` - safe source -> extraction JSON -> DB refresh
+  path for existing runs; gold is optional.
+- `scripts/recall_recovery/run_all_layers.py` - DB-observed ClinVar, PubTator,
+  and figure recovery layers.
 - `scripts/fetch_paywalled.py` - canonical paywall recovery entry point.
 - `harvesting/browser_html/` - authenticated browser recovery strategies.
 - `harvesting/browser_html/content_quality.py` - paywall/stub quality gate.

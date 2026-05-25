@@ -649,17 +649,22 @@ def automated_variant_extraction_workflow(
             )
 
             try:
-                qa_result = qa_extractor.extract(paper_obj, gene_symbol)
+                qa_result = qa_extractor.extract(paper_obj)
                 if qa_result and qa_result.extracted_data:
                     qa_variants = qa_result.extracted_data.get("variants", [])
                     if qa_variants:
                         qa_recovered += 1
-                        # Save QA extraction alongside the original
-                        qa_output = extraction_dir / f"{zv_pmid}_qa_extraction.json"
+                        # Save QA audit output outside the migrated top-level
+                        # extraction glob, then replace the canonical JSON.
+                        qa_dir = extraction_dir / "qa_reextractions"
+                        qa_dir.mkdir(exist_ok=True)
+                        qa_output = qa_dir / f"{gene_symbol}_PMID_{zv_pmid}_qa.json"
                         with open(qa_output, "w") as qf:
                             json.dump(qa_result.extracted_data, qf, indent=2)
                         # Also overwrite the original extraction file
-                        orig_output = extraction_dir / f"{zv_pmid}_extraction.json"
+                        orig_output = (
+                            extraction_dir / f"{gene_symbol}_PMID_{zv_pmid}.json"
+                        )
                         with open(orig_output, "w") as of:
                             json.dump(qa_result.extracted_data, of, indent=2)
                         logger.info(

@@ -62,13 +62,40 @@ python harvesting/migrate_to_sqlite.py \
 
 Check that the DB has non-zero `papers`, `variants`, `variant_papers`, and, for clinical papers, `individual_records` or `penetrance_data`.
 
+If source recovery lands after the initial run, do not patch SQLite rows
+directly. Refresh from source artifacts so the run remains reproducible:
+
+```bash
+python scripts/refresh_run_db.py \
+  --gene GENE \
+  --run-dir results/GENE/<timestamp> \
+  --replace-db
+```
+
+This selects stale or under-counted PMIDs from reusable source files, rewrites
+canonical extraction JSONs, rebuilds a fresh DB from the complete extraction
+directory, then runs DB-observed recovery layers. A gold standard is optional;
+without one, recall scoring is skipped but the same ClinVar, PubTator, and
+figure recovery layers still run.
+
 ## 6. Cold-Start Recovery Layers
 
-Run only layers that are gene-agnostic:
+Run only layers that are gene-agnostic. `gvf-run` and `refresh_run_db.py` call
+the combined layer driver automatically; for manual runs use:
 
-1. ClinVar PMID-citation recovery with `--gene`, `--db`, and the default `--pmid-source db`.
-2. PubTator recovery with `--gene`, `--db`, and the default `--pmid-source db`; override `--gene-id` only if auto-resolution is wrong.
-3. Figure reader on every PMID with a `*_figures/` directory, after the CLI gains `--auto-pmids`.
+```bash
+python scripts/recall_recovery/run_all_layers.py \
+  --gene GENE \
+  --db results/GENE/<timestamp>/GENE.db \
+  --pmc-dir results/GENE/<timestamp>/pmc_fulltext \
+  --backup
+```
+
+The layer driver uses DB-observed PMIDs by default:
+
+1. ClinVar PMID-citation recovery with `--pmid-source db`.
+2. PubTator recovery with `--pmid-source db`; override `--gene-id` only if auto-resolution is wrong.
+3. Figure reader on every PMID with a `*_figures/` directory.
 
 Do not use `--pmid-source gold` for cold-start claims. That mode is diagnostic
 only because it uses the target answer set to choose enrichment PMIDs.

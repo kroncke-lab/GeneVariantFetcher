@@ -43,6 +43,9 @@ from utils.variant_scanner import (
 
 logger = logging.getLogger(__name__)
 
+TABLE_HINT_MAX_VARIANTS = SCANNER_MAX_HINTS
+TABLE_REGEX_MERGE_MAX_VARIANTS = 500
+
 
 def _find_data_zones_file(
     pmid: str, search_dirs: Optional[List[str]] = None
@@ -637,7 +640,9 @@ class ExpertExtractor(BaseLLMCaller):
         extracted_data["variants"] = existing_variants
         return extracted_data
 
-    def _format_table_hints(self, table_variants: List[dict]) -> str:
+    def _format_table_hints(
+        self, table_variants: List[dict], max_hints: int = TABLE_HINT_MAX_VARIANTS
+    ) -> str:
         """
         Format pre-extracted table variants as structured hints for the LLM prompt.
 
@@ -654,7 +659,10 @@ class ExpertExtractor(BaseLLMCaller):
             "",
         ]
 
-        for i, v in enumerate(table_variants, 1):
+        shown_variants = table_variants[:max_hints]
+        omitted = max(0, len(table_variants) - len(shown_variants))
+
+        for i, v in enumerate(shown_variants, 1):
             parts = [f"{i}."]
             if v.get("cdna_notation"):
                 parts.append(v["cdna_notation"])
@@ -663,6 +671,11 @@ class ExpertExtractor(BaseLLMCaller):
             if v.get("source_location"):
                 parts.append(f"[{v['source_location']}]")
             hints.append(" ".join(parts))
+
+        if omitted:
+            hints.append(
+                f"... {omitted} additional table-detected variants omitted from prompt hints."
+            )
 
         hints.append("\n--- END PRE-EXTRACTED HINTS ---\n")
         return "\n".join(hints)
@@ -1174,7 +1187,14 @@ class ExpertExtractor(BaseLLMCaller):
     def _clean_table_cell(self, value: Optional[str]) -> Optional[str]:
         if value is None:
             return None
-        cleaned = value.strip().replace(" ", "")
+        cleaned = (
+            value.strip()
+            .replace(" ", "")
+            .replace("\u00a0", "")
+            .replace("\u2009", "")
+            .replace("\u200a", "")
+            .rstrip(",;")
+        )
         if not cleaned or cleaned.lower() in {"nan", "na", "n/a", "none", "-", "."}:
             return None
         return cleaned
@@ -1212,6 +1232,7 @@ class ExpertExtractor(BaseLLMCaller):
                 cleaned = "c." + cleaned[1:]
             else:
                 cleaned = "c." + cleaned
+        cleaned = "c." + cleaned[2:].upper()
         if self.CDNA_TABLE_VALUE_RE.match(cleaned):
             return cleaned
         return None
@@ -1567,6 +1588,129 @@ class ExpertExtractor(BaseLLMCaller):
         if variants:
             logger.info(
                 f"Parsed {len(variants)} variants via deterministic markdown table parser"
+            )
+        return variants
+
+    def _parse_vertical_gene_table_variants(
+        self, full_text: str, gene_symbol: Optional[str]
+    ) -> List[dict]:
+        """
+        Parse stacked PDF/HTML supplement tables where each cell is on its own line.
+
+        Example shape after text extraction:
+
+            Gene
+            Nucleotide
+            Amino acids
+            ...
+            RYR2
+            1258c>t
+            R420W
+            NT
+
+        This is common in publisher/PDF supplements that are not valid markdown
+        tables or fixed-width rows. We only emit rows where the target gene is an
+        isolated cell and a valid cDNA or protein token appears immediately after.
+        """
+        if not gene_symbol:
+            return []
+
+        variants: List[dict] = []
+        by_key: dict[tuple[str, str], dict] = {}
+        current_table_label = ""
+        target_gene = gene_symbol.strip().upper()
+        lines = full_text.splitlines()
+
+        def add_variant(cdna: Optional[str], protein: Optional[str]) -> None:
+            key = ((cdna or "").lower(), (protein or "").lower())
+            if not key[0] and not key[1]:
+                return
+            if key in by_key:
+                existing = by_key[key]
+                patients = existing.setdefault("patients", {})
+                pdata = existing.setdefault("penetrance_data", {})
+                for obj, field in (
+                    (patients, "count"),
+                    (pdata, "total_carriers_observed"),
+                    (pdata, "affected_count"),
+                ):
+                    value = obj.get(field)
+                    obj[field] = 1 if value is None else value + 1
+                if pdata.get("unaffected_count") is None:
+                    pdata["unaffected_count"] = 0
+                return
+
+            variant = {
+                "gene_symbol": gene_symbol,
+                "cdna_notation": cdna,
+                "protein_notation": protein,
+                "clinical_significance": "pathogenic",
+                "patients": {
+                    "count": 1,
+                    "phenotype": f"{gene_symbol}-associated disease",
+                },
+                "penetrance_data": {
+                    "total_carriers_observed": 1,
+                    "affected_count": 1,
+                    "unaffected_count": 0,
+                },
+                "individual_records": [],
+                "functional_data": {"summary": "", "assays": []},
+                "segregation_data": None,
+                "population_frequency": None,
+                "evidence_level": "medium",
+                "source_location": current_table_label or "Vertical gene table",
+                "additional_notes": "Parsed via deterministic vertical gene-table parser",
+                "key_quotes": [],
+            }
+            by_key[key] = variant
+            variants.append(variant)
+
+        for idx, line in enumerate(lines):
+            stripped = line.strip()
+            if re.match(
+                r"^(?:Supplementary|Supplemental)?\s*Table\s+\w+",
+                stripped,
+                re.IGNORECASE,
+            ):
+                current_table_label = stripped[:240]
+
+            if stripped.upper() != target_gene:
+                continue
+
+            window: list[str] = []
+            for raw in lines[idx + 1 : idx + 9]:
+                cell = raw.strip()
+                if not cell:
+                    continue
+                window.append(cell)
+                if len(window) >= 6:
+                    break
+
+            cdna = None
+            protein = None
+            for value in window:
+                # Cells sometimes contain parallel nucleotide changes separated
+                # by commas; trying the whole cell and then pieces keeps the
+                # common simple cases while preserving at least the protein
+                # notation for complex multi-base substitutions.
+                pieces = [value] + [
+                    part for part in re.split(r"\s*[,;]\s*", value) if part
+                ]
+                for piece in pieces:
+                    if cdna is None:
+                        cdna = self._valid_table_cdna(piece)
+                    if protein is None:
+                        protein = self._valid_table_protein(piece)
+                if cdna and protein:
+                    break
+
+            if cdna or protein:
+                add_variant(cdna, protein)
+
+        if variants:
+            logger.info(
+                f"Parsed {len(variants)} variants via deterministic vertical gene-table parser"
             )
         return variants
 
@@ -3137,26 +3281,46 @@ Return strict JSON with this schema:
         fixed_width_variants = self._parse_fixed_width_table_variants(
             scanner_text, paper.gene_symbol
         )
-        if len(fixed_width_variants) >= fixed_width_min_variants:
+        vertical_variants = self._parse_vertical_gene_table_variants(
+            scanner_text, paper.gene_symbol
+        )
+        deterministic_variants = list(fixed_width_variants)
+        deterministic_keys = {
+            (
+                (variant.get("cdna_notation") or "").lower(),
+                (variant.get("protein_notation") or "").lower(),
+            )
+            for variant in deterministic_variants
+        }
+        for variant in vertical_variants:
+            key = (
+                (variant.get("cdna_notation") or "").lower(),
+                (variant.get("protein_notation") or "").lower(),
+            )
+            if key not in deterministic_keys:
+                deterministic_variants.append(variant)
+                deterministic_keys.add(key)
+
+        if len(deterministic_variants) >= fixed_width_min_variants:
             extracted_data = {
                 "paper_metadata": {
                     "pmid": paper.pmid,
                     "title": paper.title or "Unknown Title",
-                    "extraction_summary": f"Deterministic fixed-width table parse of {len(fixed_width_variants)} variants",
+                    "extraction_summary": f"Deterministic table parse of {len(deterministic_variants)} variants",
                 },
-                "variants": fixed_width_variants,
+                "variants": deterministic_variants,
                 "extraction_metadata": {
-                    "total_variants_found": len(fixed_width_variants),
+                    "total_variants_found": len(deterministic_variants),
                     "extraction_confidence": "medium",
                     "compact_mode": True,
-                    "notes": "Bypassed LLM using fixed-width table parser for large PDF table",
+                    "notes": "Bypassed LLM using deterministic parser for large PDF/vertical table",
                 },
             }
             return ExtractionResult(
                 pmid=paper.pmid,
                 success=True,
                 extracted_data=extracted_data,
-                model_used="deterministic-fixed-width-table-parser",
+                model_used="deterministic-table-layout-parser",
             )
 
         # Router-first extraction: ask a cheap LLM to classify tables, then
@@ -3188,7 +3352,9 @@ Return strict JSON with this schema:
         pre_extracted_variants = self._extract_variants_from_tables(
             scanner_text, paper.gene_symbol
         )
-        table_hint_variants = router_variants + pre_extracted_variants
+        table_hint_variants = (
+            router_variants + deterministic_variants + pre_extracted_variants
+        )
         table_hints = self._format_table_hints(table_hint_variants)
         if table_hint_variants:
             logger.info(
@@ -3270,9 +3436,20 @@ Return strict JSON with this schema:
 
             # Merge pre-extracted table variants to catch any the LLM missed
             # (uses the already-extracted variants from before the LLM call)
-            if table_hint_variants:
+            table_variants_for_merge = table_hint_variants
+            if len(table_variants_for_merge) > TABLE_REGEX_MERGE_MAX_VARIANTS:
+                logger.warning(
+                    "PMID %s - Skipping merge of %d table regex/router variants; "
+                    "candidate count exceeds safety cap %d",
+                    paper.pmid,
+                    len(table_variants_for_merge),
+                    TABLE_REGEX_MERGE_MAX_VARIANTS,
+                )
+                table_variants_for_merge = []
+
+            if table_variants_for_merge:
                 extracted_data = self._merge_table_variants(
-                    extracted_data, table_hint_variants
+                    extracted_data, table_variants_for_merge
                 )
 
             # NEW: Merge scanner-found variants (catches narrative mentions the LLM missed)

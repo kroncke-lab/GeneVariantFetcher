@@ -3,6 +3,10 @@
 This is the portable way to run the current GVF recall workflow from another
 computer without committing local papers, databases, logs, or credentials.
 
+Current status and metrics live in `docs/RECALL_STATUS.md`. For existing runs
+with newly recovered source artifacts, use `scripts/refresh_run_db.py`; it
+supersedes the older post-insttoken re-extraction experiment for normal work.
+
 ## Repository Setup
 
 ```bash
@@ -79,16 +83,37 @@ rsync -a --info=progress2 \
   other-host:/path/to/GeneVariantFetcher/validation_runs/
 ```
 
-Then run the post-insttoken re-extraction driver:
+Then refresh each copied run from its source artifacts into canonical
+extraction JSON, rebuild the DB, and run DB-observed recovery layers:
 
 ```bash
-bash scripts/run_full_recall_experiment.sh --dry-run
-bash scripts/run_full_recall_experiment.sh --foreground \
-  --genes KCNH2,KCNQ1,RYR2,SCN5A \
-  --max-pmids 10000
+.venv/bin/python scripts/refresh_run_db.py \
+  --gene KCNH2 \
+  --run-dir validation_runs/turnkey_e2e_20260518_213934/results/KCNH2/20260518_213938 \
+  --replace-db
+
+.venv/bin/python scripts/refresh_run_db.py \
+  --gene KCNQ1 \
+  --run-dir validation_runs/20260517_203904/results/KCNQ1/20260517_204424 \
+  --replace-db
+
+.venv/bin/python scripts/refresh_run_db.py \
+  --gene RYR2 \
+  --run-dir validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938 \
+  --replace-db
+
+.venv/bin/python scripts/refresh_run_db.py \
+  --gene SCN5A \
+  --run-dir validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938 \
+  --replace-db
 ```
 
-If `screen` is installed and you want a detached run:
+The legacy `scripts/run_insttoken_reextract_experiment.py` driver is retained
+for historical comparisons, but it should not be the default path for consuming
+newly recovered sources.
+
+For a fresh run launched through `gvf-run`, use the shell wrapper if you want a
+detached multi-gene job:
 
 ```bash
 bash scripts/run_full_recall_experiment.sh \
@@ -99,10 +124,7 @@ bash scripts/run_full_recall_experiment.sh --status
 ```
 
 Use `--kill-existing` only when you intentionally want to stop already-running
-GVF jobs before launching a replacement. To call the Python driver directly,
-use `scripts/run_insttoken_reextract_experiment.py`; add `--full-reextract`
-when you want to back up and regenerate every extraction JSON from the full text
-that is already on disk.
+GVF jobs before launching a replacement.
 
 ## Full-Text Acquisition Only
 
@@ -133,9 +155,11 @@ try downloading the remaining missing or weak full-text files:
   --max-pmids 50
 ```
 
-For all discovered PMIDs rather than just gold-standard PMIDs, use
-`--target discovered`. That can mean thousands of network attempts, so combine
-it with `--max-pmids` for bounded passes.
+For no-gold acquisition coverage, prefer `--target tier2-pass`; it reads each
+run's `pmid_status/filter_progress.jsonl` and targets papers that passed Tier 2
+triage. For all discovered PMIDs rather than just gold-standard PMIDs, use
+`--target discovered`. Either mode can mean thousands of network attempts, so
+combine it with `--max-pmids` for bounded passes.
 
 ## Scoring and Comparison
 

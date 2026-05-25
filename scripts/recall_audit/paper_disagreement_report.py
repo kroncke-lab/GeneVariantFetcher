@@ -195,19 +195,22 @@ def _build_context_index(results_dir: Path) -> dict[tuple[str, str], Path]:
     if not results_dir.exists():
         return index
     for path in results_dir.rglob("*_FULL_CONTEXT.md"):
+        if not path.exists():
+            continue
         pmid = normalize_pmid(path.name.removesuffix("_FULL_CONTEXT.md"))
         if not pmid:
             continue
         gene = path.relative_to(results_dir).parts[0].upper()
         key = (gene, pmid)
         current = index.get(key)
-        if current is None or path.stat().st_size > current.stat().st_size:
+        current_size = current.stat().st_size if current and current.exists() else -1
+        if path.stat().st_size > current_size:
             index[key] = path
     return index
 
 
 def _table_body_metrics(path: Path | None) -> dict[str, Any]:
-    if path is None:
+    if path is None or not path.exists():
         return {
             "table_references": 0,
             "table_body_markers": 0,

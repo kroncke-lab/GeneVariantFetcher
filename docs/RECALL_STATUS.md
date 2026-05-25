@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-05-21.
+Last updated: 2026-05-25.
 
 This note records the post-`19ae63f` state of the recall/generalization push so
 the next run can resume from the same baseline without relying on chat history.
@@ -33,25 +33,68 @@ inputs and KCNH2-only manual recovery.
 
 Use this artifact as the current scored baseline:
 
-`validation_runs/turnkey_e2e_20260518_213934/targeted_additive_plus_scn5a_28341781_v10/recall_score/summary.json`
+`recall_metrics/post_refresh_20260525/summary.json`
 
-Aggregate recall from that score:
+This is the honest DB-observed four-gene score after the 2026-05-25
+source-driven refresh/rebuild pass. It includes KCNH2, KCNQ1, RYR2, and SCN5A;
+ClinVar/PubTator recovery used DB PMIDs, not gold PMIDs.
 
 | Metric | Matched / Gold | Recall |
 | --- | ---: | ---: |
-| PMIDs | 891 / 1197 | 74.4% |
-| Variant rows | 3451 / 5092 | 67.8% |
-| Unique variants | 1804 / 2388 | 75.5% |
-| Patients/carriers | 8055 / 10926 | 73.7% |
-| Affected | 5867 / 8169 | 71.8% |
-| Unaffected | 1944 / 2467 | 78.8% |
+| PMIDs | 1175 / 1502 | 78.2% |
+| Variant rows | 3620 / 6833 | 53.0% |
+| Unique variants | 1859 / 3013 | 61.7% |
+| Patients/carriers | 10911 / 18719 | 58.3% |
+| Affected | 6617 / 12475 | 53.0% |
+| Unaffected | 2855 / 3951 | 72.3% |
 
 The target remains greater than 90% across the metrics that matter. The current
-state is improved and more general, but not solved.
+state is more reproducible and less gold-conditioned, but not close to solved.
 
-This scored baseline covers KCNH2, RYR2, and SCN5A. KCNE1 extraction completed
-in the four-gene run, but KCNE1 recall should not be claimed until a normalized
-per-PMID gold input exists.
+Per-gene final recall from the same score:
+
+| Gene | PMIDs | Variant rows | Unique variants | Patients | Affected | Unaffected |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| KCNH2 | 71.8% | 54.2% | 63.8% | 62.8% | 59.0% | 66.0% |
+| KCNQ1 | 84.3% | 32.5% | 42.9% | 49.0% | 34.9% | 73.8% |
+| RYR2 | 75.8% | 62.3% | 64.6% | 71.8% | 67.9% | 89.3% |
+| SCN5A | 78.6% | 61.1% | 69.1% | 63.6% | 62.1% | 69.3% |
+
+KCNE1 extraction completed in the four-gene run, but KCNE1 recall should not be
+claimed until a normalized per-PMID gold input exists.
+
+## 2026-05-25 Source-Driven Refresh Pass
+
+Implemented and ran `scripts/refresh_run_db.py` as the safe alternative to
+SQLite row patching. The refresh workflow selects stale/under-counted PMIDs from
+source artifacts, rewrites canonical extraction JSON, rebuilds a fresh DB from
+the full extraction directory, runs DB-observed recovery layers, then atomically
+replaces the active DB with a backup.
+
+| Gene | Replay candidates | Successful | Failed/restored | JSONs rebuilt | Final unique-variant recall |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| KCNH2 | 241 | 232 | 9 | 1129/1129 | 63.8% |
+| KCNQ1 | 127 | 106 | 21 | 2381/2381 | 42.9% |
+| RYR2 | 101 | 96 | 5 | 638/638 | 64.6% |
+| SCN5A | 301 | 242 | 59 | 1449/1449 | 69.1% |
+
+Notable live findings:
+
+- The refresh fixed many stale abstract-only and under-counted extractions, but
+  most genes remain far below 90% variant-row and unique-variant recall.
+- SCN5A high-yield deterministic table recoveries included PMIDs `26496715`
+  (214 variants), `28341781` (53 variants), `30059973` (185 variants), and
+  `32893267` (1080 parsed SCN5A rows). The `32893267` multi-gene consortium
+  table is high-yield but should be audited for row-level precision and count
+  semantics before using it as a headline improvement.
+- Some known high-yield misses, including SCN5A `26921764`, still replayed to
+  zero variants from available full text. Those are likely supplement/table-body
+  or source-content failures, not stale SQLite rows.
+- A large set of SCN5A 2022 PMIDs failed the circuit breaker with no target-gene
+  variant signal; the script restored their previous JSONs and recorded them in
+  `refresh_summary.json`.
+- A paper-disagreement report bug with stale/missing context paths was fixed so
+  missing local artifacts no longer abort aggregate scoring.
 
 ## 2026-05-20 Structure Probe
 
@@ -148,7 +191,7 @@ standard extraction discovery path picks them up without per-PMID-dir plumbing:
 Each directory also contains an `insttoken_unlock_results.csv` with the
 per-PMID outcome.
 
-### Post-token PMID recall (no re-extraction yet)
+### Historical post-token PMID recall (before 2026-05-25 refresh)
 
 The scoring path computes PMID recall as `matched_pmids / gold_pmids` where a
 gold PMID counts as matched only if the SQLite DB has at least one extracted
@@ -168,14 +211,15 @@ The honest measurement against the current DBs is below
 | SCN5A | 752/1060 | 70.9% | -19.1 |
 | **Aggregate (4-gene)** | **1133/1502** | **75.4%** | **-14.6** |
 
-So the token unlock landed and 242 bodies are on disk, but the recall lift will
-not be realized until a re-extraction pass consumes them. That is now the
-single highest-leverage next step — see "Next Run Plan" below.
+This table is retained for before/after context only. The current baseline is
+the 2026-05-25 refresh score at the top of this file.
 
-## Highest-Yield Remaining Missing PMIDs
+## Historical High-Yield Missing PMIDs
 
-These are diagnostic targets from the gold-standard score. Do not hard-code them
-into production logic.
+These are diagnostic targets from the 2026-05-21 gold-standard score. Do not
+hard-code them into production logic. For current misses, use
+`recall_metrics/post_refresh_20260525/*/missing_in_sqlite.csv` and the
+paper-disagreement artifacts generated with that score.
 
 ### KCNH2
 
@@ -206,23 +250,29 @@ into production logic.
 
 ## Current Main Barrier
 
-As of 2026-05-21, the Elsevier insttoken unblock has landed (see
-"2026-05-21 Elsevier Insttoken Activation" above). The dominant remaining
-barrier shifts from *acquisition* to *converting the now-available source into
-DB rows*:
+As of 2026-05-25, the Elsevier insttoken source unlock has been consumed by the
+source-driven refresh/rebuild pass. The dominant remaining barriers are no
+longer stale SQLite rows:
 
-1. **Re-extraction pass** for KCNH2, KCNQ1, RYR2, and SCN5A so the 242 newly
-   saved `_FULL_CONTEXT.md` files actually flow into the SQLite databases.
-   Without this, PMID recall is stuck at the 2026-05-18 baseline.
-2. **Non-Elsevier paywalls still outstanding**:
+1. **Missing or incomplete source bodies, especially supplements/tables.**
+   Several refreshed papers now have real full text but still replay to zero or
+   too few variants, which means the decisive variants are likely in missing
+   supplements, table bodies, figures/pedigrees, or publisher content not
+   represented in the saved markdown.
+2. **Count semantics and table precision.** High-yield deterministic table
+   recovery now finds many variants, but carrier, affected, and unaffected
+   counts remain well below 90%. Multi-gene consortium tables such as
+   `32893267` need row-level precision and count audits before being used as
+   headline gains.
+3. **Non-Elsevier paywalls still outstanding**:
    - Wiley: `WILEY_API_KEY` in `.env` is revoked. Human Mutation
      (`10.1002/humu.*`) is unreachable until reissued.
    - Karger: no institutional agreement and Cloudflare blocks the Playwright
      stack. TDM request status unknown.
    - Sage/Liebert (PMID 23631430): Cloudflare fingerprint rejection.
-3. **Extraction-side issues that recall still depends on** (unchanged from
-   the 2026-05-20 audit below): count semantics, affected/unaffected direction,
-   cDNA-only normalization, multi-gene supplement filtering, no-gold QC.
+4. **Notation and extraction-side generalization** still matter: affected/
+   unaffected direction, cDNA-only normalization, multi-gene supplement
+   filtering, and no-gold QC.
 
 For ScienceDirect/Elsevier papers, paywall stubs / 403 / accepted-manuscripts
 issues should now resolve at the API tier (Tier 2) instead of falling through
@@ -340,23 +390,22 @@ Already-addressed items that should not remain open:
    `.env`; 242/246 paywalled Elsevier candidates unlocked and saved as
    `_FULL_CONTEXT.md` into each gene's `pmc_fulltext/`. See
    "2026-05-21 Elsevier Insttoken Activation".
-2. **Next:** Re-extract each gene against the consolidated `pmc_fulltext/`
-   directories so the new bodies become SQLite rows. Recommended:
-   `gvf gvf-run KCNH2 --email brett.m.kroncke.1@vanderbilt.edu --output <ts>`
-   (and analogously for KCNQ1, RYR2, SCN5A). Honor existing `*_FULL_CONTEXT.md`
-   files; do not redownload.
-3. Rescore PMID/variant-row recall after each gene's re-extraction
-   (`scripts/run_recall_suite.py --score --genes <GENE> --db <GENE>=...`).
-   Expected: PMID recall rises substantially toward the 90% target, especially
-   for SCN5A (currently 70.9%) and RYR2 (currently 68.0%) where the unlocked
-   set is largest relative to gold PMID counts.
-4. Confirm the recovered files are real article/supplement content, not paywall
-   stubs. Use content-quality checks and inspect variant/table density. The
-   `*.pre_insttoken_bak` companion files preserve the pre-token stubs for
-   before/after comparison.
+2. **DONE 2026-05-25:** Source-driven refresh/rebuild for KCNH2, KCNQ1, RYR2,
+   and SCN5A using `scripts/refresh_run_db.py`; current score is
+   `recall_metrics/post_refresh_20260525/summary.json`.
+3. Use `recall_metrics/post_refresh_20260525/*/missing_in_sqlite.csv` plus the
+   paper-disagreement report to separate remaining misses into: missing
+   supplement/table body, figure/pedigree-only, source has variant text but
+   extraction missed it, count-only mismatch, and notation mismatch.
+4. Audit high-impact deterministic table recoveries, especially multi-gene
+   consortium papers (`32893267`), for row-level gene filtering and count
+   semantics before presenting them as reliable count improvements.
 5. Address the residual non-Elsevier paywalls
    (Wiley key reissue, Karger TDM agreement, Sage CF) as smaller follow-up
    unblocks.
-6. Promote only general parser/acquisition fixes to code. Keep per-PMID recovery
+6. For any future source acquisition, rerun
+   `python scripts/refresh_run_db.py --gene <GENE> --run-dir <RUN> --replace-db`
+   instead of patching SQLite rows.
+7. Promote only general parser/acquisition fixes to code. Keep per-PMID recovery
    artifacts in validation runs, not production branches.
-7. Add no-gold QC output before using the pipeline for new gene-disease runs.
+8. Add no-gold QC output before using the pipeline for new gene-disease runs.

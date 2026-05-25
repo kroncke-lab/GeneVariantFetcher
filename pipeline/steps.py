@@ -9,6 +9,7 @@ allowing the callers to handle their own context (checkpoints, logging, etc.).
 """
 
 import csv
+import hashlib
 import json
 import logging
 import os
@@ -19,6 +20,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from config.constants import DEFAULT_MAX_WORKERS
+from pipeline.source_quality import is_usable_fulltext_source
 
 logger = logging.getLogger(__name__)
 
@@ -1090,13 +1092,17 @@ def extract_variants(
     data_zones = {
         f.name.replace("_DATA_ZONES.md", ""): f
         for f in harvest_dir.glob("*_DATA_ZONES.md")
+        if is_usable_fulltext_source(f)
     }
     cleaned_context = {
-        f.name.replace("_CLEANED.md", ""): f for f in harvest_dir.glob("*_CLEANED.md")
+        f.name.replace("_CLEANED.md", ""): f
+        for f in harvest_dir.glob("*_CLEANED.md")
+        if is_usable_fulltext_source(f)
     }
     full_context = {
         f.name.replace("_FULL_CONTEXT.md", ""): f
         for f in harvest_dir.glob("*_FULL_CONTEXT.md")
+        if is_usable_fulltext_source(f)
     }
 
     markdown_files = []
@@ -1110,10 +1116,20 @@ def extract_variants(
         elif pmid in full_context:
             markdown_files.append(full_context[pmid])
 
-    # Prepare abstract-only papers
+    markdown_pmids = {
+        pmid
+        for md_file in markdown_files
+        if (pmid := extract_pmid_from_filename(md_file))
+    }
+
+    # Prepare abstract-only papers. If a PMID has any usable markdown source,
+    # never submit an abstract task for the same output JSON; the two workers
+    # otherwise race and a stale abstract result can overwrite full-text output.
     abstract_papers = []
     if abstract_only_pmids and abstract_records:
         for pmid in abstract_only_pmids:
+            if pmid in markdown_pmids:
+                continue
             record_path = abstract_records.get(pmid)
             if record_path and Path(record_path).exists():
                 abstract_papers.append((pmid, record_path))
@@ -1130,8 +1146,45 @@ def extract_variants(
             extractor_local.instance = extractor
         return extractor
 
+    def source_fingerprint(source_file: Path) -> dict[str, Any]:
+        """Small source identity block saved into extraction metadata."""
+        digest = hashlib.sha256()
+        with open(source_file, "rb") as f:
+            for chunk in iter(lambda: f.read(1024 * 1024), b""):
+                digest.update(chunk)
+        stat = source_file.stat()
+        return {
+            "source_file": str(source_file),
+            "source_size_bytes": stat.st_size,
+            "source_sha256": digest.hexdigest(),
+        }
+
+    def metadata_mentions_abstract_only(metadata: dict[str, Any]) -> bool:
+        fields: list[str] = []
+        for key in ("source_type", "source_kind", "notes"):
+            value = metadata.get(key)
+            if value:
+                fields.append(str(value))
+        challenges = metadata.get("challenges")
+        if isinstance(challenges, list):
+            fields.extend(str(item) for item in challenges)
+        elif challenges:
+            fields.append(str(challenges))
+        joined = " ".join(fields).lower()
+        return (
+            bool(metadata.get("abstract_only"))
+            or "abstract-only" in joined
+            or "abstract only" in joined
+            or "full text not available" in joined
+            or "full text could not be retrieved" in joined
+        )
+
     def load_existing_extraction(
-        output_file: Path, pmid: str
+        output_file: Path,
+        pmid: str,
+        *,
+        source_kind: str,
+        fingerprint: Optional[dict[str, Any]] = None,
     ) -> Optional[ExtractionResult]:
         """Return a successful result for an already-written extraction JSON."""
         if not output_file.exists():
@@ -1144,6 +1197,29 @@ def extract_variants(
                 if isinstance(extracted_data, dict)
                 else {}
             )
+            if source_kind == "fulltext" and metadata_mentions_abstract_only(metadata):
+                logger.info(
+                    "Ignoring stale abstract-only extraction for PMID %s; full-text source is available",
+                    pmid,
+                )
+                return None
+
+            if fingerprint:
+                old_sha = metadata.get("source_sha256")
+                old_size = metadata.get("source_size_bytes")
+                if old_sha and old_sha != fingerprint.get("source_sha256"):
+                    logger.info(
+                        "Ignoring stale extraction for PMID %s; source SHA changed",
+                        pmid,
+                    )
+                    return None
+                if old_size and old_size != fingerprint.get("source_size_bytes"):
+                    logger.info(
+                        "Ignoring stale extraction for PMID %s; source size changed",
+                        pmid,
+                    )
+                    return None
+
             return ExtractionResult(
                 pmid=pmid,
                 success=True,
@@ -1167,8 +1243,17 @@ def extract_variants(
             return (None, (md_file.name, "Could not extract PMID"))
 
         try:
+            if not is_usable_fulltext_source(md_file):
+                return (None, (pmid, "Source is abstract-only fallback"))
+
             output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
-            existing = load_existing_extraction(output_file, pmid)
+            fingerprint = source_fingerprint(md_file)
+            existing = load_existing_extraction(
+                output_file,
+                pmid,
+                source_kind="fulltext",
+                fingerprint=fingerprint,
+            )
             if existing is not None:
                 return (existing, None)
 
@@ -1188,6 +1273,9 @@ def extract_variants(
                 # so cascading is auditable after the run finishes.
                 if result.extracted_data:
                     md = result.extracted_data.setdefault("extraction_metadata", {})
+                    md.update(fingerprint)
+                    md["source_type"] = "fulltext"
+                    md["abstract_only"] = False
                     md["model_used"] = result.model_used
                 with open(output_file, "w") as f:
                     json.dump(result.extracted_data, f, indent=2)
@@ -1203,11 +1291,19 @@ def extract_variants(
     ) -> Tuple[Any, Optional[Tuple[str, str]]]:
         try:
             output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
-            existing = load_existing_extraction(output_file, pmid)
+            record = None
+            record_file = Path(record_path)
+            fingerprint = source_fingerprint(record_file)
+            existing = load_existing_extraction(
+                output_file,
+                pmid,
+                source_kind="abstract",
+                fingerprint=fingerprint,
+            )
             if existing is not None:
                 return (existing, None)
 
-            with open(record_path, "r", encoding="utf-8") as f:
+            with open(record_file, "r", encoding="utf-8") as f:
                 record = json.load(f)
 
             abstract_text = record.get("abstract")
@@ -1228,6 +1324,8 @@ def extract_variants(
             if result.success:
                 if result.extracted_data:
                     md = result.extracted_data.setdefault("extraction_metadata", {})
+                    md.update(fingerprint)
+                    md["source_type"] = "abstract_only"
                     md["abstract_only"] = True
                     md["model_used"] = result.model_used
 

@@ -211,17 +211,6 @@ def step_layers(
     with_v12: Optional[Path],
 ) -> Optional[Path]:
     """Run the recall-recovery driver. Returns the progression.csv path."""
-    if not gold:
-        logger.warning(
-            "No gold standard CSV found for %s under gene_variant_fetcher_gold_standard/"
-            "normalized/ — skipping recovery layers. The DB at %s is still usable; "
-            "internal QC signals should be reviewed instead. See "
-            "docs/NEW_GENE_RUNBOOK.md.",
-            gene,
-            db,
-        )
-        return None
-
     cmd = [
         sys.executable,
         str(REPO_ROOT / "scripts" / "recall_recovery" / "run_all_layers.py"),
@@ -229,14 +218,20 @@ def step_layers(
         gene,
         "--db",
         str(db),
-        "--gold",
-        str(gold),
         "--pmc-dir",
         str(run_dir / "pmc_fulltext"),
         "--outdir",
         str(outdir),
         "--backup",
     ]
+    if gold:
+        cmd.extend(["--gold", str(gold)])
+    else:
+        logger.warning(
+            "No gold standard CSV found for %s. Recovery layers will run in "
+            "DB-PMID mode and per-layer recall scoring will be skipped.",
+            gene,
+        )
     if with_v12:
         cmd.extend(["--with-v12", str(with_v12)])
 
@@ -291,52 +286,75 @@ def step_report(
     if layer_outdir and (layer_outdir / "progression.json").exists():
         progression = json.loads((layer_outdir / "progression.json").read_text())
         rows = progression.get("progression", [])
-        lines.append("## Recall Progression (per layer)")
-        lines.append("")
+        scoring_enabled = bool(progression.get("scoring_enabled"))
         lines.append(
-            "| Layer | pmids | variant_rows | unique_variants | patients | affected | unaffected |"
+            "## Recall Progression (per layer)"
+            if scoring_enabled
+            else "## Recovery Progression"
         )
-        lines.append("|---|---:|---:|---:|---:|---:|---:|")
-        for r in rows:
-            lines.append(
-                "| {layer} | {pmids} | {variant_rows} | {unique_variants} | {patients} | {affected} | {unaffected} |".format(
-                    layer=r.get("layer", "?"),
-                    pmids=_fmt(r.get("pmids")),
-                    variant_rows=_fmt(r.get("variant_rows")),
-                    unique_variants=_fmt(r.get("unique_variants")),
-                    patients=_fmt(r.get("patients")),
-                    affected=_fmt(r.get("affected")),
-                    unaffected=_fmt(r.get("unaffected")),
-                )
-            )
         lines.append("")
-        # Identify metrics still under 90%
-        final = rows[-1] if rows else {}
-        under = [
-            k
-            for k in (
-                "pmids",
-                "variant_rows",
-                "unique_variants",
-                "patients",
-                "affected",
-                "unaffected",
+        if scoring_enabled:
+            lines.append(
+                "| Layer | pmids | variant_rows | unique_variants | patients | affected | unaffected |"
             )
-            if final.get(k) is not None and final[k] < 90
-        ]
-        if under:
-            lines.append("## Metrics under 90% target")
-            for k in under:
-                lines.append(f"- **{k}**: {final[k]:.1f}%")
+            lines.append("|---|---:|---:|---:|---:|---:|---:|")
+            for r in rows:
+                lines.append(
+                    "| {layer} | {pmids} | {variant_rows} | {unique_variants} | {patients} | {affected} | {unaffected} |".format(
+                        layer=r.get("layer", "?"),
+                        pmids=_fmt(r.get("pmids")),
+                        variant_rows=_fmt(r.get("variant_rows")),
+                        unique_variants=_fmt(r.get("unique_variants")),
+                        patients=_fmt(r.get("patients")),
+                        affected=_fmt(r.get("affected")),
+                        unaffected=_fmt(r.get("unaffected")),
+                    )
+                )
             lines.append("")
+            # Identify metrics still under 90%
+            final = rows[-1] if rows else {}
+            under = [
+                k
+                for k in (
+                    "pmids",
+                    "variant_rows",
+                    "unique_variants",
+                    "patients",
+                    "affected",
+                    "unaffected",
+                )
+                if final.get(k) is not None and final[k] < 90
+            ]
+            if under:
+                lines.append("## Metrics under 90% target")
+                for k in under:
+                    lines.append(f"- **{k}**: {final[k]:.1f}%")
+                lines.append("")
+            else:
+                lines.append("## All six metrics ≥ 90%")
+                lines.append("")
         else:
-            lines.append("## All six metrics ≥ 90%")
+            lines.append("| Layer | ClinVar added | PubTator added | Figures added |")
+            lines.append("|---|---:|---:|---:|")
+            for r in rows:
+                lines.append(
+                    "| {layer} | {clinvar} | {pubtator} | {figures} |".format(
+                        layer=r.get("layer", "?"),
+                        clinvar=r.get("clinvar_added", "—"),
+                        pubtator=r.get("pubtator_added", "—"),
+                        figures=r.get("figures_added", "—"),
+                    )
+                )
+            lines.append("")
+            lines.append(
+                "_No gold standard CSV was available, so recovery ran without recall scoring._"
+            )
             lines.append("")
     else:
         lines.append("## Recall Progression")
         lines.append("")
         lines.append(
-            "_Recovery layers skipped — no gold standard CSV found for this gene._"
+            "_Recovery layers were skipped or did not produce progression output._"
         )
         lines.append(
             "Review internal QC signals instead (see docs/NEW_GENE_RUNBOOK.md)."
