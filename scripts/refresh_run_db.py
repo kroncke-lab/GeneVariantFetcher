@@ -21,6 +21,7 @@ import csv
 import hashlib
 import json
 import logging
+import re
 import shutil
 import subprocess
 import sys
@@ -43,6 +44,8 @@ from utils.models import Paper  # noqa: E402
 
 logger = logging.getLogger("refresh_run_db")
 
+DETERMINISTIC_ABSOLUTE_LIFT_OVERRIDE = 50
+
 
 @dataclass
 class ReplayCandidate:
@@ -59,6 +62,138 @@ def _json_load(path: Path) -> dict[str, Any]:
         return json.loads(path.read_text(encoding="utf-8"))
     except Exception:
         return {}
+
+
+def _read_pmid_file(path: Path) -> set[str]:
+    pmids: set[str] = set()
+    with path.open(encoding="utf-8") as f:
+        for line in f:
+            value = line.strip()
+            if not value or value.startswith("#"):
+                continue
+            pmids.add(value)
+    return pmids
+
+
+def load_report_pmids(
+    *,
+    report: Path,
+    gene: str,
+    failure_classes: set[str],
+    min_missing_rows: int,
+    max_row_recall: float | None = None,
+) -> set[str]:
+    """Load PMIDs from a paper disagreement report for targeted replay."""
+    selected: set[str] = set()
+    with report.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if not _report_row_selected(
+                row,
+                gene=gene,
+                failure_classes=failure_classes,
+                min_missing_rows=min_missing_rows,
+                max_row_recall=max_row_recall,
+            ):
+                continue
+            pmid = str(row.get("pmid") or "").strip()
+            if pmid:
+                selected.add(pmid)
+    return selected
+
+
+def _report_row_selected(
+    row: dict[str, str],
+    *,
+    gene: str,
+    failure_classes: set[str],
+    min_missing_rows: int,
+    max_row_recall: float | None,
+) -> bool:
+    if str(row.get("gene") or "").upper() != gene.upper():
+        return False
+    failure_class = str(row.get("failure_class") or "")
+    if failure_classes and failure_class not in failure_classes:
+        return False
+    try:
+        missing_rows = int(row.get("missing_rows") or 0)
+    except ValueError:
+        missing_rows = 0
+    if missing_rows < min_missing_rows:
+        return False
+    if max_row_recall is not None:
+        try:
+            row_recall = float(row.get("row_recall") or 0)
+        except ValueError:
+            row_recall = 0
+        if row_recall > max_row_recall:
+            return False
+    return True
+
+
+def load_report_available_contexts(
+    *,
+    report: Path,
+    gene: str,
+    failure_classes: set[str],
+    min_missing_rows: int,
+    max_row_recall: float | None = None,
+    context_search_roots: list[Path] | None = None,
+) -> dict[str, Path]:
+    """Load PMID -> available_context_path from a disagreement report."""
+    selected: dict[str, Path] = {}
+    with report.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if not _report_row_selected(
+                row,
+                gene=gene,
+                failure_classes=failure_classes,
+                min_missing_rows=min_missing_rows,
+                max_row_recall=max_row_recall,
+            ):
+                continue
+            pmid = str(row.get("pmid") or "").strip()
+            raw_path = str(
+                row.get("available_context_path") or row.get("context_path") or ""
+            ).strip()
+            if not pmid:
+                continue
+            path = _largest_context_path(
+                pmid=pmid,
+                raw_path=raw_path,
+                search_roots=context_search_roots or [],
+            )
+            if path is None:
+                continue
+            current = selected.get(pmid)
+            current_size = (
+                current.stat().st_size if current and current.exists() else -1
+            )
+            if path.stat().st_size > current_size:
+                selected[pmid] = path
+    return selected
+
+
+def _largest_context_path(
+    *,
+    pmid: str,
+    raw_path: str,
+    search_roots: list[Path],
+) -> Path | None:
+    candidates: list[Path] = []
+    if raw_path:
+        candidates.append(Path(raw_path).expanduser())
+    for root in search_roots:
+        root = root.expanduser()
+        if root.exists():
+            candidates.extend(root.rglob(f"{pmid}_FULL_CONTEXT.md"))
+    usable = [
+        path for path in candidates if path.exists() and is_usable_fulltext_source(path)
+    ]
+    if not usable:
+        return None
+    return max(usable, key=lambda path: path.stat().st_size)
 
 
 def _variant_count(data: dict[str, Any]) -> int:
@@ -91,6 +226,33 @@ def _metadata_mentions_abstract_only(metadata: dict[str, Any]) -> bool:
         or "full text not available" in joined
         or "full text could not be retrieved" in joined
     )
+
+
+def _metadata_source_is_unbound(
+    metadata: dict[str, Any],
+    *,
+    output_file: Path,
+    extraction_dir: Path,
+) -> bool:
+    """True when metadata records the JSON artifact instead of its source text."""
+    source_file = metadata.get("source_file")
+    if not source_file:
+        return False
+
+    source_path = Path(str(source_file)).expanduser()
+    if source_path.suffix.lower() == ".json":
+        return True
+
+    try:
+        source_path.resolve().relative_to(extraction_dir.resolve())
+        return True
+    except (OSError, ValueError):
+        pass
+
+    try:
+        return source_path.resolve() == output_file.resolve()
+    except OSError:
+        return False
 
 
 def _sha256(path: Path) -> str:
@@ -166,7 +328,17 @@ def deterministic_variant_count(
     text = source_file.read_text(encoding="utf-8", errors="replace")
     variants: list[dict[str, Any]] = []
     variants.extend(extractor._parse_markdown_table_variants(text, gene))
-    variants.extend(extractor._parse_fixed_width_table_variants(text, gene))
+    fixed_width_variants = extractor._parse_fixed_width_table_variants(text, gene)
+    if fixed_width_variants:
+        pmid_match = re.search(r"\d{6,}", source_file.name)
+        logger.info(
+            "deterministic_fixed_width_parser_candidate pmid=%s gene=%s source=%s variants=%d",
+            pmid_match.group(0) if pmid_match else "unknown",
+            gene,
+            source_file,
+            len(fixed_width_variants),
+        )
+    variants.extend(fixed_width_variants)
     variants.extend(extractor._parse_vertical_gene_table_variants(text, gene))
     return _dedup_count(variants)
 
@@ -181,8 +353,14 @@ def select_replay_candidates(
     deterministic_lift_ratio: float,
     include_source_newer: bool,
     replay_missing_fingerprint: bool,
+    replay_unbound_source: bool,
+    force_pmids: set[str] | None = None,
+    source_overrides: dict[str, Path] | None = None,
 ) -> list[ReplayCandidate]:
     sources = discover_source_files(harvest_dir)
+    for pmid, source_file in (source_overrides or {}).items():
+        if is_usable_fulltext_source(source_file):
+            sources[str(pmid)] = source_file
     extractor = ExpertExtractor(models=["noop"], tier_threshold=0)
     candidates: list[ReplayCandidate] = []
 
@@ -196,8 +374,17 @@ def select_replay_candidates(
         reasons: list[str] = []
         if not output_file.exists():
             reasons.append("missing_extraction")
+        if force_pmids and pmid in force_pmids:
+            reasons.append("forced_pmid")
         if metadata and _metadata_mentions_abstract_only(metadata):
             reasons.append("stale_abstract_only")
+        if metadata and replay_unbound_source:
+            if _metadata_source_is_unbound(
+                metadata,
+                output_file=output_file,
+                extraction_dir=extraction_dir,
+            ):
+                reasons.append("unbound_source_metadata")
 
         existing_sha = metadata.get("source_sha256")
         if existing_sha and existing_sha != _sha256(source_file):
@@ -215,14 +402,20 @@ def select_replay_candidates(
             if current_count
             else deterministic_count >= min_deterministic_variants
         )
+        absolute_lift_ok = deterministic_lift >= max(
+            min_deterministic_lift, DETERMINISTIC_ABSOLUTE_LIFT_OVERRIDE
+        )
         if (
             deterministic_count >= min_deterministic_variants
             and deterministic_lift >= min_deterministic_lift
-            and ratio_ok
+            and (ratio_ok or absolute_lift_ok)
         ):
-            reasons.append(
-                f"deterministic_parser_lift:{deterministic_count}>{current_count}"
+            reason = (
+                "deterministic_parser_lift"
+                if ratio_ok
+                else "deterministic_parser_absolute_lift"
             )
+            reasons.append(f"{reason}:{deterministic_count}>{current_count}")
 
         if reasons:
             candidates.append(
@@ -432,6 +625,85 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--deterministic-lift-ratio", type=float, default=1.2)
     p.add_argument("--include-source-newer", action="store_true")
     p.add_argument("--replay-missing-fingerprint", action="store_true")
+    p.add_argument(
+        "--replay-unbound-source",
+        action="store_true",
+        help=(
+            "Replay extractions whose metadata source_file points at the JSON "
+            "artifact/extractions directory instead of a usable source document."
+        ),
+    )
+    p.add_argument(
+        "--pmids-file",
+        action="append",
+        type=Path,
+        default=[],
+        help=(
+            "Force replay for PMIDs listed one per line when a usable source exists. "
+            "Repeatable."
+        ),
+    )
+    p.add_argument(
+        "--candidate-report",
+        type=Path,
+        default=None,
+        help=(
+            "Force replay for PMIDs selected from a paper_disagreement_report.csv. "
+            "This is evaluation-aided and should not be used for cold-start claims."
+        ),
+    )
+    p.add_argument(
+        "--report-class",
+        action="append",
+        default=[],
+        help=(
+            "Failure class to include from --candidate-report. Repeatable. "
+            "Default: include all classes."
+        ),
+    )
+    p.add_argument(
+        "--report-min-missing-rows",
+        type=int,
+        default=1,
+        help="Minimum missing_rows required for --candidate-report PMIDs.",
+    )
+    p.add_argument(
+        "--report-max-row-recall",
+        type=float,
+        default=None,
+        help=(
+            "Optional maximum existing row_recall for --candidate-report PMIDs. "
+            "Use this to avoid replaying already high-recall papers."
+        ),
+    )
+    p.add_argument(
+        "--use-report-available-context",
+        action="store_true",
+        help=(
+            "When --candidate-report is used, replay each selected PMID from "
+            "available_context_path instead of only using the run directory's "
+            "normal source priority."
+        ),
+    )
+    p.add_argument(
+        "--report-context-search-root",
+        action="append",
+        type=Path,
+        default=[],
+        help=(
+            "When --use-report-available-context is set, also search this root "
+            "for larger <PMID>_FULL_CONTEXT.md files and use the largest usable "
+            "context. Repeatable."
+        ),
+    )
+    p.add_argument(
+        "--only-forced-pmids",
+        action="store_true",
+        help=(
+            "After candidate discovery, keep only PMIDs explicitly supplied by "
+            "--pmids-file or --candidate-report."
+        ),
+    )
     p.add_argument("--dry-run", action="store_true")
     p.add_argument("--verbose", "-v", action="store_true")
     return p
@@ -457,6 +729,36 @@ def main() -> int:
     if not extraction_dir.is_dir():
         sys.exit(f"Extraction dir not found: {extraction_dir}")
 
+    force_pmids: set[str] = set()
+    source_overrides: dict[str, Path] = {}
+    for pmids_file in args.pmids_file:
+        force_pmids.update(_read_pmid_file(pmids_file.expanduser()))
+    if args.candidate_report:
+        report = args.candidate_report.expanduser()
+        report_classes = {str(item) for item in args.report_class}
+        force_pmids.update(
+            load_report_pmids(
+                report=report,
+                gene=gene,
+                failure_classes=report_classes,
+                min_missing_rows=args.report_min_missing_rows,
+                max_row_recall=args.report_max_row_recall,
+            )
+        )
+        if args.use_report_available_context:
+            source_overrides.update(
+                load_report_available_contexts(
+                    report=report,
+                    gene=gene,
+                    failure_classes=report_classes,
+                    min_missing_rows=args.report_min_missing_rows,
+                    max_row_recall=args.report_max_row_recall,
+                    context_search_roots=[
+                        path.expanduser() for path in args.report_context_search_root
+                    ],
+                )
+            )
+
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     refresh_dir = run_dir / f"refresh_{timestamp}"
     refresh_dir.mkdir(parents=True, exist_ok=True)
@@ -470,7 +772,14 @@ def main() -> int:
         deterministic_lift_ratio=args.deterministic_lift_ratio,
         include_source_newer=args.include_source_newer,
         replay_missing_fingerprint=args.replay_missing_fingerprint,
+        replay_unbound_source=args.replay_unbound_source,
+        force_pmids=force_pmids or None,
+        source_overrides=source_overrides or None,
     )
+    if args.only_forced_pmids:
+        if not force_pmids:
+            sys.exit("--only-forced-pmids requires --pmids-file or --candidate-report")
+        candidates = [c for c in candidates if c.pmid in force_pmids]
     candidates_csv = refresh_dir / "replay_candidates.csv"
     write_candidates_csv(candidates, candidates_csv)
     logger.info("Selected %d replay candidates → %s", len(candidates), candidates_csv)
@@ -521,6 +830,7 @@ def main() -> int:
         "extraction_dir": str(extraction_dir),
         "gold": str(gold) if gold else None,
         "candidate_count": len(candidates),
+        "forced_pmid_count": len(force_pmids),
         "candidates_csv": str(candidates_csv),
         "replay": replay_stats,
         "db_rebuild": db_stats,

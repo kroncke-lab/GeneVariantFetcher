@@ -220,6 +220,220 @@ Supplementary Table 2. RyR2 mutations in CPVT patients.
     assert by_protein["P2404T"]["penetrance_data"]["total_carriers_observed"] == 1
 
 
+def test_fixed_width_lqt_etable_rows_are_gene_scoped_and_keep_protein_counts():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+eTable 1. LQT1 Mutations or Rare Variants
+                          Mutation    site     Site             N   Female    Proband       Mean QTc     Syncope    CA/VF
+              c.153C>A      p.Y51X    N        N/C-term         1        0              1         443          1            0
+         c.1022C>T p.A341V        MS   S5-pore-S6   35      20        11        500        23         7
+          c.1032 G>A p.A344A splicing       MS   S5-pore-S6   47      26        24        494        23         4
+                 * p.A178-G189del     C-loop   non-pore MS      1        1              1         471          0            0
+    ****** p.Q361_K362 ins RQ     C    N/C-term      1       1         1        470         1         0
+
+eTable 2. LQT2 Mutations or Rare Variants
+                         c.1003C>T     p.Q335X     N    N/C-term      3      2         1        481        2        0
+
+eTable 3. LQT3 Mutations or Rare Variants
+            c.5350G>A      p.E1784K C                    50         23       26         481         5         0 BrS(7)
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "KCNQ1")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {
+        "p.Y51X",
+        "p.A341V",
+        "p.A344A",
+        "p.A178-G189del",
+        "p.Q361_K362insRQ",
+    }
+    assert by_protein["p.Y51X"]["cdna_notation"] == "c.153C>A"
+    assert by_protein["p.A341V"]["penetrance_data"] == {
+        "total_carriers_observed": 35,
+        "affected_count": 23,
+        "unaffected_count": 12,
+    }
+    assert by_protein["p.A344A"]["cdna_notation"] == "c.1032G>A"
+    assert all(v["source_location"].startswith("eTable 1.") for v in variants)
+
+
+def test_fixed_width_parser_reads_lqts_compendium_summary_rows():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 2. Compendium Summary of All Mutations
+Gene  Exon      Nucleotide Change   Mutation        Mutation Type Location         Number Ethnicity   Status
+KCNQ1         1 153 C>G             Y51X            Nonsense          N-Terminal        1W            Case
+KCNQ1         1 Dup 160-168         IAP 54-56 dup   Inframe insertion N-Terminal        5 B>H         Polymorphism
+KCNQ1         1 Del 211-219         71-73 del AAP   Inframe deletion N-Terminal         1W            Case
+KCNQ1 intron 2 477+5G>C             M159sp          Splice site       S2 Domain         2W            Case
+KCNQ1         6 Del 826-828         276 del S       Inframe deletion S5 domain          1W            Case
+KCNQ1         9 Ins 1177-1179 TGG   392 ins W       Inframe insertion C-Terminal        1W            Case
+KCNQ1         16 Del 1842-1844      614 del H       Inframe deletion C-terminus (SAD)   1W            Case
+KCNH2         1 77-78 GC>TT         S26I            Missense          N-Terminal        1W            Case
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "KCNQ1")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {
+        "Y51X",
+        "I54ins",
+        "P73del",
+        "M159X",
+        "S276del",
+        "W392ins",
+        "H614del",
+    }
+    assert by_protein["Y51X"]["penetrance_data"] == {
+        "total_carriers_observed": 1,
+        "affected_count": 1,
+        "unaffected_count": 0,
+    }
+    assert by_protein["I54ins"]["clinical_significance"] == "benign"
+    assert by_protein["I54ins"]["penetrance_data"] == {
+        "total_carriers_observed": 5,
+        "affected_count": 0,
+        "unaffected_count": 5,
+    }
+    assert all(v["source_location"].startswith("Table 2.") for v in variants)
+
+
+def test_fixed_width_parser_reads_markitdown_lqts_compendium_rows():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 2. Compendium Summary of All Mutations
+Gene Exon Nucleotide Change Mutation Mutation Type Location Number Ethnicity Status
+| KCNQ1 | 1153 C>G | Y51X | Nonsense | N-Terminal | 1W | Case |
+| ----- | -------- | ---- | -------- | ---------- | -- | ---- |
+| KCNQ1 | 6817 C>T | L273F | Missense | S5 domain | 3W>Un | Case |
+| KCNQ1 | 6898 G>A | A300T | Missense | Pore | 1A | Rare control |
+| KCNH2 | 177-78 GC>TT | S26I | Missense | N-Terminal | 1W | Case |
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "KCNQ1")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {"Y51X", "L273F", "A300T"}
+    assert by_protein["L273F"]["penetrance_data"] == {
+        "total_carriers_observed": 3,
+        "affected_count": 3,
+        "unaffected_count": 0,
+    }
+    assert by_protein["A300T"]["penetrance_data"] == {
+        "total_carriers_observed": 1,
+        "affected_count": 0,
+        "unaffected_count": 1,
+    }
+
+
+def test_fixed_width_parser_reads_vertical_lqts_compendium_rows():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Table 2. Compendium Summary of All Mutations
+Gene
+Exon
+Nucleotide Change
+Mutation
+Mutation Type
+Location
+Number Ethnicity
+Status
+KCNQ1
+1 153 C>G
+Y51X
+Nonsense
+N-Terminal
+1 W
+Case
+KCNQ1
+1 Dup 160-168
+IAP 54-56 dup
+Inframe insertion N-Terminal
+5 B>H
+Polymorphism
+KCNQ1 intron 2
+477+5G>C
+M159sp
+Splice site
+S2 Domain
+2 W
+Case
+KCNQ1
+6 Del 826-828
+276 del S
+Inframe deletion S5 domain
+1 W
+Case
+KCNH2
+1 77-78 GC>TT
+S26I
+Missense
+N-Terminal
+1 W
+Case
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "KCNQ1")
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {"Y51X", "I54ins", "M159X", "S276del"}
+    assert by_protein["I54ins"]["penetrance_data"] == {
+        "total_carriers_observed": 5,
+        "affected_count": 0,
+        "unaffected_count": 5,
+    }
+    assert by_protein["M159X"]["penetrance_data"]["affected_count"] == 2
+
+
+def test_lqts_compendium_short_circuit_does_not_duplicate_vertical_parse():
+    extractor = ExpertExtractor(models=["test-model"], tier_threshold=0)
+    text = """
+Table 2. Compendium Summary of All Mutations
+Gene
+Exon
+Nucleotide Change
+Mutation
+Mutation Type
+Location
+Number Ethnicity
+Status
+KCNQ1
+1 153 C>G
+Y51X
+Nonsense
+N-Terminal
+1 W
+Case
+KCNQ1
+1 Dup 160-168
+IAP 54-56 dup
+Inframe insertion N-Terminal
+5 B>H
+Polymorphism
+""" + ("This paragraph provides full article context. " * 20)
+
+    result = extractor._attempt_extraction(
+        Paper(pmid="19841300", title="LQTS EPV", gene_symbol="KCNQ1", full_text=text),
+        "test-model",
+        text,
+        estimated_variants=2,
+    )
+
+    assert result.success
+    assert result.model_used == "deterministic-fixed-width-table-parser"
+    assert [v["protein_notation"] for v in result.extracted_data["variants"]] == [
+        "Y51X",
+        "I54ins",
+    ]
+    assert (
+        result.extracted_data["extraction_metadata"]["deterministic_parser_counts"][
+            "vertical"
+        ]
+        == 0
+    )
+
+
 def test_fixed_width_parser_reads_coding_effect_count_table():
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """
@@ -485,6 +699,61 @@ def test_does_not_suppress_deterministic_table_counts():
 
     assert "study_wide_count_suppressed" not in cleaned["extraction_metadata"]
     assert all(v["patients"]["count"] == 43 for v in cleaned["variants"])
+
+
+def test_suppresses_repeated_study_wide_context_fields_from_llm_variants():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    data = {
+        "variants": [
+            {
+                "protein_notation": f"p.Arg{i}Trp",
+                "patients": {
+                    "phenotype": (
+                        "Arrhythmia/ECG phenotypes in 35% of designated "
+                        "variant carriers overall"
+                    ),
+                    "demographics": "median age 61 years",
+                },
+                "penetrance_data": {},
+                "additional_notes": "LLM extraction from cohort summary",
+            }
+            for i in range(1, 7)
+        ],
+        "extraction_metadata": {},
+    }
+
+    cleaned = extractor._suppress_repeated_study_wide_context_fields(data)
+
+    assert cleaned["extraction_metadata"]["study_wide_context_suppressed"] == 12
+    for variant in cleaned["variants"]:
+        assert variant["patients"]["phenotype"] is None
+        assert variant["patients"]["demographics"] is None
+        assert "Cleared repeated cohort-wide phenotype" in variant["additional_notes"]
+        assert (
+            "Cleared repeated cohort-wide demographics" in variant["additional_notes"]
+        )
+
+
+def test_does_not_suppress_repeated_plain_disease_phenotype():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    data = {
+        "variants": [
+            {
+                "protein_notation": f"p.Arg{i}Trp",
+                "patients": {"phenotype": "Long QT syndrome"},
+                "penetrance_data": {},
+            }
+            for i in range(1, 7)
+        ],
+        "extraction_metadata": {},
+    }
+
+    cleaned = extractor._suppress_repeated_study_wide_context_fields(data)
+
+    assert "study_wide_context_suppressed" not in cleaned["extraction_metadata"]
+    assert all(
+        v["patients"]["phenotype"] == "Long QT syndrome" for v in cleaned["variants"]
+    )
 
 
 def test_artifact_filter_removes_malformed_protein_notations():

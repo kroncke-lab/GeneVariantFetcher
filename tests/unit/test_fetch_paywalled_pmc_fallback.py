@@ -237,6 +237,161 @@ def test_write_outputs_writes_flat_mirror_with_identical_content(tmp_path: Path)
     assert meta["per_pmid_full_context_path"] == str(per_pmid)
 
 
+def test_fetch_one_promotes_pmc_when_publisher_supplements_fail(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """A good publisher body is not enough when every supplement failed."""
+    pmid = "19841300"
+    body = "Full article body with KCNQ1 A300T and enough clinical context."
+    canonical = tmp_path / f"{pmid}_FULL_CONTEXT.md"
+    per_pmid = tmp_path / pmid / "FULL_CONTEXT.md"
+
+    fetcher = SimpleNamespace(
+        converter=MagicMock(),
+        scraper=MagicMock(),
+        session=SimpleNamespace(),
+        fetch=MagicMock(
+            return_value=SimpleNamespace(
+                main_markdown=body,
+                main_html="<html></html>",
+                supp_files=[{"url": "https://publisher.example/supp.pdf"}],
+                publisher="aha",
+                final_url="https://publisher.example/article",
+                figure_paths=[],
+                notes=[],
+                error=None,
+            )
+        ),
+    )
+
+    monkeypatch.setattr(
+        fp,
+        "find_strategy",
+        lambda doi, allowlist=None: SimpleNamespace(NAME="aha"),
+    )
+    monkeypatch.setattr(fp, "validate_article_content", lambda text: (True, "ok"))
+
+    def fake_write_outputs(*args, **kwargs):
+        canonical.parent.mkdir(parents=True, exist_ok=True)
+        per_pmid.parent.mkdir(parents=True, exist_ok=True)
+        canonical.write_text(body, encoding="utf-8")
+        per_pmid.write_text(body, encoding="utf-8")
+        enrichment = SimpleNamespace(
+            unified_markdown=body,
+            supplement_count=0,
+            figure_caption_count=0,
+            table_caption_count=0,
+        )
+        return canonical, per_pmid, body, enrichment
+
+    monkeypatch.setattr(fp, "write_outputs", fake_write_outputs)
+    monkeypatch.setattr(
+        fp,
+        "try_pmc_fallback",
+        lambda *args, **kwargs: {
+            "pmid": pmid,
+            "pmcid": "PMC3025752",
+            "outcome": "success",
+            "reason": "ok",
+            "chars": 75000,
+            "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3025752/",
+            "path": str(tmp_path / "pmc_FULL_CONTEXT.md"),
+            "canonical_path": str(tmp_path / "pmc_FULL_CONTEXT.md"),
+            "per_pmid_path": str(tmp_path / pmid / "PMC_FULL_CONTEXT.md"),
+            "supp_files": 2,
+            "figure_captions": 5,
+            "table_captions": 3,
+            "supplements_downloaded": 1,
+        },
+    )
+
+    row = fp.fetch_one(
+        fetcher=fetcher,
+        pmid=pmid,
+        doi="10.1161/CIRCULATIONAHA.109.863076",
+        output_dir=tmp_path,
+        pmc_session=SimpleNamespace(),
+    )
+
+    assert row["outcome"] == "success_via_pmc"
+    assert row["strategy"] == "aha+pmc_fallback"
+    assert row["pmcid"] == "PMC3025752"
+    assert row["supplements_downloaded"] == 1
+
+
+def test_fetch_one_promotes_elsevier_api_when_browser_returns_stub(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    pmid = "15840476"
+    stub_body = "log in, subscribe or purchase for full access"
+    api_body = (
+        "# MAIN TEXT\n\n"
+        "### Results\n\n"
+        "Full article body with KCNH2 variant tables and enough clinical context.\n\n"
+        "Table 3 Summary of KCNH2 LQT2-associated variants\n"
+        "| No. | Exon | Nucleotide | Variant | Location | No. of patients |\n"
+        "| --- | --- | --- | --- | --- | --- |\n"
+        "| 27 | 6 | 1264 G>A | A422T | S1 | 1 |\n"
+    )
+
+    fetcher = SimpleNamespace(
+        converter=MagicMock(),
+        scraper=MagicMock(),
+        session=SimpleNamespace(),
+        fetch=MagicMock(
+            return_value=SimpleNamespace(
+                main_markdown=stub_body,
+                main_html="<html></html>",
+                supp_files=[],
+                publisher="elsevier_open",
+                final_url="https://www.heartrhythmjournal.com/article/x/abstract",
+                figure_paths=[],
+                notes=[],
+                error=None,
+            )
+        ),
+    )
+
+    class FakeElsevierClient:
+        def __init__(self, *args, **kwargs):
+            self.is_available = True
+
+        @staticmethod
+        def is_elsevier_doi(doi: str) -> bool:
+            return doi.startswith("10.1016/")
+
+        def fetch_fulltext(self, doi=None, pii=None, url=None):
+            return api_body, None
+
+    monkeypatch.setattr(
+        fp,
+        "find_strategy",
+        lambda doi, allowlist=None: SimpleNamespace(NAME="elsevier_open"),
+    )
+    monkeypatch.setattr(fp, "ElsevierAPIClient", FakeElsevierClient)
+    monkeypatch.setattr(
+        fp,
+        "validate_article_content",
+        lambda text: (
+            (False, "paywall") if "log in, subscribe" in text else (True, "ok")
+        ),
+    )
+
+    row = fp.fetch_one(
+        fetcher=fetcher,
+        pmid=pmid,
+        doi="10.1016/j.hrthm.2005.01.020",
+        output_dir=tmp_path,
+        pmc_session=SimpleNamespace(),
+    )
+
+    assert row["outcome"] == "success_via_elsevier_api"
+    assert row["strategy"] == "elsevier_open+elsevier_api"
+    assert row["chars"] == len(api_body)
+    assert row["outcome"] in fp.FETCH_SUCCESS_OUTCOMES
+    assert "A422T" in (tmp_path / f"{pmid}_FULL_CONTEXT.md").read_text(encoding="utf-8")
+
+
 def test_pmc_fallback_returns_none_when_no_pmcid(
     tmp_path: Path, converter_stub: MagicMock
 ):

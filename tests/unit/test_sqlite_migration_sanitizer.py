@@ -136,6 +136,35 @@ def test_migration_keeps_multi_residue_deletion(tmp_path):
     conn.close()
 
 
+def test_migration_keeps_hyphen_range_deletions_from_lqt_tables(tmp_path):
+    db_path = tmp_path / "variants.db"
+    conn = create_database_schema(str(db_path))
+    cursor = conn.cursor()
+
+    extraction_data = {
+        "paper_metadata": {"pmid": "30758498", "title": "LQT1 supplement"},
+        "variants": [{"gene_symbol": "KCNQ1"}],
+    }
+    insert_paper_metadata(cursor, extraction_data)
+
+    first_id = insert_variant_data(
+        cursor,
+        "30758498",
+        {"gene_symbol": "KCNQ1", "protein_notation": "p.A178-G189del"},
+    )
+    second_id = insert_variant_data(
+        cursor,
+        "30758498",
+        {"gene_symbol": "KCNQ1", "protein_notation": "p.Q521-Y522delT"},
+    )
+    conn.commit()
+
+    assert first_id is not None
+    assert second_id is not None
+    assert cursor.execute("SELECT COUNT(*) FROM variants").fetchone()[0] == 2
+    conn.close()
+
+
 def test_migration_discovers_extract_folder_json_names(tmp_path):
     extraction_dir = tmp_path / "extractions"
     extraction_dir.mkdir()

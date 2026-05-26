@@ -1489,10 +1489,23 @@ class SupplementScraper:
 
                 # Normalize PMC URLs to use correct path format
                 url = self._normalize_pmc_url(original_url, base_url)
-                filename = Path(urlparse(url).path).name
+                parsed_url = urlparse(url)
+                filename = Path(parsed_url.path).name
 
                 # Skip invalid filenames
                 if not filename:
+                    continue
+
+                # Publisher navigation pages such as /supplements are not
+                # article-level downloadable supplements; treating them as a
+                # zero-byte file creates false acquisition-failure signals.
+                if (
+                    is_supplement_link
+                    and not is_pattern_match
+                    and not is_file_link
+                    and parsed_url.path.rstrip("/").lower()
+                    in {"/supplement", "/supplements", "/supplementary"}
+                ):
                     continue
 
                 if self._is_known_non_supplement_file(filename):

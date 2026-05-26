@@ -767,9 +767,26 @@ def to_canonical_form(variant: str) -> Optional[str]:
     if v.lower().startswith("p."):
         v = v[2:]
 
+    # --- Numeric in-frame deletion with deleted residues: 73-73 DEL AAP -> P73Del ---
+    m = re.match(
+        r"^(\d+)(?:[-_](\d+))?\s*del\s*([A-Z]+)$",
+        v,
+        re.IGNORECASE,
+    )
+    if m:
+        position = m.group(2) or m.group(1)
+        deleted = m.group(3).upper()
+        return f"{deleted[-1]}{position}Del"
+
+    # --- Numeric in-frame insertion with inserted residues: 392INSW -> W392Ins ---
+    m = re.match(r"^(\d+)\s*ins\s*([A-Z]+)$", v, re.IGNORECASE)
+    if m:
+        inserted = m.group(2).upper()
+        return f"{inserted[0]}{m.group(1)}Ins"
+
     # --- Three-letter range deletion: Gln1507_Pro1509del -> Q1507_P1509Del ---
     m = re.match(
-        r"^([A-Z][a-z]{2})(\d+)_([A-Z][a-z]{2})(\d+)del\d*$",
+        r"^([A-Z][a-z]{2})(\d+)[_-]([A-Z][a-z]{2})(\d+)del([A-Z]*)\d*$",
         v,
         re.IGNORECASE,
     )
@@ -777,12 +794,19 @@ def to_canonical_form(variant: str) -> Optional[str]:
         ref1 = AA_3_TO_1.get(m.group(1).title())
         ref2 = AA_3_TO_1.get(m.group(3).title())
         if ref1 and ref2:
-            return f"{ref1}{m.group(2)}_{ref2}{m.group(4)}Del"
+            return f"{ref1}{m.group(2)}_{ref2}{m.group(4)}Del{m.group(5).upper()}"
 
     # --- Single-letter range deletion: K1505_Q1507DEL -> K1505_Q1507Del ---
-    m = re.match(r"^([A-Z])(\d+)_([A-Z])(\d+)del\d*$", v, re.IGNORECASE)
+    m = re.match(
+        r"^([A-Z])(\d+)[_-]([A-Z])(\d+)del([A-Z]*)\d*$",
+        v,
+        re.IGNORECASE,
+    )
     if m:
-        return f"{m.group(1).upper()}{m.group(2)}_{m.group(3).upper()}{m.group(4)}Del"
+        return (
+            f"{m.group(1).upper()}{m.group(2)}_"
+            f"{m.group(3).upper()}{m.group(4)}Del{m.group(5).upper()}"
+        )
 
     # --- Numeric protein insertion: 4944_4945INSH -> 4944_4945InsH ---
     m = re.match(r"^(\d+)_(\d+)ins([A-Z][A-Za-z]{0,2})$", v, re.IGNORECASE)

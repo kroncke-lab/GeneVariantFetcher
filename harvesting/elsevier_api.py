@@ -321,6 +321,10 @@ class ElsevierAPIClient:
                     if body_text:
                         markdown += f"### Content\n\n{body_text}\n\n"
 
+            table_markdown = self._extract_tables_markdown(root)
+            if table_markdown:
+                markdown += "## TABLES\n\n" + table_markdown
+
             # If we got very little content, try to extract from full-text-retrieval-response
             if len(markdown) < 500:
                 # Try originalText element (common in Elsevier responses)
@@ -340,6 +344,72 @@ class ElsevierAPIClient:
         except Exception as e:
             logger.error(f"Error converting Elsevier XML to markdown: {e}")
             return None
+
+    def _extract_tables_markdown(self, root: ET.Element) -> str:
+        """Render Elsevier XML table bodies as markdown tables.
+
+        Elsevier article XML keeps variant compendium rows in ``table/tgroup``
+        structures. Plain text extraction preserves only surrounding prose, so
+        large clinical mutation tables silently disappear unless we render the
+        row/entry cells explicitly.
+        """
+        rendered: list[str] = []
+        tables = root.findall(".//table")
+        if not tables:
+            tables = root.findall(".//{*}table")
+        for table in tables:
+            table_md = self._process_table(table)
+            if table_md:
+                rendered.append(table_md)
+        return "\n\n".join(rendered) + ("\n\n" if rendered else "")
+
+    def _process_table(self, table_elem: ET.Element) -> str:
+        label_elem = table_elem.find("./label")
+        if label_elem is None:
+            label_elem = table_elem.find("./{*}label")
+        caption_elem = table_elem.find("./caption")
+        if caption_elem is None:
+            caption_elem = table_elem.find("./{*}caption")
+        label = self._extract_text(label_elem) if label_elem is not None else ""
+        caption = self._extract_text(caption_elem) if caption_elem is not None else ""
+        title = " ".join(part for part in (label, caption) if part).strip()
+
+        rows: list[list[str]] = []
+        row_elems = table_elem.findall(".//row")
+        if not row_elems:
+            row_elems = table_elem.findall(".//{*}row")
+        for row in row_elems:
+            entries = row.findall("./entry")
+            if not entries:
+                entries = row.findall("./{*}entry")
+            cells = [
+                self._clean_table_markdown_cell(self._extract_text(e)) for e in entries
+            ]
+            if any(cells):
+                rows.append(cells)
+
+        if not rows:
+            return title
+
+        width = max(len(row) for row in rows)
+        normalized_rows = [row + [""] * (width - len(row)) for row in rows]
+        lines = [title] if title else []
+        lines.append("| " + " | ".join(normalized_rows[0]) + " |")
+        lines.append("| " + " | ".join(["---"] * width) + " |")
+        for row in normalized_rows[1:]:
+            lines.append("| " + " | ".join(row) + " |")
+        return "\n".join(lines)
+
+    @staticmethod
+    def _clean_table_markdown_cell(value: str) -> str:
+        return (
+            (value or "")
+            .replace("|", "/")
+            .replace("→", ">")
+            .replace("–", "-")
+            .replace("−", "-")
+            .strip()
+        )
 
     def _process_section(self, section_elem: ET.Element, level: int = 3) -> str:
         """

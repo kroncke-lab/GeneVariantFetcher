@@ -1089,17 +1089,49 @@ class ExpertExtractor(BaseLLMCaller):
         "WES",
         "WT",
     }
+    TABLE_LABEL_GENE_ALIASES = {
+        "LQT1": "KCNQ1",
+        "LQT2": "KCNH2",
+        "LQT3": "SCN5A",
+    }
+    TABLE_LABEL_EXPLICIT_GENES = {
+        "ANK2",
+        "CACNA1C",
+        "CALM1",
+        "CALM2",
+        "CALM3",
+        "CASQ2",
+        "CAV3",
+        "KCNE1",
+        "KCNE2",
+        "KCNH2",
+        "KCNJ2",
+        "KCNQ1",
+        "RYR2",
+        "SCN5A",
+        "SNTA1",
+        "TECRL",
+        "TRDN",
+    }
+    LQTS_COMPENDIUM_MUTATION_TYPES = (
+        "Inframe insertion",
+        "Inframe deletion",
+        "Splice site",
+        "Frameshift",
+        "Missense",
+        "Nonsense",
+    )
 
     PROTEIN_TABLE_VALUE_RE = re.compile(
         r"^(?:p\.)?(?:"
         r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
         r"\d{1,4}"
-        r"(?:_(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])\d{1,4})?"
+        r"(?:[_-](?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])\d{1,4})?"
         r"(?:"
         r"(?:(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY]))?fs(?:Ter|X|\*)?\d*"
         r"|(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
         r"|[ACDEFGHIKLMNPQRSTVWY*X?]"
-        r"|del\d*"
+        r"|del(?:\d*|[ACDEFGHIKLMNPQRSTVWY]+)"
         r"|dup"
         r"|ins(?:(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])+)?"
         r")"
@@ -1193,6 +1225,9 @@ class ExpertExtractor(BaseLLMCaller):
             .replace("\u00a0", "")
             .replace("\u2009", "")
             .replace("\u200a", "")
+            .replace("→", ">")
+            .replace("–", "-")
+            .replace("−", "-")
             .rstrip(",;")
         )
         if not cleaned or cleaned.lower() in {"nan", "na", "n/a", "none", "-", "."}:
@@ -1215,6 +1250,56 @@ class ExpertExtractor(BaseLLMCaller):
         )
         if deletion_prefix:
             cleaned = f"{deletion_prefix.group(2).upper()}{deletion_prefix.group(1)}del"
+        deletion_infix = re.match(
+            r"^(?:p\.)?(\d{1,4})del([ACDEFGHIKLMNPQRSTVWY])$",
+            cleaned,
+            re.IGNORECASE,
+        )
+        if deletion_infix:
+            prefix = "p." if cleaned.lower().startswith("p.") else ""
+            cleaned = (
+                f"{prefix}{deletion_infix.group(2).upper()}{deletion_infix.group(1)}del"
+            )
+        cleaned = cleaned.rstrip("⁎†‡§")
+        residue_range_deletion = re.match(
+            r"^(p\.)?([ACDEFGHIKLMNPQRSTVWY]{2,})(\d{1,4})-(\d{1,4})del$",
+            cleaned,
+            re.IGNORECASE,
+        )
+        if residue_range_deletion:
+            residues = residue_range_deletion.group(2).upper()
+            cleaned = (
+                f"{residue_range_deletion.group(1) or ''}"
+                f"{residues[0]}{residue_range_deletion.group(3)}_"
+                f"{residues[-1]}{residue_range_deletion.group(4)}del"
+            )
+        ocr_terminal_i = re.match(
+            r"^(p\.)?([ACDEFGHIKLMNPQRSTVWY])(\d{2,4})1$",
+            cleaned,
+            re.IGNORECASE,
+        )
+        if ocr_terminal_i:
+            cleaned = (
+                f"{ocr_terminal_i.group(1) or ''}"
+                f"{ocr_terminal_i.group(2).upper()}{ocr_terminal_i.group(3)}I"
+            )
+        frameshift_slash = re.match(
+            r"^(p\.)?([ACDEFGHIKLMNPQRSTVWY]\d+)fs/\d+$",
+            cleaned,
+            re.IGNORECASE,
+        )
+        if frameshift_slash:
+            cleaned = f"{frameshift_slash.group(1) or ''}{frameshift_slash.group(2)}fsX"
+        splice = re.match(
+            r"^(p\.)?([ACDEFGHIKLMNPQRSTVWY])(\d+)/?sp$",
+            cleaned,
+            re.IGNORECASE,
+        )
+        if splice:
+            cleaned = (
+                f"{splice.group(1) or ''}{splice.group(2).upper()}{splice.group(3)}sp"
+            )
+            return cleaned
         if cleaned.endswith("*"):
             without_footnote = cleaned[:-1]
             if without_footnote and self.PROTEIN_TABLE_VALUE_RE.match(without_footnote):
@@ -1232,7 +1317,13 @@ class ExpertExtractor(BaseLLMCaller):
                 cleaned = "c." + cleaned[1:]
             else:
                 cleaned = "c." + cleaned
-        cleaned = "c." + cleaned[2:].upper()
+        body = cleaned[2:].upper()
+        body = re.sub(
+            r"(DEL|DUP|INS)([ACGT]*)",
+            lambda match: match.group(1).lower() + match.group(2),
+            body,
+        )
+        cleaned = "c." + body
         if self.CDNA_TABLE_VALUE_RE.match(cleaned):
             return cleaned
         return None
@@ -1320,6 +1411,400 @@ class ExpertExtractor(BaseLLMCaller):
                 continue
             symbols.add(token)
         return symbols
+
+    def _gene_scope_from_table_label(self, label: str) -> set[str]:
+        """Return explicit target genes implied by a table title."""
+        symbols = {
+            symbol
+            for symbol in self._gene_symbols_in_table_label(label)
+            if symbol in self.TABLE_LABEL_EXPLICIT_GENES
+        }
+        label_upper = label.upper()
+        for alias, gene in self.TABLE_LABEL_GENE_ALIASES.items():
+            if re.search(rf"\b{re.escape(alias)}\b", label_upper):
+                symbols.add(gene)
+        return symbols
+
+    def _parse_lqt_fixed_width_variant_row(
+        self,
+        stripped: str,
+        gene_symbol: str,
+        current_table_label: str,
+    ) -> Optional[dict]:
+        """Parse LQT registry supplement rows with cDNA/protein/count columns."""
+        if not re.search(r"(?:^|[\s*])(?:[cｃ]\.?\s*\d|p\.)", stripped):
+            return None
+
+        cdna = None
+        cdna_match = re.search(
+            r"(?:[cｃ]\.?\s*\d+(?:[+-]\d+|[-_]\d+)?\s*"
+            r"(?:[ACGTacgt]\s*>\s*[ACGTacgt]|del\s*[ACGTacgt]*|"
+            r"dup\s*[ACGTacgt]*|ins\s*[ACGTacgt]*))",
+            stripped,
+        )
+        if cdna_match:
+            cdna_raw = (
+                cdna_match.group(0)
+                .replace("ｃ", "c")
+                .replace(" ", "")
+                .replace("\u3000", "")
+            )
+            cdna = self._valid_table_cdna(cdna_raw)
+
+        protein = None
+        protein_match = re.search(r"\bp\.\s*", stripped, re.IGNORECASE)
+        if protein_match:
+            protein_tokens: list[str] = []
+            for token in stripped[protein_match.end() :].split():
+                clean_token = token.strip(",;")
+                if (
+                    not clean_token
+                    or clean_token.startswith("+")
+                    or clean_token.isdigit()
+                    or clean_token.upper()
+                    in {"N", "C", "MS", "TM", "DI", "DII", "DIII", "DIV"}
+                    or clean_token.lower() in {"c-loop", "s5", "s6", "diii-div"}
+                    or "term" in clean_token.lower()
+                    or "pore" in clean_token.lower()
+                    or clean_token.lower().startswith("splicing")
+                ):
+                    break
+                protein_tokens.append(clean_token)
+            if protein_tokens:
+                protein_raw = "p." + "".join(protein_tokens)
+                protein = self._valid_table_protein(protein_raw)
+
+        if not cdna and not protein:
+            return None
+
+        numeric_tokens = [int(token) for token in stripped.split() if token.isdigit()]
+        if len(numeric_tokens) < 3:
+            return None
+        count = numeric_tokens[0]
+        affected_count = numeric_tokens[-2]
+        unaffected_count = max(count - affected_count, 0)
+
+        return {
+            "gene_symbol": gene_symbol,
+            "cdna_notation": cdna,
+            "protein_notation": protein,
+            "clinical_significance": "pathogenic",
+            "patients": {
+                "count": count,
+                "phenotype": f"{gene_symbol}-associated disease",
+            },
+            "penetrance_data": {
+                "total_carriers_observed": count,
+                "affected_count": affected_count,
+                "unaffected_count": unaffected_count,
+            },
+            "individual_records": [],
+            "functional_data": {"summary": "", "assays": []},
+            "segregation_data": None,
+            "population_frequency": None,
+            "evidence_level": "medium",
+            "source_location": current_table_label or "Fixed-width LQT mutation table",
+            "additional_notes": "Parsed via deterministic fixed-width LQT mutation table parser",
+            "key_quotes": [],
+        }
+
+    def _normalize_lqts_compendium_protein(
+        self, protein_raw: Optional[str]
+    ) -> Optional[str]:
+        if not protein_raw:
+            return None
+        compact = re.sub(r"\s+", " ", protein_raw.strip())
+
+        insertion_dup = re.match(
+            r"^([ACDEFGHIKLMNPQRSTVWY]+)\s+(\d+)-(\d+)\s+dup$",
+            compact,
+            re.IGNORECASE,
+        )
+        if insertion_dup:
+            compact = f"{insertion_dup.group(1)[0].upper()}{insertion_dup.group(2)}ins"
+
+        range_deletion = re.match(
+            r"^(\d+)-(\d+)\s+del\s+([ACDEFGHIKLMNPQRSTVWY]+)$",
+            compact,
+            re.IGNORECASE,
+        )
+        if range_deletion:
+            compact = (
+                f"{range_deletion.group(3)[-1].upper()}{range_deletion.group(2)}del"
+            )
+
+        numeric_deletion = re.match(
+            r"^(\d+)\s+del\s+([ACDEFGHIKLMNPQRSTVWY])$",
+            compact,
+            re.IGNORECASE,
+        )
+        if numeric_deletion:
+            compact = (
+                f"{numeric_deletion.group(2).upper()}{numeric_deletion.group(1)}del"
+            )
+
+        numeric_insertion = re.match(
+            r"^(\d+)\s+ins\s+([ACDEFGHIKLMNPQRSTVWY]+)$",
+            compact,
+            re.IGNORECASE,
+        )
+        if numeric_insertion:
+            compact = (
+                f"{numeric_insertion.group(2)[0].upper()}"
+                f"{numeric_insertion.group(1)}ins"
+            )
+
+        frameshift = re.match(
+            r"^([ACDEFGHIKLMNPQRSTVWY]\d+)fs/\d+$",
+            compact,
+            re.IGNORECASE,
+        )
+        if frameshift:
+            compact = f"{frameshift.group(1).upper()}fsX"
+
+        splice = re.match(
+            r"^([ACDEFGHIKLMNPQRSTVWY])(\d+)sp$",
+            compact,
+            re.IGNORECASE,
+        )
+        if splice:
+            compact = f"{splice.group(1).upper()}{splice.group(2)}X"
+
+        return self._valid_table_protein(compact)
+
+    def _extract_lqts_compendium_protein(
+        self, prefix: str, mutation_type: str
+    ) -> Optional[str]:
+        patterns = [
+            r"[ACDEFGHIKLMNPQRSTVWY]+\s+\d+-\d+\s+dup",
+            r"\d+-\d+\s+del\s+[ACDEFGHIKLMNPQRSTVWY]+",
+            r"\d+\s+del\s+[ACDEFGHIKLMNPQRSTVWY]",
+            r"\d+\s+ins\s+[ACDEFGHIKLMNPQRSTVWY]+",
+            r"[ACDEFGHIKLMNPQRSTVWY]\d+fs/\d+",
+            r"[ACDEFGHIKLMNPQRSTVWY]\d+sp",
+            r"[ACDEFGHIKLMNPQRSTVWY]\d+[ACDEFGHIKLMNPQRSTVWYX]",
+        ]
+        candidates: list[str] = []
+        for pattern in patterns:
+            candidates.extend(
+                match.group(0)
+                for match in re.finditer(pattern, prefix, flags=re.IGNORECASE)
+            )
+        if not candidates:
+            return None
+        return max(candidates, key=len)
+
+    def _parse_lqts_compendium_status(
+        self, count_ethnicity: str, status: str
+    ) -> Optional[tuple[int, int, int, bool]]:
+        count_match = re.match(r"\s*(\d+)", count_ethnicity)
+        if not count_match:
+            return None
+        count = int(count_match.group(1))
+        control_like = bool(
+            re.search(r"\b(rare control|polymorphism)\b", status, re.IGNORECASE)
+        )
+        if control_like:
+            return count, 0, count, True
+        return count, count, 0, False
+
+    def _lqts_compendium_variant(
+        self,
+        *,
+        gene_symbol: str,
+        protein_raw: Optional[str],
+        count_ethnicity: str,
+        status: str,
+        source_location: str,
+    ) -> Optional[dict]:
+        protein = self._normalize_lqts_compendium_protein(protein_raw)
+        if not protein:
+            return None
+        parsed_status = self._parse_lqts_compendium_status(count_ethnicity, status)
+        if not parsed_status:
+            return None
+        count, affected_count, unaffected_count, control_like = parsed_status
+
+        return {
+            "gene_symbol": gene_symbol,
+            "cdna_notation": None,
+            "protein_notation": protein,
+            "clinical_significance": "benign" if control_like else "pathogenic",
+            "patients": {
+                "count": count,
+                "phenotype": "unaffected control"
+                if control_like
+                else f"{gene_symbol}-associated disease",
+            },
+            "penetrance_data": {
+                "total_carriers_observed": count,
+                "affected_count": affected_count,
+                "unaffected_count": unaffected_count,
+            },
+            "individual_records": [],
+            "functional_data": {"summary": "", "assays": []},
+            "segregation_data": None,
+            "population_frequency": None,
+            "evidence_level": "medium",
+            "source_location": source_location
+            or "LQTS compendium summary of all mutations",
+            "additional_notes": "Parsed via deterministic LQTS compendium table parser",
+            "key_quotes": [],
+        }
+
+    def _parse_lqts_compendium_variant_row(
+        self,
+        stripped: str,
+        gene_symbol: str,
+        current_table_label: str,
+    ) -> Optional[dict]:
+        """Parse PMID 19841300-style mixed-gene LQTS compendium rows."""
+        if stripped.startswith("|"):
+            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+            cells = [cell for cell in cells if cell]
+            if (
+                len(cells) < 7
+                or set("".join(cells)) <= {"-", ":", " "}
+                or not cells[0].upper().startswith(gene_symbol.upper())
+            ):
+                return None
+            mutation_type_idx = next(
+                (
+                    idx
+                    for idx, cell in enumerate(cells)
+                    if cell.lower()
+                    in {kind.lower() for kind in self.LQTS_COMPENDIUM_MUTATION_TYPES}
+                ),
+                None,
+            )
+            if mutation_type_idx is None or mutation_type_idx < 2:
+                return None
+            return self._lqts_compendium_variant(
+                gene_symbol=gene_symbol,
+                protein_raw=cells[mutation_type_idx - 1],
+                count_ethnicity=cells[-2],
+                status=cells[-1],
+                source_location=current_table_label,
+            )
+
+        if not stripped.upper().startswith(gene_symbol.upper()):
+            return None
+        status_match = re.search(
+            r"\s(?P<count_ethnicity>\d+\s*[A-Za-z]+(?:[>=][A-Za-z]+)*)\s+"
+            r"(?P<status>Rare control|Polymorphism|Case)\s*$",
+            stripped,
+            re.IGNORECASE,
+        )
+        if not status_match:
+            return None
+        left = stripped[: status_match.start()].rstrip()
+        type_match = re.search(
+            r"\s(?P<mutation_type>"
+            + "|".join(re.escape(kind) for kind in self.LQTS_COMPENDIUM_MUTATION_TYPES)
+            + r")\s+",
+            left,
+            re.IGNORECASE,
+        )
+        if not type_match:
+            return None
+        protein_raw = self._extract_lqts_compendium_protein(
+            left[: type_match.start()], type_match.group("mutation_type")
+        )
+        return self._lqts_compendium_variant(
+            gene_symbol=gene_symbol,
+            protein_raw=protein_raw,
+            count_ethnicity=status_match.group("count_ethnicity"),
+            status=status_match.group("status"),
+            source_location=current_table_label,
+        )
+
+    def _parse_lqts_compendium_vertical_variants(
+        self, full_text: str, gene_symbol: str
+    ) -> list[dict]:
+        """Parse PDF-converted compendium rows emitted one cell per line."""
+        lines = [line.strip() for line in full_text.splitlines()]
+        variants: list[dict] = []
+        current_table_label = ""
+        in_compendium = False
+        gene_line_re = re.compile(r"^(KCNQ1|KCNH2|SCN5A)(?:\s+intron\s+\d+)?$")
+        count_re = re.compile(r"^\d+\s*[A-Za-z]+(?:[>=][A-Za-z]+)*$")
+        status_re = re.compile(r"^(Rare control|Polymorphism|Case)$", re.IGNORECASE)
+        mutation_type_re = re.compile(
+            r"^("
+            + "|".join(re.escape(kind) for kind in self.LQTS_COMPENDIUM_MUTATION_TYPES)
+            + r")\b",
+            re.IGNORECASE,
+        )
+
+        i = 0
+        while i < len(lines):
+            stripped = lines[i]
+            if re.match(
+                r"^(?:eTable|(?:Supplementary|Supplemental)?\s*Table)\s+\w+",
+                stripped,
+                re.IGNORECASE,
+            ):
+                current_table_label = stripped
+                in_compendium = (
+                    "compendium summary of all mutations" in stripped.lower()
+                )
+                i += 1
+                continue
+            if not in_compendium or not gene_line_re.match(stripped):
+                i += 1
+                continue
+
+            row_gene = stripped.split()[0].upper()
+            j = i + 1
+            while j < len(lines) and not gene_line_re.match(lines[j]):
+                if re.match(r"^#{1,6}\s+", lines[j]):
+                    break
+                j += 1
+
+            if row_gene != gene_symbol.upper():
+                i = j
+                continue
+
+            cells = [cell for cell in lines[i + 1 : j] if cell]
+            status_idx = next(
+                (idx for idx, cell in enumerate(cells) if status_re.match(cell)),
+                None,
+            )
+            if status_idx is None:
+                i = j
+                continue
+            count_idx = next(
+                (
+                    idx
+                    for idx in range(status_idx - 1, -1, -1)
+                    if count_re.match(cells[idx])
+                ),
+                None,
+            )
+            mutation_type_idx = next(
+                (
+                    idx
+                    for idx, cell in enumerate(cells[:status_idx])
+                    if mutation_type_re.match(cell)
+                ),
+                None,
+            )
+            if count_idx is None or mutation_type_idx is None or mutation_type_idx == 0:
+                i = j
+                continue
+
+            variant = self._lqts_compendium_variant(
+                gene_symbol=gene_symbol,
+                protein_raw=cells[mutation_type_idx - 1],
+                count_ethnicity=cells[count_idx],
+                status=cells[status_idx],
+                source_location=current_table_label,
+            )
+            if variant:
+                variants.append(variant)
+            i = j
+
+        return variants
 
     def _parse_markdown_table_variants(
         self, full_text: str, gene_symbol: Optional[str]
@@ -1739,6 +2224,8 @@ class ExpertExtractor(BaseLLMCaller):
         functional_status_table = False
         clinical_mutation_table = False
         target_gene_lower = gene_symbol.lower()
+        target_gene_upper = gene_symbol.upper()
+        current_table_gene_scope: set[str] = set()
         effect_phrases = [
             ("Gain", "and", "loss"),
             ("Loss", "of", "function"),
@@ -1748,18 +2235,24 @@ class ExpertExtractor(BaseLLMCaller):
         for line in full_text.splitlines():
             stripped = line.strip()
             if re.match(
-                r"^(?:Supplementary|Supplemental)?\s*Table\s+\w+",
+                r"^(?:eTable|(?:Supplementary|Supplemental)?\s*Table)\s+\w+",
                 stripped,
                 re.IGNORECASE,
             ):
                 current_table_label = stripped
                 label_lower = current_table_label.lower()
                 if "continued" not in label_lower:
+                    current_table_gene_scope = self._gene_scope_from_table_label(
+                        current_table_label
+                    )
                     protein_count_table = (
                         "list of mutations by coding effect" in label_lower
                         and "frequency" in label_lower
                     )
-                    label_mentions_target = target_gene_lower in label_lower
+                    label_mentions_target = (
+                        target_gene_lower in label_lower
+                        or target_gene_upper in current_table_gene_scope
+                    )
                     nssnv_case_control_table = (
                         label_mentions_target
                         and "nssnv" in label_lower
@@ -1776,6 +2269,10 @@ class ExpertExtractor(BaseLLMCaller):
                     )
 
             lower = stripped.lower()
+            table_has_off_target_gene_scope = (
+                bool(current_table_gene_scope)
+                and target_gene_upper not in current_table_gene_scope
+            )
             if protein_count_table and lower.startswith("total"):
                 protein_count_table = False
                 continue
@@ -1798,8 +2295,51 @@ class ExpertExtractor(BaseLLMCaller):
             ):
                 nssnv_case_control_table = True
                 continue
+            if table_has_off_target_gene_scope:
+                continue
 
             tokens = line.strip().split()
+            lqt_mutation_table = (
+                target_gene_upper in current_table_gene_scope
+                and "mutations or rare variants" in current_table_label.lower()
+            )
+            if lqt_mutation_table:
+                variant = self._parse_lqt_fixed_width_variant_row(
+                    stripped,
+                    gene_symbol,
+                    current_table_label,
+                )
+                if variant:
+                    key = (
+                        variant.get("cdna_notation") or "",
+                        variant.get("protein_notation") or "",
+                    )
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    variants.append(variant)
+                    continue
+
+            lqts_compendium_table = (
+                "compendium summary of all mutations" in current_table_label.lower()
+            )
+            if lqts_compendium_table:
+                variant = self._parse_lqts_compendium_variant_row(
+                    stripped,
+                    gene_symbol,
+                    current_table_label,
+                )
+                if variant:
+                    key = (
+                        variant.get("cdna_notation") or "",
+                        variant.get("protein_notation") or "",
+                    )
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    variants.append(variant)
+                    continue
+
             if protein_count_table and len(tokens) >= 3 and tokens[-1].isdigit():
                 protein = self._valid_table_protein(tokens[0])
                 if not protein:
@@ -2153,6 +2693,18 @@ class ExpertExtractor(BaseLLMCaller):
                 }
             )
 
+        for variant in self._parse_lqts_compendium_vertical_variants(
+            full_text, gene_symbol
+        ):
+            key = (
+                variant.get("cdna_notation") or "",
+                variant.get("protein_notation") or "",
+            )
+            if key in seen:
+                continue
+            seen.add(key)
+            variants.append(variant)
+
         if variants:
             logger.info(
                 f"Parsed {len(variants)} variants via deterministic fixed-width table parser"
@@ -2467,6 +3019,57 @@ class ExpertExtractor(BaseLLMCaller):
 
         if suppressed and "extraction_metadata" in extracted_data:
             extracted_data["extraction_metadata"]["study_wide_count_suppressed"] = (
+                suppressed
+            )
+        return extracted_data
+
+    def _suppress_repeated_study_wide_context_fields(
+        self, extracted_data: dict
+    ) -> dict:
+        """Clear cohort-summary phenotype/demographics broadcast to many rows."""
+        study_wide_markers = re.compile(
+            r"\b(overall|cohort|study population|entire|all carriers|"
+            r"designated variant carriers|median|mean|average|percent)\b|%",
+            re.IGNORECASE,
+        )
+        groups: dict[tuple[str, str], list[dict]] = {}
+        for variant in extracted_data.get("variants", []):
+            if self._count_source_is_deterministic(variant):
+                continue
+            patients = variant.get("patients") or {}
+            for field in ("phenotype", "demographics"):
+                value = patients.get(field)
+                if not isinstance(value, str):
+                    continue
+                normalized = re.sub(r"\s+", " ", value).strip()
+                if len(normalized) < 16 or not study_wide_markers.search(normalized):
+                    continue
+                groups.setdefault((field, normalized.lower()), []).append(variant)
+
+        suppressed = 0
+        for (field, value), variants in groups.items():
+            if len(variants) < 5:
+                continue
+            for variant in variants:
+                patients = variant.setdefault("patients", {})
+                current = patients.get(field)
+                if not isinstance(current, str):
+                    continue
+                if re.sub(r"\s+", " ", current).strip().lower() != value:
+                    continue
+                patients[field] = None
+                notes = variant.get("additional_notes", "") or ""
+                if notes:
+                    notes += " "
+                notes += (
+                    f"[Cleared repeated cohort-wide {field} copied across "
+                    f"{len(variants)} variants]"
+                )
+                variant["additional_notes"] = notes
+                suppressed += 1
+
+        if suppressed and "extraction_metadata" in extracted_data:
+            extracted_data["extraction_metadata"]["study_wide_context_suppressed"] = (
                 suppressed
             )
         return extracted_data
@@ -2796,8 +3399,7 @@ Return strict JSON with this schema:
         metadata = extracted_data.get("extraction_metadata", {})
         if metadata.get("claim_verification_applied"):
             return (
-                f"{primary_model}+verified:"
-                f"{metadata.get('claim_verification_model')}"
+                f"{primary_model}+verified:{metadata.get('claim_verification_model')}"
             )
         if not metadata.get("adjudication_applied"):
             return primary_model
@@ -3281,8 +3883,24 @@ Return strict JSON with this schema:
         fixed_width_variants = self._parse_fixed_width_table_variants(
             scanner_text, paper.gene_symbol
         )
-        vertical_variants = self._parse_vertical_gene_table_variants(
-            scanner_text, paper.gene_symbol
+        if fixed_width_variants:
+            logger.info(
+                "deterministic_fixed_width_parser_hit pmid=%s gene=%s variants=%d",
+                paper.pmid,
+                paper.gene_symbol,
+                len(fixed_width_variants),
+            )
+        fixed_width_has_lqts_compendium = any(
+            "deterministic LQTS compendium table parser"
+            in (variant.get("additional_notes") or "")
+            for variant in fixed_width_variants
+        )
+        vertical_variants = (
+            []
+            if fixed_width_has_lqts_compendium
+            else self._parse_vertical_gene_table_variants(
+                scanner_text, paper.gene_symbol
+            )
         )
         deterministic_variants = list(fixed_width_variants)
         deterministic_keys = {
@@ -3314,13 +3932,22 @@ Return strict JSON with this schema:
                     "extraction_confidence": "medium",
                     "compact_mode": True,
                     "notes": "Bypassed LLM using deterministic parser for large PDF/vertical table",
+                    "deterministic_parser_counts": {
+                        "fixed_width": len(fixed_width_variants),
+                        "vertical": len(vertical_variants),
+                    },
                 },
             }
+            parser_model = (
+                "deterministic-fixed-width-table-parser"
+                if fixed_width_variants and not vertical_variants
+                else "deterministic-table-layout-parser"
+            )
             return ExtractionResult(
                 pmid=paper.pmid,
                 success=True,
                 extracted_data=extracted_data,
-                model_used="deterministic-table-layout-parser",
+                model_used=parser_model,
             )
 
         # Router-first extraction: ask a cheap LLM to classify tables, then
@@ -3462,6 +4089,9 @@ Return strict JSON with this schema:
                 )
 
             extracted_data = self._suppress_repeated_study_wide_counts(extracted_data)
+            extracted_data = self._suppress_repeated_study_wide_context_fields(
+                extracted_data
+            )
 
             # Filter variants to only keep those matching the target gene
             if paper.gene_symbol:
@@ -3480,6 +4110,9 @@ Return strict JSON with this schema:
                 scanner_variant_count=len(scanner_result.variants),
             )
             extracted_data = self._suppress_repeated_study_wide_counts(extracted_data)
+            extracted_data = self._suppress_repeated_study_wide_context_fields(
+                extracted_data
+            )
 
             num_variants = len(extracted_data.get("variants", []))
             logger.info(

@@ -292,8 +292,14 @@ class TestVariantNormalization:
             ("I82dup", "I82dup"),
             ("p.K1505_Q1507DEL", "K1505_Q1507Del"),
             ("K1505_Q1507del", "K1505_Q1507Del"),
+            ("p.A178-G189del", "A178_G189Del"),
+            ("Q521-Y522DELT", "Q521_Y522DelT"),
             ("p.Gln1507_Pro1509del", "Q1507_P1509Del"),
             ("4944_4945INSH", "4944_4945InsH"),
+            ("73-73 DEL AAP", "P73Del"),
+            ("339DELF", "F339Del"),
+            ("392INSW", "W392Ins"),
+            ("614DELH", "H614Del"),
         ],
     )
     def test_to_canonical_form_frameshift_variants_seen_in_extractions(
@@ -312,6 +318,11 @@ class TestVariantNormalization:
             "p.K1505_Q1507DEL", ["K1505_Q1507del"]
         )
         assert match == "K1505_Q1507del"
+        assert score == 1.0
+        assert match_type == "exact"
+
+        match, score, match_type = find_best_match("p.A178-G189del", ["A178-G189DEL"])
+        assert match == "A178-G189DEL"
         assert score == 1.0
         assert match_type == "exact"
 

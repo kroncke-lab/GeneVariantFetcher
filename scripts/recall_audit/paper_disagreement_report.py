@@ -61,6 +61,11 @@ REPORT_FIELDS = [
     "source_file",
     "context_path",
     "context_bytes",
+    "available_source_status",
+    "available_context_path",
+    "available_context_bytes",
+    "source_desync",
+    "source_unbound",
     "table_references",
     "table_body_markers",
     "likely_missing_table_bodies",
@@ -159,7 +164,9 @@ def _load_metadata(db_path: Path | None) -> dict[str, dict[str, Any]]:
             em.abstract_only,
             em.total_variants_found,
             em.extraction_confidence,
-            em.model_used
+            em.model_used,
+            em.challenges,
+            em.notes
         FROM papers p
         LEFT JOIN extraction_metadata em ON em.pmid = p.pmid
     """
@@ -209,6 +216,37 @@ def _build_context_index(results_dir: Path) -> dict[tuple[str, str], Path]:
     return index
 
 
+def _is_extraction_source_path(path: Path | None) -> bool:
+    if path is None:
+        return False
+    return path.name.endswith(
+        (
+            "_FULL_CONTEXT.md",
+            "_CLEANED.md",
+            "_DATA_ZONES.md",
+        )
+    )
+
+
+def _metadata_mentions_abstract_only(metadata: dict[str, Any] | None) -> bool:
+    if not metadata:
+        return False
+    fields: list[str] = []
+    for key in ("source_type", "source_kind", "notes", "challenges"):
+        value = metadata.get(key)
+        if value:
+            fields.append(str(value))
+    joined = " ".join(fields).lower()
+    return (
+        bool(metadata.get("abstract_only"))
+        or "abstract-only" in joined
+        or "abstract only" in joined
+        or "full text unavailable" in joined
+        or "full text not available" in joined
+        or "full text could not be retrieved" in joined
+    )
+
+
 def _table_body_metrics(path: Path | None) -> dict[str, Any]:
     if path is None or not path.exists():
         return {
@@ -236,6 +274,24 @@ def _table_body_metrics(path: Path | None) -> dict[str, Any]:
     }
 
 
+def _sibling_full_context(source_path: Path | None, pmid: str) -> Path | None:
+    if source_path is None or not source_path.exists():
+        return None
+    candidates: list[Path] = []
+    parent = source_path.parent
+    run_dir = parent.parent if parent.name in {"extractions", "pmc_fulltext"} else None
+    if run_dir is not None:
+        candidates.append(run_dir / "pmc_fulltext" / f"{pmid}_FULL_CONTEXT.md")
+    if source_path.name.endswith("_CLEANED.md") or source_path.name.endswith(
+        "_DATA_ZONES.md"
+    ):
+        candidates.append(parent / f"{pmid}_FULL_CONTEXT.md")
+    existing = [path for path in candidates if path.exists()]
+    if not existing:
+        return None
+    return max(existing, key=lambda path: path.stat().st_size)
+
+
 def _source_info(
     *,
     gene: str,
@@ -247,21 +303,25 @@ def _source_info(
     source_file = (metadata or {}).get("source_file") or ""
     source_path = repo_path(source_file) if source_file else None
     context_path: Optional[Path] = None
-
-    if (
+    source_unbound = bool(
         source_path
         and source_path.exists()
-        and source_path.name.endswith("_FULL_CONTEXT.md")
-    ):
+        and not _is_extraction_source_path(source_path)
+    )
+
+    if source_path and source_path.exists() and _is_extraction_source_path(source_path):
         context_path = source_path
-    else:
-        context_path = (context_index or {}).get((gene.upper(), pmid))
-        if context_path is None:
-            contexts = find_full_contexts(results_dir, gene, pmid, global_search=False)
-            context_path = contexts[0] if contexts else None
+
+    available_context = _sibling_full_context(source_path, pmid)
+    if available_context is None:
+        available_context = (context_index or {}).get((gene.upper(), pmid))
+    if available_context is None:
+        contexts = find_full_contexts(results_dir, gene, pmid, global_search=False)
+        available_context = contexts[0] if contexts else None
 
     status = context_status(context_path)
-    if (metadata or {}).get("abstract_only") and status == "not_attempted":
+    metadata_abstract_only = _metadata_mentions_abstract_only(metadata)
+    if metadata_abstract_only and status == "not_attempted":
         status = "abstract_only"
     table_metrics = _table_body_metrics(context_path)
     if (
@@ -270,12 +330,35 @@ def _source_info(
     ):
         status = "missing_table_bodies"
     context_bytes = context_path.stat().st_size if context_path else 0
+    available_status = context_status(available_context)
+    available_bytes = available_context.stat().st_size if available_context else 0
+    source_desync = False
+    if (
+        available_context is not None
+        and available_status in DATA_AVAILABLE_STATUSES
+        and status not in DATA_AVAILABLE_STATUSES
+        and metadata_abstract_only
+    ):
+        source_desync = True
+    elif (
+        available_context is not None
+        and available_status in DATA_AVAILABLE_STATUSES
+        and context_path is not None
+        and available_context.resolve() != context_path.resolve()
+        and available_bytes > context_bytes + 2_048
+    ):
+        source_desync = True
     return {
         "source_status": status,
         "data_available": status in DATA_AVAILABLE_STATUSES,
         "source_file": source_file,
         "context_path": str(context_path) if context_path else "",
         "context_bytes": context_bytes,
+        "available_source_status": available_status,
+        "available_context_path": str(available_context) if available_context else "",
+        "available_context_bytes": available_bytes,
+        "source_desync": source_desync,
+        "source_unbound": source_unbound,
         **table_metrics,
     }
 
@@ -289,7 +372,14 @@ def _failure_class(row: dict[str, Any]) -> str:
     abs_aff = float(row.get("abs_affected_diff") or 0)
     abs_unaff = float(row.get("abs_unaffected_diff") or 0)
     source_status = row.get("source_status")
+    source_desync = bool(row.get("source_desync"))
+    source_unbound = bool(row.get("source_unbound"))
+    available_status = row.get("available_source_status")
 
+    if source_desync and missing_rows:
+        return "stale_source_desync"
+    if source_unbound and available_status in DATA_AVAILABLE_STATUSES and missing_rows:
+        return "source_unbound_available"
     if source_status == "missing_table_bodies" and (
         missing_rows or count_mismatch_rows
     ):
@@ -326,6 +416,13 @@ def _score(row: dict[str, Any]) -> float:
     )
     if row.get("data_available"):
         score += 25
+    if row.get("source_desync"):
+        score += 35
+    if (
+        row.get("source_unbound")
+        and row.get("available_source_status") in DATA_AVAILABLE_STATUSES
+    ):
+        score += 20
     return round(score, 3)
 
 
@@ -431,7 +528,14 @@ def build_paper_disagreement_rows(
     return sorted(
         rows,
         key=lambda row: (
-            not bool(row.get("data_available")),
+            not (
+                bool(row.get("data_available"))
+                or bool(row.get("source_desync"))
+                or (
+                    bool(row.get("source_unbound"))
+                    and row.get("available_source_status") in DATA_AVAILABLE_STATUSES
+                )
+            ),
             -float(row.get("disagreement_score") or 0),
             row.get("gene", ""),
             row.get("pmid", ""),

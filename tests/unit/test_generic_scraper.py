@@ -55,6 +55,13 @@ class TestKeywordMatching:
         result = scraper.scrape_generic_supplements(html, "https://example.com/article")
         assert len(result) == 1
 
+    def test_generic_supplements_nav_link_is_not_downloadable_supplement(self, scraper):
+        html = _make_html([("/supplements", "Supplements")])
+        result = scraper.scrape_generic_supplements(
+            html, "https://www.heartrhythmjournal.com/article/S1547/abstract"
+        )
+        assert result == []
+
 
 class TestURLPatternMatching:
     """Links matched via URL patterns (the key improvement)."""
@@ -271,6 +278,62 @@ class TestURLPatternMatching:
             "Browser challenge page received instead of PDF" in capsys.readouterr().out
         )
         assert not (tmp_path / "test.pdf").exists()
+
+    def test_pmc_pow_challenge_is_solved_before_pdf_validation(self, tmp_path):
+        class Cookies:
+            def __init__(self):
+                self.calls = []
+
+            def set(self, name, value, domain=None, path=None):
+                self.calls.append((name, value, domain, path))
+
+        class Response:
+            def __init__(self, body):
+                self.body = body
+
+            def raise_for_status(self):
+                return None
+
+            def iter_content(self, chunk_size=8192):
+                yield self.body
+
+        class Session:
+            def __init__(self):
+                self.urls = []
+                self.cookies = Cookies()
+
+            def get(self, url, **kwargs):
+                self.urls.append(url)
+                if len(self.urls) == 1:
+                    return Response(
+                        b"""
+                        <html><body>Preparing to download ...</body>
+                        <script>
+                        const POW_CHALLENGE = "unit-test-challenge"
+                        const POW_DIFFICULTY = "1"
+                        const POW_COOKIE_NAME = "cloudpmc-viewer-pow"
+                        </script></html>
+                        """
+                    )
+                return Response(b"%PDF-1.4\n%%EOF\n")
+
+        harvester = PMCHarvester(output_dir=tmp_path, gene_symbol="KCNQ1")
+        harvester.session = Session()
+
+        ok = harvester.download_supplement(
+            "https://pmc.ncbi.nlm.nih.gov/articles/instance/3025752/bin/test.pdf",
+            tmp_path / "test.pdf",
+            "19841300",
+            "test.pdf",
+        )
+
+        assert ok is True
+        assert (tmp_path / "test.pdf").read_bytes().startswith(b"%PDF")
+        assert harvester.session.urls == [
+            "https://pmc.ncbi.nlm.nih.gov/articles/instance/3025752/bin/test.pdf",
+            "https://pmc.ncbi.nlm.nih.gov/articles/instance/3025752/bin/test.pdf",
+        ]
+        assert harvester.session.cookies.calls[0][0] == "cloudpmc-viewer-pow"
 
 
 class TestFileExtensionMatching:

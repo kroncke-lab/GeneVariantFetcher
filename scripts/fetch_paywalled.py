@@ -61,6 +61,7 @@ from harvesting.browser_html.strategies import (  # noqa: E402
     find_strategy,
     registered_names,
 )
+from harvesting.elsevier_api import ElsevierAPIClient  # noqa: E402
 from harvesting.format_converters import FormatConverter  # noqa: E402
 from harvesting.paywall_context_enrichment import (  # noqa: E402
     EnrichmentResult,
@@ -82,6 +83,14 @@ _PMC_BODY_SELECTORS = (
     "div.article-page",
     "body",
 )
+
+FETCH_SUCCESS_OUTCOMES = {
+    "success",
+    "success_via_pmc",
+    "success_via_scholar_pdf",
+    "success_via_elsevier_api",
+    "success_supplement_only",
+}
 
 
 def _canonical_full_context_path(output_dir: Path, pmid: str) -> Path:
@@ -290,6 +299,81 @@ def mark_scholar_pdf_success(row: Dict, scholar_row: Dict) -> None:
     row["canonical_path"] = scholar_row["canonical_path"]
     row["per_pmid_path"] = scholar_row["per_pmid_path"]
     row["supp_files"] = 0
+
+
+def try_elsevier_api_fallback(
+    pmid: str,
+    doi: Optional[str],
+    output_dir: Path,
+    *,
+    final_url: str = "",
+    session: Optional[requests.Session] = None,
+) -> Optional[Dict]:
+    """Recover Elsevier full text via the official API + insttoken.
+
+    Browser recovery for Elsevier imprint sites can land on paywall stubs even
+    when the Article Retrieval API returns the full XML, including table
+    bodies. This path writes the same flat/per-PMID FULL_CONTEXT artifacts as
+    the browser and PMC fallbacks.
+    """
+    if not doi or not ElsevierAPIClient.is_elsevier_doi(doi):
+        return None
+
+    client = ElsevierAPIClient(
+        api_key=os.environ.get("ELSEVIER_API_KEY"),
+        insttoken=os.environ.get("ELSEVIER_INSTTOKEN"),
+        session=session if isinstance(session, requests.Session) else None,
+    )
+    if not client.is_available:
+        return None
+
+    markdown, error = client.fetch_fulltext(doi=doi, url=final_url or None)
+    if not markdown:
+        LOG.info("Elsevier API fallback failed for PMID %s: %s", pmid, error)
+        return None
+
+    ok, reason = validate_article_content(markdown)
+    if not ok:
+        LOG.info("Elsevier API fallback for PMID %s failed gate: %s", pmid, reason)
+        return None
+
+    pmid_dir = output_dir / pmid
+    pmid_dir.mkdir(parents=True, exist_ok=True)
+    per_pmid_full_ctx = pmid_dir / "FULL_CONTEXT.md"
+    per_pmid_full_ctx.write_text(markdown, encoding="utf-8")
+    canonical_path = write_canonical_mirror(output_dir, pmid, markdown)
+    (pmid_dir / "source.txt").write_text(
+        f"Recovered via Elsevier Article Retrieval API: {doi}\n",
+        encoding="utf-8",
+    )
+    meta = {
+        "pmid": pmid,
+        "publisher": "elsevier_api",
+        "doi": doi,
+        "final_url": final_url,
+        "markdown_chars": len(markdown),
+        "canonical_full_context_path": str(canonical_path),
+        "per_pmid_full_context_path": str(per_pmid_full_ctx),
+        "notes": [],
+        "error": None,
+    }
+    (pmid_dir / "result.json").write_text(
+        json.dumps(meta, indent=2, default=str),
+        encoding="utf-8",
+    )
+
+    return {
+        "pmid": pmid,
+        "strategy": "elsevier_api",
+        "outcome": "success",
+        "reason": reason,
+        "chars": len(markdown),
+        "supp_files": 0,
+        "final_url": final_url,
+        "path": str(canonical_path),
+        "canonical_path": str(canonical_path),
+        "per_pmid_path": str(per_pmid_full_ctx),
+    }
 
 
 LOG = logging.getLogger("fetch_paywalled")
@@ -551,6 +635,41 @@ def fetch_one(
             mark_scholar_pdf_success(row, scholar_row)
         return scholar_row
 
+    def promote_pmc_fallback(pmc_row: Dict) -> None:
+        print(
+            f"  PMC fallback succeeded: {pmc_row['pmcid']} -> {pmc_row['chars']} chars"
+        )
+        row["outcome"] = "success_via_pmc"
+        row["strategy"] = f"{row['strategy']}+pmc_fallback"
+        row["reason"] = f"PMC fallback ({pmc_row['pmcid']}): {pmc_row['reason']}"
+        row["chars"] = pmc_row["chars"]
+        row["final_url"] = pmc_row["final_url"]
+        row["path"] = pmc_row["path"]
+        row["canonical_path"] = pmc_row.get("canonical_path", pmc_row["path"])
+        row["per_pmid_path"] = pmc_row.get("per_pmid_path", pmc_row["path"])
+        row["pmcid"] = pmc_row["pmcid"]
+        row["supp_files"] = pmc_row.get("supp_files", 0)
+        row["figure_captions"] = pmc_row.get("figure_captions", 0)
+        row["table_captions"] = pmc_row.get("table_captions", 0)
+        row["supplements_downloaded"] = pmc_row.get("supplements_downloaded", 0)
+
+    def promote_elsevier_api_fallback(api_row: Dict) -> None:
+        print(f"  Elsevier API fallback succeeded: {api_row['chars']} chars")
+        base_strategy = row.get("strategy") or ""
+        row["outcome"] = "success_via_elsevier_api"
+        row["strategy"] = (
+            f"{base_strategy}+elsevier_api"
+            if base_strategy and base_strategy != "(none)"
+            else "elsevier_api"
+        )
+        row["reason"] = f"Elsevier API fallback: {api_row['reason']}"
+        row["chars"] = api_row["chars"]
+        row["final_url"] = api_row.get("final_url") or row.get("final_url") or ""
+        row["path"] = api_row["path"]
+        row["canonical_path"] = api_row.get("canonical_path", api_row["path"])
+        row["per_pmid_path"] = api_row.get("per_pmid_path", api_row["path"])
+        row["supp_files"] = api_row.get("supp_files", 0)
+
     if not doi:
         row["reason"] = "no DOI"
         run_scholar_fallback()
@@ -622,15 +741,31 @@ def fetch_one(
             f"{enrichment.supplement_count} supplement(s)"
         )
 
-    # PMC fallback. If Tier 3.5 left us with a stub or empty body, try the
-    # Europe PMC route — many NIH-funded subscription papers have a free
-    # PMC deposit. The fallback overwrites FULL_CONTEXT.md only when its
-    # extraction passes the quality gate, so a failed PMC attempt doesn't
-    # mask the Tier 3.5 stub for diagnostics.
+    if row["outcome"] in ("paywall_or_stub", "empty", "error"):
+        api_row = try_elsevier_api_fallback(
+            pmid,
+            doi,
+            output_dir,
+            final_url=row.get("final_url") or "",
+            session=recovery_session,
+        )
+        if api_row is not None:
+            promote_elsevier_api_fallback(api_row)
+
+    # PMC fallback. If Tier 3.5 left us with a stub/empty body, or recovered
+    # a publisher page whose supplement downloads all failed, try the Europe
+    # PMC route. Many NIH-funded subscription papers have a free PMC deposit,
+    # and PMC supplement URLs can be easier to download than publisher copies.
+    current_supplements = int(row.get("supplements_downloaded") or 0)
+    publisher_supplements_failed = (
+        row["outcome"] in {"success", "success_supplement_only"}
+        and int(row.get("supp_files") or 0) > 0
+        and current_supplements == 0
+    )
     if (
         row["outcome"] in ("paywall_or_stub", "empty", "error")
-        and recovery_session is not None
-    ):
+        or publisher_supplements_failed
+    ) and recovery_session is not None:
         pmc_row = try_pmc_fallback(
             pmid,
             output_dir,
@@ -639,22 +774,13 @@ def fetch_one(
             scraper=fetcher.scraper,
         )
         if pmc_row is not None:
-            print(
-                f"  PMC fallback succeeded: {pmc_row['pmcid']} -> {pmc_row['chars']} chars"
-            )
-            row["outcome"] = "success_via_pmc"
-            row["strategy"] = f"{row['strategy']}+pmc_fallback"
-            row["reason"] = f"PMC fallback ({pmc_row['pmcid']}): {pmc_row['reason']}"
-            row["chars"] = pmc_row["chars"]
-            row["final_url"] = pmc_row["final_url"]
-            row["path"] = pmc_row["path"]
-            row["canonical_path"] = pmc_row.get("canonical_path", pmc_row["path"])
-            row["per_pmid_path"] = pmc_row.get("per_pmid_path", pmc_row["path"])
-            row["pmcid"] = pmc_row["pmcid"]
-            row["supp_files"] = pmc_row.get("supp_files", 0)
-            row["figure_captions"] = pmc_row.get("figure_captions", 0)
-            row["table_captions"] = pmc_row.get("table_captions", 0)
-            row["supplements_downloaded"] = pmc_row.get("supplements_downloaded", 0)
+            pmc_supplements = int(pmc_row.get("supplements_downloaded") or 0)
+            if (
+                row["outcome"] in ("paywall_or_stub", "empty", "error")
+                or pmc_supplements > current_supplements
+                or int(pmc_row.get("chars") or 0) > int(row.get("chars") or 0) + 2048
+            ):
+                promote_pmc_fallback(pmc_row)
 
     if (
         row["outcome"] in ("paywall_or_stub", "empty", "error")
@@ -946,24 +1072,14 @@ def main() -> int:
     for r in rows:
         p = r["strategy"] or "(none)"
         by_publisher.setdefault(p, {"success": 0, "fail": 0})
-        if r["outcome"] in (
-            "success",
-            "success_via_pmc",
-            "success_via_scholar_pdf",
-            "success_supplement_only",
-        ):
+        if r["outcome"] in FETCH_SUCCESS_OUTCOMES:
             by_publisher[p]["success"] += 1
         else:
             by_publisher[p]["fail"] += 1
     for p, c in sorted(by_publisher.items()):
         print(f"  {p:14s}  success={c['success']}  fail={c['fail']}")
 
-    success = sum(
-        1
-        for r in rows
-        if r["outcome"] in ("success", "success_via_pmc", "success_via_scholar_pdf")
-        or r["outcome"] == "success_supplement_only"
-    )
+    success = sum(1 for r in rows if r["outcome"] in FETCH_SUCCESS_OUTCOMES)
     print(f"\nOverall: {success}/{len(rows)} PMIDs succeeded.")
 
     # Persist a CSV-ish JSON for downstream inspection.

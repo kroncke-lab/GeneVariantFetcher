@@ -94,6 +94,11 @@ for the whole study, cohort, family set, domain, or mutation class, do NOT assig
 variant-specific. If only aggregate counts are available, leave variant-level counts
 null and put the aggregate in additional_notes.
 
+This rule also applies to patients.phenotype, patients.demographics, and
+penetrance_percentage. Study-wide statements such as "35% of carriers overall"
+or "median age 61 years" are not variant-level facts. Do not copy them onto
+every variant; mention them only in additional_notes when useful.
+
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
 Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
 and genomic_position would be null. The variant identifier is load-bearing.
@@ -278,14 +283,17 @@ A. Individual-Level Records:
      * Exact sentence where this information appears
    - Use age-appropriate penetrance logic: a young person may be "unaffected" but not past the risk window
 
-B. Cohort/Aggregate Penetrance Data:
-   - Extract study-level statistics when provided (e.g., "10 carriers, 4 affected, 6 unaffected")
-   - Total carriers observed
-   - Affected count
-   - Unaffected count
-   - Uncertain/unclear cases
-   - Age-dependent penetrance data if stratified by age groups
-   - Penetrance percentages if explicitly stated
+B. Variant-Specific Cohort/Aggregate Penetrance Data:
+   - Extract cohort statistics only when explicitly tied to one variant
+     (e.g., "10 carriers of variant X, 4 affected, 6 unaffected")
+   - Total carriers observed for that variant
+   - Affected count for that variant
+   - Unaffected count for that variant
+   - Uncertain/unclear cases for that variant
+   - Age-dependent penetrance data if stratified by age groups for that variant
+   - Variant-specific penetrance percentages if explicitly stated
+   - If the statistic describes the whole study/cohort/table/domain rather than
+     one variant, leave the variant-level count and penetrance fields null
 
 C. Age-Dependent Penetrance:
    - Capture penetrance stratified by age ranges if mentioned
@@ -335,6 +343,11 @@ for the whole study, cohort, family set, domain, or mutation class, do NOT assig
 43/28/15 to every variant. Use counts only when the row, sentence, or table cell is
 variant-specific. If only aggregate counts are available, leave variant-level counts
 null and put the aggregate in additional_notes.
+
+This rule also applies to patients.phenotype, patients.demographics, and
+penetrance_percentage. Study-wide statements such as "35% of carriers overall"
+or "median age 61 years" are not variant-level facts. Do not copy them onto
+every variant; mention them only in additional_notes when useful.
 
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
 Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
