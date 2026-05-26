@@ -112,19 +112,11 @@ The legacy `scripts/run_insttoken_reextract_experiment.py` driver is retained
 for historical comparisons, but it should not be the default path for consuming
 newly recovered sources.
 
-For a fresh run launched through `gvf-run`, use the shell wrapper if you want a
-detached multi-gene job:
-
-```bash
-bash scripts/run_full_recall_experiment.sh \
-  --genes KCNH2,KCNQ1,RYR2,SCN5A \
-  --max-pmids 10000
-
-bash scripts/run_full_recall_experiment.sh --status
-```
-
-Use `--kill-existing` only when you intentionally want to stop already-running
-GVF jobs before launching a replacement.
+`scripts/run_full_recall_experiment.sh` is a wrapper around
+`run_insttoken_reextract_experiment.py` and is part of the historical
+post-insttoken re-extraction path; **it is not a fresh-run launcher**. Do not
+use it to drive a new `gvf-run`. To run a fresh multi-gene job, invoke
+`gvf gvf-run <GENE>` per gene (or script a shell loop over `gvf gvf-run`).
 
 ## Full-Text Acquisition Only
 

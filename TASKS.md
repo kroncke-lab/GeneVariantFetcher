@@ -58,6 +58,7 @@
   - [x] Confirmed KCNH2, RYR2, and SCN5A remain below 90% on all scored recall metrics except RYR2 unaffected.
   - [x] Confirmed KCNE1 extraction completes but cannot be scored without a gold recall input.
   - [x] Removed default KCNH2 v12 auto-merge, removed gold-PMID leakage from default recovery, added DB backups, broadened LLM provider checks, filtered non-article LinkOuts, added retry/challenge handling, and guarded Data Scout against oversized raw contexts.
+- [x] **Wiley TDM API verified working (2026-05-26)** — off-VPN probe with the current `WILEY_API_KEY` in `.env` returned a real 635 KB PDF for `10.1002/humu.21126` (HTTP 302 → CDN 200, `application/pdf`, 14 pages). The earlier "revoked" claim was stale. Human Mutation and other Wiley journals are reachable now via `harvesting/wiley_api.py` without any network change.
 - [x] **Source-driven DB refresh path (2026-05-25)**
   - [x] Added `scripts/refresh_run_db.py` as the safe alternative to SQLite row patching: select stale/under-counted source artifacts, rewrite canonical extraction JSON, rebuild the DB, then run recovery layers.
   - [x] Made recovery layers run in DB-PMID mode without requiring a gold standard, so no-gold genes still get ClinVar, PubTator, and figure recovery plus internal QC artifacts.
@@ -68,14 +69,13 @@
 - [ ] **Investigate count semantics and cohort-table over-counting**. Preserve raw count columns and classify study-wide counts versus per-variant carriers before writing patient/affected/unaffected totals.
 - [ ] **Create or import KCNE1 per-PMID gold input** before making KCNE1 recall claims.
 - [x] **Obtain Elsevier INSTTOKEN** (done 2026-05-21). Token issued by Elsevier Data Support (Jun Bautista) against the `@vanderbilt.edu`-registered API key labeled `GeneVariantFetcher`. Installed into `.env` with user-only file perms; sent only as `X-ELS-Insttoken` header by `harvesting/elsevier_api.py`. Unlock probe across KCNH2/KCNQ1/RYR2/SCN5A/KCNE1 paywalled lists: 242/246 (98.4%) Elsevier candidates now return full text. Bodies saved into each run's `pmc_fulltext/` as `{PMID}_FULL_CONTEXT.md`. Details in `docs/RECALL_STATUS.md`.
-- [ ] **Re-extract KCNH2/KCNQ1/RYR2/SCN5A with consolidated insttoken full text** so the 242 newly saved `_FULL_CONTEXT.md` files become SQLite rows. Without this step, the unlock does not move PMID recall. Use `gvf gvf-run <GENE>` per gene; honor existing `_FULL_CONTEXT.md` files (do not redownload).
+- [x] **Re-extract KCNH2/KCNQ1/RYR2/SCN5A with consolidated insttoken full text** (done 2026-05-25). The 242 `_FULL_CONTEXT.md` insttoken bodies were consumed via `scripts/refresh_run_db.py` on the multigene suite, then graft-gated by the 2026-05-26 acceptance-gated source replay. Current scored state is in `docs/RECALL_STATUS.md`.
 - [ ] **Integrate valid paywall recovery artifacts into canonical runs** before re-extraction. Keep paper-specific recovery lists in validation artifacts or `docs/RECALL_STATUS.md`, not in this checklist.
 - [ ] **Manual PDF download for hard-blocked/stub PMIDs** only after the current-status source audit confirms the artifact is still missing. Feed real downloaded PDFs through `harvesting/format_converters.py`; avoid OneDrive on-demand placeholders.
 - [ ] Set weekly recall cadence (Friday re-run + compare) — produces trajectory chart for grant.
 
 ## Blocked
 - [ ] **Karger access** — Cloudflare interstitial doesn't clear even with 30+ cookies + `--no-headless`. TDM request status unknown.
-- [ ] **Wiley TDM full-text API** — `WILEY_API_KEY` in `.env` is revoked. Without it, Human Mutation (10.1002/humu.*) is unreachable.
 - [ ] **Sage/Liebert (PMID 23631430)** — Sage's CF instance refuses Playwright fingerprint even with the right cookies.
 
 ## Backlog

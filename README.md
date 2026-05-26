@@ -163,11 +163,11 @@ gvf extract KCNQ1 --email you@email.com --output ./results --scout-first
 
 | Flag | Description | Default |
 |------|-------------|---------|
-| `--max-pmids N` | Maximum PMIDs to discover | 100 |
-| `--max-downloads N` | Maximum papers to download | 50 |
+| `--max-pmids N` | Maximum PMIDs to discover | 1500 |
+| `--max-downloads N` | Maximum papers to download | no limit |
 | `--tier-threshold N` | Model cascade threshold (0=always use strong model) | 1 |
 | `--clinical-triage` | Use stricter clinical relevance filter | off |
-| `--auto-synonyms` | Auto-discover gene aliases from NCBI | off |
+| `--auto-synonyms` / `--no-auto-synonyms` | Auto-discover gene aliases from NCBI | on |
 | `--synonym SYN` | Add manual synonym (repeatable) | — |
 | `--scout-first` | Run Data Scout before extraction | off |
 | `--verbose` | Enable verbose logging | off |

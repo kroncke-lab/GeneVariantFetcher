@@ -28,16 +28,15 @@ cp .env.example .env
 
 ## Adding a New Gene
 
-1. **Add gene configuration** to `config/gene_config.py`:
+1. **Add protein length** to `PROTEIN_LENGTHS` in `utils/variant_normalizer.py`:
    ```python
-   # In config/gene_config.py, add to GENE_CONFIGS dict:
-   "YOUR_GENE": GeneConfig(
-       symbol="YOUR_GENE",
-       aliases=["ALIAS1", "ALIAS2"],
-       protein_length=1234,
-       # ... other config
-   ),
+   # In utils/variant_normalizer.py, add to PROTEIN_LENGTHS dict:
+   "YOUR_GENE": 1234,  # canonical isoform length
    ```
+
+   For cardiac-channel genes, optionally add synonyms to
+   `config/cardiac_gene_synonyms.json`. There is no central `GeneConfig` class;
+   per-gene wiring is intentionally minimal.
 
 2. **Add variant alias dictionary** (optional but recommended):
    ```

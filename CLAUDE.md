@@ -18,7 +18,7 @@ push the coherent change set or state exactly what remains uncommitted.
 
 GVF extracts genetic variants, carrier counts, and phenotype data from
 biomedical literature for the Kroncke Lab variant interpretation pipeline. The
-grant target is 90% unique-variant recall by June 2026.
+grant target is 90% unique-variant recall, with submission in October 2026.
 
 ## Current Measured State
 
@@ -81,8 +81,10 @@ fresh DB from the full extraction directory, and then runs DB-observed recovery
 layers. Gold standards are optional; without gold, the same recovery layers run
 and scoring is skipped.
 
-Residual non-Elsevier paywalls (Wiley revoked key, Karger Cloudflare,
-Sage CF fingerprint) remain in `TASKS.md` Blocked.
+Residual non-Elsevier paywalls (Karger Cloudflare, Sage CF fingerprint)
+remain in `TASKS.md` Blocked. Wiley TDM was verified working off-VPN on
+2026-05-26 — the earlier "revoked key" claim was stale; `harvesting/wiley_api.py`
+plus the current `WILEY_API_KEY` returns full-text PDFs for `10.1002/humu.*`.
 
 ## Run On Another Computer Or VPN
 

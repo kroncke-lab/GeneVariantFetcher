@@ -265,8 +265,11 @@ longer stale SQLite rows:
    `32893267` need row-level precision and count audits before being used as
    headline gains.
 3. **Non-Elsevier paywalls still outstanding**:
-   - Wiley: `WILEY_API_KEY` in `.env` is revoked. Human Mutation
-     (`10.1002/humu.*`) is unreachable until reissued.
+   - Wiley: **resolved 2026-05-26.** Off-VPN probe with the current
+     `WILEY_API_KEY` returned a 635 KB full-text PDF for `10.1002/humu.21126`
+     (302 → CDN 200, `application/pdf`, 14 pages). The earlier "revoked"
+     claim was stale; Human Mutation and other Wiley journals are reachable
+     via `harvesting/wiley_api.py` with no network change.
    - Karger: no institutional agreement and Cloudflare blocks the Playwright
      stack. TDM request status unknown.
    - Sage/Liebert (PMID 23631430): Cloudflare fingerprint rejection.
