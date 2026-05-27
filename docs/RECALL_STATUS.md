@@ -136,6 +136,22 @@ study-wide N unless row-local evidence supports it" guard catches the
 required to run in both modes (gold-present and gold-absent); GVF must be
 turnkey on new genes for which no curated answer exists.
 
+**Count-outlier guard** is implemented as `pipeline/count_outlier_guard.py`
+plus `scripts/apply_count_outlier_guard.py`. The detector flags rows whose
+count is >10× the per-paper median AND >50 absolute (gold-free, internal
+consistency). Policies:
+
+- `--policy off` (or `--dry-run`): detect and report only.
+- `--policy flag`: annotate variants with `count_outlier_flags` metadata,
+  preserve raw value (default; safest).
+- `--policy clear`: also zero the flagged count (raw preserved under flags).
+
+Dry-run validation on production extractions confirms the detector catches
+all known outliers: KCNQ1 PMID 29622001 G589D (value 453, 129× median),
+SCN5A 16453024 S1103Y (137, 91× median), SCN5A 25904541 (max 3520, 3520×
+median). To apply retroactively on a run, use the CLI and then rebuild the
+DB with `harvesting.migrate_to_sqlite` and re-score.
+
 ## 2026-05-26 Post-Rollback And DB-PMID Recovery
 
 After the SUA sweep, `/tmp/sua_sweep/rollback_and_recover.sh` compared each
