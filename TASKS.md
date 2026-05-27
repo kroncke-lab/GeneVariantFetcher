@@ -63,9 +63,13 @@
   - [x] Added `scripts/refresh_run_db.py` as the safe alternative to SQLite row patching: select stale/under-counted source artifacts, rewrite canonical extraction JSON, rebuild the DB, then run recovery layers.
   - [x] Made recovery layers run in DB-PMID mode without requiring a gold standard, so no-gold genes still get ClinVar, PubTator, and figure recovery plus internal QC artifacts.
   - [x] Added source fingerprints and abstract-only fallback guards so reruns skip already-refreshed JSON unless the source changes.
+- [x] **SUA replay rollback + DB-PMID recovery baseline (2026-05-26)**
+  - [x] Rolled back per-PMID extraction JSON regressions from the source-unbound-available sweep while preserving sweep wins.
+  - [x] Rebuilt active KCNH2/KCNQ1/SCN5A/RYR2 DBs and ran DB-observed ClinVar/PubTator recovery without gold-PMID enrichment.
+  - [x] Re-scored the four-gene aggregate at `recall_metrics/post_rollback_recover_20260526_aggregate/summary.json`; current live metrics and gaps are in `docs/RECALL_STATUS.md`.
 
 ## Active Tasks
-- [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in `docs/RECALL_STATUS.md`.
+- [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in `docs/RECALL_STATUS.md`; SCN5A and RYR2 are the largest remaining unique-variant blockers.
 - [ ] **Investigate count semantics and cohort-table over-counting**. Preserve raw count columns and classify study-wide counts versus per-variant carriers before writing patient/affected/unaffected totals.
 - [ ] **Create or import KCNE1 per-PMID gold input** before making KCNE1 recall claims.
 - [x] **Obtain Elsevier INSTTOKEN** (done 2026-05-21). Token issued by Elsevier Data Support (Jun Bautista) against the `@vanderbilt.edu`-registered API key labeled `GeneVariantFetcher`. Installed into `.env` with user-only file perms; sent only as `X-ELS-Insttoken` header by `harvesting/elsevier_api.py`. Unlock probe across KCNH2/KCNQ1/RYR2/SCN5A/KCNE1 paywalled lists: 242/246 (98.4%) Elsevier candidates now return full text. Bodies saved into each run's `pmc_fulltext/` as `{PMID}_FULL_CONTEXT.md`. Details in `docs/RECALL_STATUS.md`.

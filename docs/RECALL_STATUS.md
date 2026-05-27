@@ -1,6 +1,6 @@
 # Recall Status
 
-Last updated: 2026-05-25.
+Last updated: 2026-05-27.
 
 This note records the post-`19ae63f` state of the recall/generalization push so
 the next run can resume from the same baseline without relying on chat history.
@@ -21,8 +21,8 @@ inputs and KCNH2-only manual recovery.
 
 - Baseline-producing implementation commit: `19ae63f Improve deterministic variant recovery`
 - Status-note commit before this cleanup pass: `4b69f50 docs: record current recall status`
-- Branch: `main`
-- Remote: `origin/main`
+- Branch at verification: `codex/multigene-recall-improvement`
+- Remote tracking branch: `origin/codex/multigene-recall-improvement`
 - Recent committed changes were intentionally scoped to deterministic extraction,
   acquisition recovery, comparison/normalization, migration safety, status docs,
   and tests.
@@ -33,35 +33,178 @@ inputs and KCNH2-only manual recovery.
 
 Use this artifact as the current scored baseline:
 
-`recall_metrics/post_refresh_20260525/summary.json`
+`recall_metrics/post_rollback_recover_20260526_aggregate/summary.json`
 
-This is the honest DB-observed four-gene score after the 2026-05-25
-source-driven refresh/rebuild pass. It includes KCNH2, KCNQ1, RYR2, and SCN5A;
-ClinVar/PubTator recovery used DB PMIDs, not gold PMIDs.
+This is the honest DB-observed four-gene score after the 2026-05-26 SUA source
+replay, per-PMID rollback, DB rebuild, and recovery-layer pass. It includes
+KCNH2, KCNQ1, RYR2, and SCN5A. ClinVar/PubTator recovery used DB-observed
+PMIDs, not gold PMIDs; KCNH2 v12 manual recovery was not used; the figure layer
+was skipped because no `--pmc-dir` was supplied.
 
-| Metric | Matched / Gold | Recall |
-| --- | ---: | ---: |
-| PMIDs | 1175 / 1502 | 78.2% |
-| Variant rows | 3620 / 6833 | 53.0% |
-| Unique variants | 1859 / 3013 | 61.7% |
-| Patients/carriers | 10911 / 18719 | 58.3% |
-| Affected | 6617 / 12475 | 53.0% |
-| Unaffected | 2855 / 3951 | 72.3% |
+The score was re-run on 2026-05-27 against the same four DB paths and
+reproduced these values exactly.
 
-The target remains greater than 90% across the metrics that matter. The current
-state is more reproducible and less gold-conditioned, but not close to solved.
+| Metric | Matched / Gold | Recall | Gap to 90% |
+| --- | ---: | ---: | ---: |
+| PMIDs | 1253 / 1502 | 83.4% | 99 |
+| Variant rows | 5065 / 6833 | 74.1% | 1085 |
+| Unique variants | 2450 / 3010 | 81.4% | 259 |
+| Patients/carriers | 14368 / 18719 | 76.8% | 2480 |
+| Affected | 9418 / 12475 | 75.5% | 1810 |
+| Unaffected | 3274 / 3951 | 82.9% | 282 |
+
+The target remains greater than 90% across the metrics that matter. Unique
+variant recall moved substantially, but variant rows, patient/carrier counts,
+and affected counts are still well short of 90%.
 
 Per-gene final recall from the same score:
 
 | Gene | PMIDs | Variant rows | Unique variants | Patients | Affected | Unaffected |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| KCNH2 | 71.8% | 54.2% | 63.8% | 62.8% | 59.0% | 66.0% |
-| KCNQ1 | 84.3% | 32.5% | 42.9% | 49.0% | 34.9% | 73.8% |
-| RYR2 | 75.8% | 62.3% | 64.6% | 71.8% | 67.9% | 89.3% |
-| SCN5A | 78.6% | 61.1% | 69.1% | 63.6% | 62.1% | 69.3% |
+| KCNH2 | 232/262 (88.5%) | 813/991 (82.0%) | 438/530 (82.6%) | 2258/2674 (84.4%) | 1429/1635 (87.4%) | 582/749 (77.7%) |
+| KCNQ1 | 292/305 (95.7%) | 1317/1741 (75.6%) | 524/622 (84.2%) | 5943/7793 (76.3%) | 3256/4306 (75.6%) | 1258/1484 (84.8%) |
+| SCN5A | 595/757 (78.6%) | 2213/3128 (70.7%) | 941/1183 (79.5%) | 4589/6219 (73.8%) | 3490/4876 (71.6%) | 1099/1343 (81.8%) |
+| RYR2 | 134/178 (75.3%) | 722/973 (74.2%) | 547/675 (81.0%) | 1578/2033 (77.6%) | 1243/1658 (75.0%) | 335/375 (89.3%) |
+
+Unique-variant gap to 90%:
+
+| Gene | Current | At 90% | Need |
+| --- | ---: | ---: | ---: |
+| KCNH2 | 438/530 (82.6%) | 477/530 | +39 |
+| KCNQ1 | 524/622 (84.2%) | 560/622 | +36 |
+| SCN5A | 941/1183 (79.5%) | 1065/1183 | +124 |
+| RYR2 | 547/675 (81.0%) | 608/675 | +61 |
+| **Aggregate** | **2450/3010 (81.4%)** | **2709/3010** | **+259** |
+
+The sum of per-gene 90% ceilings is +260 because each gene rounds up
+independently. The aggregate unique-variant target is +259. SCN5A is the
+largest single unique-variant blocker, while variant rows and count metrics have
+larger aggregate gaps.
+
+Trajectory:
+
+| Stage | Aggregate unique variants |
+| --- | ---: |
+| Pre-SUA-sweep active DBs | 1884/3010 (62.6%) |
+| Post-SUA sweep, before rollback/recovery | 2206/3010 (73.3%) |
+| Post-rollback + DB-PMID recovery | 2450/3010 (81.4%) |
+| Target | 2709/3010 (90.0%) |
+| Gap | 259 unique variants, 8.6pp |
+
+Do not confuse the `1884/3010` pre-SUA-sweep row with the older
+`recall_metrics/post_refresh_20260525/summary.json` score, which was
+`1859/3013`. The KCNQ1 gold denominator changed from 625 to 622 between those
+artifacts.
 
 KCNE1 extraction completed in the four-gene run, but KCNE1 recall should not be
 claimed until a normalized per-PMID gold input exists.
+
+### Rows-Mode MAE Baseline
+
+Per-row mean absolute error (MAE) on matched-variant rows from the same
+scored artifact, computed by taking `|gold_count - extracted_count|` for each
+matched (PMID × variant) pair and averaging. Lower is better; target is
+`MAE → 0`.
+
+| Gene | carriers MAE | affected MAE | unaffected MAE | matched rows |
+| --- | ---: | ---: | ---: | ---: |
+| KCNH2 | 0.807 | 0.863 | 1.909 | 554 |
+| KCNQ1 | 2.916 | 2.121 | 1.491 | 640 |
+| SCN5A | 0.603 | 0.438 | 0.763 | 1302 |
+| RYR2 | 0.292 | 0.204 | 1.815 | 610 |
+| **Aggregate** | **1.055** | **0.744** | **1.216** | **3106** |
+
+KCNQ1 is the dominant count-MAE offender (carriers MAE 2.916, ~10× RYR2's
+0.292). Worst single outliers point at one bug class: study-wide N or
+cohort/screened totals being assigned to per-variant rows.
+
+| Gene | Top outlier (matched row) | Gold | Extracted | \|err\| |
+| --- | --- | ---: | ---: | ---: |
+| KCNQ1 | 29622001 G589D | 7 | 453 | 446 |
+| KCNQ1 | 17192539 G589D | 50 | 243 | 193 |
+| SCN5A | 16453024 S1103Y | 1 | 137 | 136 |
+| KCNH2 | 19160088 L552S | 2 | 92 | 90 |
+| SCN5A | 20470418 S1103Y | 85 | 26 | 59 |
+| KCNQ1 | 23092362 T322A | 2 | 60 | 58 |
+
+**Note on the gold-free path.** MAE is intrinsically gold-dependent. For
+no-gold runs, substitute internal-consistency outlier detection: flag any
+row whose carrier count is >10× the per-paper median, or where the same
+large count is repeated across many distinct variants. The "refuse to reuse
+study-wide N unless row-local evidence supports it" guard catches the
+7-vs-453 class without needing a gold standard. All new validators are
+required to run in both modes (gold-present and gold-absent); GVF must be
+turnkey on new genes for which no curated answer exists.
+
+## 2026-05-26 Post-Rollback And DB-PMID Recovery
+
+After the SUA sweep, `/tmp/sua_sweep/rollback_and_recover.sh` compared each
+forced PMID's current extraction JSON against the sweep backup. It restored the
+backup when the backup had more raw variant rows and preserved the sweep output
+when the sweep had more rows, then rebuilt each active DB and ran
+`scripts/recall_recovery/run_all_layers.py`.
+
+| Gene | Restored JSONs | Preserved sweep wins | Same count | Errors |
+| --- | ---: | ---: | ---: | ---: |
+| KCNH2 | 11 | 7 | 11 | 0 |
+| KCNQ1 | 4 | 2 | 32 | 0 |
+| SCN5A | 1 | 8 | 44 | 0 |
+| RYR2 | 2 | 2 | 21 | 0 |
+
+The KCNH2 restored JSONs had a raw backup-minus-current delta of 135 variant
+rows. KCNH2 unique-variant recall moved from 68.3% pre-SUA-sweep to 64.3%
+post-SUA-regression to 82.6% after rollback plus recovery. KCNQ1 moved from
+43.1% pre-SUA-sweep to 84.2% after rollback plus recovery; the biggest lift
+came from the LQT supplement parser and native table shapes.
+
+The recovery pass was DB-PMID ClinVar/PubTator enrichment. Figures were skipped
+because no `--pmc-dir` was supplied. Per-gene recovery additions recorded by
+`run_all_layers.py`: KCNH2 ClinVar 1986 / PubTator 612, KCNQ1 3658 / 693,
+SCN5A 3940 / 993, RYR2 1114 / 469.
+
+## 2026-05-26 SUA Source Replay Sweep
+
+Acceptance-gated source replay extended to the full `source_unbound_available`
+(SUA) pool from the 2026-05-26 grafted baseline's
+`paper_disagreement_report.csv`. 147 PMIDs (KCNH2 31 / KCNQ1 38 / SCN5A 53 /
+RYR2 25), processed sequentially: `fetch_paywalled.py` (new PMC-supplement
+fallback + Elsevier-insttoken path) → `refresh_run_db.py --only-forced-pmids
+--replace-db --skip-recovery` → `run_recall_suite.py --score`. Pre-sweep DB
+backups preserved per gene as `<GENE>.db.before_refresh_20260526_*.db`.
+Fetch success rates: KCNH2 28/31, KCNQ1 35/38, SCN5A 42/53, RYR2 24/25.
+
+Per-gene scored deltas (apples-to-apples, on the same production run dirs):
+
+| Gene | unique_variants PRE | unique_variants POST | Δ unique | variant_rows PRE | variant_rows POST | Δ rows |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| KCNH2 | 362/530 (68.3%) | 341/530 (64.3%) | **-21** | 630/991 (63.6%) | 585/991 (59.0%) | -45 |
+| KCNQ1 | 268/622 (43.1%) | 469/622 (75.4%) | **+201** | 566/1741 (32.5%) | 956/1741 (54.9%) | +390 |
+| SCN5A | 818/1183 (69.1%) | 885/1183 (74.8%) | **+67** | 1912/3128 (61.1%) | 1985/3128 (63.5%) | +73 |
+| RYR2  | 436/675 (64.6%) | 511/675 (75.7%) | **+75** | 606/973 (62.3%) | 647/973 (66.5%) | +41 |
+| **Aggregate** | **1884/3010 (62.6%)** | **2206/3010 (73.3%)** | **+322 (+10.7pp)** | **3714/6833 (54.4%)** | **4173/6833 (61.1%)** | **+459 (+6.7pp)** |
+
+KCNQ1 contributed the largest single-gene gain (+32.3pp on unique_variants),
+driven by the LQT supplement parser hitting its native table shapes.
+
+**KCNH2 regressed on net (-21 unique_variants)** because seven SUA PMIDs
+(11844290, 14661677, 16969682, 19038855, 21185499, 21499742, 26937396)
+returned 0 variants from the re-extracted thinner context — stub-as-newest.
+`--only-forced-pmids` does not enforce per-PMID acceptance gating against the
+prior extraction; it just rewrites. The fix is to per-PMID compare new vs
+backup variant counts in `refresh_*/extraction_json_backup/` and restore the
+backup for any regressor, then rebuild. See [[feedback-source-replay]].
+
+**Recovery layers were skipped** (`--skip-recovery`) in the sweep score to keep
+the source replay tight, so PMID-level recall regressed vs the 2026-05-25
+baseline (1100/1502 73.2% vs 1175/1502 78.2%). The rollback/recovery pass above
+then restored useful pre-sweep extraction JSONs and reran DB-PMID
+ClinVar/PubTator recovery.
+
+Sweep artifacts:
+
+- Per-gene scored summaries: `recall_metrics/sua_sweep_20260526_<GENE>/<GENE>/`
+- Per-gene refresh dirs: `<run_dir>/refresh_20260526_*/`
+- Sweep run log: `/tmp/sua_sweep/sweep.log` (local, not tracked)
 
 ## 2026-05-25 Source-Driven Refresh Pass
 
@@ -200,7 +343,7 @@ variant row that matches a gold variant on that PMID (see
 `pmc_fulltext/` therefore does not move PMID recall on its own — a re-extraction
 pass is required to convert the new text into DB rows.
 
-The honest measurement against the current DBs is below
+The honest measurement against the then-current DBs is below
 (`recall_metrics/post_insttoken_20260521/`):
 
 | Gene | PMIDs (matched/gold) | PMID recall | vs 90% target |
@@ -212,14 +355,14 @@ The honest measurement against the current DBs is below
 | **Aggregate (4-gene)** | **1133/1502** | **75.4%** | **-14.6** |
 
 This table is retained for before/after context only. The current baseline is
-the 2026-05-25 refresh score at the top of this file.
+the post-rollback + DB-PMID recovery score at the top of this file.
 
 ## Historical High-Yield Missing PMIDs
 
 These are diagnostic targets from the 2026-05-21 gold-standard score. Do not
 hard-code them into production logic. For current misses, use
-`recall_metrics/post_refresh_20260525/*/missing_in_sqlite.csv` and the
-paper-disagreement artifacts generated with that score.
+`recall_metrics/post_rollback_recover_20260526_aggregate/*/missing_in_sqlite.csv`
+and the paper-disagreement artifacts generated with that score.
 
 ### KCNH2
 
@@ -250,9 +393,10 @@ paper-disagreement artifacts generated with that score.
 
 ## Current Main Barrier
 
-As of 2026-05-25, the Elsevier insttoken source unlock has been consumed by the
-source-driven refresh/rebuild pass. The dominant remaining barriers are no
-longer stale SQLite rows:
+As of 2026-05-27, the Elsevier insttoken source unlock, SUA source replay,
+per-PMID rollback, and DB-PMID ClinVar/PubTator recovery have been consumed by
+the active four-gene DBs. The dominant remaining barriers are no longer stale
+SQLite rows:
 
 1. **Missing or incomplete source bodies, especially supplements/tables.**
    Several refreshed papers now have real full text but still replay to zero or
@@ -389,26 +533,78 @@ Already-addressed items that should not remain open:
 
 ## Next Run Plan
 
+Sequenced after the 2026-05-26 SUA sweep + rollback + recovery pass. All new
+work must be turnkey on genes-diseases that lack a gold standard
+(`gvf gvf-run NEWGENE ...` should produce usable output plus QC flags
+without comparison-based scoring).
+
+**Done:**
+
 1. **DONE 2026-05-21:** `ELSEVIER_API_KEY` + `ELSEVIER_INSTTOKEN` set in
-   `.env`; 242/246 paywalled Elsevier candidates unlocked and saved as
-   `_FULL_CONTEXT.md` into each gene's `pmc_fulltext/`. See
+   `.env`; 242/246 paywalled Elsevier candidates unlocked. See
    "2026-05-21 Elsevier Insttoken Activation".
 2. **DONE 2026-05-25:** Source-driven refresh/rebuild for KCNH2, KCNQ1, RYR2,
-   and SCN5A using `scripts/refresh_run_db.py`; current score is
-   `recall_metrics/post_refresh_20260525/summary.json`.
-3. Use `recall_metrics/post_refresh_20260525/*/missing_in_sqlite.csv` plus the
-   paper-disagreement report to separate remaining misses into: missing
-   supplement/table body, figure/pedigree-only, source has variant text but
-   extraction missed it, count-only mismatch, and notation mismatch.
-4. Audit high-impact deterministic table recoveries, especially multi-gene
-   consortium papers (`32893267`), for row-level gene filtering and count
-   semantics before presenting them as reliable count improvements.
-5. Address the residual non-Elsevier paywalls
-   (Wiley key reissue, Karger TDM agreement, Sage CF) as smaller follow-up
-   unblocks.
-6. For any future source acquisition, rerun
-   `python scripts/refresh_run_db.py --gene <GENE> --run-dir <RUN> --replace-db`
-   instead of patching SQLite rows.
-7. Promote only general parser/acquisition fixes to code. Keep per-PMID recovery
-   artifacts in validation runs, not production branches.
-8. Add no-gold QC output before using the pipeline for new gene-disease runs.
+   and SCN5A using `scripts/refresh_run_db.py`.
+3. **DONE 2026-05-26:** SUA source replay, per-PMID rollback, DB rebuild, and
+   DB-PMID ClinVar/PubTator recovery. Current score is
+   `recall_metrics/post_rollback_recover_20260526_aggregate/summary.json`.
+
+**Tier 1 — engineering foundation (no-gold-compatible by construction):**
+
+4. **Acceptance gating in `refresh_run_db.py --only-forced-pmids`.** Before
+   overwriting a per-PMID extraction JSON, compare new vs prior variant_count;
+   if new < prior, restore from backup and skip. Codifies today's post-hoc
+   rollback. Gold-free.
+5. **Refuse-to-reuse-study-wide-N guard.** Post-extraction validator: any row
+   whose carrier count is >10× the per-paper median is flagged and refused as
+   a per-variant count unless row-local evidence confirms it. Highest single
+   MAE payoff (catches the KCNQ1 29622001 G589D 7-vs-453 class). Internal
+   consistency check, gold-free.
+6. **Count provenance preservation + classification.** Preserve raw column
+   names + raw values before writing final `patients.count` / `affected_count`
+   / `unaffected_count`. Classify each count column as per-variant carrier,
+   family count, proband count, cohort total, screened N, affected/case,
+   unaffected/control. Refuse assignment when classification confidence is low.
+7. **Evidence-card validator (dual-mode).** Two triggers: gold-error
+   `|err|>=10` when gold is available; internal-consistency thresholds
+   (>10× per-paper median; same large count repeated across rows; null-count
+   clustering) when gold is absent. Pulls local table evidence; confirms,
+   corrects, or withholds the count.
+8. **Track recall AND rows-mode MAE per batch** in `scripts/run_recall_suite.py`
+   output. Acceptance gate: accept changes only if recall improves without
+   materially worsening MAE. No-gold variant: emit count-distribution
+   statistics per PMID + outlier-row counts.
+
+**Tier 2 — recall lever (missing-row attack, ~+200-500 unique variants):**
+
+9. Investigate top missing-row PMIDs:
+   `recall_metrics/post_rollback_recover_20260526_aggregate/*/missing_in_sqlite.csv`
+   plus the paper-disagreement report. Highest-yield targets: SCN5A 29325976
+   (87 rows), KCNQ1 30758498 (90), KCNQ1 17192539 (53). Separate misses into
+   missing supplement/table body, figure/pedigree-only, source has variant
+   text but extraction missed it, count-only mismatch, and notation mismatch.
+10. Re-run recovery layers with `--pmc-dir` (figure layer was skipped on
+    2026-05-26). Estimated +20-50 unique variants.
+11. Diagnostic: walk the 7 zero-yield KCNH2 SUA papers (11844290, 14661677,
+    16969682, 19038855, 21185499, 21499742, 26937396). Likely a
+    clinical-case-list table shape the prompt does not match. Implement only
+    general parser/prompt fixes uncovered.
+12. cDNA-only and splice notation normalization (RYR2 raw `c.`-less forms,
+    splice forms like `40-2 A/G`).
+
+**Tier 3 — externally gated:**
+
+13. Karger TDM agreement / Sage CF workaround (SCN5A 23631430 = 24 rows
+    alone). Wiley TDM is verified working as of 2026-05-26.
+
+**Operating rules:**
+
+14. For any future source acquisition, rerun
+    `python scripts/refresh_run_db.py --gene <GENE> --run-dir <RUN> --replace-db`
+    (now acceptance-gated). Do not patch SQLite rows directly.
+15. Promote only general parser/acquisition fixes to code. Keep per-PMID
+    recovery artifacts in validation runs, not production branches.
+16. New gene-disease runs (no gold) must surface no-gold QC output by default:
+    gene mentioned with no variants, supplement referenced but not downloaded,
+    variant-rich text with zero rows, paywall marker present, many null counts,
+    suspicious study-wide-N reuse.
