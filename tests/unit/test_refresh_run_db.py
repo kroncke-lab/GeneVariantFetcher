@@ -3,7 +3,12 @@ import json
 import pytest
 
 import scripts.refresh_run_db as refresh_run_db
-from scripts.refresh_run_db import select_replay_candidates
+from scripts.refresh_run_db import (
+    ReplayCandidate,
+    replay_candidates,
+    select_replay_candidates,
+)
+from utils.models import ExtractionResult
 
 
 def test_selects_stale_abstract_only_when_fulltext_exists(tmp_path):
@@ -411,6 +416,172 @@ def test_load_report_available_contexts_can_search_larger_recovered_context(tmp_
     )
 
     assert contexts == {"20129283": recovered_context}
+
+
+class _StubExtractor:
+    """Test double for ExpertExtractor that returns a preconfigured result."""
+
+    def __init__(self, *, tier_threshold, fulltext_dir):
+        del tier_threshold, fulltext_dir
+
+    def _set_result(self, result):
+        self._result = result
+
+    def extract(self, paper):
+        return self._result
+
+
+def _make_replay_setup(tmp_path, *, prior_variant_count: int, new_variant_count: int):
+    """Wire a minimal replay scenario; returns (candidate, harvest_dir, backup_dir, prior_payload)."""
+    gene = "KCNQ1"
+    pmid = "12345678"
+    harvest_dir = tmp_path / "pmc_fulltext"
+    extraction_dir = tmp_path / "extractions"
+    backup_dir = tmp_path / "refresh_X" / "extraction_json_backup"
+    harvest_dir.mkdir()
+    extraction_dir.mkdir()
+
+    source_file = harvest_dir / f"{pmid}_FULL_CONTEXT.md"
+    source_file.write_text(
+        "# MAIN TEXT\n\nKCNQ1 c.123A>G p.Lys41Arg\n" * 40,
+        encoding="utf-8",
+    )
+
+    prior_payload = {
+        "variants": [
+            {"protein_notation": f"p.X{i}Y"} for i in range(prior_variant_count)
+        ],
+        "extraction_metadata": {"total_variants_found": prior_variant_count},
+    }
+    output_file = extraction_dir / f"{gene}_PMID_{pmid}.json"
+    output_file.write_text(json.dumps(prior_payload), encoding="utf-8")
+
+    candidate = ReplayCandidate(
+        pmid=pmid,
+        source_file=source_file,
+        output_file=output_file,
+        current_variants=prior_variant_count,
+        deterministic_variants=new_variant_count,
+        reasons=["forced_pmid"],
+    )
+
+    new_payload = {
+        "variants": [
+            {"protein_notation": f"p.Z{i}W"} for i in range(new_variant_count)
+        ],
+        "extraction_metadata": {"total_variants_found": new_variant_count},
+    }
+    extraction_result = ExtractionResult(
+        pmid=pmid,
+        success=True,
+        extracted_data=new_payload,
+        model_used="stub-extractor",
+    )
+    return {
+        "gene": gene,
+        "pmid": pmid,
+        "candidate": candidate,
+        "harvest_dir": harvest_dir,
+        "backup_dir": backup_dir,
+        "output_file": output_file,
+        "prior_payload": prior_payload,
+        "extraction_result": extraction_result,
+    }
+
+
+def _install_stub_extractor(monkeypatch, extraction_result):
+    """Replace ExpertExtractor + is_usable_fulltext_source for one test."""
+    stub = _StubExtractor(tier_threshold=0, fulltext_dir="")
+    stub._set_result(extraction_result)
+
+    def _factory(*, tier_threshold, fulltext_dir):
+        return stub
+
+    monkeypatch.setattr(refresh_run_db, "ExpertExtractor", _factory)
+    monkeypatch.setattr(
+        refresh_run_db,
+        "is_usable_fulltext_source",
+        lambda _path: True,
+    )
+    monkeypatch.setattr(
+        refresh_run_db,
+        "_source_metadata",
+        lambda _path: {"source_file": "stub"},
+    )
+
+
+def test_replay_gates_per_pmid_regression(tmp_path, monkeypatch):
+    """When re-extraction yields fewer variants, the backup must be restored."""
+    setup = _make_replay_setup(tmp_path, prior_variant_count=10, new_variant_count=3)
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+    )
+
+    assert stats["attempted"] == 1
+    assert stats["successful"] == 0
+    assert stats["gated"] == 1
+    assert stats["gated_regressions"] == [
+        {
+            "pmid": setup["pmid"],
+            "prior_variant_count": 10,
+            "new_variant_count": 3,
+            "delta": -7,
+        }
+    ]
+    # File on disk must match the prior (10-variant) payload, not the new (3) payload.
+    payload = json.loads(setup["output_file"].read_text())
+    assert len(payload["variants"]) == 10
+    # Backup must still be present.
+    assert (setup["backup_dir"] / setup["output_file"].name).exists()
+
+
+def test_replay_accepts_per_pmid_improvement(tmp_path, monkeypatch):
+    """When re-extraction yields more variants, the new JSON must be written."""
+    setup = _make_replay_setup(tmp_path, prior_variant_count=3, new_variant_count=10)
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+    )
+
+    assert stats["successful"] == 1
+    assert stats["gated"] == 0
+    assert stats["gated_regressions"] == []
+    payload = json.loads(setup["output_file"].read_text())
+    assert len(payload["variants"]) == 10
+
+
+def test_no_gate_regressions_disables_per_pmid_acceptance(tmp_path, monkeypatch):
+    """--no-gate-regressions must overwrite even when the new JSON has fewer variants."""
+    setup = _make_replay_setup(tmp_path, prior_variant_count=10, new_variant_count=3)
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+        gate_regressions=False,
+    )
+
+    assert stats["successful"] == 1
+    assert stats["gated"] == 0
+    payload = json.loads(setup["output_file"].read_text())
+    assert len(payload["variants"]) == 3  # overwritten with fewer variants
 
 
 def test_only_forced_pmids_requires_forced_inputs(tmp_path, monkeypatch):

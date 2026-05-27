@@ -467,9 +467,17 @@ def replay_candidates(
     backup_dir: Path,
     tier_threshold: int,
     dry_run: bool,
+    gate_regressions: bool = True,
 ) -> dict[str, Any]:
     if dry_run:
-        return {"attempted": 0, "successful": 0, "failed": 0, "errors": []}
+        return {
+            "attempted": 0,
+            "successful": 0,
+            "failed": 0,
+            "gated": 0,
+            "gated_regressions": [],
+            "errors": [],
+        }
 
     backup_dir.mkdir(parents=True, exist_ok=True)
     extractor = ExpertExtractor(
@@ -477,6 +485,8 @@ def replay_candidates(
     )
     attempted = 0
     successful = 0
+    gated = 0
+    gated_regressions: list[dict[str, Any]] = []
     errors: list[dict[str, str]] = []
 
     for candidate in candidates:
@@ -495,6 +505,32 @@ def replay_candidates(
             )
             if not result.success or not result.extracted_data:
                 raise RuntimeError(result.error or "empty extraction result")
+            new_variant_count = len(result.extracted_data.get("variants", []) or [])
+            prior_variant_count = _backup_variant_count(backup_file)
+            if (
+                gate_regressions
+                and prior_variant_count is not None
+                and new_variant_count < prior_variant_count
+            ):
+                gated += 1
+                gated_regressions.append(
+                    {
+                        "pmid": candidate.pmid,
+                        "prior_variant_count": prior_variant_count,
+                        "new_variant_count": new_variant_count,
+                        "delta": new_variant_count - prior_variant_count,
+                    }
+                )
+                logger.warning(
+                    "PMID %s replay gated: prior=%d new=%d Δ=%d (kept backup)",
+                    candidate.pmid,
+                    prior_variant_count,
+                    new_variant_count,
+                    new_variant_count - prior_variant_count,
+                )
+                if backup_file.exists():
+                    shutil.copy2(backup_file, candidate.output_file)
+                continue
             metadata = result.extracted_data.setdefault("extraction_metadata", {})
             metadata.update(_source_metadata(candidate.source_file))
             metadata["model_used"] = result.model_used
@@ -506,7 +542,7 @@ def replay_candidates(
             logger.info(
                 "replayed PMID %s: %s variants via %s",
                 candidate.pmid,
-                len(result.extracted_data.get("variants", []) or []),
+                new_variant_count,
                 result.model_used,
             )
         except Exception as exc:  # noqa: BLE001
@@ -519,9 +555,29 @@ def replay_candidates(
         "attempted": attempted,
         "successful": successful,
         "failed": len(errors),
+        "gated": gated,
+        "gated_regressions": gated_regressions,
         "errors": errors,
         "backup_dir": str(backup_dir),
     }
+
+
+def _backup_variant_count(backup_file: Path) -> Optional[int]:
+    """Return the number of variants in the backup extraction JSON, or None.
+
+    Used by `replay_candidates` to gate against per-PMID regressions: if the
+    re-extraction produces fewer variants than the prior JSON (preserved as
+    backup at the start of the replay), the backup is restored. Pure
+    internal-consistency check; no gold standard required.
+    """
+    if not backup_file.exists():
+        return None
+    try:
+        data = json.loads(backup_file.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    variants = data.get("variants") if isinstance(data, dict) else None
+    return len(variants) if isinstance(variants, list) else None
 
 
 def rebuild_db(
@@ -704,6 +760,18 @@ def build_parser() -> argparse.ArgumentParser:
             "--pmids-file or --candidate-report."
         ),
     )
+    p.add_argument(
+        "--no-gate-regressions",
+        action="store_true",
+        help=(
+            "Disable per-PMID acceptance gating. By default, when a replay "
+            "produces fewer variants than the prior extraction JSON for the "
+            "same PMID, the backup is restored and the new extraction is "
+            "discarded. This flag overrides that protection and overwrites "
+            "the prior JSON unconditionally; use only when you know the new "
+            "extraction is authoritative even if it has fewer variants."
+        ),
+    )
     p.add_argument("--dry-run", action="store_true")
     p.add_argument("--verbose", "-v", action="store_true")
     return p
@@ -791,6 +859,7 @@ def main() -> int:
         backup_dir=refresh_dir / "extraction_json_backup",
         tier_threshold=args.tier_threshold,
         dry_run=args.dry_run,
+        gate_regressions=not args.no_gate_regressions,
     )
 
     output_db = args.output_db
