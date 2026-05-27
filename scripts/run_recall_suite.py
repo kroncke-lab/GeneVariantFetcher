@@ -173,6 +173,27 @@ def combine_recall(scored: list[dict[str, Any]]) -> dict[str, Any]:
     return aggregate
 
 
+MAE_FIELDS = ("carriers", "affected", "unaffected")
+
+
+def combine_mae(scored: list[dict[str, Any]]) -> dict[str, Any]:
+    """Aggregate rows-mode MAE across genes by summing |err| and N."""
+    aggregate: dict[str, Any] = {}
+    for field_name in MAE_FIELDS:
+        total = 0
+        n = 0
+        for item in scored:
+            mae_block = item.get("summary", {}).get("mae", {}).get(field_name, {})
+            total += int(mae_block.get("sum_abs_error") or 0)
+            n += int(mae_block.get("n_matched") or 0)
+        aggregate[field_name] = {
+            "sum_abs_error": total,
+            "n_matched": n,
+            "mae": (total / n) if n else None,
+        }
+    return aggregate
+
+
 def target_gap(metric: dict[str, Any], target: float) -> int | None:
     """Rows needed to reach target recall for one metric."""
     gold = int(metric.get("gold") or 0)
@@ -187,6 +208,7 @@ def build_run_summary(
     *,
     gene_results: list[dict[str, Any]],
     aggregate_recall: dict[str, Any],
+    aggregate_mae: dict[str, Any] | None = None,
     manifest: dict[str, Any],
     target: float,
 ) -> dict[str, Any]:
@@ -198,6 +220,7 @@ def build_run_summary(
             name: target_gap(metric, target)
             for name, metric in aggregate_recall.items()
         },
+        "aggregate_mae": aggregate_mae or {},
         "gene_results": gene_results,
         "gold_manifest_generated_at_utc": manifest.get("generated_at_utc"),
     }
@@ -273,6 +296,27 @@ def write_markdown_summary(summary: dict[str, Any], output_path: Path) -> None:
             f"{_format_pct(metric.get('recall'))} | {gaps.get(name, 'n/a')} |"
         )
 
+    mae = summary.get("aggregate_mae") or {}
+    if any(block.get("n_matched") for block in mae.values()):
+        lines.extend(
+            [
+                "",
+                "## Aggregate Rows-Mode MAE",
+                "",
+                "Mean absolute error on matched-variant rows (lower is better; target → 0).",
+                "",
+                "| Field | sum \\|err\\| / N matched | MAE |",
+                "|-------|---------|-----|",
+            ]
+        )
+        for field_name in MAE_FIELDS:
+            block = mae.get(field_name, {})
+            mae_val = block.get("mae")
+            lines.append(
+                f"| {field_name} | {block.get('sum_abs_error', 0)} / {block.get('n_matched', 0)} | "
+                f"{'n/a' if mae_val is None else f'{mae_val:.3f}'} |"
+            )
+
     lines.extend(["", "## Genes", ""])
     for item in summary.get("gene_results", []):
         status = item.get("status")
@@ -334,6 +378,21 @@ def print_scorecard(summary: dict[str, Any]) -> None:
             f"{_format_pct(metric.get('recall')):>7} "
             f"gap_to_target={gap_text}"
         )
+
+    mae = summary.get("aggregate_mae") or {}
+    if any(block.get("n_matched") for block in mae.values()):
+        print()
+        print("MAE (rows-mode, matched only; lower is better)")
+        for field_name in MAE_FIELDS:
+            block = mae.get(field_name, {})
+            mae_val = block.get("mae")
+            mae_text = "n/a" if mae_val is None else f"{mae_val:.3f}"
+            print(
+                f"  {field_name:16s} "
+                f"sum|err|={block.get('sum_abs_error', 0):>5}  "
+                f"n={block.get('n_matched', 0):<5} "
+                f"MAE={mae_text}"
+            )
     print()
     print("Genes")
     for item in summary.get("gene_results", []):
@@ -555,6 +614,7 @@ def main() -> int:
     summary = build_run_summary(
         gene_results=gene_results,
         aggregate_recall=combine_recall(scored),
+        aggregate_mae=combine_mae(scored),
         manifest=manifest,
         target=args.target,
     )

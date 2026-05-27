@@ -2021,6 +2021,47 @@ def compute_recall_summary(results: List[ComparisonRow]) -> Dict[str, Any]:
     }
 
 
+def compute_rows_mae(results: List[ComparisonRow]) -> Dict[str, Any]:
+    """Compute per-row mean absolute error for count fields on matched rows.
+
+    Only matched (PMID x variant) rows with both gold and extracted counts
+    present contribute. Lower is better; target is `MAE -> 0`. Returned
+    aggregate is gold-dependent and complements the recall metrics.
+
+    Per-field output: ``{"sum": <int>, "n": <int>, "mae": <float | None>}``.
+    """
+    matched_rows = [
+        r
+        for r in results
+        if not r.missing_in_excel and not r.missing_in_sqlite and r.match_type != "none"
+    ]
+    field_pairs = [
+        ("carriers", "excel_carriers_total", "sqlite_carriers_total"),
+        ("affected", "excel_affected", "sqlite_affected"),
+        ("unaffected", "excel_unaffected", "sqlite_unaffected"),
+    ]
+    out: Dict[str, Any] = {}
+    for label, gold_attr, ext_attr in field_pairs:
+        total_abs = 0
+        n = 0
+        for r in matched_rows:
+            gv = getattr(r, gold_attr, None)
+            sv = getattr(r, ext_attr, None)
+            if gv is None or sv is None:
+                continue
+            try:
+                total_abs += abs(int(gv) - int(sv))
+                n += 1
+            except (TypeError, ValueError):
+                continue
+        out[label] = {
+            "sum_abs_error": total_abs,
+            "n_matched": n,
+            "mae": (total_abs / n) if n else None,
+        }
+    return out
+
+
 # =============================================================================
 # OUTPUT GENERATION
 # =============================================================================
@@ -2061,6 +2102,7 @@ def generate_outputs(
         "count_mismatches": sum(1 for r in results if r.count_mismatch),
         "unique_pmids": len(set(r.pmid for r in results)),
         "recall": compute_recall_summary(results),
+        "mae": compute_rows_mae(results),
         "top_mismatches": [],
     }
 

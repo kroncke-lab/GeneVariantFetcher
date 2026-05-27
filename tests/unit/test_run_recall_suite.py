@@ -4,6 +4,7 @@ import sqlite3
 
 from scripts.run_recall_suite import (
     build_gene_results,
+    combine_mae,
     combine_recall,
     discover_gold_inputs,
 )
@@ -112,3 +113,51 @@ def test_build_gene_results_scores_available_and_marks_missing(tmp_path):
     aggregate = combine_recall([by_gene["KCNQ1"]])
     assert aggregate["variant_rows"]["recall"] == 0.5
     assert aggregate["affected"]["recall"] == 0.5
+
+
+def test_combine_mae_aggregates_across_genes():
+    """Aggregate MAE sums |err| and matched-N across genes, recomputes ratio."""
+    scored = [
+        {
+            "summary": {
+                "mae": {
+                    "carriers": {"sum_abs_error": 10, "n_matched": 5, "mae": 2.0},
+                    "affected": {"sum_abs_error": 3, "n_matched": 5, "mae": 0.6},
+                    "unaffected": {"sum_abs_error": 0, "n_matched": 5, "mae": 0.0},
+                }
+            }
+        },
+        {
+            "summary": {
+                "mae": {
+                    "carriers": {"sum_abs_error": 30, "n_matched": 15, "mae": 2.0},
+                    "affected": {"sum_abs_error": 9, "n_matched": 15, "mae": 0.6},
+                    "unaffected": {"sum_abs_error": 5, "n_matched": 15, "mae": 0.33},
+                }
+            }
+        },
+    ]
+
+    agg = combine_mae(scored)
+
+    assert agg["carriers"]["sum_abs_error"] == 40
+    assert agg["carriers"]["n_matched"] == 20
+    assert agg["carriers"]["mae"] == 2.0  # 40/20
+    assert agg["unaffected"]["sum_abs_error"] == 5
+    assert agg["unaffected"]["n_matched"] == 20
+    assert agg["unaffected"]["mae"] == 0.25  # 5/20
+
+
+def test_combine_mae_handles_missing_mae_blocks_safely():
+    """Genes without MAE blocks (older summaries) must not crash combine_mae."""
+    scored = [
+        {"summary": {}},  # no mae block at all
+        {"summary": {"mae": {"carriers": {"sum_abs_error": 4, "n_matched": 2}}}},
+    ]
+    agg = combine_mae(scored)
+    assert agg["carriers"]["sum_abs_error"] == 4
+    assert agg["carriers"]["n_matched"] == 2
+    assert agg["carriers"]["mae"] == 2.0
+    # Fields absent from any gene still produce a zero/n=0 block, not a KeyError
+    assert agg["affected"]["n_matched"] == 0
+    assert agg["affected"]["mae"] is None
