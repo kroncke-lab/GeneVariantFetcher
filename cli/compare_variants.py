@@ -1607,6 +1607,44 @@ def _protein_codon_from_canonical(canonical: Optional[str]) -> Optional[int]:
         return None
 
 
+# Coding-region cDNA substitution (requires literal c. prefix + base>base, so
+# intronic forms like c.703+1G>A are not mistaken for a coding position).
+_CDNA_SUBSTITUTION_RE = re.compile(r"c\.\s*(\d+)\s*[ACGTacgt]\s*>\s*[ACGTacgt]")
+# Canonical protein substitution / nonsense like Y51X, Y111C, P117L (single
+# residue, not an indel/frameshift, which are handled by the indel bridge).
+_PROTEIN_SUBSTITUTION_CANON_RE = re.compile(r"^[A-Z](\d+)[A-Z*X]$")
+
+
+def _cdna_substitution_codon(cdna: Optional[str]) -> Optional[int]:
+    """Implied protein codon for a coding cDNA substitution (c.153C>A -> 51)."""
+    if not cdna:
+        return None
+    m = _CDNA_SUBSTITUTION_RE.search(cdna)
+    if not m:
+        return None
+    try:
+        pos = int(m.group(1))
+    except ValueError:
+        return None
+    return (pos + 2) // 3 if pos > 0 else None
+
+
+def _protein_substitution_codon(canonical: Optional[str]) -> Optional[int]:
+    """Codon of a protein substitution/nonsense canonical form (Y51X -> 51).
+
+    Returns None for indel/frameshift forms (handled by the indel bridge).
+    """
+    if not canonical or _is_indel_canonical(canonical):
+        return None
+    m = _PROTEIN_SUBSTITUTION_CANON_RE.match(canonical)
+    if not m:
+        return None
+    try:
+        return int(m.group(1))
+    except ValueError:
+        return None
+
+
 def _find_cdna_protein_bridge(
     excel_entry: Dict[str, Any],
     available: List[Tuple[Tuple[str, str], Dict[str, Any]]],
@@ -1649,6 +1687,23 @@ def _find_cdna_protein_bridge(
                 # codon.
                 if implied == target_codon:
                     return (sqlite_key, entry)
+
+    # Protein-substitution / nonsense gold -> cDNA-substitution SQLite bridge.
+    # Gold like Y51X or P117L maps to a codon; a stored cDNA SNV (e.g. c.153C>A)
+    # implies the same codon and is the SAME variant in cDNA notation. Require a
+    # UNIQUE cDNA candidate at that codon on this PMID to avoid mispairing the
+    # two distinct substitutions that can share a codon (e.g. R190W vs R190Q).
+    if target_codon is None:
+        sub_codon = _protein_substitution_codon(excel_canonical)
+        if sub_codon is not None:
+            sub_cands = [
+                (sqlite_key, entry)
+                for sqlite_key, entry in available
+                if isinstance(entry.get("cdna_notation"), str)
+                and _cdna_substitution_codon(entry.get("cdna_notation")) == sub_codon
+            ]
+            if len(sub_cands) == 1:
+                return sub_cands[0]
 
     # cDNA gold -> protein SQLite bridge. This is the reverse case: SQLite may
     # prefer protein_notation as its display key even though the stored cDNA
