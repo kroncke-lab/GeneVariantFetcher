@@ -99,6 +99,40 @@ penetrance_percentage. Study-wide statements such as "35% of carriers overall"
 or "median age 61 years" are not variant-level facts. Do not copy them onto
 every variant; mention them only in additional_notes when useful.
 
+REQUIRED — COUNT PROVENANCE (records WHY a count was assigned):
+For every count you populate (patients.count, penetrance_data.*), also record
+where it came from in a separate `count_provenance` block on the variant:
+
+  count_provenance: {{
+      "carriers_column_label":   raw column header text or null
+                                 (e.g. "No. of patients", "Carriers", "N")
+      "carriers_count_type":     one of the count_type values below
+      "affected_column_label":   raw column header text or null
+      "affected_count_type":     one of the count_type values below
+      "unaffected_column_label": raw column header text or null
+      "unaffected_count_type":   one of the count_type values below
+  }}
+
+count_type values (use exactly these strings):
+  per_variant_carrier — this row's number specifically describes carriers
+                        of THIS variant (the count to actually use)
+  family_count        — families, not individuals
+  proband_count       — probands only, not all carriers
+  cohort_total        — study/cohort total ("N studied = 200"); NOT variant-specific
+  screened_N          — screening denominator; NOT a carrier count
+  case                — case-arm count in a case/control study
+  control             — control-arm count
+  unaffected_control  — healthy-control count
+  unknown             — cannot tell from context
+
+Rule: if count_type is cohort_total, screened_N, or unknown AND the count would
+otherwise be large (>10× the smallest carrier count in this paper), leave the
+corresponding patients.count / penetrance_data.* NULL — do NOT assign the cohort
+total to this row. Record the aggregate in additional_notes instead.
+
+This block is REQUIRED whenever any count is populated. Set fields to null when
+you can't identify the source column. Do NOT invent column labels.
+
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
 Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
 and genomic_position would be null. The variant identifier is load-bearing.
@@ -155,6 +189,14 @@ Return a JSON object with this structure:
                 "total_carriers_observed": N or null,
                 "affected_count": N or null,
                 "unaffected_count": N or null
+            }},
+            "count_provenance": {{
+                "carriers_column_label": "string or null",
+                "carriers_count_type": "per_variant_carrier|family_count|proband_count|cohort_total|screened_N|case|control|unaffected_control|unknown",
+                "affected_column_label": "string or null",
+                "affected_count_type": "(same enum)",
+                "unaffected_column_label": "string or null",
+                "unaffected_count_type": "(same enum)"
             }},
             "source_location": "Table X" or "Results"
         }}
@@ -349,6 +391,40 @@ penetrance_percentage. Study-wide statements such as "35% of carriers overall"
 or "median age 61 years" are not variant-level facts. Do not copy them onto
 every variant; mention them only in additional_notes when useful.
 
+REQUIRED — COUNT PROVENANCE (records WHY a count was assigned):
+For every count you populate (patients.count, penetrance_data.*), also record
+where it came from in a separate `count_provenance` block on the variant:
+
+  count_provenance: {{
+      "carriers_column_label":   raw column header text or null
+                                 (e.g. "No. of patients", "Carriers", "N")
+      "carriers_count_type":     one of the count_type values below
+      "affected_column_label":   raw column header text or null
+      "affected_count_type":     one of the count_type values below
+      "unaffected_column_label": raw column header text or null
+      "unaffected_count_type":   one of the count_type values below
+  }}
+
+count_type values (use exactly these strings):
+  per_variant_carrier — this row's number specifically describes carriers
+                        of THIS variant (the count to actually use)
+  family_count        — families, not individuals
+  proband_count       — probands only, not all carriers
+  cohort_total        — study/cohort total ("N studied = 200"); NOT variant-specific
+  screened_N          — screening denominator; NOT a carrier count
+  case                — case-arm count in a case/control study
+  control             — control-arm count
+  unaffected_control  — healthy-control count
+  unknown             — cannot tell from context
+
+Rule: if count_type is cohort_total, screened_N, or unknown AND the count would
+otherwise be large (>10× the smallest carrier count in this paper), leave the
+corresponding patients.count / penetrance_data.* NULL — do NOT assign the cohort
+total to this row. Record the aggregate in additional_notes instead.
+
+This block is REQUIRED whenever any count is populated. Set fields to null when
+you can't identify the source column. Do NOT invent column labels.
+
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
 Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
 and genomic_position would be null. The variant identifier is load-bearing.
@@ -420,6 +496,14 @@ Return a JSON object with this structure:
                         "affected_in_range": "integer"
                     }}
                 ]
+            }},
+            "count_provenance": {{
+                "carriers_column_label": "string or null (raw column header the count came from)",
+                "carriers_count_type": "per_variant_carrier|family_count|proband_count|cohort_total|screened_N|case|control|unaffected_control|unknown",
+                "affected_column_label": "string or null",
+                "affected_count_type": "(same enum as carriers_count_type)",
+                "unaffected_column_label": "string or null",
+                "unaffected_count_type": "(same enum as carriers_count_type)"
             }},
             "individual_records": [
                 {{
