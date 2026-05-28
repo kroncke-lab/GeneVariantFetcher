@@ -12,30 +12,28 @@ def _make_extraction_json(path, variants):
 
 
 def _seed_extractions(extractions_dir):
-    """Create one PMID with a clear outlier, one with no outliers."""
+    """Create one PMID with a clear outlier, one with no outliers.
+
+    Carrier counts are written to BOTH patients.count and
+    penetrance_data.total_carriers_observed, matching the production
+    extraction schema.
+    """
     extractions_dir.mkdir(parents=True, exist_ok=True)
 
+    def variant(carriers):
+        return {
+            "patients": {"count": carriers},
+            "penetrance_data": {"total_carriers_observed": carriers},
+        }
+
     # PMID with study-wide-N reuse on one row
-    outlier_variants = [
-        {"patients": {"count": 453}},
-        {"patients": {"count": 4}},
-        {"patients": {"count": 5}},
-        {"patients": {"count": 6}},
-        {"patients": {"count": 3}},
-        {"patients": {"count": 8}},
-    ]
+    outlier_variants = [variant(c) for c in (453, 4, 5, 6, 3, 8)]
     _make_extraction_json(
         extractions_dir / "KCNQ1_PMID_29622001.json", outlier_variants
     )
 
     # PMID with consistent counts; should not flag
-    normal_variants = [
-        {"patients": {"count": 7}},
-        {"patients": {"count": 8}},
-        {"patients": {"count": 6}},
-        {"patients": {"count": 10}},
-        {"patients": {"count": 9}},
-    ]
+    normal_variants = [variant(c) for c in (7, 8, 6, 10, 9)]
     _make_extraction_json(extractions_dir / "KCNQ1_PMID_99999999.json", normal_variants)
 
 
@@ -101,9 +99,13 @@ def test_clear_policy_zeros_and_backs_up(tmp_path, monkeypatch):
     summary = json.loads(report.read_text())
     assert summary["totals"]["total_cleared_values"] == 1
 
-    # Outlier file mutated; raw preserved in flags
+    # Outlier file mutated; raw preserved in flags; BOTH mirror locations cleared
     outlier_json = json.loads((extractions / "KCNQ1_PMID_29622001.json").read_text())
     assert outlier_json["variants"][0]["patients"]["count"] is None
+    assert (
+        outlier_json["variants"][0]["penetrance_data"]["total_carriers_observed"]
+        is None
+    )
     assert outlier_json["variants"][0]["count_outlier_flags"]["carriers"]["raw"] == 453
     assert outlier_json["count_outlier_guard"]["policy"] == "clear"
 

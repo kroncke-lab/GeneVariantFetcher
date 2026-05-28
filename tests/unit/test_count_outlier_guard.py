@@ -9,11 +9,17 @@ from pipeline.count_outlier_guard import (
 
 
 def _v(carriers=None, affected=None, unaffected=None):
+    """Build a variant dict that mirrors carriers into BOTH locations the
+    extraction pipeline writes them — patients.count and
+    penetrance_data.total_carriers_observed — so tests exercise the same
+    schema the guard will see in production.
+    """
     variant = {}
     if carriers is not None:
         variant["patients"] = {"count": carriers}
+        variant.setdefault("penetrance_data", {})["total_carriers_observed"] = carriers
     if affected is not None or unaffected is not None:
-        variant["penetrance_data"] = {}
+        variant.setdefault("penetrance_data", {})
         if affected is not None:
             variant["penetrance_data"]["affected_count"] = affected
         if unaffected is not None:
@@ -116,10 +122,44 @@ def test_apply_policy_clear_zeros_value_and_records_raw():
     result = apply_outlier_policy(variants, anns, policy="clear")
     assert result.flagged == 1
     assert result.cleared == 1
-    # Count is now None
+    # BOTH mirror locations cleared (regression test for the bug where the
+    # DB rebuild resurrected the value from the un-cleared mirror)
     assert variants[0]["patients"]["count"] is None
+    assert variants[0]["penetrance_data"]["total_carriers_observed"] is None
     # Raw is preserved under flags
     assert variants[0]["count_outlier_flags"]["carriers"]["raw"] == 453
+
+
+def test_clear_handles_diverging_mirror_values():
+    """When the two mirror fields disagree, clearing nulls both regardless."""
+    variants = [
+        {
+            "patients": {"count": 453},
+            "penetrance_data": {"total_carriers_observed": 401},
+        },
+        _v(carriers=4),
+        _v(carriers=5),
+        _v(carriers=6),
+        _v(carriers=3),
+    ]
+    anns = detect_count_outliers(variants)
+    assert anns and anns[0].variant_index == 0
+    apply_outlier_policy(variants, anns, policy="clear")
+    assert variants[0]["patients"]["count"] is None
+    assert variants[0]["penetrance_data"]["total_carriers_observed"] is None
+
+
+def test_detection_reads_mirror_when_primary_missing():
+    """If only total_carriers_observed is populated, the detector still sees it."""
+    variants = [
+        {"penetrance_data": {"total_carriers_observed": 453}},  # no patients.count
+        _v(carriers=4),
+        _v(carriers=5),
+        _v(carriers=6),
+        _v(carriers=3),
+    ]
+    anns = detect_count_outliers(variants)
+    assert any(a.variant_index == 0 and a.field == "carriers" for a in anns)
 
 
 def test_apply_policy_off_is_noop():

@@ -33,10 +33,17 @@ DEFAULT_MIN_VARIANTS = 4
 DEFAULT_MULTIPLIER_THRESHOLD = 10.0
 DEFAULT_ABSOLUTE_THRESHOLD = 50
 
-COUNT_FIELDS = {
-    "carriers": ("patients", "count"),
-    "affected": ("penetrance_data", "affected_count"),
-    "unaffected": ("penetrance_data", "unaffected_count"),
+COUNT_FIELDS: dict[str, tuple[tuple[str, str], ...]] = {
+    # Carrier counts appear in two mirror locations in the variant schema;
+    # both need to be read for detection (use first non-null) and cleared
+    # together so the DB rebuild does not resurrect a flagged value from the
+    # un-cleared mirror.
+    "carriers": (
+        ("patients", "count"),
+        ("penetrance_data", "total_carriers_observed"),
+    ),
+    "affected": (("penetrance_data", "affected_count"),),
+    "unaffected": (("penetrance_data", "unaffected_count"),),
 }
 
 
@@ -80,7 +87,7 @@ class GuardResult:
         }
 
 
-def _read_nested(variant: dict[str, Any], path: tuple[str, str]) -> Optional[int]:
+def _read_one(variant: dict[str, Any], path: tuple[str, str]) -> Optional[int]:
     container = variant.get(path[0])
     if not isinstance(container, dict):
         return None
@@ -91,11 +98,25 @@ def _read_nested(variant: dict[str, Any], path: tuple[str, str]) -> Optional[int
         return None
 
 
-def _write_nested(variant: dict[str, Any], path: tuple[str, str], value: Any) -> None:
-    container = variant.setdefault(path[0], {})
-    if not isinstance(container, dict):
-        return
-    container[path[1]] = value
+def _read_field(
+    variant: dict[str, Any], paths: tuple[tuple[str, str], ...]
+) -> Optional[int]:
+    """Return the first non-null value across `paths` (mirror count fields)."""
+    for path in paths:
+        v = _read_one(variant, path)
+        if v is not None:
+            return v
+    return None
+
+
+def _clear_field(variant: dict[str, Any], paths: tuple[tuple[str, str], ...]) -> None:
+    """Null every mirror location for a logical count field."""
+    for path in paths:
+        container = variant.get(path[0])
+        if not isinstance(container, dict):
+            continue
+        if path[1] in container:
+            container[path[1]] = None
 
 
 def detect_count_outliers(
@@ -124,14 +145,14 @@ def detect_count_outliers(
     annotations: list[OutlierAnnotation] = []
 
     for fkey in field_keys:
-        path = COUNT_FIELDS.get(fkey)
-        if path is None:
+        paths = COUNT_FIELDS.get(fkey)
+        if not paths:
             continue
         values: list[tuple[int, int]] = []
         for idx, variant in enumerate(variants):
             if not isinstance(variant, dict):
                 continue
-            v = _read_nested(variant, path)
+            v = _read_field(variant, paths)
             if v is None or v <= 0:
                 continue
             values.append((idx, v))
@@ -201,7 +222,7 @@ def apply_outlier_policy(
         }
         result.flagged += 1
         if policy == "clear":
-            path = COUNT_FIELDS[ann.field]
-            _write_nested(variant, path, None)
+            paths = COUNT_FIELDS[ann.field]
+            _clear_field(variant, paths)
             result.cleared += 1
     return result
