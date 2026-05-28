@@ -1835,8 +1835,20 @@ class ExpertExtractor(BaseLLMCaller):
 
         def update_table_label(text: str) -> None:
             nonlocal current_table_label
-            heading = text.lstrip("#").strip()
-            if re.match(r"^Table\s+\w+(?:[\.:]|\s|$)", heading, re.IGNORECASE):
+            candidate = text
+            # Captions are frequently emitted as a single-cell table row, e.g.
+            # `| **Supplemental Table 1. KCNQ1 variants ...** | | | |`. Pull the
+            # first non-empty cell so a gene named only in the caption (and not
+            # in a per-row Gene column) still scopes the table.
+            if candidate.lstrip().startswith("|"):
+                row_cells = [c.strip() for c in candidate.split("|") if c.strip()]
+                candidate = row_cells[0] if row_cells else ""
+            heading = candidate.lstrip("#").strip().replace("*", "").strip()
+            if re.match(
+                r"^(?:supplement\w*\s+)?table\s+\w+(?:[\.:]|\s|$)",
+                heading,
+                re.IGNORECASE,
+            ):
                 current_table_label = heading
 
         def table_label_matches_target(label: str) -> bool:

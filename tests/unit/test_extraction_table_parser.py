@@ -152,6 +152,56 @@ Table 1. KCNH2 affected and unaffected carriers
     assert pen["unaffected_count"] == 10
 
 
+def test_markdown_caption_row_scopes_gene_without_gene_column():
+    """A caption emitted as a table row (no per-row Gene column) must scope the
+    table to the gene it names. Regression for PMID 26669661, where a KCNQ1
+    supplemental table leaked all rows into an SCN5A run (1 -> 161 variants)."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+| **Supplemental Table 1. *KCNQ1* variants by location and type** | | | | |
+| --- | --- | --- | --- | --- |
+| **Amino acid change** | **Nucleotide change** | **Location** | **Total families** | **Total carriers** |
+| p.(Tyr111Cys) | c.332A>G | N-terminus | 3 | 9 |
+| p.(Pro117Leu) | c.350C>T | N-terminus | 1 | 3 |
+"""
+
+    # The caption names KCNQ1, so an SCN5A run must claim nothing.
+    assert extractor._parse_markdown_table_variants(text, "SCN5A") == []
+
+    # The same table is kept for the gene it actually describes.
+    kcnq1 = extractor._parse_markdown_table_variants(text, "KCNQ1")
+    assert {v["cdna_notation"] for v in kcnq1} == {"c.332A>G", "c.350C>T"}
+
+
+def test_markdown_no_caption_no_gene_column_is_not_oversuppressed():
+    """A gene-column-less table with no gene named anywhere stays claimable by
+    the target gene (single-gene papers must not regress)."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+| **Amino acid change** | **Nucleotide change** | **Location** | **Total carriers** |
+| --- | --- | --- | --- |
+| p.(Tyr111Cys) | c.332A>G | N-terminus | 9 |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "KCNQ1")
+    assert [v["cdna_notation"] for v in variants] == ["c.332A>G"]
+
+
+def test_markdown_gene_column_filters_rows_in_multigene_table():
+    """A table with a per-row Gene column keeps only the target gene's rows."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+| **Gene** | **Amino acid change** | **Nucleotide change** | **Total carriers** |
+| --- | --- | --- | --- |
+| SCN5A | p.(Arg18Gln) | c.53G>A | 4 |
+| KCNH2 | p.(Pro1093Leu) | c.3278C>T | 2 |
+| KCNQ1 | p.(Tyr111Cys) | c.332A>G | 9 |
+"""
+
+    variants = extractor._parse_markdown_table_variants(text, "SCN5A")
+    assert [v["cdna_notation"] for v in variants] == ["c.53G>A"]
+
+
 def test_fixed_width_parser_reads_pdftotext_layout_rows():
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """
