@@ -1,0 +1,9 @@
+{
+  "_comment": "Canonical RefSeq protein accessions for the reference-transcript validation gate (pipeline/reference_validation.py). Populate <GENE>.fasta with scripts/fetch_reference_sequences.py, which cross-checks the fetched length against expected_length (these match utils.variant_normalizer.PROTEIN_LENGTHS). expected_length is the authority: if a fetched accession's length differs, the accession is wrong/stale and is rejected.",
+  "genes": {
+    "KCNH2": {"refseq_protein": "NP_000229.1", "refseq_mrna": "NM_000238.4", "expected_length": 1159},
+    "KCNQ1": {"refseq_protein": "NP_000209.2", "refseq_mrna": "NM_000218.3", "expected_length": 676},
+    "SCN5A": {"refseq_protein": "NP_932173.1", "refseq_mrna": "NM_198056.3", "expected_length": 2016},
+    "RYR2": {"refseq_protein": "NP_001026.2", "refseq_mrna": "NM_001035.3", "expected_length": 4967}
+  }
+}
