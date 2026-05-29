@@ -251,6 +251,55 @@ _HEADER_FIELD_KEYWORDS = {
     ),
 }
 
+# Subsets of the affected/unaffected keyword lists that are ambiguous between a
+# per-variant clinical count and a case-control *cohort* total. On assay /
+# case-control tables, a column whose header matches ONLY these (e.g. "Cases",
+# "Controls") is a cohort column, not a per-variant affected/unaffected count;
+# mapping it inflates counts (the worst MAE axis). Gated by strict_cohort_labels.
+_AMBIGUOUS_COHORT_KEYWORDS = {
+    "affected": ("case", "disease"),
+    "unaffected": ("control", "healthy", "normal"),
+}
+
+
+def _field_header_match(
+    header: str,
+    field: str,
+    *,
+    strict_cohort_labels: bool,
+    has_assay_or_gwas_cue: bool,
+) -> bool:
+    """True when ``header`` maps to ``field``, honoring the cohort-label guard.
+
+    Equivalent to ``any(kw in header for kw in _HEADER_FIELD_KEYWORDS[field])``
+    except that, when ``strict_cohort_labels`` is set and the table looks like a
+    case-control / assay table, an affected/unaffected header matching ONLY
+    ambiguous cohort terms (case/disease, control/healthy/normal) is rejected so
+    a cohort total is not assigned as a per-variant count.
+    """
+    matches = [kw for kw in _HEADER_FIELD_KEYWORDS[field] if kw in header]
+    if not matches:
+        return False
+    if (
+        strict_cohort_labels
+        and has_assay_or_gwas_cue
+        and field in _AMBIGUOUS_COHORT_KEYWORDS
+        and all(kw in _AMBIGUOUS_COHORT_KEYWORDS[field] for kw in matches)
+    ):
+        return False
+    return True
+
+
+def _strict_cohort_labels_enabled() -> bool:
+    """Read the strict_cohort_labels flag from Settings (default False)."""
+    try:
+        from config.settings import get_settings
+
+        return bool(getattr(get_settings(), "strict_cohort_labels", False))
+    except Exception:
+        return False
+
+
 _ROW_LEVEL_SUBJECT_KEYWORDS = (
     "patient",
     "proband",
@@ -373,6 +422,8 @@ def _looks_like_row_level_clinical_list(
 
 def _infer_column_mapping_from_headers(
     table: MarkdownTable,
+    *,
+    strict_cohort_labels: bool = False,
 ) -> Optional[Dict[str, int]]:
     """Infer a table mapping without an LLM when headers/data are unambiguous."""
     mapping: Dict[str, int] = {}
@@ -392,14 +443,20 @@ def _infer_column_mapping_from_headers(
         ):
             mapping["gene"] = idx
 
-        if "unaffected" not in mapping and any(
-            kw in header for kw in _HEADER_FIELD_KEYWORDS["unaffected"]
+        if "unaffected" not in mapping and _field_header_match(
+            header,
+            "unaffected",
+            strict_cohort_labels=strict_cohort_labels,
+            has_assay_or_gwas_cue=has_assay_or_gwas_cue,
         ):
             mapping["unaffected"] = idx
             continue
 
-        if "affected" not in mapping and any(
-            kw in header for kw in _HEADER_FIELD_KEYWORDS["affected"]
+        if "affected" not in mapping and _field_header_match(
+            header,
+            "affected",
+            strict_cohort_labels=strict_cohort_labels,
+            has_assay_or_gwas_cue=has_assay_or_gwas_cue,
         ):
             mapping["affected"] = idx
             continue
@@ -940,8 +997,11 @@ def route_tables(
 
     deterministic: List[RoutedTable] = []
     llm_candidates: List[MarkdownTable] = []
+    strict_cohort_labels = _strict_cohort_labels_enabled()
     for table in tables:
-        mapping = _infer_column_mapping_from_headers(table)
+        mapping = _infer_column_mapping_from_headers(
+            table, strict_cohort_labels=strict_cohort_labels
+        )
         if mapping:
             deterministic.append(
                 RoutedTable(

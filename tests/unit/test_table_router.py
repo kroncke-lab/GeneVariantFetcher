@@ -7,6 +7,8 @@ import pytest
 
 from pipeline.table_router import (
     MarkdownTable,
+    _field_header_match,
+    _infer_column_mapping_from_headers,
     enumerate_markdown_tables,
     extract_via_router,
     parse_routed_table,
@@ -407,3 +409,87 @@ def test_extract_via_router_falls_back_when_router_returns_empty():
     assert result["used_fallback"] is True
     assert result["variants"] == []
     assert result["error"] is None
+
+
+# --- B3: cohort-label guard (strict_cohort_labels) -------------------------
+
+
+def test_field_header_match_guards_ambiguous_cohort_labels_on_assay_tables():
+    # Default (flag off): any keyword match maps, as before.
+    assert _field_header_match(
+        "controls", "unaffected", strict_cohort_labels=False, has_assay_or_gwas_cue=True
+    )
+    # Ambiguous-only term on an assay/case-control table -> rejected under strict.
+    assert not _field_header_match(
+        "controls", "unaffected", strict_cohort_labels=True, has_assay_or_gwas_cue=True
+    )
+    assert not _field_header_match(
+        "cases", "affected", strict_cohort_labels=True, has_assay_or_gwas_cue=True
+    )
+    # Ambiguous term but NOT an assay table -> still mapped (context allows it).
+    assert _field_header_match(
+        "controls", "unaffected", strict_cohort_labels=True, has_assay_or_gwas_cue=False
+    )
+    # Unambiguous per-variant terms are always mapped, even strict + assay.
+    assert _field_header_match(
+        "unaffected",
+        "unaffected",
+        strict_cohort_labels=True,
+        has_assay_or_gwas_cue=True,
+    )
+    assert _field_header_match(
+        "affected", "affected", strict_cohort_labels=True, has_assay_or_gwas_cue=True
+    )
+    # No keyword at all -> never a match.
+    assert not _field_header_match(
+        "age", "affected", strict_cohort_labels=True, has_assay_or_gwas_cue=True
+    )
+
+
+def _case_control_table() -> MarkdownTable:
+    # 'rsID' makes has_assay_or_gwas_cue True; protein col keeps it from being
+    # rejected as a pure-assay table; 'Carriers' is an unambiguous count column.
+    return MarkdownTable(
+        table_id="T1",
+        caption="Table 2. Case-control association",
+        header_line="| rsID | Protein | Carriers | Cases | Controls |",
+        header_cells=["rsID", "Protein", "Carriers", "Cases", "Controls"],
+        data_lines=["| rs1 | p.Arg190Trp | 3 | 5 | 200 |"],
+        char_start=0,
+        char_end=80,
+    )
+
+
+def test_infer_mapping_default_maps_cohort_columns():
+    mapping = _infer_column_mapping_from_headers(_case_control_table())
+    assert mapping is not None
+    assert mapping.get("affected") == 3
+    assert mapping.get("unaffected") == 4
+
+
+def test_infer_mapping_strict_skips_cohort_columns_on_assay_table():
+    mapping = _infer_column_mapping_from_headers(
+        _case_control_table(), strict_cohort_labels=True
+    )
+    assert mapping is not None
+    assert "affected" not in mapping
+    assert "unaffected" not in mapping
+    # The unambiguous per-variant count column is still mapped.
+    assert "patient_count" in mapping
+
+
+def test_infer_mapping_strict_keeps_unambiguous_labels():
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 3. Variant carriers",
+        header_line="| rsID | Protein | Affected | Unaffected |",
+        header_cells=["rsID", "Protein", "Affected", "Unaffected"],
+        data_lines=["| rs1 | p.Arg190Trp | 2 | 3 |"],
+        char_start=0,
+        char_end=80,
+    )
+    mapping = _infer_column_mapping_from_headers(table, strict_cohort_labels=True)
+    assert mapping is not None
+    # 'Affected'/'Unaffected' are unambiguous -> still mapped even on an assay table.
+    assert mapping.get("affected") == 2
+    assert mapping.get("unaffected") == 3

@@ -287,6 +287,20 @@ class Settings(BaseSettings):
             "Gold-free; silently skips variants without count_provenance."
         ),
     )
+    strict_cohort_labels: bool = Field(
+        default=False,
+        env="GVF_STRICT_COHORT_LABELS",
+        description=(
+            "When True, the deterministic table column mapper "
+            "(pipeline/table_router.py) refuses to map an ambiguous case/control "
+            "cohort column (header matching only case/disease or "
+            "control/healthy/normal) to affected/unaffected on case-control or "
+            "assay-style tables, where such columns are cohort totals rather than "
+            "per-variant counts. Default False preserves current behavior; this is "
+            "a count-accuracy (MAE) lever that should be measured by re-extraction "
+            "before being enabled by default. Gold-free."
+        ),
+    )
     early_debate_models: Union[str, List[str]] = Field(
         default="",
         env="EARLY_DEBATE_MODELS",
