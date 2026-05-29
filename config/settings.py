@@ -186,10 +186,33 @@ class Settings(BaseSettings):
         env="TIER2_CONFIDENCE_THRESHOLD",
         description="Minimum confidence to pass Tier 2",
     )
+    tier2_reasoning_effort: Optional[str] = Field(
+        default=None,
+        env="TIER2_REASONING_EFFORT",
+        description=(
+            "OpenAI-style reasoning effort for Tier 2 relevance models "
+            "(minimal|low|medium|high). None = provider default. Tier 2 is a "
+            "high-volume yes/no classifier, so 'minimal' is the cost/latency "
+            "saver for gpt-5-family models rather than a quality lever. Ignored "
+            "by models without an effort knob."
+        ),
+    )
 
     # Tier 3 Configuration
     tier3_temperature: float = Field(
         default=0.0, env="TIER3_TEMPERATURE", description="Temperature for Tier 3 LLM"
+    )
+    tier3_reasoning_effort: Optional[str] = Field(
+        default=None,
+        env="TIER3_REASONING_EFFORT",
+        description=(
+            "OpenAI-style reasoning effort for Tier 3 extraction models "
+            "(minimal|low|medium|high). None = provider default. This is the "
+            "stage where unique-variant recall and carrier-count accuracy are "
+            "decided, so it is the prime candidate for 'medium'/'high' — measure "
+            "with scripts/run_recall_suite.py before keeping it on. Ignored by "
+            "models without an effort knob."
+        ),
     )
     tier3_max_tokens: int = Field(
         default=16000,
@@ -268,6 +291,16 @@ class Settings(BaseSettings):
             " emitting visible content; 1-2k is too small for any non-trivial"
             " multi-table prompt and produces empty content with"
             " finish_reason='length'. 8k gives reliable JSON output."
+        ),
+    )
+    table_router_reasoning_effort: Optional[str] = Field(
+        default=None,
+        env="TABLE_ROUTER_REASONING_EFFORT",
+        description=(
+            "OpenAI-style reasoning effort for the table-router model "
+            "(minimal|low|medium|high). None = provider default. Table "
+            "classification is a moderate disambiguation task; 'low'/'medium' is "
+            "the sensible range to trial. Ignored by models without an effort knob."
         ),
     )
 
@@ -419,6 +452,40 @@ class Settings(BaseSettings):
             " standard chat-completions path."
         ),
     )
+    vision_reasoning_effort: Optional[str] = Field(
+        default=None,
+        env="VISION_REASONING_EFFORT",
+        description=(
+            "OpenAI-style reasoning effort for figure/pedigree vision models "
+            "(minimal|low|medium|high). None = provider default. NOTE: the "
+            "figure/pedigree call sites bypass BaseLLMCaller and call "
+            "litellm.completion() directly, so this is inert until those sites "
+            "are wired (see pedigree_extractor.py / figure_*_reader.py)."
+        ),
+    )
+
+    @field_validator(
+        "tier2_reasoning_effort",
+        "tier3_reasoning_effort",
+        "table_router_reasoning_effort",
+        "vision_reasoning_effort",
+    )
+    @classmethod
+    def _validate_reasoning_effort(cls, v: Optional[str]) -> Optional[str]:
+        """Normalize reasoning-effort settings; reject unknown levels early."""
+        if v is None:
+            return None
+        v_norm = str(v).strip().lower()
+        if v_norm == "":
+            return None
+        allowed = {"minimal", "low", "medium", "high"}
+        if v_norm not in allowed:
+            raise ValueError(
+                "reasoning_effort must be one of "
+                f"{sorted(allowed)} or unset; got {v!r}"
+            )
+        return v_norm
+
     pedigree_confidence_threshold: float = Field(
         default=0.7,
         env="PEDIGREE_CONFIDENCE_THRESHOLD",

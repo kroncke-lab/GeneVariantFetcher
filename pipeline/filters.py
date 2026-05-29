@@ -226,6 +226,7 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
         model: Optional[str] = None,
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
+        reasoning_effort: Optional[str] = None,
         confidence_threshold: Optional[float] = None,
         disease: Optional[str] = None,
     ):
@@ -250,6 +251,11 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
             temperature if temperature is not None else settings.tier2_temperature
         )
         max_tokens = max_tokens if max_tokens is not None else settings.tier2_max_tokens
+        reasoning_effort = (
+            reasoning_effort
+            if reasoning_effort is not None
+            else settings.tier2_reasoning_effort
+        )
 
         # Reasoning models (Kimi-K2.6, grok-reasoning, gpt-5-codex) burn most
         # of the token budget on hidden reasoning before emitting visible JSON.
@@ -271,7 +277,12 @@ Output the JSON object FIRST, before any reasoning. Keep the response under 200 
         )
         self.disease = disease.strip() if disease and disease.strip() else None
 
-        super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
+        super().__init__(
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            reasoning_effort=reasoning_effort,
+        )
 
         logger.debug(
             f"InternFilter initialized with model={model}, temp={temperature}, confidence_threshold={self.confidence_threshold}, disease={self.disease!r}"
@@ -508,6 +519,7 @@ Respond ONLY with valid JSON. Be recall-biased: when in doubt, KEEP with low con
         model: Optional[str] = None,
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
+        reasoning_effort: Optional[str] = None,
         disease: Optional[str] = None,
     ):
         """
@@ -530,10 +542,20 @@ Respond ONLY with valid JSON. Be recall-biased: when in doubt, KEEP with low con
         max_tokens = (
             max_tokens if max_tokens is not None else 200
         )  # Slightly higher than default for triage
+        reasoning_effort = (
+            reasoning_effort
+            if reasoning_effort is not None
+            else settings.tier2_reasoning_effort
+        )
 
         self.disease = disease.strip() if disease and disease.strip() else None
 
-        super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
+        super().__init__(
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            reasoning_effort=reasoning_effort,
+        )
 
         logger.debug(
             f"ClinicalDataTriageFilter initialized with model={model}, disease={self.disease!r}"

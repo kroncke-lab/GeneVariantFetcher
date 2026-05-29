@@ -43,6 +43,12 @@ from typing import Any, Dict, List, Optional
 import requests
 from litellm import completion
 
+from config.settings import get_settings
+from utils.llm_utils import (
+    build_reasoning_effort_kwargs,
+    build_responses_reasoning_param,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -286,6 +292,7 @@ def _call_chat_completions(data_url: str, model: str, prompt: str) -> str:
         ],
         temperature=0,
         max_tokens=2048,
+        **build_reasoning_effort_kwargs(model, get_settings().vision_reasoning_effort),
     )
     return (response.choices[0].message.content or "").strip()
 
@@ -311,6 +318,9 @@ def _call_responses_api(data_url: str, model: str, prompt: str) -> str:
             }
         ],
         "max_output_tokens": 4096,
+        **build_responses_reasoning_param(
+            model, get_settings().vision_reasoning_effort
+        ),
     }
     response = requests.post(
         url,

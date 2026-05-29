@@ -925,6 +925,7 @@ def route_tables(
     llm_caller: Optional[Any] = None,
     max_tokens: int = 8192,
     temperature: float = 0.0,
+    reasoning_effort: Optional[str] = None,
 ) -> RouterResult:
     """Run the full enumerate → LLM-route flow and return parsed routes.
 
@@ -968,7 +969,10 @@ def route_tables(
     prompt = build_router_prompt(llm_candidates, gene_symbol)
 
     try:
-        from utils.llm_utils import wait_for_llm_rate_limit
+        from utils.llm_utils import (
+            build_reasoning_effort_kwargs,
+            wait_for_llm_rate_limit,
+        )
         from utils.retry_utils import llm_retry
 
         @llm_retry
@@ -988,6 +992,7 @@ def route_tables(
                 ],
                 temperature=temperature,
                 max_tokens=max_tokens,
+                **build_reasoning_effort_kwargs(model, reasoning_effort),
             )
 
         response = _call()
@@ -1016,6 +1021,7 @@ def extract_via_router(
     model: str,
     llm_caller: Optional[Any] = None,
     max_tokens: int = 8192,
+    reasoning_effort: Optional[str] = None,
 ) -> Dict[str, Any]:
     """End-to-end: route, then deterministically parse, returning a variant list.
 
@@ -1026,7 +1032,12 @@ def extract_via_router(
       - ``error`` (str|None): set when the router LLM call failed
     """
     result = route_tables(
-        text, gene_symbol, model=model, llm_caller=llm_caller, max_tokens=max_tokens
+        text,
+        gene_symbol,
+        model=model,
+        llm_caller=llm_caller,
+        max_tokens=max_tokens,
+        reasoning_effort=reasoning_effort,
     )
     variants: List[Dict[str, Any]] = []
     for routed in result.routed_tables:

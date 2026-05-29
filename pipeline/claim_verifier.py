@@ -292,11 +292,13 @@ class VariantClaimVerifier(BaseLLMCaller):
         model: str,
         temperature: float = 0.0,
         max_tokens: int = 2500,
+        reasoning_effort: str | None = None,
     ):
         super().__init__(
             model=model,
             temperature=temperature,
             max_tokens=clamp_max_tokens(model, max_tokens),
+            reasoning_effort=reasoning_effort,
         )
 
     def verify(self, card: VariantClaimCard) -> dict[str, Any]:

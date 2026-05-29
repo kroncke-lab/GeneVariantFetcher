@@ -20,7 +20,11 @@ import requests
 from litellm import completion
 
 from config.settings import get_settings
-from utils.llm_utils import parse_llm_json_response
+from utils.llm_utils import (
+    build_reasoning_effort_kwargs,
+    build_responses_reasoning_param,
+    parse_llm_json_response,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +86,9 @@ def _call_azure_responses_api_vision(
             }
         ],
         "max_output_tokens": max_output_tokens,
+        **build_responses_reasoning_param(
+            deployment, get_settings().vision_reasoning_effort
+        ),
     }
     try:
         response = requests.post(
@@ -296,6 +303,9 @@ class PedigreeExtractor:
                 temperature=0,
                 max_tokens=max_tokens,
                 response_format={"type": "json_object"},
+                **build_reasoning_effort_kwargs(
+                    self.model, get_settings().vision_reasoning_effort
+                ),
             )
 
             result_text = response.choices[0].message.content

@@ -53,6 +53,10 @@ cold-start capability.
   `AlaX14`.
 - Gold-standard builders: `scripts/build_gold_standard_from_varbrowser.py` and
   `scripts/build_ryr2_gold_standard_from_xlsx.py`.
+- Reasoning effort + model registry (2026-05-29): per-stage
+  `TIER2/TIER3/TABLE_ROUTER/VISION_REASONING_EFFORT` env knobs (default off), and
+  `utils/llm_utils.py` now registers `gpt-5.5`, `grok-4.3`, and a generic `gpt-5`
+  token-limit fallback. See "Model Reasoning Effort" below.
 
 ## Manual Acquisition Queue
 
@@ -142,6 +146,38 @@ Then rerun extraction/migration and score:
   --db KCNH2=results/KCNH2/20260506_102238/end_to_end_20260515_manual_recovery/KCNH2_v12_manual_recovery_20260515.db \
   --outdir recall_metrics/kcnh2_after_vpn_recovery
 ```
+
+## Model Reasoning Effort (optional, off by default)
+
+OpenAI-style reasoning models (gpt-5 / o-series) expose a reasoning-effort knob.
+GVF can set it per pipeline stage via env vars; all default to unset = the
+provider default, so behavior is unchanged until you opt a stage in:
+
+- `TIER2_REASONING_EFFORT` — Tier 2 relevance (`pipeline/filters.py`). High
+  volume; `minimal` is a cost/latency saver, not a quality lever.
+- `TIER3_REASONING_EFFORT` — Tier 3 extraction (`pipeline/extraction.py`) and the
+  claim adjudicator, which inherits the Tier 3 value. This is where
+  unique-variant recall and carrier-count accuracy are decided.
+- `TABLE_ROUTER_REASONING_EFFORT` — table classification
+  (`pipeline/table_router.py`).
+- `VISION_REASONING_EFFORT` — figure/pedigree models, both the chat-completions
+  and the Azure Responses-API paths (`harvesting/figure_text_extractor.py`,
+  `harvesting/figure_variant_reader.py`, `pipeline/pedigree_extractor.py`).
+
+Values: `minimal | low | medium | high` (validated in `config/settings.py`). The
+knob is plumbed through `utils/llm_utils.build_reasoning_effort_kwargs` (chat
+completions) and `build_responses_reasoning_param` (Responses API). Both are
+no-ops for models without an effort knob (Anthropic, Grok, Kimi) — point a stage
+at a gpt-5/o-series model for the setting to take effect. Anthropic extended
+`thinking` is intentionally not wired (it requires `temperature=1`).
+
+Treat effort as a second-order lever: source acquisition and extraction logic
+move recall more. Change one stage at a time and re-score with
+`scripts/run_recall_suite.py` before keeping a non-default value.
+
+New model ids are registered in `utils/llm_utils.MODEL_TOKEN_LIMITS`: `gpt-5.5`,
+`grok-4.3`, and a generic `gpt-5` fallback so future gpt-5.x ids get a full
+output-token budget instead of the 4k default.
 
 ## Active Work
 

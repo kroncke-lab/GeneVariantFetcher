@@ -42,9 +42,16 @@ MODEL_TOKEN_LIMITS = {
     # work regardless of the "azure_ai/" prefix LiteLLM expects.
     "deepseek-v4-pro": (16384, 15000),  # DeepSeek V4 Pro via Azure
     "gpt-5.3-codex": (16384, 15000),  # OpenAI GPT-5.3 Codex via Azure
+    "gpt-5.5": (16384, 15000),  # OpenAI GPT-5.5 via Azure
     "gpt-5.4": (16384, 15000),  # OpenAI GPT-5.4 via Azure
+    # Generic GPT-5 family fallback. Lookup is longest-pattern-first, so the
+    # specific gpt-5.x entries above still win; this only catches gpt-5.x ids we
+    # haven't enumerated yet. Without it an unrecognized gpt-5.x falls to
+    # DEFAULT_TOKEN_LIMIT (4000) and gets truncated mid hidden-reasoning.
+    "gpt-5": (16384, 15000),  # OpenAI GPT-5 family fallback
     "kimi-k2": (16384, 15000),  # Moonshot Kimi K2 via Azure
-    "grok-4": (16384, 15000),  # xAI Grok-4 reasoning via Azure
+    "grok-4.3": (16384, 15000),  # xAI Grok-4.3 reasoning via Azure
+    "grok-4": (16384, 15000),  # xAI Grok-4.x reasoning via Azure (also covers 4.3)
     # OpenAI models - gpt-4o has 16384 completion limit
     "gpt-4o-mini": (16384, 15000),
     "gpt-4o": (16384, 15000),
@@ -87,6 +94,68 @@ MODEL_TOKEN_LIMITS = {
 
 # Default for unknown models (conservative)
 DEFAULT_TOKEN_LIMIT = (4096, 4000)
+
+
+# =============================================================================
+# REASONING EFFORT
+# =============================================================================
+# OpenAI-style reasoning models accept a `reasoning_effort` knob
+# ("minimal" | "low" | "medium" | "high"). Anthropic exposes the same capability
+# through extended `thinking`, which additionally requires temperature=1 — so we
+# do NOT route Claude through this helper yet (that path needs the temperature
+# interaction handled and live verification). Grok-4-class models reason by
+# default and ignore an effort param. litellm.drop_params=True would silently
+# drop an unsupported value, so this allow-list exists to make the no-op explicit
+# (and logged) rather than leaving callers believing effort was applied.
+REASONING_EFFORT_LEVELS = ("minimal", "low", "medium", "high")
+_REASONING_EFFORT_MODEL_HINTS = ("gpt-5", "gpt5", "o1", "o3", "o4-mini")
+
+
+def build_reasoning_effort_kwargs(
+    model: Optional[str], effort: Optional[str]
+) -> Dict[str, Any]:
+    """Return completion() kwargs requesting a reasoning effort, or {} for default.
+
+    Safe no-op when ``effort`` is falsy or the model's provider does not accept an
+    OpenAI-style ``reasoning_effort`` parameter. Keeping the allow-list explicit
+    (instead of relying on litellm.drop_params) means an effort set on an
+    unsupported model is logged as ignored rather than silently dropped.
+    """
+    if not effort:
+        return {}
+    m = (model or "").lower()
+    if any(hint in m for hint in _REASONING_EFFORT_MODEL_HINTS):
+        return {"reasoning_effort": effort}
+    logger.debug(
+        "reasoning_effort=%r ignored for model %r (no OpenAI-style effort knob)",
+        effort,
+        model,
+    )
+    return {}
+
+
+def build_responses_reasoning_param(
+    model: Optional[str], effort: Optional[str]
+) -> Dict[str, Any]:
+    """Return a Responses-API ``reasoning`` body fragment, or {} for default.
+
+    The OpenAI / Azure AI Foundry Responses API expresses reasoning effort as a
+    nested ``{"reasoning": {"effort": ...}}`` request-body field rather than the
+    chat-completions ``reasoning_effort`` kwarg. Same allow-list and no-op
+    semantics as :func:`build_reasoning_effort_kwargs`, so vision/figure code
+    that POSTs to ``/responses`` can spread it straight into the JSON body.
+    """
+    if not effort:
+        return {}
+    m = (model or "").lower()
+    if any(hint in m for hint in _REASONING_EFFORT_MODEL_HINTS):
+        return {"reasoning": {"effort": effort}}
+    logger.debug(
+        "reasoning effort=%r ignored for Responses model %r (no effort support)",
+        effort,
+        model,
+    )
+    return {}
 
 
 def get_model_token_limit(model: str, use_safe_limit: bool = True) -> int:
@@ -262,7 +331,11 @@ class BaseLLMCaller:
     """
 
     def __init__(
-        self, model: str = "gpt-4o", temperature: float = 0.3, max_tokens: float = 4000
+        self,
+        model: str = "gpt-4o",
+        temperature: float = 0.3,
+        max_tokens: float = 4000,
+        reasoning_effort: Optional[str] = None,
     ):
         """
         Initialize the LLM caller with model parameters.
@@ -271,13 +344,19 @@ class BaseLLMCaller:
             model: The LLM model to use (default: "gpt-4o")
             temperature: Sampling temperature (default: 0.3)
             max_tokens: Maximum response length (default: 4000)
+            reasoning_effort: Optional OpenAI-style reasoning effort
+                ("minimal"|"low"|"medium"|"high"). None leaves the provider
+                default. Silently ignored for models without an effort knob
+                (see build_reasoning_effort_kwargs).
         """
         self.model = model
         self.temperature = temperature
         self.max_tokens = max_tokens
+        self.reasoning_effort = reasoning_effort
         logger.info(
             f"Initialized {self.__class__.__name__} with model={model}, "
-            f"temperature={temperature}, max_tokens={max_tokens}"
+            f"temperature={temperature}, max_tokens={max_tokens}, "
+            f"reasoning_effort={reasoning_effort}"
         )
 
     def _attempt_json_repair(self, raw_text: str) -> Optional[Dict[str, Any]]:
@@ -371,6 +450,7 @@ class BaseLLMCaller:
             temperature=self.temperature,
             max_tokens=self.max_tokens,
             response_format=response_format,
+            **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
         )
 
         result_text = response.choices[0].message.content
@@ -449,6 +529,7 @@ class BaseLLMCaller:
                 temperature=self.temperature,
                 max_tokens=self.max_tokens,
                 response_format=response_format,
+                **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
             )
 
             # Extract response text
@@ -512,6 +593,7 @@ class BaseLLMCaller:
                 messages=messages,
                 temperature=self.temperature,
                 max_tokens=self.max_tokens,
+                **build_reasoning_effort_kwargs(self.model, self.reasoning_effort),
             )
 
             result_text = response.choices[0].message.content

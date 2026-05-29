@@ -146,6 +146,7 @@ class ExpertExtractor(BaseLLMCaller):
         models: Optional[List[str]] = None,
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
+        reasoning_effort: Optional[str] = None,
         tier_threshold: int = 1,
         fulltext_dir: Optional[str] = None,
     ):
@@ -186,6 +187,11 @@ class ExpertExtractor(BaseLLMCaller):
             model=self.models[0],
             temperature=self.temperature,
             max_tokens=self.max_tokens,
+            reasoning_effort=(
+                reasoning_effort
+                if reasoning_effort is not None
+                else settings.tier3_reasoning_effort
+            ),
         )
         logger.debug(
             f"ExpertExtractor initialized with models={self.models}, temp={self.temperature}, max_tokens={self.max_tokens}"
@@ -3439,6 +3445,7 @@ Return strict JSON with this schema:
         verifier = VariantClaimVerifier(
             model=verifier_model,
             max_tokens=min(self.adjudication_max_tokens, 2500),
+            reasoning_effort=self.reasoning_effort,
         )
         updated_variants: list[dict] = []
         verification_results: list[dict[str, Any]] = []
@@ -3724,6 +3731,7 @@ Return strict JSON with this schema:
                 paper.gene_symbol or "UNKNOWN",
                 model=router_model,
                 max_tokens=settings.table_router_max_tokens,
+                reasoning_effort=settings.table_router_reasoning_effort,
             )
         except Exception as e:  # noqa: BLE001
             logger.warning(
