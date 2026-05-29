@@ -28,10 +28,11 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sqlite3
 import sys
 from pathlib import Path
-from typing import Iterable, List
+from typing import Iterable, List, Tuple
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT))
@@ -41,9 +42,128 @@ from harvesting.figure_variant_reader import (  # noqa: E402
     find_pmid_figures,
     read_figures_for_pmid,
 )
+from utils.variant_normalizer import VariantNormalizer  # noqa: E402
 
 
 logger = logging.getLogger("extract_figure_variants")
+
+
+# ---------------------------------------------------------------------------
+# Figure-variant precision gate
+#
+# Vision/figure reads are noisy: the model sees pedigree legends, comparator
+# genes, axis labels, and OCR artifacts, and the reader returns *no* confidence
+# score. Without a gate, anything with a non-empty cdna/protein string is
+# written RAW into the DB, and because figures run on every normal ``gvf-run``
+# (via the recovery layer) this contaminates every new DB with potential false
+# variants.
+#
+# ``GVF_FIGURE_VARIANT_GATE`` controls how aggressively figure variants are
+# filtered before insertion. It is read fresh on every ingest call so tests and
+# callers can flip it per-run:
+#
+#   off         - today's raw behavior: accept any variant with a non-empty
+#                 cdna OR protein string. No validation. Use to reproduce the
+#                 pre-gate baseline.
+#   validate    - (DEFAULT) cheap sanity gate. Reject variants that (a) carry no
+#                 well-formed cdna or protein notation, (b) sit at a protein
+#                 position outside the gene's known length, or (c) are known
+#                 non-target / oncology hotspot artifacts. Pure-text, no network.
+#   corroborate - validate + a documented hook for future text-corroboration
+#                 (require the variant to also appear in the assembled full
+#                 text). NOT YET IMPLEMENTED: currently behaves exactly like
+#                 ``validate``. See ``_figure_variant_passes_gate``.
+#
+# Unknown / empty values fall back to ``validate`` (the safe default).
+# ---------------------------------------------------------------------------
+FIGURE_VARIANT_GATE_ENV = "GVF_FIGURE_VARIANT_GATE"
+_FIGURE_GATE_MODES = {"off", "validate", "corroborate"}
+_FIGURE_GATE_DEFAULT = "validate"
+
+
+def _figure_variant_gate_mode() -> str:
+    """Return the active gate mode, defaulting to ``validate``.
+
+    Read live (not cached) so a single process can score multiple runs under
+    different policies. Unknown values warn once and fall back to the default.
+    """
+    raw = (os.environ.get(FIGURE_VARIANT_GATE_ENV) or "").strip().lower()
+    if not raw:
+        return _FIGURE_GATE_DEFAULT
+    if raw not in _FIGURE_GATE_MODES:
+        logger.warning(
+            "Unknown %s=%r; falling back to %r (valid: %s)",
+            FIGURE_VARIANT_GATE_ENV,
+            raw,
+            _FIGURE_GATE_DEFAULT,
+            ", ".join(sorted(_FIGURE_GATE_MODES)),
+        )
+        return _FIGURE_GATE_DEFAULT
+    return raw
+
+
+def _figure_variant_passes_gate(
+    gene: str,
+    cdna: str | None,
+    protein: str | None,
+    mode: str | None = None,
+) -> Tuple[bool, str]:
+    """Decide whether a single figure-reader variant may enter the DB.
+
+    Returns ``(passed, reason)``. ``reason`` is a short, stable token used for
+    the dropped-variant breakdown log; on pass it is ``"ok"`` (or ``"gate_off"``
+    when the gate is disabled).
+
+    Reuses the canonical validators in ``utils.variant_normalizer``:
+      * ``normalize_cdna`` / ``normalize_to_single_letter`` -> well-formedness.
+      * ``is_non_target_variant`` -> hotspot + out-of-range rejection.
+      * ``validate_position`` (via ``PROTEIN_LENGTHS``) -> protein-position
+        bounds. No-ops for genes of unknown length (cold-start genes), so the
+        gate never over-rejects an unfamiliar gene.
+    """
+    if mode is None:
+        mode = _figure_variant_gate_mode()
+
+    # ``off`` reproduces the historical behavior exactly: a non-empty cdna OR
+    # protein string is enough. The empty-check itself lives in the caller, so
+    # by the time we are here at least one of the two is non-empty.
+    if mode == "off":
+        return True, "gate_off"
+
+    normalizer = VariantNormalizer(gene)
+
+    # 1) Well-formed notation. A non-empty string is not enough; it must parse
+    #    as a c.-style cdna OR a protein substitution/indel/frameshift/stop.
+    cdna_ok = bool(cdna) and normalizer.normalize_cdna(cdna) is not None
+    protein_ok = bool(protein) and (
+        normalizer.normalize_to_single_letter(protein) is not None
+        or normalizer.normalize_protein(protein) is not None
+    )
+    if not (cdna_ok or protein_ok):
+        return False, "malformed_notation"
+
+    # 2) Non-target / out-of-range protein artifacts. ``is_non_target_variant``
+    #    folds in both the oncology-hotspot list and the position>length check.
+    if protein:
+        is_non_target, _reason = normalizer.is_non_target_variant(protein)
+        if is_non_target:
+            return False, "non_target"
+
+        # 3) Explicit protein-position bound (belt-and-suspenders; also catches
+        #    in-range hotspots' siblings that parse but fall outside length).
+        pos = normalizer.extract_position(protein)
+        if pos is not None and not normalizer.validate_position(pos):
+            return False, "position_out_of_range"
+
+    if mode == "corroborate":
+        # TODO(corroborate): require the variant to also appear in the assembled
+        # full text for this PMID before accepting. Extension point: thread the
+        # PMID's text here and confirm presence of the normalized cdna/protein
+        # form. Until that lands, ``corroborate`` == ``validate`` (the checks
+        # above), so enabling it is safe but not yet stricter.
+        return True, "ok"
+
+    return True, "ok"
 
 
 def _discover_pmids_with_figures(pmc_dir: Path) -> List[str]:
@@ -146,17 +266,41 @@ def ingest_cached_variants(
     db_path: Path,
     source_tag: str = "figure-reader (cached)",
 ) -> int:
-    """Write a pre-deduped variant list into *db_path*."""
+    """Write a pre-deduped variant list into *db_path*.
+
+    Each candidate passes through ``_figure_variant_passes_gate`` (controlled by
+    ``GVF_FIGURE_VARIANT_GATE``, default ``validate``) *before* it is written.
+    Dropped variants are counted by reason and logged — never silently
+    truncated. With ``GVF_FIGURE_VARIANT_GATE=off`` the gate is a no-op and the
+    historical raw behavior is reproduced.
+    """
     if not distinct:
         return 0
+    gate_mode = _figure_variant_gate_mode()
     con = sqlite3.connect(str(db_path))
     try:
         _ensure_paper(con, pmid, gene)
         added = 0
+        dropped: dict[str, int] = {}
         for v in distinct:
             cdna = (v.get("cdna") or "").strip() or None
             protein = (v.get("protein") or "").strip() or None
             if not (cdna or protein):
+                dropped["empty_notation"] = dropped.get("empty_notation", 0) + 1
+                continue
+            passed, reason = _figure_variant_passes_gate(
+                gene, cdna, protein, mode=gate_mode
+            )
+            if not passed:
+                dropped[reason] = dropped.get(reason, 0) + 1
+                logger.debug(
+                    "PMID %s: gate(%s) dropped figure variant cdna=%r protein=%r (%s)",
+                    pmid,
+                    gate_mode,
+                    cdna,
+                    protein,
+                    reason,
+                )
                 continue
             vid = _ensure_variant(con, gene, cdna, protein)
             exists = con.execute(
@@ -176,6 +320,19 @@ def ingest_cached_variants(
             )
             added += 1
         con.commit()
+        if dropped:
+            total_dropped = sum(dropped.values())
+            breakdown = ", ".join(
+                f"{reason}={count}" for reason, count in sorted(dropped.items())
+            )
+            logger.info(
+                "PMID %s: figure gate(%s) accepted %d, dropped %d (%s)",
+                pmid,
+                gate_mode,
+                added,
+                total_dropped,
+                breakdown,
+            )
         return added
     finally:
         con.close()
