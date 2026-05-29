@@ -609,80 +609,136 @@ Already-addressed items that should not remain open:
 - Target-gene hotspot filtering that dropped true TP53/KRAS/BRAF/PIK3CA variants.
 - PMC proof-of-work challenge pages being treated as usable supplement content.
 
-## Next Run Plan
+## Next Run Plan (2026-05-29 — Codex-reviewed reconciliation)
 
-Sequenced after the 2026-05-26 SUA sweep + rollback + recovery pass. All new
-work must be turnkey on genes-diseases that lack a gold standard
-(`gvf gvf-run NEWGENE ...` should produce usable output plus QC flags
-without comparison-based scoring).
+This supersedes the prior tiering. The plan was investigated end-to-end (six
+subsystem deep-dives) and independently reviewed by Codex (gpt-5.5, read-only,
+file-verified). All new work must be turnkey on genes that lack a gold standard
+(`gvf gvf-run NEWGENE ...` should produce usable output plus QC flags without
+comparison-based scoring). Every DB-mutating step carries an explicit gate.
 
-**Done:**
+### Three corrections that shape the plan
 
-1. **DONE 2026-05-21:** `ELSEVIER_API_KEY` + `ELSEVIER_INSTTOKEN` set in
-   `.env`; 242/246 paywalled Elsevier candidates unlocked. See
-   "2026-05-21 Elsevier Insttoken Activation".
-2. **DONE 2026-05-25:** Source-driven refresh/rebuild for KCNH2, KCNQ1, RYR2,
-   and SCN5A using `scripts/refresh_run_db.py`.
-3. **DONE 2026-05-26:** SUA source replay, per-PMID rollback, DB rebuild, and
-   DB-PMID ClinVar/PubTator recovery. Current score is
-   `recall_metrics/post_rollback_recover_20260526_aggregate/summary.json`.
+1. **MAE machinery is not fully dormant.** The dormant pieces are the
+   `count_classifier` / `count_outlier_guard` / `evidence_card` modules (built +
+   unit-tested, only callable via standalone scripts; `count_provenance` is
+   emitted by the prompt but dropped at `migrate_to_sqlite`). But the live
+   extraction path ALREADY runs `_suppress_repeated_study_wide_counts`
+   (`pipeline/extraction.py:2979`, called at :4111/:4132) and a default-on
+   second-model adjudication `_maybe_adjudicate_extraction` (:4124,
+   `enable_tier3_ensemble_qa` default True). Wiring the dormant modules must be
+   reconciled with this existing suppression — flag-only first, never
+   clear-by-default.
+2. **The biggest clean recall win needs no network.** ~431 missing rows sit
+   behind stale source binding (`source_desync`: a thin stub `_FULL_CONTEXT.md`
+   is bound while a larger one is already on disk), and ~290 more sit in
+   physical `{pmid}_supplements/` dirs that re-extraction never re-reads
+   (discovery globs only `*_DATA_ZONES.md` / `*_CLEANED.md` / `*_FULL_CONTEXT.md`).
+3. **Re-binding is not automatically safe.** The existing replay gate
+   (`refresh_run_db.py:510`) only rejects when new < prior variants; a larger
+   GARBAGE file that explodes the count passes. `_largest_context_path` filters
+   only on `is_usable_fulltext_source` (nonempty / not-abstract-only), not
+   article quality. C1 below adds the missing over-count/quality gate.
 
-**Tier 1 — engineering foundation (no-gold-compatible by construction):**
+### Done
 
-4. **Acceptance gating in `refresh_run_db.py --only-forced-pmids`.** Before
-   overwriting a per-PMID extraction JSON, compare new vs prior variant_count;
-   if new < prior, restore from backup and skip. Codifies today's post-hoc
-   rollback. Gold-free.
-5. **Refuse-to-reuse-study-wide-N guard.** Post-extraction validator: any row
-   whose carrier count is >10× the per-paper median is flagged and refused as
-   a per-variant count unless row-local evidence confirms it. Highest single
-   MAE payoff (catches the KCNQ1 29622001 G589D 7-vs-453 class). Internal
-   consistency check, gold-free.
-6. **Count provenance preservation + classification.** Preserve raw column
-   names + raw values before writing final `patients.count` / `affected_count`
-   / `unaffected_count`. Classify each count column as per-variant carrier,
-   family count, proband count, cohort total, screened N, affected/case,
-   unaffected/control. Refuse assignment when classification confidence is low.
-7. **Evidence-card validator (dual-mode).** Two triggers: gold-error
-   `|err|>=10` when gold is available; internal-consistency thresholds
-   (>10× per-paper median; same large count repeated across rows; null-count
-   clustering) when gold is absent. Pulls local table evidence; confirms,
-   corrects, or withholds the count.
-8. **Track recall AND rows-mode MAE per batch** in `scripts/run_recall_suite.py`
-   output. Acceptance gate: accept changes only if recall improves without
-   materially worsening MAE. No-gold variant: emit count-distribution
-   statistics per PMID + outlier-row counts.
+- **2026-05-21:** Elsevier insttoken; 242/246 paywalled Elsevier unlocked.
+- **2026-05-25:** Source-driven refresh/rebuild (KCNH2/KCNQ1/RYR2/SCN5A).
+- **2026-05-26:** SUA source replay, per-PMID rollback, DB rebuild, DB-PMID
+  ClinVar/PubTator recovery. Baseline:
+  `recall_metrics/post_rollback_recover_20260526_aggregate/summary.json`.
+- **2026-05-27:** Acceptance gating in `refresh_run_db.py` (commit 8d51f79);
+  rows-mode MAE tracked alongside recall in `run_recall_suite.py` (fbbeef2).
+- **2026-05-28/29:** Count-outlier guard run manually (MAE 1.06→0.90);
+  cDNA↔protein matcher bridge (457c70b); markdown caption gene-scoping
+  (c5c4352). Classifier / guard / evidence-card modules committed but NOT yet
+  wired into `gvf-run` (see Tier 1 C4 and Tier 2 B2).
 
-**Tier 2 — recall lever (missing-row attack, ~+200-500 unique variants):**
+### Tier 0 — Measure first (cheap, unblocks judgment on every other lever)
 
-9. Investigate top missing-row PMIDs:
-   `recall_metrics/post_rollback_recover_20260526_aggregate/*/missing_in_sqlite.csv`
-   plus the paper-disagreement report. Highest-yield targets: SCN5A 29325976
-   (87 rows), KCNQ1 30758498 (90), KCNQ1 17192539 (53). Separate misses into
-   missing supplement/table body, figure/pedigree-only, source has variant
-   text but extraction missed it, count-only mismatch, and notation mismatch.
-10. Re-run recovery layers with `--pmc-dir` (figure layer was skipped on
-    2026-05-26). Estimated +20-50 unique variants.
-11. Diagnostic: walk the 7 zero-yield KCNH2 SUA papers (11844290, 14661677,
-    16969682, 19038855, 21185499, 21499742, 26937396). Likely a
-    clinical-case-list table shape the prompt does not match. Implement only
-    general parser/prompt fixes uncovered.
-12. cDNA-only and splice notation normalization (RYR2 raw `c.`-less forms,
-    splice forms like `40-2 A/G`).
+- **P1 — Precision metric + artifact in the scoring harness.** Add
+  `compute_precision_summary` (gold-PMID-restricted: denominator = matched +
+  unmatched-DB-rows-on-gold-PMIDs only; the ~81% of unmatched rows on non-gold
+  PMIDs are unjudgeable). Frame as a false-positive UPPER BOUND, not clean
+  precision (gold is not paper-exhaustive). Emit
+  `unmatched_db_rows_on_gold_pmids.csv` for adjudication; sample the
+  figure-reader's contribution. (`cli/compare_variants.py`,
+  `scripts/run_recall_suite.py`.)
 
-**Tier 3 — externally gated:**
+### Tier 1 — Cheap code wins, no-gold-safe (start here)
 
-13. Karger TDM agreement / Sage CF workaround (SCN5A 23631430 = 24 rows
-    alone). Wiley TDM is verified working as of 2026-05-26.
+- **C3 — Fixed-width parser gene-scoping.** The fixed-width (pdftotext) parser
+  scopes captions only against 17 hard-coded cardiac genes + LQT aliases
+  (`_gene_scope_from_table_label`, `extraction.py:1421`); a caption naming any
+  other gene leaks (empirically a BRCA1 caption leaks rows into a MYH7 run).
+  Reuse the careful gene-token extractor `_gene_symbol_tokens`
+  (`table_router.py:874`) but PRESERVE LQT1/2/3 alias resolution (that extractor
+  ignores LQT/LQTS). Prerequisite for C1 and C2.
+- **R1a — Precision gate on figure-reader output.** Figures run on every
+  `gvf-run` (`gvf_run.py` passes `--pmc-dir`) and write RAW rows
+  (`extract_figure_variants.py:142-181`, only filter is "has a cdna/protein
+  string"). Add a validate/corroborate gate (position-in-range + well-formed
+  notation; env knob, default validate) so vision noise stops contaminating new
+  DBs. Image-only detection itself is R1b (Tier 3).
+- **C1 — Re-bind source discovery to the largest on-disk `_FULL_CONTEXT.md`**
+  per PMID (~431 rows, no network), GATED: source-quality + title/PMID match +
+  variant-explosion guard (reject suspicious count blow-ups), not just the
+  existing under-count gate. Generalizes the manual per-gene re-bind.
+  (`refresh_run_db.py` discovery + `_largest_context_path`.)
+- **C2 — Supplement-fold reader.** Convert on-disk `{pmid}_supplements/` files
+  (reuse `supplement_processing_service.process_supplement_files` with a no-op
+  download callback) and append to `_FULL_CONTEXT.md` before extraction
+  (~290 rows, no network). MUST land after C3 (multi-gene supplements leak
+  otherwise).
+- **C4 — Wire count guard + classifier into the live path, FLAG-ONLY, behind
+  env knobs defaulting OFF** (`COUNT_GUARD_POLICY` / `COUNT_CLASSIFIER_POLICY`).
+  Annotate only; reconcile with the existing
+  `_suppress_repeated_study_wide_counts` (no double-clear). Then measure
+  MAE+recall deltas; only after that consider selective `clear` with
+  evidence/acceptance gates. (`pipeline/steps.py`, `config/settings.py`.)
 
-**Operating rules:**
+### Tier 2 — Bounded builds
 
-14. For any future source acquisition, rerun
-    `python scripts/refresh_run_db.py --gene <GENE> --run-dir <RUN> --replace-db`
-    (now acceptance-gated). Do not patch SQLite rows directly.
-15. Promote only general parser/acquisition fixes to code. Keep per-PMID
-    recovery artifacts in validation runs, not production branches.
-16. New gene-disease runs (no gold) must surface no-gold QC output by default:
-    gene mentioned with no variants, supplement referenced but not downloaded,
-    variant-rich text with zero rows, paywall marker present, many null counts,
-    suspicious study-wide-N reuse.
+- **B1 — Reference-sequence cache + real translation + validation gate.** No
+  reference CDS/protein exists in the repo today; validation is length-only and
+  the cDNA↔protein bridge is integer-division codon math. Fetch + cache per-gene
+  CDS/protein (biopython is already a dependency; reuse the Entrez pattern), add
+  real translation in aggregation, and a position-in-range + reference-residue
+  identity reject. Covers both the "reference CDS in aggregation" wish and the
+  gold-free precision gate; generalizes to no-gold genes.
+- **B2 — Evidence-card consumer with teeth** on high-uncertainty counts
+  (confirm/correct/withhold). EXTENDS the existing default-on adjudication
+  rather than building one; depends on C4 flags. (`pipeline/claim_verifier.py`.)
+- **B3 — Affected/unaffected column-label parsing** (unaffected MAE ~1.2 is the
+  worst; direction/label confusion: affected/symptomatic/proband/case vs
+  unaffected/asymptomatic/control).
+
+### Tier 3 — Multi-session / externally gated
+
+- **R1b — Image-only / variant-rich-but-zero detector** to TARGET vision at the
+  silent-zero-at-high-confidence class (the zero-variant QC today only re-runs a
+  TEXT model). Feeds the R1a-gated vision reader.
+- **R2 — Residual paywalls:** Karger (Cloudflare), Sage/Liebert (CF
+  fingerprint). Elsevier + Wiley already covered.
+- **R3 — cDNA-only / splice notation normalization** (RYR2 raw `c.`-less forms,
+  splice forms like `40-2 A/G`).
+
+### Recommended sequence
+
+`P1 + C3 (+ R1a) → gated C1 → gated C2 → C4 flag-only → measure → selective C4
+clear → B1 → B2 + B3 → R1b → R2 → R3`. C3 lands before C1/C2 (protects both from
+multi-gene leakage); C4 stays flag-only until measured.
+
+### Operating rules
+
+- Every DB-mutating step carries a gate (under-count AND over-count/quality);
+  no silent truncation — log what was dropped and why.
+- For any source acquisition, rerun
+  `python scripts/refresh_run_db.py --gene <GENE> --run-dir <RUN> --replace-db`
+  (acceptance-gated). Do not patch SQLite rows directly.
+- Promote only general parser/acquisition fixes to code. Keep per-PMID recovery
+  artifacts in validation runs, not production branches.
+- New gene runs (no gold) must surface no-gold QC by default: gene mentioned
+  with no variants, supplement referenced but not downloaded, variant-rich text
+  with zero rows, paywall marker present, many null counts, suspicious
+  study-wide-N reuse.
