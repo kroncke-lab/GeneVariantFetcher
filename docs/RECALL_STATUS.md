@@ -1,9 +1,71 @@
 # Recall Status
 
-Last updated: 2026-05-27.
+Last updated: 2026-05-29.
 
 This note records the post-`19ae63f` state of the recall/generalization push so
 the next run can resume from the same baseline without relying on chat history.
+
+## 2026-05-29 Session — Applied Changes & Turnkey Reproduction
+
+Committed on `codex/multigene-recall-improvement` (verify with `git log --oneline`):
+
+- `457c70b feat: cDNA<->protein substitution bridge in recall matcher`
+  (`cli/compare_variants.py`). Matches protein SNV/nonsense gold (e.g. `Y51X`) to
+  cDNA-only extracted variants (`c.153C>A`) by implied codon, unique-candidate
+  guarded. Recovers variants already in the DB that were unmatched on notation.
+- `c5c4352 fix: scope gene-column-less tables by caption to stop multi-gene leakage`
+  (`pipeline/extraction.py` + `tests/unit/test_extraction_table_parser.py`). A
+  section table whose caption names a gene (e.g. "Supplemental Table 1. KCNQ1
+  variants") no longer leaks its rows into a different gene's run. Fixes the
+  PMID 26669661 case (161 -> 24 SCN5A). 3 regression tests added.
+
+Verified four-gene state after this session (`scripts/run_recall_suite.py`):
+PMIDs 83.7%, variant rows **75.4%** (was 74.1%), unique **82.2%** (81.4%),
+patients **77.7%**, affected **76.6%**, carriers rows-mode MAE **0.90** (was ~1.06).
+
+Live-DB operations applied this session (data artifacts are gitignored — a fresh
+checkout reproduces them by RUNNING the steps, it does not inherit the DBs):
+
+1. **Count-outlier guard** cleared 96 study-wide-N values across 28 PMIDs in all
+   four extraction sets (backups: each run's `outlier_guard_backup_20260528/`) and
+   in the live DBs (backups: `<GENE>.db.before_guard_20260528.db`). MAE win, no
+   recall change. Reproduce on any run:
+   `python scripts/apply_count_outlier_guard.py --extractions <run>/extractions --policy clear --backup-dir <run>/outlier_guard_backup --report-out /tmp/r.json`
+   then rebuild + rescore.
+2. **Supplement recovery** for single-gene supplements via re-extraction from an
+   augmented FULL_CONTEXT + `scripts/refresh_run_db.py --replace-db` (RYR2 25844899
+   5 -> 28). This also ran the figure-recovery layer (baseline had skipped it).
+
+### Turnkey for a collaborator (fresh checkout)
+
+The two code fixes above are in the branch, so they apply automatically. To run
+independently and start testing:
+
+1. Setup per the "Run On Another Computer Or VPN" section in `CLAUDE.md`
+   (`pip install -e ".[dev]"`, `playwright install chromium`, `.env` with one LLM
+   key + `NCBI_EMAIL`; `ELSEVIER_INSTTOKEN`/`WILEY_API_KEY` unlock paywalled text).
+2. End-to-end on a gene: `gvf gvf-run <GENE> --email <you> --output results/`.
+3. Score against gold: `python scripts/run_recall_suite.py --score --genes <GENE>
+   --db <GENE>=<path-to.db> --outdir recall_metrics/<name>` (reports recall AND
+   rows-mode MAE).
+4. Local tests (no network): `.venv/bin/python -m pytest tests/ -q`. Note: the 5
+   `tests/integration/test_triage.py` failures are pre-existing LLM-auth issues,
+   not from these changes.
+
+### Caveats / remaining levers (do not regress)
+
+- Do NOT rebuild KCNQ1/KCNH2 via bare `migrate(extractions)+recovery` — it
+  regressed KCNQ1 rows 77.7% -> 57.4% (their recall depends on build-process
+  content the extractions alone don't regenerate). Use `refresh_run_db` with a
+  real `--pmids-file` (an empty file + `--only-forced-pmids` is rejected).
+- The gene-scoping fix covers the MARKDOWN table parser only. The FIXED-WIDTH
+  parser (used for pdftotext'd supplements) still leaks multi-gene panels — the
+  next general fix, and the reason 10 of 15 staged supplements were held back.
+- Image-only supplements (`DownloadImage.aspx`, etc.) need vision/OCR.
+- >90% on all metrics remains acquisition-bound (missing supplement/table bodies,
+  Elsevier/NEJM, image tables), not extraction-bound. Audit precision before
+  pushing recall harder (DBs hold many non-gold rows; figure recovery adds OCR
+  noise; gold is incomplete so "not in gold" != wrong).
 
 ## Source Of Truth
 
