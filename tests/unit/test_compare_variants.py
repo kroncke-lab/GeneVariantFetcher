@@ -36,9 +36,63 @@ from cli.compare_variants import (
     introspect_sqlite,
     extract_sqlite_data,
     compute_recall_summary,
+    compute_precision_summary,
     generate_outputs,
     ComparisonRow,
 )
+
+
+def _make_row(
+    *,
+    pmid: str,
+    matched: bool,
+    missing_in_excel: bool = False,
+) -> ComparisonRow:
+    """Build a minimal ComparisonRow for precision testing.
+
+    matched=True  -> a gold row that matched a DB row (exact).
+    matched=False & missing_in_excel=False -> a gold row with no DB match.
+    missing_in_excel=True -> a DB-only (extra) row.
+    """
+    if missing_in_excel:
+        return ComparisonRow(
+            pmid=pmid,
+            excel_variant_raw="",
+            excel_variant_norm="",
+            sqlite_variant_raw="p.Xxx999Yyy",
+            sqlite_variant_norm="p.Xxx999Yyy",
+            match_type="none",
+            match_score=None,
+            excel_carriers_total=None,
+            sqlite_carriers_total=None,
+            carriers_diff=None,
+            excel_affected=None,
+            sqlite_affected=None,
+            affected_diff=None,
+            excel_unaffected=None,
+            sqlite_unaffected=None,
+            unaffected_diff=None,
+            missing_in_excel=True,
+        )
+    return ComparisonRow(
+        pmid=pmid,
+        excel_variant_raw="p.Arg1His",
+        excel_variant_norm="p.Arg1His",
+        sqlite_variant_raw="p.Arg1His" if matched else None,
+        sqlite_variant_norm="p.Arg1His" if matched else None,
+        match_type="exact" if matched else "none",
+        match_score=1.0 if matched else None,
+        excel_carriers_total=None,
+        sqlite_carriers_total=None,
+        carriers_diff=None,
+        excel_affected=None,
+        sqlite_affected=None,
+        affected_diff=None,
+        excel_unaffected=None,
+        sqlite_unaffected=None,
+        unaffected_diff=None,
+        missing_in_sqlite=not matched,
+    )
 
 
 # =============================================================================
@@ -605,6 +659,92 @@ class TestComparison:
         report = (tmp_path / "report.md").read_text(encoding="utf-8")
         assert "## Recall" in report
         assert "| Affected | 16/18 (88.9%) |" in report
+
+    def test_precision_summary_restricts_extra_rows_to_gold_pmids(self):
+        """Extra DB rows count only when their PMID was curated by gold.
+
+        3 matched gold rows + 1 extra DB row on a gold PMID gives
+        3 / (3 + 1) = 0.75. Two further extra DB rows on a NON-gold PMID must
+        be excluded from the denominator and must not change the ratio.
+        """
+        results = [
+            _make_row(pmid="111", matched=True),
+            _make_row(pmid="111", matched=True),
+            _make_row(pmid="222", matched=True),
+            # Extra DB-only row on a gold PMID -> counts in denominator.
+            _make_row(pmid="222", matched=False, missing_in_excel=True),
+            # Extra DB-only rows on a PMID gold never curated -> excluded.
+            _make_row(pmid="999", matched=False, missing_in_excel=True),
+            _make_row(pmid="999", matched=False, missing_in_excel=True),
+        ]
+
+        precision = compute_precision_summary(results)
+
+        assert precision["matched_db"] == 3
+        assert precision["extra_on_gold_pmids"] == 1
+        assert precision["precision_vs_gold_pmids"] == 0.75
+        assert "note" in precision and "NOT clean precision" in precision["note"]
+
+    def test_precision_summary_non_gold_extras_do_not_change_ratio(self):
+        """Adding only non-gold-PMID extra rows leaves precision at 1.0."""
+        base = [
+            _make_row(pmid="111", matched=True),
+            _make_row(pmid="222", matched=True),
+        ]
+        with_non_gold_extras = base + [
+            _make_row(pmid="888", matched=False, missing_in_excel=True),
+            _make_row(pmid="999", matched=False, missing_in_excel=True),
+        ]
+
+        baseline = compute_precision_summary(base)
+        widened = compute_precision_summary(with_non_gold_extras)
+
+        assert baseline["precision_vs_gold_pmids"] == 1.0
+        assert widened["extra_on_gold_pmids"] == 0
+        assert widened["precision_vs_gold_pmids"] == 1.0
+
+    def test_precision_summary_none_when_no_judgeable_rows(self):
+        """No matched rows and no extras on gold PMIDs -> ratio is None."""
+        results = [
+            # Gold row that was missed entirely (no DB match) -> not in denom.
+            _make_row(pmid="111", matched=False),
+            # Extra DB row on a non-gold PMID -> excluded.
+            _make_row(pmid="999", matched=False, missing_in_excel=True),
+        ]
+
+        precision = compute_precision_summary(results)
+
+        assert precision["matched_db"] == 0
+        assert precision["extra_on_gold_pmids"] == 0
+        assert precision["precision_vs_gold_pmids"] is None
+
+    def test_generate_outputs_emits_precision_and_gold_pmid_csv(self, tmp_path):
+        """generate_outputs surfaces precision + the gold-PMID extras CSV."""
+        results = [
+            _make_row(pmid="111", matched=True),
+            _make_row(pmid="111", matched=True),
+            _make_row(pmid="222", matched=True),
+            _make_row(pmid="222", matched=False, missing_in_excel=True),
+            _make_row(pmid="999", matched=False, missing_in_excel=True),
+        ]
+
+        summary = generate_outputs(results, tmp_path, Path("gold.xlsx"), Path("gvf.db"))
+
+        assert summary["precision"]["matched_db"] == 3
+        assert summary["precision"]["extra_on_gold_pmids"] == 1
+        assert summary["precision"]["precision_vs_gold_pmids"] == 0.75
+
+        # Recall/MAE blocks unchanged in shape by the precision addition.
+        assert "recall" in summary and "mae" in summary
+
+        gold_pmid_csv = tmp_path / "unmatched_db_rows_on_gold_pmids.csv"
+        assert gold_pmid_csv.exists()
+        rows = pd.read_csv(gold_pmid_csv, dtype=str)
+        # Only the gold-PMID extra (222), not the non-gold extra (999).
+        assert set(rows["pmid"]) == {"222"}
+
+        report = (tmp_path / "report.md").read_text(encoding="utf-8")
+        assert "## Precision (vs gold PMIDs)" in report
 
 
 # =============================================================================

@@ -5,6 +5,7 @@ import sqlite3
 from scripts.run_recall_suite import (
     build_gene_results,
     combine_mae,
+    combine_precision,
     combine_recall,
     discover_gold_inputs,
 )
@@ -161,3 +162,55 @@ def test_combine_mae_handles_missing_mae_blocks_safely():
     # Fields absent from any gene still produce a zero/n=0 block, not a KeyError
     assert agg["affected"]["n_matched"] == 0
     assert agg["affected"]["mae"] is None
+
+
+def test_combine_precision_aggregates_across_genes():
+    """Aggregate precision sums numerator + denominator, recomputes ratio."""
+    scored = [
+        {
+            "summary": {
+                "precision": {
+                    "matched_db": 8,
+                    "extra_on_gold_pmids": 2,
+                    "precision_vs_gold_pmids": 0.8,
+                }
+            }
+        },
+        {
+            "summary": {
+                "precision": {
+                    "matched_db": 2,
+                    "extra_on_gold_pmids": 8,
+                    "precision_vs_gold_pmids": 0.2,
+                }
+            }
+        },
+    ]
+
+    agg = combine_precision(scored)
+
+    assert agg["matched_db"] == 10
+    assert agg["extra_on_gold_pmids"] == 10
+    assert agg["precision_vs_gold_pmids"] == 0.5  # 10 / 20
+    assert "NOT clean precision" in agg["note"]
+
+
+def test_combine_precision_handles_missing_blocks_safely():
+    """Genes whose summaries predate the precision block must not crash."""
+    scored = [
+        {"summary": {}},  # no precision block at all
+        {"summary": {"precision": {"matched_db": 3, "extra_on_gold_pmids": 1}}},
+    ]
+    agg = combine_precision(scored)
+    assert agg["matched_db"] == 3
+    assert agg["extra_on_gold_pmids"] == 1
+    assert agg["precision_vs_gold_pmids"] == 0.75
+
+
+def test_combine_precision_none_when_no_denominator():
+    """Empty / zero inputs yield a None ratio rather than dividing by zero."""
+    assert combine_precision([])["precision_vs_gold_pmids"] is None
+    zero = combine_precision(
+        [{"summary": {"precision": {"matched_db": 0, "extra_on_gold_pmids": 0}}}]
+    )
+    assert zero["precision_vs_gold_pmids"] is None

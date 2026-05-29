@@ -194,6 +194,36 @@ def combine_mae(scored: list[dict[str, Any]]) -> dict[str, Any]:
     return aggregate
 
 
+def combine_precision(scored: list[dict[str, Any]]) -> dict[str, Any]:
+    """Aggregate the gold-PMID-restricted precision metric across genes.
+
+    Sums the per-gene numerator (matched DB rows) and denominator components
+    (matched DB rows + extra DB rows on gold PMIDs), then recomputes the
+    ratio. This is an extra-rows-relative-to-gold rate / false-positive upper
+    bound, NOT clean precision; see ``compute_precision_summary`` for the
+    caveat. Genes whose summaries predate this metric contribute nothing.
+    """
+    matched_db = 0
+    extra_on_gold_pmids = 0
+    for item in scored:
+        block = item.get("summary", {}).get("precision", {})
+        matched_db += int(block.get("matched_db") or 0)
+        extra_on_gold_pmids += int(block.get("extra_on_gold_pmids") or 0)
+    denominator = matched_db + extra_on_gold_pmids
+    return {
+        "matched_db": matched_db,
+        "extra_on_gold_pmids": extra_on_gold_pmids,
+        "precision_vs_gold_pmids": (matched_db / denominator) if denominator else None,
+        "note": (
+            "Upper bound on false-positive rate, restricted to gold-curated "
+            "PMIDs. Gold is a curator-selected subset, not paper-exhaustive, "
+            "so 'extra' DB rows on gold PMIDs may still be true positives the "
+            "curator omitted. This is an extra-rows-relative-to-gold rate, NOT "
+            "clean precision."
+        ),
+    }
+
+
 def target_gap(metric: dict[str, Any], target: float) -> int | None:
     """Rows needed to reach target recall for one metric."""
     gold = int(metric.get("gold") or 0)
@@ -209,6 +239,7 @@ def build_run_summary(
     gene_results: list[dict[str, Any]],
     aggregate_recall: dict[str, Any],
     aggregate_mae: dict[str, Any] | None = None,
+    aggregate_precision: dict[str, Any] | None = None,
     manifest: dict[str, Any],
     target: float,
 ) -> dict[str, Any]:
@@ -221,6 +252,7 @@ def build_run_summary(
             for name, metric in aggregate_recall.items()
         },
         "aggregate_mae": aggregate_mae or {},
+        "aggregate_precision": aggregate_precision or {},
         "gene_results": gene_results,
         "gold_manifest_generated_at_utc": manifest.get("generated_at_utc"),
     }
@@ -317,6 +349,25 @@ def write_markdown_summary(summary: dict[str, Any], output_path: Path) -> None:
                 f"{'n/a' if mae_val is None else f'{mae_val:.3f}'} |"
             )
 
+    precision = summary.get("aggregate_precision") or {}
+    if precision.get("matched_db") or precision.get("extra_on_gold_pmids"):
+        pvg = precision.get("precision_vs_gold_pmids")
+        lines.extend(
+            [
+                "",
+                "## Aggregate Precision (vs gold PMIDs)",
+                "",
+                "Extra-rows-relative-to-gold rate, restricted to gold-curated "
+                "PMIDs. Upper bound on false positives, NOT clean precision "
+                "(gold is a curator-selected subset, not paper-exhaustive).",
+                "",
+                "| Matched DB rows | Extra DB rows on gold PMIDs | precision_vs_gold_pmids |",
+                "|-----------------|-----------------------------|-------------------------|",
+                f"| {precision.get('matched_db', 0)} | "
+                f"{precision.get('extra_on_gold_pmids', 0)} | {_format_pct(pvg)} |",
+            ]
+        )
+
     lines.extend(["", "## Genes", ""])
     for item in summary.get("gene_results", []):
         status = item.get("status")
@@ -393,6 +444,17 @@ def print_scorecard(summary: dict[str, Any]) -> None:
                 f"n={block.get('n_matched', 0):<5} "
                 f"MAE={mae_text}"
             )
+
+    precision = summary.get("aggregate_precision") or {}
+    if precision.get("matched_db") or precision.get("extra_on_gold_pmids"):
+        print()
+        print("Precision (vs gold PMIDs; upper bound on FPs, not clean precision)")
+        print(
+            f"  matched_db={precision.get('matched_db', 0):>5}  "
+            f"extra_on_gold_pmids={precision.get('extra_on_gold_pmids', 0):<5} "
+            f"precision_vs_gold_pmids="
+            f"{_format_pct(precision.get('precision_vs_gold_pmids'))}"
+        )
     print()
     print("Genes")
     for item in summary.get("gene_results", []):
@@ -615,6 +677,7 @@ def main() -> int:
         gene_results=gene_results,
         aggregate_recall=combine_recall(scored),
         aggregate_mae=combine_mae(scored),
+        aggregate_precision=combine_precision(scored),
         manifest=manifest,
         target=args.target,
     )

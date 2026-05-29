@@ -2117,6 +2117,59 @@ def compute_rows_mae(results: List[ComparisonRow]) -> Dict[str, Any]:
     return out
 
 
+def compute_precision_summary(results: List[ComparisonRow]) -> Dict[str, Any]:
+    """Compute a gold-PMID-restricted, extra-rows-relative-to-gold rate.
+
+    This is NOT clean precision. The gold standard is a curator-selected
+    subset, not a paper-exhaustive enumeration of every variant in a paper, so
+    a DB row that has no gold match might still be a true positive the curator
+    simply did not record. To keep the denominator judgeable, we restrict to
+    PMIDs the gold standard actually curated: an unmatched DB row on a PMID
+    that gold never touched cannot be adjudicated and is excluded (in one
+    sample, ~81% of unmatched DB rows were on non-gold PMIDs). The same
+    gold-PMID-restriction is applied in
+    ``scripts/recall_audit/paper_disagreement_report.py``.
+
+    Interpret the result as a false-positive UPPER BOUND on gold-curated
+    papers, not as precision: even within gold PMIDs, an "extra" DB row may be
+    a real variant the curator omitted. Hence the key name
+    ``precision_vs_gold_pmids`` and the ``note`` caveat.
+
+    Computation:
+        matched_db          = gold rows that matched a DB row
+                              (not missing_in_sqlite, match_type != "none")
+        extra_on_gold_pmids = missing_in_excel (DB-only) rows whose PMID is in
+                              the gold PMID set
+        precision_vs_gold_pmids = matched_db / (matched_db + extra_on_gold_pmids)
+                                  (None when the denominator is 0)
+    """
+    gold_rows = [r for r in results if not r.missing_in_excel]
+    matched_rows = [
+        r for r in gold_rows if not r.missing_in_sqlite and r.match_type != "none"
+    ]
+    gold_pmids = {r.pmid for r in gold_rows if r.pmid}
+
+    matched_db = len(matched_rows)
+    # Extra DB-only rows count only on PMIDs gold curated; rows on non-gold
+    # PMIDs are not judgeable by the gold standard and are excluded.
+    extra_on_gold_pmids = sum(
+        1 for r in results if r.missing_in_excel and r.pmid in gold_pmids
+    )
+
+    return {
+        "matched_db": matched_db,
+        "extra_on_gold_pmids": extra_on_gold_pmids,
+        "precision_vs_gold_pmids": _ratio(matched_db, matched_db + extra_on_gold_pmids),
+        "note": (
+            "Upper bound on false-positive rate, restricted to gold-curated "
+            "PMIDs. Gold is a curator-selected subset, not paper-exhaustive, "
+            "so 'extra' DB rows on gold PMIDs may still be true positives the "
+            "curator omitted. This is an extra-rows-relative-to-gold rate, NOT "
+            "clean precision."
+        ),
+    }
+
+
 # =============================================================================
 # OUTPUT GENERATION
 # =============================================================================
@@ -2158,6 +2211,7 @@ def generate_outputs(
         "unique_pmids": len(set(r.pmid for r in results)),
         "recall": compute_recall_summary(results),
         "mae": compute_rows_mae(results),
+        "precision": compute_precision_summary(results),
         "top_mismatches": [],
     }
 
@@ -2188,6 +2242,20 @@ def generate_outputs(
         logger.info(
             f"Wrote {outdir / 'missing_in_excel.csv'} ({len(missing_excel)} rows)"
         )
+
+        # Write the gold-PMID-restricted subset of unmatched DB rows for
+        # manual adjudication. These are the rows that feed the
+        # precision_vs_gold_pmids denominator (extra rows on gold PMIDs).
+        gold_pmids = {r.pmid for r in results if not r.missing_in_excel and r.pmid}
+        extra_on_gold = missing_excel[missing_excel["pmid"].isin(gold_pmids)]
+        if len(extra_on_gold) > 0:
+            extra_on_gold.to_csv(
+                outdir / "unmatched_db_rows_on_gold_pmids.csv", index=False
+            )
+            logger.info(
+                f"Wrote {outdir / 'unmatched_db_rows_on_gold_pmids.csv'} "
+                f"({len(extra_on_gold)} rows)"
+            )
 
     # Write summary.json
     with open(outdir / "summary.json", "w") as f:
@@ -2249,6 +2317,25 @@ def write_markdown_report(
                 f"| Patients/carriers | {fmt_recall(recall.get('patients', {}))} |",
                 f"| Affected | {fmt_recall(recall.get('affected', {}))} |",
                 f"| Unaffected | {fmt_recall(recall.get('unaffected', {}))} |",
+                "",
+            ]
+        )
+
+    precision = summary.get("precision", {})
+    if precision:
+        pvg = precision.get("precision_vs_gold_pmids")
+        pvg_text = "n/a" if pvg is None else f"{pvg:.1%}"
+        lines.extend(
+            [
+                "## Precision (vs gold PMIDs)",
+                "",
+                "Extra-rows-relative-to-gold rate, restricted to gold-curated "
+                "PMIDs. Upper bound on false positives, NOT clean precision.",
+                "",
+                f"- Matched DB rows: {precision.get('matched_db', 0)}",
+                f"- Extra DB rows on gold PMIDs: "
+                f"{precision.get('extra_on_gold_pmids', 0)}",
+                f"- precision_vs_gold_pmids: {pvg_text}",
                 "",
             ]
         )
