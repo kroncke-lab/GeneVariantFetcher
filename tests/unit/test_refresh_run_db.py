@@ -5,6 +5,7 @@ import pytest
 import scripts.refresh_run_db as refresh_run_db
 from scripts.refresh_run_db import (
     ReplayCandidate,
+    _is_variant_explosion,
     replay_candidates,
     select_replay_candidates,
 )
@@ -582,6 +583,100 @@ def test_no_gate_regressions_disables_per_pmid_acceptance(tmp_path, monkeypatch)
     assert stats["gated"] == 0
     payload = json.loads(setup["output_file"].read_text())
     assert len(payload["variants"]) == 3  # overwritten with fewer variants
+
+
+def test_replay_gates_variant_explosion(tmp_path, monkeypatch):
+    """A suspicious count blow-up must restore the backup and be recorded."""
+    setup = _make_replay_setup(tmp_path, prior_variant_count=10, new_variant_count=600)
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+    )
+
+    assert stats["successful"] == 0
+    assert stats["gated"] == 1
+    assert stats["gated_explosions"] == [
+        {
+            "pmid": setup["pmid"],
+            "prior_variant_count": 10,
+            "new_variant_count": 600,
+            "delta": 590,
+        }
+    ]
+    # Backup (10-variant) payload must be restored, not the 600-variant explosion.
+    payload = json.loads(setup["output_file"].read_text())
+    assert len(payload["variants"]) == 10
+    assert (setup["backup_dir"] / setup["output_file"].name).exists()
+
+
+def test_replay_accepts_large_legitimate_recovery(tmp_path, monkeypatch):
+    """A real supplement recovery (5 -> 28) is well under the floor and accepted."""
+    setup = _make_replay_setup(tmp_path, prior_variant_count=5, new_variant_count=28)
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+    )
+
+    assert stats["successful"] == 1
+    assert stats["gated"] == 0
+    assert stats["gated_explosions"] == []
+    payload = json.loads(setup["output_file"].read_text())
+    assert len(payload["variants"]) == 28
+
+
+def test_no_gate_explosions_disables_explosion_gate(tmp_path, monkeypatch):
+    """--no-gate-explosions must accept the larger extraction."""
+    setup = _make_replay_setup(tmp_path, prior_variant_count=10, new_variant_count=600)
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+        gate_explosions=False,
+    )
+
+    assert stats["successful"] == 1
+    assert stats["gated"] == 0
+    payload = json.loads(setup["output_file"].read_text())
+    assert len(payload["variants"]) == 600
+
+
+def test_is_variant_explosion_thresholds():
+    """Pure-helper boundary checks for the explosion gate."""
+    # Recovery from a 0/None prior is never an explosion.
+    assert (
+        _is_variant_explosion(None, 999, ratio=10.0, min_new=400, min_delta=300)
+        is False
+    )
+    assert (
+        _is_variant_explosion(0, 999, ratio=10.0, min_new=400, min_delta=300) is False
+    )
+    # Legitimate modest recovery: large multiple but small absolute -> not gated.
+    assert _is_variant_explosion(5, 28, ratio=10.0, min_new=400, min_delta=300) is False
+    # Large absolute but small multiple -> not gated.
+    assert (
+        _is_variant_explosion(100, 450, ratio=10.0, min_new=400, min_delta=300) is False
+    )
+    # All three conditions met -> gated.
+    assert (
+        _is_variant_explosion(10, 600, ratio=10.0, min_new=400, min_delta=300) is True
+    )
 
 
 def test_only_forced_pmids_requires_forced_inputs(tmp_path, monkeypatch):

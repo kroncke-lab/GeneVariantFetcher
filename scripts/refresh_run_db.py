@@ -459,6 +459,34 @@ def write_candidates_csv(candidates: list[ReplayCandidate], path: Path) -> None:
             )
 
 
+def _is_variant_explosion(
+    prior_variant_count: Optional[int],
+    new_variant_count: int,
+    *,
+    ratio: float,
+    min_new: int,
+    min_delta: int,
+) -> bool:
+    """True when a replay's variant count blows up suspiciously vs the prior JSON.
+
+    The regression gate only catches ``new < prior``. This catches the opposite
+    failure mode: re-binding to a larger but garbage / wrong-paper / multi-gene
+    source (or OCR noise) that explodes the row count. We require ALL of a large
+    multiple of the prior count, a large absolute count, and a large absolute
+    delta — the signature of garbage/leakage rather than a legitimate supplement
+    recovery (e.g. 5 -> 28 stays well under the absolute floor). Pure
+    internal-consistency check; no gold standard. A recovery from a 0/None prior
+    is never gated (nothing to compare against).
+    """
+    if prior_variant_count is None or prior_variant_count <= 0:
+        return False
+    return (
+        new_variant_count > prior_variant_count * ratio
+        and new_variant_count >= min_new
+        and (new_variant_count - prior_variant_count) >= min_delta
+    )
+
+
 def replay_candidates(
     *,
     candidates: list[ReplayCandidate],
@@ -468,6 +496,10 @@ def replay_candidates(
     tier_threshold: int,
     dry_run: bool,
     gate_regressions: bool = True,
+    gate_explosions: bool = True,
+    explosion_ratio: float = 10.0,
+    explosion_min_new: int = 400,
+    explosion_min_delta: int = 300,
 ) -> dict[str, Any]:
     if dry_run:
         return {
@@ -476,6 +508,7 @@ def replay_candidates(
             "failed": 0,
             "gated": 0,
             "gated_regressions": [],
+            "gated_explosions": [],
             "errors": [],
         }
 
@@ -487,6 +520,7 @@ def replay_candidates(
     successful = 0
     gated = 0
     gated_regressions: list[dict[str, Any]] = []
+    gated_explosions: list[dict[str, Any]] = []
     errors: list[dict[str, str]] = []
 
     for candidate in candidates:
@@ -531,6 +565,34 @@ def replay_candidates(
                 if backup_file.exists():
                     shutil.copy2(backup_file, candidate.output_file)
                 continue
+            if gate_explosions and _is_variant_explosion(
+                prior_variant_count,
+                new_variant_count,
+                ratio=explosion_ratio,
+                min_new=explosion_min_new,
+                min_delta=explosion_min_delta,
+            ):
+                gated += 1
+                gated_explosions.append(
+                    {
+                        "pmid": candidate.pmid,
+                        "prior_variant_count": prior_variant_count,
+                        "new_variant_count": new_variant_count,
+                        "delta": new_variant_count - prior_variant_count,
+                    }
+                )
+                logger.warning(
+                    "PMID %s replay gated (variant explosion): prior=%s new=%d "
+                    "Δ=+%d (kept backup; re-run with --no-gate-explosions or a "
+                    "higher --explosion-min-new to accept)",
+                    candidate.pmid,
+                    prior_variant_count,
+                    new_variant_count,
+                    new_variant_count - prior_variant_count,
+                )
+                if backup_file.exists():
+                    shutil.copy2(backup_file, candidate.output_file)
+                continue
             metadata = result.extracted_data.setdefault("extraction_metadata", {})
             metadata.update(_source_metadata(candidate.source_file))
             metadata["model_used"] = result.model_used
@@ -557,6 +619,7 @@ def replay_candidates(
         "failed": len(errors),
         "gated": gated,
         "gated_regressions": gated_regressions,
+        "gated_explosions": gated_explosions,
         "errors": errors,
         "backup_dir": str(backup_dir),
     }
@@ -772,6 +835,39 @@ def build_parser() -> argparse.ArgumentParser:
             "extraction is authoritative even if it has fewer variants."
         ),
     )
+    p.add_argument(
+        "--no-gate-explosions",
+        action="store_true",
+        help=(
+            "Disable the variant-explosion gate. By default, when a replay "
+            "produces a suspiciously larger variant count than the prior JSON "
+            "(a large multiple AND a large absolute count AND a large delta), "
+            "the backup is restored and the explosion is recorded for audit. "
+            "This guards against re-binding to a garbage / wrong-paper / "
+            "multi-gene source. Use this flag to accept the larger extraction."
+        ),
+    )
+    p.add_argument(
+        "--explosion-ratio",
+        type=float,
+        default=10.0,
+        help="Variant-explosion gate: trip when new > prior * this. Default 10.0.",
+    )
+    p.add_argument(
+        "--explosion-min-new",
+        type=int,
+        default=400,
+        help=(
+            "Variant-explosion gate: new count must reach this absolute floor "
+            "to trip. Default 400 (keeps legitimate large recoveries)."
+        ),
+    )
+    p.add_argument(
+        "--explosion-min-delta",
+        type=int,
+        default=300,
+        help="Variant-explosion gate: new - prior must reach this to trip. Default 300.",
+    )
     p.add_argument("--dry-run", action="store_true")
     p.add_argument("--verbose", "-v", action="store_true")
     return p
@@ -860,6 +956,10 @@ def main() -> int:
         tier_threshold=args.tier_threshold,
         dry_run=args.dry_run,
         gate_regressions=not args.no_gate_regressions,
+        gate_explosions=not args.no_gate_explosions,
+        explosion_ratio=args.explosion_ratio,
+        explosion_min_new=args.explosion_min_new,
+        explosion_min_delta=args.explosion_min_delta,
     )
 
     output_db = args.output_db
