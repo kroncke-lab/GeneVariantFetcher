@@ -260,6 +260,33 @@ class Settings(BaseSettings):
         env="TIER3_MAX_VERIFIER_CARDS",
         description="Maximum per-variant evidence cards to verify in one extraction.",
     )
+    count_guard_policy: str = Field(
+        default="off",
+        env="COUNT_GUARD_POLICY",
+        description=(
+            "Policy for the per-PMID count-outlier guard "
+            "(pipeline/count_outlier_guard.py) applied to freshly extracted "
+            "variants before they are saved (off|flag|clear). 'off' (default) is "
+            "a strict no-op. 'flag' only annotates suspected study-wide-N reuse "
+            "with count_outlier_flags metadata and leaves raw counts intact. "
+            "'clear' also zeros the flagged counts (the raw value is preserved "
+            "under the flag). Gold-free; works on new gene-diseases."
+        ),
+    )
+    count_classifier_policy: str = Field(
+        default="off",
+        env="COUNT_CLASSIFIER_POLICY",
+        description=(
+            "Policy for the per-variant count classifier "
+            "(pipeline/count_classifier.py) applied to freshly extracted "
+            "variants before they are saved (off|flag|clear). 'off' (default) is "
+            "a strict no-op. 'flag' only annotates counts whose LLM-declared "
+            "count_provenance is not per_variant_carrier with "
+            "count_classifier_flags metadata and leaves raw counts intact. "
+            "'clear' also zeros those counts (raw preserved under the flag). "
+            "Gold-free; silently skips variants without count_provenance."
+        ),
+    )
     early_debate_models: Union[str, List[str]] = Field(
         default="",
         env="EARLY_DEBATE_MODELS",
@@ -483,6 +510,20 @@ class Settings(BaseSettings):
             raise ValueError(
                 "reasoning_effort must be one of "
                 f"{sorted(allowed)} or unset; got {v!r}"
+            )
+        return v_norm
+
+    @field_validator("count_guard_policy", "count_classifier_policy")
+    @classmethod
+    def _validate_count_policy(cls, v: str) -> str:
+        """Normalize count-hygiene policy settings; reject unknown modes early."""
+        v_norm = str(v).strip().lower()
+        if v_norm == "":
+            return "off"
+        allowed = {"off", "flag", "clear"}
+        if v_norm not in allowed:
+            raise ValueError(
+                f"count policy must be one of {sorted(allowed)}; got {v!r}"
             )
         return v_norm
 

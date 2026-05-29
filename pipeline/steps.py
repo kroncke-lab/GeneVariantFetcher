@@ -57,6 +57,87 @@ def _resolve_filter_workers() -> int:
         return DEFAULT_MAX_WORKERS
 
 
+def _resolve_count_policies() -> Tuple[str, str]:
+    """Return (count_guard_policy, count_classifier_policy) from Settings.
+
+    Both default to "off" (strict no-op) so behavior is unchanged unless a
+    stage is explicitly opted in via COUNT_GUARD_POLICY / COUNT_CLASSIFIER_POLICY.
+    Falls back to ("off", "off") if Settings can't load (e.g. minimal-env tests).
+    """
+    try:
+        from config.settings import get_settings
+
+        settings = get_settings()
+        return (
+            getattr(settings, "count_guard_policy", "off") or "off",
+            getattr(settings, "count_classifier_policy", "off") or "off",
+        )
+    except Exception:
+        return ("off", "off")
+
+
+def _apply_count_hygiene(extracted_data: Optional[Dict[str, Any]]) -> None:
+    """Run the count-outlier guard then the count classifier in flag/clear mode.
+
+    Applied in-place to the freshly extracted variants right before they are
+    persisted to per-PMID JSON. Mirrors the calling convention of
+    scripts/apply_count_outlier_guard.py and scripts/apply_count_classifier.py:
+    detect first, then apply the configured policy (guard before classifier;
+    both are idempotent on a null count).
+
+    Strict no-op when both policies are "off" (the default) — it returns before
+    importing the guard/classifier modules so the default extraction path is
+    byte-identical to before. In "flag" mode it only annotates variants with
+    count_outlier_flags / count_classifier_flags metadata and preserves raw
+    counts; "clear" additionally zeros the flagged counts (raw preserved under
+    the flag).
+    """
+    guard_policy, classifier_policy = _resolve_count_policies()
+    if guard_policy == "off" and classifier_policy == "off":
+        return
+    if not isinstance(extracted_data, dict):
+        return
+    variants = extracted_data.get("variants")
+    if not isinstance(variants, list) or not variants:
+        return
+
+    if guard_policy != "off":
+        from pipeline.count_outlier_guard import (
+            apply_outlier_policy,
+            detect_count_outliers,
+        )
+
+        guard_annotations = detect_count_outliers(variants)
+        guard_result = apply_outlier_policy(
+            variants, guard_annotations, policy=guard_policy
+        )
+        if guard_result.flagged:
+            md = extracted_data.setdefault("extraction_metadata", {})
+            md["count_outlier_guard"] = {
+                "policy": guard_policy,
+                "flagged": guard_result.flagged,
+                "cleared": guard_result.cleared,
+            }
+
+    if classifier_policy != "off":
+        from pipeline.count_classifier import (
+            detect_misclassified_counts,
+            enforce_per_variant_policy,
+        )
+
+        classifier_annotations = detect_misclassified_counts(variants)
+        classifier_result = enforce_per_variant_policy(
+            variants, classifier_annotations, policy=classifier_policy
+        )
+        if classifier_result.flagged:
+            md = extracted_data.setdefault("extraction_metadata", {})
+            md["count_classifier"] = {
+                "policy": classifier_policy,
+                "flagged": classifier_result.flagged,
+                "cleared": classifier_result.cleared,
+            }
+
+
 # =============================================================================
 # Step Result Types
 # =============================================================================
@@ -1277,6 +1358,8 @@ def extract_variants(
                     md["source_type"] = "fulltext"
                     md["abstract_only"] = False
                     md["model_used"] = result.model_used
+                # Count hygiene (flag/clear), no-op when both policies are off.
+                _apply_count_hygiene(result.extracted_data)
                 with open(output_file, "w") as f:
                     json.dump(result.extracted_data, f, indent=2)
                 return (result, None)
@@ -1329,6 +1412,8 @@ def extract_variants(
                     md["abstract_only"] = True
                     md["model_used"] = result.model_used
 
+                # Count hygiene (flag/clear), no-op when both policies are off.
+                _apply_count_hygiene(result.extracted_data)
                 with open(output_file, "w") as f:
                     json.dump(result.extracted_data, f, indent=2)
                 return (result, None)
