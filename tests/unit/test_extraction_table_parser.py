@@ -618,6 +618,50 @@ Nucleotide Change              Coding Effect            Region
     assert len(result.extracted_data["variants"]) == 20
 
 
+def test_fixed_width_caption_scopes_arbitrary_noncardiac_gene():
+    """A fixed-width caption naming an arbitrary (non-cardiac) gene must scope the
+    table to that gene, mirroring the markdown parser's open-vocab gene scope.
+    Regression for multi-gene leakage: a BRCA1 supplement must claim nothing in
+    an MYH7 run even though BRCA1 is outside the hard-coded cardiac gene set."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Supplemental Table 1. BRCA1 mutations in cancer patients
+
+Nucleotide Change              Coding Effect            Region
+163C>T                         Q55X                     N-terminal
+407T>C                         L136P                    DI-S1
+"""
+
+    # Pre-fix behavior: the BRCA1 caption is outside TABLE_LABEL_EXPLICIT_GENES,
+    # so the off-target guard never tripped and these two rows leaked into MYH7
+    # (yielded 2 variants). After the fix the caption scopes to BRCA1 only.
+    assert extractor._parse_fixed_width_table_variants(text, "MYH7") == []
+
+    # The same table is still claimable for the gene it actually describes.
+    brca1 = extractor._parse_fixed_width_table_variants(text, "BRCA1")
+    by_protein = {v["protein_notation"]: v for v in brca1}
+    assert set(by_protein) == {"Q55X", "L136P"}
+
+
+def test_fixed_width_no_gene_caption_is_not_oversuppressed():
+    """A fixed-width caption that names NO gene must stay claimable by the target
+    gene. The noisy open-vocab tokens in a prose caption (COMPENDIUM/TESTING/...)
+    must not be mistaken for genes and over-suppress a valid single-gene table."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Supplemental Table 1: Compendium of variants identified by WES testing
+
+Position          Desig   Gene    Location   Nucleotide         Amino Acid       Zygosity
+Chr1: 116311152   VUS     CASQ2   Exon 1     c.11C>T            p.T4I            Het
+Chr1: 237433824   VUS     RYR2    Exon 2     c.76G>A            p.A26T           Het
+"""
+
+    variants = extractor._parse_fixed_width_table_variants(text, "RYR2")
+    by_variant = {v["protein_notation"] or v["cdna_notation"]: v for v in variants}
+    assert "p.A26T" in by_variant
+    assert by_variant["p.A26T"]["cdna_notation"] == "c.76G>A"
+
+
 def test_fixed_width_parser_reads_target_gene_functional_table_without_scn5a_name():
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """

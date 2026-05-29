@@ -1431,6 +1431,42 @@ class ExpertExtractor(BaseLLMCaller):
                 symbols.add(gene)
         return symbols
 
+    # Rare all-alpha gene symbols worth scoping even without a digit. Mirrors the
+    # short-token whitelist in `_gene_symbols_in_table_label` so caption prose
+    # (COMPENDIUM/PROPERTIES/TESTING/...) is not mistaken for a gene.
+    _OPEN_VOCAB_ALPHA_GENES = {"TTN", "APC", "RET", "VHL", "NF1", "NF2"}
+
+    def _fixed_width_gene_scope_from_table_label(self, label: str) -> set[str]:
+        """Open-vocabulary gene scope for the fixed-width off-target guard.
+
+        The markdown parser scopes arbitrary genes via
+        `_gene_symbols_in_table_label`, but that helper is too noisy for the
+        fixed-width guard's `bool(scope) and target not in scope` logic: it keeps
+        ALL-CAPS non-genes (ETABLE/COMPENDIUM/PROPERTIES/...) that would make
+        scope non-empty for nearly every caption and over-suppress claimable
+        tables. Compose a tighter scope instead:
+
+          explicit cardiac genes + LQT alias resolution
+          ∪ confidently gene-shaped tokens from the careful `_gene_symbol_tokens`
+            extractor (it excludes protein-/cDNA-like tokens), restricted to
+            tokens that carry a digit or are a known all-alpha gene symbol.
+
+        `_gene_symbol_tokens` ignores bare LQT/LQTS but still emits LQT1/LQT2/...,
+        so drop LQT*/SQT* here and let the alias map resolve them to a gene.
+        """
+        from pipeline.table_router import _gene_symbol_tokens
+
+        scope = set(self._gene_scope_from_table_label(label))
+        for token in _gene_symbol_tokens(label):
+            if token.startswith("LQT") or token.startswith("SQT"):
+                continue
+            if (
+                any(ch.isdigit() for ch in token)
+                or token in self._OPEN_VOCAB_ALPHA_GENES
+            ):
+                scope.add(token)
+        return scope
+
     def _parse_lqt_fixed_width_variant_row(
         self,
         stripped: str,
@@ -2260,8 +2296,10 @@ class ExpertExtractor(BaseLLMCaller):
                 current_table_label = stripped
                 label_lower = current_table_label.lower()
                 if "continued" not in label_lower:
-                    current_table_gene_scope = self._gene_scope_from_table_label(
-                        current_table_label
+                    current_table_gene_scope = (
+                        self._fixed_width_gene_scope_from_table_label(
+                            current_table_label
+                        )
                     )
                     protein_count_table = (
                         "list of mutations by coding effect" in label_lower
