@@ -1,6 +1,8 @@
 """Unit tests for the reference-transcript validation gate (B1)."""
 
 from pipeline.reference_validation import (
+    is_high_confidence_reject,
+    is_simple_substitution,
     load_reference_protein,
     parse_reference_residue,
     validate_protein_variant,
@@ -63,3 +65,35 @@ def test_validate_uses_cache_dir(tmp_path):
     v = validate_protein_variant("FAKE", "A3V", cache_dir=tmp_path)
     assert v.is_reject and v.reason == "reference_residue_mismatch"
     assert validate_protein_variant("FAKE", "R3W", cache_dir=tmp_path).status == "ok"
+
+
+def test_is_simple_substitution():
+    assert is_simple_substitution("A561V")
+    assert is_simple_substitution("p.Arg190Trp")
+    assert is_simple_substitution("R190X")  # nonsense (single-letter stop)
+    assert is_simple_substitution("Y616*")  # nonsense (* stop)
+    assert is_simple_substitution("p.Arg190Ter")
+    # Frameshifts / indels / extensions are NOT simple substitutions.
+    assert not is_simple_substitution("p.Gln1122fs*147")
+    assert not is_simple_substitution("p.Lys674fs")
+    assert not is_simple_substitution("p.Glu90del")
+    assert not is_simple_substitution("p.Ala100_Glu101insLys")
+    assert not is_simple_substitution("c.570A>G")
+    assert not is_simple_substitution("")
+
+
+def test_is_high_confidence_reject():
+    # pos 1 = M, pos 2..61 = A.
+    seq = "M" + "A" * 60
+    # Simple substitution mismatch beyond the N-terminal window -> droppable.
+    v = validate_protein_variant("X", "R40W", sequence=seq)
+    assert v.is_reject and is_high_confidence_reject("R40W", v)
+    # Same mismatch INSIDE the N-terminal isoform window -> not droppable.
+    v_nt = validate_protein_variant("X", "R5W", sequence=seq)
+    assert v_nt.is_reject and not is_high_confidence_reject("R5W", v_nt)
+    # Frameshift reject -> not droppable even though far from the N-terminus.
+    v_fs = validate_protein_variant("X", "R40fs", sequence=seq)
+    assert v_fs.is_reject and not is_high_confidence_reject("R40fs", v_fs)
+    # A non-reject verdict is never droppable.
+    v_ok = validate_protein_variant("X", "A40V", sequence=seq)
+    assert not v_ok.is_reject and not is_high_confidence_reject("A40V", v_ok)

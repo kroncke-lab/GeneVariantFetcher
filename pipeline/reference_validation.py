@@ -61,6 +61,23 @@ _AA1 = set(_AA3_TO_1.values())
 # notation that names a concrete reference residue at a concrete position.
 _LEADING_REF_RE = re.compile(r"^\s*(?:p\.?\s*)?([A-Za-z]{3}|[A-Za-z])(\d+)")
 
+# A clean single-residue substitution or nonsense: <ref><pos><alt> where alt is a
+# single residue, a stop (X / * / Ter), or a 3-letter residue. Frameshifts and
+# indels are excluded by the keyword guard below — for those the leading residue
+# is the first *affected* codon, whose identity is notation-convention dependent
+# and a poor target for a hard reference-residue check.
+_SIMPLE_SUB_RE = re.compile(
+    r"^\s*(?:p\.?\s*)?(?:[A-Za-z]{3}|[A-Za-z])\d+(?:[A-Za-z]{3}|[A-Za-z]|\*)\s*$"
+)
+_COMPLEX_NOTATION_TOKENS = ("fs", "del", "ins", "dup", "ext")
+
+# Residues at/below this position are in the N-terminal window where alternative
+# transcript isoforms most commonly diverge from the canonical RefSeq protein
+# (e.g. KCNH2 isoform 1a vs 1b). A reference-residue mismatch there is far more
+# likely an isoform/numbering artifact than a true false positive, so such a
+# reject is reported but never acted on by a destructive (drop) policy.
+NTERM_ISOFORM_GUARD = 30
+
 # in-process cache: gene (upper) -> sequence string, or None if known-absent.
 _SEQ_CACHE: dict[str, Optional[str]] = {}
 
@@ -203,6 +220,51 @@ def validate_protein_variant(
             "reject", "reference_residue_mismatch", expected=actual, observed=ref_aa
         )
     return ReferenceVerdict("ok", "match", expected=actual, observed=ref_aa)
+
+
+def is_simple_substitution(protein_notation: str) -> bool:
+    """True for a clean single-residue substitution or nonsense change.
+
+    e.g. ``A561V``, ``p.Arg190Trp``, ``R190X``, ``Y616*``, ``p.Arg190Ter``.
+    False for frameshifts (``fs``), indels (``del``/``ins``/``dup``), and
+    extensions (``ext``) — for those the leading residue is the first *affected*
+    codon, whose identity is notation-convention dependent, so a hard
+    reference-residue reject on them is low-confidence.
+    """
+    if not protein_notation:
+        return False
+    s = str(protein_notation)
+    low = s.lower()
+    if any(tok in low for tok in _COMPLEX_NOTATION_TOKENS):
+        return False
+    return bool(_SIMPLE_SUB_RE.match(s))
+
+
+def is_high_confidence_reject(
+    protein_notation: str,
+    verdict: "ReferenceVerdict",
+    *,
+    nterm_guard: int = NTERM_ISOFORM_GUARD,
+) -> bool:
+    """True when a ``reject`` verdict is safe for a destructive (drop) policy.
+
+    A reject is high-confidence — and therefore droppable — only when it is a
+    clean single-residue substitution/nonsense (:func:`is_simple_substitution`)
+    at a position beyond the N-terminal isoform-divergence window
+    (``nterm_guard``). Frameshift/indel rejects and N-terminal rejects are
+    real but ambiguous (notation convention / alternative isoform numbering),
+    so they should be *flagged but kept*, never dropped. Non-reject verdicts
+    are never droppable.
+    """
+    if not verdict.is_reject:
+        return False
+    parsed = parse_reference_residue(protein_notation)
+    if parsed is None:
+        return False
+    _ref, pos = parsed
+    if pos <= nterm_guard:
+        return False
+    return is_simple_substitution(protein_notation)
 
 
 def clear_cache() -> None:

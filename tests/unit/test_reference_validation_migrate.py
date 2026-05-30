@@ -75,6 +75,32 @@ def test_drop_removes_only_mismatches():
     assert stats["ok"] == 2 and stats["unknown"] == 1
 
 
+def test_drop_spares_low_confidence_rejects():
+    """drop omits only high-confidence rejects; fs + N-terminal rejects are kept."""
+    variants = [
+        _kcnh2("A178T"),  # simple sub, pos 178 -> high-confidence -> DROPPED
+        _kcnh2("p.Gln1122fs*147"),  # frameshift reject (exp P) -> kept
+        _kcnh2("p.Ala8Val"),  # N-terminal reject (pos 8) -> kept
+        _kcnh2("A561V"),  # ok
+    ]
+    kept, stats = _apply_reference_validation(variants, policy="drop")
+    kept_proteins = {v["protein_notation"] for v in kept}
+    assert kept_proteins == {"p.Gln1122fs*147", "p.Ala8Val", "A561V"}
+    assert stats["reject"] == 3  # A178T + fs + A8V all mismatch the reference
+    assert stats["flagged"] == 3  # all three rejects are annotated
+    assert stats["dropped"] == 1  # but only the high-confidence one is removed
+    # The spared rejects are annotated high_confidence=False, dropped=False.
+    spared = [v for v in kept if "reference_validation" in v]
+    assert {v["protein_notation"] for v in spared} == {
+        "p.Gln1122fs*147",
+        "p.Ala8Val",
+    }
+    for v in spared:
+        rv = v["reference_validation"]
+        assert rv["status"] == "reject"
+        assert rv["high_confidence"] is False and rv["dropped"] is False
+
+
 def test_uncached_gene_always_passes():
     # No FASTA for this gene -> every verdict is 'unknown' -> nothing dropped.
     variants = [

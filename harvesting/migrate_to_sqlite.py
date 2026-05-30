@@ -1088,9 +1088,14 @@ def _apply_reference_validation(
     protein (``pipeline.reference_validation.validate_protein_variant``). Behavior
     by policy:
       * ``off``  — strict no-op; returns the list unchanged (imports nothing).
-      * ``flag`` — annotate any rejected variant with a ``reference_validation``
-        block (status/reason/expected/observed) and keep it.
-      * ``drop`` — annotate AND omit rejected variants from the returned list.
+      * ``flag`` — annotate every rejected variant with a ``reference_validation``
+        block (status/reason/expected/observed/high_confidence) and keep it.
+      * ``drop`` — annotate every reject, but only *omit* HIGH-CONFIDENCE rejects
+        (clean substitutions/nonsense beyond the N-terminal isoform window).
+        Frameshift/indel and N-terminal rejects are annotated but kept, because
+        their reference residue is notation-convention / isoform ambiguous and a
+        hard drop there loses real variants (measured: 7 of 8 KCNH2 recall losses
+        were exactly this class).
 
     A variant is only ever ``reject`` when its gene has a cached reference
     sequence AND the notation names a concrete reference residue+position that
@@ -1104,7 +1109,10 @@ def _apply_reference_validation(
     if policy == "off" or not variants:
         return variants, stats
 
-    from pipeline.reference_validation import validate_protein_variant
+    from pipeline.reference_validation import (
+        is_high_confidence_reject,
+        validate_protein_variant,
+    )
 
     kept: List[Dict[str, Any]] = []
     for variant in variants:
@@ -1115,16 +1123,20 @@ def _apply_reference_validation(
         if not verdict.is_reject:
             kept.append(variant)
             continue
-        # Rejected: annotate (in both flag and drop modes), then keep or omit.
+        # Drop only high-confidence rejects; flag mode never drops.
+        high_conf = is_high_confidence_reject(protein, verdict)
+        will_drop = policy == "drop" and high_conf
         variant["reference_validation"] = {
             "status": verdict.status,
             "reason": verdict.reason,
             "expected": verdict.expected,
             "observed": verdict.observed,
             "policy": policy,
+            "high_confidence": high_conf,
+            "dropped": will_drop,
         }
         stats["flagged"] += 1
-        if policy == "drop":
+        if will_drop:
             stats["dropped"] += 1
             continue
         kept.append(variant)
