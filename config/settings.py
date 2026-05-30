@@ -301,6 +301,25 @@ class Settings(BaseSettings):
             "before being enabled by default. Gold-free."
         ),
     )
+    reference_validation_policy: str = Field(
+        default="off",
+        env="REFERENCE_VALIDATION_POLICY",
+        description=(
+            "Policy for the reference-transcript validation gate (B1, "
+            "pipeline/reference_validation.py) applied at DB migration "
+            "(harvesting/migrate_to_sqlite.py) to each variant's protein notation "
+            "(off|flag|drop). 'off' (default) is a strict no-op. 'flag' annotates "
+            "variants whose cited reference residue does not match the gene's "
+            "reference protein at that position (or is out of range) with "
+            "reference_validation metadata, keeping the row. 'drop' additionally "
+            "removes those mismatched rows. A variant is only ever rejected when a "
+            "cached reference sequence exists AND the notation names a concrete "
+            "reference residue+position; cDNA-only notations and uncached genes "
+            "always pass ('unknown'). Gold-free; turnkey-safe on new gene-diseases. "
+            "Keep at off/flag until a drop-mode DB rescore confirms it does not "
+            "cost real-variant recall."
+        ),
+    )
     early_debate_models: Union[str, List[str]] = Field(
         default="",
         env="EARLY_DEBATE_MODELS",
@@ -538,6 +557,21 @@ class Settings(BaseSettings):
         if v_norm not in allowed:
             raise ValueError(
                 f"count policy must be one of {sorted(allowed)}; got {v!r}"
+            )
+        return v_norm
+
+    @field_validator("reference_validation_policy")
+    @classmethod
+    def _validate_reference_validation_policy(cls, v: str) -> str:
+        """Normalize the reference-validation policy; reject unknown modes early."""
+        v_norm = str(v).strip().lower()
+        if v_norm == "":
+            return "off"
+        allowed = {"off", "flag", "drop"}
+        if v_norm not in allowed:
+            raise ValueError(
+                f"reference_validation_policy must be one of {sorted(allowed)}; "
+                f"got {v!r}"
             )
         return v_norm
 

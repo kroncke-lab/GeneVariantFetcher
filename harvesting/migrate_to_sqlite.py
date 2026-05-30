@@ -1065,6 +1065,72 @@ def insert_variant_data(
     return variant_id
 
 
+def _resolve_reference_validation_policy() -> str:
+    """Return the reference-validation policy from Settings (default 'off').
+
+    Falls back to 'off' (strict no-op) if Settings can't load, mirroring the
+    count-hygiene policy resolution in pipeline/steps.py.
+    """
+    try:
+        from config.settings import get_settings
+
+        return getattr(get_settings(), "reference_validation_policy", "off") or "off"
+    except Exception:
+        return "off"
+
+
+def _apply_reference_validation(
+    variants: List[Dict[str, Any]], *, policy: str
+) -> Tuple[List[Dict[str, Any]], Dict[str, int]]:
+    """Apply the B1 reference-transcript gate to a variant list before insert.
+
+    Validates each variant's protein notation against its gene's cached reference
+    protein (``pipeline.reference_validation.validate_protein_variant``). Behavior
+    by policy:
+      * ``off``  — strict no-op; returns the list unchanged (imports nothing).
+      * ``flag`` — annotate any rejected variant with a ``reference_validation``
+        block (status/reason/expected/observed) and keep it.
+      * ``drop`` — annotate AND omit rejected variants from the returned list.
+
+    A variant is only ever ``reject`` when its gene has a cached reference
+    sequence AND the notation names a concrete reference residue+position that
+    mismatches (or is out of range). cDNA-only / uncached-gene variants resolve to
+    ``unknown`` and always pass, so the gate is turnkey-safe on new genes.
+
+    Returns ``(kept_variants, stats)`` where stats counts ok/unknown/reject plus
+    flagged/dropped.
+    """
+    stats = {"ok": 0, "unknown": 0, "reject": 0, "flagged": 0, "dropped": 0}
+    if policy == "off" or not variants:
+        return variants, stats
+
+    from pipeline.reference_validation import validate_protein_variant
+
+    kept: List[Dict[str, Any]] = []
+    for variant in variants:
+        gene = variant.get("gene_symbol") or ""
+        protein = variant.get("protein_notation") or ""
+        verdict = validate_protein_variant(gene, protein)
+        stats[verdict.status] = stats.get(verdict.status, 0) + 1
+        if not verdict.is_reject:
+            kept.append(variant)
+            continue
+        # Rejected: annotate (in both flag and drop modes), then keep or omit.
+        variant["reference_validation"] = {
+            "status": verdict.status,
+            "reason": verdict.reason,
+            "expected": verdict.expected,
+            "observed": verdict.observed,
+            "policy": policy,
+        }
+        stats["flagged"] += 1
+        if policy == "drop":
+            stats["dropped"] += 1
+            continue
+        kept.append(variant)
+    return kept, stats
+
+
 def migrate_extraction_file(
     cursor: sqlite3.Cursor,
     json_file: Path,
@@ -1124,6 +1190,26 @@ def migrate_extraction_file(
 
         # Insert variants
         variants = extraction_data.get("variants", [])
+        # B1 reference-transcript validation gate. Strict no-op unless
+        # REFERENCE_VALIDATION_POLICY is flag/drop; gold-free and turnkey-safe
+        # (cDNA-only notations and uncached genes always pass).
+        refval_policy = _resolve_reference_validation_policy()
+        if refval_policy != "off":
+            variants, refval_stats = _apply_reference_validation(
+                variants, policy=refval_policy
+            )
+            if refval_stats["flagged"]:
+                logger.info(
+                    "%s: reference-validation (%s) flagged %d variant(s), "
+                    "dropped %d (ok=%d unknown=%d reject=%d)",
+                    json_file.name,
+                    refval_policy,
+                    refval_stats["flagged"],
+                    refval_stats["dropped"],
+                    refval_stats["ok"],
+                    refval_stats["unknown"],
+                    refval_stats["reject"],
+                )
         for variant in variants:
             insert_variant_data(
                 cursor,
