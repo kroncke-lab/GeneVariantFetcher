@@ -639,8 +639,9 @@ def _backup_variant_count(backup_file: Path) -> Optional[int]:
         data = json.loads(backup_file.read_text(encoding="utf-8"))
     except Exception:
         return None
-    variants = data.get("variants") if isinstance(data, dict) else None
-    return len(variants) if isinstance(variants, list) else None
+    if not isinstance(data, dict):
+        return None
+    return _variant_count(data)
 
 
 def rebuild_db(

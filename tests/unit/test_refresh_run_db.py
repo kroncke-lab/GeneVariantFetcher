@@ -543,6 +543,44 @@ def test_replay_gates_per_pmid_regression(tmp_path, monkeypatch):
     assert (setup["backup_dir"] / setup["output_file"].name).exists()
 
 
+def test_replay_gates_regression_when_prior_count_is_metadata_only(
+    tmp_path, monkeypatch
+):
+    """Older JSONs may only have total_variants_found; those still need gating."""
+    setup = _make_replay_setup(tmp_path, prior_variant_count=10, new_variant_count=3)
+    prior_payload = {
+        "extraction_metadata": {
+            "total_variants_found": 10,
+            "notes": "metadata-only prior",
+        }
+    }
+    setup["output_file"].write_text(json.dumps(prior_payload), encoding="utf-8")
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+    )
+
+    assert stats["successful"] == 0
+    assert stats["gated"] == 1
+    assert stats["gated_regressions"] == [
+        {
+            "pmid": setup["pmid"],
+            "prior_variant_count": 10,
+            "new_variant_count": 3,
+            "delta": -7,
+        }
+    ]
+    payload = json.loads(setup["output_file"].read_text())
+    assert "variants" not in payload
+    assert payload["extraction_metadata"]["total_variants_found"] == 10
+
+
 def test_replay_accepts_per_pmid_improvement(tmp_path, monkeypatch):
     """When re-extraction yields more variants, the new JSON must be written."""
     setup = _make_replay_setup(tmp_path, prior_variant_count=3, new_variant_count=10)
