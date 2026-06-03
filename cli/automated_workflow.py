@@ -22,7 +22,7 @@ from pathlib import Path
 from cli.scout import run_scout
 
 # Configure logging using centralized utility
-from gui.checkpoint import CheckpointManager, JobCheckpoint, PipelineStep
+from pipeline.checkpoint import CheckpointManager, JobCheckpoint, PipelineStep
 from utils.bootstrap import has_llm_provider_key, initialize_runtime
 from utils.logging_utils import get_logger, setup_logging
 from utils.run_manifest import RunManifestManager
