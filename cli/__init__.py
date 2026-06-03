@@ -373,10 +373,31 @@ def gvf_run_command(
             "--skip",
             help=(
                 "Skip a pipeline step. Composable: --skip doctor, --skip extract, "
-                "--skip layers, --skip report."
+                "--skip layers, --skip source-qc, --skip source-recovery, "
+                "--skip report."
             ),
         ),
     ] = None,
+    source_recovery: Annotated[
+        bool,
+        typer.Option(
+            "--source-recovery/--no-source-recovery",
+            help=(
+                "After source-qc, run the no-gold acquisition loop: "
+                "fetch_paywalled.py on source_qc/fetch_input.csv, summarize "
+                "selected-vs-successful full text, and staged-refresh accepted "
+                "sources. Off by default because it performs live acquisition "
+                "and LLM extraction."
+            ),
+        ),
+    ] = False,
+    source_recovery_timeout_s: Annotated[
+        int,
+        typer.Option(
+            "--source-recovery-timeout-s",
+            help="Per-paper timeout passed to fetch_paywalled.py during --source-recovery.",
+        ),
+    ] = 120,
     with_v12: Annotated[
         bool,
         typer.Option(
@@ -406,6 +427,8 @@ def gvf_run_command(
         resume_dir=resume_dir,
         include_v12=with_v12,
         skip=list(skip) if skip else None,
+        source_recovery=source_recovery,
+        source_recovery_timeout_s=source_recovery_timeout_s,
     )
     if exit_code != 0:
         raise typer.Exit(exit_code)

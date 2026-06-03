@@ -12,6 +12,10 @@ from scripts.refresh_run_db import (
 from utils.models import ExtractionResult
 
 
+def _long_fulltext(body: str) -> str:
+    return body + "\n" + ("methods results cohort variant table. " * 40)
+
+
 def test_selects_stale_abstract_only_when_fulltext_exists(tmp_path):
     harvest_dir = tmp_path / "pmc_fulltext"
     extraction_dir = tmp_path / "extractions"
@@ -102,7 +106,9 @@ def test_selects_deterministic_vertical_table_lift(tmp_path):
     pmid = "22222222"
     rows = "\n".join(f"RYR2\n{1258 + idx}c>t\nR{420 + idx}W\nNT" for idx in range(6))
     (harvest_dir / f"{pmid}_FULL_CONTEXT.md").write_text(
-        "Table S1. Subject Clinical and Genetic Characteristics\n" + rows,
+        _long_fulltext(
+            "Table S1. Subject Clinical and Genetic Characteristics\n" + rows
+        ),
         encoding="utf-8",
     )
     (extraction_dir / f"RYR2_PMID_{pmid}.json").write_text(
@@ -139,7 +145,7 @@ def test_selects_large_absolute_deterministic_lift_even_below_ratio(
 
     pmid = "32893267"
     (harvest_dir / f"{pmid}_FULL_CONTEXT.md").write_text(
-        "# MAIN TEXT\n\nKCNQ1 variant table\n",
+        _long_fulltext("# MAIN TEXT\n\nKCNQ1 variant table\n"),
         encoding="utf-8",
     )
     (extraction_dir / f"KCNQ1_PMID_{pmid}.json").write_text(
@@ -422,7 +428,8 @@ def test_load_report_available_contexts_can_search_larger_recovered_context(tmp_
 class _StubExtractor:
     """Test double for ExpertExtractor that returns a preconfigured result."""
 
-    def __init__(self, *, tier_threshold, fulltext_dir):
+    def __init__(self, *, models=None, tier_threshold, fulltext_dir):
+        self.models = models
         del tier_threshold, fulltext_dir
 
     def _set_result(self, result):
@@ -494,8 +501,11 @@ def _install_stub_extractor(monkeypatch, extraction_result):
     """Replace ExpertExtractor + is_usable_fulltext_source for one test."""
     stub = _StubExtractor(tier_threshold=0, fulltext_dir="")
     stub._set_result(extraction_result)
+    captured = {}
 
-    def _factory(*, tier_threshold, fulltext_dir):
+    def _factory(*, models=None, tier_threshold, fulltext_dir):
+        captured["models"] = models
+        stub.models = models
         return stub
 
     monkeypatch.setattr(refresh_run_db, "ExpertExtractor", _factory)
@@ -509,6 +519,7 @@ def _install_stub_extractor(monkeypatch, extraction_result):
         "_source_metadata",
         lambda _path: {"source_file": "stub"},
     )
+    return captured
 
 
 def test_replay_gates_per_pmid_regression(tmp_path, monkeypatch):
@@ -695,6 +706,38 @@ def test_no_gate_explosions_disables_explosion_gate(tmp_path, monkeypatch):
     assert len(payload["variants"]) == 600
 
 
+def test_replay_model_override_is_passed_to_extractor(tmp_path, monkeypatch):
+    setup = _make_replay_setup(tmp_path, prior_variant_count=1, new_variant_count=2)
+    captured = _install_stub_extractor(monkeypatch, setup["extraction_result"])
+    replay_models = ["anthropic/claude-sonnet-4-6", "anthropic/claude-opus-4-7"]
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+        replay_models=replay_models,
+    )
+
+    assert captured["models"] == replay_models
+    assert stats["replay_models"] == replay_models
+
+
+def test_split_model_args_accepts_repeatable_and_comma_forms():
+    assert refresh_run_db._split_model_args(
+        [
+            "anthropic/claude-sonnet-4-6, anthropic/claude-opus-4-7",
+            "azure_ai/gpt-5.3-codex-1",
+        ]
+    ) == [
+        "anthropic/claude-sonnet-4-6",
+        "anthropic/claude-opus-4-7",
+        "azure_ai/gpt-5.3-codex-1",
+    ]
+
+
 def test_is_variant_explosion_thresholds():
     """Pure-helper boundary checks for the explosion gate."""
     # Recovery from a 0/None prior is never an explosion.
@@ -737,3 +780,89 @@ def test_only_forced_pmids_requires_forced_inputs(tmp_path, monkeypatch):
 
     with pytest.raises(SystemExit, match="--only-forced-pmids requires"):
         refresh_run_db.main()
+
+
+def test_load_source_override_csv_filters_to_usable_refresh_rows(tmp_path):
+    usable = tmp_path / "123_FULL_CONTEXT.md"
+    usable.write_text(
+        _long_fulltext("# MAIN TEXT\n\nKCNH2 p.Arg1His\n"), encoding="utf-8"
+    )
+    abstract = tmp_path / "456_FULL_CONTEXT.md"
+    abstract.write_text(
+        "# ABSTRACT-ONLY FALLBACK\n\n"
+        "> **WARNING:** Full text could not be retrieved for PMID 456.\n"
+        "> This document contains only the PubMed abstract and metadata.\n",
+        encoding="utf-8",
+    )
+    csv_path = tmp_path / "source_override.csv"
+    csv_path.write_text(
+        "\n".join(
+            [
+                "pmid,action,available_context_path",
+                f"123,refresh_replay,{usable}",
+                f"456,refresh_replay,{abstract}",
+                f"789,fetch,{usable}",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    selected = refresh_run_db.load_source_override_csv(csv_path)
+
+    assert selected == {"123": usable}
+
+
+def test_stage_extractions_uses_copy_and_leaves_active_json(tmp_path, monkeypatch):
+    run_dir = tmp_path / "run"
+    harvest_dir = run_dir / "pmc_fulltext"
+    extraction_dir = run_dir / "extractions"
+    harvest_dir.mkdir(parents=True)
+    extraction_dir.mkdir()
+
+    pmid = "12345678"
+    (harvest_dir / f"{pmid}_FULL_CONTEXT.md").write_text(
+        "# MAIN TEXT\n\nKCNH2 p.Arg1His\n",
+        encoding="utf-8",
+    )
+    active_json = extraction_dir / f"KCNH2_PMID_{pmid}.json"
+    active_json.write_text(
+        json.dumps(
+            {
+                "variants": [{"protein_notation": "p.Arg1His"}],
+                "extraction_metadata": {"total_variants_found": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    pmids_file = tmp_path / "pmids.txt"
+    pmids_file.write_text(f"{pmid}\n", encoding="utf-8")
+
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "refresh_run_db.py",
+            "--gene",
+            "KCNH2",
+            "--run-dir",
+            str(run_dir),
+            "--pmids-file",
+            str(pmids_file),
+            "--only-forced-pmids",
+            "--stage-extractions",
+            "--skip-recovery",
+            "--dry-run",
+        ],
+    )
+
+    assert refresh_run_db.main() == 0
+    refresh_dirs = list(run_dir.glob("refresh_*"))
+    assert len(refresh_dirs) == 1
+    summary = json.loads((refresh_dirs[0] / "refresh_summary.json").read_text())
+    staged_dir = refresh_dirs[0] / "staged_extractions"
+
+    assert summary["staged_extractions"] is True
+    assert summary["original_extraction_dir"] == str(extraction_dir)
+    assert summary["extraction_dir"] == str(staged_dir)
+    assert (staged_dir / active_json.name).read_text(encoding="utf-8") == (
+        active_json.read_text(encoding="utf-8")
+    )

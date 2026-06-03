@@ -75,6 +75,16 @@ def _read_pmid_file(path: Path) -> set[str]:
     return pmids
 
 
+def _split_model_args(values: list[str]) -> list[str]:
+    models: list[str] = []
+    for value in values:
+        for model in str(value or "").split(","):
+            model = model.strip()
+            if model:
+                models.append(model)
+    return models
+
+
 def load_report_pmids(
     *,
     report: Path,
@@ -172,6 +182,56 @@ def load_report_available_contexts(
             )
             if path.stat().st_size > current_size:
                 selected[pmid] = path
+    return selected
+
+
+def load_source_override_csv(path: Path) -> dict[str, Path]:
+    """Load PMID -> source path from a route-filtered acquisition worklist.
+
+    The CSV can be the output of
+    ``scripts/recall_audit/build_acquisition_worklist.py``. If it has an
+    ``action`` column, only ``refresh_replay`` rows are used; otherwise every
+    row with a PMID and usable source path is considered.
+    """
+    selected: dict[str, Path] = {}
+    with path.open(newline="", encoding="utf-8-sig") as f:
+        reader = csv.DictReader(f)
+        if not reader.fieldnames:
+            return selected
+        lower_to_field = {name.strip().lower(): name for name in reader.fieldnames}
+        pmid_col = lower_to_field.get("pmid")
+        if pmid_col is None:
+            raise ValueError(f"No PMID column found in {path}")
+        action_col = lower_to_field.get("action")
+        path_col = None
+        for candidate in (
+            "available_context_path",
+            "source_file",
+            "context_path",
+            "full_context_path",
+        ):
+            if candidate in lower_to_field:
+                path_col = lower_to_field[candidate]
+                break
+        if path_col is None:
+            raise ValueError(f"No source path column found in {path}")
+        for row in reader:
+            action = str(row.get(action_col) or "").strip() if action_col else ""
+            if action_col and action != "refresh_replay":
+                continue
+            pmid = str(row.get(pmid_col) or "").strip()
+            raw_path = str(row.get(path_col) or "").strip()
+            if not pmid or not raw_path:
+                continue
+            source_path = Path(raw_path).expanduser()
+            if not source_path.exists() or not is_usable_fulltext_source(source_path):
+                continue
+            current = selected.get(pmid)
+            current_size = (
+                current.stat().st_size if current and current.exists() else -1
+            )
+            if source_path.stat().st_size > current_size:
+                selected[pmid] = source_path
     return selected
 
 
@@ -500,6 +560,7 @@ def replay_candidates(
     explosion_ratio: float = 10.0,
     explosion_min_new: int = 400,
     explosion_min_delta: int = 300,
+    replay_models: list[str] | None = None,
 ) -> dict[str, Any]:
     if dry_run:
         return {
@@ -507,18 +568,27 @@ def replay_candidates(
             "successful": 0,
             "failed": 0,
             "gated": 0,
+            "attempted_pmids": [],
+            "successful_pmids": [],
+            "failed_pmids": [],
+            "gated_pmids": [],
             "gated_regressions": [],
             "gated_explosions": [],
             "errors": [],
+            "replay_models": replay_models or [],
         }
 
     backup_dir.mkdir(parents=True, exist_ok=True)
     extractor = ExpertExtractor(
-        tier_threshold=tier_threshold, fulltext_dir=str(harvest_dir)
+        models=replay_models,
+        tier_threshold=tier_threshold,
+        fulltext_dir=str(harvest_dir),
     )
     attempted = 0
     successful = 0
     gated = 0
+    successful_pmids: list[str] = []
+    failed_pmids: list[str] = []
     gated_regressions: list[dict[str, Any]] = []
     gated_explosions: list[dict[str, Any]] = []
     errors: list[dict[str, str]] = []
@@ -547,6 +617,7 @@ def replay_candidates(
                 and new_variant_count < prior_variant_count
             ):
                 gated += 1
+                failed_pmids.append(candidate.pmid)
                 gated_regressions.append(
                     {
                         "pmid": candidate.pmid,
@@ -573,6 +644,7 @@ def replay_candidates(
                 min_delta=explosion_min_delta,
             ):
                 gated += 1
+                failed_pmids.append(candidate.pmid)
                 gated_explosions.append(
                     {
                         "pmid": candidate.pmid,
@@ -601,6 +673,7 @@ def replay_candidates(
                 encoding="utf-8",
             )
             successful += 1
+            successful_pmids.append(candidate.pmid)
             logger.info(
                 "replayed PMID %s: %s variants via %s",
                 candidate.pmid,
@@ -609,6 +682,7 @@ def replay_candidates(
             )
         except Exception as exc:  # noqa: BLE001
             errors.append({"pmid": candidate.pmid, "error": str(exc)})
+            failed_pmids.append(candidate.pmid)
             logger.warning("PMID %s replay failed: %s", candidate.pmid, exc)
             if backup_file.exists():
                 shutil.copy2(backup_file, candidate.output_file)
@@ -618,10 +692,21 @@ def replay_candidates(
         "successful": successful,
         "failed": len(errors),
         "gated": gated,
+        "attempted_pmids": [candidate.pmid for candidate in candidates],
+        "successful_pmids": successful_pmids,
+        "failed_pmids": sorted(set(failed_pmids)),
+        "gated_pmids": sorted(
+            {
+                row["pmid"]
+                for row in [*gated_regressions, *gated_explosions]
+                if row.get("pmid")
+            }
+        ),
         "gated_regressions": gated_regressions,
         "gated_explosions": gated_explosions,
         "errors": errors,
         "backup_dir": str(backup_dir),
+        "replay_models": replay_models or [],
     }
 
 
@@ -715,6 +800,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--run-dir", required=True, type=Path, help="Existing GVF run dir")
     p.add_argument("--harvest-dir", type=Path, default=None)
     p.add_argument("--extraction-dir", type=Path, default=None)
+    p.add_argument(
+        "--stage-extractions",
+        action="store_true",
+        help=(
+            "Copy the extraction directory into the refresh directory and replay "
+            "against that copy. This is safer for experiments because the active "
+            "run's extraction JSONs are left untouched."
+        ),
+    )
     p.add_argument("--output-db", type=Path, default=None)
     p.add_argument(
         "--replace-db",
@@ -740,6 +834,16 @@ def build_parser() -> argparse.ArgumentParser:
         help="Recovery layer to skip. Repeatable.",
     )
     p.add_argument("--tier-threshold", type=int, default=1)
+    p.add_argument(
+        "--replay-model",
+        action="append",
+        default=[],
+        help=(
+            "Override Tier 3 model(s) for replay extraction only. Repeatable "
+            "or comma-separated. Candidate selection still uses deterministic "
+            "parsers only."
+        ),
+    )
     p.add_argument("--min-deterministic-variants", type=int, default=20)
     p.add_argument("--min-deterministic-lift", type=int, default=5)
     p.add_argument("--deterministic-lift-ratio", type=float, default=1.2)
@@ -817,11 +921,22 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     p.add_argument(
+        "--source-override-csv",
+        action="append",
+        type=Path,
+        default=[],
+        help=(
+            "CSV with PMID and source path columns to force replay from explicit "
+            "source files. If an action column is present, only refresh_replay "
+            "rows are used. Repeatable."
+        ),
+    )
+    p.add_argument(
         "--only-forced-pmids",
         action="store_true",
         help=(
             "After candidate discovery, keep only PMIDs explicitly supplied by "
-            "--pmids-file or --candidate-report."
+            "--pmids-file, --candidate-report, or --source-override-csv."
         ),
     )
     p.add_argument(
@@ -893,6 +1008,8 @@ def main() -> int:
         sys.exit(f"Harvest dir not found: {harvest_dir}")
     if not extraction_dir.is_dir():
         sys.exit(f"Extraction dir not found: {extraction_dir}")
+    if args.stage_extractions and args.replace_db:
+        sys.exit("--stage-extractions cannot be combined with --replace-db")
 
     force_pmids: set[str] = set()
     source_overrides: dict[str, Path] = {}
@@ -923,10 +1040,24 @@ def main() -> int:
                     ],
                 )
             )
+    for override_csv in args.source_override_csv:
+        overrides_from_csv = load_source_override_csv(override_csv.expanduser())
+        source_overrides.update(overrides_from_csv)
+        force_pmids.update(overrides_from_csv)
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     refresh_dir = run_dir / f"refresh_{timestamp}"
     refresh_dir.mkdir(parents=True, exist_ok=True)
+    original_extraction_dir = extraction_dir
+    if args.stage_extractions:
+        staged_extraction_dir = refresh_dir / "staged_extractions"
+        shutil.copytree(extraction_dir, staged_extraction_dir)
+        extraction_dir = staged_extraction_dir
+        logger.info(
+            "Staged extraction directory %s → %s",
+            original_extraction_dir,
+            extraction_dir,
+        )
 
     candidates = select_replay_candidates(
         gene=gene,
@@ -943,11 +1074,15 @@ def main() -> int:
     )
     if args.only_forced_pmids:
         if not force_pmids:
-            sys.exit("--only-forced-pmids requires --pmids-file or --candidate-report")
+            sys.exit(
+                "--only-forced-pmids requires --pmids-file, --candidate-report, "
+                "or --source-override-csv"
+            )
         candidates = [c for c in candidates if c.pmid in force_pmids]
     candidates_csv = refresh_dir / "replay_candidates.csv"
     write_candidates_csv(candidates, candidates_csv)
     logger.info("Selected %d replay candidates → %s", len(candidates), candidates_csv)
+    replay_models = _split_model_args(args.replay_model)
 
     replay_stats = replay_candidates(
         candidates=candidates,
@@ -961,6 +1096,7 @@ def main() -> int:
         explosion_ratio=args.explosion_ratio,
         explosion_min_new=args.explosion_min_new,
         explosion_min_delta=args.explosion_min_delta,
+        replay_models=replay_models or None,
     )
 
     output_db = args.output_db
@@ -998,9 +1134,12 @@ def main() -> int:
         "run_dir": str(run_dir),
         "harvest_dir": str(harvest_dir),
         "extraction_dir": str(extraction_dir),
+        "original_extraction_dir": str(original_extraction_dir),
+        "staged_extractions": bool(args.stage_extractions),
         "gold": str(gold) if gold else None,
         "candidate_count": len(candidates),
         "forced_pmid_count": len(force_pmids),
+        "replay_models": replay_models,
         "candidates_csv": str(candidates_csv),
         "replay": replay_stats,
         "db_rebuild": db_stats,

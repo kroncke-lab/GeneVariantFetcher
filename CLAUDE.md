@@ -45,8 +45,11 @@ cold-start capability.
 - Recall runner: `scripts/run_recall_suite.py` scores normalized per-gene
   recall inputs from `gene_variant_fetcher_gold_standard/normalized/`.
 - Turnkey driver: `gvf gvf-run <GENE> --email <email> --output <dir>` runs
-  doctor -> extraction -> DB-observed recovery layers -> report. It backs up the
-  DB before recovery-layer mutation. `--with-v12` is KCNH2-only and opt-in.
+  doctor -> extraction -> DB-observed recovery layers -> gold-free source QC ->
+  report. `--source-recovery` is an opt-in no-gold loop that fetches the source
+  QC queue, summarizes selected-vs-successful acquisition, and staged-refreshes
+  accepted sources before scoring/reporting. It backs up the DB before
+  recovery-layer mutation. `--with-v12` is KCNH2-only and opt-in.
 - Matcher: `cli/compare_variants.py` has positional-digit guards, greedy
   one-to-one assignment, cDNA/protein bridging, and 2026-05-15 fixes for
   frameshift spellings such as `fsTer`, `fs/185`, `fs+*49`, and malformed
@@ -85,10 +88,63 @@ fresh DB from the full extraction directory, and then runs DB-observed recovery
 layers. Gold standards are optional; without gold, the same recovery layers run
 and scoring is skipped.
 
+As of 2026-06-01, `gvf-run` writes `source_qc/` artifacts for genes without a
+gold standard: a source acquisition worklist, a fetch queue, a refresh source
+override CSV, and coverage summary. Use
+`scripts/recall_audit/summarize_acquisition_outcome.py` after
+`fetch_paywalled.py` to distinguish PMIDs selected for acquisition from PMIDs
+that actually landed usable full text; with a gold/report denominator, it also
+reports both quantities as PMID recall. The source QC default denominator is
+the harvest/extraction surface, not raw PubMed discovery; use
+`--include-discovery-pmids` only for intentionally broad diagnostics.
+For end-to-end no-gold source recovery, pass `gvf-run --source-recovery`; this
+composes source QC, paywall fetch, outcome summarization, and acceptance-gated
+staged refresh into one opt-in run.
+
+The same path has now been exercised on KCNH2, RYR2, and SCN5A with staged
+extraction replay. KCNH2 reached 89.69% PMID / 84.96% row / 84.15% unique
+recall after DB-observed ClinVar+PubTator with figures skipped. RYR2 reached
+80.34% PMID / 81.40% row / 84.89% unique recall after the same no-figure
+recovery stack. SCN5A reached 83.09% PMID / 74.71% row / 84.19% unique recall
+after fetched-source replay. See `docs/RECALL_STATUS.md` for
+selected-vs-actually-downloaded PMID recall, refresh-successful PMID recall,
+and acceptance-gate details.
+
+Post-SCN5A residual diagnosis: the top remaining single gap is PMID `29325976`
+(87 missing distinct variants), where the main text points all SCN5A mutations
+to Supplemental Table 2 but the `mmc1.docx` supplement is Cloudflare/redirect
+blocked. A 2026-06-01 targeted v3 run added a Playwright/browser supplement
+download fallback; with 0 decrypted Chrome cookies the supplement still failed
+(403/navigation timeout). Elsevier API body recovery and staged refresh
+succeeded but extracted 0 variants, confirming this is supplement acquisition,
+not generic underextraction.
+
+A follow-up SCN5A residual Wiley/Springer batch on 2026-06-02 selected 13
+API-route PMIDs from the remaining fetch queue. `fetch_paywalled.py` landed 2
+usable full-text PMIDs, and corrected staged refresh accepted 1 (`16643399`,
+0 extracted variants) while regression-gating `24667783` (prior 25 variants,
+new 1). Corrected no-figure scoring on top of the current SCN5A staged
+extraction baseline stayed at 83.09% PMID / 74.52% row / 84.19% unique recall.
+A follow-up `24667783` diagnosis found the real miss was Word `.doc`
+supplement conversion: macOS `textutil` recovers SCN5A table rows that antiword
+missed. After adding the `textutil` fallback, scanner gene-context filtering,
+and a stricter protein-notation artifact guard, a forced one-PMID staged refresh
+accepted 11 clean SCN5A variants and moved no-figure row recall to 74.68%;
+PMID and unique recall stayed at 83.09% / 84.19%. A range-deletion parser
+follow-up recovered the remaining `P.K1505_Q1507DEL` row (source spelling
+`Lys1505_Gln1507del`); final no-figure row recall is now 74.71%, with no
+missing rows left for `24667783`. `scripts/refresh_run_db.py` now accepts
+`--replay-model` for bounded replays when the default Tier 3 model is slow or
+experimental. The outcome summary reports selected-for-fetch,
+usable-fulltext-downloaded, source-refresh-attempted, and
+source-refresh-successful PMID recall separately.
+
 Residual non-Elsevier paywalls (Karger Cloudflare, Sage CF fingerprint)
 remain in `TASKS.md` Blocked. Wiley TDM was verified working off-VPN on
 2026-05-26 — the earlier "revoked key" claim was stale; `harvesting/wiley_api.py`
 plus the current `WILEY_API_KEY` returns full-text PDFs for `10.1002/humu.*`.
+Some Wiley Online Library DOIs still return TDM 403 or Cloudflare in no-cookie
+browser sessions, so treat Wiley as partially covered rather than solved.
 
 ## Run On Another Computer Or VPN
 
@@ -98,7 +154,6 @@ From a clean checkout:
 python3.11 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
-pip install -r gui/requirements.txt
 python -m playwright install chromium
 ```
 

@@ -25,7 +25,7 @@ GeneVariantFetcher (GVF) is an end-to-end pipeline that discovers, downloads, an
 - 🔤 **Unicode normalization** — Handles arrow variants (→, ➔, ⟶), concatenated gene+variant patterns (HERGG604S)
 - 💾 **SQLite output** — Normalized relational database with penetrance, phenotypes, and functional data
 - ⏸️ **Checkpoint/resume** — Jobs survive interruption and resume from last completed step
-- 🖥️ **GUI + CLI** — Web interface for interactive use, CLI for automation and scripting
+- ⚙️ **Turnkey CLI** — single `gvf gvf-run` command for end-to-end, gold-free extraction, plus composable subcommands for automation
 
 ---
 
@@ -62,11 +62,9 @@ ELSEVIER_API_KEY=...
 # ELSEVIER_INSTTOKEN=...
 EOF
 
-# 3. Run your first extraction
-gvf extract KCNH2 --email your@email.com --output ./results
-
-# Or launch the GUI
-python main.py
+# 3. Run your first extraction (turnkey, no gold standard required)
+gvf gvf-run KCNH2 --email your@email.com --output ./results
+# Add --source-recovery to also fetch paywalled / supplementary full text
 ```
 
 Your results will be in `./results/KCNH2/{timestamp}/KCNH2.db`
@@ -103,9 +101,6 @@ source .venv/bin/activate  # Linux/macOS
 
 # Install GVF
 pip install -e .
-
-# For GUI support
-pip install -r gui/requirements.txt
 
 # For browser automation (optional, for paywalled papers)
 pip install playwright && playwright install chromium
@@ -183,13 +178,23 @@ gvf scout ./results/KCNH2/20260210_143000/pmc_fulltext --gene KCNH2
 #### Turnkey Recall-Oriented Run
 
 `gvf-run` is the cold-start driver: it runs doctor checks, extraction, recovery
-layers, and scoring/report handoff around one gene.
+layers, gold-free source QC, and scoring/report handoff around one gene.
 
 ```bash
 gvf gvf-run KCNH2 --email you@email.com --output ./validation_runs/my_run
 ```
 
 Use `--skip extract` to re-run recovery/scoring layers against an existing run.
+Each run writes `source_qc/` artifacts that separate PMIDs selected for
+full-text acquisition from PMIDs that already have usable source text but need
+source-driven refresh. After a fetch/replay pass,
+`summarize_acquisition_outcome.py` can report selected-for-fetch PMIDs,
+usable-fulltext-downloaded PMIDs, and refresh-successful PMIDs separately.
+Pass `--source-recovery` when you want `gvf-run` to run that no-gold
+acquisition loop immediately: it calls `fetch_paywalled.py` on
+`source_qc/fetch_input.csv`, writes `acquisition_outcome_summary.json`, and
+staged-refreshes accepted source overrides into a refreshed DB. This is opt-in
+because it performs live paywall acquisition and LLM extraction.
 For portable end-to-end recall commands, including how to reuse copied full-text
 artifacts without committing them, see
 [`docs/END_TO_END_RECALL_RUN.md`](docs/END_TO_END_RECALL_RUN.md).
@@ -202,19 +207,6 @@ gvf audit-paywalls ./results/KCNH2/20260210_143000
 
 This summarizes blocked full-text and supplement acquisition, including papers
 that may be unlocked by `ELSEVIER_INSTTOKEN`.
-
-### GUI Mode
-
-```bash
-python main.py
-# Opens http://localhost:8000 in your browser
-```
-
-The GUI provides:
-- Real-time progress tracking
-- Job management (pause, resume, cancel)
-- Settings configuration
-- Folder job support (process existing paper collections)
 
 ---
 
@@ -464,7 +456,6 @@ Any gene symbol works with the pipeline. However:
 | "Extraction failed" | Check `extraction_failures.csv`; increase `TIER3_MAX_TOKENS` |
 | "All papers filtered out" | Lower `TIER2_CONFIDENCE_THRESHOLD` or use `--tier-threshold 0` |
 | Rate limiting errors | Set `NCBI_API_KEY` for higher limits; increase `DOWNLOAD_DELAY` |
-| GUI won't start | Install: `pip install -r gui/requirements.txt` |
 | PDF conversion fails | Install poppler: `apt install poppler-utils` |
 
 ### Fetching Paywalled Papers
@@ -502,7 +493,7 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 2. **Add variant aliases** (optional) in `utils/variant_normalizer.py`
 
-3. **Create golden test set** in `golden_test_set/` for validation
+3. **Add a gold standard** in `gene_variant_fetcher_gold_standard/` for validation (optional — GVF runs gold-free)
 
 ### Extending Extractors
 

@@ -39,7 +39,7 @@ import logging
 import os
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 from urllib.parse import urlparse
 
 # Path bootstrap so `python scripts/fetch_paywalled.py` works without -m.
@@ -68,7 +68,9 @@ from harvesting.paywall_context_enrichment import (  # noqa: E402
     enrich_paywall_full_context,
 )
 from harvesting.scholar_pdf_fallback import try_scholar_pdf  # noqa: E402
+from harvesting.springer_api import SpringerAPIClient  # noqa: E402
 from harvesting.supplement_scraper import SupplementScraper  # noqa: E402
+from harvesting.wiley_api import WileyAPIClient  # noqa: E402
 
 
 # Body selectors used by the PMC HTML fallback. PMC articles render the
@@ -89,8 +91,14 @@ FETCH_SUCCESS_OUTCOMES = {
     "success_via_pmc",
     "success_via_scholar_pdf",
     "success_via_elsevier_api",
+    "success_via_publisher_api",
+    "success_via_springer_api",
+    "success_via_wiley_api",
     "success_supplement_only",
 }
+
+_BROWSER_SUPPLEMENT_SIZE_LIMIT_BYTES = 25 * 1024 * 1024
+_HTMLISH_SUPPLEMENT_EXTS = {".html", ".htm", ".xhtml", ".xml"}
 
 
 def _canonical_full_context_path(output_dir: Path, pmid: str) -> Path:
@@ -301,6 +309,68 @@ def mark_scholar_pdf_success(row: Dict, scholar_row: Dict) -> None:
     row["supp_files"] = 0
 
 
+def _write_publisher_api_result(
+    *,
+    pmid: str,
+    doi: str,
+    output_dir: Path,
+    final_url: str,
+    markdown: str,
+    reason: str,
+    publisher: str,
+    source_label: str,
+    outcome: str,
+    supplement_markdown: str,
+    supplements_downloaded: int,
+) -> Dict:
+    recovered_markdown = _append_recovered_supplement_markdown(
+        markdown,
+        supplement_markdown,
+    )
+
+    pmid_dir = output_dir / pmid
+    pmid_dir.mkdir(parents=True, exist_ok=True)
+    per_pmid_full_ctx = pmid_dir / "FULL_CONTEXT.md"
+    per_pmid_full_ctx.write_text(recovered_markdown, encoding="utf-8")
+    canonical_path = write_canonical_mirror(output_dir, pmid, recovered_markdown)
+    (pmid_dir / "source.txt").write_text(
+        f"Recovered via {source_label}: {doi}\n",
+        encoding="utf-8",
+    )
+    meta = {
+        "pmid": pmid,
+        "publisher": publisher,
+        "doi": doi,
+        "final_url": final_url,
+        "markdown_chars": len(recovered_markdown),
+        "api_markdown_chars": len(markdown),
+        "supplements_downloaded": supplements_downloaded,
+        "canonical_full_context_path": str(canonical_path),
+        "per_pmid_full_context_path": str(per_pmid_full_ctx),
+        "notes": [],
+        "error": None,
+    }
+    (pmid_dir / "result.json").write_text(
+        json.dumps(meta, indent=2, default=str),
+        encoding="utf-8",
+    )
+
+    return {
+        "pmid": pmid,
+        "strategy": publisher,
+        "outcome": outcome,
+        "api_label": source_label,
+        "reason": reason,
+        "chars": len(recovered_markdown),
+        "supp_files": 0,
+        "supplements_downloaded": supplements_downloaded,
+        "final_url": final_url,
+        "path": str(canonical_path),
+        "canonical_path": str(canonical_path),
+        "per_pmid_path": str(per_pmid_full_ctx),
+    }
+
+
 def try_elsevier_api_fallback(
     pmid: str,
     doi: Optional[str],
@@ -308,6 +378,8 @@ def try_elsevier_api_fallback(
     *,
     final_url: str = "",
     session: Optional[requests.Session] = None,
+    supplement_markdown: str = "",
+    supplements_downloaded: int = 0,
 ) -> Optional[Dict]:
     """Recover Elsevier full text via the official API + insttoken.
 
@@ -337,43 +409,151 @@ def try_elsevier_api_fallback(
         LOG.info("Elsevier API fallback for PMID %s failed gate: %s", pmid, reason)
         return None
 
-    pmid_dir = output_dir / pmid
-    pmid_dir.mkdir(parents=True, exist_ok=True)
-    per_pmid_full_ctx = pmid_dir / "FULL_CONTEXT.md"
-    per_pmid_full_ctx.write_text(markdown, encoding="utf-8")
-    canonical_path = write_canonical_mirror(output_dir, pmid, markdown)
-    (pmid_dir / "source.txt").write_text(
-        f"Recovered via Elsevier Article Retrieval API: {doi}\n",
-        encoding="utf-8",
-    )
-    meta = {
-        "pmid": pmid,
-        "publisher": "elsevier_api",
-        "doi": doi,
-        "final_url": final_url,
-        "markdown_chars": len(markdown),
-        "canonical_full_context_path": str(canonical_path),
-        "per_pmid_full_context_path": str(per_pmid_full_ctx),
-        "notes": [],
-        "error": None,
-    }
-    (pmid_dir / "result.json").write_text(
-        json.dumps(meta, indent=2, default=str),
-        encoding="utf-8",
+    return _write_publisher_api_result(
+        pmid=pmid,
+        doi=doi,
+        output_dir=output_dir,
+        final_url=final_url,
+        markdown=markdown,
+        reason=reason,
+        publisher="elsevier_api",
+        source_label="Elsevier Article Retrieval API",
+        outcome="success_via_elsevier_api",
+        supplement_markdown=supplement_markdown,
+        supplements_downloaded=supplements_downloaded,
     )
 
-    return {
-        "pmid": pmid,
-        "strategy": "elsevier_api",
-        "outcome": "success",
-        "reason": reason,
-        "chars": len(markdown),
-        "supp_files": 0,
-        "final_url": final_url,
-        "path": str(canonical_path),
-        "canonical_path": str(canonical_path),
-        "per_pmid_path": str(per_pmid_full_ctx),
-    }
+
+def try_wiley_api_fallback(
+    pmid: str,
+    doi: Optional[str],
+    output_dir: Path,
+    *,
+    final_url: str = "",
+    session: Optional[requests.Session] = None,
+) -> Optional[Dict]:
+    """Recover Wiley full text via the Wiley TDM API."""
+    if not doi or not WileyAPIClient.is_wiley_doi(doi):
+        return None
+
+    client = WileyAPIClient(
+        api_key=os.environ.get("WILEY_API_KEY"),
+        session=session if isinstance(session, requests.Session) else None,
+    )
+    if not client.is_available:
+        return None
+
+    markdown, error = client.fetch_fulltext(
+        doi=doi,
+        url=final_url or None,
+        try_web_scraping=True,
+    )
+    if not markdown:
+        LOG.info("Wiley API fallback failed for PMID %s: %s", pmid, error)
+        return None
+
+    ok, reason = validate_article_content(markdown)
+    if not ok:
+        LOG.info("Wiley API fallback for PMID %s failed gate: %s", pmid, reason)
+        return None
+
+    return _write_publisher_api_result(
+        pmid=pmid,
+        doi=doi,
+        output_dir=output_dir,
+        final_url=final_url,
+        markdown=markdown,
+        reason=reason,
+        publisher="wiley_api",
+        source_label="Wiley TDM API",
+        outcome="success_via_wiley_api",
+        supplement_markdown="",
+        supplements_downloaded=0,
+    )
+
+
+def try_springer_api_fallback(
+    pmid: str,
+    doi: Optional[str],
+    output_dir: Path,
+    *,
+    final_url: str = "",
+    session: Optional[requests.Session] = None,
+) -> Optional[Dict]:
+    """Recover Springer/Nature/BMC full text via Springer OpenAccess API."""
+    if not doi or not SpringerAPIClient.is_springer_doi(doi):
+        return None
+
+    client = SpringerAPIClient(
+        api_key=os.environ.get("SPRINGER_API_KEY"),
+        session=session if isinstance(session, requests.Session) else None,
+    )
+    if not client.is_available:
+        return None
+
+    markdown, _metadata, error = client.fetch_article(doi)
+    if not markdown:
+        LOG.info("Springer API fallback failed for PMID %s: %s", pmid, error)
+        return None
+
+    ok, reason = validate_article_content(markdown)
+    if not ok:
+        LOG.info("Springer API fallback for PMID %s failed gate: %s", pmid, reason)
+        return None
+
+    return _write_publisher_api_result(
+        pmid=pmid,
+        doi=doi,
+        output_dir=output_dir,
+        final_url=final_url,
+        markdown=markdown,
+        reason=reason,
+        publisher="springer_api",
+        source_label="Springer OpenAccess API",
+        outcome="success_via_springer_api",
+        supplement_markdown="",
+        supplements_downloaded=0,
+    )
+
+
+def try_publisher_api_fallback(
+    pmid: str,
+    doi: Optional[str],
+    output_dir: Path,
+    *,
+    final_url: str = "",
+    session: Optional[requests.Session] = None,
+    supplement_markdown: str = "",
+    supplements_downloaded: int = 0,
+) -> Optional[Dict]:
+    """Try publisher API fallbacks in DOI-prefix order."""
+    api_row = try_elsevier_api_fallback(
+        pmid,
+        doi,
+        output_dir,
+        final_url=final_url,
+        session=session,
+        supplement_markdown=supplement_markdown,
+        supplements_downloaded=supplements_downloaded,
+    )
+    if api_row is not None:
+        return api_row
+    api_row = try_wiley_api_fallback(
+        pmid,
+        doi,
+        output_dir,
+        final_url=final_url,
+        session=session,
+    )
+    if api_row is not None:
+        return api_row
+    return try_springer_api_fallback(
+        pmid,
+        doi,
+        output_dir,
+        final_url=final_url,
+        session=session,
+    )
 
 
 LOG = logging.getLogger("fetch_paywalled")
@@ -467,6 +647,268 @@ def hydrate_session_with_browser_cookies(
     return added
 
 
+def _payload_looks_like_html_error(
+    payload: bytes, *, content_type: str, filename: str
+) -> bool:
+    suffix = Path(filename).suffix.lower()
+    if suffix in _HTMLISH_SUPPLEMENT_EXTS:
+        return False
+    content_type_l = content_type.lower()
+    head = payload[:2048].lstrip().lower()
+    if "text/html" in content_type_l:
+        return True
+    return (
+        head.startswith(b"<!doctype html")
+        or head.startswith(b"<html")
+        or b"cf-mitigated" in head
+        or b"cloudflare" in head
+        or b"just a moment" in head
+    )
+
+
+def _browser_response_download(
+    page: Any,
+    *,
+    url: str,
+    file_path: Path,
+    filename: str,
+    source_url: str,
+    timeout_ms: int,
+) -> bool:
+    headers = {"Referer": source_url} if source_url else None
+    request = getattr(getattr(page, "context", None), "request", None)
+    if request is None:
+        return False
+
+    kwargs: Dict[str, Any] = {"timeout": timeout_ms}
+    if headers:
+        kwargs["headers"] = headers
+    try:
+        response = request.get(url, max_redirects=10, **kwargs)
+    except TypeError:
+        response = request.get(url, **kwargs)
+    except Exception as exc:
+        LOG.info("Browser supplement request failed for %s: %s", url, exc)
+        return False
+
+    if not bool(getattr(response, "ok", False)):
+        LOG.info(
+            "Browser supplement request non-200 for %s: %s",
+            url,
+            getattr(response, "status", "(unknown)"),
+        )
+        return False
+
+    raw_headers = getattr(response, "headers", {}) or {}
+    headers_l = {str(k).lower(): str(v) for k, v in raw_headers.items()}
+    content_length = headers_l.get("content-length")
+    if content_length:
+        try:
+            if int(content_length) > _BROWSER_SUPPLEMENT_SIZE_LIMIT_BYTES:
+                LOG.info("Browser supplement too large by header for %s", url)
+                return False
+        except ValueError:
+            pass
+
+    try:
+        payload = response.body()
+    except Exception as exc:
+        LOG.info("Browser supplement response body failed for %s: %s", url, exc)
+        return False
+
+    if not payload or len(payload) > _BROWSER_SUPPLEMENT_SIZE_LIMIT_BYTES:
+        return False
+    if _payload_looks_like_html_error(
+        payload,
+        content_type=headers_l.get("content-type", ""),
+        filename=filename,
+    ):
+        LOG.info("Browser supplement response looked like HTML challenge for %s", url)
+        return False
+
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+    file_path.write_bytes(payload)
+    return file_path.exists() and file_path.stat().st_size > 0
+
+
+def _save_playwright_download(download: Any, file_path: Path) -> bool:
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+    download.save_as(str(file_path))
+    if not file_path.exists() or file_path.stat().st_size == 0:
+        return False
+    if file_path.stat().st_size > _BROWSER_SUPPLEMENT_SIZE_LIMIT_BYTES:
+        file_path.unlink(missing_ok=True)
+        return False
+    return True
+
+
+def _browser_navigation_download(
+    page: Any,
+    *,
+    url: str,
+    file_path: Path,
+    timeout_ms: int,
+) -> bool:
+    try:
+        with page.expect_download(timeout=timeout_ms) as download_info:
+            page.goto(url, wait_until="commit", timeout=timeout_ms)
+        return _save_playwright_download(download_info.value, file_path)
+    except Exception as exc:
+        LOG.info("Browser supplement navigation download failed for %s: %s", url, exc)
+        return False
+
+
+def _browser_click_download(
+    page: Any,
+    *,
+    url: str,
+    source_url: str,
+    file_path: Path,
+    timeout_ms: int,
+) -> bool:
+    if not source_url:
+        return False
+    try:
+        page.goto(source_url, wait_until="domcontentloaded", timeout=timeout_ms)
+    except Exception as exc:
+        LOG.info("Browser source navigation failed for %s: %s", source_url, exc)
+        return False
+
+    find_script = """
+    (target) => {
+      return Array.from(document.querySelectorAll('a[href]')).some((a) => {
+        try {
+          return new URL(a.getAttribute('href'), document.baseURI).href === target;
+        } catch (e) {
+          return false;
+        }
+      });
+    }
+    """
+    try:
+        if not page.evaluate(find_script, url):
+            return False
+    except Exception as exc:
+        LOG.info("Browser supplement link lookup failed for %s: %s", url, exc)
+        return False
+
+    click_script = """
+    (target) => {
+      const links = Array.from(document.querySelectorAll('a[href]'));
+      const match = links.find((a) => {
+        try {
+          return new URL(a.getAttribute('href'), document.baseURI).href === target;
+        } catch (e) {
+          return false;
+        }
+      });
+      if (!match) {
+        return false;
+      }
+      match.target = '_self';
+      match.click();
+      return true;
+    }
+    """
+    try:
+        with page.expect_download(timeout=timeout_ms) as download_info:
+            if not page.evaluate(click_script, url):
+                return False
+        return _save_playwright_download(download_info.value, file_path)
+    except Exception as exc:
+        LOG.info("Browser supplement click download failed for %s: %s", url, exc)
+        return False
+
+
+def make_browser_supplement_download_fallback(
+    fetcher: BrowserHTMLFetcher,
+) -> Optional[Callable[[str, Path, str, str, Dict[str, Any]], bool]]:
+    """Build a supplement downloader backed by the authenticated browser pool."""
+    pool = getattr(fetcher, "_pool", None)
+    if pool is None or not hasattr(pool, "page"):
+        return None
+
+    timeout_s = max(5, min(int(getattr(fetcher, "_timeout_s", 90) or 90), 30))
+    timeout_ms = timeout_s * 1000
+
+    def _fallback(
+        url: str,
+        file_path: Path,
+        pmid: str,
+        filename: str,
+        supp: Dict[str, Any],
+    ) -> bool:
+        source_url = str(supp.get("source_url") or "")
+        try:
+            with pool.page() as page:
+                try:
+                    page.set_default_timeout(timeout_ms)
+                except Exception:
+                    pass
+                if source_url:
+                    try:
+                        page.goto(
+                            source_url,
+                            wait_until="domcontentloaded",
+                            timeout=timeout_ms,
+                        )
+                    except Exception as exc:
+                        LOG.info(
+                            "PMID %s browser supplement source load failed: %s",
+                            pmid,
+                            exc,
+                        )
+                if _browser_response_download(
+                    page,
+                    url=url,
+                    file_path=file_path,
+                    filename=filename,
+                    source_url=source_url,
+                    timeout_ms=timeout_ms,
+                ):
+                    return True
+                if _browser_navigation_download(
+                    page,
+                    url=url,
+                    file_path=file_path,
+                    timeout_ms=timeout_ms,
+                ):
+                    return True
+                return _browser_click_download(
+                    page,
+                    url=url,
+                    source_url=source_url,
+                    file_path=file_path,
+                    timeout_ms=timeout_ms,
+                )
+        except Exception as exc:
+            LOG.info(
+                "PMID %s browser supplement fallback failed for %s: %s", pmid, url, exc
+            )
+            try:
+                file_path.unlink(missing_ok=True)
+            except OSError:
+                pass
+            return False
+
+    return _fallback
+
+
+def _append_recovered_supplement_markdown(
+    markdown: str,
+    supplement_markdown: str,
+) -> str:
+    supplement_markdown = (supplement_markdown or "").strip()
+    if not supplement_markdown:
+        return markdown
+    return (
+        markdown.rstrip()
+        + "\n\n# RECOVERED PUBLISHER SUPPLEMENTS\n\n"
+        + supplement_markdown
+        + "\n"
+    )
+
+
 def parse_pmid_doi_overrides(raw: List[str]) -> Dict[str, str]:
     out: Dict[str, str] = {}
     for entry in raw or []:
@@ -520,6 +962,9 @@ def write_outputs(
     converter: Optional[FormatConverter] = None,
     session: Optional[requests.Session] = None,
     enrich: bool = True,
+    supplement_download_fallback: Optional[
+        Callable[[str, Path, str, str, Dict[str, Any]], bool]
+    ] = None,
 ) -> Tuple[Path, Path, Optional[str], Optional[EnrichmentResult]]:
     """Write FULL_CONTEXT.md (per-PMID dir + flat canonical mirror) + raw HTML.
 
@@ -559,6 +1004,7 @@ def write_outputs(
                 converter=converter or FormatConverter(),
                 session=session,
                 source_url=result.final_url,
+                supplement_download_fallback=supplement_download_fallback,
             )
         except Exception as exc:
             LOG.warning("Enrichment failed for PMID %s: %s", pmid, exc)
@@ -618,9 +1064,11 @@ def fetch_one(
         "reason": "",
         "chars": 0,
         "supp_files": 0,
+        "supplements_downloaded": 0,
         "final_url": "",
     }
     recovery_session = pmc_session or getattr(fetcher, "session", None)
+    publisher_supp_file_count = 0
 
     def run_scholar_fallback() -> Optional[Dict]:
         if recovery_session is None:
@@ -653,22 +1101,31 @@ def fetch_one(
         row["table_captions"] = pmc_row.get("table_captions", 0)
         row["supplements_downloaded"] = pmc_row.get("supplements_downloaded", 0)
 
-    def promote_elsevier_api_fallback(api_row: Dict) -> None:
-        print(f"  Elsevier API fallback succeeded: {api_row['chars']} chars")
+    def promote_publisher_api_fallback(api_row: Dict) -> None:
+        label = api_row.get("api_label") or "Publisher API"
+        strategy_name = api_row.get("strategy") or "publisher_api"
+        outcome = api_row.get("outcome") or "success_via_publisher_api"
+        print(f"  {label} fallback succeeded: {api_row['chars']} chars")
         base_strategy = row.get("strategy") or ""
-        row["outcome"] = "success_via_elsevier_api"
+        row["outcome"] = outcome
         row["strategy"] = (
-            f"{base_strategy}+elsevier_api"
+            f"{base_strategy}+{strategy_name}"
             if base_strategy and base_strategy != "(none)"
-            else "elsevier_api"
+            else strategy_name
         )
-        row["reason"] = f"Elsevier API fallback: {api_row['reason']}"
+        row["reason"] = f"{label} fallback: {api_row['reason']}"
         row["chars"] = api_row["chars"]
         row["final_url"] = api_row.get("final_url") or row.get("final_url") or ""
         row["path"] = api_row["path"]
         row["canonical_path"] = api_row.get("canonical_path", api_row["path"])
         row["per_pmid_path"] = api_row.get("per_pmid_path", api_row["path"])
-        row["supp_files"] = api_row.get("supp_files", 0)
+        row["supp_files"] = max(
+            int(row.get("supp_files") or 0), int(api_row.get("supp_files") or 0)
+        )
+        row["supplements_downloaded"] = max(
+            int(row.get("supplements_downloaded") or 0),
+            int(api_row.get("supplements_downloaded") or 0),
+        )
 
     if not doi:
         row["reason"] = "no DOI"
@@ -680,6 +1137,15 @@ def fetch_one(
     row["strategy"] = strategy.NAME if strategy else "(none)"
     if strategy is None:
         row["reason"] = "no matching strategy"
+        api_row = try_publisher_api_fallback(
+            pmid,
+            doi,
+            output_dir,
+            session=recovery_session,
+        )
+        if api_row is not None:
+            promote_publisher_api_fallback(api_row)
+            return row
         run_scholar_fallback()
         return row
 
@@ -687,14 +1153,29 @@ def fetch_one(
     if result is None:
         row["outcome"] = "skipped"
         row["reason"] = "fetcher returned None"
+        api_row = try_publisher_api_fallback(
+            pmid,
+            doi,
+            output_dir,
+            session=recovery_session,
+        )
+        if api_row is not None:
+            promote_publisher_api_fallback(api_row)
+            return row
         run_scholar_fallback()
         return row
 
     row["final_url"] = result.final_url or ""
     row["supp_files"] = len(result.supp_files or [])
+    publisher_supp_file_count = int(row["supp_files"] or 0)
 
+    supplement_download_fallback = make_browser_supplement_download_fallback(fetcher)
     canonical_path, per_pmid_path, body, enrichment = write_outputs(
-        pmid, result, output_dir, session=pmc_session
+        pmid,
+        result,
+        output_dir,
+        session=pmc_session,
+        supplement_download_fallback=supplement_download_fallback,
     )
     # The gate validates only the body, but the chars we report should
     # reflect what actually landed in FULL_CONTEXT.md so downstream
@@ -741,16 +1222,29 @@ def fetch_one(
             f"{enrichment.supplement_count} supplement(s)"
         )
 
-    if row["outcome"] in ("paywall_or_stub", "empty", "error"):
-        api_row = try_elsevier_api_fallback(
+    if row["outcome"] in (
+        "paywall_or_stub",
+        "empty",
+        "error",
+        "success_supplement_only",
+    ):
+        api_row = try_publisher_api_fallback(
             pmid,
             doi,
             output_dir,
             final_url=row.get("final_url") or "",
             session=recovery_session,
+            supplement_markdown=(
+                enrichment.supplement_markdown
+                if enrichment is not None and enrichment.supplement_count > 0
+                else ""
+            ),
+            supplements_downloaded=(
+                enrichment.supplement_count if enrichment is not None else 0
+            ),
         )
         if api_row is not None:
-            promote_elsevier_api_fallback(api_row)
+            promote_publisher_api_fallback(api_row)
 
     # PMC fallback. If Tier 3.5 left us with a stub/empty body, or recovered
     # a publisher page whose supplement downloads all failed, try the Europe
@@ -758,8 +1252,15 @@ def fetch_one(
     # and PMC supplement URLs can be easier to download than publisher copies.
     current_supplements = int(row.get("supplements_downloaded") or 0)
     publisher_supplements_failed = (
-        row["outcome"] in {"success", "success_supplement_only"}
-        and int(row.get("supp_files") or 0) > 0
+        row["outcome"]
+        in {
+            "success",
+            "success_supplement_only",
+            "success_via_elsevier_api",
+            "success_via_springer_api",
+            "success_via_wiley_api",
+        }
+        and (publisher_supp_file_count > 0 or int(row.get("supp_files") or 0) > 0)
         and current_supplements == 0
     )
     if (
@@ -1024,7 +1525,9 @@ def main() -> int:
             rows.append(row)
             print(
                 f"  strategy={row['strategy']:14s} outcome={row['outcome']:18s} "
-                f"chars={row['chars']:>7d} supp={row['supp_files']:>2d} "
+                f"chars={row['chars']:>7d} "
+                f"supp_links={int(row.get('supp_files') or 0):>2d} "
+                f"supp_downloaded={int(row.get('supplements_downloaded') or 0):>2d} "
                 f"url={row['final_url'][:80]}"
             )
             if row.get("reason"):

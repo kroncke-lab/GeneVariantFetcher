@@ -84,6 +84,14 @@ class FormatConverter:
 
         return "\n".join(result_lines)
 
+    def _normalize_textutil_doc_text(self, text: str) -> str:
+        """Normalize macOS textutil output from legacy Word table cells."""
+        # Legacy Word tables emitted by textutil often use BEL as a cell
+        # separator. A repeated separator is the most reliable row boundary.
+        text = text.replace("\x0c", "\n")
+        text = re.sub(r"\x07{2,}", "\n", text)
+        return text.replace("\x07", "\t")
+
     def _table_lines_to_markdown(self, table_lines: list) -> str:
         """Convert list of column lists to markdown table format."""
         if not table_lines:
@@ -596,6 +604,28 @@ class FormatConverter:
             print(
                 f"    Warning: LibreOffice conversion failed for {file_path.name}: {e}"
             )
+
+        # Try macOS textutil before antiword. Some publisher .doc supplements
+        # preserve Word table cells here that antiword drops entirely.
+        try:
+            import subprocess
+
+            result = subprocess.run(
+                ["textutil", "-convert", "txt", "-stdout", str(file_path)],
+                capture_output=True,
+                text=True,
+                timeout=120,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                text = self._normalize_textutil_doc_text(result.stdout)
+                text = self._convert_tsv_to_markdown_tables(text)
+                if text.strip():
+                    print(f"    ✓ Extracted text via textutil ({len(text)} chars)")
+                    return text + "\n\n"
+        except FileNotFoundError:
+            pass  # textutil is macOS-only
+        except Exception as e:
+            print(f"    Warning: textutil fallback failed for {file_path.name}: {e}")
 
         # Try antiword as fallback (if installed)
         # First try with -t flag for tab-delimited output (better for tables)

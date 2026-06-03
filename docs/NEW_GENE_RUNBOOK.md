@@ -1,6 +1,8 @@
 # New Gene Turn-Key Runbook
 
-This is the proposed cold-start flow for a gene with no manually curated gold standard.
+This is the cold-start flow for a gene with no manually curated gold standard.
+The turnkey entry point is `gvf gvf-run <GENE> --email <email> --output <dir> --source-recovery`;
+the steps below detail what it runs.
 
 ## 1. Prepare
 
@@ -78,6 +80,94 @@ directory, then runs DB-observed recovery layers. A gold standard is optional;
 without one, recall scoring is skipped but the same ClinVar, PubTator, and
 figure recovery layers still run.
 
+`gvf-run` also writes a no-gold source QC bundle under
+`results/GENE/<timestamp>/source_qc/`:
+
+- `source_acquisition_worklist.csv`: every run PMID classified as `fetch`,
+  `refresh_replay`, `manual_or_blocked`, `inspect`, or `none`.
+- `fetch_input.csv`: PMIDs without usable run-local full text; pass this to
+  `scripts/fetch_paywalled.py`. Known blocked publisher cases are kept out of
+  this file and remain in the worklist as `manual_or_blocked`. This also
+  includes papers whose main text explicitly points target-gene variants to a
+  missing supplemental table/body (`missing_variant_supplement` in the worklist).
+- `source_override.csv`: PMIDs with usable source text that should be replayed
+  with `refresh_run_db.py --source-override-csv`.
+- `source_acquisition_summary.json`: coverage for usable full text, selected
+  fetch PMIDs, selected source-refresh PMIDs, manual/blocked PMIDs, and
+  zero-variant full-text PMIDs. It also counts
+  `pmid_coverage.missing_variant_supplement`, which is a source-acquisition
+  bucket rather than a generic extractor miss.
+
+The default source QC denominator is the harvest/extraction surface, not raw
+PubMed discovery. Pass `--include-discovery-pmids` only for diagnostic audits
+that intentionally include every discovered PMID.
+
+To run the no-gold acquisition and staged refresh loop as part of `gvf-run`, use
+the opt-in source recovery flag:
+
+```bash
+gvf gvf-run GENE --email you@example.edu --output results/ --source-recovery
+```
+
+This runs `source-qc`, fetches `source_qc/fetch_input.csv` with
+`scripts/fetch_paywalled.py`, writes
+`source_qc/acquisition_outcome_summary.json`, emits
+`source_qc/fetched_source_override.csv`, and calls
+`scripts/refresh_run_db.py --stage-extractions --only-forced-pmids` with both
+existing-source and fetched-source override CSVs. Recovery layers run against the
+refreshed DB unless `--skip layers` is also supplied.
+
+For a manual no-gold audit on an existing run:
+
+```bash
+python scripts/recall_audit/source_acquisition_audit.py \
+  --gene GENE \
+  --run-dir results/GENE/<timestamp> \
+  --out results/GENE/<timestamp>/source_qc/source_acquisition_worklist.csv \
+  --summary-out results/GENE/<timestamp>/source_qc/source_acquisition_summary.json \
+  --fetch-input-out results/GENE/<timestamp>/source_qc/fetch_input.csv \
+  --source-override-out results/GENE/<timestamp>/source_qc/source_override.csv
+```
+
+After running `fetch_paywalled.py`, summarize selected-vs-successful
+acquisition. With no gold, this reports worklist coverage; with `--gold` or
+`--report`, it also reports PMID recall:
+
+```bash
+python scripts/recall_audit/summarize_acquisition_outcome.py \
+  --gene GENE \
+  --worklist results/GENE/<timestamp>/source_qc/source_acquisition_worklist.csv \
+  --fetch-summary results/GENE/<timestamp>/source_qc/fetch/summary.json \
+  --out results/GENE/<timestamp>/source_qc/acquisition_outcome_summary.json \
+  --source-override-out results/GENE/<timestamp>/source_qc/fetched_source_override.csv
+```
+
+Replay successful acquisitions and existing refresh candidates without mutating
+the canonical extraction directory:
+
+```bash
+python scripts/refresh_run_db.py \
+  --gene GENE \
+  --run-dir results/GENE/<timestamp> \
+  --source-override-csv results/GENE/<timestamp>/source_qc/source_override.csv \
+  --source-override-csv results/GENE/<timestamp>/source_qc/fetched_source_override.csv \
+  --only-forced-pmids \
+  --stage-extractions
+```
+
+After replay, rerun the outcome summary with the refresh summary attached to
+record the PMIDs that were actually accepted into refreshed extraction JSON:
+
+```bash
+python scripts/recall_audit/summarize_acquisition_outcome.py \
+  --gene GENE \
+  --worklist results/GENE/<timestamp>/source_qc/source_acquisition_worklist.csv \
+  --fetch-summary results/GENE/<timestamp>/source_qc/fetch/summary.json \
+  --refresh-summary results/GENE/<timestamp>/refresh_<timestamp>/refresh_summary.json \
+  --out results/GENE/<timestamp>/source_qc/acquisition_outcome_summary.json \
+  --source-override-out results/GENE/<timestamp>/source_qc/fetched_source_override.csv
+```
+
 ## 6. Cold-Start Recovery Layers
 
 Run only layers that are gene-agnostic. `gvf-run` and `refresh_run_db.py` call
@@ -114,6 +204,15 @@ Use internal signals instead of recall:
 - Extraction density: variants per full-text paper and clinical count rows per variant-bearing paper.
 - Source mix: distinguish PMC, publisher-free, API, abstract-only, and paywalled records.
 - DB integrity: no duplicate canonical variants for the same gene/PMID; `variant_papers` rows should connect to valid `papers` and `variants`.
+
+When a gold standard exists, distinguish PMID recall for PMIDs selected for
+acquisition from PMID recall for PMIDs that actually landed usable full text.
+`summarize_acquisition_outcome.py` reports both under
+`pmid_recall.selected_for_fetch_download` and
+`pmid_recall.usable_fulltext_downloaded`. After replay, pass
+`--refresh-summary` as well; this adds `pmid_recall.source_refresh_attempted`
+and `pmid_recall.source_refresh_successful`, the strict count of PMIDs accepted
+into refreshed extraction JSON.
 
 ## 8. Expected First-Pass Behavior
 

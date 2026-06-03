@@ -15,7 +15,10 @@ Order of operations:
      the resulting DB. Auto-detects gold standard CSV under
      gene_variant_fetcher_gold_standard/normalized/. The old KCNH2 v12
      manual-recovery DB is opt-in only because it is not cold-start behavior.
-  4. report — writes RUN_REPORT.md summarizing what happened, what
+  4. source-qc — writes a gold-free source acquisition/replay worklist.
+  5. source-recovery — optional: fetch source-QC queue, summarize actual
+     usable full text, and staged-refresh accepted sources.
+  6. report — writes RUN_REPORT.md summarizing what happened, what
      scored, and what's gated on credentials.
 
 Cold-start invocation (one command, no flags beyond gene + email):
@@ -37,6 +40,7 @@ import shutil
 import subprocess
 import sys
 import time
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -243,7 +247,230 @@ def step_layers(
 
 
 # ---------------------------------------------------------------------------
-# Step 4 — report
+# Step 4 — gold-free source acquisition QC
+# ---------------------------------------------------------------------------
+
+
+def step_source_qc(gene: str, run_dir: Path, outdir: Path) -> Optional[Path]:
+    """Run the no-gold source acquisition audit. Returns summary JSON path."""
+    outdir.mkdir(parents=True, exist_ok=True)
+    summary = outdir / "source_acquisition_summary.json"
+    cmd = [
+        sys.executable,
+        str(REPO_ROOT / "scripts" / "recall_audit" / "source_acquisition_audit.py"),
+        "--gene",
+        gene,
+        "--run-dir",
+        str(run_dir),
+        "--out",
+        str(outdir / "source_acquisition_worklist.csv"),
+        "--summary-out",
+        str(summary),
+        "--fetch-input-out",
+        str(outdir / "fetch_input.csv"),
+        "--source-override-out",
+        str(outdir / "source_override.csv"),
+    ]
+    logger.info("source-qc → %s", " ".join(cmd))
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        logger.error("source acquisition QC failed: %s", result.stderr[-400:])
+        return None
+    return summary
+
+
+# ---------------------------------------------------------------------------
+# Step 5 — optional no-gold source recovery loop
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class SourceRecoveryResult:
+    """Artifacts produced by the optional source-recovery loop."""
+
+    fetch_dir: Path
+    outcome_summary: Path
+    fetched_source_override: Path
+    refresh_summary: Optional[Path] = None
+    active_db: Optional[Path] = None
+    layer_outdir: Optional[Path] = None
+
+
+def _csv_has_nonheader_rows(path: Path) -> bool:
+    if not path.exists():
+        return False
+    rows = [
+        line
+        for line in path.read_text(encoding="utf-8-sig", errors="replace").splitlines()
+        if line.strip()
+    ]
+    return len(rows) > 1
+
+
+def _latest_refresh_summary_after(run_dir: Path, started_at: float) -> Optional[Path]:
+    candidates = [
+        p
+        for p in run_dir.glob("refresh_*/refresh_summary.json")
+        if p.stat().st_mtime >= started_at
+    ]
+    if not candidates:
+        return None
+    return sorted(candidates, key=lambda p: p.stat().st_mtime)[-1]
+
+
+def step_source_recovery(
+    *,
+    gene: str,
+    run_dir: Path,
+    source_qc_dir: Path,
+    gold: Optional[Path],
+    run_recovery_layers: bool,
+    timeout_s: int,
+) -> Optional[SourceRecoveryResult]:
+    """Run fetch → summarize → staged refresh from source-QC artifacts."""
+    worklist = source_qc_dir / "source_acquisition_worklist.csv"
+    fetch_input = source_qc_dir / "fetch_input.csv"
+    source_override = source_qc_dir / "source_override.csv"
+    fetch_dir = source_qc_dir / "fetch"
+    outcome_summary = source_qc_dir / "acquisition_outcome_summary.json"
+    fetched_source_override = source_qc_dir / "fetched_source_override.csv"
+
+    if not worklist.exists():
+        logger.warning("source recovery skipped: missing %s", worklist)
+        return None
+
+    if _csv_has_nonheader_rows(fetch_input):
+        fetch_dir.mkdir(parents=True, exist_ok=True)
+        fetch_cmd = [
+            sys.executable,
+            str(REPO_ROOT / "scripts" / "fetch_paywalled.py"),
+            "--input",
+            str(fetch_input),
+            "--output",
+            str(fetch_dir),
+            "--headless",
+            "--timeout-s",
+            str(timeout_s),
+        ]
+        logger.info("source-recovery fetch → %s", " ".join(fetch_cmd))
+        fetch_result = subprocess.run(fetch_cmd, capture_output=True, text=True)
+        if fetch_result.returncode != 0:
+            logger.warning(
+                "source-recovery fetch returned %s; continuing with landed artifacts: %s",
+                fetch_result.returncode,
+                (fetch_result.stderr or fetch_result.stdout)[-400:],
+            )
+    else:
+        logger.info("source-recovery fetch skipped: no fetch rows in %s", fetch_input)
+
+    summary_cmd = [
+        sys.executable,
+        str(
+            REPO_ROOT / "scripts" / "recall_audit" / "summarize_acquisition_outcome.py"
+        ),
+        "--gene",
+        gene,
+        "--worklist",
+        str(worklist),
+        "--fetch-output-dir",
+        str(fetch_dir),
+        "--out",
+        str(outcome_summary),
+        "--source-override-out",
+        str(fetched_source_override),
+    ]
+    if gold:
+        summary_cmd.extend(["--gold", str(gold)])
+    logger.info("source-recovery summarize → %s", " ".join(summary_cmd))
+    summary_result = subprocess.run(summary_cmd, capture_output=True, text=True)
+    if summary_result.returncode != 0:
+        logger.error("source-recovery summary failed: %s", summary_result.stderr[-400:])
+        return None
+
+    result = SourceRecoveryResult(
+        fetch_dir=fetch_dir,
+        outcome_summary=outcome_summary,
+        fetched_source_override=fetched_source_override,
+    )
+    override_csvs = [
+        path
+        for path in (source_override, fetched_source_override)
+        if _csv_has_nonheader_rows(path)
+    ]
+    if not override_csvs:
+        logger.info("source-recovery refresh skipped: no usable source overrides")
+        return result
+
+    refresh_started_at = time.time()
+    refresh_cmd = [
+        sys.executable,
+        str(REPO_ROOT / "scripts" / "refresh_run_db.py"),
+        "--gene",
+        gene,
+        "--run-dir",
+        str(run_dir),
+        "--stage-extractions",
+        "--only-forced-pmids",
+    ]
+    if not run_recovery_layers:
+        refresh_cmd.append("--skip-recovery")
+    for override_csv in override_csvs:
+        refresh_cmd.extend(["--source-override-csv", str(override_csv)])
+
+    logger.info("source-recovery refresh → %s", " ".join(refresh_cmd))
+    refresh_result = subprocess.run(refresh_cmd, capture_output=True, text=True)
+    if refresh_result.returncode != 0:
+        logger.error("source-recovery refresh failed: %s", refresh_result.stderr[-800:])
+        return result
+
+    refresh_summary = _latest_refresh_summary_after(run_dir, refresh_started_at)
+    if refresh_summary is None:
+        logger.warning("source-recovery refresh summary not found under %s", run_dir)
+        return result
+
+    result.refresh_summary = refresh_summary
+    try:
+        refresh_data = json.loads(refresh_summary.read_text(encoding="utf-8"))
+    except Exception:
+        refresh_data = {}
+    active_db = refresh_data.get("active_db")
+    if active_db:
+        result.active_db = Path(active_db)
+    layers_dir = refresh_summary.parent / "layers"
+    if layers_dir.exists():
+        result.layer_outdir = layers_dir
+
+    final_summary_cmd = [
+        sys.executable,
+        str(
+            REPO_ROOT / "scripts" / "recall_audit" / "summarize_acquisition_outcome.py"
+        ),
+        "--gene",
+        gene,
+        "--worklist",
+        str(worklist),
+        "--fetch-output-dir",
+        str(fetch_dir),
+        "--refresh-summary",
+        str(refresh_summary),
+        "--out",
+        str(outcome_summary),
+        "--source-override-out",
+        str(fetched_source_override),
+    ]
+    if gold:
+        final_summary_cmd.extend(["--gold", str(gold)])
+    logger.info("source-recovery final summarize → %s", " ".join(final_summary_cmd))
+    final_summary = subprocess.run(final_summary_cmd, capture_output=True, text=True)
+    if final_summary.returncode != 0:
+        logger.warning(
+            "source-recovery final summary failed: %s", final_summary.stderr[-400:]
+        )
+    return result
+
+
+# ---------------------------------------------------------------------------
+# Step 6 — report
 # ---------------------------------------------------------------------------
 
 
@@ -252,6 +479,8 @@ def step_report(
     db: Path,
     run_dir: Path,
     layer_outdir: Optional[Path],
+    source_qc_summary: Optional[Path],
+    source_recovery: Optional[SourceRecoveryResult],
     doctor_status: dict,
     started_at: float,
     duration_s: float,
@@ -262,7 +491,7 @@ def step_report(
     lines.append(f"# GVF Run Report — {gene}")
     lines.append("")
     lines.append(f"- Started: {datetime.fromtimestamp(started_at).isoformat()}")
-    lines.append(f"- Duration: {duration_s/60:.1f} min")
+    lines.append(f"- Duration: {duration_s / 60:.1f} min")
     lines.append(f"- Run dir: `{run_dir}`")
     lines.append(f"- DB: `{db}`")
     lines.append("")
@@ -361,6 +590,62 @@ def step_report(
         )
         lines.append("")
 
+    if source_qc_summary and source_qc_summary.exists():
+        source_qc = json.loads(source_qc_summary.read_text())
+        coverage = source_qc.get("pmid_coverage", {})
+        lines.append("## Source Acquisition QC (Gold-Free)")
+        lines.append("")
+        lines.append("| Signal | PMIDs | Coverage |")
+        lines.append("|---|---:|---:|")
+        for label, key in (
+            ("Usable full text now", "usable_fulltext_current"),
+            ("Selected for fetch", "selected_for_fetch"),
+            ("Selected for source refresh", "selected_for_source_refresh"),
+            ("Manual or blocked", "selected_for_manual_or_blocked"),
+            ("Zero-variant usable full text", "zero_variant_usable_fulltext"),
+        ):
+            item = coverage.get(key) or {}
+            pmids = item.get("pmids", "—")
+            total = item.get("total_pmids", "—")
+            cov = item.get("coverage")
+            cov_text = "—" if cov is None else f"{cov * 100:.1f}%"
+            lines.append(f"| {label} | {pmids}/{total} | {cov_text} |")
+        lines.append("")
+        qc_dir = source_qc_summary.parent
+        lines.append(f"- Worklist: `{qc_dir / 'source_acquisition_worklist.csv'}`")
+        lines.append(f"- Fetch queue: `{qc_dir / 'fetch_input.csv'}`")
+        lines.append(f"- Refresh source overrides: `{qc_dir / 'source_override.csv'}`")
+        lines.append("")
+
+    if source_recovery and source_recovery.outcome_summary.exists():
+        outcome = json.loads(source_recovery.outcome_summary.read_text())
+        coverage = outcome.get("pmid_coverage", {})
+        recall = outcome.get("pmid_recall", {})
+        lines.append("## Source Recovery")
+        lines.append("")
+        lines.append("| Signal | PMIDs | Coverage/Recall |")
+        lines.append("|---|---:|---:|")
+        for label, key in (
+            ("Selected for fetch", "selected_for_fetch_download"),
+            ("Fetch attempted", "fetch_attempted"),
+            ("Usable full text downloaded", "usable_fulltext_downloaded"),
+            ("Source refresh successful", "source_refresh_successful"),
+        ):
+            bucket = recall.get(key) or coverage.get(key) or {}
+            pmids = bucket.get("pmids", "—")
+            denominator = bucket.get("gold_pmids") or bucket.get("total_pmids") or "—"
+            value = bucket.get("recall")
+            if value is None:
+                value = bucket.get("coverage")
+            value_text = "—" if value is None else f"{value * 100:.1f}%"
+            lines.append(f"| {label} | {pmids}/{denominator} | {value_text} |")
+        lines.append("")
+        lines.append(f"- Fetch output: `{source_recovery.fetch_dir}`")
+        lines.append(f"- Outcome summary: `{source_recovery.outcome_summary}`")
+        if source_recovery.refresh_summary:
+            lines.append(f"- Refresh summary: `{source_recovery.refresh_summary}`")
+        lines.append("")
+
     lines.append("## Next steps")
     if doctor_status.get("unlocks", {}).get("ELSEVIER_INSTTOKEN") is False:
         lines.append(
@@ -375,6 +660,13 @@ def step_report(
         )
     if layer_outdir:
         lines.append(f"- Inspect per-layer outputs under `{layer_outdir}`.")
+    if source_qc_summary and source_qc_summary.exists() and not source_recovery:
+        lines.append(
+            "- For no-gold source recovery, run fetch_paywalled.py on the "
+            "source QC fetch queue, then refresh_run_db.py with "
+            "`--source-override-csv` and `--stage-extractions`, or rerun "
+            "`gvf-run` with `--source-recovery`."
+        )
     lines.append(f"- The scored DB is at `{db}` for ad-hoc queries.")
     lines.append("")
 
@@ -402,6 +694,8 @@ def run_gvf_pipeline(
     resume_dir: Optional[Path] = None,
     include_v12: bool = False,
     skip: Optional[list[str]] = None,
+    source_recovery: bool = False,
+    source_recovery_timeout_s: int = 120,
 ) -> int:
     """Execute the full pipeline. Returns exit code."""
     initialize_runtime()
@@ -471,11 +765,46 @@ def run_gvf_pipeline(
         logger.error("No DB produced in %s", run_dir)
         return 4
 
-    # Step 3: layers
+    gold = _find_gold(gene)
+    source_qc_summary: Optional[Path] = None
+    source_recovery_result: Optional[SourceRecoveryResult] = None
     layer_outdir: Optional[Path] = None
-    if "layers" not in skip:
+
+    if source_recovery and "source-qc" in skip:
+        logger.warning("source recovery requested but source-qc was skipped")
+
+    if source_recovery and "source-qc" not in skip:
+        logger.info("🔎 Step 3: source acquisition QC")
+        source_qc_summary = step_source_qc(
+            gene=gene,
+            run_dir=run_dir,
+            outdir=run_dir / "source_qc",
+        )
+        if "source-recovery" not in skip and source_qc_summary is not None:
+            logger.info("🛟 Step 4: source recovery")
+            source_recovery_result = step_source_recovery(
+                gene=gene,
+                run_dir=run_dir,
+                source_qc_dir=source_qc_summary.parent,
+                gold=gold,
+                run_recovery_layers=("layers" not in skip),
+                timeout_s=source_recovery_timeout_s,
+            )
+            if source_recovery_result and source_recovery_result.active_db:
+                db = source_recovery_result.active_db
+            if source_recovery_result and source_recovery_result.layer_outdir:
+                layer_outdir = source_recovery_result.layer_outdir
+        elif "source-recovery" in skip:
+            logger.info("⏭️  Step 4: source recovery — SKIPPED")
+
+    # Step 3: layers
+    if source_recovery_result and source_recovery_result.layer_outdir:
+        logger.info(
+            "⏭️  recovery layers already ran during source recovery (%s)",
+            source_recovery_result.layer_outdir,
+        )
+    elif "layers" not in skip:
         logger.info("🧬 Step 3: recovery layers")
-        gold = _find_gold(gene)
         v12 = _find_v12_db(gene) if include_v12 else None
         layer_outdir = run_dir / "layers"
         step_layers(
@@ -489,15 +818,30 @@ def run_gvf_pipeline(
     else:
         logger.info("⏭️  Step 3: layers — SKIPPED")
 
-    # Step 4: report
+    # Step 4: gold-free source QC
+    if source_qc_summary is None and "source-qc" not in skip:
+        logger.info("🔎 Step 4: source acquisition QC")
+        source_qc_summary = step_source_qc(
+            gene=gene,
+            run_dir=run_dir,
+            outdir=run_dir / "source_qc",
+        )
+    elif "source-qc" in skip:
+        logger.info("⏭️  Step 4: source acquisition QC — SKIPPED")
+    else:
+        logger.info("⏭️  Step 4: source acquisition QC — already ran")
+
+    # Step 5: report
     if "report" not in skip:
-        logger.info("📝 Step 4: report")
+        logger.info("📝 Step 5: report")
         report_path = run_dir / "RUN_REPORT.md"
         step_report(
             gene=gene,
             db=db,
             run_dir=run_dir,
             layer_outdir=layer_outdir,
+            source_qc_summary=source_qc_summary,
+            source_recovery=source_recovery_result,
             doctor_status=status,
             started_at=started,
             duration_s=time.time() - started,

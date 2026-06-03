@@ -45,6 +45,7 @@ logger = logging.getLogger(__name__)
 
 TABLE_HINT_MAX_VARIANTS = SCANNER_MAX_HINTS
 TABLE_REGEX_MERGE_MAX_VARIANTS = 500
+SCANNER_REGEX_MERGE_MAX_VARIANTS = 150
 
 
 def _find_data_zones_file(
@@ -464,21 +465,33 @@ class ExpertExtractor(BaseLLMCaller):
 
         # Create normalizer for validation
         normalizer = VariantNormalizer(gene_symbol)
+        target_gene = gene_symbol.upper()
 
         variants = []
         seen_variants = set()
         filtered_count = 0
+        row_gene_filtered_count = 0
 
         # Pre-process: normalize Unicode arrows (same as variant_scanner)
         full_text = (
             full_text.replace("\u2192", ">")
             .replace("\u2190", "<")
             .replace("\u21d2", ">")
+            .replace("\\_", "_")
+            .replace("\\*", "*")
         )
 
         # Variant patterns to look for in table cells
         protein_pattern = re.compile(
-            r"p\.([A-Z][a-z]{2}\d+[A-Z][a-z]{2}|[A-Z]\d+[A-Z*]|[A-Z][a-z]{2}\d+(?:fs|del|dup|ins))",
+            r"p\.\(?("
+            r"(?:[A-Z][a-z]{2}|[A-Z])\d{1,4}"
+            r"(?:_(?:[A-Z][a-z]{2}|[A-Z])\d{1,4})?"
+            r"(?:"
+            r"[A-Z][a-z]{2}|[A-Z*]|"
+            r"fs(?:Ter|X|\*)?\d*|"
+            r"del|dup|ins(?:[A-Z][a-z]{2}|[A-Z])*"
+            r")"
+            r")\)?",
             re.IGNORECASE,
         )
         cdna_pattern = re.compile(
@@ -487,12 +500,50 @@ class ExpertExtractor(BaseLLMCaller):
         )
         short_protein_pattern = re.compile(r"\b([A-Z]\d{2,4}(?:[A-Z*]|fs|del|dup))\b")
 
+        def genes_mentioned_in_cells(cells: list[str]) -> set[str]:
+            genes = set()
+            for cell in cells:
+                searchable = re.sub(r"[*_`\\]", " ", cell).upper()
+                for alias, official in self.TABLE_LABEL_GENE_ALIASES.items():
+                    if re.search(
+                        rf"(?<![A-Z0-9]){re.escape(alias)}(?![A-Z0-9])", searchable
+                    ):
+                        genes.add(official)
+                for explicit_gene in self.TABLE_LABEL_EXPLICIT_GENES:
+                    if re.search(
+                        rf"(?<![A-Z0-9]){re.escape(explicit_gene)}(?![A-Z0-9])",
+                        searchable,
+                    ):
+                        genes.add(explicit_gene)
+            return genes
+
+        active_table_genes: set[str] = set()
+
         # Find all markdown table rows
         for line in full_text.splitlines():
             line = line.strip()
             if not line.startswith("|"):
+                active_table_genes = set()
                 continue
             if set(line) <= {"|", "-", " ", ":"}:  # Skip separator rows
+                continue
+
+            cells = [cell.strip() for cell in line.strip("|").split("|")]
+            mentioned_genes = genes_mentioned_in_cells(cells)
+            if mentioned_genes:
+                active_table_genes = mentioned_genes
+
+            row_genes = []
+            for cell in cells:
+                normalized_cell = re.sub(r"[^A-Za-z0-9]", "", cell).upper()
+                row_gene = self.TABLE_LABEL_GENE_ALIASES.get(normalized_cell)
+                if not row_gene and normalized_cell in self.TABLE_LABEL_EXPLICIT_GENES:
+                    row_gene = normalized_cell
+                if row_gene:
+                    row_genes.append(row_gene)
+            context_genes = set(row_genes) or active_table_genes
+            if context_genes and target_gene not in context_genes:
+                row_gene_filtered_count += 1
                 continue
 
             # Extract variants from this row
@@ -559,7 +610,9 @@ class ExpertExtractor(BaseLLMCaller):
 
         if variants:
             logger.info(
-                f"Table regex extraction found {len(variants)} variants (filtered {filtered_count} non-target)"
+                f"Table regex extraction found {len(variants)} variants "
+                f"(filtered {filtered_count} non-target, "
+                f"{row_gene_filtered_count} off-target gene rows)"
             )
         return variants
 
@@ -755,10 +808,15 @@ class ExpertExtractor(BaseLLMCaller):
         r"^-$",  # Dash placeholder
         r"^\?$",  # Question mark placeholder
     ]
+    AA3_RE = (
+        r"Ala|Cys|Asp|Glu|Phe|Gly|His|Ile|Lys|Leu|Met|Asn|Pro|Gln|"
+        r"Arg|Ser|Thr|Val|Trp|Tyr|Ter|Stop|Xaa"
+    )
     PROTEIN_NOTATION_RE = re.compile(
-        r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
+        rf"^(?:p\.)?(?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY])"
         r"\d{1,4}"
-        r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del|dup|ins)",
+        rf"(?:[_-](?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY])\d{{1,4}})?"
+        rf"(?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del|dup|ins)",
         re.IGNORECASE,
     )
     CDNA_NOTATION_RE = re.compile(
@@ -4054,14 +4112,38 @@ Return strict JSON with this schema:
             gene_symbol=paper.gene_symbol or "UNKNOWN",
             source=f"PMID_{paper.pmid}",
         )
-        scanner_hints = scanner_result.get_hints_for_prompt(max_hints=SCANNER_MAX_HINTS)
-        if scanner_result.variants:
-            logger.info(
-                f"PMID {paper.pmid} - Variant scanner found {len(scanner_result.variants)} candidates as LLM hints"
+        scanner_variant_count = len(scanner_result.variants)
+        scanner_merge_enabled = (
+            scanner_variant_count <= SCANNER_REGEX_MERGE_MAX_VARIANTS
+        )
+        effective_scanner_variant_count = scanner_variant_count
+        if scanner_variant_count and not scanner_merge_enabled:
+            logger.warning(
+                "PMID %s - Skipping scanner hints/merge for %d candidates; "
+                "candidate count exceeds safety cap %d",
+                paper.pmid,
+                scanner_variant_count,
+                SCANNER_REGEX_MERGE_MAX_VARIANTS,
             )
             print(
-                f"Variant scanner found {len(scanner_result.variants)} potential variants in text"
+                f"Variant scanner found {scanner_variant_count} potential variants; "
+                "skipping scanner hints/merge due safety cap"
             )
+            scanner_hints = ""
+            effective_scanner_variant_count = 0
+        else:
+            scanner_hints = scanner_result.get_hints_for_prompt(
+                max_hints=SCANNER_MAX_HINTS
+            )
+
+        if scanner_variant_count:
+            logger.info(
+                f"PMID {paper.pmid} - Variant scanner found {scanner_variant_count} candidates"
+            )
+            if scanner_merge_enabled:
+                print(
+                    f"Variant scanner found {scanner_variant_count} potential variants in text"
+                )
 
         # Combine all hints (table + scanner)
         all_hints = table_hints + scanner_hints
@@ -4138,13 +4220,20 @@ Return strict JSON with this schema:
                 )
 
             # NEW: Merge scanner-found variants (catches narrative mentions the LLM missed)
-            if scanner_result.variants:
+            if scanner_result.variants and scanner_merge_enabled:
                 extracted_data = merge_scanner_results(
                     extracted_data,
                     scanner_result,
                     paper.gene_symbol or "UNKNOWN",
                     min_confidence=SCANNER_MERGE_MIN_CONFIDENCE,
                 )
+            elif scanner_result.variants:
+                metadata = extracted_data.setdefault("extraction_metadata", {})
+                metadata["scanner_merge_skipped"] = {
+                    "candidate_count": scanner_variant_count,
+                    "safety_cap": SCANNER_REGEX_MERGE_MAX_VARIANTS,
+                    "reason": "candidate_count_exceeds_safety_cap",
+                }
 
             extracted_data = self._suppress_repeated_study_wide_counts(extracted_data)
             extracted_data = self._suppress_repeated_study_wide_context_fields(
@@ -4165,7 +4254,7 @@ Return strict JSON with this schema:
                 extracted_data=extracted_data,
                 source_text=scanner_text,
                 estimated_variants=estimated_variants,
-                scanner_variant_count=len(scanner_result.variants),
+                scanner_variant_count=effective_scanner_variant_count,
             )
             extracted_data = self._suppress_repeated_study_wide_counts(extracted_data)
             extracted_data = self._suppress_repeated_study_wide_context_fields(

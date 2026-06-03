@@ -26,6 +26,7 @@ try:
         resolve_gold_path,
         resolve_recall_score,
         resolve_run_dir,
+        source_has_unresolved_variant_supplement_refs,
         write_csv_rows,
     )
 except ModuleNotFoundError:  # pragma: no cover
@@ -42,6 +43,7 @@ except ModuleNotFoundError:  # pragma: no cover
         resolve_gold_path,
         resolve_recall_score,
         resolve_run_dir,
+        source_has_unresolved_variant_supplement_refs,
         write_csv_rows,
     )
 
@@ -69,6 +71,7 @@ REPORT_FIELDS = [
     "table_references",
     "table_body_markers",
     "likely_missing_table_bodies",
+    "likely_missing_variant_supplement",
     "gold_rows",
     "matched_rows",
     "row_recall",
@@ -324,9 +327,11 @@ def _source_info(
     if metadata_abstract_only and status == "not_attempted":
         status = "abstract_only"
     table_metrics = _table_body_metrics(context_path)
-    if (
-        status in DATA_AVAILABLE_STATUSES
-        and table_metrics["likely_missing_table_bodies"]
+    missing_variant_supplement = source_has_unresolved_variant_supplement_refs(
+        context_path, gene
+    )
+    if status in DATA_AVAILABLE_STATUSES and (
+        table_metrics["likely_missing_table_bodies"] or missing_variant_supplement
     ):
         status = "missing_table_bodies"
     context_bytes = context_path.stat().st_size if context_path else 0
@@ -359,6 +364,7 @@ def _source_info(
         "available_context_bytes": available_bytes,
         "source_desync": source_desync,
         "source_unbound": source_unbound,
+        "likely_missing_variant_supplement": missing_variant_supplement,
         **table_metrics,
     }
 

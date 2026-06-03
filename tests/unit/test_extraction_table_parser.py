@@ -1,5 +1,7 @@
 """Regression tests for deterministic extraction table parsing."""
 
+from types import SimpleNamespace
+
 from pipeline.extraction import ExpertExtractor
 from utils.models import ExtractionResult, Paper
 
@@ -62,6 +64,28 @@ Table 3. Summary of putative LQT3-associated mutations in SCN5A
     assert [v["protein_notation"] for v in variants] == ["P52H"]
     assert variants[0]["source_location"].startswith("Table 3.")
     assert variants[0]["penetrance_data"]["total_carriers_observed"] == 1
+
+
+def test_table_regex_skips_off_target_gene_column_rows():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+| Gene | Protein | cDNA |
+|---|---|---|
+| KCNH2 | p.(Gly1036Asp) | c.3107G>A |
+| SCN5A | p.(Arg18Gln) | c.53G>A |
+| SCN5A | p.(Gln1507_Pro1509del) | c.4519_4527delCAGAAGCCC |
+"""
+
+    variants = extractor._extract_variants_from_tables(text, "SCN5A")
+
+    proteins = {v.get("protein_notation") for v in variants}
+    cdnas = {v.get("cdna_notation") for v in variants}
+    assert "R18Q" in proteins
+    assert "P.GLN1507_PRO1509DEL" in proteins
+    assert "c.53G>A" in cdnas
+    assert "c.4519_4527delCAGAAGCCC" in cdnas
+    assert "G1036D" not in proteins
+    assert "c.3107G>A" not in cdnas
 
 
 def test_deterministic_parser_filters_generic_noncardiac_table_titles():
@@ -858,19 +882,25 @@ def test_artifact_filter_removes_malformed_protein_notations():
             {"gene_symbol": "KCNH2", "protein_notation": "A"},
             {"gene_symbol": "KCNH2", "protein_notation": "0.734027"},
             {"gene_symbol": "KCNH2", "protein_notation": "378"},
+            {"gene_symbol": "SCN5A", "protein_notation": "SCN5A"},
             {"gene_symbol": "KCNH2", "protein_notation": "p.Lys897Thr"},
             {"gene_symbol": "KCNH2", "cdna_notation": "c.2398+1G>A"},
+            {
+                "gene_symbol": "SCN5A",
+                "protein_notation": "p.Lys1505_Gln1507del",
+                "cdna_notation": "c.4513_4521del",
+            },
         ],
     }
 
-    filtered = extractor._filter_extraction_artifacts(data, "KCNH2")
+    filtered = extractor._filter_extraction_artifacts(data, "SCN5A")
 
     remaining = {
         v.get("protein_notation") or v.get("cdna_notation")
         for v in filtered["variants"]
     }
-    assert remaining == {"p.Lys897Thr", "c.2398+1G>A"}
-    assert filtered["extraction_metadata"]["malformed_filtered"] == 3
+    assert remaining == {"p.Lys897Thr", "c.2398+1G>A", "p.Lys1505_Gln1507del"}
+    assert filtered["extraction_metadata"]["malformed_filtered"] == 4
 
 
 def test_low_yield_router_result_does_not_short_circuit_full_text(monkeypatch):
@@ -940,3 +970,77 @@ def test_low_yield_router_result_does_not_short_circuit_full_text(monkeypatch):
     assert result.model_used == "test-model"
     proteins = {v.get("protein_notation") for v in result.extracted_data["variants"]}
     assert {"p.Arg176Trp", "p.Leu552Ser", "p.His240His"} <= proteins
+
+
+def test_large_scanner_result_skips_hints_and_merge(monkeypatch):
+    import pipeline.extraction as extraction
+
+    extractor = ExpertExtractor(models=["test-model"], tier_threshold=1)
+    paper = Paper(
+        pmid="26669661",
+        title="Multi-gene supplemental table",
+        gene_symbol="SCN5A",
+        full_text="SCN5A variant supplemental table discussion. " * 120,
+    )
+
+    table_variant = {
+        "gene_symbol": "SCN5A",
+        "protein_notation": "p.Arg18Gln",
+        "source_location": "Supplemental Table 2",
+    }
+
+    class LargeScanner:
+        def __init__(self):
+            self.variants = [
+                SimpleNamespace(
+                    normalized=f"p.Ala{idx}Val",
+                    notation_type="protein",
+                    confidence=0.95,
+                    raw_text=f"A{idx}V",
+                    source="PMID_26669661",
+                )
+                for idx in range(extraction.SCANNER_REGEX_MERGE_MAX_VARIANTS + 1)
+            ]
+
+        def get_hints_for_prompt(self, max_hints):
+            raise AssertionError("oversized scanner result should not provide hints")
+
+    def fail_scanner_merge(*args, **kwargs):
+        raise AssertionError("oversized scanner result should not be merged")
+
+    monkeypatch.setattr(extractor, "_try_table_router", lambda *_: None)
+    monkeypatch.setattr(
+        extractor, "_extract_variants_from_tables", lambda *_: [table_variant]
+    )
+    monkeypatch.setattr(
+        extraction, "scan_document_for_variants", lambda *_, **__: LargeScanner()
+    )
+    monkeypatch.setattr(extraction, "merge_scanner_results", fail_scanner_merge)
+    monkeypatch.setattr(
+        extractor,
+        "call_llm_json_with_status",
+        lambda _prompt: (
+            {
+                "variants": [
+                    {
+                        "gene_symbol": "SCN5A",
+                        "protein_notation": "p.Glu1784Lys",
+                    }
+                ],
+                "extraction_metadata": {"total_variants_found": 1},
+            },
+            False,
+            "{}",
+        ),
+    )
+
+    result = extractor.extract(paper)
+
+    assert result.success
+    proteins = {v.get("protein_notation") for v in result.extracted_data["variants"]}
+    assert proteins == {"p.Glu1784Lys", "p.Arg18Gln"}
+    assert result.extracted_data["extraction_metadata"]["scanner_merge_skipped"] == {
+        "candidate_count": extraction.SCANNER_REGEX_MERGE_MAX_VARIANTS + 1,
+        "safety_cap": extraction.SCANNER_REGEX_MERGE_MAX_VARIANTS,
+        "reason": "candidate_count_exceeds_safety_cap",
+    }

@@ -303,6 +303,8 @@ def test_gvf_run_help():
     assert "--pmid-file" in result.stdout
     assert "--resume-dir" in result.stdout
     assert "--skip" in result.stdout
+    assert "source-qc" in result.stdout
+    assert "--source-recovery" in result.stdout
 
 
 def test_gvf_run_helpers_resolve_paths(tmp_path: Path):

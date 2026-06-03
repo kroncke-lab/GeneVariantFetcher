@@ -278,6 +278,9 @@ def enrich_paywall_full_context(
     download_timeout_s: int = 60,
     image_text_extractor: Optional[Callable[[List[Path]], str]] = None,
     source_url: Optional[str] = None,
+    supplement_download_fallback: Optional[
+        Callable[[str, Path, str, str, Dict[str, Any]], bool]
+    ] = None,
 ) -> EnrichmentResult:
     """Append caption block and supplement markdown to a rescued body.
 
@@ -308,6 +311,10 @@ def enrich_paywall_full_context(
             which case :func:`harvesting.figure_text_extractor.extract_images_to_markdown`
             is called with the configured vision model. Supply a stub here in
             tests to avoid real API calls.
+        supplement_download_fallback: Optional callback used only when the
+            normal requests-based supplement download fails. This lets callers
+            try an authenticated browser context without changing the default
+            fast path.
 
     Returns:
         :class:`EnrichmentResult` with the assembled markdown and audit
@@ -360,6 +367,8 @@ def enrich_paywall_full_context(
             normalized = dict(entry)
             normalized["url"] = url
             normalized["name"] = name
+            if source_url:
+                normalized.setdefault("source_url", source_url)
             usable.append(normalized)
 
         if usable:
@@ -372,13 +381,25 @@ def enrich_paywall_full_context(
                 _filename: str,
                 _supp: Dict[str, Any],
             ) -> bool:
-                return _default_download(
+                if _default_download(
                     url=url,
                     file_path=file_path,
                     session=session,
                     size_limit_bytes=supplement_size_limit_bytes,
                     timeout_s=download_timeout_s,
-                )
+                ):
+                    return True
+                if supplement_download_fallback is not None:
+                    return bool(
+                        supplement_download_fallback(
+                            url,
+                            file_path,
+                            _pmid,
+                            _filename,
+                            _supp,
+                        )
+                    )
+                return False
 
             try:
                 result = process_supplement_files(

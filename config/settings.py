@@ -541,8 +541,7 @@ class Settings(BaseSettings):
         allowed = {"minimal", "low", "medium", "high"}
         if v_norm not in allowed:
             raise ValueError(
-                "reasoning_effort must be one of "
-                f"{sorted(allowed)} or unset; got {v!r}"
+                f"reasoning_effort must be one of {sorted(allowed)} or unset; got {v!r}"
             )
         return v_norm
 
