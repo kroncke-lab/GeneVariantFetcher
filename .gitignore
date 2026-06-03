@@ -64,6 +64,7 @@ USER.md
 # Pipeline output
 output/
 output_directory/
+outputs/
 automated_output/
 gvf_output/
 europepmc_downloads/
