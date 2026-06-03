@@ -15,7 +15,6 @@ source .venv/bin/activate
 
 # Install in development mode
 pip install -e .
-pip install -r gui/requirements.txt
 
 # Install pre-commit hooks
 pip install pre-commit && pre-commit install
@@ -134,9 +133,8 @@ Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 ```
 GeneVariantFetcher/
 ├── cli/              # CLI commands (Typer)
-├── config/           # Settings, gene configs (gene_config.py)
+├── config/           # Settings (config/settings.py)
 ├── gene_literature/  # PMID discovery (PubMed, PubMind, Europe PMC)
-├── gui/              # FastAPI web interface
 ├── harvesting/       # Paper download, publisher APIs, format conversion
 ├── pipeline/         # Core extraction logic (filters, extraction, aggregation)
 ├── scripts/          # Utility and analysis scripts
