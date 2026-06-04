@@ -72,6 +72,14 @@ def pct(num: int, den: int) -> float:
     return (100.0 * num / den) if den else 0.0
 
 
+def _to_int(x) -> int:
+    """Coerce a possibly-TEXT/None DB count to int (0 on junk)."""
+    try:
+        return int(float(str(x).strip()))
+    except (TypeError, ValueError):
+        return 0
+
+
 _BOILERPLATE = (
     "skip to main content",
     "log in",
@@ -374,22 +382,23 @@ def load_db(db_path: Path) -> dict:
                 "FROM penetrance_data pd LEFT JOIN variants v ON v.variant_id = pd.variant_id"
             ):
                 pmid = str(r["pmid"])
-                data["pen_by_pmid"][pmid]["carriers"] += r["c"]
-                data["pen_by_pmid"][pmid]["affected"] += r["a"]
-                data["pen_by_pmid"][pmid]["unaffected"] += r["u"]
+                c, a, u = _to_int(r["c"]), _to_int(r["a"]), _to_int(r["u"])
+                data["pen_by_pmid"][pmid]["carriers"] += c
+                data["pen_by_pmid"][pmid]["affected"] += a
+                data["pen_by_pmid"][pmid]["unaffected"] += u
                 vname = r["protein_notation"]
                 if vname:
                     pv = data.setdefault("pen_pv", {}).setdefault(
                         (pmid, vname), {"carriers": 0, "affected": 0, "unaffected": 0}
                     )
-                    pv["carriers"] += r["c"]
-                    pv["affected"] += r["a"]
-                    pv["unaffected"] += r["u"]
+                    pv["carriers"] += c
+                    pv["affected"] += a
+                    pv["unaffected"] += u
                     if vname in data["variants_agg"]:
                         agg = data["variants_agg"][vname]
-                        agg["carriers"] += r["c"]
-                        agg["affected"] += r["a"]
-                        agg["unaffected"] += r["u"]
+                        agg["carriers"] += c
+                        agg["affected"] += a
+                        agg["unaffected"] += u
         if _table_cols(con, "tables_processed"):
             for r in con.execute(
                 "SELECT pmid, table_name, table_caption, variants_extracted FROM tables_processed"
