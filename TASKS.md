@@ -45,7 +45,7 @@
   - [x] Recovered 17 real contexts; 196 still require paywall/manual/source access
   - [x] Wrote audit artifacts under `results/KCNH2/20260506_102238/reharvest_out_20260514/`
 - [x] **KCNH2 v12 manual-recovery score + matcher patch (2026-05-15)**
-  - [x] Scored `KCNH2_v12_manual_recovery_20260515.db`: PMIDs 184/262 (70.2%), variant rows 542/991 (54.7%), unique variants 323/530 (60.9%), patients 1758/2674 (65.7%)
+  - [x] Scored `KCNH2_v12_manual_recovery_20260515.db` (PMID/row/unique-variant/patient recall recorded in `docs/RECALL_STATUS.md`)
   - [x] Added frameshift canonicalization for extraction spellings like `fsTer`, `fs/185`, `fs+*49`, and malformed `AlaX14`
   - [x] Extended cDNA/protein bridge matching to multi-base cDNA indel ranges; recovered `P926fsX` (PMID 26496715) and `P1034fsX` (PMID 29622001)
 - [x] **Turnkey closeout and honest enrichment cleanup (2026-05-18)**
@@ -70,23 +70,23 @@
 - [x] **KCNH2 acquisition replay + no-gold source QC (2026-06-01)**
   - [x] Added a gold-free `source_acquisition_audit.py` and wired it into `gvf-run` as `source-qc`.
   - [x] Added post-fetch outcome summarization that reports selected-for-fetch PMIDs separately from successfully usable-fulltext-downloaded PMIDs.
-  - [x] Added opt-in `gvf-run --source-recovery` to compose source QC, paywall fetch, acquisition outcome summary, and staged refresh without requiring a gold standard.
-  - [x] Replayed 20 KCNH2 fetched sources through staged extraction; 17 passed acceptance gates and moved KCNH2 to 89.69% PMID / 84.96% row / 84.15% unique recall after ClinVar+PubTator, figures skipped.
+  - [x] Added `gvf-run` source recovery (source QC, paywall fetch, acquisition outcome summary, and staged refresh without requiring a gold standard), now default-on; pass `--no-source-recovery` for a fast PMC/free-text-only pass.
+  - [x] Replayed 20 KCNH2 fetched sources through staged extraction; 17 passed acceptance gates after ClinVar+PubTator, figures skipped. Scored recall is in `docs/RECALL_STATUS.md`.
 - [x] **RYR2 acquisition replay (2026-06-01)**
   - [x] Gold-assisted worklist selected 37 PMIDs for fetch and 59 PMIDs for source acquisition or rebinding.
   - [x] Post-fetch summarizer recovered partial interrupted-fetch output: 17 usable full-text PMIDs actually landed after the stricter 500-character source gate.
   - [x] Staged refresh replayed 41 candidates; 34 passed, 4 failed source-quality checks, and 3 were regression-gated.
-  - [x] RYR2 scored at 80.34% PMID / 81.40% row / 84.89% unique recall after DB-observed ClinVar+PubTator, figures skipped.
+  - [x] RYR2 scored after DB-observed ClinVar+PubTator, figures skipped; recall is in `docs/RECALL_STATUS.md`.
 - [x] **SCN5A acquisition replay (2026-06-01)**
   - [x] Gold-assisted worklist selected 148 PMIDs for fetch and 191 PMIDs for source acquisition or rebinding.
-  - [x] Existing-source replay accepted 35/41 PMIDs and improved SCN5A to 78.86% PMID / 71.74% row / 80.30% unique recall after DB-observed ClinVar+PubTator, figures skipped.
-  - [x] Partial `fetch_paywalled.py` output produced 44 usable full-text PMIDs; the outcome summary now reports both selected-for-fetch recall (`148/757 = 19.55%`) and actual refresh-successful recall (`44/757 = 5.81%`).
-  - [x] Fetched-source replay accepted 44/47 candidates and scored at 83.09% PMID / 74.52% row / 84.19% unique recall after DB-observed ClinVar+PubTator, figures skipped.
+  - [x] Existing-source replay accepted 35/41 PMIDs and improved SCN5A recall after DB-observed ClinVar+PubTator, figures skipped (see `docs/RECALL_STATUS.md`).
+  - [x] Partial `fetch_paywalled.py` output produced 44 usable full-text PMIDs; the outcome summary now reports selected-for-fetch recall and actual refresh-successful recall separately (values in `docs/RECALL_STATUS.md`).
+  - [x] Fetched-source replay accepted 44/47 candidates and scored after DB-observed ClinVar+PubTator, figures skipped (recall in `docs/RECALL_STATUS.md`).
   - [x] Residual audit now routes explicit missing target-gene supplement pointers to acquisition. SCN5A PMID `29325976` has 87 missing distinct variants behind a blocked Supplemental Table 2 download; latest no-gold source QC finds 19 `missing_variant_supplement` PMIDs.
   - [x] Added a Playwright/browser supplement download fallback and reran `29325976`: Elsevier API body recovery + staged refresh succeeded, but `mmc1.docx` still failed under 0-cookie browser context and extraction found 0 variants.
-  - [x] Added generalized publisher API fallback for Elsevier/Wiley/Springer and ran a 13-PMID residual Wiley/Springer batch: 2 usable full texts landed, 1 accepted into refreshed extraction JSON, and corrected no-figure SCN5A recall remained 83.09% PMID / 74.52% row / 84.19% unique.
-  - [x] Diagnosed `24667783` as a Word-supplement conversion miss, added `textutil` DOC fallback plus scanner/artifact guards, accepted a forced one-PMID staged refresh, and moved no-figure SCN5A row recall to 74.68% while PMID/unique recall stayed 83.09% / 84.19%.
-  - [x] Added SCN5A protein range-deletion scanning/artifact-filter support plus `refresh_run_db.py --replay-model`; recovered the remaining `24667783` `P.K1505_Q1507DEL` row and moved final no-figure SCN5A row recall to 74.71%.
+  - [x] Added generalized publisher API fallback for Elsevier/Wiley/Springer and ran a 13-PMID residual Wiley/Springer batch: 2 usable full texts landed, 1 accepted into refreshed extraction JSON, and corrected no-figure SCN5A recall held steady (see `docs/RECALL_STATUS.md`).
+  - [x] Diagnosed `24667783` as a Word-supplement conversion miss, added `textutil` DOC fallback plus scanner/artifact guards, and accepted a forced one-PMID staged refresh that improved no-figure SCN5A row recall (see `docs/RECALL_STATUS.md`).
+  - [x] Added SCN5A protein range-deletion scanning/artifact-filter support plus `refresh_run_db.py --replay-model`; recovered the remaining `24667783` `P.K1505_Q1507DEL` row (final no-figure SCN5A row recall in `docs/RECALL_STATUS.md`).
 
 ## Active Tasks
 - [ ] **Close source/acquisition gaps to >90%** using the highest-yield PMIDs in `docs/RECALL_STATUS.md`; SCN5A is now the largest remaining unique-variant blocker.

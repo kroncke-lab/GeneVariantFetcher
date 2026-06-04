@@ -5,6 +5,29 @@ Last updated: 2026-06-02.
 This note records the post-`19ae63f` state of the recall/generalization push so
 the next run can resume from the same baseline without relying on chat history.
 
+## How to read the numbers in this file (single source of truth)
+
+This file carries two layers of metrics. To avoid the appearance of conflicting
+numbers, read them this way:
+
+- **Latest per-gene measurement** = the most recent dated session below. As of
+  the 2026-06-01 session, the current per-gene no-figure scores are KCNH2,
+  RYR2, and SCN5A (see that session). These **supersede** the older four-gene
+  aggregate for those three genes.
+- **Four-gene aggregate** = the `## Current Scored Baseline` table further down
+  is the 2026-05-26 joint snapshot (KCNH2/KCNQ1/SCN5A/RYR2). It is the latest
+  *aggregate* and the latest measurement for **KCNQ1**, but it is **stale for
+  KCNH2/RYR2/SCN5A**, which were re-measured higher in the 2026-06-01 session.
+- All per-gene figures here are **no-figure / staged-replay diagnostics**
+  (figures skipped, DB-observed PMIDs). Note that the default `gvf gvf-run` now
+  runs the figure layer, so a fresh turnkey run is a *different* (figures-on)
+  configuration than these baselines.
+- Within a session, an "intermediate" score (e.g. SCN5A 74.52% row recall) is
+  superseded by the explicitly-labeled "Final" score (SCN5A 74.71% row recall)
+  later in the same session — the latter is the one to quote.
+
+No other doc may restate a recall number; they link here.
+
 ## 2026-06-01 Session — KCNH2/RYR2/SCN5A Acquisition Replay & No-Gold Source QC
 
 KCNH2 missing-recall diagnosis showed the biggest immediate lever was source
@@ -238,10 +261,12 @@ independently and start testing:
 ## Source Of Truth
 
 Use this file as the current issue/status tracker for the recall push. Other
-top-level handoff docs (`README.md`, `CLAUDE.md`, `CODEX.md`, and `TASKS.md`)
-should link here instead of carrying independent live metric tables. If a metric
-conflicts with this file, treat this file and the scored artifact below as
-authoritative.
+top-level handoff docs (`README.md`, `CLAUDE.md`, `AGENTS.md`, and `TASKS.md`;
+`CODEX.md` is now a pointer stub) should link here instead of carrying
+independent live metric tables. If a metric conflicts with this file, this file
+is authoritative; within this file, the most recent dated per-gene session wins
+over the older four-gene aggregate table (see "How to read the numbers" at the
+top).
 
 Historical recovery docs and scripts are still useful for debugging, but they
 are not cold-start evidence unless they explicitly avoid gold-PMID-conditioned
@@ -261,7 +286,12 @@ inputs and KCNH2-only manual recovery.
 
 ## Current Scored Baseline
 
-Use this artifact as the current scored baseline:
+> **Dated 2026-05-26 — four-gene aggregate.** This is the latest *joint* score
+> and the latest measurement for **KCNQ1**. It is **superseded for
+> KCNH2/RYR2/SCN5A** by the 2026-06-01 session above, which re-measured those
+> three genes higher. See "How to read the numbers" at the top of this file.
+
+Aggregate scored-baseline artifact:
 
 `recall_metrics/post_rollback_recover_20260526_aggregate/summary.json`
 
@@ -566,19 +596,23 @@ The four non-200 rows are not token failures:
   and Gynaecology Canada*; likely outside Vanderbilt's ScienceDirect package.
 - KCNH2: 1 unresolved candidate; see per-gene unlock CSV.
 
-### Where the unlocked bodies live
+### Where the source bodies live
 
-All saved into the run's existing `pmc_fulltext/` (no separate subdirs), so the
-standard extraction discovery path picks them up without per-PMID-dir plumbing:
+As of 2026-06-04, all fetched source (full text + supplements + figures) was
+consolidated and deduplicated into a single discoverable home:
 
-- `validation_runs/turnkey_e2e_20260518_213934/results/KCNH2/20260518_213938/pmc_fulltext/*_FULL_CONTEXT.md`
-- `validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/pmc_fulltext/*_FULL_CONTEXT.md`
-- `validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938/pmc_fulltext/*_FULL_CONTEXT.md`
-- `validation_runs/turnkey_e2e_20260518_213934/results/KCNE1/20260518_213938/pmc_fulltext/*_FULL_CONTEXT.md`
-- `validation_runs/20260517_203904/results/KCNQ1/20260517_204424/pmc_fulltext/*_FULL_CONTEXT.md`
+- **`corpus/<GENE>/<PMID>/`** — `{PMID}_FULL_CONTEXT.md`, `{PMID}_CLEANED.md`,
+  `{PMID}_figures/`, `{PMID}_supplements/`, `{PMID}_artifacts.json`.
+- **`corpus/INDEX.json`** / **`corpus/INDEX.csv`** — gene → PMID → paths,
+  bytes, figure/supplement counts, and which run each best copy came from.
 
-Each directory also contains an `insttoken_unlock_results.csv` with the
-per-PMID outcome.
+6,257 distinct (gene,PMID) papers (KCNQ1 2396, SCN5A 1496, KCNH2 1299, RYR2 638,
+KCNE1 428), verified as a complete superset of every prior `pmc_fulltext/`
+location. The old per-run `pmc_fulltext/` trees under `results/` and
+`validation_runs/` were removed after consolidation; their run DBs and
+`extractions/` remain in place. Build/refresh with the corpus builder
+(`scripts/build_source_corpus.py` if promoted, else the one-off used on
+2026-06-04).
 
 ### Historical post-token PMID recall (before 2026-05-25 refresh)
 

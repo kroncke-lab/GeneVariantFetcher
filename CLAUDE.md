@@ -44,12 +44,16 @@ cold-start capability.
   explicit count column.
 - Recall runner: `scripts/run_recall_suite.py` scores normalized per-gene
   recall inputs from `gene_variant_fetcher_gold_standard/normalized/`.
-- Turnkey driver: `gvf gvf-run <GENE> --email <email> --output <dir>` runs
-  doctor -> extraction -> DB-observed recovery layers -> gold-free source QC ->
-  report. `--source-recovery` is an opt-in no-gold loop that fetches the source
-  QC queue, summarizes selected-vs-successful acquisition, and staged-refreshes
-  accepted sources before scoring/reporting. It backs up the DB before
-  recovery-layer mutation. `--with-v12` is KCNH2-only and opt-in.
+- Turnkey driver: `gvf gvf-run <GENE> --email <email> --output <dir>
+  [--disease "<phenotype>"]` runs doctor -> extraction -> source QC ->
+  source recovery (the no-gold acquisition loop) -> DB-observed recovery layers
+  -> report. As of 2026-06-03 source recovery is **on by default**: it fetches
+  the source QC queue, summarizes selected-vs-successful acquisition, and
+  acceptance-gated staged-refreshes accepted sources before scoring/reporting.
+  Pass `--no-source-recovery` for a fast PMC/free-text-only pass or for
+  calibrated `--pmid-file` measurement runs (staged refresh mutates the DB; it
+  is backed up first). `--disease` scopes discovery + the Tier-2 filter to a
+  gene-disease pair. `--with-v12` is KCNH2-only and opt-in.
 - Matcher: `cli/compare_variants.py` has positional-digit guards, greedy
   one-to-one assignment, cDNA/protein bridging, and 2026-05-15 fixes for
   frameshift spellings such as `fsTer`, `fs/185`, `fs+*49`, and malformed
@@ -97,47 +101,32 @@ that actually landed usable full text; with a gold/report denominator, it also
 reports both quantities as PMID recall. The source QC default denominator is
 the harvest/extraction surface, not raw PubMed discovery; use
 `--include-discovery-pmids` only for intentionally broad diagnostics.
-For end-to-end no-gold source recovery, pass `gvf-run --source-recovery`; this
+End-to-end no-gold source recovery now runs by default in `gvf-run` (it
 composes source QC, paywall fetch, outcome summarization, and acceptance-gated
-staged refresh into one opt-in run.
+staged refresh). Pass `--no-source-recovery` to skip it.
 
-The same path has now been exercised on KCNH2, RYR2, and SCN5A with staged
-extraction replay. KCNH2 reached 89.69% PMID / 84.96% row / 84.15% unique
-recall after DB-observed ClinVar+PubTator with figures skipped. RYR2 reached
-80.34% PMID / 81.40% row / 84.89% unique recall after the same no-figure
-recovery stack. SCN5A reached 83.09% PMID / 74.71% row / 84.19% unique recall
-after fetched-source replay. See `docs/RECALL_STATUS.md` for
+The same path has been exercised on KCNH2, RYR2, and SCN5A with staged
+extraction replay. **All current recall figures live in
+`docs/RECALL_STATUS.md`** (the single source of truth) — including
 selected-vs-actually-downloaded PMID recall, refresh-successful PMID recall,
-and acceptance-gate details.
+and acceptance-gate details. Do not restate per-gene numbers here; they drift.
+Note that the published baselines are cardiac-gene-specific, depend on the
+Vanderbilt Elsevier insttoken, and were scored with figures skipped — an
+arbitrary new gene-disease pair starts with no gold standard and no recall
+measurement.
 
-Post-SCN5A residual diagnosis: the top remaining single gap is PMID `29325976`
-(87 missing distinct variants), where the main text points all SCN5A mutations
-to Supplemental Table 2 but the `mmc1.docx` supplement is Cloudflare/redirect
-blocked. A 2026-06-01 targeted v3 run added a Playwright/browser supplement
-download fallback; with 0 decrypted Chrome cookies the supplement still failed
-(403/navigation timeout). Elsevier API body recovery and staged refresh
-succeeded but extracted 0 variants, confirming this is supplement acquisition,
-not generic underextraction.
-
-A follow-up SCN5A residual Wiley/Springer batch on 2026-06-02 selected 13
-API-route PMIDs from the remaining fetch queue. `fetch_paywalled.py` landed 2
-usable full-text PMIDs, and corrected staged refresh accepted 1 (`16643399`,
-0 extracted variants) while regression-gating `24667783` (prior 25 variants,
-new 1). Corrected no-figure scoring on top of the current SCN5A staged
-extraction baseline stayed at 83.09% PMID / 74.52% row / 84.19% unique recall.
-A follow-up `24667783` diagnosis found the real miss was Word `.doc`
-supplement conversion: macOS `textutil` recovers SCN5A table rows that antiword
-missed. After adding the `textutil` fallback, scanner gene-context filtering,
-and a stricter protein-notation artifact guard, a forced one-PMID staged refresh
-accepted 11 clean SCN5A variants and moved no-figure row recall to 74.68%;
-PMID and unique recall stayed at 83.09% / 84.19%. A range-deletion parser
-follow-up recovered the remaining `P.K1505_Q1507DEL` row (source spelling
-`Lys1505_Gln1507del`); final no-figure row recall is now 74.71%, with no
-missing rows left for `24667783`. `scripts/refresh_run_db.py` now accepts
-`--replay-model` for bounded replays when the default Tier 3 model is slow or
-experimental. The outcome summary reports selected-for-fetch,
+Residual-gap diagnoses and the latest per-gene numbers are tracked in
+`docs/RECALL_STATUS.md` (Next Run Plan + session log), not here. Durable tooling
+that came out of those sessions: a Word `.doc`/`.docx` supplement-conversion
+fallback (macOS `textutil` recovers table rows `antiword` misses),
+scanner gene-context filtering, a stricter protein-notation artifact guard, a
+range-deletion parser, and `scripts/refresh_run_db.py --replay-model` for
+bounded replays when the default Tier 3 model is slow or experimental. The
+acquisition outcome summary reports selected-for-fetch,
 usable-fulltext-downloaded, source-refresh-attempted, and
-source-refresh-successful PMID recall separately.
+source-refresh-successful PMID recall separately. The recurring residual
+pattern is supplement acquisition (Cloudflare/redirect-blocked `mmc1.docx`
+files), not generic underextraction.
 
 Residual non-Elsevier paywalls (Karger Cloudflare, Sage CF fingerprint)
 remain in `TASKS.md` Blocked. Wiley TDM was verified working off-VPN on
@@ -151,9 +140,9 @@ browser sessions, so treat Wiley as partially covered rather than solved.
 From a clean checkout:
 
 ```bash
-python3.11 -m venv .venv
+python3.11 -m venv .venv   # Python 3.11+ (pyproject requires-python >=3.11)
 source .venv/bin/activate
-pip install -e ".[dev]"
+pip install -e ".[browser,dev]"
 python -m playwright install chromium
 ```
 
@@ -188,9 +177,10 @@ GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_networ
 Recover queued or paywalled papers after VPN/login access is available:
 
 ```bash
+# <RUN> is a run dir produced by gvf-run, e.g. results/KCNH2/<TIMESTAMP>
 .venv/bin/python scripts/fetch_paywalled.py \
-  --input results/KCNH2/20260506_102238/pmc_fulltext/paywalled_missing.csv \
-  --output results/KCNH2/20260506_102238/pmc_fulltext \
+  --input <RUN>/pmc_fulltext/paywalled_missing.csv \
+  --output <RUN>/pmc_fulltext \
   --no-headless
 ```
 
@@ -260,6 +250,24 @@ genes.
   extraction.
 - `gene_variant_fetcher_gold_standard/` - normalized recall inputs and source
   exports.
+- `corpus/<GENE>/<PMID>/` - consolidated, deduplicated home AND cross-run cache
+  for ALL fetched source (full text + supplements + figures), one best usable
+  copy per paper. Discover via `corpus/INDEX.json` / `corpus/INDEX.csv`
+  (per-paper `full_text_status` ok|stub, `source_sha256`, figure/supplement
+  counts). As of 2026-06-04 this replaces the old scattered per-run
+  `pmc_fulltext/` trees (gitignored; ~11 GB / 6,382 papers). Run DBs +
+  `extractions/` remain in their `results/` run dirs.
+- `scripts/build_source_corpus.py` - builds/updates the corpus. Incremental +
+  idempotent + never-downgrade: `--apply` folds new source in (adds new papers,
+  upgrades only compromised categories), a clean re-run is a no-op. `--verify`
+  checks `corpus/MANIFEST.sha256`. To move the corpus: `tar czf corpus.tgz
+  corpus/` then `--verify` on the far end.
+- Corpus-as-cache: `gvf-run` reuses usable cached source per PMID (skips
+  re-fetch; a `stub`/compromised entry falls through to a fresh fetch so a new
+  publisher key re-attempts it) and folds new fetches back via the
+  `--corpus-sync` step (default on). Override the cache dir with
+  `GVF_CORPUS_DIR`. Wired in `pipeline/steps.py` (`_consolidate_from_corpus`)
+  and `cli/gvf_run.py` (`step_corpus_sync`).
 
 ## House Rules
 

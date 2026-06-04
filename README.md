@@ -49,8 +49,10 @@ recovery are not cold-start behavior.
 # 1. Clone and install
 git clone https://github.com/your-org/GeneVariantFetcher.git
 cd GeneVariantFetcher
-python -m venv .venv && source .venv/bin/activate
-pip install -e .
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[browser,dev]"
+python -m playwright install chromium
 
 # 2. Configure API keys
 cp .env.example .env
@@ -63,8 +65,9 @@ ELSEVIER_API_KEY=...
 EOF
 
 # 3. Run your first extraction (turnkey, no gold standard required)
-gvf gvf-run KCNH2 --email your@email.com --output ./results
-# Add --source-recovery to also fetch paywalled / supplementary full text
+gvf gvf-run KCNH2 --email your@email.com --output ./results [--disease "Long QT Syndrome"]
+# Source recovery (paywall + supplement acquisition) runs BY DEFAULT.
+# Add --no-source-recovery for a fast PMC / free-text-only pass.
 ```
 
 Your results will be in `./results/KCNH2/{timestamp}/KCNH2.db`
@@ -99,11 +102,12 @@ python3.11 -m venv .venv
 source .venv/bin/activate  # Linux/macOS
 # or: .venv\Scripts\activate  # Windows
 
-# Install GVF
-pip install -e .
+# Install GVF (browser extra pulls in Playwright for paywall recovery)
+pip install -e ".[browser,dev]"
+python -m playwright install chromium
 
-# For browser automation (optional, for paywalled papers)
-pip install playwright && playwright install chromium
+# For a minimal install without paywall recovery or dev tools:
+# pip install -e .
 ```
 
 ### Verify Installation
@@ -172,7 +176,7 @@ gvf extract KCNQ1 --email you@email.com --output ./results --scout-first
 Run the Data Scout on existing downloaded papers:
 
 ```bash
-gvf scout ./results/KCNH2/20260210_143000/pmc_fulltext --gene KCNH2
+gvf scout ./results/KCNH2/20260210_143000/pmc_fulltext ./scout_out KCNH2
 ```
 
 #### Turnkey Recall-Oriented Run
@@ -181,20 +185,23 @@ gvf scout ./results/KCNH2/20260210_143000/pmc_fulltext --gene KCNH2
 layers, gold-free source QC, and scoring/report handoff around one gene.
 
 ```bash
-gvf gvf-run KCNH2 --email you@email.com --output ./validation_runs/my_run
+gvf gvf-run KCNH2 --email you@email.com --output ./validation_runs/my_run [--disease "Long QT Syndrome"]
 ```
 
-Use `--skip extract` to re-run recovery/scoring layers against an existing run.
-Each run writes `source_qc/` artifacts that separate PMIDs selected for
-full-text acquisition from PMIDs that already have usable source text but need
-source-driven refresh. After a fetch/replay pass,
+The optional `--disease` flag scopes discovery and Tier-2 filtering to a
+gene-disease pair. Use `--skip extract` to re-run recovery/scoring layers
+against an existing run. Each run writes `source_qc/` artifacts that separate
+PMIDs selected for full-text acquisition from PMIDs that already have usable
+source text but need source-driven refresh. After a fetch/replay pass,
 `summarize_acquisition_outcome.py` can report selected-for-fetch PMIDs,
 usable-fulltext-downloaded PMIDs, and refresh-successful PMIDs separately.
-Pass `--source-recovery` when you want `gvf-run` to run that no-gold
-acquisition loop immediately: it calls `fetch_paywalled.py` on
-`source_qc/fetch_input.csv`, writes `acquisition_outcome_summary.json`, and
-staged-refreshes accepted source overrides into a refreshed DB. This is opt-in
-because it performs live paywall acquisition and LLM extraction.
+Source recovery runs **by default**: `gvf-run` runs the no-gold acquisition
+loop automatically, calling `fetch_paywalled.py` on `source_qc/fetch_input.csv`,
+writing `acquisition_outcome_summary.json`, and staged-refreshing accepted
+source overrides into a refreshed DB. Pass `--no-source-recovery` for a fast
+PMC / free-text-only pass (for example, for calibrated `--pmid-file`
+measurement runs) that skips live paywall acquisition and the extra LLM
+extraction.
 For portable end-to-end recall commands, including how to reuse copied full-text
 artifacts without committing them, see
 [`docs/END_TO_END_RECALL_RUN.md`](docs/END_TO_END_RECALL_RUN.md).
@@ -202,7 +209,9 @@ artifacts without committing them, see
 #### Paywall Audit
 
 ```bash
-gvf audit-paywalls ./results/KCNH2/20260210_143000
+gvf audit-paywalls \
+  --harvest-dir ./results/KCNH2/20260210_143000/pmc_fulltext \
+  --out-dir ./results/KCNH2/20260210_143000/paywall_audit
 ```
 
 This summarizes blocked full-text and supplement acquisition, including papers
@@ -275,7 +284,8 @@ INPUT: Gene Symbol (e.g., "KCNH2")
 ┌─────────────────────────────────────────────────────────────────────┐
 │  STAGE 7: VARIANT EXTRACTION (Tier 3)                               │
 │    • Input: DATA_ZONES.md > FULL_CONTEXT.md > abstract             │
-│    • Model cascade: gpt-4o-mini → gpt-4o (if low yield)            │
+│    • Model cascade (openai/azure provider): gpt-4o-mini → gpt-4o  │
+│      Default anthropic provider uses Claude models instead         │
 │    • Pre-scan: Regex scanner on FULL_CONTEXT.md (not condensed)    │
 │      - Supports concatenated patterns (e.g., HERGG604S, KCNH2A561V)│
 │      - Unicode arrow normalization (→, ➔, ⟶ → standard arrow)     │
@@ -303,8 +313,8 @@ OUTPUT: SQLite database + JSON summaries + workflow logs
 
 | API | Purpose | How to Get |
 |-----|---------|-----------|
-| **OpenAI** | LLM extraction (Tier 2 & 3) | [platform.openai.com](https://platform.openai.com/api-keys) |
 | **NCBI Email** | PubMed access (required for E-utilities) | Your institutional email |
+| **One LLM provider key** | LLM extraction (Tier 2 & 3). Anthropic is the default provider (`config/settings.py`); OpenAI or Azure AI also work. | [console.anthropic.com](https://console.anthropic.com/) / [platform.openai.com](https://platform.openai.com/api-keys) / [Azure AI](https://ai.azure.com/) |
 
 ### Optional (Improves Coverage)
 
@@ -411,7 +421,10 @@ TIER1_MIN_KEYWORD_MATCHES = 2      # Keywords required to pass Tier 1
 TIER2_CONFIDENCE_THRESHOLD = 0.5   # LLM confidence for Tier 2
 
 # Extraction
-TIER3_MODELS = ["gpt-4o-mini", "gpt-4o"]  # Model cascade
+TIER3_MODELS = ["gpt-4o-mini", "gpt-4o"]  # Model cascade (openai/azure)
+# NOTE: This gpt-4o cascade only applies when MODEL_PROVIDER is openai or azure.
+# Under the default anthropic provider, the EFFECTIVE Tier-3 cascade is the
+# Claude models selected in config/settings.py.
 TIER3_MAX_TOKENS = 16000           # Max tokens for extraction
 TIER3_TEMPERATURE = 0.1            # LLM temperature
 

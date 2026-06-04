@@ -1,8 +1,16 @@
 # New Gene Turn-Key Runbook
 
 This is the cold-start flow for a gene with no manually curated gold standard.
-The turnkey entry point is `gvf gvf-run <GENE> --email <email> --output <dir> --source-recovery`;
-the steps below detail what it runs.
+The turnkey entry point is:
+
+```bash
+gvf gvf-run <GENE> --email you@example.com --output ./results [--disease "<phenotype>"]
+```
+
+Source recovery (paywall + supplement acquisition) runs by default in
+`gvf-run`. Add `--no-source-recovery` for a fast PMC/free-text-only pass. The
+optional `--disease` flag scopes discovery and Tier 2 filtering to a
+gene-disease pair. The steps below detail what `gvf-run` runs.
 
 ## 1. Prepare
 
@@ -26,8 +34,11 @@ Do not use SSO cookie scraping or institutional paywall credentials unless the r
 
 Run without `--pmid-file`; explicit PMID lists are for validation against known gold standards and bypass the discovery/filtering behavior that matters for a new gene.
 
+Prefer the `gvf <command>` console script. When it is not on `PATH`, use
+`.venv/bin/python -m cli <command>` as the fallback.
+
 ```bash
-python -m cli extract GENE --scout-first
+gvf extract GENE --scout-first
 ```
 
 The workflow should discover PMIDs through PubMind, PubMed, and Europe PMC, then write `results/GENE/<timestamp>/GENE_pmids.txt`.
@@ -47,7 +58,7 @@ Key outputs to inspect:
 If resuming, point `GVF_RESUME_DIR` at the existing timestamped run directory.
 
 ```bash
-GVF_RESUME_DIR=results/GENE/<timestamp> python -m cli extract GENE --scout-first
+GVF_RESUME_DIR=results/GENE/<timestamp> gvf extract GENE --scout-first
 ```
 
 The harvester should reuse non-empty `pmc_fulltext/*_FULL_CONTEXT.md` files and retry only empty, abstract-only, thin, or publisher-shell artifacts. Avoid re-downloading already valid content.
@@ -102,11 +113,11 @@ The default source QC denominator is the harvest/extraction surface, not raw
 PubMed discovery. Pass `--include-discovery-pmids` only for diagnostic audits
 that intentionally include every discovered PMID.
 
-To run the no-gold acquisition and staged refresh loop as part of `gvf-run`, use
-the opt-in source recovery flag:
+The no-gold acquisition and staged refresh loop runs by default as part of
+`gvf-run`. Add `--no-source-recovery` for a fast PMC/free-text-only pass:
 
 ```bash
-gvf gvf-run GENE --email you@example.edu --output results/ --source-recovery
+gvf gvf-run GENE --email you@example.com --output results/
 ```
 
 This runs `source-qc`, fetches `source_qc/fetch_input.csv` with

@@ -30,10 +30,13 @@ Edit `.env` with:
 
 ## Fresh Cold-Start Run
 
+Prefer the `gvf <command>` console script. When it is not on `PATH`, use
+`.venv/bin/python -m cli <command>` as the fallback.
+
 For one gene:
 
 ```bash
-.venv/bin/python -m cli gvf-run KCNH2 \
+gvf gvf-run KCNH2 \
   --email "$NCBI_EMAIL" \
   --output validation_runs/fresh_e2e \
   --max-pmids 10000
@@ -43,7 +46,7 @@ For all four genes from scratch:
 
 ```bash
 for gene in KCNH2 KCNQ1 RYR2 SCN5A; do
-  .venv/bin/python -m cli gvf-run "$gene" \
+  gvf gvf-run "$gene" \
     --email "$NCBI_EMAIL" \
     --output validation_runs/fresh_e2e \
     --max-pmids 10000

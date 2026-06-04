@@ -13,9 +13,12 @@ cd GeneVariantFetcher
 python3.11 -m venv .venv
 source .venv/bin/activate
 
-# Install in development mode
-pip install -e .
-pip install -r gui/requirements.txt
+# Install in development mode (browser + dev extras)
+pip install -e ".[browser,dev]"
+python -m playwright install chromium
+
+# Working on the web GUI? Add the gui extra (matches gui/requirements.txt):
+pip install -e ".[gui]"
 
 # Install pre-commit hooks
 pip install pre-commit && pre-commit install
