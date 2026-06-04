@@ -957,11 +957,9 @@ def _gold_card(recall: Optional[dict], mae: Optional[dict] = None) -> str:
     )
 
 
-def _gold_source_card(gold_pmids: set, corpus_rows: dict) -> str:
-    """Of the gold-standard PMIDs, how many do we actually have full text /
-    figures / supplements for (and all three)? Sources from corpus/INDEX."""
-    if not gold_pmids:
-        return ""
+def gold_coverage_stats(gold_pmids: set, corpus_rows: dict) -> dict:
+    """Of the gold-standard PMIDs, how many have usable full text / figures /
+    supplements / all three on disk (per corpus INDEX)."""
     n = len(gold_pmids)
     ft = figs = sup = allthree = 0
     for p in gold_pmids:
@@ -973,6 +971,15 @@ def _gold_source_card(gold_pmids: set, corpus_rows: dict) -> str:
         figs += has_fig
         sup += has_sup
         allthree += has_ft and has_fig and has_sup
+    return {"n": n, "ft": ft, "figs": figs, "sup": sup, "all3": allthree}
+
+
+def _gold_source_card(gold_pmids: set, corpus_rows: dict) -> str:
+    if not gold_pmids:
+        return ""
+    c = gold_coverage_stats(gold_pmids, corpus_rows)
+    n = c["n"]
+    ft, figs, sup, allthree = c["ft"], c["figs"], c["sup"], c["all3"]
 
     def row(label: str, k: int) -> str:
         return f"<div class='kv'><span>{label}</span><b>{k}/{n} ({pct(k, n):.0f}%)</b></div>"
@@ -1227,6 +1234,13 @@ def render_index(summaries: dict[str, dict], generated: str) -> str:
                 f"<span>⭐ gold recall (uniqV / PMID)</span>"
                 f"<b>{(uv[2] or 0) * 100:.0f}% / {(pm[2] or 0) * 100:.0f}%</b></div>"
             )
+        gc = s.get("gold_cov")
+        if gc and gc["n"]:
+            gold += (
+                "<div class='kv'><span>gold source (txt/fig/supp/all)</span><b>"
+                f"{pct(gc['ft'], gc['n']):.0f}% / {pct(gc['figs'], gc['n']):.0f}% / "
+                f"{pct(gc['sup'], gc['n']):.0f}% / {pct(gc['all3'], gc['n']):.0f}%</b></div>"
+            )
         cards.append(
             f"<div class='card'><h2><a href='{esc(gene)}/index.html'>{esc(gene)}</a></h2>"
             f"<div class='kv'><span>papers in corpus</span><b>{s['in_corpus']}</b></div>"
@@ -1295,6 +1309,9 @@ def generate_dashboard(
         )
         (gene_dir / "index.html").write_text(page, encoding="utf-8")
         s["recall"] = recall
+        s["gold_cov"] = (
+            gold_coverage_stats(set(per_pmid), corpus_rows) if per_pmid else None
+        )
         summaries[gene] = s
         stats["genes"] += 1
         if db:
