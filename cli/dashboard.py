@@ -1,8 +1,10 @@
 """Static-HTML status / coverage / missingness / provenance dashboard.
 
 `gvf dashboard` reads the consolidated corpus (`corpus/INDEX.csv` + the per-paper
-source under `corpus/<GENE>/<PMID>/`) and the scored SQLite DB(s), and writes a
-self-contained, offline, zip-transferable dashboard under `--out`:
+source under `corpus/<GENE>/<PMID>/`) and the scored SQLite DB(s), and writes an
+offline static dashboard under `--out` (default `corpus/dashboard/`). Figures and
+supplements are referenced relatively into the corpus (no duplication), so zip or
+serve the whole `corpus/` to share it:
 
 * `index.html` — per-gene cards: source coverage (usable vs stub), extraction
   funnel (in-corpus -> extracted -> has-variants), variant/unique counts.
@@ -707,10 +709,11 @@ def render_paper_page(
         src_html = "<p class='note'>No full-text source on disk for this PMID (abstract-only or not fetched).</p>"
         src_note = ""
 
-    # Copy figures + supplements into a SELF-CONTAINED assets/ dir so the
-    # dashboard is portable (works when served on a website or moved/zipped).
-    asset_dir = out_dir / "assets" / gene / pmid
-    rel_assets = f"assets/{gene}/{pmid}"
+    # Reference figures/supplements RELATIVELY into the corpus (no duplication —
+    # copying for thousands of papers bloated the bundle to GBs). These resolve
+    # locally and when corpus/ is served as the web root (the dashboard lives at
+    # corpus/dashboard/, so ../<gene>/<pmid>/ -> corpus/<gene>/<pmid>/). Zip/serve
+    # the whole corpus/ to share it.
     figs = ""
     figdir = paper_root / f"{pmid}_figures"
     if figdir.is_dir():
@@ -720,35 +723,23 @@ def render_paper_page(
             if f.suffix.lower() in {".png", ".jpg", ".jpeg", ".gif"}
         ][:30]
         if imgs:
-            asset_dir.mkdir(parents=True, exist_ok=True)
-            items = []
-            for im in imgs:
-                dst = asset_dir / im.name
-                if not dst.exists():
-                    shutil.copy2(im, dst)
-                src = f"{rel_assets}/{im.name}"
-                items.append(
-                    f"<a href='{src}' target='_blank'><img src='{src}' loading='lazy' "
-                    f"style='max-width:200px;margin:5px;border:1px solid var(--line);border-radius:6px'></a>"
-                )
-            figs = f"<h3>Figures ({len(imgs)})</h3><div>{''.join(items)}</div>"
+            items = "".join(
+                f"<a href='{esc(_rel(im, out_dir))}' target='_blank'>"
+                f"<img src='{esc(_rel(im, out_dir))}' loading='lazy' "
+                f"style='max-width:200px;margin:5px;border:1px solid var(--line);border-radius:6px'></a>"
+                for im in imgs
+            )
+            figs = f"<h3>Figures ({len(imgs)})</h3><div>{items}</div>"
     sups = ""
     supdir = paper_root / f"{pmid}_supplements"
     if supdir.is_dir():
         files = [f for f in sorted(supdir.rglob("*")) if f.is_file()][:40]
         if files:
-            asset_dir.mkdir(parents=True, exist_ok=True)
-            items = []
-            for f in files:
-                dst = asset_dir / "supp" / f.relative_to(supdir)
-                if not dst.exists():
-                    dst.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.copy2(f, dst)
-                rel = f"{rel_assets}/supp/{f.relative_to(supdir).as_posix()}"
-                items.append(
-                    f"<div><a href='{rel}' target='_blank'>📎 {esc(f.name)}</a></div>"
-                )
-            sups = f"<h3>Supplements ({len(files)})</h3>{''.join(items)}"
+            items = "".join(
+                f"<div><a href='{esc(_rel(f, out_dir))}' target='_blank'>📎 {esc(f.name)}</a></div>"
+                for f in files
+            )
+            sups = f"<h3>Supplements ({len(files)})</h3>{items}"
 
     title = paper["title"] or f"PMID {pmid}"
     cite_line = f"<div class='sub'>{cite}</div>" if cite else ""
