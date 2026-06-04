@@ -90,11 +90,12 @@ def test_generate_dashboard_produces_pages_links_and_jump(tmp_path: Path):
     assert stats["genes"] == 1 and stats["paper_pages"] >= 1
     index = (out / "index.html").read_text()
     assert "TESTGENE" in index and "papers in corpus" in index
-    gene = (out / "TESTGENE.html").read_text()
+    assert "TESTGENE/index.html" in index  # per-gene subdir layout
+    gene = (out / "TESTGENE" / "index.html").read_text()
     assert "Source coverage" in gene and "Provenance completeness" in gene
-    assert "paper_TESTGENE_111.html" in gene  # links to the adjudication page
+    assert "papers/111.html" in gene  # links to the adjudication page
 
-    paper = (out / "paper_TESTGENE_111.html").read_text()
+    paper = (out / "TESTGENE" / "papers" / "111.html").read_text()
     assert "pubmed.ncbi.nlm.nih.gov/111/" in paper  # PubMed link
     assert "doi.org/10.1/x" in paper  # DOI link from artifacts.json
     assert "ncbi.nlm.nih.gov/pmc/articles/PMC1/" in paper  # PMC link
@@ -117,6 +118,6 @@ def test_generate_dashboard_produces_pages_links_and_jump(tmp_path: Path):
     assert "count basis" in paper and "N carriers" in paper  # count_provenance ("why")
 
     # variant-centric (website-style) page
-    variants = (out / "TESTGENE_variants.html").read_text()
+    variants = (out / "TESTGENE" / "variants.html").read_text()
     assert "p.Arg100Trp" in variants and "unique variants" in variants
-    assert "paper_TESTGENE_111.html" in variants  # clickthrough to adjudication
+    assert "papers/111.html" in variants  # clickthrough to adjudication

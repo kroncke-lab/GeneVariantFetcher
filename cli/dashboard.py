@@ -705,8 +705,9 @@ def render_paper_page(
         link_html.append(f"<a href='{doi_url(doi)}' target='_blank'>DOI ↗</a>")
     if pmcid:
         link_html.append(f"<a href='{pmc_url(pmcid)}' target='_blank'>PMC ↗</a>")
-    link_html.append(f"<a href='{esc(gene)}_variants.html'>variants</a>")
-    link_html.append(f"<a href='{esc(gene)}.html'>← {esc(gene)}</a>")
+    link_html.append("<a href='../variants.html'>variants</a>")
+    link_html.append(f"<a href='../index.html'>← {esc(gene)}</a>")
+    link_html.append("<a href='../../index.html'>overview</a>")
 
     cite = " · ".join(
         x
@@ -956,6 +957,36 @@ def _gold_card(recall: Optional[dict], mae: Optional[dict] = None) -> str:
     )
 
 
+def _gold_source_card(gold_pmids: set, corpus_rows: dict) -> str:
+    """Of the gold-standard PMIDs, how many do we actually have full text /
+    figures / supplements for (and all three)? Sources from corpus/INDEX."""
+    if not gold_pmids:
+        return ""
+    n = len(gold_pmids)
+    ft = figs = sup = allthree = 0
+    for p in gold_pmids:
+        r = corpus_rows.get(p)
+        has_ft = bool(r) and r.get("full_text_status") == "ok"
+        has_fig = bool(r) and int(r.get("n_figures") or 0) > 0
+        has_sup = bool(r) and int(r.get("n_supplement_files") or 0) > 0
+        ft += has_ft
+        figs += has_fig
+        sup += has_sup
+        allthree += has_ft and has_fig and has_sup
+
+    def row(label: str, k: int) -> str:
+        return f"<div class='kv'><span>{label}</span><b>{k}/{n} ({pct(k, n):.0f}%)</b></div>"
+
+    return (
+        "<div class='card'><h2>Gold-PMID source coverage</h2>"
+        f"<div class='kv'><span>gold-standard PMIDs</span><b>{n}</b></div>"
+        f"{_barbar(ft, n)}"
+        f"{row('usable full text', ft)}{row('figures on disk', figs)}"
+        f"{row('supplements on disk', sup)}{row('full text + figures + supplements', allthree)}"
+        "<div class='mut' style='font-size:11px;margin-top:4px'>over the curated gold-standard PMID set</div></div>"
+    )
+
+
 def render_gene_page(
     gene: str,
     corpus_rows: dict,
@@ -1030,7 +1061,7 @@ def render_gene_page(
         badge = "ok" if status == "ok" else "bad" if status == "stub" else "warn"
         has_page = pmid in cap_set
         pmid_cell = (
-            f"<a href='paper_{esc(gene)}_{esc(pmid)}.html'>{esc(pmid)}</a>"
+            f"<a href='papers/{esc(pmid)}.html'>{esc(pmid)}</a>"
             if has_page
             else f"<a href='{pubmed_url(pmid)}' target='_blank'>{esc(pmid)}↗</a>"
         )
@@ -1097,7 +1128,9 @@ def render_gene_page(
     )
 
     body = (
-        f"<header><h1>{esc(gene)}</h1><div class='sub'><a href='index.html'>← overview</a></div></header>"
+        f"<header><h1>{esc(gene)}</h1><div class='sub'>"
+        f"<a href='../index.html'>← overview</a> · <a href='variants.html'>variants ({s['unique']})</a>"
+        f"</div></header>"
         f"<div class='wrap'>{gap_note}"
         f"<div class='flex'>"
         f"<div class='card'><h2>Source coverage</h2>"
@@ -1113,6 +1146,7 @@ def render_gene_page(
         f"<div class='kv'><span>variant rows</span><b>{s['variant_rows']}</b></div>"
         f"<div class='kv'><span>unique variants</span><b>{s['unique']}</b></div></div>"
         f"{_gold_card(recall, mae)}"
+        f"{_gold_source_card(set(per_pmid), corpus_rows)}"
         f"<div class='card'><h2>Provenance completeness</h2>{audit_html or '<span class=mut>no DB</span>'}"
         f"<div style='margin-top:8px'>{method_html}</div></div>"
         f"<div class='card'><h2>What's left</h2>"
@@ -1120,8 +1154,12 @@ def render_gene_page(
         f"<div class='mut' style='font-size:12px;margin-top:6px'>re-run <code>gvf gvf-run {esc(gene)} …</code> "
         f"(corpus cache skips what's done; a new publisher key re-fetches stubs)</div></div>"
         f"</div>"
-        f"<h2 style='margin-top:20px'>Papers <span class='mut' style='font-size:13px'>"
-        f"(Variants = extracted; Gold/Matched/Δ vs the gold standard where available)</span></h2>"
+        f"<h2 style='margin-top:20px'>Papers</h2>"
+        f"<div class='mut' style='font-size:12px;margin-bottom:6px'>"
+        f"Variants = extracted; Gold/Matched/Δ vs the gold standard (where available); "
+        f"Carriers/Aff/Unaff = cohort counts from penetrance_data; records = per-person rows. "
+        f"<span class='flag'>⚠</span> = usable full text on disk but 0 variants extracted "
+        f"(possible boilerplate/page-shell scrape or an extraction miss — open it to check).</div>"
         f"<input class='search' id='pt-s' placeholder='filter papers…' onkeyup=\"filt('pt')\">"
         f"<table id='pt' data-sc=''><thead><tr>{thead_html}</tr></thead>"
         f"<tbody>{''.join(rows)}</tbody></table>"
@@ -1142,7 +1180,7 @@ def render_variants_page(gene: str, db: dict, page_pmids: set) -> str:
         pmids = sorted(a["pmids"], key=lambda x: int(x) if x.isdigit() else 0)
         links = [
             (
-                f"<a href='paper_{esc(gene)}_{esc(pm)}.html'>{esc(pm)}</a>"
+                f"<a href='papers/{esc(pm)}.html'>{esc(pm)}</a>"
                 if pm in page_pmids
                 else f"<a href='{pubmed_url(pm)}' target='_blank'>{esc(pm)}↗</a>"
             )
@@ -1161,8 +1199,8 @@ def render_variants_page(gene: str, db: dict, page_pmids: set) -> str:
         )
     body = (
         f"<header><h1>{esc(gene)} — variants</h1>"
-        f"<div class='sub'><a href='{esc(gene)}.html'>← {esc(gene)}</a> · "
-        f"<a href='index.html'>overview</a> · {len(agg)} unique variants · "
+        f"<div class='sub'><a href='index.html'>← {esc(gene)}</a> · "
+        f"<a href='../index.html'>overview</a> · {len(agg)} unique variants · "
         f"carriers/affected/unaffected are cohort counts (penetrance_data)</div></header>"
         f"<div class='wrap'>"
         f"<input class='search' id='vt-s' placeholder='filter variants…' onkeyup=\"filt('vt')\">"
@@ -1190,15 +1228,15 @@ def render_index(summaries: dict[str, dict], generated: str) -> str:
                 f"<b>{(uv[2] or 0) * 100:.0f}% / {(pm[2] or 0) * 100:.0f}%</b></div>"
             )
         cards.append(
-            f"<div class='card'><h2><a href='{esc(gene)}.html'>{esc(gene)}</a></h2>"
+            f"<div class='card'><h2><a href='{esc(gene)}/index.html'>{esc(gene)}</a></h2>"
             f"<div class='kv'><span>papers in corpus</span><b>{s['in_corpus']}</b></div>"
             f"{_barbar(s['usable'], s['in_corpus'])}"
             f"<div class='kv'><span>usable full text</span><b>{s['usable']} ({pct(s['usable'], s['in_corpus']):.0f}%)</b></div>"
             f"<div class='kv'><span>extracted</span><b>{s['extracted']}</b></div>"
             f"<div class='kv'><span>papers w/ variants</span><b>{s['with_variants']}</b></div>"
             f"<div class='kv'><span>unique variants</span><b>{s['unique']}</b></div>{gold}"
-            f"<div style='margin-top:8px'><a href='{esc(gene)}.html'>status</a> · "
-            f"<a href='{esc(gene)}_variants.html'>variants</a></div></div>"
+            f"<div style='margin-top:8px'><a href='{esc(gene)}/index.html'>status</a> · "
+            f"<a href='{esc(gene)}/variants.html'>variants</a></div></div>"
         )
     tot = {
         k: sum(s[k] for s in summaries.values())
@@ -1241,29 +1279,34 @@ def generate_dashboard(
         db = load_db(db_path) if db_path and db_path.exists() else None
         sm = score_map.get(gene) or {}
         recall, per_pmid = sm.get("agg"), sm.get("per_pmid")
+        # Per-gene subdir: <out>/<GENE>/{index.html, variants.html, papers/<PMID>.html}
+        gene_dir = out_dir / gene
+        gene_dir.mkdir(parents=True, exist_ok=True)
         page, s, paper_pmids = render_gene_page(
             gene,
             corpus_rows,
             db,
-            out_dir,
+            gene_dir,
             corpus_dir,
             max_papers,
             recall=recall,
             per_pmid=per_pmid,
             mae=sm.get("mae"),
         )
-        (out_dir / f"{gene}.html").write_text(page, encoding="utf-8")
+        (gene_dir / "index.html").write_text(page, encoding="utf-8")
         s["recall"] = recall
         summaries[gene] = s
         stats["genes"] += 1
         if db:
+            papers_dir = gene_dir / "papers"
+            papers_dir.mkdir(parents=True, exist_ok=True)
             for pmid in paper_pmids:
-                (out_dir / f"paper_{gene}_{pmid}.html").write_text(
-                    render_paper_page(gene, pmid, db, corpus_dir, out_dir),
+                (papers_dir / f"{pmid}.html").write_text(
+                    render_paper_page(gene, pmid, db, corpus_dir, papers_dir),
                     encoding="utf-8",
                 )
                 stats["paper_pages"] += 1
-            (out_dir / f"{gene}_variants.html").write_text(
+            (gene_dir / "variants.html").write_text(
                 render_variants_page(gene, db, set(paper_pmids)), encoding="utf-8"
             )
     (out_dir / "index.html").write_text(
