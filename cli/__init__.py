@@ -466,6 +466,83 @@ def gvf_run_command(
         raise typer.Exit(exit_code)
 
 
+@app.command("dashboard")
+def dashboard_command(
+    genes: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--gene",
+            "-g",
+            help="Gene(s) to include (repeatable). Default: all genes in the corpus.",
+        ),
+    ] = None,
+    out: Annotated[
+        str,
+        typer.Option("--out", "-o", help="Output dir for the static HTML dashboard."),
+    ] = "corpus/dashboard",
+    corpus: Annotated[
+        str,
+        typer.Option(
+            "--corpus", help="Corpus dir (default: GVF_CORPUS_DIR or ./corpus)."
+        ),
+    ] = "",
+    db: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--db",
+            help="Override scored DB per gene as GENE=path (repeatable). Else auto-find latest.",
+        ),
+    ] = None,
+    max_papers: Annotated[
+        int,
+        typer.Option(
+            "--max-papers", help="Max per-paper adjudication pages per gene (0 = all)."
+        ),
+    ] = 400,
+):
+    """Generate a static status / coverage / missingness / provenance dashboard.
+
+    Reads the consolidated corpus (corpus/INDEX.csv + corpus/<GENE>/<PMID>/) and
+    the scored DB(s) and writes self-contained HTML to --out: an overview, a
+    per-gene funnel/coverage page, and per-paper ADJUDICATION pages (PubMed/DOI/PMC
+    links + the exact on-disk full text rendered, with click-to-jump-and-highlight
+    from each extracted record to the sentence it came from).
+    """
+    import os as _os
+    from datetime import datetime
+    from pathlib import Path as _Path
+
+    from cli.dashboard import generate_dashboard
+
+    corpus_dir = _Path(
+        corpus or _os.environ.get("GVF_CORPUS_DIR") or (_Path.cwd() / "corpus")
+    ).expanduser()
+    if not corpus_dir.is_dir():
+        typer.echo(f"⚠️  corpus dir not found: {corpus_dir}", err=True)
+        raise typer.Exit(1)
+    db_map: dict[str, _Path] = {}
+    for spec in db or []:
+        if "=" not in spec:
+            typer.echo(f"⚠️  --db must be GENE=path, got {spec!r}", err=True)
+            raise typer.Exit(1)
+        g, p = spec.split("=", 1)
+        db_map[g.upper()] = _Path(p).expanduser()
+
+    out_dir = _Path(out).expanduser()
+    stats = generate_dashboard(
+        out_dir=out_dir,
+        corpus_dir=corpus_dir,
+        db_map=db_map,
+        genes=[g.upper() for g in genes] if genes else None,
+        max_papers=max_papers,
+        generated=datetime.now().strftime("%Y-%m-%d %H:%M"),
+    )
+    typer.echo(
+        f"✅ dashboard: {stats['genes']} gene page(s), {stats['paper_pages']} paper page(s) "
+        f"-> {out_dir / 'index.html'}"
+    )
+
+
 @app.command("audit-paywalls")
 def audit_paywalls_command(
     harvest_dir: Annotated[

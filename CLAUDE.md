@@ -268,6 +268,18 @@ genes.
   `--corpus-sync` step (default on). Override the cache dir with
   `GVF_CORPUS_DIR`. Wired in `pipeline/steps.py` (`_consolidate_from_corpus`)
   and `cli/gvf_run.py` (`step_corpus_sync`).
+- `cli/dashboard.py` / `gvf dashboard` - static HTML status/coverage/missingness/
+  provenance dashboard from `corpus/INDEX.csv` + the scored DB(s). Per gene:
+  source-coverage + extraction funnel + a provenance-completeness audit +
+  "what's left". Per paper: an ADJUDICATION view with PubMed/DOI/PMC links and
+  the exact on-disk full text rendered, where clicking an extracted record
+  jumps to + highlights the `evidence_sentence`/`source_location` it came from.
+  Read-only. Known provenance gaps it surfaces (not yet captured): paper
+  `journal`/`year`/`doi` are 0% in the DB (dashboard pulls DOI/PMCID from
+  `corpus/<g>/<p>/{p}_artifacts.json` instead); `key_quotes` ~3-9% populated;
+  there is NO variant-level rationale/"why" column (the prompt emits
+  `count_provenance` but `migrate_to_sqlite` drops it) — a real follow-up if a
+  per-variant "why" is needed.
 
 ## House Rules
 
