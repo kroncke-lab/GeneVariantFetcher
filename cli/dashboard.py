@@ -52,6 +52,16 @@ def esc(x) -> str:
     return html.escape("" if x is None else str(x))
 
 
+def jq(x) -> str:
+    """A JS-string argument safe to embed inside a double-quoted onclick="...".
+
+    json.dumps gives a valid JS string literal; html.escape then turns its
+    double quotes into &quot; so they don't terminate the onclick attribute
+    (the browser decodes &quot; back to " when it parses the handler).
+    """
+    return html.escape(json.dumps("" if x is None else str(x)))
+
+
 def pct(num: int, den: int) -> float:
     return (100.0 * num / den) if den else 0.0
 
@@ -400,15 +410,29 @@ function srt(id,n){var t=document.getElementById(id),tb=t.tBodies[0],rs=[].slice
  rs.forEach(function(r){tb.appendChild(r)})}
 """
 
-JUMP_JS = """
-function nrm(s){return (s||'').toLowerCase().replace(/\\s+/g,' ').trim();}
-function jump(q){q=nrm(q);if(!q)return;
+JUMP_JS = r"""
+function nrm(s){return (s||'').toLowerCase().replace(/\s+/g,' ').trim();}
+function _blocks(){return [].slice.call(document.querySelectorAll('#src .blk'));}
+// Find the source block that best matches a phrase: exact substring, then a
+// sliding word-window (8..3 words) so partial / lightly-reworded text still hits.
+function _find(s){s=nrm(s);if(s.length<3)return null;var blks=_blocks();
+ var hit=blks.find(function(b){return nrm(b.textContent).indexOf(s)>=0});if(hit)return hit;
+ var w=s.split(' ');for(var len=Math.min(8,w.length);len>=3;len--){
+  for(var i=0;i+len<=w.length;i++){var win=w.slice(i,i+len).join(' ');
+   var h=blks.find(function(b){return nrm(b.textContent).indexOf(win)>=0});if(h)return h;}}
+ return null;}
+// source_location is often a structured pointer ("Results - Family 2; Table 1;
+// Discussion - Variant p.V822L section"), not verbatim text — so also try its
+// components and distinctive tokens (variant notation, Table/Figure/Family refs).
+function jump(q){q=q||'';
  document.querySelectorAll('#src .hl').forEach(function(e){e.classList.remove('hl')});
- var blks=[].slice.call(document.querySelectorAll('#src .blk'));
- var hit=blks.find(function(b){var t=nrm(b.textContent);return t.includes(q)||(q.length>40&&t.length>20&&q.includes(t))});
- if(!hit){var key=q.split(' ').slice(0,6).join(' ');hit=blks.find(function(b){return nrm(b.textContent).includes(key)})}
+ var toks=(q.match(/[pc]\.[A-Za-z0-9_>*()+-]+|[A-Z]\d{1,4}[A-Z]|Table\s*\d+|Figure\s*\d+|Fig\.?\s*\d+|Family\s+[A-Za-z0-9.\s]{1,18}/g)||[]);
+ var phrases=q.split(/[;|·]| - |, /).map(nrm).filter(function(x){return x.length>3});
+ phrases.sort(function(a,b){return b.length-a.length});
+ var order=[q].concat(toks).concat(phrases);
+ var hit=null;for(var i=0;i<order.length;i++){hit=_find(order[i]);if(hit)break;}
  if(hit){hit.classList.add('hl');hit.scrollIntoView({behavior:'smooth',block:'center'})}
- else{alert('Could not locate this text in the rendered full text. It may live in a supplement/figure, or the model paraphrased it.');}}
+ else{alert('Could not locate this in the rendered full text — it may be in a supplement/figure, or reworded by the model.');}}
 function srcfind(){var q=nrm(document.getElementById('src-s').value);if(q)jump(q);}
 """
 
@@ -494,15 +518,15 @@ def render_paper_page(
         actions = []
         if v["location"]:
             actions.append(
-                f"<span class='btn' onclick=\"jump({json.dumps(v['location'])})\">📍 {esc(v['location'])}</span>"
+                f"<span class='btn' onclick=\"jump({jq(v['location'])})\">📍 {esc(v['location'])}</span>"
             )
         for q in v["quotes"][:2]:
             actions.append(
-                f"<span class='btn' onclick=\"jump({json.dumps(q)})\">❝ quote</span>"
+                f"<span class='btn' onclick=\"jump({jq(q)})\">❝ quote</span>"
             )
         if not v["quotes"] and v["notes"]:
             actions.append(
-                f"<span class='btn' onclick=\"jump({json.dumps(v['notes'])})\">🔎 notes</span>"
+                f"<span class='btn' onclick=\"jump({jq(v['notes'])})\">🔎 notes</span>"
             )
         notes = f"<div class='mut'>{esc(v['notes'])}</div>" if v["notes"] else ""
         cprov = (
@@ -535,7 +559,7 @@ def render_paper_page(
             )
             ev = (
                 (
-                    f"<span class='btn' onclick=\"jump({json.dumps(p['evidence'])})\">🔎 evidence sentence</span>"
+                    f"<span class='btn' onclick=\"jump({jq(p['evidence'])})\">🔎 evidence sentence</span>"
                     f"<div class='q'>❝ {esc(p['evidence'])}</div>"
                 )
                 if p["evidence"]

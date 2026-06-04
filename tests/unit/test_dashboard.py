@@ -99,7 +99,11 @@ def test_generate_dashboard_produces_pages_links_and_jump(tmp_path: Path):
     assert "ncbi.nlm.nih.gov/pmc/articles/PMC1/" in paper  # PMC link
     assert "p.Arg100Trp" in paper  # the extracted variant
     assert "Table 1, case 3" in paper  # source_location jump target
-    assert 'onclick="jump(' in paper  # click-to-highlight wired
+    # click-to-highlight wired AND the onclick arg is HTML-escaped (&quot;) so an
+    # inner double-quote can't terminate the onclick="..." attribute (the bug that
+    # silently broke every clickthrough). Raw jump("..." would be malformed.
+    assert "jump(&quot;" in paper
+    assert 'onclick="jump("' not in paper
     assert (
         "carried p.Arg100Trp and was affected" in paper
     )  # the on-disk source is rendered
