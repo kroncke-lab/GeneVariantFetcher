@@ -112,28 +112,41 @@ def md_to_html(text: str) -> str:
             hid += 1
             i += 1
             continue
-        # pipe table: header row + separator row of ---|---
+
+        # pipe table — detect a run of >=2 consecutive pipe rows, WITH or WITHOUT
+        # a |---|---| separator (many converted sources omit the separator, which
+        # is why tables were silently dropped before).
+        def _is_sep(s: str) -> bool:
+            return bool(re.match(r"^\s*\|?[\s:|-]+\|?\s*$", s)) and "-" in s
+
+        def _cells(s: str) -> list[str]:
+            return [c.strip() for c in s.strip().strip("|").split("|")]
+
         if (
-            "|" in line
+            line.count("|") >= 2
             and i + 1 < n
-            and re.match(r"^\s*\|?[\s:|-]+\|?\s*$", lines[i + 1])
-            and "-" in lines[i + 1]
+            and (lines[i + 1].count("|") >= 2 or _is_sep(lines[i + 1]))
         ):
             flush_para()
-            header = [c.strip() for c in stripped.strip("|").split("|")]
-            i += 2
+            header = _cells(line)
+            i += 1
+            if i < n and _is_sep(lines[i]):
+                i += 1  # skip the separator row if present
             rows = []
-            while i < n and "|" in lines[i] and lines[i].strip():
-                rows.append([c.strip() for c in lines[i].strip().strip("|").split("|")])
+            while i < n and lines[i].count("|") >= 2 and lines[i].strip():
+                if _is_sep(lines[i]):
+                    i += 1
+                    continue
+                rows.append(_cells(lines[i]))
                 i += 1
             thead = "".join(f"<th>{esc(c)}</th>" for c in header)
-            body = "".join(
+            bodyrows = "".join(
                 "<tr class='blk'>" + "".join(f"<td>{esc(c)}</td>" for c in r) + "</tr>"
                 for r in rows
             )
             out.append(
                 f'<div class="tblwrap"><table class="srctbl"><thead><tr>{thead}</tr>'
-                f"</thead><tbody>{body}</tbody></table></div>"
+                f"</thead><tbody>{bodyrows}</tbody></table></div>"
             )
             continue
         # blank line
@@ -437,15 +450,22 @@ function _find(s){s=nrm(s);if(s.length<3)return null;var blks=_blocks();
   for(var i=0;i+len<=w.length;i++){var win=w.slice(i,i+len).join(' ');
    var h=blks.find(function(b){return nrm(b.textContent).indexOf(win)>=0});if(h)return h;}}
  return null;}
+var AA3={ala:'A',arg:'R',asn:'N',asp:'D',cys:'C',gln:'Q',glu:'E',gly:'G',his:'H',ile:'I',leu:'L',lys:'K',met:'M',phe:'F',pro:'P',ser:'S',thr:'T',trp:'W',tyr:'Y',val:'V',ter:'*'};
+// p.Arg100Trp -> R100W (so a DB 3-letter notation also matches source 1-letter)
+function shortVar(s){return s.replace(/p\.?\s*([A-Za-z]{3})(\d{1,4})([A-Za-z]{3}|Ter|\*)?/g,function(m,a,num,b){
+ var x=AA3[a.toLowerCase()];if(!x)return m;var y=b?(AA3[b.toLowerCase()]||(b==='*'?'*':'')):'';return x+num+y;});}
 // source_location is often a structured pointer ("Results - Family 2; Table 1;
-// Discussion - Variant p.V822L section"), not verbatim text — so also try its
-// components and distinctive tokens (variant notation, Table/Figure/Family refs).
+// Discussion - Variant p.V822L section"), not verbatim text. Try the VARIANT
+// notation first (most specific -> lands on the exact row/sentence), in both
+// 3- and 1-letter forms, then quotes, then Table/Figure refs, then phrases.
 function jump(q){q=q||'';
  document.querySelectorAll('#src .hl').forEach(function(e){e.classList.remove('hl')});
- var toks=(q.match(/[pc]\.[A-Za-z0-9_>*()+-]+|[A-Z]\d{1,4}[A-Z]|Table\s*\d+|Figure\s*\d+|Fig\.?\s*\d+|Family\s+[A-Za-z0-9.\s]{1,18}/g)||[]);
+ var vars=(q.match(/p\.[A-Za-z]{3}\d{1,4}(?:[A-Za-z]{3}|Ter|\*)?|[pc]\.[A-Za-z0-9_>*()+-]+|\b[A-Z]\d{1,4}[A-Z*]\b/g)||[]);
+ var shorts=[];vars.forEach(function(v){var s=shortVar(v);if(s!==v&&s.length>2)shorts.push(s)});
+ var refs=(q.match(/Table\s*\d+|Figure\s*\d+|Fig\.?\s*\d+|Family\s+[A-Za-z0-9.\s]{1,18}/g)||[]);
  var phrases=q.split(/[;|·]| - |, /).map(nrm).filter(function(x){return x.length>3});
  phrases.sort(function(a,b){return b.length-a.length});
- var order=[q].concat(toks).concat(phrases);
+ var order=vars.concat(shorts).concat([q]).concat(refs).concat(phrases);
  var hit=null;for(var i=0;i<order.length;i++){hit=_find(order[i]);if(hit)break;}
  if(hit){hit.classList.add('hl');hit.scrollIntoView({behavior:'smooth',block:'center'})}
  else{alert('Could not locate this in the rendered full text — it may be in a supplement/figure, or reworded by the model.');}}
@@ -513,26 +533,50 @@ def score_genes(genes: list[str], db_map: dict[str, Path]) -> dict[str, dict]:
     ]
     for g, db in scoreable.items():
         cmd += ["--db", f"{g}={db}"]
+    res: dict[str, dict] = {}
     try:
         subprocess.run(cmd, capture_output=True, text=True, timeout=2400)
         data = json.loads((out / "summary.json").read_text())
+        for item in data.get("gene_results", []):
+            if item.get("status") != "scored":
+                continue
+            g = item["gene"]
+            rc = item.get("summary", {}).get("recall", {})
+            agg = {
+                k: (
+                    rc.get(k, {}).get("matched"),
+                    rc.get(k, {}).get("gold"),
+                    rc.get(k, {}).get("recall"),
+                )
+                for k in ("pmids", "variant_rows", "unique_variants")
+            }
+            # Per-paper: gold variant count (from the gold CSV) + missing count
+            # (gold variants not matched in the DB, from missing_in_sqlite.csv).
+            gold_n: Counter = Counter()
+            gold_csv = gold_dir / "normalized" / f"{g}_recall_input.csv"
+            seen: set = set()
+            if gold_csv.exists():
+                with gold_csv.open(newline="") as f:
+                    for row in csv.DictReader(f):
+                        key = (row.get("pmid", ""), row.get("variant", ""))
+                        if row.get("pmid") and key not in seen:
+                            seen.add(key)
+                            gold_n[row["pmid"]] += 1
+            miss_n: Counter = Counter()
+            miss_csv = out / g / "missing_in_sqlite.csv"
+            if miss_csv.exists():
+                with miss_csv.open(newline="") as f:
+                    for row in csv.DictReader(f):
+                        if row.get("pmid"):
+                            miss_n[row["pmid"]] += 1
+            per_pmid = {
+                p: {"gold": gold_n[p], "missing": int(miss_n.get(p, 0))} for p in gold_n
+            }
+            res[g] = {"agg": agg, "per_pmid": per_pmid}
     except Exception:  # noqa: BLE001 - scoring is best-effort; dashboard still renders
-        return {}
+        return res
     finally:
         shutil.rmtree(out, ignore_errors=True)
-    res: dict[str, dict] = {}
-    for item in data.get("gene_results", []):
-        if item.get("status") != "scored":
-            continue
-        rc = item.get("summary", {}).get("recall", {})
-        res[item["gene"]] = {
-            k: (
-                rc.get(k, {}).get("matched"),
-                rc.get(k, {}).get("gold"),
-                rc.get(k, {}).get("recall"),
-            )
-            for k in ("pmids", "variant_rows", "unique_variants")
-        }
     return res
 
 
@@ -584,7 +628,11 @@ def render_paper_page(
     # LEFT pane: extracted records with jump-to-source actions
     left = ["<h3>Extracted variants ({}):</h3>".format(len(rec["variants"]))]
     for v in rec["variants"]:
-        actions = []
+        # Primary, most-precise jump: the variant notation itself (jump() also
+        # tries its 1-letter form), so it lands on the exact row/sentence.
+        actions = [
+            f"<span class='btn' onclick=\"jump({jq(v['variant'])})\">🎯 find “{esc(v['variant'])}”</span>"
+        ]
         if v["location"]:
             actions.append(
                 f"<span class='btn' onclick=\"jump({jq(v['location'])})\">📍 {esc(v['location'])}</span>"
@@ -784,8 +832,10 @@ def render_gene_page(
     corpus_dir: Path,
     max_papers: int,
     recall: Optional[dict] = None,
+    per_pmid: Optional[dict] = None,
 ) -> tuple[str, dict, list[str]]:
     s = gene_stats(gene, corpus_rows, db)
+    per_pmid = per_pmid or {}
     prov = (db or {}).get("prov", Counter())
     method = (db or {}).get("source_method", Counter())
 
@@ -815,39 +865,36 @@ def render_gene_page(
         e = (db or {}).get("by_pmid", {}).get(pm)
         return (len(e["variants"]) + len(e["patients"])) if e else 0
 
-    # Only papers we can actually render a page for (have DB rows or on-disk source),
-    # ranked by how much there is to adjudicate so the cap keeps the richest papers.
+    # Papers we can render a page for (have DB rows or on-disk source). EVERY
+    # paper with extracted records gets a page (uncapped) so a paper with any
+    # variants/patients is never a mere PubMed link-out; the cap applies only to
+    # source-only papers (nothing extracted to adjudicate).
     pageable = [
         p
         for p in paper_pmids
         if db is not None
         and (p in (db or {}).get("papers", {}) or (corpus_dir / gene / p).is_dir())
     ]
-    pageable.sort(key=_rec_count, reverse=True)
-    cap_set = set(pageable if max_papers <= 0 else pageable[:max_papers])
+    with_rec = [p for p in pageable if _rec_count(p) > 0]
+    source_only = [p for p in pageable if _rec_count(p) == 0]
+    source_only.sort(
+        key=lambda p: int(corpus_rows.get(p, {}).get("fulltext_bytes") or 0),
+        reverse=True,
+    )
+    cap_set = set(with_rec) | set(
+        source_only if max_papers <= 0 else source_only[:max_papers]
+    )
+
+    has_gold = bool(per_pmid)
     for pmid in paper_pmids:
         cr = corpus_rows.get(pmid, {})
         status = cr.get("full_text_status", "—")
-        nvar = (
-            len((db or {}).get("by_pmid", {}).get(pmid, {}).get("variants", []))
-            if db
-            else 0
-        )
-        npat = (
-            len((db or {}).get("by_pmid", {}).get(pmid, {}).get("patients", []))
-            if db
-            else 0
-        )
+        by = (db or {}).get("by_pmid", {}).get(pmid, {})
+        nvar = len(by.get("variants", [])) if db else 0
+        npat = len(by.get("patients", [])) if db else 0
         title = (db or {}).get("papers", {}).get(pmid, {}).get("title") or ""
         badge = "ok" if status == "ok" else "bad" if status == "stub" else "warn"
-        has_page = (
-            db is not None
-            and pmid in cap_set
-            and (
-                pmid in (db or {}).get("papers", {})
-                or (corpus_dir / gene / pmid).is_dir()
-            )
-        )
+        has_page = pmid in cap_set
         pmid_cell = (
             f"<a href='paper_{esc(gene)}_{esc(pmid)}.html'>{esc(pmid)}</a>"
             if has_page
@@ -855,11 +902,35 @@ def render_gene_page(
         )
         if has_page:
             written.append(pmid)
+        gold_cells = ""
+        if has_gold:
+            pp = per_pmid.get(pmid)
+            if pp and pp["gold"]:
+                g, miss = pp["gold"], pp["missing"]
+                matched = max(0, g - miss)
+                mcls = "ok" if miss == 0 else "bad"
+                gold_cells = (
+                    f"<td data-v='{g}'>{g}</td>"
+                    f"<td data-v='{matched}'>{matched}</td>"
+                    f"<td data-v='{miss}'><span class='tag {mcls}'>{'✓' if miss == 0 else '−' + str(miss)}</span></td>"
+                )
+            else:
+                gold_cells = (
+                    "<td class='mut'>—</td><td class='mut'>—</td><td class='mut'>—</td>"
+                )
         rows.append(
-            f"<tr><td data-v='{esc(pmid)}'>{pmid_cell}</td><td>{esc(title[:90])}</td>"
+            f"<tr><td data-v='{esc(pmid)}'>{pmid_cell}</td><td>{esc(title[:80])}</td>"
             f"<td><span class='tag {badge}'>{esc(status)}</span></td>"
-            f"<td data-v='{nvar}'>{nvar}</td><td data-v='{npat}'>{npat}</td></tr>"
+            f"<td data-v='{nvar}'>{nvar}</td>{gold_cells}<td data-v='{npat}'>{npat}</td></tr>"
         )
+
+    # Build the header (gold genes get gold / matched / missing-vs-gold columns).
+    base_cols = ["PMID", "Title", "Source", "Variants"]
+    gold_cols = ["Gold", "Matched", "Δ vs gold"] if has_gold else []
+    all_cols = base_cols + gold_cols + ["Patients"]
+    thead_html = "".join(
+        f"<th onclick=\"srt('pt',{i})\">{esc(c)}</th>" for i, c in enumerate(all_cols)
+    )
 
     audit_html = "".join(
         f"<div class='kv'><span>{esc(name)}</span><b>{n}/{tot} ({pct(n, tot):.0f}%)</b></div>"
@@ -901,12 +972,11 @@ def render_gene_page(
         f"<div class='mut' style='font-size:12px;margin-top:6px'>re-run <code>gvf gvf-run {esc(gene)} …</code> "
         f"(corpus cache skips what's done; a new publisher key re-fetches stubs)</div></div>"
         f"</div>"
-        f"<h2 style='margin-top:20px'>Papers</h2>"
+        f"<h2 style='margin-top:20px'>Papers <span class='mut' style='font-size:13px'>"
+        f"(Variants = extracted; Gold/Matched/Δ vs the gold standard where available)</span></h2>"
         f"<input class='search' id='pt-s' placeholder='filter papers…' onkeyup=\"filt('pt')\">"
-        f"<table id='pt' data-sc=''><thead><tr>"
-        f"<th onclick=\"srt('pt',0)\">PMID</th><th onclick=\"srt('pt',1)\">Title</th>"
-        f"<th onclick=\"srt('pt',2)\">Source</th><th onclick=\"srt('pt',3)\">Variants</th>"
-        f"<th onclick=\"srt('pt',4)\">Patients</th></tr></thead><tbody>{''.join(rows)}</tbody></table>"
+        f"<table id='pt' data-sc=''><thead><tr>{thead_html}</tr></thead>"
+        f"<tbody>{''.join(rows)}</tbody></table>"
         f"</div>"
     )
     return _page(f"{gene} — GVF dashboard", body), s, written
@@ -1009,15 +1079,17 @@ def generate_dashboard(
     out_dir.mkdir(parents=True, exist_ok=True)
     corpus_idx = load_corpus_index(corpus_dir)
     target_genes = genes or sorted(corpus_idx.keys())
-    recall_map = score_genes(target_genes, db_map) if score else {}
+    score_map = score_genes(target_genes, db_map) if score else {}
     summaries: dict[str, dict] = {}
-    stats = {"genes": 0, "paper_pages": 0, "scored": len(recall_map)}
+    stats = {"genes": 0, "paper_pages": 0, "scored": len(score_map)}
     for gene in target_genes:
         corpus_rows = corpus_idx.get(gene, {})
         if not corpus_rows and gene not in db_map:
             continue
         db_path = db_map.get(gene) or find_latest_db(gene)
         db = load_db(db_path) if db_path and db_path.exists() else None
+        sm = score_map.get(gene) or {}
+        recall, per_pmid = sm.get("agg"), sm.get("per_pmid")
         page, s, paper_pmids = render_gene_page(
             gene,
             corpus_rows,
@@ -1025,10 +1097,11 @@ def generate_dashboard(
             out_dir,
             corpus_dir,
             max_papers,
-            recall=recall_map.get(gene),
+            recall=recall,
+            per_pmid=per_pmid,
         )
         (out_dir / f"{gene}.html").write_text(page, encoding="utf-8")
-        s["recall"] = recall_map.get(gene)
+        s["recall"] = recall
         summaries[gene] = s
         stats["genes"] += 1
         if db:
