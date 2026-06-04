@@ -72,6 +72,39 @@ def pct(num: int, den: int) -> float:
     return (100.0 * num / den) if den else 0.0
 
 
+_BOILERPLATE = (
+    "skip to main content",
+    "log in",
+    "create a free account",
+    "your email address",
+    "forgot password",
+    "advertisement",
+    "cookie",
+    "subscribe",
+    "sign in",
+    "institutional access",
+    "get access",
+    "add to mendeley",
+    "reset your password",
+)
+
+
+def boilerplate_warning(text: str) -> str:
+    """Flag sources that look like a captured page shell (login/nav/ads, thin
+    body) rather than article text — i.e. acquisition, not extraction, failed."""
+    low = text.lower()
+    hits = sum(1 for m in _BOILERPLATE if m in low)
+    body_chars = sum(len(ln) for ln in text.splitlines() if len(ln.strip()) > 40)
+    if hits >= 4 and body_chars < 6000:
+        return (
+            "<div class='note'>⚠ This source looks boilerplate-heavy "
+            f"({hits} login/nav/ad markers, ~{body_chars} body chars) — acquisition may "
+            "have captured the page shell, not the article. Records below may be "
+            "unverifiable in this text; this is a fetch problem, not an extraction one.</div>"
+        )
+    return ""
+
+
 # ---------------------------------------------------------------------------
 # Minimal, dependency-free Markdown -> HTML (faithful: every block is taggable
 # so the adjudication JS can jump to and highlight the source sentence/row).
@@ -151,6 +184,22 @@ def md_to_html(text: str) -> str:
                 f"</thead><tbody>{bodyrows}</tbody></table></div>"
             )
             continue
+        # inline figure marker (`_image_: <url>` or markdown ![alt](url)) — render
+        # as a clickable figure chip (the downloaded figure gallery is appended
+        # separately; remote URLs open in a new tab).
+        mimg = re.match(r"^_image_:\s*(\S+)", stripped) or re.match(
+            r"^!\[[^\]]*\]\((\S+?)\)", stripped
+        )
+        if mimg:
+            flush_para()
+            url = mimg.group(1)
+            name = url.rstrip("/").rsplit("/", 1)[-1][:60]
+            out.append(
+                f"<div class='blk'><a class='figref' href='{esc(url)}' target='_blank'>"
+                f"🖼 figure: {esc(name)}</a></div>"
+            )
+            i += 1
+            continue
         # blank line
         if not stripped:
             flush_para()
@@ -194,7 +243,18 @@ def load_db(db_path: Path) -> dict:
         "source_method": Counter(),
         "prov": Counter(),
         "variants_agg": defaultdict(
-            lambda: {"sig": "", "pmids": set(), "affected": 0, "unaffected": 0}
+            lambda: {
+                "sig": "",
+                "pmids": set(),
+                "affected": 0,
+                "unaffected": 0,
+                "carriers": 0,
+            }
+        ),
+        # cohort counts from penetrance_data (the real patient/carrier numbers;
+        # individual_records is per-person and far sparser)
+        "pen_by_pmid": defaultdict(
+            lambda: {"carriers": 0, "affected": 0, "unaffected": 0}
         ),
     }
     try:
@@ -289,12 +349,6 @@ def load_db(db_path: Path) -> dict:
             ):
                 rd = dict(r)
                 vname = rd.get("protein_notation") or ""
-                status = rd.get("affected_status") or ""
-                if vname and vname in data["variants_agg"]:
-                    if status == "affected":
-                        data["variants_agg"][vname]["affected"] += 1
-                    elif status == "unaffected":
-                        data["variants_agg"][vname]["unaffected"] += 1
                 data["by_pmid"][str(rd["pmid"])]["patients"].append(
                     {
                         "variant": vname,
@@ -303,13 +357,39 @@ def load_db(db_path: Path) -> dict:
                         if rd.get("age_at_evaluation") is not None
                         else rd.get("age_at_onset"),
                         "sex": rd.get("sex") or "",
-                        "status": status,
+                        "status": rd.get("affected_status") or "",
                         "phenotype": rd.get("phenotype_details") or "",
                         "ethnicity": rd.get("ethnicity") or "",
                         "origin": rd.get("geographic_origin") or "",
                         "evidence": rd.get("evidence_sentence") or "",
                     }
                 )
+        # cohort counts (penetrance_data) — the substantive carrier/affected/
+        # unaffected numbers per paper and per variant.
+        if _table_cols(con, "penetrance_data"):
+            for r in con.execute(
+                "SELECT pd.pmid, v.protein_notation, "
+                "COALESCE(pd.total_carriers_observed,0) c, COALESCE(pd.affected_count,0) a, "
+                "COALESCE(pd.unaffected_count,0) u "
+                "FROM penetrance_data pd LEFT JOIN variants v ON v.variant_id = pd.variant_id"
+            ):
+                pmid = str(r["pmid"])
+                data["pen_by_pmid"][pmid]["carriers"] += r["c"]
+                data["pen_by_pmid"][pmid]["affected"] += r["a"]
+                data["pen_by_pmid"][pmid]["unaffected"] += r["u"]
+                vname = r["protein_notation"]
+                if vname:
+                    pv = data.setdefault("pen_pv", {}).setdefault(
+                        (pmid, vname), {"carriers": 0, "affected": 0, "unaffected": 0}
+                    )
+                    pv["carriers"] += r["c"]
+                    pv["affected"] += r["a"]
+                    pv["unaffected"] += r["u"]
+                    if vname in data["variants_agg"]:
+                        agg = data["variants_agg"][vname]
+                        agg["carriers"] += r["c"]
+                        agg["affected"] += r["a"]
+                        agg["unaffected"] += r["u"]
         if _table_cols(con, "tables_processed"):
             for r in con.execute(
                 "SELECT pmid, table_name, table_caption, variants_extracted FROM tables_processed"
@@ -429,6 +509,8 @@ tbody tr:nth-child(even) td{background:#f8fafc}tr:hover td{background:#eef5ff}
 .links a{margin-right:14px;font-weight:600}.note{background:#fff7ed;border-left:3px solid var(--warn);padding:8px 12px;border-radius:6px;margin:10px 0;color:#7c4a12}
 .big{font-size:28px;font-weight:800;color:#0f172a}.flex{display:flex;gap:24px;flex-wrap:wrap}
 .gold{background:linear-gradient(180deg,#fffbeb,#fff);border-color:#fde68a}
+.figref{display:inline-block;font-size:12px;padding:2px 9px;border-radius:7px;background:#eef2f8;color:var(--acc2)}
+.flag{color:var(--warn);cursor:help;font-weight:700}
 """
 
 SORT_JS = """
@@ -543,14 +625,26 @@ def score_genes(genes: list[str], db_map: dict[str, Path]) -> dict[str, dict]:
             if item.get("status") != "scored":
                 continue
             g = item["gene"]
-            rc = item.get("summary", {}).get("recall", {})
+            summ = item.get("summary", {})
+            rc = summ.get("recall", {})
             agg = {
                 k: (
                     rc.get(k, {}).get("matched"),
                     rc.get(k, {}).get("gold"),
                     rc.get(k, {}).get("recall"),
                 )
-                for k in ("pmids", "variant_rows", "unique_variants")
+                for k in (
+                    "pmids",
+                    "variant_rows",
+                    "unique_variants",
+                    "patients",
+                    "affected",
+                    "unaffected",
+                )
+            }
+            mae = {
+                k: summ.get("mae", {}).get(k, {}).get("mae")
+                for k in ("carriers", "affected", "unaffected")
             }
             # Per-paper: gold variant count (from the gold CSV) + missing count
             # (gold variants not matched in the DB, from missing_in_sqlite.csv).
@@ -574,7 +668,7 @@ def score_genes(genes: list[str], db_map: dict[str, Path]) -> dict[str, dict]:
             per_pmid = {
                 p: {"gold": gold_n[p], "missing": int(miss_n.get(p, 0))} for p in gold_n
             }
-            res[g] = {"agg": agg, "per_pmid": per_pmid}
+            res[g] = {"agg": agg, "mae": mae, "per_pmid": per_pmid}
     except Exception:  # noqa: BLE001 - scoring is best-effort; dashboard still renders
         return res
     finally:
@@ -626,6 +720,14 @@ def render_paper_page(
     ):
         if meta.get(k) not in (None, ""):
             meta_bits.append(f"<span class='tag'>{esc(k)}: {esc(meta[k])}</span>")
+    pen_tot = db.get("pen_by_pmid", {}).get(pmid)
+    if pen_tot and (
+        pen_tot["carriers"] or pen_tot["affected"] or pen_tot["unaffected"]
+    ):
+        meta_bits.append(
+            f"<span class='tag ok'>cohort: {pen_tot['carriers']} carriers · "
+            f"{pen_tot['affected']} aff · {pen_tot['unaffected']} unaff</span>"
+        )
 
     # LEFT pane: extracted records with jump-to-source actions
     left = ["<h3>Extracted variants ({}):</h3>".format(len(rec["variants"]))]
@@ -654,10 +756,17 @@ def render_paper_page(
             else ""
         )
         quotes = "".join(f"<div class='q'>❝ {esc(q)}</div>" for q in v["quotes"][:2])
+        pv = db.get("pen_pv", {}).get((pmid, v["variant"]))
+        cohort = (
+            f"<div class='mut'>👥 cohort: {pv['carriers']} carriers · "
+            f"{pv['affected']} affected · {pv['unaffected']} unaffected</div>"
+            if pv and (pv["carriers"] or pv["affected"] or pv["unaffected"])
+            else ""
+        )
         left.append(
             f"<div class='rec'><span class='vn'>{esc(v['variant'])}</span>"
             f" <span class='mut'>{esc(v['sig'] or '')}</span><div>{''.join(actions)}</div>"
-            f"{quotes}{notes}{cprov}</div>"
+            f"{cohort}{quotes}{notes}{cprov}</div>"
         )
     if rec["patients"]:
         left.append(f"<h3>Patient records ({len(rec['patients'])}):</h3>")
@@ -695,8 +804,11 @@ def render_paper_page(
 
     # RIGHT pane: the exact on-disk source + a section table-of-contents
     toc = ""
+    bp_warn = ""
     if ft.exists():
-        src_html = md_to_html(ft.read_text(encoding="utf-8", errors="replace"))
+        raw = ft.read_text(encoding="utf-8", errors="replace")
+        src_html = md_to_html(raw)
+        bp_warn = boilerplate_warning(raw)
         src_note = f"<div class='mut'>Exact on-disk source the LLM parsed: <code>{esc(ft.name)}</code></div>"
         heads = re.findall(r'<h(\d) class="blk hd" id="(sec\d+)">(.*?)</h\1>', src_html)
         if heads:
@@ -750,7 +862,7 @@ def render_paper_page(
         f"<div class='wrap'><div class='split'>"
         f"<div class='pane'>{''.join(left)}</div>"
         f"<div class='pane'><input class='search' id='src-s' placeholder='search the full text…' "
-        f"onkeydown=\"if(event.key==='Enter')srcfind()\">{src_note}{toc}"
+        f"onkeydown=\"if(event.key==='Enter')srcfind()\">{src_note}{bp_warn}{toc}"
         f"<div id='src'>{src_html}</div>{figs}{sups}</div>"
         f"</div></div>"
     )
@@ -787,8 +899,9 @@ def gene_stats(gene: str, corpus_rows: dict, db: Optional[dict]) -> dict:
     return s
 
 
-def _gold_card(recall: Optional[dict]) -> str:
-    """Gold-standard recall card (only genes with a gold standard get one)."""
+def _gold_card(recall: Optional[dict], mae: Optional[dict] = None) -> str:
+    """Gold-standard recall card: all 6 recall metrics + carrier/affected/
+    unaffected MAE (only genes with a gold standard get one)."""
     if not recall:
         return ""
     import math
@@ -797,7 +910,11 @@ def _gold_card(recall: Optional[dict]) -> str:
         m, g, r = recall.get(key, (None, None, None))
         if g is None:
             return ""
-        return f"<div class='kv'><span>{label}</span><b>{m}/{g} ({(r or 0) * 100:.1f}%)</b></div>"
+        cls = "ok" if (r or 0) >= 0.9 else ""
+        return (
+            f"<div class='kv'><span>{label}</span>"
+            f"<b class='{cls}'>{m}/{g} ({(r or 0) * 100:.1f}%)</b></div>"
+        )
 
     m, g, r = recall.get("unique_variants", (None, None, None))
     bar = (
@@ -806,12 +923,27 @@ def _gold_card(recall: Optional[dict]) -> str:
         else ""
     )
     gap = max(0, math.ceil((g or 0) * 0.9) - (m or 0)) if g else 0
+    mae = mae or {}
+    mae_html = ""
+    if any(v is not None for v in mae.values()):
+        mae_html = (
+            "<div class='kv' style='border-top:1px solid var(--line);margin-top:6px;padding-top:6px'>"
+            "<span>count MAE (carriers/aff/unaff)</span><b>"
+            + " / ".join(
+                f"{mae[k]:.2f}" if mae.get(k) is not None else "—"
+                for k in ("carriers", "affected", "unaffected")
+            )
+            + "</b></div>"
+        )
     return (
         "<div class='card gold'><h2>⭐ Gold-standard recall</h2>"
         f"{line('PMIDs', 'pmids')}{line('variant rows', 'variant_rows')}"
         f"{line('unique variants', 'unique_variants')}{bar}"
+        f"{line('patients/carriers', 'patients')}{line('affected', 'affected')}"
+        f"{line('unaffected', 'unaffected')}"
         f"<div class='kv'><span>unique-variant gap to 90%</span><b>+{gap}</b></div>"
-        "<div class='mut' style='font-size:11px;margin-top:4px'>scored via run_recall_suite vs the curated gold set</div></div>"
+        f"{mae_html}"
+        "<div class='mut' style='font-size:11px;margin-top:4px'>recall &amp; MAE via run_recall_suite vs the curated gold set</div></div>"
     )
 
 
@@ -824,9 +956,11 @@ def render_gene_page(
     max_papers: int,
     recall: Optional[dict] = None,
     per_pmid: Optional[dict] = None,
+    mae: Optional[dict] = None,
 ) -> tuple[str, dict, list[str]]:
     s = gene_stats(gene, corpus_rows, db)
     per_pmid = per_pmid or {}
+    pen_by_pmid = (db or {}).get("pen_by_pmid", {})
     prov = (db or {}).get("prov", Counter())
     method = (db or {}).get("source_method", Counter())
 
@@ -909,16 +1043,30 @@ def render_gene_page(
                 gold_cells = (
                     "<td class='mut'>—</td><td class='mut'>—</td><td class='mut'>—</td>"
                 )
+        pen = pen_by_pmid.get(pmid, {})
+        carriers = pen.get("carriers", 0)
+        aff, unaff = pen.get("affected", 0), pen.get("unaffected", 0)
         rows.append(
             f"<tr><td data-v='{esc(pmid)}'>{pmid_cell}</td><td>{esc(title[:80])}</td>"
-            f"<td><span class='tag {badge}'>{esc(status)}</span></td>"
-            f"<td data-v='{nvar}'>{nvar}</td>{gold_cells}<td data-v='{npat}'>{npat}</td></tr>"
+            f"<td><span class='tag {badge}'>{esc(status)}</span>"
+            + (
+                " <span class='flag' title='Usable full text but 0 variants extracted — possible boilerplate scrape or extraction miss; check the source'>⚠</span>"
+                if status == "ok" and nvar == 0 and db is not None
+                else ""
+            )
+            + "</td>"
+            f"<td data-v='{nvar}'>{nvar}</td>{gold_cells}"
+            f"<td data-v='{carriers}'>{carriers}</td>"
+            f"<td data-v='{aff}'>{aff}</td><td data-v='{unaff}'>{unaff}</td>"
+            f"<td data-v='{npat}' class='mut'>{npat}</td></tr>"
         )
 
     # Build the header (gold genes get gold / matched / missing-vs-gold columns).
+    # Carriers/Aff/Unaff are cohort counts from penetrance_data (the real patient
+    # numbers); "records" is the sparser per-person individual_records count.
     base_cols = ["PMID", "Title", "Source", "Variants"]
     gold_cols = ["Gold", "Matched", "Δ vs gold"] if has_gold else []
-    all_cols = base_cols + gold_cols + ["Patients"]
+    all_cols = base_cols + gold_cols + ["Carriers", "Aff", "Unaff", "records"]
     thead_html = "".join(
         f"<th onclick=\"srt('pt',{i})\">{esc(c)}</th>" for i, c in enumerate(all_cols)
     )
@@ -955,7 +1103,7 @@ def render_gene_page(
         f"<div class='kv'><span>papers with variants</span><b>{s['with_variants']}</b></div>"
         f"<div class='kv'><span>variant rows</span><b>{s['variant_rows']}</b></div>"
         f"<div class='kv'><span>unique variants</span><b>{s['unique']}</b></div></div>"
-        f"{_gold_card(recall)}"
+        f"{_gold_card(recall, mae)}"
         f"<div class='card'><h2>Provenance completeness</h2>{audit_html or '<span class=mut>no DB</span>'}"
         f"<div style='margin-top:8px'>{method_html}</div></div>"
         f"<div class='card'><h2>What's left</h2>"
@@ -997,6 +1145,7 @@ def render_variants_page(gene: str, db: dict, page_pmids: set) -> str:
         rows.append(
             f"<tr><td>{esc(vname)}</td><td>{esc(a['sig'])}</td>"
             f"<td data-v='{len(pmids)}'>{len(pmids)}</td>"
+            f"<td data-v='{a.get('carriers', 0)}'>{a.get('carriers', 0)}</td>"
             f"<td data-v='{a['affected']}'>{a['affected']}</td>"
             f"<td data-v='{a['unaffected']}'>{a['unaffected']}</td>"
             f"<td>{' '.join(links)}{more}</td></tr>"
@@ -1004,13 +1153,15 @@ def render_variants_page(gene: str, db: dict, page_pmids: set) -> str:
     body = (
         f"<header><h1>{esc(gene)} — variants</h1>"
         f"<div class='sub'><a href='{esc(gene)}.html'>← {esc(gene)}</a> · "
-        f"<a href='index.html'>overview</a> · {len(agg)} unique variants</div></header>"
+        f"<a href='index.html'>overview</a> · {len(agg)} unique variants · "
+        f"carriers/affected/unaffected are cohort counts (penetrance_data)</div></header>"
         f"<div class='wrap'>"
         f"<input class='search' id='vt-s' placeholder='filter variants…' onkeyup=\"filt('vt')\">"
         f"<table id='vt' data-sc=''><thead><tr>"
         f"<th onclick=\"srt('vt',0)\">Variant</th><th onclick=\"srt('vt',1)\">Clinical sig</th>"
-        f"<th onclick=\"srt('vt',2)\">Papers</th><th onclick=\"srt('vt',3)\">Affected</th>"
-        f"<th onclick=\"srt('vt',4)\">Unaffected</th><th>Papers (→ adjudicate / PubMed)</th>"
+        f"<th onclick=\"srt('vt',2)\">Papers</th><th onclick=\"srt('vt',3)\">Carriers</th>"
+        f"<th onclick=\"srt('vt',4)\">Affected</th>"
+        f"<th onclick=\"srt('vt',5)\">Unaffected</th><th>Papers (→ adjudicate / PubMed)</th>"
         f"</tr></thead><tbody>{''.join(rows)}</tbody></table></div>"
     )
     return _page(f"{gene} variants — GVF", body)
@@ -1090,6 +1241,7 @@ def generate_dashboard(
             max_papers,
             recall=recall,
             per_pmid=per_pmid,
+            mae=sm.get("mae"),
         )
         (out_dir / f"{gene}.html").write_text(page, encoding="utf-8")
         s["recall"] = recall
