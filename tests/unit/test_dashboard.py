@@ -84,6 +84,7 @@ def test_generate_dashboard_produces_pages_links_and_jump(tmp_path: Path):
         genes=["TESTGENE"],
         max_papers=0,
         generated="2026-06-04",
+        score=False,
     )
 
     assert stats["genes"] == 1 and stats["paper_pages"] >= 1

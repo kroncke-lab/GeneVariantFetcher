@@ -24,7 +24,11 @@ import csv
 import html
 import json
 import re
+import shutil
 import sqlite3
+import subprocess
+import sys
+import tempfile
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Optional
@@ -75,6 +79,7 @@ def md_to_html(text: str) -> str:
     out: list[str] = []
     i, n = 0, len(lines)
     para: list[str] = []
+    hid = 0
 
     def flush_para():
         if para:
@@ -103,7 +108,8 @@ def md_to_html(text: str) -> str:
             flush_para()
             level = min(len(m.group(1)) + 1, 6)
             txt = m.group(2)
-            out.append(f'<h{level} class="blk hd">{esc(txt)}</h{level}>')
+            out.append(f'<h{level} class="blk hd" id="sec{hid}">{esc(txt)}</h{level}>')
+            hid += 1
             i += 1
             continue
         # pipe table: header row + separator row of ---|---
@@ -126,7 +132,8 @@ def md_to_html(text: str) -> str:
                 for r in rows
             )
             out.append(
-                f'<table class="srctbl"><thead><tr>{thead}</tr></thead><tbody>{body}</tbody></table>'
+                f'<div class="tblwrap"><table class="srctbl"><thead><tr>{thead}</tr>'
+                f"</thead><tbody>{body}</tbody></table></div>"
             )
             continue
         # blank line
@@ -373,31 +380,40 @@ def _artifacts_links(corpus_dir: Path, gene: str, pmid: str) -> dict:
 # HTML scaffolding (self-contained: inline CSS + JS, no network assets)
 # ---------------------------------------------------------------------------
 CSS = """
-:root{--bg:#0f1419;--card:#1a2230;--ink:#e6edf3;--mut:#9aa7b4;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--acc:#58a6ff;--line:#2d3748}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,Segoe UI,Roboto,sans-serif}
+:root{--bg:#eef1f6;--card:#ffffff;--ink:#1b2430;--mut:#5b6776;--ok:#15a34a;--warn:#b45309;--bad:#dc2626;--acc:#2563eb;--acc2:#0e7490;--line:#dde3ec;--hl:#fff3b0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,sans-serif}
 a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
-header{padding:18px 24px;border-bottom:1px solid var(--line)}h1{margin:0;font-size:20px}.sub{color:var(--mut);font-size:13px}
-.wrap{padding:20px 24px;max-width:1400px;margin:0 auto}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
-.card h2{margin:0 0 8px;font-size:17px}.kv{display:flex;justify-content:space-between;color:var(--mut);font-size:13px;padding:2px 0}.kv b{color:var(--ink)}
-.bar{height:8px;background:#222c3a;border-radius:6px;overflow:hidden;margin:6px 0}.bar>span{display:block;height:100%}
-.bar .ok{background:var(--ok)}.bar .warn{background:var(--warn)}
-.tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:10px;border:1px solid var(--line);color:var(--mut);margin:2px 3px 0 0}
-.tag.ok{color:var(--ok);border-color:var(--ok)}.tag.bad{color:var(--bad);border-color:var(--bad)}.tag.warn{color:var(--warn);border-color:var(--warn)}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-th{position:sticky;top:0;background:var(--card);cursor:pointer;user-select:none}tr:hover td{background:#161d29}
-.search{width:100%;padding:8px 10px;margin:8px 0;background:#0b0f14;border:1px solid var(--line);border-radius:8px;color:var(--ink)}
-.split{display:grid;grid-template-columns:minmax(420px,1fr) 1.2fr;gap:16px;align-items:start}
-.pane{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;max-height:82vh;overflow:auto}
-.rec{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:8px 0}.rec .vn{font-weight:600;color:var(--acc)}
-.btn{cursor:pointer;font-size:12px;background:#222c3a;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:2px 8px;margin:2px 4px 0 0}
-.btn:hover{border-color:var(--acc)}.mut{color:var(--mut)}.q{color:var(--ink);font-style:italic}
-#src .blk{padding:2px 4px;border-radius:4px}#src .hd{color:var(--acc);margin:10px 0 4px;border-top:1px solid var(--line);padding-top:8px}
-#src .hl{background:rgba(210,153,34,.35);outline:2px solid var(--warn)}
-.srctbl{margin:8px 0;font-size:12px}.srctbl th,.srctbl td{border:1px solid var(--line);padding:3px 6px}
-.links a{margin-right:12px}.note{background:#1d2533;border-left:3px solid var(--warn);padding:8px 12px;border-radius:6px;margin:10px 0;color:var(--mut)}
-.big{font-size:26px;font-weight:700}.flex{display:flex;gap:24px;flex-wrap:wrap}
+header{padding:18px 24px;background:linear-gradient(180deg,#fff,#f3f6fb);border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:21px;color:#0f172a}.sub{color:var(--mut);font-size:13px}
+.wrap{padding:20px 24px;max-width:1500px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(15,23,42,.06)}
+.card h2{margin:0 0 8px;font-size:16px;color:#0f172a}.kv{display:flex;justify-content:space-between;color:var(--mut);font-size:13px;padding:3px 0}.kv b{color:var(--ink)}
+.bar{height:9px;background:#e9edf3;border-radius:6px;overflow:hidden;margin:7px 0}.bar>span{display:block;height:100%}
+.bar .ok{background:linear-gradient(90deg,#22c55e,#15a34a)}.bar .warn{background:var(--warn)}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid var(--line);color:var(--mut);margin:2px 3px 0 0;background:#f8fafc}
+.tag.ok{color:#fff;background:var(--ok);border-color:var(--ok)}.tag.bad{color:#fff;background:var(--bad);border-color:var(--bad)}.tag.warn{color:#fff;background:var(--warn);border-color:var(--warn)}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{position:sticky;top:0;background:#eef2f8;color:#0f172a;cursor:pointer;user-select:none;font-weight:600}
+tbody tr:nth-child(even) td{background:#f8fafc}tr:hover td{background:#eef5ff}
+.search{width:100%;padding:9px 11px;margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--ink)}
+.split{display:grid;grid-template-columns:minmax(430px,1fr) 1.25fr;gap:16px;align-items:start}
+.pane{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;max-height:84vh;overflow:auto;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+.rec{border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin:8px 0;background:#fbfcfe}.rec .vn{font-weight:700;color:var(--acc)}
+.btn{cursor:pointer;font-size:12px;background:#eff4ff;border:1px solid #c7d7f5;color:var(--acc);border-radius:7px;padding:3px 9px;margin:2px 4px 0 0;display:inline-block}
+.btn:hover{background:var(--acc);color:#fff}.mut{color:var(--mut)}.q{color:#334155;font-style:italic}
+#src{font-size:13.5px;color:#243040}#src .blk{padding:3px 6px;border-radius:5px}
+#src .hd{color:var(--acc2);font-weight:700;margin:14px 0 4px;border-top:1px solid var(--line);padding-top:8px;scroll-margin-top:60px}
+#src .hl{background:var(--hl);outline:2px solid #f59e0b;outline-offset:1px}
+.toc{position:sticky;top:0;z-index:5;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:10px;max-height:150px;overflow:auto}
+.toc a{display:inline-block;font-size:12px;padding:2px 9px;margin:2px;border-radius:20px;background:#eef2f8;color:#334155;cursor:pointer}
+.toc a:hover{background:var(--acc);color:#fff;text-decoration:none}.toc .h3{font-weight:600}
+.tblwrap{overflow-x:auto;margin:8px 0;border:1px solid var(--line);border-radius:8px}
+.srctbl{margin:0;font-size:12px;min-width:100%}.srctbl th{position:static;background:#eef2f8}.srctbl th,.srctbl td{border:1px solid var(--line);padding:4px 7px;white-space:nowrap}
+.links a{margin-right:14px;font-weight:600}.note{background:#fff7ed;border-left:3px solid var(--warn);padding:8px 12px;border-radius:6px;margin:10px 0;color:#7c4a12}
+.big{font-size:28px;font-weight:800;color:#0f172a}.flex{display:flex;gap:24px;flex-wrap:wrap}
+.gold{background:linear-gradient(180deg,#fffbeb,#fff);border-color:#fde68a}
 """
 
 SORT_JS = """
@@ -434,6 +450,9 @@ function jump(q){q=q||'';
  if(hit){hit.classList.add('hl');hit.scrollIntoView({behavior:'smooth',block:'center'})}
  else{alert('Could not locate this in the rendered full text — it may be in a supplement/figure, or reworded by the model.');}}
 function srcfind(){var q=nrm(document.getElementById('src-s').value);if(q)jump(q);}
+function goto(id){var e=document.getElementById(id);if(!e)return;
+ document.querySelectorAll('#src .hl').forEach(function(x){x.classList.remove('hl')});
+ e.classList.add('hl');e.scrollIntoView({behavior:'smooth',block:'start'});}
 """
 
 
@@ -465,6 +484,56 @@ def find_latest_db(gene: str) -> Optional[Path]:
         if base.exists():
             cands += list(base.rglob(f"{gene}.db"))
     return max(cands, key=lambda p: p.stat().st_mtime) if cands else None
+
+
+def score_genes(genes: list[str], db_map: dict[str, Path]) -> dict[str, dict]:
+    """Run the recall suite for genes that have a gold standard + a DB, and
+    return {gene: {pmids|variant_rows|unique_variants: (matched, gold, recall)}}.
+    Reuses scripts/run_recall_suite.py so the numbers match the official scorer."""
+    gold_dir = REPO / "gene_variant_fetcher_gold_standard"
+    scoreable: dict[str, Path] = {}
+    for g in genes:
+        gold = gold_dir / "normalized" / f"{g}_recall_input.csv"
+        db = db_map.get(g) or find_latest_db(g)
+        if gold.exists() and db and db.exists():
+            scoreable[g] = db
+    if not scoreable:
+        return {}
+    out = Path(tempfile.mkdtemp(prefix="gvf_dash_score_"))
+    cmd = [
+        sys.executable,
+        str(REPO / "scripts" / "run_recall_suite.py"),
+        "--score",
+        "--genes",
+        ",".join(scoreable.keys()),
+        "--gold-dir",
+        str(gold_dir),
+        "--outdir",
+        str(out),
+    ]
+    for g, db in scoreable.items():
+        cmd += ["--db", f"{g}={db}"]
+    try:
+        subprocess.run(cmd, capture_output=True, text=True, timeout=2400)
+        data = json.loads((out / "summary.json").read_text())
+    except Exception:  # noqa: BLE001 - scoring is best-effort; dashboard still renders
+        return {}
+    finally:
+        shutil.rmtree(out, ignore_errors=True)
+    res: dict[str, dict] = {}
+    for item in data.get("gene_results", []):
+        if item.get("status") != "scored":
+            continue
+        rc = item.get("summary", {}).get("recall", {})
+        res[item["gene"]] = {
+            k: (
+                rc.get(k, {}).get("matched"),
+                rc.get(k, {}).get("gold"),
+                rc.get(k, {}).get("recall"),
+            )
+            for k in ("pmids", "variant_rows", "unique_variants")
+        }
+    return res
 
 
 # ---------------------------------------------------------------------------
@@ -574,36 +643,64 @@ def render_paper_page(
             "(it may be abstract-only, a stub, or filtered out).</p>"
         )
 
-    # RIGHT pane: the exact on-disk source + figures + supplements
+    # RIGHT pane: the exact on-disk source + a section table-of-contents
+    toc = ""
     if ft.exists():
         src_html = md_to_html(ft.read_text(encoding="utf-8", errors="replace"))
-        src_note = f"<div class='mut'>Rendered from on-disk source the LLM parsed: <code>{esc(_rel(ft, out_dir))}</code></div>"
+        src_note = f"<div class='mut'>Exact on-disk source the LLM parsed: <code>{esc(ft.name)}</code></div>"
+        heads = re.findall(r'<h(\d) class="blk hd" id="(sec\d+)">(.*?)</h\1>', src_html)
+        if heads:
+            links = "".join(
+                f"<a class='h{lvl}' onclick=\"goto('{hid}')\">{txt[:48]}</a>"
+                for lvl, hid, txt in heads
+            )
+            toc = f"<div class='toc'><b class='mut'>Jump to section:</b> {links}</div>"
     else:
         src_html = "<p class='note'>No full-text source on disk for this PMID (abstract-only or not fetched).</p>"
         src_note = ""
-    figdir = paper_root / f"{pmid}_figures"
+
+    # Copy figures + supplements into a SELF-CONTAINED assets/ dir so the
+    # dashboard is portable (works when served on a website or moved/zipped).
+    asset_dir = out_dir / "assets" / gene / pmid
+    rel_assets = f"assets/{gene}/{pmid}"
     figs = ""
+    figdir = paper_root / f"{pmid}_figures"
     if figdir.is_dir():
         imgs = [
             f
             for f in sorted(figdir.iterdir())
             if f.suffix.lower() in {".png", ".jpg", ".jpeg", ".gif"}
-        ]
+        ][:30]
         if imgs:
-            figs = "<h3>Figures on disk:</h3>" + "".join(
-                f"<a href='{esc(_rel(im, out_dir))}' target='_blank'><img src='{esc(_rel(im, out_dir))}' "
-                f"style='max-width:160px;margin:4px;border:1px solid var(--line);border-radius:4px'></a>"
-                for im in imgs[:30]
-            )
-    supdir = paper_root / f"{pmid}_supplements"
+            asset_dir.mkdir(parents=True, exist_ok=True)
+            items = []
+            for im in imgs:
+                dst = asset_dir / im.name
+                if not dst.exists():
+                    shutil.copy2(im, dst)
+                src = f"{rel_assets}/{im.name}"
+                items.append(
+                    f"<a href='{src}' target='_blank'><img src='{src}' loading='lazy' "
+                    f"style='max-width:200px;margin:5px;border:1px solid var(--line);border-radius:6px'></a>"
+                )
+            figs = f"<h3>Figures ({len(imgs)})</h3><div>{''.join(items)}</div>"
     sups = ""
+    supdir = paper_root / f"{pmid}_supplements"
     if supdir.is_dir():
-        files = [f for f in sorted(supdir.rglob("*")) if f.is_file()]
+        files = [f for f in sorted(supdir.rglob("*")) if f.is_file()][:40]
         if files:
-            sups = "<h3>Supplements on disk:</h3>" + "".join(
-                f"<div><a href='{esc(_rel(f, out_dir))}' target='_blank'>📎 {esc(f.name)}</a></div>"
-                for f in files[:40]
-            )
+            asset_dir.mkdir(parents=True, exist_ok=True)
+            items = []
+            for f in files:
+                dst = asset_dir / "supp" / f.relative_to(supdir)
+                if not dst.exists():
+                    dst.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(f, dst)
+                rel = f"{rel_assets}/supp/{f.relative_to(supdir).as_posix()}"
+                items.append(
+                    f"<div><a href='{rel}' target='_blank'>📎 {esc(f.name)}</a></div>"
+                )
+            sups = f"<h3>Supplements ({len(files)})</h3>{''.join(items)}"
 
     title = paper["title"] or f"PMID {pmid}"
     cite_line = f"<div class='sub'>{cite}</div>" if cite else ""
@@ -614,7 +711,7 @@ def render_paper_page(
         f"<div class='wrap'><div class='split'>"
         f"<div class='pane'>{''.join(left)}</div>"
         f"<div class='pane'><input class='search' id='src-s' placeholder='search the full text…' "
-        f"onkeydown=\"if(event.key==='Enter')srcfind()\">{src_note}"
+        f"onkeydown=\"if(event.key==='Enter')srcfind()\">{src_note}{toc}"
         f"<div id='src'>{src_html}</div>{figs}{sups}</div>"
         f"</div></div>"
     )
@@ -651,6 +748,34 @@ def gene_stats(gene: str, corpus_rows: dict, db: Optional[dict]) -> dict:
     return s
 
 
+def _gold_card(recall: Optional[dict]) -> str:
+    """Gold-standard recall card (only genes with a gold standard get one)."""
+    if not recall:
+        return ""
+    import math
+
+    def line(label: str, key: str) -> str:
+        m, g, r = recall.get(key, (None, None, None))
+        if g is None:
+            return ""
+        return f"<div class='kv'><span>{label}</span><b>{m}/{g} ({(r or 0) * 100:.1f}%)</b></div>"
+
+    m, g, r = recall.get("unique_variants", (None, None, None))
+    bar = (
+        f"<div class='bar'><span class='ok' style='width:{(r or 0) * 100:.0f}%'></span></div>"
+        if g
+        else ""
+    )
+    gap = max(0, math.ceil((g or 0) * 0.9) - (m or 0)) if g else 0
+    return (
+        "<div class='card gold'><h2>⭐ Gold-standard recall</h2>"
+        f"{line('PMIDs', 'pmids')}{line('variant rows', 'variant_rows')}"
+        f"{line('unique variants', 'unique_variants')}{bar}"
+        f"<div class='kv'><span>unique-variant gap to 90%</span><b>+{gap}</b></div>"
+        "<div class='mut' style='font-size:11px;margin-top:4px'>scored via run_recall_suite vs the curated gold set</div></div>"
+    )
+
+
 def render_gene_page(
     gene: str,
     corpus_rows: dict,
@@ -658,6 +783,7 @@ def render_gene_page(
     out_dir: Path,
     corpus_dir: Path,
     max_papers: int,
+    recall: Optional[dict] = None,
 ) -> tuple[str, dict, list[str]]:
     s = gene_stats(gene, corpus_rows, db)
     prov = (db or {}).get("prov", Counter())
@@ -767,6 +893,7 @@ def render_gene_page(
         f"<div class='kv'><span>papers with variants</span><b>{s['with_variants']}</b></div>"
         f"<div class='kv'><span>variant rows</span><b>{s['variant_rows']}</b></div>"
         f"<div class='kv'><span>unique variants</span><b>{s['unique']}</b></div></div>"
+        f"{_gold_card(recall)}"
         f"<div class='card'><h2>Provenance completeness</h2>{audit_html or '<span class=mut>no DB</span>'}"
         f"<div style='margin-top:8px'>{method_html}</div></div>"
         f"<div class='card'><h2>What's left</h2>"
@@ -831,6 +958,16 @@ def render_variants_page(gene: str, db: dict, page_pmids: set) -> str:
 def render_index(summaries: dict[str, dict], generated: str) -> str:
     cards = []
     for gene, s in sorted(summaries.items()):
+        rc = s.get("recall") or {}
+        gold = ""
+        if rc:
+            uv = rc.get("unique_variants", (None, None, None))
+            pm = rc.get("pmids", (None, None, None))
+            gold = (
+                "<div class='kv' style='border-top:1px solid var(--line);margin-top:6px;padding-top:6px'>"
+                f"<span>⭐ gold recall (uniqV / PMID)</span>"
+                f"<b>{(uv[2] or 0) * 100:.0f}% / {(pm[2] or 0) * 100:.0f}%</b></div>"
+            )
         cards.append(
             f"<div class='card'><h2><a href='{esc(gene)}.html'>{esc(gene)}</a></h2>"
             f"<div class='kv'><span>papers in corpus</span><b>{s['in_corpus']}</b></div>"
@@ -838,7 +975,7 @@ def render_index(summaries: dict[str, dict], generated: str) -> str:
             f"<div class='kv'><span>usable full text</span><b>{s['usable']} ({pct(s['usable'], s['in_corpus']):.0f}%)</b></div>"
             f"<div class='kv'><span>extracted</span><b>{s['extracted']}</b></div>"
             f"<div class='kv'><span>papers w/ variants</span><b>{s['with_variants']}</b></div>"
-            f"<div class='kv'><span>unique variants</span><b>{s['unique']}</b></div>"
+            f"<div class='kv'><span>unique variants</span><b>{s['unique']}</b></div>{gold}"
             f"<div style='margin-top:8px'><a href='{esc(gene)}.html'>status</a> · "
             f"<a href='{esc(gene)}_variants.html'>variants</a></div></div>"
         )
@@ -867,12 +1004,14 @@ def generate_dashboard(
     genes: Optional[list[str]],
     max_papers: int,
     generated: str,
+    score: bool = True,
 ) -> dict:
     out_dir.mkdir(parents=True, exist_ok=True)
     corpus_idx = load_corpus_index(corpus_dir)
     target_genes = genes or sorted(corpus_idx.keys())
+    recall_map = score_genes(target_genes, db_map) if score else {}
     summaries: dict[str, dict] = {}
-    stats = {"genes": 0, "paper_pages": 0}
+    stats = {"genes": 0, "paper_pages": 0, "scored": len(recall_map)}
     for gene in target_genes:
         corpus_rows = corpus_idx.get(gene, {})
         if not corpus_rows and gene not in db_map:
@@ -880,9 +1019,16 @@ def generate_dashboard(
         db_path = db_map.get(gene) or find_latest_db(gene)
         db = load_db(db_path) if db_path and db_path.exists() else None
         page, s, paper_pmids = render_gene_page(
-            gene, corpus_rows, db, out_dir, corpus_dir, max_papers
+            gene,
+            corpus_rows,
+            db,
+            out_dir,
+            corpus_dir,
+            max_papers,
+            recall=recall_map.get(gene),
         )
         (out_dir / f"{gene}.html").write_text(page, encoding="utf-8")
+        s["recall"] = recall_map.get(gene)
         summaries[gene] = s
         stats["genes"] += 1
         if db:

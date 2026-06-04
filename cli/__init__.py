@@ -499,6 +499,13 @@ def dashboard_command(
             "--max-papers", help="Max per-paper adjudication pages per gene (0 = all)."
         ),
     ] = 400,
+    score: Annotated[
+        bool,
+        typer.Option(
+            "--score/--no-score",
+            help="Compute gold-standard recall (runs run_recall_suite) for genes with a gold set. On by default; --no-score for a faster build.",
+        ),
+    ] = True,
 ):
     """Generate a static status / coverage / missingness / provenance dashboard.
 
@@ -536,10 +543,11 @@ def dashboard_command(
         genes=[g.upper() for g in genes] if genes else None,
         max_papers=max_papers,
         generated=datetime.now().strftime("%Y-%m-%d %H:%M"),
+        score=score,
     )
     typer.echo(
-        f"✅ dashboard: {stats['genes']} gene page(s), {stats['paper_pages']} paper page(s) "
-        f"-> {out_dir / 'index.html'}"
+        f"✅ dashboard: {stats['genes']} gene page(s), {stats['paper_pages']} paper page(s), "
+        f"{stats.get('scored', 0)} gene(s) gold-scored -> {out_dir / 'index.html'}"
     )
 
 
