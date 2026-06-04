@@ -452,6 +452,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         CREATE TABLE IF NOT EXISTS papers (
             pmid TEXT PRIMARY KEY,
             title TEXT,
+            first_author TEXT,
             journal TEXT,
             publication_date TEXT,
             doi TEXT,
@@ -502,6 +503,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             source_location TEXT,
             additional_notes TEXT,
             key_quotes TEXT,  -- JSON array of quotes
+            count_provenance TEXT,  -- JSON: which column/count-type each carrier/affected count came from (the "why")
 
             PRIMARY KEY (variant_id, pmid),
             FOREIGN KEY (variant_id) REFERENCES variants(variant_id) ON DELETE CASCADE,
@@ -560,11 +562,24 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             affected_status TEXT CHECK(affected_status IN ('affected', 'unaffected', 'uncertain')),
             phenotype_details TEXT,
             evidence_sentence TEXT,
+            ethnicity TEXT,
+            geographic_origin TEXT,
 
             FOREIGN KEY (variant_id) REFERENCES variants(variant_id) ON DELETE CASCADE,
             FOREIGN KEY (pmid) REFERENCES papers(pmid) ON DELETE CASCADE
         )
     """)
+
+    # Backfill new columns onto pre-existing DBs (CREATE IF NOT EXISTS won't add them).
+    for table, col, decl in (
+        ("papers", "first_author", "TEXT"),
+        ("variant_papers", "count_provenance", "TEXT"),
+        ("individual_records", "ethnicity", "TEXT"),
+        ("individual_records", "geographic_origin", "TEXT"),
+    ):
+        existing = {r[1] for r in cursor.execute(f"PRAGMA table_info({table})")}
+        if col not in existing:
+            cursor.execute(f"ALTER TABLE {table} ADD COLUMN {col} {decl}")
 
     # Index for querying individual records by affected status
     cursor.execute("""
@@ -781,33 +796,40 @@ def insert_paper_metadata(
     values = (
         pmid,
         paper_meta.get("title"),
+        paper_meta.get("first_author"),
+        paper_meta.get("journal"),
+        paper_meta.get("publication_date"),
+        paper_meta.get("doi"),
+        paper_meta.get("pmc_id"),
         gene_symbol,
         paper_meta.get("extraction_summary"),
         datetime.now().isoformat(),
     )
+    cols = (
+        "pmid, title, first_author, journal, publication_date, doi, pmc_id, "
+        "gene_symbol, extraction_summary, extraction_timestamp"
+    )
+    placeholders = ", ".join(["?"] * len(values))
 
     if replace_existing:
         cursor.execute(
-            """
-            INSERT OR REPLACE INTO papers (
-                pmid, title, gene_symbol, extraction_summary, extraction_timestamp
-            ) VALUES (?, ?, ?, ?, ?)
-        """,
-            values,
+            f"INSERT OR REPLACE INTO papers ({cols}) VALUES ({placeholders})", values
         )
         return
 
     cursor.execute(
-        """
-        INSERT INTO papers (
-            pmid, title, gene_symbol, extraction_summary, extraction_timestamp
-        ) VALUES (?, ?, ?, ?, ?)
+        f"""
+        INSERT INTO papers ({cols}) VALUES ({placeholders})
         ON CONFLICT(pmid) DO UPDATE SET
             title = COALESCE(excluded.title, papers.title),
+            first_author = COALESCE(excluded.first_author, papers.first_author),
+            journal = COALESCE(excluded.journal, papers.journal),
+            publication_date = COALESCE(excluded.publication_date, papers.publication_date),
+            doi = COALESCE(excluded.doi, papers.doi),
+            pmc_id = COALESCE(excluded.pmc_id, papers.pmc_id),
             gene_symbol = COALESCE(papers.gene_symbol, excluded.gene_symbol),
             extraction_summary = COALESCE(
-                excluded.extraction_summary,
-                papers.extraction_summary
+                excluded.extraction_summary, papers.extraction_summary
             ),
             extraction_timestamp = excluded.extraction_timestamp
     """,
@@ -863,8 +885,8 @@ def insert_variant_data(
     cursor.execute(
         """
         INSERT OR IGNORE INTO variant_papers (
-            variant_id, pmid, source_location, additional_notes, key_quotes
-        ) VALUES (?, ?, ?, ?, ?)
+            variant_id, pmid, source_location, additional_notes, key_quotes, count_provenance
+        ) VALUES (?, ?, ?, ?, ?, ?)
     """,
         (
             variant_id,
@@ -872,6 +894,9 @@ def insert_variant_data(
             variant_data.get("source_location"),
             variant_data.get("additional_notes"),
             json.dumps(variant_data.get("key_quotes", [])),
+            json.dumps(variant_data["count_provenance"])
+            if variant_data.get("count_provenance")
+            else None,
         ),
     )
 
@@ -994,8 +1019,8 @@ def insert_variant_data(
             INSERT INTO individual_records (
                 variant_id, pmid, individual_id, age_at_evaluation,
                 age_at_onset, age_at_diagnosis, sex, affected_status,
-                phenotype_details, evidence_sentence
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                phenotype_details, evidence_sentence, ethnicity, geographic_origin
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
             (
                 variant_id,
@@ -1008,6 +1033,8 @@ def insert_variant_data(
                 affected_status,
                 record.get("phenotype_details"),
                 record.get("evidence_sentence"),
+                record.get("ethnicity"),
+                record.get("geographic_origin"),
             ),
         )
 

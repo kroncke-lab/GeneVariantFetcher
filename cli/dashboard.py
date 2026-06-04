@@ -161,26 +161,61 @@ def load_db(db_path: Path) -> dict:
         "by_pmid": defaultdict(lambda: {"variants": [], "patients": [], "tables": []}),
         "source_method": Counter(),
         "prov": Counter(),
+        "variants_agg": defaultdict(
+            lambda: {"sig": "", "pmids": set(), "affected": 0, "unaffected": 0}
+        ),
     }
     try:
-        for r in con.execute("SELECT pmid, title FROM papers"):
-            data["papers"][str(r["pmid"])] = {"title": r["title"], "meta": {}}
+        pcols = _table_cols(con, "papers")
+        bib = [
+            c
+            for c in ("first_author", "journal", "publication_date", "doi", "pmc_id")
+            if c in pcols
+        ]
+        for r in con.execute(
+            "SELECT pmid, title" + ("," + ",".join(bib) if bib else "") + " FROM papers"
+        ):
+            rd = dict(r)
+            data["papers"][str(rd["pmid"])] = {
+                "title": rd.get("title"),
+                "meta": {},
+                "bib": {
+                    k: rd.get(k)
+                    for k in (
+                        "first_author",
+                        "journal",
+                        "publication_date",
+                        "doi",
+                        "pmc_id",
+                    )
+                },
+            }
         if _table_cols(con, "extraction_metadata"):
             for r in con.execute(
                 "SELECT pmid, model_used, source_file, source_type, extraction_confidence, "
                 "total_variants_found, notes, abstract_only FROM extraction_metadata"
             ):
-                data["papers"].setdefault(str(r["pmid"]), {"title": None, "meta": {}})
+                data["papers"].setdefault(
+                    str(r["pmid"]), {"title": None, "meta": {}, "bib": {}}
+                )
                 data["papers"][str(r["pmid"])]["meta"] = dict(r)
-        # variant provenance
+        # variant provenance (count_provenance column added 2026-06-04; guard for old DBs)
+        has_cp = "count_provenance" in _table_cols(con, "variant_papers")
         q = (
             "SELECT vp.pmid, v.protein_notation, v.cdna_notation, v.genomic_position, "
-            "v.clinical_significance, vp.source_location, vp.additional_notes, vp.key_quotes "
-            "FROM variant_papers vp JOIN variants v ON v.variant_id = vp.variant_id"
+            "v.clinical_significance, vp.source_location, vp.additional_notes, vp.key_quotes"
+            + (", vp.count_provenance" if has_cp else "")
+            + " FROM variant_papers vp JOIN variants v ON v.variant_id = vp.variant_id"
         )
         for r in con.execute(q):
             pmid = str(r["pmid"])
             loc = r["source_location"] or ""
+            vname = (
+                r["protein_notation"]
+                or r["cdna_notation"]
+                or r["genomic_position"]
+                or "?"
+            )
             data["source_method"][_method_bucket(loc)] += 1
             data["prov"]["total"] += 1
             if loc.strip():
@@ -190,37 +225,57 @@ def load_db(db_path: Path) -> dict:
             quotes = _parse_quotes(r["key_quotes"])
             if quotes:
                 data["prov"]["with_quotes"] += 1
+            cprov = _parse_count_provenance(r["count_provenance"]) if has_cp else ""
+            if cprov:
+                data["prov"]["with_count_prov"] += 1
+            agg = data["variants_agg"][vname]
+            agg["sig"] = agg["sig"] or (r["clinical_significance"] or "")
+            agg["pmids"].add(pmid)
             data["by_pmid"][pmid]["variants"].append(
                 {
-                    "variant": r["protein_notation"]
-                    or r["cdna_notation"]
-                    or r["genomic_position"]
-                    or "?",
+                    "variant": vname,
                     "cdna": r["cdna_notation"],
                     "sig": r["clinical_significance"],
                     "location": loc,
                     "notes": r["additional_notes"] or "",
                     "quotes": quotes,
+                    "count_prov": cprov,
                 }
             )
-        # patient characteristics
-        if _table_cols(con, "individual_records"):
+        # patient characteristics (ethnicity/geographic_origin added 2026-06-04)
+        ir_cols = _table_cols(con, "individual_records")
+        if ir_cols:
+            extra = [c for c in ("ethnicity", "geographic_origin") if c in ir_cols]
+            sel = (
+                "ir.pmid, v.protein_notation, ir.individual_id, ir.age_at_evaluation, "
+                "ir.age_at_onset, ir.sex, ir.affected_status, ir.phenotype_details, ir.evidence_sentence"
+                + ("," + ",".join("ir." + c for c in extra) if extra else "")
+            )
             for r in con.execute(
-                "SELECT ir.pmid, v.protein_notation, ir.individual_id, ir.age_at_evaluation, "
-                "ir.age_at_onset, ir.sex, ir.affected_status, ir.phenotype_details, ir.evidence_sentence "
-                "FROM individual_records ir LEFT JOIN variants v ON v.variant_id = ir.variant_id"
+                f"SELECT {sel} FROM individual_records ir "
+                "LEFT JOIN variants v ON v.variant_id = ir.variant_id"
             ):
-                data["by_pmid"][str(r["pmid"])]["patients"].append(
+                rd = dict(r)
+                vname = rd.get("protein_notation") or ""
+                status = rd.get("affected_status") or ""
+                if vname and vname in data["variants_agg"]:
+                    if status == "affected":
+                        data["variants_agg"][vname]["affected"] += 1
+                    elif status == "unaffected":
+                        data["variants_agg"][vname]["unaffected"] += 1
+                data["by_pmid"][str(rd["pmid"])]["patients"].append(
                     {
-                        "variant": r["protein_notation"] or "",
-                        "id": r["individual_id"] or "",
-                        "age": r["age_at_evaluation"]
-                        if r["age_at_evaluation"] is not None
-                        else r["age_at_onset"],
-                        "sex": r["sex"] or "",
-                        "status": r["affected_status"] or "",
-                        "phenotype": r["phenotype_details"] or "",
-                        "evidence": r["evidence_sentence"] or "",
+                        "variant": vname,
+                        "id": rd.get("individual_id") or "",
+                        "age": rd.get("age_at_evaluation")
+                        if rd.get("age_at_evaluation") is not None
+                        else rd.get("age_at_onset"),
+                        "sex": rd.get("sex") or "",
+                        "status": status,
+                        "phenotype": rd.get("phenotype_details") or "",
+                        "ethnicity": rd.get("ethnicity") or "",
+                        "origin": rd.get("geographic_origin") or "",
+                        "evidence": rd.get("evidence_sentence") or "",
                     }
                 )
         if _table_cols(con, "tables_processed"):
@@ -265,6 +320,30 @@ def _parse_quotes(raw) -> list[str]:
         if str(raw).strip():
             return [str(raw)]
     return []
+
+
+def _parse_count_provenance(raw) -> str:
+    """Render count_provenance JSON as a short 'why this count' string."""
+    if not raw:
+        return ""
+    try:
+        d = json.loads(raw) if isinstance(raw, str) else raw
+    except (json.JSONDecodeError, TypeError):
+        return str(raw)
+    if not isinstance(d, dict):
+        return str(raw)
+    bits = []
+    for kind in ("carriers", "affected", "unaffected"):
+        label = d.get(f"{kind}_column_label")
+        ctype = d.get(f"{kind}_count_type")
+        if label or (ctype and ctype not in ("unknown", None)):
+            piece = kind
+            if label:
+                piece += f" from “{label}”"
+            if ctype and ctype != "unknown":
+                piece += f" ({ctype})"
+            bits.append(piece)
+    return "; ".join(bits)
 
 
 def _artifacts_links(corpus_dir: Path, gene: str, pmid: str) -> dict:
@@ -370,20 +449,32 @@ def find_latest_db(gene: str) -> Optional[Path]:
 def render_paper_page(
     gene: str, pmid: str, db: dict, corpus_dir: Path, out_dir: Path
 ) -> str:
-    paper = db["papers"].get(pmid, {"title": None, "meta": {}})
+    paper = db["papers"].get(pmid, {"title": None, "meta": {}, "bib": {}})
     rec = db["by_pmid"].get(pmid, {"variants": [], "patients": [], "tables": []})
     links = _artifacts_links(corpus_dir, gene, pmid)
+    bib = paper.get("bib") or {}
+    doi = bib.get("doi") or links["doi"]
+    pmcid = bib.get("pmc_id") or links["pmcid"]
     paper_root = corpus_dir / gene / pmid
     ft = paper_root / f"{pmid}_FULL_CONTEXT.md"
 
     link_html = [f"<a href='{pubmed_url(pmid)}' target='_blank'>PubMed ↗</a>"]
-    if links["doi"]:
-        link_html.append(f"<a href='{doi_url(links['doi'])}' target='_blank'>DOI ↗</a>")
-    if links["pmcid"]:
-        link_html.append(
-            f"<a href='{pmc_url(links['pmcid'])}' target='_blank'>PMC ↗</a>"
-        )
+    if doi:
+        link_html.append(f"<a href='{doi_url(doi)}' target='_blank'>DOI ↗</a>")
+    if pmcid:
+        link_html.append(f"<a href='{pmc_url(pmcid)}' target='_blank'>PMC ↗</a>")
+    link_html.append(f"<a href='{esc(gene)}_variants.html'>variants</a>")
     link_html.append(f"<a href='{esc(gene)}.html'>← {esc(gene)}</a>")
+
+    cite = " · ".join(
+        x
+        for x in [
+            esc(bib.get("first_author")) + " et al." if bib.get("first_author") else "",
+            f"<i>{esc(bib.get('journal'))}</i>" if bib.get("journal") else "",
+            esc(bib.get("publication_date")) if bib.get("publication_date") else "",
+        ]
+        if x
+    )
 
     meta = paper["meta"]
     meta_bits = []
@@ -414,10 +505,16 @@ def render_paper_page(
                 f"<span class='btn' onclick=\"jump({json.dumps(v['notes'])})\">🔎 notes</span>"
             )
         notes = f"<div class='mut'>{esc(v['notes'])}</div>" if v["notes"] else ""
+        cprov = (
+            f"<div class='mut'>⚖️ count basis: {esc(v['count_prov'])}</div>"
+            if v.get("count_prov")
+            else ""
+        )
         quotes = "".join(f"<div class='q'>❝ {esc(q)}</div>" for q in v["quotes"][:2])
         left.append(
             f"<div class='rec'><span class='vn'>{esc(v['variant'])}</span>"
-            f" <span class='mut'>{esc(v['sig'] or '')}</span><div>{''.join(actions)}</div>{quotes}{notes}</div>"
+            f" <span class='mut'>{esc(v['sig'] or '')}</span><div>{''.join(actions)}</div>"
+            f"{quotes}{notes}{cprov}</div>"
         )
     if rec["patients"]:
         left.append(f"<h3>Patient records ({len(rec['patients'])}):</h3>")
@@ -430,7 +527,9 @@ def render_paper_page(
                     f"{esc(p['variant'])}" if p["variant"] else "",
                     f"age {esc(p['age'])}" if p["age"] not in (None, "") else "",
                     f"sex {esc(p['sex'])}" if p["sex"] else "",
-                    p["phenotype"][:80] if p["phenotype"] else "",
+                    f"🌍 {esc(p['ethnicity'])}" if p.get("ethnicity") else "",
+                    f"📍 {esc(p['origin'])}" if p.get("origin") else "",
+                    esc(p["phenotype"][:80]) if p["phenotype"] else "",
                 ]
                 if x
             )
@@ -483,8 +582,9 @@ def render_paper_page(
             )
 
     title = paper["title"] or f"PMID {pmid}"
+    cite_line = f"<div class='sub'>{cite}</div>" if cite else ""
     body = (
-        f"<header><h1>{esc(title)}</h1>"
+        f"<header><h1>{esc(title)}</h1>{cite_line}"
         f"<div class='links sub'>PMID {esc(pmid)} · {' '.join(link_html)}</div>"
         f"<div>{''.join(meta_bits)}</div></header>"
         f"<div class='wrap'><div class='split'>"
@@ -661,6 +761,49 @@ def render_gene_page(
     return _page(f"{gene} — GVF dashboard", body), s, written
 
 
+def render_variants_page(gene: str, db: dict, page_pmids: set) -> str:
+    """Variant-centric view (website-style): one row per unique variant,
+    aggregating papers + affected/unaffected patient counts, with clickthrough
+    to each paper's adjudication page (or PubMed)."""
+    agg = db.get("variants_agg", {})
+    rows = []
+    for vname, a in sorted(
+        agg.items(), key=lambda kv: len(kv[1]["pmids"]), reverse=True
+    ):
+        pmids = sorted(a["pmids"], key=lambda x: int(x) if x.isdigit() else 0)
+        links = [
+            (
+                f"<a href='paper_{esc(gene)}_{esc(pm)}.html'>{esc(pm)}</a>"
+                if pm in page_pmids
+                else f"<a href='{pubmed_url(pm)}' target='_blank'>{esc(pm)}↗</a>"
+            )
+            for pm in pmids[:12]
+        ]
+        more = (
+            f" <span class='mut'>+{len(pmids) - 12}</span>" if len(pmids) > 12 else ""
+        )
+        rows.append(
+            f"<tr><td>{esc(vname)}</td><td>{esc(a['sig'])}</td>"
+            f"<td data-v='{len(pmids)}'>{len(pmids)}</td>"
+            f"<td data-v='{a['affected']}'>{a['affected']}</td>"
+            f"<td data-v='{a['unaffected']}'>{a['unaffected']}</td>"
+            f"<td>{' '.join(links)}{more}</td></tr>"
+        )
+    body = (
+        f"<header><h1>{esc(gene)} — variants</h1>"
+        f"<div class='sub'><a href='{esc(gene)}.html'>← {esc(gene)}</a> · "
+        f"<a href='index.html'>overview</a> · {len(agg)} unique variants</div></header>"
+        f"<div class='wrap'>"
+        f"<input class='search' id='vt-s' placeholder='filter variants…' onkeyup=\"filt('vt')\">"
+        f"<table id='vt' data-sc=''><thead><tr>"
+        f"<th onclick=\"srt('vt',0)\">Variant</th><th onclick=\"srt('vt',1)\">Clinical sig</th>"
+        f"<th onclick=\"srt('vt',2)\">Papers</th><th onclick=\"srt('vt',3)\">Affected</th>"
+        f"<th onclick=\"srt('vt',4)\">Unaffected</th><th>Papers (→ adjudicate / PubMed)</th>"
+        f"</tr></thead><tbody>{''.join(rows)}</tbody></table></div>"
+    )
+    return _page(f"{gene} variants — GVF", body)
+
+
 def render_index(summaries: dict[str, dict], generated: str) -> str:
     cards = []
     for gene, s in sorted(summaries.items()):
@@ -671,7 +814,9 @@ def render_index(summaries: dict[str, dict], generated: str) -> str:
             f"<div class='kv'><span>usable full text</span><b>{s['usable']} ({pct(s['usable'], s['in_corpus']):.0f}%)</b></div>"
             f"<div class='kv'><span>extracted</span><b>{s['extracted']}</b></div>"
             f"<div class='kv'><span>papers w/ variants</span><b>{s['with_variants']}</b></div>"
-            f"<div class='kv'><span>unique variants</span><b>{s['unique']}</b></div></div>"
+            f"<div class='kv'><span>unique variants</span><b>{s['unique']}</b></div>"
+            f"<div style='margin-top:8px'><a href='{esc(gene)}.html'>status</a> · "
+            f"<a href='{esc(gene)}_variants.html'>variants</a></div></div>"
         )
     tot = {
         k: sum(s[k] for s in summaries.values())
@@ -723,6 +868,9 @@ def generate_dashboard(
                     encoding="utf-8",
                 )
                 stats["paper_pages"] += 1
+            (out_dir / f"{gene}_variants.html").write_text(
+                render_variants_page(gene, db, set(paper_pmids)), encoding="utf-8"
+            )
     (out_dir / "index.html").write_text(
         render_index(summaries, generated), encoding="utf-8"
     )

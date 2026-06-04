@@ -273,13 +273,21 @@ genes.
   source-coverage + extraction funnel + a provenance-completeness audit +
   "what's left". Per paper: an ADJUDICATION view with PubMed/DOI/PMC links and
   the exact on-disk full text rendered, where clicking an extracted record
-  jumps to + highlights the `evidence_sentence`/`source_location` it came from.
-  Read-only. Known provenance gaps it surfaces (not yet captured): paper
-  `journal`/`year`/`doi` are 0% in the DB (dashboard pulls DOI/PMCID from
-  `corpus/<g>/<p>/{p}_artifacts.json` instead); `key_quotes` ~3-9% populated;
-  there is NO variant-level rationale/"why" column (the prompt emits
-  `count_provenance` but `migrate_to_sqlite` drops it) — a real follow-up if a
-  per-variant "why" is needed.
+  jumps to + highlights the `evidence_sentence`/`source_location` it came from
+  (both 100%-populated). Also emits a per-gene `<GENE>_variants.html`
+  variant-centric view (one row per unique variant → papers + affected/unaffected
+  patient counts + clickthrough) for the eventual variant website. Read-only.
+- Provenance fields (2026-06-04): the schema/migrator now capture
+  `papers.first_author`, `variant_papers.count_provenance` (the "why" behind each
+  carrier/affected count — was emitted by the prompt but previously dropped), and
+  `individual_records.ethnicity`/`geographic_origin` (extracted by the Tier-3
+  prompt, on by default). New columns auto-ALTER onto existing DBs.
+- `scripts/backfill_paper_metadata.py` - fills `papers.{first_author,journal,
+  publication_date,doi,pmc_id}` into existing DBs from local caches
+  (`abstract_json/*.json` authors/journal/year + corpus `{pmid}_artifacts.json`
+  doi/pmcid) — NO LLM, NO network, idempotent, COALESCE-safe. Run it after
+  migrate/refresh; on the four cardiac genes it lifts first_author/journal/year
+  from 0% to ~99%. ethnicity/"why" only populate on the NEXT extraction run.
 
 ## House Rules
 

@@ -3867,6 +3867,11 @@ Return strict JSON with this schema:
             "paper_metadata": {
                 "pmid": paper.pmid,
                 "title": paper.title or "Unknown Title",
+                "first_author": (paper.authors or [None])[0],
+                "journal": paper.journal,
+                "publication_date": paper.publication_date,
+                "doi": paper.doi,
+                "pmc_id": paper.pmc_id,
                 "extraction_summary": (
                     f"Router+deterministic parse of {len(variants)} variants from "
                     f"{len(routed)} routed table(s)"
@@ -3974,6 +3979,11 @@ Return strict JSON with this schema:
                     "paper_metadata": {
                         "pmid": paper.pmid,
                         "title": paper.title or "Unknown Title",
+                        "first_author": (paper.authors or [None])[0],
+                        "journal": paper.journal,
+                        "publication_date": paper.publication_date,
+                        "doi": paper.doi,
+                        "pmc_id": paper.pmc_id,
                         "extraction_summary": f"Deterministic table parse of {len(parsed_variants)} variants",
                     },
                     "variants": parsed_variants,
@@ -4040,6 +4050,11 @@ Return strict JSON with this schema:
                 "paper_metadata": {
                     "pmid": paper.pmid,
                     "title": paper.title or "Unknown Title",
+                    "first_author": (paper.authors or [None])[0],
+                    "journal": paper.journal,
+                    "publication_date": paper.publication_date,
+                    "doi": paper.doi,
+                    "pmc_id": paper.pmc_id,
                     "extraction_summary": f"Deterministic table parse of {len(deterministic_variants)} variants",
                 },
                 "variants": deterministic_variants,

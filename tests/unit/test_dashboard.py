@@ -34,26 +34,30 @@ def _make_db(db: Path) -> None:
     con = sqlite3.connect(str(db))
     con.executescript(
         """
-        CREATE TABLE papers(pmid TEXT PRIMARY KEY, title TEXT, gene_symbol TEXT);
+        CREATE TABLE papers(pmid TEXT PRIMARY KEY, title TEXT, first_author TEXT,
+            journal TEXT, publication_date TEXT, doi TEXT, pmc_id TEXT, gene_symbol TEXT);
         CREATE TABLE variants(variant_id INTEGER PRIMARY KEY, gene_symbol TEXT,
             cdna_notation TEXT, protein_notation TEXT, genomic_position TEXT, clinical_significance TEXT);
         CREATE TABLE variant_papers(variant_id INTEGER, pmid TEXT, source_location TEXT,
-            additional_notes TEXT, key_quotes TEXT);
+            additional_notes TEXT, key_quotes TEXT, count_provenance TEXT);
         CREATE TABLE individual_records(variant_id INTEGER, pmid TEXT, individual_id TEXT,
             age_at_evaluation INTEGER, age_at_onset INTEGER, sex TEXT, affected_status TEXT,
-            phenotype_details TEXT, evidence_sentence TEXT);
+            phenotype_details TEXT, evidence_sentence TEXT, ethnicity TEXT, geographic_origin TEXT);
         """
     )
-    con.execute("INSERT INTO papers VALUES ('111','A KCNH2 family study','TESTGENE')")
+    con.execute(
+        "INSERT INTO papers VALUES ('111','A KCNH2 family study','Chen Q','Circulation','1999','10.1/x',NULL,'TESTGENE')"
+    )
     con.execute(
         "INSERT INTO variants VALUES (1,'TESTGENE',NULL,'p.Arg100Trp',NULL,'Pathogenic')"
     )
     con.execute(
-        "INSERT INTO variant_papers VALUES (1,'111','Table 1, case 3','proband; LQT2','[\"carried p.Arg100Trp\"]')"
+        "INSERT INTO variant_papers VALUES (1,'111','Table 1, case 3','proband; LQT2',"
+        '\'["carried p.Arg100Trp"]\',\'{"carriers_column_label":"N carriers","carriers_count_type":"per_variant_carrier"}\')'
     )
     con.execute(
         "INSERT INTO individual_records VALUES (1,'111','proband',12,10,'F','affected',"
-        "'long QT','The proband carried p.Arg100Trp and was affected at age 12.')"
+        "'long QT','The proband carried p.Arg100Trp and was affected at age 12.','East Asian','Japan')"
     )
     con.commit()
     con.close()
@@ -100,3 +104,14 @@ def test_generate_dashboard_produces_pages_links_and_jump(tmp_path: Path):
         "carried p.Arg100Trp and was affected" in paper
     )  # the on-disk source is rendered
     assert "id='src'" in paper  # source pane present
+    # new provenance fields
+    assert (
+        "Chen Q" in paper and "Circulation" in paper
+    )  # first author + journal bibliography
+    assert "East Asian" in paper and "Japan" in paper  # patient ethnicity / origin
+    assert "count basis" in paper and "N carriers" in paper  # count_provenance ("why")
+
+    # variant-centric (website-style) page
+    variants = (out / "TESTGENE_variants.html").read_text()
+    assert "p.Arg100Trp" in variants and "unique variants" in variants
+    assert "paper_TESTGENE_111.html" in variants  # clickthrough to adjudication

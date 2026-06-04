@@ -514,6 +514,8 @@ Return a JSON object with this structure:
                     "sex": "string or null (male/female/other)",
                     "affected_status": "string (affected/unaffected/uncertain)",
                     "phenotype_details": "string (disease manifestations for this person)",
+                    "ethnicity": "string or null (reported race/ethnicity/ancestry of this individual or their cohort, verbatim, e.g. 'East Asian', 'Caucasian', 'Ashkenazi Jewish')",
+                    "geographic_origin": "string or null (reported country/region/population of origin, e.g. 'Japan', 'Northern Italy')",
                     "evidence_sentence": "string (exact sentence from paper)"
                 }}
             ],
