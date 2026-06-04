@@ -132,6 +132,7 @@ def step_extract(
     pmid_file: Optional[Path],
     max_pmids: int,
     resume_dir: Optional[Path],
+    disease: Optional[str] = None,
 ) -> Path:
     """Run the existing automated workflow. Returns the run dir it produced."""
     from cli.automated_workflow import automated_variant_extraction_workflow
@@ -150,6 +151,9 @@ def step_extract(
         pmids = [p for p in pmids if p.isdigit()]
         logger.info("Using %d PMIDs from %s (calibrated mode)", len(pmids), pmid_file)
 
+    if disease:
+        logger.info("Scoping discovery + Tier-2 filter by disease: %s", disease)
+
     automated_variant_extraction_workflow(
         gene_symbol=gene,
         email=email,
@@ -157,6 +161,7 @@ def step_extract(
         max_pmids=max_pmids,
         pmids=pmids,
         scout_first=True,
+        disease=disease,
     )
 
     # Find the run dir the workflow just created (latest timestamped child).
@@ -680,6 +685,35 @@ def _fmt(v: Optional[float]) -> str:
     return f"{v:.1f}%"
 
 
+def step_corpus_sync(run_dir: Path) -> None:
+    """Incrementally fold this run's fetched source into the consolidated corpus.
+
+    Scoped to ``run_dir`` so it is fast; the builder is idempotent and only
+    adds new (gene, PMID) papers or upgrades compromised categories, so a
+    rerun never re-fetches what the corpus already holds.
+    """
+    builder = REPO_ROOT / "scripts" / "build_source_corpus.py"
+    if not builder.exists():
+        return
+    logger.info("📦 Step 4.5: corpus sync (folding new source into corpus/)")
+    try:
+        result = subprocess.run(
+            [sys.executable, str(builder), "--apply", "--roots", str(run_dir)],
+            capture_output=True,
+            text=True,
+            timeout=1800,
+        )
+        for ln in result.stdout.splitlines():
+            if ln.startswith(("actions:", "corpus ", "MODE")):
+                logger.info("  %s", ln)
+        if result.returncode != 0:
+            logger.warning(
+                "corpus sync returned %s: %s", result.returncode, result.stderr[-300:]
+            )
+    except Exception as e:  # noqa: BLE001 - corpus sync is best-effort
+        logger.warning("corpus sync failed (non-fatal): %s", e)
+
+
 # ---------------------------------------------------------------------------
 # Entry point (called from cli/__init__.py)
 # ---------------------------------------------------------------------------
@@ -694,8 +728,10 @@ def run_gvf_pipeline(
     resume_dir: Optional[Path] = None,
     include_v12: bool = False,
     skip: Optional[list[str]] = None,
-    source_recovery: bool = False,
+    source_recovery: bool = True,
     source_recovery_timeout_s: int = 120,
+    disease: Optional[str] = None,
+    corpus_sync: bool = True,
 ) -> int:
     """Execute the full pipeline. Returns exit code."""
     initialize_runtime()
@@ -755,6 +791,7 @@ def run_gvf_pipeline(
                 pmid_file=pmid_file,
                 max_pmids=max_pmids,
                 resume_dir=resume_dir,
+                disease=disease,
             )
         except Exception as e:
             logger.exception("extract step failed: %s", e)
@@ -830,6 +867,14 @@ def run_gvf_pipeline(
         logger.info("⏭️  Step 4: source acquisition QC — SKIPPED")
     else:
         logger.info("⏭️  Step 4: source acquisition QC — already ran")
+
+    # Step 4.5: fold newly-fetched source into the consolidated corpus cache
+    # (idempotent incremental merge — adds new papers / upgrades compromised
+    # categories only, so the next run reuses them instead of re-fetching).
+    if corpus_sync and "corpus-sync" not in skip:
+        step_corpus_sync(run_dir=run_dir)
+    elif "corpus-sync" in skip or not corpus_sync:
+        logger.info("⏭️  Step 4.5: corpus sync — SKIPPED")
 
     # Step 5: report
     if "report" not in skip:

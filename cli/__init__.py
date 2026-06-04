@@ -337,6 +337,20 @@ def gvf_run_command(
             "--output", "-o", help="Output root (gene subdir will be created)"
         ),
     ],
+    disease: Annotated[
+        Optional[str],
+        typer.Option(
+            "--disease",
+            "-d",
+            help=(
+                "Optional disease/phenotype term (e.g. 'long QT syndrome'). When "
+                "set, the disease clause is appended to PubMed discovery queries "
+                "and the Tier-2 relevance filter prioritizes original "
+                "patient/functional data for that condition — i.e. the "
+                "'gene-disease pair' mode. When omitted, behavior is unchanged."
+            ),
+        ),
+    ] = None,
     pmid_file: Annotated[
         Optional[Path],
         typer.Option(
@@ -386,11 +400,14 @@ def gvf_run_command(
                 "After source-qc, run the no-gold acquisition loop: "
                 "fetch_paywalled.py on source_qc/fetch_input.csv, summarize "
                 "selected-vs-successful full text, and staged-refresh accepted "
-                "sources. Off by default because it performs live acquisition "
-                "and LLM extraction."
+                "sources. ON by default so the turnkey run acquires "
+                "paywalled/supplementary full text (~70% of the corpus). Pass "
+                "--no-source-recovery for a fast PMC/free-text-only pass or for "
+                "calibrated --pmid-file measurement runs where you don't want "
+                "the DB mutated by staged refresh."
             ),
         ),
-    ] = False,
+    ] = True,
     source_recovery_timeout_s: Annotated[
         int,
         typer.Option(
@@ -398,6 +415,17 @@ def gvf_run_command(
             help="Per-paper timeout passed to fetch_paywalled.py during --source-recovery.",
         ),
     ] = 120,
+    corpus_sync: Annotated[
+        bool,
+        typer.Option(
+            "--corpus-sync/--no-corpus-sync",
+            help=(
+                "After fetching, fold new source into the consolidated corpus "
+                "cache (corpus/<GENE>/<PMID>/) so the next run reuses it instead "
+                "of re-downloading. On by default; incremental + idempotent."
+            ),
+        ),
+    ] = True,
     with_v12: Annotated[
         bool,
         typer.Option(
@@ -411,9 +439,11 @@ def gvf_run_command(
 ):
     """One-shot end-to-end driver: cold start → scored variant DB.
 
-    Wraps extract → migrate → recovery layers → scoring + report into one
-    command. Auto-detects gold standard CSVs; KCNH2 v12 baseline merging is
-    available only when explicitly requested with `--with-v12`.
+    Wraps extract → migrate → recovery layers → source acquisition
+    (paywall/supplement recovery, on by default) → scoring + report into one
+    command. Pass `--disease` to scope discovery and Tier-2 filtering to a
+    gene-disease pair. Auto-detects gold standard CSVs; KCNH2 v12 baseline
+    merging is available only when explicitly requested with `--with-v12`.
     See cli/gvf_run.py for the per-step breakdown.
     """
     from cli.gvf_run import run_gvf_pipeline
@@ -429,6 +459,8 @@ def gvf_run_command(
         skip=list(skip) if skip else None,
         source_recovery=source_recovery,
         source_recovery_timeout_s=source_recovery_timeout_s,
+        disease=disease,
+        corpus_sync=corpus_sync,
     )
     if exit_code != 0:
         raise typer.Exit(exit_code)
