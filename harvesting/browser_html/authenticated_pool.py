@@ -12,12 +12,19 @@ Same lifecycle as ``BrowserPool``, with two differences:
 
 The Chrome profile itself is NOT opened (Chrome locks its user-data-dir while
 running), so this pool is safe to use while Chrome is open.
+
+When ``persistent_profile_path`` is provided, the pool launches a dedicated
+Playwright/Chrome user-data directory instead. That path is intended for
+authorized interactive publisher access: run visible once, complete SSO or
+publisher access checks in that profile, and reuse the same browser state for
+later article and supplement fetches.
 """
 
 from __future__ import annotations
 
 import logging
 from contextlib import contextmanager
+from pathlib import Path
 from typing import Any, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -51,11 +58,13 @@ class AuthenticatedBrowserPool:
         headless: bool = True,
         slow_mo: int = 0,
         use_chrome_channel: bool = True,
+        persistent_profile_path: Optional[str] = None,
     ):
         self._cookies = cookies or []
         self.headless = headless
         self.slow_mo = slow_mo
         self.use_chrome_channel = use_chrome_channel
+        self.persistent_profile_path = persistent_profile_path
         self._playwright = None
         self._browser = None
         self._context = None
@@ -101,20 +110,7 @@ class AuthenticatedBrowserPool:
         if self.use_chrome_channel:
             launch_kwargs["channel"] = "chrome"
 
-        try:
-            self._browser = self._playwright.chromium.launch(**launch_kwargs)
-        except Exception as e:
-            if self.use_chrome_channel:
-                logger.warning(
-                    "Chrome channel launch failed (%s); falling back to bundled Chromium.",
-                    e,
-                )
-                launch_kwargs.pop("channel", None)
-                self._browser = self._playwright.chromium.launch(**launch_kwargs)
-            else:
-                raise
-
-        self._context = self._browser.new_context(
+        context_kwargs = dict(
             user_agent=(
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                 "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -131,6 +127,49 @@ class AuthenticatedBrowserPool:
                 "Accept-Language": "en-US,en;q=0.9",
             },
         )
+
+        if self.persistent_profile_path:
+            profile_dir = Path(self.persistent_profile_path).expanduser()
+            profile_dir.mkdir(parents=True, exist_ok=True)
+            persistent_kwargs = {**launch_kwargs, **context_kwargs}
+            try:
+                self._context = self._playwright.chromium.launch_persistent_context(
+                    str(profile_dir),
+                    **persistent_kwargs,
+                )
+            except Exception as e:
+                if self.use_chrome_channel:
+                    logger.warning(
+                        "Chrome channel persistent launch failed (%s); falling back to bundled Chromium.",
+                        e,
+                    )
+                    persistent_kwargs.pop("channel", None)
+                    self._context = self._playwright.chromium.launch_persistent_context(
+                        str(profile_dir),
+                        **persistent_kwargs,
+                    )
+                else:
+                    raise
+            self._browser = None
+            logger.info(
+                "AuthenticatedBrowserPool started with persistent profile %s",
+                profile_dir,
+            )
+        else:
+            try:
+                self._browser = self._playwright.chromium.launch(**launch_kwargs)
+            except Exception as e:
+                if self.use_chrome_channel:
+                    logger.warning(
+                        "Chrome channel launch failed (%s); falling back to bundled Chromium.",
+                        e,
+                    )
+                    launch_kwargs.pop("channel", None)
+                    self._browser = self._playwright.chromium.launch(**launch_kwargs)
+                else:
+                    raise
+
+            self._context = self._browser.new_context(**context_kwargs)
         self._context.add_init_script(_STEALTH_SCRIPT)
 
         # Inject cookies before any navigation.
@@ -144,9 +183,10 @@ class AuthenticatedBrowserPool:
 
         self._started = True
         logger.info(
-            "AuthenticatedBrowserPool started (headless=%s, channel=%s)",
+            "AuthenticatedBrowserPool started (headless=%s, channel=%s, persistent_profile=%s)",
             self.headless,
             "chrome" if self.use_chrome_channel else "chromium",
+            bool(self.persistent_profile_path),
         )
 
     def _inject_cookies(self, cookies: List[dict]) -> int:

@@ -363,6 +363,100 @@ def test_main_requires_explicit_pmids(monkeypatch, tmp_path):
     assert exc.value.code == 2
 
 
+def test_main_wires_persistent_profile_and_auth_url(monkeypatch, tmp_path):
+    captured = {}
+
+    class _Pool:
+        def __init__(
+            self,
+            *,
+            cookies,
+            headless,
+            use_chrome_channel,
+            persistent_profile_path=None,
+        ):
+            captured["pool"] = {
+                "cookies": cookies,
+                "headless": headless,
+                "use_chrome_channel": use_chrome_channel,
+                "persistent_profile_path": persistent_profile_path,
+            }
+
+        def close(self):
+            captured["closed"] = True
+
+    class _Fetcher:
+        converter = object()
+        scraper = object()
+        session = object()
+
+        def __init__(self, **kwargs):
+            captured["fetcher_pool"] = kwargs["pool"]
+
+    profile_dir = tmp_path / "gvf-browser-profile"
+    output_dir = tmp_path / "out"
+
+    monkeypatch.setenv("ENTREZ_EMAIL", "curator@example.org")
+    monkeypatch.setattr(fetch_paywalled, "load_chrome_cookies", lambda **_kwargs: [])
+    monkeypatch.setattr(fetch_paywalled, "cookie_domain_summary", lambda _cookies: {})
+    monkeypatch.setattr(fetch_paywalled, "AuthenticatedBrowserPool", _Pool)
+    monkeypatch.setattr(fetch_paywalled, "BrowserHTMLFetcher", _Fetcher)
+    monkeypatch.setattr(
+        fetch_paywalled, "hydrate_session_with_browser_cookies", lambda *_args: 0
+    )
+    monkeypatch.setattr(
+        fetch_paywalled, "pubmed_resolve_doi", lambda *_args: "10.1002/example"
+    )
+    monkeypatch.setattr(
+        fetch_paywalled,
+        "prime_authenticated_browser",
+        lambda pool, urls, timeout_s: captured.update(
+            {"auth_urls": urls, "auth_timeout_s": timeout_s}
+        ),
+    )
+    monkeypatch.setattr(
+        fetch_paywalled,
+        "fetch_one",
+        lambda *_args, **_kwargs: {
+            "pmid": "22222",
+            "strategy": "wiley",
+            "outcome": "success",
+            "chars": 12000,
+            "supp_files": 1,
+            "supplements_downloaded": 1,
+            "final_url": "https://onlinelibrary.wiley.com/doi/full/example",
+            "reason": "ok",
+        },
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "fetch_paywalled",
+            "--pmid",
+            "22222",
+            "--output",
+            str(output_dir),
+            "--no-cookies",
+            "--no-headless",
+            "--browser-profile-dir",
+            str(profile_dir),
+            "--auth-url",
+            "https://onlinelibrary.wiley.com",
+            "--auth-timeout-s",
+            "45",
+        ],
+    )
+
+    assert fetch_paywalled.main() == 0
+
+    assert captured["pool"]["headless"] is False
+    assert captured["pool"]["persistent_profile_path"] == str(profile_dir.resolve())
+    assert captured["auth_urls"] == ["https://onlinelibrary.wiley.com"]
+    assert captured["auth_timeout_s"] == 45
+    assert captured["closed"] is True
+
+
 def test_fetch_one_preserves_failed_publisher_supplements_for_pmc_fallback(
     tmp_path, monkeypatch
 ):

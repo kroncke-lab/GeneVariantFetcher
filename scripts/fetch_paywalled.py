@@ -614,6 +614,45 @@ def make_session() -> requests.Session:
     return s
 
 
+def prime_authenticated_browser(
+    pool: AuthenticatedBrowserPool,
+    auth_urls: List[str],
+    *,
+    timeout_s: int,
+) -> None:
+    """Open authorization URLs and pause for a human-controlled browser session.
+
+    This is for authorized publisher/institutional access, not unattended
+    challenge solving. The caller can use a dedicated persistent profile so SSO
+    cookies and publisher access state survive into later recovery batches.
+    """
+    urls = [u.strip() for u in auth_urls or [] if u and u.strip()]
+    if not urls:
+        return
+    if not sys.stdin.isatty():
+        raise RuntimeError("--auth-url requires an interactive terminal")
+    if pool.headless:
+        print("WARNING: --auth-url is intended for use with --no-headless.")
+
+    timeout_ms = max(30, int(timeout_s or 180)) * 1000
+    for url in urls:
+        print(f"Opening auth URL: {url}")
+        with pool.page() as page:
+            try:
+                page.set_default_timeout(timeout_ms)
+            except Exception:
+                pass
+            try:
+                page.goto(url, wait_until="domcontentloaded", timeout=timeout_ms)
+            except Exception as exc:
+                LOG.info("Auth URL load did not complete for %s: %s", url, exc)
+            print(
+                "Complete institutional login/access checks in the browser, "
+                "then press Enter to continue."
+            )
+            input()
+
+
 def hydrate_session_with_browser_cookies(
     session: requests.Session, cookies: List[dict]
 ) -> int:
@@ -1373,6 +1412,31 @@ def main() -> int:
         help="Use bundled Chromium instead of the locally-installed Chrome binary.",
     )
     parser.add_argument(
+        "--browser-profile-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Dedicated persistent browser user-data directory for authorized "
+            "publisher/SSO sessions. Use with --no-headless and do not point "
+            "at a daily Chrome profile."
+        ),
+    )
+    parser.add_argument(
+        "--auth-url",
+        action="append",
+        default=[],
+        help=(
+            "URL to open before fetching, then pause for Enter after manual "
+            "institutional login/access checks. Repeat for multiple publishers."
+        ),
+    )
+    parser.add_argument(
+        "--auth-timeout-s",
+        type=int,
+        default=180,
+        help="Navigation timeout for each --auth-url page (default: 180).",
+    )
+    parser.add_argument(
         "--timeout-s",
         type=int,
         default=120,
@@ -1407,9 +1471,16 @@ def main() -> int:
     overrides = {**input_overrides, **overrides}
     output_dir: Path = args.output.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
+    browser_profile_dir = (
+        args.browser_profile_dir.expanduser().resolve()
+        if args.browser_profile_dir
+        else None
+    )
 
     print(f"PMIDs:       {', '.join(pmids)}")
     print(f"Output dir:  {output_dir}")
+    if browser_profile_dir:
+        print(f"Profile dir: {browser_profile_dir}")
     print(f"Strategies:  {registered_names()}")
     print(f"Headless:    {args.headless}")
     print()
@@ -1435,6 +1506,15 @@ def main() -> int:
         cookies=cookies,
         headless=args.headless,
         use_chrome_channel=args.use_chrome_channel,
+        persistent_profile_path=str(browser_profile_dir)
+        if browser_profile_dir
+        else None,
+    )
+
+    prime_authenticated_browser(
+        pool,
+        args.auth_url,
+        timeout_s=args.auth_timeout_s,
     )
 
     # ---- 3. Build minimal settings for the fetcher ----
