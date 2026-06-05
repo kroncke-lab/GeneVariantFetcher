@@ -72,6 +72,26 @@ _CONVERTIBLE_EXTS = (
 # multi-gigabyte raw sequencing data that won't help us and would blow the
 # disk. Body-text supplements (variant lists) are virtually always <25 MB.
 _DEFAULT_SUPP_SIZE_LIMIT_BYTES = 25 * 1024 * 1024
+
+
+def _default_max_supplements() -> int:
+    """Per-paper supplement cap, env-overridable via ``GVF_MAX_SUPPLEMENTS``.
+
+    Default 40 (was 12): supplement-heavy cohort papers list many files, and the
+    13th+ was silently dropped — the mutation table is sometimes a high-numbered
+    ``mmcN`` / ``MOESM_N``. The 25 MB per-file size cap still bounds disk use.
+    """
+    raw = (os.environ.get("GVF_MAX_SUPPLEMENTS") or "").strip()
+    if raw:
+        try:
+            val = int(raw)
+            if val > 0:
+                return val
+        except ValueError:
+            pass
+    return 40
+
+
 _IMAGE_EXTS = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".tif", ".tiff", ".bmp")
 
 
@@ -273,7 +293,7 @@ def enrich_paywall_full_context(
     session: Any = None,
     extra_captions: Optional[CaptionExtractionResult] = None,
     download_supplements: bool = True,
-    max_supplements: int = 12,
+    max_supplements: Optional[int] = None,
     supplement_size_limit_bytes: int = _DEFAULT_SUPP_SIZE_LIMIT_BYTES,
     download_timeout_s: int = 60,
     image_text_extractor: Optional[Callable[[List[Path]], str]] = None,
@@ -303,7 +323,8 @@ def enrich_paywall_full_context(
             harvest path).
         download_supplements: Set to False to skip the download attempt
             entirely (useful in tests).
-        max_supplements: Cap on how many supplements we try to download.
+        max_supplements: Cap on how many supplements we try to download. None
+            (default) resolves to ``GVF_MAX_SUPPLEMENTS`` or 40.
         image_text_extractor: Optional callable ``(image_paths: List[Path]) ->
             str`` that extracts text from figure images. When *None* (default),
             extraction runs only if the ``GVF_EXTRACT_FIGURE_TEXT`` environment
@@ -320,6 +341,8 @@ def enrich_paywall_full_context(
         :class:`EnrichmentResult` with the assembled markdown and audit
         metadata for the caller.
     """
+    if max_supplements is None:
+        max_supplements = _default_max_supplements()
     body = body_markdown or ""
 
     captions = CaptionExtractionResult()
