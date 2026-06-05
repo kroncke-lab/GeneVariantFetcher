@@ -48,6 +48,11 @@ def _make_db(db: Path) -> None:
     con.execute(
         "INSERT INTO papers VALUES ('111','A KCNH2 family study','Chen Q','Circulation','1999','10.1/x',NULL,'TESTGENE')"
     )
+    # A malformed extraction row whose pmid is "N/A": the slash must NOT abort the
+    # build by trying to write papers/N/A.html. It should be silently skipped.
+    con.execute(
+        "INSERT INTO papers VALUES ('N/A','junk row',NULL,NULL,NULL,NULL,NULL,'TESTGENE')"
+    )
     con.execute(
         "INSERT INTO variants VALUES (1,'TESTGENE',NULL,'p.Arg100Trp',NULL,'Pathogenic')"
     )
@@ -88,6 +93,9 @@ def test_generate_dashboard_produces_pages_links_and_jump(tmp_path: Path):
     )
 
     assert stats["genes"] == 1 and stats["paper_pages"] >= 1
+    # the malformed "N/A" pmid was skipped, not written as a path
+    assert not (out / "TESTGENE" / "papers" / "N").exists()
+    assert not (out / "TESTGENE" / "papers" / "N" / "A.html").exists()
     index = (out / "index.html").read_text()
     assert "TESTGENE" in index and "papers in corpus" in index
     assert "TESTGENE/index.html" in index  # per-gene subdir layout

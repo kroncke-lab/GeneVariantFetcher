@@ -1025,11 +1025,17 @@ def render_gene_page(
         p for p, r in corpus_rows.items() if r.get("full_text_status") != "ok"
     ]
 
-    # paper table
+    # paper table. PubMed IDs are numeric; drop any malformed token (e.g. a
+    # stray "N/A" extraction row) so it neither links nor tries to write a
+    # papers/<pmid>.html path — a "/" in the id would otherwise abort the build.
     rows = []
     paper_pmids = sorted(
-        set(corpus_rows) | set((db or {}).get("papers", {})),
-        key=lambda x: int(x) if x.isdigit() else 0,
+        {
+            p
+            for p in (set(corpus_rows) | set((db or {}).get("papers", {})))
+            if p.isdigit()
+        },
+        key=int,
     )
     written: list[str] = []
 
