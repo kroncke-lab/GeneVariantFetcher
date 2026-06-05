@@ -43,6 +43,12 @@ class WileyStrategy(PublisherStrategy):
             "https://onlinelibrary.wiley.com/doi/full/"
             f"{self.encode_doi_for_path(ctx.doi)}"
         )
+        # Route through the institutional EZproxy when configured so the request
+        # egresses from the publisher-allowlisted subscriber IP (clears the
+        # Cloudflare managed challenge). No-op when GVF_EZPROXY_* is unset.
+        from harvesting.browser_html import ezproxy
+
+        target = ezproxy.wrap(target)
         try:
             page.goto(target, wait_until="load", timeout=ctx.timeout_s * 1000)
         except Exception as e:

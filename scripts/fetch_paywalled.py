@@ -611,6 +611,14 @@ def make_session() -> requests.Session:
             "User-Agent": (f"GVF-PaywalledFetch/1.0 (mailto:{_ncbi_email()})"),
         }
     )
+    # Auto-route Cloudflare-blocked publisher URLs (Wiley/Karger/Sage) through the
+    # institutional EZproxy when configured (GVF_EZPROXY_PREFIX/HOST). No-op
+    # otherwise. Article HTML and /action/downloadSupplement files both route.
+    from harvesting.browser_html import ezproxy
+
+    ezproxy.install_on_session(s)
+    if ezproxy.is_configured():
+        LOG.info("EZproxy routing active for CF-blocked publishers")
     return s
 
 

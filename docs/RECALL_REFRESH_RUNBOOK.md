@@ -79,6 +79,59 @@ python scripts/run_recall_suite.py --score --genes SCN5A \
     --db SCN5A=/tmp/SCN5A.refreshed.db --outdir /tmp/score
 ```
 
+## Getting past the Cloudflare wall (Wiley / Karger / Sage) — automated
+
+Wiley Online Library (and Karger/Sage) sit behind a Cloudflare **managed
+challenge** — plain `requests` and headless browsers get HTTP 403 "Just a
+moment…". The robust, authorized, *automated* way past it for a **licensed
+institution** is to route the request through the **library EZproxy**: its egress
+IP is allowlisted by the publisher as a paying subscriber, so the proxied request
+returns licensed full text + `/action/downloadSupplement` files with no CF
+challenge. (You are accessing content the institution is licensed for — this is
+authorized subscriber access, not circumvention of payment.)
+
+### Setup (one-time)
+1. Log into the library EZproxy once in Chrome (Vanderbilt SSO). This drops an
+   EZproxy session cookie that `cookie_loader.py` already reads
+   (`ezproxy.library.vanderbilt.edu`); it typically lasts the SSO session
+   (days–weeks).
+2. Point GVF at the proxy in `.env` (pick the form your library uses):
+   ```bash
+   GVF_EZPROXY_PREFIX="https://ezproxy.library.vanderbilt.edu/login?url="
+   # or just:  GVF_EZPROXY_HOST="ezproxy.library.vanderbilt.edu"
+   # GVF_EZPROXY_ALL=1   # optional: proxy ALL publisher URLs, not just the CF-blocked set
+   ```
+3. Verify it clears Cloudflare:
+   ```bash
+   python scripts/check_ezproxy.py --doi 10.1111/jce.14865
+   ```
+   PASS = a 200 with no CF challenge and a real body.
+
+### Automated from then on
+With the cookie present and `GVF_EZPROXY_*` set, every CF-blocked publisher
+request is rewritten through the proxy automatically — `make_session()` installs
+the rewriter (`harvesting/browser_html/ezproxy.install_on_session`), the Wiley
+browser strategy proxies its navigation, and supplement downloads route the same
+way. No per-run human step until the SSO session expires (re-do step 1).
+
+### Fallbacks (when EZproxy isn't available)
+- **Persistent authenticated browser profile** — solve CF + log in once in a
+  visible browser, reuse the profile unattended afterward:
+  ```bash
+  python scripts/fetch_paywalled.py --input <queue.csv> --output <dir> \
+      --no-headless --browser-profile-dir ~/.gvf/wiley_profile \
+      --auth-url "https://onlinelibrary.wiley.com/"
+  ```
+  The warmed profile re-passes the managed challenge silently on later headless
+  runs while the `cf_clearance` cookie is valid (~30 min–hours, IP+UA bound).
+- **Stealth/undetected browser (optional dep)** — for fully unattended CF passing
+  without a proxy, swap the Playwright backend for a patched one (`patchright`)
+  or `nodriver`; works best from a clean/residential/institutional IP. Not added
+  by default (heavyweight dep + arms-race); EZproxy is preferred.
+
+Karger (0.3%) and Sage (0.0%) carry almost none of the recall gap, so the payoff
+here is overwhelmingly **Wiley**.
+
 ## Notes
 - The canonical DBs live under `results/` / `validation_runs/` and are **gitignored
   (local)**; the refresh updates them in place (with backups). Commit only the
