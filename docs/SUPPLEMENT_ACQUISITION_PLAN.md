@@ -71,10 +71,34 @@ prize), RYR2 81.9→83.4. Nothing regressed (PMIDs/unaffected flat). The landed
 +50 uniqV is below the isolated +63 because the canonical DBs already match some
 of these variants via the ClinVar layer (overlap).
 
-**Status:** Done: T1, T2, T3, T5, corpus→flat bridge, official re-score, AND
-landed in the canonical DBs (+1.6pp uniqV / +2.8pp rows). Remaining: T6
-(Wiley/Springer API supplements, ~11% of gap), T7 (max_supplements cap),
-T8/T9 (Karger/Sage, deferred ~0 value).
+### T6 (Wiley/Springer API supplements) — investigated 2026-06-05: ACCESS-BLOCKED
+
+Addressable set was already small: Wiley 12 papers / 23 missing variants, Springer
+14 / 36 (~59 total, vs Elsevier's 268). Investigation found recovery is blocked by
+credentials/format, not code:
+- **Springer**: `SPRINGER_API_KEY` is commented out in `.env`, so the JATS (which
+  would carry the `MOESM`/`supplementary-material` refs → open
+  `static-content.springer.com` CDN, an Elsevier-like clean path) can't be fetched.
+  The no-key landing-page route (`link.springer.com` + `scrape_springer_supplements`)
+  returned 0 supplement links on the tested paper (JS-rendered or no ESM).
+  UNBLOCK: provide the Springer Nature API key → then add
+  `SpringerAPIClient.download_supplements` (MOESM → static-content), mirroring
+  `ElsevierAPIClient.download_supplements`.
+- **Wiley**: 3/4 addressable `10.1111` DOIs return TDM **403** (those journals
+  aren't in the TDM grant); the one that returns content is a PDF with **no**
+  supplement references. Wiley supplements live only on the Cloudflare-fronted
+  `onlinelibrary.wiley.com` landing pages (`/action/downloadSupplement`). UNBLOCK:
+  off-VPN/institutional landing-page access (same wall as Karger/Sage); not worth a
+  CF arms race for 23 variants.
+
+Did NOT ship download plumbing that can't be live-verified. T6 reactivates the
+moment the Springer key is restored (cleanest next step) or Wiley landing-page
+access is available.
+
+**Status:** Done: T1, T2, T3, T5, corpus→flat bridge, official re-score, landed
+in canonical DBs (+1.6pp uniqV / +2.8pp rows). T6 access-blocked (spec above).
+Remaining: T7 (max_supplements cap — cheap, still viable), T8/T9 (Karger/Sage,
+deferred ~0 value).
 
 ## TL;DR — the premise was wrong; here is where the value actually is
 
