@@ -32,6 +32,12 @@ numbers are historical debugging baselines. Gold-PMID-conditioned enrichment
 and KCNH2 v12 manual recovery are diagnostic/manual recovery paths, not
 cold-start capability.
 
+Companion docs:
+- `docs/RECALL_HISTORY.md` — append-only benchmark/change history (the recall
+  trajectory over time; never delete its entries, only append).
+- `docs/RECALL_REFRESH_RUNBOOK.md` — the idempotent re-run procedure for when new
+  papers are published or API permissions expand (`scripts/refresh_recall.py`).
+
 ## What Changed In This Branch
 
 - Source recovery stack: authenticated Playwright recovery in
@@ -125,11 +131,25 @@ bounded replays when the default Tier 3 model is slow or experimental. The
 acquisition outcome summary reports selected-for-fetch,
 usable-fulltext-downloaded, source-refresh-attempted, and
 source-refresh-successful PMID recall separately. The recurring residual
-pattern is supplement acquisition (Cloudflare/redirect-blocked `mmc1.docx`
-files), not generic underextraction.
+pattern is supplement acquisition, not generic underextraction.
 
-Residual non-Elsevier paywalls (Karger Cloudflare, Sage CF fingerprint)
-remain in `TASKS.md` Blocked. Wiley TDM was verified working off-VPN on
+As of 2026-06-05 the largest supplement bucket — **Elsevier `mmc` mutation
+tables** that the full-text API dropped — is recovered: the authenticated XML
+carries `1-s2.0-<PII>-mmc<N>.<ext>` refs that download from the open
+`ars.els-cdn.com` CDN (`ElsevierAPIClient.download_supplements` +
+`scripts/fetch_elsevier_supplements.py`), and `refresh_run_db` now folds on-disk
+supplements into FULL_CONTEXT before re-extraction. This landed the four-gene
+unique-variant recall higher (see `docs/RECALL_HISTORY.md`). The earlier
+"Cloudflare-blocked `mmc1.docx`" framing was wrong for Elsevier — those
+supplements are openly CDN-served; only the *publisher landing pages* are blocked.
+Re-run idempotently via `scripts/refresh_recall.py` (see
+`docs/RECALL_REFRESH_RUNBOOK.md`).
+
+Genuinely blocked (small share of the gap): Wiley supplements (TDM 403 on many
+journals; supplements only on the CF-fronted Online Library) and Springer
+(API key currently disabled in `.env`). Karger Cloudflare / Sage CF were measured
+at ~0.3%/0.0% of the gold-missing-variant gap — near-irrelevant to recall.
+These remain in `TASKS.md` Blocked. Wiley TDM was verified working off-VPN on
 2026-05-26 — the earlier "revoked key" claim was stale; `harvesting/wiley_api.py`
 plus the current `WILEY_API_KEY` returns full-text PDFs for `10.1002/humu.*`.
 Some Wiley Online Library DOIs still return TDM 403 or Cloudflare in no-cookie
@@ -226,19 +246,32 @@ output-token budget instead of the 4k default.
 
 ## Active Work
 
-Current active work is tracked in
-`docs/RECALL_STATUS.md`. Do not duplicate metric gaps here.
-The short version: source acquisition improved after the Elsevier insttoken
-unblock, and the refresh/rebuild path now exists for converting recovered
-source artifacts into DB rows without gold-standard-dependent logic. Beyond
-that: fix general count/affected-status extraction issues, address the
-remaining Wiley/Karger/Sage paywalls, and keep no-gold QC prominent for new
-genes.
+Current active work is tracked in `docs/RECALL_STATUS.md`; the recall trajectory
+is in `docs/RECALL_HISTORY.md`. Do not duplicate metric gaps here. The short
+version: source acquisition improved after the Elsevier insttoken unblock, the
+refresh/rebuild path converts recovered source into DB rows without
+gold-dependent logic, and (2026-06-05) Elsevier `mmc` supplement recovery + the
+wired supplement re-fold landed a unique-variant-recall gain. The whole loop is
+idempotent and re-runnable via `scripts/refresh_recall.py` as papers/permissions
+grow (`docs/RECALL_REFRESH_RUNBOOK.md`). Remaining levers, by value: Wiley/Springer
+supplement recovery (access-gated — restore the Springer key; see
+`SUPPLEMENT_ACQUISITION_PLAN.md` T6), general count/affected-status extraction
+accuracy, and keeping no-gold QC prominent for new genes. Karger/Sage are
+deprioritized (~0% of the recall gap).
 
 ## Files To Know
 
 - `cli/compare_variants.py` - gold-standard matcher and recall summary.
 - `scripts/run_recall_suite.py` - multi-gene recall scoring.
+- `scripts/refresh_recall.py` - idempotent recall-refresh orchestrator (fetch
+  supplements -> bridge corpus -> fold + acceptance-gated re-extract -> score ->
+  optional layer-preserving land into the canonical DB). The "just re-run it" entry.
+- `scripts/fetch_elsevier_supplements.py` - recover Elsevier `mmc` supplements the
+  full-text API drops (open `ars.els-cdn.com` CDN); idempotent.
+- `scripts/corpus_to_harvest.py` - bridge nested `corpus/` to the flat harvest
+  layout `refresh_run_db` expects.
+- `scripts/recall_audit/supplement_fold_gap.py` - no-network QC: on-disk
+  supplements not yet folded into FULL_CONTEXT.
 - `scripts/refresh_run_db.py` - safe source -> extraction JSON -> DB refresh
   path for existing runs; gold is optional.
 - `scripts/recall_recovery/run_all_layers.py` - DB-observed ClinVar, PubTator,

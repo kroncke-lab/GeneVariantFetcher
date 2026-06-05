@@ -288,7 +288,10 @@ independently and start testing:
 Use this file as the current issue/status tracker for the recall push. Other
 top-level handoff docs (`README.md`, `CLAUDE.md`, `AGENTS.md`, and `TASKS.md`;
 `CODEX.md` is now a pointer stub) should link here instead of carrying
-independent live metric tables. If a metric conflicts with this file, this file
+independent live metric tables. Companions: `docs/RECALL_HISTORY.md` is the
+append-only benchmark/change history (the trajectory over time — never delete
+its entries); `docs/RECALL_REFRESH_RUNBOOK.md` is the idempotent re-run procedure
+(`scripts/refresh_recall.py`) for when new papers/permissions arrive. If a metric conflicts with this file, this file
 is authoritative; within this file, the most recent dated per-gene session wins
 over the older four-gene aggregate table (see "How to read the numbers" at the
 top).
