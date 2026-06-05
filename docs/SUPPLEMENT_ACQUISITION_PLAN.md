@@ -5,6 +5,36 @@ every load-bearing claim against the live repo and the 4 gold cardiac genes
 (KCNH2/KCNQ1/SCN5A/RYR2). This file is the durable source of truth for the
 supplement-acquisition effort; it is safe to compact the session against it.
 
+## MEASURED RESULTS (2026-06-05 execution)
+
+Executed Phase 0 (T1/T2/T3) + T5. **Measured recovery: +175 unique gold-missing
+variants** (~10% of the 1,673-variant gap), per-paper (fold → Tier-3 re-extract →
+match vs the gold-missing list; disjoint paper sets):
+
+| Source | Papers | Recovered / missing |
+|---|---|---|
+| T4 no-network fold (on-disk unparsed supplement) | SCN5A 22840528 | 8 / 8 |
+| T5 Elsevier mmc fetch — single biggest blocker | SCN5A 29325976 | 64 / 87 |
+| T5 Elsevier mmc fetch — batch | 16 papers | 103 / 126 |
+| **Total** | **18 papers** | **175 / 221 (79%)** |
+
+Elsevier mmc batch hit rate: 16/59 addressable papers actually carry mmc
+supplements (KCNH2 1/14, KCNQ1 3/7, SCN5A 8/30, RYR2 4/8); the rest have no mmc
+referenced in the authenticated XML. Where a supplement exists, ~79% of its
+missing variants are recovered.
+
+**Status:** the recovered supplements are downloaded into the corpus and folded
+into FULL_CONTEXT on disk; the variants are confirmed Tier-3-extractable. They
+are NOT yet in the canonical scoring DBs — an official `run_recall_suite`
+re-score needs a corpus→flat-harvest bridge so `refresh_run_db` (which now folds
+supplements) can rebuild the gold DBs. That bridge is the next step.
+
+Done: T1 (`supplement_fold_gap.py`), T2 (nested-zip rglob), T3 (fold wired into
+`refresh_run_db`), T5 (`ElsevierAPIClient.download_supplements` +
+`fetch_elsevier_supplements.py`). Remaining: corpus→flat re-score bridge, T6
+(Wiley/Springer API supplements), T7 (max_supplements cap), T8/T9 (Karger/Sage,
+deferred ~0 value).
+
 ## TL;DR — the premise was wrong; here is where the value actually is
 
 The task was framed as "get Karger/Sage/Cloudflare-blocked supplements." The
