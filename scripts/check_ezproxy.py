@@ -5,7 +5,7 @@ Mission-critical sanity check: confirms that, with ``GVF_EZPROXY_PREFIX``/``HOST
 set and a valid EZproxy session cookie loaded, a Wiley Online Library request
 returns licensed content instead of the Cloudflare 403 "Just a moment…" page.
 
-  GVF_EZPROXY_PREFIX="https://ezproxy.library.vanderbilt.edu/login?url=" \\
+  GVF_EZPROXY_PREFIX="https://proxy.library.vanderbilt.edu/login?url=" \\
       python scripts/check_ezproxy.py --doi 10.1111/jce.14865
 
 Reports, for the direct and the EZproxy-routed request: HTTP status, whether a
@@ -67,7 +67,7 @@ def main() -> int:
         print(
             "\nSet GVF_EZPROXY_PREFIX (or GVF_EZPROXY_HOST) and ensure an EZproxy\n"
             "session cookie is loaded (log into the library proxy once in Chrome;\n"
-            "cookie_loader reads ezproxy.library.vanderbilt.edu). Then re-run."
+            "cookie_loader reads proxy.library.vanderbilt.edu). Then re-run."
         )
         return 2
 

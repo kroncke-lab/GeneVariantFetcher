@@ -11,15 +11,15 @@ This module is **inert unless configured** (no hardcoded institution is ever
 activated). Set one of:
 
   GVF_EZPROXY_PREFIX   full login-rewrite prefix, e.g.
-                       "https://ezproxy.library.vanderbilt.edu/login?url="
-  GVF_EZPROXY_HOST     just the host, e.g. "ezproxy.library.vanderbilt.edu"
+                       "https://proxy.library.vanderbilt.edu/login?url="
+  GVF_EZPROXY_HOST     just the host, e.g. "proxy.library.vanderbilt.edu"
                        (the "/login?url=" prefix is built for you)
 
 Optional:
   GVF_EZPROXY_ALL=1    proxy *every* publisher URL, not just the CF-blocked set.
 
 You also need a valid EZproxy **session cookie** in the requests session /
-browser profile (one-time SSO; cookies for `ezproxy.library.vanderbilt.edu` are
+browser profile (one-time SSO; cookies for `proxy.library.vanderbilt.edu` are
 already loaded by ``cookie_loader.py``). With the cookie present, routing is
 fully automated until the SSO session expires.
 """
@@ -42,11 +42,24 @@ CF_BLOCKED_DOMAINS: tuple[str, ...] = (
 
 
 def proxy_prefix() -> str:
-    """The configured EZproxy login-rewrite prefix, or '' when unconfigured."""
-    raw = (os.environ.get("GVF_EZPROXY_PREFIX") or "").strip()
+    """The configured EZproxy login-rewrite prefix, or '' when unconfigured.
+
+    Accepts ``GVF_EZPROXY_PREFIX`` or the plainer ``PROXY_LOGIN_PREFIX``; or a
+    bare host via ``GVF_EZPROXY_HOST`` / ``PROXY_HOST`` (the ``/login?url=``
+    prefix is built for you). e.g. PROXY_HOST=proxy.library.vanderbilt.edu.
+    """
+    raw = (
+        os.environ.get("GVF_EZPROXY_PREFIX")
+        or os.environ.get("PROXY_LOGIN_PREFIX")
+        or ""
+    ).strip()
     if raw:
         return raw
-    host = (os.environ.get("GVF_EZPROXY_HOST") or "").strip().rstrip("/")
+    host = (
+        (os.environ.get("GVF_EZPROXY_HOST") or os.environ.get("PROXY_HOST") or "")
+        .strip()
+        .rstrip("/")
+    )
     if host:
         if "://" not in host:
             host = f"https://{host}"

@@ -62,3 +62,19 @@ def test_install_on_session_rewrites_requests(monkeypatch):
     ezproxy.install_on_session(s)
     s.get("https://onlinelibrary.wiley.com/doi/10.1111/y")
     assert seen["url"].count("ezproxy.library.vanderbilt.edu") == 1
+
+
+def test_honors_plain_proxy_env_var_aliases(monkeypatch):
+    # the user's .env uses PROXY_LOGIN_PREFIX / PROXY_HOST (not GVF_-prefixed)
+    monkeypatch.delenv("GVF_EZPROXY_PREFIX", raising=False)
+    monkeypatch.delenv("GVF_EZPROXY_HOST", raising=False)
+    monkeypatch.setenv(
+        "PROXY_LOGIN_PREFIX", "https://proxy.library.vanderbilt.edu/login?url="
+    )
+    assert ezproxy.is_configured()
+    assert ezproxy.wrap("https://onlinelibrary.wiley.com/doi/x").startswith(
+        "https://proxy.library.vanderbilt.edu/login?url="
+    )
+    monkeypatch.delenv("PROXY_LOGIN_PREFIX", raising=False)
+    monkeypatch.setenv("PROXY_HOST", "proxy.library.vanderbilt.edu")
+    assert ezproxy.proxy_prefix() == "https://proxy.library.vanderbilt.edu/login?url="

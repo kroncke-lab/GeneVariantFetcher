@@ -63,10 +63,13 @@ DEFAULT_PUBLISHER_DOMAINS: tuple = (
     # PMC (cookies aren't needed but harmless)
     "ncbi.nlm.nih.gov",
     "pmc.ncbi.nlm.nih.gov",
-    # Institutional SSO / proxy — needed for the auth handshake redirect chain.
+    # Institutional SSO / proxy — needed for the auth handshake redirect chain
+    # AND for the EZproxy session cookie that authorizes proxied publisher
+    # access (Wiley/Karger/Sage routing in harvesting/browser_html/ezproxy.py).
     "vumc.org",
     "vanderbilt.edu",
-    "ezproxy.library.vanderbilt.edu",
+    "proxy.library.vanderbilt.edu",  # the live Vanderbilt library proxy host
+    "ezproxy.library.vanderbilt.edu",  # legacy alias, kept for safety
     "microsoftonline.com",
     "login.microsoft.com",
     "okta.com",
@@ -75,13 +78,21 @@ DEFAULT_PUBLISHER_DOMAINS: tuple = (
 
 
 def _env_cookie_domains() -> list[str]:
-    """Return user-configured cookie domains for institution-specific SSO."""
+    """Return user-configured cookie domains for institution-specific SSO.
+
+    Honors ``GVF_COOKIE_DOMAINS`` / ``GVF_SSO_COOKIE_DOMAINS`` (space/comma list)
+    and the plain ``COOKIE_DOMAIN`` (e.g. ``proxy.library.vanderbilt.edu``).
+    """
+    out: list[str] = []
     raw = os.environ.get("GVF_COOKIE_DOMAINS") or os.environ.get(
         "GVF_SSO_COOKIE_DOMAINS"
     )
-    if not raw:
-        return []
-    return [d.strip() for d in _split_cookie_domains(raw) if d.strip()]
+    if raw:
+        out.extend(d.strip() for d in _split_cookie_domains(raw) if d.strip())
+    single = (os.environ.get("COOKIE_DOMAIN") or "").strip()
+    if single:
+        out.append(single)
+    return out
 
 
 def _split_cookie_domains(raw: str) -> list[str]:

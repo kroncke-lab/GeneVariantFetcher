@@ -93,12 +93,12 @@ authorized subscriber access, not circumvention of payment.)
 ### Setup (one-time)
 1. Log into the library EZproxy once in Chrome (Vanderbilt SSO). This drops an
    EZproxy session cookie that `cookie_loader.py` already reads
-   (`ezproxy.library.vanderbilt.edu`); it typically lasts the SSO session
+   (`proxy.library.vanderbilt.edu`); it typically lasts the SSO session
    (days–weeks).
 2. Point GVF at the proxy in `.env` (pick the form your library uses):
    ```bash
-   GVF_EZPROXY_PREFIX="https://ezproxy.library.vanderbilt.edu/login?url="
-   # or just:  GVF_EZPROXY_HOST="ezproxy.library.vanderbilt.edu"
+   GVF_EZPROXY_PREFIX="https://proxy.library.vanderbilt.edu/login?url="
+   # or just:  GVF_EZPROXY_HOST="proxy.library.vanderbilt.edu"
    # GVF_EZPROXY_ALL=1   # optional: proxy ALL publisher URLs, not just the CF-blocked set
    ```
 3. Verify it clears Cloudflare:
