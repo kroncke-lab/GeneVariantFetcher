@@ -866,3 +866,45 @@ def test_stage_extractions_uses_copy_and_leaves_active_json(tmp_path, monkeypatc
     assert (staged_dir / active_json.name).read_text(encoding="utf-8") == (
         active_json.read_text(encoding="utf-8")
     )
+
+
+def test_fold_on_disk_supplements_grows_full_context_and_marks_pmid(tmp_path):
+    from harvesting.supplement_fold import FOLD_BEGIN
+
+    pmid = "30758498"
+    (tmp_path / f"{pmid}_FULL_CONTEXT.md").write_text(
+        _long_fulltext("# MAIN\n\nKCNQ1 LQTS cohort body"), encoding="utf-8"
+    )
+    supp = tmp_path / f"{pmid}_supplements"
+    supp.mkdir()
+    (supp / "tableS1.csv").write_text("variant,carriers\nc.1A>G,3\n", encoding="utf-8")
+
+    folded = refresh_run_db.fold_on_disk_supplements(tmp_path)
+
+    assert pmid in folded
+    fc = (tmp_path / f"{pmid}_FULL_CONTEXT.md").read_text(encoding="utf-8")
+    assert FOLD_BEGIN in fc and "c.1A>G,3" in fc
+
+
+def test_discover_prefers_full_context_when_condensed_is_stale(tmp_path):
+    from harvesting.supplement_fold import FOLD_BEGIN, FOLD_END
+
+    pmid = "12345678"
+    folded_block = f"\n\n{FOLD_BEGIN}\nsupp table c.1A>G,3\n{FOLD_END}\n"
+    (tmp_path / f"{pmid}_FULL_CONTEXT.md").write_text(
+        _long_fulltext("# MAIN\n\nKCNQ1 body") + folded_block, encoding="utf-8"
+    )
+    # Condensed source predates the fold (no sentinel) -> stale -> must be skipped
+    (tmp_path / f"{pmid}_DATA_ZONES.md").write_text(
+        _long_fulltext("# zones\n\nKCNQ1 condensed"), encoding="utf-8"
+    )
+
+    src = refresh_run_db.discover_source_files(tmp_path)
+    assert src[pmid].name.endswith("_FULL_CONTEXT.md")
+
+    # Once the condensed form carries the sentinel (regenerated), it wins again.
+    (tmp_path / f"{pmid}_DATA_ZONES.md").write_text(
+        _long_fulltext("# zones\n\nKCNQ1 condensed") + folded_block, encoding="utf-8"
+    )
+    src2 = refresh_run_db.discover_source_files(tmp_path)
+    assert src2[pmid].name.endswith("_DATA_ZONES.md")

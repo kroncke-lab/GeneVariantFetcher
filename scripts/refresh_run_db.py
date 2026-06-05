@@ -334,6 +334,47 @@ def _source_metadata(source_file: Path) -> dict[str, Any]:
     }
 
 
+def fold_on_disk_supplements(harvest_dir: Path) -> set[str]:
+    """Fold any on-disk ``{pmid}_supplements/`` into ``{pmid}_FULL_CONTEXT.md``.
+
+    The re-extraction path otherwise never re-reads supplement files, so a paper
+    whose supplement tables were downloaded but not folded (stale binding, thin
+    harvest-time fold, side-directory recovery) silently loses those variants on
+    replay. The fold is non-destructive (``.pre_fold_bak``), sentinel-delimited,
+    and idempotent. Returns the set of PMIDs whose FULL_CONTEXT carries folded
+    supplements (so discovery can avoid a stale condensed source for them).
+    """
+    from harvesting.supplement_fold import fold_supplements_into_full_context
+
+    folded: set[str] = set()
+    for supp_dir in sorted(harvest_dir.glob("*_supplements")):
+        if not supp_dir.is_dir():
+            continue
+        pmid = supp_dir.name.replace("_supplements", "")
+        try:
+            out = fold_supplements_into_full_context(pmid, harvest_dir)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("supplement fold failed for %s: %s", pmid, exc)
+            continue
+        if out is not None:
+            folded.add(pmid)
+    if folded:
+        logger.info(
+            "folded on-disk supplements into FULL_CONTEXT for %d PMID(s)", len(folded)
+        )
+    return folded
+
+
+def _has_folded_supplements(path: Path) -> bool:
+    """True if *path*'s text contains the supplement-fold sentinel."""
+    from harvesting.supplement_fold import FOLD_BEGIN
+
+    try:
+        return FOLD_BEGIN in path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return False
+
+
 def discover_source_files(harvest_dir: Path) -> dict[str, Path]:
     """Return PMID -> preferred extraction source, matching pipeline priority."""
     data_zones = {
@@ -355,11 +396,24 @@ def discover_source_files(harvest_dir: Path) -> dict[str, Path]:
     sources: dict[str, Path] = {}
     for pmid in sorted(set(data_zones) | set(cleaned) | set(full_context)):
         if pmid in data_zones:
-            sources[pmid] = data_zones[pmid]
+            chosen = data_zones[pmid]
         elif pmid in cleaned:
-            sources[pmid] = cleaned[pmid]
+            chosen = cleaned[pmid]
         else:
-            sources[pmid] = full_context[pmid]
+            chosen = full_context[pmid]
+        # If supplements were folded into FULL_CONTEXT but the preferred condensed
+        # source predates the fold (lacks the sentinel), that condensed form is
+        # stale and would drop the supplement tables — fall back to the grown
+        # FULL_CONTEXT for just this PMID.
+        fc = full_context.get(pmid)
+        if (
+            fc is not None
+            and chosen is not fc
+            and _has_folded_supplements(fc)
+            and not _has_folded_supplements(chosen)
+        ):
+            chosen = fc
+        sources[pmid] = chosen
     return sources
 
 
@@ -801,6 +855,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--harvest-dir", type=Path, default=None)
     p.add_argument("--extraction-dir", type=Path, default=None)
     p.add_argument(
+        "--no-supplement-fold",
+        action="store_true",
+        help=(
+            "Skip folding on-disk {pmid}_supplements/ into FULL_CONTEXT before "
+            "discovery. By default the fold runs (non-destructive, idempotent) so "
+            "downloaded supplement tables are visible to re-extraction."
+        ),
+    )
+    p.add_argument(
         "--stage-extractions",
         action="store_true",
         help=(
@@ -1008,6 +1071,11 @@ def main() -> int:
         sys.exit(f"Harvest dir not found: {harvest_dir}")
     if not extraction_dir.is_dir():
         sys.exit(f"Extraction dir not found: {extraction_dir}")
+
+    # Fold any on-disk supplements into FULL_CONTEXT so re-extraction sees them
+    # (the discovery glob never re-reads {pmid}_supplements/ on its own).
+    if not args.no_supplement_fold:
+        fold_on_disk_supplements(harvest_dir)
     if args.stage_extractions and args.replace_db:
         sys.exit("--stage-extractions cannot be combined with --replace-db")
 
