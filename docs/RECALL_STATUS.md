@@ -28,6 +28,31 @@ numbers, read them this way:
 
 No other doc may restate a recall number; they link here.
 
+## 2026-06-05 Session — Supplement Acquisition Landed In Canonical DBs
+
+Recovered Elsevier `mmc` supplement mutation tables (the full-text API fetches
+body only) + folded on-disk supplements, then surgically injected the 12
+value papers into the canonical four-gene DBs (preserving clinvar/pubtator/figure
+layer rows; verified no individual_records loss; backups at
+`{gene}.db.before_supplements_20260605.db`). Method + full details:
+`docs/SUPPLEMENT_ACQUISITION_PLAN.md`.
+
+Four-gene aggregate (figures-skipped scoring, canonical DBs):
+
+| Metric | Prior (2026-05-29) | Now (+supplements) | Δ |
+|---|---|---|---|
+| unique_variants | 2473/3010 (82.2%) | **2523/3010 (83.8%)** | +50 (+1.6pp) |
+| variant_rows | 5160/6833 (75.5%) | **5350/6833 (78.3%)** | +190 (+2.8pp) |
+| patients | (77.8%) | **80.6%** | +2.8pp |
+| affected | (76.6%) | **78.7%** | +2.1pp |
+| carriers MAE | 0.910 | **0.882** | better |
+
+Per-gene unique_variants: KCNH2 82.8→83.2, KCNQ1 85.7→86.8, SCN5A 80.1→**82.8**
+(largest gain — the SCN5A 29325976 mmc1.docx alone added 64 of its 87 missing
+variants), RYR2 81.9→83.4. Aggregate gap-to-90% unique variants: 236 → **186**.
+The two Cloudflare-blocked publishers (Karger 0.3% / Sage 0.0% of the gap) were
+confirmed near-irrelevant to recall.
+
 ## 2026-06-01 Session — KCNH2/RYR2/SCN5A Acquisition Replay & No-Gold Source QC
 
 KCNH2 missing-recall diagnosis showed the biggest immediate lever was source

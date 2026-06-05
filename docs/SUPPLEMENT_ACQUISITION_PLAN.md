@@ -47,11 +47,34 @@ gene-deduped uniqV gain (+63) is below the per-paper proxy (+175) because uniqV
 dedups across papers and the stricter official matcher is used; variant_rows
 (+220) tracks the per-paper recovery more closely.
 
-**Status:** official supplement lift confirmed (+63 uniqV / +220 rows from 18
-papers, isolated). Done: T1, T2, T3, T5, corpus→flat bridge + re-score.
-Remaining: T6 (Wiley/Springer API supplements, ~11% of gap), T7 (max_supplements
-cap), T8/T9 (Karger/Sage, deferred ~0 value); and a full-pipeline refresh (with
-recovery layers) to land the supplement variants in the published DBs.
+### LANDED in the canonical DBs (surgical injection, 2026-06-05)
+
+Rather than a wholesale rebuild (which would have to perfectly reproduce the
+canonical clinvar/pubtator/figure layer rows), the 12 value papers' supplement
+re-extractions were surgically injected into copies of the canonical DBs:
+delete each paper's extraction-origin rows (penetrance/individual/non-layer
+variant_papers — preserving clinvar/pubtator/figure rows), then
+`migrate_extraction_file(replace_existing_paper=True)`. Verified no
+individual_records loss and strict improvement, then promoted with backups
+(`{gene}.db.before_supplements_20260605.db`).
+
+| Metric | Canonical | + Supplements (PROMOTED) | Δ |
+|---|---|---|---|
+| unique_variants | 82.2% (2473) | **83.8% (2523)** | +50 (+1.6pp); gap-to-90% 236→186 |
+| variant_rows | 75.5% (5160) | **78.3% (5350)** | +190 (+2.8pp) |
+| patients | 77.8% | 80.6% | +534 |
+| affected | 76.6% | 78.7% | +264 |
+| carriers MAE | 0.910 | **0.882** | better |
+
+Per-gene uniqV: KCNH2 82.8→83.2, KCNQ1 85.7→86.8, SCN5A 80.1→82.8 (biggest, the
+prize), RYR2 81.9→83.4. Nothing regressed (PMIDs/unaffected flat). The landed
++50 uniqV is below the isolated +63 because the canonical DBs already match some
+of these variants via the ClinVar layer (overlap).
+
+**Status:** Done: T1, T2, T3, T5, corpus→flat bridge, official re-score, AND
+landed in the canonical DBs (+1.6pp uniqV / +2.8pp rows). Remaining: T6
+(Wiley/Springer API supplements, ~11% of gap), T7 (max_supplements cap),
+T8/T9 (Karger/Sage, deferred ~0 value).
 
 ## TL;DR — the premise was wrong; here is where the value actually is
 
