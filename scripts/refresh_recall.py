@@ -86,13 +86,17 @@ def _score(gene: str, db: Path, gold_dir: Path, outdir: Path) -> dict | None:
 
 
 def _uniqv(summary: dict | None) -> tuple[int, int]:
-    """(matched, gold) for unique variants from a run_recall_suite summary."""
+    """(matched, gold) for unique variants from a run_recall_suite summary.
+
+    run_recall_suite writes ``summary["recall"]["unique_variants"] = {matched,
+    gold, recall}``; tolerate a flattened layout too.
+    """
     if not summary:
         return (0, 0)
-    for key in ("unique_variants", "unique_variant_recall", "uniqueVariants"):
-        v = summary.get(key)
-        if isinstance(v, dict):
-            return int(v.get("matched", 0)), int(v.get("gold", v.get("total", 0)))
+    rec = summary.get("recall") or {}
+    v = rec.get("unique_variants") or summary.get("unique_variants")
+    if isinstance(v, dict):
+        return int(v.get("matched", 0)), int(v.get("gold", v.get("total", 0)))
     return (0, 0)
 
 
