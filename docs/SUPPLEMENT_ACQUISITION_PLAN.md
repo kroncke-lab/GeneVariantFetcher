@@ -23,17 +23,35 @@ supplements (KCNH2 1/14, KCNQ1 3/7, SCN5A 8/30, RYR2 4/8); the rest have no mmc
 referenced in the authenticated XML. Where a supplement exists, ~79% of its
 missing variants are recovered.
 
-**Status:** the recovered supplements are downloaded into the corpus and folded
-into FULL_CONTEXT on disk; the variants are confirmed Tier-3-extractable. They
-are NOT yet in the canonical scoring DBs — an official `run_recall_suite`
-re-score needs a corpus→flat-harvest bridge so `refresh_run_db` (which now folds
-supplements) can rebuild the gold DBs. That bridge is the next step.
+### OFFICIAL re-score (corpus→flat bridge, `scripts/corpus_to_harvest.py`)
 
-Done: T1 (`supplement_fold_gap.py`), T2 (nested-zip rglob), T3 (fold wired into
-`refresh_run_db`), T5 (`ElsevierAPIClient.download_supplements` +
-`fetch_elsevier_supplements.py`). Remaining: corpus→flat re-score bridge, T6
-(Wiley/Springer API supplements), T7 (max_supplements cap), T8/T9 (Karger/Sage,
-deferred ~0 value).
+Built the bridge and re-scored via `refresh_run_db` (re-extract the 18 forced
+supplement papers, acceptance-gated) → `run_recall_suite`. To isolate the
+supplement effect, BOTH DBs were rebuilt identically from extractions with
+`--skip-recovery` (no ClinVar/PubTator/figure layers), so the delta is purely
+supplements. Absolute numbers are therefore below the layered published baseline
+(82.2% uniqV); the supplement lift STACKS on top of the full pipeline.
+
+| Metric | Before (rebuilt) | After (+supplements) | Δ |
+|---|---|---|---|
+| unique_variants | 75.1% (2262) | 77.2% (2325) | **+63 (+2.1pp)** |
+| variant_rows | 63.4% (4331) | 66.6% (4551) | **+220 (+3.2pp)** |
+| patients | 66.8% | 69.8% | +576 |
+| affected | 65.1% | 67.6% | +306 |
+| carriers MAE | 0.915 | 0.887 | better |
+
+Per-gene unique_variants: SCN5A 75.1→78.1 (+3.0pp, rows +4.9pp), RYR2 76.9→79.0
+(+2.1pp), KCNQ1 77.0→78.9 (+1.9pp; PMID 19716085 correctly regression-gated:
+re-extract gave 0 vs prior 412), KCNH2 70.8→71.1 (+0.3pp). The official
+gene-deduped uniqV gain (+63) is below the per-paper proxy (+175) because uniqV
+dedups across papers and the stricter official matcher is used; variant_rows
+(+220) tracks the per-paper recovery more closely.
+
+**Status:** official supplement lift confirmed (+63 uniqV / +220 rows from 18
+papers, isolated). Done: T1, T2, T3, T5, corpus→flat bridge + re-score.
+Remaining: T6 (Wiley/Springer API supplements, ~11% of gap), T7 (max_supplements
+cap), T8/T9 (Karger/Sage, deferred ~0 value); and a full-pipeline refresh (with
+recovery layers) to land the supplement variants in the published DBs.
 
 ## TL;DR — the premise was wrong; here is where the value actually is
 
