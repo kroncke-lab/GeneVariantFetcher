@@ -1430,6 +1430,16 @@ def main() -> int:
         ),
     )
     parser.add_argument(
+        "--stealth",
+        action="store_true",
+        help=(
+            "Use the patchright stealth backend (real Chrome, forced headful) to "
+            "clear Cloudflare managed challenges (e.g. Wiley Online Library) "
+            "without a proxy. Requires `pip install patchright && patchright "
+            "install chromium`. Best combined with --browser-profile-dir."
+        ),
+    )
+    parser.add_argument(
         "--auth-url",
         action="append",
         default=[],
@@ -1517,6 +1527,7 @@ def main() -> int:
         persistent_profile_path=str(browser_profile_dir)
         if browser_profile_dir
         else None,
+        use_stealth=args.stealth,
     )
 
     prime_authenticated_browser(

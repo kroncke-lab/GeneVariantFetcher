@@ -59,12 +59,21 @@ class AuthenticatedBrowserPool:
         slow_mo: int = 0,
         use_chrome_channel: bool = True,
         persistent_profile_path: Optional[str] = None,
+        use_stealth: bool = False,
     ):
         self._cookies = cookies or []
         self.headless = headless
         self.slow_mo = slow_mo
         self.use_chrome_channel = use_chrome_channel
         self.persistent_profile_path = persistent_profile_path
+        # Stealth backend: use patchright (a patched Playwright drop-in) instead
+        # of vanilla Playwright. Empirically (2026-06-05) patchright + the real
+        # Chrome channel + HEADFUL clears Wiley's Cloudflare managed challenge;
+        # the headless-shell and new-headless are still detected. So enabling
+        # stealth forces channel=chrome and headful, and skips the custom UA /
+        # headers / init-script (those re-introduce a detectable fingerprint;
+        # patchright manages fingerprinting itself).
+        self.use_stealth = use_stealth
         self._playwright = None
         self._browser = None
         self._context = None
@@ -81,13 +90,30 @@ class AuthenticatedBrowserPool:
     def start(self) -> None:
         if self._started:
             return
-        try:
-            from playwright.sync_api import sync_playwright
-        except ImportError as e:
-            raise RuntimeError(
-                "Playwright is not installed. Install with "
-                "`pip install playwright && playwright install chromium`."
-            ) from e
+        if self.use_stealth:
+            try:
+                from patchright.sync_api import sync_playwright
+            except ImportError as e:
+                raise RuntimeError(
+                    "Stealth backend requested but patchright is not installed. "
+                    "Install with `pip install patchright && patchright install chromium`."
+                ) from e
+            # CF managed challenge only clears with real Chrome, headful.
+            self.use_chrome_channel = True
+            if self.headless:
+                logger.warning(
+                    "use_stealth forces headful Chrome (headless is CF-detected); "
+                    "overriding headless=True -> False."
+                )
+                self.headless = False
+        else:
+            try:
+                from playwright.sync_api import sync_playwright
+            except ImportError as e:
+                raise RuntimeError(
+                    "Playwright is not installed. Install with "
+                    "`pip install playwright && playwright install chromium`."
+                ) from e
 
         self._playwright = sync_playwright().start()
         launch_args = [
@@ -110,23 +136,33 @@ class AuthenticatedBrowserPool:
         if self.use_chrome_channel:
             launch_kwargs["channel"] = "chrome"
 
-        context_kwargs = dict(
-            user_agent=(
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/131.0.0.0 Safari/537.36"
-            ),
-            viewport={"width": 1920, "height": 1080},
-            locale="en-US",
-            timezone_id="America/New_York",
-            color_scheme="light",
-            # Some publishers gate on Accept-Language and Sec-CH-UA hints — let
-            # the channel default to whatever Chrome would send, but make sure
-            # Accept-Language is set explicitly.
-            extra_http_headers={
-                "Accept-Language": "en-US,en;q=0.9",
-            },
-        )
+        if self.use_stealth:
+            # Minimal context: let real Chrome supply its native UA / client
+            # hints. A custom UA or extra headers here are a detectable
+            # inconsistency that defeats the whole point.
+            context_kwargs = dict(
+                viewport={"width": 1920, "height": 1080},
+                locale="en-US",
+                timezone_id="America/New_York",
+            )
+        else:
+            context_kwargs = dict(
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/131.0.0.0 Safari/537.36"
+                ),
+                viewport={"width": 1920, "height": 1080},
+                locale="en-US",
+                timezone_id="America/New_York",
+                color_scheme="light",
+                # Some publishers gate on Accept-Language and Sec-CH-UA hints — let
+                # the channel default to whatever Chrome would send, but make sure
+                # Accept-Language is set explicitly.
+                extra_http_headers={
+                    "Accept-Language": "en-US,en;q=0.9",
+                },
+            )
 
         if self.persistent_profile_path:
             profile_dir = Path(self.persistent_profile_path).expanduser()
@@ -170,7 +206,10 @@ class AuthenticatedBrowserPool:
                     raise
 
             self._context = self._browser.new_context(**context_kwargs)
-        self._context.add_init_script(_STEALTH_SCRIPT)
+        # patchright handles fingerprint hardening itself; our hand-rolled init
+        # script can re-introduce detectable patches, so skip it under stealth.
+        if not self.use_stealth:
+            self._context.add_init_script(_STEALTH_SCRIPT)
 
         # Inject cookies before any navigation.
         if self._cookies:

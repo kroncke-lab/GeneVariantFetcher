@@ -29,6 +29,13 @@ dependencies = [
 browser = [
     "playwright>=1.40.0",
 ]
+# Stealth backend for Cloudflare-fronted publishers (Wiley etc.) when EZproxy
+# isn't available. Patched-Playwright drop-in; run `patchright install chromium`.
+# Clears the CF managed challenge only with real Chrome, headful (see
+# fetch_paywalled.py --stealth and docs/RECALL_REFRESH_RUNBOOK.md).
+stealth = [
+    "patchright>=1.40.0",
+]
 dev = [
     "pytest>=7.4.0",
     "ruff>=0.1.6",
