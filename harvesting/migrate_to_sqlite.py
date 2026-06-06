@@ -837,6 +837,28 @@ def insert_paper_metadata(
     )
 
 
+def _row_exists(cursor: sqlite3.Cursor, table: str, match: Dict[str, Any]) -> bool:
+    """Return True if *table* already holds a row matching every column in *match*.
+
+    NULL-aware (uses ``col IS NULL`` rather than ``col = NULL``). This keeps the
+    child-row inserts idempotent: the same fact extracted from several table
+    representations of one variant (e.g. multi-cohort / multi-classification
+    supplement tables) — or re-migrated on a refresh — must not create a second
+    identical row, which would make carrier/affected counts sum N-fold at scoring
+    time. Table and column names are code-controlled (never user input).
+    """
+    clauses: List[str] = []
+    params: List[Any] = []
+    for col, val in match.items():
+        if val is None:
+            clauses.append(f"{col} IS NULL")
+        else:
+            clauses.append(f"{col} = ?")
+            params.append(val)
+    sql = f"SELECT 1 FROM {table} WHERE {' AND '.join(clauses)} LIMIT 1"  # noqa: S608
+    return cursor.execute(sql, params).fetchone() is not None
+
+
 def insert_variant_data(
     cursor: sqlite3.Cursor,
     pmid: str,
@@ -915,8 +937,29 @@ def insert_variant_data(
             penetrance.get("uncertain_count"),
             penetrance.get("penetrance_percentage"),
         )
+        # Idempotency guard: an identical penetrance row for this (variant_id,
+        # pmid) must never be written twice. Exact duplicates come from one
+        # variant represented across several supplement-table cells (multi-cohort
+        # / multi-classification) or from re-migrating a paper on a refresh;
+        # without this guard they are summed N-fold into the carrier/affected
+        # counts at scoring time (the regression that took KCNQ1 PMID 32893267
+        # to 4x gold).
+        is_exact_penetrance_dup = _row_exists(
+            cursor,
+            "penetrance_data",
+            {
+                "variant_id": variant_id,
+                "pmid": pmid,
+                "total_carriers_observed": penetrance.get("total_carriers_observed"),
+                "affected_count": penetrance.get("affected_count"),
+                "unaffected_count": penetrance.get("unaffected_count"),
+                "uncertain_count": penetrance.get("uncertain_count"),
+                "penetrance_percentage": penetrance.get("penetrance_percentage"),
+            },
+        )
+
         existing_penetrance = None
-        if preserve_existing_evidence:
+        if preserve_existing_evidence and not is_exact_penetrance_dup:
             existing_penetrance = cursor.execute(
                 """
                 SELECT penetrance_id, total_carriers_observed, affected_count,
@@ -929,7 +972,10 @@ def insert_variant_data(
                 (variant_id, pmid),
             ).fetchone()
 
-        if existing_penetrance:
+        if is_exact_penetrance_dup:
+            # Identical row already stored — no-op keeps migration idempotent.
+            pass
+        elif existing_penetrance:
             penetrance_id = existing_penetrance[0]
             current_values = existing_penetrance[1:]
             incoming_values = penetrance_values[2:]
@@ -1014,6 +1060,27 @@ def insert_variant_data(
                 ).fetchone()
             if existing_record:
                 continue
+        # Idempotency guard: skip an individual record identical to one already
+        # stored for this (variant_id, pmid) (applies in replace mode too).
+        if _row_exists(
+            cursor,
+            "individual_records",
+            {
+                "variant_id": variant_id,
+                "pmid": pmid,
+                "individual_id": individual_id,
+                "age_at_evaluation": record.get("age_at_evaluation"),
+                "age_at_onset": record.get("age_at_onset"),
+                "age_at_diagnosis": record.get("age_at_diagnosis"),
+                "sex": record.get("sex"),
+                "affected_status": affected_status,
+                "phenotype_details": record.get("phenotype_details"),
+                "evidence_sentence": record.get("evidence_sentence"),
+                "ethnicity": record.get("ethnicity"),
+                "geographic_origin": record.get("geographic_origin"),
+            },
+        ):
+            continue
         cursor.execute(
             """
             INSERT INTO individual_records (
@@ -1038,56 +1105,84 @@ def insert_variant_data(
             ),
         )
 
-    # Insert functional data
+    # Insert functional data (exact-dup guard keeps re-migration idempotent —
+    # _land does not pre-delete these child rows the way it does penetrance).
     functional = variant_data.get("functional_data", {})
     if functional and (functional.get("summary") or functional.get("assays")):
-        cursor.execute(
-            """
-            INSERT INTO functional_data (
-                variant_id, pmid, summary, assays
-            ) VALUES (?, ?, ?, ?)
-        """,
-            (
-                variant_id,
-                pmid,
-                functional.get("summary"),
-                json.dumps(functional.get("assays", [])),
-            ),
-        )
+        assays_json = json.dumps(functional.get("assays", []))
+        if not _row_exists(
+            cursor,
+            "functional_data",
+            {
+                "variant_id": variant_id,
+                "pmid": pmid,
+                "summary": functional.get("summary"),
+                "assays": assays_json,
+            },
+        ):
+            cursor.execute(
+                """
+                INSERT INTO functional_data (
+                    variant_id, pmid, summary, assays
+                ) VALUES (?, ?, ?, ?)
+            """,
+                (variant_id, pmid, functional.get("summary"), assays_json),
+            )
 
     # Insert phenotype data
     patients = variant_data.get("patients", {})
     if patients and (patients.get("count") or patients.get("phenotype")):
-        cursor.execute(
-            """
-            INSERT INTO phenotypes (
-                variant_id, pmid, patient_count, demographics, phenotype_description
-            ) VALUES (?, ?, ?, ?, ?)
-        """,
-            (
-                variant_id,
-                pmid,
-                patients.get("count"),
-                patients.get("demographics"),
-                patients.get("phenotype"),
-            ),
-        )
+        if not _row_exists(
+            cursor,
+            "phenotypes",
+            {
+                "variant_id": variant_id,
+                "pmid": pmid,
+                "patient_count": patients.get("count"),
+                "demographics": patients.get("demographics"),
+                "phenotype_description": patients.get("phenotype"),
+            },
+        ):
+            cursor.execute(
+                """
+                INSERT INTO phenotypes (
+                    variant_id, pmid, patient_count, demographics, phenotype_description
+                ) VALUES (?, ?, ?, ?, ?)
+            """,
+                (
+                    variant_id,
+                    pmid,
+                    patients.get("count"),
+                    patients.get("demographics"),
+                    patients.get("phenotype"),
+                ),
+            )
 
     # Insert variant metadata
     if variant_data.get("segregation_data") or variant_data.get("population_frequency"):
-        cursor.execute(
-            """
-            INSERT INTO variant_metadata (
-                variant_id, pmid, segregation_data, population_frequency
-            ) VALUES (?, ?, ?, ?)
-        """,
-            (
-                variant_id,
-                pmid,
-                variant_data.get("segregation_data"),
-                variant_data.get("population_frequency"),
-            ),
-        )
+        if not _row_exists(
+            cursor,
+            "variant_metadata",
+            {
+                "variant_id": variant_id,
+                "pmid": pmid,
+                "segregation_data": variant_data.get("segregation_data"),
+                "population_frequency": variant_data.get("population_frequency"),
+            },
+        ):
+            cursor.execute(
+                """
+                INSERT INTO variant_metadata (
+                    variant_id, pmid, segregation_data, population_frequency
+                ) VALUES (?, ?, ?, ?)
+            """,
+                (
+                    variant_id,
+                    pmid,
+                    variant_data.get("segregation_data"),
+                    variant_data.get("population_frequency"),
+                ),
+            )
 
     return variant_id
 
@@ -1377,6 +1472,59 @@ def migrate_extraction_directory(
 # ============================================================================
 # CLEANUP AND ARCHIVAL FUNCTIONS
 # ============================================================================
+
+
+_DEDUP_CHILD_TABLES: Tuple[str, ...] = (
+    "penetrance_data",
+    "individual_records",
+    "functional_data",
+    "phenotypes",
+    "variant_metadata",
+)
+
+
+def dedup_existing_rows(
+    conn: sqlite3.Connection,
+    tables: Tuple[str, ...] = _DEDUP_CHILD_TABLES,
+) -> Dict[str, int]:
+    """Collapse exact-duplicate child rows already stored in a DB (idempotent).
+
+    For each table, rows that are identical on every column except the synthetic
+    primary key are reduced to one (the lowest ``rowid`` is kept). Foreign-key
+    cascades drop ``age_dependent_penetrance`` rows under any removed penetrance
+    row. Genuinely different rows (e.g. real sub-cohort splits) are untouched.
+    Re-running on an already-clean DB removes nothing.
+
+    Back-fill companion to the exact-dup insert guards in ``insert_variant_data``:
+    the guards stop new duplicates being written; this removes the ones that
+    accumulated before the guards existed (carrier/affected counts summed N-fold
+    from variants represented across multiple cohort/supplement tables).
+
+    Returns ``{table: rows_removed}``.
+    """
+    removed: Dict[str, int] = {}
+    conn.execute("PRAGMA foreign_keys = ON")
+    cur = conn.cursor()
+    for table in tables:
+        info = cur.execute(f"PRAGMA table_info({table})").fetchall()  # noqa: S608
+        if not info:
+            continue
+        pk_cols = {row[1] for row in info if row[5]}
+        value_cols = [row[1] for row in info if row[1] not in pk_cols]
+        if not value_cols:
+            continue
+        # IFNULL sentinel so NULLs group together (NULL == NULL for dedup); the
+        # char(0) byte never appears in real extracted values.
+        group_expr = ", ".join(f"IFNULL({c}, char(0))" for c in value_cols)
+        before = cur.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]  # noqa: S608
+        cur.execute(  # noqa: S608 - table/column names are code-controlled
+            f"DELETE FROM {table} WHERE rowid NOT IN "
+            f"(SELECT MIN(rowid) FROM {table} GROUP BY {group_expr})"
+        )
+        after = cur.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]  # noqa: S608
+        removed[table] = before - after
+    conn.commit()
+    return removed
 
 
 def find_and_delete_empty_directories(

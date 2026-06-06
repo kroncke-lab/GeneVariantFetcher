@@ -26,6 +26,8 @@ Elsevier insttoken.
 | 2026-05-26 | Post-rollback + ClinVar/PubTator recovery | 2450/3010 (81.4%) | 5065/6833 (74.1%) | 1.055 |
 | 2026-05-29 | cDNA↔protein matcher bridge + count-outlier guard | 2473/3010 (82.2%) | 5160/6833 (75.4%) | ~0.90 |
 | **2026-06-05** | **Elsevier mmc supplement acquisition (landed)** | **2523/3010 (83.8%)** | **5350/6833 (78.3%)** | **0.882** |
+| 2026-06-06 | refresh_recall re-extract (recall up, MAE regressed) | 2572/3010 (85.4%) | 5423/6833 (79.4%) | 1.274 |
+| **2026-06-06** | **Duplicate-penetrance idempotency fix** | **2572/3010 (85.4%)** | **5423/6833 (79.4%)** | **0.614** |
 | — | **Target** | **2709/3010 (90.0%)** | — | → 0 |
 
 Gap to the 90% unique-variant target: **186** variants (was 1126 at the 62.6%
@@ -37,6 +39,32 @@ KCNH2 **83.2%**, KCNQ1 **86.8%**, SCN5A **82.8%**, RYR2 **83.4%**.
 ---
 
 ## Timeline (newest first)
+
+### 2026-06-06 — Duplicate-penetrance idempotency fix (carriers MAE 1.274→0.614, recall preserved)
+The 2026-06-05 `refresh_recall` re-extraction lifted recall (uniqV 83.8→85.4%,
+rows 78.3→79.4%, patients 80.6→82.1%) but **spiked aggregate carriers MAE
+0.882→1.274** — 94% of it KCNQ1, ~98% of that a single paper (PMID 32893267, the
+Lahrouchi 2020 LQTS exome cohort). Root cause was **not** junk variants from
+no-patient-data papers: the migration wrote one `penetrance_data` row per
+supplement-table appearance of a variant (that paper lists each variant across
+Table S4 + Table S14 × two ACMG schemes), and the scorer **sums** the rows linked
+to each (pmid, variant) — so V254M scored 4× gold (100 vs 25). The count-outlier
+guard can't catch it (uniform inflation lifts the per-paper median too, so nothing
+trips the >10× rule) and the land gate checks only unique-variant recall, never
+MAE, so it promoted silently.
+- Fix is idempotency at the write path: exact-duplicate insert guards in
+  `migrate_to_sqlite.insert_variant_data` for penetrance/individual/functional/
+  phenotypes/variant_metadata, so re-migration or a variant repeated across table
+  cells never writes a second identical row. Back-fill for DBs built before the
+  guards: `dedup_existing_rows` (`scripts/dedup_db.py`).
+- Canonical DBs deduped (backups `<GENE>.db.before_dedup.db`): aggregate carriers
+  MAE **1.274→0.614** (below the 0.882 baseline), recall unchanged. Per-gene
+  carriers MAE: KCNH2 0.860, SCN5A 0.489, KCNQ1 3.61→**0.897**, RYR2 0.323.
+  Removed exact dups: penetrance 6883, phenotypes 7431 across the four DBs.
+- Tests: `tests/unit/test_migrate_idempotent.py` (4) + the migration/scoring suite
+  (125) green.
+- Not yet done: an MAE non-regression check on the `refresh_recall` land gate
+  (currently `if lm >= bm`, recall-only) so a count regression can't promote again.
 
 ### 2026-06-05 — Supplement acquisition: the real recall lever (+1.6pp uniqV)
 Recon (`docs/SUPPLEMENT_ACQUISITION_PLAN.md`) re-framed the problem: the

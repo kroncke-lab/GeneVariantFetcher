@@ -47,6 +47,19 @@ Four-gene aggregate (figures-skipped scoring, canonical DBs):
 | affected | (76.6%) | **78.7%** | +2.1pp |
 | carriers MAE | 0.910 | **0.882** | better |
 
+> **2026-06-06 — duplicate-penetrance idempotency fix (supersedes the carriers
+> MAE above).** The 2026-06-05 `refresh_recall` re-extraction of multi-table
+> cohort papers double-counted carriers (KCNQ1 PMID 32893267 V254M scored 4× gold
+> = 100 vs 25), spiking aggregate carriers MAE to **1.274** (KCNQ1 3.61) while
+> recall held. Root cause: migration wrote one `penetrance_data` row per
+> supplement-table appearance of a variant and the scorer SUMS the rows linked to
+> each (pmid, variant). Fixed by exact-duplicate insert guards in
+> `migrate_to_sqlite.insert_variant_data` (migration is now idempotent) plus a
+> `dedup_existing_rows` back-fill (`scripts/dedup_db.py`). Canonical DBs deduped
+> (backups: `<GENE>.db.before_dedup.db`): **aggregate carriers MAE 1.274 → 0.614**
+> (below the 0.882 baseline), **recall unchanged**. Per-gene carriers MAE now:
+> KCNH2 0.860, SCN5A 0.489, KCNQ1 0.897, RYR2 0.323.
+
 Per-gene unique_variants: KCNH2 82.8→83.2, KCNQ1 85.7→86.8, SCN5A 80.1→**82.8**
 (largest gain — the SCN5A 29325976 mmc1.docx alone added 64 of its 87 missing
 variants), RYR2 81.9→83.4. Aggregate gap-to-90% unique variants: 236 → **186**.
