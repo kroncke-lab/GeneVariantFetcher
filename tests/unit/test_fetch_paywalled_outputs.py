@@ -374,12 +374,14 @@ def test_main_wires_persistent_profile_and_auth_url(monkeypatch, tmp_path):
             headless,
             use_chrome_channel,
             persistent_profile_path=None,
+            use_stealth=False,
         ):
             captured["pool"] = {
                 "cookies": cookies,
                 "headless": headless,
                 "use_chrome_channel": use_chrome_channel,
                 "persistent_profile_path": persistent_profile_path,
+                "use_stealth": use_stealth,
             }
 
         def close(self):
@@ -452,6 +454,7 @@ def test_main_wires_persistent_profile_and_auth_url(monkeypatch, tmp_path):
 
     assert captured["pool"]["headless"] is False
     assert captured["pool"]["persistent_profile_path"] == str(profile_dir.resolve())
+    assert captured["pool"]["use_stealth"] is False
     assert captured["auth_urls"] == ["https://onlinelibrary.wiley.com"]
     assert captured["auth_timeout_s"] == 45
     assert captured["closed"] is True

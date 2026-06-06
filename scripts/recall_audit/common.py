@@ -351,6 +351,7 @@ def find_full_contexts(
         candidates.extend(gene_root.glob(f"**/{wanted}"))
     if global_search and not candidates and results_dir.exists():
         candidates.extend(results_dir.glob(f"**/{wanted}"))
+    candidates = [p for p in candidates if p.exists()]
     unique = sorted(
         set(candidates), key=lambda p: (p.stat().st_size, str(p)), reverse=True
     )

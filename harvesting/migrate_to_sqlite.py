@@ -39,7 +39,7 @@ import sqlite3
 import zipfile
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 # Configure logging using centralized utility
 from utils.logging_utils import get_logger, setup_logging
@@ -837,8 +837,13 @@ def insert_paper_metadata(
     )
 
 
-def _row_exists(cursor: sqlite3.Cursor, table: str, match: Dict[str, Any]) -> bool:
-    """Return True if *table* already holds a row matching every column in *match*.
+def _matching_row_id(
+    cursor: sqlite3.Cursor,
+    table: str,
+    id_column: str,
+    match: Dict[str, Any],
+) -> Optional[int]:
+    """Return the first matching synthetic id, or None.
 
     NULL-aware (uses ``col IS NULL`` rather than ``col = NULL``). This keeps the
     child-row inserts idempotent: the same fact extracted from several table
@@ -855,8 +860,56 @@ def _row_exists(cursor: sqlite3.Cursor, table: str, match: Dict[str, Any]) -> bo
         else:
             clauses.append(f"{col} = ?")
             params.append(val)
-    sql = f"SELECT 1 FROM {table} WHERE {' AND '.join(clauses)} LIMIT 1"  # noqa: S608
-    return cursor.execute(sql, params).fetchone() is not None
+    sql = (  # noqa: S608
+        f"SELECT {id_column} FROM {table} "
+        f"WHERE {' AND '.join(clauses)} ORDER BY {id_column} LIMIT 1"
+    )
+    row = cursor.execute(sql, params).fetchone()
+    return int(row[0]) if row else None
+
+
+def _row_exists(cursor: sqlite3.Cursor, table: str, match: Dict[str, Any]) -> bool:
+    """Return True if *table* already holds a row matching every column in *match*."""
+    return _matching_row_id(cursor, table, "rowid", match) is not None
+
+
+def _insert_age_dependent_penetrance(
+    cursor: sqlite3.Cursor,
+    penetrance_id: int,
+    age_dependent_rows: Iterable[Dict[str, Any]],
+) -> None:
+    """Insert unique age-bin rows under an existing or newly-created parent."""
+    for age_dep in age_dependent_rows:
+        if not isinstance(age_dep, dict):
+            logger.warning(
+                "Skipping non-object age_dependent_penetrance for penetrance_id %s",
+                penetrance_id,
+            )
+            continue
+        row = {
+            "penetrance_id": penetrance_id,
+            "age_range": age_dep.get("age_range"),
+            "penetrance_percentage": age_dep.get("penetrance_percentage"),
+            "carriers_in_range": age_dep.get("carriers_in_range"),
+            "affected_in_range": age_dep.get("affected_in_range"),
+        }
+        if _row_exists(cursor, "age_dependent_penetrance", row):
+            continue
+        cursor.execute(
+            """
+            INSERT INTO age_dependent_penetrance (
+                penetrance_id, age_range, penetrance_percentage,
+                carriers_in_range, affected_in_range
+            ) VALUES (?, ?, ?, ?, ?)
+        """,
+            (
+                penetrance_id,
+                row["age_range"],
+                row["penetrance_percentage"],
+                row["carriers_in_range"],
+                row["affected_in_range"],
+            ),
+        )
 
 
 def insert_variant_data(
@@ -944,19 +997,22 @@ def insert_variant_data(
         # without this guard they are summed N-fold into the carrier/affected
         # counts at scoring time (the regression that took KCNQ1 PMID 32893267
         # to 4x gold).
-        is_exact_penetrance_dup = _row_exists(
+        exact_penetrance_match = {
+            "variant_id": variant_id,
+            "pmid": pmid,
+            "total_carriers_observed": penetrance.get("total_carriers_observed"),
+            "affected_count": penetrance.get("affected_count"),
+            "unaffected_count": penetrance.get("unaffected_count"),
+            "uncertain_count": penetrance.get("uncertain_count"),
+            "penetrance_percentage": penetrance.get("penetrance_percentage"),
+        }
+        exact_penetrance_id = _matching_row_id(
             cursor,
             "penetrance_data",
-            {
-                "variant_id": variant_id,
-                "pmid": pmid,
-                "total_carriers_observed": penetrance.get("total_carriers_observed"),
-                "affected_count": penetrance.get("affected_count"),
-                "unaffected_count": penetrance.get("unaffected_count"),
-                "uncertain_count": penetrance.get("uncertain_count"),
-                "penetrance_percentage": penetrance.get("penetrance_percentage"),
-            },
+            "penetrance_id",
+            exact_penetrance_match,
         )
+        is_exact_penetrance_dup = exact_penetrance_id is not None
 
         existing_penetrance = None
         if preserve_existing_evidence and not is_exact_penetrance_dup:
@@ -973,8 +1029,13 @@ def insert_variant_data(
             ).fetchone()
 
         if is_exact_penetrance_dup:
-            # Identical row already stored — no-op keeps migration idempotent.
-            pass
+            # Identical parent already stored. Still merge any unique
+            # age-stratified children carried by this duplicate representation.
+            _insert_age_dependent_penetrance(
+                cursor,
+                exact_penetrance_id,
+                penetrance.get("age_dependent_penetrance", []),
+            )
         elif existing_penetrance:
             penetrance_id = existing_penetrance[0]
             current_values = existing_penetrance[1:]
@@ -996,6 +1057,11 @@ def insert_variant_data(
                     """,
                     (*merged_values, penetrance_id),
                 )
+            _insert_age_dependent_penetrance(
+                cursor,
+                penetrance_id,
+                penetrance.get("age_dependent_penetrance", []),
+            )
         else:
             cursor.execute(
                 """
@@ -1010,23 +1076,12 @@ def insert_variant_data(
             penetrance_id = cursor.lastrowid
 
             # Insert age-dependent penetrance only for a newly inserted parent
-            # row. Existing parent rows are kept intact in preserve mode.
-            for age_dep in penetrance.get("age_dependent_penetrance", []):
-                cursor.execute(
-                    """
-                    INSERT INTO age_dependent_penetrance (
-                        penetrance_id, age_range, penetrance_percentage,
-                        carriers_in_range, affected_in_range
-                    ) VALUES (?, ?, ?, ?, ?)
-                """,
-                    (
-                        penetrance_id,
-                        age_dep.get("age_range"),
-                        age_dep.get("penetrance_percentage"),
-                        age_dep.get("carriers_in_range"),
-                        age_dep.get("affected_in_range"),
-                    ),
-                )
+            # row; duplicates are folded into the stored parent above.
+            _insert_age_dependent_penetrance(
+                cursor,
+                penetrance_id,
+                penetrance.get("age_dependent_penetrance", []),
+            )
 
     # Insert individual records
     for record in variant_data.get("individual_records", []):
@@ -1483,6 +1538,92 @@ _DEDUP_CHILD_TABLES: Tuple[str, ...] = (
 )
 
 
+def _reparent_age_bins_for_duplicate_penetrance(cursor: sqlite3.Cursor) -> None:
+    """Move unique age-bin children onto the kept duplicate parent row.
+
+    ``dedup_existing_rows`` removes exact-duplicate ``penetrance_data`` parents.
+    Before that delete runs, preserve any nonduplicate
+    ``age_dependent_penetrance`` rows hanging off the parent rows that will be
+    cascaded away.
+    """
+    parent_info = cursor.execute("PRAGMA table_info(penetrance_data)").fetchall()
+    if not parent_info:
+        return
+    if not cursor.execute("PRAGMA table_info(age_dependent_penetrance)").fetchall():
+        return
+    parent_pk = next((row[1] for row in parent_info if row[5]), "penetrance_id")
+    parent_value_cols = [row[1] for row in parent_info if row[1] != parent_pk]
+    parent_rows = cursor.execute(
+        f"SELECT {parent_pk}, {', '.join(parent_value_cols)} "  # noqa: S608
+        f"FROM penetrance_data ORDER BY {parent_pk}"  # noqa: S608
+    ).fetchall()
+
+    grouped: Dict[Tuple[Any, ...], List[int]] = {}
+    for row in parent_rows:
+        grouped.setdefault(tuple(row[1:]), []).append(int(row[0]))
+
+    for ids in grouped.values():
+        if len(ids) < 2:
+            continue
+        keep_id = ids[0]
+        for duplicate_id in ids[1:]:
+            age_rows = cursor.execute(
+                """
+                SELECT age_range, penetrance_percentage, carriers_in_range,
+                       affected_in_range
+                FROM age_dependent_penetrance
+                WHERE penetrance_id = ?
+                ORDER BY age_penetrance_id
+                """,
+                (duplicate_id,),
+            ).fetchall()
+            _insert_age_dependent_penetrance(
+                cursor,
+                keep_id,
+                [
+                    {
+                        "age_range": row[0],
+                        "penetrance_percentage": row[1],
+                        "carriers_in_range": row[2],
+                        "affected_in_range": row[3],
+                    }
+                    for row in age_rows
+                ],
+            )
+
+
+def _delete_orphan_age_dependent_penetrance(cursor: sqlite3.Cursor) -> int:
+    """Remove age-bin rows whose penetrance parent is gone.
+
+    This is normally redundant with the ON DELETE CASCADE constraint. It is
+    intentionally kept as a belt-and-suspenders cleanup because SQLite ignores
+    ``PRAGMA foreign_keys = ON`` inside an already-open transaction, and older
+    ad hoc DB scripts may also have disabled FK enforcement.
+    """
+    if not cursor.execute("PRAGMA table_info(age_dependent_penetrance)").fetchall():
+        return 0
+    if not cursor.execute("PRAGMA table_info(penetrance_data)").fetchall():
+        return 0
+    before = cursor.execute("SELECT COUNT(*) FROM age_dependent_penetrance").fetchone()[
+        0
+    ]
+    cursor.execute(
+        """
+        DELETE FROM age_dependent_penetrance
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM penetrance_data
+            WHERE penetrance_data.penetrance_id =
+                  age_dependent_penetrance.penetrance_id
+        )
+        """
+    )
+    after = cursor.execute("SELECT COUNT(*) FROM age_dependent_penetrance").fetchone()[
+        0
+    ]
+    return before - after
+
+
 def dedup_existing_rows(
     conn: sqlite3.Connection,
     tables: Tuple[str, ...] = _DEDUP_CHILD_TABLES,
@@ -1490,9 +1631,10 @@ def dedup_existing_rows(
     """Collapse exact-duplicate child rows already stored in a DB (idempotent).
 
     For each table, rows that are identical on every column except the synthetic
-    primary key are reduced to one (the lowest ``rowid`` is kept). Foreign-key
-    cascades drop ``age_dependent_penetrance`` rows under any removed penetrance
-    row. Genuinely different rows (e.g. real sub-cohort splits) are untouched.
+    primary key are reduced to one (the lowest ``rowid`` is kept).
+    ``age_dependent_penetrance`` rows under removed penetrance parents are
+    either dropped by FK cascade or cleaned up explicitly when FK enforcement is
+    off. Genuinely different rows (e.g. real sub-cohort splits) are untouched.
     Re-running on an already-clean DB removes nothing.
 
     Back-fill companion to the exact-dup insert guards in ``insert_variant_data``:
@@ -1513,6 +1655,8 @@ def dedup_existing_rows(
         value_cols = [row[1] for row in info if row[1] not in pk_cols]
         if not value_cols:
             continue
+        if table == "penetrance_data":
+            _reparent_age_bins_for_duplicate_penetrance(cur)
         # IFNULL sentinel so NULLs group together (NULL == NULL for dedup); the
         # char(0) byte never appears in real extracted values.
         group_expr = ", ".join(f"IFNULL({c}, char(0))" for c in value_cols)
@@ -1521,6 +1665,12 @@ def dedup_existing_rows(
             f"DELETE FROM {table} WHERE rowid NOT IN "
             f"(SELECT MIN(rowid) FROM {table} GROUP BY {group_expr})"
         )
+        if table == "penetrance_data":
+            orphan_removed = _delete_orphan_age_dependent_penetrance(cur)
+            if orphan_removed:
+                removed["age_dependent_penetrance_orphans"] = (
+                    removed.get("age_dependent_penetrance_orphans", 0) + orphan_removed
+                )
         after = cur.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]  # noqa: S608
         removed[table] = before - after
     conn.commit()
