@@ -224,6 +224,46 @@ def combine_precision(scored: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def combine_fbeta(
+    aggregate_recall: dict[str, Any],
+    aggregate_precision: dict[str, Any] | None,
+    *,
+    metric: str = "unique_variants",
+    beta: float = 2.0,
+) -> dict[str, Any]:
+    """F-beta for the headline metric from aggregate recall + the precision proxy.
+
+    A flat recall target invites Goodhart's Law — a pipeline can hit it by
+    over-extracting and tanking precision. Pairing recall with precision via an
+    F-beta (beta=2 weights recall 2x precision) is the more defensible
+    north-star. Precision here is the gold-PMID-restricted proxy, which is a
+    LOWER bound on true precision (some "extra" rows are real positives the
+    curator omitted), so ``fbeta_vs_gold_pmids`` is a CONSERVATIVE lower bound.
+    Returns ``{}`` when either input is unavailable.
+    """
+    recall_block = (aggregate_recall or {}).get(metric) or {}
+    recall = recall_block.get("recall")
+    precision = (aggregate_precision or {}).get("precision_vs_gold_pmids")
+    if recall is None or precision is None:
+        return {}
+    b2 = beta * beta
+    denom = (b2 * precision) + recall
+    fbeta = ((1 + b2) * precision * recall / denom) if denom else None
+    return {
+        "metric": metric,
+        "beta": beta,
+        "recall": recall,
+        "precision_vs_gold_pmids": precision,
+        "fbeta_vs_gold_pmids": fbeta,
+        "note": (
+            "F-beta (beta=2 weights recall 2x precision) on the headline metric. "
+            "Precision is the gold-PMID-restricted proxy — a LOWER bound on true "
+            "precision — so this F-beta is a CONSERVATIVE lower bound. Pairs the "
+            "recall north-star with a false-positive guard (anti-Goodhart)."
+        ),
+    }
+
+
 def target_gap(metric: dict[str, Any], target: float) -> int | None:
     """Rows needed to reach target recall for one metric."""
     gold = int(metric.get("gold") or 0)
@@ -240,6 +280,7 @@ def build_run_summary(
     aggregate_recall: dict[str, Any],
     aggregate_mae: dict[str, Any] | None = None,
     aggregate_precision: dict[str, Any] | None = None,
+    aggregate_fbeta: dict[str, Any] | None = None,
     manifest: dict[str, Any],
     target: float,
 ) -> dict[str, Any]:
@@ -253,6 +294,7 @@ def build_run_summary(
         },
         "aggregate_mae": aggregate_mae or {},
         "aggregate_precision": aggregate_precision or {},
+        "aggregate_fbeta": aggregate_fbeta or {},
         "gene_results": gene_results,
         "gold_manifest_generated_at_utc": manifest.get("generated_at_utc"),
     }
@@ -673,11 +715,14 @@ def main() -> int:
         fuzzy_threshold=args.fuzzy_threshold,
     )
     scored = [item for item in gene_results if item.get("status") == "scored"]
+    aggregate_recall = combine_recall(scored)
+    aggregate_precision = combine_precision(scored)
     summary = build_run_summary(
         gene_results=gene_results,
-        aggregate_recall=combine_recall(scored),
+        aggregate_recall=aggregate_recall,
         aggregate_mae=combine_mae(scored),
-        aggregate_precision=combine_precision(scored),
+        aggregate_precision=aggregate_precision,
+        aggregate_fbeta=combine_fbeta(aggregate_recall, aggregate_precision),
         manifest=manifest,
         target=args.target,
     )

@@ -4,6 +4,7 @@ import sqlite3
 
 from scripts.run_recall_suite import (
     build_gene_results,
+    combine_fbeta,
     combine_mae,
     combine_precision,
     combine_recall,
@@ -214,3 +215,30 @@ def test_combine_precision_none_when_no_denominator():
         [{"summary": {"precision": {"matched_db": 0, "extra_on_gold_pmids": 0}}}]
     )
     assert zero["precision_vs_gold_pmids"] is None
+
+
+def test_combine_fbeta_computes_recall_weighted_f2():
+    """F2 = 5PR/(4P+R) on the headline metric, weighting recall 2x precision."""
+    recall = {"unique_variants": {"matched": 6, "gold": 10, "recall": 0.6}}
+    precision = {"precision_vs_gold_pmids": 0.9}
+    fb = combine_fbeta(recall, precision)
+    assert fb["metric"] == "unique_variants"
+    assert fb["beta"] == 2.0
+    # 5*0.9*0.6 / (4*0.9 + 0.6) = 2.7 / 4.2
+    assert round(fb["fbeta_vs_gold_pmids"], 4) == 0.6429
+    # recall-weighted: with R<P, F2 sits closer to recall than the F1 mean would
+    f1 = 2 * 0.9 * 0.6 / (0.9 + 0.6)
+    assert fb["fbeta_vs_gold_pmids"] < f1
+
+
+def test_combine_fbeta_empty_when_inputs_missing():
+    assert combine_fbeta({}, {"precision_vs_gold_pmids": 0.9}) == {}
+    assert combine_fbeta({"unique_variants": {"recall": 0.8}}, {}) == {}
+    assert combine_fbeta({"unique_variants": {"recall": 0.8}}, None) == {}
+
+
+def test_combine_fbeta_zero_denominator_is_none():
+    fb = combine_fbeta(
+        {"unique_variants": {"recall": 0.0}}, {"precision_vs_gold_pmids": 0.0}
+    )
+    assert fb["fbeta_vs_gold_pmids"] is None
