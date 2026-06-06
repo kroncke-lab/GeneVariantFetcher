@@ -1158,6 +1158,17 @@ class ExpertExtractor(BaseLLMCaller):
         "LQT2": "KCNH2",
         "LQT3": "SCN5A",
     }
+    TABLE_LABEL_CONTEXTUAL_GENE_RE = re.compile(
+        r"\b([A-Z][A-Z0-9-]{2,11})\s+"
+        r"(?:gene|genes|variant|variants|mutation|mutations)\b"
+        r"|"
+        r"\b(?:gene|genes|variant|variants|mutation|mutations)\s+"
+        r"(?:(?:in|of|for|from)\s+|:\s*)?"
+        r"([A-Z][A-Z0-9-]{2,11})\b"
+        r"|"
+        r"\b([A-Z][A-Z0-9-]{2,11})(?=-(?:associated|related)\b)",
+        re.IGNORECASE,
+    )
     TABLE_LABEL_EXPLICIT_GENES = {
         "ANK2",
         "CACNA1C",
@@ -1494,6 +1505,29 @@ class ExpertExtractor(BaseLLMCaller):
     # (COMPENDIUM/PROPERTIES/TESTING/...) is not mistaken for a gene.
     _OPEN_VOCAB_ALPHA_GENES = {"TTN", "APC", "RET", "VHL", "NF1", "NF2"}
 
+    def _contextual_gene_symbols_in_table_label(self, label: str) -> set[str]:
+        """Return all-letter gene tokens when the caption labels them as genes."""
+        if not label:
+            return set()
+
+        from pipeline.table_router import _gene_symbol_tokens
+
+        symbols: set[str] = set()
+        for match in self.TABLE_LABEL_CONTEXTUAL_GENE_RE.finditer(label.upper()):
+            for raw_token in match.groups():
+                token = (raw_token or "").strip()
+                if (
+                    not token
+                    or token in self.TABLE_LABEL_GENE_STOPWORDS
+                    or token.startswith(("LQT", "SQT"))
+                    or token not in _gene_symbol_tokens(token)
+                ):
+                    continue
+                if token.isalpha() and len(token) > 6:
+                    continue
+                symbols.add(token)
+        return symbols
+
     def _fixed_width_gene_scope_from_table_label(self, label: str) -> set[str]:
         """Open-vocabulary gene scope for the fixed-width off-target guard.
 
@@ -1507,7 +1541,9 @@ class ExpertExtractor(BaseLLMCaller):
           explicit cardiac genes + LQT alias resolution
           ∪ confidently gene-shaped tokens from the careful `_gene_symbol_tokens`
             extractor (it excludes protein-/cDNA-like tokens), restricted to
-            tokens that carry a digit or are a known all-alpha gene symbol.
+            tokens that carry a digit, are a known all-alpha gene symbol, or are
+            all-alpha tokens in a caption context that explicitly labels them as
+            genes/variants/mutations.
 
         `_gene_symbol_tokens` ignores bare LQT/LQTS but still emits LQT1/LQT2/...,
         so drop LQT*/SQT* here and let the alias map resolve them to a gene.
@@ -1516,13 +1552,18 @@ class ExpertExtractor(BaseLLMCaller):
 
         scope = set(self._gene_scope_from_table_label(label))
         for token in _gene_symbol_tokens(label):
-            if token.startswith("LQT") or token.startswith("SQT"):
+            if (
+                token in self.TABLE_LABEL_GENE_STOPWORDS
+                or token.startswith("LQT")
+                or token.startswith("SQT")
+            ):
                 continue
             if (
                 any(ch.isdigit() for ch in token)
                 or token in self._OPEN_VOCAB_ALPHA_GENES
             ):
                 scope.add(token)
+        scope.update(self._contextual_gene_symbols_in_table_label(label))
         return scope
 
     def _parse_lqt_fixed_width_variant_row(

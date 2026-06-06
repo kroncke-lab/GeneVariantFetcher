@@ -913,15 +913,14 @@ comparison-based scoring). Every DB-mutating step carries an explicit gate.
   figure-reader's contribution. (`cli/compare_variants.py`,
   `scripts/run_recall_suite.py`.)
 
-### Tier 1 — Cheap code wins, no-gold-safe (start here)
+### Tier 1 — Cheap code wins, no-gold-safe
 
-- **C3 — Fixed-width parser gene-scoping.** The fixed-width (pdftotext) parser
-  scopes captions only against 17 hard-coded cardiac genes + LQT aliases
-  (`_gene_scope_from_table_label`, `extraction.py:1421`); a caption naming any
-  other gene leaks (empirically a BRCA1 caption leaks rows into a MYH7 run).
-  Reuse the careful gene-token extractor `_gene_symbol_tokens`
-  (`table_router.py:874`) but PRESERVE LQT1/2/3 alias resolution (that extractor
-  ignores LQT/LQTS). Prerequisite for C1 and C2.
+- **C3 — Fixed-width parser gene-scoping: DONE 2026-06-06.** The fixed-width
+  (pdftotext) parser now scopes captions with explicit cardiac genes + LQT
+  aliases, generic digit-bearing gene tokens via `_gene_symbol_tokens`, and
+  contextual all-letter gene captions such as `LMNA mutations`. Regression tests
+  cover BRCA1 and LMNA off-target leakage plus a no-gene prose caption that must
+  remain claimable by the target.
 - **R1a — Precision gate on figure-reader output.** Figures run on every
   `gvf-run` (`gvf_run.py` passes `--pmc-dir`) and write RAW rows
   (`extract_figure_variants.py:142-181`, only filter is "has a cdna/protein

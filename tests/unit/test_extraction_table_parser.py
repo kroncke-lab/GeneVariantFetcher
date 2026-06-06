@@ -667,6 +667,24 @@ Nucleotide Change              Coding Effect            Region
     assert set(by_protein) == {"Q55X", "L136P"}
 
 
+def test_fixed_width_caption_scopes_contextual_all_alpha_gene():
+    """All-letter genes need contextual scoping for novel-gene turnkey runs."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Supplemental Table 1. LMNA mutations in cardiomyopathy probands
+
+Nucleotide Change              Coding Effect            Region
+163C>T                         Q55X                     N-terminal
+407T>C                         L136P                    DI-S1
+"""
+
+    assert extractor._parse_fixed_width_table_variants(text, "MYH7") == []
+
+    lmna = extractor._parse_fixed_width_table_variants(text, "LMNA")
+    by_protein = {v["protein_notation"]: v for v in lmna}
+    assert set(by_protein) == {"Q55X", "L136P"}
+
+
 def test_fixed_width_no_gene_caption_is_not_oversuppressed():
     """A fixed-width caption that names NO gene must stay claimable by the target
     gene. The noisy open-vocab tokens in a prose caption (COMPENDIUM/TESTING/...)
