@@ -38,11 +38,31 @@ from pipeline.somatic_germline_qc import (  # noqa: E402
 )
 
 
-def _paper_context(payload: dict) -> str:
-    """Title/abstract give strong paper-level somatic vs germline signal."""
-    return "\n".join(
-        str(payload.get(k, "")) for k in ("title", "abstract") if payload.get(k)
-    )
+def _pmid(payload: dict) -> str:
+    """Extraction payloads carry the PMID under paper_metadata (not top level)."""
+    meta = payload.get("paper_metadata") or {}
+    return str(payload.get("pmid") or meta.get("pmid") or "")
+
+
+def _paper_context(payload: dict, source_dir: Path | None, pmid: str) -> str:
+    """Paper-level text drives the somatic-vs-germline study-type signal.
+
+    The extraction payload only carries a placeholder title, so the somatic
+    signal (tumor-sequencing vs germline cohort) is not in it. When a run dir is
+    given we pull the real abstract from ``abstract_json/{pmid}.json``, which
+    exists for every discovered PMID (full-text or abstract-only).
+    """
+    meta = payload.get("paper_metadata") or {}
+    parts = [str(meta.get("title") or ""), str(payload.get("abstract") or "")]
+    if source_dir and pmid:
+        aj = source_dir / "abstract_json" / f"{pmid}.json"
+        if aj.exists():
+            try:
+                abstract = json.loads(aj.read_text(encoding="utf-8")).get("abstract")
+                parts.append(str(abstract or ""))
+            except (OSError, json.JSONDecodeError):
+                pass
+    return "\n".join(p for p in parts if p)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -50,6 +70,15 @@ def build_parser() -> argparse.ArgumentParser:
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     ap.add_argument("--extractions", required=True, type=Path)
+    ap.add_argument(
+        "--source-dir",
+        type=Path,
+        default=None,
+        help="Run dir containing abstract_json/ (per-PMID abstracts) for "
+        "paper-level somatic/germline context. Strongly recommended — the "
+        "extraction JSON carries no abstract, so without this most records are "
+        "'unknown'.",
+    )
     ap.add_argument(
         "--policy",
         choices=("flag", "drop_somatic"),
@@ -74,6 +103,7 @@ def main() -> int:
         return 2
 
     write = args.write or args.policy == "drop_somatic"
+    source_dir = args.source_dir.expanduser().resolve() if args.source_dir else None
     totals = {GERMLINE: 0, SOMATIC: 0, AMBIGUOUS: 0, UNKNOWN: 0}
     per_pmid: list[dict] = []
     files = 0
@@ -88,8 +118,11 @@ def main() -> int:
         if not isinstance(variants, list) or not variants:
             continue
         files += 1
+        pmid = _pmid(payload)
         summary = annotate_variants(
-            variants, paper_context=_paper_context(payload), policy=args.policy
+            variants,
+            paper_context=_paper_context(payload, source_dir, pmid),
+            policy=args.policy,
         )
         for label, n in summary["counts"].items():
             totals[label] += n
@@ -98,7 +131,7 @@ def main() -> int:
             per_pmid.append(
                 {
                     "file": json_path.name,
-                    "pmid": payload.get("pmid"),
+                    "pmid": pmid,
                     "somatic_fraction": round(summary["somatic_fraction"], 3),
                     "counts": summary["counts"],
                 }

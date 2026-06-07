@@ -5,6 +5,8 @@ are not heritable carriers, so they must be flaggable before they pollute
 carrier/penetrance counts. Flag-only by default; drop only the clearly-somatic.
 """
 
+import json
+
 import pytest
 
 from pipeline.somatic_germline_qc import (
@@ -16,6 +18,7 @@ from pipeline.somatic_germline_qc import (
     classify_text,
     classify_variant,
 )
+from scripts.apply_somatic_germline_qc import _paper_context, _pmid
 
 
 # --- classify_text ----------------------------------------------------------
@@ -131,3 +134,25 @@ def test_annotate_empty_corpus_is_zero_fraction():
 def test_annotate_rejects_unknown_policy():
     with pytest.raises(ValueError):
         annotate_variants([], policy="nuke")
+
+
+# --- apply-script paper-level context (the BRCA2 run carries the abstract
+#     in abstract_json/, not in the extraction payload) ----------------------
+
+
+def test_apply_pmid_reads_paper_metadata():
+    assert _pmid({"paper_metadata": {"pmid": "123"}}) == "123"
+    assert _pmid({"pmid": "456"}) == "456"
+    assert _pmid({}) == ""
+
+
+def test_apply_paper_context_pulls_abstract_from_source_dir(tmp_path):
+    (tmp_path / "abstract_json").mkdir()
+    (tmp_path / "abstract_json" / "999.json").write_text(
+        json.dumps({"abstract": "Somatic BRCA2 mutations from tumor ctDNA sequencing"})
+    )
+    payload = {"paper_metadata": {"pmid": "999", "title": "Paper 999"}, "variants": []}
+    # with the source dir, the abstract's somatic signal is visible
+    assert "somatic" in _paper_context(payload, tmp_path, "999").lower()
+    # without it, only the placeholder title -> no signal (the bug this fixes)
+    assert "somatic" not in _paper_context(payload, None, "999").lower()
