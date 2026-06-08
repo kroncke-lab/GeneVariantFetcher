@@ -68,8 +68,13 @@ DEFAULT_PUBLISHER_DOMAINS: tuple = (
     # access (Wiley/Karger/Sage routing in harvesting/browser_html/ezproxy.py).
     "vumc.org",
     "vanderbilt.edu",
-    "proxy.library.vanderbilt.edu",  # the live Vanderbilt library proxy host
-    "ezproxy.library.vanderbilt.edu",  # legacy alias, kept for safety
+    # The live Vanderbilt library proxy. EZproxy host-rewriting drops the session
+    # cookie on the apex `.proxy.library.vanderbilt.edu`, so querying the apex
+    # catches it; the actual *login* host is the `login.` subdomain (the bare apex
+    # has no matching cert). Both listed so host-only cookies are caught too.
+    "proxy.library.vanderbilt.edu",
+    "login.proxy.library.vanderbilt.edu",
+    "ezproxy.library.vanderbilt.edu",  # legacy alias (no longer resolves), kept for safety
     "microsoftonline.com",
     "login.microsoft.com",
     "okta.com",

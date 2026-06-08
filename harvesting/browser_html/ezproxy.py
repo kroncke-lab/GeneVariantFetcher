@@ -11,9 +11,16 @@ This module is **inert unless configured** (no hardcoded institution is ever
 activated). Set one of:
 
   GVF_EZPROXY_PREFIX   full login-rewrite prefix, e.g.
-                       "https://proxy.library.vanderbilt.edu/login?url="
-  GVF_EZPROXY_HOST     just the host, e.g. "proxy.library.vanderbilt.edu"
+                       "https://login.proxy.library.vanderbilt.edu/login?url="
+  GVF_EZPROXY_HOST     just the host, e.g. "login.proxy.library.vanderbilt.edu"
                        (the "/login?url=" prefix is built for you)
+
+Use the institution's actual *login* host. Vanderbilt's EZproxy uses host-based
+rewriting behind a wildcard cert (`*.proxy.library.vanderbilt.edu`) that does NOT
+match the bare apex, so `proxy.library.vanderbilt.edu` throws a TLS error — the
+working host is `login.proxy.library.vanderbilt.edu` (verified live 2026-06-08).
+The session cookie still lands on the apex `.proxy.library.vanderbilt.edu`, which
+is what `cookie_loader.py` reads.
 
 Optional:
   GVF_EZPROXY_ALL=1    proxy *every* publisher URL, not just the CF-blocked set.
@@ -27,7 +34,7 @@ fully automated until the SSO session expires.
 from __future__ import annotations
 
 import os
-from urllib.parse import quote, urlparse
+from urllib.parse import urlparse, urlsplit, urlunsplit
 
 # Registrable domains that are Cloudflare-fronted / subscription-walled and worth
 # routing through the institutional proxy. Subdomains match by suffix.
@@ -71,6 +78,28 @@ def is_configured() -> bool:
     return bool(proxy_prefix())
 
 
+def proxy_base() -> str:
+    """The proxy's base host used for host-rewriting, or '' when unconfigured.
+
+    EZproxy host-based rewriting turns a resource into a subdomain of this base
+    (e.g. ``onlinelibrary.wiley.com`` -> ``onlinelibrary-wiley-com.<base>``). For
+    Vanderbilt the base is ``proxy.library.vanderbilt.edu`` while the *login* host
+    is ``login.proxy.library.vanderbilt.edu`` — so a leading ``login.`` label is
+    stripped off the configured host. Override directly with ``GVF_EZPROXY_BASE``
+    / ``PROXY_BASE`` for libraries whose base differs from ``host`` minus
+    ``login.``.
+    """
+    explicit = (
+        os.environ.get("GVF_EZPROXY_BASE") or os.environ.get("PROXY_BASE") or ""
+    ).strip()
+    if explicit:
+        return _host(explicit if "://" in explicit else f"https://{explicit}")
+    host = _host(proxy_prefix() + "x")
+    if host.startswith("login."):
+        host = host[len("login.") :]
+    return host
+
+
 def _host(url: str) -> str:
     try:
         return (urlparse(url).hostname or "").lower()
@@ -85,20 +114,52 @@ def should_proxy(url: str) -> bool:
     host = _host(url)
     if not host:
         return False
-    # never double-wrap a URL already pointing at the proxy host
-    prefix_host = _host(proxy_prefix() + "x")
-    if prefix_host and prefix_host in host:
+    # never double-wrap a URL already on the proxy (login host OR a rewritten
+    # resource subdomain both end in the base, e.g. *.proxy.library.vanderbilt.edu)
+    base = proxy_base()
+    if base and (host == base or host.endswith("." + base)):
         return False
     if (os.environ.get("GVF_EZPROXY_ALL") or "").strip() in ("1", "true", "yes"):
         return True
     return any(host == d or host.endswith("." + d) for d in CF_BLOCKED_DOMAINS)
 
 
+def _hostify(host: str, base: str) -> str:
+    """EZproxy host-based rewrite of a single hostname.
+
+    Standard EZproxy encoding: literal dashes are doubled, then dots become
+    dashes, then the proxy base is appended. ``onlinelibrary.wiley.com`` ->
+    ``onlinelibrary-wiley-com.<base>``; ``my-host.com`` -> ``my--host-com.<base>``.
+    """
+    label = host.replace("-", "--").replace(".", "-")
+    return f"{label}.{base}"
+
+
 def wrap(url: str) -> str:
-    """Return the EZproxy-rewritten URL when proxying applies, else *url*."""
+    """Return the EZproxy host-rewritten URL when proxying applies, else *url*.
+
+    Uses EZproxy *host-based rewriting* (the resource becomes a subdomain of the
+    proxy base), NOT the ``login?url=`` starting-point form. On an
+    already-authenticated session the ``login?url=`` form redirects to the proxy
+    *menu* instead of the resource (observed live on Vanderbilt's EZproxy
+    2026-06-08), so it silently fetches the menu page and is unusable for
+    unattended harvesting. The host-rewritten form returns the resource directly,
+    cold, with just the session cookie.
+    """
     if not should_proxy(url):
         return url
-    return proxy_prefix() + quote(url, safe="")
+    base = proxy_base()
+    if not base:
+        return url
+    parts = urlsplit(url)
+    if not parts.hostname:
+        return url
+    new_netloc = _hostify(parts.hostname, base)
+    if parts.port:
+        new_netloc = f"{new_netloc}:{parts.port}"
+    return urlunsplit(
+        (parts.scheme or "https", new_netloc, parts.path, parts.query, parts.fragment)
+    )
 
 
 def install_on_session(session):

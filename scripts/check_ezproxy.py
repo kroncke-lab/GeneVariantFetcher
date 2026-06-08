@@ -5,7 +5,7 @@ Mission-critical sanity check: confirms that, with ``GVF_EZPROXY_PREFIX``/``HOST
 set and a valid EZproxy session cookie loaded, a Wiley Online Library request
 returns licensed content instead of the Cloudflare 403 "Just a moment…" page.
 
-  GVF_EZPROXY_PREFIX="https://proxy.library.vanderbilt.edu/login?url=" \\
+  GVF_EZPROXY_PREFIX="https://login.proxy.library.vanderbilt.edu/login?url=" \\
       python scripts/check_ezproxy.py --doi 10.1111/jce.14865
 
 Reports, for the direct and the EZproxy-routed request: HTTP status, whether a
@@ -83,11 +83,22 @@ def main() -> int:
     try:
         cookies = load_chrome_cookies()
         n = hydrate_session_with_browser_cookies(raw, cookies)
-        ez = sum(1 for c in cookies if "ezproxy" in (c.get("domain") or "").lower())
-        print(f"loaded {n} browser cookies into the session ({ez} EZproxy)")
+
+        # The EZproxy session cookies are NAMED ezproxy/ezproxyl/ezproxyn and live
+        # on the proxy host's domain (e.g. `.proxy.library.vanderbilt.edu`) — the
+        # domain string itself need not contain "ezproxy" (Vanderbilt's host is
+        # `proxy.library.vanderbilt.edu`). Match on either signal.
+        def _is_ez(c):
+            name = (c.get("name") or "").lower()
+            dom = (c.get("domain") or "").lower()
+            return name.startswith("ezproxy") or "proxy.library." in dom
+
+        ez = sum(1 for c in cookies if _is_ez(c))
+        print(f"loaded {n} browser cookies into the session ({ez} EZproxy/proxy)")
         if ez == 0:
             print(
-                "  WARNING: no EZproxy session cookie found — log into the proxy in Chrome."
+                "  WARNING: no EZproxy session cookie found — log into the proxy in"
+                " Chrome (VUMC users: sign in with your @vumc.org email)."
             )
     except Exception as exc:  # noqa: BLE001
         print(f"  (could not load browser cookies: {exc})")

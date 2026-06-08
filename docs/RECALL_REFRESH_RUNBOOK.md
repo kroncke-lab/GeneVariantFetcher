@@ -91,21 +91,28 @@ challenge. (You are accessing content the institution is licensed for — this i
 authorized subscriber access, not circumvention of payment.)
 
 ### Setup (one-time)
-1. Log into the library EZproxy once in Chrome (Vanderbilt SSO). This drops an
-   EZproxy session cookie that `cookie_loader.py` already reads
-   (`proxy.library.vanderbilt.edu`); it typically lasts the SSO session
-   (days–weeks).
-2. Point GVF at the proxy in `.env` (pick the form your library uses):
+1. Log into the library EZproxy once in Chrome (Vanderbilt SSO). **VUMC users
+   must sign in with their `…@vumc.org` email** (not a VUnet/VUMC ID), or the
+   proxy returns an access-denied page even after authenticating. This drops an
+   EZproxy session cookie on `.proxy.library.vanderbilt.edu` that
+   `cookie_loader.py` already reads (`proxy.library.vanderbilt.edu` query catches
+   the apex-domain cookie); it typically lasts the SSO session (days–weeks).
+2. Point GVF at the proxy in `.env` (pick the form your library uses). Use the
+   **`login.` subdomain** — the live proxy uses EZproxy host-rewriting with a
+   wildcard cert (`*.proxy.library.vanderbilt.edu`) that does NOT cover the bare
+   apex, so `https://proxy.library.vanderbilt.edu/...` throws a cert/privacy error:
    ```bash
-   GVF_EZPROXY_PREFIX="https://proxy.library.vanderbilt.edu/login?url="
-   # or just:  GVF_EZPROXY_HOST="proxy.library.vanderbilt.edu"
+   GVF_EZPROXY_PREFIX="https://login.proxy.library.vanderbilt.edu/login?url="
+   # or just:  GVF_EZPROXY_HOST="login.proxy.library.vanderbilt.edu"
    # GVF_EZPROXY_ALL=1   # optional: proxy ALL publisher URLs, not just the CF-blocked set
    ```
 3. Verify it clears Cloudflare:
    ```bash
    python scripts/check_ezproxy.py --doi 10.1111/jce.14865
    ```
-   PASS = a 200 with no CF challenge and a real body.
+   PASS = a 200 with no CF challenge and a real body. (Verified live 2026-06-08:
+   the `login.` host returns the full ~290 KB licensed Wiley article; the bare
+   apex throws a cert error.)
 
 ### Automated from then on
 With the cookie present and `GVF_EZPROXY_*` set, every CF-blocked publisher
