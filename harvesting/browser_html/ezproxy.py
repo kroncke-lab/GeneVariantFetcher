@@ -47,6 +47,23 @@ CF_BLOCKED_DOMAINS: tuple[str, ...] = (
     "liebertpub.com",
 )
 
+# Resolution / API / CDN / infrastructure hosts that must NEVER be routed through
+# EZproxy — they are not subscription resources, and proxying them breaks them.
+# In particular GVF_EZPROXY_ALL=1 would otherwise send NCBI E-utilities DOI
+# lookups through the proxy, which returns a non-JSON page and silently drops
+# every PMID as "no DOI". Checked before both the ALL=1 and CF-list rules.
+NEVER_PROXY_DOMAINS: tuple[str, ...] = (
+    "ncbi.nlm.nih.gov",  # E-utilities (esummary/efetch), PMC, FTP
+    "nih.gov",
+    "doi.org",  # DOI resolver — follow the redirect directly, then proxy the target
+    "crossref.org",
+    "els-cdn.com",  # Elsevier open supplement CDN (ars.els-cdn.com) — served openly
+    "api.elsevier.com",  # Elsevier full-text API (uses insttoken, not the proxy)
+    "id.elsevier.com",  # Elsevier SSO
+    "unpaywall.org",
+    "googleapis.com",
+)
+
 
 def proxy_prefix() -> str:
     """The configured EZproxy login-rewrite prefix, or '' when unconfigured.
@@ -118,6 +135,9 @@ def should_proxy(url: str) -> bool:
     # resource subdomain both end in the base, e.g. *.proxy.library.vanderbilt.edu)
     base = proxy_base()
     if base and (host == base or host.endswith("." + base)):
+        return False
+    # resolution/API/CDN/infra hosts are never proxied (even with GVF_EZPROXY_ALL)
+    if any(host == d or host.endswith("." + d) for d in NEVER_PROXY_DOMAINS):
         return False
     if (os.environ.get("GVF_EZPROXY_ALL") or "").strip() in ("1", "true", "yes"):
         return True

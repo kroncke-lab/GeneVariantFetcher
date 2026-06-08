@@ -113,6 +113,22 @@ def test_honors_plain_proxy_env_var_aliases(monkeypatch):
     assert ezproxy.proxy_base() == BASE
 
 
+def test_never_proxy_infra_hosts_even_with_all(monkeypatch):
+    # GVF_EZPROXY_ALL must NOT route NCBI/DOI/API/CDN hosts (would break DOI lookup)
+    monkeypatch.setenv("GVF_EZPROXY_PREFIX", VU)
+    monkeypatch.setenv("GVF_EZPROXY_ALL", "1")
+    for u in (
+        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=1",
+        "https://doi.org/10.1111/jce.14865",
+        "https://api.elsevier.com/content/article/doi/10.1016/x",
+        "https://ars.els-cdn.com/content/image/1-s2.0-x-mmc1.docx",
+    ):
+        assert ezproxy.should_proxy(u) is False
+        assert ezproxy.wrap(u) == u
+    # but a real publisher host still proxies under ALL=1
+    assert ezproxy.should_proxy("https://www.nature.com/articles/x")
+
+
 def test_explicit_base_override(monkeypatch):
     # GVF_EZPROXY_BASE wins for libraries whose base != host minus "login."
     monkeypatch.setenv("GVF_EZPROXY_HOST", "signin.example.edu")
