@@ -45,6 +45,11 @@ CF_BLOCKED_DOMAINS: tuple[str, ...] = (
     "sagepub.com",
     "journals.sagepub.com",
     "liebertpub.com",
+    # AHA Journals (Circulation, Circ Cardiovasc Genet, JAHA, Stroke, ...) —
+    # DOI 10.1161, Cloudflare-fronted and subscription-walled for <12-month and
+    # many legacy articles. Proxy so the subscriber IP returns licensed full text
+    # instead of a "get full access to this article" stub.
+    "ahajournals.org",
 )
 
 # Resolution / API / CDN / infrastructure hosts that must NEVER be routed through
