@@ -105,7 +105,7 @@ class RouterResult:
 
 
 _TABLE_CAPTION_RE = re.compile(
-    r"^\s*(table\s+\d+[a-z]?[.:]|tbl\.?\s*\d+[.:])", re.IGNORECASE
+    r"^\s*(e?table\s+\d+[a-z]?[.:]|tbl\.?\s*\d+[.:])", re.IGNORECASE
 )
 
 
@@ -916,9 +916,9 @@ _GENE_SYMBOL_IGNORE = {
     "HG38",
 }
 _TARGET_GENE_ALIASES = {
-    "KCNH2": {"KCNH2", "HERG", "HERG1", "ERG", "ERG1", "H-ERG"},
-    "KCNQ1": {"KCNQ1", "KVLQT1"},
-    "SCN5A": {"SCN5A", "NAV1.5"},
+    "KCNH2": {"KCNH2", "HERG", "HERG1", "ERG", "ERG1", "H-ERG", "LQT2"},
+    "KCNQ1": {"KCNQ1", "KVLQT1", "LQT1"},
+    "SCN5A": {"SCN5A", "NAV1.5", "LQT3"},
     "RYR2": {"RYR2", "RYR-2"},
 }
 
@@ -926,6 +926,20 @@ _TARGET_GENE_ALIASES = {
 def _target_gene_tokens(gene_symbol: str) -> set[str]:
     gene = (gene_symbol or "").strip().upper()
     return _TARGET_GENE_ALIASES.get(gene, {gene})
+
+
+def _caption_gene_scope(caption: Optional[str]) -> set[str]:
+    """Return target genes explicitly implied by a table caption."""
+    if not caption:
+        return set()
+    text = caption.upper()
+    scope: set[str] = set()
+    for gene, aliases in _TARGET_GENE_ALIASES.items():
+        for alias in aliases:
+            if re.search(rf"(?<![A-Z0-9]){re.escape(alias)}(?![A-Z0-9])", text):
+                scope.add(gene)
+                break
+    return scope
 
 
 def _gene_symbol_tokens(value: Optional[str]) -> set[str]:
@@ -1140,6 +1154,9 @@ def parse_routed_table(
     variants: List[Dict[str, Any]] = []
     by_key: Dict[tuple[str, str], Dict[str, Any]] = {}
     target_gene_lower = gene_symbol.strip().lower() if gene_symbol else ""
+    caption_scope = _caption_gene_scope(table.caption)
+    if caption_scope and gene_symbol.strip().upper() not in caption_scope:
+        return []
 
     for row in table.data_lines:
         cells = _split_pipe_row(row)

@@ -15,7 +15,8 @@ No other doc may restate a recall number; they link here.
 
 ## 2026-06-12 Current Canonical Baseline
 
-Fresh run of `scripts/run_recall_suite.py` against the four canonical DBs:
+Fresh run of `scripts/run_recall_suite.py` against the four canonical DBs after
+the 2026-06-12 PDF-linearized table reconstruction land:
 
 - `results/KCNH2/e2e_working_20260529_full/02_strict/KCNH2.db`
 - `validation_runs/20260517_203904/results/KCNQ1/20260517_204424/KCNQ1.db`
@@ -27,17 +28,17 @@ Four-gene aggregate:
 | Metric | Matched / Gold | Recall | Gap to 90% |
 | --- | ---: | ---: | ---: |
 | PMIDs | 1274 / 1502 | 84.8% | 78 |
-| Variant rows | 5423 / 6833 | 79.4% | 727 |
-| Unique variants | **2572 / 3010** | **85.4%** | **137** |
-| Patients/carriers | 15369 / 18719 | 82.1% | 1479 |
-| Affected | 9929 / 12475 | 79.6% | 1299 |
+| Variant rows | 5457 / 6833 | 79.9% | 693 |
+| Unique variants | **2574 / 3010** | **85.5%** | **135** |
+| Patients/carriers | 15706 / 18719 | 83.9% | 1142 |
+| Affected | 10266 / 12475 | 82.3% | 962 |
 | Unaffected | 3435 / 3951 | 86.9% | 121 |
 
 Rows-mode MAE:
 
 | Count field | Sum abs error / N | MAE |
 | --- | ---: | ---: |
-| Carriers | 2141 / 3485 | **0.614** |
+| Carriers | 2141 / 3539 | **0.605** |
 | Affected | 1547 / 2956 | **0.523** |
 | Unaffected | 323 / 265 | **1.219** |
 
@@ -46,18 +47,18 @@ Per-gene current recall:
 | Gene | PMIDs | Variant rows | Unique variants | Patients | Affected | Unaffected | carriers MAE |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | KCNH2 | 230/262 (87.8%) | 820/991 (82.7%) | 441/530 (83.2%) | 2256/2674 (84.4%) | 1404/1635 (85.9%) | 599/749 (80.0%) | 0.860 |
-| KCNQ1 | 285/305 (93.4%) | 1408/1741 (80.9%) | 545/622 (87.6%) | 6472/7793 (83.0%) | 3407/4306 (79.1%) | 1313/1484 (88.5%) | 0.897 |
+| KCNQ1 | 285/305 (93.4%) | 1442/1741 (82.8%) | 547/622 (87.9%) | 6809/7793 (87.4%) | 3744/4306 (86.9%) | 1313/1484 (88.5%) | 0.840 |
 | SCN5A | 620/757 (81.9%) | 2429/3128 (77.7%) | 1021/1183 (86.3%) | 5016/6219 (80.7%) | 3832/4876 (78.6%) | 1184/1343 (88.2%) | 0.489 |
 | RYR2 | 139/178 (78.1%) | 766/973 (78.7%) | 565/675 (83.7%) | 1625/2033 (79.9%) | 1286/1658 (77.6%) | 339/375 (90.4%) | 0.323 |
 
 Headline precision is `precision_vs_counted_gold_pmids`, which restricts the
 denominator to extra rows on gold PMIDs that carry at least one extracted count:
-`5423 / (5423 + 1660) = 76.6%`. The looser raw proxy remains useful only as a
-false-positive **upper bound**: `5423 / (5423 + 13642) = 28.4%`.
+`5457 / (5457 + 1660) = 76.7%`. The looser raw proxy remains useful only as a
+false-positive **upper bound**: `5457 / (5457 + 13635) = 28.6%`.
 
 Why the raw proxy is pessimistic:
 
-- 11,982 / 13,642 (88%) current extra-on-gold-PMID rows have zero patient counts
+- 11,975 / 13,635 (88%) current extra-on-gold-PMID rows have zero patient counts
   and are ClinVar/PubTator-style linkage attributions rather than count-bearing
   paper extractions.
 - Only 1,660 extra rows carry any carrier/affected/unaffected count.
@@ -70,7 +71,7 @@ Why the raw proxy is pessimistic:
 - 53 structural/CNV rows are real biology but currently unmatchable by the
   variant matcher.
 
-Interpretation: recall gains are mostly adding real signal; the 28.4% proxy
+Interpretation: recall gains are mostly adding real signal; the 28.6% proxy
 overstates true false positives by roughly 7x.
 
 Current per-layer precision proxy from the scorer. The four canonical DBs now
@@ -79,26 +80,26 @@ on the `.before_source_layer_20260612_093534` backups matches this block exactly
 
 | Source layer | Matched DB rows | Extra rows | Counted extra rows | precision_vs_gold_pmids | precision_vs_counted_gold_pmids |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| clinvar | 464 | 2491 | 71 | 15.7% | 86.7% |
+| clinvar | 444 | 2484 | 71 | 15.2% | 86.2% |
 | figure | 236 | 465 | 39 | 33.7% | 85.8% |
-| llm_table | 838 | 477 | 275 | 63.7% | 75.3% |
+| llm_table | 892 | 477 | 275 | 65.2% | 76.4% |
 | llm_text | 455 | 823 | 168 | 35.6% | 73.0% |
 | mixed | 1949 | 392 | 176 | 83.3% | 91.7% |
 | pubtator | 12 | 159 | 0 | 7.0% | 100.0% |
 | regex_table | 1256 | 3864 | 929 | 24.5% | 57.5% |
 | regex_text | 213 | 4971 | 2 | 4.1% | 99.1% |
 
-Current failure-mode split from `paper_disagreement_report.csv` and
-`failure_taxonomy_report.py`:
+Current failure-mode split from `paper_disagreement_report.csv`:
 
 | Failure mode | Missing rows | What it means |
 | --- | ---: | --- |
 | source_missing_or_stub | 568 | paper/source never landed or only a stub landed |
-| source_abstract_only | 284 | abstract was available, but mutation tables/body were missing |
+| source_abstract_only | 250 | abstract was available, but mutation tables/body were missing |
 | available_source_underextraction | 248 | usable source exists but extraction missed rows |
 | source_missing_table_bodies | 184 | supplement/full text landed without the relevant tables |
 | partial_underextraction | 82 | some rows extracted, table not exhausted |
 | count_semantics | 36 | variant present but carrier/affected/unaffected semantics wrong |
+| overinclusive_extraction | 8 | DB has many extra rows for the PMID; residual missing rows are not the main recall lever |
 
 The next implementation lane is therefore source/table acquisition and binding
 for the top PMIDs, then count semantics. For count semantics, point the
@@ -113,41 +114,49 @@ Supersedes the "Next Run Plan (2026-05-29)" tiering at the bottom of this file
 (its precision metric, fixed-width gene-scoping, source re-bind/fold, and the
 count-guard wiring are landed). This plan is organized around the **exact-match
 gap to the manual gold curation** = missing gold rows + count-mismatches on
-matched rows. Source: `recall_metrics/verify_20260612/`.
+matched rows. Current post-1B strict score artifact:
+`recall_metrics/linearized_tables_20260612_strict/`.
 
 ### The gap, decomposed
 
-Missing gold variant rows: **1,410** (6833 gold − 5423 matched). By cause:
+Missing gold variant rows: **1,376** (6833 gold − 5457 matched). The starting
+plan used 1,410 missing rows; the PDF-linearized table reconstruction land
+recovered 34 KCNQ1 rows under the strict no-MAE-regression guardrail, so the
+in-source parser-miss bucket below is reduced accordingly until the next full
+decomposition refresh. By cause:
 
 | Cause | Rows | Share | Meaning |
 | --- | ---: | ---: | --- |
-| Extraction | ~917 | 65% | Variant is in a paper the DB ALREADY has (≥1 row for that PMID) but was never extracted — supplement/table bodies. |
-| Acquisition | ~426 | 30% | The gold PMID has ZERO rows in the DB — source/supplement never landed. |
+| Extraction | ~883 | 64% | Variant is in a paper the DB ALREADY has (≥1 row for that PMID) but was never extracted — supplement/table bodies. |
+| Acquisition | ~426 | 31% | The gold PMID has ZERO rows in the DB — source/supplement never landed. |
 | Matcher | ~67 | 5% | We extracted the variant (same codon position is present in the DB for that PMID) but the notation did not match gold. |
 
 Plus **567 count-mismatches on matched rows** (~10% of matched) — the count-
 exactness gap. Catastrophic study-wide-N reuse is now rare (~15 cases) after the
 guard + dedup; the residual is per-row column-role confusion, consistent with
-unaffected MAE 1.219 being the worst field.
+unaffected MAE remaining the worst field.
 
-Key reframe: the gap is now **65% extraction, not acquisition** — most missing
+Key reframe: the gap is still **~64% extraction, not acquisition** — most missing
 variants are in papers we already hold. (This complements the source-status
-bucket table above, which is a per-PMID source lens on the same 1,410.)
+bucket table above, which is a per-PMID source lens on the same 1,376.)
 
 ### Ranked levers (biggest exact-match wins first)
 
-1. **Supplement/table-body extraction on already-fetched papers (917 rows — the
+1. **Supplement/table-body extraction on already-fetched papers (~883 rows — the
    dominant lever).** These PMIDs are in the DB but their mutation-list tables
-   were not exhausted.
-   - Targeted: the top ~15 extraction-gap PMIDs cover 44% (408 rows): KCNQ1
-     `17192539` (56), KCNQ1 `30758498` (55), KCNQ1 `23631430` (31), SCN5A
-     `15840476` (31), KCNQ1 `19490272` (27), SCN5A `20541041` (26), RYR2
-     `19398665` (25), SCN5A `23631430` (24), SCN5A `21273195` (23), RYR2
-     `27452199` (22), KCNH2 `29650123` (20), KCNH2 `16922724` (19), SCN5A
-     `25163546` (18), SCN5A `24631775` (16), SCN5A `29325976` (15). Re-extract
-     via supplement-fold + `table_router`; diagnose why each table dropped.
-   - General: the long tail is ~210 PMIDs — a table-parser robustness fix
-     (multi-row mutation lists in fixed-width / markdown / Word supplements).
+   were not exhausted. The parser-track 1B land recovered the KCNQ1 linearized
+   table win that did not regress MAE; KCNQ1 `30758498` reconstructs but remains
+   unpromoted until count semantics are fixed. Regenerate the top-PMID list
+   before the next targeted 1C sweep so it does not keep prioritizing
+   already-landed rows.
+   - Targeted: the pre-1B top ~15 extraction-gap list was KCNQ1 `17192539`,
+     `30758498`, `23631430`, `19490272`; SCN5A `15840476`, `20541041`,
+     `23631430`, `21273195`, `25163546`, `24631775`, `29325976`; RYR2
+     `19398665`, `27452199`; KCNH2 `29650123`, `16922724`. The 1B validation
+     accepted the KCNQ1 parser win and withheld candidates that regressed
+     unique/row recall or MAE gates.
+   - General: continue table-parser robustness fixes for multi-row mutation
+     lists in fixed-width / markdown / Word supplements.
      This is the `regex_table` layer, which is ALSO the count-bearing FP surface
      (57.5% counted precision), so fixing its parsing helps recall AND precision.
 

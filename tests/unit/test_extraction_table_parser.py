@@ -332,6 +332,173 @@ eTable 3. LQT3 Mutations or Rare Variants
     assert all(v["source_location"].startswith("eTable 1.") for v in variants)
 
 
+def test_pdf_linearized_lqt_etable_reconstructs_rows_for_markdown_parser():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+eTable 1. LQT1 Mutations or Rare Variants
+Mutation
+site
+Site
+N
+Female
+(n)
+Proband
+(n)
+Mean QTc
+(proband)
+Syncope
+(n)
+CA/VF
+(n)
+c.521G>A  p.R147H
+MS
+non-pore MS
+2
+1
+1
+444
+1
+0
+c.1111G>T  p.D317Y  MS
+S5-pore-S6
+2
+1
+1
+495
+2
+0
+c.1683G>T  p.R561S
+C
+N/C-term
+3
+2
+0
+1
+0
+c.3093insG  p.G1031fsX
+1118
+C
+N/C-term
+2
+2
+1
+525
+1
+0
+N: N-terminus, C: C-terminus, MS: membrane spanning, CA/VF: cardiac arrest
+"""
+
+    blocks = extractor._reconstruct_pdf_linearized_tables(text)
+
+    assert len(blocks) == 1
+    block = blocks[0]
+    assert (
+        "| cDNA | Protein | site | Site | No. of patients | Female (n) | "
+        "Proband (n) | Mean QTc (proband) | affected | CA/VF (n) |"
+    ) in block
+    assert (
+        "| c.521G>A | p.R147H | MS | non-pore MS | 2 | 1 | 1 | 444 | 1 | 0 |"
+    ) in block
+    assert (
+        "| c.1111G>T | p.D317Y | MS | S5-pore-S6 | 2 | 1 | 1 | 495 | 2 | 0 |"
+    ) in block
+    assert "| c.1683G>T | p.R561S | C | N/C-term | 3 | 2 | 0 | - | 1 | 0 |" in block
+    assert (
+        "| c.3093insG | p.G1031fsX1118 | C | N/C-term | 2 | 2 | 1 | 525 | 1 | 0 |"
+    ) in block
+
+    variants = extractor._parse_markdown_table_variants(
+        extractor._augment_pdf_linearized_tables(text), "KCNQ1"
+    )
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {
+        "p.R147H",
+        "p.D317Y",
+        "p.R561S",
+        "p.G1031fsX1118",
+    }
+    assert by_protein["p.R147H"]["cdna_notation"] == "c.521G>A"
+    assert by_protein["p.R147H"]["penetrance_data"] == {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+    }
+    assert by_protein["p.D317Y"]["penetrance_data"] == {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+    }
+    assert by_protein["p.R561S"]["penetrance_data"] == {
+        "total_carriers_observed": 3,
+        "affected_count": 1,
+        "unaffected_count": 2,
+    }
+    assert by_protein["p.G1031fsX1118"]["penetrance_data"] == {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+    }
+
+
+def test_pdf_linearized_table_updates_stale_estimate_for_deterministic_short_circuit():
+    extractor = ExpertExtractor(models=["test-model"], tier_threshold=0)
+    row_blocks = []
+    for idx in range(110):
+        pos = 100 + idx
+        row_blocks.extend(
+            [
+                f"c.{pos}G>A  p.R{pos}H",
+                "MS",
+                "non-pore MS",
+                "2",
+                "1",
+                "1",
+                "444",
+                "1",
+                "0",
+            ]
+        )
+    text = (
+        """
+eTable 1. LQT1 Mutations or Rare Variants
+Mutation
+site
+Site
+N
+Female
+(n)
+Proband
+(n)
+Mean QTc
+(proband)
+Syncope
+(n)
+CA/VF
+(n)
+"""
+        + "\n".join(row_blocks)
+        + "\nN: N-terminus, C: C-terminus, MS: membrane spanning\n"
+        + ("Long QT cohort methods and results. " * 80)
+    )
+
+    result = extractor._attempt_extraction(
+        Paper(
+            pmid="30758498",
+            title="LQT1 supplement",
+            gene_symbol="KCNQ1",
+            full_text=text,
+        ),
+        "test-model",
+        text,
+        estimated_variants=0,
+    )
+
+    assert result.success
+    assert result.model_used == "deterministic-table-parser"
+    assert len(result.extracted_data["variants"]) == 110
+
+
 def test_fixed_width_parser_reads_lqts_compendium_summary_rows():
     extractor = ExpertExtractor(models=["gpt-4"])
     text = """

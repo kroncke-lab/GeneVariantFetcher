@@ -440,6 +440,7 @@ def deterministic_variant_count(
     if not is_usable_fulltext_source(source_file):
         return 0
     text = source_file.read_text(encoding="utf-8", errors="replace")
+    text = extractor._augment_pdf_linearized_tables(text)
     variants: list[dict[str, Any]] = []
     variants.extend(extractor._parse_markdown_table_variants(text, gene))
     fixed_width_variants = extractor._parse_fixed_width_table_variants(text, gene)

@@ -10,25 +10,27 @@
 ## Exact-Match Recovery Plan (2026-06-12) — START HERE
 
 Root-caused decomposition of the exact-match gap to the manual gold curation
-(1,410 missing gold rows + 567 count-mismatches) is in `docs/RECALL_STATUS.md`
+(current missing rows + count-mismatches are in `docs/RECALL_STATUS.md`)
 (§ "2026-06-12 Next Run Plan"). This is the tracked checklist — update boxes as
 items land. **Both Claude and Codex: resume the recall push from here.**
 
-Gap by root cause: acquisition (PMID absent) 426 · supplement/table not in source
-647 · in-source-but-not-extracted 270 · matcher 67 · count-mismatch 567.
+Gap by root cause after the 1B parser land: acquisition (PMID absent) ~426 ·
+supplement/table not in source ~647 · in-source-but-not-extracted ~236 · matcher
+~67 · count-mismatch is tracked in `docs/RECALL_STATUS.md`.
 
-### Lever 1 — Supplement/table-body recovery on already-fetched papers (917 rows; dominant)
-Of 917: **647 (71%) are NOT in the captured source text** (supplement table never
-fetched/folded); **270 (29%) ARE in the text but extraction missed them**
-(PDF-linearized tables defeat the parser/LLM).
+### Lever 1 — Supplement/table-body recovery on already-fetched papers (~883 rows; dominant)
+Of the remaining approximate bucket: **~647 are NOT in the captured source text**
+(supplement table never fetched/folded); **~236 ARE in the text but extraction
+missed them** after the 1B parser land.
 
-- [ ] **1B — Table-reconstruction preprocessor (parser track, ~270 rows, NO fetching — cheapest win).**
-      Supplement tables fold in PDF-linearized as one-cell-per-line (e.g. KCNQ1
-      `30758498` "eTable 1. LQT1 Mutations": 57 rows present in FULL_CONTEXT, 0
-      extracted; SCN5A `15840476`: 31/31 present, 0 extracted). Detect a header row
-      (Mutation/Variant + N/Proband/carrier columns) followed by runs of short
-      lines, regroup N-lines-per-record into structured rows, then re-extract.
-      Target `pipeline/extraction.py` / `pipeline/table_router.py`.
+- [x] **1B — Table-reconstruction preprocessor (parser track, NO fetching).**
+      Landed 2026-06-12. PDF-linearized supplement tables are reconstructed from
+      one-cell-per-line text into delimited rows before deterministic table
+      extraction. Strict no-MAE-regression land accepted the KCNQ1 replay that
+      improved recall and carriers MAE; KCNQ1 `30758498` reconstructs but remains
+      unpromoted until count semantics are fixed. Candidates that regressed
+      unique/row recall or MAE were withheld. Current score is in
+      `docs/RECALL_STATUS.md`.
 - [ ] **1A — Supplement fetch+fold audit (acquisition/fold track, ~647 rows).**
       Many top PMIDs reference an eTable/Supplementary Table but have 0 supplement
       files on disk (e.g. KCNQ1 `17192539`: 21KB body, 48 missing variants absent
@@ -36,18 +38,18 @@ fetched/folded); **270 (29%) ARE in the text but extraction missed them**
       (Elsevier mmc CDN works; Wiley/Springer gated); convert xlsx/docx/pdf; fold
       into FULL_CONTEXT before extraction. Ensure the CLEANED size-guard never drops
       a mutation-table region.
-- [ ] **1C — Targeted re-extraction of the top-15 extraction-gap PMIDs** (cover 44% =
-      408 rows), acceptance-gated via `scripts/refresh_recall.py`: KCNQ1
-      `17192539`(56) `30758498`(55) `23631430`(31) `19490272`(27); SCN5A
-      `15840476`(31) `20541041`(26) `23631430`(24) `21273195`(23) `25163546`(18)
-      `24631775`(16) `29325976`(15); RYR2 `19398665`(25) `27452199`(22); KCNH2
-      `29650123`(20) `16922724`(19).
+- [ ] **1C — Targeted re-extraction of the top extraction-gap PMIDs**,
+      acceptance-gated via `scripts/refresh_recall.py`. Regenerate the ranked
+      list from the post-1B score before running; the pre-1B list included KCNQ1
+      `17192539` `30758498` `23631430` `19490272`; SCN5A `15840476` `20541041`
+      `23631430` `21273195` `25163546` `24631775` `29325976`; RYR2 `19398665`
+      `27452199`; KCNH2 `29650123` `16922724`.
 
-### Lever 2 — Count-role attribution on matched rows (567 mismatches; unaffected MAE 1.219)
+### Lever 2 — Count-role attribution on matched rows
 - [ ] Study-wide-N reuse is ~gone (~15). Residual is column-role confusion
       (affected/proband/case vs unaffected/asymptomatic/control vs study total).
       Point the count classifier / evidence-card validator at the `regex_table`
-      layer (57.5% counted precision, 929 counted extras).
+      layer; current counts and precision are in `docs/RECALL_STATUS.md`.
 
 ### Lever 3 — Acquisition of absent-PMID rows (426; SCN5A has 96 absent PMIDs)
 - [ ] Wiley/Springer supplements + remaining paywalls; restore Springer key; Wiley

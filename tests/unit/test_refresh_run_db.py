@@ -135,6 +135,85 @@ def test_selects_deterministic_vertical_table_lift(tmp_path):
     assert any(r.startswith("deterministic_parser_lift") for r in candidates[0].reasons)
 
 
+def test_selects_pdf_linearized_table_lift(tmp_path):
+    harvest_dir = tmp_path / "pmc_fulltext"
+    extraction_dir = tmp_path / "extractions"
+    harvest_dir.mkdir()
+    extraction_dir.mkdir()
+
+    pmid = "30758498"
+    linearized_table = """
+eTable 1. LQT1 Mutations or Rare Variants
+Mutation
+site
+Site
+N
+Female
+(n)
+Proband
+(n)
+Mean QTc
+(proband)
+Syncope
+(n)
+CA/VF
+(n)
+c.521G>A  p.R147H
+MS
+non-pore MS
+2
+1
+1
+444
+1
+0
+c.502G>A  p.G168R
+MS
+non-pore MS
+8
+7
+2
+500
+0
+0
+c.520C>T  p.R174C
+C-loop
+non-pore MS
+7
+4
+3
+466
+1
+0
+"""
+    (harvest_dir / f"{pmid}_FULL_CONTEXT.md").write_text(
+        _long_fulltext(linearized_table),
+        encoding="utf-8",
+    )
+    (extraction_dir / f"KCNQ1_PMID_{pmid}.json").write_text(
+        json.dumps(
+            {"variants": [], "extraction_metadata": {"total_variants_found": 0}}
+        ),
+        encoding="utf-8",
+    )
+
+    candidates = select_replay_candidates(
+        gene="KCNQ1",
+        harvest_dir=harvest_dir,
+        extraction_dir=extraction_dir,
+        min_deterministic_variants=3,
+        min_deterministic_lift=3,
+        deterministic_lift_ratio=1.2,
+        include_source_newer=False,
+        replay_missing_fingerprint=False,
+        replay_unbound_source=False,
+    )
+
+    assert [c.pmid for c in candidates] == [pmid]
+    assert candidates[0].deterministic_variants == 3
+    assert any(r.startswith("deterministic_parser_lift") for r in candidates[0].reasons)
+
+
 def test_selects_large_absolute_deterministic_lift_even_below_ratio(
     tmp_path, monkeypatch
 ):
