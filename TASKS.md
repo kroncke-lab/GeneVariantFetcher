@@ -7,6 +7,61 @@
 - **Measurement loop is multi-gene now** — score KCNH2, RYR2, and SCN5A from `gene_variant_fetcher_gold_standard/normalized/*_recall_input.csv`; KCNQ1 scoring remains available when its gold input is in scope.
 - **KCNE1 is extraction-only until a gold input exists.** There is no `KCNE1_recall_input.csv` in the current gold-standard package, so KCNE1 recall cannot be claimed yet.
 
+## Exact-Match Recovery Plan (2026-06-12) — START HERE
+
+Root-caused decomposition of the exact-match gap to the manual gold curation
+(1,410 missing gold rows + 567 count-mismatches) is in `docs/RECALL_STATUS.md`
+(§ "2026-06-12 Next Run Plan"). This is the tracked checklist — update boxes as
+items land. **Both Claude and Codex: resume the recall push from here.**
+
+Gap by root cause: acquisition (PMID absent) 426 · supplement/table not in source
+647 · in-source-but-not-extracted 270 · matcher 67 · count-mismatch 567.
+
+### Lever 1 — Supplement/table-body recovery on already-fetched papers (917 rows; dominant)
+Of 917: **647 (71%) are NOT in the captured source text** (supplement table never
+fetched/folded); **270 (29%) ARE in the text but extraction missed them**
+(PDF-linearized tables defeat the parser/LLM).
+
+- [ ] **1B — Table-reconstruction preprocessor (parser track, ~270 rows, NO fetching — cheapest win).**
+      Supplement tables fold in PDF-linearized as one-cell-per-line (e.g. KCNQ1
+      `30758498` "eTable 1. LQT1 Mutations": 57 rows present in FULL_CONTEXT, 0
+      extracted; SCN5A `15840476`: 31/31 present, 0 extracted). Detect a header row
+      (Mutation/Variant + N/Proband/carrier columns) followed by runs of short
+      lines, regroup N-lines-per-record into structured rows, then re-extract.
+      Target `pipeline/extraction.py` / `pipeline/table_router.py`.
+- [ ] **1A — Supplement fetch+fold audit (acquisition/fold track, ~647 rows).**
+      Many top PMIDs reference an eTable/Supplementary Table but have 0 supplement
+      files on disk (e.g. KCNQ1 `17192539`: 21KB body, 48 missing variants absent
+      from source). Audit "supplement referenced but absent/unfolded"; fetch
+      (Elsevier mmc CDN works; Wiley/Springer gated); convert xlsx/docx/pdf; fold
+      into FULL_CONTEXT before extraction. Ensure the CLEANED size-guard never drops
+      a mutation-table region.
+- [ ] **1C — Targeted re-extraction of the top-15 extraction-gap PMIDs** (cover 44% =
+      408 rows), acceptance-gated via `scripts/refresh_recall.py`: KCNQ1
+      `17192539`(56) `30758498`(55) `23631430`(31) `19490272`(27); SCN5A
+      `15840476`(31) `20541041`(26) `23631430`(24) `21273195`(23) `25163546`(18)
+      `24631775`(16) `29325976`(15); RYR2 `19398665`(25) `27452199`(22); KCNH2
+      `29650123`(20) `16922724`(19).
+
+### Lever 2 — Count-role attribution on matched rows (567 mismatches; unaffected MAE 1.219)
+- [ ] Study-wide-N reuse is ~gone (~15). Residual is column-role confusion
+      (affected/proband/case vs unaffected/asymptomatic/control vs study total).
+      Point the count classifier / evidence-card validator at the `regex_table`
+      layer (57.5% counted precision, 929 counted extras).
+
+### Lever 3 — Acquisition of absent-PMID rows (426; SCN5A has 96 absent PMIDs)
+- [ ] Wiley/Springer supplements + remaining paywalls; restore Springer key; Wiley
+      supplement via EZproxy route. Access-gated (see Blocked).
+
+### Lever 4 — Matcher notation lanes (67 rows; cheap, already-extracted)
+- [ ] indel `GxxxDel`/`LxxxIns`/`c.x_yDel` (27); same-codon-position substitutions
+      that don't match — isoform offset / 1↔3-letter (27); compound `A + B` gold
+      rows (8); frameshift (3); splice/IVS (2). Extend `cli/compare_variants.py`.
+
+### Lever 5 — Structural/CNV matching lane (53 rows)
+- [ ] Exon deletions, breakpoints, translocations: real biology, unmatchable today.
+      Add a structural lane or exclude from the precision denominator.
+
 ## Completed
 - [x] Springer API integration (full-text retrieval working)
 - [x] Wire `gene_literature/supplements/` UnifiedSupplementFetcher into orchestrator
