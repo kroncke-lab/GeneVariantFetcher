@@ -664,12 +664,21 @@ def replay_candidates(
             )
             if not result.success or not result.extracted_data:
                 raise RuntimeError(result.error or "empty extraction result")
-            new_variant_count = len(result.extracted_data.get("variants", []) or [])
+            new_variants = result.extracted_data.get("variants", []) or []
+            new_variant_count = len(new_variants)
             prior_variant_count = _backup_variant_count(backup_file)
+            # Quality-aware regression gate: a re-extraction with fewer total
+            # rows is NOT a regression when it carries more gold-matchable
+            # (paired cDNA+protein) content. This stops a stale over-counted
+            # cDNA-only extraction from blocking a cleaner paired one.
+            new_quality = _variant_quality_score(new_variants)
+            prior_quality = _backup_quality_score(backup_file)
+            quality_held = prior_quality is not None and new_quality >= prior_quality
             if (
                 gate_regressions
                 and prior_variant_count is not None
                 and new_variant_count < prior_variant_count
+                and not quality_held
             ):
                 gated += 1
                 failed_pmids.append(candidate.pmid)
@@ -782,6 +791,46 @@ def _backup_variant_count(backup_file: Path) -> Optional[int]:
     if not isinstance(data, dict):
         return None
     return _variant_count(data)
+
+
+def _variant_quality_score(variants: list) -> int:
+    """Quality-weighted variant count: a variant carrying BOTH a cDNA and a
+    protein notation is directly gold-matchable, so it counts double.
+
+    This keeps a stale, over-counted cDNA-only extraction (e.g. PDF-table
+    fragments) from out-voting a cleaner paired-notation re-extraction in the
+    regression gate. Pure internal-consistency signal; no gold standard required.
+    """
+    score = 0
+    for variant in variants or []:
+        if not isinstance(variant, dict):
+            continue
+        cdna = (variant.get("cdna_notation") or "").strip()
+        protein = (variant.get("protein_notation") or "").strip()
+        score += 2 if (cdna and protein) else 1
+    return score
+
+
+def _backup_quality_score(backup_file: Path) -> Optional[int]:
+    """Quality-weighted variant score of the backup extraction JSON, or None.
+
+    Returns None when the backup has no per-variant list (e.g. a metadata-only
+    prior with ``total_variants_found``): quality can't be assessed, so the
+    caller falls back to the raw count regression gate rather than waving it
+    through.
+    """
+    if not backup_file.exists():
+        return None
+    try:
+        data = json.loads(backup_file.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    if not isinstance(data, dict):
+        return None
+    variants = data.get("variants")
+    if not isinstance(variants, list) or not variants:
+        return None
+    return _variant_quality_score(variants)
 
 
 def rebuild_db(

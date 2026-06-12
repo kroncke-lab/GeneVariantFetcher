@@ -1229,3 +1229,52 @@ def test_large_scanner_result_skips_hints_and_merge(monkeypatch):
         "safety_cap": extraction.SCANNER_REGEX_MERGE_MAX_VARIANTS,
         "reason": "candidate_count_exceeds_safety_cap",
     }
+
+
+def test_pairs_from_reconstructed_blocks_maps_both_directions():
+    # The reconstructed table carries an explicit cDNA+protein pairing per row;
+    # the map lets a cDNA-only (or protein-only) extracted row recover its partner.
+    extractor = ExpertExtractor(models=["gpt-4"])
+    block = "\n".join(
+        [
+            "eTable 1. Mutations",
+            "| cDNA | Protein | No. of patients |",
+            "| --- | --- | --- |",
+            "| c.153C>A | p.Y51X | 1 |",
+            "| c.521G>A | p.R147H | 2 |",
+        ]
+    )
+    pairs = extractor._pairs_from_reconstructed_blocks([block])
+    assert pairs["c.153c>a"] == "p.Y51X"
+    assert pairs["c.521g>a"] == "p.R147H"
+    assert pairs["p.y51x"] == "c.153C>A"  # reverse direction
+
+
+def test_backfill_fills_missing_side_without_overwriting():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    extractor._linearized_variant_pairs = {
+        "c.153c>a": "p.Y51X",
+        "p.y51x": "c.153C>A",
+    }
+    data = {
+        "variants": [
+            {"cdna_notation": "c.153C>A", "protein_notation": None},  # fill protein
+            {"cdna_notation": "", "protein_notation": "p.Y51X"},  # fill cDNA
+            {"cdna_notation": "c.999Z>Q", "protein_notation": None},  # absent: stays
+            {"cdna_notation": "c.153C>A", "protein_notation": "p.KEEP"},  # keep
+        ]
+    }
+    extractor._backfill_variant_notation_pairs(data)
+    variants = data["variants"]
+    assert variants[0]["protein_notation"] == "p.Y51X"
+    assert variants[1]["cdna_notation"] == "c.153C>A"
+    assert variants[2]["protein_notation"] is None
+    assert variants[3]["protein_notation"] == "p.KEEP"
+
+
+def test_backfill_is_noop_when_no_table_reconstructed():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    extractor._linearized_variant_pairs = {}
+    data = {"variants": [{"cdna_notation": "c.1A>T", "protein_notation": None}]}
+    extractor._backfill_variant_notation_pairs(data)
+    assert data["variants"][0]["protein_notation"] is None

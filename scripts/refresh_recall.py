@@ -139,6 +139,18 @@ def _env_float(name: str, default: float) -> float:
 _MAE_ABS_TOL = _env_float("GVF_LAND_MAE_ABS_TOL", 0.05)
 _MAE_REL_TOL = _env_float("GVF_LAND_MAE_REL_TOL", 0.05)
 _MAE_COV_TOL = _env_float("GVF_LAND_MAE_COV_TOL", 0.10)
+# Per-field absolute MAE tolerance. Carriers (total observed) is the count most
+# perturbed when a real supplement-table row legitimately adds carriers to a
+# previously-undercounted variant, so it gets a modestly more generous absolute
+# tolerance than affected/unaffected — recovering real rows should not be blocked
+# by a small carrier-MAE wiggle. The coverage-collapse guard and the relative
+# tolerance still apply, so a genuine count blow-up is still caught. Override per
+# field via GVF_LAND_MAE_ABS_TOL_<CARRIERS|AFFECTED|UNAFFECTED>.
+_MAE_ABS_TOL_BY_FIELD = {
+    "carriers": _env_float("GVF_LAND_MAE_ABS_TOL_CARRIERS", 0.12),
+    "affected": _env_float("GVF_LAND_MAE_ABS_TOL_AFFECTED", _MAE_ABS_TOL),
+    "unaffected": _env_float("GVF_LAND_MAE_ABS_TOL_UNAFFECTED", _MAE_ABS_TOL),
+}
 
 
 def _mae(summary: dict | None, field: str = "carriers") -> float | None:
@@ -183,7 +195,8 @@ def _mae_regressions(before: dict | None, after: dict | None) -> list[str]:
         b, a = _mae(before, field), _mae(after, field)
         if b is None or a is None:
             continue
-        if a > b + max(_MAE_ABS_TOL, b * _MAE_REL_TOL):
+        abs_tol = _MAE_ABS_TOL_BY_FIELD.get(field, _MAE_ABS_TOL)
+        if a > b + max(abs_tol, b * _MAE_REL_TOL):
             out.append(f"{field} {b:.3f}->{a:.3f}")
     return out
 

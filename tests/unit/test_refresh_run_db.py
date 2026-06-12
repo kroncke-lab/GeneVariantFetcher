@@ -633,6 +633,44 @@ def test_replay_gates_per_pmid_regression(tmp_path, monkeypatch):
     assert (setup["backup_dir"] / setup["output_file"].name).exists()
 
 
+def test_replay_accepts_fewer_but_paired_over_cdna_only_prior(tmp_path, monkeypatch):
+    """A cleaner paired (cDNA+protein) re-extraction must not be regression-gated
+    by a stale, over-counted cDNA-only prior, even with fewer total rows."""
+    setup = _make_replay_setup(tmp_path, prior_variant_count=10, new_variant_count=6)
+    # Prior: 10 cDNA-only fragments (unpaired) -> quality score 10.
+    prior_payload = {
+        "variants": [{"cdna_notation": f"c.{100 + i}A>G"} for i in range(10)],
+        "extraction_metadata": {"total_variants_found": 10},
+    }
+    setup["output_file"].write_text(json.dumps(prior_payload), encoding="utf-8")
+    # New: 6 paired variants -> quality score 12 (>= prior 10), fewer total rows.
+    new_payload = {
+        "variants": [
+            {"cdna_notation": f"c.{100 + i}A>G", "protein_notation": f"p.X{i}Y"}
+            for i in range(6)
+        ],
+        "extraction_metadata": {"total_variants_found": 6},
+    }
+    setup["extraction_result"].extracted_data = new_payload
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+    )
+
+    assert stats["successful"] == 1
+    assert stats["gated"] == 0
+    # The cleaner 6-variant paired payload must now be on disk.
+    payload = json.loads(setup["output_file"].read_text())
+    assert len(payload["variants"]) == 6
+    assert all(v.get("protein_notation") for v in payload["variants"])
+
+
 def test_replay_gates_regression_when_prior_count_is_metadata_only(
     tmp_path, monkeypatch
 ):

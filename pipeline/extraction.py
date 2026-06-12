@@ -1963,9 +1963,16 @@ class ExpertExtractor(BaseLLMCaller):
 
     def _augment_pdf_linearized_tables(self, full_text: str) -> str:
         """Append markdown reconstructions of one-cell-per-line PDF tables."""
+        # Reset the per-paper cDNA<->protein pairing map. The reconstructed
+        # tables carry an explicit cDNA+protein pairing per row; downstream
+        # parsers/scanners sometimes emit a row with only one notation, so we
+        # stash the pairing here and backfill the missing side after extraction
+        # (see _backfill_variant_notation_pairs).
+        self._linearized_variant_pairs = {}
         blocks = self._reconstruct_pdf_linearized_tables(full_text)
         if not blocks:
             return full_text
+        self._linearized_variant_pairs = self._pairs_from_reconstructed_blocks(blocks)
         logger.info("Reconstructed %d PDF-linearized table(s)", len(blocks))
         appendix = "\n\n".join(blocks)
         return (
@@ -1973,6 +1980,65 @@ class ExpertExtractor(BaseLLMCaller):
             "## Reconstructed PDF-linearized tables\n\n"
             f"{appendix}"
         )
+
+    @staticmethod
+    def _notation_pair_key(notation: str) -> str:
+        """Whitespace-insensitive, case-insensitive key for pairing notations."""
+        return re.sub(r"\s+", "", (notation or "")).lower()
+
+    def _pairs_from_reconstructed_blocks(self, blocks: list[str]) -> dict[str, str]:
+        """Map each reconstructed cDNA<->protein cell to its row partner.
+
+        Keyed by ``_notation_pair_key`` so a cDNA-only extracted row can recover
+        its protein (and vice versa). cDNA and protein notations never collide
+        (``c.`` vs ``p.``), so a single dict is unambiguous. First write wins.
+        """
+        pairs: dict[str, str] = {}
+        for block in blocks:
+            rows = [line for line in block.splitlines() if line.strip().startswith("|")]
+            if len(rows) < 3:  # header, separator, >=1 data row
+                continue
+            header = [c.strip().lower() for c in rows[0].strip().strip("|").split("|")]
+            if "cdna" not in header or "protein" not in header:
+                continue
+            cdna_idx = header.index("cdna")
+            protein_idx = header.index("protein")
+            for line in rows[2:]:  # skip header + separator row
+                cells = [c.strip() for c in line.strip().strip("|").split("|")]
+                if max(cdna_idx, protein_idx) >= len(cells):
+                    continue
+                cdna, protein = cells[cdna_idx], cells[protein_idx]
+                if not cdna or not protein:
+                    continue
+                pairs.setdefault(self._notation_pair_key(cdna), protein)
+                pairs.setdefault(self._notation_pair_key(protein), cdna)
+        return pairs
+
+    def _backfill_variant_notation_pairs(
+        self, extracted_data: Optional[dict]
+    ) -> Optional[dict]:
+        """Fill a missing cDNA or protein notation from the reconstructed pairing.
+
+        Only fills the empty side; never overwrites a notation the extractor
+        already produced. No-op when no PDF-linearized table was reconstructed.
+        """
+        pairs = getattr(self, "_linearized_variant_pairs", None)
+        if not pairs or not extracted_data:
+            return extracted_data
+        for variant in extracted_data.get("variants", []) or []:
+            if not isinstance(variant, dict):
+                continue
+            cdna = (variant.get("cdna_notation") or "").strip()
+            protein = (variant.get("protein_notation") or "").strip()
+            if cdna and not protein:
+                partner = pairs.get(self._notation_pair_key(cdna))
+                if partner and partner.lower().startswith("p."):
+                    variant["protein_notation"] = partner
+            elif protein and not cdna:
+                partner = pairs.get(self._notation_pair_key(protein))
+                if partner and partner.lower().startswith("c"):
+                    variant["cdna_notation"] = partner
+        return extracted_data
 
     def _reconstruct_pdf_linearized_tables(self, full_text: str) -> list[str]:
         """Return pipe-table blocks reconstructed from PDF-linearized cell runs.
@@ -4450,6 +4516,9 @@ Return strict JSON with this schema:
                 paper, model, prepared_full_text, estimated_variants
             )
             if result.success:
+                result.extracted_data = self._backfill_variant_notation_pairs(
+                    result.extracted_data
+                )
                 result.extracted_data = self._annotate_source_layers(
                     result.extracted_data
                 )

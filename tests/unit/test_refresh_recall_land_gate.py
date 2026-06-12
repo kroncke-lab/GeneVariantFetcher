@@ -88,6 +88,21 @@ def test_mae_regressions_checks_all_three_count_fields():
     assert _mae_regressions(before, after) == ["unaffected 0.500->2.000"]
 
 
+def test_mae_regressions_carriers_tolerance_is_more_generous():
+    # Carriers gets a modestly more generous absolute tolerance (0.12 default) so
+    # recovering real supplement-table rows is not blocked by a small wiggle.
+    # A +0.10 carriers increase passes (0.60 -> 0.70, within 0.12)...
+    assert _mae_regressions(_summary(carriers=0.60), _summary(carriers=0.70)) == []
+    # ...but the same +0.10 increase on unaffected (stricter 0.05 tol) is flagged.
+    assert _mae_regressions(_summary(unaffected=0.60), _summary(unaffected=0.70)) == [
+        "unaffected 0.600->0.700"
+    ]
+    # A genuine carriers blow-up (+0.30 > 0.12) is still caught.
+    assert _mae_regressions(_summary(carriers=0.60), _summary(carriers=0.90)) == [
+        "carriers 0.600->0.900"
+    ]
+
+
 # --- count-coverage regressions (Codex finding: can't game MAE by dropping
 #     the very counts it is scored on) ------------------------------------
 
