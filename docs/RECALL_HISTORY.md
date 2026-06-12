@@ -30,15 +30,45 @@ Elsevier insttoken.
 | **2026-06-06** | **Duplicate-penetrance idempotency fix** | **2572/3010 (85.4%)** | **5423/6833 (79.4%)** | **0.614** |
 | — | **Target** | **2709/3010 (90.0%)** | — | → 0 |
 
-Gap to the 90% unique-variant target: **186** variants (was 1126 at the 62.6%
+Gap to the 90% unique-variant target: **137** variants (was 1126 at the 62.6%
 starting point; ~83% of the original gap has been closed).
 
-Per-gene unique-variant recall, latest canonical (2026-06-05):
-KCNH2 **83.2%**, KCNQ1 **86.8%**, SCN5A **82.8%**, RYR2 **83.4%**.
+Per-gene unique-variant recall, latest canonical (2026-06-12):
+KCNH2 **83.2%**, KCNQ1 **87.6%**, SCN5A **86.3%**, RYR2 **83.7%**.
 
 ---
 
 ## Timeline (newest first)
+
+### 2026-06-12 — Source-layer backfill + cheap notation junk gate
+Added a shared source-layer classifier, explicit `variant_papers.source_layer`
+backfill for the four canonical DBs, and a scorer/migration reject for obvious
+figure/regex-table junk: gene-symbol-as-variant, <=2-character protein strings,
+and residue prose. Backups were written as
+`.before_source_layer_20260612_093534` before any DB mutation. Re-scoring the
+canonical DBs and the backups (fallback inference, no `source_layer` column)
+produced identical aggregate recall/MAE/precision blocks, confirming the scorer
+prefers the explicit column without changing semantics.
+
+Recall and MAE were unchanged: uniqV **2572/3010 (85.4%)**, rows
+**5423/6833 (79.4%)**, carriers MAE **0.614**, affected MAE **0.523**,
+unaffected MAE **1.219**. The junk gate dropped 64 raw rows before scoring
+(41 extra-on-gold-PMID rows, 8 counted extras). Headline counted precision is now
+`5423/(5423+1660)` = **76.6%**; the loose raw gold-PMID upper bound is
+`5423/(5423+13642)` = **28.4%**. The old `manual_or_legacy` bucket is now
+`llm_text`.
+
+### 2026-06-11 — Canonical rescore + precision decomposition
+Fresh `scripts/run_recall_suite.py` run against the four canonical DBs confirmed
+the current aggregate: uniqV **2572/3010 (85.4%)**, rows **5423/6833 (79.4%)**,
+PMIDs **1274/1502 (84.8%)**, carriers MAE **0.614**, affected MAE **0.523**,
+unaffected MAE **1.219**. Precision-vs-gold-PMIDs remains a false-positive
+upper bound at **28.4%**, but decomposition shows only **1668/13683** extra
+rows on gold PMIDs carry counts, giving `precision_vs_counted_gold_pmids`
+**76.5%**. Added `variant_papers.source_layer` plus per-layer precision output
+so ClinVar/PubTator/figure/linker rows are auditable without a manual sample.
+Confirmed the MAE non-regression land gate already existed; fixed the stale
+history note that claimed it was still missing.
 
 ### 2026-06-06 — Duplicate-penetrance idempotency fix (carriers MAE 1.274→0.614, recall preserved)
 The 2026-06-05 `refresh_recall` re-extraction lifted recall (uniqV 83.8→85.4%,
@@ -63,8 +93,9 @@ MAE, so it promoted silently.
   Removed exact dups: penetrance 6883, phenotypes 7431 across the four DBs.
 - Tests: `tests/unit/test_migrate_idempotent.py` (4) + the migration/scoring suite
   (125) green.
-- Not yet done: an MAE non-regression check on the `refresh_recall` land gate
-  (currently `if lm >= bm`, recall-only) so a count regression can't promote again.
+- Follow-up landed 2026-06-06: `refresh_recall` now has an MAE non-regression
+  land gate (`_promotion_decision`) requiring recall hold plus no carriers,
+  affected, or unaffected MAE regression before promotion.
 
 ### 2026-06-05 — Supplement acquisition: the real recall lever (+1.6pp uniqV)
 Recon (`docs/SUPPLEMENT_ACQUISITION_PLAN.md`) re-framed the problem: the

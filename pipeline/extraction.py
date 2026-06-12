@@ -35,6 +35,7 @@ from pipeline.prompts import (
 )
 from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 from utils.models import ExtractionResult, Paper
+from utils.source_layers import infer_source_layer_from_text
 from utils.variant_scanner import (
     VariantScanner,
     merge_scanner_results,
@@ -3113,6 +3114,23 @@ class ExpertExtractor(BaseLLMCaller):
             )
         )
 
+    @staticmethod
+    def _infer_source_layer(variant: dict) -> str:
+        return infer_source_layer_from_text(
+            source_location=variant.get("source_location"),
+            additional_notes=variant.get("additional_notes"),
+            extraction_source=variant.get("extraction_source"),
+            source_layer=variant.get("source_layer"),
+        )
+
+    def _annotate_source_layers(self, extracted_data: dict | None) -> dict | None:
+        if not extracted_data:
+            return extracted_data
+        for variant in extracted_data.get("variants", []) or []:
+            if isinstance(variant, dict):
+                variant["source_layer"] = self._infer_source_layer(variant)
+        return extracted_data
+
     def _suppress_repeated_study_wide_counts(self, extracted_data: dict) -> dict:
         """
         Clear likely cohort-wide totals copied onto every variant by the LLM.
@@ -3953,9 +3971,14 @@ Return strict JSON with this schema:
             self.model = model
             self.max_tokens = self._clamp_max_tokens(model, self.requested_max_tokens)
 
-            return self._do_attempt_extraction(
+            result = self._do_attempt_extraction(
                 paper, model, prepared_full_text, estimated_variants
             )
+            if result.success:
+                result.extracted_data = self._annotate_source_layers(
+                    result.extracted_data
+                )
+            return result
         finally:
             self.model, self.max_tokens = saved_model, saved_max_tokens
 

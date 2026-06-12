@@ -2,6 +2,8 @@
 
 import sqlite3
 
+import pytest
+
 from scripts.run_recall_suite import (
     build_gene_results,
     combine_fbeta,
@@ -173,7 +175,16 @@ def test_combine_precision_aggregates_across_genes():
                 "precision": {
                     "matched_db": 8,
                     "extra_on_gold_pmids": 2,
+                    "counted_extra_on_gold_pmids": 1,
                     "precision_vs_gold_pmids": 0.8,
+                    "precision_vs_counted_gold_pmids": 8 / 9,
+                    "by_source_layer": {
+                        "llm_table": {
+                            "matched_db": 8,
+                            "extra_on_gold_pmids": 2,
+                            "counted_extra_on_gold_pmids": 1,
+                        }
+                    },
                 }
             }
         },
@@ -182,7 +193,16 @@ def test_combine_precision_aggregates_across_genes():
                 "precision": {
                     "matched_db": 2,
                     "extra_on_gold_pmids": 8,
+                    "counted_extra_on_gold_pmids": 3,
                     "precision_vs_gold_pmids": 0.2,
+                    "precision_vs_counted_gold_pmids": 0.4,
+                    "by_source_layer": {
+                        "clinvar": {
+                            "matched_db": 2,
+                            "extra_on_gold_pmids": 8,
+                            "counted_extra_on_gold_pmids": 3,
+                        }
+                    },
                 }
             }
         },
@@ -192,7 +212,15 @@ def test_combine_precision_aggregates_across_genes():
 
     assert agg["matched_db"] == 10
     assert agg["extra_on_gold_pmids"] == 10
+    assert agg["counted_extra_on_gold_pmids"] == 4
     assert agg["precision_vs_gold_pmids"] == 0.5  # 10 / 20
+    assert agg["precision_vs_counted_gold_pmids"] == pytest.approx(10 / 14)
+    assert agg["by_source_layer"]["llm_table"]["precision_vs_gold_pmids"] == 0.8
+    assert agg["by_source_layer"]["llm_table"][
+        "precision_vs_counted_gold_pmids"
+    ] == pytest.approx(8 / 9)
+    assert agg["by_source_layer"]["clinvar"]["precision_vs_gold_pmids"] == 0.2
+    assert agg["by_source_layer"]["clinvar"]["precision_vs_counted_gold_pmids"] == 0.4
     assert "NOT clean precision" in agg["note"]
 
 

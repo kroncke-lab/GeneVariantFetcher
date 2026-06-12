@@ -54,7 +54,8 @@ PY = sys.executable
 # variant_papers rows written by the recovery layers (NOT extraction) — preserved
 # across a surgical land so re-extraction never drops ClinVar/PubTator/figure rows.
 _LAYER = (
-    "(LOWER(COALESCE(source_location,'')) LIKE '%clinvar%' "
+    "(LOWER(COALESCE(source_layer,'')) IN ('clinvar', 'pubtator', 'figure') "
+    "OR LOWER(COALESCE(source_location,'')) LIKE '%clinvar%' "
     "OR LOWER(COALESCE(source_location,'')) LIKE '%pubtator%' "
     "OR LOWER(COALESCE(source_location,'')) LIKE '%figure%')"
 )

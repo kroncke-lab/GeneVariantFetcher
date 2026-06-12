@@ -34,6 +34,7 @@ from scripts.recall_audit.paper_disagreement_report import (  # noqa: E402
     select_regression_cases,
     write_markdown as write_regression_cases_markdown,
 )
+from utils.source_layers import normalize_source_layer  # noqa: E402
 
 DEFAULT_GOLD_DIR = BASE_DIR / "gene_variant_fetcher_gold_standard"
 DEFAULT_RESULTS_DIR = BASE_DIR / "results"
@@ -205,21 +206,68 @@ def combine_precision(scored: list[dict[str, Any]]) -> dict[str, Any]:
     """
     matched_db = 0
     extra_on_gold_pmids = 0
+    counted_extra_on_gold_pmids = 0
+    by_layer: dict[str, dict[str, int]] = {}
     for item in scored:
         block = item.get("summary", {}).get("precision", {})
         matched_db += int(block.get("matched_db") or 0)
         extra_on_gold_pmids += int(block.get("extra_on_gold_pmids") or 0)
+        counted_extra_on_gold_pmids += int(
+            block.get("counted_extra_on_gold_pmids") or 0
+        )
+        for raw_layer, layer_block in (block.get("by_source_layer") or {}).items():
+            layer = normalize_source_layer(raw_layer) or "llm_text"
+            acc = by_layer.setdefault(
+                layer,
+                {
+                    "matched_db": 0,
+                    "extra_on_gold_pmids": 0,
+                    "counted_extra_on_gold_pmids": 0,
+                },
+            )
+            acc["matched_db"] += int(layer_block.get("matched_db") or 0)
+            acc["extra_on_gold_pmids"] += int(
+                layer_block.get("extra_on_gold_pmids") or 0
+            )
+            acc["counted_extra_on_gold_pmids"] += int(
+                layer_block.get("counted_extra_on_gold_pmids") or 0
+            )
     denominator = matched_db + extra_on_gold_pmids
+    counted_denominator = matched_db + counted_extra_on_gold_pmids
+    layer_out: dict[str, dict[str, Any]] = {}
+    for layer, block in sorted(by_layer.items()):
+        layer_matched = block["matched_db"]
+        layer_extra = block["extra_on_gold_pmids"]
+        layer_counted = block["counted_extra_on_gold_pmids"]
+        layer_out[layer] = {
+            **block,
+            "precision_vs_gold_pmids": (
+                layer_matched / (layer_matched + layer_extra)
+                if layer_matched + layer_extra
+                else None
+            ),
+            "precision_vs_counted_gold_pmids": (
+                layer_matched / (layer_matched + layer_counted)
+                if layer_matched + layer_counted
+                else None
+            ),
+        }
     return {
         "matched_db": matched_db,
         "extra_on_gold_pmids": extra_on_gold_pmids,
+        "counted_extra_on_gold_pmids": counted_extra_on_gold_pmids,
         "precision_vs_gold_pmids": (matched_db / denominator) if denominator else None,
+        "precision_vs_counted_gold_pmids": (
+            matched_db / counted_denominator if counted_denominator else None
+        ),
+        "by_source_layer": layer_out,
         "note": (
             "Upper bound on false-positive rate, restricted to gold-curated "
             "PMIDs. Gold is a curator-selected subset, not paper-exhaustive, "
             "so 'extra' DB rows on gold PMIDs may still be true positives the "
-            "curator omitted. This is an extra-rows-relative-to-gold rate, NOT "
-            "clean precision."
+            "curator omitted. counted_extra_on_gold_pmids restricts that "
+            "denominator to extra rows carrying extracted counts. These are "
+            "extra-rows-relative-to-gold rates, NOT clean precision."
         ),
     }
 
@@ -394,21 +442,42 @@ def write_markdown_summary(summary: dict[str, Any], output_path: Path) -> None:
     precision = summary.get("aggregate_precision") or {}
     if precision.get("matched_db") or precision.get("extra_on_gold_pmids"):
         pvg = precision.get("precision_vs_gold_pmids")
+        pcg = precision.get("precision_vs_counted_gold_pmids")
         lines.extend(
             [
                 "",
-                "## Aggregate Precision (vs gold PMIDs)",
+                "## Aggregate Precision (counted extras vs gold PMIDs)",
                 "",
                 "Extra-rows-relative-to-gold rate, restricted to gold-curated "
-                "PMIDs. Upper bound on false positives, NOT clean precision "
-                "(gold is a curator-selected subset, not paper-exhaustive).",
+                "PMIDs. Headline precision uses only count-bearing extra rows; "
+                "the raw gold-PMID rate is a loose false-positive upper bound "
+                "dominated by zero-count variant mentions.",
                 "",
-                "| Matched DB rows | Extra DB rows on gold PMIDs | precision_vs_gold_pmids |",
-                "|-----------------|-----------------------------|-------------------------|",
+                "| Matched DB rows | Counted extra rows | precision_vs_counted_gold_pmids | Extra DB rows on gold PMIDs | loose precision_vs_gold_pmids |",
+                "|-----------------|--------------------|--------------------------------|-----------------------------|-------------------------------|",
                 f"| {precision.get('matched_db', 0)} | "
+                f"{precision.get('counted_extra_on_gold_pmids', 0)} | "
+                f"{_format_pct(pcg)} | "
                 f"{precision.get('extra_on_gold_pmids', 0)} | {_format_pct(pvg)} |",
             ]
         )
+        by_layer = precision.get("by_source_layer") or {}
+        if by_layer:
+            lines.extend(
+                [
+                    "",
+                    "| Source layer | Matched DB rows | Extra rows | Counted extra rows | precision_vs_gold_pmids | precision_vs_counted_gold_pmids |",
+                    "|--------------|-----------------|------------|--------------------|-------------------------|--------------------------------|",
+                ]
+            )
+            for layer, block in sorted(by_layer.items()):
+                lines.append(
+                    f"| {layer} | {block.get('matched_db', 0)} | "
+                    f"{block.get('extra_on_gold_pmids', 0)} | "
+                    f"{block.get('counted_extra_on_gold_pmids', 0)} | "
+                    f"{_format_pct(block.get('precision_vs_gold_pmids'))} | "
+                    f"{_format_pct(block.get('precision_vs_counted_gold_pmids'))} |"
+                )
 
     lines.extend(["", "## Genes", ""])
     for item in summary.get("gene_results", []):
@@ -490,12 +559,16 @@ def print_scorecard(summary: dict[str, Any]) -> None:
     precision = summary.get("aggregate_precision") or {}
     if precision.get("matched_db") or precision.get("extra_on_gold_pmids"):
         print()
-        print("Precision (vs gold PMIDs; upper bound on FPs, not clean precision)")
+        print("Precision (counted extras headline; raw gold-PMID rate is loose)")
         print(
             f"  matched_db={precision.get('matched_db', 0):>5}  "
-            f"extra_on_gold_pmids={precision.get('extra_on_gold_pmids', 0):<5} "
-            f"precision_vs_gold_pmids="
+            f"counted_extra_on_gold_pmids="
+            f"{precision.get('counted_extra_on_gold_pmids', 0):<5} "
+            f"precision_vs_counted_gold_pmids="
+            f"{_format_pct(precision.get('precision_vs_counted_gold_pmids'))}"
+            f" loose_precision_vs_gold_pmids="
             f"{_format_pct(precision.get('precision_vs_gold_pmids'))}"
+            f" extra_on_gold_pmids={precision.get('extra_on_gold_pmids', 0):<5} "
         )
     print()
     print("Genes")

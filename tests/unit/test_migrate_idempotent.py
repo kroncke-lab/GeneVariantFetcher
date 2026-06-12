@@ -63,6 +63,43 @@ def test_insert_variant_data_collapses_exact_duplicate_penetrance(tmp_path):
     conn.close()
 
 
+def test_insert_variant_data_writes_source_layer(tmp_path):
+    """variant_papers carries the stable provenance layer used by recall scoring."""
+    conn = create_database_schema(str(tmp_path / "t.db"))
+    cur = conn.cursor()
+    cur.execute("INSERT OR IGNORE INTO papers (pmid) VALUES ('32893267')")
+    insert_variant_data(
+        cur,
+        "32893267",
+        {
+            "gene_symbol": "KCNQ1",
+            "protein_notation": "p.Val254Met",
+            "source_location": "Supplement Table S4",
+        },
+    )
+    insert_variant_data(
+        cur,
+        "32893267",
+        {
+            "gene_symbol": "KCNQ1",
+            "protein_notation": "p.Ala341Val",
+            "source_layer": "pubtator",
+        },
+    )
+    conn.commit()
+
+    rows = conn.execute(
+        """
+        SELECT v.protein_notation, vp.source_layer
+        FROM variant_papers vp
+        JOIN variants v ON v.variant_id = vp.variant_id
+        ORDER BY v.protein_notation
+        """
+    ).fetchall()
+    assert rows == [("p.Ala341Val", "pubtator"), ("p.Val254Met", "llm_table")]
+    conn.close()
+
+
 def test_insert_variant_data_merges_age_bins_from_duplicate_penetrance(tmp_path):
     """Duplicate parent rows can still carry unique age-stratified child facts."""
     conn = create_database_schema(str(tmp_path / "t.db"))

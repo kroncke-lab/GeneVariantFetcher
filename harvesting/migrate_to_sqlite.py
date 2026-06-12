@@ -44,6 +44,10 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 # Configure logging using centralized utility
 from utils.logging_utils import get_logger, setup_logging
 from utils.pmid_utils import extract_gene_from_filename, extract_pmid_from_filename
+from utils.source_layers import (
+    infer_source_layer_from_text,
+    junk_notation_reason,
+)
 
 setup_logging(level=logging.INFO)
 logger = get_logger(__name__)
@@ -64,7 +68,6 @@ CDNA_NOTATION_RE = re.compile(
     r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$",
     re.IGNORECASE,
 )
-
 
 # =============================================================================
 # INPUT VALIDATION
@@ -97,6 +100,17 @@ def sanitize_variant_notation(variant_data: Dict[str, Any]) -> bool:
         cdna = ""
 
     return bool(protein or cdna or genomic)
+
+
+def infer_source_layer(variant_data: Dict[str, Any]) -> str:
+    """Return a stable source-layer label for a variant-paper link."""
+
+    return infer_source_layer_from_text(
+        source_location=variant_data.get("source_location"),
+        additional_notes=variant_data.get("additional_notes"),
+        extraction_source=variant_data.get("extraction_source"),
+        source_layer=variant_data.get("source_layer"),
+    )
 
 
 def normalize_affected_status(status: Any) -> Optional[str]:
@@ -504,6 +518,7 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             additional_notes TEXT,
             key_quotes TEXT,  -- JSON array of quotes
             count_provenance TEXT,  -- JSON: which column/count-type each carrier/affected count came from (the "why")
+            source_layer TEXT,  -- stable provenance layer: llm_table, clinvar, pubtator, figure, etc.
 
             PRIMARY KEY (variant_id, pmid),
             FOREIGN KEY (variant_id) REFERENCES variants(variant_id) ON DELETE CASCADE,
@@ -573,7 +588,11 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
     # Backfill new columns onto pre-existing DBs (CREATE IF NOT EXISTS won't add them).
     for table, col, decl in (
         ("papers", "first_author", "TEXT"),
+        ("variant_papers", "source_location", "TEXT"),
+        ("variant_papers", "additional_notes", "TEXT"),
+        ("variant_papers", "key_quotes", "TEXT"),
         ("variant_papers", "count_provenance", "TEXT"),
+        ("variant_papers", "source_layer", "TEXT"),
         ("individual_records", "ethnicity", "TEXT"),
         ("individual_records", "geographic_origin", "TEXT"),
     ):
@@ -931,6 +950,31 @@ def insert_variant_data(
     Returns:
         variant_id, or None if the variant had no usable notation
     """
+    source_layer = infer_source_layer(variant_data)
+    junk_reason = junk_notation_reason(
+        source_layer=source_layer,
+        protein_notation=variant_data.get("protein_notation"),
+        cdna_notation=variant_data.get("cdna_notation"),
+        variant=(
+            variant_data.get("protein_notation")
+            or variant_data.get("cdna_notation")
+            or variant_data.get("genomic_position")
+        ),
+        gene_symbol=variant_data.get("gene_symbol"),
+    )
+    if junk_reason:
+        logger.info(
+            "Dropping junk %s variant in PMID %s "
+            "(reason=%s, gene=%s, protein=%r, cdna=%r)",
+            source_layer,
+            pmid,
+            junk_reason,
+            variant_data.get("gene_symbol"),
+            variant_data.get("protein_notation"),
+            variant_data.get("cdna_notation"),
+        )
+        return None
+
     original_notation = {
         "protein_notation": variant_data.get("protein_notation"),
         "cdna_notation": variant_data.get("cdna_notation"),
@@ -960,8 +1004,9 @@ def insert_variant_data(
     cursor.execute(
         """
         INSERT OR IGNORE INTO variant_papers (
-            variant_id, pmid, source_location, additional_notes, key_quotes, count_provenance
-        ) VALUES (?, ?, ?, ?, ?, ?)
+            variant_id, pmid, source_location, additional_notes, key_quotes,
+            count_provenance, source_layer
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
     """,
         (
             variant_id,
@@ -972,7 +1017,18 @@ def insert_variant_data(
             json.dumps(variant_data["count_provenance"])
             if variant_data.get("count_provenance")
             else None,
+            source_layer,
         ),
+    )
+    cursor.execute(
+        """
+        UPDATE variant_papers
+        SET source_layer = ?
+        WHERE variant_id = ?
+          AND pmid = ?
+          AND (source_layer IS NULL OR TRIM(source_layer) = '')
+        """,
+        (source_layer, variant_id, pmid),
     )
 
     # Insert penetrance data

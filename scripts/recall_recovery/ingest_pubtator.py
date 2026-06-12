@@ -143,6 +143,12 @@ def ensure_paper(
     return True
 
 
+def ensure_source_layer_column(con: sqlite3.Connection) -> None:
+    columns = {row[1] for row in con.execute("PRAGMA table_info(variant_papers)")}
+    if "source_layer" not in columns:
+        con.execute("ALTER TABLE variant_papers ADD COLUMN source_layer TEXT")
+
+
 def parse_hgvs(hgvs: str) -> tuple[Optional[str], Optional[str]]:
     if hgvs.startswith("p."):
         return None, hgvs
@@ -277,6 +283,7 @@ def main() -> int:
 
     con = sqlite3.connect(str(db_path))
     con.row_factory = sqlite3.Row
+    ensure_source_layer_column(con)
 
     pmids = (
         load_gold_pmids(gold_path)
@@ -318,8 +325,8 @@ def main() -> int:
             ).fetchone():
                 con.execute(
                     """INSERT INTO variant_papers
-                       (variant_id, pmid, source_location, additional_notes)
-                       VALUES (?, ?, 'PubTator3 (text-mined)', ?)""",
+                       (variant_id, pmid, source_location, additional_notes, source_layer)
+                       VALUES (?, ?, 'PubTator3 (text-mined)', ?, 'pubtator')""",
                     (vid, pmid, text),
                 )
                 added += 1

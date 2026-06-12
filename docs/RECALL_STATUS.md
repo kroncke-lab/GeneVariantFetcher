@@ -1,32 +1,111 @@
 # Recall Status
 
-Last updated: 2026-06-02.
+Last updated: 2026-06-12.
 
-This note records the post-`19ae63f` state of the recall/generalization push so
-the next run can resume from the same baseline without relying on chat history.
+This note records the current recall/generalization state so the next run can
+resume from the same baseline without relying on chat history.
 
 ## How to read the numbers in this file (single source of truth)
 
-This file carries two layers of metrics. To avoid the appearance of conflicting
-numbers, read them this way:
-
-- **Latest per-gene measurement** = the most recent dated session below. As of
-  the 2026-06-01 session, the current per-gene no-figure scores are KCNH2,
-  RYR2, and SCN5A (see that session). These **supersede** the older four-gene
-  aggregate for those three genes.
-- **Four-gene aggregate** = the `## Current Scored Baseline` table further down
-  is the 2026-05-26 joint snapshot (KCNH2/KCNQ1/SCN5A/RYR2). It is the latest
-  *aggregate* and the latest measurement for **KCNQ1**, but it is **stale for
-  KCNH2/RYR2/SCN5A**, which were re-measured higher in the 2026-06-01 session.
-- All per-gene figures here are **no-figure / staged-replay diagnostics**
-  (figures skipped, DB-observed PMIDs). Note that the default `gvf gvf-run` now
-  runs the figure layer, so a fresh turnkey run is a *different* (figures-on)
-  configuration than these baselines.
-- Within a session, an "intermediate" score (e.g. SCN5A 74.52% row recall) is
-  superseded by the explicitly-labeled "Final" score (SCN5A 74.71% row recall)
-  later in the same session — the latter is the one to quote.
+Use the **2026-06-12 Current Canonical Baseline** immediately below for all live
+planning. Older dated sections are retained as history and may contain numbers
+that are superseded by the current baseline.
 
 No other doc may restate a recall number; they link here.
+
+## 2026-06-12 Current Canonical Baseline
+
+Fresh run of `scripts/run_recall_suite.py` against the four canonical DBs:
+
+- `results/KCNH2/e2e_working_20260529_full/02_strict/KCNH2.db`
+- `validation_runs/20260517_203904/results/KCNQ1/20260517_204424/KCNQ1.db`
+- `validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/SCN5A.db`
+- `validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938/RYR2.db`
+
+Four-gene aggregate:
+
+| Metric | Matched / Gold | Recall | Gap to 90% |
+| --- | ---: | ---: | ---: |
+| PMIDs | 1274 / 1502 | 84.8% | 78 |
+| Variant rows | 5423 / 6833 | 79.4% | 727 |
+| Unique variants | **2572 / 3010** | **85.4%** | **137** |
+| Patients/carriers | 15369 / 18719 | 82.1% | 1479 |
+| Affected | 9929 / 12475 | 79.6% | 1299 |
+| Unaffected | 3435 / 3951 | 86.9% | 121 |
+
+Rows-mode MAE:
+
+| Count field | Sum abs error / N | MAE |
+| --- | ---: | ---: |
+| Carriers | 2141 / 3485 | **0.614** |
+| Affected | 1547 / 2956 | **0.523** |
+| Unaffected | 323 / 265 | **1.219** |
+
+Per-gene current recall:
+
+| Gene | PMIDs | Variant rows | Unique variants | Patients | Affected | Unaffected | carriers MAE |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| KCNH2 | 230/262 (87.8%) | 820/991 (82.7%) | 441/530 (83.2%) | 2256/2674 (84.4%) | 1404/1635 (85.9%) | 599/749 (80.0%) | 0.860 |
+| KCNQ1 | 285/305 (93.4%) | 1408/1741 (80.9%) | 545/622 (87.6%) | 6472/7793 (83.0%) | 3407/4306 (79.1%) | 1313/1484 (88.5%) | 0.897 |
+| SCN5A | 620/757 (81.9%) | 2429/3128 (77.7%) | 1021/1183 (86.3%) | 5016/6219 (80.7%) | 3832/4876 (78.6%) | 1184/1343 (88.2%) | 0.489 |
+| RYR2 | 139/178 (78.1%) | 766/973 (78.7%) | 565/675 (83.7%) | 1625/2033 (79.9%) | 1286/1658 (77.6%) | 339/375 (90.4%) | 0.323 |
+
+Headline precision is `precision_vs_counted_gold_pmids`, which restricts the
+denominator to extra rows on gold PMIDs that carry at least one extracted count:
+`5423 / (5423 + 1660) = 76.6%`. The looser raw proxy remains useful only as a
+false-positive **upper bound**: `5423 / (5423 + 13642) = 28.4%`.
+
+Why the raw proxy is pessimistic:
+
+- 11,982 / 13,642 (88%) current extra-on-gold-PMID rows have zero patient counts
+  and are ClinVar/PubTator-style linkage attributions rather than count-bearing
+  paper extractions.
+- Only 1,660 extra rows carry any carrier/affected/unaffected count.
+- About 97% are well-formed variants absent from the count-curated gold packet,
+  not malformed output.
+- The scorer now rejects 64 obvious figure/regex-table junk rows before scoring
+  (gene-symbol-as-variant, <=2-character protein notation, residue prose). This
+  removed 41 extra-on-gold-PMID rows, including 8 counted extras, with recall and
+  MAE unchanged.
+- 53 structural/CNV rows are real biology but currently unmatchable by the
+  variant matcher.
+
+Interpretation: recall gains are mostly adding real signal; the 28.4% proxy
+overstates true false positives by roughly 7x.
+
+Current per-layer precision proxy from the scorer. The four canonical DBs now
+have explicit `variant_papers.source_layer` values; the fallback-derived score
+on the `.before_source_layer_20260612_093534` backups matches this block exactly.
+
+| Source layer | Matched DB rows | Extra rows | Counted extra rows | precision_vs_gold_pmids | precision_vs_counted_gold_pmids |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| clinvar | 464 | 2491 | 71 | 15.7% | 86.7% |
+| figure | 236 | 465 | 39 | 33.7% | 85.8% |
+| llm_table | 838 | 477 | 275 | 63.7% | 75.3% |
+| llm_text | 455 | 823 | 168 | 35.6% | 73.0% |
+| mixed | 1949 | 392 | 176 | 83.3% | 91.7% |
+| pubtator | 12 | 159 | 0 | 7.0% | 100.0% |
+| regex_table | 1256 | 3864 | 929 | 24.5% | 57.5% |
+| regex_text | 213 | 4971 | 2 | 4.1% | 99.1% |
+
+Current failure-mode split from `paper_disagreement_report.csv` and
+`failure_taxonomy_report.py`:
+
+| Failure mode | Missing rows | What it means |
+| --- | ---: | --- |
+| source_missing_or_stub | 568 | paper/source never landed or only a stub landed |
+| source_abstract_only | 284 | abstract was available, but mutation tables/body were missing |
+| available_source_underextraction | 248 | usable source exists but extraction missed rows |
+| source_missing_table_bodies | 184 | supplement/full text landed without the relevant tables |
+| partial_underextraction | 82 | some rows extracted, table not exhausted |
+| count_semantics | 36 | variant present but carrier/affected/unaffected semantics wrong |
+
+The next implementation lane is therefore source/table acquisition and binding
+for the top PMIDs, then count semantics. For count semantics, point the
+count-guard/evidence-card validation at `regex_table`: it is the dominant
+count-bearing FP surface (`929` counted extras, 57.5% counted precision), while
+figure rows are comparatively small and clean (`39` counted extras, 85.8%).
+Broad model tweaking is lower yield.
 
 ## 2026-06-05 Session — Supplement Acquisition Landed In Canonical DBs
 
@@ -325,12 +404,11 @@ inputs and KCNH2-only manual recovery.
 - There are unrelated local dirty files in this checkout. Do not assume they are
   part of this cleanup unless they are explicitly staged/committed later.
 
-## Current Scored Baseline
+## Historical Scored Baseline (2026-05-26)
 
 > **Dated 2026-05-26 — four-gene aggregate.** This is the latest *joint* score
-> and the latest measurement for **KCNQ1**. It is **superseded for
-> KCNH2/RYR2/SCN5A** by the 2026-06-01 session above, which re-measured those
-> three genes higher. See "How to read the numbers" at the top of this file.
+> from the 2026-05-26 recovery pass. It is superseded by the 2026-06-11
+> canonical baseline at the top of this file.
 
 Aggregate scored-baseline artifact:
 
@@ -676,7 +754,7 @@ The honest measurement against the then-current DBs is below
 | **Aggregate (4-gene)** | **1133/1502** | **75.4%** | **-14.6** |
 
 This table is retained for before/after context only. The current baseline is
-the post-rollback + DB-PMID recovery score at the top of this file.
+the 2026-06-11 canonical score at the top of this file.
 
 ## Historical High-Yield Missing PMIDs
 
@@ -724,11 +802,13 @@ SQLite rows:
    too few variants, which means the decisive variants are likely in missing
    supplements, table bodies, figures/pedigrees, or publisher content not
    represented in the saved markdown.
-2. **Count semantics and table precision.** High-yield deterministic table
-   recovery now finds many variants, but carrier, affected, and unaffected
-   counts remain well below 90%. Multi-gene consortium tables such as
-   `32893267` need row-level precision and count audits before being used as
-   headline gains.
+2. **Count semantics and regex-table precision.** High-yield deterministic
+   table recovery now finds many variants, but carrier, affected, and unaffected
+   counts remain well below 90%. With explicit source-layer provenance,
+   `regex_table` is the count-bearing FP surface to validate first
+   (`929` counted extras, 57.5% counted precision). Multi-gene consortium
+   tables such as `32893267` need row-level precision and count audits before
+   being used as headline gains.
 3. **Non-Elsevier paywalls still outstanding**:
    - Wiley: **resolved 2026-05-26.** Off-VPN probe with the current
      `WILEY_API_KEY` returned a 635 KB full-text PDF for `10.1002/humu.21126`
@@ -904,14 +984,12 @@ comparison-based scoring). Every DB-mutating step carries an explicit gate.
 
 ### Tier 0 — Measure first (cheap, unblocks judgment on every other lever)
 
-- **P1 — Precision metric + artifact in the scoring harness.** Add
-  `compute_precision_summary` (gold-PMID-restricted: denominator = matched +
-  unmatched-DB-rows-on-gold-PMIDs only; the ~81% of unmatched rows on non-gold
-  PMIDs are unjudgeable). Frame as a false-positive UPPER BOUND, not clean
-  precision (gold is not paper-exhaustive). Emit
-  `unmatched_db_rows_on_gold_pmids.csv` for adjudication; sample the
-  figure-reader's contribution. (`cli/compare_variants.py`,
-  `scripts/run_recall_suite.py`.)
+- **P1 — Precision metric + artifact in the scoring harness: DONE 2026-06-11.**
+  `compute_precision_summary` is gold-PMID-restricted, frames the result as a
+  false-positive upper bound, emits `unmatched_db_rows_on_gold_pmids.csv`, and
+  now reports `counted_extra_on_gold_pmids`,
+  `precision_vs_counted_gold_pmids`, and `by_source_layer` so recovery/linker
+  rows are decomposable without manual sampling.
 
 ### Tier 1 — Cheap code wins, no-gold-safe
 
@@ -921,12 +999,11 @@ comparison-based scoring). Every DB-mutating step carries an explicit gate.
   contextual all-letter gene captions such as `LMNA mutations`. Regression tests
   cover BRCA1 and LMNA off-target leakage plus a no-gene prose caption that must
   remain claimable by the target.
-- **R1a — Precision gate on figure-reader output.** Figures run on every
-  `gvf-run` (`gvf_run.py` passes `--pmc-dir`) and write RAW rows
-  (`extract_figure_variants.py:142-181`, only filter is "has a cdna/protein
-  string"). Add a validate/corroborate gate (position-in-range + well-formed
-  notation; env knob, default validate) so vision noise stops contaminating new
-  DBs. Image-only detection itself is R1b (Tier 3).
+- **R1a — Figure-reader precision gate: mostly done / lower priority.** Figures
+  run on every `gvf-run` and now carry explicit `source_layer='figure'`; the
+  figure bucket is comparatively clean after notation gating (`39` counted
+  extras, 85.8% counted precision). Do not prioritize figure adjudication ahead
+  of `regex_table` count validation.
 - **C1 — Re-bind source discovery to the largest on-disk `_FULL_CONTEXT.md`**
   per PMID (~431 rows, no network), GATED: source-quality + title/PMID match +
   variant-explosion guard (reject suspicious count blow-ups), not just the

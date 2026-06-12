@@ -176,6 +176,12 @@ def ensure_paper(
     return True
 
 
+def ensure_source_layer_column(con: sqlite3.Connection) -> None:
+    columns = {row[1] for row in con.execute("PRAGMA table_info(variant_papers)")}
+    if "source_layer" not in columns:
+        con.execute("ALTER TABLE variant_papers ADD COLUMN source_layer TEXT")
+
+
 def ensure_variant(
     con: sqlite3.Connection, gene: str, cdna: Optional[str], protein: Optional[str]
 ) -> int:
@@ -294,6 +300,7 @@ def main() -> int:
 
     con = sqlite3.connect(str(db_path))
     con.row_factory = sqlite3.Row
+    ensure_source_layer_column(con)
 
     pmids = (
         load_gold_pmids(gold_path)
@@ -320,8 +327,8 @@ def main() -> int:
             ).fetchone():
                 con.execute(
                     """INSERT INTO variant_papers
-                       (variant_id, pmid, source_location, additional_notes, key_quotes)
-                       VALUES (?, ?, 'ClinVar (PMID citation)', ?, ?)""",
+                       (variant_id, pmid, source_location, additional_notes, key_quotes, source_layer)
+                       VALUES (?, ?, 'ClinVar (PMID citation)', ?, ?, 'clinvar')""",
                     (vid, pmid, title, json.dumps([])),
                 )
                 added += 1

@@ -47,6 +47,8 @@ def _make_row(
     pmid: str,
     matched: bool,
     missing_in_excel: bool = False,
+    sqlite_source_layer: str | None = None,
+    sqlite_carriers_total: int | None = None,
 ) -> ComparisonRow:
     """Build a minimal ComparisonRow for precision testing.
 
@@ -64,7 +66,7 @@ def _make_row(
             match_type="none",
             match_score=None,
             excel_carriers_total=None,
-            sqlite_carriers_total=None,
+            sqlite_carriers_total=sqlite_carriers_total,
             carriers_diff=None,
             excel_affected=None,
             sqlite_affected=None,
@@ -73,6 +75,7 @@ def _make_row(
             sqlite_unaffected=None,
             unaffected_diff=None,
             missing_in_excel=True,
+            sqlite_source_layer=sqlite_source_layer,
         )
     return ComparisonRow(
         pmid=pmid,
@@ -92,6 +95,7 @@ def _make_row(
         sqlite_unaffected=None,
         unaffected_diff=None,
         missing_in_sqlite=not matched,
+        sqlite_source_layer=sqlite_source_layer,
     )
 
 
@@ -529,6 +533,74 @@ class TestSQLiteIntrospection:
         assert "carriers_total" in df.columns
         assert "affected_count" in df.columns
 
+    def test_extract_sqlite_data_prefers_explicit_source_layer(self):
+        conn = sqlite3.connect(":memory:")
+        cur = conn.cursor()
+        cur.executescript(
+            """
+            CREATE TABLE variants (
+                variant_id INTEGER PRIMARY KEY,
+                gene_symbol TEXT,
+                cdna_notation TEXT,
+                protein_notation TEXT,
+                genomic_position TEXT
+            );
+            CREATE TABLE variant_papers (
+                variant_id INTEGER,
+                pmid TEXT,
+                source_location TEXT,
+                source_layer TEXT
+            );
+            INSERT INTO variants VALUES (1, 'KCNH2', NULL, 'p.Arg123His', NULL);
+            INSERT INTO variant_papers
+            VALUES (1, '12345678', 'ClinVar (PMID citation)', 'figure');
+            """
+        )
+
+        df = extract_sqlite_data(conn, introspect_sqlite(conn))
+
+        assert len(df) == 1
+        assert df.iloc[0]["source_layer"] == "figure"
+        conn.close()
+
+    def test_extract_sqlite_data_rejects_junk_in_figure_and_regex_table_layers(self):
+        conn = sqlite3.connect(":memory:")
+        cur = conn.cursor()
+        cur.executescript(
+            """
+            CREATE TABLE variants (
+                variant_id INTEGER PRIMARY KEY,
+                gene_symbol TEXT,
+                cdna_notation TEXT,
+                protein_notation TEXT,
+                genomic_position TEXT
+            );
+            CREATE TABLE variant_papers (
+                variant_id INTEGER,
+                pmid TEXT,
+                source_location TEXT,
+                source_layer TEXT
+            );
+            INSERT INTO variants VALUES (1, 'SCN5A', NULL, 'SCN5A', NULL);
+            INSERT INTO variant_papers VALUES (1, '111', 'table regex', 'regex_table');
+            INSERT INTO variants VALUES (2, 'KCNH2', NULL, 'RQ', NULL);
+            INSERT INTO variant_papers VALUES (2, '222', 'figure-reader', 'figure');
+            INSERT INTO variants VALUES (3, 'KCNQ1', NULL, 'D4S6 residue 56', NULL);
+            INSERT INTO variant_papers VALUES (3, '333', 'figure-reader', 'figure');
+            INSERT INTO variants VALUES (4, 'KCNH2', NULL, 'RQ', NULL);
+            INSERT INTO variant_papers VALUES (4, '444', 'scanner text scan', 'regex_text');
+            INSERT INTO variants VALUES (5, 'KCNH2', NULL, 'p.Arg123His', NULL);
+            INSERT INTO variant_papers VALUES (5, '555', 'Supplement Table S4', 'regex_table');
+            """
+        )
+
+        df = extract_sqlite_data(conn, introspect_sqlite(conn))
+
+        assert set(df["pmid"]) == {"444", "555"}
+        assert "regex_text" in set(df["source_layer"])
+        assert "regex_table" in set(df["source_layer"])
+        conn.close()
+
 
 # =============================================================================
 # COMPARISON TESTS
@@ -682,8 +754,57 @@ class TestComparison:
 
         assert precision["matched_db"] == 3
         assert precision["extra_on_gold_pmids"] == 1
+        assert precision["counted_extra_on_gold_pmids"] == 0
         assert precision["precision_vs_gold_pmids"] == 0.75
+        assert precision["precision_vs_counted_gold_pmids"] == 1.0
         assert "note" in precision and "NOT clean precision" in precision["note"]
+
+    def test_precision_summary_decomposes_counted_extras_by_source_layer(self):
+        """Zero-count linker rows and counted extraction rows stay separable."""
+        results = [
+            _make_row(
+                pmid="111",
+                matched=True,
+                sqlite_source_layer="llm_table",
+            ),
+            _make_row(
+                pmid="111",
+                matched=True,
+                sqlite_source_layer="clinvar",
+            ),
+            # Zero-count ClinVar linker row: included in the upper-bound proxy,
+            # excluded from the counted-extra denominator.
+            _make_row(
+                pmid="111",
+                matched=False,
+                missing_in_excel=True,
+                sqlite_source_layer="clinvar",
+            ),
+            # Count-bearing table extraction row: included in both denominators.
+            _make_row(
+                pmid="111",
+                matched=False,
+                missing_in_excel=True,
+                sqlite_source_layer="llm_table",
+                sqlite_carriers_total=4,
+            ),
+        ]
+
+        precision = compute_precision_summary(results)
+
+        assert precision["matched_db"] == 2
+        assert precision["extra_on_gold_pmids"] == 2
+        assert precision["counted_extra_on_gold_pmids"] == 1
+        assert precision["precision_vs_gold_pmids"] == 0.5
+        assert precision["precision_vs_counted_gold_pmids"] == pytest.approx(2 / 3)
+
+        by_layer = precision["by_source_layer"]
+        assert by_layer["clinvar"]["extra_on_gold_pmids"] == 1
+        assert by_layer["clinvar"]["counted_extra_on_gold_pmids"] == 0
+        assert by_layer["clinvar"]["precision_vs_counted_gold_pmids"] == 1.0
+        assert by_layer["llm_table"]["extra_on_gold_pmids"] == 1
+        assert by_layer["llm_table"]["counted_extra_on_gold_pmids"] == 1
+        assert by_layer["llm_table"]["precision_vs_counted_gold_pmids"] == 0.5
 
     def test_precision_summary_non_gold_extras_do_not_change_ratio(self):
         """Adding only non-gold-PMID extra rows leaves precision at 1.0."""
@@ -716,7 +837,9 @@ class TestComparison:
 
         assert precision["matched_db"] == 0
         assert precision["extra_on_gold_pmids"] == 0
+        assert precision["counted_extra_on_gold_pmids"] == 0
         assert precision["precision_vs_gold_pmids"] is None
+        assert precision["precision_vs_counted_gold_pmids"] is None
 
     def test_generate_outputs_emits_precision_and_gold_pmid_csv(self, tmp_path):
         """generate_outputs surfaces precision + the gold-PMID extras CSV."""
@@ -732,7 +855,9 @@ class TestComparison:
 
         assert summary["precision"]["matched_db"] == 3
         assert summary["precision"]["extra_on_gold_pmids"] == 1
+        assert summary["precision"]["counted_extra_on_gold_pmids"] == 0
         assert summary["precision"]["precision_vs_gold_pmids"] == 0.75
+        assert summary["precision"]["precision_vs_counted_gold_pmids"] == 1.0
 
         # Recall/MAE blocks unchanged in shape by the precision addition.
         assert "recall" in summary and "mae" in summary
@@ -744,7 +869,7 @@ class TestComparison:
         assert set(rows["pmid"]) == {"222"}
 
         report = (tmp_path / "report.md").read_text(encoding="utf-8")
-        assert "## Precision (vs gold PMIDs)" in report
+        assert "## Precision (counted extras vs gold PMIDs)" in report
 
 
 # =============================================================================
