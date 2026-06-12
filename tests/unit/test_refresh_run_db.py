@@ -714,6 +714,51 @@ def test_replay_gates_pairing_that_drops_positions(tmp_path, monkeypatch):
     assert len(json.loads(setup["output_file"].read_text())["variants"]) == 10
 
 
+def test_replay_accepts_faithful_re_extraction_over_overcounted_prior(
+    tmp_path, monkeypatch
+):
+    """The 30758498 class: the prior is OVER-counted vs the trusted deterministic
+    TABLE parse. A re-extraction faithful to that table parse is accepted even with
+    far fewer rows than the prior — the table is the structural ground truth, so
+    the prior's excess is droppable. This is the gold-free recovery the safety
+    guard must still allow."""
+    setup = _make_replay_setup(tmp_path, prior_variant_count=18, new_variant_count=6)
+    # Prior: 18 cDNA-only rows (over-counted, unpaired).
+    prior_payload = {
+        "variants": [{"cdna_notation": f"c.{100 + 3 * i}A>G"} for i in range(18)],
+        "extraction_metadata": {"total_variants_found": 18},
+    }
+    setup["output_file"].write_text(json.dumps(prior_payload), encoding="utf-8")
+    # The deterministic TABLE parse found 6 variants at 6 codons (the real table).
+    det_codons = [34, 35, 36, 37, 38, 39]
+    setup["candidate"].deterministic_positions = frozenset(det_codons)
+    # Re-extraction returns those 6 PAIRED, covering 100% of the table -> accept.
+    new_payload = {
+        "variants": [
+            {"cdna_notation": f"c.{3 * c - 2}A>G", "protein_notation": f"p.X{c}Y"}
+            for c in det_codons
+        ],
+        "extraction_metadata": {"total_variants_found": 6},
+    }
+    setup["extraction_result"].extracted_data = new_payload
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+    )
+
+    assert stats["successful"] == 1
+    assert stats["gated"] == 0
+    payload = json.loads(setup["output_file"].read_text())
+    assert len(payload["variants"]) == 6
+    assert all(v.get("protein_notation") for v in payload["variants"])
+
+
 def test_variant_positions_unifies_cdna_and_protein():
     # cDNA implied codon ((nt+2)//3) and protein residue collapse to one position.
     assert refresh_run_db._variant_positions([{"cdna_notation": "c.153C>A"}]) == {51}
