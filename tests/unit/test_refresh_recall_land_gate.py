@@ -89,15 +89,15 @@ def test_mae_regressions_checks_all_three_count_fields():
 
 
 def test_mae_regressions_carriers_tolerance_is_more_generous():
-    # Carriers gets a modestly more generous absolute tolerance (0.12 default) so
+    # Carriers gets a modestly more generous absolute tolerance (0.10 default) so
     # recovering real supplement-table rows is not blocked by a small wiggle.
-    # A +0.10 carriers increase passes (0.60 -> 0.70, within 0.12)...
-    assert _mae_regressions(_summary(carriers=0.60), _summary(carriers=0.70)) == []
-    # ...but the same +0.10 increase on unaffected (stricter 0.05 tol) is flagged.
-    assert _mae_regressions(_summary(unaffected=0.60), _summary(unaffected=0.70)) == [
-        "unaffected 0.600->0.700"
+    # A +0.08 carriers increase passes (0.60 -> 0.68, within 0.10)...
+    assert _mae_regressions(_summary(carriers=0.60), _summary(carriers=0.68)) == []
+    # ...but the same +0.08 increase on unaffected (stricter 0.05 tol) is flagged.
+    assert _mae_regressions(_summary(unaffected=0.60), _summary(unaffected=0.68)) == [
+        "unaffected 0.600->0.680"
     ]
-    # A genuine carriers blow-up (+0.30 > 0.12) is still caught.
+    # A genuine carriers blow-up (+0.30 > 0.10) is still caught.
     assert _mae_regressions(_summary(carriers=0.60), _summary(carriers=0.90)) == [
         "carriers 0.600->0.900"
     ]
@@ -151,6 +151,24 @@ def test_promotion_decision_blocks_mae_regression_even_when_recall_holds():
     )
     assert promote is False
     assert "carriers 0.882->1.274" in msg
+
+
+def test_promotion_decision_blocks_variant_row_regression():
+    # Unique recall held (100 >= 90) and MAE clean, but matched variant ROWS
+    # dropped (4500 < 4600) -> must NOT promote (Codex review guardrail (d)).
+    promote, msg = _promotion_decision(
+        lm=100, bm=90, mae_regressions=[], lr=4500, br=4600
+    )
+    assert promote is False
+    assert "variant-row regression" in msg
+
+
+def test_promotion_decision_skips_row_check_when_not_supplied():
+    # Back-compat: callers that don't pass row recall (br defaults to 0) skip
+    # the row-recall guard entirely.
+    promote, msg = _promotion_decision(lm=100, bm=90, mae_regressions=[])
+    assert promote is True
+    assert msg == ""
 
 
 # --- _env_float robustness (must not crash the module at import) ------------

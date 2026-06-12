@@ -102,6 +102,22 @@ def _uniqv(summary: dict | None) -> tuple[int, int]:
     return (0, 0)
 
 
+def _rows(summary: dict | None) -> tuple[int, int]:
+    """(matched, gold) for variant rows from a run_recall_suite summary.
+
+    Mirrors ``_uniqv`` for the ``variant_rows`` recall block. Used by the land
+    gate so a promotion can't hold unique-variant recall while quietly dropping
+    matched variant ROWS (the per-(pmid, variant) coverage the grant scores).
+    """
+    if not summary:
+        return (0, 0)
+    rec = summary.get("recall") or {}
+    v = rec.get("variant_rows") or summary.get("variant_rows")
+    if isinstance(v, dict):
+        return int(v.get("matched", 0)), int(v.get("gold", v.get("total", 0)))
+    return (0, 0)
+
+
 # --- MAE non-regression guard ----------------------------------------------
 # Promotion requires recall to hold AND rows-mode count accuracy not to regress.
 # A re-extraction can lift unique-variant recall while silently inflating carrier
@@ -147,7 +163,7 @@ _MAE_COV_TOL = _env_float("GVF_LAND_MAE_COV_TOL", 0.10)
 # tolerance still apply, so a genuine count blow-up is still caught. Override per
 # field via GVF_LAND_MAE_ABS_TOL_<CARRIERS|AFFECTED|UNAFFECTED>.
 _MAE_ABS_TOL_BY_FIELD = {
-    "carriers": _env_float("GVF_LAND_MAE_ABS_TOL_CARRIERS", 0.12),
+    "carriers": _env_float("GVF_LAND_MAE_ABS_TOL_CARRIERS", 0.10),
     "affected": _env_float("GVF_LAND_MAE_ABS_TOL_AFFECTED", _MAE_ABS_TOL),
     "unaffected": _env_float("GVF_LAND_MAE_ABS_TOL_UNAFFECTED", _MAE_ABS_TOL),
 }
@@ -202,19 +218,28 @@ def _mae_regressions(before: dict | None, after: dict | None) -> list[str]:
 
 
 def _promotion_decision(
-    lm: int, bm: int, mae_regressions: list[str]
+    lm: int, bm: int, mae_regressions: list[str], lr: int = 0, br: int = 0
 ) -> tuple[bool, str]:
     """Whether a landed DB may replace the canonical one, with the reason if not.
 
-    Promote only if unique-variant recall holds (``lm >= bm``) AND no count
-    field regressed (``mae_regressions`` empty). Returns ``(promote, message)``;
-    ``message`` is the NOT-promoted explanation (empty when promoting). Pure so
-    the land decision is unit-testable without the DB/scoring machinery.
+    Promote only if unique-variant recall holds (``lm >= bm``) AND variant-row
+    recall holds (``lr >= br``) AND no count field regressed (``mae_regressions``
+    empty). The row-recall check (Codex review guardrail) stops a promotion that
+    lifts unique-variant recall while dropping matched variant ROWS; it is
+    skipped when ``br`` is 0 (caller did not supply row recall). Returns
+    ``(promote, message)``; ``message`` is the NOT-promoted explanation (empty
+    when promoting). Pure so the land decision is unit-testable without the
+    DB/scoring machinery.
     """
     if lm < bm:
         return False, (
             f"NOT promoted: landed {lm} < canonical {bm} "
             "(unique-variant regression). Canonical untouched."
+        )
+    if br and lr < br:
+        return False, (
+            f"NOT promoted: landed variant-row recall {lr} < canonical {br} "
+            "(variant-row regression). Canonical untouched."
         )
     if mae_regressions:
         return False, (
@@ -391,9 +416,14 @@ def main() -> int:
         landed = _land(gene, canonical_db, refresh_dir / "staged_extractions", changed)
         landed_summary = _score(gene, landed, gold_dir, work / "score_landed")
         lm, lg = _uniqv(landed_summary)
-        print(f"\nlanded DB unique_variants: {lm}/{lg} (canonical was {bm}/{bg})")
+        lr, _lrg = _rows(landed_summary)
+        br, _brg = _rows(before)
+        print(
+            f"\nlanded DB unique_variants: {lm}/{lg} (canonical was {bm}/{bg}); "
+            f"variant_rows: {lr} (canonical was {br})"
+        )
         promote, msg = _promotion_decision(
-            lm, bm, _mae_regressions(before, landed_summary)
+            lm, bm, _mae_regressions(before, landed_summary), lr=lr, br=br
         )
         if promote:
             backup = canonical_db.parent / f"{gene}.db.before_refresh_recall.db"
