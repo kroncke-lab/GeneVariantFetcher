@@ -107,6 +107,76 @@ count-bearing FP surface (`929` counted extras, 57.5% counted precision), while
 figure rows are comparatively small and clean (`39` counted extras, 85.8%).
 Broad model tweaking is lower yield.
 
+## 2026-06-12 Next Run Plan — Exact-Match Gap Decomposition
+
+Supersedes the "Next Run Plan (2026-05-29)" tiering at the bottom of this file
+(its precision metric, fixed-width gene-scoping, source re-bind/fold, and the
+count-guard wiring are landed). This plan is organized around the **exact-match
+gap to the manual gold curation** = missing gold rows + count-mismatches on
+matched rows. Source: `recall_metrics/verify_20260612/`.
+
+### The gap, decomposed
+
+Missing gold variant rows: **1,410** (6833 gold − 5423 matched). By cause:
+
+| Cause | Rows | Share | Meaning |
+| --- | ---: | ---: | --- |
+| Extraction | ~917 | 65% | Variant is in a paper the DB ALREADY has (≥1 row for that PMID) but was never extracted — supplement/table bodies. |
+| Acquisition | ~426 | 30% | The gold PMID has ZERO rows in the DB — source/supplement never landed. |
+| Matcher | ~67 | 5% | We extracted the variant (same codon position is present in the DB for that PMID) but the notation did not match gold. |
+
+Plus **567 count-mismatches on matched rows** (~10% of matched) — the count-
+exactness gap. Catastrophic study-wide-N reuse is now rare (~15 cases) after the
+guard + dedup; the residual is per-row column-role confusion, consistent with
+unaffected MAE 1.219 being the worst field.
+
+Key reframe: the gap is now **65% extraction, not acquisition** — most missing
+variants are in papers we already hold. (This complements the source-status
+bucket table above, which is a per-PMID source lens on the same 1,410.)
+
+### Ranked levers (biggest exact-match wins first)
+
+1. **Supplement/table-body extraction on already-fetched papers (917 rows — the
+   dominant lever).** These PMIDs are in the DB but their mutation-list tables
+   were not exhausted.
+   - Targeted: the top ~15 extraction-gap PMIDs cover 44% (408 rows): KCNQ1
+     `17192539` (56), KCNQ1 `30758498` (55), KCNQ1 `23631430` (31), SCN5A
+     `15840476` (31), KCNQ1 `19490272` (27), SCN5A `20541041` (26), RYR2
+     `19398665` (25), SCN5A `23631430` (24), SCN5A `21273195` (23), RYR2
+     `27452199` (22), KCNH2 `29650123` (20), KCNH2 `16922724` (19), SCN5A
+     `25163546` (18), SCN5A `24631775` (16), SCN5A `29325976` (15). Re-extract
+     via supplement-fold + `table_router`; diagnose why each table dropped.
+   - General: the long tail is ~210 PMIDs — a table-parser robustness fix
+     (multi-row mutation lists in fixed-width / markdown / Word supplements).
+     This is the `regex_table` layer, which is ALSO the count-bearing FP surface
+     (57.5% counted precision), so fixing its parsing helps recall AND precision.
+
+2. **Count-role attribution for matched rows (567 mismatches; unaffected MAE
+   1.219).** Not outlier guards (study-wide-N reuse is ~gone) but column-role
+   classification: affected/symptomatic/proband/case vs unaffected/asymptomatic/
+   control vs study total. Point the count classifier / evidence-card validator
+   at `regex_table`.
+
+3. **Acquisition of the 426 absent-PMID rows.** SCN5A dominates (96 gold PMIDs
+   entirely absent from its DB). Wiley/Springer supplements + remaining paywalls;
+   restore the Springer key; Wiley supplement via the EZproxy route. Access-gated.
+
+4. **Matcher notation lanes (67 rows; cheap — we already extracted these, no
+   acquisition/extraction needed).** Classes: indel `GxxxDel`/`LxxxIns`/`c.x_yDel`
+   (27); substitution with the same codon position but unmatched, likely isoform
+   numbering offset or 1↔3-letter (27); compound `A + B` gold rows (8);
+   frameshift/nonsense (3); splice/IVS (2). Extend `cli/compare_variants.py`.
+
+5. **Structural/CNV matching lane (53 rows).** Exon deletions, breakpoints,
+   translocations — real biology, currently unmatchable. Add a structural lane or
+   explicitly exclude from the precision denominator.
+
+### Operating rules (unchanged)
+
+Every DB-mutating step stays acceptance-gated (recall hold + MAE non-regression,
+now enforced in `refresh_recall.py`); promote only general parser/acquisition
+fixes; keep no-gold QC working for new genes.
+
 ## 2026-06-05 Session — Supplement Acquisition Landed In Canonical DBs
 
 Recovered Elsevier `mmc` supplement mutation tables (the full-text API fetches
