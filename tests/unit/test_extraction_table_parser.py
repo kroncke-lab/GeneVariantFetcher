@@ -1278,3 +1278,49 @@ def test_backfill_is_noop_when_no_table_reconstructed():
     data = {"variants": [{"cdna_notation": "c.1A>T", "protein_notation": None}]}
     extractor._backfill_variant_notation_pairs(data)
     assert data["variants"][0]["protein_notation"] is None
+
+
+def test_pdf_linearized_reconstruction_generalizes_to_noncardiac_table():
+    # Generalization guard against overfitting: the reconstruction must fire on a
+    # generic supplement table with NO cardiac-specific columns (no Syncope, QTc,
+    # or CA/VF) — only generic Mutation/Region/N/Cases/Affected — so it works on
+    # genes we have not manually curated. The detector keys off generic
+    # variant + count column names, not the LQTS eTable it was first built on.
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Supplementary Table 1. BRCA1 pathogenic variants
+Mutation
+Region
+N
+Cases
+(n)
+Affected
+(n)
+c.68A>G  p.Glu23Gly
+RING
+3
+2
+2
+c.181T>G  p.Cys61Gly
+BRCT
+4
+3
+3
+c.5123C>A  p.Ala1708Glu
+BRCT
+6
+5
+5
+"""
+    blocks = extractor._reconstruct_pdf_linearized_tables(text)
+    assert len(blocks) == 1
+    block = blocks[0]
+    # cDNA and Protein columns were reconstructed for the generic variants.
+    assert "| c.68A>G | p.Glu23Gly |" in block
+    assert "| c.181T>G | p.Cys61Gly |" in block
+    assert "| c.5123C>A | p.Ala1708Glu |" in block
+    # And the pairing map (used for the post-extraction backfill) carries them.
+    extractor._augment_pdf_linearized_tables(text)
+    pairs = extractor._linearized_variant_pairs
+    assert pairs.get("c.68a>g") == "p.Glu23Gly"
+    assert pairs.get("c.5123c>a") == "p.Ala1708Glu"

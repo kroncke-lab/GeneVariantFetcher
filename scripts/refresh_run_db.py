@@ -21,6 +21,7 @@ import csv
 import hashlib
 import json
 import logging
+import os
 import re
 import shutil
 import subprocess
@@ -417,28 +418,90 @@ def discover_source_files(harvest_dir: Path) -> dict[str, Path]:
     return sources
 
 
-def _dedup_count(variants: list[dict[str, Any]]) -> int:
-    keys = {
-        (
+# Fraction of the prior extraction's distinct codon positions a re-extraction
+# must still cover to be accepted when it has FEWER total rows. This is the
+# no-gold safety net: it rejects a re-extraction that pairs a few rows while
+# silently dropping real variants, on genes that have no manually curated answer
+# (the cardiac-gene --land path catches this with a gold rescore; new genes do
+# not). Intrinsic signal only — no gene/PMID/gold reference.
+_POSITION_COVERAGE_TOL = float(os.getenv("GVF_REPLAY_POSITION_COVERAGE_TOL", "0.85"))
+
+
+def _dedup_variants(variants: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Variants deduplicated by (cdna, protein, genomic) identity, first kept."""
+    seen: set[tuple[str, str, str]] = set()
+    out: list[dict[str, Any]] = []
+    for v in variants:
+        if not (
+            v.get("cdna_notation")
+            or v.get("protein_notation")
+            or v.get("genomic_position")
+        ):
+            continue
+        key = (
             str(v.get("cdna_notation") or "").lower(),
             str(v.get("protein_notation") or "").lower(),
             str(v.get("genomic_position") or "").lower(),
         )
-        for v in variants
-        if v.get("cdna_notation")
-        or v.get("protein_notation")
-        or v.get("genomic_position")
-    }
-    return len(keys)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(v)
+    return out
 
 
-def deterministic_variant_count(
+def _dedup_count(variants: list[dict[str, Any]]) -> int:
+    return len(_dedup_variants(variants))
+
+
+def _variant_positions(variants: list) -> set[int]:
+    """Distinct codon positions across a variant list, unifying cDNA + protein.
+
+    A protein residue number and a cDNA implied codon ((nt + 2) // 3) for the
+    same variant collapse to one position, so a cDNA-only row and a protein-only
+    row for one variant are counted once. Gene- and gold-agnostic; used to detect
+    recall loss (dropped positions) and quality lift (re-pairing) without a gold
+    standard, so it generalizes to genes with no curated answer.
+    """
+    positions: set[int] = set()
+    for variant in variants or []:
+        if not isinstance(variant, dict):
+            continue
+        protein = str(variant.get("protein_notation") or "")
+        pm = re.search(r"\d{1,5}", protein)
+        if pm:
+            positions.add(int(pm.group(0)))
+        cdna = str(variant.get("cdna_notation") or "")
+        cm = re.search(r"\d+", cdna)
+        if cm:
+            positions.add((int(cm.group(0)) + 2) // 3)
+    return positions
+
+
+def _position_coverage(new_variants: list, prior_variants: list) -> float:
+    """Fraction of the prior extraction's distinct positions still present.
+
+    1.0 when the prior had no positional variants (nothing to lose). The no-gold
+    analogue of the gold variant-row recall guard.
+    """
+    prior = _variant_positions(prior_variants)
+    if not prior:
+        return 1.0
+    return len(_variant_positions(new_variants) & prior) / len(prior)
+
+
+def deterministic_variant_list(
     extractor: ExpertExtractor,
     source_file: Path,
     gene: str,
-) -> int:
+) -> list[dict[str, Any]]:
+    """Deduplicated deterministic-parser variants for a source (cheap, no LLM).
+
+    Proxy for what a re-extraction would yield; used by candidate selection to
+    detect both a count lift and a notation-pairing (quality) lift.
+    """
     if not is_usable_fulltext_source(source_file):
-        return 0
+        return []
     text = source_file.read_text(encoding="utf-8", errors="replace")
     text = extractor._augment_pdf_linearized_tables(text)
     variants: list[dict[str, Any]] = []
@@ -455,7 +518,15 @@ def deterministic_variant_count(
         )
     variants.extend(fixed_width_variants)
     variants.extend(extractor._parse_vertical_gene_table_variants(text, gene))
-    return _dedup_count(variants)
+    return _dedup_variants(variants)
+
+
+def deterministic_variant_count(
+    extractor: ExpertExtractor,
+    source_file: Path,
+    gene: str,
+) -> int:
+    return len(deterministic_variant_list(extractor, source_file, gene))
 
 
 def select_replay_candidates(
@@ -484,7 +555,8 @@ def select_replay_candidates(
         data = _json_load(output_file) if output_file.exists() else {}
         metadata = data.get("extraction_metadata") or {}
         current_count = _variant_count(data)
-        deterministic_count = deterministic_variant_count(extractor, source_file, gene)
+        det_variants = deterministic_variant_list(extractor, source_file, gene)
+        deterministic_count = len(det_variants)
 
         reasons: list[str] = []
         if not output_file.exists():
@@ -531,6 +603,24 @@ def select_replay_candidates(
                 else "deterministic_parser_absolute_lift"
             )
             reasons.append(f"{reason}:{deterministic_count}>{current_count}")
+
+        # Quality lift: the deterministic parse improves notation pairing while
+        # still covering the current extraction's positions, even when it does
+        # NOT raise the raw count (a clean paired table replacing a stale
+        # over-counted cDNA-only extraction — the count-only selector misses it).
+        # Gold/gene-agnostic.
+        current_variants_list = data.get("variants") or []
+        det_quality = _variant_quality_score(det_variants)
+        current_quality = _variant_quality_score(current_variants_list)
+        if (
+            deterministic_count >= min_deterministic_variants
+            and det_quality > current_quality
+            and _position_coverage(det_variants, current_variants_list)
+            >= _POSITION_COVERAGE_TOL
+        ):
+            reasons.append(
+                f"deterministic_quality_lift:{det_quality}>{current_quality}"
+            )
 
         if reasons:
             candidates.append(
@@ -674,11 +764,20 @@ def replay_candidates(
             new_quality = _variant_quality_score(new_variants)
             prior_quality = _backup_quality_score(backup_file)
             quality_held = prior_quality is not None and new_quality >= prior_quality
+            # Position-coverage guard (no-gold safety net): a re-extraction with
+            # fewer total rows may bypass the count gate ONLY if it also keeps the
+            # prior's distinct variant positions. Pairing gains must not mask
+            # silently dropped variants — this is what protects genes that have no
+            # gold rescore to catch a lossy re-extraction.
+            coverage_held = (
+                _position_coverage(new_variants, _backup_variants(backup_file))
+                >= _POSITION_COVERAGE_TOL
+            )
             if (
                 gate_regressions
                 and prior_variant_count is not None
                 and new_variant_count < prior_variant_count
-                and not quality_held
+                and not (quality_held and coverage_held)
             ):
                 gated += 1
                 failed_pmids.append(candidate.pmid)
@@ -794,17 +893,20 @@ def _backup_variant_count(backup_file: Path) -> Optional[int]:
 
 
 def _variant_quality_score(variants: list) -> int:
-    """Quality-weighted variant count: a variant carrying BOTH a cDNA and a
-    protein notation is directly gold-matchable, so it counts double.
+    """Quality-weighted DISTINCT-variant score: a variant carrying BOTH a cDNA and
+    a protein notation is directly gold-matchable, so it counts double.
 
-    This keeps a stale, over-counted cDNA-only extraction (e.g. PDF-table
-    fragments) from out-voting a cleaner paired-notation re-extraction in the
-    regression gate. Pure internal-consistency signal; no gold standard required.
+    Exact-duplicate rows are collapsed first (``_dedup_variants``), so a stale,
+    over-counted cDNA-only extraction (duplicate PDF-table fragments) cannot
+    out-vote a cleaner paired re-extraction — deduping is what makes pairing
+    genuinely raise the score rather than tie on raw row count. Pure
+    internal-consistency signal; no gold standard required, so it generalizes to
+    genes with no curated answer.
     """
     score = 0
-    for variant in variants or []:
-        if not isinstance(variant, dict):
-            continue
+    for variant in _dedup_variants(
+        [v for v in (variants or []) if isinstance(v, dict)]
+    ):
         cdna = (variant.get("cdna_notation") or "").strip()
         protein = (variant.get("protein_notation") or "").strip()
         score += 2 if (cdna and protein) else 1
@@ -831,6 +933,23 @@ def _backup_quality_score(backup_file: Path) -> Optional[int]:
     if not isinstance(variants, list) or not variants:
         return None
     return _variant_quality_score(variants)
+
+
+def _backup_variants(backup_file: Path) -> list[dict[str, Any]]:
+    """Variant list from the backup extraction JSON (empty if absent/unreadable).
+
+    Used for the gate's position-coverage check against the prior extraction.
+    """
+    if not backup_file.exists():
+        return []
+    try:
+        data = json.loads(backup_file.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    if not isinstance(data, dict):
+        return []
+    variants = data.get("variants")
+    return variants if isinstance(variants, list) else []
 
 
 def rebuild_db(

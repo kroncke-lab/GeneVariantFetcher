@@ -237,7 +237,9 @@ def test_selects_large_absolute_deterministic_lift_even_below_ratio(
         encoding="utf-8",
     )
     monkeypatch.setattr(
-        refresh_run_db, "deterministic_variant_count", lambda *_args: 412
+        refresh_run_db,
+        "deterministic_variant_list",
+        lambda *_args: [{"cdna_notation": f"c.{i}A>G"} for i in range(412)],
     )
 
     candidates = select_replay_candidates(
@@ -637,17 +639,20 @@ def test_replay_accepts_fewer_but_paired_over_cdna_only_prior(tmp_path, monkeypa
     """A cleaner paired (cDNA+protein) re-extraction must not be regression-gated
     by a stale, over-counted cDNA-only prior, even with fewer total rows."""
     setup = _make_replay_setup(tmp_path, prior_variant_count=10, new_variant_count=6)
-    # Prior: 10 cDNA-only fragments (unpaired) -> quality score 10.
+    # Prior: 10 rows over 6 distinct codons (4 are exact duplicates — the stale
+    # over-count) -> count 10, quality 10, 6 distinct positions.
+    base = [100, 103, 106, 109, 112, 115]  # codons 34..39
     prior_payload = {
-        "variants": [{"cdna_notation": f"c.{100 + i}A>G"} for i in range(10)],
+        "variants": [{"cdna_notation": f"c.{n}A>G"} for n in base + base[:4]],
         "extraction_metadata": {"total_variants_found": 10},
     }
     setup["output_file"].write_text(json.dumps(prior_payload), encoding="utf-8")
-    # New: 6 paired variants -> quality score 12 (>= prior 10), fewer total rows.
+    # New: the same 6 distinct variants, now PAIRED -> count 6, quality 12, and it
+    # covers all 6 prior positions (coverage 1.0), so it is a clean quality lift.
     new_payload = {
         "variants": [
-            {"cdna_notation": f"c.{100 + i}A>G", "protein_notation": f"p.X{i}Y"}
-            for i in range(6)
+            {"cdna_notation": f"c.{n}A>G", "protein_notation": f"p.X{(n + 2) // 3}Y"}
+            for n in base
         ],
         "extraction_metadata": {"total_variants_found": 6},
     }
@@ -669,6 +674,115 @@ def test_replay_accepts_fewer_but_paired_over_cdna_only_prior(tmp_path, monkeypa
     payload = json.loads(setup["output_file"].read_text())
     assert len(payload["variants"]) == 6
     assert all(v.get("protein_notation") for v in payload["variants"])
+
+
+def test_replay_gates_pairing_that_drops_positions(tmp_path, monkeypatch):
+    """No-gold safety net: a re-extraction that pairs rows but DROPS distinct
+    positions is gated even when its quality score held — pairing must not mask a
+    recall loss on a gene with no gold rescore to catch it."""
+    setup = _make_replay_setup(tmp_path, prior_variant_count=10, new_variant_count=6)
+    # Prior: 10 cDNA-only at 10 distinct codons.
+    prior_payload = {
+        "variants": [{"cdna_notation": f"c.{100 + 3 * i}A>G"} for i in range(10)],
+        "extraction_metadata": {"total_variants_found": 10},
+    }
+    setup["output_file"].write_text(json.dumps(prior_payload), encoding="utf-8")
+    # New: 6 PAIRED rows (quality 12 >= prior 10) but only 4 distinct codons
+    # (2 duplicated) -> covers 4/10 = 40% of prior positions, below the 85% gate.
+    new_payload = {
+        "variants": [
+            {"cdna_notation": f"c.{n}A>G", "protein_notation": f"p.X{(n + 2) // 3}Y"}
+            for n in (100, 103, 106, 109, 100, 103)
+        ],
+        "extraction_metadata": {"total_variants_found": 6},
+    }
+    setup["extraction_result"].extracted_data = new_payload
+    _install_stub_extractor(monkeypatch, setup["extraction_result"])
+
+    stats = replay_candidates(
+        candidates=[setup["candidate"]],
+        gene=setup["gene"],
+        harvest_dir=setup["harvest_dir"],
+        backup_dir=setup["backup_dir"],
+        tier_threshold=0,
+        dry_run=False,
+    )
+
+    assert stats["gated"] == 1
+    assert stats["successful"] == 0
+    # The lossy paired re-extraction is rejected; the prior (10) is preserved.
+    assert len(json.loads(setup["output_file"].read_text())["variants"]) == 10
+
+
+def test_variant_positions_unifies_cdna_and_protein():
+    # cDNA implied codon ((nt+2)//3) and protein residue collapse to one position.
+    assert refresh_run_db._variant_positions([{"cdna_notation": "c.153C>A"}]) == {51}
+    assert refresh_run_db._variant_positions([{"protein_notation": "p.Y51X"}]) == {51}
+    assert refresh_run_db._variant_positions(
+        [{"cdna_notation": "c.153C>A", "protein_notation": "p.Tyr51Ter"}]
+    ) == {51}
+
+
+def test_position_coverage_detects_dropped_variants():
+    prior = [{"protein_notation": f"p.X{r}Y"} for r in (10, 20, 30, 40)]
+    full = [{"protein_notation": f"p.X{r}Z"} for r in (10, 20, 30, 40)]
+    half = [{"protein_notation": f"p.X{r}Z"} for r in (10, 20)]
+    assert refresh_run_db._position_coverage(full, prior) == 1.0
+    assert refresh_run_db._position_coverage(half, prior) == 0.5
+    assert refresh_run_db._position_coverage([], []) == 1.0  # nothing to lose
+
+
+def test_selects_quality_lift_without_count_lift(tmp_path, monkeypatch):
+    """The stale-over-count case: the deterministic parse has FEWER rows than the
+    current extraction but better pairing while covering its positions -> selected
+    by the quality-lift trigger that the count-only selector would miss."""
+    harvest_dir = tmp_path / "pmc_fulltext"
+    extraction_dir = tmp_path / "extractions"
+    harvest_dir.mkdir()
+    extraction_dir.mkdir()
+    pmid = "30758498"
+    (harvest_dir / f"{pmid}_FULL_CONTEXT.md").write_text(
+        _long_fulltext("# MAIN TEXT\n\nKCNQ1 variant table\n"), encoding="utf-8"
+    )
+    base = [100, 103, 106, 109, 112, 115]  # 6 distinct codons
+    # Current DB: 12 cDNA-only rows over those 6 codons (over-counted, quality 6).
+    (extraction_dir / f"KCNQ1_PMID_{pmid}.json").write_text(
+        json.dumps(
+            {
+                "variants": [{"cdna_notation": f"c.{n}A>G"} for n in base + base],
+                "extraction_metadata": {"total_variants_found": 12},
+            }
+        ),
+        encoding="utf-8",
+    )
+    # Deterministic parse: 6 PAIRED rows over the same 6 codons (quality 12, fewer
+    # rows) -> no count lift, but a clean quality lift covering all positions.
+    monkeypatch.setattr(
+        refresh_run_db,
+        "deterministic_variant_list",
+        lambda *_args: [
+            {"cdna_notation": f"c.{n}A>G", "protein_notation": f"p.X{(n + 2) // 3}Y"}
+            for n in base
+        ],
+    )
+
+    candidates = select_replay_candidates(
+        gene="KCNQ1",
+        harvest_dir=harvest_dir,
+        extraction_dir=extraction_dir,
+        min_deterministic_variants=5,
+        min_deterministic_lift=5,
+        deterministic_lift_ratio=1.2,
+        include_source_newer=False,
+        replay_missing_fingerprint=False,
+        replay_unbound_source=False,
+    )
+
+    assert [c.pmid for c in candidates] == [pmid]
+    reasons = candidates[0].reasons
+    assert any(r.startswith("deterministic_quality_lift") for r in reasons)
+    # Raw-count lift must NOT fire (6 deterministic < 12 current).
+    assert not any(r.startswith("deterministic_parser_lift") for r in reasons)
 
 
 def test_replay_gates_regression_when_prior_count_is_metadata_only(
