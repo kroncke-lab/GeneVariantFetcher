@@ -17,7 +17,9 @@ No other doc may restate a recall number; they link here.
 
 Fresh run of `scripts/run_recall_suite.py` against the four canonical DBs after
 the 2026-06-12 PDF-linearized table reconstruction + iter-2 quality-aware
-gate/selector + targeted KCNQ1 land (`scripts/targeted_land.py`, PMID 30758498):
+gate/selector + targeted lands of all four genes (`scripts/targeted_land.py`;
+KCNQ1 30758498 is the headline win, KCNH2/SCN5A/RYR2 each found 1-2 candidates
+with marginal/held recall — promoted as cleaner, non-regressive re-extractions):
 
 - `results/KCNH2/e2e_working_20260529_full/02_strict/KCNH2.db`
 - `validation_runs/20260517_203904/results/KCNQ1/20260517_204424/KCNQ1.db`
@@ -29,18 +31,18 @@ Four-gene aggregate:
 | Metric | Matched / Gold | Recall | Gap to 90% |
 | --- | ---: | ---: | ---: |
 | PMIDs | 1274 / 1502 | 84.8% | 78 |
-| Variant rows | 5514 / 6833 | 80.7% | 636 |
-| Unique variants | **2590 / 3010** | **86.0%** | **119** |
-| Patients/carriers | 15892 / 18719 | 84.9% | 955 |
-| Affected | 10431 / 12475 | 83.6% | 797 |
+| Variant rows | 5518 / 6833 | 80.8% | 632 |
+| Unique variants | **2591 / 3010** | **86.1%** | **118** |
+| Patients/carriers | 15896 / 18719 | 84.9% | 951 |
+| Affected | 10435 / 12475 | 83.6% | 793 |
 | Unaffected | 3441 / 3951 | 87.1% | 115 |
 
 Rows-mode MAE:
 
 | Count field | Sum abs error / N | MAE |
 | --- | ---: | ---: |
-| Carriers | 2286 / 3608 | **0.634** |
-| Affected | 1534 / 3000 | **0.511** |
+| Carriers | 2287 / 3718 | **0.615** |
+| Affected | 1535 / 3110 | **0.494** |
 | Unaffected | 323 / 271 | **1.192** |
 
 Per-gene current recall:
@@ -49,20 +51,20 @@ Per-gene current recall:
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | KCNH2 | 230/262 (87.8%) | 820/991 (82.7%) | 441/530 (83.2%) | 2256/2674 (84.4%) | 1404/1635 (85.9%) | 599/749 (80.0%) | 0.860 |
 | KCNQ1 | 285/305 (93.4%) | 1499/1741 (86.1%) | 563/622 (**90.5%**) | 6995/7793 (89.8%) | 3909/4306 (90.8%) | 1319/1484 (88.9%) | 0.935 |
-| SCN5A | 620/757 (81.9%) | 2429/3128 (77.7%) | 1021/1183 (86.3%) | 5016/6219 (80.7%) | 3832/4876 (78.6%) | 1184/1343 (88.2%) | 0.489 |
+| SCN5A | 620/757 (81.9%) | 2433/3128 (77.8%) | 1022/1183 (86.4%) | 5020/6219 (80.7%) | 3836/4876 (78.7%) | 1184/1343 (88.2%) | 0.454 |
 | RYR2 | 139/178 (78.1%) | 766/973 (78.7%) | 565/675 (83.7%) | 1625/2033 (79.9%) | 1286/1658 (77.6%) | 339/375 (90.4%) | 0.323 |
 
 Headline precision is `precision_vs_counted_gold_pmids`, which restricts the
 denominator to extra rows on gold PMIDs that carry at least one extracted count:
-`5514 / (5514 + 1631) = 77.2%`. The looser raw proxy remains useful only as a
-false-positive **upper bound**: `5514 / (5514 + 13494) = 29.0%`.
+`5518 / (5518 + 1631) = 77.2%`. The looser raw proxy remains useful only as a
+false-positive **upper bound**: `5518 / (5518 + 13021) = 29.8%`.
 
 Why the raw proxy is pessimistic:
 
-- 11,975 / 13,635 (88%) current extra-on-gold-PMID rows have zero patient counts
+- 11,390 / 13,021 (87%) current extra-on-gold-PMID rows have zero patient counts
   and are ClinVar/PubTator-style linkage attributions rather than count-bearing
   paper extractions.
-- Only 1,660 extra rows carry any carrier/affected/unaffected count.
+- Only 1,631 extra rows carry any carrier/affected/unaffected count.
 - About 97% are well-formed variants absent from the count-curated gold packet,
   not malformed output.
 - The scorer now rejects 64 obvious figure/regex-table junk rows before scoring

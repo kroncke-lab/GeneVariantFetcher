@@ -29,18 +29,30 @@ Elsevier insttoken.
 | 2026-06-06 | refresh_recall re-extract (recall up, MAE regressed) | 2572/3010 (85.4%) | 5423/6833 (79.4%) | 1.274 |
 | **2026-06-06** | **Duplicate-penetrance idempotency fix** | **2572/3010 (85.4%)** | **5423/6833 (79.4%)** | **0.614** |
 | **2026-06-12** | **PDF-linearized table reconstruction + iter-2 quality gate + targeted KCNQ1 land** | **2590/3010 (86.0%)** | **5514/6833 (80.7%)** | **0.634** |
+| **2026-06-12** | **+ targeted lands KCNH2/SCN5A/RYR2 (all four genes)** | **2591/3010 (86.1%)** | **5518/6833 (80.8%)** | **0.615** |
 | — | **Target** | **2709/3010 (90.0%)** | — | → 0 |
 
-Gap to the 90% unique-variant target: **119** variants (was 1126 at the 62.6%
+Gap to the 90% unique-variant target: **118** variants (was 1126 at the 62.6%
 starting point; ~89% of the original gap has been closed).
 
 Per-gene unique-variant recall, latest canonical (2026-06-12):
-KCNH2 **83.2%**, KCNQ1 **90.5%** (crossed the 90% target), SCN5A **86.3%**,
+KCNH2 **83.2%**, KCNQ1 **90.5%** (crossed the 90% target), SCN5A **86.4%**,
 RYR2 **83.7%**.
 
 ---
 
 ## Timeline (newest first)
+
+### 2026-06-12 — Targeted lands extended to the remaining three genes
+After the KCNQ1 headline land, `scripts/targeted_land.py` was run on the other
+three canonical genes. SCN5A PMID 19716085 promoted a cleaner re-extraction
+(+1 unique variant, +4 variant rows; SCN5A **86.3%→86.4%**, and its carriers MAE
+improved **0.489→0.454** as over-counted rows were replaced). KCNH2 PMID 32681117
+and RYR2 PMID 24136861 each found a candidate whose re-extraction *held* recall —
+promoted as cleaner, non-regressive (gold-gated, no recall/row/MAE regression).
+Four-gene aggregate **86.0%→86.1%** unique (2591/3010), rows **80.7%→80.8%**
+(5518/6833), carriers MAE **0.634→0.615**. Each gene backed up as
+`<GENE>.db.before_targeted_land.db` before promotion.
 
 ### 2026-06-12 — PDF-linearized table reconstruction → iter-2 quality gate/selector → fast targeted land
 PDF supplement tables that fold in linearized (one cell per line) are now
