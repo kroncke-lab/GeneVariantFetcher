@@ -28,17 +28,39 @@ Elsevier insttoken.
 | **2026-06-05** | **Elsevier mmc supplement acquisition (landed)** | **2523/3010 (83.8%)** | **5350/6833 (78.3%)** | **0.882** |
 | 2026-06-06 | refresh_recall re-extract (recall up, MAE regressed) | 2572/3010 (85.4%) | 5423/6833 (79.4%) | 1.274 |
 | **2026-06-06** | **Duplicate-penetrance idempotency fix** | **2572/3010 (85.4%)** | **5423/6833 (79.4%)** | **0.614** |
+| **2026-06-12** | **PDF-linearized table reconstruction + iter-2 quality gate + targeted KCNQ1 land** | **2590/3010 (86.0%)** | **5514/6833 (80.7%)** | **0.634** |
 | — | **Target** | **2709/3010 (90.0%)** | — | → 0 |
 
-Gap to the 90% unique-variant target: **137** variants (was 1126 at the 62.6%
-starting point; ~83% of the original gap has been closed).
+Gap to the 90% unique-variant target: **119** variants (was 1126 at the 62.6%
+starting point; ~89% of the original gap has been closed).
 
 Per-gene unique-variant recall, latest canonical (2026-06-12):
-KCNH2 **83.2%**, KCNQ1 **87.6%**, SCN5A **86.3%**, RYR2 **83.7%**.
+KCNH2 **83.2%**, KCNQ1 **90.5%** (crossed the 90% target), SCN5A **86.3%**,
+RYR2 **83.7%**.
 
 ---
 
 ## Timeline (newest first)
+
+### 2026-06-12 — PDF-linearized table reconstruction → iter-2 quality gate/selector → fast targeted land
+PDF supplement tables that fold in linearized (one cell per line) are now
+reconstructed into delimited rows before extraction (`ExpertExtractor.
+_augment_pdf_linearized_tables`), with a post-extraction cDNA↔protein backfill.
+The replay gate/selector were generalized to be **no-gold-safe**: the gene-scoped
+deterministic table parse is the structural baseline — a fewer-row re-extraction
+is accepted only if it does not lose paired variants and covers ≥85% of the
+deterministic parse's positions (over-extracted prior → drop the excess; lossy
+under-extraction → reject). Root insight: the blocker was never that extraction
+dropped protein — the `refresh_run_db` count gate preferred a stale over-counted
+cDNA-only extraction (KCNQ1 30758498: 182 rows, recovers 34/183 gold) over a
+clean paired one (100 rows, recovers 85/183). Validated cross-gene (fires on
+KCNQ1 + an untuned RYR2 paper; declines SCN5A 0/120). `scripts/targeted_land.py`
+lands a single paper's win in **minutes not ~1h** (scan → bridge only candidates
+→ re-extract+gate → surgical layer-preserving inject → gold-gated promote).
+Landed KCNQ1 PMID 30758498 → **KCNQ1 87.9%→90.5% unique** (crosses target),
+aggregate **85.5%→86.0% / rows 79.9%→80.7%**, gated (recall+row-recall+MAE),
+backup `KCNQ1.db.before_targeted_land.db`. 787 unit tests incl. a non-cardiac
+generalization test. Codex (gpt-5.5, read-only) reviewed the gate/selector design.
 
 ### 2026-06-12 — Source-layer backfill + cheap notation junk gate
 Added a shared source-layer classifier, explicit `variant_papers.source_layer`
