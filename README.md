@@ -375,6 +375,7 @@ OUTPUT: SQLite database + JSON summaries + workflow logs
 | `functional_data` | Functional studies | summary, assays (JSON) |
 | `phenotypes` | Clinical phenotypes | patient_count, phenotype_description |
 | `variant_papers` | Variant↔paper links | source_location, key_quotes (JSON) |
+| `fact_provenance` | Exact evidence pointers for extracted facts | fact_type, fact_value, source_table, source_row, source_column, evidence_quote |
 
 See [docs/SQLITE_MIGRATION_GUIDE.md](docs/SQLITE_MIGRATION_GUIDE.md) for full schema details.
 

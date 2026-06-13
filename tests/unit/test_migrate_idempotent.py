@@ -39,6 +39,10 @@ def _age_row_count(conn):
     return conn.execute("SELECT COUNT(*) FROM age_dependent_penetrance").fetchone()[0]
 
 
+def _fact_count(conn):
+    return conn.execute("SELECT COUNT(*) FROM fact_provenance").fetchone()[0]
+
+
 def test_insert_variant_data_collapses_exact_duplicate_penetrance(tmp_path):
     """One variant extracted from 4 identical table cells -> a single 25, not 100."""
     conn = create_database_schema(str(tmp_path / "t.db"))
@@ -97,6 +101,93 @@ def test_insert_variant_data_writes_source_layer(tmp_path):
         """
     ).fetchall()
     assert rows == [("p.Ala341Val", "pubtator"), ("p.Val254Met", "llm_table")]
+    conn.close()
+
+
+def test_insert_variant_data_writes_standard_fact_provenance_idempotently(tmp_path):
+    """Every standard fact gets source pointers, and replay does not duplicate them."""
+    conn = create_database_schema(str(tmp_path / "t.db"))
+    cur = conn.cursor()
+    cur.execute("INSERT OR IGNORE INTO papers (pmid) VALUES ('32893267')")
+    variant = {
+        "gene_symbol": "KCNQ1",
+        "protein_notation": "p.Val254Met",
+        "source_location": "Table S1, row 20",
+        "key_quotes": ["p.Val254Met had 3 carriers: 2 affected and 1 unaffected."],
+        "patients": {"count": 3},
+        "penetrance_data": {
+            "total_carriers_observed": 3,
+            "affected_count": 2,
+            "unaffected_count": 1,
+        },
+        "count_provenance": {
+            "carriers_column_label": "N carriers",
+            "carriers_count_type": "per_variant_carrier",
+            "affected_column_label": "Affected",
+            "affected_count_type": "per_variant_carrier",
+            "unaffected_column_label": "Unaffected",
+            "unaffected_count_type": "per_variant_carrier",
+        },
+        "individual_records": [
+            {
+                "individual_id": "P1",
+                "affected_status": "affected",
+                "evidence_sentence": "P1 carried p.Val254Met and was affected.",
+            }
+        ],
+        "fact_provenance": [
+            {
+                "fact_type": "affected_count",
+                "fact_value": 2,
+                "source_table": "Table S1",
+                "source_row": "row 20",
+                "source_column": "Affected",
+                "evidence_quote": "2 affected",
+            }
+        ],
+    }
+
+    insert_variant_data(cur, "32893267", copy.deepcopy(variant))
+    conn.commit()
+    first_count = _fact_count(conn)
+    insert_variant_data(cur, "32893267", copy.deepcopy(variant))
+    conn.commit()
+
+    assert _fact_count(conn) == first_count
+    assert first_count >= 8
+    assert (
+        conn.execute(
+            "SELECT COUNT(DISTINCT fact_hash) FROM fact_provenance"
+        ).fetchone()[0]
+        == first_count
+    )
+
+    total = conn.execute(
+        """
+        SELECT fact_value, source_table, source_row, source_column, count_type
+        FROM fact_provenance
+        WHERE fact_type = 'total_carriers_observed'
+        """
+    ).fetchone()
+    assert total == ("3", "Table S1", "row 20", "N carriers", "per_variant_carrier")
+
+    individual = conn.execute(
+        """
+        SELECT fact_value, individual_id, evidence_quote
+        FROM fact_provenance
+        WHERE fact_type = 'individual_affected_status'
+        """
+    ).fetchone()
+    assert individual == ("affected", "P1", "P1 carried p.Val254Met and was affected.")
+
+    explicit = conn.execute(
+        """
+        SELECT source_table, source_row, source_column, provenance_kind
+        FROM fact_provenance
+        WHERE fact_type = 'affected_count' AND evidence_quote = '2 affected'
+        """
+    ).fetchone()
+    assert explicit == ("Table S1", "row 20", "Affected", "explicit")
     conn.close()
 
 
@@ -173,6 +264,7 @@ def test_migrate_extraction_file_twice_is_idempotent(tmp_path):
 
     assert len(_carrier_rows(conn)) == 1
     assert _carrier_rows(conn)[0][0] == 25
+    assert _fact_count(conn) == 3
     for table in ("functional_data", "phenotypes"):
         n = conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
         assert n == 1, f"{table} duplicated on re-migration"

@@ -30,6 +30,7 @@ The script will automatically find JSON extraction files in:
 """
 
 import argparse
+import hashlib
 import json
 import logging
 import os
@@ -67,6 +68,24 @@ CDNA_NOTATION_RE = re.compile(
     r"|^c\.\d+(?:[+-]\d+)?(?:del|dup|ins)[ACGT]*$"
     r"|^c\.\d+(?:_\d+)?(?:del|dup|ins)[ACGT]*$",
     re.IGNORECASE,
+)
+
+FACT_PROVENANCE_FIELDS: Tuple[str, ...] = (
+    "variant_id",
+    "pmid",
+    "fact_type",
+    "fact_value",
+    "individual_id",
+    "source_location",
+    "source_section",
+    "source_paragraph",
+    "source_table",
+    "source_row",
+    "source_column",
+    "evidence_quote",
+    "count_type",
+    "source_layer",
+    "provenance_kind",
 )
 
 # =============================================================================
@@ -585,6 +604,40 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         )
     """)
 
+    # ========================================================================
+    # Fact provenance: exact source pointers for variant/count/person facts
+    # ========================================================================
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS fact_provenance (
+            provenance_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            fact_hash TEXT NOT NULL UNIQUE,
+            variant_id INTEGER NOT NULL,
+            pmid TEXT NOT NULL,
+            fact_type TEXT NOT NULL,
+            fact_value TEXT,
+            individual_id TEXT,
+            source_location TEXT,
+            source_section TEXT,
+            source_paragraph TEXT,
+            source_table TEXT,
+            source_row TEXT,
+            source_column TEXT,
+            evidence_quote TEXT,
+            count_type TEXT,
+            source_layer TEXT,
+            provenance_kind TEXT,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+
+            FOREIGN KEY (variant_id) REFERENCES variants(variant_id) ON DELETE CASCADE,
+            FOREIGN KEY (pmid) REFERENCES papers(pmid) ON DELETE CASCADE
+        )
+    """)
+
+    cursor.execute("""
+        CREATE INDEX IF NOT EXISTS idx_fact_provenance_variant_paper
+        ON fact_provenance(variant_id, pmid, fact_type)
+    """)
+
     # Backfill new columns onto pre-existing DBs (CREATE IF NOT EXISTS won't add them).
     for table, col, decl in (
         ("papers", "first_author", "TEXT"),
@@ -931,6 +984,364 @@ def _insert_age_dependent_penetrance(
         )
 
 
+def _clean_optional_text(value: Any) -> Optional[str]:
+    """Return a stripped text value, preserving None for missing/blank fields."""
+    if value is None:
+        return None
+    if isinstance(value, (dict, list)):
+        text = json.dumps(value, sort_keys=True, ensure_ascii=False)
+    else:
+        text = str(value)
+    text = text.strip()
+    return text or None
+
+
+def _first_quote(variant_data: Dict[str, Any]) -> Optional[str]:
+    quotes = variant_data.get("key_quotes")
+    if isinstance(quotes, list):
+        for quote in quotes:
+            text = _clean_optional_text(quote)
+            if text:
+                return text
+    return _clean_optional_text(quotes)
+
+
+def _normalize_count_provenance(raw: Any) -> Dict[str, Any]:
+    if isinstance(raw, dict):
+        return raw
+    if isinstance(raw, str) and raw.strip():
+        try:
+            parsed = json.loads(raw)
+        except json.JSONDecodeError:
+            return {}
+        return parsed if isinstance(parsed, dict) else {}
+    return {}
+
+
+def _infer_source_components(
+    source_location: Optional[str],
+) -> Dict[str, Optional[str]]:
+    """Best-effort split of a free-text source pointer into queryable pieces."""
+    text = source_location or ""
+    table = None
+    row = None
+    paragraph = None
+    section = None
+
+    table_match = re.search(
+        r"\b(?:(?:Supplementary|Supplemental)\s+)?e?Table\s+[A-Za-z0-9._-]+",
+        text,
+        re.IGNORECASE,
+    )
+    if table_match:
+        table = table_match.group(0)
+
+    row_match = re.search(
+        r"\brows?\s+[A-Za-z0-9._-]+(?:\s*(?:-|–|,|and)\s*[A-Za-z0-9._-]+)?",
+        text,
+        re.IGNORECASE,
+    )
+    if row_match:
+        row = row_match.group(0)
+
+    para_match = re.search(
+        r"\b(?:paragraph|para\.?)\s+[A-Za-z0-9._-]+",
+        text,
+        re.IGNORECASE,
+    )
+    if para_match:
+        paragraph = para_match.group(0)
+
+    section_match = re.search(
+        r"\b(Abstract|Introduction|Methods?|Results?|Discussion|Conclusion|"
+        r"Case(?: presentation| report)?|Supplementary Material)\b",
+        text,
+        re.IGNORECASE,
+    )
+    if section_match:
+        section = section_match.group(0)
+
+    return {
+        "source_table": _clean_optional_text(table),
+        "source_row": _clean_optional_text(row),
+        "source_paragraph": _clean_optional_text(paragraph),
+        "source_section": _clean_optional_text(section),
+    }
+
+
+def _fact_hash(row: Dict[str, Any]) -> str:
+    payload = {
+        key: _clean_optional_text(row.get(key)) for key in FACT_PROVENANCE_FIELDS
+    }
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+
+
+def insert_fact_provenance(
+    cursor: sqlite3.Cursor,
+    *,
+    variant_id: int,
+    pmid: str,
+    fact_type: str,
+    fact_value: Any = None,
+    individual_id: Any = None,
+    source_location: Any = None,
+    source_section: Any = None,
+    source_paragraph: Any = None,
+    source_table: Any = None,
+    source_row: Any = None,
+    source_column: Any = None,
+    evidence_quote: Any = None,
+    count_type: Any = None,
+    source_layer: Any = None,
+    provenance_kind: str = "synthesized",
+) -> None:
+    """Insert one fact-level provenance row, idempotently.
+
+    ``fact_hash`` is a stable natural key over the semantic fields. It makes
+    re-migration, refresh replay, and layered recovery additive without creating
+    duplicate evidence rows.
+    """
+    source_location_text = _clean_optional_text(source_location)
+    inferred = _infer_source_components(source_location_text)
+    row = {
+        "variant_id": variant_id,
+        "pmid": _clean_optional_text(pmid),
+        "fact_type": _clean_optional_text(fact_type),
+        "fact_value": _clean_optional_text(fact_value),
+        "individual_id": _clean_optional_text(individual_id),
+        "source_location": source_location_text,
+        "source_section": _clean_optional_text(source_section)
+        or inferred["source_section"],
+        "source_paragraph": _clean_optional_text(source_paragraph)
+        or inferred["source_paragraph"],
+        "source_table": _clean_optional_text(source_table) or inferred["source_table"],
+        "source_row": _clean_optional_text(source_row) or inferred["source_row"],
+        "source_column": _clean_optional_text(source_column),
+        "evidence_quote": _clean_optional_text(evidence_quote),
+        "count_type": _clean_optional_text(count_type),
+        "source_layer": _clean_optional_text(source_layer),
+        "provenance_kind": _clean_optional_text(provenance_kind),
+    }
+    if not row["fact_type"]:
+        return
+    row["fact_hash"] = _fact_hash(row)
+    cursor.execute(
+        """
+        INSERT OR IGNORE INTO fact_provenance (
+            fact_hash, variant_id, pmid, fact_type, fact_value, individual_id,
+            source_location, source_section, source_paragraph, source_table,
+            source_row, source_column, evidence_quote, count_type, source_layer,
+            provenance_kind
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            row["fact_hash"],
+            variant_id,
+            row["pmid"],
+            row["fact_type"],
+            row["fact_value"],
+            row["individual_id"],
+            row["source_location"],
+            row["source_section"],
+            row["source_paragraph"],
+            row["source_table"],
+            row["source_row"],
+            row["source_column"],
+            row["evidence_quote"],
+            row["count_type"],
+            row["source_layer"],
+            row["provenance_kind"],
+        ),
+    )
+
+
+def _count_provenance_for(
+    count_provenance: Dict[str, Any], fact_type: str
+) -> Tuple[Optional[str], Optional[str]]:
+    prefix = {
+        "patient_count": "carriers",
+        "total_carriers_observed": "carriers",
+        "affected_count": "affected",
+        "unaffected_count": "unaffected",
+    }.get(fact_type)
+    if not prefix:
+        return None, None
+    return (
+        _clean_optional_text(count_provenance.get(f"{prefix}_column_label")),
+        _clean_optional_text(count_provenance.get(f"{prefix}_count_type")),
+    )
+
+
+def _insert_explicit_fact_provenance(
+    cursor: sqlite3.Cursor,
+    *,
+    pmid: str,
+    variant_id: int,
+    variant_data: Dict[str, Any],
+    source_layer: str,
+) -> None:
+    raw_rows = variant_data.get("fact_provenance") or variant_data.get(
+        "fact_provenance_records"
+    )
+    if not isinstance(raw_rows, list):
+        return
+    for raw in raw_rows:
+        if not isinstance(raw, dict):
+            logger.warning(
+                "Skipping non-object fact_provenance row for PMID %s variant_id %s",
+                pmid,
+                variant_id,
+            )
+            continue
+        insert_fact_provenance(
+            cursor,
+            variant_id=variant_id,
+            pmid=pmid,
+            fact_type=raw.get("fact_type") or raw.get("field"),
+            fact_value=raw.get("fact_value")
+            if "fact_value" in raw
+            else raw.get("value"),
+            individual_id=raw.get("individual_id"),
+            source_location=raw.get("source_location")
+            or variant_data.get("source_location"),
+            source_section=raw.get("source_section") or raw.get("section"),
+            source_paragraph=raw.get("source_paragraph") or raw.get("paragraph"),
+            source_table=raw.get("source_table") or raw.get("table"),
+            source_row=raw.get("source_row") or raw.get("row"),
+            source_column=raw.get("source_column") or raw.get("column"),
+            evidence_quote=raw.get("evidence_quote")
+            or raw.get("quote")
+            or raw.get("evidence_sentence"),
+            count_type=raw.get("count_type"),
+            source_layer=raw.get("source_layer") or source_layer,
+            provenance_kind="explicit",
+        )
+
+
+def _insert_standard_fact_provenance(
+    cursor: sqlite3.Cursor,
+    *,
+    pmid: str,
+    variant_id: int,
+    variant_data: Dict[str, Any],
+    source_layer: str,
+) -> None:
+    """Write the repo-standard provenance rows for every migrated variant."""
+    source_location = variant_data.get("source_location")
+    quote = _first_quote(variant_data)
+
+    _insert_explicit_fact_provenance(
+        cursor,
+        pmid=pmid,
+        variant_id=variant_id,
+        variant_data=variant_data,
+        source_layer=source_layer,
+    )
+
+    for notation_key in ("protein_notation", "cdna_notation", "genomic_position"):
+        notation = variant_data.get(notation_key)
+        if notation:
+            insert_fact_provenance(
+                cursor,
+                variant_id=variant_id,
+                pmid=pmid,
+                fact_type="variant_identity",
+                fact_value=notation,
+                source_location=source_location,
+                evidence_quote=quote,
+                source_layer=source_layer,
+                provenance_kind="synthesized",
+            )
+
+    if variant_data.get("clinical_significance") is not None:
+        insert_fact_provenance(
+            cursor,
+            variant_id=variant_id,
+            pmid=pmid,
+            fact_type="clinical_significance",
+            fact_value=variant_data.get("clinical_significance"),
+            source_location=source_location,
+            evidence_quote=quote,
+            source_layer=source_layer,
+            provenance_kind="synthesized",
+        )
+
+    count_provenance = _normalize_count_provenance(variant_data.get("count_provenance"))
+    patients = variant_data.get("patients") or {}
+    if patients.get("count") is not None:
+        column, count_type = _count_provenance_for(count_provenance, "patient_count")
+        insert_fact_provenance(
+            cursor,
+            variant_id=variant_id,
+            pmid=pmid,
+            fact_type="patient_count",
+            fact_value=patients.get("count"),
+            source_location=source_location,
+            source_column=column,
+            evidence_quote=quote,
+            count_type=count_type,
+            source_layer=source_layer,
+            provenance_kind="synthesized",
+        )
+
+    penetrance = variant_data.get("penetrance_data") or {}
+    for fact_type in (
+        "total_carriers_observed",
+        "affected_count",
+        "unaffected_count",
+        "uncertain_count",
+    ):
+        if penetrance.get(fact_type) is None:
+            continue
+        column, count_type = _count_provenance_for(count_provenance, fact_type)
+        insert_fact_provenance(
+            cursor,
+            variant_id=variant_id,
+            pmid=pmid,
+            fact_type=fact_type,
+            fact_value=penetrance.get(fact_type),
+            source_location=source_location,
+            source_column=column,
+            evidence_quote=quote,
+            count_type=count_type,
+            source_layer=source_layer,
+            provenance_kind="synthesized",
+        )
+
+    for record in variant_data.get("individual_records", []):
+        if not isinstance(record, dict):
+            continue
+        individual_id = record.get("individual_id")
+        evidence = record.get("evidence_sentence") or quote
+        insert_fact_provenance(
+            cursor,
+            variant_id=variant_id,
+            pmid=pmid,
+            fact_type="individual_carrier_status",
+            fact_value="carrier",
+            individual_id=individual_id,
+            source_location=source_location,
+            evidence_quote=evidence,
+            source_layer=source_layer,
+            provenance_kind="synthesized",
+        )
+        affected_status = normalize_affected_status(record.get("affected_status"))
+        if affected_status:
+            insert_fact_provenance(
+                cursor,
+                variant_id=variant_id,
+                pmid=pmid,
+                fact_type="individual_affected_status",
+                fact_value=affected_status,
+                individual_id=individual_id,
+                source_location=source_location,
+                evidence_quote=evidence,
+                source_layer=source_layer,
+                provenance_kind="synthesized",
+            )
+
+
 def insert_variant_data(
     cursor: sqlite3.Cursor,
     pmid: str,
@@ -1029,6 +1440,14 @@ def insert_variant_data(
           AND (source_layer IS NULL OR TRIM(source_layer) = '')
         """,
         (source_layer, variant_id, pmid),
+    )
+
+    _insert_standard_fact_provenance(
+        cursor,
+        pmid=pmid,
+        variant_id=variant_id,
+        variant_data=variant_data,
+        source_layer=source_layer,
     )
 
     # Insert penetrance data
@@ -1588,6 +2007,7 @@ def migrate_extraction_directory(
 _DEDUP_CHILD_TABLES: Tuple[str, ...] = (
     "penetrance_data",
     "individual_records",
+    "fact_provenance",
     "functional_data",
     "phenotypes",
     "variant_metadata",

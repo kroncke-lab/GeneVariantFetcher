@@ -248,6 +248,8 @@ def load_db(db_path: Path) -> dict:
     data: dict = {
         "papers": {},
         "by_pmid": defaultdict(lambda: {"variants": [], "patients": [], "tables": []}),
+        "facts_by_pmid_variant": defaultdict(list),
+        "facts_by_pmid_individual": defaultdict(list),
         "source_method": Counter(),
         "prov": Counter(),
         "variants_agg": defaultdict(
@@ -399,6 +401,45 @@ def load_db(db_path: Path) -> dict:
                         agg["carriers"] += c
                         agg["affected"] += a
                         agg["unaffected"] += u
+        if _table_cols(con, "fact_provenance"):
+            for r in con.execute(
+                """
+                SELECT fp.pmid,
+                       COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position, '?') AS variant,
+                       fp.fact_type, fp.fact_value, fp.individual_id,
+                       fp.source_location, fp.source_section, fp.source_paragraph,
+                       fp.source_table, fp.source_row, fp.source_column,
+                       fp.evidence_quote, fp.count_type, fp.provenance_kind
+                FROM fact_provenance fp
+                JOIN variants v ON v.variant_id = fp.variant_id
+                ORDER BY fp.provenance_id
+                """
+            ):
+                rd = dict(r)
+                pmid = str(rd["pmid"])
+                variant = rd.get("variant") or "?"
+                fact = {
+                    "type": rd.get("fact_type") or "",
+                    "value": rd.get("fact_value") or "",
+                    "individual_id": rd.get("individual_id") or "",
+                    "location": rd.get("source_location") or "",
+                    "section": rd.get("source_section") or "",
+                    "paragraph": rd.get("source_paragraph") or "",
+                    "table": rd.get("source_table") or "",
+                    "row": rd.get("source_row") or "",
+                    "column": rd.get("source_column") or "",
+                    "quote": rd.get("evidence_quote") or "",
+                    "count_type": rd.get("count_type") or "",
+                    "kind": rd.get("provenance_kind") or "",
+                }
+                data["prov"]["with_fact_provenance"] += 1
+                if fact["table"] or fact["row"] or fact["section"] or fact["quote"]:
+                    data["prov"]["with_exact_fact_pointer"] += 1
+                data["facts_by_pmid_variant"][(pmid, variant)].append(fact)
+                if fact["individual_id"]:
+                    data["facts_by_pmid_individual"][
+                        (pmid, variant, fact["individual_id"])
+                    ].append(fact)
         if _table_cols(con, "tables_processed"):
             for r in con.execute(
                 "SELECT pmid, table_name, table_caption, variants_extracted FROM tables_processed"
@@ -465,6 +506,64 @@ def _parse_count_provenance(raw) -> str:
                 piece += f" ({ctype})"
             bits.append(piece)
     return "; ".join(bits)
+
+
+def _fact_pointer(fact: dict) -> str:
+    parts = [
+        fact.get("table"),
+        fact.get("row"),
+        fact.get("column"),
+        fact.get("section"),
+        fact.get("paragraph"),
+        fact.get("location"),
+    ]
+    return " · ".join(str(p) for p in parts if p)
+
+
+def _render_fact_provenance(facts: list[dict], limit: int = 6) -> str:
+    if not facts:
+        return ""
+    bits = []
+    seen = set()
+    for fact in facts:
+        key = (
+            fact.get("type"),
+            fact.get("value"),
+            _fact_pointer(fact),
+            fact.get("quote"),
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+        pointer = _fact_pointer(fact)
+        label = f"{fact.get('type') or 'fact'}={fact.get('value') or '?'}"
+        detail = " · ".join(
+            x
+            for x in [
+                pointer,
+                fact.get("count_type"),
+                fact.get("kind"),
+            ]
+            if x
+        )
+        jump_arg = fact.get("quote") or pointer
+        action = (
+            f" <span class='btn' onclick=\"jump({jq(jump_arg)})\">evidence</span>"
+            if jump_arg
+            else ""
+        )
+        bits.append(
+            f"<div class='mut'>↳ {esc(label)}"
+            + (f" <span>{esc(detail)}</span>" if detail else "")
+            + action
+            + "</div>"
+        )
+        if len(bits) >= limit:
+            break
+    more = len(facts) - len(bits)
+    if more > 0:
+        bits.append(f"<div class='mut'>↳ +{more} more evidence facts</div>")
+    return "".join(bits)
 
 
 def _artifacts_links(corpus_dir: Path, gene: str, pmid: str) -> dict:
@@ -765,6 +864,9 @@ def render_paper_page(
             if v.get("count_prov")
             else ""
         )
+        facts_html = _render_fact_provenance(
+            db.get("facts_by_pmid_variant", {}).get((pmid, v["variant"]), [])
+        )
         quotes = "".join(f"<div class='q'>❝ {esc(q)}</div>" for q in v["quotes"][:2])
         pv = db.get("pen_pv", {}).get((pmid, v["variant"]))
         cohort = (
@@ -776,7 +878,7 @@ def render_paper_page(
         left.append(
             f"<div class='rec'><span class='vn'>{esc(v['variant'])}</span>"
             f" <span class='mut'>{esc(v['sig'] or '')}</span><div>{''.join(actions)}</div>"
-            f"{cohort}{quotes}{notes}{cprov}</div>"
+            f"{cohort}{quotes}{notes}{cprov}{facts_html}</div>"
         )
     if rec["patients"]:
         left.append(f"<h3>Patient records ({len(rec['patients'])}):</h3>")
@@ -803,8 +905,14 @@ def render_paper_page(
                 if p["evidence"]
                 else ""
             )
+            facts_html = _render_fact_provenance(
+                db.get("facts_by_pmid_individual", {}).get(
+                    (pmid, p["variant"], p["id"]), []
+                ),
+                limit=3,
+            )
             left.append(
-                f"<div class='rec'><span class='tag {cls}'>{esc(st or '?')}</span> {chars}{ev}</div>"
+                f"<div class='rec'><span class='tag {cls}'>{esc(st or '?')}</span> {chars}{ev}{facts_html}</div>"
             )
     if not rec["variants"] and not rec["patients"]:
         left.append(
@@ -1019,6 +1127,14 @@ def render_gene_page(
             ("additional_notes populated", prov.get("with_notes", 0), prov["total"]),
             ("key_quotes populated", prov.get("with_quotes", 0), prov["total"]),
         ]
+        if prov.get("with_fact_provenance"):
+            audit.append(
+                (
+                    "fact provenance exact pointers",
+                    prov.get("with_exact_fact_pointer", 0),
+                    prov.get("with_fact_provenance", 0),
+                )
+            )
 
     # which papers still need work (no usable full text, or no variants)
     stub_pmids = [

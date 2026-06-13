@@ -133,6 +133,15 @@ total to this row. Record the aggregate in additional_notes instead.
 This block is REQUIRED whenever any count is populated. Set fields to null when
 you can't identify the source column. Do NOT invent column labels.
 
+REQUIRED — FACT-LEVEL PROVENANCE:
+For every extracted variant identity, carrier count, affected count, unaffected
+count, and individual affected/unaffected status, emit a `fact_provenance` row
+with the most exact location available. Use structured fields when possible:
+source_table ("Table S1"), source_row ("row 20"), source_column ("Affected"),
+source_section ("Methods"), source_paragraph ("paragraph 2"), plus a short
+evidence_quote copied from the paper. If you only know a coarse location, still
+emit source_location.
+
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
 Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
 and genomic_position would be null. The variant identifier is load-bearing.
@@ -198,7 +207,21 @@ Return a JSON object with this structure:
                 "unaffected_column_label": "string or null",
                 "unaffected_count_type": "(same enum)"
             }},
-            "source_location": "Table X" or "Results"
+            "source_location": "Table X" or "Results",
+            "fact_provenance": [
+                {{
+                    "fact_type": "variant_identity|patient_count|total_carriers_observed|affected_count|unaffected_count|individual_affected_status",
+                    "fact_value": "string/integer value",
+                    "individual_id": "string or null",
+                    "source_location": "string",
+                    "source_table": "string or null",
+                    "source_row": "string or null",
+                    "source_column": "string or null",
+                    "source_section": "string or null",
+                    "source_paragraph": "string or null",
+                    "evidence_quote": "short exact quote"
+                }}
+            ]
         }}
     ],
     "extraction_metadata": {{
@@ -425,6 +448,15 @@ total to this row. Record the aggregate in additional_notes instead.
 This block is REQUIRED whenever any count is populated. Set fields to null when
 you can't identify the source column. Do NOT invent column labels.
 
+REQUIRED — FACT-LEVEL PROVENANCE:
+For every extracted variant identity, carrier count, affected count, unaffected
+count, and individual affected/unaffected status, emit a `fact_provenance` row
+with the most exact location available. Use structured fields when possible:
+source_table ("Table S1"), source_row ("row 20"), source_column ("Affected"),
+source_section ("Methods"), source_paragraph ("paragraph 2"), plus a short
+evidence_quote copied from the paper. If you only know a coarse location, still
+emit source_location.
+
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
 Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
 and genomic_position would be null. The variant identifier is load-bearing.
@@ -528,7 +560,21 @@ Return a JSON object with this structure:
             "evidence_level": "string",
             "source_location": "e.g., 'Table 2, Row 3' or 'Results, paragraph 4'",
             "additional_notes": "string",
-            "key_quotes": ["relevant quotes from paper"]
+            "key_quotes": ["relevant quotes from paper"],
+            "fact_provenance": [
+                {{
+                    "fact_type": "variant_identity|patient_count|total_carriers_observed|affected_count|unaffected_count|individual_affected_status",
+                    "fact_value": "string/integer value",
+                    "individual_id": "string or null",
+                    "source_location": "string",
+                    "source_table": "string or null",
+                    "source_row": "string or null",
+                    "source_column": "string or null",
+                    "source_section": "string or null",
+                    "source_paragraph": "string or null",
+                    "evidence_quote": "short exact quote"
+                }}
+            ]
         }}
     ],
     "tables_processed": [

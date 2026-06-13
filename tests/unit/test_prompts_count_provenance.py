@@ -69,3 +69,22 @@ def test_both_prompts_have_provenance_null_rule():
             f"{name} missing the 'leave count NULL when count_type is "
             f"cohort_total/screened_N/unknown and value is large' rule"
         )
+
+
+def test_both_prompts_declare_fact_level_provenance_schema():
+    for name, prompt in PROMPTS.items():
+        assert "fact_provenance" in prompt, (
+            f"{name} is missing the fact_provenance block required for "
+            "row/paragraph-level evidence"
+        )
+        for label in (
+            "fact_type",
+            "fact_value",
+            "source_table",
+            "source_row",
+            "source_column",
+            "source_section",
+            "source_paragraph",
+            "evidence_quote",
+        ):
+            assert label in prompt, f"{name} missing required key '{label}'"

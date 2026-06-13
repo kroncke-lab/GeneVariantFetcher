@@ -1128,6 +1128,119 @@ def extract_via_router(
     }
 
 
+def _header_label(table: MarkdownTable, idx: Optional[int]) -> Optional[str]:
+    if idx is None or idx < 0 or idx >= len(table.header_cells):
+        return None
+    label = table.header_cells[idx].strip()
+    return label or None
+
+
+def _router_count_provenance(
+    table: MarkdownTable,
+    count_idx: Optional[int],
+    aff_idx: Optional[int],
+    unaff_idx: Optional[int],
+) -> Dict[str, Optional[str]]:
+    carrier_label = (
+        "implicit one carrier per clinical row"
+        if count_idx == _INFER_ROW_PATIENT_COUNT
+        else _header_label(table, count_idx)
+    )
+    affected_label = _header_label(table, aff_idx) or carrier_label
+    unaffected_label = _header_label(table, unaff_idx)
+    return {
+        "carriers_column_label": carrier_label,
+        "carriers_count_type": "per_variant_carrier" if carrier_label else None,
+        "affected_column_label": affected_label,
+        "affected_count_type": "per_variant_carrier" if affected_label else None,
+        "unaffected_column_label": unaffected_label,
+        "unaffected_count_type": "per_variant_carrier" if unaffected_label else None,
+    }
+
+
+def _router_fact_rows(
+    *,
+    table: MarkdownTable,
+    row_number: int,
+    row_text: str,
+    cdna: Optional[str],
+    protein: Optional[str],
+    total: Optional[int],
+    affected: Optional[int],
+    unaffected: Optional[int],
+    uncertain: Optional[int],
+    count_idx: Optional[int],
+    aff_idx: Optional[int],
+    unaff_idx: Optional[int],
+    unc_idx: Optional[int],
+    source_location: str,
+) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    source_table = table.caption or f"Table {table.table_id}"
+    base = {
+        "source_location": source_location,
+        "source_table": source_table,
+        "source_row": str(row_number),
+        "evidence_quote": row_text.strip(),
+        "source_layer": "llm_table",
+    }
+    for value in (protein, cdna):
+        if value:
+            rows.append(
+                {
+                    **base,
+                    "fact_type": "variant_identity",
+                    "fact_value": value,
+                }
+            )
+
+    def add_count(
+        fact_type: str, value: Optional[int], idx: Optional[int], count_type: str
+    ) -> None:
+        if value is None:
+            return
+        rows.append(
+            {
+                **base,
+                "fact_type": fact_type,
+                "fact_value": value,
+                "source_column": (
+                    "implicit one carrier per clinical row"
+                    if idx == _INFER_ROW_PATIENT_COUNT
+                    else _header_label(table, idx)
+                ),
+                "count_type": count_type,
+            }
+        )
+
+    add_count(
+        "patient_count",
+        total,
+        count_idx,
+        "per_variant_carrier",
+    )
+    add_count(
+        "total_carriers_observed",
+        total,
+        count_idx,
+        "per_variant_carrier",
+    )
+    add_count(
+        "affected_count",
+        affected,
+        aff_idx if aff_idx is not None else count_idx,
+        "per_variant_carrier",
+    )
+    add_count(
+        "unaffected_count",
+        unaffected,
+        unaff_idx if unaff_idx is not None else count_idx,
+        "per_variant_carrier",
+    )
+    add_count("uncertain_count", uncertain, unc_idx, "per_variant_carrier")
+    return rows
+
+
 def parse_routed_table(
     table: MarkdownTable, mapping: Dict[str, int], gene_symbol: str
 ) -> List[Dict[str, Any]]:
@@ -1158,7 +1271,7 @@ def parse_routed_table(
     if caption_scope and gene_symbol.strip().upper() not in caption_scope:
         return []
 
-    for row in table.data_lines:
+    for row_number, row in enumerate(table.data_lines, start=1):
         cells = _split_pipe_row(row)
         if not cells or len(cells) < 2:
             continue
@@ -1248,9 +1361,28 @@ def parse_routed_table(
             if not cdna and not protein:
                 continue
 
+            source_table = table.caption or f"Table {table.table_id}"
+            source_location = f"{source_table}, row {row_number} (router+deterministic)"
+            fact_rows = _router_fact_rows(
+                table=table,
+                row_number=row_number,
+                row_text=row,
+                cdna=cdna,
+                protein=protein,
+                total=total,
+                affected=affected,
+                unaffected=unaffected,
+                uncertain=uncertain,
+                count_idx=count_idx,
+                aff_idx=aff_idx,
+                unaff_idx=unaff_idx,
+                unc_idx=unc_idx,
+                source_location=source_location,
+            )
             dedup_key = ((cdna or "").lower(), (protein or "").lower())
             if dedup_key in by_key:
                 existing = by_key[dedup_key]
+                existing.setdefault("fact_provenance", []).extend(fact_rows)
                 existing["patients"]["count"] = _sum_optional_int(
                     existing["patients"].get("count"), total
                 )
@@ -1293,7 +1425,7 @@ def parse_routed_table(
                 "segregation_data": None,
                 "population_frequency": None,
                 "evidence_level": "medium",
-                "source_location": f"Table {table.table_id} (router+deterministic)",
+                "source_location": source_location,
                 "additional_notes": (
                     f"Parsed deterministically from {table.table_id}; "
                     f"caption={table.caption!r}"
@@ -1301,6 +1433,10 @@ def parse_routed_table(
                     else f"Parsed deterministically from {table.table_id}"
                 ),
                 "key_quotes": [],
+                "count_provenance": _router_count_provenance(
+                    table, count_idx, aff_idx, unaff_idx
+                ),
+                "fact_provenance": fact_rows,
             }
             by_key[dedup_key] = variant
             variants.append(variant)

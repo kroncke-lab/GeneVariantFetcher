@@ -54,6 +54,7 @@ papers (pmid PK)
   │                                              ├──→ penetrance_data
   │                                              │      └──→ age_dependent_penetrance
   │                                              ├──→ individual_records
+  │                                              ├──→ fact_provenance
   │                                              ├──→ functional_data
   │                                              ├──→ phenotypes
   │                                              └──→ variant_metadata
@@ -157,6 +158,33 @@ CREATE TABLE individual_records (
     phenotype_details TEXT,
     family_id TEXT,
     proband_status TEXT,
+    FOREIGN KEY (variant_id) REFERENCES variants(variant_id),
+    FOREIGN KEY (pmid) REFERENCES papers(pmid)
+);
+```
+
+#### `fact_provenance`
+Fact-level evidence pointers for variants, cohort counts, and person statuses.
+
+```sql
+CREATE TABLE fact_provenance (
+    provenance_id INTEGER PRIMARY KEY,
+    fact_hash TEXT UNIQUE,
+    variant_id INTEGER,
+    pmid TEXT,
+    fact_type TEXT,           -- variant_identity, total_carriers_observed, affected_count, etc.
+    fact_value TEXT,
+    individual_id TEXT,
+    source_location TEXT,
+    source_table TEXT,
+    source_row TEXT,
+    source_column TEXT,
+    source_section TEXT,
+    source_paragraph TEXT,
+    evidence_quote TEXT,
+    count_type TEXT,
+    source_layer TEXT,
+    provenance_kind TEXT,
     FOREIGN KEY (variant_id) REFERENCES variants(variant_id),
     FOREIGN KEY (pmid) REFERENCES papers(pmid)
 );
