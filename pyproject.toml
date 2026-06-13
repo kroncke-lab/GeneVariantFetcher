@@ -41,16 +41,10 @@ dev = [
     "ruff>=0.1.6",
     "mypy>=1.5.0",
 ]
-gui = [
-    "fastapi>=0.104.0",
-    "uvicorn[standard]>=0.24.0",
-    "websockets>=12.0",
-    "python-multipart>=0.0.6",
-]
 
 [project.scripts]
 gvf = "cli:app"
 
 [tool.setuptools.packages.find]
-include = ["pipeline*", "harvesting*", "config*", "utils*", "gene_literature*", "gui*", "cli*"]
+include = ["pipeline*", "harvesting*", "config*", "utils*", "gene_literature*", "cli*"]
 exclude = ["test_*", "automated_output*"]

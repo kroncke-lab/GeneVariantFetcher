@@ -35,7 +35,7 @@ gold standard.
 > ```bash
 > .venv/bin/python -c "
 > import importlib, pkgutil
-> for pkg in ['cli', 'pipeline', 'harvesting', 'utils', 'gene_literature', 'gui']:
+> for pkg in ['cli', 'pipeline', 'harvesting', 'utils', 'gene_literature']:
 >     for _, name, _ in pkgutil.walk_packages([pkg], prefix=pkg + '.'):
 >         try: importlib.import_module(name)
 >         except Exception as e: print(f'IMPORT FAIL {name}: {e}')

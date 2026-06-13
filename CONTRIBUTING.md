@@ -17,9 +17,6 @@ source .venv/bin/activate
 pip install -e ".[browser,dev]"
 python -m playwright install chromium
 
-# Working on the web GUI? Add the gui extra (matches gui/requirements.txt):
-pip install -e ".[gui]"
-
 # Install pre-commit hooks
 pip install pre-commit && pre-commit install
 
@@ -139,7 +136,6 @@ GeneVariantFetcher/
 ├── cli/              # CLI commands (Typer)
 ├── config/           # Settings, gene configs (gene_config.py)
 ├── gene_literature/  # PMID discovery (PubMed, PubMind, Europe PMC)
-├── gui/              # FastAPI web interface
 ├── harvesting/       # Paper download, publisher APIs, format conversion
 ├── pipeline/         # Core extraction logic (filters, extraction, aggregation)
 ├── scripts/          # Utility and analysis scripts

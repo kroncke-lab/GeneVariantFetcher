@@ -114,7 +114,6 @@ def parse_gene_filter(value: str | None) -> set[str] | None:
 
 def import_project_clients():
     """Import the project API classes lazily so dry-run has no dependencies."""
-    from gene_literature.europepmc_handler import EuropePMCClient
     from harvesting.elsevier_api import ElsevierAPIClient
     from harvesting.pmc_api import PMCAPIClient
     from harvesting.springer_api import SpringerAPIClient
@@ -123,7 +122,6 @@ def import_project_clients():
     from utils import pubmed_utils
 
     return {
-        "EuropePMCClient": EuropePMCClient,
         "PMCAPIClient": PMCAPIClient,
         "UnpaywallClient": UnpaywallClient,
         "ElsevierAPIClient": ElsevierAPIClient,
@@ -180,14 +178,13 @@ def run_live_check(
         result.error = f"pubmed:{exc}"
 
     try:
-        epmc = clients["EuropePMCClient"](timeout=30)
-        metadata = epmc.get_paper_metadata(pmid)
-        if metadata:
-            result.europepmc_metadata = "ok"
-            result.pmcid = metadata.get("pmcid") or ""
-            result.doi = metadata.get("doi") or ""
-        else:
-            result.europepmc_metadata = "missing"
+        # Europe PMC coverage via the production discovery path (gene search):
+        # does Europe PMC surface this PMID for its gene? (pmcid/doi are filled
+        # from the PMC API block below.)
+        epmc_pmids = clients["pubmed_utils"].query_europepmc(
+            row["gene"], max_results=1000
+        )
+        result.europepmc_metadata = "ok" if pmid in epmc_pmids else "missing"
     except Exception as exc:  # noqa: BLE001
         result.europepmc_metadata = "error"
         result.error = append_error(result.error, f"europepmc:{exc}")
