@@ -290,7 +290,8 @@ duplicate the matching/DB logic on this side. Full how-to:
   that keeps BOTH extracted and corrected counts (so recall/precision/MAE can be
   recomputed without mutating raw rows), plus a follow-up queue and a summary
   with net count deltas. Idempotent. This is the live, export-driven cousin of
-  the older hardcoded `scripts/recall_audit/apply_gold_v2_adjudications.py`.
+  the older hand-curated `gold_v2_*` overlay columns in
+  `gene_variant_fetcher_gold_standard/normalized/<GENE>_recall_input.csv`.
 
 ## Files To Know
 

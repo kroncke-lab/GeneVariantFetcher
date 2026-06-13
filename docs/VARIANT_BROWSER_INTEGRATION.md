@@ -145,8 +145,9 @@ value are kept side by side. Nothing rewrites the raw extraction JSON or the run
 > The overlay preserves everything needed to recompute metrics, but joining it into
 > the live scorer is a deliberate next step, not automatic today.
 
-This is the live, export-driven cousin of the older hardcoded
-`scripts/recall_audit/apply_gold_v2_adjudications.py` (a one-off manual probe).
+This is the live, export-driven cousin of the older hand-curated `gold_v2_*`
+overlay columns in `normalized/<GENE>_recall_input.csv` (which were populated by a
+one-off manual probe, since retired).
 
 ---
 
