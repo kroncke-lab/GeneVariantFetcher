@@ -78,3 +78,22 @@ def test_elsevier_xml_to_markdown_preserves_table_bodies_for_deterministic_parse
         "E1784K",
     ]
     assert scn5a_variants[1]["penetrance_data"]["total_carriers_observed"] == 4
+
+
+def test_extract_supplement_refs_finds_mmc_and_dedups():
+    from harvesting.elsevier_api import ElsevierAPIClient
+
+    xml = (
+        "<xocs:pii-unformatted>S1547527118300146</xocs:pii-unformatted>"
+        '<foo href="https://ars.els-cdn.com/content/image/'
+        '1-s2.0-S1547527118300146-mmc1.docx"/>'
+        "see also 1-s2.0-S1547527118300146-mmc1.docx and "
+        "1-s2.0-S1547527118300146-mmc2.xlsx"
+    )
+    refs = ElsevierAPIClient.extract_supplement_refs(xml)
+    assert refs == [
+        "1-s2.0-S1547527118300146-mmc1.docx",
+        "1-s2.0-S1547527118300146-mmc2.xlsx",
+    ]  # de-duplicated, order-preserving
+    assert ElsevierAPIClient.extract_supplement_refs("") == []
+    assert ElsevierAPIClient.extract_supplement_refs("no supplements here") == []

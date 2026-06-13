@@ -1,9 +1,399 @@
 # Recall Status
 
-Last updated: 2026-05-29.
+Last updated: 2026-06-12.
 
-This note records the post-`19ae63f` state of the recall/generalization push so
-the next run can resume from the same baseline without relying on chat history.
+This note records the current recall/generalization state so the next run can
+resume from the same baseline without relying on chat history.
+
+## How to read the numbers in this file (single source of truth)
+
+Use the **2026-06-12 Current Canonical Baseline** immediately below for all live
+planning. Older dated sections are retained as history and may contain numbers
+that are superseded by the current baseline.
+
+No other doc may restate a recall number; they link here.
+
+## 2026-06-12 Current Canonical Baseline
+
+Fresh run of `scripts/run_recall_suite.py` against the four canonical DBs after
+the 2026-06-12 PDF-linearized table reconstruction + iter-2 quality-aware
+gate/selector + targeted lands of all four genes (`scripts/targeted_land.py`;
+KCNQ1 30758498 is the headline win, KCNH2/SCN5A/RYR2 each found 1-2 candidates
+with marginal/held recall — promoted as cleaner, non-regressive re-extractions):
+
+- `results/KCNH2/e2e_working_20260529_full/02_strict/KCNH2.db`
+- `validation_runs/20260517_203904/results/KCNQ1/20260517_204424/KCNQ1.db`
+- `validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/SCN5A.db`
+- `validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938/RYR2.db`
+
+Four-gene aggregate:
+
+| Metric | Matched / Gold | Recall | Gap to 90% |
+| --- | ---: | ---: | ---: |
+| PMIDs | 1274 / 1502 | 84.8% | 78 |
+| Variant rows | 5518 / 6833 | 80.8% | 632 |
+| Unique variants | **2591 / 3010** | **86.1%** | **118** |
+| Patients/carriers | 15896 / 18719 | 84.9% | 951 |
+| Affected | 10435 / 12475 | 83.6% | 793 |
+| Unaffected | 3441 / 3951 | 87.1% | 115 |
+
+Rows-mode MAE:
+
+| Count field | Sum abs error / N | MAE |
+| --- | ---: | ---: |
+| Carriers | 2287 / 3718 | **0.615** |
+| Affected | 1535 / 3110 | **0.494** |
+| Unaffected | 323 / 271 | **1.192** |
+
+Per-gene current recall:
+
+| Gene | PMIDs | Variant rows | Unique variants | Patients | Affected | Unaffected | carriers MAE |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| KCNH2 | 230/262 (87.8%) | 820/991 (82.7%) | 441/530 (83.2%) | 2256/2674 (84.4%) | 1404/1635 (85.9%) | 599/749 (80.0%) | 0.860 |
+| KCNQ1 | 285/305 (93.4%) | 1499/1741 (86.1%) | 563/622 (**90.5%**) | 6995/7793 (89.8%) | 3909/4306 (90.8%) | 1319/1484 (88.9%) | 0.935 |
+| SCN5A | 620/757 (81.9%) | 2433/3128 (77.8%) | 1022/1183 (86.4%) | 5020/6219 (80.7%) | 3836/4876 (78.7%) | 1184/1343 (88.2%) | 0.454 |
+| RYR2 | 139/178 (78.1%) | 766/973 (78.7%) | 565/675 (83.7%) | 1625/2033 (79.9%) | 1286/1658 (77.6%) | 339/375 (90.4%) | 0.323 |
+
+Headline precision is `precision_vs_counted_gold_pmids`, which restricts the
+denominator to extra rows on gold PMIDs that carry at least one extracted count:
+`5518 / (5518 + 1631) = 77.2%`. The looser raw proxy remains useful only as a
+false-positive **upper bound**: `5518 / (5518 + 13021) = 29.8%`.
+
+Why the raw proxy is pessimistic:
+
+- 11,390 / 13,021 (87%) current extra-on-gold-PMID rows have zero patient counts
+  and are ClinVar/PubTator-style linkage attributions rather than count-bearing
+  paper extractions.
+- Only 1,631 extra rows carry any carrier/affected/unaffected count.
+- About 97% are well-formed variants absent from the count-curated gold packet,
+  not malformed output.
+- The scorer now rejects 64 obvious figure/regex-table junk rows before scoring
+  (gene-symbol-as-variant, <=2-character protein notation, residue prose). This
+  removed 41 extra-on-gold-PMID rows, including 8 counted extras, with recall and
+  MAE unchanged.
+- 53 structural/CNV rows are real biology but currently unmatchable by the
+  variant matcher.
+
+Interpretation: recall gains are mostly adding real signal; the 28.6% proxy
+overstates true false positives by roughly 7x.
+
+Current per-layer precision proxy from the scorer. The four canonical DBs now
+have explicit `variant_papers.source_layer` values; the fallback-derived score
+on the `.before_source_layer_20260612_093534` backups matches this block exactly.
+
+| Source layer | Matched DB rows | Extra rows | Counted extra rows | precision_vs_gold_pmids | precision_vs_counted_gold_pmids |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| clinvar | 444 | 2484 | 71 | 15.2% | 86.2% |
+| figure | 236 | 465 | 39 | 33.7% | 85.8% |
+| llm_table | 892 | 477 | 275 | 65.2% | 76.4% |
+| llm_text | 455 | 823 | 168 | 35.6% | 73.0% |
+| mixed | 1949 | 392 | 176 | 83.3% | 91.7% |
+| pubtator | 12 | 159 | 0 | 7.0% | 100.0% |
+| regex_table | 1256 | 3864 | 929 | 24.5% | 57.5% |
+| regex_text | 213 | 4971 | 2 | 4.1% | 99.1% |
+
+Current failure-mode split from `paper_disagreement_report.csv`:
+
+| Failure mode | Missing rows | What it means |
+| --- | ---: | --- |
+| source_missing_or_stub | 568 | paper/source never landed or only a stub landed |
+| source_abstract_only | 250 | abstract was available, but mutation tables/body were missing |
+| available_source_underextraction | 248 | usable source exists but extraction missed rows |
+| source_missing_table_bodies | 184 | supplement/full text landed without the relevant tables |
+| partial_underextraction | 82 | some rows extracted, table not exhausted |
+| count_semantics | 36 | variant present but carrier/affected/unaffected semantics wrong |
+| overinclusive_extraction | 8 | DB has many extra rows for the PMID; residual missing rows are not the main recall lever |
+
+The next implementation lane is therefore source/table acquisition and binding
+for the top PMIDs, then count semantics. For count semantics, point the
+count-guard/evidence-card validation at `regex_table`: it is the dominant
+count-bearing FP surface (`929` counted extras, 57.5% counted precision), while
+figure rows are comparatively small and clean (`39` counted extras, 85.8%).
+Broad model tweaking is lower yield.
+
+## 2026-06-12 Next Run Plan — Exact-Match Gap Decomposition
+
+Supersedes the "Next Run Plan (2026-05-29)" tiering at the bottom of this file
+(its precision metric, fixed-width gene-scoping, source re-bind/fold, and the
+count-guard wiring are landed). This plan is organized around the **exact-match
+gap to the manual gold curation** = missing gold rows + count-mismatches on
+matched rows. Current post-1B strict score artifact:
+`recall_metrics/linearized_tables_20260612_strict/`.
+
+### The gap, decomposed
+
+Missing gold variant rows: **1,376** (6833 gold − 5457 matched). The starting
+plan used 1,410 missing rows; the PDF-linearized table reconstruction land
+recovered 34 KCNQ1 rows under the strict no-MAE-regression guardrail, so the
+in-source parser-miss bucket below is reduced accordingly until the next full
+decomposition refresh. By cause:
+
+| Cause | Rows | Share | Meaning |
+| --- | ---: | ---: | --- |
+| Extraction | ~883 | 64% | Variant is in a paper the DB ALREADY has (≥1 row for that PMID) but was never extracted — supplement/table bodies. |
+| Acquisition | ~426 | 31% | The gold PMID has ZERO rows in the DB — source/supplement never landed. |
+| Matcher | ~67 | 5% | We extracted the variant (same codon position is present in the DB for that PMID) but the notation did not match gold. |
+
+Plus **567 count-mismatches on matched rows** (~10% of matched) — the count-
+exactness gap. Catastrophic study-wide-N reuse is now rare (~15 cases) after the
+guard + dedup; the residual is per-row column-role confusion, consistent with
+unaffected MAE remaining the worst field.
+
+Key reframe: the gap is still **~64% extraction, not acquisition** — most missing
+variants are in papers we already hold. (This complements the source-status
+bucket table above, which is a per-PMID source lens on the same 1,376.)
+
+### Ranked levers (biggest exact-match wins first)
+
+1. **Supplement/table-body extraction on already-fetched papers (~883 rows — the
+   dominant lever).** These PMIDs are in the DB but their mutation-list tables
+   were not exhausted. The parser-track 1B land recovered the KCNQ1 linearized
+   table win that did not regress MAE; KCNQ1 `30758498` reconstructs but remains
+   unpromoted until count semantics are fixed. Regenerate the top-PMID list
+   before the next targeted 1C sweep so it does not keep prioritizing
+   already-landed rows.
+   - Targeted: the pre-1B top ~15 extraction-gap list was KCNQ1 `17192539`,
+     `30758498`, `23631430`, `19490272`; SCN5A `15840476`, `20541041`,
+     `23631430`, `21273195`, `25163546`, `24631775`, `29325976`; RYR2
+     `19398665`, `27452199`; KCNH2 `29650123`, `16922724`. The 1B validation
+     accepted the KCNQ1 parser win and withheld candidates that regressed
+     unique/row recall or MAE gates.
+   - General: continue table-parser robustness fixes for multi-row mutation
+     lists in fixed-width / markdown / Word supplements.
+     This is the `regex_table` layer, which is ALSO the count-bearing FP surface
+     (57.5% counted precision), so fixing its parsing helps recall AND precision.
+
+2. **Count-role attribution for matched rows (567 mismatches; unaffected MAE
+   1.219).** Not outlier guards (study-wide-N reuse is ~gone) but column-role
+   classification: affected/symptomatic/proband/case vs unaffected/asymptomatic/
+   control vs study total. Point the count classifier / evidence-card validator
+   at `regex_table`.
+
+3. **Acquisition of the 426 absent-PMID rows.** SCN5A dominates (96 gold PMIDs
+   entirely absent from its DB). Wiley/Springer supplements + remaining paywalls;
+   restore the Springer key; Wiley supplement via the EZproxy route. Access-gated.
+
+4. **Matcher notation lanes (67 rows; cheap — we already extracted these, no
+   acquisition/extraction needed).** Classes: indel `GxxxDel`/`LxxxIns`/`c.x_yDel`
+   (27); substitution with the same codon position but unmatched, likely isoform
+   numbering offset or 1↔3-letter (27); compound `A + B` gold rows (8);
+   frameshift/nonsense (3); splice/IVS (2). Extend `cli/compare_variants.py`.
+
+5. **Structural/CNV matching lane (53 rows).** Exon deletions, breakpoints,
+   translocations — real biology, currently unmatchable. Add a structural lane or
+   explicitly exclude from the precision denominator.
+
+### Operating rules (unchanged)
+
+Every DB-mutating step stays acceptance-gated (recall hold + MAE non-regression,
+now enforced in `refresh_recall.py`); promote only general parser/acquisition
+fixes; keep no-gold QC working for new genes.
+
+## 2026-06-05 Session — Supplement Acquisition Landed In Canonical DBs
+
+Recovered Elsevier `mmc` supplement mutation tables (the full-text API fetches
+body only) + folded on-disk supplements, then surgically injected the 12
+value papers into the canonical four-gene DBs (preserving clinvar/pubtator/figure
+layer rows; verified no individual_records loss; backups at
+`{gene}.db.before_supplements_20260605.db`). Method + full details:
+`docs/SUPPLEMENT_ACQUISITION_PLAN.md`.
+
+Four-gene aggregate (figures-skipped scoring, canonical DBs):
+
+| Metric | Prior (2026-05-29) | Now (+supplements) | Δ |
+|---|---|---|---|
+| unique_variants | 2473/3010 (82.2%) | **2523/3010 (83.8%)** | +50 (+1.6pp) |
+| variant_rows | 5160/6833 (75.5%) | **5350/6833 (78.3%)** | +190 (+2.8pp) |
+| patients | (77.8%) | **80.6%** | +2.8pp |
+| affected | (76.6%) | **78.7%** | +2.1pp |
+| carriers MAE | 0.910 | **0.882** | better |
+
+> **2026-06-06 — duplicate-penetrance idempotency fix (supersedes the carriers
+> MAE above).** The 2026-06-05 `refresh_recall` re-extraction of multi-table
+> cohort papers double-counted carriers (KCNQ1 PMID 32893267 V254M scored 4× gold
+> = 100 vs 25), spiking aggregate carriers MAE to **1.274** (KCNQ1 3.61) while
+> recall held. Root cause: migration wrote one `penetrance_data` row per
+> supplement-table appearance of a variant and the scorer SUMS the rows linked to
+> each (pmid, variant). Fixed by exact-duplicate insert guards in
+> `migrate_to_sqlite.insert_variant_data` (migration is now idempotent) plus a
+> `dedup_existing_rows` back-fill (`scripts/dedup_db.py`). Canonical DBs deduped
+> (backups: `<GENE>.db.before_dedup.db`): **aggregate carriers MAE 1.274 → 0.614**
+> (below the 0.882 baseline), **recall unchanged**. Per-gene carriers MAE now:
+> KCNH2 0.860, SCN5A 0.489, KCNQ1 0.897, RYR2 0.323.
+
+Per-gene unique_variants: KCNH2 82.8→83.2, KCNQ1 85.7→86.8, SCN5A 80.1→**82.8**
+(largest gain — the SCN5A 29325976 mmc1.docx alone added 64 of its 87 missing
+variants), RYR2 81.9→83.4. Aggregate gap-to-90% unique variants: 236 → **186**.
+The two Cloudflare-blocked publishers (Karger 0.3% / Sage 0.0% of the gap) were
+confirmed near-irrelevant to recall.
+
+## 2026-06-01 Session — KCNH2/RYR2/SCN5A Acquisition Replay & No-Gold Source QC
+
+KCNH2 missing-recall diagnosis showed the biggest immediate lever was source
+acquisition, not another broad extraction run. The acquisition worklist now
+reports PMID recall separately for PMIDs selected for full-text acquisition and
+PMIDs that actually landed usable full text after `fetch_paywalled.py`.
+
+KCNH2 acquisition experiment on
+`results/KCNH2/e2e_working_20260529_full/01_off`:
+
+- Gold-assisted acquisition worklist selected 39 PMIDs for fetch and 64 PMIDs
+  for acquisition or source rebinding.
+- `fetch_paywalled.py` landed 20 usable full-text PMIDs. This is
+  `20/262 = 7.6336%` PMID recall for actual usable full text downloaded, versus
+  `39/262 = 14.8855%` PMID recall for PMIDs merely selected for fetch.
+- Staged refresh replayed those 20 sources without mutating canonical
+  extractions; 17 passed the acceptance gate and 3 were rejected for variant
+  regressions (`19038855`, `16399053`, `26022375`).
+- Comparable KCNH2 score after ClinVar + PubTator, figures skipped:
+  PMIDs **89.69%**, variant rows **84.96%**, unique variants **84.15%**.
+  This improves the prior KCNH2 baseline of roughly 87.79% / 82.54% / 82.64%.
+
+SCN5A and RYR2 were then audited with the same gold-assisted acquisition
+worklist builder against the 2026-05-18 turnkey run:
+
+- SCN5A selected 148 PMIDs for fetch (`148/757 = 19.5509%` selected-for-fetch
+  PMID recall) and 191 PMIDs for acquisition or source rebinding
+  (`191/757 = 25.2312%`). The fetch bucket represents 391 missing distinct
+  variants, with another 242 in refresh-replay and 28 in manual/blocked source
+  work.
+- SCN5A existing-source replay first targeted the 41 already available
+  refresh-replay PMIDs: 35 passed, 5 were regression-gated
+  (`10973849`, `21964171`, `24606995`, `26173111`, `28491684`), and 1 was
+  explosion-gated (`26669661`). After ClinVar + PubTator with figures skipped,
+  this intermediate DB scored PMIDs **597/757 (78.86%)**, variant rows
+  **2244/3128 (71.74%)**, unique variants **950/1183 (80.30%)**.
+- SCN5A `fetch_paywalled.py` then ran on the 148 fetch-selected PMIDs. The run
+  was interrupted before a native summary, but the output-dir summarizer
+  recovered 143 attempted PMIDs and 44 usable full-text PMIDs
+  (`44/757 = 5.8124%` actual usable-fulltext-downloaded PMID recall), versus
+  `148/757 = 19.5509%` selected-for-fetch recall. The same 44 PMIDs were
+  accepted by staged refresh; three 76-character placeholders (`10727647`,
+  `15671436`, `17420262`) were rejected by the 500-character source gate.
+- SCN5A after fetched-source replay plus DB-observed ClinVar + PubTator,
+  figures skipped: PMIDs **629/757 (83.09%)**, variant rows
+  **2331/3128 (74.52%)**, unique variants **996/1183 (84.19%)**, patients
+  **4673/6219 (75.14%)**, affected **3546/4876 (72.72%)**, unaffected
+  **1127/1343 (83.92%)**. Compared with the prior current scored SCN5A row
+  below, this is +55 unique variants.
+- Residual SCN5A diagnosis after that score: `29325976` is the largest single
+  remaining gap (87 missing distinct variants). The main text explicitly says
+  all SCN5A mutations are in Supplemental Table 2, but the supplement download
+  is Cloudflare/redirect blocked (`mmc1.docx`, `supplements_downloaded=0`).
+  Gold-assisted and no-gold worklists now route this pattern as
+  `missing_variant_supplement` source acquisition instead of generic
+  underextraction; the no-gold latest SCN5A source QC found 19 such PMIDs.
+- Targeted `29325976` v3 experiment: `fetch_paywalled.py` now tries an
+  authenticated Playwright/browser supplement fallback after requests-based
+  supplement download fails. In this session Chrome cookie decryption loaded
+  0 cookies; the supplement still failed (`Exceeded 30 redirects`, browser
+  request 403, browser navigation timeout). Elsevier API body recovery succeeded
+  and staged refresh accepted the source, but extraction found 0 variants. This
+  confirms the 87 missing variants are in the blocked Supplemental Table 2, not
+  in the API body. Residual post-fetch accounting for the current SCN5A DB:
+  108 PMIDs selected for fetch (`108/757 = 14.2668%` selected-for-fetch PMID
+  recall), 115 selected for source acquisition or rebinding (`15.1915%`), and
+  the targeted run produced 1 usable-fulltext/source-refresh-successful PMID
+  (`29325976`, `1/757 = 0.1321%`) with no variant recovery.
+- Targeted SCN5A residual Wiley/Springer API-route batch on 2026-06-02:
+  13 PMIDs were attempted from the 108-PMID residual fetch queue, covering 41
+  missing distinct variants (`13/757 = 1.7173%` fetch-attempted PMID recall).
+  `fetch_paywalled.py` landed 2 usable full-text PMIDs (`16643399`,
+  `24667783`; `2/757 = 0.2642%` usable-fulltext-downloaded PMID recall),
+  while 9 Wiley PMIDs stayed Cloudflare/TDM-403 blocked and 2 Springer PMIDs
+  failed the content-quality gate. Corrected staged refresh on top of
+  `refresh_20260601_154228/staged_extractions` attempted those 2 PMIDs,
+  accepted 1 (`16643399`, 0 extracted variants; `1/757 = 0.1321%`
+  source-refresh-successful PMID recall), and regression-gated `24667783`
+  (`prior=25`, `new=1`). Corrected no-figure rescore remained unchanged:
+  PMIDs **629/757 (83.09%)**, variant rows **2331/3128 (74.52%)**, unique
+  variants **996/1183 (84.19%)**.
+- Follow-up `24667783` diagnosis showed the fetched Springer/Nature source had
+  the right `.doc` supplement, but antiword lost the SCN5A table rows. macOS
+  `textutil` conversion recovered the Word table; scanner gene-context filtering
+  removed the cross-gene `P73T` leak; the extraction artifact filter now rejects
+  gene symbols such as `SCN5A` as malformed protein notations; and the scanner
+  plus artifact guard now accept protein range deletions such as
+  `p.Lys1505_Gln1507del` / `K1505_Q1507del`. The first forced one-PMID staged
+  refresh recovered five previously missing gold rows (`N406S`, `E1784K`,
+  `Y1795C`, `P1332L`, `M1498T`). The deletion-parser follow-up then recovered
+  the remaining `24667783` gold row (`P.K1505_Q1507DEL`), leaving no missing
+  rows for that PMID in the final PubTator-layer missing list. Final no-figure
+  SCN5A score after DB-observed ClinVar + PubTator:
+  PMIDs **629/757 (83.09%)**, variant rows **2337/3128 (74.71%)**, unique
+  variants **996/1183 (84.19%)**, patients **4679/6219 (75.24%)**, affected
+  **3552/4876 (72.85%)**, unaffected **1127/1343 (83.92%)**. Compared with the
+  pre-`24667783` no-figure score, this is +6 matched variant rows and no
+  PMID/unique movement.
+- RYR2 selected 37 PMIDs for fetch (`37/178 = 20.7865%`) and 59 PMIDs for
+  acquisition or source rebinding (`59/178 = 33.1461%`). `fetch_paywalled.py`
+  was interrupted before writing a final summary, but the outcome summarizer
+  recovered partial output-dir results: 17 usable full-text PMIDs landed
+  (`17/178 = 9.5506%` actual usable-fulltext-downloaded PMID recall), covering
+  80 missing distinct variants. Staged source refresh accepted 34/41 PMIDs
+  (`34/178 = 19.1011%` source-refresh-successful PMID recall).
+- RYR2 staged refresh replayed 41 source candidates: 34 passed, 4 failed source
+  quality checks, and 3 were rejected by the regression gate
+  (`31913406`, `33500567`, `33897349`). The rebuilt DB migrated 646/646
+  extraction JSONs.
+- RYR2 after DB-observed ClinVar + PubTator, figures skipped:
+  PMIDs **143/178 (80.34%)**, variant rows **792/973 (81.40%)**, unique
+  variants **573/675 (84.89%)**, patients **1669/2033 (82.10%)**, affected
+  **1325/1658 (79.92%)**, unaffected **344/375 (91.73%)**. Compared with the
+  prior current scored RYR2 row below, this is +26 unique variants.
+
+New turnkey/no-gold tooling added in this session:
+
+- `scripts/recall_audit/source_acquisition_audit.py` builds a source worklist
+  without reading gold standards or recall discrepancies.
+- `gvf gvf-run` now runs a `source-qc` step and writes `source_qc/` artifacts:
+  source worklist, fetch queue, source override CSV, and summary JSON.
+- `gvf gvf-run --source-recovery` is now the opt-in no-gold source recovery
+  loop: fetch the source-QC queue, write selected-vs-successful acquisition
+  outcome accounting, staged-refresh accepted source overrides, and score/report
+  against the refreshed DB when recovery layers are not skipped.
+- `scripts/recall_audit/summarize_acquisition_outcome.py` now supports both
+  gold recall mode and no-gold worklist coverage mode. In gold mode it reports
+  both selected-for-fetch PMID recall and actually usable-fulltext-downloaded
+  PMID recall. When passed a `refresh_run_db.py` summary, it also reports
+  `source_refresh_attempted` and `source_refresh_successful` PMID recall.
+- Source/acquisition audits detect explicit prose pointers such as "All SCN5A
+  mutations are listed in Supplemental Table 2" when the corresponding
+  supplemental table body is absent. `fetch_input.csv` now includes these
+  missing target-gene supplement cases, with DOI recovery from run-local
+  `result.json` / artifact JSON where possible.
+- `scripts/refresh_run_db.py` supports repeatable `--source-override-csv` and
+  `--stage-extractions` so fetched sources can be replayed in a disposable
+  extraction copy.
+- `scripts/refresh_run_db.py` also supports repeatable/comma-separated
+  `--replay-model` so a bounded replay can override a stuck or experimental
+  default Tier 3 model without editing `.env`.
+- `pipeline/source_quality.py` now shares the extractor's 500-character minimum
+  full-text gate so tiny placeholder files are not counted as usable sources.
+- `scripts/fetch_paywalled.py` preserves publisher supplement-link counts
+  across Elsevier API body fallback and prints `supp_links` separately from
+  `supp_downloaded`, so blocked supplement acquisition is visible in the run
+  log and summary JSON.
+- `scripts/fetch_paywalled.py` also threads an optional browser-backed
+  supplement download fallback into the paywall enricher. If a supplement does
+  download from a publisher page and the Elsevier API later replaces a stub main
+  body, the recovered supplement markdown is appended to the API body instead of
+  being overwritten.
+- Publisher API fallback is now generalized for Elsevier, Wiley, and Springer:
+  when a browser strategy is absent, empty, stubby, or supplement-only,
+  `fetch_paywalled.py` tries the matching API client and writes successful
+  bodies through the same quality gate and artifact schema.
+
+Gold-free KCNH2 source QC smoke test on the same run produced 5,017 run PMIDs:
+690 currently have usable full text, 4,327 are selected for fetch, and 89 are
+selected for source refresh. This is broad operational coverage, not recall.
+After tightening the denominator to exclude raw PubMed discovery lists by
+default, gold-free source QC on the 2026-05-18 turnkey run produced:
+SCN5A 1,496 actionable run PMIDs with 1,145 usable full text current
+(`76.54%`), 345 selected for fetch (`23.06%`), and 6 routed to
+manual/blocked; RYR2 638 actionable run PMIDs with 518 usable full text current
+(`81.19%`) and 120 selected for fetch (`18.81%`). Use
+`--include-discovery-pmids` only for intentionally broad diagnostics.
 
 ## 2026-05-29 Session — Applied Changes & Turnkey Reproduction
 
@@ -70,10 +460,15 @@ independently and start testing:
 ## Source Of Truth
 
 Use this file as the current issue/status tracker for the recall push. Other
-top-level handoff docs (`README.md`, `CLAUDE.md`, `CODEX.md`, and `TASKS.md`)
-should link here instead of carrying independent live metric tables. If a metric
-conflicts with this file, treat this file and the scored artifact below as
-authoritative.
+top-level handoff docs (`README.md`, `CLAUDE.md`, `AGENTS.md`, and `TASKS.md`;
+`CODEX.md` is now a pointer stub) should link here instead of carrying
+independent live metric tables. Companions: `docs/RECALL_HISTORY.md` is the
+append-only benchmark/change history (the trajectory over time — never delete
+its entries); `docs/RECALL_REFRESH_RUNBOOK.md` is the idempotent re-run procedure
+(`scripts/refresh_recall.py`) for when new papers/permissions arrive. If a metric conflicts with this file, this file
+is authoritative; within this file, the most recent dated per-gene session wins
+over the older four-gene aggregate table (see "How to read the numbers" at the
+top).
 
 Historical recovery docs and scripts are still useful for debugging, but they
 are not cold-start evidence unless they explicitly avoid gold-PMID-conditioned
@@ -91,9 +486,13 @@ inputs and KCNH2-only manual recovery.
 - There are unrelated local dirty files in this checkout. Do not assume they are
   part of this cleanup unless they are explicitly staged/committed later.
 
-## Current Scored Baseline
+## Historical Scored Baseline (2026-05-26)
 
-Use this artifact as the current scored baseline:
+> **Dated 2026-05-26 — four-gene aggregate.** This is the latest *joint* score
+> from the 2026-05-26 recovery pass. It is superseded by the 2026-06-11
+> canonical baseline at the top of this file.
+
+Aggregate scored-baseline artifact:
 
 `recall_metrics/post_rollback_recover_20260526_aggregate/summary.json`
 
@@ -398,19 +797,23 @@ The four non-200 rows are not token failures:
   and Gynaecology Canada*; likely outside Vanderbilt's ScienceDirect package.
 - KCNH2: 1 unresolved candidate; see per-gene unlock CSV.
 
-### Where the unlocked bodies live
+### Where the source bodies live
 
-All saved into the run's existing `pmc_fulltext/` (no separate subdirs), so the
-standard extraction discovery path picks them up without per-PMID-dir plumbing:
+As of 2026-06-04, all fetched source (full text + supplements + figures) was
+consolidated and deduplicated into a single discoverable home:
 
-- `validation_runs/turnkey_e2e_20260518_213934/results/KCNH2/20260518_213938/pmc_fulltext/*_FULL_CONTEXT.md`
-- `validation_runs/turnkey_e2e_20260518_213934/results/SCN5A/20260518_213938/pmc_fulltext/*_FULL_CONTEXT.md`
-- `validation_runs/turnkey_e2e_20260518_213934/results/RYR2/20260518_213938/pmc_fulltext/*_FULL_CONTEXT.md`
-- `validation_runs/turnkey_e2e_20260518_213934/results/KCNE1/20260518_213938/pmc_fulltext/*_FULL_CONTEXT.md`
-- `validation_runs/20260517_203904/results/KCNQ1/20260517_204424/pmc_fulltext/*_FULL_CONTEXT.md`
+- **`corpus/<GENE>/<PMID>/`** — `{PMID}_FULL_CONTEXT.md`, `{PMID}_CLEANED.md`,
+  `{PMID}_figures/`, `{PMID}_supplements/`, `{PMID}_artifacts.json`.
+- **`corpus/INDEX.json`** / **`corpus/INDEX.csv`** — gene → PMID → paths,
+  bytes, figure/supplement counts, and which run each best copy came from.
 
-Each directory also contains an `insttoken_unlock_results.csv` with the
-per-PMID outcome.
+6,257 distinct (gene,PMID) papers (KCNQ1 2396, SCN5A 1496, KCNH2 1299, RYR2 638,
+KCNE1 428), verified as a complete superset of every prior `pmc_fulltext/`
+location. The old per-run `pmc_fulltext/` trees under `results/` and
+`validation_runs/` were removed after consolidation; their run DBs and
+`extractions/` remain in place. Build/refresh with the corpus builder
+(`scripts/build_source_corpus.py` if promoted, else the one-off used on
+2026-06-04).
 
 ### Historical post-token PMID recall (before 2026-05-25 refresh)
 
@@ -433,7 +836,7 @@ The honest measurement against the then-current DBs is below
 | **Aggregate (4-gene)** | **1133/1502** | **75.4%** | **-14.6** |
 
 This table is retained for before/after context only. The current baseline is
-the post-rollback + DB-PMID recovery score at the top of this file.
+the 2026-06-11 canonical score at the top of this file.
 
 ## Historical High-Yield Missing PMIDs
 
@@ -481,11 +884,13 @@ SQLite rows:
    too few variants, which means the decisive variants are likely in missing
    supplements, table bodies, figures/pedigrees, or publisher content not
    represented in the saved markdown.
-2. **Count semantics and table precision.** High-yield deterministic table
-   recovery now finds many variants, but carrier, affected, and unaffected
-   counts remain well below 90%. Multi-gene consortium tables such as
-   `32893267` need row-level precision and count audits before being used as
-   headline gains.
+2. **Count semantics and regex-table precision.** High-yield deterministic
+   table recovery now finds many variants, but carrier, affected, and unaffected
+   counts remain well below 90%. With explicit source-layer provenance,
+   `regex_table` is the count-bearing FP surface to validate first
+   (`929` counted extras, 57.5% counted precision). Multi-gene consortium
+   tables such as `32893267` need row-level precision and count audits before
+   being used as headline gains.
 3. **Non-Elsevier paywalls still outstanding**:
    - Wiley: **resolved 2026-05-26.** Off-VPN probe with the current
      `WILEY_API_KEY` returned a 635 KB full-text PDF for `10.1002/humu.21126`
@@ -634,11 +1039,16 @@ comparison-based scoring). Every DB-mutating step carries an explicit gate.
    is bound while a larger one is already on disk), and ~290 more sit in
    physical `{pmid}_supplements/` dirs that re-extraction never re-reads
    (discovery globs only `*_DATA_ZONES.md` / `*_CLEANED.md` / `*_FULL_CONTEXT.md`).
-3. **Re-binding is not automatically safe.** The existing replay gate
-   (`refresh_run_db.py:510`) only rejects when new < prior variants; a larger
-   GARBAGE file that explodes the count passes. `_largest_context_path` filters
-   only on `is_usable_fulltext_source` (nonempty / not-abstract-only), not
-   article quality. C1 below adds the missing over-count/quality gate.
+3. **Re-binding is gated on count, not yet on semantics.** The replay path
+   (`refresh_run_db.py`) now has TWO internal-consistency gates: a regression
+   gate (rejects new < prior) and a variant-explosion gate
+   (`_is_variant_explosion`, default-on at :522 — rejects new > 10x prior AND
+   >=400 absolute AND >=300 delta, the signature of garbage / wrong-paper /
+   multi-gene leakage). `_largest_context_path` also filters abstract fallbacks
+   and sub-500-character sources. What is still MISSING is a semantic / on-gene
+   quality gate: none of these prove the recovered variants are real and
+   on-target. C1 below should add that semantic gate — NOT lower the explosion
+   thresholds, which would suppress legitimate supplement recoveries.
 
 ### Done
 
@@ -656,30 +1066,26 @@ comparison-based scoring). Every DB-mutating step carries an explicit gate.
 
 ### Tier 0 — Measure first (cheap, unblocks judgment on every other lever)
 
-- **P1 — Precision metric + artifact in the scoring harness.** Add
-  `compute_precision_summary` (gold-PMID-restricted: denominator = matched +
-  unmatched-DB-rows-on-gold-PMIDs only; the ~81% of unmatched rows on non-gold
-  PMIDs are unjudgeable). Frame as a false-positive UPPER BOUND, not clean
-  precision (gold is not paper-exhaustive). Emit
-  `unmatched_db_rows_on_gold_pmids.csv` for adjudication; sample the
-  figure-reader's contribution. (`cli/compare_variants.py`,
-  `scripts/run_recall_suite.py`.)
+- **P1 — Precision metric + artifact in the scoring harness: DONE 2026-06-11.**
+  `compute_precision_summary` is gold-PMID-restricted, frames the result as a
+  false-positive upper bound, emits `unmatched_db_rows_on_gold_pmids.csv`, and
+  now reports `counted_extra_on_gold_pmids`,
+  `precision_vs_counted_gold_pmids`, and `by_source_layer` so recovery/linker
+  rows are decomposable without manual sampling.
 
-### Tier 1 — Cheap code wins, no-gold-safe (start here)
+### Tier 1 — Cheap code wins, no-gold-safe
 
-- **C3 — Fixed-width parser gene-scoping.** The fixed-width (pdftotext) parser
-  scopes captions only against 17 hard-coded cardiac genes + LQT aliases
-  (`_gene_scope_from_table_label`, `extraction.py:1421`); a caption naming any
-  other gene leaks (empirically a BRCA1 caption leaks rows into a MYH7 run).
-  Reuse the careful gene-token extractor `_gene_symbol_tokens`
-  (`table_router.py:874`) but PRESERVE LQT1/2/3 alias resolution (that extractor
-  ignores LQT/LQTS). Prerequisite for C1 and C2.
-- **R1a — Precision gate on figure-reader output.** Figures run on every
-  `gvf-run` (`gvf_run.py` passes `--pmc-dir`) and write RAW rows
-  (`extract_figure_variants.py:142-181`, only filter is "has a cdna/protein
-  string"). Add a validate/corroborate gate (position-in-range + well-formed
-  notation; env knob, default validate) so vision noise stops contaminating new
-  DBs. Image-only detection itself is R1b (Tier 3).
+- **C3 — Fixed-width parser gene-scoping: DONE 2026-06-06.** The fixed-width
+  (pdftotext) parser now scopes captions with explicit cardiac genes + LQT
+  aliases, generic digit-bearing gene tokens via `_gene_symbol_tokens`, and
+  contextual all-letter gene captions such as `LMNA mutations`. Regression tests
+  cover BRCA1 and LMNA off-target leakage plus a no-gene prose caption that must
+  remain claimable by the target.
+- **R1a — Figure-reader precision gate: mostly done / lower priority.** Figures
+  run on every `gvf-run` and now carry explicit `source_layer='figure'`; the
+  figure bucket is comparatively clean after notation gating (`39` counted
+  extras, 85.8% counted precision). Do not prioritize figure adjudication ahead
+  of `regex_table` count validation.
 - **C1 — Re-bind source discovery to the largest on-disk `_FULL_CONTEXT.md`**
   per PMID (~431 rows, no network), GATED: source-quality + title/PMID match +
   variant-explosion guard (reject suspicious count blow-ups), not just the

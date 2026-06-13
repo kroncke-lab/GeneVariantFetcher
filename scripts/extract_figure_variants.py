@@ -244,6 +244,12 @@ def _ensure_variant(
     return int(cur.lastrowid)
 
 
+def _ensure_source_layer_column(con: sqlite3.Connection) -> None:
+    columns = {row[1] for row in con.execute("PRAGMA table_info(variant_papers)")}
+    if "source_layer" not in columns:
+        con.execute("ALTER TABLE variant_papers ADD COLUMN source_layer TEXT")
+
+
 def ingest_report(
     report: PMIDFigureReport, db_path: Path, source_tag: str = "figure-reader"
 ) -> int:
@@ -279,6 +285,7 @@ def ingest_cached_variants(
     gate_mode = _figure_variant_gate_mode()
     con = sqlite3.connect(str(db_path))
     try:
+        _ensure_source_layer_column(con)
         _ensure_paper(con, pmid, gene)
         added = 0
         dropped: dict[str, int] = {}
@@ -314,8 +321,8 @@ def ingest_cached_variants(
             )
             con.execute(
                 """INSERT INTO variant_papers
-                   (variant_id, pmid, source_location, additional_notes, key_quotes)
-                   VALUES (?, ?, ?, ?, ?)""",
+                   (variant_id, pmid, source_location, additional_notes, key_quotes, source_layer)
+                   VALUES (?, ?, ?, ?, ?, 'figure')""",
                 (vid, pmid, source_tag, note, "[]"),
             )
             added += 1

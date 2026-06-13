@@ -307,6 +307,24 @@ class TestProteinVariantScanning:
         norms = {v.normalized for v in result.variants}
         assert expected_normalized in norms
 
+    @pytest.mark.parametrize(
+        "text",
+        ["p.Lys1505_Gln1507del", "K1505_Q1507del"],
+        ids=["pLys1505_Gln1507del", "K1505_Q1507del"],
+    )
+    def test_scn5a_range_deletions(self, scn5a_scanner, text):
+        result = scn5a_scanner.scan(f"SCN5A deletion {text} was identified")
+        norms = {v.normalized for v in result.variants}
+        assert "K1505_Q1507del" in norms
+
+    def test_range_deletion_does_not_emit_suffix_only_deletion(self, scn5a_scanner):
+        result = scn5a_scanner.scan(
+            "SCN5A p.Lys1505_Gln1507del was identified in Table 2."
+        )
+        norms = {v.normalized for v in result.variants}
+        assert "K1505_Q1507del" in norms
+        assert "Q1507del" not in norms
+
 
 # =============================================================================
 # TestCdnaVariantScanning
@@ -443,6 +461,62 @@ class TestFalsePositiveFiltering:
     def test_valid_variants_not_filtered(self, scanner):
         assert not scanner._is_false_positive("R534C")
         assert not scanner._is_false_positive("p.Arg534Cys")
+
+
+# =============================================================================
+# TestGeneContextFiltering
+# =============================================================================
+
+
+class TestGeneContextFiltering:
+    """Tests that multi-gene table rows do not bleed into the target gene."""
+
+    def test_scanner_filters_rows_explicitly_labeled_with_other_gene(
+        self, scn5a_scanner
+    ):
+        text = """
+        | Patient | Gene | Aa change (p.) |
+        | 5 | KCNH2 | Ala561Val |
+        | 19 | SCN5A | Glu1784Lys |
+        """
+        result = scn5a_scanner.scan(text)
+        norms = {v.normalized for v in result.variants}
+        assert "E1784K" in norms
+        assert "A561V" not in norms
+
+    def test_target_gene_context_keeps_variant_when_other_gene_also_named(
+        self, scn5a_scanner
+    ):
+        text = "SCN5A and KCNH2 were screened; the SCN5A Glu1784Lys row is listed."
+        result = scn5a_scanner.scan(text)
+        norms = {v.normalized for v in result.variants}
+        assert "E1784K" in norms
+
+    def test_nearest_gene_assignment_filters_other_gene_variant_in_sentence(
+        self, scn5a_scanner
+    ):
+        text = (
+            "KCNQ1 p.(Pro73Thr) was previously described as a VUS, "
+            "and SCN5A p.(Pro1008Ser) had been associated with arrhythmia."
+        )
+        result = scn5a_scanner.scan(text)
+        norms = {v.normalized for v in result.variants}
+        assert "P1008S" in norms
+        assert "P73T" not in norms
+
+    def test_nearest_gene_assignment_handles_wrapped_multigene_table_rows(
+        self, scn5a_scanner
+    ):
+        text = """
+        | 33 | KCNQ1 | 1 | Cytoplasmic |  |  |  |
+        | N-term | Pro73Thr | 217C>A | Missense | het |
+        | 46 | SCN5A | 12 | Cytoplasmic |  |  |  |
+        | C-term | Arg620Cys | 1858 C>T | Missense | het |
+        """
+        result = scn5a_scanner.scan(text)
+        norms = {v.normalized for v in result.variants}
+        assert "R620C" in norms
+        assert "P73T" not in norms
 
 
 # =============================================================================

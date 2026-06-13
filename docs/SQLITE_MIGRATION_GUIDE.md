@@ -45,7 +45,7 @@ The database uses a normalized schema with the following tables:
 
 ### Installation
 
-First, ensure you have Python 3.8+ and install dependencies:
+First, ensure you have Python 3.11+ and install dependencies:
 
 ```bash
 pip install tabulate  # For query_variants_db.py
@@ -53,14 +53,15 @@ pip install tabulate  # For query_variants_db.py
 
 ### Basic Migration
 
-To migrate a data directory to SQLite:
+To migrate a data directory to SQLite (the script lives at
+`harvesting/migrate_to_sqlite.py`; run it as a module from the repo root):
 
 ```bash
-python migrate_to_sqlite.py --data-dir /path/to/output/TTR/20251125_114028
+python -m harvesting.migrate_to_sqlite --data-dir /path/to/output/TTR/20251125_114028
 ```
 
 This will:
-1. Create `variants.db` in the current directory
+1. Create `{GENE}.db` (auto-detected from the gene symbol, e.g. `TTR.db`) in the current directory
 2. Import all JSON files from the `extractions` subdirectory
 3. Show migration statistics
 
@@ -69,7 +70,7 @@ This will:
 To migrate AND clean up the file system:
 
 ```bash
-python migrate_to_sqlite.py \
+python -m harvesting.migrate_to_sqlite \
     --data-dir /path/to/output/TTR/20251125_114028 \
     --cleanup \
     --delete-pmc-after-archive
@@ -84,7 +85,7 @@ This will:
 ### Custom Database Name
 
 ```bash
-python migrate_to_sqlite.py \
+python -m harvesting.migrate_to_sqlite \
     --data-dir /path/to/output/TTR/20251125_114028 \
     --db ttr_variants.db
 ```
@@ -94,7 +95,7 @@ python migrate_to_sqlite.py \
 If your extraction files are in a different subdirectory (e.g., `extractions_rerun`):
 
 ```bash
-python migrate_to_sqlite.py \
+python -m harvesting.migrate_to_sqlite \
     --data-dir /path/to/output/TTR/20251125_114028 \
     --extractions-subdir extractions_rerun
 ```
@@ -104,7 +105,7 @@ python migrate_to_sqlite.py \
 To see what would happen without actually migrating:
 
 ```bash
-python migrate_to_sqlite.py \
+python -m harvesting.migrate_to_sqlite \
     --data-dir /path/to/output/TTR/20251125_114028 \
     --cleanup \
     --dry-run
@@ -147,7 +148,7 @@ sqlite> SELECT v.protein_notation, pd.total_carriers_observed, pd.affected_count
 You can also query the database directly using SQLite:
 
 ```bash
-sqlite3 variants.db
+sqlite3 GENE.db
 ```
 
 ### Example Queries
@@ -233,7 +234,7 @@ After migration:
 The script searches for `extractions`, `extractions_rerun`, and `extraction` directories. If your directory has a different name:
 
 ```bash
-python migrate_to_sqlite.py \
+python -m harvesting.migrate_to_sqlite \
     --data-dir /path/to/data \
     --extractions-subdir your_directory_name
 ```

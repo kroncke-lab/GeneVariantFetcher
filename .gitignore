@@ -50,7 +50,8 @@ venv.bak/
 .Ruserdata
 
 # Agent tooling and local scratch files
-AGENTS.md
+# NOTE: AGENTS.md is tracked — it is a thin pointer to CLAUDE.md (the canonical
+# handoff), not session scratch. The rest below are per-session scratch.
 HEARTBEAT.md
 IDENTITY.md
 SOUL.md
@@ -110,6 +111,10 @@ recall_metrics/
 
 # Validation framework run artifacts (multi-GB snapshots, never commit)
 validation_runs/
+
+# Consolidated source corpus (deduplicated full text + supplements + figures,
+# multi-GB fetched source; discoverable via corpus/INDEX.{json,csv}, never commit)
+corpus/
 
 # Ad-hoc local recall debugging helpers
 scripts/_analyze_missing.py

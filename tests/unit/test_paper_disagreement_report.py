@@ -1,3 +1,6 @@
+import pytest
+
+from scripts.recall_audit.common import find_full_contexts
 from scripts.recall_audit.paper_disagreement_report import (
     _build_context_index,
     _failure_class,
@@ -36,6 +39,21 @@ def test_source_info_uses_consumed_cleaned_source_before_latest_context(tmp_path
     assert info["available_context_bytes"] == latest.stat().st_size
     assert info["data_available"] is True
     assert info["source_desync"] is True
+
+
+def test_find_full_contexts_skips_broken_context_symlink(tmp_path):
+    results_dir = tmp_path / "results"
+    context_dir = results_dir / "KCNH2" / "run" / "pmc_fulltext"
+    context_dir.mkdir(parents=True)
+    broken = context_dir / "123_FULL_CONTEXT.md"
+    try:
+        broken.symlink_to(context_dir / "missing_FULL_CONTEXT.md")
+    except OSError:
+        pytest.skip("symlinks unavailable on this filesystem")
+    good = results_dir / "KCNH2" / "newer" / "pmc_fulltext" / "123_FULL_CONTEXT.md"
+    _write_context(good, "usable context")
+
+    assert find_full_contexts(results_dir, "KCNH2", "123") == [good]
 
 
 def test_source_info_marks_abstract_json_with_later_context_as_desync(tmp_path):

@@ -706,6 +706,78 @@ def filter_papers(
 # =============================================================================
 
 
+def _resolve_corpus_dir() -> Optional[Path]:
+    """Resolve the consolidated source corpus dir (GVF_CORPUS_DIR or <repo>/corpus)."""
+    env = os.environ.get("GVF_CORPUS_DIR")
+    corpus = Path(env) if env else Path(__file__).resolve().parents[1] / "corpus"
+    return corpus if corpus.is_dir() else None
+
+
+def _consolidate_from_corpus(
+    pmids: List[str],
+    harvest_dir: Path,
+    gene_symbol: str,
+    corpus_dir: Optional[Path],
+) -> set:
+    """Reuse already-fetched source from the consolidated corpus cache.
+
+    Looks up ``corpus/<GENE>/<PMID>/`` and, when the cached full text is usable
+    (``is_usable_fulltext_source`` — i.e. not a paywall/abstract stub), copies
+    it plus its ``_figures``/``_supplements`` into the run so the harvester
+    skips re-fetching it. A stub/compromised cached copy is deliberately NOT
+    reused, so a fresh run (e.g. after adding a publisher key) will re-attempt
+    it. This is the cross-run idempotency cache.
+
+    Returns the set of PMIDs satisfied from the corpus.
+    """
+    import shutil
+
+    from pipeline.source_quality import is_usable_fulltext_source
+
+    recovered: set = set()
+    if not corpus_dir:
+        return recovered
+    gene_dir = corpus_dir / gene_symbol.upper()
+    if not gene_dir.is_dir():
+        return recovered
+
+    already_present = {
+        f.name.replace("_FULL_CONTEXT.md", "")
+        for f in harvest_dir.glob("*_FULL_CONTEXT.md")
+    }
+    for pmid in (str(p) for p in pmids):
+        if pmid in already_present:
+            continue
+        src_ft = gene_dir / pmid / f"{pmid}_FULL_CONTEXT.md"
+        if not src_ft.is_file() or not is_usable_fulltext_source(src_ft):
+            continue  # absent or stub/compromised -> let the harvester try
+        try:
+            shutil.copy2(str(src_ft), str(harvest_dir / f"{pmid}_FULL_CONTEXT.md"))
+            for extra in (f"{pmid}_CLEANED.md", f"{pmid}_artifacts.json"):
+                s = gene_dir / pmid / extra
+                if s.is_file():
+                    shutil.copy2(str(s), str(harvest_dir / extra))
+            for suffix in ("_figures", "_supplements"):
+                s = gene_dir / pmid / f"{pmid}{suffix}"
+                d = harvest_dir / f"{pmid}{suffix}"
+                if s.is_dir() and not d.exists():
+                    shutil.copytree(str(s), str(d))
+            recovered.add(pmid)
+        except Exception as e:  # noqa: BLE001 - best-effort cache reuse
+            logger.warning(f"corpus cache: failed to reuse PMID {pmid}: {e}")
+
+    if recovered:
+        logger.info(
+            f"✓ corpus cache: reused {len(recovered)} papers from {gene_dir} "
+            f"(skipping re-download)"
+        )
+        print(
+            f"\n📦 Corpus cache: reused {len(recovered)} papers from corpus/"
+            f"{gene_symbol.upper()} (no re-fetch needed)"
+        )
+    return recovered
+
+
 def _consolidate_prior_downloads(
     pmids: List[str],
     harvest_dir: Path,
@@ -849,7 +921,13 @@ def download_fulltext(
             prior_output_base = output_path
 
     harvest_dir.mkdir(parents=True, exist_ok=True)
-    recovered_pmids = _consolidate_prior_downloads(
+
+    # Corpus cache first (authoritative, quality-gated cross-run cache), then
+    # fall back to the legacy prior-run walk for anything not yet in corpus.
+    recovered_pmids = _consolidate_from_corpus(
+        pmids_to_download, harvest_dir, gene_symbol, _resolve_corpus_dir()
+    )
+    recovered_pmids |= _consolidate_prior_downloads(
         pmids_to_download, harvest_dir, prior_output_base
     )
 

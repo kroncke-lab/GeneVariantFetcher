@@ -21,9 +21,9 @@ class TestPaperRecall:
 
     def test_paper_count_minimum(self, downloaded_pmids):
         """Ensure minimum number of papers downloaded."""
-        assert (
-            len(downloaded_pmids) >= 140
-        ), f"Only {len(downloaded_pmids)} papers, expected >= 140"
+        assert len(downloaded_pmids) >= 140, (
+            f"Only {len(downloaded_pmids)} papers, expected >= 140"
+        )
 
     def test_fulltext_coverage(self, downloaded_papers):
         """Check full-text vs abstract-only breakdown."""

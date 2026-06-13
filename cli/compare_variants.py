@@ -26,6 +26,12 @@ from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Set, Tuple
 
 import pandas as pd
+from utils.source_layers import (
+    count_reasons,
+    junk_notation_reason,
+    normalize_source_layer,
+    source_layer_sql_case,
+)
 
 # Try to import rapidfuzz for better fuzzy matching; fallback to difflib
 try:
@@ -484,6 +490,14 @@ def extract_sqlite_data(
 
         has_pd = "penetrance_data" in table_info
         has_ir = "individual_records" in table_info
+        has_vp = "variant_papers" in table_info
+        has_vp_layer = has_vp and "source_layer" in table_info["variant_papers"].columns
+        has_vp_source_location = (
+            has_vp and "source_location" in table_info["variant_papers"].columns
+        )
+        has_vp_additional_notes = (
+            has_vp and "additional_notes" in table_info["variant_papers"].columns
+        )
 
         pd_join = (
             "LEFT JOIN penetrance_data pd "
@@ -512,6 +526,34 @@ def extract_sqlite_data(
             if has_ir
             else ""
         )
+        vp_layer_expr = source_layer_sql_case(
+            "source_location" if has_vp_source_location else "NULL",
+            "source_layer" if has_vp_layer else None,
+            additional_notes_expr=(
+                "additional_notes" if has_vp_additional_notes else None
+            ),
+        )
+        vp_layer_cte = (
+            f""",
+        vp_layer AS (
+            SELECT
+                pmid,
+                variant_id,
+                GROUP_CONCAT(DISTINCT {vp_layer_expr}) AS source_layer
+            FROM variant_papers
+            GROUP BY pmid, variant_id
+        )"""
+            if has_vp
+            else ""
+        )
+        vp_join = (
+            "LEFT JOIN vp_layer vp ON vp.pmid = al.pmid AND vp.variant_id = al.variant_id"
+            if has_vp
+            else ""
+        )
+        layer_select_expr = (
+            "COALESCE(vp.source_layer, 'llm_text')" if has_vp else "'llm_text'"
+        )
 
         carriers_expr = []
         affected_expr = []
@@ -532,23 +574,29 @@ def extract_sqlite_data(
         unaffected_expr.append("NULL")
         uncertain_expr.append("NULL")
 
+        def coalesce_sql(values: list[str]) -> str:
+            return values[0] if len(values) == 1 else f"COALESCE({', '.join(values)})"
+
         query = f"""
         WITH all_links AS (
             {union_sql}
-        ){ir_cte}
+        ){ir_cte}{vp_layer_cte}
         SELECT
             al.pmid,
             COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) AS variant,
+            v.gene_symbol,
             v.protein_notation,
             v.cdna_notation,
-            COALESCE({", ".join(carriers_expr)}) AS carriers_total,
-            COALESCE({", ".join(affected_expr)}) AS affected_count,
-            COALESCE({", ".join(unaffected_expr)}) AS unaffected_count,
-            COALESCE({", ".join(uncertain_expr)}) AS uncertain_count
+            {layer_select_expr} AS source_layer,
+            {coalesce_sql(carriers_expr)} AS carriers_total,
+            {coalesce_sql(affected_expr)} AS affected_count,
+            {coalesce_sql(unaffected_expr)} AS unaffected_count,
+            {coalesce_sql(uncertain_expr)} AS uncertain_count
         FROM all_links al
         JOIN variants v ON al.variant_id = v.variant_id
         {pd_join}
         {ir_join}
+        {vp_join}
         """
         logger.info(
             "Executing union_all query across variant_papers + penetrance_data + individual_records"
@@ -566,8 +614,10 @@ def extract_sqlite_data(
             SELECT
                 pd.pmid,
                 COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) as variant,
+                v.gene_symbol,
                 v.protein_notation,
                 v.cdna_notation,
+                'llm_text' as source_layer,
                 pd.total_carriers_observed as carriers_total,
                 pd.affected_count,
                 pd.unaffected_count,
@@ -584,8 +634,10 @@ def extract_sqlite_data(
             SELECT
                 ir.pmid,
                 COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) as variant,
+                v.gene_symbol,
                 v.protein_notation,
                 v.cdna_notation,
+                'llm_text' as source_layer,
                 COUNT(*) as carriers_total,
                 SUM(CASE WHEN ir.affected_status = 'affected' THEN 1 ELSE 0 END) as affected_count,
                 SUM(CASE WHEN ir.affected_status = 'unaffected' THEN 1 ELSE 0 END) as unaffected_count,
@@ -599,12 +651,28 @@ def extract_sqlite_data(
 
     elif strategy == "variant_papers_join":
         # Just get variant-paper associations (no counts available)
-        query = """
+        has_vp_layer = "source_layer" in table_info["variant_papers"].columns
+        has_vp_source_location = (
+            "source_location" in table_info["variant_papers"].columns
+        )
+        has_vp_additional_notes = (
+            "additional_notes" in table_info["variant_papers"].columns
+        )
+        layer_expr = source_layer_sql_case(
+            "vp.source_location" if has_vp_source_location else "NULL",
+            "vp.source_layer" if has_vp_layer else None,
+            additional_notes_expr=(
+                "vp.additional_notes" if has_vp_additional_notes else None
+            ),
+        )
+        query = f"""
             SELECT
                 vp.pmid,
                 COALESCE(v.protein_notation, v.cdna_notation, v.genomic_position) as variant,
+                v.gene_symbol,
                 v.protein_notation,
                 v.cdna_notation,
+                {layer_expr} as source_layer,
                 NULL as carriers_total,
                 NULL as affected_count,
                 NULL as unaffected_count,
@@ -631,6 +699,8 @@ def extract_sqlite_data(
             SELECT
                 {pmid_col} as pmid,
                 {variant_select} as variant,
+                NULL as gene_symbol,
+                'llm_text' as source_layer,
                 {count_cols.get("carriers_total", "NULL")} as carriers_total,
                 {count_cols.get("affected_count", "NULL")} as affected_count,
                 {count_cols.get("unaffected_count", "NULL")} as unaffected_count,
@@ -642,9 +712,43 @@ def extract_sqlite_data(
 
     # Normalize PMIDs (handles float conversion like 16470702.0 -> "16470702")
     df["pmid"] = df["pmid"].apply(normalize_pmid)
+    df = filter_junk_sqlite_rows(df)
 
     logger.info(f"Extracted {len(df)} records from SQLite")
     return df
+
+
+def filter_junk_sqlite_rows(df: pd.DataFrame) -> pd.DataFrame:
+    """Drop known-invalid figure/regex-table notation artifacts before scoring."""
+
+    if df.empty:
+        return df
+
+    reasons: list[str | None] = []
+    for _, row in df.iterrows():
+        reasons.append(
+            junk_notation_reason(
+                source_layer=row.get("source_layer"),
+                protein_notation=row.get("protein_notation"),
+                cdna_notation=row.get("cdna_notation"),
+                variant=row.get("variant"),
+                gene_symbol=row.get("gene_symbol"),
+            )
+        )
+    mask = pd.Series([reason is not None for reason in reasons], index=df.index)
+    if not mask.any():
+        return df
+
+    counts = count_reasons(reason for reason in reasons if reason)
+    breakdown = ", ".join(
+        f"{reason}={count}" for reason, count in sorted(counts.items())
+    )
+    logger.info(
+        "Dropped %d junk figure/regex_table SQLite rows before scoring (%s)",
+        int(mask.sum()),
+        breakdown,
+    )
+    return df.loc[~mask].copy()
 
 
 # =============================================================================
@@ -1356,6 +1460,7 @@ class ComparisonRow:
     missing_in_sqlite: bool = False
     missing_in_excel: bool = False
     count_mismatch: bool = False
+    sqlite_source_layer: Optional[str] = None
 
 
 def safe_int(value: Any) -> Optional[int]:
@@ -1527,6 +1632,11 @@ def aggregate_sqlite_data(df: pd.DataFrame) -> Dict[Tuple[str, str], Dict[str, A
 
         key = (pmid, variant_key)
 
+        raw_source_layer = str(row.get("source_layer") or "").strip()
+        source_layer = normalize_source_layer(raw_source_layer) or "llm_text"
+        if "," in raw_source_layer:
+            source_layer = "mixed"
+
         if key not in aggregated:
             aggregated[key] = {
                 "pmid": pmid,
@@ -1537,7 +1647,10 @@ def aggregate_sqlite_data(df: pd.DataFrame) -> Dict[Tuple[str, str], Dict[str, A
                 "unaffected_count": 0,
                 "protein_notation": row.get("protein_notation"),
                 "cdna_notation": row.get("cdna_notation"),
+                "source_layer": source_layer,
             }
+        elif source_layer != aggregated[key].get("source_layer"):
+            aggregated[key]["source_layer"] = "mixed"
 
         # Aggregate counts (handle None values)
         aggregated[key]["carriers_total"] += safe_int(row.get("carriers_total")) or 0
@@ -1926,6 +2039,7 @@ def compare_data(
                 sqlite_unaffected=sqlite_entry["unaffected_count"] or None,
                 unaffected_diff=None,
                 missing_in_excel=True,
+                sqlite_source_layer=sqlite_entry.get("source_layer"),
             )
         )
 
@@ -1993,6 +2107,7 @@ def create_comparison_row(
         unaffected_diff=unaffected_diff,
         phenotype=phenotype,
         count_mismatch=count_mismatch,
+        sqlite_source_layer=sqlite_entry.get("source_layer") if sqlite_entry else None,
     )
 
 
@@ -2140,8 +2255,12 @@ def compute_precision_summary(results: List[ComparisonRow]) -> Dict[str, Any]:
                               (not missing_in_sqlite, match_type != "none")
         extra_on_gold_pmids = missing_in_excel (DB-only) rows whose PMID is in
                               the gold PMID set
+        counted_extra_on_gold_pmids = extra rows on gold PMIDs carrying at least
+                                      one extracted count field
         precision_vs_gold_pmids = matched_db / (matched_db + extra_on_gold_pmids)
                                   (None when the denominator is 0)
+        precision_vs_counted_gold_pmids = matched_db /
+                                          (matched_db + counted_extra_on_gold_pmids)
     """
     gold_rows = [r for r in results if not r.missing_in_excel]
     matched_rows = [
@@ -2150,22 +2269,78 @@ def compute_precision_summary(results: List[ComparisonRow]) -> Dict[str, Any]:
     gold_pmids = {r.pmid for r in gold_rows if r.pmid}
 
     matched_db = len(matched_rows)
+    extras_on_gold = [r for r in results if r.missing_in_excel and r.pmid in gold_pmids]
     # Extra DB-only rows count only on PMIDs gold curated; rows on non-gold
     # PMIDs are not judgeable by the gold standard and are excluded.
-    extra_on_gold_pmids = sum(
-        1 for r in results if r.missing_in_excel and r.pmid in gold_pmids
+    extra_on_gold_pmids = len(extras_on_gold)
+    counted_extra_on_gold_pmids = sum(
+        1
+        for r in extras_on_gold
+        if any(
+            value is not None
+            for value in (
+                r.sqlite_carriers_total,
+                r.sqlite_affected,
+                r.sqlite_unaffected,
+            )
+        )
     )
+    by_layer: Dict[str, Dict[str, Any]] = {}
+    layers = {
+        (normalize_source_layer(r.sqlite_source_layer) or "llm_text")
+        for r in [*matched_rows, *extras_on_gold]
+    }
+    for layer in sorted(layers):
+        layer_matched = sum(
+            1
+            for r in matched_rows
+            if (normalize_source_layer(r.sqlite_source_layer) or "llm_text") == layer
+        )
+        layer_extras = [
+            r
+            for r in extras_on_gold
+            if (normalize_source_layer(r.sqlite_source_layer) or "llm_text") == layer
+        ]
+        layer_counted = sum(
+            1
+            for r in layer_extras
+            if any(
+                value is not None
+                for value in (
+                    r.sqlite_carriers_total,
+                    r.sqlite_affected,
+                    r.sqlite_unaffected,
+                )
+            )
+        )
+        by_layer[layer] = {
+            "matched_db": layer_matched,
+            "extra_on_gold_pmids": len(layer_extras),
+            "counted_extra_on_gold_pmids": layer_counted,
+            "precision_vs_gold_pmids": _ratio(
+                layer_matched, layer_matched + len(layer_extras)
+            ),
+            "precision_vs_counted_gold_pmids": _ratio(
+                layer_matched, layer_matched + layer_counted
+            ),
+        }
 
     return {
         "matched_db": matched_db,
         "extra_on_gold_pmids": extra_on_gold_pmids,
+        "counted_extra_on_gold_pmids": counted_extra_on_gold_pmids,
         "precision_vs_gold_pmids": _ratio(matched_db, matched_db + extra_on_gold_pmids),
+        "precision_vs_counted_gold_pmids": _ratio(
+            matched_db, matched_db + counted_extra_on_gold_pmids
+        ),
+        "by_source_layer": by_layer,
         "note": (
             "Upper bound on false-positive rate, restricted to gold-curated "
             "PMIDs. Gold is a curator-selected subset, not paper-exhaustive, "
             "so 'extra' DB rows on gold PMIDs may still be true positives the "
-            "curator omitted. This is an extra-rows-relative-to-gold rate, NOT "
-            "clean precision."
+            "curator omitted. counted_extra_on_gold_pmids restricts that "
+            "denominator to extra rows carrying extracted counts. These are "
+            "extra-rows-relative-to-gold rates, NOT clean precision."
         ),
     }
 
@@ -2325,20 +2500,46 @@ def write_markdown_report(
     if precision:
         pvg = precision.get("precision_vs_gold_pmids")
         pvg_text = "n/a" if pvg is None else f"{pvg:.1%}"
+        pcg = precision.get("precision_vs_counted_gold_pmids")
+        pcg_text = "n/a" if pcg is None else f"{pcg:.1%}"
         lines.extend(
             [
-                "## Precision (vs gold PMIDs)",
+                "## Precision (counted extras vs gold PMIDs)",
                 "",
-                "Extra-rows-relative-to-gold rate, restricted to gold-curated "
-                "PMIDs. Upper bound on false positives, NOT clean precision.",
+                "Headline precision uses only count-bearing extra rows on "
+                "gold-curated PMIDs. The raw gold-PMID rate is a loose "
+                "false-positive upper bound dominated by zero-count variant "
+                "mentions.",
                 "",
                 f"- Matched DB rows: {precision.get('matched_db', 0)}",
-                f"- Extra DB rows on gold PMIDs: "
+                f"- Counted extra DB rows on gold PMIDs: "
+                f"{precision.get('counted_extra_on_gold_pmids', 0)}",
+                f"- precision_vs_counted_gold_pmids: {pcg_text}",
+                f"- Loose extra DB rows on gold PMIDs: "
                 f"{precision.get('extra_on_gold_pmids', 0)}",
-                f"- precision_vs_gold_pmids: {pvg_text}",
+                f"- loose precision_vs_gold_pmids: {pvg_text}",
                 "",
             ]
         )
+        by_layer = precision.get("by_source_layer") or {}
+        if by_layer:
+            lines.extend(
+                [
+                    "| Source layer | Matched DB rows | Extra rows | Counted extra rows | precision_vs_gold_pmids | precision_vs_counted_gold_pmids |",
+                    "|--------------|-----------------|------------|--------------------|-------------------------|--------------------------------|",
+                ]
+            )
+            for layer, block in sorted(by_layer.items()):
+                layer_p = block.get("precision_vs_gold_pmids")
+                layer_pc = block.get("precision_vs_counted_gold_pmids")
+                lines.append(
+                    f"| {layer} | {block.get('matched_db', 0)} | "
+                    f"{block.get('extra_on_gold_pmids', 0)} | "
+                    f"{block.get('counted_extra_on_gold_pmids', 0)} | "
+                    f"{'n/a' if layer_p is None else f'{layer_p:.1%}'} | "
+                    f"{'n/a' if layer_pc is None else f'{layer_pc:.1%}'} |"
+                )
+            lines.append("")
 
     # Top mismatches table
     if summary["count_mismatches"] > 0:

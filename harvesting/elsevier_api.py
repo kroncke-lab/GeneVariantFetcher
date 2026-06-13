@@ -11,7 +11,8 @@ API Documentation: https://dev.elsevier.com/documentation/ArticleRetrievalAPI.wa
 import logging
 import re
 import time
-from typing import Optional, Tuple
+from pathlib import Path
+from typing import List, Optional, Tuple
 from urllib.parse import quote, urlparse
 from xml.etree import ElementTree as ET
 
@@ -176,6 +177,91 @@ class ElsevierAPIClient:
             return None, "Request timed out"
         except requests.exceptions.RequestException as e:
             return None, f"Request failed: {str(e)}"
+
+    # ------------------------------------------------------------------
+    # Supplement (mmc) discovery + download
+    #
+    # The authenticated full-text XML references supplement files by their
+    # ScienceDirect CDN basename, e.g.
+    #   1-s2.0-S1547527118300146-mmc1.docx
+    # which maps to the (publicly served) URL
+    #   https://ars.els-cdn.com/content/image/<basename>
+    # The body-only ``xml_to_markdown`` drops these, so a paper recovered via the
+    # API lands without its supplement mutation tables. These helpers recover them.
+    # ------------------------------------------------------------------
+
+    CDN_BASE = "https://ars.els-cdn.com/content/image"
+    _MMC_REF_RE = re.compile(
+        r"1-s2\.0-[A-Za-z0-9]+-mmc\d+\.(?:pdf|docx?|xlsx?|pptx?|csv|txt|zip)",
+        re.IGNORECASE,
+    )
+
+    @classmethod
+    def extract_supplement_refs(cls, xml_content: str) -> List[str]:
+        """Return unique ScienceDirect supplement basenames referenced in *xml*.
+
+        Pure/deterministic (no network): scans for ``1-s2.0-<PII>-mmc<N>.<ext>``
+        tokens. Order-preserving + de-duplicated.
+        """
+        if not xml_content:
+            return []
+        seen: dict[str, None] = {}
+        for m in cls._MMC_REF_RE.findall(xml_content):
+            seen.setdefault(m, None)
+        return list(seen)
+
+    def download_supplements(self, xml_content: str, dest_dir: Path) -> List[Path]:
+        """Download every mmc supplement referenced in *xml_content* into *dest_dir*.
+
+        Returns the list of saved file paths. The CDN serves supplements without
+        auth, but we retry with the API key + insttoken headers if a plain GET is
+        rejected. Files that come back as HTML (paywall/error pages) or are tiny
+        are skipped. Idempotent: an already-present file is not re-downloaded.
+        """
+        refs = self.extract_supplement_refs(xml_content)
+        if not refs:
+            return []
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        auth_headers = {}
+        if self.api_key:
+            auth_headers["X-ELS-APIKey"] = self.api_key
+        if self.insttoken:
+            auth_headers["X-ELS-Insttoken"] = self.insttoken
+
+        saved: List[Path] = []
+        for ref in refs:
+            # local name is the mmc tail (mmc1.docx), not the full CDN basename
+            local = re.sub(r"^1-s2\.0-[A-Za-z0-9]+-", "", ref)
+            out = dest_dir / local
+            if out.exists() and out.stat().st_size > 1000:
+                saved.append(out)
+                continue
+            url = f"{self.CDN_BASE}/{ref}"
+            data = None
+            for headers in ({}, auth_headers):
+                try:
+                    self._rate_limit()
+                    resp = self.session.get(url, headers=headers, timeout=60)
+                except requests.exceptions.RequestException as exc:
+                    logger.warning(
+                        "Elsevier supplement GET failed for %s: %s", url, exc
+                    )
+                    continue
+                if resp.status_code == 200 and len(resp.content) > 1000:
+                    head = resp.content[:512].lstrip().lower()
+                    if head.startswith(b"<!doctype html") or head.startswith(b"<html"):
+                        continue  # paywall/error HTML, not the file
+                    data = resp.content
+                    break
+            if data is None:
+                logger.info("Elsevier supplement not recoverable: %s", ref)
+                continue
+            out.write_bytes(data)
+            saved.append(out)
+            logger.info(
+                "downloaded Elsevier supplement %s (%d bytes)", local, len(data)
+            )
+        return saved
 
     def get_fulltext_by_pii(self, pii: str) -> Tuple[Optional[str], Optional[str]]:
         """

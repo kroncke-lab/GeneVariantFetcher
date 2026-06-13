@@ -64,6 +64,21 @@ def test_enumerate_finds_captioned_tables():
     assert len(t.data_lines) == 2
 
 
+def test_enumerate_finds_etable_captions():
+    text = """
+eTable 1. LQT1 Mutations or Rare Variants
+
+| cDNA | Protein | No. of patients |
+| --- | --- | --- |
+| c.521G>A | p.R147H | 2 |
+"""
+
+    tables = enumerate_markdown_tables(text)
+
+    assert len(tables) == 1
+    assert tables[0].caption == "eTable 1. LQT1 Mutations or Rare Variants"
+
+
 def test_enumerate_drops_caption_less_pseudo_tables():
     # Pseudo-table (no caption, no variant-ish keyword in header) gets filtered.
     pseudo = """Some prose that contains | pipes | for | formatting
@@ -212,6 +227,23 @@ def test_parse_routed_table_accepts_target_gene_alias_in_gene_column():
 
     assert len(variants) == 1
     assert variants[0]["protein_notation"] == "p.Gly572Ser"
+
+
+def test_parse_routed_table_scopes_lqt_caption_without_gene_column():
+    table = MarkdownTable(
+        table_id="T1",
+        caption="eTable 1. LQT1 Mutations or Rare Variants",
+        header_line="| cDNA | Protein | No. of patients |",
+        header_cells=["cDNA", "Protein", "No. of patients"],
+        data_lines=["| c.521G>A | p.R147H | 2 |"],
+        char_start=0,
+        char_end=120,
+    )
+    mapping = {"cdna": 0, "protein": 1, "patient_count": 2}
+
+    assert parse_routed_table(table, mapping, "SCN5A") == []
+    variants = parse_routed_table(table, mapping, "KCNQ1")
+    assert [v["protein_notation"] for v in variants] == ["p.R147H"]
 
 
 def test_parse_routed_table_splits_parallel_pairs_and_sums_duplicate_rows():

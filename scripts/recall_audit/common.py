@@ -29,6 +29,33 @@ RUN_DIR_ENV = "GVF_RECALL_RUN_DIR"
 DEFAULT_GOLD_DIR = REPO_ROOT / "gene_variant_fetcher_gold_standard" / "normalized"
 DEFAULT_RESULTS_DIR = REPO_ROOT / "results"
 DEFAULT_CONTEXT_MIN_BYTES = 5_000
+SUPPLEMENT_REF_RE = re.compile(
+    r"\b(?:Supplement(?:al|ary)?|Supporting)\s+"
+    r"(?:Table|Tables|Data|File)\s*([A-Za-z0-9]+)",
+    re.IGNORECASE,
+)
+SUPPLEMENT_BODY_RE = re.compile(
+    r"(?im)^\s*(?:#{1,6}\s*)?(?:\*\*)?\s*"
+    r"(?:Supplement(?:al|ary)?|Supporting)\s+"
+    r"(?:Table|Data|File)\s*([A-Za-z0-9]+)\b",
+)
+VARIANT_SUPPLEMENT_TERMS = (
+    "mutation",
+    "mutations",
+    "variant",
+    "variants",
+    "genetic",
+)
+SUPPLEMENT_POINTER_TERMS = (
+    "listed",
+    "shown",
+    "provided",
+    "available",
+    "summarized",
+    "summarised",
+    "contained",
+    "found",
+)
 
 
 def repo_path(value: str | Path) -> Path:
@@ -81,6 +108,66 @@ def parse_bool(value: Any) -> bool:
     if isinstance(value, bool):
         return value
     return str(value).strip().lower() in {"1", "true", "yes", "y"}
+
+
+def _supplement_ref_label(value: str) -> str:
+    return re.sub(r"\W+", "", value).upper()
+
+
+def unresolved_variant_supplement_refs(text: str, gene: str) -> list[str]:
+    """Return referenced supplement-table labels that are not present as bodies.
+
+    This intentionally looks for explicit prose pointers such as "All SCN5A
+    mutations are listed in Supplemental Table 2" and then checks whether a
+    same-number supplemental table body appears as a heading/caption. It avoids
+    treating ordinary main-text mentions of supplemental figures or statistics
+    as missing variant data.
+    """
+    if not text:
+        return []
+    body_labels = {
+        _supplement_ref_label(match.group(1))
+        for match in SUPPLEMENT_BODY_RE.finditer(text)
+    }
+    unresolved: set[str] = set()
+    for match in SUPPLEMENT_REF_RE.finditer(text):
+        label = _supplement_ref_label(match.group(1))
+        if not label or label in body_labels:
+            continue
+        start = max(0, match.start() - 180)
+        end = min(len(text), match.end() + 180)
+        snippet = text[start:end]
+        relative_match = match.start() - start
+        prefix = snippet[:relative_match]
+        suffix = snippet[relative_match:]
+        left_boundary = max(prefix.rfind("."), prefix.rfind("\n"))
+        right_period = suffix.find(".")
+        right_newline = suffix.find("\n")
+        right_candidates = [idx for idx in (right_period, right_newline) if idx != -1]
+        right_boundary = (
+            relative_match + min(right_candidates) if right_candidates else len(snippet)
+        )
+        sentence = snippet[left_boundary + 1 : right_boundary].lower()
+        if (
+            gene
+            and gene.lower() not in sentence
+            and not any(term in sentence for term in VARIANT_SUPPLEMENT_TERMS)
+        ):
+            continue
+        if not any(term in sentence for term in SUPPLEMENT_POINTER_TERMS):
+            continue
+        unresolved.add(label)
+    return sorted(unresolved)
+
+
+def source_has_unresolved_variant_supplement_refs(path: Path | None, gene: str) -> bool:
+    if path is None or not path.exists():
+        return False
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return False
+    return bool(unresolved_variant_supplement_refs(text, gene))
 
 
 def read_csv_rows(path: Path) -> list[dict[str, str]]:
@@ -264,6 +351,7 @@ def find_full_contexts(
         candidates.extend(gene_root.glob(f"**/{wanted}"))
     if global_search and not candidates and results_dir.exists():
         candidates.extend(results_dir.glob(f"**/{wanted}"))
+    candidates = [p for p in candidates if p.exists()]
     unique = sorted(
         set(candidates), key=lambda p: (p.stat().st_size, str(p)), reverse=True
     )

@@ -1,14 +1,11 @@
-# GeneVariantFetcher — Agent Handoff (Codex)
+# CODEX.md
 
-**This file is intentionally a pointer, not a second handoff.**
+This file is intentionally a pointer, not a handoff document.
 
-The single source of truth for project handoff — current status, architecture,
-recovery pipeline, file map, and house rules — is [`CLAUDE.md`](./CLAUDE.md).
-Read it before doing anything substantive.
+The canonical agent handoff lives in `CLAUDE.md`, and `AGENTS.md` mirrors the
+same pointers. Do not add handoff content here — keeping three parallel agent
+files in sync caused drift, so CODEX.md is deliberately thin.
 
-For current measured recall, the scored baseline, high-yield PMIDs, and the
-next-run plan, see [`docs/RECALL_STATUS.md`](./docs/RECALL_STATUS.md)
-(authoritative).
-
-(CODEX.md previously duplicated CLAUDE.md and drifted out of sync. It is now a
-pointer so there is exactly one handoff to maintain.)
+For current instructions, read `CLAUDE.md`. For live recall metrics and the
+next-run plan, read `docs/RECALL_STATUS.md` (the single source of truth for
+numbers).

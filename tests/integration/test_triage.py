@@ -183,9 +183,9 @@ def test_functional_with_phenotype():
     print(json.dumps(result, indent=2))
     print(f"\nExpected: KEEP (functional + phenotype)")
     print(f"Actual: {result['decision']}")
-    assert (
-        result["decision"] == "KEEP"
-    ), "Failed: Should KEEP functional studies with phenotype"
+    assert result["decision"] == "KEEP", (
+        "Failed: Should KEEP functional studies with phenotype"
+    )
     print("✓ PASSED")
 
 

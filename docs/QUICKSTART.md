@@ -25,7 +25,8 @@ python3.11 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install GVF in development mode
-pip install -e .
+pip install -e ".[browser,dev]"
+python -m playwright install chromium
 ```
 
 ## Configuration

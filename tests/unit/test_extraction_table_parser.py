@@ -1,5 +1,7 @@
 """Regression tests for deterministic extraction table parsing."""
 
+from types import SimpleNamespace
+
 from pipeline.extraction import ExpertExtractor
 from utils.models import ExtractionResult, Paper
 
@@ -62,6 +64,28 @@ Table 3. Summary of putative LQT3-associated mutations in SCN5A
     assert [v["protein_notation"] for v in variants] == ["P52H"]
     assert variants[0]["source_location"].startswith("Table 3.")
     assert variants[0]["penetrance_data"]["total_carriers_observed"] == 1
+
+
+def test_table_regex_skips_off_target_gene_column_rows():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+| Gene | Protein | cDNA |
+|---|---|---|
+| KCNH2 | p.(Gly1036Asp) | c.3107G>A |
+| SCN5A | p.(Arg18Gln) | c.53G>A |
+| SCN5A | p.(Gln1507_Pro1509del) | c.4519_4527delCAGAAGCCC |
+"""
+
+    variants = extractor._extract_variants_from_tables(text, "SCN5A")
+
+    proteins = {v.get("protein_notation") for v in variants}
+    cdnas = {v.get("cdna_notation") for v in variants}
+    assert "R18Q" in proteins
+    assert "P.GLN1507_PRO1509DEL" in proteins
+    assert "c.53G>A" in cdnas
+    assert "c.4519_4527delCAGAAGCCC" in cdnas
+    assert "G1036D" not in proteins
+    assert "c.3107G>A" not in cdnas
 
 
 def test_deterministic_parser_filters_generic_noncardiac_table_titles():
@@ -306,6 +330,173 @@ eTable 3. LQT3 Mutations or Rare Variants
     }
     assert by_protein["p.A344A"]["cdna_notation"] == "c.1032G>A"
     assert all(v["source_location"].startswith("eTable 1.") for v in variants)
+
+
+def test_pdf_linearized_lqt_etable_reconstructs_rows_for_markdown_parser():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+eTable 1. LQT1 Mutations or Rare Variants
+Mutation
+site
+Site
+N
+Female
+(n)
+Proband
+(n)
+Mean QTc
+(proband)
+Syncope
+(n)
+CA/VF
+(n)
+c.521G>A  p.R147H
+MS
+non-pore MS
+2
+1
+1
+444
+1
+0
+c.1111G>T  p.D317Y  MS
+S5-pore-S6
+2
+1
+1
+495
+2
+0
+c.1683G>T  p.R561S
+C
+N/C-term
+3
+2
+0
+1
+0
+c.3093insG  p.G1031fsX
+1118
+C
+N/C-term
+2
+2
+1
+525
+1
+0
+N: N-terminus, C: C-terminus, MS: membrane spanning, CA/VF: cardiac arrest
+"""
+
+    blocks = extractor._reconstruct_pdf_linearized_tables(text)
+
+    assert len(blocks) == 1
+    block = blocks[0]
+    assert (
+        "| cDNA | Protein | site | Site | No. of patients | Female (n) | "
+        "Proband (n) | Mean QTc (proband) | affected | CA/VF (n) |"
+    ) in block
+    assert (
+        "| c.521G>A | p.R147H | MS | non-pore MS | 2 | 1 | 1 | 444 | 1 | 0 |"
+    ) in block
+    assert (
+        "| c.1111G>T | p.D317Y | MS | S5-pore-S6 | 2 | 1 | 1 | 495 | 2 | 0 |"
+    ) in block
+    assert "| c.1683G>T | p.R561S | C | N/C-term | 3 | 2 | 0 | - | 1 | 0 |" in block
+    assert (
+        "| c.3093insG | p.G1031fsX1118 | C | N/C-term | 2 | 2 | 1 | 525 | 1 | 0 |"
+    ) in block
+
+    variants = extractor._parse_markdown_table_variants(
+        extractor._augment_pdf_linearized_tables(text), "KCNQ1"
+    )
+
+    by_protein = {v["protein_notation"]: v for v in variants}
+    assert set(by_protein) == {
+        "p.R147H",
+        "p.D317Y",
+        "p.R561S",
+        "p.G1031fsX1118",
+    }
+    assert by_protein["p.R147H"]["cdna_notation"] == "c.521G>A"
+    assert by_protein["p.R147H"]["penetrance_data"] == {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+    }
+    assert by_protein["p.D317Y"]["penetrance_data"] == {
+        "total_carriers_observed": 2,
+        "affected_count": 2,
+        "unaffected_count": 0,
+    }
+    assert by_protein["p.R561S"]["penetrance_data"] == {
+        "total_carriers_observed": 3,
+        "affected_count": 1,
+        "unaffected_count": 2,
+    }
+    assert by_protein["p.G1031fsX1118"]["penetrance_data"] == {
+        "total_carriers_observed": 2,
+        "affected_count": 1,
+        "unaffected_count": 1,
+    }
+
+
+def test_pdf_linearized_table_updates_stale_estimate_for_deterministic_short_circuit():
+    extractor = ExpertExtractor(models=["test-model"], tier_threshold=0)
+    row_blocks = []
+    for idx in range(110):
+        pos = 100 + idx
+        row_blocks.extend(
+            [
+                f"c.{pos}G>A  p.R{pos}H",
+                "MS",
+                "non-pore MS",
+                "2",
+                "1",
+                "1",
+                "444",
+                "1",
+                "0",
+            ]
+        )
+    text = (
+        """
+eTable 1. LQT1 Mutations or Rare Variants
+Mutation
+site
+Site
+N
+Female
+(n)
+Proband
+(n)
+Mean QTc
+(proband)
+Syncope
+(n)
+CA/VF
+(n)
+"""
+        + "\n".join(row_blocks)
+        + "\nN: N-terminus, C: C-terminus, MS: membrane spanning\n"
+        + ("Long QT cohort methods and results. " * 80)
+    )
+
+    result = extractor._attempt_extraction(
+        Paper(
+            pmid="30758498",
+            title="LQT1 supplement",
+            gene_symbol="KCNQ1",
+            full_text=text,
+        ),
+        "test-model",
+        text,
+        estimated_variants=0,
+    )
+
+    assert result.success
+    assert result.model_used == "deterministic-table-parser"
+    assert len(result.extracted_data["variants"]) == 110
 
 
 def test_fixed_width_parser_reads_lqts_compendium_summary_rows():
@@ -643,6 +834,24 @@ Nucleotide Change              Coding Effect            Region
     assert set(by_protein) == {"Q55X", "L136P"}
 
 
+def test_fixed_width_caption_scopes_contextual_all_alpha_gene():
+    """All-letter genes need contextual scoping for novel-gene turnkey runs."""
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Supplemental Table 1. LMNA mutations in cardiomyopathy probands
+
+Nucleotide Change              Coding Effect            Region
+163C>T                         Q55X                     N-terminal
+407T>C                         L136P                    DI-S1
+"""
+
+    assert extractor._parse_fixed_width_table_variants(text, "MYH7") == []
+
+    lmna = extractor._parse_fixed_width_table_variants(text, "LMNA")
+    by_protein = {v["protein_notation"]: v for v in lmna}
+    assert set(by_protein) == {"Q55X", "L136P"}
+
+
 def test_fixed_width_no_gene_caption_is_not_oversuppressed():
     """A fixed-width caption that names NO gene must stay claimable by the target
     gene. The noisy open-vocab tokens in a prose caption (COMPENDIUM/TESTING/...)
@@ -858,19 +1067,25 @@ def test_artifact_filter_removes_malformed_protein_notations():
             {"gene_symbol": "KCNH2", "protein_notation": "A"},
             {"gene_symbol": "KCNH2", "protein_notation": "0.734027"},
             {"gene_symbol": "KCNH2", "protein_notation": "378"},
+            {"gene_symbol": "SCN5A", "protein_notation": "SCN5A"},
             {"gene_symbol": "KCNH2", "protein_notation": "p.Lys897Thr"},
             {"gene_symbol": "KCNH2", "cdna_notation": "c.2398+1G>A"},
+            {
+                "gene_symbol": "SCN5A",
+                "protein_notation": "p.Lys1505_Gln1507del",
+                "cdna_notation": "c.4513_4521del",
+            },
         ],
     }
 
-    filtered = extractor._filter_extraction_artifacts(data, "KCNH2")
+    filtered = extractor._filter_extraction_artifacts(data, "SCN5A")
 
     remaining = {
         v.get("protein_notation") or v.get("cdna_notation")
         for v in filtered["variants"]
     }
-    assert remaining == {"p.Lys897Thr", "c.2398+1G>A"}
-    assert filtered["extraction_metadata"]["malformed_filtered"] == 3
+    assert remaining == {"p.Lys897Thr", "c.2398+1G>A", "p.Lys1505_Gln1507del"}
+    assert filtered["extraction_metadata"]["malformed_filtered"] == 4
 
 
 def test_low_yield_router_result_does_not_short_circuit_full_text(monkeypatch):
@@ -940,3 +1155,172 @@ def test_low_yield_router_result_does_not_short_circuit_full_text(monkeypatch):
     assert result.model_used == "test-model"
     proteins = {v.get("protein_notation") for v in result.extracted_data["variants"]}
     assert {"p.Arg176Trp", "p.Leu552Ser", "p.His240His"} <= proteins
+
+
+def test_large_scanner_result_skips_hints_and_merge(monkeypatch):
+    import pipeline.extraction as extraction
+
+    extractor = ExpertExtractor(models=["test-model"], tier_threshold=1)
+    paper = Paper(
+        pmid="26669661",
+        title="Multi-gene supplemental table",
+        gene_symbol="SCN5A",
+        full_text="SCN5A variant supplemental table discussion. " * 120,
+    )
+
+    table_variant = {
+        "gene_symbol": "SCN5A",
+        "protein_notation": "p.Arg18Gln",
+        "source_location": "Supplemental Table 2",
+    }
+
+    class LargeScanner:
+        def __init__(self):
+            self.variants = [
+                SimpleNamespace(
+                    normalized=f"p.Ala{idx}Val",
+                    notation_type="protein",
+                    confidence=0.95,
+                    raw_text=f"A{idx}V",
+                    source="PMID_26669661",
+                )
+                for idx in range(extraction.SCANNER_REGEX_MERGE_MAX_VARIANTS + 1)
+            ]
+
+        def get_hints_for_prompt(self, max_hints):
+            raise AssertionError("oversized scanner result should not provide hints")
+
+    def fail_scanner_merge(*args, **kwargs):
+        raise AssertionError("oversized scanner result should not be merged")
+
+    monkeypatch.setattr(extractor, "_try_table_router", lambda *_: None)
+    monkeypatch.setattr(
+        extractor, "_extract_variants_from_tables", lambda *_: [table_variant]
+    )
+    monkeypatch.setattr(
+        extraction, "scan_document_for_variants", lambda *_, **__: LargeScanner()
+    )
+    monkeypatch.setattr(extraction, "merge_scanner_results", fail_scanner_merge)
+    monkeypatch.setattr(
+        extractor,
+        "call_llm_json_with_status",
+        lambda _prompt: (
+            {
+                "variants": [
+                    {
+                        "gene_symbol": "SCN5A",
+                        "protein_notation": "p.Glu1784Lys",
+                    }
+                ],
+                "extraction_metadata": {"total_variants_found": 1},
+            },
+            False,
+            "{}",
+        ),
+    )
+
+    result = extractor.extract(paper)
+
+    assert result.success
+    proteins = {v.get("protein_notation") for v in result.extracted_data["variants"]}
+    assert proteins == {"p.Glu1784Lys", "p.Arg18Gln"}
+    assert result.extracted_data["extraction_metadata"]["scanner_merge_skipped"] == {
+        "candidate_count": extraction.SCANNER_REGEX_MERGE_MAX_VARIANTS + 1,
+        "safety_cap": extraction.SCANNER_REGEX_MERGE_MAX_VARIANTS,
+        "reason": "candidate_count_exceeds_safety_cap",
+    }
+
+
+def test_pairs_from_reconstructed_blocks_maps_both_directions():
+    # The reconstructed table carries an explicit cDNA+protein pairing per row;
+    # the map lets a cDNA-only (or protein-only) extracted row recover its partner.
+    extractor = ExpertExtractor(models=["gpt-4"])
+    block = "\n".join(
+        [
+            "eTable 1. Mutations",
+            "| cDNA | Protein | No. of patients |",
+            "| --- | --- | --- |",
+            "| c.153C>A | p.Y51X | 1 |",
+            "| c.521G>A | p.R147H | 2 |",
+        ]
+    )
+    pairs = extractor._pairs_from_reconstructed_blocks([block])
+    assert pairs["c.153c>a"] == "p.Y51X"
+    assert pairs["c.521g>a"] == "p.R147H"
+    assert pairs["p.y51x"] == "c.153C>A"  # reverse direction
+
+
+def test_backfill_fills_missing_side_without_overwriting():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    extractor._linearized_variant_pairs = {
+        "c.153c>a": "p.Y51X",
+        "p.y51x": "c.153C>A",
+    }
+    data = {
+        "variants": [
+            {"cdna_notation": "c.153C>A", "protein_notation": None},  # fill protein
+            {"cdna_notation": "", "protein_notation": "p.Y51X"},  # fill cDNA
+            {"cdna_notation": "c.999Z>Q", "protein_notation": None},  # absent: stays
+            {"cdna_notation": "c.153C>A", "protein_notation": "p.KEEP"},  # keep
+        ]
+    }
+    extractor._backfill_variant_notation_pairs(data)
+    variants = data["variants"]
+    assert variants[0]["protein_notation"] == "p.Y51X"
+    assert variants[1]["cdna_notation"] == "c.153C>A"
+    assert variants[2]["protein_notation"] is None
+    assert variants[3]["protein_notation"] == "p.KEEP"
+
+
+def test_backfill_is_noop_when_no_table_reconstructed():
+    extractor = ExpertExtractor(models=["gpt-4"])
+    extractor._linearized_variant_pairs = {}
+    data = {"variants": [{"cdna_notation": "c.1A>T", "protein_notation": None}]}
+    extractor._backfill_variant_notation_pairs(data)
+    assert data["variants"][0]["protein_notation"] is None
+
+
+def test_pdf_linearized_reconstruction_generalizes_to_noncardiac_table():
+    # Generalization guard against overfitting: the reconstruction must fire on a
+    # generic supplement table with NO cardiac-specific columns (no Syncope, QTc,
+    # or CA/VF) — only generic Mutation/Region/N/Cases/Affected — so it works on
+    # genes we have not manually curated. The detector keys off generic
+    # variant + count column names, not the LQTS eTable it was first built on.
+    extractor = ExpertExtractor(models=["gpt-4"])
+    text = """
+Supplementary Table 1. BRCA1 pathogenic variants
+Mutation
+Region
+N
+Cases
+(n)
+Affected
+(n)
+c.68A>G  p.Glu23Gly
+RING
+3
+2
+2
+c.181T>G  p.Cys61Gly
+BRCT
+4
+3
+3
+c.5123C>A  p.Ala1708Glu
+BRCT
+6
+5
+5
+"""
+    blocks = extractor._reconstruct_pdf_linearized_tables(text)
+    assert len(blocks) == 1
+    block = blocks[0]
+    # cDNA and Protein columns were reconstructed for the generic variants.
+    assert "| c.68A>G | p.Glu23Gly |" in block
+    assert "| c.181T>G | p.Cys61Gly |" in block
+    assert "| c.5123C>A | p.Ala1708Glu |" in block
+    # And the pairing map (used for the post-extraction backfill) carries them.
+    extractor._augment_pdf_linearized_tables(text)
+    pairs = extractor._linearized_variant_pairs
+    assert pairs.get("c.68a>g") == "p.Glu23Gly"
+    assert pairs.get("c.5123c>a") == "p.Ala1708Glu"

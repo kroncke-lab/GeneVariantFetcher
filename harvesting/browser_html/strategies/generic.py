@@ -54,6 +54,11 @@ class GenericStrategy(PublisherStrategy):
             result.error = "no doi"
             return result
 
+        # Route through the institutional EZproxy when configured (no-op for
+        # doi.org; applies if a direct CF-blocked publisher URL is ever passed).
+        from harvesting.browser_html import ezproxy
+
+        target = ezproxy.wrap(target)
         try:
             page.goto(target, wait_until="load", timeout=ctx.timeout_s * 1000)
         except Exception as e:

@@ -72,6 +72,26 @@ _CONVERTIBLE_EXTS = (
 # multi-gigabyte raw sequencing data that won't help us and would blow the
 # disk. Body-text supplements (variant lists) are virtually always <25 MB.
 _DEFAULT_SUPP_SIZE_LIMIT_BYTES = 25 * 1024 * 1024
+
+
+def _default_max_supplements() -> int:
+    """Per-paper supplement cap, env-overridable via ``GVF_MAX_SUPPLEMENTS``.
+
+    Default 40 (was 12): supplement-heavy cohort papers list many files, and the
+    13th+ was silently dropped — the mutation table is sometimes a high-numbered
+    ``mmcN`` / ``MOESM_N``. The 25 MB per-file size cap still bounds disk use.
+    """
+    raw = (os.environ.get("GVF_MAX_SUPPLEMENTS") or "").strip()
+    if raw:
+        try:
+            val = int(raw)
+            if val > 0:
+                return val
+        except ValueError:
+            pass
+    return 40
+
+
 _IMAGE_EXTS = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".tif", ".tiff", ".bmp")
 
 
@@ -273,11 +293,14 @@ def enrich_paywall_full_context(
     session: Any = None,
     extra_captions: Optional[CaptionExtractionResult] = None,
     download_supplements: bool = True,
-    max_supplements: int = 12,
+    max_supplements: Optional[int] = None,
     supplement_size_limit_bytes: int = _DEFAULT_SUPP_SIZE_LIMIT_BYTES,
     download_timeout_s: int = 60,
     image_text_extractor: Optional[Callable[[List[Path]], str]] = None,
     source_url: Optional[str] = None,
+    supplement_download_fallback: Optional[
+        Callable[[str, Path, str, str, Dict[str, Any]], bool]
+    ] = None,
 ) -> EnrichmentResult:
     """Append caption block and supplement markdown to a rescued body.
 
@@ -300,7 +323,8 @@ def enrich_paywall_full_context(
             harvest path).
         download_supplements: Set to False to skip the download attempt
             entirely (useful in tests).
-        max_supplements: Cap on how many supplements we try to download.
+        max_supplements: Cap on how many supplements we try to download. None
+            (default) resolves to ``GVF_MAX_SUPPLEMENTS`` or 40.
         image_text_extractor: Optional callable ``(image_paths: List[Path]) ->
             str`` that extracts text from figure images. When *None* (default),
             extraction runs only if the ``GVF_EXTRACT_FIGURE_TEXT`` environment
@@ -308,11 +332,17 @@ def enrich_paywall_full_context(
             which case :func:`harvesting.figure_text_extractor.extract_images_to_markdown`
             is called with the configured vision model. Supply a stub here in
             tests to avoid real API calls.
+        supplement_download_fallback: Optional callback used only when the
+            normal requests-based supplement download fails. This lets callers
+            try an authenticated browser context without changing the default
+            fast path.
 
     Returns:
         :class:`EnrichmentResult` with the assembled markdown and audit
         metadata for the caller.
     """
+    if max_supplements is None:
+        max_supplements = _default_max_supplements()
     body = body_markdown or ""
 
     captions = CaptionExtractionResult()
@@ -360,6 +390,8 @@ def enrich_paywall_full_context(
             normalized = dict(entry)
             normalized["url"] = url
             normalized["name"] = name
+            if source_url:
+                normalized.setdefault("source_url", source_url)
             usable.append(normalized)
 
         if usable:
@@ -372,13 +404,25 @@ def enrich_paywall_full_context(
                 _filename: str,
                 _supp: Dict[str, Any],
             ) -> bool:
-                return _default_download(
+                if _default_download(
                     url=url,
                     file_path=file_path,
                     session=session,
                     size_limit_bytes=supplement_size_limit_bytes,
                     timeout_s=download_timeout_s,
-                )
+                ):
+                    return True
+                if supplement_download_fallback is not None:
+                    return bool(
+                        supplement_download_fallback(
+                            url,
+                            file_path,
+                            _pmid,
+                            _filename,
+                            _supp,
+                        )
+                    )
+                return False
 
             try:
                 result = process_supplement_files(

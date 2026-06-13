@@ -35,6 +35,7 @@ from pipeline.prompts import (
 )
 from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 from utils.models import ExtractionResult, Paper
+from utils.source_layers import infer_source_layer_from_text
 from utils.variant_scanner import (
     VariantScanner,
     merge_scanner_results,
@@ -45,6 +46,7 @@ logger = logging.getLogger(__name__)
 
 TABLE_HINT_MAX_VARIANTS = SCANNER_MAX_HINTS
 TABLE_REGEX_MERGE_MAX_VARIANTS = 500
+SCANNER_REGEX_MERGE_MAX_VARIANTS = 150
 
 
 def _find_data_zones_file(
@@ -464,21 +466,33 @@ class ExpertExtractor(BaseLLMCaller):
 
         # Create normalizer for validation
         normalizer = VariantNormalizer(gene_symbol)
+        target_gene = gene_symbol.upper()
 
         variants = []
         seen_variants = set()
         filtered_count = 0
+        row_gene_filtered_count = 0
 
         # Pre-process: normalize Unicode arrows (same as variant_scanner)
         full_text = (
             full_text.replace("\u2192", ">")
             .replace("\u2190", "<")
             .replace("\u21d2", ">")
+            .replace("\\_", "_")
+            .replace("\\*", "*")
         )
 
         # Variant patterns to look for in table cells
         protein_pattern = re.compile(
-            r"p\.([A-Z][a-z]{2}\d+[A-Z][a-z]{2}|[A-Z]\d+[A-Z*]|[A-Z][a-z]{2}\d+(?:fs|del|dup|ins))",
+            r"p\.\(?("
+            r"(?:[A-Z][a-z]{2}|[A-Z])\d{1,4}"
+            r"(?:_(?:[A-Z][a-z]{2}|[A-Z])\d{1,4})?"
+            r"(?:"
+            r"[A-Z][a-z]{2}|[A-Z*]|"
+            r"fs(?:Ter|X|\*)?\d*|"
+            r"del|dup|ins(?:[A-Z][a-z]{2}|[A-Z])*"
+            r")"
+            r")\)?",
             re.IGNORECASE,
         )
         cdna_pattern = re.compile(
@@ -487,12 +501,50 @@ class ExpertExtractor(BaseLLMCaller):
         )
         short_protein_pattern = re.compile(r"\b([A-Z]\d{2,4}(?:[A-Z*]|fs|del|dup))\b")
 
+        def genes_mentioned_in_cells(cells: list[str]) -> set[str]:
+            genes = set()
+            for cell in cells:
+                searchable = re.sub(r"[*_`\\]", " ", cell).upper()
+                for alias, official in self.TABLE_LABEL_GENE_ALIASES.items():
+                    if re.search(
+                        rf"(?<![A-Z0-9]){re.escape(alias)}(?![A-Z0-9])", searchable
+                    ):
+                        genes.add(official)
+                for explicit_gene in self.TABLE_LABEL_EXPLICIT_GENES:
+                    if re.search(
+                        rf"(?<![A-Z0-9]){re.escape(explicit_gene)}(?![A-Z0-9])",
+                        searchable,
+                    ):
+                        genes.add(explicit_gene)
+            return genes
+
+        active_table_genes: set[str] = set()
+
         # Find all markdown table rows
         for line in full_text.splitlines():
             line = line.strip()
             if not line.startswith("|"):
+                active_table_genes = set()
                 continue
             if set(line) <= {"|", "-", " ", ":"}:  # Skip separator rows
+                continue
+
+            cells = [cell.strip() for cell in line.strip("|").split("|")]
+            mentioned_genes = genes_mentioned_in_cells(cells)
+            if mentioned_genes:
+                active_table_genes = mentioned_genes
+
+            row_genes = []
+            for cell in cells:
+                normalized_cell = re.sub(r"[^A-Za-z0-9]", "", cell).upper()
+                row_gene = self.TABLE_LABEL_GENE_ALIASES.get(normalized_cell)
+                if not row_gene and normalized_cell in self.TABLE_LABEL_EXPLICIT_GENES:
+                    row_gene = normalized_cell
+                if row_gene:
+                    row_genes.append(row_gene)
+            context_genes = set(row_genes) or active_table_genes
+            if context_genes and target_gene not in context_genes:
+                row_gene_filtered_count += 1
                 continue
 
             # Extract variants from this row
@@ -559,7 +611,9 @@ class ExpertExtractor(BaseLLMCaller):
 
         if variants:
             logger.info(
-                f"Table regex extraction found {len(variants)} variants (filtered {filtered_count} non-target)"
+                f"Table regex extraction found {len(variants)} variants "
+                f"(filtered {filtered_count} non-target, "
+                f"{row_gene_filtered_count} off-target gene rows)"
             )
         return variants
 
@@ -755,10 +809,15 @@ class ExpertExtractor(BaseLLMCaller):
         r"^-$",  # Dash placeholder
         r"^\?$",  # Question mark placeholder
     ]
+    AA3_RE = (
+        r"Ala|Cys|Asp|Glu|Phe|Gly|His|Ile|Lys|Leu|Met|Asn|Pro|Gln|"
+        r"Arg|Ser|Thr|Val|Trp|Tyr|Ter|Stop|Xaa"
+    )
     PROTEIN_NOTATION_RE = re.compile(
-        r"^(?:p\.)?(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
+        rf"^(?:p\.)?(?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY])"
         r"\d{1,4}"
-        r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del|dup|ins)",
+        rf"(?:[_-](?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY])\d{{1,4}})?"
+        rf"(?:{AA3_RE}|[ACDEFGHIKLMNPQRSTVWY*X?]|fs(?:X|\*)?\d*|del|dup|ins)",
         re.IGNORECASE,
     )
     CDNA_NOTATION_RE = re.compile(
@@ -1045,6 +1104,8 @@ class ExpertExtractor(BaseLLMCaller):
         "CPVT",
         "DNA",
         "EFFECT",
+        "ETABLE",
+        "ETABLES",
         "EXON",
         "EXONS",
         "FIG",
@@ -1100,6 +1161,17 @@ class ExpertExtractor(BaseLLMCaller):
         "LQT2": "KCNH2",
         "LQT3": "SCN5A",
     }
+    TABLE_LABEL_CONTEXTUAL_GENE_RE = re.compile(
+        r"\b([A-Z][A-Z0-9-]{2,11})\s+"
+        r"(?:gene|genes|variant|variants|mutation|mutations)\b"
+        r"|"
+        r"\b(?:gene|genes|variant|variants|mutation|mutations)\s+"
+        r"(?:(?:in|of|for|from)\s+|:\s*)?"
+        r"([A-Z][A-Z0-9-]{2,11})\b"
+        r"|"
+        r"\b([A-Z][A-Z0-9-]{2,11})(?=-(?:associated|related)\b)",
+        re.IGNORECASE,
+    )
     TABLE_LABEL_EXPLICIT_GENES = {
         "ANK2",
         "CACNA1C",
@@ -1436,6 +1508,29 @@ class ExpertExtractor(BaseLLMCaller):
     # (COMPENDIUM/PROPERTIES/TESTING/...) is not mistaken for a gene.
     _OPEN_VOCAB_ALPHA_GENES = {"TTN", "APC", "RET", "VHL", "NF1", "NF2"}
 
+    def _contextual_gene_symbols_in_table_label(self, label: str) -> set[str]:
+        """Return all-letter gene tokens when the caption labels them as genes."""
+        if not label:
+            return set()
+
+        from pipeline.table_router import _gene_symbol_tokens
+
+        symbols: set[str] = set()
+        for match in self.TABLE_LABEL_CONTEXTUAL_GENE_RE.finditer(label.upper()):
+            for raw_token in match.groups():
+                token = (raw_token or "").strip()
+                if (
+                    not token
+                    or token in self.TABLE_LABEL_GENE_STOPWORDS
+                    or token.startswith(("LQT", "SQT"))
+                    or token not in _gene_symbol_tokens(token)
+                ):
+                    continue
+                if token.isalpha() and len(token) > 6:
+                    continue
+                symbols.add(token)
+        return symbols
+
     def _fixed_width_gene_scope_from_table_label(self, label: str) -> set[str]:
         """Open-vocabulary gene scope for the fixed-width off-target guard.
 
@@ -1449,7 +1544,9 @@ class ExpertExtractor(BaseLLMCaller):
           explicit cardiac genes + LQT alias resolution
           ∪ confidently gene-shaped tokens from the careful `_gene_symbol_tokens`
             extractor (it excludes protein-/cDNA-like tokens), restricted to
-            tokens that carry a digit or are a known all-alpha gene symbol.
+            tokens that carry a digit, are a known all-alpha gene symbol, or are
+            all-alpha tokens in a caption context that explicitly labels them as
+            genes/variants/mutations.
 
         `_gene_symbol_tokens` ignores bare LQT/LQTS but still emits LQT1/LQT2/...,
         so drop LQT*/SQT* here and let the alias map resolve them to a gene.
@@ -1458,13 +1555,18 @@ class ExpertExtractor(BaseLLMCaller):
 
         scope = set(self._gene_scope_from_table_label(label))
         for token in _gene_symbol_tokens(label):
-            if token.startswith("LQT") or token.startswith("SQT"):
+            if (
+                token in self.TABLE_LABEL_GENE_STOPWORDS
+                or token.startswith("LQT")
+                or token.startswith("SQT")
+            ):
                 continue
             if (
                 any(ch.isdigit() for ch in token)
                 or token in self._OPEN_VOCAB_ALPHA_GENES
             ):
                 scope.add(token)
+        scope.update(self._contextual_gene_symbols_in_table_label(label))
         return scope
 
     def _parse_lqt_fixed_width_variant_row(
@@ -1848,6 +1950,540 @@ class ExpertExtractor(BaseLLMCaller):
 
         return variants
 
+    LINEARIZED_TABLE_CAPTION_RE = re.compile(
+        r"^(?:eTable|(?:Supplementary|Supplemental)?\s*Table)\s+\w+.*"
+        r"(?:mutation|variant|carrier|patient|proband)",
+        re.IGNORECASE,
+    )
+    LINEARIZED_TABLE_STOP_RE = re.compile(
+        r"^(?:eTable|eFigure|(?:Supplementary|Supplemental)?\s*"
+        r"(?:Table|Figure))\s+\w+",
+        re.IGNORECASE,
+    )
+
+    def _augment_pdf_linearized_tables(self, full_text: str) -> str:
+        """Append markdown reconstructions of one-cell-per-line PDF tables."""
+        # Reset the per-paper cDNA<->protein pairing map. The reconstructed
+        # tables carry an explicit cDNA+protein pairing per row; downstream
+        # parsers/scanners sometimes emit a row with only one notation, so we
+        # stash the pairing here and backfill the missing side after extraction
+        # (see _backfill_variant_notation_pairs).
+        self._linearized_variant_pairs = {}
+        blocks = self._reconstruct_pdf_linearized_tables(full_text)
+        if not blocks:
+            return full_text
+        self._linearized_variant_pairs = self._pairs_from_reconstructed_blocks(blocks)
+        logger.info("Reconstructed %d PDF-linearized table(s)", len(blocks))
+        appendix = "\n\n".join(blocks)
+        return (
+            f"{full_text.rstrip()}\n\n"
+            "## Reconstructed PDF-linearized tables\n\n"
+            f"{appendix}"
+        )
+
+    @staticmethod
+    def _notation_pair_key(notation: str) -> str:
+        """Whitespace-insensitive, case-insensitive key for pairing notations."""
+        return re.sub(r"\s+", "", (notation or "")).lower()
+
+    def _pairs_from_reconstructed_blocks(self, blocks: list[str]) -> dict[str, str]:
+        """Map each reconstructed cDNA<->protein cell to its row partner.
+
+        Keyed by ``_notation_pair_key`` so a cDNA-only extracted row can recover
+        its protein (and vice versa). cDNA and protein notations never collide
+        (``c.`` vs ``p.``), so a single dict is unambiguous. First write wins.
+        """
+        pairs: dict[str, str] = {}
+        for block in blocks:
+            rows = [line for line in block.splitlines() if line.strip().startswith("|")]
+            if len(rows) < 3:  # header, separator, >=1 data row
+                continue
+            header = [c.strip().lower() for c in rows[0].strip().strip("|").split("|")]
+            if "cdna" not in header or "protein" not in header:
+                continue
+            cdna_idx = header.index("cdna")
+            protein_idx = header.index("protein")
+            for line in rows[2:]:  # skip header + separator row
+                cells = [c.strip() for c in line.strip().strip("|").split("|")]
+                if max(cdna_idx, protein_idx) >= len(cells):
+                    continue
+                cdna, protein = cells[cdna_idx], cells[protein_idx]
+                if not cdna or not protein:
+                    continue
+                pairs.setdefault(self._notation_pair_key(cdna), protein)
+                pairs.setdefault(self._notation_pair_key(protein), cdna)
+        return pairs
+
+    def _backfill_variant_notation_pairs(
+        self, extracted_data: Optional[dict]
+    ) -> Optional[dict]:
+        """Fill a missing cDNA or protein notation from the reconstructed pairing.
+
+        Only fills the empty side; never overwrites a notation the extractor
+        already produced. No-op when no PDF-linearized table was reconstructed.
+        """
+        pairs = getattr(self, "_linearized_variant_pairs", None)
+        if not pairs or not extracted_data:
+            return extracted_data
+        for variant in extracted_data.get("variants", []) or []:
+            if not isinstance(variant, dict):
+                continue
+            cdna = (variant.get("cdna_notation") or "").strip()
+            protein = (variant.get("protein_notation") or "").strip()
+            if cdna and not protein:
+                partner = pairs.get(self._notation_pair_key(cdna))
+                if partner and partner.lower().startswith("p."):
+                    variant["protein_notation"] = partner
+            elif protein and not cdna:
+                partner = pairs.get(self._notation_pair_key(protein))
+                if partner and partner.lower().startswith("c"):
+                    variant["cdna_notation"] = partner
+        return extracted_data
+
+    def _reconstruct_pdf_linearized_tables(self, full_text: str) -> list[str]:
+        """Return pipe-table blocks reconstructed from PDF-linearized cell runs.
+
+        These supplements often preserve every table cell on its own line. We
+        detect a variant/count header, then rebuild rows by variant-line
+        boundaries and header-derived column positions so the existing
+        deterministic markdown parser can consume the table.
+        """
+        lines = full_text.splitlines()
+        blocks: list[str] = []
+        i = 0
+        while i < len(lines):
+            header = self._find_linearized_table_header(lines, i)
+            if header is None:
+                i += 1
+                continue
+
+            caption, headers, data_start = header
+            rows, end_idx = self._collect_linearized_table_rows(
+                lines, data_start, headers
+            )
+            if rows:
+                blocks.append(self._render_reconstructed_table(caption, headers, rows))
+                i = max(end_idx, data_start + 1)
+            else:
+                i += 1
+        return blocks
+
+    def _find_linearized_table_header(
+        self, lines: list[str], start_idx: int
+    ) -> Optional[tuple[str, list[str], int]]:
+        first = lines[start_idx].strip()
+        if (
+            not first
+            or "|" in first
+            or not self._looks_like_linearized_header_cell(first)
+        ):
+            return None
+
+        raw_cells: list[str] = []
+        j = start_idx
+        max_header_lines = min(len(lines), start_idx + 24)
+        while j < max_header_lines:
+            cell = lines[j].strip()
+            if not cell:
+                j += 1
+                continue
+            if "|" in cell:
+                return None
+            if self._line_has_variant_notation(cell):
+                break
+            if j != start_idx and self.LINEARIZED_TABLE_STOP_RE.match(cell):
+                return None
+            if not self._looks_like_linearized_header_cell(cell):
+                if raw_cells and re.fullmatch(r"[A-Za-z/]{1,12}", cell):
+                    raw_cells.append(cell)
+                    j += 1
+                    continue
+                if len(raw_cells) < 3:
+                    return None
+                break
+            raw_cells.extend(self._split_linearized_header_line(cell))
+            j += 1
+
+        if j >= len(lines) or not self._line_has_variant_notation(lines[j].strip()):
+            return None
+
+        header_cells = self._normalize_linearized_header_cells(raw_cells)
+        if not self._linearized_header_qualifies(header_cells):
+            return None
+
+        output_headers = self._linearized_output_headers(header_cells)
+        caption = self._nearest_linearized_table_caption(lines, start_idx)
+        if not caption and len(output_headers) < 5:
+            return None
+        return caption, output_headers, j
+
+    def _nearest_linearized_table_caption(
+        self, lines: list[str], header_idx: int
+    ) -> str:
+        for idx in range(header_idx - 1, max(-1, header_idx - 8), -1):
+            candidate = lines[idx].strip()
+            if not candidate:
+                continue
+            if self.LINEARIZED_TABLE_CAPTION_RE.match(candidate):
+                return candidate
+            if candidate.startswith("|"):
+                break
+        return ""
+
+    def _split_linearized_header_line(self, line: str) -> list[str]:
+        return [
+            part.strip()
+            for part in re.split(r"\t+|\s{2,}", line.strip())
+            if part.strip()
+        ]
+
+    def _normalize_linearized_header_cells(self, cells: list[str]) -> list[str]:
+        normalized: list[str] = []
+        join_previous = {
+            "acid",
+            "change",
+            "effect",
+            "count",
+            "counts",
+            "number",
+            "patients",
+            "carriers",
+            "observed",
+        }
+        previous_prefix = {
+            "amino",
+            "amino acid",
+            "coding",
+            "dna",
+            "cdna",
+            "nucleotide",
+            "protein",
+            "mean",
+            "total",
+            "number of",
+            "no.",
+        }
+        for raw in cells:
+            cell = re.sub(r"\s+", " ", raw.strip().strip("*")).strip()
+            if not cell:
+                continue
+            lower = cell.lower()
+            if normalized and re.fullmatch(r"[A-Za-z]{1,4}\s+\([^)]{1,30}\)", cell):
+                normalized[-1] = f"{normalized[-1]}{cell}"
+                continue
+            if normalized and re.fullmatch(r"\([^)]{1,30}\)", cell):
+                normalized[-1] = f"{normalized[-1]} {cell}"
+                continue
+            if normalized and (
+                lower in join_previous or normalized[-1].lower() in previous_prefix
+            ):
+                normalized[-1] = f"{normalized[-1]} {cell}"
+                continue
+            normalized.append(cell)
+        return normalized
+
+    def _linearized_header_qualifies(self, cells: list[str]) -> bool:
+        if len(cells) < 4 or len(cells) > 18:
+            return False
+        normalized = [re.sub(r"[^a-z0-9./+-]+", " ", c.lower()).strip() for c in cells]
+        has_variant = any(
+            any(term in cell for term in ("mutation", "variant", "hgvs", "protein"))
+            or cell in {"cdna", "c.", "nucleotide"}
+            for cell in normalized
+        )
+        has_count = any(
+            cell in {"n", "no", "number"}
+            or "(n)" in cell
+            or any(
+                term in cell
+                for term in (
+                    "patient",
+                    "carrier",
+                    "proband",
+                    "affected",
+                    "unaffected",
+                    "syncope",
+                    "case",
+                )
+            )
+            for cell in normalized
+        )
+        return has_variant and has_count
+
+    def _linearized_output_headers(self, cells: list[str]) -> list[str]:
+        headers: list[str] = []
+        inserted_variant_columns = False
+        for cell in cells:
+            lower = re.sub(r"[^a-z0-9./+-]+", " ", cell.lower()).strip()
+            if (
+                not inserted_variant_columns
+                and any(term in lower for term in ("mutation", "variant", "hgvs"))
+                and "type" not in lower
+            ):
+                headers.extend(["cDNA", "Protein"])
+                inserted_variant_columns = True
+                continue
+            if lower == "n":
+                headers.append("No. of patients")
+            elif "syncope" in lower:
+                headers.append("affected")
+            else:
+                headers.append(cell)
+        if not inserted_variant_columns:
+            headers = ["cDNA", "Protein", *headers]
+        return headers
+
+    def _collect_linearized_table_rows(
+        self, lines: list[str], data_start: int, headers: list[str]
+    ) -> tuple[list[list[str]], int]:
+        rows: list[list[str]] = []
+        current: Optional[list[str]] = None
+        i = data_start
+        while i < len(lines):
+            cell = lines[i].strip()
+            if not cell or self._is_linearized_page_noise(cell):
+                i += 1
+                continue
+            if rows and self.LINEARIZED_TABLE_STOP_RE.match(cell):
+                break
+            if rows and self._is_linearized_table_footnote_or_prose(cell):
+                break
+            if "|" in cell and rows:
+                break
+
+            if self._line_has_variant_notation(cell):
+                if current:
+                    aligned = self._align_linearized_row_cells(current, headers)
+                    if aligned:
+                        rows.append(aligned)
+                current = self._split_linearized_variant_cell(cell)
+            elif current and self._looks_like_linearized_data_cell(cell):
+                current.append(cell)
+            elif rows:
+                break
+            else:
+                return [], i + 1
+            i += 1
+
+        if current:
+            aligned = self._align_linearized_row_cells(current, headers)
+            if aligned:
+                rows.append(aligned)
+        return rows, i
+
+    def _line_has_variant_notation(self, line: str) -> bool:
+        cleaned = line.strip()
+        if not cleaned or len(cleaned) > 140:
+            return False
+        return bool(
+            re.search(
+                r"(?:^|[\s*])(?:[cｃ]\.?\s*\d|p\.\s*"
+                r"(?:[A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY0-9]))",
+                cleaned,
+                re.IGNORECASE,
+            )
+        )
+
+    def _split_linearized_variant_cell(self, cell: str) -> list[str]:
+        cdna = ""
+        protein = ""
+        consumed_end = 0
+        cdna_match = re.search(
+            r"(?:[cｃ]\.?\s*\d+(?:[+-]\d+|[-_]\d+)?\s*"
+            r"(?:[ACGTacgt]\s*>\s*[ACGTacgt]|del\s*[ACGTacgt]*|"
+            r"dup\s*[ACGTacgt]*|ins\s*[ACGTacgt]*))",
+            cell,
+        )
+        if cdna_match:
+            cdna = (
+                self._valid_table_cdna(
+                    cdna_match.group(0).replace("ｃ", "c").replace("\u3000", "")
+                )
+                or ""
+            )
+            consumed_end = max(consumed_end, cdna_match.end())
+
+        protein_match = re.search(r"\bp\.\s*", cell, re.IGNORECASE)
+        if protein_match:
+            protein_tokens: list[str] = []
+            cursor = protein_match.end()
+            for match in re.finditer(r"\S+", cell[protein_match.end() :]):
+                token_start = protein_match.end() + match.start()
+                token_end = protein_match.end() + match.end()
+                token = match.group(0).strip(",;")
+                if self._linearized_variant_token_stops_protein(token):
+                    break
+                protein_tokens.append(token)
+                cursor = token_end
+            if protein_tokens:
+                protein = (
+                    self._valid_table_protein("p." + "".join(protein_tokens)) or ""
+                )
+                consumed_end = max(consumed_end, cursor)
+
+        cells = [cdna, protein]
+        remainder = cell[consumed_end:].strip(" ,;")
+        if remainder and self._looks_like_linearized_variant_remainder(remainder):
+            cells.append(remainder)
+        return cells
+
+    def _linearized_variant_token_stops_protein(self, token: str) -> bool:
+        clean = token.strip().strip(",;")
+        if not clean or clean.startswith("+") or clean.isdigit():
+            return True
+        upper = clean.upper()
+        lower = clean.lower()
+        return (
+            upper in {"N", "C", "MS", "TM", "DI", "DII", "DIII", "DIV"}
+            or lower in {"c-loop", "s5", "s6", "diii-div"}
+            or "term" in lower
+            or "pore" in lower
+            or lower.startswith("splicing")
+            or lower == "error"
+        )
+
+    def _looks_like_linearized_variant_remainder(self, value: str) -> bool:
+        lower = value.lower()
+        if "splicing" in lower or "error" in lower:
+            return False
+        if len(value) > 35:
+            return False
+        return bool(
+            re.fullmatch(r"[A-Za-z0-9/().+-]+(?:\s+[A-Za-z0-9/().+-]+)?", value)
+        )
+
+    def _align_linearized_row_cells(
+        self, cells: list[str], headers: list[str]
+    ) -> Optional[list[str]]:
+        if not any(cells[:2]) or not any(self._is_integer_cell(c) for c in cells[2:]):
+            return None
+
+        count_idx = self._linearized_count_header_index(headers)
+        if count_idx is None or count_idx < 2:
+            row = cells[: len(headers)]
+            return row + [""] * (len(headers) - len(row))
+
+        row = cells[:2]
+        rest = cells[2:]
+        if (
+            row[1]
+            and re.search(r"fs(?:x|ter|\*)$", row[1], re.IGNORECASE)
+            and rest
+            and re.fullmatch(r"\d{2,4}", rest[0])
+            and len(rest) > 1
+            and not self._is_integer_cell(rest[1])
+        ):
+            row[1] = f"{row[1]}{rest.pop(0)}"
+        descriptor_slots = max(0, count_idx - 2)
+        descriptors: list[str] = []
+        while rest and len(descriptors) < descriptor_slots:
+            if self._is_integer_cell(rest[0]):
+                break
+            descriptors.append(rest.pop(0))
+        descriptors.extend([""] * (descriptor_slots - len(descriptors)))
+
+        numeric_slots = len(headers) - count_idx
+        numeric = rest[:]
+        mean_qtc_idx = next(
+            (
+                idx
+                for idx, header in enumerate(headers)
+                if "qtc" in header.lower() or "qt interval" in header.lower()
+            ),
+            None,
+        )
+        if len(numeric) == numeric_slots - 1 and mean_qtc_idx is not None:
+            relative_qtc_idx = mean_qtc_idx - count_idx
+            if 0 <= relative_qtc_idx <= len(numeric):
+                qtc_value = (
+                    int(numeric[relative_qtc_idx])
+                    if relative_qtc_idx < len(numeric)
+                    and numeric[relative_qtc_idx].isdigit()
+                    else None
+                )
+                if qtc_value is None or qtc_value < 100:
+                    numeric.insert(relative_qtc_idx, "")
+        numeric = numeric[:numeric_slots]
+        numeric.extend([""] * (numeric_slots - len(numeric)))
+
+        row.extend(descriptors)
+        row.extend(numeric)
+        row = row[: len(headers)]
+        row.extend([""] * (len(headers) - len(row)))
+        return row
+
+    def _linearized_count_header_index(self, headers: list[str]) -> Optional[int]:
+        for idx, header in enumerate(headers):
+            normalized = re.sub(r"[^a-z0-9]+", " ", header.lower()).strip()
+            if normalized in {"n", "no of patients", "number of patients"}:
+                return idx
+            if "patient" in normalized or "carrier" in normalized:
+                return idx
+        return None
+
+    def _is_integer_cell(self, value: str) -> bool:
+        return bool(re.fullmatch(r"\d+", value.strip()))
+
+    def _looks_like_linearized_header_cell(self, cell: str) -> bool:
+        if len(cell) > 80 or cell.startswith("#"):
+            return False
+        lower = cell.lower().strip()
+        if re.fullmatch(r"\([^)]{1,30}\)", cell) or re.fullmatch(
+            r"[A-Za-z]{1,4}\s+\([^)]{1,30}\)", cell
+        ):
+            return True
+        return bool(
+            re.search(
+                r"\b(mutation|variant|hgvs|protein|nucleotide|cdna|site|"
+                r"female|male|proband|patient|carrier|mean|qtc|syncope|"
+                r"ca/vf|affected|unaffected|number|count|n)\b",
+                lower,
+            )
+        )
+
+    def _looks_like_linearized_data_cell(self, cell: str) -> bool:
+        if len(cell) > 90 or cell.startswith("#"):
+            return False
+        if self._is_integer_cell(cell):
+            return True
+        if re.fullmatch(r"[A-Za-z0-9/().+-]+(?:\s+[A-Za-z0-9/().+-]+){0,4}", cell):
+            return True
+        return False
+
+    def _is_linearized_page_noise(self, cell: str) -> bool:
+        return bool(
+            re.match(r"^#{1,6}\s+Page\s+\d+", cell, re.IGNORECASE)
+            or cell.startswith("©")
+            or "all rights reserved" in cell.lower()
+        )
+
+    def _is_linearized_table_footnote_or_prose(self, cell: str) -> bool:
+        if re.match(r"^[A-Z]:\s", cell):
+            return True
+        if len(cell) > 90 and not self._line_has_variant_notation(cell):
+            return True
+        if cell.endswith(".") and len(cell.split()) > 7:
+            return True
+        return False
+
+    def _render_reconstructed_table(
+        self, caption: str, headers: list[str], rows: list[list[str]]
+    ) -> str:
+        def clean(value: str) -> str:
+            cleaned = re.sub(r"\s+", " ", (value or "").replace("|", "/")).strip()
+            return cleaned or "-"
+
+        block: list[str] = []
+        if caption:
+            block.append(clean(caption))
+        else:
+            block.append("Reconstructed PDF-linearized variant table")
+        block.append("| " + " | ".join(clean(header) for header in headers) + " |")
+        block.append("| " + " | ".join("---" for _ in headers) + " |")
+        for row in rows:
+            block.append("| " + " | ".join(clean(cell) for cell in row) + " |")
+        return "\n".join(block)
+
     def _parse_markdown_table_variants(
         self, full_text: str, gene_symbol: Optional[str]
     ) -> List[dict]:
@@ -1887,7 +2523,7 @@ class ExpertExtractor(BaseLLMCaller):
                 candidate = row_cells[0] if row_cells else ""
             heading = candidate.lstrip("#").strip().replace("*", "").strip()
             if re.match(
-                r"^(?:supplement\w*\s+)?table\s+\w+(?:[\.:]|\s|$)",
+                r"^(?:etable|(?:supplement\w*\s+)?table)\s+\w+(?:[\.:]|\s|$)",
                 heading,
                 re.IGNORECASE,
             ):
@@ -1896,7 +2532,10 @@ class ExpertExtractor(BaseLLMCaller):
         def table_label_matches_target(label: str) -> bool:
             if not label:
                 return True
-            mentioned = self._gene_symbols_in_table_label(label)
+            mentioned = set(self._gene_scope_from_table_label(label))
+            mentioned.update(self._contextual_gene_symbols_in_table_label(label))
+            if not mentioned:
+                mentioned = self._gene_symbols_in_table_label(label)
             return not mentioned or gene_symbol.upper() in mentioned
 
         for line in lines:
@@ -2360,6 +2999,8 @@ class ExpertExtractor(BaseLLMCaller):
                 and "mutations or rare variants" in current_table_label.lower()
             )
             if lqt_mutation_table:
+                if stripped.startswith("|"):
+                    continue
                 variant = self._parse_lqt_fixed_width_variant_row(
                     stripped,
                     gene_symbol,
@@ -3013,6 +3654,23 @@ class ExpertExtractor(BaseLLMCaller):
                 "router-first",
             )
         )
+
+    @staticmethod
+    def _infer_source_layer(variant: dict) -> str:
+        return infer_source_layer_from_text(
+            source_location=variant.get("source_location"),
+            additional_notes=variant.get("additional_notes"),
+            extraction_source=variant.get("extraction_source"),
+            source_layer=variant.get("source_layer"),
+        )
+
+    def _annotate_source_layers(self, extracted_data: dict | None) -> dict | None:
+        if not extracted_data:
+            return extracted_data
+        for variant in extracted_data.get("variants", []) or []:
+            if isinstance(variant, dict):
+                variant["source_layer"] = self._infer_source_layer(variant)
+        return extracted_data
 
     def _suppress_repeated_study_wide_counts(self, extracted_data: dict) -> dict:
         """
@@ -3809,6 +4467,11 @@ Return strict JSON with this schema:
             "paper_metadata": {
                 "pmid": paper.pmid,
                 "title": paper.title or "Unknown Title",
+                "first_author": (paper.authors or [None])[0],
+                "journal": paper.journal,
+                "publication_date": paper.publication_date,
+                "doi": paper.doi,
+                "pmc_id": paper.pmc_id,
                 "extraction_summary": (
                     f"Router+deterministic parse of {len(variants)} variants from "
                     f"{len(routed)} routed table(s)"
@@ -3849,9 +4512,17 @@ Return strict JSON with this schema:
             self.model = model
             self.max_tokens = self._clamp_max_tokens(model, self.requested_max_tokens)
 
-            return self._do_attempt_extraction(
+            result = self._do_attempt_extraction(
                 paper, model, prepared_full_text, estimated_variants
             )
+            if result.success:
+                result.extracted_data = self._backfill_variant_notation_pairs(
+                    result.extracted_data
+                )
+                result.extracted_data = self._annotate_source_layers(
+                    result.extracted_data
+                )
+            return result
         finally:
             self.model, self.max_tokens = saved_model, saved_max_tokens
 
@@ -3881,6 +4552,20 @@ Return strict JSON with this schema:
         # The scanner is pure regex (no API cost), so it should see everything.
         # This prevents table data from being lost during Scout condensation.
         scanner_text = paper.full_text if paper.full_text else full_text
+        raw_scanner_text = scanner_text
+        scanner_text = self._augment_pdf_linearized_tables(scanner_text)
+        if scanner_text != raw_scanner_text:
+            augmented_table_rows = self._estimate_table_rows(scanner_text)
+            if estimated_variants is None or augmented_table_rows > estimated_variants:
+                estimated_variants = augmented_table_rows
+            reconstructed_appendix = scanner_text[len(raw_scanner_text) :].lstrip()
+            if full_text == raw_scanner_text:
+                full_text = scanner_text
+            elif (
+                reconstructed_appendix
+                and reconstructed_appendix.strip() not in full_text
+            ):
+                full_text = f"{full_text.rstrip()}\n\n{reconstructed_appendix}"
 
         # Assess input quality before sending to LLM
         is_usable, quality_reason = self._assess_input_quality(
@@ -3916,6 +4601,11 @@ Return strict JSON with this schema:
                     "paper_metadata": {
                         "pmid": paper.pmid,
                         "title": paper.title or "Unknown Title",
+                        "first_author": (paper.authors or [None])[0],
+                        "journal": paper.journal,
+                        "publication_date": paper.publication_date,
+                        "doi": paper.doi,
+                        "pmc_id": paper.pmc_id,
                         "extraction_summary": f"Deterministic table parse of {len(parsed_variants)} variants",
                     },
                     "variants": parsed_variants,
@@ -3982,6 +4672,11 @@ Return strict JSON with this schema:
                 "paper_metadata": {
                     "pmid": paper.pmid,
                     "title": paper.title or "Unknown Title",
+                    "first_author": (paper.authors or [None])[0],
+                    "journal": paper.journal,
+                    "publication_date": paper.publication_date,
+                    "doi": paper.doi,
+                    "pmc_id": paper.pmc_id,
                     "extraction_summary": f"Deterministic table parse of {len(deterministic_variants)} variants",
                 },
                 "variants": deterministic_variants,
@@ -4054,14 +4749,38 @@ Return strict JSON with this schema:
             gene_symbol=paper.gene_symbol or "UNKNOWN",
             source=f"PMID_{paper.pmid}",
         )
-        scanner_hints = scanner_result.get_hints_for_prompt(max_hints=SCANNER_MAX_HINTS)
-        if scanner_result.variants:
-            logger.info(
-                f"PMID {paper.pmid} - Variant scanner found {len(scanner_result.variants)} candidates as LLM hints"
+        scanner_variant_count = len(scanner_result.variants)
+        scanner_merge_enabled = (
+            scanner_variant_count <= SCANNER_REGEX_MERGE_MAX_VARIANTS
+        )
+        effective_scanner_variant_count = scanner_variant_count
+        if scanner_variant_count and not scanner_merge_enabled:
+            logger.warning(
+                "PMID %s - Skipping scanner hints/merge for %d candidates; "
+                "candidate count exceeds safety cap %d",
+                paper.pmid,
+                scanner_variant_count,
+                SCANNER_REGEX_MERGE_MAX_VARIANTS,
             )
             print(
-                f"Variant scanner found {len(scanner_result.variants)} potential variants in text"
+                f"Variant scanner found {scanner_variant_count} potential variants; "
+                "skipping scanner hints/merge due safety cap"
             )
+            scanner_hints = ""
+            effective_scanner_variant_count = 0
+        else:
+            scanner_hints = scanner_result.get_hints_for_prompt(
+                max_hints=SCANNER_MAX_HINTS
+            )
+
+        if scanner_variant_count:
+            logger.info(
+                f"PMID {paper.pmid} - Variant scanner found {scanner_variant_count} candidates"
+            )
+            if scanner_merge_enabled:
+                print(
+                    f"Variant scanner found {scanner_variant_count} potential variants in text"
+                )
 
         # Combine all hints (table + scanner)
         all_hints = table_hints + scanner_hints
@@ -4138,13 +4857,20 @@ Return strict JSON with this schema:
                 )
 
             # NEW: Merge scanner-found variants (catches narrative mentions the LLM missed)
-            if scanner_result.variants:
+            if scanner_result.variants and scanner_merge_enabled:
                 extracted_data = merge_scanner_results(
                     extracted_data,
                     scanner_result,
                     paper.gene_symbol or "UNKNOWN",
                     min_confidence=SCANNER_MERGE_MIN_CONFIDENCE,
                 )
+            elif scanner_result.variants:
+                metadata = extracted_data.setdefault("extraction_metadata", {})
+                metadata["scanner_merge_skipped"] = {
+                    "candidate_count": scanner_variant_count,
+                    "safety_cap": SCANNER_REGEX_MERGE_MAX_VARIANTS,
+                    "reason": "candidate_count_exceeds_safety_cap",
+                }
 
             extracted_data = self._suppress_repeated_study_wide_counts(extracted_data)
             extracted_data = self._suppress_repeated_study_wide_context_fields(
@@ -4165,7 +4891,7 @@ Return strict JSON with this schema:
                 extracted_data=extracted_data,
                 source_text=scanner_text,
                 estimated_variants=estimated_variants,
-                scanner_variant_count=len(scanner_result.variants),
+                scanner_variant_count=effective_scanner_variant_count,
             )
             extracted_data = self._suppress_repeated_study_wide_counts(extracted_data)
             extracted_data = self._suppress_repeated_study_wide_context_fields(

@@ -30,9 +30,9 @@ REQUIRED_COUNT_TYPES = {
 
 def test_both_prompts_declare_count_provenance_schema():
     for name, prompt in PROMPTS.items():
-        assert (
-            "count_provenance" in prompt
-        ), f"{name} is missing the count_provenance block — #5/#6 depend on it"
+        assert "count_provenance" in prompt, (
+            f"{name} is missing the count_provenance block — #5/#6 depend on it"
+        )
         # Field names per logical count
         for label in (
             "carriers_column_label",

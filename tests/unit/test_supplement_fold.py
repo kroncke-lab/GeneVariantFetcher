@@ -42,6 +42,24 @@ def test_build_supplement_markdown_converts_csv_and_txt(tmp_path):
     assert "SUPPLEMENTAL FILE" in md
 
 
+def test_build_supplement_markdown_folds_nested_zip_extracted_files(tmp_path):
+    # Files extracted from a .zip land in a subdirectory; the recursive walk must
+    # fold them (the .zip itself stays excluded), and label them by relative path.
+    supp = tmp_path / "12345678_supplements"
+    _write_supp(supp, "top.csv", "variant,carriers\nc.1A>G,3\n")
+    _write_supp(supp / "mmc1", "nested_table.csv", "variant,carriers\nc.9G>T,5\n")
+    # cruft that must be ignored
+    _write_supp(supp / "__MACOSX", "._junk.csv", "garbage\n")
+    _write_supp(supp, ".DS_Store.csv", "garbage\n")
+
+    md, converted = build_supplement_markdown(supp, converter=_DUMMY)
+
+    assert converted == 2  # top + nested, NOT the cruft
+    assert "c.1A>G,3" in md and "c.9G>T,5" in md
+    assert "mmc1/nested_table.csv" in md  # nested provenance label
+    assert "garbage" not in md
+
+
 def test_build_supplement_markdown_empty_or_missing(tmp_path):
     assert build_supplement_markdown(tmp_path / "nope", converter=_DUMMY) == ("", 0)
     empty = tmp_path / "999_supplements"

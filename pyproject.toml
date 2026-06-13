@@ -2,6 +2,7 @@
 name = "genevariantfetcher"
 version = "2.1.0"
 description = "A collection of Python tools for extracting genetic variant data, patient-level information, and full-text articles from PubMed literature"
+license = { text = "MIT" }
 requires-python = ">=3.11"
 dependencies = [
     "beautifulsoup4>=4.12.3",
@@ -27,6 +28,13 @@ dependencies = [
 [project.optional-dependencies]
 browser = [
     "playwright>=1.40.0",
+]
+# Stealth backend for Cloudflare-fronted publishers (Wiley etc.) when EZproxy
+# isn't available. Patched-Playwright drop-in; run `patchright install chromium`.
+# Clears the CF managed challenge only with real Chrome, headful (see
+# fetch_paywalled.py --stealth and docs/RECALL_REFRESH_RUNBOOK.md).
+stealth = [
+    "patchright>=1.40.0",
 ]
 dev = [
     "pytest>=7.4.0",

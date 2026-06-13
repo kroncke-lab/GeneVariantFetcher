@@ -222,6 +222,65 @@ def test_enrich_downloads_and_converts_supplements(
     assert not (tmp_path / "12345678_supplements" / "movie.mp4").exists()
 
 
+def test_enrich_uses_supplement_download_fallback_after_requests_failure(
+    tmp_path: Path, converter: MagicMock
+):
+    body = "# MAIN TEXT\n\nMain body.\n"
+
+    class _Resp:
+        status_code = 403
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def iter_content(self, chunk_size: int = 1024):
+            yield b""
+
+    class _FailingSession:
+        def get(self, *_args, **_kwargs):
+            return _Resp()
+
+    fallback_calls = []
+
+    def fallback(url: str, path: Path, pmid: str, filename: str, supp: Dict[str, Any]):
+        fallback_calls.append((url, pmid, filename, supp.get("source_url")))
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(b"PK\x03\x04fallback-xlsx")
+        return True
+
+    result = enrich_paywall_full_context(
+        body_markdown=body,
+        html="",
+        supp_files=[
+            {
+                "url": "https://publisher.example/cms/attachment/mmc1.xlsx",
+                "name": "mmc1.xlsx",
+            }
+        ],
+        pmid="24680",
+        output_dir=tmp_path,
+        converter=converter,
+        session=_FailingSession(),
+        source_url="https://publisher.example/article",
+        supplement_download_fallback=fallback,
+    )
+
+    assert fallback_calls == [
+        (
+            "https://publisher.example/cms/attachment/mmc1.xlsx",
+            "24680",
+            "mmc1.xlsx",
+            "https://publisher.example/article",
+        )
+    ]
+    assert result.supplement_count == 1
+    assert "p.Ala561Val" in result.unified_markdown
+    assert (tmp_path / "24680_supplements" / "mmc1.xlsx").exists()
+
+
 def test_enrich_downloads_caption_table_images_for_injected_vision(
     tmp_path: Path, converter: MagicMock
 ):

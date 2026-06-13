@@ -157,6 +157,11 @@ class VariantScanner:
     Finds variants in all text, not just structured tables.
     """
 
+    GENE_CONTEXT_TERMS = {gene: {gene} for gene in PROTEIN_LENGTHS}
+    GENE_CONTEXT_TERMS.setdefault("KCNH2", set()).update({"HERG", "hERG", "Kv11.1"})
+    GENE_CONTEXT_TERMS.setdefault("KCNQ1", set()).update({"KvLQT1", "Kv7.1"})
+    GENE_CONTEXT_TERMS.setdefault("SCN5A", set()).update({"Nav1.5", "Na v 1.5"})
+
     # ==========================================================================
     # PROTEIN VARIANT PATTERNS
     # ==========================================================================
@@ -237,6 +242,16 @@ class VariantScanner:
     )
 
     # Deletion variants: L552del, p.Leu552del, del552, del I642-V644
+    RANGE_DELETION_PATTERNS = re.compile(
+        r"\b(?:p\.)?"
+        r"([A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
+        r"(\d{2,4})"
+        r"[_-]"
+        r"([A-Z][a-z]{2}|[ACDEFGHIKLMNPQRSTVWY])"
+        r"(\d{2,4})"
+        r"del[A-Z]*\b",
+        re.IGNORECASE,
+    )
     DELETION_PATTERNS = re.compile(
         r"\b(?:p\.)?"
         r"(?:([A-Z][a-z]{2}|[A-Z])(\d{2,4})del"  # Leu552del or L552del
@@ -406,6 +421,14 @@ class VariantScanner:
                 filtered_count += 1
                 continue
 
+            if self._has_conflicting_gene_context(v.context, v.raw_text):
+                filtered_count += 1
+                logger.debug(
+                    "Scanner: filtered %s due to conflicting gene context",
+                    v.raw_text,
+                )
+                continue
+
             # Skip common comparator hotspots only when they are not the target gene.
             hotspot_genes = NON_TARGET_HOTSPOT_GENES.get(v.normalized.upper())
             if hotspot_genes and self.gene_symbol not in hotspot_genes:
@@ -454,6 +477,74 @@ class VariantScanner:
         )
 
         return result
+
+    def _context_mentions_gene(self, context: str, gene_symbol: str) -> bool:
+        terms = self.GENE_CONTEXT_TERMS.get(gene_symbol.upper(), {gene_symbol})
+        for term in terms:
+            pattern = rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])"
+            if re.search(pattern, context, re.IGNORECASE):
+                return True
+        return False
+
+    def _gene_assigned_to_variant(self, context: str, raw_text: str) -> Optional[str]:
+        """Infer the closest gene label attached to this variant mention."""
+        if not context or not raw_text:
+            return None
+
+        raw_match = re.search(re.escape(raw_text), context, re.IGNORECASE)
+        if not raw_match:
+            return None
+
+        variant_start, variant_end = raw_match.span()
+        mentions: List[tuple[str, int, int]] = []
+        for gene, terms in self.GENE_CONTEXT_TERMS.items():
+            for term in terms:
+                pattern = rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])"
+                for match in re.finditer(pattern, context, re.IGNORECASE):
+                    mentions.append((gene.upper(), match.start(), match.end()))
+
+        def same_clause_or_row(separator: str, *, has_table: bool) -> bool:
+            if len(separator) > 180:
+                return False
+            if has_table and "|" in separator:
+                return True
+            return not re.search(r";|\.\s", separator)
+
+        before: List[tuple[int, str]] = []
+        for gene, start, end in mentions:
+            if end <= variant_start:
+                separator = context[end:variant_start]
+                if same_clause_or_row(separator, has_table="|" in context):
+                    before.append((variant_start - end, gene))
+        if before:
+            before.sort(key=lambda item: item[0])
+            return before[0][1]
+
+        after: List[tuple[int, str]] = []
+        for gene, start, _end in mentions:
+            if start >= variant_end:
+                separator = context[variant_end:start]
+                if len(separator) <= 80 and not re.search(r";|\.\s", separator):
+                    after.append((start - variant_end, gene))
+        if after:
+            after.sort(key=lambda item: item[0])
+            return after[0][1]
+
+        return None
+
+    def _has_conflicting_gene_context(self, context: str, raw_text: str = "") -> bool:
+        """Return true when local context names another gene but not target."""
+        assigned_gene = self._gene_assigned_to_variant(context, raw_text)
+        if assigned_gene:
+            return assigned_gene != self.gene_symbol
+
+        if self._context_mentions_gene(context, self.gene_symbol):
+            return False
+        return any(
+            self._context_mentions_gene(context, other_gene)
+            for other_gene in PROTEIN_LENGTHS
+            if other_gene != self.gene_symbol
+        )
 
     def _scan_protein_variants(self, text: str) -> List[ScannedVariant]:
         """Scan for protein variants."""
@@ -671,8 +762,42 @@ class VariantScanner:
                 )
             )
 
-        # Deletion patterns
+        # Range deletion patterns: p.Lys1505_Gln1507del, K1505_Q1507del
+        for m in self.RANGE_DELETION_PATTERNS.finditer(text):
+            ref1, pos1, ref2, pos2 = m.group(1), m.group(2), m.group(3), m.group(4)
+            raw = m.group(0)
+
+            ref1_single = (
+                AA_MAP_REVERSE.get(ref1.capitalize(), ref1[0].upper())
+                if len(ref1) == 3
+                else ref1.upper()
+            )
+            ref2_single = (
+                AA_MAP_REVERSE.get(ref2.capitalize(), ref2[0].upper())
+                if len(ref2) == 3
+                else ref2.upper()
+            )
+            if not ref1_single or not ref2_single:
+                continue
+
+            variants.append(
+                ScannedVariant(
+                    raw_text=raw,
+                    normalized=f"{ref1_single}{pos1}_{ref2_single}{pos2}del",
+                    variant_type="deletion",
+                    notation_type="protein",
+                    position=int(pos1),
+                    context=self._get_context(text, m.start(), m.end()),
+                    confidence=0.90,
+                    source="range_deletion",
+                )
+            )
+
+        # Single-residue deletion patterns
         for m in self.DELETION_PATTERNS.finditer(text):
+            if m.start() > 0 and text[m.start() - 1] in "_-":
+                continue
+
             raw = m.group(0)
             groups = m.groups()
 
@@ -932,6 +1057,46 @@ class VariantScanner:
 
     def _get_context(self, text: str, start: int, end: int, window: int = 50) -> str:
         """Get surrounding context for a match."""
+        line_start = text.rfind("\n", 0, start) + 1
+        line_end = text.find("\n", end)
+        if line_end == -1:
+            line_end = len(text)
+        if 0 <= line_start <= start and line_end - line_start <= 500:
+            line_context = text[line_start:line_end]
+            if any(
+                self._context_mentions_gene(line_context, gene)
+                for gene in PROTEIN_LENGTHS
+            ):
+                return line_context
+
+            # Legacy Word/table converters can wrap a single table row across
+            # physical lines. Pull a few previous lines into the context so
+            # gene-column labels such as "SCN5A" or "KCNH2" stay attached to
+            # their wrapped variant cells.
+            prev_lines: List[str] = []
+            cursor = line_start
+            for _ in range(3):
+                if cursor <= 0:
+                    break
+                prev_end = cursor - 1
+                prev_start = text.rfind("\n", 0, prev_end) + 1
+                prev_line = text[prev_start:prev_end]
+                candidate_lines = [prev_line] + prev_lines + [line_context]
+                candidate = "\n".join(candidate_lines)
+                if len(candidate) > 800:
+                    break
+                prev_lines.insert(0, prev_line)
+                if any(
+                    self._context_mentions_gene(candidate, gene)
+                    for gene in PROTEIN_LENGTHS
+                ):
+                    return candidate
+                cursor = prev_start
+
+            if prev_lines:
+                return "\n".join(prev_lines + [line_context])
+            return line_context
+
         ctx_start = max(0, start - window)
         ctx_end = min(len(text), end + window)
         return text[ctx_start:ctx_end]

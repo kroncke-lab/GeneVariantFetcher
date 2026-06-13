@@ -6,6 +6,7 @@ TSV, HTML supplement, XML supplement, and ZIP nested-extraction.
 
 from __future__ import annotations
 
+import subprocess
 import textwrap
 import zipfile
 from pathlib import Path
@@ -171,6 +172,34 @@ def test_pmc_html_to_markdown_preserves_article_table_rows(converter):
     md = converter.pmc_html_to_markdown(html)
     assert "p.Ala561Val" in md
     assert "| Variant | Carriers |" in md
+
+
+def test_doc_to_markdown_uses_textutil_before_antiword_for_word_tables(
+    converter, tmp_path: Path
+):
+    doc_path = tmp_path / "supp.doc"
+    doc_path.write_bytes(b"legacy word placeholder")
+    converter.markitdown = None
+
+    textutil_text = (
+        "Patient #\x07Gene\x07Aa change (p.)\x07Bases pair change (c.)"
+        "\x07\x0713\x07SCN5A\x07Asn406Ser\x071217 A>G"
+        "\x07\x0719\x07SCN5A\x07Glu1784Lys\x075350 G>A"
+    )
+
+    def fake_run(cmd, **kwargs):
+        if cmd[0] == "soffice":
+            raise FileNotFoundError
+        if cmd[0] == "textutil":
+            return subprocess.CompletedProcess(cmd, 0, stdout=textutil_text, stderr="")
+        raise AssertionError(f"unexpected converter command: {cmd}")
+
+    with patch("subprocess.run", side_effect=fake_run):
+        md = converter.doc_to_markdown(doc_path)
+
+    assert "| Patient # | Gene | Aa change (p.) | Bases pair change (c.) |" in md
+    assert "| 13 | SCN5A | Asn406Ser | 1217 A>G |" in md
+    assert "| 19 | SCN5A | Glu1784Lys | 5350 G>A |" in md
 
 
 def test_xml_supplement_to_markdown_strips_tags(converter, tmp_path: Path):

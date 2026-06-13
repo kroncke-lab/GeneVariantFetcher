@@ -5,6 +5,15 @@ All notable changes to GeneVariantFetcher will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-06-03
+
+### Changed
+- `CODEX.md` reduced to a pointer stub; `CLAUDE.md` is the canonical agent
+  handoff (`AGENTS.md` mirrors the same pointers).
+- `gvf gvf-run` now runs source recovery (paywall + supplement acquisition) by
+  default; pass `--no-source-recovery` for a fast PMC/free-text-only pass. New
+  `--disease` flag scopes discovery and Tier-2 filtering to a gene-disease pair.
+
 ## [Unreleased] - 2026-05-22
 
 ### Added
@@ -35,8 +44,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `docs/DOWNLOAD_PROTOCOL.md` (no incoming references; superseded by
   Elsevier insttoken + Playwright recovery stack).
 - `docs/vanderbilt_api_access.md` (overlapping with `docs/API_KEYS.md`).
-- `CODEX.md` now mirrors `CLAUDE.md` verbatim so Codex and Claude agents
-  share a single handoff source.
+- `CODEX.md` is now a thin pointer stub to `CLAUDE.md` (the single canonical
+  agent handoff), avoiding drift between three parallel agent files.
 
 ## [Prior Unreleased] - 2026-05-21
 

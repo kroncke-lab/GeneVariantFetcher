@@ -293,16 +293,24 @@ def test_run_all_layers_help():
 
 def test_gvf_run_help():
     """The gvf-run command parses --help cleanly."""
+    import os
+
     result = subprocess.run(
         [sys.executable, "-m", "cli", "gvf-run", "--help"],
         capture_output=True,
         text=True,
         cwd=str(REPO_ROOT),
+        # Wide terminal so Rich doesn't truncate long flag names off-screen.
+        env={**os.environ, "COLUMNS": "200"},
     )
     assert result.returncode == 0
     assert "--pmid-file" in result.stdout
     assert "--resume-dir" in result.stdout
     assert "--skip" in result.stdout
+    assert "source-qc" in result.stdout
+    assert "--source-recovery" in result.stdout
+    assert "--no-source-recovery" in result.stdout
+    assert "--disease" in result.stdout
 
 
 def test_gvf_run_helpers_resolve_paths(tmp_path: Path):

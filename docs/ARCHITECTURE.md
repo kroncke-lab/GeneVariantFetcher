@@ -265,7 +265,7 @@ extractions/{gene}_PMID_*.json
 | **Springer** | API key | Variable | Free for researchers |
 | **Wiley** | API key | Variable | TDM agreement needed |
 | **Unpaywall** | Email | 100k/day | OA link resolution |
-| **OpenAI** | API key | Per plan | Required for extraction |
+| **LLM provider** | API key | Per plan | One provider required for extraction — Anthropic (default), OpenAI, or Azure AI |
 
 ### Retry & Circuit Breaker
 

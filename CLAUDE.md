@@ -32,6 +32,12 @@ numbers are historical debugging baselines. Gold-PMID-conditioned enrichment
 and KCNH2 v12 manual recovery are diagnostic/manual recovery paths, not
 cold-start capability.
 
+Companion docs:
+- `docs/RECALL_HISTORY.md` — append-only benchmark/change history (the recall
+  trajectory over time; never delete its entries, only append).
+- `docs/RECALL_REFRESH_RUNBOOK.md` — the idempotent re-run procedure for when new
+  papers are published or API permissions expand (`scripts/refresh_recall.py`).
+
 ## What Changed In This Branch
 
 - Source recovery stack: authenticated Playwright recovery in
@@ -44,9 +50,16 @@ cold-start capability.
   explicit count column.
 - Recall runner: `scripts/run_recall_suite.py` scores normalized per-gene
   recall inputs from `gene_variant_fetcher_gold_standard/normalized/`.
-- Turnkey driver: `gvf gvf-run <GENE> --email <email> --output <dir>` runs
-  doctor -> extraction -> DB-observed recovery layers -> report. It backs up the
-  DB before recovery-layer mutation. `--with-v12` is KCNH2-only and opt-in.
+- Turnkey driver: `gvf gvf-run <GENE> --email <email> --output <dir>
+  [--disease "<phenotype>"]` runs doctor -> extraction -> source QC ->
+  source recovery (the no-gold acquisition loop) -> DB-observed recovery layers
+  -> report. As of 2026-06-03 source recovery is **on by default**: it fetches
+  the source QC queue, summarizes selected-vs-successful acquisition, and
+  acceptance-gated staged-refreshes accepted sources before scoring/reporting.
+  Pass `--no-source-recovery` for a fast PMC/free-text-only pass or for
+  calibrated `--pmid-file` measurement runs (staged refresh mutates the DB; it
+  is backed up first). `--disease` scopes discovery + the Tier-2 filter to a
+  gene-disease pair. `--with-v12` is KCNH2-only and opt-in.
 - Matcher: `cli/compare_variants.py` has positional-digit guards, greedy
   one-to-one assignment, cDNA/protein bridging, and 2026-05-15 fixes for
   frameshift spellings such as `fsTer`, `fs/185`, `fs+*49`, and malformed
@@ -85,20 +98,71 @@ fresh DB from the full extraction directory, and then runs DB-observed recovery
 layers. Gold standards are optional; without gold, the same recovery layers run
 and scoring is skipped.
 
-Residual non-Elsevier paywalls (Karger Cloudflare, Sage CF fingerprint)
-remain in `TASKS.md` Blocked. Wiley TDM was verified working off-VPN on
+As of 2026-06-01, `gvf-run` writes `source_qc/` artifacts for genes without a
+gold standard: a source acquisition worklist, a fetch queue, a refresh source
+override CSV, and coverage summary. Use
+`scripts/recall_audit/summarize_acquisition_outcome.py` after
+`fetch_paywalled.py` to distinguish PMIDs selected for acquisition from PMIDs
+that actually landed usable full text; with a gold/report denominator, it also
+reports both quantities as PMID recall. The source QC default denominator is
+the harvest/extraction surface, not raw PubMed discovery; use
+`--include-discovery-pmids` only for intentionally broad diagnostics.
+End-to-end no-gold source recovery now runs by default in `gvf-run` (it
+composes source QC, paywall fetch, outcome summarization, and acceptance-gated
+staged refresh). Pass `--no-source-recovery` to skip it.
+
+The same path has been exercised on KCNH2, RYR2, and SCN5A with staged
+extraction replay. **All current recall figures live in
+`docs/RECALL_STATUS.md`** (the single source of truth) — including
+selected-vs-actually-downloaded PMID recall, refresh-successful PMID recall,
+and acceptance-gate details. Do not restate per-gene numbers here; they drift.
+Note that the published baselines are cardiac-gene-specific, depend on the
+Vanderbilt Elsevier insttoken, and were scored with figures skipped — an
+arbitrary new gene-disease pair starts with no gold standard and no recall
+measurement.
+
+Residual-gap diagnoses and the latest per-gene numbers are tracked in
+`docs/RECALL_STATUS.md` (Next Run Plan + session log), not here. Durable tooling
+that came out of those sessions: a Word `.doc`/`.docx` supplement-conversion
+fallback (macOS `textutil` recovers table rows `antiword` misses),
+scanner gene-context filtering, a stricter protein-notation artifact guard, a
+range-deletion parser, and `scripts/refresh_run_db.py --replay-model` for
+bounded replays when the default Tier 3 model is slow or experimental. The
+acquisition outcome summary reports selected-for-fetch,
+usable-fulltext-downloaded, source-refresh-attempted, and
+source-refresh-successful PMID recall separately. The recurring residual
+pattern is supplement acquisition, not generic underextraction.
+
+As of 2026-06-05 the largest supplement bucket — **Elsevier `mmc` mutation
+tables** that the full-text API dropped — is recovered: the authenticated XML
+carries `1-s2.0-<PII>-mmc<N>.<ext>` refs that download from the open
+`ars.els-cdn.com` CDN (`ElsevierAPIClient.download_supplements` +
+`scripts/fetch_elsevier_supplements.py`), and `refresh_run_db` now folds on-disk
+supplements into FULL_CONTEXT before re-extraction. This landed the four-gene
+unique-variant recall higher (see `docs/RECALL_HISTORY.md`). The earlier
+"Cloudflare-blocked `mmc1.docx`" framing was wrong for Elsevier — those
+supplements are openly CDN-served; only the *publisher landing pages* are blocked.
+Re-run idempotently via `scripts/refresh_recall.py` (see
+`docs/RECALL_REFRESH_RUNBOOK.md`).
+
+Genuinely blocked (small share of the gap): Wiley supplements (TDM 403 on many
+journals; supplements only on the CF-fronted Online Library) and Springer
+(API key currently disabled in `.env`). Karger Cloudflare / Sage CF were measured
+at ~0.3%/0.0% of the gold-missing-variant gap — near-irrelevant to recall.
+These remain in `TASKS.md` Blocked. Wiley TDM was verified working off-VPN on
 2026-05-26 — the earlier "revoked key" claim was stale; `harvesting/wiley_api.py`
 plus the current `WILEY_API_KEY` returns full-text PDFs for `10.1002/humu.*`.
+Some Wiley Online Library DOIs still return TDM 403 or Cloudflare in no-cookie
+browser sessions, so treat Wiley as partially covered rather than solved.
 
 ## Run On Another Computer Or VPN
 
 From a clean checkout:
 
 ```bash
-python3.11 -m venv .venv
+python3.11 -m venv .venv   # Python 3.11+ (pyproject requires-python >=3.11)
 source .venv/bin/activate
-pip install -e ".[dev]"
-pip install -r gui/requirements.txt
+pip install -e ".[browser,dev]"
 python -m playwright install chromium
 ```
 
@@ -133,9 +197,10 @@ GVF_TEST_OUTPUT_DIR=/tmp/gvf_tests .venv/bin/python -m pytest -m requires_networ
 Recover queued or paywalled papers after VPN/login access is available:
 
 ```bash
+# <RUN> is a run dir produced by gvf-run, e.g. results/KCNH2/<TIMESTAMP>
 .venv/bin/python scripts/fetch_paywalled.py \
-  --input results/KCNH2/20260506_102238/pmc_fulltext/paywalled_missing.csv \
-  --output results/KCNH2/20260506_102238/pmc_fulltext \
+  --input <RUN>/pmc_fulltext/paywalled_missing.csv \
+  --output <RUN>/pmc_fulltext \
   --no-headless
 ```
 
@@ -181,19 +246,32 @@ output-token budget instead of the 4k default.
 
 ## Active Work
 
-Current active work is tracked in
-`docs/RECALL_STATUS.md`. Do not duplicate metric gaps here.
-The short version: source acquisition improved after the Elsevier insttoken
-unblock, and the refresh/rebuild path now exists for converting recovered
-source artifacts into DB rows without gold-standard-dependent logic. Beyond
-that: fix general count/affected-status extraction issues, address the
-remaining Wiley/Karger/Sage paywalls, and keep no-gold QC prominent for new
-genes.
+Current active work is tracked in `docs/RECALL_STATUS.md`; the recall trajectory
+is in `docs/RECALL_HISTORY.md`. Do not duplicate metric gaps here. The short
+version: source acquisition improved after the Elsevier insttoken unblock, the
+refresh/rebuild path converts recovered source into DB rows without
+gold-dependent logic, and (2026-06-05) Elsevier `mmc` supplement recovery + the
+wired supplement re-fold landed a unique-variant-recall gain. The whole loop is
+idempotent and re-runnable via `scripts/refresh_recall.py` as papers/permissions
+grow (`docs/RECALL_REFRESH_RUNBOOK.md`). Remaining levers, by value: Wiley/Springer
+supplement recovery (access-gated — restore the Springer key; see
+`SUPPLEMENT_ACQUISITION_PLAN.md` T6), general count/affected-status extraction
+accuracy, and keeping no-gold QC prominent for new genes. Karger/Sage are
+deprioritized (~0% of the recall gap).
 
 ## Files To Know
 
 - `cli/compare_variants.py` - gold-standard matcher and recall summary.
 - `scripts/run_recall_suite.py` - multi-gene recall scoring.
+- `scripts/refresh_recall.py` - idempotent recall-refresh orchestrator (fetch
+  supplements -> bridge corpus -> fold + acceptance-gated re-extract -> score ->
+  optional layer-preserving land into the canonical DB). The "just re-run it" entry.
+- `scripts/fetch_elsevier_supplements.py` - recover Elsevier `mmc` supplements the
+  full-text API drops (open `ars.els-cdn.com` CDN); idempotent.
+- `scripts/corpus_to_harvest.py` - bridge nested `corpus/` to the flat harvest
+  layout `refresh_run_db` expects.
+- `scripts/recall_audit/supplement_fold_gap.py` - no-network QC: on-disk
+  supplements not yet folded into FULL_CONTEXT.
 - `scripts/refresh_run_db.py` - safe source -> extraction JSON -> DB refresh
   path for existing runs; gold is optional.
 - `scripts/recall_recovery/run_all_layers.py` - DB-observed ClinVar, PubTator,
@@ -205,6 +283,44 @@ genes.
   extraction.
 - `gene_variant_fetcher_gold_standard/` - normalized recall inputs and source
   exports.
+- `corpus/<GENE>/<PMID>/` - consolidated, deduplicated home AND cross-run cache
+  for ALL fetched source (full text + supplements + figures), one best usable
+  copy per paper. Discover via `corpus/INDEX.json` / `corpus/INDEX.csv`
+  (per-paper `full_text_status` ok|stub, `source_sha256`, figure/supplement
+  counts). As of 2026-06-04 this replaces the old scattered per-run
+  `pmc_fulltext/` trees (gitignored; ~11 GB / 6,382 papers). Run DBs +
+  `extractions/` remain in their `results/` run dirs.
+- `scripts/build_source_corpus.py` - builds/updates the corpus. Incremental +
+  idempotent + never-downgrade: `--apply` folds new source in (adds new papers,
+  upgrades only compromised categories), a clean re-run is a no-op. `--verify`
+  checks `corpus/MANIFEST.sha256`. To move the corpus: `tar czf corpus.tgz
+  corpus/` then `--verify` on the far end.
+- Corpus-as-cache: `gvf-run` reuses usable cached source per PMID (skips
+  re-fetch; a `stub`/compromised entry falls through to a fresh fetch so a new
+  publisher key re-attempts it) and folds new fetches back via the
+  `--corpus-sync` step (default on). Override the cache dir with
+  `GVF_CORPUS_DIR`. Wired in `pipeline/steps.py` (`_consolidate_from_corpus`)
+  and `cli/gvf_run.py` (`step_corpus_sync`).
+- `cli/dashboard.py` / `gvf dashboard` - static HTML status/coverage/missingness/
+  provenance dashboard from `corpus/INDEX.csv` + the scored DB(s). Per gene:
+  source-coverage + extraction funnel + a provenance-completeness audit +
+  "what's left". Per paper: an ADJUDICATION view with PubMed/DOI/PMC links and
+  the exact on-disk full text rendered, where clicking an extracted record
+  jumps to + highlights the `evidence_sentence`/`source_location` it came from
+  (both 100%-populated). Also emits a per-gene `<GENE>_variants.html`
+  variant-centric view (one row per unique variant → papers + affected/unaffected
+  patient counts + clickthrough) for the eventual variant website. Read-only.
+- Provenance fields (2026-06-04): the schema/migrator now capture
+  `papers.first_author`, `variant_papers.count_provenance` (the "why" behind each
+  carrier/affected count — was emitted by the prompt but previously dropped), and
+  `individual_records.ethnicity`/`geographic_origin` (extracted by the Tier-3
+  prompt, on by default). New columns auto-ALTER onto existing DBs.
+- `scripts/backfill_paper_metadata.py` - fills `papers.{first_author,journal,
+  publication_date,doi,pmc_id}` into existing DBs from local caches
+  (`abstract_json/*.json` authors/journal/year + corpus `{pmid}_artifacts.json`
+  doi/pmcid) — NO LLM, NO network, idempotent, COALESCE-safe. Run it after
+  migrate/refresh; on the four cardiac genes it lifts first_author/journal/year
+  from 0% to ~99%. ethnicity/"why" only populate on the NEXT extraction run.
 
 ## House Rules
 

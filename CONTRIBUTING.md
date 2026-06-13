@@ -13,8 +13,9 @@ cd GeneVariantFetcher
 python3.11 -m venv .venv
 source .venv/bin/activate
 
-# Install in development mode
-pip install -e .
+# Install in development mode (browser + dev extras)
+pip install -e ".[browser,dev]"
+python -m playwright install chromium
 
 # Install pre-commit hooks
 pip install pre-commit && pre-commit install
@@ -133,7 +134,7 @@ Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 ```
 GeneVariantFetcher/
 ├── cli/              # CLI commands (Typer)
-├── config/           # Settings (config/settings.py)
+├── config/           # Settings, gene configs (gene_config.py)
 ├── gene_literature/  # PMID discovery (PubMed, PubMind, Europe PMC)
 ├── harvesting/       # Paper download, publisher APIs, format conversion
 ├── pipeline/         # Core extraction logic (filters, extraction, aggregation)

@@ -85,10 +85,21 @@ def build_supplement_markdown(
     """
     if not supplements_dir.is_dir():
         return "", 0
+    # Recursive walk (not top-level iterdir): convertible files extracted from a
+    # ``.zip`` supplement land in a subdirectory and would otherwise be missed.
+    # The ``.zip`` itself stays excluded (not a convertible suffix), so we fold
+    # the extracted files exactly once; the sentinel-delimited rebuild keeps this
+    # idempotent. Skip macOS zip cruft and hidden/AppleDouble files.
     files = sorted(
-        p
-        for p in supplements_dir.iterdir()
-        if p.is_file() and p.suffix.lower() in _CONVERTIBLE_SUFFIXES
+        (
+            p
+            for p in supplements_dir.rglob("*")
+            if p.is_file()
+            and p.suffix.lower() in _CONVERTIBLE_SUFFIXES
+            and "__MACOSX" not in p.parts
+            and not p.name.startswith(".")
+        ),
+        key=lambda p: p.relative_to(supplements_dir).as_posix(),
     )
     if not files:
         return "", 0
@@ -100,6 +111,10 @@ def build_supplement_markdown(
     parts: list[str] = []
     converted = 0
     for idx, file_path in enumerate(files, 1):
+        # Label by path relative to the supplements dir: a top-level file shows
+        # just its name; a file extracted from a zip shows ``subdir/name`` so the
+        # provenance (and the nested-zip recovery) is visible in FULL_CONTEXT.
+        rel = file_path.relative_to(supplements_dir).as_posix()
         try:
             md, _figs, _nested = _convert_supplement(
                 file_path=file_path,
@@ -109,10 +124,10 @@ def build_supplement_markdown(
                 logger=logger_obj,
             )
         except Exception as exc:  # noqa: BLE001
-            logger.warning("supplement convert failed for %s: %s", file_path.name, exc)
+            logger.warning("supplement convert failed for %s: %s", rel, exc)
             continue
         if md and md.strip():
-            parts.append(f"\n\n# SUPPLEMENTAL FILE {idx}: {file_path.name}\n\n{md}")
+            parts.append(f"\n\n# SUPPLEMENTAL FILE {idx}: {rel}\n\n{md}")
             converted += 1
     return "".join(parts).strip(), converted
 
