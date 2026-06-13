@@ -436,6 +436,30 @@ def gvf_run_command(
             ),
         ),
     ] = False,
+    publish_review: Annotated[
+        bool,
+        typer.Option(
+            "--publish-review/--no-publish-review",
+            help=(
+                "After the run, publish the scored DB into the Variant_Browser "
+                "review database (Azure 'vb-curation') via gvf_publish.sh so "
+                "collaborators can adjudicate it. OFF by default (opt-in). "
+                "Best-effort: a publish failure warns but does not fail the run. "
+                "Requires a sibling Variant_Browser checkout (or --review-repo)."
+            ),
+        ),
+    ] = False,
+    review_repo: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--review-repo",
+            help=(
+                "Path to the Variant_Browser checkout that owns gvf_publish.sh. "
+                "Only used with --publish-review. Defaults to GVF_REVIEW_REPO / "
+                "VARIANT_BROWSER_DIR, then the sibling '../Variant_Browser'."
+            ),
+        ),
+    ] = None,
 ):
     """One-shot end-to-end driver: cold start → scored variant DB.
 
@@ -461,6 +485,8 @@ def gvf_run_command(
         source_recovery_timeout_s=source_recovery_timeout_s,
         disease=disease,
         corpus_sync=corpus_sync,
+        publish_review=publish_review,
+        review_repo=review_repo,
     )
     if exit_code != 0:
         raise typer.Exit(exit_code)

@@ -475,7 +475,7 @@ def step_source_recovery(
 
 
 # ---------------------------------------------------------------------------
-# Step 6 — report
+# Step 5 — report
 # ---------------------------------------------------------------------------
 
 
@@ -715,6 +715,93 @@ def step_corpus_sync(run_dir: Path) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Step 6 — publish to the Variant_Browser review DB (opt-in)
+# ---------------------------------------------------------------------------
+
+
+def _find_review_repo(explicit: Optional[Path]) -> Optional[Path]:
+    """Locate the sibling Variant_Browser checkout that owns gvf_publish.sh.
+
+    Resolution order: an explicit ``--review-repo``, then the
+    ``GVF_REVIEW_REPO`` / ``VARIANT_BROWSER_DIR`` env vars, then the
+    conventional sibling ``<repo parent>/Variant_Browser``. Returns the repo
+    path only if its ``scripts/gvf_publish.sh`` actually exists, else None so
+    the caller can warn-and-skip rather than fail the run.
+    """
+    candidates: list[Path] = []
+    if explicit:
+        candidates.append(Path(explicit).expanduser())
+    for env_key in ("GVF_REVIEW_REPO", "VARIANT_BROWSER_DIR"):
+        val = os.environ.get(env_key)
+        if val:
+            candidates.append(Path(val).expanduser())
+    candidates.append(REPO_ROOT.parent / "Variant_Browser")
+    for repo in candidates:
+        if (repo / "scripts" / "gvf_publish.sh").exists():
+            return repo
+    return None
+
+
+def step_publish_review(
+    *,
+    gene: str,
+    db: Path,
+    disease: Optional[str],
+    review_repo: Optional[Path],
+    timeout_s: int = 600,
+) -> bool:
+    """Push this gene's scored DB into the Variant_Browser review DB.
+
+    Opt-in final step. Shells out to ``Variant_Browser/scripts/gvf_publish.sh``,
+    which owns the Azure ``vb-curation`` creds and the GVF→browser variant
+    matching — GVF does not need DB creds or to duplicate that logic. The
+    publish is idempotent on the browser side (re-running replaces the gene's
+    carrier data on the current snapshot).
+
+    Best-effort: a missing repo, a launch failure, a timeout, or a non-zero
+    exit are all logged and warned, never fatal to the GVF run. Returns True
+    only on a clean publish.
+    """
+    repo = _find_review_repo(review_repo)
+    if repo is None:
+        logger.warning(
+            "publish-review skipped: could not locate "
+            "Variant_Browser/scripts/gvf_publish.sh. Pass --review-repo or set "
+            "GVF_REVIEW_REPO / VARIANT_BROWSER_DIR."
+        )
+        return False
+
+    script = repo / "scripts" / "gvf_publish.sh"
+    cmd = ["bash", str(script), gene, str(db)]
+    if disease:
+        cmd.append(disease)
+    logger.info("📤 publish-review → %s", " ".join(cmd))
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout_s)
+    except subprocess.TimeoutExpired:
+        logger.warning(
+            "publish-review timed out after %ss; GVF run not affected", timeout_s
+        )
+        return False
+    except Exception as e:  # noqa: BLE001 - publish is best-effort
+        logger.warning("publish-review failed to launch (%s); GVF run not affected", e)
+        return False
+
+    if result.returncode == 0:
+        for ln in (result.stdout or "").strip().splitlines()[-3:]:
+            logger.info("  %s", ln)
+        logger.info("✅ Published %s to the review DB (%s)", gene, repo)
+        return True
+
+    logger.warning(
+        "publish-review failed (exit %s); GVF run not affected. Output tail:\n%s",
+        result.returncode,
+        (result.stderr or result.stdout or "")[-800:],
+    )
+    return False
+
+
+# ---------------------------------------------------------------------------
 # Entry point (called from cli/__init__.py)
 # ---------------------------------------------------------------------------
 
@@ -732,6 +819,9 @@ def run_gvf_pipeline(
     source_recovery_timeout_s: int = 120,
     disease: Optional[str] = None,
     corpus_sync: bool = True,
+    publish_review: bool = False,
+    review_repo: Optional[Path] = None,
+    publish_timeout_s: int = 600,
 ) -> int:
     """Execute the full pipeline. Returns exit code."""
     initialize_runtime()
@@ -897,6 +987,19 @@ def run_gvf_pipeline(
             shutil.copy2(report_path, output / f"{gene}_RUN_REPORT.md")
         except OSError:
             pass
+
+    # Step 6: publish to the Variant_Browser review DB (opt-in)
+    if publish_review and "publish-review" not in skip:
+        logger.info("📤 Step 6: publish to review DB")
+        step_publish_review(
+            gene=gene,
+            db=db,
+            disease=disease,
+            review_repo=review_repo,
+            timeout_s=publish_timeout_s,
+        )
+    elif publish_review and "publish-review" in skip:
+        logger.info("⏭️  Step 6: publish to review DB — SKIPPED")
 
     logger.info("✅ Done in %.1f min", (time.time() - started) / 60)
     return 0

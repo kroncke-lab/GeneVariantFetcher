@@ -11,6 +11,7 @@ gene_variant_fetcher_gold_standard/
 ├── schema/clinical_counts.schema.json   Column contract for the normalized long format
 ├── raw/                                 Verbatim per-table dumps from Variant_Browser (audit trail)
 ├── normalized/                          Tolerant-parsed, source-classified, variant-normalized output
+├── adjudications/                       Review correction overlay from the Variant_Browser round-trip
 ├── qc/                                  Row-count summaries, anomaly reports
 ├── manifest.json                        Generation metadata (commit, timestamp, row counts, filters)
 └── README.md                            (this file)
@@ -121,6 +122,38 @@ Current adjudication semantics:
 - `carriers` means variant-positive people, not everyone enrolled, sampled, sequenced, or screened.
 - `affected` means variant carriers meeting the paper's disease/phenotype definition, including ECG/QTc-defined affection when the paper defines it that way.
 - `unaffected` means explicit unaffected/asymptomatic carriers. When v2 has a populated status and blank `gold_v2_unaffected`, the adjudicated value is intentionally null rather than the original unaffected count.
+
+## Review adjudications overlay (`adjudications/`)
+
+`adjudications/` holds the **export-driven** correction overlay produced by the
+Variant_Browser round-trip — the live cousin of the hand-curated `gold_v2_*`
+columns above. After a run is published to the review DB
+(`gvf gvf-run --publish-review`) and collaborators adjudicate it, run:
+
+```bash
+cd ~/GitRepos/Variant_Browser && set -a && source .env && set +a
+python manage.py export_adjudications --out adjudications.csv
+cd ~/GitRepos/GeneVariantFetcher
+python scripts/ingest_review_adjudications.py --export-csv ~/GitRepos/Variant_Browser/adjudications.csv
+```
+
+This writes (idempotently), per gene present in the export:
+
+- `adjudications/<GENE>_review_adjudications.csv` — one row per adjudication, keyed
+  by `(gene, source_notation, pmid)` where `source_notation` is the GVF
+  `protein_notation`. Keeps **both** the extracted counts and the adjudicated
+  `corrected_*` values so metrics can be recomputed without mutating raw rows.
+  Verdicts map to actions: `confirm`→`gold_confirmed`,
+  `correct_counts`→`count_override`, `wrong_variant`→`false_positive`,
+  `wrong_paper`→`excluded`, `missing`→`followup_missing`, `other`→`followup_other`.
+- `adjudications/review_followup_queue.csv` — missing/other verdicts plus any
+  unresolved matches, for human follow-up.
+- `adjudications/review_adjudications_summary.json` — per-gene counts + net count
+  deltas.
+
+Like `gold_v2_*`, this overlay is **not yet consumed by the recall scorer**; it is
+a durable correction layer. See `docs/VARIANT_BROWSER_INTEGRATION.md` for the full
+contract.
 
 ## Audit / QC outputs
 

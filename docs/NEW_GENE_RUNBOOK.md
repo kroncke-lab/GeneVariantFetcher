@@ -236,3 +236,31 @@ For no-gold runs, judge progress by internal QC: source completeness, supplement
 coverage, zero-variant full-text papers, variant density, count plausibility,
 and whether high-priority paywalled papers are represented by real full text
 rather than abstract/paywall stubs.
+
+## 9. Publish for Review and Ingest Adjudications (optional round-trip)
+
+Once a run is scored, you can push it into the Variant_Browser review database so
+collaborators can adjudicate it, then pull their verdicts back into the gold
+standard. Both directions are opt-in.
+
+Publish on the run (best-effort; a publish failure warns but never fails the run):
+
+```bash
+gvf gvf-run GENE --email you@example.com --output results/ \
+  --disease "<phenotype>" --publish-review
+```
+
+Ingest the adjudications afterward (writes a correction overlay under
+`gene_variant_fetcher_gold_standard/adjudications/` that keeps both the extracted
+and the adjudicated counts):
+
+```bash
+cd ~/GitRepos/Variant_Browser && set -a && source .env && set +a
+python manage.py export_adjudications [--gene GENE] --out adjudications.csv
+cd ~/GitRepos/GeneVariantFetcher
+python scripts/ingest_review_adjudications.py --export-csv ~/GitRepos/Variant_Browser/adjudications.csv
+```
+
+The gene-disease pair must already exist in the browser (created upstream from
+variantFeatures). See `docs/VARIANT_BROWSER_INTEGRATION.md` for the full contract,
+the round-trip key, and the verdict→action mapping.

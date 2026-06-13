@@ -1,0 +1,226 @@
+"""Tests for scripts/ingest_review_adjudications.py.
+
+Exercises the Variant_Browser → GVF adjudication round-trip: an export CSV (the
+schema ``manage.py export_adjudications`` emits) is matched against a real run DB
+built through the actual ``migrate_to_sqlite`` path, so the (pmid, canonical
+notation) match contract is checked against the same schema the recall scorer
+reads. Covers all six verdicts, the correction overlay (extracted + corrected
+values kept side by side), the follow-up queue, the summary deltas, idempotency,
+and the no-DB path.
+"""
+
+import csv
+import json
+import sys
+
+import pytest
+
+import harvesting.migrate_to_sqlite as migrate
+import scripts.ingest_review_adjudications as ingest
+
+PMID = "10086971"
+
+# protein_notation -> (carriers, affected, unaffected) seeded into the run DB.
+DB_VARIANTS = {
+    "p.Ser818Leu": (2, 2, 0),
+    "p.Ala561Val": (1, 1, 0),
+    "p.Gly628Ser": (4, 3, 1),
+    "p.Asn588Lys": (2, 1, 1),
+}
+
+# Export rows: one per verdict. (variant_label, source_notation, verdict,
+# corrected_affected, corrected_unaffected, corrected_total, classification, comment)
+EXPORT_ROWS = [
+    ("S818L", "p.Ser818Leu", "confirm", "", "", "", "", "looks right"),
+    ("A561V", "p.Ala561Val", "correct_counts", "5", "2", "7", "Pathogenic", "miscount"),
+    ("G628S", "p.Gly628Ser", "wrong_variant", "", "", "", "", "actually G628A"),
+    ("N588K", "p.Asn588Lys", "wrong_paper", "", "", "", "", "wrong PMID linked"),
+    ("R100Q", "p.Arg100Gln", "missing", "3", "1", "4", "", "GVF missed this one"),
+    ("T200M", "p.Thr200Met", "other", "", "", "", "", "needs a domain expert"),
+]
+
+
+def _build_db(tmp_path):
+    """Build a real KCNH2 run DB through the actual migration path."""
+    ext_dir = tmp_path / "extractions"
+    ext_dir.mkdir()
+    doc = {
+        "paper_metadata": {"pmid": PMID, "title": "Test paper", "gene_symbol": "KCNH2"},
+        "variants": [
+            {
+                "gene_symbol": "KCNH2",
+                "protein_notation": protein,
+                "penetrance_data": {
+                    "total_carriers_observed": carriers,
+                    "affected_count": affected,
+                    "unaffected_count": unaffected,
+                },
+            }
+            for protein, (carriers, affected, unaffected) in DB_VARIANTS.items()
+        ],
+    }
+    (ext_dir / f"{PMID}.json").write_text(json.dumps(doc))
+    db_path = tmp_path / "KCNH2.db"
+    conn = migrate.create_database_schema(str(db_path))
+    try:
+        cur = conn.cursor()
+        ok, msg = migrate.migrate_extraction_file(cur, ext_dir / f"{PMID}.json")
+        assert ok, msg
+        conn.commit()
+    finally:
+        conn.close()
+    return db_path
+
+
+def _write_export(tmp_path):
+    path = tmp_path / "adjudications.csv"
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(
+            [
+                "gene",
+                "variant_label",
+                "source_notation",
+                "pmid",
+                "verdict",
+                "corrected_affected",
+                "corrected_unaffected",
+                "corrected_total",
+                "corrected_classification",
+                "comment",
+                "adjudicator",
+                "updated_at",
+            ]
+        )
+        for i, (label, src, verdict, c_aff, c_unaff, c_tot, cls, comment) in enumerate(
+            EXPORT_ROWS
+        ):
+            writer.writerow(
+                [
+                    "KCNH2",
+                    label,
+                    src,
+                    PMID,
+                    verdict,
+                    c_aff,
+                    c_unaff,
+                    c_tot,
+                    cls,
+                    comment,
+                    f"reviewer{i}",
+                    "2026-06-13T10:00:00",
+                ]
+            )
+    return path
+
+
+def _run(tmp_path, *extra_argv):
+    out_dir = tmp_path / "adj_out"
+    argv = [
+        "ingest_review_adjudications.py",
+        "--export-csv",
+        str(_write_export(tmp_path)),
+        "--out-dir",
+        str(out_dir),
+        *extra_argv,
+    ]
+    old = sys.argv
+    sys.argv = argv
+    try:
+        assert ingest.main() == 0
+    finally:
+        sys.argv = old
+    return out_dir
+
+
+def _read_overlay(out_dir):
+    with (out_dir / "KCNH2_review_adjudications.csv").open(encoding="utf-8") as handle:
+        return {r["source_notation"]: r for r in csv.DictReader(handle)}
+
+
+def test_canonicalization_matches_scorer():
+    # The overlay key must be identical for 3-letter and 1-letter spellings,
+    # which is how it round-trips to the DB's aggregated (pmid, variant) key.
+    assert ingest._variant_key("p.Ser818Leu") == ingest._variant_key("S818L")
+
+
+def test_verdicts_map_and_match_against_real_db(tmp_path):
+    db = _build_db(tmp_path)
+    out_dir = _run(tmp_path, "--db", f"KCNH2={db}")
+    rows = _read_overlay(out_dir)
+    assert len(rows) == len(EXPORT_ROWS)
+
+    confirm = rows["p.Ser818Leu"]
+    assert confirm["action"] == "gold_confirmed"
+    assert confirm["match_status"] == "matched"
+    # Both extracted and corrected survive; confirm keeps the extracted value.
+    assert confirm["extracted_affected"] == "2"
+
+    override = rows["p.Ala561Val"]
+    assert override["action"] == "count_override"
+    assert override["match_status"] == "matched"
+    assert override["extracted_affected"] == "1"  # original kept
+    assert override["corrected_affected"] == "5"  # adjudication kept
+
+    assert rows["p.Gly628Ser"]["action"] == "false_positive"
+    assert rows["p.Gly628Ser"]["match_status"] == "matched"
+    assert rows["p.Asn588Lys"]["action"] == "excluded"
+    assert rows["p.Asn588Lys"]["match_status"] == "matched"
+
+    # missing/other reference variants GVF never extracted -> unmatched is expected.
+    assert rows["p.Arg100Gln"]["action"] == "followup_missing"
+    assert rows["p.Arg100Gln"]["match_status"] == "unmatched"
+    assert rows["p.Thr200Met"]["action"] == "followup_other"
+
+
+def test_followup_queue_and_summary(tmp_path):
+    db = _build_db(tmp_path)
+    out_dir = _run(tmp_path, "--db", f"KCNH2={db}")
+
+    with (out_dir / "review_followup_queue.csv").open(encoding="utf-8") as handle:
+        queue = list(csv.DictReader(handle))
+    # Only missing + other queue (the four actionable verdicts all matched).
+    queued_verdicts = sorted(r["verdict"] for r in queue)
+    assert queued_verdicts == ["missing", "other"]
+
+    summary = json.loads((out_dir / "review_adjudications_summary.json").read_text())
+    kcnh2 = summary["KCNH2"]
+    assert kcnh2["total"] == 6
+    assert kcnh2["actions"]["count_override"] == 1
+    assert kcnh2["count_override_matched"] == 1
+    # A561V: affected 1->5 (+4), unaffected 0->2 (+2). Only matched overrides count.
+    assert kcnh2["net_affected_delta"] == 4
+    assert kcnh2["net_unaffected_delta"] == 2
+
+
+def test_idempotent(tmp_path):
+    db = _build_db(tmp_path)
+    out_dir = _run(tmp_path, "--db", f"KCNH2={db}")
+    first = (out_dir / "KCNH2_review_adjudications.csv").read_bytes()
+    out_dir2 = _run(tmp_path, "--db", f"KCNH2={db}")
+    assert (out_dir2 / "KCNH2_review_adjudications.csv").read_bytes() == first
+
+
+def test_no_db_mode_queues_everything(tmp_path):
+    out_dir = _run(tmp_path, "--no-db")
+    rows = _read_overlay(out_dir)
+    assert all(r["match_status"] == "no_db" for r in rows.values())
+    assert all(r["extracted_affected"] == "" for r in rows.values())
+    with (out_dir / "review_followup_queue.csv").open(encoding="utf-8") as handle:
+        queue = list(csv.DictReader(handle))
+    # With no DB, nothing can be verified, so every row needs human follow-up.
+    assert len(queue) == len(EXPORT_ROWS)
+
+
+def test_missing_export_errors(tmp_path):
+    sys_argv = sys.argv
+    sys.argv = [
+        "ingest_review_adjudications.py",
+        "--export-csv",
+        str(tmp_path / "does_not_exist.csv"),
+    ]
+    try:
+        with pytest.raises(SystemExit):
+            ingest.main()
+    finally:
+        sys.argv = sys_argv

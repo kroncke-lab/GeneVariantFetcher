@@ -87,7 +87,15 @@ gvf extract KCNH2 --email you@example.com --verbose
 
 # Custom output directory
 gvf extract KCNH2 --email you@example.com --output /path/to/results
+
+# Publish the scored run into the Variant_Browser review DB for collaborator
+# adjudication (opt-in, best-effort; needs a sibling Variant_Browser checkout)
+gvf gvf-run KCNH2 --email you@example.com --output ./results --publish-review
 ```
+
+To pull collaborator adjudications back into the gold standard, see
+[docs/VARIANT_BROWSER_INTEGRATION.md](VARIANT_BROWSER_INTEGRATION.md)
+(`scripts/ingest_review_adjudications.py`).
 
 ## What to Expect
 

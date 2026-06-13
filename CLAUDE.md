@@ -259,10 +259,47 @@ supplement recovery (access-gated — restore the Springer key; see
 accuracy, and keeping no-gold QC prominent for new genes. Karger/Sage are
 deprioritized (~0% of the recall gap).
 
+## Variant_Browser Review Integration
+
+GVF round-trips with the sibling `Variant_Browser` curation app (Azure SQL
+`vb-curation`). The browser owns both endpoints; GVF only calls them — do not
+duplicate the matching/DB logic on this side. Full how-to:
+`docs/VARIANT_BROWSER_INTEGRATION.md`.
+
+- **Publish (GVF → review DB), opt-in.** `gvf gvf-run <GENE> --publish-review`
+  adds a best-effort final step that shells out to
+  `Variant_Browser/scripts/gvf_publish.sh <GENE> <run_db> [DISEASE]`, pushing the
+  scored run into `vb-curation` for collaborators to adjudicate. OFF by default.
+  A publish failure warns but never fails the run. The review repo is resolved
+  from `--review-repo`, then `GVF_REVIEW_REPO`/`VARIANT_BROWSER_DIR`, then the
+  sibling `../Variant_Browser`. `gvf_publish.sh` owns the Azure creds and the
+  GVF→browser variant matching, so GVF needs no DB creds. Wired in
+  `cli/gvf_run.py` (`step_publish_review`).
+- **Pull adjudications (review → gold), correction overlay.** Export from the
+  browser (`cd ~/GitRepos/Variant_Browser && set -a && source .env && set +a &&
+  python manage.py export_adjudications [--gene GENE] --out adjudications.csv`),
+  then `python scripts/ingest_review_adjudications.py --export-csv
+  adjudications.csv`. Round-trip key = `(gene, source_notation, pmid)` where
+  `source_notation` is the GVF `protein_notation`; matched against a run DB's
+  extracted rows using the SAME canonical notation the recall scorer uses (so a
+  match here means a match there). Verdicts map to overlay actions
+  (`confirm→gold_confirmed`, `correct_counts→count_override`,
+  `wrong_variant→false_positive`, `wrong_paper→excluded`,
+  `missing→followup_missing`, `other→followup_other`). It writes a durable
+  CORRECTION OVERLAY under `gene_variant_fetcher_gold_standard/adjudications/`
+  that keeps BOTH extracted and corrected counts (so recall/precision/MAE can be
+  recomputed without mutating raw rows), plus a follow-up queue and a summary
+  with net count deltas. Idempotent. This is the live, export-driven cousin of
+  the older hardcoded `scripts/recall_audit/apply_gold_v2_adjudications.py`.
+
 ## Files To Know
 
 - `cli/compare_variants.py` - gold-standard matcher and recall summary.
 - `scripts/run_recall_suite.py` - multi-gene recall scoring.
+- `scripts/ingest_review_adjudications.py` - ingest Variant_Browser collaborator
+  adjudications (the `export_adjudications` CSV) into a durable gold-standard
+  correction overlay + follow-up queue, matched by `(gene, protein_notation,
+  pmid)`. Round-trip partner of `gvf-run --publish-review`.
 - `scripts/refresh_recall.py` - idempotent recall-refresh orchestrator (fetch
   supplements -> bridge corpus -> fold + acceptance-gated re-extract -> score ->
   optional layer-preserving land into the canonical DB). The "just re-run it" entry.
