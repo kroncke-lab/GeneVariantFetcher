@@ -2507,6 +2507,8 @@ class ExpertExtractor(BaseLLMCaller):
         header_idx = {}
         header_mapping = {}  # Maps our standard keys to actual column indices
         header_multi = {"count": [], "affected": [], "unaffected": []}
+        active_headers = []
+        table_row_ordinal = 0
         row_level_clinical_table = False
         current_table_label = ""
         active_table_label = ""
@@ -2538,7 +2540,7 @@ class ExpertExtractor(BaseLLMCaller):
                 mentioned = self._gene_symbols_in_table_label(label)
             return not mentioned or gene_symbol.upper() in mentioned
 
-        for line in lines:
+        for line_number, line in enumerate(lines, start=1):
             stripped_line = line.strip()
             if not table_started:
                 update_table_label(stripped_line)
@@ -2557,6 +2559,8 @@ class ExpertExtractor(BaseLLMCaller):
                         self._looks_like_row_level_clinical_header(parts)
                     )
                     active_table_label = current_table_label
+                    active_headers = parts
+                    table_row_ordinal = 0
                     for idx, name in enumerate(parts):
                         name_lower = name.lower().strip()
                         header_idx[name_lower] = idx
@@ -2595,6 +2599,8 @@ class ExpertExtractor(BaseLLMCaller):
                 header_mapping = {}
                 header_idx = {}
                 header_multi = {"count": [], "affected": [], "unaffected": []}
+                active_headers = []
+                table_row_ordinal = 0
                 row_level_clinical_table = False
                 active_table_label = ""
                 continue
@@ -2606,6 +2612,7 @@ class ExpertExtractor(BaseLLMCaller):
             cells = [c.strip() for c in line.split("|") if c.strip()]
             if len(cells) < 2:  # Relaxed from 3 to 2 for simpler tables
                 continue
+            table_row_ordinal += 1
 
             def get_col(key: str) -> Optional[str]:
                 idx = header_mapping.get(key)
@@ -2626,6 +2633,13 @@ class ExpertExtractor(BaseLLMCaller):
                     if value:
                         values.append(value)
                 return values
+
+            def header_label(key: str) -> Optional[str]:
+                idx = header_mapping.get(key)
+                if idx is None or idx >= len(active_headers):
+                    return None
+                label = active_headers[idx].strip()
+                return label or None
 
             cdna = get_col("cdna")
             protein = get_col("protein")
@@ -2734,6 +2748,24 @@ class ExpertExtractor(BaseLLMCaller):
                     remainder = patient_count - affected_count
                     unaffected_count = remainder if remainder >= 0 else None
 
+            source_ref = active_table_label or "Markdown table"
+            observation_provenance = {
+                "source_container": "supplement"
+                if re.search(
+                    r"\bsupp(?:lement(?:ary|al)?)?\b|etable|e-table",
+                    source_ref,
+                    re.IGNORECASE,
+                )
+                else "main",
+                "source_kind": "table",
+                "source_ref": source_ref,
+                "row_ordinal": table_row_ordinal,
+                "column_ref": header_label("count"),
+                "locator_extra": {
+                    "parser": "markdown_table",
+                    "line_number": line_number,
+                },
+            }
             variant = {
                 "gene_symbol": gene_symbol,
                 "cdna_notation": f"c.{cdna}"
@@ -2746,6 +2778,7 @@ class ExpertExtractor(BaseLLMCaller):
                     "phenotype": "unaffected control"
                     if row_control_like
                     else f"{gene_symbol}-associated disease",
+                    **observation_provenance,
                 },
                 "penetrance_data": {
                     "total_carriers_observed": patient_count,
@@ -2758,6 +2791,7 @@ class ExpertExtractor(BaseLLMCaller):
                 "population_frequency": None,
                 "evidence_level": "medium",
                 "source_location": active_table_label or "Markdown table",
+                **observation_provenance,
                 "additional_notes": "Parsed via deterministic table parser",
                 "key_quotes": [],
             }

@@ -1241,6 +1241,37 @@ def _router_fact_rows(
     return rows
 
 
+def _router_observation_provenance(
+    table: MarkdownTable,
+    row_number: int,
+    count_idx: Optional[int],
+) -> Dict[str, Any]:
+    source_ref = table.caption or f"Table {table.table_id}"
+    source_container = (
+        "supplement"
+        if re.search(
+            r"\bsupp(?:lement(?:ary|al)?)?\b|etable|e-table", source_ref, re.IGNORECASE
+        )
+        else "main"
+    )
+    column_ref = (
+        "implicit one carrier per clinical row"
+        if count_idx == _INFER_ROW_PATIENT_COUNT
+        else _header_label(table, count_idx)
+    )
+    return {
+        "source_container": source_container,
+        "source_kind": "table",
+        "source_ref": source_ref,
+        "row_ordinal": row_number,
+        "column_ref": column_ref,
+        "locator_extra": {
+            "parser": "table_router",
+            "table_id": table.table_id,
+        },
+    }
+
+
 def parse_routed_table(
     table: MarkdownTable, mapping: Dict[str, int], gene_symbol: str
 ) -> List[Dict[str, Any]]:
@@ -1363,6 +1394,9 @@ def parse_routed_table(
 
             source_table = table.caption or f"Table {table.table_id}"
             source_location = f"{source_table}, row {row_number} (router+deterministic)"
+            observation_provenance = _router_observation_provenance(
+                table, row_number, count_idx
+            )
             fact_rows = _router_fact_rows(
                 table=table,
                 row_number=row_number,
@@ -1411,6 +1445,7 @@ def parse_routed_table(
                 "patients": {
                     "count": total,
                     "phenotype": phenotype.strip() if phenotype else None,
+                    **observation_provenance,
                 },
                 "penetrance_data": {
                     "total_carriers_observed": total,
@@ -1426,6 +1461,7 @@ def parse_routed_table(
                 "population_frequency": None,
                 "evidence_level": "medium",
                 "source_location": source_location,
+                **observation_provenance,
                 "additional_notes": (
                     f"Parsed deterministically from {table.table_id}; "
                     f"caption={table.caption!r}"

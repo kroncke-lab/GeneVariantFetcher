@@ -10,6 +10,7 @@ import json
 import sqlite3
 
 from harvesting.migrate_to_sqlite import (
+    OBSERVATION_PROVENANCE_KEYS,
     create_database_schema,
     dedup_existing_rows,
     insert_variant_data,
@@ -41,6 +42,173 @@ def _age_row_count(conn):
 
 def _fact_count(conn):
     return conn.execute("SELECT COUNT(*) FROM fact_provenance").fetchone()[0]
+
+
+def _table_columns(conn, table):
+    return {row[1] for row in conn.execute(f"PRAGMA table_info({table})")}
+
+
+def test_observation_provenance_columns_exist_on_child_tables(tmp_path):
+    conn = create_database_schema(str(tmp_path / "t.db"))
+
+    for table in ("individual_records", "phenotypes"):
+        columns = _table_columns(conn, table)
+        for column in OBSERVATION_PROVENANCE_KEYS:
+            assert column in columns
+    conn.close()
+
+
+def test_insert_variant_data_round_trips_observation_provenance(tmp_path):
+    conn = create_database_schema(str(tmp_path / "t.db"))
+    cur = conn.cursor()
+    cur.execute("INSERT OR IGNORE INTO papers (pmid) VALUES ('32893267')")
+    insert_variant_data(
+        cur,
+        "32893267",
+        {
+            "gene_symbol": "KCNQ1",
+            "protein_notation": "p.Val254Met",
+            "source_location": "Supplementary Table 2, row 4",
+            "patients": {
+                "count": 1,
+                "phenotype": "LQTS",
+                "source_container": "supplement",
+                "source_kind": "table",
+                "source_ref": "Supplementary Table 2",
+                "page_label": "e12",
+                "pdf_page": 7,
+                "row_label": "Patient 4",
+                "row_ordinal": 4,
+                "column_ref": "Phenotype",
+                "locator_extra": {"cell_coords": {"row": 4, "col": 6}},
+            },
+            "individual_records": [
+                {
+                    "individual_id": "Patient 4",
+                    "affected_status": "affected",
+                    "phenotype_details": "QT prolongation",
+                    "evidence_sentence": "Patient 4 had QT prolongation.",
+                    "source_container": "supplement",
+                    "source_kind": "table",
+                    "source_ref": "Supplementary Table 2",
+                    "page_label": "e12",
+                    "pdf_page": 7,
+                    "row_label": "Patient 4",
+                    "row_ordinal": 4,
+                    "column_ref": "Phenotype",
+                    "locator_extra": {"bbox": [1, 2, 3, 4]},
+                }
+            ],
+        },
+    )
+    conn.commit()
+
+    individual = conn.execute(
+        """
+        SELECT source_container, source_kind, source_ref, page_label, pdf_page,
+               row_label, row_ordinal, column_ref, figure_panel, source_record_id,
+               locator_extra
+        FROM individual_records
+        """
+    ).fetchone()
+    assert individual[:9] == (
+        "supplement",
+        "table",
+        "Supplementary Table 2",
+        "e12",
+        7,
+        "Patient 4",
+        4,
+        "Phenotype",
+        None,
+    )
+    assert len(individual[9]) == 64
+    assert json.loads(individual[10]) == {"bbox": [1, 2, 3, 4]}
+
+    phenotype = conn.execute(
+        """
+        SELECT source_container, source_kind, source_ref, page_label, pdf_page,
+               row_label, row_ordinal, column_ref, source_record_id, locator_extra
+        FROM phenotypes
+        """
+    ).fetchone()
+    assert phenotype[:8] == (
+        "supplement",
+        "table",
+        "Supplementary Table 2",
+        "e12",
+        7,
+        "Patient 4",
+        4,
+        "Phenotype",
+    )
+    assert len(phenotype[8]) == 64
+    assert json.loads(phenotype[9]) == {"cell_coords": {"col": 6, "row": 4}}
+    conn.close()
+
+
+def test_source_record_id_is_stable_across_reruns(tmp_path):
+    variant = {
+        "gene_symbol": "KCNQ1",
+        "protein_notation": "p.Val254Met",
+        "individual_records": [
+            {
+                "individual_id": "II-1",
+                "affected_status": "affected",
+                "source_ref": "Table 2",
+                "row_label": "II-1",
+            }
+        ],
+    }
+    ids = []
+    for db_name in ("first.db", "second.db"):
+        conn = create_database_schema(str(tmp_path / db_name))
+        cur = conn.cursor()
+        cur.execute("INSERT OR IGNORE INTO papers (pmid) VALUES ('32893267')")
+        insert_variant_data(cur, "32893267", copy.deepcopy(variant))
+        conn.commit()
+        ids.append(
+            conn.execute("SELECT source_record_id FROM individual_records").fetchone()[
+                0
+            ]
+        )
+        conn.close()
+
+    assert ids[0] == ids[1]
+
+
+def test_insert_variant_data_allows_rows_without_provenance(tmp_path):
+    conn = create_database_schema(str(tmp_path / "t.db"))
+    cur = conn.cursor()
+    cur.execute("INSERT OR IGNORE INTO papers (pmid) VALUES ('32893267')")
+    insert_variant_data(
+        cur,
+        "32893267",
+        {
+            "gene_symbol": "KCNQ1",
+            "protein_notation": "p.Val254Met",
+            "patients": {"count": 1, "phenotype": "LQTS"},
+            "individual_records": [
+                {"individual_id": "P1", "affected_status": "affected"}
+            ],
+        },
+    )
+    conn.commit()
+
+    individual = conn.execute(
+        """
+        SELECT source_container, source_kind, source_ref, source_record_id
+        FROM individual_records
+        """
+    ).fetchone()
+    phenotype = conn.execute(
+        "SELECT source_container, source_kind, source_ref, source_record_id FROM phenotypes"
+    ).fetchone()
+    assert individual[:3] == (None, None, None)
+    assert phenotype[:3] == (None, None, None)
+    assert len(individual[3]) == 64
+    assert len(phenotype[3]) == 64
+    conn.close()
 
 
 def test_insert_variant_data_collapses_exact_duplicate_penetrance(tmp_path):

@@ -88,6 +88,24 @@ FACT_PROVENANCE_FIELDS: Tuple[str, ...] = (
     "provenance_kind",
 )
 
+OBSERVATION_PROVENANCE_COLUMNS: Tuple[Tuple[str, str], ...] = (
+    ("source_container", "TEXT"),
+    ("source_kind", "TEXT"),
+    ("source_ref", "TEXT"),
+    ("page_label", "TEXT"),
+    ("pdf_page", "INTEGER"),
+    ("row_label", "TEXT"),
+    ("row_ordinal", "INTEGER"),
+    ("column_ref", "TEXT"),
+    ("figure_panel", "TEXT"),
+    ("source_record_id", "TEXT"),
+    ("locator_extra", "TEXT"),
+)
+
+OBSERVATION_PROVENANCE_KEYS: Tuple[str, ...] = tuple(
+    col for col, _decl in OBSERVATION_PROVENANCE_COLUMNS
+)
+
 # =============================================================================
 # INPUT VALIDATION
 # =============================================================================
@@ -598,6 +616,17 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             evidence_sentence TEXT,
             ethnicity TEXT,
             geographic_origin TEXT,
+            source_container TEXT,
+            source_kind TEXT,
+            source_ref TEXT,
+            page_label TEXT,
+            pdf_page INTEGER,
+            row_label TEXT,
+            row_ordinal INTEGER,
+            column_ref TEXT,
+            figure_panel TEXT,
+            source_record_id TEXT,
+            locator_extra TEXT,
 
             FOREIGN KEY (variant_id) REFERENCES variants(variant_id) ON DELETE CASCADE,
             FOREIGN KEY (pmid) REFERENCES papers(pmid) ON DELETE CASCADE
@@ -648,7 +677,18 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
         ("variant_papers", "source_layer", "TEXT"),
         ("individual_records", "ethnicity", "TEXT"),
         ("individual_records", "geographic_origin", "TEXT"),
+        *(
+            ("individual_records", col, decl)
+            for col, decl in OBSERVATION_PROVENANCE_COLUMNS
+        ),
+        *(("phenotypes", col, decl) for col, decl in OBSERVATION_PROVENANCE_COLUMNS),
     ):
+        table_exists = cursor.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
+            (table,),
+        ).fetchone()
+        if not table_exists:
+            continue
         existing = {r[1] for r in cursor.execute(f"PRAGMA table_info({table})")}
         if col not in existing:
             cursor.execute(f"ALTER TABLE {table} ADD COLUMN {col} {decl}")
@@ -657,6 +697,11 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
     cursor.execute("""
         CREATE INDEX IF NOT EXISTS idx_individual_records_affected
         ON individual_records(variant_id, affected_status)
+    """)
+
+    cursor.execute("""
+        CREATE INDEX IF NOT EXISTS idx_individual_records_source_record
+        ON individual_records(source_record_id)
     """)
 
     # ========================================================================
@@ -686,10 +731,26 @@ def create_database_schema(db_path: str) -> sqlite3.Connection:
             patient_count INTEGER,
             demographics TEXT,
             phenotype_description TEXT,
+            source_container TEXT,
+            source_kind TEXT,
+            source_ref TEXT,
+            page_label TEXT,
+            pdf_page INTEGER,
+            row_label TEXT,
+            row_ordinal INTEGER,
+            column_ref TEXT,
+            figure_panel TEXT,
+            source_record_id TEXT,
+            locator_extra TEXT,
 
             FOREIGN KEY (variant_id) REFERENCES variants(variant_id) ON DELETE CASCADE,
             FOREIGN KEY (pmid) REFERENCES papers(pmid) ON DELETE CASCADE
         )
+    """)
+
+    cursor.execute("""
+        CREATE INDEX IF NOT EXISTS idx_phenotypes_source_record
+        ON phenotypes(source_record_id)
     """)
 
     # ========================================================================
@@ -765,6 +826,20 @@ def upgrade_database_schema(conn: sqlite3.Connection) -> None:
     """
     cursor = conn.cursor()
 
+    def ensure_column(table: str, column: str, declaration: str) -> None:
+        table_exists = cursor.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
+            (table,),
+        ).fetchone()
+        if not table_exists:
+            return
+        cursor.execute(f"PRAGMA table_info({table})")
+        columns = {row[1] for row in cursor.fetchall()}
+        if column in columns:
+            return
+        logger.info("Upgrading schema: adding %s column to %s", column, table)
+        cursor.execute(f"ALTER TABLE {table} ADD COLUMN {column} {declaration}")
+
     # Check if source_file column exists in extraction_metadata
     cursor.execute("PRAGMA table_info(extraction_metadata)")
     columns = {row[1] for row in cursor.fetchall()}
@@ -779,6 +854,11 @@ def upgrade_database_schema(conn: sqlite3.Connection) -> None:
         """)
         conn.commit()
         logger.info("✓ Schema upgrade complete: source_file column added")
+
+    for table in ("individual_records", "phenotypes"):
+        for column, declaration in OBSERVATION_PROVENANCE_COLUMNS:
+            ensure_column(table, column, declaration)
+    conn.commit()
 
 
 # ============================================================================
@@ -1066,6 +1146,262 @@ def _infer_source_components(
         "source_row": _clean_optional_text(row),
         "source_paragraph": _clean_optional_text(paragraph),
         "source_section": _clean_optional_text(section),
+    }
+
+
+def _nested_provenance(raw: Dict[str, Any]) -> Dict[str, Any]:
+    """Return flat per-observation provenance keys from a possibly nested row."""
+    merged: Dict[str, Any] = {}
+    for key in ("provenance", "source_provenance", "source_locator", "locator"):
+        nested = raw.get(key)
+        if isinstance(nested, dict):
+            merged.update(nested)
+    merged.update(raw)
+    return merged
+
+
+def _normalize_source_container(value: Any) -> Optional[str]:
+    text = _clean_optional_text(value)
+    if not text:
+        return None
+    lowered = text.lower()
+    if lowered in {"supplement", "supplemental", "supplementary", "supp"}:
+        return "supplement"
+    if lowered == "main":
+        return "main"
+    return None
+
+
+def _normalize_source_kind(value: Any) -> Optional[str]:
+    text = _clean_optional_text(value)
+    if not text:
+        return None
+    lowered = text.lower()
+    if lowered in {"table", "figure", "text", "abstract"}:
+        return lowered
+    if lowered in {"section", "paragraph", "body"}:
+        return "text"
+    return None
+
+
+def _coerce_optional_int(value: Any) -> Optional[int]:
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, int):
+        return value
+    text = _clean_optional_text(value)
+    if not text:
+        return None
+    match = re.search(r"\d+", text)
+    return int(match.group(0)) if match else None
+
+
+def _infer_observation_source_from_location(
+    source_location: Any,
+) -> Dict[str, Optional[Any]]:
+    """Best-effort structured locator from legacy free-text source_location."""
+    text = _clean_optional_text(source_location) or ""
+    if not text:
+        return {}
+    lowered = text.lower()
+
+    source_container = (
+        "supplement"
+        if re.search(
+            r"\bsupp(?:lement(?:ary|al)?)?\b|etable|e-table|table\s+s\d", lowered
+        )
+        else "main"
+    )
+    source_kind = None
+    if re.search(r"\b(?:e?table|tab\.?)\b", lowered):
+        source_kind = "table"
+    elif re.search(r"\b(?:fig(?:ure)?\.?)\b", lowered):
+        source_kind = "figure"
+    elif "abstract" in lowered:
+        source_kind = "abstract"
+    elif re.search(
+        r"\b(results?|methods?|discussion|conclusions?|case(?: presentation| report)?|paragraph|text scan)\b",
+        lowered,
+    ):
+        source_kind = "text"
+
+    ref = None
+    figure_panel = None
+    ref_match = re.search(
+        r"\b(?:(?:Supplementary|Supplemental|Supp\.?)\s+)?e?"
+        r"(?:Table|Fig(?:ure)?\.?)\s*[A-Za-z0-9][A-Za-z0-9._-]*[A-Za-z]?",
+        text,
+        re.IGNORECASE,
+    )
+    if ref_match:
+        ref = ref_match.group(0).strip(" .;,")
+        if source_kind == "figure":
+            panel_match = re.search(r"\d+\s*([A-Za-z])$", ref)
+            if panel_match:
+                figure_panel = panel_match.group(1).upper()
+    elif source_kind in {"table", "figure"}:
+        ref = text
+    else:
+        section_match = re.search(
+            r"\b(Abstract|Introduction|Methods?|Results?|Discussion|Conclusions?|"
+            r"Case(?: presentation| report)?|Supplementary Material)\b",
+            text,
+            re.IGNORECASE,
+        )
+        if section_match:
+            ref = section_match.group(0)
+
+    row_ordinal = None
+    row_match = re.search(r"\brows?\s+(\d+)\b", text, re.IGNORECASE)
+    if row_match:
+        row_ordinal = int(row_match.group(1))
+
+    return {
+        "source_container": source_container,
+        "source_kind": source_kind,
+        "source_ref": _clean_optional_text(ref),
+        "row_ordinal": row_ordinal,
+        "figure_panel": figure_panel,
+    }
+
+
+def _serialize_locator_extra(raw: Any, provenance: Dict[str, Any]) -> Optional[str]:
+    value = raw
+    if value is None:
+        extra: Dict[str, Any] = {}
+        for out_key, in_keys in {
+            "bbox": ("bbox", "bounding_box"),
+            "pmc_xpath": ("pmc_xpath", "xpath"),
+            "cell_coords": ("cell_coords", "cell_coordinates"),
+            "parser_confidence": ("parser_confidence", "confidence"),
+        }.items():
+            for in_key in in_keys:
+                if provenance.get(in_key) is not None:
+                    extra[out_key] = provenance[in_key]
+                    break
+        value = extra or None
+    if value is None:
+        return None
+    if isinstance(value, str):
+        text = value.strip()
+        if not text:
+            return None
+        try:
+            value = json.loads(text)
+        except json.JSONDecodeError:
+            value = text
+    return json.dumps(value, sort_keys=True, ensure_ascii=False)
+
+
+def _stable_source_record_id(
+    *,
+    pmid: Any,
+    source_notation: Any,
+    individual_id: Any = None,
+    row_label: Any = None,
+    source_ref: Any = None,
+) -> str:
+    person_key = _clean_optional_text(individual_id) or _clean_optional_text(row_label)
+    payload = {
+        "pmid": _clean_optional_text(pmid) or "",
+        "protein_notation": _clean_optional_text(source_notation) or "",
+        "person": person_key or "",
+        "source_ref": _clean_optional_text(source_ref) or "",
+    }
+    encoded = json.dumps(
+        {k: v.casefold() for k, v in payload.items()},
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+
+
+def _observation_provenance_values(
+    *,
+    observation: Dict[str, Any],
+    variant_data: Dict[str, Any],
+    pmid: str,
+    individual_id: Any = None,
+    default_column_ref: Any = None,
+) -> Dict[str, Any]:
+    """Normalize structured per-observation provenance for DB insertion."""
+    obs_prov = _nested_provenance(observation)
+    variant_prov = _nested_provenance(variant_data)
+    source_location = (
+        obs_prov.get("source_location")
+        or variant_prov.get("source_location")
+        or variant_data.get("source_location")
+    )
+    inferred = _infer_observation_source_from_location(source_location)
+
+    def pick(*keys: str, default: Any = None) -> Any:
+        for key in keys:
+            if obs_prov.get(key) is not None:
+                return obs_prov.get(key)
+        for key in keys:
+            if variant_prov.get(key) is not None:
+                return variant_prov.get(key)
+        return inferred.get(keys[0], default)
+
+    source_container = _normalize_source_container(
+        pick("source_container", "container")
+    )
+    source_kind = _normalize_source_kind(pick("source_kind", "kind"))
+    source_ref = _clean_optional_text(
+        pick(
+            "source_ref",
+            "source_table",
+            "table",
+            "source_figure",
+            "figure",
+            "source_section",
+            "section",
+        )
+    )
+    row_label = _clean_optional_text(
+        pick("row_label", "source_row", "row", "case_label")
+    )
+    if not row_label:
+        row_label = _clean_optional_text(individual_id)
+    column_ref = _clean_optional_text(
+        pick("column_ref", "source_column", "column", default=default_column_ref)
+    )
+    figure_panel = _clean_optional_text(pick("figure_panel", "panel"))
+    if not figure_panel and source_kind == "figure" and source_ref:
+        panel_match = re.search(r"\d+\s*([A-Za-z])$", source_ref)
+        if panel_match:
+            figure_panel = panel_match.group(1).upper()
+
+    source_notation = (
+        variant_data.get("protein_notation")
+        or variant_data.get("cdna_notation")
+        or variant_data.get("genomic_position")
+    )
+    return {
+        "source_container": source_container,
+        "source_kind": source_kind,
+        "source_ref": source_ref,
+        "page_label": _clean_optional_text(
+            pick("page_label", "printed_page", "source_page")
+        ),
+        "pdf_page": _coerce_optional_int(pick("pdf_page", "pdf_page_number")),
+        "row_label": row_label,
+        "row_ordinal": _coerce_optional_int(pick("row_ordinal", "row_index")),
+        "column_ref": column_ref,
+        "figure_panel": figure_panel,
+        "source_record_id": _stable_source_record_id(
+            pmid=pmid,
+            source_notation=source_notation,
+            individual_id=individual_id,
+            row_label=row_label,
+            source_ref=source_ref,
+        ),
+        "locator_extra": _serialize_locator_extra(
+            obs_prov.get("locator_extra") or variant_prov.get("locator_extra"),
+            obs_prov,
+        ),
     }
 
 
@@ -1569,6 +1905,12 @@ def insert_variant_data(
             continue
         affected_status = normalize_affected_status(record.get("affected_status"))
         individual_id = record.get("individual_id")
+        individual_provenance = _observation_provenance_values(
+            observation=record,
+            variant_data=variant_data,
+            pmid=pmid,
+            individual_id=individual_id,
+        )
         if preserve_existing_evidence:
             if individual_id:
                 existing_record = cursor.execute(
@@ -1608,6 +1950,7 @@ def insert_variant_data(
                 "evidence_sentence": record.get("evidence_sentence"),
                 "ethnicity": record.get("ethnicity"),
                 "geographic_origin": record.get("geographic_origin"),
+                **individual_provenance,
             },
         ):
             continue
@@ -1616,8 +1959,11 @@ def insert_variant_data(
             INSERT INTO individual_records (
                 variant_id, pmid, individual_id, age_at_evaluation,
                 age_at_onset, age_at_diagnosis, sex, affected_status,
-                phenotype_details, evidence_sentence, ethnicity, geographic_origin
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                phenotype_details, evidence_sentence, ethnicity, geographic_origin,
+                source_container, source_kind, source_ref, page_label, pdf_page,
+                row_label, row_ordinal, column_ref, figure_panel, source_record_id,
+                locator_extra
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
             (
                 variant_id,
@@ -1632,6 +1978,17 @@ def insert_variant_data(
                 record.get("evidence_sentence"),
                 record.get("ethnicity"),
                 record.get("geographic_origin"),
+                individual_provenance["source_container"],
+                individual_provenance["source_kind"],
+                individual_provenance["source_ref"],
+                individual_provenance["page_label"],
+                individual_provenance["pdf_page"],
+                individual_provenance["row_label"],
+                individual_provenance["row_ordinal"],
+                individual_provenance["column_ref"],
+                individual_provenance["figure_panel"],
+                individual_provenance["source_record_id"],
+                individual_provenance["locator_extra"],
             ),
         )
 
@@ -1662,6 +2019,16 @@ def insert_variant_data(
     # Insert phenotype data
     patients = variant_data.get("patients", {})
     if patients and (patients.get("count") or patients.get("phenotype")):
+        count_provenance = _normalize_count_provenance(
+            variant_data.get("count_provenance")
+        )
+        phenotype_provenance = _observation_provenance_values(
+            observation=patients,
+            variant_data=variant_data,
+            pmid=pmid,
+            individual_id=patients.get("individual_id"),
+            default_column_ref=count_provenance.get("carriers_column_label"),
+        )
         if not _row_exists(
             cursor,
             "phenotypes",
@@ -1671,13 +2038,17 @@ def insert_variant_data(
                 "patient_count": patients.get("count"),
                 "demographics": patients.get("demographics"),
                 "phenotype_description": patients.get("phenotype"),
+                **phenotype_provenance,
             },
         ):
             cursor.execute(
                 """
                 INSERT INTO phenotypes (
-                    variant_id, pmid, patient_count, demographics, phenotype_description
-                ) VALUES (?, ?, ?, ?, ?)
+                    variant_id, pmid, patient_count, demographics,
+                    phenotype_description, source_container, source_kind, source_ref,
+                    page_label, pdf_page, row_label, row_ordinal, column_ref,
+                    figure_panel, source_record_id, locator_extra
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
                 (
                     variant_id,
@@ -1685,6 +2056,17 @@ def insert_variant_data(
                     patients.get("count"),
                     patients.get("demographics"),
                     patients.get("phenotype"),
+                    phenotype_provenance["source_container"],
+                    phenotype_provenance["source_kind"],
+                    phenotype_provenance["source_ref"],
+                    phenotype_provenance["page_label"],
+                    phenotype_provenance["pdf_page"],
+                    phenotype_provenance["row_label"],
+                    phenotype_provenance["row_ordinal"],
+                    phenotype_provenance["column_ref"],
+                    phenotype_provenance["figure_panel"],
+                    phenotype_provenance["source_record_id"],
+                    phenotype_provenance["locator_extra"],
                 ),
             )
 

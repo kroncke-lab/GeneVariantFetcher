@@ -142,6 +142,26 @@ source_section ("Methods"), source_paragraph ("paragraph 2"), plus a short
 evidence_quote copied from the paper. If you only know a coarse location, still
 emit source_location.
 
+REQUIRED — PER-OBSERVATION SOURCE LOCATORS:
+For every aggregate `patients` object and every `individual_records` entry,
+include the structured locator fields below when the paper provides them. Leave
+unknown fields null. Do NOT invent page, row, column, or figure-panel values.
+
+  source_container: "main" or "supplement" (a supplementary table is still a table)
+  source_kind: "table", "figure", "text", or "abstract"
+  source_ref: "Table 2", "Figure 3B", "Results", etc.
+  page_label: printed page label such as "1274" or "e12", or null
+  pdf_page: 1-based PDF viewer page number, or null
+  row_label: row/person label such as "II-1" or "Patient 4", or null
+  row_ordinal: 1-based row index within the table, or null
+  column_ref: exact column header the value came from, or null
+  figure_panel: panel label such as "B", or null
+  locator_extra: JSON object for bbox, PMC XPath, cell coords, or parser confidence
+
+If the paper gives only aggregate counts, emit one grouped variant record with
+the aggregate locator on `patients` and `fact_provenance`. The downstream SQLite
+writer computes `source_record_id`; do not attempt to hash it.
+
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
 Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
 and genomic_position would be null. The variant identifier is load-bearing.
@@ -193,7 +213,20 @@ Return a JSON object with this structure:
             "cdna_notation": "c.XXX",
             "protein_notation": "p.XXX",
             "clinical_significance": "pathogenic/likely_pathogenic/VUS/likely_benign/benign",
-            "patients": {{"count": N, "phenotype": "brief description"}},
+            "patients": {{
+                "count": N,
+                "phenotype": "brief description",
+                "source_container": "main|supplement|null",
+                "source_kind": "table|figure|text|abstract|null",
+                "source_ref": "Table X or Results or null",
+                "page_label": "string or null",
+                "pdf_page": "integer or null",
+                "row_label": "string or null",
+                "row_ordinal": "integer or null",
+                "column_ref": "string or null",
+                "figure_panel": "string or null",
+                "locator_extra": {{}}
+            }},
             "penetrance_data": {{
                 "total_carriers_observed": N or null,
                 "affected_count": N or null,
@@ -457,6 +490,26 @@ source_section ("Methods"), source_paragraph ("paragraph 2"), plus a short
 evidence_quote copied from the paper. If you only know a coarse location, still
 emit source_location.
 
+REQUIRED — PER-OBSERVATION SOURCE LOCATORS:
+For every aggregate `patients` object and every `individual_records` entry,
+include the structured locator fields below when the paper provides them. Leave
+unknown fields null. Do NOT invent page, row, column, or figure-panel values.
+
+  source_container: "main" or "supplement" (a supplementary table is still a table)
+  source_kind: "table", "figure", "text", or "abstract"
+  source_ref: "Table 2", "Figure 3B", "Results", etc.
+  page_label: printed page label such as "1274" or "e12", or null
+  pdf_page: 1-based PDF viewer page number, or null
+  row_label: row/person label such as "II-1" or "Patient 4", or null
+  row_ordinal: 1-based row index within the table, or null
+  column_ref: exact column header the value came from, or null
+  figure_panel: panel label such as "B", or null
+  locator_extra: JSON object for bbox, PMC XPath, cell coords, or parser confidence
+
+If the paper gives only aggregate counts, emit one grouped variant record with
+the aggregate locator on `patients` and `fact_provenance`. The downstream SQLite
+writer computes `source_record_id`; do not attempt to hash it.
+
 REQUIRED — REJECT COHORT-CLASS SUMMARIES (no specific variant identifier):
 Do NOT emit a variant entry where ALL THREE of cdna_notation, protein_notation,
 and genomic_position would be null. The variant identifier is load-bearing.
@@ -512,7 +565,17 @@ Return a JSON object with this structure:
             "patients": {{
                 "count": integer,
                 "demographics": "string",
-                "phenotype": "string"
+                "phenotype": "string",
+                "source_container": "main|supplement|null",
+                "source_kind": "table|figure|text|abstract|null",
+                "source_ref": "Table X or Figure Y or Results or null",
+                "page_label": "string or null",
+                "pdf_page": "integer or null",
+                "row_label": "string or null",
+                "row_ordinal": "integer or null",
+                "column_ref": "string or null",
+                "figure_panel": "string or null",
+                "locator_extra": {{}}
             }},
             "penetrance_data": {{
                 "total_carriers_observed": "integer or null (total people with variant)",
@@ -548,7 +611,17 @@ Return a JSON object with this structure:
                     "phenotype_details": "string (disease manifestations for this person)",
                     "ethnicity": "string or null (reported race/ethnicity/ancestry of this individual or their cohort, verbatim, e.g. 'East Asian', 'Caucasian', 'Ashkenazi Jewish')",
                     "geographic_origin": "string or null (reported country/region/population of origin, e.g. 'Japan', 'Northern Italy')",
-                    "evidence_sentence": "string (exact sentence from paper)"
+                    "evidence_sentence": "string (exact sentence from paper)",
+                    "source_container": "main|supplement|null",
+                    "source_kind": "table|figure|text|abstract|null",
+                    "source_ref": "Table X or Figure Y or Results or null",
+                    "page_label": "string or null",
+                    "pdf_page": "integer or null",
+                    "row_label": "string or null",
+                    "row_ordinal": "integer or null",
+                    "column_ref": "string or null",
+                    "figure_panel": "string or null",
+                    "locator_extra": {{}}
                 }}
             ],
             "functional_data": {{
