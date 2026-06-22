@@ -68,6 +68,9 @@ AA_MAP_REVERSE["Xaa"] = "X"  # Unknown amino acid
 
 # Protein lengths for common cardiac genes
 PROTEIN_LENGTHS = {
+    "APOE": 317,
+    "BRCA1": 1863,
+    "MYBPC3": 1274,
     "KCNH2": 1159,
     "KCNQ1": 676,
     "SCN5A": 2016,
@@ -76,6 +79,7 @@ PROTEIN_LENGTHS = {
     "KCNJ2": 427,
     "CACNA1C": 2221,
     "RYR2": 4967,
+    "LDLR": 860,
     # Atrial fibrillation genes
     "NPPA": 151,
     "GJA5": 406,
@@ -296,6 +300,16 @@ class VariantNormalizer:
         """
         self.gene_symbol = gene_symbol.upper()
         self.protein_length = PROTEIN_LENGTHS.get(self.gene_symbol)
+        try:
+            from utils.gene_metadata import get_gene_metadata
+
+            metadata = get_gene_metadata(self.gene_symbol)
+            if metadata.protein_length:
+                self.protein_length = metadata.protein_length
+        except Exception:
+            logger.debug(
+                "Falling back to static protein length for %s", self.gene_symbol
+            )
 
     def normalize_protein(self, variant: str) -> Optional[str]:
         """

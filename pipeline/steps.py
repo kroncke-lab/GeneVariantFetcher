@@ -13,7 +13,9 @@ import hashlib
 import json
 import logging
 import os
+import re
 import threading
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -23,6 +25,13 @@ from config.constants import DEFAULT_MAX_WORKERS
 from pipeline.source_quality import is_usable_fulltext_source
 
 logger = logging.getLogger(__name__)
+
+
+_NON_RETRYABLE_EXTRACTION_FAILURES = (
+    "could not extract pmid",
+    "no abstract available",
+    "source is abstract-only fallback",
+)
 
 
 def _resolve_default_workers() -> int:
@@ -38,6 +47,164 @@ def _resolve_default_workers() -> int:
         return get_settings().get_max_workers()
     except Exception:
         return DEFAULT_MAX_WORKERS
+
+
+def _is_retryable_extraction_failure(error: Any) -> bool:
+    """Return whether a failed extraction is worth one more model pass.
+
+    Most extraction failures are provider/rate-limit/model exceptions and are
+    cheap to retry after the main batch drains. Source-availability failures are
+    deterministic and should not burn another LLM call.
+    """
+    if error is None:
+        return True
+    message = str(error).strip().lower()
+    if not message:
+        return True
+    return not any(token in message for token in _NON_RETRYABLE_EXTRACTION_FAILURES)
+
+
+def _artifact_supplement_summary(harvest_dir: Path, pmid: str) -> dict[str, Any]:
+    """Return supplement/source counters from a run-local artifact log."""
+    artifact_path = harvest_dir / f"{pmid}_artifacts.json"
+    if not artifact_path.exists():
+        return {}
+    try:
+        artifact = json.loads(artifact_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return {"artifact_log": str(artifact_path), "artifact_read_error": str(exc)}
+
+    summary = artifact.get("summary") or {}
+    main_text = artifact.get("main_text") or {}
+    supplements = artifact.get("supplements") or []
+    return {
+        "artifact_log": str(artifact_path),
+        "main_text_source": main_text.get("source"),
+        "main_text_chars": summary.get("main_text_chars") or main_text.get("chars"),
+        "supplement_refs": main_text.get("supplement_descriptions_count", 0),
+        "supplements_downloaded": summary.get("supplement_count", len(supplements)),
+        "supplements_converted": summary.get("supplements_converted"),
+        "supplements_total_chars": summary.get("supplements_total_chars"),
+    }
+
+
+def _cap_qc_record_from_extraction(
+    extraction: Any, harvest_dir: Path
+) -> Optional[dict[str, Any]]:
+    data = extraction.extracted_data or {}
+    metadata = data.get("extraction_metadata") or {}
+    scanner_skip = metadata.get("scanner_merge_skipped") or {}
+    table_overflow = metadata.get("table_merge_overflow") or {}
+    if not scanner_skip and not table_overflow:
+        return None
+
+    pmid = str(
+        extraction.pmid or (data.get("paper_metadata") or {}).get("pmid") or ""
+    ).strip()
+    variants = data.get("variants") or []
+    record: dict[str, Any] = {
+        "pmid": pmid,
+        "model_used": metadata.get("model_used") or extraction.model_used,
+        "source_type": metadata.get("source_type"),
+        "source_file": metadata.get("source_file"),
+        "source_size_bytes": metadata.get("source_size_bytes"),
+        "final_variant_count": len(variants),
+        "scanner_cap_tripped": bool(scanner_skip),
+        "scanner_candidate_count": scanner_skip.get("candidate_count"),
+        "scanner_safety_cap": scanner_skip.get("safety_cap"),
+        "table_merge_cap_tripped": bool(table_overflow),
+        "table_candidate_count": table_overflow.get("candidate_count"),
+        "table_deduped_count": table_overflow.get("deduped_count"),
+        "table_normal_safety_cap": table_overflow.get("normal_safety_cap"),
+        "table_overflow_merge_cap": table_overflow.get("overflow_merge_cap"),
+        "table_selected_for_merge": table_overflow.get("selected_for_merge"),
+        "table_omitted_after_dedupe": table_overflow.get("omitted_after_dedupe"),
+        "table_structured_candidate_count": table_overflow.get(
+            "structured_candidate_count"
+        ),
+        "table_regex_only_candidate_count": table_overflow.get(
+            "regex_only_candidate_count"
+        ),
+        "table_merged_added": table_overflow.get("merged_added"),
+    }
+    if pmid:
+        record.update(_artifact_supplement_summary(harvest_dir, pmid))
+    return record
+
+
+def _write_dense_table_overflow_report(
+    *,
+    extractions: list[Any],
+    harvest_dir: Path,
+    output_dir: Path,
+) -> tuple[Optional[Path], Optional[Path], dict[str, Any]]:
+    """Write run-level QC for scanner/table cap trips."""
+    records = [
+        record
+        for extraction in extractions
+        if (record := _cap_qc_record_from_extraction(extraction, harvest_dir))
+    ]
+    summary = {
+        "records": len(records),
+        "scanner_cap_trips": sum(1 for row in records if row["scanner_cap_tripped"]),
+        "table_merge_cap_trips": sum(
+            1 for row in records if row["table_merge_cap_tripped"]
+        ),
+        "table_candidates_omitted_after_dedupe": sum(
+            int(row.get("table_omitted_after_dedupe") or 0) for row in records
+        ),
+        "missing_supplement_ref_pmids": sum(
+            1
+            for row in records
+            if int(row.get("supplement_refs") or 0)
+            > int(row.get("supplements_downloaded") or 0)
+        ),
+    }
+
+    pmid_status_dir = output_dir / "pmid_status"
+    pmid_status_dir.mkdir(parents=True, exist_ok=True)
+    json_path = pmid_status_dir / "dense_table_overflow.json"
+    tsv_path = pmid_status_dir / "dense_table_overflow.tsv"
+    json_path.write_text(
+        json.dumps({"summary": summary, "records": records}, indent=2),
+        encoding="utf-8",
+    )
+
+    fieldnames = [
+        "pmid",
+        "scanner_cap_tripped",
+        "scanner_candidate_count",
+        "scanner_safety_cap",
+        "table_merge_cap_tripped",
+        "table_candidate_count",
+        "table_deduped_count",
+        "table_selected_for_merge",
+        "table_omitted_after_dedupe",
+        "table_merged_added",
+        "supplement_refs",
+        "supplements_downloaded",
+        "supplements_converted",
+        "main_text_source",
+        "final_variant_count",
+        "source_type",
+        "source_file",
+    ]
+    with tsv_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t")
+        writer.writeheader()
+        for row in records:
+            writer.writerow({field: row.get(field, "") for field in fieldnames})
+    return json_path, tsv_path, summary
+
+
+def _source_has_folded_supplements(source_file: Path) -> bool:
+    """Return true when a markdown source carries folded supplement content."""
+    try:
+        from harvesting.supplement_fold import FOLD_BEGIN
+
+        return FOLD_BEGIN in source_file.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return False
 
 
 def _resolve_filter_workers() -> int:
@@ -74,6 +241,94 @@ def _resolve_count_policies() -> Tuple[str, str]:
         )
     except Exception:
         return ("off", "off")
+
+
+def _nonhuman_veterinary_source_reason(source_text: str) -> Optional[str]:
+    """Return a reason when a source is clearly non-human/veterinary.
+
+    These papers can still be useful for variant identities, but their carrier
+    counts should not populate human clinical evidence rows. Require a strong
+    species signal so background mentions of animal models do not trigger it.
+    """
+    if not source_text:
+        return None
+    head = source_text[:20_000]
+    if re.search(
+        r"(?im)^#{1,3}\s+.*\b(?:cats?\s+and\s+humans?|humans?\s+and\s+cats?)\b",
+        head,
+    ) or re.search(r"(?im)^#{1,4}\s+HUMAN\b", head):
+        return None
+    strong_patterns = (
+        r"\bMaine\s+Coon\s+cats?\b",
+        r"\bfeline\s+hypertrophic\s+cardiomyopathy\b",
+        r"\bveterinary\b",
+        r"\bAnimals?\s*:\s*[^\n.]{0,240}\b(?:cats?|dogs?|mice|rats?|horses?|"
+        r"zebrafish|canine|feline|equine|murine|porcine|bovine)\b",
+    )
+    for pattern in strong_patterns:
+        if re.search(pattern, head, re.IGNORECASE):
+            return "source is explicitly non-human/veterinary"
+
+    animal_terms = re.findall(
+        r"\b(?:cats?|feline|dogs?|canine|mice|mouse|murine|rats?|zebrafish|"
+        r"horses?|equine|porcine|bovine)\b",
+        head,
+        flags=re.IGNORECASE,
+    )
+    title_lines = "\n".join(
+        line for line in head.splitlines()[:40] if line.lstrip().startswith("#")
+    )
+    title_animal_signal = re.search(
+        r"\b(?:cats?|feline|dogs?|canine|mice|mouse|murine|rats?|zebrafish|"
+        r"horses?|equine)\b",
+        title_lines,
+        flags=re.IGNORECASE,
+    )
+    if title_animal_signal and len(animal_terms) >= 4:
+        return "title and body indicate a non-human source"
+    return None
+
+
+def _apply_nonhuman_clinical_count_guard(
+    extracted_data: Optional[Dict[str, Any]], source_text: str
+) -> None:
+    """Clear human clinical count fields for clearly non-human sources."""
+    reason = _nonhuman_veterinary_source_reason(source_text)
+    if not reason or not isinstance(extracted_data, dict):
+        return
+    variants = extracted_data.get("variants")
+    if not isinstance(variants, list) or not variants:
+        return
+
+    from pipeline.count_outlier_guard import COUNT_FIELDS, _clear_field, _read_field
+
+    flagged = 0
+    cleared = 0
+    for variant in variants:
+        if not isinstance(variant, dict):
+            continue
+        for field_name, paths in COUNT_FIELDS.items():
+            value = _read_field(variant, paths)
+            if value is None:
+                continue
+            flags = variant.setdefault("nonhuman_source_flags", {})
+            flags[field_name] = {
+                "raw": value,
+                "reason": reason,
+                "policy": "clear",
+            }
+            flagged += 1
+            _clear_field(variant, paths)
+            cleared += 1
+
+    if flagged:
+        md = extracted_data.setdefault("extraction_metadata", {})
+        md["nonhuman_count_guard"] = {
+            "policy": "clear",
+            "flagged": flagged,
+            "cleared": cleared,
+            "reason": reason,
+        }
 
 
 def _apply_count_hygiene(extracted_data: Optional[Dict[str, Any]]) -> None:
@@ -180,8 +435,14 @@ def discover_synonyms(
         SynonymFinder,
         automatic_synonym_selection,
     )
+    from utils.gene_metadata import get_gene_aliases
 
     all_synonyms = list(existing_synonyms) if existing_synonyms else []
+    existing_set = {syn.lower() for syn in all_synonyms}
+    for alias in get_gene_aliases(gene_symbol, include_query_aliases=False):
+        if alias.lower() != gene_symbol.lower() and alias.lower() not in existing_set:
+            all_synonyms.append(alias)
+            existing_set.add(alias.lower())
 
     try:
         synonym_finder = SynonymFinder(
@@ -204,7 +465,6 @@ def discover_synonyms(
         )
 
         # Merge with existing synonyms (avoid duplicates)
-        existing_set = set(s.lower() for s in all_synonyms)
         for syn in auto_selected:
             if syn.lower() not in existing_set and syn.lower() != gene_symbol.lower():
                 all_synonyms.append(syn)
@@ -244,6 +504,7 @@ def fetch_pmids(
     use_europepmc: bool = False,
     api_key: Optional[str] = None,
     disease: Optional[str] = None,
+    disease_terms: Optional[List[str]] = None,
 ) -> StepResult:
     """
     Fetch PMIDs from literature sources.
@@ -261,6 +522,7 @@ def fetch_pmids(
         disease: Optional disease term to scope PubMed queries (e.g.
             "atrial fibrillation"). When None (default), behavior is identical
             to the gene-only baseline.
+        disease_terms: Optional disease aliases for PubMed query expansion.
 
     Returns:
         StepResult with PMIDs in data["pmids"]
@@ -289,6 +551,7 @@ def fetch_pmids(
             settings=settings,
             synonyms=synonyms,
             disease=disease,
+            disease_terms=disease_terms,
         )
 
         return StepResult(
@@ -1220,8 +1483,23 @@ def extract_variants(
     disease: Optional[str] = None,
     abstract_records: Optional[Dict[str, str]] = None,
     abstract_only_pmids: Optional[List[str]] = None,
+    candidate_pmids: Optional[List[str]] = None,
+    force_pmids: Optional[List[str]] = None,
     tier_threshold: int = 1,
     max_workers: Optional[int] = None,
+    priority_top_n: Optional[int] = None,
+    priority_offset: int = 0,
+    priority_report_dir: Optional[Path] = None,
+    priority_disease_terms: Optional[List[str]] = None,
+    triage_mode: Optional[str] = None,
+    triage_model: Optional[str] = None,
+    triage_report_dir: Optional[Path] = None,
+    triage_include_defer: bool = False,
+    triage_max_llm_candidates: Optional[int] = None,
+    retry_failed_extractions: bool = True,
+    extraction_retry_attempts: int = 1,
+    extraction_retry_max_workers: Optional[int] = 1,
+    extraction_retry_backoff_seconds: float = 30.0,
     progress_callback: Optional[Callable[[int, int], None]] = None,
 ) -> StepResult:
     """
@@ -1234,8 +1512,29 @@ def extract_variants(
         disease: Optional disease term used to interpret affected/unaffected counts
         abstract_records: Dict mapping PMID to abstract JSON path
         abstract_only_pmids: PMIDs that need abstract-only extraction
+        candidate_pmids: Optional PMID surface to extract from. When provided,
+            full-text files outside this set are ignored. This is important for
+            resume/targeted retry runs whose harvest directory may contain older
+            cached papers.
+        force_pmids: Optional PMID list that must be re-extracted even when an
+            existing JSON has a matching source fingerprint. Use for targeted
+            replays after extractor/parser fixes.
         tier_threshold: Model cascade threshold
         max_workers: Max parallel workers (None → provider-aware default)
+        priority_top_n: Optional cap for prioritized pre-LLM extraction
+        priority_offset: Number of top-ranked candidates to skip before selection
+        priority_report_dir: Optional directory for prioritization audit artifacts
+        priority_disease_terms: Disease aliases used by the prioritizer
+        triage_mode: Optional cheap triage mode ("deterministic", "llm", "hybrid")
+        triage_model: Optional model for LLM triage (defaults to Tier-2 model)
+        triage_report_dir: Optional directory for triage audit artifacts
+        triage_include_defer: Include "defer" papers in extraction queue
+        triage_max_llm_candidates: Optional cap on LLM triage calls
+        retry_failed_extractions: Run a low-concurrency retry pass for failed
+            extraction calls after the first batch completes
+        extraction_retry_attempts: Number of retry passes to run
+        extraction_retry_max_workers: Max workers for retry passes
+        extraction_retry_backoff_seconds: Cooldown before each retry pass
         progress_callback: Optional callback(completed, total)
 
     Returns:
@@ -1246,6 +1545,20 @@ def extract_variants(
     from utils.pmid_utils import extract_pmid_from_filename
 
     extraction_dir.mkdir(exist_ok=True)
+    candidate_pmid_order: List[str] = []
+    candidate_pmid_set: Optional[set[str]] = None
+    if candidate_pmids is not None:
+        seen_candidate_pmids: set[str] = set()
+        for pmid in candidate_pmids:
+            clean = str(pmid).strip()
+            if not clean or clean in seen_candidate_pmids:
+                continue
+            seen_candidate_pmids.add(clean)
+            candidate_pmid_order.append(clean)
+        candidate_pmid_set = set(candidate_pmid_order)
+    force_pmid_set = {
+        clean for pmid in (force_pmids or []) if (clean := str(pmid).strip())
+    }
 
     # Find markdown files (prefer DATA_ZONES over CLEANED over FULL_CONTEXT)
     data_zones = {
@@ -1265,15 +1578,29 @@ def extract_variants(
     }
 
     markdown_files = []
-    for pmid in (
+    for pmid in sorted(
         set(data_zones.keys()) | set(cleaned_context.keys()) | set(full_context.keys())
     ):
+        if candidate_pmid_set is not None and pmid not in candidate_pmid_set:
+            continue
         if pmid in data_zones:
-            markdown_files.append(data_zones[pmid])
+            chosen_file = data_zones[pmid]
         elif pmid in cleaned_context:
-            markdown_files.append(cleaned_context[pmid])
+            chosen_file = cleaned_context[pmid]
         elif pmid in full_context:
-            markdown_files.append(full_context[pmid])
+            chosen_file = full_context[pmid]
+        else:
+            continue
+
+        full_context_file = full_context.get(pmid)
+        if (
+            full_context_file is not None
+            and chosen_file != full_context_file
+            and _source_has_folded_supplements(full_context_file)
+            and not _source_has_folded_supplements(chosen_file)
+        ):
+            chosen_file = full_context_file
+        markdown_files.append(chosen_file)
 
     markdown_pmids = {
         pmid
@@ -1285,13 +1612,120 @@ def extract_variants(
     # never submit an abstract task for the same output JSON; the two workers
     # otherwise race and a stale abstract result can overwrite full-text output.
     abstract_papers = []
-    if abstract_only_pmids and abstract_records:
-        for pmid in abstract_only_pmids:
+    if abstract_records:
+        if candidate_pmid_set is not None:
+            abstract_source_pmids = candidate_pmid_order
+        else:
+            abstract_source_pmids = abstract_only_pmids or []
+        for pmid in abstract_source_pmids:
             if pmid in markdown_pmids:
                 continue
             record_path = abstract_records.get(pmid)
             if record_path and Path(record_path).exists():
                 abstract_papers.append((pmid, record_path))
+
+    priority_summary: dict[str, Any] = {}
+    priority_result = None
+    if priority_top_n and priority_top_n > 0:
+        from pipeline.extraction_priority import prioritize_extraction_sources
+
+        report_dir = priority_report_dir or (
+            extraction_dir.parent / "extraction_priority"
+        )
+        priority_terms = priority_disease_terms or ([disease] if disease else [])
+        priority_result = prioritize_extraction_sources(
+            markdown_files=markdown_files,
+            abstract_papers=abstract_papers,
+            gene_symbol=gene_symbol,
+            disease_terms=priority_terms,
+            abstract_records=abstract_records,
+            top_n=priority_top_n,
+            offset=priority_offset,
+            report_dir=report_dir,
+        )
+        markdown_files = priority_result.selected_markdown_files
+        abstract_papers = priority_result.selected_abstract_papers
+        selected = priority_result.selected_candidates
+        priority_summary = {
+            "priority_top_n": priority_top_n,
+            "priority_offset": priority_offset,
+            "priority_candidates": len(priority_result.candidates),
+            "priority_selected": len(selected),
+            "priority_fulltext_selected": sum(
+                1 for candidate in selected if candidate.source_kind == "fulltext"
+            ),
+            "priority_abstract_selected": sum(
+                1 for candidate in selected if candidate.source_kind == "abstract"
+            ),
+            "priority_report_dir": str(report_dir),
+        }
+        logger.info(
+            "Prioritized extraction selected %s/%s candidates (full text: %s, abstract-only: %s); audit: %s",
+            priority_summary["priority_selected"],
+            priority_summary["priority_candidates"],
+            priority_summary["priority_fulltext_selected"],
+            priority_summary["priority_abstract_selected"],
+            report_dir,
+        )
+
+        if triage_mode and triage_mode.lower() not in {"off", "none"}:
+            from pipeline.extraction_triage import (
+                apply_triage_filter,
+                triage_priority_result,
+            )
+
+            triage_dir = triage_report_dir or (
+                extraction_dir.parent / "extraction_triage"
+            )
+            triage_result = triage_priority_result(
+                priority_result,
+                gene_symbol=gene_symbol,
+                disease=disease or "",
+                mode=triage_mode,
+                model=triage_model,
+                max_llm_candidates=triage_max_llm_candidates,
+                report_dir=triage_dir,
+            )
+            priority_result = apply_triage_filter(
+                priority_result,
+                triage_result,
+                include_defer=triage_include_defer,
+            )
+            markdown_files = priority_result.selected_markdown_files
+            abstract_papers = priority_result.selected_abstract_papers
+            decisions = triage_result.decisions
+            priority_summary.update(
+                {
+                    "triage_mode": triage_mode,
+                    "triage_model": triage_model,
+                    "triage_report_dir": str(triage_dir),
+                    "triage_total": len(decisions),
+                    "triage_extract_now": sum(
+                        1
+                        for decision in decisions
+                        if decision.decision == "extract_now"
+                    ),
+                    "triage_defer": sum(
+                        1 for decision in decisions if decision.decision == "defer"
+                    ),
+                    "triage_skip": sum(
+                        1 for decision in decisions if decision.decision == "skip"
+                    ),
+                    "triage_selected_for_extraction": len(markdown_files)
+                    + len(abstract_papers),
+                    "triage_include_defer": triage_include_defer,
+                }
+            )
+            logger.info(
+                "Triage selected %s/%s priority candidates for extraction "
+                "(extract_now=%s, defer=%s, skip=%s); audit: %s",
+                priority_summary["triage_selected_for_extraction"],
+                priority_summary["triage_total"],
+                priority_summary["triage_extract_now"],
+                priority_summary["triage_defer"],
+                priority_summary["triage_skip"],
+                triage_dir,
+            )
 
     extractor_local = threading.local()
 
@@ -1392,9 +1826,17 @@ def extract_variants(
             return None
 
     extractions = []
-    failures = []
+    failures: list[tuple[str, str]] = []
     total = len(markdown_files) + len(abstract_papers)
     completed = 0
+    fulltext_by_pmid: dict[str, Path] = {}
+    for md_file in markdown_files:
+        pmid = extract_pmid_from_filename(md_file)
+        if pmid:
+            fulltext_by_pmid[pmid] = md_file
+    abstract_by_pmid: dict[str, str] = {
+        pmid: record_path for pmid, record_path in abstract_papers
+    }
 
     def process_fulltext(md_file: Path) -> Tuple[Any, Optional[Tuple[str, str]]]:
         pmid = extract_pmid_from_filename(md_file)
@@ -1407,14 +1849,15 @@ def extract_variants(
 
             output_file = extraction_dir / f"{gene_symbol}_PMID_{pmid}.json"
             fingerprint = source_fingerprint(md_file)
-            existing = load_existing_extraction(
-                output_file,
-                pmid,
-                source_kind="fulltext",
-                fingerprint=fingerprint,
-            )
-            if existing is not None:
-                return (existing, None)
+            if pmid not in force_pmid_set:
+                existing = load_existing_extraction(
+                    output_file,
+                    pmid,
+                    source_kind="fulltext",
+                    fingerprint=fingerprint,
+                )
+                if existing is not None:
+                    return (existing, None)
 
             content = md_file.read_text(encoding="utf-8")
             paper = Paper(
@@ -1436,6 +1879,18 @@ def extract_variants(
                     md["source_type"] = "fulltext"
                     md["abstract_only"] = False
                     md["model_used"] = result.model_used
+                from pipeline.target_gene_specificity import (
+                    apply_target_gene_specificity,
+                )
+
+                apply_target_gene_specificity(
+                    result.extracted_data,
+                    gene_symbol=gene_symbol,
+                    source_text=content,
+                )
+                _apply_nonhuman_clinical_count_guard(
+                    result.extracted_data, source_text=content
+                )
                 # Count hygiene (flag/clear), no-op when both policies are off.
                 _apply_count_hygiene(result.extracted_data)
                 with open(output_file, "w") as f:
@@ -1455,14 +1910,15 @@ def extract_variants(
             record = None
             record_file = Path(record_path)
             fingerprint = source_fingerprint(record_file)
-            existing = load_existing_extraction(
-                output_file,
-                pmid,
-                source_kind="abstract",
-                fingerprint=fingerprint,
-            )
-            if existing is not None:
-                return (existing, None)
+            if pmid not in force_pmid_set:
+                existing = load_existing_extraction(
+                    output_file,
+                    pmid,
+                    source_kind="abstract",
+                    fingerprint=fingerprint,
+                )
+                if existing is not None:
+                    return (existing, None)
 
             with open(record_file, "r", encoding="utf-8") as f:
                 record = json.load(f)
@@ -1489,6 +1945,18 @@ def extract_variants(
                     md["source_type"] = "abstract_only"
                     md["abstract_only"] = True
                     md["model_used"] = result.model_used
+                from pipeline.target_gene_specificity import (
+                    apply_target_gene_specificity,
+                )
+
+                apply_target_gene_specificity(
+                    result.extracted_data,
+                    gene_symbol=gene_symbol,
+                    source_text=abstract_text,
+                )
+                _apply_nonhuman_clinical_count_guard(
+                    result.extracted_data, source_text=abstract_text
+                )
 
                 # Count hygiene (flag/clear), no-op when both policies are off.
                 _apply_count_hygiene(result.extracted_data)
@@ -1542,8 +2010,174 @@ def extract_variants(
                 )
                 failures.append((pmid, str(e)))
 
-    # Save failures
-    if failures:
+    initial_failures = [(str(pmid), str(error or "")) for pmid, error in failures]
+    retry_attempted_pmids: set[str] = set()
+    retry_recovered_pmids: set[str] = set()
+    retry_skipped_records: list[dict[str, str]] = []
+    retry_attempt_records: list[dict[str, Any]] = []
+    retry_report_path: Optional[Path] = None
+
+    if retry_failed_extractions and extraction_retry_attempts > 0 and failures:
+        retry_workers_config = (
+            extraction_retry_max_workers
+            if extraction_retry_max_workers and extraction_retry_max_workers > 0
+            else 1
+        )
+        retry_workers = max(1, retry_workers_config)
+        retry_backoff = max(0.0, float(extraction_retry_backoff_seconds or 0.0))
+        pending_failures = initial_failures
+        skipped_pmids: set[str] = set()
+
+        for attempt_number in range(1, extraction_retry_attempts + 1):
+            retry_tasks: list[tuple[str, str, Path | str, str]] = []
+            for pmid, error in pending_failures:
+                if not _is_retryable_extraction_failure(error):
+                    if pmid not in skipped_pmids:
+                        skipped_pmids.add(pmid)
+                        retry_skipped_records.append(
+                            {
+                                "pmid": pmid,
+                                "error": error,
+                                "reason": "non_retryable_failure",
+                            }
+                        )
+                    continue
+                if pmid in fulltext_by_pmid:
+                    retry_tasks.append(
+                        ("fulltext", pmid, fulltext_by_pmid[pmid], error)
+                    )
+                elif pmid in abstract_by_pmid:
+                    retry_tasks.append(
+                        ("abstract", pmid, abstract_by_pmid[pmid], error)
+                    )
+                else:
+                    if pmid not in skipped_pmids:
+                        skipped_pmids.add(pmid)
+                        retry_skipped_records.append(
+                            {
+                                "pmid": pmid,
+                                "error": error,
+                                "reason": "source_not_found",
+                            }
+                        )
+
+            if not retry_tasks:
+                pending_failures = []
+                break
+
+            if retry_backoff > 0:
+                logger.info(
+                    "Waiting %.1fs before extraction retry pass %s/%s",
+                    retry_backoff,
+                    attempt_number,
+                    extraction_retry_attempts,
+                )
+                time.sleep(retry_backoff)
+
+            retry_worker_count = min(retry_workers, len(retry_tasks))
+            logger.info(
+                "Retrying %s failed extractions (attempt %s/%s, workers=%s)",
+                len(retry_tasks),
+                attempt_number,
+                extraction_retry_attempts,
+                retry_worker_count,
+            )
+
+            attempt_failures: list[tuple[str, str]] = []
+            with ThreadPoolExecutor(max_workers=retry_worker_count) as executor:
+                retry_futures = {}
+                for source_type, pmid, source, initial_error in retry_tasks:
+                    retry_attempted_pmids.add(pmid)
+                    if source_type == "fulltext":
+                        future = executor.submit(process_fulltext, source)
+                    else:
+                        future = executor.submit(process_abstract, pmid, str(source))
+                    retry_futures[future] = (source_type, pmid, initial_error)
+
+                for future in as_completed(retry_futures):
+                    source_type, pmid, initial_error = retry_futures[future]
+                    try:
+                        result, failure = future.result()
+                    except Exception as e:
+                        result = None
+                        failure = (pmid, str(e))
+
+                    if result:
+                        extractions.append(result)
+                        retry_recovered_pmids.add(pmid)
+                        retry_attempt_records.append(
+                            {
+                                "attempt": attempt_number,
+                                "pmid": pmid,
+                                "source_type": source_type,
+                                "status": "succeeded",
+                                "initial_error": initial_error,
+                            }
+                        )
+                    if failure:
+                        failed_pmid, error = failure
+                        failed_pmid = str(failed_pmid)
+                        error = str(error or "")
+                        attempt_failures.append((failed_pmid, error))
+                        retry_attempt_records.append(
+                            {
+                                "attempt": attempt_number,
+                                "pmid": failed_pmid,
+                                "source_type": source_type,
+                                "status": "failed",
+                                "initial_error": initial_error,
+                                "error": error,
+                            }
+                        )
+
+            pending_failures = attempt_failures
+            logger.info(
+                "Extraction retry pass %s/%s recovered %s/%s failures",
+                attempt_number,
+                extraction_retry_attempts,
+                len(retry_recovered_pmids),
+                len(retry_attempted_pmids),
+            )
+            if not pending_failures:
+                break
+
+        skipped_failures = [
+            (record["pmid"], record["error"])
+            for record in retry_skipped_records
+            if record["pmid"] not in retry_recovered_pmids
+        ]
+        failures = pending_failures + skipped_failures
+
+    if initial_failures:
+        retry_report_path = (
+            extraction_dir.parent / "pmid_status" / "extraction_retry_summary.json"
+        )
+        retry_report_path.parent.mkdir(parents=True, exist_ok=True)
+        retry_report_path.write_text(
+            json.dumps(
+                {
+                    "enabled": retry_failed_extractions,
+                    "attempts_configured": extraction_retry_attempts,
+                    "retry_workers": extraction_retry_max_workers,
+                    "retry_backoff_seconds": extraction_retry_backoff_seconds,
+                    "initial_failures": [
+                        {"pmid": pmid, "error": error}
+                        for pmid, error in initial_failures
+                    ],
+                    "attempts": retry_attempt_records,
+                    "skipped": retry_skipped_records,
+                    "final_failures": [
+                        {"pmid": pmid, "error": error} for pmid, error in failures
+                    ],
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+
+    # Save final failures after retry. If all initial failures recovered, write
+    # a header-only CSV so stale failure rows from an earlier pass do not linger.
+    if failures or initial_failures:
         failures_file = (
             extraction_dir.parent / "pmid_status" / "extraction_failures.csv"
         )
@@ -1552,6 +2186,17 @@ def extract_variants(
             writer = csv.writer(f)
             writer.writerow(["PMID", "Error"])
             writer.writerows(failures)
+
+    retry_failed_pmids = {
+        pmid for pmid, _error in failures if pmid in retry_attempted_pmids
+    }
+    dense_table_report_path, dense_table_report_tsv, cap_qc_summary = (
+        _write_dense_table_overflow_report(
+            extractions=extractions,
+            harvest_dir=harvest_dir,
+            output_dir=extraction_dir.parent,
+        )
+    )
 
     # Count variants
     total_variants = sum(
@@ -1565,11 +2210,51 @@ def extract_variants(
         stats={
             "papers_extracted": len(extractions),
             "failures": len(failures),
+            "initial_failures": len(initial_failures),
             "total_variants": total_variants,
+            "candidate_pmid_count": len(candidate_pmid_order)
+            if candidate_pmid_set is not None
+            else None,
+            "extraction_retry_enabled": retry_failed_extractions,
+            "extraction_retry_attempts": extraction_retry_attempts,
+            "extraction_retry_attempted": len(retry_attempted_pmids),
+            "extraction_retry_succeeded": len(retry_recovered_pmids),
+            "extraction_retry_failed": len(retry_failed_pmids),
+            "extraction_retry_skipped": len(retry_skipped_records),
+            "extraction_retry_report": str(retry_report_path)
+            if retry_report_path
+            else None,
+            "dense_table_overflow_records": cap_qc_summary.get("records", 0),
+            "scanner_cap_trips": cap_qc_summary.get("scanner_cap_trips", 0),
+            "table_merge_cap_trips": cap_qc_summary.get("table_merge_cap_trips", 0),
+            "table_candidates_omitted_after_dedupe": cap_qc_summary.get(
+                "table_candidates_omitted_after_dedupe", 0
+            ),
+            "missing_supplement_ref_pmids": cap_qc_summary.get(
+                "missing_supplement_ref_pmids", 0
+            ),
+            "dense_table_overflow_report": str(dense_table_report_path)
+            if dense_table_report_path
+            else None,
+            **priority_summary,
         },
         data={
             "extractions": extractions,
             "failures": failures,
+            "initial_failures": initial_failures,
+            "retry_report_path": str(retry_report_path) if retry_report_path else None,
+            "dense_table_overflow_report": str(dense_table_report_path)
+            if dense_table_report_path
+            else None,
+            "dense_table_overflow_tsv": str(dense_table_report_tsv)
+            if dense_table_report_tsv
+            else None,
+            "priority_report_dir": (
+                str(priority_result.report_dir)
+                if priority_result and priority_result.report_dir
+                else None
+            ),
+            "triage_report_dir": priority_summary.get("triage_report_dir"),
         },
     )
 

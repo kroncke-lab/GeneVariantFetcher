@@ -42,7 +42,14 @@ def automated_variant_extraction_workflow(
     synonyms: list[str] | None = None,
     scout_first: bool = False,
     disease: str | None = None,
+    include_all_clinigen_phenotypes: bool | None = None,
     pmids: list[str] | None = None,
+    extraction_top_n: int | None = None,
+    extraction_priority_offset: int = 0,
+    extraction_triage_mode: str | None = None,
+    extraction_triage_model: str | None = None,
+    extraction_triage_include_defer: bool = False,
+    extraction_triage_max_llm: int | None = None,
 ):
     """
     Complete automated workflow from gene symbol to extracted variant data.
@@ -62,13 +69,60 @@ def automated_variant_extraction_workflow(
             disease clause is appended to PubMed queries and Tier-2 filter prompts
             prioritize original patient/functional data. When None (default),
             behavior is unchanged.
+        include_all_clinigen_phenotypes: Include every ClinGen disease label
+            for the gene in the run's disease context, even when disease is set.
         pmids: Optional explicit PMID list. When provided, skips synonym discovery,
             PMID search, AND Tier 1/Tier 2 relevance filtering — the list is fed
             straight into harvest + extraction. Useful for measuring pure
             extraction recall against a known gold-standard PMID set.
+        extraction_top_n: Optional pre-LLM priority cap. When set, full-text and
+            abstract candidates are scored for original variant/count evidence
+            and only the top N are submitted for extraction first.
+        extraction_priority_offset: Number of priority-ranked candidates to skip
+            before applying extraction_top_n. Use 500 to process the next band
+            after a top-500 pilot.
+        extraction_triage_mode: Optional cheap triage pass after prioritization
+            ("deterministic", "hybrid", or "llm"). When set, only triage-selected
+            papers are submitted for expensive extraction.
+        extraction_triage_model: Optional LLM model for triage; defaults to Tier-2.
+        extraction_triage_include_defer: Extract triage "defer" papers as well.
+        extraction_triage_max_llm: Optional cap on LLM triage calls.
     """
     initialize_runtime()
     setup_logging(level=logging.INFO)
+    if extraction_top_n is None:
+        env_top_n = os.environ.get("GVF_EXTRACTION_TOP_N", "").strip()
+        if env_top_n:
+            try:
+                extraction_top_n = int(env_top_n)
+            except ValueError:
+                logger.warning(
+                    "Ignoring invalid GVF_EXTRACTION_TOP_N=%r; expected integer",
+                    env_top_n,
+                )
+                extraction_top_n = None
+    if extraction_triage_mode is None:
+        extraction_triage_mode = (
+            os.environ.get("GVF_EXTRACTION_TRIAGE_MODE", "").strip() or None
+        )
+    if extraction_triage_model is None:
+        extraction_triage_model = (
+            os.environ.get("GVF_EXTRACTION_TRIAGE_MODEL", "").strip() or None
+        )
+    if extraction_triage_max_llm is None:
+        env_triage_max = os.environ.get("GVF_EXTRACTION_TRIAGE_MAX_LLM", "").strip()
+        if env_triage_max:
+            try:
+                extraction_triage_max_llm = int(env_triage_max)
+            except ValueError:
+                logger.warning(
+                    "Ignoring invalid GVF_EXTRACTION_TRIAGE_MAX_LLM=%r; expected integer",
+                    env_triage_max,
+                )
+    if include_all_clinigen_phenotypes is None:
+        include_all_clinigen_phenotypes = os.environ.get(
+            "GVF_INCLUDE_ALL_CLINGEN_PHENOTYPES", ""
+        ).strip().lower() in {"1", "true", "yes", "on", "all"}
 
     # Track whether the caller supplied an explicit PMID list. We need this
     # later (after STEP 1 has reassigned `pmids`) to skip Tier 1/2 filtering.
@@ -108,6 +162,34 @@ def automated_variant_extraction_workflow(
 
     # Initialize run manifest
     run_manifest = RunManifestManager.create_for_workflow(gene_symbol, str(output_path))
+
+    from gene_literature.disease_context import build_gene_disease_context
+
+    disease_context = build_gene_disease_context(
+        gene_symbol,
+        disease,
+        include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
+    )
+    disease_context_path = output_path / "gene_disease_context.json"
+    disease_context.save(disease_context_path)
+    effective_disease = disease_context.prompt_disease or disease
+    disease_terms = disease_context.disease_terms
+    if disease_terms:
+        logger.info(
+            "Disease context for %s: %s",
+            gene_symbol,
+            "; ".join(disease_terms),
+        )
+    if disease_context.clinigen_curations:
+        logger.info(
+            "ClinGen gene-validity curations for %s: %d total, %d selected for this run",
+            gene_symbol,
+            len(disease_context.clinigen_curations),
+            len(disease_context.selected_clinigen_curations),
+        )
+    for warning in disease_context.warnings:
+        run_manifest.add_warning(warning)
+    run_manifest.update_output_locations(gene_disease_context=str(disease_context_path))
     run_manifest.set_config(
         max_pmids=max_pmids,
         max_papers_to_download=max_papers_to_download,
@@ -116,7 +198,16 @@ def automated_variant_extraction_workflow(
         auto_synonyms=auto_synonyms,
         synonyms=synonyms or [],
         scout_first=scout_first,
-        disease=disease,
+        disease=effective_disease,
+        requested_disease=disease,
+        include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
+        disease_terms=disease_terms,
+        extraction_top_n=extraction_top_n,
+        extraction_priority_offset=extraction_priority_offset,
+        extraction_triage_mode=extraction_triage_mode,
+        extraction_triage_model=extraction_triage_model,
+        extraction_triage_include_defer=extraction_triage_include_defer,
+        extraction_triage_max_llm=extraction_triage_max_llm,
     )
 
     # Initialize checkpoint manager
@@ -241,6 +332,7 @@ def automated_variant_extraction_workflow(
             use_europepmc=settings.use_europepmc,
             api_key=os.getenv("NCBI_API_KEY"),
             disease=disease,
+            disease_terms=disease_terms,
         )
 
         if not pmid_result.success:
@@ -335,7 +427,7 @@ def automated_variant_extraction_workflow(
             use_clinical_triage=use_clinical_triage,
             tier1_min_keywords=settings.tier1_min_keywords,
             tier2_confidence_threshold=settings.tier2_confidence_threshold,
-            disease=disease,
+            disease=effective_disease,
         )
 
         filtered_pmids = filter_result.data.get("filtered_pmids", [])
@@ -470,8 +562,23 @@ def automated_variant_extraction_workflow(
     run_manifest.save()
 
     logger.info("\n🧬 STEP 3: Extracting variant and patient data using AI...")
+    if extraction_top_n and extraction_top_n > 0:
+        logger.info(
+            "Priority gate enabled: extracting %s ranked papers after offset %s",
+            extraction_top_n,
+            extraction_priority_offset,
+        )
+    if extraction_triage_mode:
+        logger.info(
+            "Cheap extraction triage enabled: mode=%s model=%s include_defer=%s",
+            extraction_triage_mode,
+            extraction_triage_model or "(tier-2 default)",
+            extraction_triage_include_defer,
+        )
 
     extraction_dir = output_path / "extractions"
+    priority_report_dir = output_path / "extraction_priority"
+    triage_report_dir = output_path / "extraction_triage"
 
     # If scout_first was used, pass the scout manifest for better context.
     # max_workers is intentionally omitted so extract_variants picks the
@@ -480,10 +587,20 @@ def automated_variant_extraction_workflow(
         harvest_dir=harvest_dir,
         extraction_dir=extraction_dir,
         gene_symbol=gene_symbol,
-        disease=disease,
+        disease=effective_disease,
         abstract_records=abstract_records,
         abstract_only_pmids=abstract_only_pmids,
+        candidate_pmids=filtered_pmids,
         tier_threshold=tier_threshold,
+        priority_top_n=extraction_top_n,
+        priority_offset=extraction_priority_offset,
+        priority_report_dir=priority_report_dir,
+        priority_disease_terms=disease_terms,
+        triage_mode=extraction_triage_mode,
+        triage_model=extraction_triage_model,
+        triage_report_dir=triage_report_dir,
+        triage_include_defer=extraction_triage_include_defer,
+        triage_max_llm_candidates=extraction_triage_max_llm,
     )
 
     extractions = extract_result.data.get("extractions", [])
@@ -495,9 +612,38 @@ def automated_variant_extraction_workflow(
 
     workflow_stats["papers_extracted"] = len(extractions)
     workflow_stats["extraction_failures"] = len(extraction_failures)
+    workflow_stats["extraction_initial_failures"] = extract_result.stats.get(
+        "initial_failures", 0
+    )
+    workflow_stats["extraction_retry_attempted"] = extract_result.stats.get(
+        "extraction_retry_attempted", 0
+    )
+    workflow_stats["extraction_retry_succeeded"] = extract_result.stats.get(
+        "extraction_retry_succeeded", 0
+    )
+    workflow_stats["extraction_retry_failed"] = extract_result.stats.get(
+        "extraction_retry_failed", 0
+    )
+    workflow_stats["extraction_retry_skipped"] = extract_result.stats.get(
+        "extraction_retry_skipped", 0
+    )
     workflow_stats["total_variants_found"] = extract_result.stats.get(
         "total_variants", 0
     )
+    if extract_result.stats.get("priority_top_n"):
+        workflow_stats["extraction_priority_candidates"] = extract_result.stats.get(
+            "priority_candidates", 0
+        )
+        workflow_stats["extraction_priority_selected"] = extract_result.stats.get(
+            "priority_selected", 0
+        )
+    if extract_result.stats.get("triage_total"):
+        workflow_stats["extraction_triage_total"] = extract_result.stats.get(
+            "triage_total", 0
+        )
+        workflow_stats["extraction_triage_selected"] = extract_result.stats.get(
+            "triage_selected_for_extraction", 0
+        )
 
     # Update checkpoint and manifest
     checkpoint.extracted_pmids = [e.pmid for e in extractions if hasattr(e, "pmid")]
@@ -514,11 +660,68 @@ def automated_variant_extraction_workflow(
     run_manifest.update_statistics(
         papers_extracted=len(extractions),
         papers_extraction_failed=len(extraction_failures),
+        papers_extraction_initial_failures=extract_result.stats.get(
+            "initial_failures", 0
+        ),
+        extraction_retry_attempted=extract_result.stats.get(
+            "extraction_retry_attempted", 0
+        ),
+        extraction_retry_succeeded=extract_result.stats.get(
+            "extraction_retry_succeeded", 0
+        ),
+        extraction_retry_failed=extract_result.stats.get("extraction_retry_failed", 0),
+        extraction_retry_skipped=extract_result.stats.get(
+            "extraction_retry_skipped", 0
+        ),
+        dense_table_overflow_records=extract_result.stats.get(
+            "dense_table_overflow_records", 0
+        ),
+        scanner_cap_trips=extract_result.stats.get("scanner_cap_trips", 0),
+        table_merge_cap_trips=extract_result.stats.get("table_merge_cap_trips", 0),
+        table_candidates_omitted_after_dedupe=extract_result.stats.get(
+            "table_candidates_omitted_after_dedupe", 0
+        ),
+        missing_supplement_ref_pmids=extract_result.stats.get(
+            "missing_supplement_ref_pmids", 0
+        ),
         total_variants_found=extract_result.stats.get("total_variants", 0),
         papers_from_fulltext=len(extractions) - abstract_extraction_count,
         papers_from_abstract_only=abstract_extraction_count,
+        extraction_priority_candidates=extract_result.stats.get(
+            "priority_candidates", 0
+        ),
+        extraction_priority_selected=extract_result.stats.get("priority_selected", 0),
+        extraction_priority_fulltext_selected=extract_result.stats.get(
+            "priority_fulltext_selected", 0
+        ),
+        extraction_priority_abstract_selected=extract_result.stats.get(
+            "priority_abstract_selected", 0
+        ),
+        extraction_triage_total=extract_result.stats.get("triage_total", 0),
+        extraction_triage_extract_now=extract_result.stats.get("triage_extract_now", 0),
+        extraction_triage_defer=extract_result.stats.get("triage_defer", 0),
+        extraction_triage_skip=extract_result.stats.get("triage_skip", 0),
+        extraction_triage_selected=extract_result.stats.get(
+            "triage_selected_for_extraction", 0
+        ),
     )
     run_manifest.update_output_locations(extractions_dir=str(extraction_dir))
+    if extract_result.data.get("priority_report_dir"):
+        run_manifest.update_output_locations(
+            extraction_priority_dir=extract_result.data["priority_report_dir"]
+        )
+    if extract_result.data.get("triage_report_dir"):
+        run_manifest.update_output_locations(
+            extraction_triage_dir=extract_result.data["triage_report_dir"]
+        )
+    if extract_result.data.get("retry_report_path"):
+        run_manifest.update_output_locations(
+            extraction_retry_summary=extract_result.data["retry_report_path"]
+        )
+    if extract_result.data.get("dense_table_overflow_report"):
+        run_manifest.update_output_locations(
+            dense_table_overflow=extract_result.data["dense_table_overflow_report"]
+        )
 
     # =========================================================================
     # STEP 3.5: Source-Completeness Report & Zero-Variant QA

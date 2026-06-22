@@ -586,6 +586,13 @@ class TestPositionValidation:
         norms = {v.normalized for v in result.variants}
         assert "c.3000C>T" in norms
 
+    def test_scanner_gene_context_uses_default_aliases(self):
+        scanner = VariantScanner("MYBPC3")
+        context = "Table 1 | cMyBP-C | p.Arg502Trp | 4 carriers |"
+
+        assert scanner._context_mentions_gene(context, "MYBPC3") is True
+        assert scanner._gene_assigned_to_variant(context, "p.Arg502Trp") == "MYBPC3"
+
 
 # =============================================================================
 # TestUnicodeNormalization

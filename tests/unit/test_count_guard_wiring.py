@@ -104,6 +104,72 @@ def test_off_policy_is_a_strict_noop(patch_policies):
     assert "count_classifier" not in data["extraction_metadata"]
 
 
+def test_nonhuman_source_guard_clears_clinical_counts():
+    data = {
+        "variants": [
+            {
+                "gene_symbol": "MYBPC3",
+                "protein_notation": "p.A31P",
+                "patients": {"count": 1089},
+                "penetrance_data": {
+                    "total_carriers_observed": 1089,
+                    "affected_count": 344,
+                    "unaffected_count": 745,
+                },
+            }
+        ],
+        "extraction_metadata": {},
+    }
+    source_text = (
+        "## A cardiac myosin binding protein C mutation in Maine Coon cats\n\n"
+        "Animals: 3310 DNA samples from cats were evaluated for feline "
+        "hypertrophic cardiomyopathy."
+    )
+
+    steps._apply_nonhuman_clinical_count_guard(data, source_text)
+
+    variant = data["variants"][0]
+    assert variant["patients"]["count"] is None
+    assert variant["penetrance_data"]["total_carriers_observed"] is None
+    assert variant["penetrance_data"]["affected_count"] is None
+    assert variant["penetrance_data"]["unaffected_count"] is None
+    assert variant["nonhuman_source_flags"]["carriers"]["raw"] == 1089
+    assert data["extraction_metadata"]["nonhuman_count_guard"]["cleared"] == 3
+
+
+def test_nonhuman_source_guard_skips_mixed_human_cat_reviews():
+    data = {
+        "variants": [
+            {
+                "gene_symbol": "MYBPC3",
+                "protein_notation": "p.Arg502Trp",
+                "patients": {"count": 25},
+                "penetrance_data": {
+                    "total_carriers_observed": 25,
+                    "affected_count": 15,
+                    "unaffected_count": 10,
+                },
+            }
+        ],
+        "extraction_metadata": {},
+    }
+    source_text = (
+        "## The Genetic Basis of Hypertrophic Cardiomyopathy in Cats and Humans\n\n"
+        "### HUMAN HCM\n\n"
+        "Of the 25 individuals that carried this mutation, 15 had HCM.\n\n"
+        "### FELINE HCM\n\n"
+        "Maine Coon cats and Ragdoll cats carry other MYBPC3 mutations."
+    )
+
+    steps._apply_nonhuman_clinical_count_guard(data, source_text)
+
+    variant = data["variants"][0]
+    assert variant["patients"]["count"] == 25
+    assert variant["penetrance_data"]["affected_count"] == 15
+    assert "nonhuman_source_flags" not in variant
+    assert "nonhuman_count_guard" not in data["extraction_metadata"]
+
+
 def test_resolve_count_policies_defaults_off_without_settings(monkeypatch):
     """If Settings can't load, the helper falls back to ('off', 'off')."""
 

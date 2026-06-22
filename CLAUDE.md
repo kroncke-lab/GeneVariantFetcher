@@ -296,7 +296,15 @@ duplicate the matching/DB logic on this side. Full how-to:
 ## Files To Know
 
 - `cli/compare_variants.py` - gold-standard matcher and recall summary.
-- `scripts/run_recall_suite.py` - multi-gene recall scoring.
+- `scripts/run_recall_suite.py` - multi-gene recall scoring (full gold standard).
+- `benchmarks/curated_extraction_eval/` - **fast inner-loop benchmark**: 24
+  hand-picked, well-extracted, strategy-diverse gold papers (tables/figures/text
+  across the four genes) for cheaply measuring recall + MAE when you change
+  prompts/harness/guardrails/matcher, WITHOUT re-running the full gold standard.
+  `python benchmarks/curated_extraction_eval/run_benchmark.py` (score mode is
+  free; `--mode extract` re-extracts and costs tokens). Self-contained README +
+  manifest; the place to start when iterating. Confirm headline changes on the
+  full scorer before claiming a number.
 - `scripts/ingest_review_adjudications.py` - ingest Variant_Browser collaborator
   adjudications (the `export_adjudications` CSV) into a durable gold-standard
   correction overlay + follow-up queue, matched by `(gene, protein_notation,

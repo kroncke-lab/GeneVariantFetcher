@@ -1,0 +1,39 @@
+{
+  "recall": {
+    "pmids": {
+      "matched": 24,
+      "gold": 24,
+      "recall": 1.0
+    },
+    "variant_rows": {
+      "matched": 735,
+      "gold": 738,
+      "recall": 0.9959349593495935
+    },
+    "unique_variants": {
+      "matched": 566,
+      "gold": 569,
+      "recall": 0.9947275922671354
+    },
+    "patients": {
+      "matched": 2032,
+      "gold": 2035,
+      "recall": 0.9985257985257985
+    },
+    "affected": {
+      "matched": 1318,
+      "gold": 1321,
+      "recall": 0.9977289931869796
+    },
+    "unaffected": {
+      "matched": 270,
+      "gold": 270,
+      "recall": 1.0
+    }
+  },
+  "mae": {
+    "carriers": 0.15618661257606492,
+    "affected": 0.15776081424936386,
+    "unaffected": 0.18181818181818182
+  }
+}

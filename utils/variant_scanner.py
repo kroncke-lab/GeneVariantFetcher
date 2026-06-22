@@ -27,6 +27,11 @@ logger = logging.getLogger(__name__)
 
 # Import from variant_normalizer for AA codes and normalization
 try:
+    from utils.gene_metadata import (
+        gene_alias_regex,
+        get_gene_aliases,
+        known_gene_aliases,
+    )
     from utils.variant_normalizer import (
         AA_MAP,
         AA_MAP_REVERSE,
@@ -38,6 +43,9 @@ try:
     )
 except ImportError:
     # Fallback for standalone testing
+    gene_alias_regex = None
+    get_gene_aliases = None
+    known_gene_aliases = None
     from variant_normalizer import (
         AA_MAP,
         AA_MAP_REVERSE,
@@ -161,6 +169,27 @@ class VariantScanner:
     GENE_CONTEXT_TERMS.setdefault("KCNH2", set()).update({"HERG", "hERG", "Kv11.1"})
     GENE_CONTEXT_TERMS.setdefault("KCNQ1", set()).update({"KvLQT1", "Kv7.1"})
     GENE_CONTEXT_TERMS.setdefault("SCN5A", set()).update({"Nav1.5", "Na v 1.5"})
+
+    @classmethod
+    def _known_context_genes(cls) -> set[str]:
+        genes = set(PROTEIN_LENGTHS) | set(cls.GENE_CONTEXT_TERMS)
+        if known_gene_aliases is not None:
+            try:
+                genes.update(known_gene_aliases(include_query_aliases=True))
+            except Exception:
+                pass
+        return genes
+
+    @classmethod
+    def _gene_context_terms(cls, gene_symbol: str) -> set[str]:
+        gene = gene_symbol.upper()
+        terms = set(cls.GENE_CONTEXT_TERMS.get(gene, {gene_symbol}))
+        if get_gene_aliases is not None:
+            try:
+                terms.update(get_gene_aliases(gene, include_query_aliases=True))
+            except Exception:
+                pass
+        return terms
 
     # ==========================================================================
     # PROTEIN VARIANT PATTERNS
@@ -479,7 +508,16 @@ class VariantScanner:
         return result
 
     def _context_mentions_gene(self, context: str, gene_symbol: str) -> bool:
-        terms = self.GENE_CONTEXT_TERMS.get(gene_symbol.upper(), {gene_symbol})
+        if gene_alias_regex is not None:
+            try:
+                return bool(
+                    gene_alias_regex(gene_symbol, include_query_aliases=True).search(
+                        context
+                    )
+                )
+            except Exception:
+                pass
+        terms = self._gene_context_terms(gene_symbol)
         for term in terms:
             pattern = rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])"
             if re.search(pattern, context, re.IGNORECASE):
@@ -497,7 +535,8 @@ class VariantScanner:
 
         variant_start, variant_end = raw_match.span()
         mentions: List[tuple[str, int, int]] = []
-        for gene, terms in self.GENE_CONTEXT_TERMS.items():
+        for gene in self._known_context_genes():
+            terms = self._gene_context_terms(gene)
             for term in terms:
                 pattern = rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])"
                 for match in re.finditer(pattern, context, re.IGNORECASE):
@@ -542,7 +581,7 @@ class VariantScanner:
             return False
         return any(
             self._context_mentions_gene(context, other_gene)
-            for other_gene in PROTEIN_LENGTHS
+            for other_gene in self._known_context_genes()
             if other_gene != self.gene_symbol
         )
 
@@ -1065,7 +1104,7 @@ class VariantScanner:
             line_context = text[line_start:line_end]
             if any(
                 self._context_mentions_gene(line_context, gene)
-                for gene in PROTEIN_LENGTHS
+                for gene in self._known_context_genes()
             ):
                 return line_context
 
@@ -1088,7 +1127,7 @@ class VariantScanner:
                 prev_lines.insert(0, prev_line)
                 if any(
                     self._context_mentions_gene(candidate, gene)
-                    for gene in PROTEIN_LENGTHS
+                    for gene in self._known_context_genes()
                 ):
                     return candidate
                 cursor = prev_start

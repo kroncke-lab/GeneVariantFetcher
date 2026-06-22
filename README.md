@@ -35,6 +35,12 @@ Current recall status is tracked in
 [`docs/RECALL_STATUS.md`](docs/RECALL_STATUS.md). That file is the source of
 truth for live metrics, blockers, and next actions.
 
+For a **fast, cheap regression check** when changing prompts/harness/guardrails,
+use the curated benchmark in
+[`benchmarks/curated_extraction_eval/`](benchmarks/curated_extraction_eval/README.md):
+24 well-extracted, strategy-diverse gold papers scored on recall + MAE in
+seconds, without re-running the full gold standard.
+
 Older KCNH2-only recovery scores and the 2026-05-18 closeout are historical
 debugging baselines. Gold-PMID-conditioned enrichment and KCNH2 v12 manual
 recovery are not cold-start behavior.

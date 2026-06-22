@@ -1,0 +1,46 @@
+# Curated Extraction Eval — paper registry (the editable source of truth for the set).
+#
+# ADD A PAPER: append a row below (tab-separated), or run:
+#   python add_paper.py <GENE> <PMID> --strategy <table|text|figure|mixed> --note "..."
+# then rebuild:  python build_fixture.py
+#
+# Columns (TAB-separated):
+#   gene      target gene symbol, e.g. KCNH2. The paper's gold answer must be
+#             discoverable for scoring: either it already has rows in
+#             gene_variant_fetcher_gold_standard/normalized/<GENE>_recall_input.csv,
+#             OR you supply rows in gold_overrides/<GENE>_recall_input.csv (use
+#             this for problem papers / genes without a repo gold standard).
+#   pmid      PubMed ID. Source must be cached at corpus/<GENE>/<PMID>/ (it will
+#             be after any gvf-run that fetched it); build_fixture warns if not.
+#   strategy  how the gold variants are encoded, so the set spans extraction
+#             routes: table | text | figure | mixed.
+#   note      one line on why this paper is in the set (e.g. the failure mode it
+#             guards against). Free text; do not use tabs.
+#
+# Lines starting with # and blank lines are ignored. Order does not matter.
+#
+# gene	pmid	strategy	note
+KCNH2	10973849	table	59-variant mutation-list table; carries count-mismatch signal for MAE
+KCNH2	26496715	table	China LQTS genotype table (53 variants)
+KCNH2	11854117	table	classic LQT2 mutation-screening table (44 variants, clean counts)
+KCNH2	22727609	text	30 Czech LQTS families; variants in running text
+KCNH2	18808722	text	text-dominant with a few figure/table rows (routing edge)
+KCNH2	29752375	text	small text+table paper; variant-presence only (0 gold counts)
+KCNQ1	19841300	table	large clean LQT1 supplement table (90 variants)
+KCNQ1	29197658	table	table-dominant LQTS cohort (29 variants)
+KCNQ1	23153844	mixed	table+figure+text mix; high-carrier cohort (routing stress)
+KCNQ1	22949429	text	71 variants classified inline; strong MAE signal (cmm=13)
+KCNQ1	20421371	text	mechanistic S3-mutation paper; variants in prose
+SCN5A	27566755	table	clean 51-variant table, exact counts
+SCN5A	26746457	table	32-variant table with affected/unaffected split
+SCN5A	24573164	figure	flagship FIGURE paper: 20 variants read from a pedigree/figure (91% figure)
+SCN5A	16798729	figure	figure-sourced variants (15; 85% figure)
+SCN5A	22514276	figure	pure-figure variant readings (7)
+SCN5A	32533946	text	83 variants in running text (large text case)
+SCN5A	27287068	text	electrophysiology paper; variants inline (cmm=3)
+RYR2	25844899	table	clean 25-variant table
+RYR2	22677073	table	molecular-autopsy table (26 variants)
+RYR2	19926015	figure	large mixed table+figure ORF scan (40 variants)
+RYR2	22222782	figure	postmortem RYR2 figure readings; MAE signal (cmm=3)
+RYR2	16272262	mixed	CPVT paper; table+figure mix (routing stress)
+RYR2	29544605	text	RYR2 variants reported in prose (12)

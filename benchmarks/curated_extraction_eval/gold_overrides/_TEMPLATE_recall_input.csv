@@ -1,0 +1,3 @@
+variant,pmid,carriers,affected,unaffected,gold_v2_carriers,gold_v2_affected,gold_v2_unaffected,gold_v2_status,gold_v2_note,gold_v2_source
+EXAMPLE_R1234W,00000000,3,2,1,,,,,,
+EXAMPLE_c.5678G>A,00000000,1,1,0,,,,,,

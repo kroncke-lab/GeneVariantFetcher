@@ -147,6 +147,18 @@ def extract_command(
             ),
         ),
     ] = None,
+    include_all_clinigen_phenotypes: Annotated[
+        bool,
+        typer.Option(
+            "--include-all-clinigen-phenotypes/--target-disease-only",
+            help=(
+                "Include every ClinGen disease label for the gene in the run "
+                "context, even when --disease is set. Use this for phenotype-broad "
+                "cold starts where weak or unsupported associations should still "
+                "be collected for later adjudication."
+            ),
+        ),
+    ] = False,
     pmids: Annotated[
         str,
         typer.Option(
@@ -170,6 +182,60 @@ def extract_command(
                 "lines are ignored. Trailing '# comment' is allowed on PMID "
                 "lines. May be combined with --pmids; the union (deduped) is used."
             ),
+        ),
+    ] = None,
+    extraction_top_n: Annotated[
+        Optional[int],
+        typer.Option(
+            "--extraction-top-n",
+            help=(
+                "Score full-text/abstract candidates before LLM extraction and "
+                "submit only the top N first. Use 0 or omit for no priority cap."
+            ),
+        ),
+    ] = None,
+    extraction_priority_offset: Annotated[
+        int,
+        typer.Option(
+            "--extraction-priority-offset",
+            help=(
+                "Skip this many priority-ranked candidates before applying "
+                "--extraction-top-n. Use 500 for the next band after a top-500 pilot."
+            ),
+        ),
+    ] = 0,
+    extraction_triage_mode: Annotated[
+        Optional[str],
+        typer.Option(
+            "--extraction-triage-mode",
+            help=(
+                "Optional cheap pre-extraction triage after priority ranking: "
+                "'deterministic', 'hybrid', or 'llm'."
+            ),
+        ),
+    ] = None,
+    extraction_triage_model: Annotated[
+        Optional[str],
+        typer.Option(
+            "--extraction-triage-model",
+            help=(
+                "Model for LLM triage, e.g. anthropic/claude-haiku-4-5-20251001. "
+                "Defaults to the Tier-2 model."
+            ),
+        ),
+    ] = None,
+    extraction_triage_include_defer: Annotated[
+        bool,
+        typer.Option(
+            "--extraction-triage-include-defer/--no-extraction-triage-include-defer",
+            help="Also submit triage 'defer' papers to expensive extraction.",
+        ),
+    ] = False,
+    extraction_triage_max_llm: Annotated[
+        Optional[int],
+        typer.Option(
+            "--extraction-triage-max-llm",
+            help="Optional cap on LLM triage calls; remaining papers use deterministic triage.",
         ),
     ] = None,
     browser_html_fallback: Annotated[
@@ -311,7 +377,14 @@ def extract_command(
             synonyms=synonyms or [],
             scout_first=scout_first,
             disease=disease,
+            include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
             pmids=explicit_pmids,
+            extraction_top_n=extraction_top_n,
+            extraction_priority_offset=extraction_priority_offset,
+            extraction_triage_mode=extraction_triage_mode,
+            extraction_triage_model=extraction_triage_model,
+            extraction_triage_include_defer=extraction_triage_include_defer,
+            extraction_triage_max_llm=extraction_triage_max_llm,
         )
     except KeyboardInterrupt:
         typer.echo("\n⚠️  Workflow interrupted by user", err=True)
@@ -351,6 +424,16 @@ def gvf_run_command(
             ),
         ),
     ] = None,
+    include_all_clinigen_phenotypes: Annotated[
+        bool,
+        typer.Option(
+            "--include-all-clinigen-phenotypes/--target-disease-only",
+            help=(
+                "Include every ClinGen disease label for the gene in the run "
+                "context, even when --disease is set."
+            ),
+        ),
+    ] = False,
     pmid_file: Annotated[
         Optional[Path],
         typer.Option(
@@ -415,6 +498,60 @@ def gvf_run_command(
             help="Per-paper timeout passed to fetch_paywalled.py during --source-recovery.",
         ),
     ] = 120,
+    extraction_top_n: Annotated[
+        Optional[int],
+        typer.Option(
+            "--extraction-top-n",
+            help=(
+                "Score full-text/abstract candidates before LLM extraction and "
+                "submit only the top N first. Use 0 or omit for no priority cap."
+            ),
+        ),
+    ] = None,
+    extraction_priority_offset: Annotated[
+        int,
+        typer.Option(
+            "--extraction-priority-offset",
+            help=(
+                "Skip this many priority-ranked candidates before applying "
+                "--extraction-top-n. Use 500 for the next band after a top-500 pilot."
+            ),
+        ),
+    ] = 0,
+    extraction_triage_mode: Annotated[
+        Optional[str],
+        typer.Option(
+            "--extraction-triage-mode",
+            help=(
+                "Optional cheap pre-extraction triage after priority ranking: "
+                "'deterministic', 'hybrid', or 'llm'."
+            ),
+        ),
+    ] = None,
+    extraction_triage_model: Annotated[
+        Optional[str],
+        typer.Option(
+            "--extraction-triage-model",
+            help=(
+                "Model for LLM triage, e.g. anthropic/claude-haiku-4-5-20251001. "
+                "Defaults to the Tier-2 model."
+            ),
+        ),
+    ] = None,
+    extraction_triage_include_defer: Annotated[
+        bool,
+        typer.Option(
+            "--extraction-triage-include-defer/--no-extraction-triage-include-defer",
+            help="Also submit triage 'defer' papers to expensive extraction.",
+        ),
+    ] = False,
+    extraction_triage_max_llm: Annotated[
+        Optional[int],
+        typer.Option(
+            "--extraction-triage-max-llm",
+            help="Optional cap on LLM triage calls; remaining papers use deterministic triage.",
+        ),
+    ] = None,
     corpus_sync: Annotated[
         bool,
         typer.Option(
@@ -460,6 +597,67 @@ def gvf_run_command(
             ),
         ),
     ] = None,
+    full_coverage: Annotated[
+        bool,
+        typer.Option(
+            "--full-coverage/--no-full-coverage",
+            help=(
+                "Run the full-coverage workflow: after the bounded extraction, walk "
+                "priority extraction to variant-yield taper (high-TPM model), then apply "
+                "the carrier-count guard and variantFeatures enrichment + wrong-gene "
+                "false-positive quarantine before report/publish. OFF by default. Pair "
+                "with --publish-review for the browseable pipeline."
+            ),
+        ),
+    ] = False,
+    extraction_model: Annotated[
+        Optional[str],
+        typer.Option(
+            "--extraction-model",
+            help=(
+                "LiteLLM model id for the full-coverage walk's extraction "
+                "(default azure_ai/gpt-5.4). Only used with --full-coverage."
+            ),
+        ),
+    ] = None,
+    extraction_workers: Annotated[
+        Optional[int],
+        typer.Option(
+            "--extraction-workers",
+            help="Concurrency for the full-coverage walk (default 10). Only with --full-coverage.",
+        ),
+    ] = None,
+    taper_min_variants: Annotated[
+        int,
+        typer.Option(
+            "--taper-min-variants",
+            help=(
+                "Stop full-coverage walking after the configured patience once a "
+                "batch adds fewer than this many distinct variants. Only used "
+                "with --full-coverage."
+            ),
+        ),
+    ] = 8,
+    carrier_guard: Annotated[
+        bool,
+        typer.Option(
+            "--carrier-guard/--no-carrier-guard",
+            help=(
+                "Run the post-migration carrier-count sanity guard during "
+                "--full-coverage. On by default for full coverage."
+            ),
+        ),
+    ] = True,
+    vf_enrich: Annotated[
+        bool,
+        typer.Option(
+            "--vf-enrich/--no-vf-enrich",
+            help=(
+                "Run variantFeatures enrichment and wrong-gene FP quarantine "
+                "during --full-coverage. On by default for full coverage."
+            ),
+        ),
+    ] = True,
 ):
     """One-shot end-to-end driver: cold start → scored variant DB.
 
@@ -484,9 +682,22 @@ def gvf_run_command(
         source_recovery=source_recovery,
         source_recovery_timeout_s=source_recovery_timeout_s,
         disease=disease,
+        include_all_clinigen_phenotypes=include_all_clinigen_phenotypes,
         corpus_sync=corpus_sync,
         publish_review=publish_review,
         review_repo=review_repo,
+        extraction_top_n=extraction_top_n,
+        extraction_priority_offset=extraction_priority_offset,
+        extraction_triage_mode=extraction_triage_mode,
+        extraction_triage_model=extraction_triage_model,
+        extraction_triage_include_defer=extraction_triage_include_defer,
+        extraction_triage_max_llm=extraction_triage_max_llm,
+        full_coverage=full_coverage,
+        extraction_model=extraction_model,
+        extraction_workers=extraction_workers,
+        taper_min_variants=taper_min_variants,
+        carrier_guard=carrier_guard,
+        vf_enrich=vf_enrich,
     )
     if exit_code != 0:
         raise typer.Exit(exit_code)

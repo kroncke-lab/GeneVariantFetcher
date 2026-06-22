@@ -23,6 +23,7 @@ Public API mirrors the outlier guard for consistency:
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Optional
 
@@ -49,6 +50,46 @@ PROVENANCE_KEYS = {
     "affected": ("affected_column_label", "affected_count_type"),
     "unaffected": ("unaffected_column_label", "unaffected_count_type"),
 }
+
+_SUSPICIOUS_LABEL_PATTERNS = (
+    (
+        "row identifier",
+        re.compile(
+            r"\b(?:adult|child|patient|proband|subject|case|individual|"
+            r"participant|family|kindred|pedigree|sample)\s*(?:number|no\.?|id)\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "population allele frequency/count",
+        re.compile(
+            r"\b(?:maf|minor allele frequency|allele frequency|eaf|frequency|"
+            r"occurrences?|allele count|alleles|gnomad|exac)\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "genotype observation count",
+        re.compile(r"^\s*(?:het|hom|homo)\s*$|\bgenotype\b", re.IGNORECASE),
+    ),
+    (
+        "cohort denominator",
+        re.compile(
+            r"\b(?:total\s+cases?|total\s+controls?|sample size|screened|"
+            r"n\s+tested|cohort size)\b",
+            re.IGNORECASE,
+        ),
+    ),
+)
+
+
+def _suspicious_column_label_reason(value: Any) -> Optional[str]:
+    if not isinstance(value, str) or not value.strip():
+        return None
+    for reason, pattern in _SUSPICIOUS_LABEL_PATTERNS:
+        if pattern.search(value):
+            return reason
+    return None
 
 
 @dataclass
@@ -125,7 +166,11 @@ def detect_misclassified_counts(
         for fkey in field_keys:
             label_key, type_key = PROVENANCE_KEYS[fkey]
             declared = _normalize_count_type(provenance.get(type_key))
-            if declared is None or declared == ACCEPTED_COUNT_TYPE:
+            column_label = provenance.get(label_key) or None
+            suspicious_label = _suspicious_column_label_reason(column_label)
+            if (
+                declared is None or declared == ACCEPTED_COUNT_TYPE
+            ) and not suspicious_label:
                 continue
             paths = COUNT_FIELDS.get(fkey)
             if not paths:
@@ -140,12 +185,17 @@ def detect_misclassified_counts(
                     variant_index=idx,
                     field=fkey,
                     value=current_value,
-                    declared_count_type=declared,
-                    column_label=(provenance.get(label_key) or None),
+                    declared_count_type=declared or "suspicious_column_label",
+                    column_label=column_label,
                     reason=(
-                        f"declared count_type {declared!r} is not "
-                        f"{ACCEPTED_COUNT_TYPE!r}; value {current_value} "
-                        f"would be a non-per-variant assignment"
+                        f"column label looks like {suspicious_label}; value "
+                        f"{current_value} would be a non-per-variant assignment"
+                        if suspicious_label
+                        else (
+                            f"declared count_type {declared!r} is not "
+                            f"{ACCEPTED_COUNT_TYPE!r}; value {current_value} "
+                            f"would be a non-per-variant assignment"
+                        )
                     ),
                 )
             )

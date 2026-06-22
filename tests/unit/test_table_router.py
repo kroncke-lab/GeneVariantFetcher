@@ -229,6 +229,24 @@ def test_parse_routed_table_accepts_target_gene_alias_in_gene_column():
     assert variants[0]["protein_notation"] == "p.Gly572Ser"
 
 
+def test_parse_routed_table_accepts_default_phrase_alias_in_gene_column():
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. Cardiomyopathy carrier counts",
+        header_line="| Gene | Protein | Carriers |",
+        header_cells=["Gene", "Protein", "Carriers"],
+        data_lines=["| cardiac myosin-binding protein C | p.Arg502Trp | 4 |"],
+        char_start=0,
+        char_end=140,
+    )
+    mapping = {"gene": 0, "protein": 1, "patient_count": 2}
+
+    variants = parse_routed_table(table, mapping, "MYBPC3")
+
+    assert len(variants) == 1
+    assert variants[0]["protein_notation"] == "p.Arg502Trp"
+
+
 def test_parse_routed_table_scopes_lqt_caption_without_gene_column():
     table = MarkdownTable(
         table_id="T1",
@@ -492,11 +510,12 @@ def _case_control_table() -> MarkdownTable:
     )
 
 
-def test_infer_mapping_default_maps_cohort_columns():
+def test_infer_mapping_default_skips_cohort_columns_when_carrier_present():
     mapping = _infer_column_mapping_from_headers(_case_control_table())
     assert mapping is not None
-    assert mapping.get("affected") == 3
-    assert mapping.get("unaffected") == 4
+    assert "affected" not in mapping
+    assert "unaffected" not in mapping
+    assert mapping.get("patient_count") == 2
 
 
 def test_infer_mapping_strict_skips_cohort_columns_on_assay_table():
@@ -525,3 +544,70 @@ def test_infer_mapping_strict_keeps_unambiguous_labels():
     # 'Affected'/'Unaffected' are unambiguous -> still mapped even on an assay table.
     assert mapping.get("affected") == 2
     assert mapping.get("unaffected") == 3
+
+
+def test_infer_mapping_prefers_carrier_over_total_case_denominator():
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. BRCA1 variants in cases",
+        header_line="| cDNA | Protein | Total case | Carrier |",
+        header_cells=["cDNA", "Protein", "Total case", "Carrier"],
+        data_lines=["| c.5467del | p.Ile1824fs | 1505 | 20 |"],
+        char_start=0,
+        char_end=100,
+    )
+
+    mapping = _infer_column_mapping_from_headers(table)
+
+    assert mapping is not None
+    assert mapping.get("patient_count") == 3
+    assert "affected" not in mapping
+
+    variants = parse_routed_table(table, mapping, "BRCA1")
+
+    assert len(variants) == 1
+    pen = variants[0]["penetrance_data"]
+    assert pen["total_carriers_observed"] == 20
+    assert pen["affected_count"] == 20
+
+
+def test_parse_routed_table_treats_adult_number_as_row_identifier():
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. MYBPC3 adult HCM patients",
+        header_line="| Adult number | Diagnosis | Protein |",
+        header_cells=["Adult number", "Diagnosis", "Protein"],
+        data_lines=["| 172 | HCM | p.Trp916Ter |"],
+        char_start=0,
+        char_end=100,
+    )
+    mapping = {"patient_count": 0, "phenotype": 1, "protein": 2}
+
+    variants = parse_routed_table(table, mapping, "MYBPC3")
+
+    assert len(variants) == 1
+    assert variants[0]["penetrance_data"]["total_carriers_observed"] == 1
+    assert variants[0]["penetrance_data"]["affected_count"] == 1
+    assert (
+        variants[0]["count_provenance"]["carriers_column_label"]
+        == "implicit one carrier per clinical row"
+    )
+
+
+def test_parse_routed_table_rejects_population_occurrence_counts():
+    table = MarkdownTable(
+        table_id="T1",
+        caption="Table 1. 1000 Genomes MYBPC3 allele frequencies",
+        header_line="| Gene | Protein | MAF (No. of occurrences from n=2184 alleles) |",
+        header_cells=[
+            "Gene",
+            "Protein",
+            "MAF (No. of occurrences from n=2184 alleles)",
+        ],
+        data_lines=["| MYBPC3 | p.Ser236Gly | 0.09 (189) |"],
+        char_start=0,
+        char_end=120,
+    )
+    mapping = {"gene": 0, "protein": 1, "patient_count": 2}
+
+    assert parse_routed_table(table, mapping, "MYBPC3") == []

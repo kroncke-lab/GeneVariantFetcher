@@ -32,6 +32,8 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
+from utils.gene_metadata import gene_alias_regex, get_gene_aliases, known_gene_aliases
+
 logger = logging.getLogger(__name__)
 
 
@@ -302,13 +304,26 @@ def _strict_cohort_labels_enabled() -> bool:
 
 _ROW_LEVEL_SUBJECT_KEYWORDS = (
     "patient",
+    "patientnumber",
+    "patientno",
+    "patientid",
     "proband",
+    "probandnumber",
+    "probandno",
+    "probandid",
     "subject",
+    "subjectnumber",
+    "subjectno",
+    "subjectid",
     "caseid",
     "case",
+    "casenumber",
+    "caseno",
     "family",
     "kindred",
     "individual",
+    "adultnumber",
+    "childnumber",
     "participant",
     "pedigree",
     "member",
@@ -388,6 +403,118 @@ def _looks_numeric_column(values: List[str]) -> bool:
     return numeric >= max(1, len(non_empty) // 2)
 
 
+_EXPLICIT_CARRIER_COUNT_HEADERS = (
+    "carrier",
+    "carriers",
+    "ncarrier",
+    "ncarriers",
+    "numberofcarriers",
+    "noofcarriers",
+)
+
+_ROW_IDENTIFIER_HEADERS = (
+    "adultnumber",
+    "childnumber",
+    "patientnumber",
+    "patientno",
+    "patientid",
+    "probandnumber",
+    "probandno",
+    "probandid",
+    "subjectnumber",
+    "subjectno",
+    "subjectid",
+    "individualnumber",
+    "individualno",
+    "individualid",
+    "participantnumber",
+    "participantno",
+    "participantid",
+    "casenumber",
+    "caseno",
+    "caseid",
+    "familynumber",
+    "familyno",
+    "familyid",
+    "kindrednumber",
+    "kindredno",
+    "kindredid",
+    "pedigreenumber",
+    "pedigreeno",
+    "pedigreeid",
+    "sampleid",
+)
+
+_POPULATION_FREQUENCY_HEADERS = (
+    "maf",
+    "minorallelefrequency",
+    "allelefrequency",
+    "alternateallelefrequency",
+    "effectallelefrequency",
+    "eaf",
+    "frequency",
+    "freq",
+    "occurrence",
+    "occurrences",
+    "numberofoccurrences",
+    "noofoccurrences",
+    "allelecount",
+    "alleles",
+    "exac",
+    "gnomad",
+)
+
+_DENOMINATOR_HEADERS_WHEN_CARRIER_PRESENT = (
+    "totalcase",
+    "totalcases",
+    "case",
+    "cases",
+    "totalcontrol",
+    "totalcontrols",
+    "control",
+    "controls",
+    "totalsample",
+    "samplesize",
+    "cohortsize",
+    "screened",
+    "screenedn",
+    "ntested",
+    "numbertested",
+)
+
+
+def _has_explicit_carrier_header(headers: List[str]) -> bool:
+    return any(
+        any(token in header for token in _EXPLICIT_CARRIER_COUNT_HEADERS)
+        for header in headers
+    )
+
+
+def _is_row_identifier_header(header: str) -> bool:
+    return any(token in header for token in _ROW_IDENTIFIER_HEADERS)
+
+
+def _is_population_frequency_header(header: str) -> bool:
+    return any(token in header for token in _POPULATION_FREQUENCY_HEADERS)
+
+
+def _is_denominator_header_when_carrier_present(
+    header: str, normalized_headers: List[str]
+) -> bool:
+    if not _has_explicit_carrier_header(normalized_headers):
+        return False
+    return any(token in header for token in _DENOMINATOR_HEADERS_WHEN_CARRIER_PRESENT)
+
+
+def _is_non_variant_count_header(header: str, normalized_headers: List[str]) -> bool:
+    """Reject numeric columns that are visibly not per-variant carrier counts."""
+    return (
+        _is_row_identifier_header(header)
+        or _is_population_frequency_header(header)
+        or _is_denominator_header_when_carrier_present(header, normalized_headers)
+    )
+
+
 def _has_header_keyword(headers: List[str], keywords: tuple[str, ...]) -> bool:
     return any(any(kw in header for kw in keywords) for header in headers)
 
@@ -437,26 +564,37 @@ def _infer_column_mapping_from_headers(
         values = _column_values(table, idx)
         protein_by_data = any(_normalize_protein(v) for v in values)
         cdna_by_data = any(_normalize_cdna(v) for v in values)
+        non_variant_count_header = _is_non_variant_count_header(
+            header, normalized_headers
+        )
 
         if "gene" not in mapping and any(
             kw in header for kw in _HEADER_FIELD_KEYWORDS["gene"]
         ):
             mapping["gene"] = idx
 
-        if "unaffected" not in mapping and _field_header_match(
-            header,
-            "unaffected",
-            strict_cohort_labels=strict_cohort_labels,
-            has_assay_or_gwas_cue=has_assay_or_gwas_cue,
+        if (
+            not non_variant_count_header
+            and "unaffected" not in mapping
+            and _field_header_match(
+                header,
+                "unaffected",
+                strict_cohort_labels=strict_cohort_labels,
+                has_assay_or_gwas_cue=has_assay_or_gwas_cue,
+            )
         ):
             mapping["unaffected"] = idx
             continue
 
-        if "affected" not in mapping and _field_header_match(
-            header,
-            "affected",
-            strict_cohort_labels=strict_cohort_labels,
-            has_assay_or_gwas_cue=has_assay_or_gwas_cue,
+        if (
+            not non_variant_count_header
+            and "affected" not in mapping
+            and _field_header_match(
+                header,
+                "affected",
+                strict_cohort_labels=strict_cohort_labels,
+                has_assay_or_gwas_cue=has_assay_or_gwas_cue,
+            )
         ):
             mapping["affected"] = idx
             continue
@@ -492,8 +630,10 @@ def _infer_column_mapping_from_headers(
             mapping["clinical_significance"] = idx
             continue
 
-        if "patient_count" not in mapping and any(
-            kw in header for kw in _HEADER_FIELD_KEYWORDS["patient_count"]
+        if (
+            not non_variant_count_header
+            and "patient_count" not in mapping
+            and any(kw in header for kw in _HEADER_FIELD_KEYWORDS["patient_count"])
         ):
             if _looks_numeric_column(values):
                 mapping["patient_count"] = idx
@@ -659,7 +799,8 @@ Allowed field names (omit a field if no column matches):
   - gene              — column listing the gene symbol (KCNH2, SCN5A, etc.)
   - cdna              — column with c. or HGVS coding-DNA notation
   - protein           — column with p. or short-form amino acid notation
-  - patient_count     — total carriers / "n detected" / "number of times" / "patients"
+  - patient_count     — explicit variant-specific carriers / patients / probands
+                        / "n detected" counts
   - affected          — affected/symptomatic carrier count
   - unaffected        — unaffected/asymptomatic carrier count
   - uncertain         — equivocal/borderline carrier count
@@ -677,6 +818,13 @@ GWAS/association statistics, allele-frequency summaries, lead SNPs, or columns
 such as Locus/SNV/CHR/BP/EA/AA/EAF/beta/SE/p/n do NOT qualify — skip them.
 In those tables, AA usually means alternate allele and n is cohort size, not a
 patient/carrier count.
+Do NOT map denominator, row-ID, or population-frequency columns to patient_count:
+"Total case(s)" is a screened/case denominator when a "Carrier(s)" column is
+present; use "Carrier(s)" instead. "Adult number", "child number", "patient ID",
+and "case no." are row identifiers; for one-patient-per-row clinical lists set
+"patient_count": -1. "MAF", "allele frequency", "No. of occurrences",
+ExAC/gnomAD/1000 Genomes counts, and allele denominators are population data,
+not clinical carrier counts.
 
 Return strict JSON. No prose. No markdown fences. Schema:
 
@@ -915,31 +1063,29 @@ _GENE_SYMBOL_IGNORE = {
     "HG19",
     "HG38",
 }
-_TARGET_GENE_ALIASES = {
-    "KCNH2": {"KCNH2", "HERG", "HERG1", "ERG", "ERG1", "H-ERG", "LQT2"},
-    "KCNQ1": {"KCNQ1", "KVLQT1", "LQT1"},
-    "SCN5A": {"SCN5A", "NAV1.5", "LQT3"},
-    "RYR2": {"RYR2", "RYR-2"},
-}
 
 
 def _target_gene_tokens(gene_symbol: str) -> set[str]:
     gene = (gene_symbol or "").strip().upper()
-    return _TARGET_GENE_ALIASES.get(gene, {gene})
+    aliases = get_gene_aliases(gene, include_query_aliases=True)
+    return {alias.upper() for alias in aliases if alias} | {gene}
 
 
 def _caption_gene_scope(caption: Optional[str]) -> set[str]:
     """Return target genes explicitly implied by a table caption."""
     if not caption:
         return set()
-    text = caption.upper()
     scope: set[str] = set()
-    for gene, aliases in _TARGET_GENE_ALIASES.items():
-        for alias in aliases:
-            if re.search(rf"(?<![A-Z0-9]){re.escape(alias)}(?![A-Z0-9])", text):
-                scope.add(gene)
-                break
+    for gene in known_gene_aliases(include_query_aliases=True):
+        if gene_alias_regex(gene, include_query_aliases=True).search(caption):
+            scope.add(gene)
     return scope
+
+
+def _cell_mentions_target_gene(value: Optional[str], gene_symbol: str) -> bool:
+    if not value or not gene_symbol:
+        return False
+    return bool(gene_alias_regex(gene_symbol, include_query_aliases=True).search(value))
 
 
 def _gene_symbol_tokens(value: Optional[str]) -> set[str]:
@@ -972,6 +1118,8 @@ def _row_has_off_target_gene_without_target(cells: List[str], gene_symbol: str) 
     whose gene column was not mapped by the router.
     """
     target_tokens = _target_gene_tokens(gene_symbol)
+    if _cell_mentions_target_gene(" ".join(cells), gene_symbol):
+        return False
     row_tokens: set[str] = set()
     for cell in cells:
         row_tokens.update(_gene_symbol_tokens(cell))
@@ -1135,6 +1283,26 @@ def _header_label(table: MarkdownTable, idx: Optional[int]) -> Optional[str]:
     return label or None
 
 
+def _usable_count_index(
+    table: MarkdownTable,
+    idx: Optional[int],
+    normalized_headers: List[str],
+) -> Optional[int]:
+    """Drop routed count columns that are clearly IDs, denominators, or AFs."""
+    if idx is None or idx == _INFER_ROW_PATIENT_COUNT:
+        return idx
+    if idx < 0 or idx >= len(normalized_headers):
+        return None
+    if _is_non_variant_count_header(normalized_headers[idx], normalized_headers):
+        logger.debug(
+            "table_router: ignoring non-carrier count column %r in %s",
+            _header_label(table, idx),
+            table.table_id,
+        )
+        return None
+    return idx
+
+
 def _router_count_provenance(
     table: MarkdownTable,
     count_idx: Optional[int],
@@ -1288,12 +1456,39 @@ def parse_routed_table(
     gene_idx = mapping.get("gene")
     cdna_idx = mapping.get("cdna")
     protein_idx = mapping.get("protein")
-    count_idx = mapping.get("patient_count")
-    aff_idx = mapping.get("affected")
-    unaff_idx = mapping.get("unaffected")
-    unc_idx = mapping.get("uncertain")
+    normalized_headers = [_normalize_header(c) for c in table.header_cells]
+    count_idx = _usable_count_index(
+        table, mapping.get("patient_count"), normalized_headers
+    )
+    aff_idx = _usable_count_index(table, mapping.get("affected"), normalized_headers)
+    unaff_idx = _usable_count_index(
+        table, mapping.get("unaffected"), normalized_headers
+    )
+    unc_idx = _usable_count_index(table, mapping.get("uncertain"), normalized_headers)
     pheno_idx = mapping.get("phenotype")
     clin_idx = mapping.get("clinical_significance")
+
+    if count_idx is None and aff_idx is None and unaff_idx is None:
+        sanitized_mapping = {
+            key: value
+            for key, value in mapping.items()
+            if key
+            not in {
+                "patient_count",
+                "affected",
+                "unaffected",
+                "uncertain",
+            }
+        }
+        has_assay_or_gwas_cue = any(
+            h in _GWAS_OR_ASSAY_HEADERS for h in normalized_headers
+        )
+        if _looks_like_row_level_clinical_list(
+            table, sanitized_mapping, has_assay_or_gwas_cue
+        ):
+            count_idx = _INFER_ROW_PATIENT_COUNT
+        else:
+            return []
 
     variants: List[Dict[str, Any]] = []
     by_key: Dict[tuple[str, str], Dict[str, Any]] = {}
@@ -1316,11 +1511,11 @@ def parse_routed_table(
 
         # Gene-filter: skip rows that explicitly belong to a different gene.
         if gene_idx is not None and target_gene_lower:
-            gene_cell = (cell(gene_idx) or "").strip().lower()
+            gene_cell = (cell(gene_idx) or "").strip()
             gene_tokens = _gene_symbol_tokens(gene_cell.upper())
             if (
                 gene_cell
-                and target_gene_lower not in gene_cell
+                and not _cell_mentions_target_gene(gene_cell, gene_symbol)
                 and not (gene_tokens & _target_gene_tokens(gene_symbol))
             ):
                 continue

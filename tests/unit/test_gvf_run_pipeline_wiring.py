@@ -33,10 +33,18 @@ def _fake_extract_factory(captured: dict):
     """Return a step_extract stand-in that records its kwargs and seeds a DB."""
 
     def fake_extract(
-        gene, email, output_dir, pmid_file, max_pmids, resume_dir, disease=None
+        gene,
+        email,
+        output_dir,
+        pmid_file,
+        max_pmids,
+        resume_dir,
+        disease=None,
+        **kwargs,
     ):
         captured["disease"] = disease
         captured["gene"] = gene
+        captured["extract_kwargs"] = kwargs
         run_dir = Path(output_dir) / gene / "run1"
         run_dir.mkdir(parents=True, exist_ok=True)
         (run_dir / f"{gene}.db").write_bytes(b"sqlite")
@@ -155,3 +163,109 @@ def test_disease_threads_into_extraction(tmp_path: Path, monkeypatch):
 
     assert rc == 0
     assert captured["disease"] == "long QT syndrome"
+
+
+def test_full_coverage_is_opt_in(tmp_path: Path, monkeypatch):
+    """Default gvf-run keeps the bounded/non-full-coverage path untouched."""
+    captured: dict = {}
+    calls: list[str] = []
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        gvf_run,
+        "step_full_coverage_walk",
+        lambda **kwargs: calls.append("walk") or {},
+    )
+    monkeypatch.setattr(
+        gvf_run, "step_carrier_guard", lambda **kwargs: calls.append("guard") or {}
+    )
+    monkeypatch.setattr(
+        gvf_run, "step_vf_enrich", lambda **kwargs: calls.append("vf") or {}
+    )
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        skip=["layers", "source-qc"],
+    )
+
+    assert rc == 0
+    assert calls == []
+    assert captured["extract_kwargs"].get("extraction_top_n") is None
+
+
+def test_full_coverage_seeds_and_walks_from_next_offset(tmp_path: Path, monkeypatch):
+    """--full-coverage seeds a bounded priority batch, then continues walking."""
+    captured: dict = {}
+    calls: list[tuple[str, dict]] = []
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+
+    def fake_walk(**kwargs):
+        calls.append(("walk", kwargs))
+        return {"walked": True}
+
+    monkeypatch.setattr(gvf_run, "step_full_coverage_walk", fake_walk)
+    monkeypatch.setattr(
+        gvf_run,
+        "step_carrier_guard",
+        lambda **kwargs: calls.append(("guard", kwargs)) or {},
+    )
+    monkeypatch.setattr(
+        gvf_run, "step_vf_enrich", lambda **kwargs: calls.append(("vf", kwargs)) or {}
+    )
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        skip=["layers", "source-qc"],
+        full_coverage=True,
+        extraction_model="azure_ai/gpt-5.4",
+        extraction_workers=7,
+        taper_min_variants=11,
+    )
+
+    assert rc == 0
+    assert captured["extract_kwargs"]["extraction_top_n"] == 1000
+    assert calls[0][0] == "walk"
+    assert calls[0][1]["model"] == "azure_ai/gpt-5.4"
+    assert calls[0][1]["max_workers"] == 7
+    assert calls[0][1]["start_offset"] == 1000
+    assert calls[0][1]["min_new_variants"] == 11
+    assert [name for name, _ in calls] == ["walk", "guard", "vf"]
+
+
+def test_full_coverage_quality_steps_are_toggleable(tmp_path: Path, monkeypatch):
+    captured: dict = {}
+    calls: list[str] = []
+    monkeypatch.setattr(gvf_run, "doctor", _ok_doctor)
+    monkeypatch.setattr(gvf_run, "step_extract", _fake_extract_factory(captured))
+    monkeypatch.setattr(
+        gvf_run,
+        "step_full_coverage_walk",
+        lambda **kwargs: calls.append("walk") or {},
+    )
+    monkeypatch.setattr(
+        gvf_run, "step_carrier_guard", lambda **kwargs: calls.append("guard") or {}
+    )
+    monkeypatch.setattr(
+        gvf_run, "step_vf_enrich", lambda **kwargs: calls.append("vf") or {}
+    )
+
+    rc = gvf_run.run_gvf_pipeline(
+        gene="TESTGENE",
+        email="x@example.com",
+        output=tmp_path / "out",
+        source_recovery=False,
+        skip=["layers", "source-qc"],
+        full_coverage=True,
+        carrier_guard=False,
+        vf_enrich=False,
+    )
+
+    assert rc == 0
+    assert calls == ["walk"]

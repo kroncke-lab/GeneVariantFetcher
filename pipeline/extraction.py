@@ -8,6 +8,7 @@ genetic variant data using advanced LLM prompting.
 import copy
 import json
 import logging
+import os
 import re
 from pathlib import Path
 from typing import Any, List, Optional
@@ -33,6 +34,7 @@ from pipeline.prompts import (
     EXTRACTION_PROMPT,
     HIGH_VARIANT_THRESHOLD,
 )
+from utils.gene_metadata import gene_alias_regex, known_gene_aliases
 from utils.llm_utils import BaseLLMCaller, clamp_max_tokens
 from utils.models import ExtractionResult, Paper
 from utils.source_layers import infer_source_layer_from_text
@@ -47,6 +49,12 @@ logger = logging.getLogger(__name__)
 TABLE_HINT_MAX_VARIANTS = SCANNER_MAX_HINTS
 TABLE_REGEX_MERGE_MAX_VARIANTS = 500
 SCANNER_REGEX_MERGE_MAX_VARIANTS = 150
+TABLE_REGEX_OVERFLOW_MERGE_MAX_VARIANTS = int(
+    os.environ.get("GVF_TABLE_OVERFLOW_MERGE_MAX_VARIANTS", "2000")
+)
+TABLE_REGEX_OVERFLOW_CHUNK_SIZE = int(
+    os.environ.get("GVF_TABLE_OVERFLOW_CHUNK_SIZE", "250")
+)
 
 
 def _find_data_zones_file(
@@ -504,16 +512,23 @@ class ExpertExtractor(BaseLLMCaller):
         def genes_mentioned_in_cells(cells: list[str]) -> set[str]:
             genes = set()
             for cell in cells:
-                searchable = re.sub(r"[*_`\\]", " ", cell).upper()
+                searchable = re.sub(r"[*_`\\]", " ", cell)
+                searchable_upper = searchable.upper()
                 for alias, official in self.TABLE_LABEL_GENE_ALIASES.items():
                     if re.search(
-                        rf"(?<![A-Z0-9]){re.escape(alias)}(?![A-Z0-9])", searchable
+                        rf"(?<![A-Z0-9]){re.escape(alias)}(?![A-Z0-9])",
+                        searchable_upper,
                     ):
                         genes.add(official)
+                for gene in known_gene_aliases(include_query_aliases=False):
+                    if gene_alias_regex(gene, include_query_aliases=False).search(
+                        searchable
+                    ):
+                        genes.add(gene)
                 for explicit_gene in self.TABLE_LABEL_EXPLICIT_GENES:
                     if re.search(
                         rf"(?<![A-Z0-9]){re.escape(explicit_gene)}(?![A-Z0-9])",
-                        searchable,
+                        searchable_upper,
                     ):
                         genes.add(explicit_gene)
             return genes
@@ -542,6 +557,7 @@ class ExpertExtractor(BaseLLMCaller):
                     row_gene = normalized_cell
                 if row_gene:
                     row_genes.append(row_gene)
+                row_genes.extend(genes_mentioned_in_cells([cell]))
             context_genes = set(row_genes) or active_table_genes
             if context_genes and target_gene not in context_genes:
                 row_gene_filtered_count += 1
@@ -698,6 +714,117 @@ class ExpertExtractor(BaseLLMCaller):
                 extracted_data["extraction_metadata"]["table_regex_added"] = added_count
 
         extracted_data["variants"] = existing_variants
+        return extracted_data
+
+    def _table_variant_key(self, variant: dict) -> tuple[str, str]:
+        """Return a normalized dedupe key for a table-derived variant."""
+        from utils.variant_normalizer import normalize_variant
+
+        protein = normalize_variant(variant.get("protein_notation", "") or "")
+        cdna = normalize_variant(variant.get("cdna_notation", "") or "")
+        return (cdna.lower(), protein.lower())
+
+    def _is_structured_table_variant(self, variant: dict) -> bool:
+        """True when a table variant carries row/count provenance, not just regex text."""
+        source_location = str(variant.get("source_location") or "").lower()
+        patients = variant.get("patients") or {}
+        penetrance = variant.get("penetrance_data") or {}
+        return (
+            "router+deterministic" in source_location
+            or bool(variant.get("fact_provenance"))
+            or bool(variant.get("count_provenance"))
+            or patients.get("count") is not None
+            or penetrance.get("total_carriers_observed") is not None
+            or penetrance.get("affected_count") is not None
+        )
+
+    def _dedupe_table_variants(self, table_variants: List[dict]) -> List[dict]:
+        """Dedupe table candidates while preferring richer row-level variants."""
+        selected: List[dict] = []
+        index_by_key: dict[tuple[str, str], int] = {}
+        for variant in table_variants:
+            key = self._table_variant_key(variant)
+            if not any(key):
+                continue
+            if key not in index_by_key:
+                index_by_key[key] = len(selected)
+                selected.append(variant)
+                continue
+            existing_index = index_by_key[key]
+            existing = selected[existing_index]
+            if self._is_structured_table_variant(
+                variant
+            ) and not self._is_structured_table_variant(existing):
+                selected[existing_index] = variant
+        return selected
+
+    def _select_table_variants_for_merge(
+        self, table_variants: List[dict]
+    ) -> tuple[List[dict], Optional[dict]]:
+        """Select candidates for table merge and describe overflow decisions."""
+        deduped = self._dedupe_table_variants(table_variants)
+        if len(table_variants) <= TABLE_REGEX_MERGE_MAX_VARIANTS:
+            return deduped, None
+
+        overflow_max = max(
+            TABLE_REGEX_MERGE_MAX_VARIANTS, TABLE_REGEX_OVERFLOW_MERGE_MAX_VARIANTS
+        )
+        structured = [v for v in deduped if self._is_structured_table_variant(v)]
+        regex_only = [v for v in deduped if not self._is_structured_table_variant(v)]
+
+        selected: List[dict] = []
+        selected.extend(structured[:overflow_max])
+        remaining_slots = max(0, overflow_max - len(selected))
+        if remaining_slots:
+            selected.extend(regex_only[:remaining_slots])
+
+        overflow = {
+            "candidate_count": len(table_variants),
+            "deduped_count": len(deduped),
+            "normal_safety_cap": TABLE_REGEX_MERGE_MAX_VARIANTS,
+            "overflow_merge_cap": overflow_max,
+            "chunk_size": max(1, TABLE_REGEX_OVERFLOW_CHUNK_SIZE),
+            "structured_candidate_count": len(structured),
+            "regex_only_candidate_count": len(regex_only),
+            "selected_for_merge": len(selected),
+            "omitted_after_dedupe": max(0, len(deduped) - len(selected)),
+            "reason": "candidate_count_exceeds_safety_cap",
+        }
+        return selected, overflow
+
+    def _merge_table_variants_with_overflow_qc(
+        self, extracted_data: dict, table_variants: List[dict], pmid: Optional[str]
+    ) -> dict:
+        """Merge table candidates; when over cap, merge in bounded chunks with QC."""
+        selected, overflow = self._select_table_variants_for_merge(table_variants)
+        if overflow:
+            logger.warning(
+                "PMID %s - Table regex/router merge overflow: %d candidates "
+                "(deduped=%d), merging %d with overflow cap %d",
+                pmid,
+                overflow["candidate_count"],
+                overflow["deduped_count"],
+                overflow["selected_for_merge"],
+                overflow["overflow_merge_cap"],
+            )
+
+        before_count = len(extracted_data.get("variants", []) or [])
+        if selected:
+            chunk_size = (
+                max(1, TABLE_REGEX_OVERFLOW_CHUNK_SIZE) if overflow else len(selected)
+            )
+            for start in range(0, len(selected), chunk_size):
+                extracted_data = self._merge_table_variants(
+                    extracted_data, selected[start : start + chunk_size]
+                )
+
+        after_count = len(extracted_data.get("variants", []) or [])
+        metadata = extracted_data.setdefault("extraction_metadata", {})
+        metadata["table_merge_candidate_count"] = len(table_variants)
+        if overflow:
+            overflow["merged_added"] = max(0, after_count - before_count)
+            metadata["table_merge_overflow"] = overflow
+            metadata["table_regex_added"] = overflow["merged_added"]
         return extracted_data
 
     def _format_table_hints(
@@ -998,6 +1125,7 @@ class ExpertExtractor(BaseLLMCaller):
         "patients",
         "no. of patients",
         "no. of patient",
+        "carrier",
         "carriers",
         "probands",
         "families",
@@ -1500,6 +1628,9 @@ class ExpertExtractor(BaseLLMCaller):
         label_upper = label.upper()
         for alias, gene in self.TABLE_LABEL_GENE_ALIASES.items():
             if re.search(rf"\b{re.escape(alias)}\b", label_upper):
+                symbols.add(gene)
+        for gene in known_gene_aliases(include_query_aliases=False):
+            if gene_alias_regex(gene, include_query_aliases=False).search(label):
                 symbols.add(gene)
         return symbols
 
@@ -2512,6 +2643,43 @@ class ExpertExtractor(BaseLLMCaller):
         row_level_clinical_table = False
         current_table_label = ""
         active_table_label = ""
+        normalized_active_headers = []
+
+        from pipeline.table_router import (
+            _is_non_variant_count_header,
+            _normalize_header,
+        )
+
+        def count_type_for_header(label: Optional[str]) -> Optional[str]:
+            if not label:
+                return None
+            normalized = _normalize_header(label)
+            if not normalized:
+                return None
+            if "family" in normalized or "kindred" in normalized:
+                return "family_count"
+            if "proband" in normalized:
+                return "proband_count"
+            if "control" in normalized:
+                return "unaffected_control"
+            if normalized in {"case", "cases"}:
+                return "case"
+            if any(
+                token in normalized
+                for token in (
+                    "totalcase",
+                    "totalcontrol",
+                    "totalsample",
+                    "samplesize",
+                    "cohortsize",
+                )
+            ):
+                return "cohort_total"
+            if any(
+                token in normalized for token in ("screened", "ntested", "numbertested")
+            ):
+                return "screened_N"
+            return "per_variant_carrier"
 
         def update_table_label(text: str) -> None:
             nonlocal current_table_label
@@ -2560,6 +2728,9 @@ class ExpertExtractor(BaseLLMCaller):
                     )
                     active_table_label = current_table_label
                     active_headers = parts
+                    normalized_active_headers = [
+                        _normalize_header(header) for header in active_headers
+                    ]
                     table_row_ordinal = 0
                     for idx, name in enumerate(parts):
                         name_lower = name.lower().strip()
@@ -2600,6 +2771,7 @@ class ExpertExtractor(BaseLLMCaller):
                 header_idx = {}
                 header_multi = {"count": [], "affected": [], "unaffected": []}
                 active_headers = []
+                normalized_active_headers = []
                 table_row_ordinal = 0
                 row_level_clinical_table = False
                 active_table_label = ""
@@ -2614,32 +2786,57 @@ class ExpertExtractor(BaseLLMCaller):
                 continue
             table_row_ordinal += 1
 
-            def get_col(key: str) -> Optional[str]:
-                idx = header_mapping.get(key)
-                if idx is None or idx >= len(cells):
-                    # Fallback to direct header lookup
-                    idx = header_idx.get(key)
+            def usable_indices(key: str) -> List[int]:
+                raw_indices = list(header_multi.get(key, []))
+                mapped_idx = header_mapping.get(key)
+                if mapped_idx is not None and mapped_idx not in raw_indices:
+                    raw_indices.append(mapped_idx)
+                if not raw_indices:
+                    direct_idx = header_idx.get(key)
+                    if direct_idx is not None:
+                        raw_indices.append(direct_idx)
+
+                indices: List[int] = []
+                for idx in raw_indices:
                     if idx is None or idx >= len(cells):
-                        return None
+                        continue
+                    if (
+                        key in {"count", "affected", "unaffected"}
+                        and idx < len(normalized_active_headers)
+                        and _is_non_variant_count_header(
+                            normalized_active_headers[idx], normalized_active_headers
+                        )
+                    ):
+                        continue
+                    indices.append(idx)
+                return indices
+
+            def get_col(key: str) -> Optional[str]:
+                indices = usable_indices(key)
+                if not indices:
+                    return None
+                idx = indices[0]
                 return cells[idx] or None
 
             def get_cols(key: str) -> List[str]:
                 values = []
-                for idx in header_multi.get(key, []):
+                for idx in usable_indices(key):
                     if idx < len(cells) and cells[idx]:
                         values.append(cells[idx])
-                if not values:
-                    value = get_col(key)
-                    if value:
-                        values.append(value)
                 return values
 
+            def header_labels(key: str) -> List[str]:
+                labels = []
+                for idx in usable_indices(key):
+                    if idx < len(active_headers):
+                        label = active_headers[idx].strip()
+                        if label:
+                            labels.append(label)
+                return labels
+
             def header_label(key: str) -> Optional[str]:
-                idx = header_mapping.get(key)
-                if idx is None or idx >= len(active_headers):
-                    return None
-                label = active_headers[idx].strip()
-                return label or None
+                labels = header_labels(key)
+                return "; ".join(labels) if labels else None
 
             cdna = get_col("cdna")
             protein = get_col("protein")
@@ -2766,6 +2963,9 @@ class ExpertExtractor(BaseLLMCaller):
                     "line_number": line_number,
                 },
             }
+            carrier_label = header_label("count")
+            affected_label = header_label("affected") or carrier_label
+            unaffected_label = header_label("unaffected")
             variant = {
                 "gene_symbol": gene_symbol,
                 "cdna_notation": f"c.{cdna}"
@@ -2794,6 +2994,14 @@ class ExpertExtractor(BaseLLMCaller):
                 **observation_provenance,
                 "additional_notes": "Parsed via deterministic table parser",
                 "key_quotes": [],
+                "count_provenance": {
+                    "carriers_column_label": carrier_label,
+                    "carriers_count_type": count_type_for_header(carrier_label),
+                    "affected_column_label": affected_label,
+                    "affected_count_type": count_type_for_header(affected_label),
+                    "unaffected_column_label": unaffected_label,
+                    "unaffected_count_type": count_type_for_header(unaffected_label),
+                },
             }
             variants.append(variant)
 
@@ -4872,22 +5080,12 @@ Return strict JSON with this schema:
                     extracted_data
                 )
 
-            # Merge pre-extracted table variants to catch any the LLM missed
-            # (uses the already-extracted variants from before the LLM call)
-            table_variants_for_merge = table_hint_variants
-            if len(table_variants_for_merge) > TABLE_REGEX_MERGE_MAX_VARIANTS:
-                logger.warning(
-                    "PMID %s - Skipping merge of %d table regex/router variants; "
-                    "candidate count exceeds safety cap %d",
-                    paper.pmid,
-                    len(table_variants_for_merge),
-                    TABLE_REGEX_MERGE_MAX_VARIANTS,
-                )
-                table_variants_for_merge = []
-
-            if table_variants_for_merge:
-                extracted_data = self._merge_table_variants(
-                    extracted_data, table_variants_for_merge
+            # Merge pre-extracted table variants to catch any the LLM missed.
+            # Above the normal cap, keep a bounded deterministic overflow path
+            # instead of dropping the entire table safety-net.
+            if table_hint_variants:
+                extracted_data = self._merge_table_variants_with_overflow_qc(
+                    extracted_data, table_hint_variants, paper.pmid
                 )
 
             # NEW: Merge scanner-found variants (catches narrative mentions the LLM missed)
